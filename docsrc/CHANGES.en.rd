@@ -3,6 +3,15 @@
 
 == changes from 0.4.0
 
+: enable bundling RubyCocoa.framework within an application bundle
+
+Change a buld configration of RubyCocoa.framework project, to execute
+a RubyCocoa application on the environment which is not installed
+RubyCocoa. It allows that RubyCocoa application itself bundles with
+RubyCocoa.framework.
+
+: misc
+
 * define module RCDataAttachment.
 * define some class methods for class NSData and NSStrng.
 

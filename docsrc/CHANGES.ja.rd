@@ -3,8 +3,17 @@
 
 == 0.4.0 からのおもな変更点
 
-* RCDataAttachmentモジュールを定義
-* NSData, NSStrng クラスにいくつかのクラスメソッドを定義
+: RubyCocoa.frameworkを組み込み可能にした
+
+  RubyCocoaがインストールされていない環境で、RubyCocoaアプリケーション
+  を動作可能にするため、RubyCocoa.frameworkのビルト設定を変更しました。
+  RubyCocoaアプリケーション自体にRubyCocoa.frameworkを組み込んで使うこ
+  とができます。
+
+: その他
+
+  * RCDataAttachmentモジュールを定義
+  * NSData, NSStrng クラスにいくつかのクラスメソッドを定義
 
 == 0.3.2 からのおもな変更点 (0.4.0)
 
