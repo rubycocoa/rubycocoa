@@ -158,6 +158,40 @@ After installation, let's try samples that are written by Ruby. Refer
 to ((<'Try RubyCocoa Samples'|URL:trysamples.en.html>)).
 
 
+== [FYI] Useful Installer's Options for a Binary Packaging
+
+For a maintainer of a binary package, there're useful options in
+config phase.
+
+  * --install-prefix  : effect to extended library and library
+  * --install-root    : effect to framework, templates, documents and examples
+
+=== e.g.
+
+  $ ruby -r rbconfig -e 'p Config::CONFIG["prefix"]'
+  "/usr"
+  $ ruby install.rb config \
+      --install-prefix=/tmp/build/usr --install-root=/tmp/build
+  $ ruby install.rb setup
+  $ sudo ruby install.rb install
+
+As a result, these will be installed temporarily.
+
+  /tmp/build/usr/lib/ruby/site_ruby/1.6/osx/addressbook.rb
+  /tmp/build/usr/lib/ruby/site_ruby/1.6/osx/appkit.rb
+  /tmp/build/usr/lib/ruby/site_ruby/1.6/osx/cocoa.rb
+  /tmp/build/usr/lib/ruby/site_ruby/1.6/osx/foundation.rb
+  /tmp/build/usr/lib/ruby/site_ruby/1.6/powerpc-darwin6.0/rubycocoa.bundle
+  /tmp/build/Library/Frameworks/RubyCocoa.framework
+  /tmp/build/Developer/ProjectBuilder Extras/File Templates/Ruby
+  /tmp/build/Developer/ProjectBuilder Extras/Project Templates/ \
+          Application/Cocoa-Ruby Application
+  /tmp/build/Developer/ProjectBuilder Extras/Project Templates/ \
+          Application/Cocoa-Ruby Document-based Application
+  /tmp/build/Developer/Examples/RubyCocoa
+  /tmp/build/Developer/Documentation/RubyCocoa
+
+
 == Development and testing environment 
 
 * PowerMacintosh G4/400/384MB or iBook G3/600/384MB
