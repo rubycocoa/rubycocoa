@@ -29,6 +29,12 @@ module OSX
     end
   end
 
+  class NIBObject < OCObject
+    def NIBObject.inherited(klass)
+      OSX.create_objc_stub klass.to_s.intern
+    end
+  end
+
   module ToFloat
     def force_to_f(val)
       begin

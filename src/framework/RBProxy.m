@@ -213,37 +213,19 @@ static id ocid_of(VALUE obj)
 
 // public methods
 
-- (id)    __parent__ { return m_parent; }
 - (VALUE) __rbobj__  { return m_rbobj; }
-
-// - (NSString *)_copyDescription
-// {
-//   return [[NSString alloc] initWithCString: STR2CSTR(rb_inspect(m_rbobj))];
-// }
-
-- initWithRubyObject: (VALUE)rbobj parent: parent
-{
-  m_rbobj = rbobj;
-  m_parent = parent ? [parent retain] : nil;
-  return self;
-}
 
 - initWithRubyObject: (VALUE)rbobj
 {
-  [self initWithRubyObject: rbobj parent: nil];
+  m_rbobj = rbobj;
   return self;
-}
-
-- (void)dealloc
-{
-  if (m_parent) [m_parent release];
 }
 
 - (BOOL)isKindOfClass: (Class)klass
 {
   BOOL ret;
   DLOG1("isKindOfClass(%@)", klass);
-  ret = m_parent ? [m_parent isKindOfClass: klass] : NO;
+  ret = NO;
   DLOG1("   --> %d", ret);
   return ret;
 }
@@ -255,11 +237,6 @@ static id ocid_of(VALUE obj)
     DLOG0("   -> forward to Ruby Object");
     [self rbobjForwardInvocation: an_inv];
   }
-  else if (m_parent) {
-    DLOG0("   -> invoke with Parent Objective-C Object");
-    [an_inv setTarget: m_parent];
-    [an_inv invoke];
-  }
   else {
     DLOG0("   -> forward to super Objective-C Object");
     [super forwardInvocation: an_inv];
@@ -270,8 +247,6 @@ static id ocid_of(VALUE obj)
 {
   NSMethodSignature* ret = nil;
   DLOG1("methodSignatureForSelector(%@)", NSStringFromSelector(a_sel));
-  if (m_parent)
-    ret = [m_parent methodSignatureForSelector: a_sel];
   if (ret == nil)
     ret = [DummyProtocolHandler instanceMethodSignatureForSelector: a_sel];
   if (ret == nil)
@@ -285,10 +260,6 @@ static id ocid_of(VALUE obj)
   BOOL ret;
   DLOG1("respondsToSelector(%@)", NSStringFromSelector(a_sel));
   ret = [self rbobjRespondsToSelector: a_sel];
-  if (ret == NO) {
-    if (m_parent)
-      ret = [m_parent respondsToSelector: a_sel];
-  }
   DLOG1("   --> %d", ret);
   return ret;
 }

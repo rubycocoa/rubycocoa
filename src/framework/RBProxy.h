@@ -1,20 +1,19 @@
 #import <Foundation/NSProxy.h>
+#import <Foundation/NSMethodSignature.h>
+#import <Foundation/NSInvocation.h>
 #import <LibRuby/cocoa_ruby.h>
 
 @interface RBProxy : NSProxy
 {
-  id    m_parent;
   VALUE m_rbobj;
 }
 
-- initWithRubyObject: (VALUE) rbobj parent: parent;
 - initWithRubyObject: (VALUE) rbobj;
-- (void) dealloc;
-
-// - (NSString *)_copyDescription;
-
-- (id)    __parent__;
 - (VALUE) __rbobj__;
+
+- (BOOL) rbobjRespondsToSelector: (SEL)a_sel;
+- (NSMethodSignature*) rbobjMethodSignatureForSelector: (SEL)a_sel;
+- (void) rbobjForwardInvocation: (NSInvocation *)an_inv;
 
 @end
 
