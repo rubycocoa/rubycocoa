@@ -5,6 +5,8 @@
 * ((<RubyCocoa Project|URL:http://sourceforge.net/projects/rubycocoa/>))
 * ((<Mailing List (Japanese)|URL:http://www.freeml.com/info/rubycocoa@freeml.com>))
 * ((<Mailing List (English)|URL:http://sourceforge.net/mail/?group_id=44114>))
+* ((<RubyCocoa Wiki (Japanese)|URL:http://www.fobj.com/rubycocoa/w.ja/>))
+* ((<RubyCocoa Wiki (English)|URL:http://www.fobj.com/rubycocoa/w.en/>))
 
 
 == RubyCocoa
