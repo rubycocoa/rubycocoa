@@ -1,3 +1,11 @@
+2005-01-10  kimura wataru <kimuraw@i.nifty.jp>
+
+	* install.rb, framework/RubyCocoa.pbproj/project.pbxproj.in:
+	enable build with libruby-static.a or libruby.a.
+
+	* metaconfig, pre-install.rb:
+	remove config option 'other-ldflags'.
+
 2005-01-06  kimura wataru <kimuraw@i.nifty.jp>
 
 	* framework/src/ruby/osx/objc/cocoa_macros.rb, framework/src/ruby/osx/objc/ruby_additon.rb:
