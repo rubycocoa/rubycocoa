@@ -44,26 +44,18 @@ _debug_log(const char* fmt,...)
 static id
 rb_objwrapper_ocid(VALUE rcv)
 {
-  id ocid = nil;
+  RB_ID mtd;
 
-  if (rb_obj_is_kind_of(rcv, rb_objcid()) == Qtrue) {
-    ocid = rb_objcid_ocid(rcv);
+  if (rb_obj_is_kind_of(rcv, rb_objcid()) == Qtrue)
+    return rb_objcid_ocid(rcv);
+
+  mtd = rb_intern("__ocid__");
+  if (rb_respond_to(rcv, mtd)) {
+    rcv = rb_funcall(rcv, mtd, 0);
+    return (id) NUM2UINT(rcv);
   }
-  else {
-    VALUE obj;
-    obj = rb_ivar_get(rcv, rb_intern("__objcid__"));
-    if (rb_obj_is_kind_of(obj, rb_objcid()) == Qtrue) {
-      ocid = rb_objcid_ocid(obj);
-    }
-    else {
-      RB_ID mtd = rb_intern("__ocid__");
-      if (rb_respond_to(rcv, mtd)) {
-	obj = rb_funcall(rcv, mtd, 0);
-	ocid = (id) NUM2UINT(obj);
-      }
-    }
-  }
-  return ocid;
+
+  return nil;
 }
 
 static VALUE

@@ -17,6 +17,15 @@ module OSX
 
   class OCObject < ObjcID
     include OCObjWrapper
+
+    def method_missing(mname, *args)
+      m_name, m_args, m_predicate = analyze_missing(mname, args)
+      ret = self.ocm_send(m_name, *m_args)
+      ret.ocm_send(:release) if occur_ownership?(ret, m_name)
+      ret = (ret != 0) if m_predicate
+      ret
+    end
+
   end				# class OCObject
 
   module OCObjWrapper
@@ -58,14 +67,6 @@ module OSX
       else
 	super
       end
-    end
-
-    def method_missing(mname, *args)
-      m_name, m_args, m_predicate = analyze_missing(mname, args)
-      ret = self.ocm_send(m_name, *m_args)
-      ret.ocm_send(:release) if occur_ownership?(ret, m_name)
-      ret = (ret != 0) if m_predicate
-      ret
     end
 
     private

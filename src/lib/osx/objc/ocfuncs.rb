@@ -16,23 +16,18 @@ module OSX
     klass = Class.new(OSX::OCObject)
     klass.instance_eval %{
       extend OCObjWrapper
-      @__objcid__ = ObjcID.new(val)
+      @__ocobj__ = OCObject.new(val)
+      def method_missing(mname, *args)
+	@__ocobj__.send(mname, *args)
+      end
+      def __ocid__
+	@__ocobj__.__ocid__
+      end
       def inherited(k)
-	p k
+	# create new Class in the Objective-C world
       end
     }
     klass
-  end
-
-  def OSX.ns_import_new(sym)
-    if not const_defined?(sym) then
-      const_name = sym.to_s
-      sym_name = ":#{sym}"
-      module_eval %[
-        nsc = objc_class_new(NSClassFromString(#{sym_name}).__ocid__)
-        #{const_name} = nsc if nsc
-      ]
-    end
   end
 
   def OSX.ns_import(sym)
@@ -40,7 +35,7 @@ module OSX
       const_name = sym.to_s
       sym_name = ":#{sym}"
       module_eval %[
-        nsc = NSClassFromString(#{sym_name})
+        nsc = objc_class_new(NSClassFromString(#{sym_name}).__ocid__)
         #{const_name} = nsc if nsc
       ]
     end
