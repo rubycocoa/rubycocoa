@@ -69,6 +69,18 @@ static RB_ID sel_to_mid(SEL a_sel)
   return rb_intern(mname);
 }
 
+static int argc_of(SEL a_sel)
+{
+  id pool = [[NSAutoreleasePool alloc] init];
+  const char* cp = [NSStringFromSelector(a_sel) cString];
+  int ch;
+  int argc = 0;
+  while (ch = *cp++)
+    if (ch == ':') argc++;
+  [pool release];
+  return argc;
+}
+
 static SEL dummy_selector_of(SEL a_sel)
 {
   id selstr;
@@ -101,8 +113,20 @@ static SEL dummy_selector_of(SEL a_sel)
 - (NSMethodSignature *)msigForRubyMethod: (SEL)a_sel
 {
   if ([self hasRubyHandlerOf: a_sel]) {
+    NSMethodSignature* msig;
     a_sel = dummy_selector_of(a_sel);
-    return [self methodSignatureForSelector: a_sel];
+    msig = [self methodSignatureForSelector: a_sel];
+    if (msig == nil) {
+      // as Observer
+      int argc = argc_of(a_sel);
+      if (argc == 0)
+	msig = [self methodSignatureForSelector: @selector(ruby_method_0)];
+      else if (argc == 1)
+	msig = [self methodSignatureForSelector: @selector(ruby_method_1:)];
+      else if (argc >= 2)
+	msig = [self methodSignatureForSelector: @selector(ruby_method_2:)];
+    }
+    return msig;
   }
   return nil;
 }
@@ -206,7 +230,6 @@ static SEL dummy_selector_of(SEL a_sel)
 - (NSMethodSignature *)methodSignatureForSelector:(SEL)aSelector
 {
   NSMethodSignature* msig;
-  DLOG1(@"== methodSignatureForSelector(%@)" , NSStringFromSelector(aSelector));
   msig = [super methodSignatureForSelector: aSelector];
   if (msig == nil) msig = [self msigForRubyMethod: aSelector];
   return msig;
@@ -277,6 +300,14 @@ static SEL dummy_selector_of(SEL a_sel)
 /** informal protocols **/
 /************************/
 
+// other
+- ruby_method_0 { return nil; }
+- ruby_method_1:a1 { return nil; }
+- ruby_method_2:a1,... { return nil; }
+
+// as Observer
+- (void)dummy_receiveNotification: (NSNotification *)notification {}
+
 // @interface NSObject (NSNibAwaking)
 - (void)dummy_awakeFromNib {}
 
@@ -305,6 +336,18 @@ static SEL dummy_selector_of(SEL a_sel)
 - (void)dummy_applicationDidUpdate:(NSNotification *)notification {}
 - (void)dummy_applicationWillTerminate:(NSNotification *)notification {}
 - (void)dummy_applicationDidChangeScreenParameters:(NSNotification *)notification {}
+
+// @interface NSObject(NSApplicationDelegate)
+- (NSApplicationTerminateReply)dummy_applicationShouldTerminate:(NSApplication *)sender { return 0; }
+- (BOOL)dummy_application:(NSApplication *)sender openFile:(NSString *)filename { return NO; }
+- (BOOL)dummy_application:(NSApplication *)sender openTempFile:(NSString *)filename { return NO; }
+- (BOOL)dummy_applicationShouldOpenUntitledFile:(NSApplication *)sender { return NO; }
+- (BOOL)dummy_applicationOpenUntitledFile:(NSApplication *)sender { return NO; }
+- (BOOL)dummy_application:(id)sender openFileWithoutUI:(NSString *)filename { return NO; }
+- (BOOL)dummy_application:(NSApplication *)sender printFile:(NSString *)filename { return NO; }
+- (BOOL)dummy_applicationShouldTerminateAfterLastWindowClosed:(NSApplication *)sender { return NO; }
+- (BOOL)dummy_applicationShouldHandleReopen:(NSApplication *)sender hasVisibleWindows:(BOOL)flag { return NO; }
+- (NSMenu *)dummy_applicationDockMenu:(NSApplication *)sender { return nil; }
 
 // @interface NSObject (NSConnectionDelegateMethods)
 - (BOOL)dummy_makeNewConnection:(NSConnection *)conn sender:(NSConnection *)ancestor { return NO; }
@@ -438,6 +481,24 @@ static SEL dummy_selector_of(SEL a_sel)
 - (NSToolbarItem *)dummy_toolbar:(NSToolbar *)toolbar itemForItemIdentifier:(NSString *)itemIdentifier willBeInsertedIntoToolbar:(BOOL)flag { return nil; }
 - (NSArray *)dummy_toolbarDefaultItemIdentifiers:(NSToolbar*)toolbar { return nil; }
 - (NSArray *)dummy_toolbarAllowedItemIdentifiers:(NSToolbar*)toolbar { return nil; }
+
+// @interface NSObject(NSWindowNotifications)
+- (void)dummy_windowDidResize:(NSNotification *)notification {}
+- (void)dummy_windowDidExpose:(NSNotification *)notification {}
+- (void)dummy_windowWillMove:(NSNotification *)notification {}
+- (void)dummy_windowDidMove:(NSNotification *)notification {}
+- (void)dummy_windowDidBecomeKey:(NSNotification *)notification {}
+- (void)dummy_windowDidResignKey:(NSNotification *)notification {}
+- (void)dummy_windowDidBecomeMain:(NSNotification *)notification {}
+- (void)dummy_windowDidResignMain:(NSNotification *)notification {}
+- (void)dummy_windowWillClose:(NSNotification *)notification {}
+- (void)dummy_windowWillMiniaturize:(NSNotification *)notification {}
+- (void)dummy_windowDidMiniaturize:(NSNotification *)notification {}
+- (void)dummy_windowDidDeminiaturize:(NSNotification *)notification {}
+- (void)dummy_windowDidUpdate:(NSNotification *)notification {}
+- (void)dummy_windowDidChangeScreen:(NSNotification *)notification {}
+- (void)dummy_windowWillBeginSheet:(NSNotification *)notification {}
+- (void)dummy_windowDidEndSheet:(NSNotification *)notification {}
 
 // @interface NSObject(NSWindowDelegate)
 - (BOOL)dummy_windowShouldClose:(id)sender { return NO; }
