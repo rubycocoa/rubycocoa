@@ -44,6 +44,13 @@ static VALUE rbclass_nssize()
   return rb_const_get(mOSX, rb_intern("NSSize"));
 }
 
+static VALUE rbclass_nsrange()
+{
+  VALUE mOSX = rb_const_get(rb_cObject, rb_intern("OSX"));
+  if (!mOSX) return Qnil;
+  return rb_const_get(mOSX, rb_intern("NSRange"));
+}
+
 int
 to_octype(const char* octype_str)
 {
@@ -60,6 +67,9 @@ to_octype(const char* octype_str)
   }
   else if (strcmp(octype_str, "{_NSSize=ff}") == 0) {
     oct = _PRIV_C_NSSIZE;
+  }
+  else if (strcmp(octype_str, "{_NSRange=II}") == 0) {
+    oct = _PRIV_C_NSRANGE;
   }
 
   return oct;
@@ -121,6 +131,9 @@ ocdata_size(int octype)
   case _PRIV_C_NSSIZE:
     result = sizeof(NSSize); break;
 
+  case _PRIV_C_NSRANGE:
+    result = sizeof(NSRange); break;
+
   case _C_BFLD:
   case _C_UNDEF:
   case _C_ARY_B:
@@ -180,6 +193,8 @@ ocdata_malloc_va_arg(va_list ap, int octype)
     *(NSPoint*)data = va_arg(ap, NSPoint); break;
   case _PRIV_C_NSSIZE:
     *(NSSize*)data = va_arg(ap, NSSize); break;
+  case _PRIV_C_NSRANGE:
+    *(NSRange*)data = va_arg(ap, NSRange); break;
   case _C_BFLD:
   case _C_UNDEF:
   case _C_ARY_B:
@@ -293,6 +308,17 @@ ocdata_to_rbobj(int octype, const void* ocdata,	VALUE* result)
       rbval = rb_funcall(klass, rb_intern("new"), 2,
 			 rb_float_new((double)vp->width),
 			 rb_float_new((double)vp->height));
+    else
+      f_success = NO;
+    break;
+  }
+
+  case _PRIV_C_NSRANGE: {
+    NSRange* rp = (NSRange*)ocdata;
+    VALUE klass = rbclass_nsrange();
+    if (klass != Qnil)
+      rbval = rb_funcall(klass, rb_intern("new"), 2, 
+			 UINT2NUM(rp->location), UINT2NUM(rp->length));
     else
       f_success = NO;
     break;
@@ -508,6 +534,25 @@ static BOOL rbobj_to_nssize(VALUE obj, NSSize* result)
   return YES;
 }
 
+static BOOL rbobj_to_nsrange(VALUE obj, NSRange* result)
+{
+  if (rb_respond_to(obj, rb_intern("to_range")))
+    obj = rb_funcall(obj, rb_intern("to_range"), 0);
+  if (rb_obj_is_kind_of(obj, rb_cRange)) {
+    result->location = NUM2UINT(rb_funcall(obj, rb_intern("begin"), 0));
+    result->length = NUM2UINT(rb_funcall(obj, rb_intern("length"), 0));
+  }
+  else {
+    if (TYPE(obj) != T_ARRAY)
+      obj = rb_funcall(obj, rb_intern("to_a"), 0);
+    rb_funcall(obj, rb_intern("flatten!"), 0);
+    if (RARRAY(obj)->len != 2) return NO;
+    result->location = NUM2UINT(rb_ary_entry(obj, 0));
+    result->length = NUM2UINT(rb_ary_entry(obj, 1));
+  }
+  return YES;
+}
+
 static BOOL rbobj_to_nsrect(VALUE obj, NSRect* result)
 {
   if (TYPE(obj) != T_ARRAY)
@@ -619,6 +664,13 @@ rbobj_to_ocdata(VALUE obj, int octype, void* ocdata)
     NSSize nsval;
     f_success = rbobj_to_nssize(obj, &nsval);
     if (f_success) *(NSSize*)ocdata = nsval;
+    break;
+  }
+
+  case _PRIV_C_NSRANGE: {
+    NSRange nsval;
+    f_success = rbobj_to_nsrange(obj, &nsval);
+    if (f_success) *(NSRange*)ocdata = nsval;
     break;
   }
 

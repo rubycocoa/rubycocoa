@@ -110,6 +110,26 @@ module OSX
     end
   end
 
+  class NSRange
+    attr_accessor :location, :length
+    def initialize(*args)
+      @location = @length = 0
+      args.flatten!
+      if args.size == 1 then
+	if args[0].is_a? Range then
+	  @location = args[0].begin
+	  @length = args[0].length
+	end
+      elsif args.size == 2 then
+	@location = args[0].to_i
+	@length = args[1].to_i
+      end
+    end
+    def to_range
+      Range.new(@location, @location + @length - 1)
+    end
+  end
+
   class OCObject
     extend OCStubCreator
 

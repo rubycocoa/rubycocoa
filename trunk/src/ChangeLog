@@ -1,3 +1,8 @@
+2001-12-04  FUJIMOTO Hisakuni  <hisa@fobj.com>
+
+	* framework/ocdata_conv.h, framework/ocdata_conv.m,
+	lib/osx/ocobject.rb: implement NSRange and Range conversion.
+
 2001-12-03  FUJIMOTO Hisakuni  <hisa@fobj.com>
 
 	* framework/OverrideMixin.m, framework/RBRuntime.m: use
