@@ -60,7 +60,7 @@ ocobj_data_new(id oc_obj)
 }
 
 
-VALUE ocobj_new_with_ocid(id oc_obj)
+static VALUE ocobj_new_with_ocid_with_class(id oc_obj, VALUE klass)
 {
   VALUE new_obj;
   struct _ocobj_data* dp;
@@ -82,15 +82,48 @@ VALUE ocobj_new_with_ocid(id oc_obj)
 
   NS_ENDHANDLER
   
-  new_obj = Data_Wrap_Struct(kOCObject, 0, ocobj_data_free, dp);
+  new_obj = Data_Wrap_Struct(klass, 0, ocobj_data_free, dp);
   return new_obj;
+}
+
+VALUE ocobj_new_with_ocid(id oc_obj)
+{
+  return ocobj_new_with_ocid_with_class(oc_obj, kOCObject);
 }
 
 static VALUE ocobj_s_new_with_id(int argc, VALUE* argv, VALUE klass)
 {
   VALUE obj;
   if (argc < 1) rb_raise(rb_eArgError, "wrong # of arguments");
-  obj = ocobj_new_with_ocid((id)NUM2ULONG(argv[0]));
+  obj = ocobj_new_with_ocid_with_class((id)NUM2ULONG(argv[0]), klass);
+  argc--; argv++;
+  rb_obj_call_init(obj, argc, argv);
+  return obj;
+}
+
+static Class rbstr_to_nsclass(VALUE rbstr)
+{
+  id pool = [[NSAutoreleasePool alloc] init];
+  Class result;
+  rbstr = rb_obj_as_string(rbstr);
+  result = NSClassFromString([NSString stringWithCString: STR2CSTR(rbstr)]);
+  [pool release];
+  return result;
+}
+
+static VALUE ocobj_s_new_with_name(int argc, VALUE* argv, VALUE klass)
+{
+  VALUE obj;
+  Class nsclass;
+  id nsobj;
+  if (argc < 1) rb_raise(rb_eArgError, "wrong # of arguments");
+  nsclass = rbstr_to_nsclass(argv[0]);
+  if (nsclass == nil)
+    rb_raise(rb_eArgError, "class '%s' is nothing.", 
+	     STR2CSTR(rb_obj_as_string(argv[0])));
+  nsobj = [[nsclass alloc] init];
+  obj = ocobj_new_with_ocid_with_class(nsobj, klass);
+  OCOBJ_DATA_PTR(obj)->ownership -= 1; // remove one ownership
   argc--; argv++;
   rb_obj_call_init(obj, argc, argv);
   return obj;
@@ -99,15 +132,9 @@ static VALUE ocobj_s_new_with_id(int argc, VALUE* argv, VALUE klass)
 static VALUE ocobj_s_new(int argc, VALUE* argv, VALUE klass)
 {
   VALUE obj;
-  if (argc < 1) rb_raise(rb_eArgError, "wrong # of arguments");
-  obj = ocobj_new_with_ocid((id)NUM2ULONG(argv[0]));
-  argc--; argv++;
+  obj = ocobj_new_with_ocid_with_class([[NSObject alloc] init], klass);
   rb_obj_call_init(obj, argc, argv);
-  return obj;
-}
-
-static VALUE ocobj_initialize(int argc, VALUE* argv, VALUE obj)
-{
+  OCOBJ_DATA_PTR(obj)->ownership -= 1; // remove one ownership
   return obj;
 }
 
@@ -396,8 +423,8 @@ init_class_OCObject(VALUE outer)
   kOCObject = rb_define_class_under(outer, "OCObject", rb_cObject);
 
   rb_define_singleton_method(kOCObject, "new_with_id", ocobj_s_new_with_id, -1);
+  rb_define_singleton_method(kOCObject, "new_with_name", ocobj_s_new_with_name, -1);
   rb_define_singleton_method(kOCObject, "new", ocobj_s_new, -1);
-  rb_define_method(kOCObject, "initialize", ocobj_initialize, -1);
 
   rb_define_method(kOCObject, "__ocid__", ocobj_ocid, 0);
   rb_define_method(kOCObject, "__inspect__", ocobj_inspect, 0);
