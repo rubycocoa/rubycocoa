@@ -11,12 +11,15 @@
  **/
 #import <objc/objc.h>
 #import <Foundation/NSObject.h>
+#import <Foundation/NSTimer.h>
 #import <LibRuby/cocoa_ruby.h>
 
 int RBApplicationMain(const char* rb_main_name, int argc, char* argv[]);
 
 Class RBOCClassNew(const char* name, Class superclass);
 Class RBOCDerivedClassNew(const char* name, Class superclass);
+
+void RBThreadSchedulerStart(NSTimeInterval interval);
 
 @interface NSObject(RBOverrideMixin)
 - __slave__;

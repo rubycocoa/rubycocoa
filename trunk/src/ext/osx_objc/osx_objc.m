@@ -84,6 +84,14 @@ osx_mf_objc_derived_class_method_add(VALUE mdl, VALUE class_name, VALUE method_n
   return Qnil;
 }
 
+static VALUE
+osx_mf_ruby_thread_switcher_start(VALUE mdl, VALUE interval)
+{
+  NSTimeInterval it;
+  Check_Type(interval, T_FLOAT);
+  RBThreadSchedulerStart(RFLOAT(interval)->value);
+}
+
 
 void Init_osx_objc()
 {
@@ -100,6 +108,9 @@ void Init_osx_objc()
 			    osx_mf_objc_derived_class_new, 2);
   rb_define_module_function(mOSX, "objc_derived_class_method_add",
 			    osx_mf_objc_derived_class_method_add, 2);
+
+  rb_define_module_function(mOSX, "ruby_thread_switcher_start",
+			    osx_mf_ruby_thread_switcher_start, 1);
 
   init_cocoa(mOSX);
 }
