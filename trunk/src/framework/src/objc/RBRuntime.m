@@ -60,7 +60,7 @@ static char* framework_ruby_path()
   return result;
 }
 
-static VALUE load_path_unshift(const char* path)
+static void load_path_unshift(const char* path)
 {
   extern VALUE rb_load_path;
   rb_ary_unshift(rb_load_path, rb_str_new2(path));
