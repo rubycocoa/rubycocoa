@@ -77,7 +77,7 @@ There are various other samples. Please read and try them. Have fun!
   that was translated from Python into Ruby.
 
 * TransparentHello.rb appears in the article of
-  ((<'Dr. Dobbs Journal, May 2002'|URL:http://http://www.ddj.com/articles/2002/0205//>))
+  ((<'Dr. Dobbs Journal, May 2002'|URL:http://www.ddj.com/articles/2002/0205/>))
   written by Chris Thomas.
 
 * RubyRaiseMan and RubyTypingTutor is a tutorial application in
