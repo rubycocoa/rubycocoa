@@ -18,11 +18,11 @@ module OSX
     if not OSX.const_defined?(sym) then
       const_name = sym.to_s
       sym_name = ":#{sym}"
-      OSX.module_eval <<-END,__FILE__,__LINE__+1
+      OSX.module_eval <<-EOE_NS_IMPORT,__FILE__,__LINE__+1
         clsobj = NSClassFromString(#{sym_name})
         rbcls = class_new_for_occlass(clsobj)
         #{const_name} = rbcls if rbcls
-      END
+      EOE_NS_IMPORT
     end
   end
   module_function :ns_import
@@ -30,12 +30,12 @@ module OSX
   # create Ruby's class for Cocoa class
   def OSX.class_new_for_occlass(occls)
     klass = Class.new(OSX::ObjcID)
-    klass.class_eval <<END,__FILE__,__LINE__+1
+    klass.class_eval <<-EOE_CLASS_NEW_FOR_OCCLASS,__FILE__,__LINE__+1
       include OCObjWrapper
       self.extend OCObjWrapper
       self.extend NSBehaviorAttachment
       @ocid = #{occls.__ocid__}
-    END
+    EOE_CLASS_NEW_FOR_OCCLASS
     def klass.__ocid__() @ocid end
     def klass.to_s() name end
     def klass.inherited(subklass) subklass.ns_inherited() end
