@@ -139,7 +139,23 @@ osx_NSApplicationDidChangeScreenParametersNotification(VALUE mdl)
 static VALUE
 osx_NSApplicationMain(VALUE mdl, VALUE a0, VALUE a1)
 {
-  rb_notimplement();
+  int ns_result;
+
+  int ns_a0;
+  const char ** ns_a1;
+
+  VALUE rb_result;
+  id pool = [[NSAutoreleasePool alloc] init];
+  /* a0 */
+  rbarg_to_nsarg(a0, _C_INT, &ns_a0, pool, 0);
+  /* a1 */
+  rbarg_to_nsarg(a1, _PRIV_C_PTR, &ns_a1, pool, 1);
+
+  ns_result = NSApplicationMain(ns_a0, ns_a1);
+
+  rb_result = nsresult_to_rbresult(_C_INT, &ns_result, pool);
+  [pool release];
+  return rb_result;
 }
 
 // BOOL NSApplicationLoad ( void );

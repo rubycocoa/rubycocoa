@@ -12,28 +12,94 @@ static const int VA_MAX = 4;
 static VALUE
 osx_NSAllocateObject(VALUE mdl, VALUE a0, VALUE a1, VALUE a2)
 {
-  rb_notimplement();
+  id < NSObject > ns_result;
+
+  Class ns_a0;
+  unsigned ns_a1;
+  NSZone * ns_a2;
+
+  VALUE rb_result;
+  id pool = [[NSAutoreleasePool alloc] init];
+  /* a0 */
+  rbarg_to_nsarg(a0, _C_ID, &ns_a0, pool, 0);
+  /* a1 */
+  rbarg_to_nsarg(a1, _C_UINT, &ns_a1, pool, 1);
+  /* a2 */
+  rbarg_to_nsarg(a2, _PRIV_C_PTR, &ns_a2, pool, 2);
+
+  ns_result = NSAllocateObject(ns_a0, ns_a1, ns_a2);
+
+  rb_result = nsresult_to_rbresult(_C_ID, &ns_result, pool);
+  [pool release];
+  return rb_result;
 }
 
 // void NSDeallocateObject ( id < NSObject > object );
 static VALUE
 osx_NSDeallocateObject(VALUE mdl, VALUE a0)
 {
-  rb_notimplement();
+
+  id < NSObject > ns_a0;
+
+  VALUE rb_result;
+  id pool = [[NSAutoreleasePool alloc] init];
+  /* a0 */
+  rbarg_to_nsarg(a0, _C_ID, &ns_a0, pool, 0);
+
+  NSDeallocateObject(ns_a0);
+
+  rb_result = Qnil;
+  [pool release];
+  return rb_result;
 }
 
 // id < NSObject > NSCopyObject ( id < NSObject > object , unsigned extraBytes , NSZone * zone );
 static VALUE
 osx_NSCopyObject(VALUE mdl, VALUE a0, VALUE a1, VALUE a2)
 {
-  rb_notimplement();
+  id < NSObject > ns_result;
+
+  id < NSObject > ns_a0;
+  unsigned ns_a1;
+  NSZone * ns_a2;
+
+  VALUE rb_result;
+  id pool = [[NSAutoreleasePool alloc] init];
+  /* a0 */
+  rbarg_to_nsarg(a0, _C_ID, &ns_a0, pool, 0);
+  /* a1 */
+  rbarg_to_nsarg(a1, _C_UINT, &ns_a1, pool, 1);
+  /* a2 */
+  rbarg_to_nsarg(a2, _PRIV_C_PTR, &ns_a2, pool, 2);
+
+  ns_result = NSCopyObject(ns_a0, ns_a1, ns_a2);
+
+  rb_result = nsresult_to_rbresult(_C_ID, &ns_result, pool);
+  [pool release];
+  return rb_result;
 }
 
 // BOOL NSShouldRetainWithZone ( id < NSObject > anObject , NSZone * requestedZone );
 static VALUE
 osx_NSShouldRetainWithZone(VALUE mdl, VALUE a0, VALUE a1)
 {
-  rb_notimplement();
+  BOOL ns_result;
+
+  id < NSObject > ns_a0;
+  NSZone * ns_a1;
+
+  VALUE rb_result;
+  id pool = [[NSAutoreleasePool alloc] init];
+  /* a0 */
+  rbarg_to_nsarg(a0, _C_ID, &ns_a0, pool, 0);
+  /* a1 */
+  rbarg_to_nsarg(a1, _PRIV_C_PTR, &ns_a1, pool, 1);
+
+  ns_result = NSShouldRetainWithZone(ns_a0, ns_a1);
+
+  rb_result = nsresult_to_rbresult(_PRIV_C_BOOL, &ns_result, pool);
+  [pool release];
+  return rb_result;
 }
 
 // void NSIncrementExtraRefCount ( id object );

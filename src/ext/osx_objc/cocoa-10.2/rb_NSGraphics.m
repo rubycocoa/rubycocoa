@@ -153,35 +153,112 @@ osx_NSDeviceSize(VALUE mdl)
 static VALUE
 osx_NSBestDepth(VALUE mdl, VALUE a0, VALUE a1, VALUE a2, VALUE a3, VALUE a4)
 {
-  rb_notimplement();
+  NSWindowDepth ns_result;
+
+  NSString * ns_a0;
+  int ns_a1;
+  int ns_a2;
+  BOOL ns_a3;
+  BOOL * ns_a4;
+
+  VALUE rb_result;
+  id pool = [[NSAutoreleasePool alloc] init];
+  /* a0 */
+  rbarg_to_nsarg(a0, _C_ID, &ns_a0, pool, 0);
+  /* a1 */
+  rbarg_to_nsarg(a1, _C_INT, &ns_a1, pool, 1);
+  /* a2 */
+  rbarg_to_nsarg(a2, _C_INT, &ns_a2, pool, 2);
+  /* a3 */
+  rbarg_to_nsarg(a3, _C_UCHR, &ns_a3, pool, 3);
+  /* a4 */
+  rbarg_to_nsarg(a4, _PRIV_C_PTR, &ns_a4, pool, 4);
+
+  ns_result = NSBestDepth(ns_a0, ns_a1, ns_a2, ns_a3, ns_a4);
+
+  rb_result = nsresult_to_rbresult(_C_INT, &ns_result, pool);
+  [pool release];
+  return rb_result;
 }
 
 // BOOL NSPlanarFromDepth ( NSWindowDepth depth );
 static VALUE
 osx_NSPlanarFromDepth(VALUE mdl, VALUE a0)
 {
-  rb_notimplement();
+  BOOL ns_result;
+
+  NSWindowDepth ns_a0;
+
+  VALUE rb_result;
+  id pool = [[NSAutoreleasePool alloc] init];
+  /* a0 */
+  rbarg_to_nsarg(a0, _C_INT, &ns_a0, pool, 0);
+
+  ns_result = NSPlanarFromDepth(ns_a0);
+
+  rb_result = nsresult_to_rbresult(_PRIV_C_BOOL, &ns_result, pool);
+  [pool release];
+  return rb_result;
 }
 
 // NSString * NSColorSpaceFromDepth ( NSWindowDepth depth );
 static VALUE
 osx_NSColorSpaceFromDepth(VALUE mdl, VALUE a0)
 {
-  rb_notimplement();
+  NSString * ns_result;
+
+  NSWindowDepth ns_a0;
+
+  VALUE rb_result;
+  id pool = [[NSAutoreleasePool alloc] init];
+  /* a0 */
+  rbarg_to_nsarg(a0, _C_INT, &ns_a0, pool, 0);
+
+  ns_result = NSColorSpaceFromDepth(ns_a0);
+
+  rb_result = nsresult_to_rbresult(_C_ID, &ns_result, pool);
+  [pool release];
+  return rb_result;
 }
 
 // int NSBitsPerSampleFromDepth ( NSWindowDepth depth );
 static VALUE
 osx_NSBitsPerSampleFromDepth(VALUE mdl, VALUE a0)
 {
-  rb_notimplement();
+  int ns_result;
+
+  NSWindowDepth ns_a0;
+
+  VALUE rb_result;
+  id pool = [[NSAutoreleasePool alloc] init];
+  /* a0 */
+  rbarg_to_nsarg(a0, _C_INT, &ns_a0, pool, 0);
+
+  ns_result = NSBitsPerSampleFromDepth(ns_a0);
+
+  rb_result = nsresult_to_rbresult(_C_INT, &ns_result, pool);
+  [pool release];
+  return rb_result;
 }
 
 // int NSBitsPerPixelFromDepth ( NSWindowDepth depth );
 static VALUE
 osx_NSBitsPerPixelFromDepth(VALUE mdl, VALUE a0)
 {
-  rb_notimplement();
+  int ns_result;
+
+  NSWindowDepth ns_a0;
+
+  VALUE rb_result;
+  id pool = [[NSAutoreleasePool alloc] init];
+  /* a0 */
+  rbarg_to_nsarg(a0, _C_INT, &ns_a0, pool, 0);
+
+  ns_result = NSBitsPerPixelFromDepth(ns_a0);
+
+  rb_result = nsresult_to_rbresult(_C_INT, &ns_result, pool);
+  [pool release];
+  return rb_result;
 }
 
 // int NSNumberOfColorComponents ( NSString * colorSpaceName );
@@ -648,7 +725,49 @@ osx_NSReadPixel(VALUE mdl, VALUE a0)
 static VALUE
 osx_NSDrawBitmap(VALUE mdl, VALUE a0, VALUE a1, VALUE a2, VALUE a3, VALUE a4, VALUE a5, VALUE a6, VALUE a7, VALUE a8, VALUE a9, VALUE a10)
 {
-  rb_notimplement();
+
+  NSRect ns_a0;
+  int ns_a1;
+  int ns_a2;
+  int ns_a3;
+  int ns_a4;
+  int ns_a5;
+  int ns_a6;
+  BOOL ns_a7;
+  BOOL ns_a8;
+  NSString * ns_a9;
+  const unsigned char * const* ns_a10;
+
+  VALUE rb_result;
+  id pool = [[NSAutoreleasePool alloc] init];
+  /* a0 */
+  rbarg_to_nsarg(a0, _PRIV_C_NSRECT, &ns_a0, pool, 0);
+  /* a1 */
+  rbarg_to_nsarg(a1, _C_INT, &ns_a1, pool, 1);
+  /* a2 */
+  rbarg_to_nsarg(a2, _C_INT, &ns_a2, pool, 2);
+  /* a3 */
+  rbarg_to_nsarg(a3, _C_INT, &ns_a3, pool, 3);
+  /* a4 */
+  rbarg_to_nsarg(a4, _C_INT, &ns_a4, pool, 4);
+  /* a5 */
+  rbarg_to_nsarg(a5, _C_INT, &ns_a5, pool, 5);
+  /* a6 */
+  rbarg_to_nsarg(a6, _C_INT, &ns_a6, pool, 6);
+  /* a7 */
+  rbarg_to_nsarg(a7, _C_UCHR, &ns_a7, pool, 7);
+  /* a8 */
+  rbarg_to_nsarg(a8, _C_UCHR, &ns_a8, pool, 8);
+  /* a9 */
+  rbarg_to_nsarg(a9, _C_ID, &ns_a9, pool, 9);
+  /* a10 */
+  rbarg_to_nsarg(a10, _PRIV_C_PTR, &ns_a10, pool, 10);
+
+  NSDrawBitmap(ns_a0, ns_a1, ns_a2, ns_a3, ns_a4, ns_a5, ns_a6, ns_a7, ns_a8, ns_a9, ns_a10);
+
+  rb_result = Qnil;
+  [pool release];
+  return rb_result;
 }
 
 // void NSCopyBits ( int srcGState , NSRect srcRect , NSPoint destPoint );
@@ -726,7 +845,22 @@ osx_NSCountWindows(VALUE mdl, VALUE a0)
 static VALUE
 osx_NSWindowList(VALUE mdl, VALUE a0, VALUE a1)
 {
-  rb_notimplement();
+
+  int ns_a0;
+  int* ns_a1;
+
+  VALUE rb_result;
+  id pool = [[NSAutoreleasePool alloc] init];
+  /* a0 */
+  rbarg_to_nsarg(a0, _C_INT, &ns_a0, pool, 0);
+  /* a1 */
+  rbarg_to_nsarg(a1, _PRIV_C_PTR, &ns_a1, pool, 1);
+
+  NSWindowList(ns_a0, ns_a1);
+
+  rb_result = Qnil;
+  [pool release];
+  return rb_result;
 }
 
 // void NSCountWindowsForContext ( int context , int * count );
@@ -755,7 +889,25 @@ osx_NSCountWindowsForContext(VALUE mdl, VALUE a0, VALUE a1)
 static VALUE
 osx_NSWindowListForContext(VALUE mdl, VALUE a0, VALUE a1, VALUE a2)
 {
-  rb_notimplement();
+
+  int ns_a0;
+  int ns_a1;
+  int* ns_a2;
+
+  VALUE rb_result;
+  id pool = [[NSAutoreleasePool alloc] init];
+  /* a0 */
+  rbarg_to_nsarg(a0, _C_INT, &ns_a0, pool, 0);
+  /* a1 */
+  rbarg_to_nsarg(a1, _C_INT, &ns_a1, pool, 1);
+  /* a2 */
+  rbarg_to_nsarg(a2, _PRIV_C_PTR, &ns_a2, pool, 2);
+
+  NSWindowListForContext(ns_a0, ns_a1, ns_a2);
+
+  rb_result = Qnil;
+  [pool release];
+  return rb_result;
 }
 
 // int NSGetWindowServerMemory ( int context , int * virtualMemory , int * windowBackingMemory , NSString * * windowDumpString );
