@@ -1,5 +1,8 @@
 TARGETDIR = ./html
-INSTALL_TARGETDIR = ../doc
+RUBYCOCOA_DIR = ../src
+CHANGELOG_SRC = $(RUBYCOCOA_DIR)/Changelog
+INSTALL_TARGETDIR = $(RUBYCOCOA_DIR)/doc
+
 RUBY = ruby
 SED = sed
 
@@ -112,7 +115,7 @@ $(TARGETDIR)/references.en.html:	REFERENCES.en
 $(TARGETDIR)/references.ja.html:	REFERENCES.ja
 	$(RUBY) make_html.rb $< $(TARGETDIR)
 
-$(TARGETDIR)/changelog.html:		../ChangeLog
+$(TARGETDIR)/changelog.html:		$(CHANGELOG_SRC)
 	echo "<html>" > $(TARGETDIR)/changelog.html
 	echo "<head><title>RubyCocoa - ChangeLog</title></head>" >> $(TARGETDIR)/changelog.html
 	echo "<body>"  >> $(TARGETDIR)/changelog.html
