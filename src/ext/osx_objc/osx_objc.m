@@ -10,10 +10,10 @@
  *
  **/
 
-#import <LibRuby/cocoa_ruby.h>
+#import "osx_ruby.h"
 #import <Foundation/Foundation.h>
-#import <RubyCocoa/RubyCocoa.h>
-#import <RubyCocoa/RBThreadSwitcher.h>
+#import "RubyCocoa.h"
+#import "RBThreadSwitcher.h"
 
 #define OSX_MODULE_NAME "OSX"
 

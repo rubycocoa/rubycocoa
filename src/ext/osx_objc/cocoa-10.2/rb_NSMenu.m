@@ -1,5 +1,5 @@
-#import <LibRuby/cocoa_ruby.h>
-#import <RubyCocoa/ocdata_conv.h>
+#import "osx_ruby.h"
+#import "ocdata_conv.h"
 #import <AppKit/AppKit.h>
 
 extern void rbarg_to_nsarg(VALUE rbarg, int octype, void* nsarg, id pool, int index);
