@@ -42,3 +42,5 @@ dt { font-weight: bold; color: #303070; margin: 0em 1em }
 dd { margin: 0em 2em }
 
 p { margin: 1em 1em }
+
+em { font-weight: bold }
