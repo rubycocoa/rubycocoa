@@ -47,15 +47,6 @@ _objcid_data_new()
 }
 
 static VALUE
-objcid_s_new(int argc, VALUE* argv, VALUE klass)
-{
-  VALUE obj;
-  obj = Data_Wrap_Struct(klass, 0, _objcid_data_free, _objcid_data_new());
-  rb_obj_call_init(obj, argc, argv);
-  return obj;
-}
-
-static VALUE
 _rb_cls_name(VALUE obj)
 {
   obj = rb_obj_as_string(CLASS_OF(obj));
@@ -64,7 +55,7 @@ _rb_cls_name(VALUE obj)
 }
 
 static VALUE
-objcid_initialize(int argc, VALUE* argv, VALUE rcv)
+_objcid_real_initialize(int argc, VALUE* argv, VALUE rcv)
 {
   VALUE arg_ocid;
   id ocid;
@@ -87,6 +78,26 @@ objcid_initialize(int argc, VALUE* argv, VALUE rcv)
     [pool release];
   }
   OBJCID_DATA_PTR(rcv)->ocid = ocid;
+  return rcv;
+}
+
+static VALUE
+objcid_s_new(int argc, VALUE* argv, VALUE klass)
+{
+  VALUE obj;
+  obj = Data_Wrap_Struct(klass, 0, _objcid_data_free, _objcid_data_new());
+  obj = _objcid_real_initialize(argc, argv, obj);
+  if (argc > 0) {
+    argc--;
+    argv++;
+  }
+  rb_obj_call_init(obj, argc, argv);
+  return obj;
+}
+
+static VALUE
+objcid_initialize(int argc, VALUE* argv, VALUE rcv)
+{
   return rcv;
 }
 

@@ -14,17 +14,6 @@ module OSX
 
   module OCStubCreator
 
-    def ns_loadable(super_name = nil)
-      name = self.to_s
-      if super_name.nil? then
-	OSX.objc_proxy_class_new (name)
-      else
-	super_name = :NSObject unless super_name
-	OSX.objc_derived_class_new (name, super_name.to_s)
-      end
-      OSX.ns_import name
-    end
-
     def ns_overrides(*args)
       class_name = self.to_s
       args.each do |method_name|
@@ -37,7 +26,6 @@ module OSX
     end
 
     # for look and feel
-    alias_method :ib_loadable,  :ns_loadable
     alias_method :ib_overrides, :ns_overrides
     alias_method :ib_outlets,   :ns_outlets
 
@@ -46,33 +34,35 @@ module OSX
 
   end
 
-  def OSX.objc_class_new(val)
+  # create Ruby's class for Cocoa class
+  def OSX.class_new_for_occlass(occls)
     klass = Class.new(OSX::OCObject)
-    klass.instance_eval %{
-      extend OCObjWrapper
-      @__ocobj__ = OCObject.new(val)
-      def method_missing(mname, *args)
-	@__ocobj__.send(mname, *args)
-      end
-      def __ocid__
-	@__ocobj__.__ocid__
-      end
-      def inherited(kls)
-	spr_name = self.description.to_s
-	cls_name = kls.name.split(':')[-1]
-	OSX.objc_derived_class_new (cls_name, spr_name)
-      end
-    }
+    klass.extend OCObjWrapper
+    klass.instance_eval "@ocid = #{occls.__ocid__}"
+
+    def klass.__ocid__() @ocid end
+    def klass.to_s() name end
+
+    def klass.inherited(kls)
+      spr_name = self.description.to_s
+      cls_name = kls.name.split(':')[-1]
+      OSX.objc_derived_class_new (cls_name, spr_name)
+      kls.extend OCStubCreator
+    end
+
     klass
   end
 
+  # create Ruby's class for Cocoa class,
+  # then define Constant under module 'OSX'.
   def OSX.ns_import(sym)
     if not const_defined?(sym) then
       const_name = sym.to_s
       sym_name = ":#{sym}"
       module_eval %[
-        nsc = objc_class_new(NSClassFromString(#{sym_name}).__ocid__)
-        #{const_name} = nsc if nsc
+        clsobj = NSClassFromString(#{sym_name})
+        rbcls = class_new_for_occlass(clsobj)
+        #{const_name} = rbcls if rbcls
       ]
     end
   end
