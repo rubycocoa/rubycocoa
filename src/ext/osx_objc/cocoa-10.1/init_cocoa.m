@@ -13,12 +13,23 @@
 #import "osx_ruby.h"
 #import "ocdata_conv.h"
 
+static VALUE
+_ocdataconv_err_class()
+{
+  static VALUE exc = Qnil;
+  if (exc == Qnil) {
+    VALUE mosx = rb_const_get(rb_cObject, rb_intern("OSX"));
+    exc = rb_const_get(mosx, rb_intern("OCDataConvException"));
+  }
+  return exc;
+}
+
 void
 rbarg_to_nsarg(VALUE rbarg, int octype, void* nsarg, id pool, int index)
 {
   if (!rbobj_to_ocdata(rbarg, octype, nsarg)) {
     if (pool) [pool release];
-    rb_raise(rb_eArgError, "arg #%d cannot convert to nsobj.", index);
+    rb_raise(_ocdataconv_err_class(), "arg #%d cannot convert to nsobj.", index);
   }
 }
 
@@ -28,7 +39,7 @@ nsresult_to_rbresult(int octype, const void* nsresult, id pool)
   VALUE rbresult;
   if (!ocdata_to_rbobj(Qnil, octype, nsresult, &rbresult)) {
     if (pool) [pool release];
-    rb_raise(rb_eRuntimeError, "result cannot convert to rbobj.");
+    rb_raise(_ocdataconv_err_class(), "result cannot convert to rbobj.");
   }
   return rbresult;
 }
