@@ -17,6 +17,7 @@ SRCS.each {|src| usage unless FileTest.file?( src ) }
 PAT_1 = '\$Date:.*\$'
 PAT_2 = '\$Revision:.*\$'
 
+
 # process
 SRCS.each do |src|
   dstpath = File.join( TARGET, File.basename( src ) )
