@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="us-ascii" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<title>RubyOSXOBJC-MINITOUR</title>
+<meta http-equiv="Content-type" content="text/html; charset=us-ascii" />
+<link href="rdtext.css" type="text/css" rel="stylesheet"/>
+</head>
+<body>
+<h1><a name="label:0" id="label:0">Using RubyCocoa</a></h1><!-- RDLabel: "Using RubyCocoa" -->
+<h2><a name="label:1" id="label:1">load libraries</a></h2><!-- RDLabel: "load libraries" -->
+<pre>require 'osx/cocoa'      # classes defined in Foundation and AppKit.</pre>
+<p>or</p>
+<pre>require 'osx/foundation' # classes defined in Foundation
+require 'osx/appkit'     # classes defined in AppKit</pre>
+<h2><a name="label:2" id="label:2">an example the action with feeling</a></h2><!-- RDLabel: "an example the action with feeling" -->
+<p>At first it is a simple example to can taste the actual feeling that
+changed (a sound sounds).</p>
+<pre># play system sounds (1) (sample/sndplay.rb)
+require 'osx/cocoa'
+sndfiles = `ls /System/Library/Sounds/*.aiff`.split
+sndfiles.each do |path|
+  snd = OSX::NSSound.alloc.initWithContentsOfFile_byReference(path, true)
+  snd.play
+  sleep 0.25 while snd.isPlaying?
+end</pre>
+<p>Below, the right side of "# =&gt;" is character string done standard
+output of as an execution result in description.</p>
+<h2><a name="label:3" id="label:3">Instance of OSX::OCObject is an Objective-C Object wrapper</a></h2><!-- RDLabel: "Instance of OSX::OCObject is an Objective-C Object wrapper" -->
+<pre>p OSX::NSObject  # =&gt; #&lt;OCObject:0x82f22 class='NSObject' id=80819B0C&gt;
+nobj = OSX::NSObject.alloc.init
+p nobj           # =&gt; #&lt;OCObject:0x53d1a class='NSObject' id=3C6BB0&gt;</pre>
+<p>In RubyCocoa, all Objective-C Object (even Class itself) is instance
+of the OSX::OCObject. An instance of The OSX::OCObject is a Ruby
+object wrapped Objective-C object.</p>
+<h2><a name="label:4" id="label:4">Everything is Ruby objects</a></h2><!-- RDLabel: "Everything is Ruby objects" -->
+<pre>p OSX::NSString.kind_of?(Class) # =&gt; false
+p OSX::NSString.type            # =&gt; OSX::OCObject
+p OSX::NSString.string.type     # =&gt; OSX::OCObject</pre>
+<p>For example, RubyCocoa representation of Class "NSString" is
+"OSX::NSString". This "OSX::NSString" as Ruby object is an instance of
+OSX::OCObject and not is Ruby's Class itself.</p>
+<h2><a name="label:5" id="label:5">creating an object and owenership</a></h2><!-- RDLabel: "creating an object and owenership" -->
+<p>For creating an instance of OSX::OCObject, you can use methods for
+Cocoa/Objective-C. An instance of OSX::OCObject has ownership for
+wrapped Objective-C object always. When the instance is died by GC,
+ownership is remove automatic. So you don't worry memory management.</p>
+<pre>OSX::NSString.alloc.initWithString "Hoge"
+OSX::NSString.alloc.stringWithString "Hoge"</pre>
+<p>This 2 line is almost same meaning in RubyCocoa. You don't need to
+call methods release、autorelease、retain, and don't need to make
+NSAutoreleasePool.</p>
+<ul>
+<li>use Cocoa method for creating an instance of OSX::OCObject.</li>
+<li>don't worry ownership and memory management.</li>
+</ul>
+<h2><a name="label:6" id="label:6">return value of method</a></h2><!-- RDLabel: "return value of method" -->
+<pre>nstr = OSX::NSString.description
+p nstr      # =&gt; #&lt;OCObject:0x7233e class='NSCFString' id=687610&gt;
+p nstr.to_s # =&gt; "NSString"
+
+nstr = OSX::NSString.stringWithString "Hello World !"
+p nstr      # =&gt; #&lt;OCObject:0x71970 class='NSCFString' id=688E90&gt;
+p nstr.to_s # =&gt; "Hello World !"
+
+nstr = OSX::NSString.stringWithString(`pwd`.chop)
+nary = nstr.pathComponents
+p nary      # =&gt; #&lt;OCObject:0x6bb2e class='NSCFArray' id=3C0150&gt;
+
+ary = nary.to_a
+p ary       # =&gt; [#&lt;OCObject:0x6a9b8 class='NSCFString' id=3C2B50&gt;,...]
+
+ary.map! {|i| i.to_s }
+p ary       # =&gt; ["/", "Users", "hisa", "src", "ruby", "osxobjc"]</pre>
+<h2><a name="label:7" id="label:7">A decision and a variation of method name</a></h2><!-- RDLabel: "A decision and a variation of method name" -->
+<pre># play system sounds (2)
+sndfiles.each do |path|
+  snd = OSX::NSSound.alloc.initWithContentsOfFile(path, :byReference, true)
+  snd.play
+  sleep 0.25 while snd.isPlaying?
+end</pre>
+<p>This is another version of "playing system sounds". This show the
+other way of representation Objective-C Message Selector in Ruby
+world.</p>
+<p>As Objective-C:</p>
+<pre>[obj hogeAt: a0 withParamA: a1 withParamB: a2]</pre>
+<p>The RubyCocoa prepare some message sending way. Most basic way is
+substitute ":" with "_".</p>
+<pre>obj.hogeAt_withParamA_withParamB_ (a0, a1, a2)</pre>
+<p>But this appearance is too bad, so you can omit the last "_".</p>
+<pre>obj.hogeAt_withParamA_withParamB (a0, a1, a2)</pre>
+<p>When method name is very long, the relation Message Selector Keyword
+and each arguments is unclear. In order to improve this </p>
+<pre>obj.hogeAt (a0, :withParamA, a1, :withParamB, a2)</pre>
+<p>For the method returned BOOL (predicate method), using method name
+suffix "?".  If nothing this, method will return value 0(NO) or
+1(YES). These values behave as the true in the Ruby World.</p>
+<pre>nary = OSX::NSMutableArray.alloc.init
+p nary.containsObject("hoge")   # =&gt; 0
+p nary.containsObject?("hoge")  # =&gt; false
+nary.addObject("hoge")
+p nary.containsObject("hoge")   # =&gt; 1
+p nary.containsObject?("hoge")  # =&gt; true</pre>
+<h2><a name="label:8" id="label:8">convert Ruby object argument of method as possible</a></h2><!-- RDLabel: "convert Ruby object argument of method as possible" -->
+<p>It seems to be usual containsObject of the top and, in case of method
+to catch Objective-C object as a value of argument, tries conversion
+even if it just hands Ruby object so long as it is possible.</p>
+<h2><a name="label:9" id="label:9">method name prefix "oc_" - using this when method name conflict</a></h2><!-- RDLabel: "method name prefix "oc_" - using this when method name conflict" -->
+<pre>klass = OSX::NSObject.class
+p klass     # =&gt; OSX::OCObject
+klass = OSX::NSObject.oc_class
+p klass     # =&gt; #&lt;OCObject:0x82f22 class='NSObject' id=80819B0C&gt;</pre>
+<p>When the case same method name in Ruby and Objective-C like
+"Object#class", use method name prefix "oc_".</p>
+<p>FUJIMOTO Hisakuni &lt;hisa@imasy.or.jp&gt;
+$Date$ $Revisison$</p>
+
+</body>
+</html>
