@@ -20,7 +20,7 @@ static void debug_log(const char* fmt,...)
 {
   //  if (ruby_debug == Qtrue) {
     id pool = [[NSAutoreleasePool alloc] init];
-    NSString* nsfmt = [NSString stringWithFormat: @"RPRXY:%s", fmt];
+    NSString* nsfmt = [NSString stringWithFormat: @"RBOBJ:%s", fmt];
     va_list args;
     va_start(args, fmt);
     NSLogv(nsfmt, args);
@@ -124,19 +124,29 @@ static id ocid_of(VALUE obj)
 
 - (BOOL)rbobjRespondsToSelector: (SEL)a_sel
 {
-  RB_ID mid = sel_to_mid(a_sel);
-  BOOL ret = (rb_respond_to(m_rbobj, mid) != 0);
+  BOOL ret;
+  RB_ID mid;
+  DLOG1("rbobjRespondsToSelector(%@)", NSStringFromSelector(a_sel));
+  mid = sel_to_mid(a_sel);
+  ret = (rb_respond_to(m_rbobj, mid) != 0);
   if (ret == NO) {
     mid = sel_to_mid_as_setter(a_sel);
     ret = (rb_respond_to(m_rbobj, mid) != 0);
   }
+  DLOG1("   --> %d", ret);
   return ret;
 }
 
 - (NSMethodSignature*)rbobjMethodSignatureForSelector: (SEL)a_sel
 {
-  int argc = argc_of(a_sel);
-  return [DummyProtocolHandler instanceMethodSignatureForSelector: ruby_method_sel(argc)];
+  NSMethodSignature* msig;
+  int argc;
+  DLOG1("rbobjMethodSignatureForSelector(%@)", NSStringFromSelector(a_sel));
+  argc = argc_of(a_sel);
+  msig = [DummyProtocolHandler 
+	   instanceMethodSignatureForSelector: ruby_method_sel(argc)];
+  DLOG1("   --> %@", msig);
+  return msig;
 }
 
 - (VALUE)fetchForwardArgumentsOf: (NSInvocation*)an_inv
@@ -205,12 +215,14 @@ static id ocid_of(VALUE obj)
   VALUE rb_args;
   VALUE rb_result;
   RB_ID mid;
+  DLOG1("rbobjForwardInvocation(%@)", an_inv);
   mid = sel_to_mid([an_inv selector]);
   if (rb_respond_to(m_rbobj, mid) == 0)
     mid = sel_to_mid_as_setter([an_inv selector]);
   rb_args = [self fetchForwardArgumentsOf: an_inv];
   rb_result = rb_apply(m_rbobj, mid, rb_args);
   [self stuffForwardResult: rb_result to: an_inv];
+  DLOG1("   --> rb_result=%s", STR2CSTR(rb_inspect(rb_result)));
 }
 
 // public methods
@@ -236,7 +248,7 @@ static id ocid_of(VALUE obj)
 {
   DLOG1("forwardInvocation(%@)", an_inv);
   if ([self rbobjRespondsToSelector: [an_inv selector]]) {
-    DLOG0("   -> forward to Ruby Object");
+    DLOG0("   -> forward to super Objective-C Object");
     [self rbobjForwardInvocation: an_inv];
   }
   else {

@@ -11,10 +11,6 @@
 - initWithRubyObject: (VALUE) rbobj;
 - (VALUE) __rbobj__;
 
-- (BOOL) rbobjRespondsToSelector: (SEL)a_sel;
-- (NSMethodSignature*) rbobjMethodSignatureForSelector: (SEL)a_sel;
-- (void) rbobjForwardInvocation: (NSInvocation *)an_inv;
-
 @end
 
 @interface RBObject(RBSlaveObject)
