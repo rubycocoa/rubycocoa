@@ -15,6 +15,7 @@
 #import <Foundation/NSAutoreleasePool.h>
 #import <Foundation/NSString.h>
 #import <Foundation/NSBundle.h>
+#import <Foundation/NSDictionary.h>
 #import <RubyCocoa/RBObject.h>
 
 #import <objc/objc.h>
@@ -159,16 +160,95 @@ static void install_class_method_list(Class c)
   class_addMethods((c->isa), override_mixin_class_method_list());
 }
 
-Class RBOCClassNew(const char* name, Class super_class)
+
+/**
+ * Dictionary for Ruby class from  Objective-C class name
+ **/
+static NSMutableDictionary* class_dic_name_to_value()
 {
-  Class c = objc_class_alloc(name, super_class);
+  static NSMutableDictionary* dic = nil;
+  if (!dic) dic = [[NSMutableDictionary alloc] init];
+  return dic;
+}
+
+/**
+ * Dictionary for Objective-C class name from Ruby class
+ **/
+static NSMutableDictionary* class_dic_value_to_name()
+{
+  static NSMutableDictionary* dic = nil;
+  if (!dic) dic = [[NSMutableDictionary alloc] init];
+  return dic;
+}
+
+/**
+ * add class map entry to dictionaries.
+ **/
+static void class_map_dic_add (const char* name, VALUE kls)
+{
+  NSString* kls_name;
+  NSNumber* kls_value;
+
+  kls_name = [[NSString alloc] initWithCString: name];
+  kls_value = [[NSNumber alloc] initWithUnsignedLong: kls];
+  [class_dic_name_to_value() setObject: kls_value forKey: kls_name];
+  [class_dic_value_to_name() setObject: kls_name forKey: kls_value];
+  [kls_name release];
+  [kls_value release];
+}
+
+
+Class RBOCObjcClassFromRubyClass (VALUE kls)
+{
+  id pool;
+  NSDictionary* dic;
+  NSNumber* kls_value;
+  NSString* kls_name;
+  Class result = nil;
+
+  dic = class_dic_value_to_name();
+  pool = [[NSAutoreleasePool alloc] init];
+
+  kls_value = [NSNumber numberWithUnsignedLong: kls];
+  kls_name = [dic objectForKey: kls_value];
+  result = NSClassFromString (kls_name);
+  [pool release];
+  return result;
+}
+
+VALUE RBOCRubyClassFromObjcClass (Class cls)
+{
+  id pool;
+  NSDictionary* dic;
+  NSNumber* kls_value;
+  NSString* kls_name;
+  VALUE result = Qnil;
+
+  dic = class_dic_name_to_value();
+  pool = [[NSAutoreleasePool alloc] init];
+
+  kls_name = NSStringFromClass(cls);
+  kls_value = [dic objectForKey: kls_name];
+  result = [kls_value unsignedLongValue];
+  [pool release];
+  return result;
+}
+
+Class RBOCClassNew(VALUE kls, const char* name, Class super_class)
+{
+  Class c;
+
+  c = objc_class_alloc(name, super_class);
   objc_addClass(c);
+  class_map_dic_add (name, kls);
   return c;
 }
 
-Class RBOCDerivedClassNew(const char* name, Class super_class)
+Class RBOCDerivedClassNew(VALUE kls, const char* name, Class super_class)
 {
-  Class c = objc_class_alloc(name, super_class);
+  Class c;
+
+  c = objc_class_alloc(name, super_class);
 
   // init instance variable (m_proxy)
   install_ivar_list(c);
@@ -181,6 +261,7 @@ Class RBOCDerivedClassNew(const char* name, Class super_class)
 
   // add class to runtime system
   objc_addClass(c);
+  class_map_dic_add (name, kls);
   return c;
 }
 

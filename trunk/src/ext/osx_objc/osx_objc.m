@@ -29,31 +29,31 @@ static VALUE init_module_OSX()
   return module;
 }
 
-// def OSX.objc_proxy_class_new (class_name)
-// ex1.  OSX.objc_proxy_class_new (:AppController)
+// def OSX.objc_proxy_class_new (kls, kls_name)
+// ex1.  OSX.objc_proxy_class_new (AA::BB::AppController, "AppController")
 static VALUE
-osx_mf_objc_proxy_class_new(VALUE mdl, VALUE class_name)
+osx_mf_objc_proxy_class_new(VALUE mdl, VALUE kls, VALUE kls_name)
 {
-  class_name = rb_obj_as_string(class_name);
-  RBOCClassNew(STR2CSTR(class_name), [RBObject class]);
+  kls_name = rb_obj_as_string(kls_name);
+  RBOCClassNew(kls, STR2CSTR(kls_name), [RBObject class]);
   return Qnil;
 }
 
-// def OSX.objc_derived_class_new (class_name, super_name)
-// ex1.  OSX.objc_derived_class_new (:CustomView, :NSView)
+// def OSX.objc_derived_class_new (kls, kls_name, super_name)
+// ex1.  OSX.objc_derived_class_new (AA::BB::CustomView, "CustomView", "NSView")
 static VALUE
-osx_mf_objc_derived_class_new(VALUE mdl, VALUE class_name, VALUE super_name)
+osx_mf_objc_derived_class_new(VALUE mdl, VALUE kls, VALUE kls_name, VALUE super_name)
 {
   Class super_class;
   Class new_cls = nil;
   id pool = [[NSAutoreleasePool alloc] init];
 
-  class_name = rb_obj_as_string(class_name);
+  kls_name = rb_obj_as_string(kls_name);
   super_name = rb_obj_as_string(super_name);
   super_class = NSClassFromString([NSString 
 				    stringWithCString: STR2CSTR(super_name)]);
   if (super_class)
-    new_cls = RBOCDerivedClassNew(STR2CSTR(class_name), super_class);
+    new_cls = RBOCDerivedClassNew(kls, STR2CSTR(kls_name), super_class);
   [pool release];
 
   if (new_cls)
@@ -61,19 +61,17 @@ osx_mf_objc_derived_class_new(VALUE mdl, VALUE class_name, VALUE super_name)
   return Qnil;
 }
 
-// def OSX.objc_derived_class_method_add (class_name, method_name)
-// ex1.  OSX.objc_derived_class_method_add (:CustomView, "drawRect:")
+// def OSX.objc_derived_class_method_add (kls, method_name)
+// ex1.  OSX.objc_derived_class_method_add (AA::BB::CustomView, "drawRect:")
 static VALUE
-osx_mf_objc_derived_class_method_add(VALUE mdl, VALUE class_name, VALUE method_name)
+osx_mf_objc_derived_class_method_add(VALUE mdl, VALUE kls, VALUE method_name)
 {
   Class a_class;
   SEL a_sel;
   id pool = [[NSAutoreleasePool alloc] init];
 
-  class_name = rb_obj_as_string(class_name);
   method_name = rb_obj_as_string(method_name);
-  a_class = 
-    NSClassFromString([NSString stringWithCString: STR2CSTR(class_name)]);
+  a_class = RBOCObjcClassFromRubyClass (kls);
   a_sel =
     NSSelectorFromString([NSString stringWithCString: STR2CSTR(method_name)]);
   if (a_class && a_sel) {
@@ -130,9 +128,9 @@ void Init_osx_objc()
   init_mdl_OCObjWrapper(mOSX);
 
   rb_define_module_function(mOSX, "objc_proxy_class_new", 
-			    osx_mf_objc_proxy_class_new, 1);
+			    osx_mf_objc_proxy_class_new, 2);
   rb_define_module_function(mOSX, "objc_derived_class_new", 
-			    osx_mf_objc_derived_class_new, 2);
+			    osx_mf_objc_derived_class_new, 3);
   rb_define_module_function(mOSX, "objc_derived_class_method_add",
 			    osx_mf_objc_derived_class_method_add, 2);
 

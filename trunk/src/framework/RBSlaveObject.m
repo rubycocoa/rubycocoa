@@ -9,6 +9,7 @@
  *   the GNU Lesser General Public License version 2.
  *
  **/
+#import <RubyCocoa/RBRuntime.h>
 #import <RubyCocoa/RBObject.h>
 #import <Foundation/Foundation.h>
 #import <LibRuby/cocoa_ruby.h>
@@ -17,15 +18,6 @@
 static VALUE rbobj_for(VALUE rbclass, id master)
 {
   return rb_funcall(rbclass, rb_intern("new_with_ocid"), 1, OCID2NUM(master));
-}
-
-static VALUE rbclass_for(Class occlass)
-{
-  id pool = [[NSAutoreleasePool alloc] init];
-  id name = NSStringFromClass(occlass);
-  VALUE rbclass = rb_const_get(rb_cObject, rb_intern([name cString]));
-  [pool release];
-  return rbclass;
 }
 
 @implementation RBObject(RBSlaveObject)
@@ -47,7 +39,7 @@ static VALUE rbclass_for(Class occlass)
 
 - initWithClass: (Class)occlass masterObject: master
 {
-  VALUE rb_class = rbclass_for(occlass);
+  VALUE rb_class = RBOCRubyClassFromObjcClass (occlass);
   return [self initWithRubyClass: rb_class masterObject: master];
 }
 
