@@ -60,18 +60,20 @@ static char* framework_ruby_path()
   return result;
 }
 
-int
-RBApplicationMain(const char* rb_main_name, int argc, char* argv[])
+static VALUE load_path_unshift(const char* path)
+{
+  extern VALUE rb_load_path;
+  rb_ary_unshift(rb_load_path, rb_str_new2(path));
+}
+
+static int
+prepare_argv(int argc, const char* argv[], const char* rb_main_name, const char*** ruby_argv_ptr)
 {
   int i;
   int ruby_argc;
-  char** ruby_argv;
+  const char** ruby_argv;
   int my_argc;
   char* my_argv[] = {
-    "-I",
-    resource_path(),
-    "-I",
-    framework_ruby_path(),
     rb_main_path(rb_main_name)
   };
 
@@ -86,9 +88,22 @@ RBApplicationMain(const char* rb_main_name, int argc, char* argv[])
   for (i = 0; i < my_argc; i++) ruby_argv[ruby_argc++] = my_argv[i];
   ruby_argv[ruby_argc] = NULL;
 
+  *ruby_argv_ptr = ruby_argv;
+  return ruby_argc;
+}
+
+int
+RBApplicationMain(const char* rb_main_name, int argc, const char* argv[])
+{
+  int ruby_argc;
+  const char** ruby_argv;
+
+  ruby_argc = prepare_argv(argc, argv, rb_main_name, &ruby_argv);
+
   ruby_init();
-  RBOsxObjcInit();
-  ruby_options(ruby_argc, ruby_argv);
+  ruby_options(ruby_argc, (char**) ruby_argv);
+  RBRubyCocoaInit();
+  load_path_unshift(resource_path()); // add a ruby part of oneself to $LOAD_PATH
   ruby_run();
   return 0;
 }
@@ -97,11 +112,13 @@ int
 RBRubyCocoaInit()
 {
   static int init_p = 0;
-  extern VALUE rb_load_path;
 
   if (init_p) return 0;
-  initialize_mdl_osxobjc();
-  rb_ary_unshift(rb_load_path, rb_str_new2(framework_ruby_path()));
+
+  ruby_init();
+  initialize_mdl_osxobjc();	// initialize an objc part of rubycocoa
+  load_path_unshift(framework_ruby_path()); // add a ruby part of rubycocoa to $LOAD_PATH
   init_p = 1;
+
   return 1;
 }
