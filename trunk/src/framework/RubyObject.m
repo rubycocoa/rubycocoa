@@ -16,6 +16,7 @@
 #import <stdarg.h>
 #import "ocdata_conv.h"
 #import "DummyProtocolHandler.h"
+#import "delegate_utils.h"
 
 #define OCID2NUM(val) UINT2NUM((VALUE)(val))
 
@@ -24,6 +25,8 @@
 #define DLOG1(f,a1)       if (ruby_debug == Qtrue) debug_log((f),(a1))
 #define DLOG2(f,a1,a2)    if (ruby_debug == Qtrue) debug_log((f),(a1),(a2))
 #define DLOG3(f,a1,a2,a3) if (ruby_debug == Qtrue) debug_log((f),(a1),(a2),(a3))
+
+static NSMutableSet* delegated_classes;
 
 static void debug_log(const char* fmt,...)
 {
@@ -191,12 +194,32 @@ static SEL ruby_method_sel(int argc)
 
 - (unsigned long) __rbobj__ { return rbobj; }
 
++ (void)initialize
+{
+  delegated_classes = [[NSMutableSet alloc] init];
+}
+
 + rubyObjectWithOCObject: (id)a_ocobj
 {
   id pool = [[NSAutoreleasePool alloc] init];
   id result = [[self alloc]
 		initWithRubyClassName: [[a_ocobj class] description]
 		ocObject: a_ocobj];
+  [pool release];
+  return result;
+}
+
++ rubyDelegatorFor: (id)a_ocobj
+{
+  id pool = [[NSAutoreleasePool alloc] init];
+  Class occlass = [a_ocobj class];
+  id result = [[self alloc]
+		initWithRubyClassName: [occlass description]
+		ocObject: a_ocobj];
+  if ([delegated_classes containsObject: occlass] == NO) {
+    install_delegator_methods(occlass, CLASS_OF([result __rbobj__]));
+    [delegated_classes addObject: occlass];
+  }
   [pool release];
   return result;
 }
