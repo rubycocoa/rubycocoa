@@ -88,18 +88,23 @@ RBApplicationMain(const char* rb_main_name, int argc, char* argv[])
 
 /////
 
+static struct objc_method_list** method_list_alloc(int cnt)
+{
+  int i;
+  struct objc_method_list** mlp;
+  mlp = malloc(cnt * sizeof(void*));
+  for (i = 0; i < cnt; i++)
+    mlp[i] = NULL;
+  return mlp;
+}
+
 static Class objc_class_alloc(const char* name, Class super_class)
 {
   Class c = malloc(sizeof(struct objc_class));
   Class isa = malloc(sizeof(struct objc_class));
   struct objc_method_list **mlp0, **mlp1;
-  int i;
-  const int cnt = 16;
-  mlp0 = malloc(cnt * sizeof(void*));
-  mlp1 = malloc(cnt * sizeof(void*));
-  for (i = 0; i < cnt; i++) {
-    mlp0[i] = mlp1[i] = NULL;
-  }
+  mlp0 = method_list_alloc(16);
+  mlp1 = method_list_alloc(4);
 
   c->isa = isa;
   c->super_class = super_class;

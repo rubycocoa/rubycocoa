@@ -141,7 +141,7 @@ static id imp_respondsToSelector (id rcv, SEL method, SEL arg0)
   id slave = get_slave(rcv);
   ret = (*simp)(rcv, method, arg0);
   if (ret == NULL)
-    ret = (id) [slave rbobjRespondsToSelector: arg0];
+    ret = (id) [slave respondsToSelector: arg0];
   return ret;
 }
 
@@ -152,7 +152,7 @@ static id imp_methodSignatureForSelector (id rcv, SEL method, SEL arg0)
   id slave = get_slave(rcv);
   ret = (*simp)(rcv, method, arg0);
   if (ret == nil)
-    ret = [slave rbobjMethodSignatureForSelector: arg0];
+    ret = [slave methodSignatureForSelector: arg0];
   return ret;
 }
 
@@ -161,8 +161,8 @@ static id imp_forwardInvocation (id rcv, SEL method, NSInvocation* arg0)
   IMP simp = super_imp(rcv, method);
   id slave = get_slave(rcv);
 
-  if ([slave rbobjRespondsToSelector: [arg0 selector]])
-    [slave rbobjForwardInvocation: arg0];
+  if ([slave respondsToSelector: [arg0 selector]])
+    [slave forwardInvocation: arg0];
   else
     (*simp)(rcv, method, arg0);
   return nil;
