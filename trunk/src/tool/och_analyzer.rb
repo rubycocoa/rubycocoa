@@ -8,10 +8,14 @@
 #  the GNU Lesser General Public License version 2.
 #
 
+CPP = "/usr/bin/cpp"
+
 ARCH = `arch`.chop
 CPP_TARGET_CPU = "TARGET_CPU_#{ARCH.upcase}"
 CPP_ARCH = "__#{ARCH.downcase}__"
 CPP_ENDIAN = "__BIG_ENDIAN__"
+
+CPPFLAGS = [ CPP_TARGET_CPU, CPP_ARCH, CPP_ENDIAN ].map {|i| "-D#{i}" }.join(' ')
 
 class OCHeaderAnalyzer
 
@@ -37,6 +41,14 @@ class OCHeaderAnalyzer
     File.basename(@path)
   end
 
+  def enum_types
+    if @enum_types.nil? then
+      re = /\btypedef\s+enum\s*\w*\s*\{[^\}]*\}\s*(\w+)\s*;/m
+      @enum_types = @cpp_result.scan(re).flatten
+    end
+    return @enum_types
+  end
+
   def enums
     if @enums.nil? then
       re = /\benum\b.*{([^}]*)}/
@@ -60,7 +72,7 @@ class OCHeaderAnalyzer
   def constants
     if @constants.nil? then
       @constants = externs.map{ |i|
-	OCHeaderAnalyzer.constant?(i)
+	constant?(i)
       }.compact
     end
     @constants
@@ -69,7 +81,7 @@ class OCHeaderAnalyzer
   def functions
     if @functions.nil? then
       @functions = externs.map{ |i|
-	OCHeaderAnalyzer.function?(i)
+	function?(i)
       }.compact
     end
     @functions
@@ -104,10 +116,10 @@ class OCHeaderAnalyzer
 
   private
 
-  def OCHeaderAnalyzer.constant?(str)
+  def constant?(str)
     str.strip!
     if str == '...' then
-      VarInfo.new('...', '...', str)
+      VarInfo.new('...', '...', str, enum_types)
     else
       str += "dummy" if str[-1].chr == '*'
       re = /^([^()]*)\b(\w+)\b(\[\])*$/
@@ -116,12 +128,12 @@ class OCHeaderAnalyzer
 	m = m.to_a[1..-1].compact.map{|i|i.strip}
 	m[0] += m[2] if m.size == 3
 	m[0] = 'void' if m[1] == 'void'
-	VarInfo.new(m[0],m[1],str)
+	VarInfo.new(m[0],m[1],str, enum_types)
       end
     end
   end
 
-  def OCHeaderAnalyzer.function?(str)
+  def function?(str)
     str.strip!
     re = /^(.*)\((.*)\)$/
     m = re.match(str.strip)
@@ -130,11 +142,11 @@ class OCHeaderAnalyzer
       if func then
 	args = m[2].split(',').map{|i|
 	  ai = constant?(i)
-	  ai = VarInfo.new('unknown', 'unknown', i) if ai.nil?
+	  ai = VarInfo.new('unknown', 'unknown', i, enum_types) if ai.nil?
 	  ai
 	}
 	args = [] if args.size == 1 && args[0].type == 'void'
-	FuncInfo.new(func, args, str)
+	FuncInfo.new(func, args, str, enum_types)
       end
     end
   end
@@ -169,10 +181,7 @@ class OCHeaderAnalyzer
 
   def OCHeaderAnalyzer.do_cpp(path)
     f_on = false
-    cppflags = [ CPP_TARGET_CPU, CPP_ARCH, CPP_ENDIAN ].map {|i|
-      "-D#{i}"
-    }.join(' ')
-    `cpp #{cppflags} #{path}`.map {|s|
+    `#{CPP} #{CPPFLAGS} #{path}`.map {|s|
       s.sub (/\/\/.*$/, "")
     }.select { |s|
       next if /^\s*$/ =~ s
@@ -187,11 +196,12 @@ class OCHeaderAnalyzer
     attr_reader :type, :name, :orig
     attr_accessor :octype
 
-    def initialize(type, name, orig)
+    def initialize(type, name, orig, enum_types)
       @type = type
       @name = name
       @orig = orig
       t = type.gsub(/\b(__)?const\b/,'').strip
+      t = "int" if enum_types.include? (t)
       @octype = OCHeaderAnalyzer.octype_of(t)
     end
 
@@ -205,8 +215,8 @@ class OCHeaderAnalyzer
 
     attr_reader :args, :argc
 
-    def initialize(func, args, orig)
-      super(func.type, func.name, orig)
+    def initialize(func, args, orig, enum_types)
+      super(func.type, func.name, orig, enum_types)
       @args = args
       @argc = @args.size
       if @args[-1].type == '...' then
@@ -250,15 +260,25 @@ class OCHeaderAnalyzer
 end
 
 if __FILE__ == $0 then
-  est = cst = fst = 0
-  ARGV.each do |path|
-    ar = OCHeaderAnalyzer.new(path)
-    es, cs, fs = ar.enums.size, ar.constants.size, ar.functions.size
-    printf "%s enums=%d constants=%d funcs=%d\n",
-      ar.filename.ljust(30), es, cs, fs
-    est, cst, fst = est + es, cst + cs, fst + fs
+  if ARGV.size == 1 then
+    ar = OCHeaderAnalyzer.new(ARGV[0])
+    puts "#{ar.filename}"
+    puts "enums      total: #{ar.enums.size}"
+    puts "enum_types total: #{ar.enum_types.size}"
+    puts "constants  total: #{ar.constants.size}"
+    puts "functions  total: #{ar.functions.size}"
+  else
+    est = etst = cst = fst = 0
+    ARGV.each do |path|
+      ar = OCHeaderAnalyzer.new(path)
+      es, ets, cs, fs = ar.enums.size, ar.enum_types.size, ar.constants.size, ar.functions.size
+      printf "%s enums=%d enum_types=%d constants=%d funcs=%d\n",
+	ar.filename.ljust(30), es, ets, cs, fs
+      est, stst, cst, fst = est + es, etst + ets, cst + cs, fst + fs
+    end
+    puts "enums      total: #{est}"
+    puts "enum_types total: #{etst}"
+    puts "constants  total: #{cst}"
+    puts "functions  total: #{fst}"
   end
-  puts "enums     total: #{est}"
-  puts "constants total: #{cst}"
-  puts "functions total: #{fst}"
 end
