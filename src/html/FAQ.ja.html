@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="euc-jp" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="ja" xml:lang="ja">
+<head>
+<title>RubyCocoa - FAQ</title>
+<meta http-equiv="Content-type" content="text/html; charset=euc-jp" />
+<link href="rdtext.css" type="text/css" rel="stylesheet"/>
+</head>
+<body>
+<h1><a name="label:0" id="label:0">RubyCocoa FAQ</a></h1><!-- RDLabel: "RubyCocoa FAQ" -->
+<p>$Date$</p>
+<h2><a name="label:1" id="label:1">インストール完了後</a></h2><!-- RDLabel: "インストール完了後" -->
+<h3><a name="label:2" id="label:2">Q: インストールが完了してサンプルスクリプトを実行しようとすると</a></h3><!-- RDLabel: "Q: インストールが完了してサンプルスクリプトを実行しようとすると" -->
+<pre>% ruby fontnames.rb
+dyld: ruby Undefined symbols:
+_init_NSDistributedNotificationCenter
+_init_NSScriptStandardSuiteCommands</pre>
+<p>というエラーが起こり、osx/cocoa が require できません。</p>
+<h4><a name="label:3" id="label:3">A: RubyCocoaのtgzファイルをStuffItで展開しましたか？</a></h4><!-- RDLabel: "A: RubyCocoaのtgzファイルをStuffItで展開しましたか？" -->
+<p>RubyCocoaのtgzファイルをStuffItで展開した場合、ソースファイルに含まれ
+る31文字を越える長いファイル名が切り詰められてしまい、RubyCocoaを正し
+く作ることができません。インストールのドキュメントの手順どおりにシェル
+(Terminalアプリケーション)からtarコマンドを使って</p>
+<pre>% tar zxf rubycocoa-0.1.0.tgz</pre>
+<p>と入力してtgzファイルを展開しRubyCocoaを作り直してください。</p>
+<p>(志村さん情報どうも)</p>
+
+</body>
+</html>

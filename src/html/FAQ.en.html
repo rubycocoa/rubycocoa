@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="us-ascii" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<title>RubyCocoa - FAQ</title>
+<meta http-equiv="Content-type" content="text/html; charset=us-ascii" />
+<link href="rdtext.css" type="text/css" rel="stylesheet"/>
+</head>
+<body>
+<h1><a name="label:0" id="label:0">RubyCocoa FAQ</a></h1><!-- RDLabel: "RubyCocoa FAQ" -->
+<p>$Date$</p>
+<h2><a name="label:1" id="label:1">After Install</a></h2><!-- RDLabel: "After Install" -->
+<h3><a name="label:2" id="label:2">Q: I try to execute sample script, but error occured:</a></h3><!-- RDLabel: "Q: I try to execute sample script, but error occured:" -->
+<pre>% ruby fontnames.rb
+dyld: ruby Undefined symbols:
+_init_NSDistributedNotificationCenter
+_init_NSScriptStandardSuiteCommands</pre>
+<h4><a name="label:3" id="label:3">A: Do you use StuffIt when extracting a tgz file of RubyCocoa ?</a></h4><!-- RDLabel: "A: Do you use StuffIt when extracting a tgz file of RubyCocoa ?" -->
+<p>Using StuffIt, long file name to exceed 31 characters when I use
+SutffIt has been cut down. And building RubyCocoa was failed. You must
+use "tar" command on shell (Terminal application) when extracting the
+tgz file:</p>
+<pre>% tar zxf rubycocoa-0.1.0.tgz</pre>
+<p>And redo installing the RubyCocoa.</p>
+<p>(thanks Shimura-san)</p>
+
+</body>
+</html>
