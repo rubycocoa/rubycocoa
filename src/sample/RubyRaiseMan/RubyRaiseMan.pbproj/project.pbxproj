@@ -57,6 +57,7 @@
 		1058C7A6FEA54F5311CA2CBB = {
 			children = (
 				1058C7A7FEA54F5311CA2CBB,
+				E8F5E23003ADAF6203A81C6F,
 			);
 			isa = PBXGroup;
 			name = "Linked Frameworks";
@@ -142,7 +143,6 @@
 			children = (
 				2A37F4ABFDCFA73011CA2CEA,
 				2A37F4AFFDCFA73011CA2CEA,
-				E82AF1180325AE0E032D03DC,
 				2A37F4B8FDCFA73011CA2CEA,
 				2A37F4C3FDCFA73011CA2CEA,
 				19C28FB0FE9D524F11CA2CBB,
@@ -272,9 +272,9 @@
 			);
 			buildSettings = {
 				FRAMEWORK_SEARCH_PATHS = "";
-				HEADER_SEARCH_PATHS = "/usr/lib/ruby/1.6/powerpc-darwin6.0";
+				HEADER_SEARCH_PATHS = "";
 				INSTALL_PATH = "$(HOME)/Applications";
-				LIBRARY_SEARCH_PATHS = "/usr/lib/ruby/1.6/powerpc-darwin6.0";
+				LIBRARY_SEARCH_PATHS = "";
 				PREBINDING = NO;
 				PRODUCT_NAME = RubyRaiseMan;
 				SECTORDER_FLAGS = "";
@@ -384,7 +384,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				1058C7A9FEA54F5311CA2CBB,
-				E82AF11A0325AE50032D03DC,
+				E8F5E23903ADAF6203A81C6F,
 			);
 			isa = PBXFrameworksBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -468,26 +468,6 @@
 			name = Japanese;
 			path = Japanese.lproj/MainMenu.nib;
 			refType = 4;
-		};
-		E82AF1180325AE0E032D03DC = {
-			children = (
-				E82AF1190325AE50032D03DC,
-			);
-			isa = PBXGroup;
-			name = Libraries;
-			refType = 4;
-		};
-		E82AF1190325AE50032D03DC = {
-			isa = PBXFileReference;
-			name = libruby.a;
-			path = "/usr/lib/ruby/1.6/powerpc-darwin6.0/libruby.a";
-			refType = 0;
-		};
-		E82AF11A0325AE50032D03DC = {
-			fileRef = E82AF1190325AE50032D03DC;
-			isa = PBXBuildFile;
-			settings = {
-			};
 		};
 		E833DBA30314C1B403A81C6F = {
 			isa = PBXFileReference;
@@ -578,6 +558,18 @@
 		};
 		E8F4C484030CA6D4038C597D = {
 			fileRef = E8F4C483030CA6D4038C597D;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		E8F5E23003ADAF6203A81C6F = {
+			isa = PBXFrameworkReference;
+			name = RubyCocoa.framework;
+			path = /Library/Frameworks/RubyCocoa.framework;
+			refType = 0;
+		};
+		E8F5E23903ADAF6203A81C6F = {
+			fileRef = E8F5E23003ADAF6203A81C6F;
 			isa = PBXBuildFile;
 			settings = {
 			};
