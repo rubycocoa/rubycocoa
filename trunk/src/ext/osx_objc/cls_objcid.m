@@ -34,7 +34,7 @@ _objcid_data_free(struct _objcid_data* dp)
 static struct _objcid_data*
 _objcid_data_new()
 {
-  struct _objcid_data* dp = NULL;
+  struct _objcid_data* dp;
   dp = malloc(sizeof(struct _objcid_data));
   dp->ocid = nil;
   return dp;
@@ -93,7 +93,7 @@ static VALUE
 objcid_inspect(VALUE rcv)
 {
   VALUE result;
-  char s[256];
+  char s[512];
   id ocid = OCID_OF(rcv);
   id pool = [[NSAutoreleasePool alloc] init];
   const char* class_desc = [[[ocid class] description] cString];
