@@ -1,5 +1,6 @@
 # -*-rd-*-
-= What is RubyCocoa ?
+
+== What is RubyCocoa ?
 
 RubyCocoa is a ((<Ruby|URL:http://www.ruby-lang.org/>)) library for
 using ((<Cocoa|URL:http://developer.apple.com/cocoa/>)) Objects on
