@@ -34,7 +34,12 @@ for:</p>
 <li>development of a mission critical software</li>
 <li>development of a long life cycle software</li>
 </ul>
-<h2><a name="label:2" id="label:2">Script Examples</a></h2><!-- RDLabel: "Script Examples" -->
+<h2><a name="label:2" id="label:2">RubyCocoa with Mac OS X 10.2 (Jaguar)</a></h2><!-- RDLabel: "RubyCocoa with Mac OS X 10.2 (Jaguar)" -->
+<p>`ruby' command is contained in Mac OS X 10.2, but the shared library
+"libruby.dylib" isn't contained in. So you cannot use it for
+RubyCocoa. You need to install Ruby 1.6.7 separately. Refer to
+<a href="INSTALL.en.html">INSTALL</a> for a detail.</p>
+<h2><a name="label:3" id="label:3">Script Examples</a></h2><!-- RDLabel: "Script Examples" -->
 <p>Next script is playing system sounds.</p>
 <pre>require 'osx/cocoa'
 snd_files =`ls /System/Library/Sounds/*.aiff`.split
@@ -42,7 +47,7 @@ snd_files.each do |path|
   snd = OSX::NSSound.alloc.
     initWithContentsOfFile_byReference (path, true)
   snd.play
-  sleep 0.25 while snd.isPlaying?
+  sleep 0.5
 end</pre>
 <p>Next script is a class definition that is related with nib file made
 by Interface Builder.</p>
@@ -70,12 +75,12 @@ class AppCtrl &lt; OSX::NSObject
   end    
 
 end</pre>
-<h2><a name="label:3" id="label:3">Screenshot</a></h2><!-- RDLabel: "Screenshot" -->
+<h2><a name="label:4" id="label:4">Screenshot</a></h2><!-- RDLabel: "Screenshot" -->
 <p><a href="screenshot.jpg">This is a screenshot</a> of running <a href="../rubyosx/files/CocoaAEOSA_app.zip">a Cocoa
 application</a> that consists
 of only Ruby scripting and Interface Builder's Nib file by RubyAEOSA
 and RubyCocoa.</p>
-<h2><a name="label:4" id="label:4">Getting RubyCocoa</a></h2><!-- RDLabel: "Getting RubyCocoa" -->
+<h2><a name="label:5" id="label:5">Getting RubyCocoa</a></h2><!-- RDLabel: "Getting RubyCocoa" -->
 <p>The latest version is 0.2.6.</p>
 <ul>
 <li><a href="../rubyosx/files/">Sources</a> </li>
@@ -86,7 +91,7 @@ and RubyCocoa.</p>
     </a><code> - add 2002.4.5</code></li>
 </ul></li>
 </ul>
-<h2><a name="label:5" id="label:5">Documents</a></h2><!-- RDLabel: "Documents" -->
+<h2><a name="label:6" id="label:6">Documents</a></h2><!-- RDLabel: "Documents" -->
 <ul>
 <li><a href="INSTALL.en.html">Installing</a></li>
 <li><a href="USING.en.html">Using</a></li>
@@ -95,8 +100,8 @@ and RubyCocoa.</p>
 <li><a href="CHANGES.en.html">Changes</a></li>
 <li><a href="ChangeLog.html">ChangeLog</a></li>
 </ul>
-<h2><a name="label:6" id="label:6">Links</a></h2><!-- RDLabel: "Links" -->
-<h3><a name="label:7" id="label:7">RubyCocoa And RubyAEOSA Links:</a></h3><!-- RDLabel: "RubyCocoa And RubyAEOSA Links:" -->
+<h2><a name="label:7" id="label:7">Links</a></h2><!-- RDLabel: "Links" -->
+<h3><a name="label:8" id="label:8">RubyCocoa And RubyAEOSA Links:</a></h3><!-- RDLabel: "RubyCocoa And RubyAEOSA Links:" -->
 <ul>
 <li><a href="http://www.imasy.or.jp/~hisa/mac/rubycocoa/">RubyCocoa Web Page</a></li>
 <li><a href="http://www.imasy.or.jp/~hisa/mac/rubyaeosa/">RubyAEOSA Web Page</a></li>
@@ -109,7 +114,7 @@ and RubyCocoa.</p>
 <li><a href="http://mwave.sppd.ne.jp/diary/calc_app/calc_app1.html">Writing An Application by RubyCocoa (Tutorial)(Japanese)
   </a></li>
 </ul>
-<h3><a name="label:8" id="label:8">Related And Interesting Links:</a></h3><!-- RDLabel: "Related And Interesting Links:" -->
+<h3><a name="label:9" id="label:9">Related And Interesting Links:</a></h3><!-- RDLabel: "Related And Interesting Links:" -->
 <ul>
 <li><a href="http://www.ruby-lang.org/">Ruby Web Site</a></li>
 <li><a href="http://www.rubygarden.org/">Ruby Garden</a></li>
@@ -128,10 +133,10 @@ and RubyCocoa.</p>
   </a><code> - add 2002.4.5</code></li>
 <li><a href="http://www.ddj.com/articles/2002/0205/">DDJ May 2002 with RubyCocoa article</a><code> - add 2002.4.5</code></li>
 </ul>
-<h2><a name="label:9" id="label:9">LICENCE</a></h2><!-- RDLabel: "LICENCE" -->
+<h2><a name="label:10" id="label:10">LICENCE</a></h2><!-- RDLabel: "LICENCE" -->
 <p><a href="http://www.gnu.org/licenses/lgpl.html">GNU Lesser General Public License version 2. LGPL
 </a></p>
-<h2><a name="label:10" id="label:10">Comments and Bug Reports</a></h2><!-- RDLabel: "Comments and Bug Reports" -->
+<h2><a name="label:11" id="label:11">Comments and Bug Reports</a></h2><!-- RDLabel: "Comments and Bug Reports" -->
 <p>Feel free to send comments, bug reports and patches about RubyCocoa.</p>
 <p>FUJIMOTO Hisakuni, &lt;hisa@imasy.or.jp&gt;, 
 $Date$ $Revision$</p>

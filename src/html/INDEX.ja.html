@@ -35,7 +35,12 @@ RubyCocoaを使って</p>
 <li>ライフサイクルの長いソフトウェアの開発</li>
 </ul>
 <p>などがあげられます。</p>
-<h2><a name="label:2" id="label:2">スクリプト例</a></h2><!-- RDLabel: "スクリプト例" -->
+<h2><a name="label:2" id="label:2">Mac OS X 10.2 (Jaguar) に関して</a></h2><!-- RDLabel: "Mac OS X 10.2 (Jaguar) に関して" -->
+<p>Jaguar には ruby コマンドが標準で入っていますが、libruby共有ライブラリ
+が含まれていないため RubyCocoa を使うためには、別途共有ライブラリ付き
+で Ruby をインストールする必要があります。詳細は<a href="INSTALL.ja.html">インストール
+</a>をご覧ください。</p>
+<h2><a name="label:3" id="label:3">スクリプト例</a></h2><!-- RDLabel: "スクリプト例" -->
 <p>以下の例はシステムの音を順番に鳴らすスクリプトです。</p>
 <pre>require 'osx/cocoa'
 snd_files =`ls /System/Library/Sounds/*.aiff`.split
@@ -43,7 +48,7 @@ snd_files.each do |path|
   snd = OSX::NSSound.alloc.
     initWithContentsOfFile_byReference (path, true)
   snd.play
-  sleep 0.25 while snd.isPlaying?
+  sleep 0.5
 end</pre>
 <p>以下の例はインターフェースビルダーで作成したnibファイル内のクラスと関
 連づけられたクラス定義のサンプルです。</p>
@@ -71,12 +76,12 @@ class AppCtrl &lt; OSX::NSObject
   end    
 
 end</pre>
-<h2><a name="label:3" id="label:3">スクリーンショット</a></h2><!-- RDLabel: "スクリーンショット" -->
+<h2><a name="label:4" id="label:4">スクリーンショット</a></h2><!-- RDLabel: "スクリーンショット" -->
 <p>RubyCocoa と RubyAEOSA により、Ruby スクリプトと Interface Builder の 
 Nib ファイルのみで書かれた<a href="../rubyosx/files/CocoaAEOSA_app.zip">Cocoa アプリケーション
 </a> が動作しているところの<a href="screenshot.jpg">
 スクリーンショット</a>です。</p>
-<h2><a name="label:4" id="label:4">入手</a></h2><!-- RDLabel: "入手" -->
+<h2><a name="label:5" id="label:5">入手</a></h2><!-- RDLabel: "入手" -->
 <p>最新バージョンは 0.2.6 です。</p>
 <ul>
 <li><a href="../rubyosx/files/">ソース</a> </li>
@@ -87,7 +92,7 @@ Nib ファイルのみで書かれた<a href="../rubyosx/files/CocoaAEOSA_app.zip">Cocoa ア
     </a><code> - 2002.4.5追加</code></li>
 </ul></li>
 </ul>
-<h2><a name="label:5" id="label:5">ドキュメント</a></h2><!-- RDLabel: "ドキュメント" -->
+<h2><a name="label:6" id="label:6">ドキュメント</a></h2><!-- RDLabel: "ドキュメント" -->
 <ul>
 <li><a href="INSTALL.ja.html">インストール</a></li>
 <li><a href="USING.ja.html">使い方</a></li>
@@ -96,7 +101,7 @@ Nib ファイルのみで書かれた<a href="../rubyosx/files/CocoaAEOSA_app.zip">Cocoa ア
 <li><a href="CHANGES.ja.html">変更点</a></li>
 <li><a href="ChangeLog.html">変更ログ</a></li>
 </ul>
-<h2><a name="label:6" id="label:6">リンク</a></h2><!-- RDLabel: "リンク" -->
+<h2><a name="label:7" id="label:7">リンク</a></h2><!-- RDLabel: "リンク" -->
 <p>RubyCocoa と RubyAEOSA:</p>
 <ul>
 <li><a href="http://www.imasy.or.jp/~hisa/mac/rubycocoa/">RubyCocoaホームページ</a></li>
@@ -128,10 +133,10 @@ Nib ファイルのみで書かれた<a href="../rubyosx/files/CocoaAEOSA_app.zip">Cocoa ア
 <li><a href="http://sacral.c.u-tokyo.ac.jp/~hasimoto/Pineapple/">Project PINEAPPLE(日本語)</a><code> - 2002.4.5追加</code></li>
 <li><a href="http://www.ddj.com/articles/2002/0205/">DDJ 2002 5月号にRubyCocoaの記事</a><code> - 2002.4.5追加</code></li>
 </ul>
-<h2><a name="label:7" id="label:7">ライセンス</a></h2><!-- RDLabel: "ライセンス" -->
+<h2><a name="label:8" id="label:8">ライセンス</a></h2><!-- RDLabel: "ライセンス" -->
 <p><a href="http://www.gnu.org/licenses/lgpl.html">GNU Lesser General Public License version 2. LGPL
 </a></p>
-<h2><a name="label:8" id="label:8">コメントなど</a></h2><!-- RDLabel: "コメントなど" -->
+<h2><a name="label:9" id="label:9">コメントなど</a></h2><!-- RDLabel: "コメントなど" -->
 <p>バグリポート、コメントなどお気軽にお寄せください。</p>
 <p>藤本尚邦, &lt;hisa@imasy.or.jp&gt;,
 $Date$ $Revision$</p>
