@@ -149,6 +149,7 @@ class OCHeaderAnalyzer
     when 'NSRect' then :_PRIV_C_NSRECT
     when 'NSPoint' then :_PRIV_C_NSPOINT
     when 'NSSize' then :_PRIV_C_NSSIZE
+    when 'NSRange' then :_PRIV_C_NSRANGE
     when /^unsigned\s+char$/ then :_C_UCHR
     when 'char' then '_C_CHR'
     when /^unsigned\s+short(\s+int)?$/ then :_C_USHT
