@@ -1,0 +1,29 @@
+Subject-ja: デバッグ方法について
+Subject-en: short briefing about debugging
+Date: 2003-01-05
+UID: 1041750137
+
+RubyCocoaアプリケーションのデバッグ方法について、
+<a href="programming.ja.html#label:18">「プログラミング」</a>
+に簡単に書き加えました。
+..ja
+
+Write briefly about debugging of RubyCocoa application to
+<a href="programming.en.html#label:18">"Programming"</a>.
+..en
+
+
+Subject-ja: RubyCocoa 0.4をリリース！
+Subject-en: RubyCocoa 0.4 was released!
+Date: 2002-12-28
+UID: 1041154613
+
+RubyCocoa 0.4をリリースしました。Ruby 1.8 に対応しています。
+詳しくは<a href="changes.ja.html">「変更点」</a>をご覧ください。
+
+..ja
+
+RubyCocoa 0.4 was released! Now it support Ruby 1.8. See
+<a href="changes.en.html">"Changes"</a> for more detail.
+
+..en
