@@ -1,8 +1,0 @@
-MANIFEST
-extconf.rb
-cocoa
-osx_objc.m
-cls_objcid.h
-cls_objcid.m
-mdl_objwrapper.h
-mdl_objwrapper.m
