@@ -1,11 +1,11 @@
-#import <Cocoa/Cocoa.h>
+#import <AppKit/NSView.h>
 
 @interface RubyView : NSView
 {
-  id rbobj;
+  id rbdg;
 }
 
 - initWithFrame:(NSRect)frame;
-- rbobj;
+- rubyDelegator;
 
 @end
