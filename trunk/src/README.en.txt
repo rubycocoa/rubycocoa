@@ -25,7 +25,6 @@ object in a Ruby script.
   mk_app0/     - application using IB outlet and action (Makefile base)
   mk_app1/     - application using custom NSView (Makefile base)
   pb_app0/     - application using IB outlet and action (PB base)
-  pb_app1/     - application using IB outlet and action (PB base)
 
 3. LICENCE
 
@@ -40,7 +39,7 @@ object in a Ruby script.
 
 5. Comments and Bug Reports
 
-  Feel free to send comments, bug reports and patches about RubyCocoa
+  Fpeel free to send comments, bug reports and patches about RubyCocoa
   to the author's email address at:
 
       hisa@imasy.or.jp
