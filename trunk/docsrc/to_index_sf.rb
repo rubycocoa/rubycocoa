@@ -4,7 +4,7 @@ def replace_link(elm)
   if elm.name == 'a' then
     href = elm.attributes['href']
     if /\Ahttp:/ !~ href and /\Amailto:/ !~ href and /\.html(#\d+)?\z/ =~ href then
-      elm.attributes['href'] = "http://www.fobj.com/rubycocoa/doc/#{href}"
+      elm.attributes['href'] = "http://rubycocoa.sourceforge.net/doc/#{href}"
     end
   end
   elm.each_element do |child|
