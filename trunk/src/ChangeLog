@@ -1,5 +1,8 @@
 2002-01-28  FUJIMOTO Hisakuni  <hisa@fobj.com>
 
+	* framework/OverrideMixin.m:
+	imp_c_addRubyMethod(): correct rb_raise's wrong message. (thanks Ogino-san)
+
 	* ext/osx_objc/osx_objc.m, framework/RubyCocoa.frmwk.pbproj/project.pbxproj, framework/RubyCocoa.h, framework/Version.h:
 	version info support
 
