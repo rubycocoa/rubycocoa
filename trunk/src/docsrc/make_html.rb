@@ -32,7 +32,7 @@ def rd_to_html(src, dst, lang, charset = nil)
     tmpl.replace_elements( 'id', idval, xmldoc.root )
   end
 
-  rdoc = RDDocument.new (src)
+  rdoc = RDDocument.new(src)
   tmpl.set_title( rdoc.title )
   tmpl.set_contents( rdoc.body )
   tmpl.set_lang( lang )
