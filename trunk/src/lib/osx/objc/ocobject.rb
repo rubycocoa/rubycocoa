@@ -17,6 +17,9 @@ module OSX
 
   class OCObject < ObjcID
     include OCObjWrapper
+  end				# class OCObject
+
+  module OCObjWrapper
 
     def method_missing(mname, *args)
       m_name, m_args, m_predicate = analyze_missing(mname, args)
@@ -25,10 +28,6 @@ module OSX
       ret = (ret != 0) if m_predicate
       ret
     end
-
-  end				# class OCObject
-
-  module OCObjWrapper
 
     def to_s
       if self.ocm_send(:isKindOfClass_, OSX::NSString) != 0 then
