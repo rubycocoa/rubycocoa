@@ -533,9 +533,14 @@ ocid_to_rbobj(VALUE context_obj, id ocid)
 
 id rbobj_to_nsselstr(VALUE obj)
 {
+  int i;
   VALUE str = rb_obj_as_string(obj);
-  // str.tr!('_',':')
-  rb_funcall(str, rb_intern("tr!"), 2, rb_str_new2("_"), rb_str_new2(":"));
+
+  // str[0..0] + str[1..-1].tr('_',':')
+  for (i = 1; i < RSTRING(str)->len; i++) {
+    if (RSTRING(str)->ptr[i] == '_')
+      RSTRING(str)->ptr[i] = ':';
+  }
   return [NSString stringWithCString: STR2CSTR(str)];
 }
 
