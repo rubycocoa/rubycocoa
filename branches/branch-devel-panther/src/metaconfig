@@ -7,6 +7,9 @@ end
 libruby_path = File.join(Config::CONFIG['libdir'], Config::CONFIG['LIBRUBY_A'])
 unless File.exist?( libruby_path ) then
   libruby_path = File.join(Config::CONFIG['archdir'], Config::CONFIG['LIBRUBY_A'])
+# On Panther, /usr/lib/ruby reports wrong CONFIG
+unless File.exist?( libruby_path ) then
+  libruby_path = File.join(Config::CONFIG['libdir'], 'libruby.dylib')
 end
 
 add_path_config 'install-root', '',
