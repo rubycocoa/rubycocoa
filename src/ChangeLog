@@ -1,3 +1,8 @@
+2002-01-10  Chris Thomas <kenshin@apple.com>
+
+	* framework/OverrideMixin.m:
+	handle_ruby_method(): using NSGetSizeAndAlignment for va_arg offset.
+
 2002-01-10  FUJIMOTO Hisakuni  <hisa@fobj.com>
 
 	* framework/RBObject.m: 
