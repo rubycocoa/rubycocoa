@@ -1,5 +1,22 @@
 2003-01-15  FUJIMOTO Hisakuni  <hisa@fobj.com>
 
+	* framework/src/ruby/osx/objc/oc_attachments.rb:
+	define module RCDataAttachment and RCDataAttachment#rubyString.
+
+	* framework/src/ruby/osx/objc/cocoa_macros.rb:
+	define NSData.dataWithRubyString and NSMutableData.dataWithRubyString.
+
+	* framework/src/objc/ocdata_conv.m:
+	rbobj_to_nsobj() - call a method named "to_nsobject" if it is
+	defined, to convert aruby object into an objective-c object.
+
+	* framework/src/objc/mdl_osxobjc.m:
+	rbobj_get_ocid() - relocate invocation of "to_nsobject" into rbobj_to_nsobj().
+
+	* framework/src/objc/mdl_osxobjc.m:
+	ocobj_s_new() - add an attachment into a new object if it is a
+	NSArray, NSDictionary or NSData.
+
 	* tests/tc_nsdata.rb, tests/tc_objcptr.rb: add some unit tests
 
 	* framework/src/objc/cls_objcptr.m: add taint mark handling.
