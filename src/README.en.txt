@@ -1,8 +1,8 @@
 			      RubyCocoa
 
-RubyCocoa is extension libraries and framework for the Object Oriented
-Scripting Language Ruby on MacOS X. Using RubyCocoa, you can access
-Cocoa objects as Ruby object in Ruby script.
+RubyCocoa is a library and a framework for the Object Oriented
+Scripting Language Ruby on MacOS X. Using RubyCocoa, you can access a
+Cocoa object as a Ruby object in a Ruby script.
 
     RubyCocoa - http://www.imasy.or.jp/~hisa/mac/rubycocoa/
     Ruby      - http://www.ruby-lang.org/
@@ -14,14 +14,14 @@ Cocoa objects as Ruby object in Ruby script.
 
 1. HOW TO USE
 
-  Read "html/USING.(ja|en).html" when you want how to use.  Read
-  "html/REFERENCES.(ja|en).html" when you want to know the detail.
+  Read "html/USING.(ja|en).html" for usage information.  Read
+  "html/REFERENCES.(ja|en).html" for technical details.
 
 2. EXAMPLES
 
-  sndplay.rb   - playing system sounds
-  sndplay2.rb  - playing system sounds (with Ruby Thread)
-  fontnames.rb - print font names to stdout
+  sndplay.rb   - plays system sounds
+  sndplay2.rb  - plays system sounds (with Ruby Thread)
+  fontnames.rb - prints font names to stdout
   mk_app0/     - application using IB outlet and action (Makefile base)
   mk_app1/     - application using custom NSView (Makefile base)
   pb_app0/     - application using IB outlet and action (PB base)
@@ -40,8 +40,8 @@ Cocoa objects as Ruby object in Ruby script.
 
 5. Comments and Bug Reports
 
-  Feel free to send comments, bug reports and patches about RubyCocoa.
-  The author's mail address is:
+  Feel free to send comments, bug reports and patches about RubyCocoa
+  to the author's email address at:
 
       hisa@imasy.or.jp
 
