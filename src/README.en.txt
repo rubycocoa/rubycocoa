@@ -1,8 +1,8 @@
 			      RubyCocoa
 
-RubyCocoa is a library and a framework for the Object Oriented
-Scripting Language Ruby on MacOS X. Using RubyCocoa, you can access a
-Cocoa object as a Ruby object in a Ruby script.
+RubyCocoa is a library for the Object Oriented Scripting Language Ruby
+on MacOS X. Using RubyCocoa, you can access a Cocoa object as a Ruby
+object in a Ruby script.
 
     RubyCocoa - http://www.imasy.or.jp/~hisa/mac/rubycocoa/
     Ruby      - http://www.ruby-lang.org/

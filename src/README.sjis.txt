@@ -1,7 +1,7 @@
 			      RubyCocoa
 
   RubyCocoaは、MacOS XのCocoaオブジェクトをRubyスクリプトからRubyオ
-  ブジェクトとして扱うためのRuby用ライブラリとフレームワークです。
+  ブジェクトとして扱うためのRuby用拡張ライブラリです。
 
     RubyCocoa - http://www.imasy.or.jp/~hisa/mac/rubycocoa/
     Ruby      - http://www.ruby-lang.org/
