@@ -92,11 +92,54 @@
 - (void)handleTakeValue:(id)value forUnboundKey:(NSString *)key {  }
 - (void)unableToSetNilForKey:(NSString *)key {  }
 
+/**** NSKeyedArchiver.h ****/
+// @interface NSObject (NSKeyedArchiverDelegate)
+- (id)archiver:(NSKeyedArchiver *)archiver willEncodeObject:(id)object { return nil; }
+- (void)archiver:(NSKeyedArchiver *)archiver didEncodeObject:(id)object {  }
+- (void)archiver:(NSKeyedArchiver *)archiver willReplaceObject:(id)object withObject:(id)newObject {  }
+- (void)archiverWillFinish:(NSKeyedArchiver *)archiver {  }
+- (void)archiverDidFinish:(NSKeyedArchiver *)archiver {  }
+
+// @interface NSObject (NSKeyedUnarchiverDelegate)
+- (Class)unarchiver:(NSKeyedUnarchiver *)unarchiver cannotDecodeObjectOfClassName:(NSString *)name originalClasses:(NSArray *)classNames { return nil; }
+- (id)unarchiver:(NSKeyedUnarchiver *)unarchiver didDecodeObject:(id)object { return nil; }
+- (void)unarchiver:(NSKeyedUnarchiver *)unarchiver willReplaceObject:(id)object withObject:(id)newObject {  }
+- (void)unarchiverWillFinish:(NSKeyedUnarchiver *)unarchiver {  }
+- (void)unarchiverDidFinish:(NSKeyedUnarchiver *)unarchiver {  }
+
+// @interface NSObject (NSKeyedArchiverObjectSubstitution)
+- (Class)classForKeyedArchiver { return nil; }
+- (id)replacementObjectForKeyedArchiver:(NSKeyedArchiver *)archiver { return nil; }
+
+// @interface NSObject (NSKeyedUnarchiverObjectSubstitution)
++ (Class)classForKeyedUnarchiver { return nil; }
+
+/**** NSNetServices.h ****/
+// @interface NSObject (NSNetServiceDelegateMethods)
+- (void)netServiceWillPublish:(NSNetService *)sender {  }
+- (void)netServiceWillResolve:(NSNetService *)sender {  }
+- (void)netService:(NSNetService *)sender didNotPublish:(NSDictionary *)errorDict {  }
+- (void)netServiceDidResolveAddress:(NSNetService *)sender {  }
+- (void)netService:(NSNetService *)sender didNotResolve:(NSDictionary *)errorDict {  }
+- (void)netServiceDidStop:(NSNetService *)sender {  }
+
+// @interface NSObject (NSNetServiceBrowserDelegateMethods)
+- (void)netServiceBrowserWillSearch:(NSNetServiceBrowser *)aNetServiceBrowser {  }
+- (void)netServiceBrowser:(NSNetServiceBrowser *)aNetServiceBrowser didFindDomain:(NSString *)domainString moreComing:(BOOL)moreComing {  }
+- (void)netServiceBrowser:(NSNetServiceBrowser *)aNetServiceBrowser didFindService:(NSNetService *)aNetService moreComing:(BOOL)moreComing {  }
+- (void)netServiceBrowser:(NSNetServiceBrowser *)aNetServiceBrowser didNotSearch:(NSDictionary *)errorDict {  }
+- (void)netServiceBrowserDidStopSearch:(NSNetServiceBrowser *)aNetServiceBrowser {  }
+- (void)netServiceBrowser:(NSNetServiceBrowser *)aNetServiceBrowser didRemoveDomain:(NSString *)domainString moreComing:(BOOL)moreComing {  }
+- (void)netServiceBrowser:(NSNetServiceBrowser *)aNetServiceBrowser didRemoveService:(NSNetService *)aNetService moreComing:(BOOL)moreComing {  }
+
 /**** NSNotification.h ****/
 /**** NSPathUtilities.h ****/
 /**** NSPort.h ****/
 // @interface NSObject (NSPortDelegateMethods)
 - (void)handlePortMessage:(NSPortMessage *)message {  }
+
+// @interface NSObject (NSMachPortDelegateMethods)
+- (void)handleMachMessage:(void *)msg {  }
 
 /**** NSPortCoder.h ****/
 // @interface NSObject (NSDistributedObjects)
@@ -110,9 +153,9 @@
 - (void)performSelector:(SEL)aSelector withObject:(id)anArgument afterDelay:(NSTimeInterval)delay inModes:(NSArray *)modes {  }
 - (void)performSelector:(SEL)aSelector withObject:(id)anArgument afterDelay:(NSTimeInterval)delay {  }
 + (void)cancelPreviousPerformRequestsWithTarget:(id)aTarget selector:(SEL)aSelector object:(id)anArgument {  }
++ (void)cancelPreviousPerformRequestsWithTarget:(id)aTarget {  }
 
 /**** NSScanner.h ****/
-/**** NSSerialization.h ****/
 /**** NSSet.h ****/
 /**** NSSpellServer.h ****/
 // @interface NSObject(NSSpellServerDelegate)
@@ -123,6 +166,11 @@
 
 /**** NSString.h ****/
 /**** NSTask.h ****/
+/**** NSThread.h ****/
+// @interface NSObject (NSMainThreadPerformAdditions)
+- (void)performSelectorOnMainThread:(SEL)aSelector withObject:(id)arg waitUntilDone:(BOOL)wait modes:(NSArray *)array {  }
+- (void)performSelectorOnMainThread:(SEL)aSelector withObject:(id)arg waitUntilDone:(BOOL)wait {  }
+
 /**** NSTimeZone.h ****/
 /**** NSURL.h ****/
 // @interface NSObject(NSURLClient)
@@ -132,6 +180,11 @@
 - (void)URL:(NSURL *)sender resourceDidFailLoadingWithReason:(NSString *)reason {  }
 
 /**** NSValue.h ****/
+/**** NSObjectScripting.h ****/
+// @interface NSObject(NSScripting)
+- (NSDictionary *)scriptingProperties { return nil; }
+- (void)setScriptingProperties:(NSDictionary *)properties {  }
+
 /**** NSScriptClassDescription.h ****/
 // @interface NSObject(NSScriptClassDescription)
 - (NSString *)className { return nil; }
@@ -140,9 +193,12 @@
 /**** NSScriptKeyValueCoding.h ****/
 // @interface NSObject(NSScriptKeyValueCoding)
 - (id)valueAtIndex:(unsigned)index inPropertyWithKey:(NSString *)key { return nil; }
+- (id)valueWithName:(NSString *)name inPropertyWithKey:(NSString *)key { return nil; }
+- (id)valueWithUniqueID:(id)uniqueID inPropertyWithKey:(NSString *)key { return nil; }
 - (void)replaceValueAtIndex:(unsigned)index inPropertyWithKey:(NSString *)key withValue:(id)value {  }
 - (void)insertValue:(id)value atIndex:(unsigned)index inPropertyWithKey:(NSString *)key {  }
 - (void)removeValueAtIndex:(unsigned)index fromPropertyWithKey:(NSString *)key {  }
+- (void)insertValue:(id)value inPropertyWithKey:(NSString *)key {  }
 - (id)coerceValue:(id)value forKey:(NSString *)key { return nil; }
 
 /**** NSScriptObjectSpecifiers.h ****/
@@ -172,7 +228,9 @@
 - (BOOL)scriptingEndsWith:(id)object { return NO; }
 - (BOOL)scriptingContains:(id)object { return NO; }
 
+/**** NSSerialization.h ****/
 /**** NSGraphicsContext.h ****/
+/**** NSAppleScriptExtensions.h ****/
 /**** NSApplication.h ****/
 // @interface NSObject(NSApplicationNotifications)
 - (void)applicationWillFinishLaunching:(NSNotification *)notification {  }
@@ -268,6 +326,7 @@
 
 // @interface NSObject(NSDraggingSource)
 - (NSDragOperation)draggingSourceOperationMaskForLocal:(BOOL)flag { return (NSDragOperation)0; }
+- (NSArray *)namesOfPromisedFilesDroppedAtDestination:(NSURL *)dropDestination { return nil; }
 - (void)draggedImage:(NSImage *)image beganAt:(NSPoint)screenPoint {  }
 - (void)draggedImage:(NSImage *)image endedAt:(NSPoint)screenPoint operation:(NSDragOperation)operation {  }
 - (void)draggedImage:(NSImage *)image movedTo:(NSPoint)screenPoint {  }
@@ -278,6 +337,10 @@
 /**** NSImage.h ****/
 // @interface NSObject(NSImageDelegate)
 - (NSImage *)imageDidNotDraw:(id)sender inRect:(NSRect)aRect { return nil; }
+- (void)image:(NSImage*)image willLoadRepresentation:(NSImageRep*)rep {  }
+- (void)image:(NSImage*)image didLoadRepresentationHeader:(NSImageRep*)rep {  }
+- (void)image:(NSImage*)image didLoadPartOfRepresentation:(NSImageRep*)rep withValidRows:(int)rows {  }
+- (void)image:(NSImage*)image didLoadRepresentation:(NSImageRep*)rep withStatus:(NSImageLoadStatus)status {  }
 
 /**** NSNibLoading.h ****/
 // @interface NSObject (NSNibAwaking)
