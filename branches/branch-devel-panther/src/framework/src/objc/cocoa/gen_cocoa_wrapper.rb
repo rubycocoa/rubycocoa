@@ -9,6 +9,9 @@
 #
 
 FORCE_MODE = (ARGV.size > 0 && ARGV[0] == "-f")
+FRAMEWORKS = {
+  'Foundation' => '/System/Library/Frameworks/Foundation.framework/Headers/Foundation.h',
+  'AppKit' => '/System/Library/Frameworks/AppKit.framework/Headers/AppKit.h'}
 
 if `uname -r`.to_f >= 6.0 then
   require '../../../../tool/och_analyzer3'
@@ -26,16 +29,9 @@ def collect_src_headers(src_path, re_pat)
   }
 end
 
-def collect_appkit_headers
-  path = "/System/Library/Frameworks/AppKit.framework/Headers/AppKit.h"
-  re = %r{^\s*#import\s*<AppKit/(\w+\.h)>}
-  collect_src_headers(path, re)
-end
-
-def collect_foundation_headers
-  path = '/System/Library/Frameworks/Foundation.framework/Headers/Foundation.h'
-  re = %r{^\s*#import\s*<Foundation/(\w+\.h)>}
-  collect_src_headers(path, re)
+def collect_headers(framework, hpath)
+  re = %r{^\s*#import\s*<#{framework}/(\w+\.h)>}
+  collect_src_headers(hpath, re)
 end
 
 def collect_classes(pathes)
@@ -318,21 +314,8 @@ def gen_skelton(hpath)
   funcs = gen_def_funcs(och)
   if enums || consts || funcs then
     name = och.filename.split('.')[0]
-    fname = "rb_#{name}.m"
-    if File.exist?(fname) then
-      if FORCE_MODE then
-	system "mkdir -p old"
-	File.rename(fname, "old/#{fname}")
-      else
-	raise "'#{fname}' already exist !"
-      end
-    end
-    File.open(fname, "w") do |f|
-      f.print "\#import \"osx_ruby.h\"\n"
-      f.print "\#import \"ocdata_conv.h\"\n"
-      f.print "\#import <#{och.framework}/#{och.framework}.h>\n\n"
-      f.print STATIC_FUNCS
-      f.print "\n\n"
+    fname = "rb_#{och.framework}.m"
+    File.open(fname, "a") do |f|
       f.print consts[0] if consts
       f.print funcs[0] if funcs
       f.print "void init_#{name}(VALUE mOSX)\n"
@@ -346,10 +329,50 @@ def gen_skelton(hpath)
   $stderr.print "\n"
 end
 
-fnd_headers = collect_foundation_headers
-akt_headers = collect_appkit_headers
-CLASSES = collect_classes(fnd_headers) + collect_classes(akt_headers)
+def gen_skelton_top(framework)
+  fname = "rb_#{framework}.m"
+  File.open(fname, "w") do |f|
+    f.print "\#import \"osx_ruby.h\"\n"
+    f.print "\#import \"ocdata_conv.h\"\n"
+    f.print "\#import <#{framework}/#{framework}.h>\n\n"
+    f.print STATIC_FUNCS
+    f.print "\n\n"
+  end
+end
+
+def gen_skelton_init(framework) 
+  fname = "rb_#{framework}.m"
+  inits = (%x!grep '^void init_' #{fname}!).split("\n").map do |line|
+    func = line.sub(/^void (init_[^(]*).*\z/, '\1')
+    "  #{func}(mOSX);"
+  end
+  File.open(fname, "a") do |f|
+    f.print "void init_#{framework}(VALUE mOSX)\n"
+    f.print "{\n"
+    f.print inits.join("\n")
+    f.print "\n}\n"
+  end
+end
+
+headers = Hash.new
+FRAMEWORKS.each do |framework, hpath|
+  headers[framework] = collect_headers(framework, hpath)
+end
+CLASSES = collect_classes(headers.values.flatten)
 CLASSES.uniq!
 
-fnd_headers.each {|hpath| gen_skelton(hpath) }
-akt_headers.each {|hpath| gen_skelton(hpath) }
+FRAMEWORKS.each_key do |framework|
+  fname = "rb_#{framework}.m"
+  if File.exist?(fname) then
+    if FORCE_MODE then
+      system "mkdir -p old"
+      File.rename(fname, "old/#{fname}")
+    else
+      raise "'#{fname}' already exist !"
+    end
+  end
+  gen_skelton_top(framework)
+  headers[framework].each {|hpath| gen_skelton(hpath) }
+  gen_skelton_init(framework) 
+end
+
