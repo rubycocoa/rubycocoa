@@ -2,6 +2,21 @@
 <head><title>RubyCocoa - ChangeLog</title></head>
 <body>
 <pre>
+2003-07-28  FUJIMOTO Hisakuni  
+
+	* framework/src/objc/RBSlaveObject.h.in, framework/src/objc/RBSlaveObject.m:
+	Remove definition of initializer method "init". This fixes an
+	error which occurs when an intializer method is overridden with
+	invocation of "super_init".
+
+	* framework/RubyCocoa.pbproj/project.pbxproj.in, framework/src/ruby/osx/webkit.rb, lib/osx/webkit.rb:
+	add new library to support the WebKit.framework
+
+2003-07-28  kimura wataru 
+
+	* framework/src/ruby/osx/objc/webkit.rb
+	add new library to support the WebKit.framework
+
 2003-07-25  FUJIMOTO Hisakuni  
 
 	* framework/RubyCocoa.pbproj/project.pbxproj.in:
