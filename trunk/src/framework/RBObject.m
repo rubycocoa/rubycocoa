@@ -182,8 +182,13 @@ static SEL ruby_method_sel(int argc)
     f_success = true;
   }
   else if ((octype == _C_ID) || (octype == _C_CLASS)) {
-    id ocdata = (result == m_rbobj) ? self : rbobj_get_ocid(result);
-    if (ocdata == nil) rbobj_to_nsobj(result, &ocdata);
+    id ocdata = rbobj_get_ocid(result);
+    if (ocdata == nil) {
+      if (result == m_rbobj)
+	ocdata = self;
+      else
+	rbobj_to_nsobj(result, &ocdata);
+    }
     [an_inv setReturnValue: &ocdata];
     f_success = YES;
   }
