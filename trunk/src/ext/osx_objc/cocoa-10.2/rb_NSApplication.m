@@ -15,14 +15,14 @@ osx_NSAppKitVersionNumber(VALUE mdl)
   return nsresult_to_rbresult(_C_DBL, &NSAppKitVersionNumber, nil);
 }
 
-// NSString *NSModalPanelRunLoopMode;
+// NSString * NSModalPanelRunLoopMode;
 static VALUE
 osx_NSModalPanelRunLoopMode(VALUE mdl)
 {
   return nsresult_to_rbresult(_C_ID, &NSModalPanelRunLoopMode, nil);
 }
 
-// NSString *NSEventTrackingRunLoopMode;
+// NSString * NSEventTrackingRunLoopMode;
 static VALUE
 osx_NSEventTrackingRunLoopMode(VALUE mdl)
 {
@@ -36,98 +36,98 @@ osx_NSApp(VALUE mdl)
   return nsresult_to_rbresult(_C_ID, &NSApp, nil);
 }
 
-// NSString *NSApplicationDidBecomeActiveNotification;
+// NSString * NSApplicationDidBecomeActiveNotification;
 static VALUE
 osx_NSApplicationDidBecomeActiveNotification(VALUE mdl)
 {
   return nsresult_to_rbresult(_C_ID, &NSApplicationDidBecomeActiveNotification, nil);
 }
 
-// NSString *NSApplicationDidHideNotification;
+// NSString * NSApplicationDidHideNotification;
 static VALUE
 osx_NSApplicationDidHideNotification(VALUE mdl)
 {
   return nsresult_to_rbresult(_C_ID, &NSApplicationDidHideNotification, nil);
 }
 
-// NSString *NSApplicationDidFinishLaunchingNotification;
+// NSString * NSApplicationDidFinishLaunchingNotification;
 static VALUE
 osx_NSApplicationDidFinishLaunchingNotification(VALUE mdl)
 {
   return nsresult_to_rbresult(_C_ID, &NSApplicationDidFinishLaunchingNotification, nil);
 }
 
-// NSString *NSApplicationDidResignActiveNotification;
+// NSString * NSApplicationDidResignActiveNotification;
 static VALUE
 osx_NSApplicationDidResignActiveNotification(VALUE mdl)
 {
   return nsresult_to_rbresult(_C_ID, &NSApplicationDidResignActiveNotification, nil);
 }
 
-// NSString *NSApplicationDidUnhideNotification;
+// NSString * NSApplicationDidUnhideNotification;
 static VALUE
 osx_NSApplicationDidUnhideNotification(VALUE mdl)
 {
   return nsresult_to_rbresult(_C_ID, &NSApplicationDidUnhideNotification, nil);
 }
 
-// NSString *NSApplicationDidUpdateNotification;
+// NSString * NSApplicationDidUpdateNotification;
 static VALUE
 osx_NSApplicationDidUpdateNotification(VALUE mdl)
 {
   return nsresult_to_rbresult(_C_ID, &NSApplicationDidUpdateNotification, nil);
 }
 
-// NSString *NSApplicationWillBecomeActiveNotification;
+// NSString * NSApplicationWillBecomeActiveNotification;
 static VALUE
 osx_NSApplicationWillBecomeActiveNotification(VALUE mdl)
 {
   return nsresult_to_rbresult(_C_ID, &NSApplicationWillBecomeActiveNotification, nil);
 }
 
-// NSString *NSApplicationWillHideNotification;
+// NSString * NSApplicationWillHideNotification;
 static VALUE
 osx_NSApplicationWillHideNotification(VALUE mdl)
 {
   return nsresult_to_rbresult(_C_ID, &NSApplicationWillHideNotification, nil);
 }
 
-// NSString *NSApplicationWillFinishLaunchingNotification;
+// NSString * NSApplicationWillFinishLaunchingNotification;
 static VALUE
 osx_NSApplicationWillFinishLaunchingNotification(VALUE mdl)
 {
   return nsresult_to_rbresult(_C_ID, &NSApplicationWillFinishLaunchingNotification, nil);
 }
 
-// NSString *NSApplicationWillResignActiveNotification;
+// NSString * NSApplicationWillResignActiveNotification;
 static VALUE
 osx_NSApplicationWillResignActiveNotification(VALUE mdl)
 {
   return nsresult_to_rbresult(_C_ID, &NSApplicationWillResignActiveNotification, nil);
 }
 
-// NSString *NSApplicationWillUnhideNotification;
+// NSString * NSApplicationWillUnhideNotification;
 static VALUE
 osx_NSApplicationWillUnhideNotification(VALUE mdl)
 {
   return nsresult_to_rbresult(_C_ID, &NSApplicationWillUnhideNotification, nil);
 }
 
-// NSString *NSApplicationWillUpdateNotification;
+// NSString * NSApplicationWillUpdateNotification;
 static VALUE
 osx_NSApplicationWillUpdateNotification(VALUE mdl)
 {
   return nsresult_to_rbresult(_C_ID, &NSApplicationWillUpdateNotification, nil);
 }
 
-// NSString *NSApplicationWillTerminateNotification;
+// NSString * NSApplicationWillTerminateNotification;
 static VALUE
 osx_NSApplicationWillTerminateNotification(VALUE mdl)
 {
   return nsresult_to_rbresult(_C_ID, &NSApplicationWillTerminateNotification, nil);
 }
 
-// NSString *NSApplicationDidChangeScreenParametersNotification;
+// NSString * NSApplicationDidChangeScreenParametersNotification;
 static VALUE
 osx_NSApplicationDidChangeScreenParametersNotification(VALUE mdl)
 {
@@ -135,14 +135,14 @@ osx_NSApplicationDidChangeScreenParametersNotification(VALUE mdl)
 }
 
   /**** functions ****/
-// int NSApplicationMain(int argc, const char *argv[]);
+// int NSApplicationMain ( int argc , const char * argv [ ] );
 static VALUE
 osx_NSApplicationMain(VALUE mdl, VALUE a0, VALUE a1)
 {
   rb_notimplement();
 }
 
-// BOOL NSApplicationLoad(void);
+// BOOL NSApplicationLoad ( void );
 static VALUE
 osx_NSApplicationLoad(VALUE mdl)
 {
@@ -150,7 +150,7 @@ osx_NSApplicationLoad(VALUE mdl)
   return nsresult_to_rbresult(_PRIV_C_BOOL, &ns_result, nil);
 }
 
-// BOOL NSShowsServicesMenuItem(NSString * itemName);
+// BOOL NSShowsServicesMenuItem ( NSString * itemName );
 static VALUE
 osx_NSShowsServicesMenuItem(VALUE mdl, VALUE a0)
 {
@@ -170,7 +170,7 @@ osx_NSShowsServicesMenuItem(VALUE mdl, VALUE a0)
   return rb_result;
 }
 
-// int NSSetShowsServicesMenuItem(NSString * itemName, BOOL enabled);
+// int NSSetShowsServicesMenuItem ( NSString * itemName , BOOL enabled );
 static VALUE
 osx_NSSetShowsServicesMenuItem(VALUE mdl, VALUE a0, VALUE a1)
 {
@@ -193,7 +193,7 @@ osx_NSSetShowsServicesMenuItem(VALUE mdl, VALUE a0, VALUE a1)
   return rb_result;
 }
 
-// void NSUpdateDynamicServices(void);
+// void NSUpdateDynamicServices ( void );
 static VALUE
 osx_NSUpdateDynamicServices(VALUE mdl)
 {
@@ -201,7 +201,7 @@ osx_NSUpdateDynamicServices(VALUE mdl)
   return Qnil;
 }
 
-// BOOL NSPerformService(NSString *itemName, NSPasteboard *pboard);
+// BOOL NSPerformService ( NSString * itemName , NSPasteboard * pboard );
 static VALUE
 osx_NSPerformService(VALUE mdl, VALUE a0, VALUE a1)
 {
@@ -224,7 +224,7 @@ osx_NSPerformService(VALUE mdl, VALUE a0, VALUE a1)
   return rb_result;
 }
 
-// void NSRegisterServicesProvider(id provider, NSString *name);
+// void NSRegisterServicesProvider ( id provider , NSString * name );
 static VALUE
 osx_NSRegisterServicesProvider(VALUE mdl, VALUE a0, VALUE a1)
 {
@@ -246,7 +246,7 @@ osx_NSRegisterServicesProvider(VALUE mdl, VALUE a0, VALUE a1)
   return rb_result;
 }
 
-// void NSUnregisterServicesProvider(NSString *name);
+// void NSUnregisterServicesProvider ( NSString * name );
 static VALUE
 osx_NSUnregisterServicesProvider(VALUE mdl, VALUE a0)
 {

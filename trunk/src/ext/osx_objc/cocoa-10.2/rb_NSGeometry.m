@@ -30,7 +30,7 @@ osx_NSZeroRect(VALUE mdl)
 }
 
   /**** functions ****/
-// BOOL NSEqualPoints(NSPoint aPoint, NSPoint bPoint);
+// BOOL NSEqualPoints ( NSPoint aPoint , NSPoint bPoint );
 static VALUE
 osx_NSEqualPoints(VALUE mdl, VALUE a0, VALUE a1)
 {
@@ -53,7 +53,7 @@ osx_NSEqualPoints(VALUE mdl, VALUE a0, VALUE a1)
   return rb_result;
 }
 
-// BOOL NSEqualSizes(NSSize aSize, NSSize bSize);
+// BOOL NSEqualSizes ( NSSize aSize , NSSize bSize );
 static VALUE
 osx_NSEqualSizes(VALUE mdl, VALUE a0, VALUE a1)
 {
@@ -76,7 +76,7 @@ osx_NSEqualSizes(VALUE mdl, VALUE a0, VALUE a1)
   return rb_result;
 }
 
-// BOOL NSEqualRects(NSRect aRect, NSRect bRect);
+// BOOL NSEqualRects ( NSRect aRect , NSRect bRect );
 static VALUE
 osx_NSEqualRects(VALUE mdl, VALUE a0, VALUE a1)
 {
@@ -99,7 +99,7 @@ osx_NSEqualRects(VALUE mdl, VALUE a0, VALUE a1)
   return rb_result;
 }
 
-// BOOL NSIsEmptyRect(NSRect aRect);
+// BOOL NSIsEmptyRect ( NSRect aRect );
 static VALUE
 osx_NSIsEmptyRect(VALUE mdl, VALUE a0)
 {
@@ -119,7 +119,7 @@ osx_NSIsEmptyRect(VALUE mdl, VALUE a0)
   return rb_result;
 }
 
-// NSRect NSInsetRect(NSRect aRect, float dX, float dY);
+// NSRect NSInsetRect ( NSRect aRect , float dX , float dY );
 static VALUE
 osx_NSInsetRect(VALUE mdl, VALUE a0, VALUE a1, VALUE a2)
 {
@@ -145,7 +145,7 @@ osx_NSInsetRect(VALUE mdl, VALUE a0, VALUE a1, VALUE a2)
   return rb_result;
 }
 
-// NSRect NSIntegralRect(NSRect aRect);
+// NSRect NSIntegralRect ( NSRect aRect );
 static VALUE
 osx_NSIntegralRect(VALUE mdl, VALUE a0)
 {
@@ -165,7 +165,7 @@ osx_NSIntegralRect(VALUE mdl, VALUE a0)
   return rb_result;
 }
 
-// NSRect NSUnionRect(NSRect aRect, NSRect bRect);
+// NSRect NSUnionRect ( NSRect aRect , NSRect bRect );
 static VALUE
 osx_NSUnionRect(VALUE mdl, VALUE a0, VALUE a1)
 {
@@ -188,7 +188,7 @@ osx_NSUnionRect(VALUE mdl, VALUE a0, VALUE a1)
   return rb_result;
 }
 
-// NSRect NSIntersectionRect(NSRect aRect, NSRect bRect);
+// NSRect NSIntersectionRect ( NSRect aRect , NSRect bRect );
 static VALUE
 osx_NSIntersectionRect(VALUE mdl, VALUE a0, VALUE a1)
 {
@@ -211,7 +211,7 @@ osx_NSIntersectionRect(VALUE mdl, VALUE a0, VALUE a1)
   return rb_result;
 }
 
-// NSRect NSOffsetRect(NSRect aRect, float dX, float dY);
+// NSRect NSOffsetRect ( NSRect aRect , float dX , float dY );
 static VALUE
 osx_NSOffsetRect(VALUE mdl, VALUE a0, VALUE a1, VALUE a2)
 {
@@ -237,14 +237,38 @@ osx_NSOffsetRect(VALUE mdl, VALUE a0, VALUE a1, VALUE a2)
   return rb_result;
 }
 
-// void NSDivideRect(NSRect inRect, NSRect *slice, NSRect *rem, float amount, NSRectEdge edge);
+// void NSDivideRect ( NSRect inRect , NSRect * slice , NSRect * rem , float amount , NSRectEdge edge );
 static VALUE
 osx_NSDivideRect(VALUE mdl, VALUE a0, VALUE a1, VALUE a2, VALUE a3, VALUE a4)
 {
-  rb_notimplement();
+
+  NSRect ns_a0;
+  NSRect * ns_a1;
+  NSRect * ns_a2;
+  float ns_a3;
+  NSRectEdge ns_a4;
+
+  VALUE rb_result;
+  id pool = [[NSAutoreleasePool alloc] init];
+  /* a0 */
+  rbarg_to_nsarg(a0, _PRIV_C_NSRECT, &ns_a0, pool, 0);
+  /* a1 */
+  rbarg_to_nsarg(a1, _C_PTR, &ns_a1, pool, 1);
+  /* a2 */
+  rbarg_to_nsarg(a2, _C_PTR, &ns_a2, pool, 2);
+  /* a3 */
+  rbarg_to_nsarg(a3, _C_FLT, &ns_a3, pool, 3);
+  /* a4 */
+  rbarg_to_nsarg(a4, _C_INT, &ns_a4, pool, 4);
+
+  NSDivideRect(ns_a0, ns_a1, ns_a2, ns_a3, ns_a4);
+
+  rb_result = Qnil;
+  [pool release];
+  return rb_result;
 }
 
-// BOOL NSPointInRect(NSPoint aPoint, NSRect aRect);
+// BOOL NSPointInRect ( NSPoint aPoint , NSRect aRect );
 static VALUE
 osx_NSPointInRect(VALUE mdl, VALUE a0, VALUE a1)
 {
@@ -267,7 +291,7 @@ osx_NSPointInRect(VALUE mdl, VALUE a0, VALUE a1)
   return rb_result;
 }
 
-// BOOL NSMouseInRect(NSPoint aPoint, NSRect aRect, BOOL flipped);
+// BOOL NSMouseInRect ( NSPoint aPoint , NSRect aRect , BOOL flipped );
 static VALUE
 osx_NSMouseInRect(VALUE mdl, VALUE a0, VALUE a1, VALUE a2)
 {
@@ -293,7 +317,7 @@ osx_NSMouseInRect(VALUE mdl, VALUE a0, VALUE a1, VALUE a2)
   return rb_result;
 }
 
-// BOOL NSContainsRect(NSRect aRect, NSRect bRect);
+// BOOL NSContainsRect ( NSRect aRect , NSRect bRect );
 static VALUE
 osx_NSContainsRect(VALUE mdl, VALUE a0, VALUE a1)
 {
@@ -316,7 +340,7 @@ osx_NSContainsRect(VALUE mdl, VALUE a0, VALUE a1)
   return rb_result;
 }
 
-// BOOL NSIntersectsRect(NSRect aRect, NSRect bRect);
+// BOOL NSIntersectsRect ( NSRect aRect , NSRect bRect );
 static VALUE
 osx_NSIntersectsRect(VALUE mdl, VALUE a0, VALUE a1)
 {
@@ -339,7 +363,7 @@ osx_NSIntersectsRect(VALUE mdl, VALUE a0, VALUE a1)
   return rb_result;
 }
 
-// NSString *NSStringFromPoint(NSPoint aPoint);
+// NSString * NSStringFromPoint ( NSPoint aPoint );
 static VALUE
 osx_NSStringFromPoint(VALUE mdl, VALUE a0)
 {
@@ -359,7 +383,7 @@ osx_NSStringFromPoint(VALUE mdl, VALUE a0)
   return rb_result;
 }
 
-// NSString *NSStringFromSize(NSSize aSize);
+// NSString * NSStringFromSize ( NSSize aSize );
 static VALUE
 osx_NSStringFromSize(VALUE mdl, VALUE a0)
 {
@@ -379,7 +403,7 @@ osx_NSStringFromSize(VALUE mdl, VALUE a0)
   return rb_result;
 }
 
-// NSString *NSStringFromRect(NSRect aRect);
+// NSString * NSStringFromRect ( NSRect aRect );
 static VALUE
 osx_NSStringFromRect(VALUE mdl, VALUE a0)
 {
@@ -399,7 +423,7 @@ osx_NSStringFromRect(VALUE mdl, VALUE a0)
   return rb_result;
 }
 
-// NSPoint NSPointFromString(NSString *aString);
+// NSPoint NSPointFromString ( NSString * aString );
 static VALUE
 osx_NSPointFromString(VALUE mdl, VALUE a0)
 {
@@ -419,7 +443,7 @@ osx_NSPointFromString(VALUE mdl, VALUE a0)
   return rb_result;
 }
 
-// NSSize NSSizeFromString(NSString *aString);
+// NSSize NSSizeFromString ( NSString * aString );
 static VALUE
 osx_NSSizeFromString(VALUE mdl, VALUE a0)
 {
@@ -439,7 +463,7 @@ osx_NSSizeFromString(VALUE mdl, VALUE a0)
   return rb_result;
 }
 
-// NSRect NSRectFromString(NSString *aString);
+// NSRect NSRectFromString ( NSString * aString );
 static VALUE
 osx_NSRectFromString(VALUE mdl, VALUE a0)
 {

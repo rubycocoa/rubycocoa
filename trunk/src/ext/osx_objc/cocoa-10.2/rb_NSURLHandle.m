@@ -8,70 +8,70 @@ static const int VA_MAX = 4;
 
 
   /**** constants ****/
-// NSString *NSHTTPPropertyStatusCodeKey;
+// NSString * NSHTTPPropertyStatusCodeKey;
 static VALUE
 osx_NSHTTPPropertyStatusCodeKey(VALUE mdl)
 {
   return nsresult_to_rbresult(_C_ID, &NSHTTPPropertyStatusCodeKey, nil);
 }
 
-// NSString *NSHTTPPropertyStatusReasonKey;
+// NSString * NSHTTPPropertyStatusReasonKey;
 static VALUE
 osx_NSHTTPPropertyStatusReasonKey(VALUE mdl)
 {
   return nsresult_to_rbresult(_C_ID, &NSHTTPPropertyStatusReasonKey, nil);
 }
 
-// NSString *NSHTTPPropertyServerHTTPVersionKey;
+// NSString * NSHTTPPropertyServerHTTPVersionKey;
 static VALUE
 osx_NSHTTPPropertyServerHTTPVersionKey(VALUE mdl)
 {
   return nsresult_to_rbresult(_C_ID, &NSHTTPPropertyServerHTTPVersionKey, nil);
 }
 
-// NSString *NSHTTPPropertyRedirectionHeadersKey;
+// NSString * NSHTTPPropertyRedirectionHeadersKey;
 static VALUE
 osx_NSHTTPPropertyRedirectionHeadersKey(VALUE mdl)
 {
   return nsresult_to_rbresult(_C_ID, &NSHTTPPropertyRedirectionHeadersKey, nil);
 }
 
-// NSString *NSHTTPPropertyErrorPageDataKey;
+// NSString * NSHTTPPropertyErrorPageDataKey;
 static VALUE
 osx_NSHTTPPropertyErrorPageDataKey(VALUE mdl)
 {
   return nsresult_to_rbresult(_C_ID, &NSHTTPPropertyErrorPageDataKey, nil);
 }
 
-// NSString *NSHTTPPropertyHTTPProxy;
+// NSString * NSHTTPPropertyHTTPProxy;
 static VALUE
 osx_NSHTTPPropertyHTTPProxy(VALUE mdl)
 {
   return nsresult_to_rbresult(_C_ID, &NSHTTPPropertyHTTPProxy, nil);
 }
 
-// NSString *NSFTPPropertyUserLoginKey;
+// NSString * NSFTPPropertyUserLoginKey;
 static VALUE
 osx_NSFTPPropertyUserLoginKey(VALUE mdl)
 {
   return nsresult_to_rbresult(_C_ID, &NSFTPPropertyUserLoginKey, nil);
 }
 
-// NSString *NSFTPPropertyUserPasswordKey;
+// NSString * NSFTPPropertyUserPasswordKey;
 static VALUE
 osx_NSFTPPropertyUserPasswordKey(VALUE mdl)
 {
   return nsresult_to_rbresult(_C_ID, &NSFTPPropertyUserPasswordKey, nil);
 }
 
-// NSString *NSFTPPropertyActiveTransferModeKey;
+// NSString * NSFTPPropertyActiveTransferModeKey;
 static VALUE
 osx_NSFTPPropertyActiveTransferModeKey(VALUE mdl)
 {
   return nsresult_to_rbresult(_C_ID, &NSFTPPropertyActiveTransferModeKey, nil);
 }
 
-// NSString *NSFTPPropertyFileOffsetKey;
+// NSString * NSFTPPropertyFileOffsetKey;
 static VALUE
 osx_NSFTPPropertyFileOffsetKey(VALUE mdl)
 {

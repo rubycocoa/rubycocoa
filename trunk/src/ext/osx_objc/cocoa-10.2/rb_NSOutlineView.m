@@ -8,56 +8,56 @@ static const int VA_MAX = 4;
 
 
   /**** constants ****/
-// NSString *NSOutlineViewSelectionDidChangeNotification;
+// NSString * NSOutlineViewSelectionDidChangeNotification;
 static VALUE
 osx_NSOutlineViewSelectionDidChangeNotification(VALUE mdl)
 {
   return nsresult_to_rbresult(_C_ID, &NSOutlineViewSelectionDidChangeNotification, nil);
 }
 
-// NSString *NSOutlineViewColumnDidMoveNotification;
+// NSString * NSOutlineViewColumnDidMoveNotification;
 static VALUE
 osx_NSOutlineViewColumnDidMoveNotification(VALUE mdl)
 {
   return nsresult_to_rbresult(_C_ID, &NSOutlineViewColumnDidMoveNotification, nil);
 }
 
-// NSString *NSOutlineViewColumnDidResizeNotification;
+// NSString * NSOutlineViewColumnDidResizeNotification;
 static VALUE
 osx_NSOutlineViewColumnDidResizeNotification(VALUE mdl)
 {
   return nsresult_to_rbresult(_C_ID, &NSOutlineViewColumnDidResizeNotification, nil);
 }
 
-// NSString *NSOutlineViewSelectionIsChangingNotification;
+// NSString * NSOutlineViewSelectionIsChangingNotification;
 static VALUE
 osx_NSOutlineViewSelectionIsChangingNotification(VALUE mdl)
 {
   return nsresult_to_rbresult(_C_ID, &NSOutlineViewSelectionIsChangingNotification, nil);
 }
 
-// NSString *NSOutlineViewItemWillExpandNotification;
+// NSString * NSOutlineViewItemWillExpandNotification;
 static VALUE
 osx_NSOutlineViewItemWillExpandNotification(VALUE mdl)
 {
   return nsresult_to_rbresult(_C_ID, &NSOutlineViewItemWillExpandNotification, nil);
 }
 
-// NSString *NSOutlineViewItemDidExpandNotification;
+// NSString * NSOutlineViewItemDidExpandNotification;
 static VALUE
 osx_NSOutlineViewItemDidExpandNotification(VALUE mdl)
 {
   return nsresult_to_rbresult(_C_ID, &NSOutlineViewItemDidExpandNotification, nil);
 }
 
-// NSString *NSOutlineViewItemWillCollapseNotification;
+// NSString * NSOutlineViewItemWillCollapseNotification;
 static VALUE
 osx_NSOutlineViewItemWillCollapseNotification(VALUE mdl)
 {
   return nsresult_to_rbresult(_C_ID, &NSOutlineViewItemWillCollapseNotification, nil);
 }
 
-// NSString *NSOutlineViewItemDidCollapseNotification;
+// NSString * NSOutlineViewItemDidCollapseNotification;
 static VALUE
 osx_NSOutlineViewItemDidCollapseNotification(VALUE mdl)
 {

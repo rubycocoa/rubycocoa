@@ -8,7 +8,7 @@ static const int VA_MAX = 4;
 
 
   /**** functions ****/
-// NSObject *NXReadNSObjectFromCoder(NSCoder *decoder);
+// NSObject * NXReadNSObjectFromCoder ( NSCoder * decoder );
 static VALUE
 osx_NXReadNSObjectFromCoder(VALUE mdl, VALUE a0)
 {

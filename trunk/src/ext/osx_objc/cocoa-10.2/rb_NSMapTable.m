@@ -86,21 +86,21 @@ osx_NSOwnedPointerMapValueCallBacks(VALUE mdl)
 }
 
   /**** functions ****/
-// NSMapTable *NSCreateMapTableWithZone(NSMapTableKeyCallBacks keyCallBacks, NSMapTableValueCallBacks valueCallBacks, unsigned capacity, NSZone *zone);
+// NSMapTable * NSCreateMapTableWithZone ( NSMapTableKeyCallBacks keyCallBacks , NSMapTableValueCallBacks valueCallBacks , unsigned capacity , NSZone * zone );
 static VALUE
 osx_NSCreateMapTableWithZone(VALUE mdl, VALUE a0, VALUE a1, VALUE a2, VALUE a3)
 {
   rb_notimplement();
 }
 
-// NSMapTable *NSCreateMapTable(NSMapTableKeyCallBacks keyCallBacks, NSMapTableValueCallBacks valueCallBacks, unsigned capacity);
+// NSMapTable * NSCreateMapTable ( NSMapTableKeyCallBacks keyCallBacks , NSMapTableValueCallBacks valueCallBacks , unsigned capacity );
 static VALUE
 osx_NSCreateMapTable(VALUE mdl, VALUE a0, VALUE a1, VALUE a2)
 {
   rb_notimplement();
 }
 
-// void NSFreeMapTable(NSMapTable *table);
+// void NSFreeMapTable ( NSMapTable * table );
 static VALUE
 osx_NSFreeMapTable(VALUE mdl, VALUE a0)
 {
@@ -119,7 +119,7 @@ osx_NSFreeMapTable(VALUE mdl, VALUE a0)
   return rb_result;
 }
 
-// void NSResetMapTable(NSMapTable *table);
+// void NSResetMapTable ( NSMapTable * table );
 static VALUE
 osx_NSResetMapTable(VALUE mdl, VALUE a0)
 {
@@ -138,7 +138,7 @@ osx_NSResetMapTable(VALUE mdl, VALUE a0)
   return rb_result;
 }
 
-// BOOL NSCompareMapTables(NSMapTable *table1, NSMapTable *table2);
+// BOOL NSCompareMapTables ( NSMapTable * table1 , NSMapTable * table2 );
 static VALUE
 osx_NSCompareMapTables(VALUE mdl, VALUE a0, VALUE a1)
 {
@@ -161,7 +161,7 @@ osx_NSCompareMapTables(VALUE mdl, VALUE a0, VALUE a1)
   return rb_result;
 }
 
-// NSMapTable *NSCopyMapTableWithZone(NSMapTable *table, NSZone *zone);
+// NSMapTable * NSCopyMapTableWithZone ( NSMapTable * table , NSZone * zone );
 static VALUE
 osx_NSCopyMapTableWithZone(VALUE mdl, VALUE a0, VALUE a1)
 {
@@ -184,7 +184,7 @@ osx_NSCopyMapTableWithZone(VALUE mdl, VALUE a0, VALUE a1)
   return rb_result;
 }
 
-// BOOL NSMapMember(NSMapTable *table, const void *key, void **originalKey, void **value);
+// BOOL NSMapMember ( NSMapTable * table , const void * key , void * * originalKey , void * * value );
 static VALUE
 osx_NSMapMember(VALUE mdl, VALUE a0, VALUE a1, VALUE a2, VALUE a3)
 {
@@ -192,8 +192,8 @@ osx_NSMapMember(VALUE mdl, VALUE a0, VALUE a1, VALUE a2, VALUE a3)
 
   NSMapTable * ns_a0;
   const void * ns_a1;
-  void ** ns_a2;
-  void ** ns_a3;
+  void * * ns_a2;
+  void * * ns_a3;
 
   VALUE rb_result;
   id pool = [[NSAutoreleasePool alloc] init];
@@ -213,7 +213,7 @@ osx_NSMapMember(VALUE mdl, VALUE a0, VALUE a1, VALUE a2, VALUE a3)
   return rb_result;
 }
 
-// void *NSMapGet(NSMapTable *table, const void *key);
+// void * NSMapGet ( NSMapTable * table , const void * key );
 static VALUE
 osx_NSMapGet(VALUE mdl, VALUE a0, VALUE a1)
 {
@@ -236,7 +236,7 @@ osx_NSMapGet(VALUE mdl, VALUE a0, VALUE a1)
   return rb_result;
 }
 
-// void NSMapInsert(NSMapTable *table, const void *key, const void *value);
+// void NSMapInsert ( NSMapTable * table , const void * key , const void * value );
 static VALUE
 osx_NSMapInsert(VALUE mdl, VALUE a0, VALUE a1, VALUE a2)
 {
@@ -261,7 +261,7 @@ osx_NSMapInsert(VALUE mdl, VALUE a0, VALUE a1, VALUE a2)
   return rb_result;
 }
 
-// void NSMapInsertKnownAbsent(NSMapTable *table, const void *key, const void *value);
+// void NSMapInsertKnownAbsent ( NSMapTable * table , const void * key , const void * value );
 static VALUE
 osx_NSMapInsertKnownAbsent(VALUE mdl, VALUE a0, VALUE a1, VALUE a2)
 {
@@ -286,7 +286,7 @@ osx_NSMapInsertKnownAbsent(VALUE mdl, VALUE a0, VALUE a1, VALUE a2)
   return rb_result;
 }
 
-// void *NSMapInsertIfAbsent(NSMapTable *table, const void *key, const void *value);
+// void * NSMapInsertIfAbsent ( NSMapTable * table , const void * key , const void * value );
 static VALUE
 osx_NSMapInsertIfAbsent(VALUE mdl, VALUE a0, VALUE a1, VALUE a2)
 {
@@ -312,7 +312,7 @@ osx_NSMapInsertIfAbsent(VALUE mdl, VALUE a0, VALUE a1, VALUE a2)
   return rb_result;
 }
 
-// void NSMapRemove(NSMapTable *table, const void *key);
+// void NSMapRemove ( NSMapTable * table , const void * key );
 static VALUE
 osx_NSMapRemove(VALUE mdl, VALUE a0, VALUE a1)
 {
@@ -334,22 +334,22 @@ osx_NSMapRemove(VALUE mdl, VALUE a0, VALUE a1)
   return rb_result;
 }
 
-// NSMapEnumerator NSEnumerateMapTable(NSMapTable *table);
+// NSMapEnumerator NSEnumerateMapTable ( NSMapTable * table );
 static VALUE
 osx_NSEnumerateMapTable(VALUE mdl, VALUE a0)
 {
   rb_notimplement();
 }
 
-// BOOL NSNextMapEnumeratorPair(NSMapEnumerator *enumerator, void **key, void **value);
+// BOOL NSNextMapEnumeratorPair ( NSMapEnumerator * enumerator , void * * key , void * * value );
 static VALUE
 osx_NSNextMapEnumeratorPair(VALUE mdl, VALUE a0, VALUE a1, VALUE a2)
 {
   BOOL ns_result;
 
   NSMapEnumerator * ns_a0;
-  void ** ns_a1;
-  void ** ns_a2;
+  void * * ns_a1;
+  void * * ns_a2;
 
   VALUE rb_result;
   id pool = [[NSAutoreleasePool alloc] init];
@@ -367,7 +367,7 @@ osx_NSNextMapEnumeratorPair(VALUE mdl, VALUE a0, VALUE a1, VALUE a2)
   return rb_result;
 }
 
-// void NSEndMapTableEnumeration(NSMapEnumerator *enumerator);
+// void NSEndMapTableEnumeration ( NSMapEnumerator * enumerator );
 static VALUE
 osx_NSEndMapTableEnumeration(VALUE mdl, VALUE a0)
 {
@@ -386,7 +386,7 @@ osx_NSEndMapTableEnumeration(VALUE mdl, VALUE a0)
   return rb_result;
 }
 
-// unsigned NSCountMapTable(NSMapTable *table);
+// unsigned NSCountMapTable ( NSMapTable * table );
 static VALUE
 osx_NSCountMapTable(VALUE mdl, VALUE a0)
 {
@@ -406,7 +406,7 @@ osx_NSCountMapTable(VALUE mdl, VALUE a0)
   return rb_result;
 }
 
-// NSString *NSStringFromMapTable(NSMapTable *table);
+// NSString * NSStringFromMapTable ( NSMapTable * table );
 static VALUE
 osx_NSStringFromMapTable(VALUE mdl, VALUE a0)
 {
@@ -426,7 +426,7 @@ osx_NSStringFromMapTable(VALUE mdl, VALUE a0)
   return rb_result;
 }
 
-// NSArray *NSAllMapTableKeys(NSMapTable *table);
+// NSArray * NSAllMapTableKeys ( NSMapTable * table );
 static VALUE
 osx_NSAllMapTableKeys(VALUE mdl, VALUE a0)
 {
@@ -446,7 +446,7 @@ osx_NSAllMapTableKeys(VALUE mdl, VALUE a0)
   return rb_result;
 }
 
-// NSArray *NSAllMapTableValues(NSMapTable *table);
+// NSArray * NSAllMapTableValues ( NSMapTable * table );
 static VALUE
 osx_NSAllMapTableValues(VALUE mdl, VALUE a0)
 {

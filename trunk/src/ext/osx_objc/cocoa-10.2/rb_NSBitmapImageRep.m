@@ -8,63 +8,63 @@ static const int VA_MAX = 4;
 
 
   /**** constants ****/
-// NSString* NSImageCompressionMethod;
+// NSString * NSImageCompressionMethod;
 static VALUE
 osx_NSImageCompressionMethod(VALUE mdl)
 {
   return nsresult_to_rbresult(_C_ID, &NSImageCompressionMethod, nil);
 }
 
-// NSString* NSImageCompressionFactor;
+// NSString * NSImageCompressionFactor;
 static VALUE
 osx_NSImageCompressionFactor(VALUE mdl)
 {
   return nsresult_to_rbresult(_C_ID, &NSImageCompressionFactor, nil);
 }
 
-// NSString* NSImageDitherTransparency;
+// NSString * NSImageDitherTransparency;
 static VALUE
 osx_NSImageDitherTransparency(VALUE mdl)
 {
   return nsresult_to_rbresult(_C_ID, &NSImageDitherTransparency, nil);
 }
 
-// NSString* NSImageRGBColorTable;
+// NSString * NSImageRGBColorTable;
 static VALUE
 osx_NSImageRGBColorTable(VALUE mdl)
 {
   return nsresult_to_rbresult(_C_ID, &NSImageRGBColorTable, nil);
 }
 
-// NSString* NSImageInterlaced;
+// NSString * NSImageInterlaced;
 static VALUE
 osx_NSImageInterlaced(VALUE mdl)
 {
   return nsresult_to_rbresult(_C_ID, &NSImageInterlaced, nil);
 }
 
-// NSString* NSImageColorSyncProfileData;
+// NSString * NSImageColorSyncProfileData;
 static VALUE
 osx_NSImageColorSyncProfileData(VALUE mdl)
 {
   return nsresult_to_rbresult(_C_ID, &NSImageColorSyncProfileData, nil);
 }
 
-// NSString* NSImageFrameCount;
+// NSString * NSImageFrameCount;
 static VALUE
 osx_NSImageFrameCount(VALUE mdl)
 {
   return nsresult_to_rbresult(_C_ID, &NSImageFrameCount, nil);
 }
 
-// NSString* NSImageCurrentFrame;
+// NSString * NSImageCurrentFrame;
 static VALUE
 osx_NSImageCurrentFrame(VALUE mdl)
 {
   return nsresult_to_rbresult(_C_ID, &NSImageCurrentFrame, nil);
 }
 
-// NSString* NSImageCurrentFrameDuration;
+// NSString * NSImageCurrentFrameDuration;
 static VALUE
 osx_NSImageCurrentFrameDuration(VALUE mdl)
 {

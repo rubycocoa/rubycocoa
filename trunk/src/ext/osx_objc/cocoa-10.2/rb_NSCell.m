@@ -8,7 +8,7 @@ static const int VA_MAX = 4;
 
 
   /**** constants ****/
-// NSString *NSControlTintDidChangeNotification;
+// NSString * NSControlTintDidChangeNotification;
 static VALUE
 osx_NSControlTintDidChangeNotification(VALUE mdl)
 {

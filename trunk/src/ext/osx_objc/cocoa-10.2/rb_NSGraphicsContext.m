@@ -8,28 +8,28 @@ static const int VA_MAX = 4;
 
 
   /**** constants ****/
-// NSString *NSGraphicsContextDestinationAttributeName;
+// NSString * NSGraphicsContextDestinationAttributeName;
 static VALUE
 osx_NSGraphicsContextDestinationAttributeName(VALUE mdl)
 {
   return nsresult_to_rbresult(_C_ID, &NSGraphicsContextDestinationAttributeName, nil);
 }
 
-// NSString *NSGraphicsContextRepresentationFormatAttributeName;
+// NSString * NSGraphicsContextRepresentationFormatAttributeName;
 static VALUE
 osx_NSGraphicsContextRepresentationFormatAttributeName(VALUE mdl)
 {
   return nsresult_to_rbresult(_C_ID, &NSGraphicsContextRepresentationFormatAttributeName, nil);
 }
 
-// NSString *NSGraphicsContextPSFormat;
+// NSString * NSGraphicsContextPSFormat;
 static VALUE
 osx_NSGraphicsContextPSFormat(VALUE mdl)
 {
   return nsresult_to_rbresult(_C_ID, &NSGraphicsContextPSFormat, nil);
 }
 
-// NSString *NSGraphicsContextPDFFormat;
+// NSString * NSGraphicsContextPDFFormat;
 static VALUE
 osx_NSGraphicsContextPDFFormat(VALUE mdl)
 {

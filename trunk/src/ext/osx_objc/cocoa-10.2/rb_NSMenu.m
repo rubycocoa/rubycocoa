@@ -8,35 +8,35 @@ static const int VA_MAX = 4;
 
 
   /**** constants ****/
-// NSString *NSMenuWillSendActionNotification;
+// NSString * NSMenuWillSendActionNotification;
 static VALUE
 osx_NSMenuWillSendActionNotification(VALUE mdl)
 {
   return nsresult_to_rbresult(_C_ID, &NSMenuWillSendActionNotification, nil);
 }
 
-// NSString *NSMenuDidSendActionNotification;
+// NSString * NSMenuDidSendActionNotification;
 static VALUE
 osx_NSMenuDidSendActionNotification(VALUE mdl)
 {
   return nsresult_to_rbresult(_C_ID, &NSMenuDidSendActionNotification, nil);
 }
 
-// NSString *NSMenuDidAddItemNotification;
+// NSString * NSMenuDidAddItemNotification;
 static VALUE
 osx_NSMenuDidAddItemNotification(VALUE mdl)
 {
   return nsresult_to_rbresult(_C_ID, &NSMenuDidAddItemNotification, nil);
 }
 
-// NSString *NSMenuDidRemoveItemNotification;
+// NSString * NSMenuDidRemoveItemNotification;
 static VALUE
 osx_NSMenuDidRemoveItemNotification(VALUE mdl)
 {
   return nsresult_to_rbresult(_C_ID, &NSMenuDidRemoveItemNotification, nil);
 }
 
-// NSString *NSMenuDidChangeItemNotification;
+// NSString * NSMenuDidChangeItemNotification;
 static VALUE
 osx_NSMenuDidChangeItemNotification(VALUE mdl)
 {

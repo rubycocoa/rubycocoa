@@ -8,14 +8,14 @@ static const int VA_MAX = 4;
 
 
   /**** constants ****/
-// NSString *NSContextHelpModeDidActivateNotification;
+// NSString * NSContextHelpModeDidActivateNotification;
 static VALUE
 osx_NSContextHelpModeDidActivateNotification(VALUE mdl)
 {
   return nsresult_to_rbresult(_C_ID, &NSContextHelpModeDidActivateNotification, nil);
 }
 
-// NSString *NSContextHelpModeDidDeactivateNotification;
+// NSString * NSContextHelpModeDidDeactivateNotification;
 static VALUE
 osx_NSContextHelpModeDidDeactivateNotification(VALUE mdl)
 {

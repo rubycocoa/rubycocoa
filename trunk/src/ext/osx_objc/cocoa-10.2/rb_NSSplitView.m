@@ -8,14 +8,14 @@ static const int VA_MAX = 4;
 
 
   /**** constants ****/
-// NSString *NSSplitViewDidResizeSubviewsNotification;
+// NSString * NSSplitViewDidResizeSubviewsNotification;
 static VALUE
 osx_NSSplitViewDidResizeSubviewsNotification(VALUE mdl)
 {
   return nsresult_to_rbresult(_C_ID, &NSSplitViewDidResizeSubviewsNotification, nil);
 }
 
-// NSString *NSSplitViewWillResizeSubviewsNotification;
+// NSString * NSSplitViewWillResizeSubviewsNotification;
 static VALUE
 osx_NSSplitViewWillResizeSubviewsNotification(VALUE mdl)
 {

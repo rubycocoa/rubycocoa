@@ -8,7 +8,7 @@ static const int VA_MAX = 4;
 
 
   /**** functions ****/
-// NSRange NSUnionRange(NSRange range1, NSRange range2);
+// NSRange NSUnionRange ( NSRange range1 , NSRange range2 );
 static VALUE
 osx_NSUnionRange(VALUE mdl, VALUE a0, VALUE a1)
 {
@@ -31,7 +31,7 @@ osx_NSUnionRange(VALUE mdl, VALUE a0, VALUE a1)
   return rb_result;
 }
 
-// NSRange NSIntersectionRange(NSRange range1, NSRange range2);
+// NSRange NSIntersectionRange ( NSRange range1 , NSRange range2 );
 static VALUE
 osx_NSIntersectionRange(VALUE mdl, VALUE a0, VALUE a1)
 {
@@ -54,7 +54,7 @@ osx_NSIntersectionRange(VALUE mdl, VALUE a0, VALUE a1)
   return rb_result;
 }
 
-// NSString *NSStringFromRange(NSRange range);
+// NSString * NSStringFromRange ( NSRange range );
 static VALUE
 osx_NSStringFromRange(VALUE mdl, VALUE a0)
 {
@@ -74,7 +74,7 @@ osx_NSStringFromRange(VALUE mdl, VALUE a0)
   return rb_result;
 }
 
-// NSRange NSRangeFromString(NSString *aString);
+// NSRange NSRangeFromString ( NSString * aString );
 static VALUE
 osx_NSRangeFromString(VALUE mdl, VALUE a0)
 {

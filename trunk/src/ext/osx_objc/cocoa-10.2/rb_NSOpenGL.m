@@ -7,6 +7,73 @@ extern VALUE nsresult_to_rbresult(int octype, const void* nsresult, id pool);
 static const int VA_MAX = 4;
 
 
+  /**** functions ****/
+// void NSOpenGLSetOption ( NSOpenGLGlobalOption pname , long param );
+static VALUE
+osx_NSOpenGLSetOption(VALUE mdl, VALUE a0, VALUE a1)
+{
+
+  NSOpenGLGlobalOption ns_a0;
+  long ns_a1;
+
+  VALUE rb_result;
+  id pool = [[NSAutoreleasePool alloc] init];
+  /* a0 */
+  rbarg_to_nsarg(a0, _C_INT, &ns_a0, pool, 0);
+  /* a1 */
+  rbarg_to_nsarg(a1, _C_LNG, &ns_a1, pool, 1);
+
+  NSOpenGLSetOption(ns_a0, ns_a1);
+
+  rb_result = Qnil;
+  [pool release];
+  return rb_result;
+}
+
+// void NSOpenGLGetOption ( NSOpenGLGlobalOption pname , long * param );
+static VALUE
+osx_NSOpenGLGetOption(VALUE mdl, VALUE a0, VALUE a1)
+{
+
+  NSOpenGLGlobalOption ns_a0;
+  long * ns_a1;
+
+  VALUE rb_result;
+  id pool = [[NSAutoreleasePool alloc] init];
+  /* a0 */
+  rbarg_to_nsarg(a0, _C_INT, &ns_a0, pool, 0);
+  /* a1 */
+  rbarg_to_nsarg(a1, _C_PTR, &ns_a1, pool, 1);
+
+  NSOpenGLGetOption(ns_a0, ns_a1);
+
+  rb_result = Qnil;
+  [pool release];
+  return rb_result;
+}
+
+// void NSOpenGLGetVersion ( long * major , long * minor );
+static VALUE
+osx_NSOpenGLGetVersion(VALUE mdl, VALUE a0, VALUE a1)
+{
+
+  long * ns_a0;
+  long * ns_a1;
+
+  VALUE rb_result;
+  id pool = [[NSAutoreleasePool alloc] init];
+  /* a0 */
+  rbarg_to_nsarg(a0, _C_PTR, &ns_a0, pool, 0);
+  /* a1 */
+  rbarg_to_nsarg(a1, _C_PTR, &ns_a1, pool, 1);
+
+  NSOpenGLGetVersion(ns_a0, ns_a1);
+
+  rb_result = Qnil;
+  [pool release];
+  return rb_result;
+}
+
 void init_NSOpenGL(VALUE mOSX)
 {
   /**** enums ****/
@@ -51,4 +118,8 @@ void init_NSOpenGL(VALUE mOSX)
   rb_define_const(mOSX, "NSOpenGLCPSurfaceOpacity", INT2NUM(NSOpenGLCPSurfaceOpacity));
   rb_define_const(mOSX, "NSOpenGLCPStateValidation", INT2NUM(NSOpenGLCPStateValidation));
 
+  /**** functions ****/
+  rb_define_module_function(mOSX, "NSOpenGLSetOption", osx_NSOpenGLSetOption, 2);
+  rb_define_module_function(mOSX, "NSOpenGLGetOption", osx_NSOpenGLGetOption, 2);
+  rb_define_module_function(mOSX, "NSOpenGLGetVersion", osx_NSOpenGLGetVersion, 2);
 }

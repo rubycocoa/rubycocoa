@@ -58,21 +58,21 @@ osx_NSPointerToStructHashCallBacks(VALUE mdl)
 }
 
   /**** functions ****/
-// NSHashTable *NSCreateHashTableWithZone(NSHashTableCallBacks callBacks, unsigned capacity, NSZone *zone);
+// NSHashTable * NSCreateHashTableWithZone ( NSHashTableCallBacks callBacks , unsigned capacity , NSZone * zone );
 static VALUE
 osx_NSCreateHashTableWithZone(VALUE mdl, VALUE a0, VALUE a1, VALUE a2)
 {
   rb_notimplement();
 }
 
-// NSHashTable *NSCreateHashTable(NSHashTableCallBacks callBacks, unsigned capacity);
+// NSHashTable * NSCreateHashTable ( NSHashTableCallBacks callBacks , unsigned capacity );
 static VALUE
 osx_NSCreateHashTable(VALUE mdl, VALUE a0, VALUE a1)
 {
   rb_notimplement();
 }
 
-// void NSFreeHashTable(NSHashTable *table);
+// void NSFreeHashTable ( NSHashTable * table );
 static VALUE
 osx_NSFreeHashTable(VALUE mdl, VALUE a0)
 {
@@ -91,7 +91,7 @@ osx_NSFreeHashTable(VALUE mdl, VALUE a0)
   return rb_result;
 }
 
-// void NSResetHashTable(NSHashTable *table);
+// void NSResetHashTable ( NSHashTable * table );
 static VALUE
 osx_NSResetHashTable(VALUE mdl, VALUE a0)
 {
@@ -110,7 +110,7 @@ osx_NSResetHashTable(VALUE mdl, VALUE a0)
   return rb_result;
 }
 
-// BOOL NSCompareHashTables(NSHashTable *table1, NSHashTable *table2);
+// BOOL NSCompareHashTables ( NSHashTable * table1 , NSHashTable * table2 );
 static VALUE
 osx_NSCompareHashTables(VALUE mdl, VALUE a0, VALUE a1)
 {
@@ -133,7 +133,7 @@ osx_NSCompareHashTables(VALUE mdl, VALUE a0, VALUE a1)
   return rb_result;
 }
 
-// NSHashTable *NSCopyHashTableWithZone(NSHashTable *table, NSZone *zone);
+// NSHashTable * NSCopyHashTableWithZone ( NSHashTable * table , NSZone * zone );
 static VALUE
 osx_NSCopyHashTableWithZone(VALUE mdl, VALUE a0, VALUE a1)
 {
@@ -156,7 +156,7 @@ osx_NSCopyHashTableWithZone(VALUE mdl, VALUE a0, VALUE a1)
   return rb_result;
 }
 
-// void *NSHashGet(NSHashTable *table, const void *pointer);
+// void * NSHashGet ( NSHashTable * table , const void * pointer );
 static VALUE
 osx_NSHashGet(VALUE mdl, VALUE a0, VALUE a1)
 {
@@ -179,7 +179,7 @@ osx_NSHashGet(VALUE mdl, VALUE a0, VALUE a1)
   return rb_result;
 }
 
-// void NSHashInsert(NSHashTable *table, const void *pointer);
+// void NSHashInsert ( NSHashTable * table , const void * pointer );
 static VALUE
 osx_NSHashInsert(VALUE mdl, VALUE a0, VALUE a1)
 {
@@ -201,7 +201,7 @@ osx_NSHashInsert(VALUE mdl, VALUE a0, VALUE a1)
   return rb_result;
 }
 
-// void NSHashInsertKnownAbsent(NSHashTable *table, const void *pointer);
+// void NSHashInsertKnownAbsent ( NSHashTable * table , const void * pointer );
 static VALUE
 osx_NSHashInsertKnownAbsent(VALUE mdl, VALUE a0, VALUE a1)
 {
@@ -223,7 +223,7 @@ osx_NSHashInsertKnownAbsent(VALUE mdl, VALUE a0, VALUE a1)
   return rb_result;
 }
 
-// void *NSHashInsertIfAbsent(NSHashTable *table, const void *pointer);
+// void * NSHashInsertIfAbsent ( NSHashTable * table , const void * pointer );
 static VALUE
 osx_NSHashInsertIfAbsent(VALUE mdl, VALUE a0, VALUE a1)
 {
@@ -246,7 +246,7 @@ osx_NSHashInsertIfAbsent(VALUE mdl, VALUE a0, VALUE a1)
   return rb_result;
 }
 
-// void NSHashRemove(NSHashTable *table, const void *pointer);
+// void NSHashRemove ( NSHashTable * table , const void * pointer );
 static VALUE
 osx_NSHashRemove(VALUE mdl, VALUE a0, VALUE a1)
 {
@@ -268,14 +268,14 @@ osx_NSHashRemove(VALUE mdl, VALUE a0, VALUE a1)
   return rb_result;
 }
 
-// NSHashEnumerator NSEnumerateHashTable(NSHashTable *table);
+// NSHashEnumerator NSEnumerateHashTable ( NSHashTable * table );
 static VALUE
 osx_NSEnumerateHashTable(VALUE mdl, VALUE a0)
 {
   rb_notimplement();
 }
 
-// void *NSNextHashEnumeratorItem(NSHashEnumerator *enumerator);
+// void * NSNextHashEnumeratorItem ( NSHashEnumerator * enumerator );
 static VALUE
 osx_NSNextHashEnumeratorItem(VALUE mdl, VALUE a0)
 {
@@ -295,7 +295,7 @@ osx_NSNextHashEnumeratorItem(VALUE mdl, VALUE a0)
   return rb_result;
 }
 
-// void NSEndHashTableEnumeration(NSHashEnumerator *enumerator);
+// void NSEndHashTableEnumeration ( NSHashEnumerator * enumerator );
 static VALUE
 osx_NSEndHashTableEnumeration(VALUE mdl, VALUE a0)
 {
@@ -314,7 +314,7 @@ osx_NSEndHashTableEnumeration(VALUE mdl, VALUE a0)
   return rb_result;
 }
 
-// unsigned NSCountHashTable(NSHashTable *table);
+// unsigned NSCountHashTable ( NSHashTable * table );
 static VALUE
 osx_NSCountHashTable(VALUE mdl, VALUE a0)
 {
@@ -334,7 +334,7 @@ osx_NSCountHashTable(VALUE mdl, VALUE a0)
   return rb_result;
 }
 
-// NSString *NSStringFromHashTable(NSHashTable *table);
+// NSString * NSStringFromHashTable ( NSHashTable * table );
 static VALUE
 osx_NSStringFromHashTable(VALUE mdl, VALUE a0)
 {
@@ -354,7 +354,7 @@ osx_NSStringFromHashTable(VALUE mdl, VALUE a0)
   return rb_result;
 }
 
-// NSArray *NSAllHashTableObjects(NSHashTable *table);
+// NSArray * NSAllHashTableObjects ( NSHashTable * table );
 static VALUE
 osx_NSAllHashTableObjects(VALUE mdl, VALUE a0)
 {

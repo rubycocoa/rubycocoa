@@ -8,14 +8,14 @@ static const int VA_MAX = 4;
 
 
   /**** constants ****/
-// NSString *NSTextViewWillChangeNotifyingTextViewNotification;
+// NSString * NSTextViewWillChangeNotifyingTextViewNotification;
 static VALUE
 osx_NSTextViewWillChangeNotifyingTextViewNotification(VALUE mdl)
 {
   return nsresult_to_rbresult(_C_ID, &NSTextViewWillChangeNotifyingTextViewNotification, nil);
 }
 
-// NSString *NSTextViewDidChangeSelectionNotification;
+// NSString * NSTextViewDidChangeSelectionNotification;
 static VALUE
 osx_NSTextViewDidChangeSelectionNotification(VALUE mdl)
 {

@@ -8,7 +8,7 @@ static const int VA_MAX = 4;
 
 
   /**** constants ****/
-// NSString *NSInterfaceStyleDefault;
+// NSString * NSInterfaceStyleDefault;
 static VALUE
 osx_NSInterfaceStyleDefault(VALUE mdl)
 {
@@ -16,11 +16,27 @@ osx_NSInterfaceStyleDefault(VALUE mdl)
 }
 
   /**** functions ****/
-// NSInterfaceStyle NSInterfaceStyleForKey(NSString *key, NSResponder *responder);
+// NSInterfaceStyle NSInterfaceStyleForKey ( NSString * key , NSResponder * responder );
 static VALUE
 osx_NSInterfaceStyleForKey(VALUE mdl, VALUE a0, VALUE a1)
 {
-  rb_notimplement();
+  NSInterfaceStyle ns_result;
+
+  NSString * ns_a0;
+  NSResponder * ns_a1;
+
+  VALUE rb_result;
+  id pool = [[NSAutoreleasePool alloc] init];
+  /* a0 */
+  rbarg_to_nsarg(a0, _C_ID, &ns_a0, pool, 0);
+  /* a1 */
+  rbarg_to_nsarg(a1, _C_ID, &ns_a1, pool, 1);
+
+  ns_result = NSInterfaceStyleForKey(ns_a0, ns_a1);
+
+  rb_result = nsresult_to_rbresult(_C_INT, &ns_result, pool);
+  [pool release];
+  return rb_result;
 }
 
 void init_NSInterfaceStyle(VALUE mOSX)
