@@ -52,6 +52,9 @@ clean:
 install:	$(TARGETDIR) $(TARGET)
 	$(RUBY) copy_if_diff.rb $(TARGET) $(INSTALL_TARGETDIR)
 
+install-index-sf:	$(TARGETDIR)/index_sf.html
+	scp -p $< shell.sf.net:rubycocoa/htdocs/index.html
+
 $(TARGET):	$(TEMPLATES)
 
 
