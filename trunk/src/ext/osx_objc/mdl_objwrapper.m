@@ -51,6 +51,18 @@ rb_ocexception_s_new(NSException* nsexcp)
   return rb_funcall(klass, rb_intern("new"), 1, val);
 }
 
+static VALUE
+rb_ocdataconv_exception_class()
+{
+  VALUE val;
+  VALUE mosx;
+  VALUE klass;
+  
+  mosx = rb_const_get(rb_cObject, rb_intern("OSX"));;
+  klass = rb_const_get(mosx, rb_intern("OCDataConvException"));
+  return klass;
+}
+
 static BOOL
 ocm_perform(int argc, VALUE* argv, VALUE rcv, VALUE* result)
 {
@@ -186,13 +198,30 @@ ocm_invoke(int argc, VALUE* argv, VALUE rcv, VALUE* result)
     BOOL f_conv_success;
     DLOG2("    arg_type[%d]: %s", i, octype_str);
     ocdata = OCDATA_ALLOCA(octype, octype_str);
-    f_conv_success = rbobj_to_ocdata(arg, octype, ocdata);
+    if (octype == _PRIV_C_ID_PTR) {
+      if (arg == Qnil) {
+	*(id**)ocdata = NULL;
+	f_conv_success = YES;
+      }
+      else if (rb_obj_is_kind_of(arg, rb_cls_objcid()) == Qtrue) {
+	id old_id = OCID_OF(arg);
+	if (old_id) [old_id release];
+	*(id**)ocdata = &OCID_OF(arg);
+	f_conv_success = YES;
+      }
+      else {
+	f_conv_success = NO;
+      }
+    }
+    else {
+      f_conv_success = rbobj_to_ocdata(arg, octype, ocdata);
+    }
     if (f_conv_success) {
       [oc_inv setArgument: ocdata atIndex: (i+2)];
     }
     else {
       [pool release];
-      rb_raise(rb_eRuntimeError,
+      rb_raise(rb_ocdataconv_exception_class(),
 	       "cannot convert the argument #%d as '%s' to NS argument.",
 	       i, octype_str);
       return NO;
@@ -214,6 +243,16 @@ ocm_invoke(int argc, VALUE* argv, VALUE rcv, VALUE* result)
 
   DLOG1("    NSInvocation#invoke (%@): done.", oc_sel_str);
 
+  // get result as argument
+  for (i = 0; i < num_of_args; i++) {
+    VALUE arg = argv[i];
+    if (arg == Qnil) continue;
+    if (rb_obj_is_kind_of(arg, rb_cls_objcid()) != Qtrue) continue;
+    if (to_octype([oc_msig getArgumentTypeAtIndex: (i+2)]) != _PRIV_C_ID_PTR) continue;
+    if (OCID_OF(arg))
+      [OCID_OF(arg) retain];
+  }
+
   // get result
   ret_len = [oc_msig methodReturnLength];
   if (ret_len > 0) {
@@ -224,7 +263,7 @@ ocm_invoke(int argc, VALUE* argv, VALUE rcv, VALUE* result)
     f_conv_success = ocdata_to_rbobj(rcv, octype, result_data, result);
     if (!f_conv_success) {
       [pool release];
-      rb_raise(rb_eRuntimeError,
+      rb_raise(rb_ocdataconv_exception_class(),
 	       "cannot convert the result as '%s' to Ruby Object.", ret_type);
       return NO;
     }
