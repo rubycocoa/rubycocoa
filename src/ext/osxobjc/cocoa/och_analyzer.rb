@@ -78,6 +78,7 @@ class OCHeaderAnalyzer
   private
 
   def OCHeaderAnalyzer.constant?(str)
+    str.strip!
     if str == '...' then
       VarInfo.new('...', '...', str)
     else
@@ -94,6 +95,7 @@ class OCHeaderAnalyzer
   end
 
   def OCHeaderAnalyzer.function?(str)
+    str.strip!
     re = /^(.*)\((.*)\)$/
     m = re.match(str.strip)
     if m then
