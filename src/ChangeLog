@@ -1,3 +1,12 @@
+2003-12-04  kimura wataru <kimuraw@i.nifty.jp>
+
+	* install.rb (branch-devel-panther): 
+	use xcodebuild in place of pbxbuild, if xcodebuild exists.
+
+	* framework/post-config.rb,
+	  framework/RubyCocoa.pbproj/project.pbxproj.in (branch-devel-panther):
+	fill a gap of Cocoa framework between Panther and Jaguar.
+
 2003-12-03  kimura wataru <kimuraw@i.nifty.jp>
 
 	* metaconfig (branch-devel-panther): 
