@@ -15,16 +15,9 @@
 #import <string.h>
 #import <stdlib.h>
 #import <RubyCocoa/RBObject.h>
+#import <RubyCocoa/ocdata_conv.h>
 
 static VALUE _kObjcID = Qnil;
-
-struct _objcid_data {
-  id  ocid;
-};
-
-#define OBJCID_DATA_PTR(o) ((struct _objcid_data*)(DATA_PTR(o)))
-#define OCID_OF(o) (OBJCID_DATA_PTR(o)->ocid)
-
 
 static void
 _objcid_data_free(struct _objcid_data* dp)
@@ -47,68 +40,6 @@ _objcid_data_new()
   return dp;
 }
 
-#if 0
-static id
-_find_occls(VALUE obj)
-{
-  id oc_cls = nil;
-  VALUE klass = CLASS_OF(obj);
-
-  id pool = [[NSAutoreleasePool alloc] init];
-
-  while (klass != Qnil) {
-    VALUE rname;
-    id oc_str;
-    rname = rb_obj_as_string(klass);
-    rname = rb_str_split(rname, "::");
-    rname = rb_ary_entry(rname, -1);
-    oc_str = [NSString stringWithCString: STR2CSTR(rname)];
-    oc_cls = NSClassFromString(oc_str);
-    if (oc_cls != nil) break;
-    klass = RCLASS(klass)->super;
-  }
-
-  [pool release];
-  return oc_cls;
-}
-
-#else
-
-static id
-_find_occls(VALUE obj)
-{
-  id oc_cls = nil;
-  VALUE klass = CLASS_OF(obj);
-
-  id pool = [[NSAutoreleasePool alloc] init];
-
-  VALUE rname;
-  id oc_str;
-  rname = rb_obj_as_string(klass);
-  rname = rb_str_split(rname, "::");
-  rname = rb_ary_entry(rname, -1);
-  oc_str = [NSString stringWithCString: STR2CSTR(rname)];
-  oc_cls = NSClassFromString(oc_str);
-
-  [pool release];
-  return oc_cls;
-}
-#endif
-
-static void
-_objcid_initialize_for_new(VALUE rcv)
-{
-  id ocid;
-  id oc_cls = _find_occls(rcv);
-  if (oc_cls) {
-    ocid = [[oc_cls alloc] init];
-  }
-  else {
-    ocid = [[RBObject alloc] initWithRubyObject: rcv];
-  }
-  OBJCID_DATA_PTR(rcv)->ocid = ocid;
-}
-
 static void
 _objcid_initialize_for_new_with_ocid(int argc, VALUE* argv, VALUE rcv)
 {
@@ -120,9 +51,6 @@ _objcid_initialize_for_new_with_ocid(int argc, VALUE* argv, VALUE rcv)
     [ocid retain];
     OBJCID_DATA_PTR(rcv)->ocid = ocid;
   }
-  else {
-    _objcid_initialize_for_new(rcv);
-  }
 }
 
 static VALUE
@@ -130,7 +58,6 @@ objcid_s_new(int argc, VALUE* argv, VALUE klass)
 {
   VALUE obj;
   obj = Data_Wrap_Struct(klass, 0, _objcid_data_free, _objcid_data_new());
-  _objcid_initialize_for_new(obj);
   rb_obj_call_init(obj, argc, argv);
   return obj;
 }
