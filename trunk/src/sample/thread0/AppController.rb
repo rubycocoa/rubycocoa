@@ -47,10 +47,10 @@ class AppController < OSX::NSObject
   def hello_sequence
     [
       [ "Ruby",  1 ], [ "and",   1 ], [ "Cocoa", 1 ],
-      [ "",      2 ], 
-      [ "Hello RubyCocoa !", 0.3 ], [ "", 0.7 ],
-      [ "Hello RubyCocoa !", 0.3 ], [ "", 0.7 ],
-      [ "Hello RubyCocoa !", 0.3 ], [ "", 0.7 ],
+      [ "",      1 ], 
+      [ "Hello RubyCocoa !", 0.3 ], [ "", 0.6 ],
+      [ "Hello RubyCocoa !", 0.3 ], [ "", 0.6 ],
+      [ "Hello RubyCocoa !", 0.3 ], [ "", 0.6 ],
       [ "Hello RubyCocoa !", 3 ]
     ].each do |msg, interval|
       set_msg (msg)

@@ -1,3 +1,13 @@
+2002-01-09  Chris Thomas <kenshin@apple.com>
+
+	* ext/osx_objc/cls_objcid.m: _objcid_initialize_for_new_with_ocid
+	was passing the argument signature "10*" to rb_scan_args, but was
+	only passing a pointer to one output argument and was thus missing
+	a second argument for the array. This caused rb_scan_args to
+	overwrite the next four bytes off the end of the argument array
+	with the VALUE for an empty array. Fixed by changing the method
+	signature to "10".
+
 2002-01-09  FUJIMOTO Hisakuni  <hisa@fobj.com>
 
 	* ext/osx_objc/osx_objc.m: change OSX.ruby_thread_switcher_start()
