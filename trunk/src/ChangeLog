@@ -1,5 +1,7 @@
 2001-12-20  FUJIMOTO Hisakuni  <hisa@fobj.com>
 
+	* release 0.2.0
+	
 	* doc/MINITOUR: rename MINITOUR to USING.
 
 	* doc/USING: add description to be related to class definitions.
