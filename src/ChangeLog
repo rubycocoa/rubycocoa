@@ -1,3 +1,13 @@
+2002-09-26  FUJIMOTO Hisakuni  <hisa@fobj.com>
+
+	* ext/osx_objc/RBObject.m:
+	Fix a bug that a wrapped Ruby object may be done GC. use
+	rb_gc_register_address() when init, and use rb_gc_unregister_address()
+	when dealloc.
+
+	* lib/osx/objc/oc_types.rb:
+	define NSRect#x, NSRect#y, NSRect#width, NSRect#height
+
 2002-09-25  FUJIMOTO Hisakuni  <hisa@fobj.com>
 
 	* ext/osx_objc/cocoa-10.1/*, ext/osx_objc/cocoa-10.2/*:
