@@ -94,11 +94,9 @@ static id handle_ruby_method(id rcv, SEL a_sel, ...)
   unsigned  argc, i;
   NSMethodSignature* msig;
   NSInvocation* inv;
-  const char* type;
-  int offset;
   va_list args;
   unsigned retlen;
-  
+
   // prepare
   msig = [rcv methodSignatureForSelector: a_sel];
   inv = [NSInvocation invocationWithMethodSignature: msig];
@@ -107,10 +105,19 @@ static id handle_ruby_method(id rcv, SEL a_sel, ...)
 
   // set argument
   va_start(args, a_sel);
+
   for (i = 2; i < argc; i++) {
+    unsigned int size;
+    unsigned int align;
+    const char* type;
+    int offset;
+	
     method_getArgumentInfo(method, i, &type, &offset);
+
     [inv setArgument: args atIndex: i];
-    args += offset;
+
+    NSGetSizeAndAlignment( type, &size, &align );
+    args += align;
   }
 
   // invoke
