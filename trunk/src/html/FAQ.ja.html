@@ -9,16 +9,16 @@
 <link href="rdtext.css" type="text/css" rel="stylesheet"/>
 </head>
 <body>
-<p>e= RubyCocoa FAQ</p>
+<h1><a name="label:0" id="label:0">RubyCocoa FAQ</a></h1><!-- RDLabel: "RubyCocoa FAQ" -->
 <p>$Date$</p>
-<h2><a name="label:0" id="label:0">インストール完了後</a></h2><!-- RDLabel: "インストール完了後" -->
-<h3><a name="label:1" id="label:1">Q: インストールが完了してサンプルスクリプトを実行しようとすると</a></h3><!-- RDLabel: "Q: インストールが完了してサンプルスクリプトを実行しようとすると" -->
+<h2><a name="label:1" id="label:1">インストール完了後</a></h2><!-- RDLabel: "インストール完了後" -->
+<h3><a name="label:2" id="label:2">Q: インストールが完了してサンプルスクリプトを実行しようとすると</a></h3><!-- RDLabel: "Q: インストールが完了してサンプルスクリプトを実行しようとすると" -->
 <pre>% ruby fontnames.rb
 dyld: ruby Undefined symbols:
 _init_NSDistributedNotificationCenter
 _init_NSScriptStandardSuiteCommands</pre>
 <p>というエラーが起こり、osx/cocoa が require できません。</p>
-<h4><a name="label:2" id="label:2">A: RubyCocoaのtgzファイルをStuffItで展開しましたか？</a></h4><!-- RDLabel: "A: RubyCocoaのtgzファイルをStuffItで展開しましたか？" -->
+<h4><a name="label:3" id="label:3">A: RubyCocoaのtgzファイルをStuffItで展開しましたか？</a></h4><!-- RDLabel: "A: RubyCocoaのtgzファイルをStuffItで展開しましたか？" -->
 <p>RubyCocoaのtgzファイルをStuffItで展開した場合、ソースファイルに含まれ
 る31文字を越える長いファイル名が切り詰められてしまい、RubyCocoaを正し
 く作ることができません。インストールのドキュメントの手順どおりにシェル
@@ -26,20 +26,20 @@ _init_NSScriptStandardSuiteCommands</pre>
 <pre>% tar zxf rubycocoa-0.1.0.tgz</pre>
 <p>と入力してtgzファイルを展開しRubyCocoaを作り直してください。</p>
 <p>(志村さん、情報どうも)</p>
-<h3><a name="label:3" id="label:3">Q: Cocoaアプリ実行時にConsoleにmallocに関する警告が出ます</a></h3><!-- RDLabel: "Q: Cocoaアプリ実行時にConsoleにmallocに関する警告が出ます" -->
+<h3><a name="label:4" id="label:4">Q: Cocoaアプリ実行時にConsoleにmallocに関する警告が出ます</a></h3><!-- RDLabel: "Q: Cocoaアプリ実行時にConsoleにmallocに関する警告が出ます" -->
 <p>Cocoaアプリ実行時、Consoleにメモリアロケーションに関する以下のような警
 告メッセージが出るときがあります。</p>
 <pre>malloc[2461]: Deallocation of a pointer not malloced: 0x2718b20;
 This could be a double free(), or free() called with the middle of
 an allocated block; Try setting environment variable MallocHelp to
 see tools to help debug</pre>
-<h4><a name="label:4" id="label:4">A: リリース 0.1.2で解決しました。</a></h4><!-- RDLabel: "A: リリース 0.1.2で解決しました。" -->
-<h3><a name="label:5" id="label:5">Q: スレッドを使うとうまく動かないようです。</a></h3><!-- RDLabel: "Q: スレッドを使うとうまく動かないようです。" -->
-<h4><a name="label:6" id="label:6">A: そのとおりです。現在(2001-12-12)解決できていません。</a></h4><!-- RDLabel: "A: そのとおりです。現在(2001-12-12)解決できていません。" -->
+<h4><a name="label:5" id="label:5">A: リリース 0.1.2で解決しました。</a></h4><!-- RDLabel: "A: リリース 0.1.2で解決しました。" -->
+<h3><a name="label:6" id="label:6">Q: スレッドを使うとうまく動かないようです。</a></h3><!-- RDLabel: "Q: スレッドを使うとうまく動かないようです。" -->
+<h4><a name="label:7" id="label:7">A: そのとおりです。現在(2001-12-12)解決できていません。</a></h4><!-- RDLabel: "A: そのとおりです。現在(2001-12-12)解決できていません。" -->
 <p>この問題を解決/改善したいと思っていますが、あまり詳しくないところなの
 ですぐには解決できそうにありません。解決、改善案を提案してもらえると助
 かります。(Lucskyさん詳しい報告どうも)</p>
-<h3><a name="label:7" id="label:7">Q: 「アプリケーションは予期せぬ動作のため終了」ダイアログが出ます</a></h3><!-- RDLabel: "Q: 「アプリケーションは予期せぬ動作のため終了」ダイアログが出ます" -->
+<h3><a name="label:8" id="label:8">Q: 「アプリケーションは予期せぬ動作のため終了」ダイアログが出ます</a></h3><!-- RDLabel: "Q: 「アプリケーションは予期せぬ動作のため終了」ダイアログが出ます" -->
 <p>fontname.rb や sndplay.rb は動いたのですが、サンプルのRubyCocoaアプリ
 を実行すると「アプリケーションは予期せぬ動作のため終了しました」という
 ダイアログが表示されます。コンソールを見ると</p>
@@ -50,7 +50,7 @@ _dlerror
 _dlopen
 _dlsym</pre>
 <p>というエラーメッセージが出ています。</p>
-<h4><a name="label:8" id="label:8">A: EasyPackageなどでUNIX系ソフトをインストールしたことはありますか？</a></h4><!-- RDLabel: "A: EasyPackageなどでUNIX系ソフトをインストールしたことはありますか？" -->
+<h4><a name="label:9" id="label:9">A: EasyPackageなどでUNIX系ソフトをインストールしたことはありますか？</a></h4><!-- RDLabel: "A: EasyPackageなどでUNIX系ソフトをインストールしたことはありますか？" -->
 <p>古いEasyPackageをインストールしていた場合などに /usr/local/lib に 
 libdl*.bundle という名前で共有ライブラリをリンクするための関数を持つラ
 イブラリが入っていて、そちらにリンクされたりして問題が起きるようです。
@@ -66,10 +66,10 @@ libdl*.bundle という名前で共有ライブラリをリンクするための関数を持つラ
 <p><a href="http://www.ruby-talk.com/cgi-bin/scat.rb/ruby/ruby-talk/29708">[ruby-talk:29708](英語)
 </a> 
 も解決の参考になるかもしれません。</p>
-<h2><a name="label:9" id="label:9">その他</a></h2><!-- RDLabel: "その他" -->
-<h3><a name="label:10" id="label:10">Q: Project Builderの新規プロジェクトでRubyCocoaアプリケーション</a></h3><!-- RDLabel: "Q: Project Builderの新規プロジェクトでRubyCocoaアプリケーション" -->
+<h2><a name="label:10" id="label:10">その他</a></h2><!-- RDLabel: "その他" -->
+<h3><a name="label:11" id="label:11">Q: Project Builderの新規プロジェクトでRubyCocoaアプリケーション</a></h3><!-- RDLabel: "Q: Project Builderの新規プロジェクトでRubyCocoaアプリケーション" -->
 <p>用のプロジェクトを選びたいのですが？</p>
-<h4><a name="label:11" id="label:11">A: templateディレクトリ内のtmpl_pb_basedディレクトリ</a></h4><!-- RDLabel: "A: templateディレクトリ内のtmpl_pb_basedディレクトリ" -->
+<h4><a name="label:12" id="label:12">A: templateディレクトリ内のtmpl_pb_basedディレクトリ</a></h4><!-- RDLabel: "A: templateディレクトリ内のtmpl_pb_basedディレクトリ" -->
 <p>を"/Developer/ProjectBuilder Extras/Project Templates/Application/"の
 下にコピーして"RubyCocoa Application"というような名前に変えてください。</p>
 <pre>% cd "/Developer/ProjectBuilder Extras/Project Templates/Application"
