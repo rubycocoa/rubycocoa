@@ -32,7 +32,7 @@
 	* lib/osx/objc/oc_types.rb: new file. implement some Foundation
 	Framework data types.
 
-	* lib/osx/objc/oc_wrapper.rb: new file. implement a Rubby part of
+	* lib/osx/objc/oc_wrapper.rb: new file. implement a Ruby part of
 	mixin module OSX::OCObjWrapper.
 
 	* samples/*: rewrite for release 0.2.x.
