@@ -1,6 +1,12 @@
 # -*-rd-*-
 = Changes
 
+== changes from 0.4.0 (0.4.1d9)
+
+: ruby 1.8.0 support
+
+  Fix some warning and errors that came to go with ruby 1.8.0.
+
 == changes from 0.4.0 (0.4.1d8)
 
 : enable bundling RubyCocoa.framework within an application bundle
