@@ -59,7 +59,7 @@ static VALUE rbclass_for(Class occlass)
 - initWithRubyClass: (VALUE)rbclass parent: parent
 {
   VALUE rbobj = rbobj_for(rbclass, parent);
-  return [self initWithRubyObject: rbobj parent: parent];
+  return [self initWithRubyObject: rbobj];
 }
 
 @end
