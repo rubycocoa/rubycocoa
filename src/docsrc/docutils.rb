@@ -33,9 +33,11 @@ class PageTemplate
   end
 
   def set_title (str)
-    str = 'RubyCocoa - ' << str
-    @doc.root.elements["head/title"].text = Uconv::euctou8(str.toeuc)
-    nil
+    if not str.nil? then
+      str = 'RubyCocoa - ' << str
+      @doc.root.elements["head/title"].text = Uconv::euctou8(str.toeuc)
+      nil
+    end
   end
 
   def set_contents( elm )
@@ -101,7 +103,9 @@ class RDDocument
     @doc = REXML::Document.new(xml_src)
     @body = @doc.elements['html/body']
     elm_h1 = @body.elements['h1']
-    @title = Uconv::u8toeuc(elm_h1.elements['a'].text)
+    if elm_h1 then
+      @title = Uconv::u8toeuc(elm_h1.elements['a'].text)
+    end
   end
 
   def to_s

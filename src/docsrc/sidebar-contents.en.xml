@@ -3,8 +3,8 @@
   <h2 class="body-sidebar">Contents</h2>
   <ul class="body-sidebar">
     <li><a href="index.en.html">What is RubyCocoa?</a></li>
-    <li><a href="getting.en.html">Getting</a></li>
-    <li><a href="build.en.html">Build from Source</a></li>
+    <li><a href="getting.en.html">Getting RubyCocoa</a></li>
+    <li><a href="build.en.html">Build & Install from Source</a></li>
     <li><a href="trysamples.en.html">Try Samples</a></li>
     <li><a href="programming.en.html">Programming</a></li>
     <li><a href="references.en.html">References</a></li>
