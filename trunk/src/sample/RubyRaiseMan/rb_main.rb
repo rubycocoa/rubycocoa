@@ -6,7 +6,7 @@ require 'osx/cocoa'
 
 def rb_main_init
   path = OSX::NSBundle.mainBundle.resourcePath.to_s
-  rbfiles = Dir.glob(File.join(path, '*.rb')) - [ __FILE__ ]
+  rbfiles = (Dir.entries(path) - [ __FILE__ ]).select {|x| /\.rb\z/ =~ x}
   rbfiles.each do |path|
     require( File.basename(path) )
   end
