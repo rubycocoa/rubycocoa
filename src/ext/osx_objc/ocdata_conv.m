@@ -14,126 +14,33 @@
 #import <Foundation/Foundation.h>
 #import "ocdata_conv.h"
 #import "RBObject.h"
-#import "cls_objcptr.h"
-
-VALUE
-rb_mdl_osx()
-{
-  RB_ID rid = rb_intern("OSX");
-  if (! rb_const_defined(rb_cObject, rid))
-    return rb_define_module("OSX");
-  return rb_const_get(rb_cObject, rid);
-}
-
-VALUE
-rb_cls_objcid()
-{
-  VALUE mOSX = rb_mdl_osx();
-  if (!mOSX) return Qnil;
-  return rb_const_get(mOSX, rb_intern("ObjcID"));
-}
-
-VALUE
-rb_cls_ocobj(const char* name)
-{
-  VALUE cls = Qnil;
-  VALUE mOSX = rb_mdl_osx();
-  if (!mOSX) return Qnil;
-  if (rb_const_defined(mOSX, rb_intern(name))) {
-    cls = rb_const_get(mOSX, rb_intern(name));
-  }
-  else {
-    cls = rb_const_get(mOSX, rb_intern("OCObject"));
-  }
-  return cls;
-}
-
-static id
-rb_obj_ocid(VALUE rcv)
-{
-  VALUE val = rb_funcall(rcv, rb_intern("__ocid__"), 0);
-  return NUM2OCID(val);
-}
-
-VALUE
-rb_ocobj_s_new(id ocid)
-{
-  VALUE obj;
-  id pool, cls_name;
-
-  pool = [[NSAutoreleasePool alloc] init];
-
-  cls_name = [[ocid class] description];
-  obj = rb_funcall(rb_cls_ocobj([cls_name cString]), 
-		   rb_intern("new_with_ocid"), 1, OCID2NUM(ocid));
-
-  [pool release];
-  return obj;
-}
-
-id rbobj_get_ocid (VALUE obj)
-{
-  RB_ID mtd;
-
-  if (rb_obj_is_kind_of(obj, rb_cls_objcid()) == Qtrue)
-    return rb_obj_ocid(obj);
-
-  mtd = rb_intern("__ocid__");
-  if (rb_respond_to(obj, mtd))
-    return rb_obj_ocid(obj);
-
-  if (rb_respond_to(obj, rb_intern("to_nsobj"))) {
-    VALUE nso = rb_funcall(obj, rb_intern("to_nsobj"), 0);
-    return rb_obj_ocid(nso);
-  }
-
-  return nil;
-}
-
-VALUE ocid_get_rbobj (id ocid)
-{
-  VALUE result = Qnil;
-
-  NS_DURING  
-    if ([ocid isKindOfClass: [RBObject class]])
-      result = [ocid __rbobj__];
-
-    else if ([ocid respondsToSelector: @selector(__rbobj__)])
-      result = [ocid __rbobj__];
-
-  NS_HANDLER
-    result = Qnil;
-
-  NS_ENDHANDLER
-
-  return result;
-}
+#import "osx_objc.h"
 
 
 static VALUE rbclass_nsrect()
 {
-  VALUE mOSX = rb_mdl_osx();
+  VALUE mOSX = osx_s_module();
   if (!mOSX) return Qnil;
   return rb_const_get(mOSX, rb_intern("NSRect"));
 }
 
 static VALUE rbclass_nspoint()
 {
-  VALUE mOSX = rb_mdl_osx();
+  VALUE mOSX = osx_s_module();
   if (!mOSX) return Qnil;
   return rb_const_get(mOSX, rb_intern("NSPoint"));
 }
 
 static VALUE rbclass_nssize()
 {
-  VALUE mOSX = rb_mdl_osx();
+  VALUE mOSX = osx_s_module();
   if (!mOSX) return Qnil;
   return rb_const_get(mOSX, rb_intern("NSSize"));
 }
 
 static VALUE rbclass_nsrange()
 {
-  VALUE mOSX = rb_mdl_osx();
+  VALUE mOSX = osx_s_module();
   if (!mOSX) return Qnil;
   return rb_const_get(mOSX, rb_intern("NSRange"));
 }
@@ -555,7 +462,7 @@ ocid_to_rbobj(VALUE context_obj, id ocid)
     if (rbobj_get_ocid(context_obj) == ocid)
       result = context_obj;
     else
-      result = rb_ocobj_s_new(ocid);
+      result = ocobj_s_new (ocid);
   }
 
   return result;
@@ -586,11 +493,31 @@ SEL rbobj_to_nssel(VALUE obj)
 
 static BOOL rbobj_to_objcptr(VALUE obj, void** cptr)
 {
-  if (TYPE(obj) == T_STRING) {
+  if (TYPE(obj) == T_NIL) {
+    *cptr = NULL;
+  }
+  else if (TYPE(obj) == T_STRING) {
     *cptr = RSTRING(obj)->ptr;
   }
   else if (rb_obj_is_kind_of(obj, objcptr_s_class()) == Qtrue) {
     *cptr = objcptr_cptr(obj);
+  }
+  else {
+    return NO;
+  }
+  return YES;
+}
+
+static BOOL rbobj_to_idptr(VALUE obj, id** idptr)
+{
+  if (TYPE(obj) == T_NIL) {
+    *idptr = NULL;
+  }
+  else if (rb_obj_is_kind_of(obj, objid_s_class()) == Qtrue) {
+    id old_id = OBJCID_ID(obj);
+    if (old_id) [old_id release];
+    OBJCID_ID(obj) = nil;
+    *idptr = OBJCID_IDPTR(obj);
   }
   else {
     return NO;
@@ -734,6 +661,13 @@ rbobj_to_ocdata(VALUE obj, int octype, void* ocdata)
     void* cptr;
     f_success = rbobj_to_objcptr(obj, &cptr);
     if (f_success) *(void**)ocdata = cptr;
+    break;
+  }
+
+  case _PRIV_C_ID_PTR: {
+    id* idptr;
+    f_success = rbobj_to_idptr(obj, &idptr);
+    if (f_success) *(id**)ocdata = idptr;
     break;
   }
 
