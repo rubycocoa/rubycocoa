@@ -103,15 +103,6 @@ $ cvs update -d -P</pre>
 <p>と入力すると、'rubycocoa'というディレクトリにRubyCocoaのソース一式が
 ダウンロードされます。CVSの性質上、ダウンロードしたタイミングにより
 構築できないこともあります。</p>
-<p>また、Panther 対応ブランチを入手したい場合は:</p>
-<pre>$ cvs -d:pserver:anonymous@cvs.sf.net:/cvsroot/rubycocoa login
-$ cvs -z3 -d:pserver:anonymous@cvs.sf.net:/cvsroot/rubycocoa co \
-      -P -r branch-devel-panther -d rubycocoa-panther src
-$ cd rubycocoa-panther
-$ cvs update -d -P</pre>
-<p>とします。</p>
-<p>'cvs update'コマンドや'cvs status -v'コマンドを適当なオプションと
-いっしょに使うとよいでしょう。</p>
 <h2><a name='label-10' id='label-10'>PINEAPPLE RPMパッケージ</a></h2><!-- RDLabel: "PINEAPPLE RPMパッケージ" -->
 <p><a href='http://sacral.c.u-tokyo.ac.jp/~hasimoto/Pineapple/'>Project PINEAPPLE(日本語)
 </a>にRPM形式の
