@@ -1,3 +1,12 @@
+2001-11-29  FUJIMOTO Hisakuni  <hisa@fobj.com>
+
+	* framework: OverrideMixin.m, RBObject.h, RBObject.m: hide
+	RBObject#rbobjXXX methods as private method. With reading
+	'Learning Cocoa Ch.9'.
+
+	* framework: RBRuntime.m: change method list allocation size
+	(magical number)
+
 2001-11-28  FUJIMOTO Hisakuni  <hisa@fobj.com>
 
 	* rewrite the dotview sample with reading 'Learning Cocoa Ch.8'
