@@ -19,13 +19,13 @@
 
 #define OCID2NUM(val) UINT2NUM((VALUE)(val))
 
-#undef DEBUGLOG
+#define DEBUGLOG
 
 #ifdef DEBUGLOG
-#  define DLOG(f)            NSLog((f))
-#  define DLOG1(f,a0)        NSLog((f),(a0))
-#  define DLOG2(f,a0,a1)     NSLog((f),(a0),(a1))
-#  define DLOG3(f,a0,a1,a2)  NSLog((f),(a0),(a1),(a2))
+#  define DLOG(f)            if (ruby_debug == Qtrue) NSLog((f))
+#  define DLOG1(f,a0)        if (ruby_debug == Qtrue) NSLog((f),(a0))
+#  define DLOG2(f,a0,a1)     if (ruby_debug == Qtrue) NSLog((f),(a0),(a1))
+#  define DLOG3(f,a0,a1,a2)  if (ruby_debug == Qtrue) NSLog((f),(a0),(a1),(a2))
 #else
 #  define DLOG(f)
 #  define DLOG1(f,a0)
@@ -213,8 +213,7 @@ static int argc_of(SEL a_sel)
   RB_ID rb_class_id;
   VALUE rb_class;
   RB_ID rb_mid;
-
-  dummy = [DummyProtocolHandler instance];
+  VALUE a_rbobj;
 
   rb_class_id = rb_intern([a_rbclass_name cString]);
   rb_class = rb_const_get(rb_cObject, rb_class_id);
@@ -233,18 +232,17 @@ static int argc_of(SEL a_sel)
    **/
   rb_mid = rb_intern("new_with_ocid");
   if (rb_respond_to(rb_class, rb_mid)) {
-    rbobj = rb_funcall(rb_class, rb_mid, 1, OCID2NUM(a_ocobj));
+    a_rbobj = rb_funcall(rb_class, rb_mid, 1, OCID2NUM(a_ocobj));
   }
   else {
-    rbobj = rb_funcall(rb_class, rb_intern("new"), 0);
+    a_rbobj = rb_funcall(rb_class, rb_intern("new"), 0);
     rb_mid = rb_intern("set_ocobj");
     if (rb_respond_to(rb_class, rb_mid)) {
-      rb_funcall(rbobj, rb_mid, 1, to_rbobj(a_ocobj));
+      rb_funcall(a_rbobj, rb_mid, 1, to_rbobj(a_ocobj));
     }
   }
-  return self;
+  return [self initWithRubyObject: a_rbobj];
 }
-
 
 - (BOOL) hasObjcHandlerForSelector: (SEL)a_sel
 {
@@ -265,11 +263,11 @@ static int argc_of(SEL a_sel)
   return [self hasRubyHandlerForSelector: a_sel];
 }
 
-- (NSMethodSignature *)methodSignatureForSelector:(SEL)aSelector
+- (NSMethodSignature *)methodSignatureForSelector:(SEL)a_sel
 {
   NSMethodSignature* msig;
-  msig = [super methodSignatureForSelector: aSelector];
-  if (msig == nil) msig = [self msigForRubyMethod: aSelector];
+  msig = [super methodSignatureForSelector: a_sel];
+  if (msig == nil) msig = [self msigForRubyMethod: a_sel];
   return msig;
 }
 

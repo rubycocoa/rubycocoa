@@ -68,6 +68,11 @@ to_octype(const char* octype_str)
   return oct;
 }
 
+BOOL octype_object_p(int octype)
+{
+  return ((octype == _C_ID) || (octype == _C_CLASS));
+}
+
 size_t
 ocdata_size(int octype)
 {
@@ -397,18 +402,19 @@ VALUE double_to_rbobj (double val)
 }
 
 
-SEL rbobj_to_nssel(VALUE obj)
+id rbobj_to_nsselstr(VALUE obj)
 {
-  VALUE str;
-  id pool, nsstr;
-  SEL nssel;
-
-  str = rb_obj_as_string(obj);
+  VALUE str = rb_obj_as_string(obj);
   // str.tr!('_',':')
   rb_funcall(str, rb_intern("tr!"), 2, rb_str_new2("_"), rb_str_new2(":"));
-  pool = [[NSAutoreleasePool alloc] init];
-  nsstr = [NSString stringWithCString: STR2CSTR(str)];
-  nssel = NSSelectorFromString(nsstr);
+  return [NSString stringWithCString: STR2CSTR(str)];
+}
+
+SEL rbobj_to_nssel(VALUE obj)
+{
+  id pool = [[NSAutoreleasePool alloc] init];
+  id nsstr = rbobj_to_nsselstr(obj);
+  SEL nssel = NSSelectorFromString(nsstr);
   [pool release];
   return nssel;
 }
