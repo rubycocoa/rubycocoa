@@ -7,12 +7,8 @@ class AppCtrl < OSX::NSObject
 
   ib_outlets :monthField, :dayField, :mulField
 
-  def initialize
-    super
-    @close_cnt = 3
-  end
-
   def awakeFromNib
+    @close_cnt = 3
     @monthField.setIntValue  Time.now.month
     @dayField.setIntValue Time.now.day
     convert

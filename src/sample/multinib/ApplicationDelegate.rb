@@ -2,17 +2,15 @@ require 'osx/cocoa'
 require 'WindowAController'
 require 'WindowBController'
 
-class ApplicationDelegate < OSX::OCObject
-
-  ib_loadable :NSObject
+class ApplicationDelegate < OSX::NSObject
 
   def createWindowA (sender)
-    controller = WindowAController.createInstance
+    controller = WindowAController.alloc.init
     controller.showWindow (self)
   end
 
   def createWindowB (sender)
-    controller = WindowBController.new
+    controller = WindowBController.alloc.init
     controller.showWindow
   end
 

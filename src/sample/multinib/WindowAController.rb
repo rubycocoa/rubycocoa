@@ -1,11 +1,9 @@
 require 'osx/cocoa'
 
-class WindowAController < OSX::OCObject
+class WindowAController < OSX::NSWindowController
 
-  ib_loadable :NSWindowController
-
-  def WindowAController.createInstance
-    OSX::WindowAController.alloc.initWithWindowNibName "WindowA"
+  def init
+    initWithWindowNibName "WindowA"
   end
 
 end

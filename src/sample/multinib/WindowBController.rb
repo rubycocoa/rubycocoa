@@ -1,11 +1,12 @@
 require 'osx/cocoa'
 
-class WindowBController < OSX::OCObject
+class WindowBController < OSX::NSObject
 
-  ib_outlets :window
+  ns_outlets   :window
 
-  def initialize
+  def init
     OSX::NSBundle.loadNibNamed ("WindowB", :owner, self)
+    self
   end
 
   def showWindow

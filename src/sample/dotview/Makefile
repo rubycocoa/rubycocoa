@@ -1,6 +1,6 @@
 # -*-makefile-*-
 
-APPNAME = SimpleApp
+APPNAME = DotView
 RUBYSRCS = DotView.rb
 
 NIBDIR = English.lproj

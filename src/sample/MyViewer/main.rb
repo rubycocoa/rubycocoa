@@ -3,7 +3,7 @@ require 'osx/foundation'
 require 'MyViewerCtrl'
 
 if __FILE__ == $0 then
-  controller = MyViewerCtrl.new
+  controller = MyViewerCtrl.alloc.init
   app = OSX::NSApplication.sharedApplication
   app.setDelegate (controller)
   app.setMainMenu (controller.mainMenu)
