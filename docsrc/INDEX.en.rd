@@ -2,7 +2,7 @@
 
 == What is RubyCocoa ?
 
-RubyCocoa is a ((<Mac OS X|URL:http://www.apple.com/macosx/>)) framework
+RubyCocoa is a framework for ((<Mac OS X|URL:http://www.apple.com/macosx/>))
 that allows ((<Cocoa|URL:http://developer.apple.com/cocoa/>)) programming
 in the object-oriented scripting language ((<Ruby|URL:http://www.ruby-lang.org/>)).
 
@@ -11,7 +11,7 @@ It allows creating and using a Cocoa object in a Ruby script.
 In Cocoa application, mixture of program written by both Ruby and
 Objective-C is possible.
 
-Some cases using RubyCocoa:
+Some useful cases of RubyCocoa:
 
   * Exploration of a Cocoa object's feature with 'irb' interactively
   * Prototyping of a Cocoa application
