@@ -10,6 +10,7 @@
 
 require 'osx/objc/foundation'
 require 'osx/objc/appkit'
+require 'nkf'
 
 module OSX
 
@@ -28,5 +29,41 @@ module OSX
   module_function :NSLocalizedStringFromTableInBundle
   module_function :NSLocalizedStringFromTable
   module_function :NSLocalizedString
+
+  # for NSData
+  class NSData
+    def NSData.dataWithRubyString (str)
+      NSData.dataWithBytes_length( str, str.size )
+    end
+  end
+
+  # for NSString
+  class NSString
+
+    def NSString.guess_nsencoding(rbstr)
+      case NKF.guess(rbstr)
+      when NKF::JIS then NSISO2022JPStringEncoding
+      when NKF::EUC then NSJapaneseEUCStringEncoding
+      when NKF::SJIS then NSShiftJISStringEncoding
+      else NSProprietaryStringEncoding
+      end
+    end
+
+    def NSString.stringWithRubyString (str)
+      data = NSData.dataWithRubyString( str )
+      enc = guess_nsencoding( str )
+      NSString.alloc.initWithData_encoding( data, enc )
+    end
+
+  end
+
+  # for NSMutableString
+  class NSMutableString
+    def NSMutableString.stringWithRubyString (str)
+      data = NSData.dataWithRubyString( str )
+      enc = NSString.guess_nsencoding( str )
+      NSMutableString.alloc.initWithData_encoding( data, enc )
+    end
+  end
 
 end
