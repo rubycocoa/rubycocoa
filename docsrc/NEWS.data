@@ -1,5 +1,5 @@
-Subject-ja: CocoaRBBR.app - RubyクラスブラウザのRubyCocoa実装
-Subject-en: CocoaRBBR.app - Ruby class browser implemented with RubyCocoa
+Subject-ja: RubyCocoaで実装されたRubyクラスブラウザ
+Subject-en: Ruby class browser implemented with RubyCocoa
 Date: 2003-07-25
 UID: 1059131865
 
@@ -38,8 +38,6 @@ WebKit SDKの使い方を解説しているWEBページ
 <a href='http://homepage.mac.com/mkino2/safari/myfirst/index.html'>「はじめてのブラウザのつくり方」</a>
 をRubyCocoaで追いかけるという試みが行われています。</p>
 ..ja
-
-"How To Make My First Browser" which is a web page described about development with WebKit SDK.
 
 <p>On <a href='http://mwave.sppd.ne.jp/diary/?date=20030701#p01'>s.sawada's blog (Japanese)</a>, 
 it is progressing to follow up with RubyCocoa the page
