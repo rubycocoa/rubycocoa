@@ -23,19 +23,23 @@ module OSX
     end
   end
 
+  module ToFloat
+    def force_to_f(val)
+      begin
+	val.to_f
+      rescue NameError
+	$stderr.puts "#{val.inspect} cannot 'to_f'" if $DEBUG
+	0.0
+      end
+    end
+  end
+  
   class NSPoint
+    include ToFloat
     attr_accessor :x, :y
     def initialize(*args)
-      @x = begin
-	     args[0].to_f
-	   rescue NameError
-	     0.0
-	   end
-      @y = begin
-	     args[1].to_f
-	   rescue NameError
-	     0.0
-	   end
+      @x = force_to_f(args[0])
+      @y = force_to_f(args[1])
     end
     def to_a
       [ @x, @y ]
@@ -43,18 +47,11 @@ module OSX
   end
 
   class NSSize
+    include ToFloat
     attr_accessor :width, :height
     def initialize(*args)
-      @width = begin
-	     args[0].to_f
-	   rescue NameError
-	     0.0
-	   end
-      @height = begin
-	     args[1].to_f
-	   rescue NameError
-	     0.0
-	   end
+      @width = force_to_f(args[0])
+      @height = force_to_f(args[1])
     end
     def to_a
       [ @width, @height ]

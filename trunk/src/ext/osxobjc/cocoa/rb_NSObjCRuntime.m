@@ -4,6 +4,7 @@
 
 extern void rbarg_to_nsarg(VALUE rbarg, int octype, void* nsarg, id pool, int index);
 extern VALUE nsresult_to_rbresult(int octype, const void* nsresult, id pool);
+static const int VA_MAX = 4;
 
 
   /**** constants ****/
@@ -125,7 +126,40 @@ osx_NSGetSizeAndAlignment(VALUE mdl, VALUE a0, VALUE a1, VALUE a2)
 static VALUE
 osx_NSLog(int argc, VALUE* argv, VALUE mdl)
 {
-  rb_notimplement();
+
+  NSString * ns_a0;
+  int va_first = 1;
+  int va_last;
+  id ns_va[VA_MAX];
+  int i;
+
+  VALUE rb_result;
+  id pool = [[NSAutoreleasePool alloc] init];
+  /* argv[0] */
+  rbarg_to_nsarg(argv[0], _C_ID, &ns_a0, pool, 0);
+  /* ns_va */
+  va_last = va_first + VA_MAX;
+  for (i = va_first; (i < argc) && (i < va_last); i++)
+    rbarg_to_nsarg(argv[i], _C_ID, &ns_va[i - va_first], pool, i);
+
+  if (argc == va_first)
+    NSLog(ns_a0);
+  else if (argc == (va_first + 1))
+    NSLog(ns_a0,
+      ns_va[0]);
+  else if (argc == (va_first + 2))
+    NSLog(ns_a0,
+      ns_va[0], ns_va[1]);
+  else if (argc == (va_first + 3))
+    NSLog(ns_a0,
+      ns_va[0], ns_va[1], ns_va[2]);
+  else if (argc == (va_first + 4))
+    NSLog(ns_a0,
+      ns_va[0], ns_va[1], ns_va[2], ns_va[3]);
+
+  rb_result = Qnil;
+  [pool release];
+  return rb_result;
 }
 
 // void NSLogv(NSString *format, va_list args);

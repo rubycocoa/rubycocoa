@@ -53,8 +53,32 @@ end
 STATIC_FUNCS = <<'STATIC_FUNCS_DEFINE'
 extern void rbarg_to_nsarg(VALUE rbarg, int octype, void* nsarg, id pool, int index);
 extern VALUE nsresult_to_rbresult(int octype, const void* nsresult, id pool);
+static const int VA_MAX = 4;
 STATIC_FUNCS_DEFINE
 
+VA_VAR_SETS = <<'VA_VAR_SETS_DEFINE'
+  /* ns_va */
+  va_last = va_first + VA_MAX;
+  for (i = va_first; (i < argc) && (i < va_last); i++)
+    rbarg_to_nsarg(argv[i], _C_ID, &ns_va[i - va_first], pool, i);
+VA_VAR_SETS_DEFINE
+
+VA_FUNC_CALL = <<'VA_FUNC_CALL_DEFINE'
+  if (argc == va_first)
+    %%fname%%(%%fargs%%);
+  else if (argc == (va_first + 1))
+    %%fname%%(%%fargs%%,
+      ns_va[0]);
+  else if (argc == (va_first + 2))
+    %%fname%%(%%fargs%%,
+      ns_va[0], ns_va[1]);
+  else if (argc == (va_first + 3))
+    %%fname%%(%%fargs%%,
+      ns_va[0], ns_va[1], ns_va[2]);
+  else if (argc == (va_first + 4))
+    %%fname%%(%%fargs%%,
+      ns_va[0], ns_va[1], ns_va[2], ns_va[3]);
+VA_FUNC_CALL_DEFINE
 
 def gen_c_func_notimpl
   $notimpl_cnt += 1
@@ -74,36 +98,56 @@ def gen_c_func_arglist(argc)
   end
 end
 
-def gen_c_func_var_defs(arginfos)
+def gen_c_func_var_defs(finfo)
   ret = ""
-  arginfos.each_with_index do |info,index|
-    ret.concat "  #{info.type} ns_a#{index};\n"
+  finfo.args.each_with_index do |ai,index|
+    ret.concat "  #{ai.type} ns_a#{index};\n"
+  end
+  if finfo.argc == -1 then
+    ret.concat "  int va_first = #{finfo.args.size};\n"
+    ret.concat "  int va_last;\n"
+    ret.concat "  id ns_va[VA_MAX];\n"
+    ret.concat "  int i;\n"
   end
   ret
 end
 
-def gen_c_func_var_sets(arginfos, va = false)
+def gen_c_func_var_sets(finfo)
   ret = ""
-  arginfos.each_with_index do |info,index|
-    return nil if info.octype == :UNKNOWN
-    aname = va ? "argv[#{index}]" : "a#{index}"
-    type_str = info.octype.to_s
-    type_str = "_C_UCHR" if info.octype == :_PRIV_C_BOOL
+  finfo.args.each_with_index do |ai,index|
+    return nil if ai.octype == :UNKNOWN
+    aname = (finfo.argc == -1) ? "argv[#{index}]" : "a#{index}"
+    type_str = ai.octype.to_s
+    type_str = "_C_UCHR" if ai.octype == :_PRIV_C_BOOL
     ret.concat "  /* #{aname} */\n"
     ret.concat "  rbarg_to_nsarg(#{aname}, #{type_str}, "
     ret.concat "&ns_a#{index}, pool, #{index});\n"
   end
+  if finfo.argc == -1 then
+    ret.concat VA_VAR_SETS
+  end
   ret
 end
 
-def gen_c_func_func_call(info)
-  if info.octype == :_C_VOID then
-    s = "  #{info.name}("
+def gen_c_func_func_call(finfo)
+  fargs = ((0...finfo.args.size).map{|i| "ns_a#{i}"}.join(', '))
+  if finfo.argc == -1 then
+    s = VA_FUNC_CALL.dup
+    s.gsub! /%%fargs%%/, fargs
+    if finfo.octype == :_C_VOID then
+      s.gsub! /%%fname%%/, "#{finfo.name}"
+    else
+      s.gsub! /%%fname%%/, "ns_result = #{finfo.name}"
+    end
   else
-    s = "  ns_result = #{info.name}("
+    if finfo.octype == :_C_VOID then
+      s = "  #{finfo.name}("
+    else
+      s = "  ns_result = #{finfo.name}("
+    end
+    s.concat fargs
+    s.concat ");\n"
   end
-  s.concat ((0...info.args.size).map{|i| "ns_a#{i}"}.join(', '))
-  s.concat ");\n"
   s
 end
 
@@ -129,7 +173,7 @@ FUNC_BODY_TMPL = <<'FUNC_BODY_TMPL_DEFINE'
   return rb_result;
 FUNC_BODY_TMPL_DEFINE
 
-def gen_c_func_body(info, va = false)
+def gen_c_func_body(info)
   return gen_c_func_notimpl if info.octype == :UNKNOWN
   tmpl = FUNC_BODY_TMPL.dup
   if info.octype == :_C_VOID then
@@ -137,8 +181,8 @@ def gen_c_func_body(info, va = false)
   else
     tmpl.sub! /%%ns_result_defs%%/, "  #{info.type} ns_result;\n"
   end
-  tmpl.sub! /%%var_defs%%/, gen_c_func_var_defs(info.args)
-  unless s = gen_c_func_var_sets(info.args, va) then
+  tmpl.sub! /%%var_defs%%/, gen_c_func_var_defs(info)
+  unless s = gen_c_func_var_sets(info) then
     return gen_c_func_notimpl
   end
   tmpl.sub! /%%var_set%%/,  s
@@ -178,7 +222,7 @@ def gen_def_c_func(info, argc = -1)
   elsif argc > 0 then
     ret.concat gen_c_func_body(info)
   else
-    ret.concat gen_c_func_notimpl
+    ret.concat gen_c_func_body(info)
   end
 
   ret.concat "}\n\n"
