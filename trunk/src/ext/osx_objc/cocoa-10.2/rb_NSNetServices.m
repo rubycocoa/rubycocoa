@@ -2,8 +2,9 @@
 #import "ocdata_conv.h"
 #import <Foundation/Foundation.h>
 
-extern void rbarg_to_nsarg(VALUE rbarg, int octype, void* nsarg, id pool, int index);
-extern VALUE nsresult_to_rbresult(int octype, const void* nsresult, id pool);
+extern VALUE oc_err_new (const char* fname, NSException* nsexcp);
+extern void rbarg_to_nsarg(VALUE rbarg, int octype, void* nsarg, const char* fname, id pool, int index);
+extern VALUE nsresult_to_rbresult(int octype, const void* nsresult, const char* fname, id pool);
 static const int VA_MAX = 4;
 
 
@@ -12,14 +13,14 @@ static const int VA_MAX = 4;
 static VALUE
 osx_NSNetServicesErrorCode(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSNetServicesErrorCode, nil);
+  return nsresult_to_rbresult(_C_ID, &NSNetServicesErrorCode, "NSNetServicesErrorCode", nil);
 }
 
 // NSString * const NSNetServicesErrorDomain;
 static VALUE
 osx_NSNetServicesErrorDomain(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSNetServicesErrorDomain, nil);
+  return nsresult_to_rbresult(_C_ID, &NSNetServicesErrorDomain, "NSNetServicesErrorDomain", nil);
 }
 
 void init_NSNetServices(VALUE mOSX)

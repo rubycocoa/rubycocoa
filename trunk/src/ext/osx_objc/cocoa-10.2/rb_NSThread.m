@@ -2,8 +2,9 @@
 #import "ocdata_conv.h"
 #import <Foundation/Foundation.h>
 
-extern void rbarg_to_nsarg(VALUE rbarg, int octype, void* nsarg, id pool, int index);
-extern VALUE nsresult_to_rbresult(int octype, const void* nsresult, id pool);
+extern VALUE oc_err_new (const char* fname, NSException* nsexcp);
+extern void rbarg_to_nsarg(VALUE rbarg, int octype, void* nsarg, const char* fname, id pool, int index);
+extern VALUE nsresult_to_rbresult(int octype, const void* nsresult, const char* fname, id pool);
 static const int VA_MAX = 4;
 
 
@@ -12,21 +13,21 @@ static const int VA_MAX = 4;
 static VALUE
 osx_NSWillBecomeMultiThreadedNotification(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSWillBecomeMultiThreadedNotification, nil);
+  return nsresult_to_rbresult(_C_ID, &NSWillBecomeMultiThreadedNotification, "NSWillBecomeMultiThreadedNotification", nil);
 }
 
 // NSString * const NSDidBecomeSingleThreadedNotification;
 static VALUE
 osx_NSDidBecomeSingleThreadedNotification(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSDidBecomeSingleThreadedNotification, nil);
+  return nsresult_to_rbresult(_C_ID, &NSDidBecomeSingleThreadedNotification, "NSDidBecomeSingleThreadedNotification", nil);
 }
 
 // NSString * const NSThreadWillExitNotification;
 static VALUE
 osx_NSThreadWillExitNotification(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSThreadWillExitNotification, nil);
+  return nsresult_to_rbresult(_C_ID, &NSThreadWillExitNotification, "NSThreadWillExitNotification", nil);
 }
 
 void init_NSThread(VALUE mOSX)

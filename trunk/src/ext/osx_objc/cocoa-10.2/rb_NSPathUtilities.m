@@ -2,8 +2,9 @@
 #import "ocdata_conv.h"
 #import <Foundation/Foundation.h>
 
-extern void rbarg_to_nsarg(VALUE rbarg, int octype, void* nsarg, id pool, int index);
-extern VALUE nsresult_to_rbresult(int octype, const void* nsresult, id pool);
+extern VALUE oc_err_new (const char* fname, NSException* nsexcp);
+extern void rbarg_to_nsarg(VALUE rbarg, int octype, void* nsarg, const char* fname, id pool, int index);
+extern VALUE nsresult_to_rbresult(int octype, const void* nsresult, const char* fname, id pool);
 static const int VA_MAX = 4;
 
 
@@ -13,7 +14,7 @@ static VALUE
 osx_NSUserName(VALUE mdl)
 {
   NSString * ns_result = NSUserName();
-  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
+  return nsresult_to_rbresult(_C_ID, &ns_result, "NSUserName", nil);
 }
 
 // NSString * NSFullUserName ( void );
@@ -21,7 +22,7 @@ static VALUE
 osx_NSFullUserName(VALUE mdl)
 {
   NSString * ns_result = NSFullUserName();
-  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
+  return nsresult_to_rbresult(_C_ID, &ns_result, "NSFullUserName", nil);
 }
 
 // NSString * NSHomeDirectory ( void );
@@ -29,7 +30,7 @@ static VALUE
 osx_NSHomeDirectory(VALUE mdl)
 {
   NSString * ns_result = NSHomeDirectory();
-  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
+  return nsresult_to_rbresult(_C_ID, &ns_result, "NSHomeDirectory", nil);
 }
 
 // NSString * NSHomeDirectoryForUser ( NSString * userName );
@@ -40,14 +41,24 @@ osx_NSHomeDirectoryForUser(VALUE mdl, VALUE a0)
 
   NSString * ns_a0;
 
+  VALUE excp = Qnil;
   VALUE rb_result;
   id pool = [[NSAutoreleasePool alloc] init];
   /* a0 */
-  rbarg_to_nsarg(a0, _C_ID, &ns_a0, pool, 0);
+  rbarg_to_nsarg(a0, _C_ID, &ns_a0, "NSHomeDirectoryForUser", pool, 0);
 
+NS_DURING
   ns_result = NSHomeDirectoryForUser(ns_a0);
+NS_HANDLER
+  excp = oc_err_new ("NSHomeDirectoryForUser", localException);
+NS_ENDHANDLER
+  if (excp != Qnil) {
+    [pool release];
+    rb_exc_raise (excp);
+    return Qnil;
+  }
 
-  rb_result = nsresult_to_rbresult(_C_ID, &ns_result, pool);
+  rb_result = nsresult_to_rbresult(_C_ID, &ns_result, "NSHomeDirectoryForUser", pool);
   [pool release];
   return rb_result;
 }
@@ -57,7 +68,7 @@ static VALUE
 osx_NSTemporaryDirectory(VALUE mdl)
 {
   NSString * ns_result = NSTemporaryDirectory();
-  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
+  return nsresult_to_rbresult(_C_ID, &ns_result, "NSTemporaryDirectory", nil);
 }
 
 // NSString * NSOpenStepRootDirectory ( void );
@@ -65,7 +76,7 @@ static VALUE
 osx_NSOpenStepRootDirectory(VALUE mdl)
 {
   NSString * ns_result = NSOpenStepRootDirectory();
-  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
+  return nsresult_to_rbresult(_C_ID, &ns_result, "NSOpenStepRootDirectory", nil);
 }
 
 // NSArray * NSSearchPathForDirectoriesInDomains ( NSSearchPathDirectory directory , NSSearchPathDomainMask domainMask , BOOL expandTilde );
@@ -78,18 +89,28 @@ osx_NSSearchPathForDirectoriesInDomains(VALUE mdl, VALUE a0, VALUE a1, VALUE a2)
   NSSearchPathDomainMask ns_a1;
   BOOL ns_a2;
 
+  VALUE excp = Qnil;
   VALUE rb_result;
   id pool = [[NSAutoreleasePool alloc] init];
   /* a0 */
-  rbarg_to_nsarg(a0, _C_INT, &ns_a0, pool, 0);
+  rbarg_to_nsarg(a0, _C_INT, &ns_a0, "NSSearchPathForDirectoriesInDomains", pool, 0);
   /* a1 */
-  rbarg_to_nsarg(a1, _C_INT, &ns_a1, pool, 1);
+  rbarg_to_nsarg(a1, _C_INT, &ns_a1, "NSSearchPathForDirectoriesInDomains", pool, 1);
   /* a2 */
-  rbarg_to_nsarg(a2, _C_UCHR, &ns_a2, pool, 2);
+  rbarg_to_nsarg(a2, _C_UCHR, &ns_a2, "NSSearchPathForDirectoriesInDomains", pool, 2);
 
+NS_DURING
   ns_result = NSSearchPathForDirectoriesInDomains(ns_a0, ns_a1, ns_a2);
+NS_HANDLER
+  excp = oc_err_new ("NSSearchPathForDirectoriesInDomains", localException);
+NS_ENDHANDLER
+  if (excp != Qnil) {
+    [pool release];
+    rb_exc_raise (excp);
+    return Qnil;
+  }
 
-  rb_result = nsresult_to_rbresult(_C_ID, &ns_result, pool);
+  rb_result = nsresult_to_rbresult(_C_ID, &ns_result, "NSSearchPathForDirectoriesInDomains", pool);
   [pool release];
   return rb_result;
 }

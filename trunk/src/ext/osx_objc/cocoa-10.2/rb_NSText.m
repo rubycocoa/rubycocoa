@@ -2,8 +2,9 @@
 #import "ocdata_conv.h"
 #import <AppKit/AppKit.h>
 
-extern void rbarg_to_nsarg(VALUE rbarg, int octype, void* nsarg, id pool, int index);
-extern VALUE nsresult_to_rbresult(int octype, const void* nsresult, id pool);
+extern VALUE oc_err_new (const char* fname, NSException* nsexcp);
+extern void rbarg_to_nsarg(VALUE rbarg, int octype, void* nsarg, const char* fname, id pool, int index);
+extern VALUE nsresult_to_rbresult(int octype, const void* nsresult, const char* fname, id pool);
 static const int VA_MAX = 4;
 
 
@@ -12,21 +13,21 @@ static const int VA_MAX = 4;
 static VALUE
 osx_NSTextDidBeginEditingNotification(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSTextDidBeginEditingNotification, nil);
+  return nsresult_to_rbresult(_C_ID, &NSTextDidBeginEditingNotification, "NSTextDidBeginEditingNotification", nil);
 }
 
 // NSString * NSTextDidEndEditingNotification;
 static VALUE
 osx_NSTextDidEndEditingNotification(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSTextDidEndEditingNotification, nil);
+  return nsresult_to_rbresult(_C_ID, &NSTextDidEndEditingNotification, "NSTextDidEndEditingNotification", nil);
 }
 
 // NSString * NSTextDidChangeNotification;
 static VALUE
 osx_NSTextDidChangeNotification(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSTextDidChangeNotification, nil);
+  return nsresult_to_rbresult(_C_ID, &NSTextDidChangeNotification, "NSTextDidChangeNotification", nil);
 }
 
 void init_NSText(VALUE mOSX)

@@ -2,8 +2,9 @@
 #import "ocdata_conv.h"
 #import <AppKit/AppKit.h>
 
-extern void rbarg_to_nsarg(VALUE rbarg, int octype, void* nsarg, id pool, int index);
-extern VALUE nsresult_to_rbresult(int octype, const void* nsresult, id pool);
+extern VALUE oc_err_new (const char* fname, NSException* nsexcp);
+extern void rbarg_to_nsarg(VALUE rbarg, int octype, void* nsarg, const char* fname, id pool, int index);
+extern VALUE nsresult_to_rbresult(int octype, const void* nsresult, const char* fname, id pool);
 static const int VA_MAX = 4;
 
 
@@ -12,126 +13,126 @@ static const int VA_MAX = 4;
 static VALUE
 osx_NSAppKitVersionNumber(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_DBL, &NSAppKitVersionNumber, nil);
+  return nsresult_to_rbresult(_C_DBL, &NSAppKitVersionNumber, "NSAppKitVersionNumber", nil);
 }
 
 // NSString * NSModalPanelRunLoopMode;
 static VALUE
 osx_NSModalPanelRunLoopMode(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSModalPanelRunLoopMode, nil);
+  return nsresult_to_rbresult(_C_ID, &NSModalPanelRunLoopMode, "NSModalPanelRunLoopMode", nil);
 }
 
 // NSString * NSEventTrackingRunLoopMode;
 static VALUE
 osx_NSEventTrackingRunLoopMode(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSEventTrackingRunLoopMode, nil);
+  return nsresult_to_rbresult(_C_ID, &NSEventTrackingRunLoopMode, "NSEventTrackingRunLoopMode", nil);
 }
 
 // id NSApp;
 static VALUE
 osx_NSApp(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSApp, nil);
+  return nsresult_to_rbresult(_C_ID, &NSApp, "NSApp", nil);
 }
 
 // NSString * NSApplicationDidBecomeActiveNotification;
 static VALUE
 osx_NSApplicationDidBecomeActiveNotification(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSApplicationDidBecomeActiveNotification, nil);
+  return nsresult_to_rbresult(_C_ID, &NSApplicationDidBecomeActiveNotification, "NSApplicationDidBecomeActiveNotification", nil);
 }
 
 // NSString * NSApplicationDidHideNotification;
 static VALUE
 osx_NSApplicationDidHideNotification(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSApplicationDidHideNotification, nil);
+  return nsresult_to_rbresult(_C_ID, &NSApplicationDidHideNotification, "NSApplicationDidHideNotification", nil);
 }
 
 // NSString * NSApplicationDidFinishLaunchingNotification;
 static VALUE
 osx_NSApplicationDidFinishLaunchingNotification(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSApplicationDidFinishLaunchingNotification, nil);
+  return nsresult_to_rbresult(_C_ID, &NSApplicationDidFinishLaunchingNotification, "NSApplicationDidFinishLaunchingNotification", nil);
 }
 
 // NSString * NSApplicationDidResignActiveNotification;
 static VALUE
 osx_NSApplicationDidResignActiveNotification(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSApplicationDidResignActiveNotification, nil);
+  return nsresult_to_rbresult(_C_ID, &NSApplicationDidResignActiveNotification, "NSApplicationDidResignActiveNotification", nil);
 }
 
 // NSString * NSApplicationDidUnhideNotification;
 static VALUE
 osx_NSApplicationDidUnhideNotification(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSApplicationDidUnhideNotification, nil);
+  return nsresult_to_rbresult(_C_ID, &NSApplicationDidUnhideNotification, "NSApplicationDidUnhideNotification", nil);
 }
 
 // NSString * NSApplicationDidUpdateNotification;
 static VALUE
 osx_NSApplicationDidUpdateNotification(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSApplicationDidUpdateNotification, nil);
+  return nsresult_to_rbresult(_C_ID, &NSApplicationDidUpdateNotification, "NSApplicationDidUpdateNotification", nil);
 }
 
 // NSString * NSApplicationWillBecomeActiveNotification;
 static VALUE
 osx_NSApplicationWillBecomeActiveNotification(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSApplicationWillBecomeActiveNotification, nil);
+  return nsresult_to_rbresult(_C_ID, &NSApplicationWillBecomeActiveNotification, "NSApplicationWillBecomeActiveNotification", nil);
 }
 
 // NSString * NSApplicationWillHideNotification;
 static VALUE
 osx_NSApplicationWillHideNotification(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSApplicationWillHideNotification, nil);
+  return nsresult_to_rbresult(_C_ID, &NSApplicationWillHideNotification, "NSApplicationWillHideNotification", nil);
 }
 
 // NSString * NSApplicationWillFinishLaunchingNotification;
 static VALUE
 osx_NSApplicationWillFinishLaunchingNotification(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSApplicationWillFinishLaunchingNotification, nil);
+  return nsresult_to_rbresult(_C_ID, &NSApplicationWillFinishLaunchingNotification, "NSApplicationWillFinishLaunchingNotification", nil);
 }
 
 // NSString * NSApplicationWillResignActiveNotification;
 static VALUE
 osx_NSApplicationWillResignActiveNotification(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSApplicationWillResignActiveNotification, nil);
+  return nsresult_to_rbresult(_C_ID, &NSApplicationWillResignActiveNotification, "NSApplicationWillResignActiveNotification", nil);
 }
 
 // NSString * NSApplicationWillUnhideNotification;
 static VALUE
 osx_NSApplicationWillUnhideNotification(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSApplicationWillUnhideNotification, nil);
+  return nsresult_to_rbresult(_C_ID, &NSApplicationWillUnhideNotification, "NSApplicationWillUnhideNotification", nil);
 }
 
 // NSString * NSApplicationWillUpdateNotification;
 static VALUE
 osx_NSApplicationWillUpdateNotification(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSApplicationWillUpdateNotification, nil);
+  return nsresult_to_rbresult(_C_ID, &NSApplicationWillUpdateNotification, "NSApplicationWillUpdateNotification", nil);
 }
 
 // NSString * NSApplicationWillTerminateNotification;
 static VALUE
 osx_NSApplicationWillTerminateNotification(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSApplicationWillTerminateNotification, nil);
+  return nsresult_to_rbresult(_C_ID, &NSApplicationWillTerminateNotification, "NSApplicationWillTerminateNotification", nil);
 }
 
 // NSString * NSApplicationDidChangeScreenParametersNotification;
 static VALUE
 osx_NSApplicationDidChangeScreenParametersNotification(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSApplicationDidChangeScreenParametersNotification, nil);
+  return nsresult_to_rbresult(_C_ID, &NSApplicationDidChangeScreenParametersNotification, "NSApplicationDidChangeScreenParametersNotification", nil);
 }
 
   /**** functions ****/
@@ -144,16 +145,26 @@ osx_NSApplicationMain(VALUE mdl, VALUE a0, VALUE a1)
   int ns_a0;
   const char ** ns_a1;
 
+  VALUE excp = Qnil;
   VALUE rb_result;
   id pool = [[NSAutoreleasePool alloc] init];
   /* a0 */
-  rbarg_to_nsarg(a0, _C_INT, &ns_a0, pool, 0);
+  rbarg_to_nsarg(a0, _C_INT, &ns_a0, "NSApplicationMain", pool, 0);
   /* a1 */
-  rbarg_to_nsarg(a1, _PRIV_C_PTR, &ns_a1, pool, 1);
+  rbarg_to_nsarg(a1, _PRIV_C_PTR, &ns_a1, "NSApplicationMain", pool, 1);
 
+NS_DURING
   ns_result = NSApplicationMain(ns_a0, ns_a1);
+NS_HANDLER
+  excp = oc_err_new ("NSApplicationMain", localException);
+NS_ENDHANDLER
+  if (excp != Qnil) {
+    [pool release];
+    rb_exc_raise (excp);
+    return Qnil;
+  }
 
-  rb_result = nsresult_to_rbresult(_C_INT, &ns_result, pool);
+  rb_result = nsresult_to_rbresult(_C_INT, &ns_result, "NSApplicationMain", pool);
   [pool release];
   return rb_result;
 }
@@ -163,7 +174,7 @@ static VALUE
 osx_NSApplicationLoad(VALUE mdl)
 {
   BOOL ns_result = NSApplicationLoad();
-  return nsresult_to_rbresult(_PRIV_C_BOOL, &ns_result, nil);
+  return nsresult_to_rbresult(_PRIV_C_BOOL, &ns_result, "NSApplicationLoad", nil);
 }
 
 // BOOL NSShowsServicesMenuItem ( NSString * itemName );
@@ -174,14 +185,24 @@ osx_NSShowsServicesMenuItem(VALUE mdl, VALUE a0)
 
   NSString * ns_a0;
 
+  VALUE excp = Qnil;
   VALUE rb_result;
   id pool = [[NSAutoreleasePool alloc] init];
   /* a0 */
-  rbarg_to_nsarg(a0, _C_ID, &ns_a0, pool, 0);
+  rbarg_to_nsarg(a0, _C_ID, &ns_a0, "NSShowsServicesMenuItem", pool, 0);
 
+NS_DURING
   ns_result = NSShowsServicesMenuItem(ns_a0);
+NS_HANDLER
+  excp = oc_err_new ("NSShowsServicesMenuItem", localException);
+NS_ENDHANDLER
+  if (excp != Qnil) {
+    [pool release];
+    rb_exc_raise (excp);
+    return Qnil;
+  }
 
-  rb_result = nsresult_to_rbresult(_PRIV_C_BOOL, &ns_result, pool);
+  rb_result = nsresult_to_rbresult(_PRIV_C_BOOL, &ns_result, "NSShowsServicesMenuItem", pool);
   [pool release];
   return rb_result;
 }
@@ -195,16 +216,26 @@ osx_NSSetShowsServicesMenuItem(VALUE mdl, VALUE a0, VALUE a1)
   NSString * ns_a0;
   BOOL ns_a1;
 
+  VALUE excp = Qnil;
   VALUE rb_result;
   id pool = [[NSAutoreleasePool alloc] init];
   /* a0 */
-  rbarg_to_nsarg(a0, _C_ID, &ns_a0, pool, 0);
+  rbarg_to_nsarg(a0, _C_ID, &ns_a0, "NSSetShowsServicesMenuItem", pool, 0);
   /* a1 */
-  rbarg_to_nsarg(a1, _C_UCHR, &ns_a1, pool, 1);
+  rbarg_to_nsarg(a1, _C_UCHR, &ns_a1, "NSSetShowsServicesMenuItem", pool, 1);
 
+NS_DURING
   ns_result = NSSetShowsServicesMenuItem(ns_a0, ns_a1);
+NS_HANDLER
+  excp = oc_err_new ("NSSetShowsServicesMenuItem", localException);
+NS_ENDHANDLER
+  if (excp != Qnil) {
+    [pool release];
+    rb_exc_raise (excp);
+    return Qnil;
+  }
 
-  rb_result = nsresult_to_rbresult(_C_INT, &ns_result, pool);
+  rb_result = nsresult_to_rbresult(_C_INT, &ns_result, "NSSetShowsServicesMenuItem", pool);
   [pool release];
   return rb_result;
 }
@@ -226,16 +257,26 @@ osx_NSPerformService(VALUE mdl, VALUE a0, VALUE a1)
   NSString * ns_a0;
   NSPasteboard * ns_a1;
 
+  VALUE excp = Qnil;
   VALUE rb_result;
   id pool = [[NSAutoreleasePool alloc] init];
   /* a0 */
-  rbarg_to_nsarg(a0, _C_ID, &ns_a0, pool, 0);
+  rbarg_to_nsarg(a0, _C_ID, &ns_a0, "NSPerformService", pool, 0);
   /* a1 */
-  rbarg_to_nsarg(a1, _C_ID, &ns_a1, pool, 1);
+  rbarg_to_nsarg(a1, _C_ID, &ns_a1, "NSPerformService", pool, 1);
 
+NS_DURING
   ns_result = NSPerformService(ns_a0, ns_a1);
+NS_HANDLER
+  excp = oc_err_new ("NSPerformService", localException);
+NS_ENDHANDLER
+  if (excp != Qnil) {
+    [pool release];
+    rb_exc_raise (excp);
+    return Qnil;
+  }
 
-  rb_result = nsresult_to_rbresult(_PRIV_C_BOOL, &ns_result, pool);
+  rb_result = nsresult_to_rbresult(_PRIV_C_BOOL, &ns_result, "NSPerformService", pool);
   [pool release];
   return rb_result;
 }
@@ -248,14 +289,24 @@ osx_NSRegisterServicesProvider(VALUE mdl, VALUE a0, VALUE a1)
   id ns_a0;
   NSString * ns_a1;
 
+  VALUE excp = Qnil;
   VALUE rb_result;
   id pool = [[NSAutoreleasePool alloc] init];
   /* a0 */
-  rbarg_to_nsarg(a0, _C_ID, &ns_a0, pool, 0);
+  rbarg_to_nsarg(a0, _C_ID, &ns_a0, "NSRegisterServicesProvider", pool, 0);
   /* a1 */
-  rbarg_to_nsarg(a1, _C_ID, &ns_a1, pool, 1);
+  rbarg_to_nsarg(a1, _C_ID, &ns_a1, "NSRegisterServicesProvider", pool, 1);
 
+NS_DURING
   NSRegisterServicesProvider(ns_a0, ns_a1);
+NS_HANDLER
+  excp = oc_err_new ("NSRegisterServicesProvider", localException);
+NS_ENDHANDLER
+  if (excp != Qnil) {
+    [pool release];
+    rb_exc_raise (excp);
+    return Qnil;
+  }
 
   rb_result = Qnil;
   [pool release];
@@ -269,12 +320,22 @@ osx_NSUnregisterServicesProvider(VALUE mdl, VALUE a0)
 
   NSString * ns_a0;
 
+  VALUE excp = Qnil;
   VALUE rb_result;
   id pool = [[NSAutoreleasePool alloc] init];
   /* a0 */
-  rbarg_to_nsarg(a0, _C_ID, &ns_a0, pool, 0);
+  rbarg_to_nsarg(a0, _C_ID, &ns_a0, "NSUnregisterServicesProvider", pool, 0);
 
+NS_DURING
   NSUnregisterServicesProvider(ns_a0);
+NS_HANDLER
+  excp = oc_err_new ("NSUnregisterServicesProvider", localException);
+NS_ENDHANDLER
+  if (excp != Qnil) {
+    [pool release];
+    rb_exc_raise (excp);
+    return Qnil;
+  }
 
   rb_result = Qnil;
   [pool release];

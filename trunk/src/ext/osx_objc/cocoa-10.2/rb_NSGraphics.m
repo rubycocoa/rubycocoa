@@ -2,8 +2,9 @@
 #import "ocdata_conv.h"
 #import <AppKit/AppKit.h>
 
-extern void rbarg_to_nsarg(VALUE rbarg, int octype, void* nsarg, id pool, int index);
-extern VALUE nsresult_to_rbresult(int octype, const void* nsresult, id pool);
+extern VALUE oc_err_new (const char* fname, NSException* nsexcp);
+extern void rbarg_to_nsarg(VALUE rbarg, int octype, void* nsarg, const char* fname, id pool, int index);
+extern VALUE nsresult_to_rbresult(int octype, const void* nsresult, const char* fname, id pool);
 static const int VA_MAX = 4;
 
 
@@ -12,140 +13,140 @@ static const int VA_MAX = 4;
 static VALUE
 osx_NSCalibratedWhiteColorSpace(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSCalibratedWhiteColorSpace, nil);
+  return nsresult_to_rbresult(_C_ID, &NSCalibratedWhiteColorSpace, "NSCalibratedWhiteColorSpace", nil);
 }
 
 // NSString * NSCalibratedBlackColorSpace;
 static VALUE
 osx_NSCalibratedBlackColorSpace(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSCalibratedBlackColorSpace, nil);
+  return nsresult_to_rbresult(_C_ID, &NSCalibratedBlackColorSpace, "NSCalibratedBlackColorSpace", nil);
 }
 
 // NSString * NSCalibratedRGBColorSpace;
 static VALUE
 osx_NSCalibratedRGBColorSpace(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSCalibratedRGBColorSpace, nil);
+  return nsresult_to_rbresult(_C_ID, &NSCalibratedRGBColorSpace, "NSCalibratedRGBColorSpace", nil);
 }
 
 // NSString * NSDeviceWhiteColorSpace;
 static VALUE
 osx_NSDeviceWhiteColorSpace(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSDeviceWhiteColorSpace, nil);
+  return nsresult_to_rbresult(_C_ID, &NSDeviceWhiteColorSpace, "NSDeviceWhiteColorSpace", nil);
 }
 
 // NSString * NSDeviceBlackColorSpace;
 static VALUE
 osx_NSDeviceBlackColorSpace(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSDeviceBlackColorSpace, nil);
+  return nsresult_to_rbresult(_C_ID, &NSDeviceBlackColorSpace, "NSDeviceBlackColorSpace", nil);
 }
 
 // NSString * NSDeviceRGBColorSpace;
 static VALUE
 osx_NSDeviceRGBColorSpace(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSDeviceRGBColorSpace, nil);
+  return nsresult_to_rbresult(_C_ID, &NSDeviceRGBColorSpace, "NSDeviceRGBColorSpace", nil);
 }
 
 // NSString * NSDeviceCMYKColorSpace;
 static VALUE
 osx_NSDeviceCMYKColorSpace(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSDeviceCMYKColorSpace, nil);
+  return nsresult_to_rbresult(_C_ID, &NSDeviceCMYKColorSpace, "NSDeviceCMYKColorSpace", nil);
 }
 
 // NSString * NSNamedColorSpace;
 static VALUE
 osx_NSNamedColorSpace(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSNamedColorSpace, nil);
+  return nsresult_to_rbresult(_C_ID, &NSNamedColorSpace, "NSNamedColorSpace", nil);
 }
 
 // NSString * NSPatternColorSpace;
 static VALUE
 osx_NSPatternColorSpace(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSPatternColorSpace, nil);
+  return nsresult_to_rbresult(_C_ID, &NSPatternColorSpace, "NSPatternColorSpace", nil);
 }
 
 // NSString * NSCustomColorSpace;
 static VALUE
 osx_NSCustomColorSpace(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSCustomColorSpace, nil);
+  return nsresult_to_rbresult(_C_ID, &NSCustomColorSpace, "NSCustomColorSpace", nil);
 }
 
 // const float NSWhite;
 static VALUE
 osx_NSWhite(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_FLT, &NSWhite, nil);
+  return nsresult_to_rbresult(_C_FLT, &NSWhite, "NSWhite", nil);
 }
 
 // const float NSLightGray;
 static VALUE
 osx_NSLightGray(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_FLT, &NSLightGray, nil);
+  return nsresult_to_rbresult(_C_FLT, &NSLightGray, "NSLightGray", nil);
 }
 
 // const float NSDarkGray;
 static VALUE
 osx_NSDarkGray(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_FLT, &NSDarkGray, nil);
+  return nsresult_to_rbresult(_C_FLT, &NSDarkGray, "NSDarkGray", nil);
 }
 
 // const float NSBlack;
 static VALUE
 osx_NSBlack(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_FLT, &NSBlack, nil);
+  return nsresult_to_rbresult(_C_FLT, &NSBlack, "NSBlack", nil);
 }
 
 // NSString * NSDeviceResolution;
 static VALUE
 osx_NSDeviceResolution(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSDeviceResolution, nil);
+  return nsresult_to_rbresult(_C_ID, &NSDeviceResolution, "NSDeviceResolution", nil);
 }
 
 // NSString * NSDeviceColorSpaceName;
 static VALUE
 osx_NSDeviceColorSpaceName(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSDeviceColorSpaceName, nil);
+  return nsresult_to_rbresult(_C_ID, &NSDeviceColorSpaceName, "NSDeviceColorSpaceName", nil);
 }
 
 // NSString * NSDeviceBitsPerSample;
 static VALUE
 osx_NSDeviceBitsPerSample(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSDeviceBitsPerSample, nil);
+  return nsresult_to_rbresult(_C_ID, &NSDeviceBitsPerSample, "NSDeviceBitsPerSample", nil);
 }
 
 // NSString * NSDeviceIsScreen;
 static VALUE
 osx_NSDeviceIsScreen(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSDeviceIsScreen, nil);
+  return nsresult_to_rbresult(_C_ID, &NSDeviceIsScreen, "NSDeviceIsScreen", nil);
 }
 
 // NSString * NSDeviceIsPrinter;
 static VALUE
 osx_NSDeviceIsPrinter(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSDeviceIsPrinter, nil);
+  return nsresult_to_rbresult(_C_ID, &NSDeviceIsPrinter, "NSDeviceIsPrinter", nil);
 }
 
 // NSString * NSDeviceSize;
 static VALUE
 osx_NSDeviceSize(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSDeviceSize, nil);
+  return nsresult_to_rbresult(_C_ID, &NSDeviceSize, "NSDeviceSize", nil);
 }
 
   /**** functions ****/
@@ -161,22 +162,32 @@ osx_NSBestDepth(VALUE mdl, VALUE a0, VALUE a1, VALUE a2, VALUE a3, VALUE a4)
   BOOL ns_a3;
   BOOL * ns_a4;
 
+  VALUE excp = Qnil;
   VALUE rb_result;
   id pool = [[NSAutoreleasePool alloc] init];
   /* a0 */
-  rbarg_to_nsarg(a0, _C_ID, &ns_a0, pool, 0);
+  rbarg_to_nsarg(a0, _C_ID, &ns_a0, "NSBestDepth", pool, 0);
   /* a1 */
-  rbarg_to_nsarg(a1, _C_INT, &ns_a1, pool, 1);
+  rbarg_to_nsarg(a1, _C_INT, &ns_a1, "NSBestDepth", pool, 1);
   /* a2 */
-  rbarg_to_nsarg(a2, _C_INT, &ns_a2, pool, 2);
+  rbarg_to_nsarg(a2, _C_INT, &ns_a2, "NSBestDepth", pool, 2);
   /* a3 */
-  rbarg_to_nsarg(a3, _C_UCHR, &ns_a3, pool, 3);
+  rbarg_to_nsarg(a3, _C_UCHR, &ns_a3, "NSBestDepth", pool, 3);
   /* a4 */
-  rbarg_to_nsarg(a4, _PRIV_C_PTR, &ns_a4, pool, 4);
+  rbarg_to_nsarg(a4, _PRIV_C_PTR, &ns_a4, "NSBestDepth", pool, 4);
 
+NS_DURING
   ns_result = NSBestDepth(ns_a0, ns_a1, ns_a2, ns_a3, ns_a4);
+NS_HANDLER
+  excp = oc_err_new ("NSBestDepth", localException);
+NS_ENDHANDLER
+  if (excp != Qnil) {
+    [pool release];
+    rb_exc_raise (excp);
+    return Qnil;
+  }
 
-  rb_result = nsresult_to_rbresult(_C_INT, &ns_result, pool);
+  rb_result = nsresult_to_rbresult(_C_INT, &ns_result, "NSBestDepth", pool);
   [pool release];
   return rb_result;
 }
@@ -189,14 +200,24 @@ osx_NSPlanarFromDepth(VALUE mdl, VALUE a0)
 
   NSWindowDepth ns_a0;
 
+  VALUE excp = Qnil;
   VALUE rb_result;
   id pool = [[NSAutoreleasePool alloc] init];
   /* a0 */
-  rbarg_to_nsarg(a0, _C_INT, &ns_a0, pool, 0);
+  rbarg_to_nsarg(a0, _C_INT, &ns_a0, "NSPlanarFromDepth", pool, 0);
 
+NS_DURING
   ns_result = NSPlanarFromDepth(ns_a0);
+NS_HANDLER
+  excp = oc_err_new ("NSPlanarFromDepth", localException);
+NS_ENDHANDLER
+  if (excp != Qnil) {
+    [pool release];
+    rb_exc_raise (excp);
+    return Qnil;
+  }
 
-  rb_result = nsresult_to_rbresult(_PRIV_C_BOOL, &ns_result, pool);
+  rb_result = nsresult_to_rbresult(_PRIV_C_BOOL, &ns_result, "NSPlanarFromDepth", pool);
   [pool release];
   return rb_result;
 }
@@ -209,14 +230,24 @@ osx_NSColorSpaceFromDepth(VALUE mdl, VALUE a0)
 
   NSWindowDepth ns_a0;
 
+  VALUE excp = Qnil;
   VALUE rb_result;
   id pool = [[NSAutoreleasePool alloc] init];
   /* a0 */
-  rbarg_to_nsarg(a0, _C_INT, &ns_a0, pool, 0);
+  rbarg_to_nsarg(a0, _C_INT, &ns_a0, "NSColorSpaceFromDepth", pool, 0);
 
+NS_DURING
   ns_result = NSColorSpaceFromDepth(ns_a0);
+NS_HANDLER
+  excp = oc_err_new ("NSColorSpaceFromDepth", localException);
+NS_ENDHANDLER
+  if (excp != Qnil) {
+    [pool release];
+    rb_exc_raise (excp);
+    return Qnil;
+  }
 
-  rb_result = nsresult_to_rbresult(_C_ID, &ns_result, pool);
+  rb_result = nsresult_to_rbresult(_C_ID, &ns_result, "NSColorSpaceFromDepth", pool);
   [pool release];
   return rb_result;
 }
@@ -229,14 +260,24 @@ osx_NSBitsPerSampleFromDepth(VALUE mdl, VALUE a0)
 
   NSWindowDepth ns_a0;
 
+  VALUE excp = Qnil;
   VALUE rb_result;
   id pool = [[NSAutoreleasePool alloc] init];
   /* a0 */
-  rbarg_to_nsarg(a0, _C_INT, &ns_a0, pool, 0);
+  rbarg_to_nsarg(a0, _C_INT, &ns_a0, "NSBitsPerSampleFromDepth", pool, 0);
 
+NS_DURING
   ns_result = NSBitsPerSampleFromDepth(ns_a0);
+NS_HANDLER
+  excp = oc_err_new ("NSBitsPerSampleFromDepth", localException);
+NS_ENDHANDLER
+  if (excp != Qnil) {
+    [pool release];
+    rb_exc_raise (excp);
+    return Qnil;
+  }
 
-  rb_result = nsresult_to_rbresult(_C_INT, &ns_result, pool);
+  rb_result = nsresult_to_rbresult(_C_INT, &ns_result, "NSBitsPerSampleFromDepth", pool);
   [pool release];
   return rb_result;
 }
@@ -249,14 +290,24 @@ osx_NSBitsPerPixelFromDepth(VALUE mdl, VALUE a0)
 
   NSWindowDepth ns_a0;
 
+  VALUE excp = Qnil;
   VALUE rb_result;
   id pool = [[NSAutoreleasePool alloc] init];
   /* a0 */
-  rbarg_to_nsarg(a0, _C_INT, &ns_a0, pool, 0);
+  rbarg_to_nsarg(a0, _C_INT, &ns_a0, "NSBitsPerPixelFromDepth", pool, 0);
 
+NS_DURING
   ns_result = NSBitsPerPixelFromDepth(ns_a0);
+NS_HANDLER
+  excp = oc_err_new ("NSBitsPerPixelFromDepth", localException);
+NS_ENDHANDLER
+  if (excp != Qnil) {
+    [pool release];
+    rb_exc_raise (excp);
+    return Qnil;
+  }
 
-  rb_result = nsresult_to_rbresult(_C_INT, &ns_result, pool);
+  rb_result = nsresult_to_rbresult(_C_INT, &ns_result, "NSBitsPerPixelFromDepth", pool);
   [pool release];
   return rb_result;
 }
@@ -269,14 +320,24 @@ osx_NSNumberOfColorComponents(VALUE mdl, VALUE a0)
 
   NSString * ns_a0;
 
+  VALUE excp = Qnil;
   VALUE rb_result;
   id pool = [[NSAutoreleasePool alloc] init];
   /* a0 */
-  rbarg_to_nsarg(a0, _C_ID, &ns_a0, pool, 0);
+  rbarg_to_nsarg(a0, _C_ID, &ns_a0, "NSNumberOfColorComponents", pool, 0);
 
+NS_DURING
   ns_result = NSNumberOfColorComponents(ns_a0);
+NS_HANDLER
+  excp = oc_err_new ("NSNumberOfColorComponents", localException);
+NS_ENDHANDLER
+  if (excp != Qnil) {
+    [pool release];
+    rb_exc_raise (excp);
+    return Qnil;
+  }
 
-  rb_result = nsresult_to_rbresult(_C_INT, &ns_result, pool);
+  rb_result = nsresult_to_rbresult(_C_INT, &ns_result, "NSNumberOfColorComponents", pool);
   [pool release];
   return rb_result;
 }
@@ -286,7 +347,7 @@ static VALUE
 osx_NSAvailableWindowDepths(VALUE mdl)
 {
   const NSWindowDepth * ns_result = NSAvailableWindowDepths();
-  return nsresult_to_rbresult(_PRIV_C_PTR, &ns_result, nil);
+  return nsresult_to_rbresult(_PRIV_C_PTR, &ns_result, "NSAvailableWindowDepths", nil);
 }
 
 // void NSRectFill ( NSRect aRect );
@@ -296,12 +357,22 @@ osx_NSRectFill(VALUE mdl, VALUE a0)
 
   NSRect ns_a0;
 
+  VALUE excp = Qnil;
   VALUE rb_result;
   id pool = [[NSAutoreleasePool alloc] init];
   /* a0 */
-  rbarg_to_nsarg(a0, _PRIV_C_NSRECT, &ns_a0, pool, 0);
+  rbarg_to_nsarg(a0, _PRIV_C_NSRECT, &ns_a0, "NSRectFill", pool, 0);
 
+NS_DURING
   NSRectFill(ns_a0);
+NS_HANDLER
+  excp = oc_err_new ("NSRectFill", localException);
+NS_ENDHANDLER
+  if (excp != Qnil) {
+    [pool release];
+    rb_exc_raise (excp);
+    return Qnil;
+  }
 
   rb_result = Qnil;
   [pool release];
@@ -316,14 +387,24 @@ osx_NSRectFillList(VALUE mdl, VALUE a0, VALUE a1)
   const NSRect * ns_a0;
   int ns_a1;
 
+  VALUE excp = Qnil;
   VALUE rb_result;
   id pool = [[NSAutoreleasePool alloc] init];
   /* a0 */
-  rbarg_to_nsarg(a0, _PRIV_C_PTR, &ns_a0, pool, 0);
+  rbarg_to_nsarg(a0, _PRIV_C_PTR, &ns_a0, "NSRectFillList", pool, 0);
   /* a1 */
-  rbarg_to_nsarg(a1, _C_INT, &ns_a1, pool, 1);
+  rbarg_to_nsarg(a1, _C_INT, &ns_a1, "NSRectFillList", pool, 1);
 
+NS_DURING
   NSRectFillList(ns_a0, ns_a1);
+NS_HANDLER
+  excp = oc_err_new ("NSRectFillList", localException);
+NS_ENDHANDLER
+  if (excp != Qnil) {
+    [pool release];
+    rb_exc_raise (excp);
+    return Qnil;
+  }
 
   rb_result = Qnil;
   [pool release];
@@ -339,16 +420,26 @@ osx_NSRectFillListWithGrays(VALUE mdl, VALUE a0, VALUE a1, VALUE a2)
   const float * ns_a1;
   int ns_a2;
 
+  VALUE excp = Qnil;
   VALUE rb_result;
   id pool = [[NSAutoreleasePool alloc] init];
   /* a0 */
-  rbarg_to_nsarg(a0, _PRIV_C_PTR, &ns_a0, pool, 0);
+  rbarg_to_nsarg(a0, _PRIV_C_PTR, &ns_a0, "NSRectFillListWithGrays", pool, 0);
   /* a1 */
-  rbarg_to_nsarg(a1, _PRIV_C_PTR, &ns_a1, pool, 1);
+  rbarg_to_nsarg(a1, _PRIV_C_PTR, &ns_a1, "NSRectFillListWithGrays", pool, 1);
   /* a2 */
-  rbarg_to_nsarg(a2, _C_INT, &ns_a2, pool, 2);
+  rbarg_to_nsarg(a2, _C_INT, &ns_a2, "NSRectFillListWithGrays", pool, 2);
 
+NS_DURING
   NSRectFillListWithGrays(ns_a0, ns_a1, ns_a2);
+NS_HANDLER
+  excp = oc_err_new ("NSRectFillListWithGrays", localException);
+NS_ENDHANDLER
+  if (excp != Qnil) {
+    [pool release];
+    rb_exc_raise (excp);
+    return Qnil;
+  }
 
   rb_result = Qnil;
   [pool release];
@@ -364,16 +455,26 @@ osx_NSRectFillListWithColors(VALUE mdl, VALUE a0, VALUE a1, VALUE a2)
   NSColor * * ns_a1;
   int ns_a2;
 
+  VALUE excp = Qnil;
   VALUE rb_result;
   id pool = [[NSAutoreleasePool alloc] init];
   /* a0 */
-  rbarg_to_nsarg(a0, _PRIV_C_PTR, &ns_a0, pool, 0);
+  rbarg_to_nsarg(a0, _PRIV_C_PTR, &ns_a0, "NSRectFillListWithColors", pool, 0);
   /* a1 */
-  rbarg_to_nsarg(a1, _PRIV_C_PTR, &ns_a1, pool, 1);
+  rbarg_to_nsarg(a1, _PRIV_C_PTR, &ns_a1, "NSRectFillListWithColors", pool, 1);
   /* a2 */
-  rbarg_to_nsarg(a2, _C_INT, &ns_a2, pool, 2);
+  rbarg_to_nsarg(a2, _C_INT, &ns_a2, "NSRectFillListWithColors", pool, 2);
 
+NS_DURING
   NSRectFillListWithColors(ns_a0, ns_a1, ns_a2);
+NS_HANDLER
+  excp = oc_err_new ("NSRectFillListWithColors", localException);
+NS_ENDHANDLER
+  if (excp != Qnil) {
+    [pool release];
+    rb_exc_raise (excp);
+    return Qnil;
+  }
 
   rb_result = Qnil;
   [pool release];
@@ -388,14 +489,24 @@ osx_NSRectFillUsingOperation(VALUE mdl, VALUE a0, VALUE a1)
   NSRect ns_a0;
   NSCompositingOperation ns_a1;
 
+  VALUE excp = Qnil;
   VALUE rb_result;
   id pool = [[NSAutoreleasePool alloc] init];
   /* a0 */
-  rbarg_to_nsarg(a0, _PRIV_C_NSRECT, &ns_a0, pool, 0);
+  rbarg_to_nsarg(a0, _PRIV_C_NSRECT, &ns_a0, "NSRectFillUsingOperation", pool, 0);
   /* a1 */
-  rbarg_to_nsarg(a1, _C_INT, &ns_a1, pool, 1);
+  rbarg_to_nsarg(a1, _C_INT, &ns_a1, "NSRectFillUsingOperation", pool, 1);
 
+NS_DURING
   NSRectFillUsingOperation(ns_a0, ns_a1);
+NS_HANDLER
+  excp = oc_err_new ("NSRectFillUsingOperation", localException);
+NS_ENDHANDLER
+  if (excp != Qnil) {
+    [pool release];
+    rb_exc_raise (excp);
+    return Qnil;
+  }
 
   rb_result = Qnil;
   [pool release];
@@ -411,16 +522,26 @@ osx_NSRectFillListUsingOperation(VALUE mdl, VALUE a0, VALUE a1, VALUE a2)
   int ns_a1;
   NSCompositingOperation ns_a2;
 
+  VALUE excp = Qnil;
   VALUE rb_result;
   id pool = [[NSAutoreleasePool alloc] init];
   /* a0 */
-  rbarg_to_nsarg(a0, _PRIV_C_PTR, &ns_a0, pool, 0);
+  rbarg_to_nsarg(a0, _PRIV_C_PTR, &ns_a0, "NSRectFillListUsingOperation", pool, 0);
   /* a1 */
-  rbarg_to_nsarg(a1, _C_INT, &ns_a1, pool, 1);
+  rbarg_to_nsarg(a1, _C_INT, &ns_a1, "NSRectFillListUsingOperation", pool, 1);
   /* a2 */
-  rbarg_to_nsarg(a2, _C_INT, &ns_a2, pool, 2);
+  rbarg_to_nsarg(a2, _C_INT, &ns_a2, "NSRectFillListUsingOperation", pool, 2);
 
+NS_DURING
   NSRectFillListUsingOperation(ns_a0, ns_a1, ns_a2);
+NS_HANDLER
+  excp = oc_err_new ("NSRectFillListUsingOperation", localException);
+NS_ENDHANDLER
+  if (excp != Qnil) {
+    [pool release];
+    rb_exc_raise (excp);
+    return Qnil;
+  }
 
   rb_result = Qnil;
   [pool release];
@@ -437,18 +558,28 @@ osx_NSRectFillListWithColorsUsingOperation(VALUE mdl, VALUE a0, VALUE a1, VALUE 
   int ns_a2;
   NSCompositingOperation ns_a3;
 
+  VALUE excp = Qnil;
   VALUE rb_result;
   id pool = [[NSAutoreleasePool alloc] init];
   /* a0 */
-  rbarg_to_nsarg(a0, _PRIV_C_PTR, &ns_a0, pool, 0);
+  rbarg_to_nsarg(a0, _PRIV_C_PTR, &ns_a0, "NSRectFillListWithColorsUsingOperation", pool, 0);
   /* a1 */
-  rbarg_to_nsarg(a1, _PRIV_C_PTR, &ns_a1, pool, 1);
+  rbarg_to_nsarg(a1, _PRIV_C_PTR, &ns_a1, "NSRectFillListWithColorsUsingOperation", pool, 1);
   /* a2 */
-  rbarg_to_nsarg(a2, _C_INT, &ns_a2, pool, 2);
+  rbarg_to_nsarg(a2, _C_INT, &ns_a2, "NSRectFillListWithColorsUsingOperation", pool, 2);
   /* a3 */
-  rbarg_to_nsarg(a3, _C_INT, &ns_a3, pool, 3);
+  rbarg_to_nsarg(a3, _C_INT, &ns_a3, "NSRectFillListWithColorsUsingOperation", pool, 3);
 
+NS_DURING
   NSRectFillListWithColorsUsingOperation(ns_a0, ns_a1, ns_a2, ns_a3);
+NS_HANDLER
+  excp = oc_err_new ("NSRectFillListWithColorsUsingOperation", localException);
+NS_ENDHANDLER
+  if (excp != Qnil) {
+    [pool release];
+    rb_exc_raise (excp);
+    return Qnil;
+  }
 
   rb_result = Qnil;
   [pool release];
@@ -462,12 +593,22 @@ osx_NSFrameRect(VALUE mdl, VALUE a0)
 
   NSRect ns_a0;
 
+  VALUE excp = Qnil;
   VALUE rb_result;
   id pool = [[NSAutoreleasePool alloc] init];
   /* a0 */
-  rbarg_to_nsarg(a0, _PRIV_C_NSRECT, &ns_a0, pool, 0);
+  rbarg_to_nsarg(a0, _PRIV_C_NSRECT, &ns_a0, "NSFrameRect", pool, 0);
 
+NS_DURING
   NSFrameRect(ns_a0);
+NS_HANDLER
+  excp = oc_err_new ("NSFrameRect", localException);
+NS_ENDHANDLER
+  if (excp != Qnil) {
+    [pool release];
+    rb_exc_raise (excp);
+    return Qnil;
+  }
 
   rb_result = Qnil;
   [pool release];
@@ -482,14 +623,24 @@ osx_NSFrameRectWithWidth(VALUE mdl, VALUE a0, VALUE a1)
   NSRect ns_a0;
   float ns_a1;
 
+  VALUE excp = Qnil;
   VALUE rb_result;
   id pool = [[NSAutoreleasePool alloc] init];
   /* a0 */
-  rbarg_to_nsarg(a0, _PRIV_C_NSRECT, &ns_a0, pool, 0);
+  rbarg_to_nsarg(a0, _PRIV_C_NSRECT, &ns_a0, "NSFrameRectWithWidth", pool, 0);
   /* a1 */
-  rbarg_to_nsarg(a1, _C_FLT, &ns_a1, pool, 1);
+  rbarg_to_nsarg(a1, _C_FLT, &ns_a1, "NSFrameRectWithWidth", pool, 1);
 
+NS_DURING
   NSFrameRectWithWidth(ns_a0, ns_a1);
+NS_HANDLER
+  excp = oc_err_new ("NSFrameRectWithWidth", localException);
+NS_ENDHANDLER
+  if (excp != Qnil) {
+    [pool release];
+    rb_exc_raise (excp);
+    return Qnil;
+  }
 
   rb_result = Qnil;
   [pool release];
@@ -505,16 +656,26 @@ osx_NSFrameRectWithWidthUsingOperation(VALUE mdl, VALUE a0, VALUE a1, VALUE a2)
   float ns_a1;
   NSCompositingOperation ns_a2;
 
+  VALUE excp = Qnil;
   VALUE rb_result;
   id pool = [[NSAutoreleasePool alloc] init];
   /* a0 */
-  rbarg_to_nsarg(a0, _PRIV_C_NSRECT, &ns_a0, pool, 0);
+  rbarg_to_nsarg(a0, _PRIV_C_NSRECT, &ns_a0, "NSFrameRectWithWidthUsingOperation", pool, 0);
   /* a1 */
-  rbarg_to_nsarg(a1, _C_FLT, &ns_a1, pool, 1);
+  rbarg_to_nsarg(a1, _C_FLT, &ns_a1, "NSFrameRectWithWidthUsingOperation", pool, 1);
   /* a2 */
-  rbarg_to_nsarg(a2, _C_INT, &ns_a2, pool, 2);
+  rbarg_to_nsarg(a2, _C_INT, &ns_a2, "NSFrameRectWithWidthUsingOperation", pool, 2);
 
+NS_DURING
   NSFrameRectWithWidthUsingOperation(ns_a0, ns_a1, ns_a2);
+NS_HANDLER
+  excp = oc_err_new ("NSFrameRectWithWidthUsingOperation", localException);
+NS_ENDHANDLER
+  if (excp != Qnil) {
+    [pool release];
+    rb_exc_raise (excp);
+    return Qnil;
+  }
 
   rb_result = Qnil;
   [pool release];
@@ -528,12 +689,22 @@ osx_NSRectClip(VALUE mdl, VALUE a0)
 
   NSRect ns_a0;
 
+  VALUE excp = Qnil;
   VALUE rb_result;
   id pool = [[NSAutoreleasePool alloc] init];
   /* a0 */
-  rbarg_to_nsarg(a0, _PRIV_C_NSRECT, &ns_a0, pool, 0);
+  rbarg_to_nsarg(a0, _PRIV_C_NSRECT, &ns_a0, "NSRectClip", pool, 0);
 
+NS_DURING
   NSRectClip(ns_a0);
+NS_HANDLER
+  excp = oc_err_new ("NSRectClip", localException);
+NS_ENDHANDLER
+  if (excp != Qnil) {
+    [pool release];
+    rb_exc_raise (excp);
+    return Qnil;
+  }
 
   rb_result = Qnil;
   [pool release];
@@ -548,14 +719,24 @@ osx_NSRectClipList(VALUE mdl, VALUE a0, VALUE a1)
   const NSRect * ns_a0;
   int ns_a1;
 
+  VALUE excp = Qnil;
   VALUE rb_result;
   id pool = [[NSAutoreleasePool alloc] init];
   /* a0 */
-  rbarg_to_nsarg(a0, _PRIV_C_PTR, &ns_a0, pool, 0);
+  rbarg_to_nsarg(a0, _PRIV_C_PTR, &ns_a0, "NSRectClipList", pool, 0);
   /* a1 */
-  rbarg_to_nsarg(a1, _C_INT, &ns_a1, pool, 1);
+  rbarg_to_nsarg(a1, _C_INT, &ns_a1, "NSRectClipList", pool, 1);
 
+NS_DURING
   NSRectClipList(ns_a0, ns_a1);
+NS_HANDLER
+  excp = oc_err_new ("NSRectClipList", localException);
+NS_ENDHANDLER
+  if (excp != Qnil) {
+    [pool release];
+    rb_exc_raise (excp);
+    return Qnil;
+  }
 
   rb_result = Qnil;
   [pool release];
@@ -574,22 +755,32 @@ osx_NSDrawTiledRects(VALUE mdl, VALUE a0, VALUE a1, VALUE a2, VALUE a3, VALUE a4
   const float * ns_a3;
   int ns_a4;
 
+  VALUE excp = Qnil;
   VALUE rb_result;
   id pool = [[NSAutoreleasePool alloc] init];
   /* a0 */
-  rbarg_to_nsarg(a0, _PRIV_C_NSRECT, &ns_a0, pool, 0);
+  rbarg_to_nsarg(a0, _PRIV_C_NSRECT, &ns_a0, "NSDrawTiledRects", pool, 0);
   /* a1 */
-  rbarg_to_nsarg(a1, _PRIV_C_NSRECT, &ns_a1, pool, 1);
+  rbarg_to_nsarg(a1, _PRIV_C_NSRECT, &ns_a1, "NSDrawTiledRects", pool, 1);
   /* a2 */
-  rbarg_to_nsarg(a2, _PRIV_C_PTR, &ns_a2, pool, 2);
+  rbarg_to_nsarg(a2, _PRIV_C_PTR, &ns_a2, "NSDrawTiledRects", pool, 2);
   /* a3 */
-  rbarg_to_nsarg(a3, _PRIV_C_PTR, &ns_a3, pool, 3);
+  rbarg_to_nsarg(a3, _PRIV_C_PTR, &ns_a3, "NSDrawTiledRects", pool, 3);
   /* a4 */
-  rbarg_to_nsarg(a4, _C_INT, &ns_a4, pool, 4);
+  rbarg_to_nsarg(a4, _C_INT, &ns_a4, "NSDrawTiledRects", pool, 4);
 
+NS_DURING
   ns_result = NSDrawTiledRects(ns_a0, ns_a1, ns_a2, ns_a3, ns_a4);
+NS_HANDLER
+  excp = oc_err_new ("NSDrawTiledRects", localException);
+NS_ENDHANDLER
+  if (excp != Qnil) {
+    [pool release];
+    rb_exc_raise (excp);
+    return Qnil;
+  }
 
-  rb_result = nsresult_to_rbresult(_PRIV_C_NSRECT, &ns_result, pool);
+  rb_result = nsresult_to_rbresult(_PRIV_C_NSRECT, &ns_result, "NSDrawTiledRects", pool);
   [pool release];
   return rb_result;
 }
@@ -602,14 +793,24 @@ osx_NSDrawGrayBezel(VALUE mdl, VALUE a0, VALUE a1)
   NSRect ns_a0;
   NSRect ns_a1;
 
+  VALUE excp = Qnil;
   VALUE rb_result;
   id pool = [[NSAutoreleasePool alloc] init];
   /* a0 */
-  rbarg_to_nsarg(a0, _PRIV_C_NSRECT, &ns_a0, pool, 0);
+  rbarg_to_nsarg(a0, _PRIV_C_NSRECT, &ns_a0, "NSDrawGrayBezel", pool, 0);
   /* a1 */
-  rbarg_to_nsarg(a1, _PRIV_C_NSRECT, &ns_a1, pool, 1);
+  rbarg_to_nsarg(a1, _PRIV_C_NSRECT, &ns_a1, "NSDrawGrayBezel", pool, 1);
 
+NS_DURING
   NSDrawGrayBezel(ns_a0, ns_a1);
+NS_HANDLER
+  excp = oc_err_new ("NSDrawGrayBezel", localException);
+NS_ENDHANDLER
+  if (excp != Qnil) {
+    [pool release];
+    rb_exc_raise (excp);
+    return Qnil;
+  }
 
   rb_result = Qnil;
   [pool release];
@@ -624,14 +825,24 @@ osx_NSDrawGroove(VALUE mdl, VALUE a0, VALUE a1)
   NSRect ns_a0;
   NSRect ns_a1;
 
+  VALUE excp = Qnil;
   VALUE rb_result;
   id pool = [[NSAutoreleasePool alloc] init];
   /* a0 */
-  rbarg_to_nsarg(a0, _PRIV_C_NSRECT, &ns_a0, pool, 0);
+  rbarg_to_nsarg(a0, _PRIV_C_NSRECT, &ns_a0, "NSDrawGroove", pool, 0);
   /* a1 */
-  rbarg_to_nsarg(a1, _PRIV_C_NSRECT, &ns_a1, pool, 1);
+  rbarg_to_nsarg(a1, _PRIV_C_NSRECT, &ns_a1, "NSDrawGroove", pool, 1);
 
+NS_DURING
   NSDrawGroove(ns_a0, ns_a1);
+NS_HANDLER
+  excp = oc_err_new ("NSDrawGroove", localException);
+NS_ENDHANDLER
+  if (excp != Qnil) {
+    [pool release];
+    rb_exc_raise (excp);
+    return Qnil;
+  }
 
   rb_result = Qnil;
   [pool release];
@@ -646,14 +857,24 @@ osx_NSDrawWhiteBezel(VALUE mdl, VALUE a0, VALUE a1)
   NSRect ns_a0;
   NSRect ns_a1;
 
+  VALUE excp = Qnil;
   VALUE rb_result;
   id pool = [[NSAutoreleasePool alloc] init];
   /* a0 */
-  rbarg_to_nsarg(a0, _PRIV_C_NSRECT, &ns_a0, pool, 0);
+  rbarg_to_nsarg(a0, _PRIV_C_NSRECT, &ns_a0, "NSDrawWhiteBezel", pool, 0);
   /* a1 */
-  rbarg_to_nsarg(a1, _PRIV_C_NSRECT, &ns_a1, pool, 1);
+  rbarg_to_nsarg(a1, _PRIV_C_NSRECT, &ns_a1, "NSDrawWhiteBezel", pool, 1);
 
+NS_DURING
   NSDrawWhiteBezel(ns_a0, ns_a1);
+NS_HANDLER
+  excp = oc_err_new ("NSDrawWhiteBezel", localException);
+NS_ENDHANDLER
+  if (excp != Qnil) {
+    [pool release];
+    rb_exc_raise (excp);
+    return Qnil;
+  }
 
   rb_result = Qnil;
   [pool release];
@@ -668,14 +889,24 @@ osx_NSDrawButton(VALUE mdl, VALUE a0, VALUE a1)
   NSRect ns_a0;
   NSRect ns_a1;
 
+  VALUE excp = Qnil;
   VALUE rb_result;
   id pool = [[NSAutoreleasePool alloc] init];
   /* a0 */
-  rbarg_to_nsarg(a0, _PRIV_C_NSRECT, &ns_a0, pool, 0);
+  rbarg_to_nsarg(a0, _PRIV_C_NSRECT, &ns_a0, "NSDrawButton", pool, 0);
   /* a1 */
-  rbarg_to_nsarg(a1, _PRIV_C_NSRECT, &ns_a1, pool, 1);
+  rbarg_to_nsarg(a1, _PRIV_C_NSRECT, &ns_a1, "NSDrawButton", pool, 1);
 
+NS_DURING
   NSDrawButton(ns_a0, ns_a1);
+NS_HANDLER
+  excp = oc_err_new ("NSDrawButton", localException);
+NS_ENDHANDLER
+  if (excp != Qnil) {
+    [pool release];
+    rb_exc_raise (excp);
+    return Qnil;
+  }
 
   rb_result = Qnil;
   [pool release];
@@ -689,12 +920,22 @@ osx_NSEraseRect(VALUE mdl, VALUE a0)
 
   NSRect ns_a0;
 
+  VALUE excp = Qnil;
   VALUE rb_result;
   id pool = [[NSAutoreleasePool alloc] init];
   /* a0 */
-  rbarg_to_nsarg(a0, _PRIV_C_NSRECT, &ns_a0, pool, 0);
+  rbarg_to_nsarg(a0, _PRIV_C_NSRECT, &ns_a0, "NSEraseRect", pool, 0);
 
+NS_DURING
   NSEraseRect(ns_a0);
+NS_HANDLER
+  excp = oc_err_new ("NSEraseRect", localException);
+NS_ENDHANDLER
+  if (excp != Qnil) {
+    [pool release];
+    rb_exc_raise (excp);
+    return Qnil;
+  }
 
   rb_result = Qnil;
   [pool release];
@@ -709,14 +950,24 @@ osx_NSReadPixel(VALUE mdl, VALUE a0)
 
   NSPoint ns_a0;
 
+  VALUE excp = Qnil;
   VALUE rb_result;
   id pool = [[NSAutoreleasePool alloc] init];
   /* a0 */
-  rbarg_to_nsarg(a0, _PRIV_C_NSPOINT, &ns_a0, pool, 0);
+  rbarg_to_nsarg(a0, _PRIV_C_NSPOINT, &ns_a0, "NSReadPixel", pool, 0);
 
+NS_DURING
   ns_result = NSReadPixel(ns_a0);
+NS_HANDLER
+  excp = oc_err_new ("NSReadPixel", localException);
+NS_ENDHANDLER
+  if (excp != Qnil) {
+    [pool release];
+    rb_exc_raise (excp);
+    return Qnil;
+  }
 
-  rb_result = nsresult_to_rbresult(_C_ID, &ns_result, pool);
+  rb_result = nsresult_to_rbresult(_C_ID, &ns_result, "NSReadPixel", pool);
   [pool release];
   return rb_result;
 }
@@ -738,32 +989,42 @@ osx_NSDrawBitmap(VALUE mdl, VALUE a0, VALUE a1, VALUE a2, VALUE a3, VALUE a4, VA
   NSString * ns_a9;
   const unsigned char * const* ns_a10;
 
+  VALUE excp = Qnil;
   VALUE rb_result;
   id pool = [[NSAutoreleasePool alloc] init];
   /* a0 */
-  rbarg_to_nsarg(a0, _PRIV_C_NSRECT, &ns_a0, pool, 0);
+  rbarg_to_nsarg(a0, _PRIV_C_NSRECT, &ns_a0, "NSDrawBitmap", pool, 0);
   /* a1 */
-  rbarg_to_nsarg(a1, _C_INT, &ns_a1, pool, 1);
+  rbarg_to_nsarg(a1, _C_INT, &ns_a1, "NSDrawBitmap", pool, 1);
   /* a2 */
-  rbarg_to_nsarg(a2, _C_INT, &ns_a2, pool, 2);
+  rbarg_to_nsarg(a2, _C_INT, &ns_a2, "NSDrawBitmap", pool, 2);
   /* a3 */
-  rbarg_to_nsarg(a3, _C_INT, &ns_a3, pool, 3);
+  rbarg_to_nsarg(a3, _C_INT, &ns_a3, "NSDrawBitmap", pool, 3);
   /* a4 */
-  rbarg_to_nsarg(a4, _C_INT, &ns_a4, pool, 4);
+  rbarg_to_nsarg(a4, _C_INT, &ns_a4, "NSDrawBitmap", pool, 4);
   /* a5 */
-  rbarg_to_nsarg(a5, _C_INT, &ns_a5, pool, 5);
+  rbarg_to_nsarg(a5, _C_INT, &ns_a5, "NSDrawBitmap", pool, 5);
   /* a6 */
-  rbarg_to_nsarg(a6, _C_INT, &ns_a6, pool, 6);
+  rbarg_to_nsarg(a6, _C_INT, &ns_a6, "NSDrawBitmap", pool, 6);
   /* a7 */
-  rbarg_to_nsarg(a7, _C_UCHR, &ns_a7, pool, 7);
+  rbarg_to_nsarg(a7, _C_UCHR, &ns_a7, "NSDrawBitmap", pool, 7);
   /* a8 */
-  rbarg_to_nsarg(a8, _C_UCHR, &ns_a8, pool, 8);
+  rbarg_to_nsarg(a8, _C_UCHR, &ns_a8, "NSDrawBitmap", pool, 8);
   /* a9 */
-  rbarg_to_nsarg(a9, _C_ID, &ns_a9, pool, 9);
+  rbarg_to_nsarg(a9, _C_ID, &ns_a9, "NSDrawBitmap", pool, 9);
   /* a10 */
-  rbarg_to_nsarg(a10, _PRIV_C_PTR, &ns_a10, pool, 10);
+  rbarg_to_nsarg(a10, _PRIV_C_PTR, &ns_a10, "NSDrawBitmap", pool, 10);
 
+NS_DURING
   NSDrawBitmap(ns_a0, ns_a1, ns_a2, ns_a3, ns_a4, ns_a5, ns_a6, ns_a7, ns_a8, ns_a9, ns_a10);
+NS_HANDLER
+  excp = oc_err_new ("NSDrawBitmap", localException);
+NS_ENDHANDLER
+  if (excp != Qnil) {
+    [pool release];
+    rb_exc_raise (excp);
+    return Qnil;
+  }
 
   rb_result = Qnil;
   [pool release];
@@ -779,16 +1040,26 @@ osx_NSCopyBits(VALUE mdl, VALUE a0, VALUE a1, VALUE a2)
   NSRect ns_a1;
   NSPoint ns_a2;
 
+  VALUE excp = Qnil;
   VALUE rb_result;
   id pool = [[NSAutoreleasePool alloc] init];
   /* a0 */
-  rbarg_to_nsarg(a0, _C_INT, &ns_a0, pool, 0);
+  rbarg_to_nsarg(a0, _C_INT, &ns_a0, "NSCopyBits", pool, 0);
   /* a1 */
-  rbarg_to_nsarg(a1, _PRIV_C_NSRECT, &ns_a1, pool, 1);
+  rbarg_to_nsarg(a1, _PRIV_C_NSRECT, &ns_a1, "NSCopyBits", pool, 1);
   /* a2 */
-  rbarg_to_nsarg(a2, _PRIV_C_NSPOINT, &ns_a2, pool, 2);
+  rbarg_to_nsarg(a2, _PRIV_C_NSPOINT, &ns_a2, "NSCopyBits", pool, 2);
 
+NS_DURING
   NSCopyBits(ns_a0, ns_a1, ns_a2);
+NS_HANDLER
+  excp = oc_err_new ("NSCopyBits", localException);
+NS_ENDHANDLER
+  if (excp != Qnil) {
+    [pool release];
+    rb_exc_raise (excp);
+    return Qnil;
+  }
 
   rb_result = Qnil;
   [pool release];
@@ -802,12 +1073,22 @@ osx_NSHighlightRect(VALUE mdl, VALUE a0)
 
   NSRect ns_a0;
 
+  VALUE excp = Qnil;
   VALUE rb_result;
   id pool = [[NSAutoreleasePool alloc] init];
   /* a0 */
-  rbarg_to_nsarg(a0, _PRIV_C_NSRECT, &ns_a0, pool, 0);
+  rbarg_to_nsarg(a0, _PRIV_C_NSRECT, &ns_a0, "NSHighlightRect", pool, 0);
 
+NS_DURING
   NSHighlightRect(ns_a0);
+NS_HANDLER
+  excp = oc_err_new ("NSHighlightRect", localException);
+NS_ENDHANDLER
+  if (excp != Qnil) {
+    [pool release];
+    rb_exc_raise (excp);
+    return Qnil;
+  }
 
   rb_result = Qnil;
   [pool release];
@@ -829,12 +1110,22 @@ osx_NSCountWindows(VALUE mdl, VALUE a0)
 
   int * ns_a0;
 
+  VALUE excp = Qnil;
   VALUE rb_result;
   id pool = [[NSAutoreleasePool alloc] init];
   /* a0 */
-  rbarg_to_nsarg(a0, _PRIV_C_PTR, &ns_a0, pool, 0);
+  rbarg_to_nsarg(a0, _PRIV_C_PTR, &ns_a0, "NSCountWindows", pool, 0);
 
+NS_DURING
   NSCountWindows(ns_a0);
+NS_HANDLER
+  excp = oc_err_new ("NSCountWindows", localException);
+NS_ENDHANDLER
+  if (excp != Qnil) {
+    [pool release];
+    rb_exc_raise (excp);
+    return Qnil;
+  }
 
   rb_result = Qnil;
   [pool release];
@@ -849,14 +1140,24 @@ osx_NSWindowList(VALUE mdl, VALUE a0, VALUE a1)
   int ns_a0;
   int* ns_a1;
 
+  VALUE excp = Qnil;
   VALUE rb_result;
   id pool = [[NSAutoreleasePool alloc] init];
   /* a0 */
-  rbarg_to_nsarg(a0, _C_INT, &ns_a0, pool, 0);
+  rbarg_to_nsarg(a0, _C_INT, &ns_a0, "NSWindowList", pool, 0);
   /* a1 */
-  rbarg_to_nsarg(a1, _PRIV_C_PTR, &ns_a1, pool, 1);
+  rbarg_to_nsarg(a1, _PRIV_C_PTR, &ns_a1, "NSWindowList", pool, 1);
 
+NS_DURING
   NSWindowList(ns_a0, ns_a1);
+NS_HANDLER
+  excp = oc_err_new ("NSWindowList", localException);
+NS_ENDHANDLER
+  if (excp != Qnil) {
+    [pool release];
+    rb_exc_raise (excp);
+    return Qnil;
+  }
 
   rb_result = Qnil;
   [pool release];
@@ -871,14 +1172,24 @@ osx_NSCountWindowsForContext(VALUE mdl, VALUE a0, VALUE a1)
   int ns_a0;
   int * ns_a1;
 
+  VALUE excp = Qnil;
   VALUE rb_result;
   id pool = [[NSAutoreleasePool alloc] init];
   /* a0 */
-  rbarg_to_nsarg(a0, _C_INT, &ns_a0, pool, 0);
+  rbarg_to_nsarg(a0, _C_INT, &ns_a0, "NSCountWindowsForContext", pool, 0);
   /* a1 */
-  rbarg_to_nsarg(a1, _PRIV_C_PTR, &ns_a1, pool, 1);
+  rbarg_to_nsarg(a1, _PRIV_C_PTR, &ns_a1, "NSCountWindowsForContext", pool, 1);
 
+NS_DURING
   NSCountWindowsForContext(ns_a0, ns_a1);
+NS_HANDLER
+  excp = oc_err_new ("NSCountWindowsForContext", localException);
+NS_ENDHANDLER
+  if (excp != Qnil) {
+    [pool release];
+    rb_exc_raise (excp);
+    return Qnil;
+  }
 
   rb_result = Qnil;
   [pool release];
@@ -894,16 +1205,26 @@ osx_NSWindowListForContext(VALUE mdl, VALUE a0, VALUE a1, VALUE a2)
   int ns_a1;
   int* ns_a2;
 
+  VALUE excp = Qnil;
   VALUE rb_result;
   id pool = [[NSAutoreleasePool alloc] init];
   /* a0 */
-  rbarg_to_nsarg(a0, _C_INT, &ns_a0, pool, 0);
+  rbarg_to_nsarg(a0, _C_INT, &ns_a0, "NSWindowListForContext", pool, 0);
   /* a1 */
-  rbarg_to_nsarg(a1, _C_INT, &ns_a1, pool, 1);
+  rbarg_to_nsarg(a1, _C_INT, &ns_a1, "NSWindowListForContext", pool, 1);
   /* a2 */
-  rbarg_to_nsarg(a2, _PRIV_C_PTR, &ns_a2, pool, 2);
+  rbarg_to_nsarg(a2, _PRIV_C_PTR, &ns_a2, "NSWindowListForContext", pool, 2);
 
+NS_DURING
   NSWindowListForContext(ns_a0, ns_a1, ns_a2);
+NS_HANDLER
+  excp = oc_err_new ("NSWindowListForContext", localException);
+NS_ENDHANDLER
+  if (excp != Qnil) {
+    [pool release];
+    rb_exc_raise (excp);
+    return Qnil;
+  }
 
   rb_result = Qnil;
   [pool release];
@@ -921,20 +1242,30 @@ osx_NSGetWindowServerMemory(VALUE mdl, VALUE a0, VALUE a1, VALUE a2, VALUE a3)
   int * ns_a2;
   NSString * * ns_a3;
 
+  VALUE excp = Qnil;
   VALUE rb_result;
   id pool = [[NSAutoreleasePool alloc] init];
   /* a0 */
-  rbarg_to_nsarg(a0, _C_INT, &ns_a0, pool, 0);
+  rbarg_to_nsarg(a0, _C_INT, &ns_a0, "NSGetWindowServerMemory", pool, 0);
   /* a1 */
-  rbarg_to_nsarg(a1, _PRIV_C_PTR, &ns_a1, pool, 1);
+  rbarg_to_nsarg(a1, _PRIV_C_PTR, &ns_a1, "NSGetWindowServerMemory", pool, 1);
   /* a2 */
-  rbarg_to_nsarg(a2, _PRIV_C_PTR, &ns_a2, pool, 2);
+  rbarg_to_nsarg(a2, _PRIV_C_PTR, &ns_a2, "NSGetWindowServerMemory", pool, 2);
   /* a3 */
-  rbarg_to_nsarg(a3, _PRIV_C_PTR, &ns_a3, pool, 3);
+  rbarg_to_nsarg(a3, _PRIV_C_PTR, &ns_a3, "NSGetWindowServerMemory", pool, 3);
 
+NS_DURING
   ns_result = NSGetWindowServerMemory(ns_a0, ns_a1, ns_a2, ns_a3);
+NS_HANDLER
+  excp = oc_err_new ("NSGetWindowServerMemory", localException);
+NS_ENDHANDLER
+  if (excp != Qnil) {
+    [pool release];
+    rb_exc_raise (excp);
+    return Qnil;
+  }
 
-  rb_result = nsresult_to_rbresult(_C_INT, &ns_result, pool);
+  rb_result = nsresult_to_rbresult(_C_INT, &ns_result, "NSGetWindowServerMemory", pool);
   [pool release];
   return rb_result;
 }
@@ -951,22 +1282,32 @@ osx_NSDrawColorTiledRects(VALUE mdl, VALUE a0, VALUE a1, VALUE a2, VALUE a3, VAL
   NSColor * * ns_a3;
   int ns_a4;
 
+  VALUE excp = Qnil;
   VALUE rb_result;
   id pool = [[NSAutoreleasePool alloc] init];
   /* a0 */
-  rbarg_to_nsarg(a0, _PRIV_C_NSRECT, &ns_a0, pool, 0);
+  rbarg_to_nsarg(a0, _PRIV_C_NSRECT, &ns_a0, "NSDrawColorTiledRects", pool, 0);
   /* a1 */
-  rbarg_to_nsarg(a1, _PRIV_C_NSRECT, &ns_a1, pool, 1);
+  rbarg_to_nsarg(a1, _PRIV_C_NSRECT, &ns_a1, "NSDrawColorTiledRects", pool, 1);
   /* a2 */
-  rbarg_to_nsarg(a2, _PRIV_C_PTR, &ns_a2, pool, 2);
+  rbarg_to_nsarg(a2, _PRIV_C_PTR, &ns_a2, "NSDrawColorTiledRects", pool, 2);
   /* a3 */
-  rbarg_to_nsarg(a3, _PRIV_C_PTR, &ns_a3, pool, 3);
+  rbarg_to_nsarg(a3, _PRIV_C_PTR, &ns_a3, "NSDrawColorTiledRects", pool, 3);
   /* a4 */
-  rbarg_to_nsarg(a4, _C_INT, &ns_a4, pool, 4);
+  rbarg_to_nsarg(a4, _C_INT, &ns_a4, "NSDrawColorTiledRects", pool, 4);
 
+NS_DURING
   ns_result = NSDrawColorTiledRects(ns_a0, ns_a1, ns_a2, ns_a3, ns_a4);
+NS_HANDLER
+  excp = oc_err_new ("NSDrawColorTiledRects", localException);
+NS_ENDHANDLER
+  if (excp != Qnil) {
+    [pool release];
+    rb_exc_raise (excp);
+    return Qnil;
+  }
 
-  rb_result = nsresult_to_rbresult(_PRIV_C_NSRECT, &ns_result, pool);
+  rb_result = nsresult_to_rbresult(_PRIV_C_NSRECT, &ns_result, "NSDrawColorTiledRects", pool);
   [pool release];
   return rb_result;
 }
@@ -979,14 +1320,24 @@ osx_NSDrawDarkBezel(VALUE mdl, VALUE a0, VALUE a1)
   NSRect ns_a0;
   NSRect ns_a1;
 
+  VALUE excp = Qnil;
   VALUE rb_result;
   id pool = [[NSAutoreleasePool alloc] init];
   /* a0 */
-  rbarg_to_nsarg(a0, _PRIV_C_NSRECT, &ns_a0, pool, 0);
+  rbarg_to_nsarg(a0, _PRIV_C_NSRECT, &ns_a0, "NSDrawDarkBezel", pool, 0);
   /* a1 */
-  rbarg_to_nsarg(a1, _PRIV_C_NSRECT, &ns_a1, pool, 1);
+  rbarg_to_nsarg(a1, _PRIV_C_NSRECT, &ns_a1, "NSDrawDarkBezel", pool, 1);
 
+NS_DURING
   NSDrawDarkBezel(ns_a0, ns_a1);
+NS_HANDLER
+  excp = oc_err_new ("NSDrawDarkBezel", localException);
+NS_ENDHANDLER
+  if (excp != Qnil) {
+    [pool release];
+    rb_exc_raise (excp);
+    return Qnil;
+  }
 
   rb_result = Qnil;
   [pool release];
@@ -1001,14 +1352,24 @@ osx_NSDrawLightBezel(VALUE mdl, VALUE a0, VALUE a1)
   NSRect ns_a0;
   NSRect ns_a1;
 
+  VALUE excp = Qnil;
   VALUE rb_result;
   id pool = [[NSAutoreleasePool alloc] init];
   /* a0 */
-  rbarg_to_nsarg(a0, _PRIV_C_NSRECT, &ns_a0, pool, 0);
+  rbarg_to_nsarg(a0, _PRIV_C_NSRECT, &ns_a0, "NSDrawLightBezel", pool, 0);
   /* a1 */
-  rbarg_to_nsarg(a1, _PRIV_C_NSRECT, &ns_a1, pool, 1);
+  rbarg_to_nsarg(a1, _PRIV_C_NSRECT, &ns_a1, "NSDrawLightBezel", pool, 1);
 
+NS_DURING
   NSDrawLightBezel(ns_a0, ns_a1);
+NS_HANDLER
+  excp = oc_err_new ("NSDrawLightBezel", localException);
+NS_ENDHANDLER
+  if (excp != Qnil) {
+    [pool release];
+    rb_exc_raise (excp);
+    return Qnil;
+  }
 
   rb_result = Qnil;
   [pool release];
@@ -1022,12 +1383,22 @@ osx_NSDottedFrameRect(VALUE mdl, VALUE a0)
 
   NSRect ns_a0;
 
+  VALUE excp = Qnil;
   VALUE rb_result;
   id pool = [[NSAutoreleasePool alloc] init];
   /* a0 */
-  rbarg_to_nsarg(a0, _PRIV_C_NSRECT, &ns_a0, pool, 0);
+  rbarg_to_nsarg(a0, _PRIV_C_NSRECT, &ns_a0, "NSDottedFrameRect", pool, 0);
 
+NS_DURING
   NSDottedFrameRect(ns_a0);
+NS_HANDLER
+  excp = oc_err_new ("NSDottedFrameRect", localException);
+NS_ENDHANDLER
+  if (excp != Qnil) {
+    [pool release];
+    rb_exc_raise (excp);
+    return Qnil;
+  }
 
   rb_result = Qnil;
   [pool release];
@@ -1041,12 +1412,22 @@ osx_NSDrawWindowBackground(VALUE mdl, VALUE a0)
 
   NSRect ns_a0;
 
+  VALUE excp = Qnil;
   VALUE rb_result;
   id pool = [[NSAutoreleasePool alloc] init];
   /* a0 */
-  rbarg_to_nsarg(a0, _PRIV_C_NSRECT, &ns_a0, pool, 0);
+  rbarg_to_nsarg(a0, _PRIV_C_NSRECT, &ns_a0, "NSDrawWindowBackground", pool, 0);
 
+NS_DURING
   NSDrawWindowBackground(ns_a0);
+NS_HANDLER
+  excp = oc_err_new ("NSDrawWindowBackground", localException);
+NS_ENDHANDLER
+  if (excp != Qnil) {
+    [pool release];
+    rb_exc_raise (excp);
+    return Qnil;
+  }
 
   rb_result = Qnil;
   [pool release];
@@ -1060,12 +1441,22 @@ osx_NSSetFocusRingStyle(VALUE mdl, VALUE a0)
 
   NSFocusRingPlacement ns_a0;
 
+  VALUE excp = Qnil;
   VALUE rb_result;
   id pool = [[NSAutoreleasePool alloc] init];
   /* a0 */
-  rbarg_to_nsarg(a0, _C_INT, &ns_a0, pool, 0);
+  rbarg_to_nsarg(a0, _C_INT, &ns_a0, "NSSetFocusRingStyle", pool, 0);
 
+NS_DURING
   NSSetFocusRingStyle(ns_a0);
+NS_HANDLER
+  excp = oc_err_new ("NSSetFocusRingStyle", localException);
+NS_ENDHANDLER
+  if (excp != Qnil) {
+    [pool release];
+    rb_exc_raise (excp);
+    return Qnil;
+  }
 
   rb_result = Qnil;
   [pool release];

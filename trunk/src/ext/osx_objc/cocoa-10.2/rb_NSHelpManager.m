@@ -2,8 +2,9 @@
 #import "ocdata_conv.h"
 #import <AppKit/AppKit.h>
 
-extern void rbarg_to_nsarg(VALUE rbarg, int octype, void* nsarg, id pool, int index);
-extern VALUE nsresult_to_rbresult(int octype, const void* nsresult, id pool);
+extern VALUE oc_err_new (const char* fname, NSException* nsexcp);
+extern void rbarg_to_nsarg(VALUE rbarg, int octype, void* nsarg, const char* fname, id pool, int index);
+extern VALUE nsresult_to_rbresult(int octype, const void* nsresult, const char* fname, id pool);
 static const int VA_MAX = 4;
 
 
@@ -12,14 +13,14 @@ static const int VA_MAX = 4;
 static VALUE
 osx_NSContextHelpModeDidActivateNotification(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSContextHelpModeDidActivateNotification, nil);
+  return nsresult_to_rbresult(_C_ID, &NSContextHelpModeDidActivateNotification, "NSContextHelpModeDidActivateNotification", nil);
 }
 
 // NSString * NSContextHelpModeDidDeactivateNotification;
 static VALUE
 osx_NSContextHelpModeDidDeactivateNotification(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSContextHelpModeDidDeactivateNotification, nil);
+  return nsresult_to_rbresult(_C_ID, &NSContextHelpModeDidDeactivateNotification, "NSContextHelpModeDidDeactivateNotification", nil);
 }
 
 void init_NSHelpManager(VALUE mOSX)

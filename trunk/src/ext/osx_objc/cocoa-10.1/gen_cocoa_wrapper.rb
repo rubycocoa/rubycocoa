@@ -51,8 +51,9 @@ def collect_classes(pathes)
 end
 
 STATIC_FUNCS = <<'STATIC_FUNCS_DEFINE'
-extern void rbarg_to_nsarg(VALUE rbarg, int octype, void* nsarg, id pool, int index);
-extern VALUE nsresult_to_rbresult(int octype, const void* nsresult, id pool);
+extern VALUE oc_err_new (const char* fname, NSException* nsexcp);
+extern void rbarg_to_nsarg(VALUE rbarg, int octype, void* nsarg, const char* fname, id pool, int index);
+extern VALUE nsresult_to_rbresult(int octype, const void* nsresult, const char* fname, id pool);
 static const int VA_MAX = 4;
 STATIC_FUNCS_DEFINE
 
@@ -60,7 +61,7 @@ VA_VAR_SETS = <<'VA_VAR_SETS_DEFINE'
   /* ns_va */
   va_last = va_first + VA_MAX;
   for (i = va_first; (i < argc) && (i < va_last); i++)
-    rbarg_to_nsarg(argv[i], _C_ID, &ns_va[i - va_first], pool, i);
+    rbarg_to_nsarg(argv[i], _C_ID, &ns_va[i - va_first], "%%func_name%%", pool, i);
 VA_VAR_SETS_DEFINE
 
 VA_FUNC_CALL = <<'VA_FUNC_CALL_DEFINE'
@@ -121,10 +122,10 @@ def gen_c_func_var_sets(finfo)
     type_str = "_C_UCHR" if ai.octype == :_PRIV_C_BOOL
     ret.concat "  /* #{aname} */\n"
     ret.concat "  rbarg_to_nsarg(#{aname}, #{type_str}, "
-    ret.concat "&ns_a#{index}, pool, #{index});\n"
+    ret.concat "&ns_a#{index}, \"#{finfo.name}\", pool, #{index});\n"
   end
   if finfo.argc == -1 then
-    ret.concat VA_VAR_SETS
+    ret.concat (VA_VAR_SETS.sub /%%func_name%%/, finfo.name)
   end
   ret
 end
@@ -146,28 +147,39 @@ def gen_c_func_func_call(finfo)
       s = "  ns_result = #{finfo.name}("
     end
     s.concat fargs
-    s.concat ");\n"
+    s.concat ");"
   end
   s
 end
 
-def gen_c_func_conv_call(octype)
+def gen_c_func_conv_call(octype, func_name)
   if octype == :UNKNOWN then
     nil
   elsif octype == :_C_VOID then
     "Qnil"
   else
-    "nsresult_to_rbresult(#{octype}, &ns_result, pool)"
+    "nsresult_to_rbresult(#{octype}, &ns_result, \"#{func_name}\", pool)"
   end
 end
 
 FUNC_BODY_TMPL = <<'FUNC_BODY_TMPL_DEFINE'
 %%ns_result_defs%%
 %%var_defs%%
+  VALUE excp = Qnil;
   VALUE rb_result;
   id pool = [[NSAutoreleasePool alloc] init];
 %%var_set%%
+NS_DURING
 %%func_call%%
+NS_HANDLER
+  excp = oc_err_new ("%%func_name%%", localException);
+NS_ENDHANDLER
+  if (excp != Qnil) {
+    [pool release];
+    rb_exc_raise (excp);
+    return Qnil;
+  }
+
   rb_result = %%conv_call%%;
   [pool release];
   return rb_result;
@@ -176,6 +188,7 @@ FUNC_BODY_TMPL_DEFINE
 def gen_c_func_body(info)
   return gen_c_func_notimpl if info.octype == :UNKNOWN
   tmpl = FUNC_BODY_TMPL.dup
+  tmpl.sub! /%%func_name%%/, info.name
   if info.octype == :_C_VOID then
     tmpl.sub! /%%ns_result_defs%%/, ''
   else
@@ -187,7 +200,7 @@ def gen_c_func_body(info)
   end
   tmpl.sub! /%%var_set%%/,  s
   tmpl.sub! /%%func_call%%/,  gen_c_func_func_call(info)
-  unless s = gen_c_func_conv_call(info.octype) then
+  unless s = gen_c_func_conv_call(info.octype, info.name) then
     return gen_c_func_notimpl
   end
   tmpl.sub! /%%conv_call%%/, s
@@ -202,10 +215,10 @@ def gen_c_func_body_noarg(info)
 	"  return Qnil;\n"
     else
       "  #{info.type} ns_result = #{info.name}();\n" +
-	"  return nsresult_to_rbresult(#{info.octype}, &ns_result, nil);\n"
+	"  return nsresult_to_rbresult(#{info.octype}, &ns_result, \"#{info.name}\", nil);\n"
     end
   else
-    "  return nsresult_to_rbresult(#{info.octype}, &#{info.name}, nil);\n"
+    "  return nsresult_to_rbresult(#{info.octype}, &#{info.name}, \"#{info.name}\", nil);\n"
   end
 end
 

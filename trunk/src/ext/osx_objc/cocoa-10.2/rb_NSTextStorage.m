@@ -2,8 +2,9 @@
 #import "ocdata_conv.h"
 #import <AppKit/AppKit.h>
 
-extern void rbarg_to_nsarg(VALUE rbarg, int octype, void* nsarg, id pool, int index);
-extern VALUE nsresult_to_rbresult(int octype, const void* nsresult, id pool);
+extern VALUE oc_err_new (const char* fname, NSException* nsexcp);
+extern void rbarg_to_nsarg(VALUE rbarg, int octype, void* nsarg, const char* fname, id pool, int index);
+extern VALUE nsresult_to_rbresult(int octype, const void* nsresult, const char* fname, id pool);
 static const int VA_MAX = 4;
 
 
@@ -12,14 +13,14 @@ static const int VA_MAX = 4;
 static VALUE
 osx_NSTextStorageWillProcessEditingNotification(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSTextStorageWillProcessEditingNotification, nil);
+  return nsresult_to_rbresult(_C_ID, &NSTextStorageWillProcessEditingNotification, "NSTextStorageWillProcessEditingNotification", nil);
 }
 
 // NSString * NSTextStorageDidProcessEditingNotification;
 static VALUE
 osx_NSTextStorageDidProcessEditingNotification(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSTextStorageDidProcessEditingNotification, nil);
+  return nsresult_to_rbresult(_C_ID, &NSTextStorageDidProcessEditingNotification, "NSTextStorageDidProcessEditingNotification", nil);
 }
 
 void init_NSTextStorage(VALUE mOSX)

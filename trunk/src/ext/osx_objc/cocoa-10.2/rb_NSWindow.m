@@ -2,8 +2,9 @@
 #import "ocdata_conv.h"
 #import <AppKit/AppKit.h>
 
-extern void rbarg_to_nsarg(VALUE rbarg, int octype, void* nsarg, id pool, int index);
-extern VALUE nsresult_to_rbresult(int octype, const void* nsresult, id pool);
+extern VALUE oc_err_new (const char* fname, NSException* nsexcp);
+extern void rbarg_to_nsarg(VALUE rbarg, int octype, void* nsarg, const char* fname, id pool, int index);
+extern VALUE nsresult_to_rbresult(int octype, const void* nsresult, const char* fname, id pool);
 static const int VA_MAX = 4;
 
 
@@ -12,126 +13,126 @@ static const int VA_MAX = 4;
 static VALUE
 osx_NSIconSize(VALUE mdl)
 {
-  return nsresult_to_rbresult(_PRIV_C_NSSIZE, &NSIconSize, nil);
+  return nsresult_to_rbresult(_PRIV_C_NSSIZE, &NSIconSize, "NSIconSize", nil);
 }
 
 // NSSize NSTokenSize;
 static VALUE
 osx_NSTokenSize(VALUE mdl)
 {
-  return nsresult_to_rbresult(_PRIV_C_NSSIZE, &NSTokenSize, nil);
+  return nsresult_to_rbresult(_PRIV_C_NSSIZE, &NSTokenSize, "NSTokenSize", nil);
 }
 
 // NSString * NSWindowDidBecomeKeyNotification;
 static VALUE
 osx_NSWindowDidBecomeKeyNotification(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSWindowDidBecomeKeyNotification, nil);
+  return nsresult_to_rbresult(_C_ID, &NSWindowDidBecomeKeyNotification, "NSWindowDidBecomeKeyNotification", nil);
 }
 
 // NSString * NSWindowDidBecomeMainNotification;
 static VALUE
 osx_NSWindowDidBecomeMainNotification(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSWindowDidBecomeMainNotification, nil);
+  return nsresult_to_rbresult(_C_ID, &NSWindowDidBecomeMainNotification, "NSWindowDidBecomeMainNotification", nil);
 }
 
 // NSString * NSWindowDidChangeScreenNotification;
 static VALUE
 osx_NSWindowDidChangeScreenNotification(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSWindowDidChangeScreenNotification, nil);
+  return nsresult_to_rbresult(_C_ID, &NSWindowDidChangeScreenNotification, "NSWindowDidChangeScreenNotification", nil);
 }
 
 // NSString * NSWindowDidDeminiaturizeNotification;
 static VALUE
 osx_NSWindowDidDeminiaturizeNotification(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSWindowDidDeminiaturizeNotification, nil);
+  return nsresult_to_rbresult(_C_ID, &NSWindowDidDeminiaturizeNotification, "NSWindowDidDeminiaturizeNotification", nil);
 }
 
 // NSString * NSWindowDidExposeNotification;
 static VALUE
 osx_NSWindowDidExposeNotification(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSWindowDidExposeNotification, nil);
+  return nsresult_to_rbresult(_C_ID, &NSWindowDidExposeNotification, "NSWindowDidExposeNotification", nil);
 }
 
 // NSString * NSWindowDidMiniaturizeNotification;
 static VALUE
 osx_NSWindowDidMiniaturizeNotification(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSWindowDidMiniaturizeNotification, nil);
+  return nsresult_to_rbresult(_C_ID, &NSWindowDidMiniaturizeNotification, "NSWindowDidMiniaturizeNotification", nil);
 }
 
 // NSString * NSWindowDidMoveNotification;
 static VALUE
 osx_NSWindowDidMoveNotification(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSWindowDidMoveNotification, nil);
+  return nsresult_to_rbresult(_C_ID, &NSWindowDidMoveNotification, "NSWindowDidMoveNotification", nil);
 }
 
 // NSString * NSWindowDidResignKeyNotification;
 static VALUE
 osx_NSWindowDidResignKeyNotification(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSWindowDidResignKeyNotification, nil);
+  return nsresult_to_rbresult(_C_ID, &NSWindowDidResignKeyNotification, "NSWindowDidResignKeyNotification", nil);
 }
 
 // NSString * NSWindowDidResignMainNotification;
 static VALUE
 osx_NSWindowDidResignMainNotification(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSWindowDidResignMainNotification, nil);
+  return nsresult_to_rbresult(_C_ID, &NSWindowDidResignMainNotification, "NSWindowDidResignMainNotification", nil);
 }
 
 // NSString * NSWindowDidResizeNotification;
 static VALUE
 osx_NSWindowDidResizeNotification(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSWindowDidResizeNotification, nil);
+  return nsresult_to_rbresult(_C_ID, &NSWindowDidResizeNotification, "NSWindowDidResizeNotification", nil);
 }
 
 // NSString * NSWindowDidUpdateNotification;
 static VALUE
 osx_NSWindowDidUpdateNotification(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSWindowDidUpdateNotification, nil);
+  return nsresult_to_rbresult(_C_ID, &NSWindowDidUpdateNotification, "NSWindowDidUpdateNotification", nil);
 }
 
 // NSString * NSWindowWillCloseNotification;
 static VALUE
 osx_NSWindowWillCloseNotification(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSWindowWillCloseNotification, nil);
+  return nsresult_to_rbresult(_C_ID, &NSWindowWillCloseNotification, "NSWindowWillCloseNotification", nil);
 }
 
 // NSString * NSWindowWillMiniaturizeNotification;
 static VALUE
 osx_NSWindowWillMiniaturizeNotification(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSWindowWillMiniaturizeNotification, nil);
+  return nsresult_to_rbresult(_C_ID, &NSWindowWillMiniaturizeNotification, "NSWindowWillMiniaturizeNotification", nil);
 }
 
 // NSString * NSWindowWillMoveNotification;
 static VALUE
 osx_NSWindowWillMoveNotification(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSWindowWillMoveNotification, nil);
+  return nsresult_to_rbresult(_C_ID, &NSWindowWillMoveNotification, "NSWindowWillMoveNotification", nil);
 }
 
 // NSString * NSWindowWillBeginSheetNotification;
 static VALUE
 osx_NSWindowWillBeginSheetNotification(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSWindowWillBeginSheetNotification, nil);
+  return nsresult_to_rbresult(_C_ID, &NSWindowWillBeginSheetNotification, "NSWindowWillBeginSheetNotification", nil);
 }
 
 // NSString * NSWindowDidEndSheetNotification;
 static VALUE
 osx_NSWindowDidEndSheetNotification(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSWindowDidEndSheetNotification, nil);
+  return nsresult_to_rbresult(_C_ID, &NSWindowDidEndSheetNotification, "NSWindowDidEndSheetNotification", nil);
 }
 
 void init_NSWindow(VALUE mOSX)

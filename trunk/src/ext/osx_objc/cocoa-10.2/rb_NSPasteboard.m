@@ -2,8 +2,9 @@
 #import "ocdata_conv.h"
 #import <AppKit/AppKit.h>
 
-extern void rbarg_to_nsarg(VALUE rbarg, int octype, void* nsarg, id pool, int index);
-extern VALUE nsresult_to_rbresult(int octype, const void* nsresult, id pool);
+extern VALUE oc_err_new (const char* fname, NSException* nsexcp);
+extern void rbarg_to_nsarg(VALUE rbarg, int octype, void* nsarg, const char* fname, id pool, int index);
+extern VALUE nsresult_to_rbresult(int octype, const void* nsresult, const char* fname, id pool);
 static const int VA_MAX = 4;
 
 
@@ -12,154 +13,154 @@ static const int VA_MAX = 4;
 static VALUE
 osx_NSStringPboardType(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSStringPboardType, nil);
+  return nsresult_to_rbresult(_C_ID, &NSStringPboardType, "NSStringPboardType", nil);
 }
 
 // NSString * NSFilenamesPboardType;
 static VALUE
 osx_NSFilenamesPboardType(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSFilenamesPboardType, nil);
+  return nsresult_to_rbresult(_C_ID, &NSFilenamesPboardType, "NSFilenamesPboardType", nil);
 }
 
 // NSString * NSPostScriptPboardType;
 static VALUE
 osx_NSPostScriptPboardType(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSPostScriptPboardType, nil);
+  return nsresult_to_rbresult(_C_ID, &NSPostScriptPboardType, "NSPostScriptPboardType", nil);
 }
 
 // NSString * NSTIFFPboardType;
 static VALUE
 osx_NSTIFFPboardType(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSTIFFPboardType, nil);
+  return nsresult_to_rbresult(_C_ID, &NSTIFFPboardType, "NSTIFFPboardType", nil);
 }
 
 // NSString * NSRTFPboardType;
 static VALUE
 osx_NSRTFPboardType(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSRTFPboardType, nil);
+  return nsresult_to_rbresult(_C_ID, &NSRTFPboardType, "NSRTFPboardType", nil);
 }
 
 // NSString * NSTabularTextPboardType;
 static VALUE
 osx_NSTabularTextPboardType(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSTabularTextPboardType, nil);
+  return nsresult_to_rbresult(_C_ID, &NSTabularTextPboardType, "NSTabularTextPboardType", nil);
 }
 
 // NSString * NSFontPboardType;
 static VALUE
 osx_NSFontPboardType(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSFontPboardType, nil);
+  return nsresult_to_rbresult(_C_ID, &NSFontPboardType, "NSFontPboardType", nil);
 }
 
 // NSString * NSRulerPboardType;
 static VALUE
 osx_NSRulerPboardType(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSRulerPboardType, nil);
+  return nsresult_to_rbresult(_C_ID, &NSRulerPboardType, "NSRulerPboardType", nil);
 }
 
 // NSString * NSFileContentsPboardType;
 static VALUE
 osx_NSFileContentsPboardType(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSFileContentsPboardType, nil);
+  return nsresult_to_rbresult(_C_ID, &NSFileContentsPboardType, "NSFileContentsPboardType", nil);
 }
 
 // NSString * NSColorPboardType;
 static VALUE
 osx_NSColorPboardType(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSColorPboardType, nil);
+  return nsresult_to_rbresult(_C_ID, &NSColorPboardType, "NSColorPboardType", nil);
 }
 
 // NSString * NSRTFDPboardType;
 static VALUE
 osx_NSRTFDPboardType(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSRTFDPboardType, nil);
+  return nsresult_to_rbresult(_C_ID, &NSRTFDPboardType, "NSRTFDPboardType", nil);
 }
 
 // NSString * NSHTMLPboardType;
 static VALUE
 osx_NSHTMLPboardType(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSHTMLPboardType, nil);
+  return nsresult_to_rbresult(_C_ID, &NSHTMLPboardType, "NSHTMLPboardType", nil);
 }
 
 // NSString * NSPICTPboardType;
 static VALUE
 osx_NSPICTPboardType(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSPICTPboardType, nil);
+  return nsresult_to_rbresult(_C_ID, &NSPICTPboardType, "NSPICTPboardType", nil);
 }
 
 // NSString * NSURLPboardType;
 static VALUE
 osx_NSURLPboardType(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSURLPboardType, nil);
+  return nsresult_to_rbresult(_C_ID, &NSURLPboardType, "NSURLPboardType", nil);
 }
 
 // NSString * NSPDFPboardType;
 static VALUE
 osx_NSPDFPboardType(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSPDFPboardType, nil);
+  return nsresult_to_rbresult(_C_ID, &NSPDFPboardType, "NSPDFPboardType", nil);
 }
 
 // NSString * NSVCardPboardType;
 static VALUE
 osx_NSVCardPboardType(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSVCardPboardType, nil);
+  return nsresult_to_rbresult(_C_ID, &NSVCardPboardType, "NSVCardPboardType", nil);
 }
 
 // NSString * NSFilesPromisePboardType;
 static VALUE
 osx_NSFilesPromisePboardType(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSFilesPromisePboardType, nil);
+  return nsresult_to_rbresult(_C_ID, &NSFilesPromisePboardType, "NSFilesPromisePboardType", nil);
 }
 
 // NSString * NSGeneralPboard;
 static VALUE
 osx_NSGeneralPboard(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSGeneralPboard, nil);
+  return nsresult_to_rbresult(_C_ID, &NSGeneralPboard, "NSGeneralPboard", nil);
 }
 
 // NSString * NSFontPboard;
 static VALUE
 osx_NSFontPboard(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSFontPboard, nil);
+  return nsresult_to_rbresult(_C_ID, &NSFontPboard, "NSFontPboard", nil);
 }
 
 // NSString * NSRulerPboard;
 static VALUE
 osx_NSRulerPboard(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSRulerPboard, nil);
+  return nsresult_to_rbresult(_C_ID, &NSRulerPboard, "NSRulerPboard", nil);
 }
 
 // NSString * NSFindPboard;
 static VALUE
 osx_NSFindPboard(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSFindPboard, nil);
+  return nsresult_to_rbresult(_C_ID, &NSFindPboard, "NSFindPboard", nil);
 }
 
 // NSString * NSDragPboard;
 static VALUE
 osx_NSDragPboard(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSDragPboard, nil);
+  return nsresult_to_rbresult(_C_ID, &NSDragPboard, "NSDragPboard", nil);
 }
 
   /**** functions ****/
@@ -171,14 +172,24 @@ osx_NSCreateFilenamePboardType(VALUE mdl, VALUE a0)
 
   NSString * ns_a0;
 
+  VALUE excp = Qnil;
   VALUE rb_result;
   id pool = [[NSAutoreleasePool alloc] init];
   /* a0 */
-  rbarg_to_nsarg(a0, _C_ID, &ns_a0, pool, 0);
+  rbarg_to_nsarg(a0, _C_ID, &ns_a0, "NSCreateFilenamePboardType", pool, 0);
 
+NS_DURING
   ns_result = NSCreateFilenamePboardType(ns_a0);
+NS_HANDLER
+  excp = oc_err_new ("NSCreateFilenamePboardType", localException);
+NS_ENDHANDLER
+  if (excp != Qnil) {
+    [pool release];
+    rb_exc_raise (excp);
+    return Qnil;
+  }
 
-  rb_result = nsresult_to_rbresult(_C_ID, &ns_result, pool);
+  rb_result = nsresult_to_rbresult(_C_ID, &ns_result, "NSCreateFilenamePboardType", pool);
   [pool release];
   return rb_result;
 }
@@ -191,14 +202,24 @@ osx_NSCreateFileContentsPboardType(VALUE mdl, VALUE a0)
 
   NSString * ns_a0;
 
+  VALUE excp = Qnil;
   VALUE rb_result;
   id pool = [[NSAutoreleasePool alloc] init];
   /* a0 */
-  rbarg_to_nsarg(a0, _C_ID, &ns_a0, pool, 0);
+  rbarg_to_nsarg(a0, _C_ID, &ns_a0, "NSCreateFileContentsPboardType", pool, 0);
 
+NS_DURING
   ns_result = NSCreateFileContentsPboardType(ns_a0);
+NS_HANDLER
+  excp = oc_err_new ("NSCreateFileContentsPboardType", localException);
+NS_ENDHANDLER
+  if (excp != Qnil) {
+    [pool release];
+    rb_exc_raise (excp);
+    return Qnil;
+  }
 
-  rb_result = nsresult_to_rbresult(_C_ID, &ns_result, pool);
+  rb_result = nsresult_to_rbresult(_C_ID, &ns_result, "NSCreateFileContentsPboardType", pool);
   [pool release];
   return rb_result;
 }
@@ -211,14 +232,24 @@ osx_NSGetFileType(VALUE mdl, VALUE a0)
 
   NSString * ns_a0;
 
+  VALUE excp = Qnil;
   VALUE rb_result;
   id pool = [[NSAutoreleasePool alloc] init];
   /* a0 */
-  rbarg_to_nsarg(a0, _C_ID, &ns_a0, pool, 0);
+  rbarg_to_nsarg(a0, _C_ID, &ns_a0, "NSGetFileType", pool, 0);
 
+NS_DURING
   ns_result = NSGetFileType(ns_a0);
+NS_HANDLER
+  excp = oc_err_new ("NSGetFileType", localException);
+NS_ENDHANDLER
+  if (excp != Qnil) {
+    [pool release];
+    rb_exc_raise (excp);
+    return Qnil;
+  }
 
-  rb_result = nsresult_to_rbresult(_C_ID, &ns_result, pool);
+  rb_result = nsresult_to_rbresult(_C_ID, &ns_result, "NSGetFileType", pool);
   [pool release];
   return rb_result;
 }
@@ -231,14 +262,24 @@ osx_NSGetFileTypes(VALUE mdl, VALUE a0)
 
   NSArray * ns_a0;
 
+  VALUE excp = Qnil;
   VALUE rb_result;
   id pool = [[NSAutoreleasePool alloc] init];
   /* a0 */
-  rbarg_to_nsarg(a0, _C_ID, &ns_a0, pool, 0);
+  rbarg_to_nsarg(a0, _C_ID, &ns_a0, "NSGetFileTypes", pool, 0);
 
+NS_DURING
   ns_result = NSGetFileTypes(ns_a0);
+NS_HANDLER
+  excp = oc_err_new ("NSGetFileTypes", localException);
+NS_ENDHANDLER
+  if (excp != Qnil) {
+    [pool release];
+    rb_exc_raise (excp);
+    return Qnil;
+  }
 
-  rb_result = nsresult_to_rbresult(_C_ID, &ns_result, pool);
+  rb_result = nsresult_to_rbresult(_C_ID, &ns_result, "NSGetFileTypes", pool);
   [pool release];
   return rb_result;
 }

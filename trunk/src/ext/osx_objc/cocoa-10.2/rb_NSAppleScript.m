@@ -2,8 +2,9 @@
 #import "ocdata_conv.h"
 #import <Foundation/Foundation.h>
 
-extern void rbarg_to_nsarg(VALUE rbarg, int octype, void* nsarg, id pool, int index);
-extern VALUE nsresult_to_rbresult(int octype, const void* nsresult, id pool);
+extern VALUE oc_err_new (const char* fname, NSException* nsexcp);
+extern void rbarg_to_nsarg(VALUE rbarg, int octype, void* nsarg, const char* fname, id pool, int index);
+extern VALUE nsresult_to_rbresult(int octype, const void* nsresult, const char* fname, id pool);
 static const int VA_MAX = 4;
 
 
@@ -12,35 +13,35 @@ static const int VA_MAX = 4;
 static VALUE
 osx_NSAppleScriptErrorMessage(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSAppleScriptErrorMessage, nil);
+  return nsresult_to_rbresult(_C_ID, &NSAppleScriptErrorMessage, "NSAppleScriptErrorMessage", nil);
 }
 
 // NSString * const NSAppleScriptErrorNumber;
 static VALUE
 osx_NSAppleScriptErrorNumber(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSAppleScriptErrorNumber, nil);
+  return nsresult_to_rbresult(_C_ID, &NSAppleScriptErrorNumber, "NSAppleScriptErrorNumber", nil);
 }
 
 // NSString * const NSAppleScriptErrorAppName;
 static VALUE
 osx_NSAppleScriptErrorAppName(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSAppleScriptErrorAppName, nil);
+  return nsresult_to_rbresult(_C_ID, &NSAppleScriptErrorAppName, "NSAppleScriptErrorAppName", nil);
 }
 
 // NSString * const NSAppleScriptErrorBriefMessage;
 static VALUE
 osx_NSAppleScriptErrorBriefMessage(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSAppleScriptErrorBriefMessage, nil);
+  return nsresult_to_rbresult(_C_ID, &NSAppleScriptErrorBriefMessage, "NSAppleScriptErrorBriefMessage", nil);
 }
 
 // NSString * const NSAppleScriptErrorRange;
 static VALUE
 osx_NSAppleScriptErrorRange(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSAppleScriptErrorRange, nil);
+  return nsresult_to_rbresult(_C_ID, &NSAppleScriptErrorRange, "NSAppleScriptErrorRange", nil);
 }
 
 void init_NSAppleScript(VALUE mOSX)

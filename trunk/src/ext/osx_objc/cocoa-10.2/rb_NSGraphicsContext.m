@@ -2,8 +2,9 @@
 #import "ocdata_conv.h"
 #import <AppKit/AppKit.h>
 
-extern void rbarg_to_nsarg(VALUE rbarg, int octype, void* nsarg, id pool, int index);
-extern VALUE nsresult_to_rbresult(int octype, const void* nsresult, id pool);
+extern VALUE oc_err_new (const char* fname, NSException* nsexcp);
+extern void rbarg_to_nsarg(VALUE rbarg, int octype, void* nsarg, const char* fname, id pool, int index);
+extern VALUE nsresult_to_rbresult(int octype, const void* nsresult, const char* fname, id pool);
 static const int VA_MAX = 4;
 
 
@@ -12,28 +13,28 @@ static const int VA_MAX = 4;
 static VALUE
 osx_NSGraphicsContextDestinationAttributeName(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSGraphicsContextDestinationAttributeName, nil);
+  return nsresult_to_rbresult(_C_ID, &NSGraphicsContextDestinationAttributeName, "NSGraphicsContextDestinationAttributeName", nil);
 }
 
 // NSString * NSGraphicsContextRepresentationFormatAttributeName;
 static VALUE
 osx_NSGraphicsContextRepresentationFormatAttributeName(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSGraphicsContextRepresentationFormatAttributeName, nil);
+  return nsresult_to_rbresult(_C_ID, &NSGraphicsContextRepresentationFormatAttributeName, "NSGraphicsContextRepresentationFormatAttributeName", nil);
 }
 
 // NSString * NSGraphicsContextPSFormat;
 static VALUE
 osx_NSGraphicsContextPSFormat(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSGraphicsContextPSFormat, nil);
+  return nsresult_to_rbresult(_C_ID, &NSGraphicsContextPSFormat, "NSGraphicsContextPSFormat", nil);
 }
 
 // NSString * NSGraphicsContextPDFFormat;
 static VALUE
 osx_NSGraphicsContextPDFFormat(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSGraphicsContextPDFFormat, nil);
+  return nsresult_to_rbresult(_C_ID, &NSGraphicsContextPDFFormat, "NSGraphicsContextPDFFormat", nil);
 }
 
 void init_NSGraphicsContext(VALUE mOSX)
