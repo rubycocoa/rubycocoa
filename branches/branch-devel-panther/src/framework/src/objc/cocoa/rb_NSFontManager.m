@@ -23,6 +23,7 @@ void init_NSFontManager(VALUE mOSX)
   rb_define_const(mOSX, "NSCompressedFontMask", INT2NUM(NSCompressedFontMask));
   rb_define_const(mOSX, "NSFixedPitchFontMask", INT2NUM(NSFixedPitchFontMask));
   rb_define_const(mOSX, "NSUnitalicFontMask", INT2NUM(NSUnitalicFontMask));
+  rb_define_const(mOSX, "NSFontCollectionApplicationOnlyMask", INT2NUM(NSFontCollectionApplicationOnlyMask));
   rb_define_const(mOSX, "NSNoFontChangeAction", INT2NUM(NSNoFontChangeAction));
   rb_define_const(mOSX, "NSViaPanelFontAction", INT2NUM(NSViaPanelFontAction));
   rb_define_const(mOSX, "NSAddTraitFontAction", INT2NUM(NSAddTraitFontAction));

@@ -86,6 +86,76 @@ osx_NSLinkAttributeName(VALUE mdl)
   return nsresult_to_rbresult(_C_ID, &NSLinkAttributeName, "NSLinkAttributeName", nil);
 }
 
+// NSString * NSStrokeWidthAttributeName;
+static VALUE
+osx_NSStrokeWidthAttributeName(VALUE mdl)
+{
+  return nsresult_to_rbresult(_C_ID, &NSStrokeWidthAttributeName, "NSStrokeWidthAttributeName", nil);
+}
+
+// NSString * NSStrokeColorAttributeName;
+static VALUE
+osx_NSStrokeColorAttributeName(VALUE mdl)
+{
+  return nsresult_to_rbresult(_C_ID, &NSStrokeColorAttributeName, "NSStrokeColorAttributeName", nil);
+}
+
+// NSString * NSUnderlineColorAttributeName;
+static VALUE
+osx_NSUnderlineColorAttributeName(VALUE mdl)
+{
+  return nsresult_to_rbresult(_C_ID, &NSUnderlineColorAttributeName, "NSUnderlineColorAttributeName", nil);
+}
+
+// NSString * NSStrikethroughStyleAttributeName;
+static VALUE
+osx_NSStrikethroughStyleAttributeName(VALUE mdl)
+{
+  return nsresult_to_rbresult(_C_ID, &NSStrikethroughStyleAttributeName, "NSStrikethroughStyleAttributeName", nil);
+}
+
+// NSString * NSStrikethroughColorAttributeName;
+static VALUE
+osx_NSStrikethroughColorAttributeName(VALUE mdl)
+{
+  return nsresult_to_rbresult(_C_ID, &NSStrikethroughColorAttributeName, "NSStrikethroughColorAttributeName", nil);
+}
+
+// NSString * NSShadowAttributeName;
+static VALUE
+osx_NSShadowAttributeName(VALUE mdl)
+{
+  return nsresult_to_rbresult(_C_ID, &NSShadowAttributeName, "NSShadowAttributeName", nil);
+}
+
+// NSString * NSObliquenessAttributeName;
+static VALUE
+osx_NSObliquenessAttributeName(VALUE mdl)
+{
+  return nsresult_to_rbresult(_C_ID, &NSObliquenessAttributeName, "NSObliquenessAttributeName", nil);
+}
+
+// NSString * NSExpansionAttributeName;
+static VALUE
+osx_NSExpansionAttributeName(VALUE mdl)
+{
+  return nsresult_to_rbresult(_C_ID, &NSExpansionAttributeName, "NSExpansionAttributeName", nil);
+}
+
+// NSString * NSCursorAttributeName;
+static VALUE
+osx_NSCursorAttributeName(VALUE mdl)
+{
+  return nsresult_to_rbresult(_C_ID, &NSCursorAttributeName, "NSCursorAttributeName", nil);
+}
+
+// NSString * NSToolTipAttributeName;
+static VALUE
+osx_NSToolTipAttributeName(VALUE mdl)
+{
+  return nsresult_to_rbresult(_C_ID, &NSToolTipAttributeName, "NSToolTipAttributeName", nil);
+}
+
 // NSString * NSCharacterShapeAttributeName;
 static VALUE
 osx_NSCharacterShapeAttributeName(VALUE mdl)
@@ -105,13 +175,6 @@ static VALUE
 osx_NSUnderlineByWordMask(VALUE mdl)
 {
   return nsresult_to_rbresult(_C_UINT, &NSUnderlineByWordMask, "NSUnderlineByWordMask", nil);
-}
-
-// unsigned NSUnderlineStrikethroughMask;
-static VALUE
-osx_NSUnderlineStrikethroughMask(VALUE mdl)
-{
-  return nsresult_to_rbresult(_C_UINT, &NSUnderlineStrikethroughMask, "NSUnderlineStrikethroughMask", nil);
 }
 
 // NSString * NSPlainTextDocumentType;
@@ -149,9 +212,39 @@ osx_NSHTMLTextDocumentType(VALUE mdl)
   return nsresult_to_rbresult(_C_ID, &NSHTMLTextDocumentType, "NSHTMLTextDocumentType", nil);
 }
 
+// NSString * NSDocFormatTextDocumentType;
+static VALUE
+osx_NSDocFormatTextDocumentType(VALUE mdl)
+{
+  return nsresult_to_rbresult(_C_ID, &NSDocFormatTextDocumentType, "NSDocFormatTextDocumentType", nil);
+}
+
+// NSString * NSWordMLTextDocumentType;
+static VALUE
+osx_NSWordMLTextDocumentType(VALUE mdl)
+{
+  return nsresult_to_rbresult(_C_ID, &NSWordMLTextDocumentType, "NSWordMLTextDocumentType", nil);
+}
+
+// unsigned NSUnderlineStrikethroughMask;
+static VALUE
+osx_NSUnderlineStrikethroughMask(VALUE mdl)
+{
+  return nsresult_to_rbresult(_C_UINT, &NSUnderlineStrikethroughMask, "NSUnderlineStrikethroughMask", nil);
+}
+
 void init_NSAttributedString(VALUE mOSX)
 {
   /**** enums ****/
+  rb_define_const(mOSX, "NSUnderlineStyleNone", INT2NUM(NSUnderlineStyleNone));
+  rb_define_const(mOSX, "NSUnderlineStyleSingle", INT2NUM(NSUnderlineStyleSingle));
+  rb_define_const(mOSX, "NSUnderlineStyleThick", INT2NUM(NSUnderlineStyleThick));
+  rb_define_const(mOSX, "NSUnderlineStyleDouble", INT2NUM(NSUnderlineStyleDouble));
+  rb_define_const(mOSX, "NSUnderlinePatternSolid", INT2NUM(NSUnderlinePatternSolid));
+  rb_define_const(mOSX, "NSUnderlinePatternDot", INT2NUM(NSUnderlinePatternDot));
+  rb_define_const(mOSX, "NSUnderlinePatternDash", INT2NUM(NSUnderlinePatternDash));
+  rb_define_const(mOSX, "NSUnderlinePatternDashDot", INT2NUM(NSUnderlinePatternDashDot));
+  rb_define_const(mOSX, "NSUnderlinePatternDashDotDot", INT2NUM(NSUnderlinePatternDashDotDot));
   rb_define_const(mOSX, "NSNoUnderlineStyle", INT2NUM(NSNoUnderlineStyle));
   rb_define_const(mOSX, "NSSingleUnderlineStyle", INT2NUM(NSSingleUnderlineStyle));
 
@@ -167,13 +260,25 @@ void init_NSAttributedString(VALUE mOSX)
   rb_define_module_function(mOSX, "NSBaselineOffsetAttributeName", osx_NSBaselineOffsetAttributeName, 0);
   rb_define_module_function(mOSX, "NSKernAttributeName", osx_NSKernAttributeName, 0);
   rb_define_module_function(mOSX, "NSLinkAttributeName", osx_NSLinkAttributeName, 0);
+  rb_define_module_function(mOSX, "NSStrokeWidthAttributeName", osx_NSStrokeWidthAttributeName, 0);
+  rb_define_module_function(mOSX, "NSStrokeColorAttributeName", osx_NSStrokeColorAttributeName, 0);
+  rb_define_module_function(mOSX, "NSUnderlineColorAttributeName", osx_NSUnderlineColorAttributeName, 0);
+  rb_define_module_function(mOSX, "NSStrikethroughStyleAttributeName", osx_NSStrikethroughStyleAttributeName, 0);
+  rb_define_module_function(mOSX, "NSStrikethroughColorAttributeName", osx_NSStrikethroughColorAttributeName, 0);
+  rb_define_module_function(mOSX, "NSShadowAttributeName", osx_NSShadowAttributeName, 0);
+  rb_define_module_function(mOSX, "NSObliquenessAttributeName", osx_NSObliquenessAttributeName, 0);
+  rb_define_module_function(mOSX, "NSExpansionAttributeName", osx_NSExpansionAttributeName, 0);
+  rb_define_module_function(mOSX, "NSCursorAttributeName", osx_NSCursorAttributeName, 0);
+  rb_define_module_function(mOSX, "NSToolTipAttributeName", osx_NSToolTipAttributeName, 0);
   rb_define_module_function(mOSX, "NSCharacterShapeAttributeName", osx_NSCharacterShapeAttributeName, 0);
   rb_define_module_function(mOSX, "NSGlyphInfoAttributeName", osx_NSGlyphInfoAttributeName, 0);
   rb_define_module_function(mOSX, "NSUnderlineByWordMask", osx_NSUnderlineByWordMask, 0);
-  rb_define_module_function(mOSX, "NSUnderlineStrikethroughMask", osx_NSUnderlineStrikethroughMask, 0);
   rb_define_module_function(mOSX, "NSPlainTextDocumentType", osx_NSPlainTextDocumentType, 0);
   rb_define_module_function(mOSX, "NSRTFTextDocumentType", osx_NSRTFTextDocumentType, 0);
   rb_define_module_function(mOSX, "NSRTFDTextDocumentType", osx_NSRTFDTextDocumentType, 0);
   rb_define_module_function(mOSX, "NSMacSimpleTextDocumentType", osx_NSMacSimpleTextDocumentType, 0);
   rb_define_module_function(mOSX, "NSHTMLTextDocumentType", osx_NSHTMLTextDocumentType, 0);
+  rb_define_module_function(mOSX, "NSDocFormatTextDocumentType", osx_NSDocFormatTextDocumentType, 0);
+  rb_define_module_function(mOSX, "NSWordMLTextDocumentType", osx_NSWordMLTextDocumentType, 0);
+  rb_define_module_function(mOSX, "NSUnderlineStrikethroughMask", osx_NSUnderlineStrikethroughMask, 0);
 }

@@ -351,6 +351,9 @@ void init_NSApplication(VALUE mOSX)
   rb_define_const(mOSX, "NSUpdateWindowsRunLoopOrdering", INT2NUM(NSUpdateWindowsRunLoopOrdering));
   rb_define_const(mOSX, "NSCriticalRequest", INT2NUM(NSCriticalRequest));
   rb_define_const(mOSX, "NSInformationalRequest", INT2NUM(NSInformationalRequest));
+  rb_define_const(mOSX, "NSApplicationDelegateReplySuccess", INT2NUM(NSApplicationDelegateReplySuccess));
+  rb_define_const(mOSX, "NSApplicationDelegateReplyCancel", INT2NUM(NSApplicationDelegateReplyCancel));
+  rb_define_const(mOSX, "NSApplicationDelegateReplyFailure", INT2NUM(NSApplicationDelegateReplyFailure));
   rb_define_const(mOSX, "NSTerminateCancel", INT2NUM(NSTerminateCancel));
   rb_define_const(mOSX, "NSTerminateNow", INT2NUM(NSTerminateNow));
   rb_define_const(mOSX, "NSTerminateLater", INT2NUM(NSTerminateLater));

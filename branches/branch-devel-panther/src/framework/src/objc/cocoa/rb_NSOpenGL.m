@@ -140,6 +140,7 @@ void init_NSOpenGL(VALUE mOSX)
   rb_define_const(mOSX, "NSOpenGLPFAMultiScreen", INT2NUM(NSOpenGLPFAMultiScreen));
   rb_define_const(mOSX, "NSOpenGLPFACompliant", INT2NUM(NSOpenGLPFACompliant));
   rb_define_const(mOSX, "NSOpenGLPFAScreenMask", INT2NUM(NSOpenGLPFAScreenMask));
+  rb_define_const(mOSX, "NSOpenGLPFAPixelBuffer", INT2NUM(NSOpenGLPFAPixelBuffer));
   rb_define_const(mOSX, "NSOpenGLPFAVirtualScreenCount", INT2NUM(NSOpenGLPFAVirtualScreenCount));
   rb_define_const(mOSX, "NSOpenGLCPSwapRectangle", INT2NUM(NSOpenGLCPSwapRectangle));
   rb_define_const(mOSX, "NSOpenGLCPSwapRectangleEnable", INT2NUM(NSOpenGLCPSwapRectangleEnable));

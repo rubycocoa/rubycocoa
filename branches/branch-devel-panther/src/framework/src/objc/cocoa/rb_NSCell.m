@@ -62,9 +62,12 @@ void init_NSCell(VALUE mOSX)
   rb_define_const(mOSX, "NSChangeGrayCellMask", INT2NUM(NSChangeGrayCellMask));
   rb_define_const(mOSX, "NSChangeBackgroundCellMask", INT2NUM(NSChangeBackgroundCellMask));
   rb_define_const(mOSX, "NSDefaultControlTint", INT2NUM(NSDefaultControlTint));
+  rb_define_const(mOSX, "NSBlueControlTint", INT2NUM(NSBlueControlTint));
+  rb_define_const(mOSX, "NSGraphiteControlTint", INT2NUM(NSGraphiteControlTint));
   rb_define_const(mOSX, "NSClearControlTint", INT2NUM(NSClearControlTint));
   rb_define_const(mOSX, "NSRegularControlSize", INT2NUM(NSRegularControlSize));
   rb_define_const(mOSX, "NSSmallControlSize", INT2NUM(NSSmallControlSize));
+  rb_define_const(mOSX, "NSMiniControlSize", INT2NUM(NSMiniControlSize));
 
   /**** constants ****/
   rb_define_module_function(mOSX, "NSControlTintDidChangeNotification", osx_NSControlTintDidChangeNotification, 0);

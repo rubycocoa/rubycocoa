@@ -56,6 +56,8 @@ void init_NSText(VALUE mOSX)
   rb_define_const(mOSX, "NSRightTextMovement", INT2NUM(NSRightTextMovement));
   rb_define_const(mOSX, "NSUpTextMovement", INT2NUM(NSUpTextMovement));
   rb_define_const(mOSX, "NSDownTextMovement", INT2NUM(NSDownTextMovement));
+  rb_define_const(mOSX, "NSCancelTextMovement", INT2NUM(NSCancelTextMovement));
+  rb_define_const(mOSX, "NSOtherTextMovement", INT2NUM(NSOtherTextMovement));
 
   /**** constants ****/
   rb_define_module_function(mOSX, "NSTextDidBeginEditingNotification", osx_NSTextDidBeginEditingNotification, 0);

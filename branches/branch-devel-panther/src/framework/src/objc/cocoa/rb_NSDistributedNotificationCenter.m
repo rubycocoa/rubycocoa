@@ -23,6 +23,8 @@ void init_NSDistributedNotificationCenter(VALUE mOSX)
   rb_define_const(mOSX, "NSNotificationSuspensionBehaviorCoalesce", INT2NUM(NSNotificationSuspensionBehaviorCoalesce));
   rb_define_const(mOSX, "NSNotificationSuspensionBehaviorHold", INT2NUM(NSNotificationSuspensionBehaviorHold));
   rb_define_const(mOSX, "NSNotificationSuspensionBehaviorDeliverImmediately", INT2NUM(NSNotificationSuspensionBehaviorDeliverImmediately));
+  rb_define_const(mOSX, "NSNotificationDeliverImmediately", INT2NUM(NSNotificationDeliverImmediately));
+  rb_define_const(mOSX, "NSNotificationPostToAllSessions", INT2NUM(NSNotificationPostToAllSessions));
 
   /**** constants ****/
   rb_define_module_function(mOSX, "NSLocalNotificationCenterType", osx_NSLocalNotificationCenterType, 0);
