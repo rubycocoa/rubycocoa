@@ -14,13 +14,6 @@
 #import <stdarg.h>
 #import "osx_ruby.h"
 
-struct _objcid_data {
-  id  ocid;
-};
-
-#define OBJCID_DATA_PTR(o) ((struct _objcid_data*)(DATA_PTR(o)))
-#define OCID_OF(o) (OBJCID_DATA_PTR(o)->ocid)
-
 enum osxobjc_nsdata_type {
   _PRIV_C_BOOL = 1024,
   _PRIV_C_NSRECT,
@@ -31,21 +24,10 @@ enum osxobjc_nsdata_type {
   _PRIV_C_ID_PTR,
 };
 
-#define OCID2NUM(val) UINT2NUM((unsigned int)(val))
-#define NUM2OCID(val) ((id)NUM2UINT((VALUE)(val)))
-
 int     to_octype       (const char* oc_type_str);
 size_t  ocdata_size     (int octype, const char* octype_str);
 void*   ocdata_malloc   (int octype, const char* octype_str);
 #define OCDATA_ALLOCA(octype,s)  alloca(ocdata_size((octype),(s)))
-
-VALUE rb_mdl_osx();
-VALUE rb_cls_objcid();
-VALUE rb_cls_ocobj(const char* name);
-
-id    rbobj_get_ocid (VALUE obj);
-VALUE ocid_get_rbobj (id ocid);
-VALUE rb_ocobj_s_new(id ocid);
 
 id    rbobj_to_nsselstr (VALUE obj);
 SEL   rbobj_to_nssel    (VALUE obj);
