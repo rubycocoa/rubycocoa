@@ -44,9 +44,11 @@ module OSX
 
   module NSBehaviorAttachment
 
+    ERRMSG_FOR_RESTRICT_NEW = "use 'alloc.initXXX' to instantiate Cocoa Object"
+
     # restrict creating an instance by Class#new of NSObject gruop.
     def new
-      raise "use 'alloc.initXXX' to instantiate Cocoa Object"
+      raise ERRMSG_FOR_RESTRICT_NEW
     end
 
     # initializer for definition of a derived class of a class on
