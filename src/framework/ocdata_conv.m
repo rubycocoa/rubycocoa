@@ -158,12 +158,15 @@ to_octype(const char* octype_str)
   else if (strcmp(octype_str, "{_NSRange=II}") == 0) {
     oct = _PRIV_C_NSRANGE;
   }
+  else if (strcmp(octype_str, "r^I") == 0) {
+    oct = _PRIV_C_ARY_UI;
+  }
 
   return oct;
 }
 
 size_t
-ocdata_size(int octype)
+ocdata_size(int octype, const char* octype_str)
 {
   size_t result = 0;
   switch (octype) {
@@ -216,6 +219,9 @@ ocdata_size(int octype)
   case _PRIV_C_NSRANGE:
     result = sizeof(NSRange); break;
 
+  case _PRIV_C_ARY_UI:
+    result = sizeof(unsigned int *); break;
+
   case _C_BFLD:
   case _C_UNDEF:
   case _C_ARY_B:
@@ -225,16 +231,19 @@ ocdata_size(int octype)
   case _C_STRUCT_B:
   case _C_STRUCT_E:
 
-  default:
-    result = 0; break;
+  default: {
+    unsigned int size, align;
+    NSGetSizeAndAlignment(octype_str, &size, &align);
+    result = size; break;
+  }
   }
   return result;
 }
 
 void*
-ocdata_malloc(int octype)
+ocdata_malloc(int octype, const char* octype_str)
 {
-  size_t s = ocdata_size(octype);
+  size_t s = ocdata_size(octype, octype_str);
   if (s == 0) return NULL;
   return malloc(s);
 }
@@ -345,6 +354,15 @@ ocdata_to_rbobj(VALUE context_obj,
 			 UINT2NUM(rp->location), UINT2NUM(rp->length));
     else
       f_success = NO;
+    break;
+  }
+
+  case _PRIV_C_ARY_UI: {
+    const unsigned int* uip = *(unsigned int**)ocdata;
+    unsigned int val;
+    rbval = rb_ary_new();
+    while (val = *uip++) rb_ary_push(rbval, UINT2NUM(val));
+    f_success = YES;
     break;
   }
 
