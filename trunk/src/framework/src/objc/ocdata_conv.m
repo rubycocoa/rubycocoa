@@ -484,11 +484,16 @@ id rbobj_to_nsselstr(VALUE obj)
 
 SEL rbobj_to_nssel(VALUE obj)
 {
-  id pool = [[NSAutoreleasePool alloc] init];
-  id nsstr = rbobj_to_nsselstr(obj);
-  SEL nssel = NSSelectorFromString(nsstr);
-  [pool release];
-  return nssel;
+  if (NIL_P(obj)) {
+    return NULL;
+  }
+  else {
+    id pool = [[NSAutoreleasePool alloc] init];
+    id nsstr = rbobj_to_nsselstr(obj);
+    SEL nssel = NSSelectorFromString(nsstr);
+    [pool release];
+    return nssel;
+  }
 }
 
 static BOOL rbobj_to_objcptr(VALUE obj, void** cptr)
