@@ -9,7 +9,14 @@
 #
 
 def libruby_installed?
-  /ld.*Undefined\s+symbols/ =~ `cc -framework LibRuby`
+  require 'tempfile'
+  f = Tempfile.new ('rubycocoa-post-config')
+  f.write "#import <LibRuby/cocoa_ruby.h>\nint main()\n{ ruby_init();\nreturn 0;\n }\n"
+  f.flush
+  outfile = f.path + '.o'
+  ret = `cc -x objective-c -framework LibRuby -c #{f.path} -o #{outfile} 2>&1`
+  File.delete (outfile) if FileTest.exist? (outfile)
+  return ret.size == 0
 end
 
 # libruby alert
