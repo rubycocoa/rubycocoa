@@ -5,6 +5,28 @@
 	};
 	objectVersion = 34;
 	objects = {
+		E82EFCE3019F475103A81C66 = {
+			isa = PBXFileReference;
+			path = rb_main.rb.tmpl;
+			refType = 4;
+		};
+		E82EFCE4019F475103A81C66 = {
+			fileRef = E82EFCE3019F475103A81C66;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		E82EFCE5019F478403A81C66 = {
+			isa = PBXFileReference;
+			path = main.m.tmpl;
+			refType = 4;
+		};
+		E82EFCE6019F478403A81C66 = {
+			fileRef = E82EFCE5019F478403A81C66;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
 		E84BFC67019A08FF03A81C66 = {
 			isa = PBXFileReference;
 			path = rb_controller.rb;
@@ -171,6 +193,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				E84BFC68019A08FF03A81C66,
+				E82EFCE4019F475103A81C66,
+				E82EFCE6019F478403A81C66,
 			);
 			isa = PBXResourcesBuildPhase;
 			name = "Bundle Resources";
@@ -233,11 +257,6 @@
 			path = "";
 			refType = 4;
 		};
-		E8A0707201967E8C03A81C66 = {
-			isa = PBXFileReference;
-			path = rb_main.rb;
-			refType = 4;
-		};
 		E8A0707401967E8C03A81C66 = {
 			children = (
 				E8A0707E01967EE003A81C66,
@@ -289,17 +308,12 @@
 		};
 		E8A0709501968E4B03A81C66 = {
 			children = (
-				E8A0707201967E8C03A81C66,
-				E8A0709601968E5F03A81C66,
+				E82EFCE3019F475103A81C66,
+				E82EFCE5019F478403A81C66,
 			);
 			isa = PBXGroup;
 			name = template;
 			path = "";
-			refType = 4;
-		};
-		E8A0709601968E5F03A81C66 = {
-			isa = PBXFileReference;
-			path = main.m;
 			refType = 4;
 		};
 		E8A070A401969B1303A81C66 = {
