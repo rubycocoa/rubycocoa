@@ -124,6 +124,7 @@ void Init_osx_objc()
   extern void init_cocoa(VALUE);
 
   mOSX = init_module_OSX();
+  init_cls_ObjcPtr(mOSX);
   init_cls_ObjcID(mOSX);
   init_mdl_OCObjWrapper(mOSX);
 
@@ -147,5 +148,5 @@ void Init_osx_objc()
   rb_define_const(mOSX, "RUBYCOCOA_RELEASE_DATE", 
 		  rb_obj_freeze(rb_str_new2(RUBYCOCOA_RELEASE_DATE)));
 
-  init_cocoa(mOSX);
+ init_cocoa(mOSX);
 }
