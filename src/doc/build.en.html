@@ -118,6 +118,8 @@ $ ruby install.rb config
 $ ruby install.rb setup</pre>
 <p>'ruby install.rb config' command have some options for RubyCocoa. If
 required, specify option at the time of a config phase.</p>
+<p><em>Caution!</em> If you got an error Segmentation Fault in config phase,
+please check "<a href='#label:19'>Notice for build of RubyCocoa 0.4.0 to Ruby 1.6.8</a>".</p>
 <h2><a name='label:9' id='label:9'>Unit Test for RubyCocoa</a></h2><!-- RDLabel: "Unit Test for RubyCocoa" -->
 <pre>$ cd {source}/tests
 $ DYLD_FRAMEWORK_PATH={source}/framework/build ruby -I../lib testall.rb</pre>
@@ -187,7 +189,34 @@ $ sudo ruby install.rb install</pre>
         Application/Cocoa-Ruby Document-based Application
 /tmp/build/Developer/Examples/RubyCocoa
 /tmp/build/Developer/Documentation/RubyCocoa</pre>
-<h2><a name='label:19' id='label:19'>Development and testing environment</a></h2><!-- RDLabel: "Development and testing environment" -->
+<h2><a name='label:19' id='label:19'>Notice for build of RubyCocoa 0.4.0 to Ruby 1.6.8</a></h2><!-- RDLabel: "Notice for build of RubyCocoa 0.4.0 to Ruby 1.6.8" -->
+<p>In build of RubyCocoa 0.4.0 to <em>Ruby 1.6.8</em>, you may see a error
+message Segmentation Fault in config phase:</p>
+<pre>ruby install.rb config</pre>
+<p>For fix this, apply
+<a href='http://www.imasy.or.jp/%7ehisa/mac/rubyosx/files/ruco0.4.0-fw-post-config.patch'>a patch</a>
+as follows after extracting rubycocoa-0.4.0.tgz.</p>
+<pre>$ cd {rubycocoa-0.4.0}
+$ patch -p0 &lt; ruco0.4.0-fw-post-config.patch</pre>
+<p>The patch is:</p>
+<pre>diff -u -b -u -r1.4 post-config.rb
+--- framework/post-config.rb	19 Dec 2002 08:41:50 -0000	1.4
++++ framework/post-config.rb	11 Jan 2003 14:02:17 -0000
+@@ -12,10 +12,9 @@
+   $stderr.puts "create #{File.expand_path(dst_fname)} ..."
+   File.open(dst_fname, 'w') do |dstfile|
+     IO.foreach(src_path) do |line|
+-      line = line.gsub( /\bID\b/, 'RB_ID' )
+-      line = line.gsub( /\bT_DATA\b/, 'RB_T_DATA' )
+-      line = line.gsub( /\bintern.h\b/, "#{new_filename_prefix}intern.h" )
+-      dstfile.puts line
++      line.gsub!( /\b(ID|T_DATA)\b/, 'RB_\1' )
++      line.gsub!( /\bintern\.h\b/, "#{new_filename_prefix}intern.h" )
++      dstfile.puts( line )
+     end
+   end
+ end</pre>
+<h2><a name='label:20' id='label:20'>Development and testing environment</a></h2><!-- RDLabel: "Development and testing environment" -->
 <ul>
 <li>PowerMacintosh G4/400/384MB or iBook G3/600/384MB</li>
 <li>Mac OS X 10.2.3</li>
@@ -195,7 +224,7 @@ $ sudo ruby install.rb install</pre>
 <li>ruby-1.6.7 (pre-installed in Mac OS X 10.2)</li>
 <li>ruby-1.8 (preview 1 from cvs server)</li>
 </ul>
-<h2><a name='label:20' id='label:20'>Have a fun</a></h2><!-- RDLabel: "Have a fun" -->
+<h2><a name='label:21' id='label:21'>Have a fun</a></h2><!-- RDLabel: "Have a fun" -->
 <p>Feel free to send comments, bug reports and patches for RubyCocoa.</p>
 <p>$Date$</p>
 <hr/>
