@@ -45,12 +45,16 @@ RubyCocoaのベースとなるRubyの構築手順を説明します。
 
 Ruby 1.7のソースディレクトリに移動して、以下のように構築・インストール
 します。オプションは必要に応じて変更してください。
+((- CFLAGSに'-fno-common'オプションを指定しないと、RubyCocoa.framework
+がリンクできないようです -))
 
   $ CFLAGS='-g -O2 -fno-common' ./configure
   $ make
   $ make test
   $ sudo make install
   $ sudo ranlib /usr/local/lib/libruby-static.a  # 
+
+
 
 
 === Mac OS X 10.2付属のRuby 1.6.7
@@ -82,6 +86,8 @@ Ruby 1.6.7用パッチをあてます。
 ==== librubyの構築・インストール
 
 Mac OS X付属Rubyの環境に合わせてRuby 1.6.7を構築します。
+((- CFLAGSに'-fno-common'オプションを指定しないと、RubyCocoa.framework
+がリンクできないようです -))
 
   $ rbhost=`ruby -r rbconfig -e "print Config::CONFIG['host']"`
   $ CFLAGS='-g -O2 -fno-common' ./configure --prefix=/usr --host=$rbhost
