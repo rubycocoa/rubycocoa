@@ -98,8 +98,9 @@ static struct objc_method_list** method_list_alloc(int cnt)
   int i;
   struct objc_method_list** mlp;
   mlp = alloc_from_default_zone(cnt * sizeof(void*));
-  for (i = 0; i < cnt; i++)
+  for (i = 0; i < (cnt-1); i++)
     mlp[i] = NULL;
+  mlp[cnt-1] = (struct objc_method_list*)-1; // END_OF_METHODS_LIST
   return mlp;
 }
 
@@ -109,7 +110,7 @@ static Class objc_class_alloc(const char* name, Class super_class)
   Class isa = alloc_from_default_zone(sizeof(struct objc_class));
   struct objc_method_list **mlp0, **mlp1;
   mlp0 = method_list_alloc(16);
-  mlp1 = method_list_alloc(3);
+  mlp1 = method_list_alloc(4);
 
   c->isa = isa;
   c->super_class = super_class;
