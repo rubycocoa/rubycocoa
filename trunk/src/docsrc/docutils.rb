@@ -46,12 +46,14 @@ class PageTemplate
 
   def replace_elements (src_key, src_val, new_elm)
     target = @doc.find_attribute( src_key, src_val )
-    target.to_a.each {|i| target.delete(i) }
-    new_elm.each do |i|
-      if i.respond_to? :deep_clone then
-	target.add(i.deep_clone)
-      else
-	target.add(i.clone)
+    if target then
+      target.to_a.each {|i| target.delete(i) }
+      new_elm.each do |i|
+	if i.respond_to? :deep_clone then
+	  target.add(i.deep_clone)
+	else
+	  target.add(i.clone)
+	end
       end
     end
     nil

@@ -16,6 +16,21 @@
   statically to RubyCocoa framework in binary distribution, too.
   It may make easy to distribute a RubyCocoa application.
 
+: rename extended library
+
+  Name of the extended library was changed from 'osx_objc.bundle' into
+  'rubycocoa.bundle'.
+  This library have become 'stub' extended library for using RubyCocoa
+  framework from 'ruby' command, 'irb' command and etc.
+
+: relocate some libraries
+
+  All of libraries included in the directory 'osx/objc' was moved inside
+  RubyCocoa framework.
+  In addition, libraries included in the 'osx' directory have become
+  'stub' library for using RubyCocoa framework from 'ruby', 'irb'
+  andetc commands.
+
 
 == changes from 0.3.1 (0.3.2)
 
