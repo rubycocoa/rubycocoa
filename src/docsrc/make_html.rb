@@ -47,6 +47,6 @@ docs.each do |path|
   filename = File.basename(path)
   docname = filename.split('.')[0..-2].join
   lang = filename.split('.')[-1]
-  dstpath = "#{DSTDIR}/#{docname}.#{lang}.html"
+  dstpath = "#{DSTDIR}/#{docname.downcase}.#{lang}.html"
   rd_to_html(path, dstpath, lang)
 end

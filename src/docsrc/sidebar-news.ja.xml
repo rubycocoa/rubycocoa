@@ -2,7 +2,7 @@
 <div id="sidebar-news">
   <h2 class="body-sidebar"><a href="news.ja.html">ニュース</a></h2>
   <ul class="body-sidebar">
-    <li><a href="news.ja.html#news:0">RubyCocoa 0.4 リリース (2002.12.24)</a></li>
-    <li><a href="news.ja.html#news:1">ホームページを引越し (2002.12.24)</a></li>
+    <li>RubyCocoa 0.4 リリース (2002.12.24)</li>
+    <li>ホームページを引越し (2002.12.24)</li>
   </ul>
 </div>
