@@ -4,9 +4,9 @@ module RubyCocoaConfig
   eval File.open('VERSION'){|f|f.read}
 end
 
-libruby_path = File.join (Config::CONFIG['libdir'], Config::CONFIG['LIBRUBY_A'])
+libruby_path = File.join(Config::CONFIG['libdir'], Config::CONFIG['LIBRUBY_A'])
 unless File.exist?( libruby_path ) then
-  libruby_path = File.join (Config::CONFIG['archdir'], Config::CONFIG['LIBRUBY_A'])
+  libruby_path = File.join(Config::CONFIG['archdir'], Config::CONFIG['LIBRUBY_A'])
 end
 
 add_path_config 'install-root', '',
