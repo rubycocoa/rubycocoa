@@ -49,9 +49,9 @@ wrapped Objective-C object always. When the instance is died by GC,
 ownership is remove automatic. So you don't worry memory management.</p>
 <pre>OSX::NSString.alloc.initWithString "Hoge"
 OSX::NSString.stringWithString "Hoge"</pre>
-<p>This 2 line is almost same meaning in RubyCocoa. You don't need to
-call methods release、autorelease、retain, and don't need to make
-NSAutoreleasePool.</p>
+<p>This 2 line is almost same semantics in RubyCocoa, different
+Objective-C. You don't need to call methods "release", "autorelease"
+and "retain", and don't need to make NSAutoreleasePool.</p>
 <ul>
 <li>use Cocoa method for creating an instance of OSX::OCObject.</li>
 <li>don't worry ownership and memory management.</li>
