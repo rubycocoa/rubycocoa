@@ -54,6 +54,7 @@
 		1058C7A0FEA54F0111CA2CBB = {
 			children = (
 				1058C7A1FEA54F0111CA2CBB,
+				E8A5D69C03AD9F5103A81C6F,
 			);
 			isa = PBXGroup;
 			name = "Linked Frameworks";
@@ -221,6 +222,7 @@
 				LIBRARY_SEARCH_PATHS = "";
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = "";
+				PREBINDING = NO;
 				PRODUCT_NAME = SimpleApp;
 				SECTORDER_FLAGS = "";
 				WARNING_CFLAGS = "-Wmost -Wno-four-char-constants -Wno-unknown-pragmas";
@@ -292,6 +294,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				1058C7A3FEA54F0111CA2CBB,
+				E8A5D6A503AD9F5103A81C6F,
 			);
 			isa = PBXFrameworksBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -394,6 +397,18 @@
 		};
 		E88D182803291E7603A81C6F = {
 			fileRef = E88D182703291E7603A81C6F;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		E8A5D69C03AD9F5103A81C6F = {
+			isa = PBXFrameworkReference;
+			name = RubyCocoa.framework;
+			path = /Library/Frameworks/RubyCocoa.framework;
+			refType = 0;
+		};
+		E8A5D6A503AD9F5103A81C6F = {
+			fileRef = E8A5D69C03AD9F5103A81C6F;
 			isa = PBXBuildFile;
 			settings = {
 			};

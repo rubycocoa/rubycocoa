@@ -142,8 +142,8 @@
 		};
 		29B97323FDCFA39411CA2CEA = {
 			children = (
-				E8DD39BB03A99FE003A81C6F,
 				E837D05203A9BC0903A81C6F,
+				E87510B503ADA74403A81C6F,
 			);
 			isa = PBXGroup;
 			name = Frameworks;
@@ -158,7 +158,7 @@
 				29B9732DFDCFA39411CA2CEA,
 			);
 			buildSettings = {
-				FRAMEWORK_SEARCH_PATHS = "/Users/hisa/proj/rubyosx/rubycocoa/src-trunk/framework/build";
+				FRAMEWORK_SEARCH_PATHS = "";
 				HEADER_SEARCH_PATHS = "";
 				INSTALL_PATH = "$(HOME)/Applications";
 				LIBRARY_SEARCH_PATHS = "";
@@ -239,8 +239,8 @@
 		29B9732DFDCFA39411CA2CEA = {
 			buildActionMask = 2147483647;
 			files = (
-				E8DD39C403A99FE103A81C6F,
 				E837D05A03A9BC0A03A81C6F,
+				E87510BE03ADA74403A81C6F,
 			);
 			isa = PBXFrameworksBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -316,6 +316,18 @@
 			settings = {
 			};
 		};
+		E87510B503ADA74403A81C6F = {
+			isa = PBXFrameworkReference;
+			name = RubyCocoa.framework;
+			path = /Library/Frameworks/RubyCocoa.framework;
+			refType = 0;
+		};
+		E87510BE03ADA74403A81C6F = {
+			fileRef = E87510B503ADA74403A81C6F;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
 		E8CBFFC501B0F32C03A81C66 = {
 			isa = PBXFileReference;
 			path = AppCtrl.rb;
@@ -323,18 +335,6 @@
 		};
 		E8CBFFC601B0F32C03A81C66 = {
 			fileRef = E8CBFFC501B0F32C03A81C66;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
-		E8DD39BB03A99FE003A81C6F = {
-			isa = PBXFrameworkReference;
-			name = RubyCocoa.framework;
-			path = /Library/Frameworks/RubyCocoa.framework;
-			refType = 0;
-		};
-		E8DD39C403A99FE103A81C6F = {
-			fileRef = E8DD39BB03A99FE003A81C6F;
 			isa = PBXBuildFile;
 			settings = {
 			};
