@@ -19,7 +19,10 @@
 static VALUE
 rb_mdl_osx()
 {
-  return rb_const_get(rb_cObject, rb_intern("OSX"));
+  RB_ID rid = rb_intern("OSX");
+  if (! rb_const_defined(rb_cObject, rid))
+    return rb_define_module("OSX");
+  return rb_const_get(rb_cObject, rid);
 }
 
 static VALUE
@@ -31,11 +34,18 @@ rb_cls_objcid()
 }
 
 static VALUE
-rb_cls_ocobj()
+rb_cls_ocobj(const char* name)
 {
+  VALUE cls = Qnil;
   VALUE mOSX = rb_mdl_osx();
   if (!mOSX) return Qnil;
-  return rb_const_get(mOSX, rb_intern("OCObject"));
+  if (rb_const_defined(mOSX, rb_intern(name))) {
+    cls = rb_const_get(mOSX, rb_intern(name));
+  }
+  else {
+    cls = rb_const_get(mOSX, rb_intern("OCObject"));
+  }
+  return cls;
 }
 
 static id
@@ -45,10 +55,20 @@ rb_obj_ocid(VALUE rcv)
   return NUM2OCID(val);
 }
 
-static VALUE
+VALUE
 rb_ocobj_s_new(id ocid)
 {
-  return rb_funcall(rb_cls_ocobj(), rb_intern("new"), 1, OCID2NUM(ocid));
+  VALUE obj;
+  id pool, cls_name;
+
+  pool = [[NSAutoreleasePool alloc] init];
+
+  cls_name = [[ocid class] description];
+  obj = rb_funcall(rb_cls_ocobj([cls_name cString]), 
+		   rb_intern("new"), 1, OCID2NUM(ocid));
+
+  [pool release];
+  return obj;
 }
 
 id rbobj_get_ocid (VALUE obj)

@@ -121,28 +121,6 @@ static SEL ruby_method_sel(int argc)
   return result;
 }
 
-static VALUE ocobject_class()
-{
-  VALUE mOSX = rb_const_get(rb_cObject, rb_intern("OSX"));;
-  return rb_const_get(mOSX, rb_intern("OCObject"));
-}
-
-static VALUE to_rbobj(id ocobj)
-{
-  return rb_funcall(ocobject_class(), 
-		    rb_intern("new_with_ocid"), 1, OCID2NUM(ocobj));
-}
-
-static id ocid_of(VALUE obj)
-{
-  id result = nil;
-  if (rb_obj_is_kind_of(obj, ocobject_class()) == Qtrue) {
-    VALUE val = rb_funcall(obj, rb_intern("__ocid__"), 0);
-    result = (id)NUM2ULONG(val);
-  }
-  return result;
-}
-
 @implementation RBObject
 
 // private methods
@@ -204,7 +182,7 @@ static id ocid_of(VALUE obj)
     f_success = true;
   }
   else if ((octype == _C_ID) || (octype == _C_CLASS)) {
-    id ocdata = (result == m_rbobj) ? self : ocid_of(result);
+    id ocdata = (result == m_rbobj) ? self : rbobj_get_ocid(result);
     if (ocdata == nil) rbobj_to_nsobj(result, &ocdata);
     [an_inv setReturnValue: &ocdata];
     f_success = YES;

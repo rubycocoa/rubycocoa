@@ -32,6 +32,7 @@ void*   ocdata_malloc   (int octype);
 
 id    rbobj_get_ocid (VALUE obj);
 VALUE ocid_get_rbobj (id ocid);
+VALUE rb_ocobj_s_new(id ocid);
 
 id    rbobj_to_nsselstr (VALUE obj);
 SEL   rbobj_to_nssel    (VALUE obj);

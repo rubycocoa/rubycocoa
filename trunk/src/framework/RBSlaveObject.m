@@ -12,26 +12,11 @@
 #import <RubyCocoa/RBObject.h>
 #import <Foundation/Foundation.h>
 #import <LibRuby/cocoa_ruby.h>
+#import <RubyCocoa/ocdata_conv.h>
 
-
-static VALUE rbobj_for(VALUE rbclass, VALUE arg, id master)
+static VALUE rbobj_for(VALUE rbclass, id master)
 {
-  
-  VALUE rbobj = Qnil;
-  if (master && rb_respond_to(rbclass, rb_intern("new_with_ocid"))) {
-    VALUE rb_ocid = UINT2NUM((unsigned int)master);
-    if (arg == Qnil)
-      rbobj = rb_funcall(rbclass, rb_intern("new_with_ocid"), 1, rb_ocid);
-    else
-      rbobj = rb_funcall(rbclass, rb_intern("new_with_ocid"), 2, rb_ocid, arg);
-  }
-  else {
-    if (arg == Qnil)
-      rbobj = rb_funcall(rbclass, rb_intern("new"), 0);
-    else
-      rbobj = rb_funcall(rbclass, rb_intern("new"), 1, arg);
-  }
-  return rbobj;
+  return rb_funcall(rbclass, rb_intern("new"), 1, OCID2NUM(master));
 }
 
 static VALUE rbclass_for(Class occlass)
@@ -62,13 +47,8 @@ static VALUE rbclass_for(Class occlass)
 
 - initWithClass: (Class)occlass masterObject: master
 {
-  return [self initWithClass: occlass withArg: Qnil masterObject: master];
-}
-
-- initWithClass: (Class)occlass withArg: (VALUE)arg masterObject: master
-{
   VALUE rb_class = rbclass_for(occlass);
-  return [self initWithRubyClass: rb_class withArg: arg masterObject: master];
+  return [self initWithRubyClass: rb_class masterObject: master];
 }
 
 ///////
@@ -80,12 +60,7 @@ static VALUE rbclass_for(Class occlass)
 
 - initWithRubyClass: (VALUE)rbclass masterObject: master
 {
-  return [self initWithRubyClass: rbclass withArg: Qnil masterObject: master];
-}
-
-- initWithRubyClass: (VALUE)rbclass withArg: (VALUE)arg masterObject: master
-{
-  VALUE rbobj = rbobj_for(rbclass, arg, master);
+  VALUE rbobj = rbobj_for(rbclass, master);
   return [self initWithRubyObject: rbobj];
 }
 

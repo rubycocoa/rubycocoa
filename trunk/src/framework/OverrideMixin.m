@@ -50,9 +50,9 @@ static IMP super_imp(id rcv, SEL a_sel)
   return [[rcv superclass] instanceMethodForSelector: a_sel];
 }
 
-static id slave_obj_new(id rcv, VALUE arg)
+static id slave_obj_new(id rcv)
 {
-  return [[RBObject alloc] initWithClass: [rcv class] withArg: arg masterObject: rcv];
+  return [[RBObject alloc] initWithClass: [rcv class] masterObject: rcv];
 }
 
 /**
@@ -191,7 +191,7 @@ static id imp_c_alloc(Class klass, SEL method)
   id new_obj;
   id slave;
   new_obj = class_createInstance(klass, 0);
-  slave = slave_obj_new(new_obj, Qnil);
+  slave = slave_obj_new(new_obj);
   set_slave(new_obj, slave);
   return new_obj;
 }
@@ -201,7 +201,7 @@ static id imp_c_allocWithZone(Class klass, SEL method, NSZone* zone)
   id new_obj;
   id slave;
   new_obj = class_createInstanceFromZone(klass, 0, zone);
-  slave = slave_obj_new(new_obj, Qnil);
+  slave = slave_obj_new(new_obj);
   set_slave(new_obj, slave);
   return new_obj;
 }

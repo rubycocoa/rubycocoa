@@ -10,8 +10,6 @@
  *
  **/
 
-#import "cls_objcid.h"
-
 #import <LibRuby/cocoa_ruby.h>
 #import <Foundation/Foundation.h>
 #import <string.h>
@@ -58,14 +56,39 @@ objcid_s_new(int argc, VALUE* argv, VALUE klass)
 }
 
 static VALUE
-objcid_initialize(VALUE rcv, VALUE arg)
+_rb_cls_name(VALUE obj)
 {
-  id ocid = (id) NUM2UINT(arg);
-  [ocid retain];
+  obj = rb_obj_as_string(CLASS_OF(obj));
+  obj = rb_str_split(obj, "::");
+  return rb_ary_entry(obj, -1);
+}
+
+static VALUE
+objcid_initialize(int argc, VALUE* argv, VALUE rcv)
+{
+  VALUE arg_ocid;
+  id ocid;
+
+  rb_scan_args(argc, argv, "01", &arg_ocid);
+  if (arg_ocid != Qnil) {
+    ocid = (id) NUM2UINT(arg_ocid);
+    [ocid retain];
+  }
+  else {
+    id pool = [[NSAutoreleasePool alloc] init];
+    id oc_str, oc_cls;
+
+    oc_str = [NSString stringWithCString: STR2CSTR(_rb_cls_name(rcv))];
+    oc_cls = NSClassFromString(oc_str);
+    if (oc_cls)
+      ocid = [[oc_cls alloc] init];
+    else
+      ocid = [[NSObject alloc] init];
+    [pool release];
+  }
   OBJCID_DATA_PTR(rcv)->ocid = ocid;
   return rcv;
 }
-
 
 static VALUE
 objcid_ocid(VALUE rcv)
@@ -95,25 +118,13 @@ objcid_inspect(VALUE rcv)
 /*******/
 
 VALUE
-rb_objcid()
-{
-  return _kObjcID;
-}
-
-id
-rb_objcid_ocid(VALUE rcv)
-{
-  return OCID_OF(rcv);
-}
-
-VALUE
 init_cls_ObjcID(VALUE outer)
 {
   _kObjcID = rb_define_class_under(outer, "ObjcID", rb_cObject);
 
   rb_define_singleton_method(_kObjcID, "new", objcid_s_new, -1);
 
-  rb_define_method(_kObjcID, "initialize", objcid_initialize, 1);
+  rb_define_method(_kObjcID, "initialize", objcid_initialize, -1);
   rb_define_method(_kObjcID, "__ocid__", objcid_ocid, 0);
   rb_define_method(_kObjcID, "__inspect__", objcid_inspect, 0);
   rb_define_method(_kObjcID, "inspect", objcid_inspect, 0);
