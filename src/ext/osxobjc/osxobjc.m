@@ -12,6 +12,9 @@
 
 #import <LibRuby/cocoa_ruby.h>
 #import "osx_ocobject.h"
+#import <Foundation/Foundation.h>
+#import <RubyCocoa/RBRuntime.h>	// RubyCocoa.framework
+#import <RubyCocoa/RBProxy.h>	// RubyCocoa.framework
 
 #define OSX_MODULE_NAME "OSX"
 
@@ -27,6 +30,32 @@ static VALUE init_module_OSX()
   return module;
 }
 
+// def OSX.create_objc_stub (stubname, supername = nil)
+// ex0.  OSX.create_objc_stub (:AppController)
+// ex1.  OSX.create_objc_stub (:CustomView, :NSView)
+static VALUE osx_mf_create_objc_stub(int argc, VALUE* argv, VALUE mdl)
+{
+  Class super_class;
+  VALUE stub_name;
+  if (argc == 1) {
+    super_class = [RBProxy class];
+  }
+  else if (argc == 2) {
+    id pool = [[NSAutoreleasePool alloc] init];
+    VALUE super_name = rb_obj_as_string(argv[1]);
+    super_class = 
+      NSClassFromString([NSString stringWithCString: STR2CSTR(super_name)]);
+    [pool release];
+  }
+  else {
+    rb_raise(rb_eArgError, "wrong # of arguments");
+  }
+  stub_name = rb_obj_as_string(argv[0]);
+  RBOCClassNew(STR2CSTR(stub_name), super_class);
+  return Qnil;
+}
+
+
 void Init_osxobjc()
 {
   VALUE mOSX, cOCObject;
@@ -34,6 +63,6 @@ void Init_osxobjc()
 
   mOSX = init_module_OSX();
   init_class_OCObject(mOSX);
-
+  rb_define_module_function(mOSX, "create_objc_stub", osx_mf_create_objc_stub, -1);
   init_cocoa(mOSX);
 }

@@ -9,5 +9,9 @@
  *   the GNU Lesser General Public License version 2.
  *
  **/
+#import <objc/objc.h>
 
 int RBApplicationMain(const char* rb_main_name, int argc, char* argv[]);
+
+Class RBOCClassNew(const char* name, Class superclass);
+

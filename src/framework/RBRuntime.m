@@ -18,6 +18,11 @@
 
 #import <RubyCocoa/RBProxy.h>
 
+#import <objc/objc.h>
+#import <objc/objc-class.h>
+#import <objc/objc-runtime.h>
+
+
 #define RUBY_MAIN_NAME "rb_main.rb"
 
 static char* rb_main_path(const char* rb_main_name)
@@ -76,4 +81,42 @@ RBApplicationMain(const char* rb_main_name, int argc, char* argv[])
   ruby_options(private_argc, private_argv);
   ruby_run();
   return 0;
+}
+
+
+/////
+
+Class RBOCClassNew(const char* name, Class superclass)
+{
+  Class c = malloc(sizeof(struct objc_class));
+  Class isa = malloc(sizeof(struct objc_class));
+  struct objc_method_list **mlp0, **mlp1;
+  mlp0 = malloc(sizeof(void*));
+  mlp1 = malloc(sizeof(void*));
+  *mlp0 = *mlp1 = NULL;
+
+  c->isa = isa;
+  c->super_class = superclass;
+  c->name = strdup(name);
+  c->version = 0;
+  c->info = CLS_CLASS + CLS_METHOD_ARRAY;
+  c->instance_size = superclass->instance_size;
+  c->ivars = NULL;
+  c->methodLists = mlp0;
+  c->cache = NULL;
+  c->protocols = NULL;
+
+  isa->isa = superclass->isa->isa;
+  isa->super_class = superclass->isa;
+  isa->name = c->name;
+  isa->version = 5;
+  isa->info = CLS_META + CLS_INITIALIZED + CLS_METHOD_ARRAY;
+  isa->instance_size = superclass->isa->instance_size;
+  isa->ivars = NULL;
+  isa->methodLists = mlp1;
+  isa->cache = NULL;
+  isa->protocols = NULL;
+
+  objc_addClass(c);
+  return c;
 }
