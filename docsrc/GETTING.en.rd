@@ -63,13 +63,7 @@ for RubyCocoa. On the shell command line, type this:
   $ cd rubycocoa
   $ cvs update -d -P
 
-Or, you may want to get panther supported branch:
-
-  $ cvs -d:pserver:anonymous@cvs.sf.net:/cvsroot/rubycocoa login
-  $ cvs -z3 -d:pserver:anonymous@cvs.sf.net:/cvsroot/rubycocoa co \
-        -P -r branch-devel-panther -d rubycocoa-panther src
-  $ cd rubycocoa-panther
-  $ cvs update -d -P
+The latest source supports panther. branch-devel-panther was merged into main trunk.
 
 All of the source for RubyCocoa is downloaded into a directory named 'rubycocoa'.
 

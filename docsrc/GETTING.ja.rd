@@ -69,19 +69,7 @@ ProjectBuilderテンプレートなどが含まれています。実行・開発に必要な
 ダウンロードされます。CVSの性質上、ダウンロードしたタイミングにより
 構築できないこともあります。
 
-また、Panther 対応ブランチを入手したい場合は:
-
-  $ cvs -d:pserver:anonymous@cvs.sf.net:/cvsroot/rubycocoa login
-  $ cvs -z3 -d:pserver:anonymous@cvs.sf.net:/cvsroot/rubycocoa co \
-        -P -r branch-devel-panther -d rubycocoa-panther src
-  $ cd rubycocoa-panther
-  $ cvs update -d -P
-
-とします。
-
-'cvs update'コマンドや'cvs status -v'コマンドを適当なオプションと
-いっしょに使うとよいでしょう。
-
+また、最新のコードはPantherに対応しています。Panther開発ブランチ(branch-devel-panther)はマージされました。
 
 == PINEAPPLE RPMパッケージ
 
