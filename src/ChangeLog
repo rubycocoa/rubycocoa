@@ -1,7 +1,68 @@
+2004-11-25  kimura wataru <kimuraw@i.nifty.jp>
+
+	* framework/src/ruby/osx/objc/webkit.rb:
+	add missing constants.
+
+2004-11-23  kimura wataru <kimuraw@i.nifty.jp>
+
+	* tools/och_analyzer3.rb:
+	use /usr/bin/cpp-3.3 when /usr/bin/cpp3 don't exists.
+
 2004-11-07  kimura wataru <kimuraw@i.nifty.jp>
 
 	* sample/HybridLangApp/rb_main.rb, sample/Pong/rb_main.rb, sample/RubyRaiseMan/rb_main.rb, sample/RubyTypingTutor/rb_main.rb, sample/SimpleApp.app/Contents/Resources/rb_main.rb, sample/dotview/rb_main.rb, sample/mk_app0/rb_main.rb, sample/mk_app1/rb_main.rb, sample/multinib/rb_main.rb, sample/pb_app0/rb_main.rb, sample/simpleapp/rb_main.rb, sample/thread0/rb_main.rb, template/EmptyApp.app/Contents/Resources/rb_main.rb, template/MakefileBased/rb_main.rb, template/ProjectBuilder/Application/Cocoa-Ruby Application/rb_main.rb, template/ProjectBuilder/Application/Cocoa-Ruby Document-based Application/rb_main.rb
 	Fix application works not well, when pathname contains whitespace.(thanks to Chris Thomas)
+
+2004-07-23  kimura wataru <kimuraw@i.nifty.jp>
+
+	* metaconfig, pre-config.rb, framework/RubyCocoa.pbproj/project.pbxproj.in:
+	enable build on 10.2.x.
+
+2004-05-03  kimura wataru <kimuraw@i.nifty.jp>
+
+	* framework/src/ruby/osx/objc/webkit.rb:
+	fix warning 'already initialized constant' on Panther.
+
+2004-02-11  kimura wataru <kimuraw@i.nifty.jp>
+
+	* metaconfig, pre-install.rb
+	install templates for Xcode.
+
+2004-02-07  kimura wataru <kimuraw@i.nifty.jp>
+
+	* framework/post-config.rb, framework/src/objc/cocoa/gen_cocoa_wrapper.rb:
+	change mode of gen_cococa_wrapper.rb at config.
+
+	* install.rb:
+	remove rb_AppKit.m and rb_Foundation.m at clean.
+
+2004-01-29  kimura wataru <kimuraw@i.nifty.jp>
+
+	* install.rb:
+	use xcodebuild in place of pbxbuild, if xcodebuild exists.(for clean)
+
+2004-01-28  kimura wataru <kimuraw@i.nifty.jp>
+
+	* metaconfing:
+	fix: "dyld: ruby multiple definitions of symbol _rb_obj_id".
+
+2003-12-22  kimura wataru <kimuraw@i.nifty.jp>
+	* framework/RubyCocoa.pbproj/project.pbxproj.in, framework/src/objc/cocoa/init_cocoa.m, framework/src/objc/cocoa/gen_cocoa_wrapper.rb:
+	use rb_AppKit.m and rb_Foundation.m as substitue for rb_<Classname>.m.
+	
+2003-12-04  kimura wataru <kimuraw@i.nifty.jp>
+
+	* install.rb (branch-devel-panther): 
+	use xcodebuild in place of pbxbuild, if xcodebuild exists.
+
+	* framework/post-config.rb,
+	  framework/RubyCocoa.pbproj/project.pbxproj.in (branch-devel-panther):
+	fill a gap of Cocoa framework between Panther and Jaguar.
+
+2003-12-03  kimura wataru <kimuraw@i.nifty.jp>
+
+	* metaconfig (branch-devel-panther): 
+	fix bad libruby-path on Panther's /usr/bin/ruby.
 
 2003-08-09  FUJIMOTO Hisakuni  <hisa@fobj.com>
 

@@ -627,8 +627,16 @@ class Installer
   end
 
   def setup_dir_framework( relpath )
-    command 'pbxbuild'
+    command buildcommand
   end
+
+  def buildcommand
+    if test(?x, '/usr/bin/xcodebuild') then
+      'xcodebuild'
+    else
+      'pbxbuild'
+    end
+  end 
 
   #
   # install
@@ -729,8 +737,10 @@ class Installer
   end
 
   def clean_dir_framework( rel )
-    command 'pbxbuild clean'
+    command buildcommand + ' clean'
     command 'rm -rf build'
+    command 'rm -f src/objc/cocoa/rb_AppKit.m'
+    command 'rm -f src/objc/cocoa/rb_Foundation.m'
   end
 
   #

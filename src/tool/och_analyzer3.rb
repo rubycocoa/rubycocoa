@@ -8,7 +8,15 @@
 #  the GNU Lesser General Public License version 2.
 #
 
-CPP = "/usr/bin/cpp3"
+['/usr/bin/cpp3', '/usr/bin/cpp-3.3'].each do |cpp|
+  if test(?x, cpp) 
+    CPP = cpp
+    break
+  end
+end
+unless defined? CPP
+  raise "cpp not found"
+end
 CPPFLAGS = "-x objective-c -D__GNUC__ -D__APPLE_CPP__"
 
 class OCHeaderAnalyzer
