@@ -137,7 +137,7 @@ static VALUE new_with_occlass(VALUE klass, Class nsclass)
   else {
     nsobj = [nsobj init];
     if ([nsobj respondsToSelector: @selector(setRubyObject:)]) {
-      [nsobj setRubyObject: obj];
+      objc_msgSend(nsobj, @selector(setRubyObject:), obj);
     }
   }
   OCOBJ_DATA_PTR(obj)->ownership -= 1; // remove one ownership
@@ -342,6 +342,44 @@ ocm_invoke(int argc, VALUE* argv, VALUE rcv, VALUE* result)
   return YES;
 }
 
+
+static Ivar
+ivar_for(id ocrcv, SEL a_sel)
+{
+  id pool = [[NSAutoreleasePool alloc] init];
+  id nsname = NSStringFromSelector(a_sel);
+  Ivar iv = class_getInstanceVariable([ocrcv class], [nsname cString]);
+  [pool release];
+  return iv;
+}
+
+static BOOL
+ocm_ivar(VALUE rcv, VALUE name, VALUE* result)
+{
+  BOOL f_ok = NO;
+  id ocrcv = OCOBJ_ID_OF(rcv);
+  id pool = [[NSAutoreleasePool alloc] init];
+  id nsname = rbobj_to_nsselstr(name);
+  Ivar iv = class_getInstanceVariable([ocrcv class], [nsname cString]);
+  debug_log(@"ocm_invar ...");
+  if (iv) {
+    int octype = to_octype(iv->ivar_type);
+    if (octype_object_p(octype)) {
+      void* val;
+      iv = object_getInstanceVariable(ocrcv, [nsname cString], &val);
+      *result = create_rbobj_with_ocid((id)val);
+      f_ok = YES;
+    }
+    else {
+      void* val;
+      iv = object_getInstanceVariable(ocrcv, [nsname cString], &val);
+      f_ok = ocdata_to_rbobj(octype, val, result);
+    }
+  }
+  [pool release];
+  return f_ok;
+}
+
 static BOOL
 ocm_send(int argc, VALUE* argv, VALUE rcv, VALUE* result)
 {
@@ -349,6 +387,8 @@ ocm_send(int argc, VALUE* argv, VALUE rcv, VALUE* result)
 
   if (ocm_perform(argc, argv, rcv, result)) return YES;
   if (ocm_invoke(argc, argv, rcv, result)) return YES;
+  if (argc == 1)
+    if (ocm_ivar(rcv, argv[0], result)) return YES;
   return NO;
 }
 
@@ -400,9 +440,14 @@ ocobj_inspect(VALUE rcv)
 static VALUE
 ocobj_ocm_responds_p(VALUE rcv, VALUE sel)
 {
+  VALUE result = Qfalse;
   id oc_rcv = OCOBJ_ID_OF(rcv);
   SEL oc_sel = rbobj_to_nssel(sel);
-  return [oc_rcv respondsToSelector: oc_sel] ? Qtrue : Qfalse;
+  if ([oc_rcv respondsToSelector: oc_sel] == NO) {
+    if (ivar_for(oc_rcv, oc_sel) != nil)
+      result = YES;
+  }
+  return result;
 }
 
 static VALUE
@@ -438,6 +483,19 @@ ocobj_ocm_invoke(int argc, VALUE* argv, VALUE rcv)
     else {
       rb_raise(rb_eRuntimeError, "ocm_invoke failed");
     }
+  }
+  [pool release];
+  return result;
+}
+
+static VALUE
+ocobj_ocm_ivar(VALUE rcv, VALUE name)
+{
+  VALUE result;
+  id pool = [[NSAutoreleasePool alloc] init];
+  if (!ocm_ivar(rcv, name, &result)) {
+    [pool release];
+    rb_raise(rb_eRuntimeError, "ocm_ivar failed");
   }
   [pool release];
   return result;
@@ -484,6 +542,7 @@ init_class_OCObject(VALUE outer)
   rb_define_method(kOCObject, "ocm_responds?", ocobj_ocm_responds_p, 1);
   rb_define_method(kOCObject, "ocm_perform", ocobj_ocm_perform, -1);
   rb_define_method(kOCObject, "ocm_invoke", ocobj_ocm_invoke, -1);
+  rb_define_method(kOCObject, "ocm_ivar", ocobj_ocm_ivar, 1);
   rb_define_method(kOCObject, "ocm_send", ocobj_ocm_send, -1);
 
   return kOCObject;

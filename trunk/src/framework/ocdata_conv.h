@@ -25,7 +25,10 @@ enum osxobjc_nsdata_type {
 int    to_octype       (const char* oc_type_str);
 size_t ocdata_size     (int octype);
 void*  ocdata_malloc   (int octype);
+BOOL   octype_object_p (int octype);
 
+
+id     rbobj_to_nsselstr  (VALUE obj);
 SEL    rbobj_to_nssel  (VALUE obj);
 BOOL   rbobj_to_nsobj  (VALUE obj, id* nsobj);
 

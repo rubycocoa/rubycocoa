@@ -35,7 +35,6 @@
 
 - (BOOL)isOpaque
 {
-  BOOL result;
   if ([rbobj hasRubyHandlerForSelector: @selector(isOpaque:)])
     return [rbobj isOpaque];
   else
