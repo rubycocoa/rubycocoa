@@ -1,11 +1,14 @@
+2002-12-27  FUJIMOTO Hisakuni  <hisa@fobj.com>
+
+	* 0.4.0a6 (alpha-0_4_0a6)
+
+	* apply downcase to all html document names.
+
 2002-12-26  FUJIMOTO Hisakuni  <hisa@fobj.com>
 
 	* framework/src/objc/cls_objcptr.m:
 	remove ObjcPtr.allocate, because the method conflict with
 	Class#allocate in ruby 1.7.
-
-	* docsrc:
-	add sources of html documents.
 
 2002-12-22  FUJIMOTO Hisakuni  <hisa@fobj.com>
 
