@@ -87,9 +87,14 @@ osx_mf_objc_derived_class_method_add(VALUE mdl, VALUE class_name, VALUE method_n
 static VALUE
 osx_mf_ruby_thread_switcher_start(VALUE mdl, VALUE interval)
 {
-  NSTimeInterval it;
   Check_Type(interval, T_FLOAT);
   RBThreadSchedulerStart(RFLOAT(interval)->value);
+}
+
+static VALUE
+osx_mf_ruby_thread_switcher_stop(VALUE mdl)
+{
+  RBThreadSchedulerStop();
 }
 
 
@@ -111,6 +116,8 @@ void Init_osx_objc()
 
   rb_define_module_function(mOSX, "ruby_thread_switcher_start",
 			    osx_mf_ruby_thread_switcher_start, 1);
+  rb_define_module_function(mOSX, "ruby_thread_switcher_stop",
+			    osx_mf_ruby_thread_switcher_stop, 0);
 
   init_cocoa(mOSX);
 }
