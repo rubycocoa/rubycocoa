@@ -11,6 +11,9 @@
 <body>
 <h1><a name="label:0" id="label:0">変更点</a></h1><!-- RDLabel: "変更点" -->
 <h2><a name="label:1" id="label:1">0.2.5からのおもな変更点</a></h2><!-- RDLabel: "0.2.5からのおもな変更点" -->
+<p>[IMPROVE] Cocoaのグローバル関数変数のラッバー自動生成スクリプトを改良。
+その結果"not implemented"なCocoaのグローバル関数変数が減少。新しくサポー
+トしたものにはNSGenericException系列,NSUnionRange系列などが含まれる。</p>
 <p>[IMPROVE] ドキュメントベースアプリケーション用のProjectBuilderテンプレー
 トを追加。</p>
 <p>[CHANGE] ProjectBuilderテンプレートの名前を変更。</p>
@@ -19,7 +22,7 @@ Objective-Cメソッドの引数の型がObjective-Cオブジェクトの場合の振る舞い
 を変更。</p>
 <p>[IMPROVE] シートパネル対応を改良。Callbuckされるメソッドには
 "_returnCode_contextInfo"で終る名前をつける必要がある。</p>
-<p>[IMPROVE] ローカライズ文字列用のモジュール関数を定期</p>
+<p>[IMPROVE] ローカライズ文字列用のモジュール関数を定義</p>
 <pre>OSX::NSLocalizedStringFromTableInBundle
 OSX::NSLocalizedStringFromTable
 OSX::NSLocalizedString</pre>

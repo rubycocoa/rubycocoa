@@ -1,3 +1,17 @@
+2002-02-07  FUJIMOTO Hisakuni  <hisa@fobj.com>
+
+	* ext/osx_objc/cocoa/rb_*.m:
+	renew with 'const' and 'unsigned' supported auto wrapper generator.
+
+	* ext/osx_objc/cocoa/gen_cocoa_wrapper.rb: fix 'const' bug.
+
+	* tool/och_analyzer.rb:
+	- fix a type checking bug for 'unsigned'.
+	- improve type checking for 'const'.
+
+	* lib/osx/objc/oc_types.rb:
+	added constant ZERO for NSPoint,Size,Rect,Range
+
 2002-02-06  FUJIMOTO Hisakuni  <hisa@fobj.com>
 
 	* template/tmpl_pb_: add PB Document-based template. rename PB
