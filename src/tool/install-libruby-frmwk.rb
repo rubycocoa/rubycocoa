@@ -1,6 +1,14 @@
 #!/usr/bin/env ruby
-
+#
 # $Id$
+#
+#  Copyright (c) 2001 FUJIMOTO Hisakuni <hisa@imasy.or.jp>
+#
+#  This program is free software.  You can distribute/modify this
+#  program under same as the Ruby License.
+#
+#  VERSION: 1.0.0
+#
 
 FRAMEWORK_NAME = 'LibRuby'
 FRAMEWORKS_DIR = '/Library/Frameworks'
