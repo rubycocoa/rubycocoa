@@ -83,6 +83,10 @@
 
   Rubyに関するニュース・Wiki
 
+: ((<Rubyist Magazine - るびま (日本語)|URL:http://jp.rubyist.net/magazine/>))
+
+  日本Rubyの会によるウェブ雑誌
+
 : ((<RWiki|URL:http://pub.cozmixng.org/~the-rwiki/>))
 
   Rubyで書かれたWiki

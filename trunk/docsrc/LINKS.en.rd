@@ -87,6 +87,10 @@
 
   News site about Ruby. There is also a Wiki for Ruby at this site.
 
+: ((<"Rubyist Magazine / RubiMa (Japanese)"|URL:http://jp.rubyist.net/magazine/>))
+
+  A web magazine about Ruby published by users group "Nihon Ruby no Kai" 
+
 : ((<RWiki|URL:http://pub.cozmixng.org/~the-rwiki/>))
 
   Wiki written with Ruby.
