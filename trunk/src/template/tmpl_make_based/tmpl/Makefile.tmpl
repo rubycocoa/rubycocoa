@@ -12,7 +12,7 @@ CFLAGS = -Wall
 
 
 $(TARGET): $(OBJS) $(RUBYSRCS) $(RUBYSRC_MAIN)
-	$(CC) $(OBJS) -framework Foundation -framework LibRuby -framework RubyCocoa
+	$(CC) $(OBJS) -framework Foundation
 	-/bin/rm -rf $(APPNAME).app
 	mkdir $(APPNAME).app
 	mkdir $(APPNAME).app/Contents
