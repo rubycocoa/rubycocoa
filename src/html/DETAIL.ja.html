@@ -9,7 +9,7 @@
 <link href="rdtext.css" type="text/css" rel="stylesheet"/>
 </head>
 <body>
-<h1><a name="label:0" id="label:0">RubyCocoaの詳細</a></h1><!-- RDLabel: "RubyCocoaの詳細" -->
+<h1><a name="label:0" id="label:0">RubyCocoaの詳細 (不完全)</a></h1><!-- RDLabel: "RubyCocoaの詳細 (不完全)" -->
 <p>RubyCocoaは、Ruby側を担当するRubyCocoaライブラリとObjective-C側を担当
 するRubyCocoaフレームワークから構成されます。</p>
 <h2><a name="label:1" id="label:1">RubyCocoaライブラリ</a></h2><!-- RDLabel: "RubyCocoaライブラリ" -->
@@ -30,23 +30,20 @@
 <p>自身のクラス名と同じ名前を持つObjective-C側のクラスを探し、その
 Objective-C側のインスタンスを生成しラッパーとなります。Objective-C 
 側のクラスが存在しない場合は生成するクラスとして
-<a href="#label:38">RubyObjectクラス</a>を採用します。</p></dd>
-<dt><a name="label:5" id="label:5"><code>OCObject.new_with_ocname (<var>ocname</var>, ...)</code></a></dt><!-- RDLabel: "OCObject.new_with_ocname" -->
+<!-- Reference, RDLabel "RObjectクラス" doesn't exist --><em class="label-not-found">RObjectクラス</em><!-- Reference end -->を採用します。</p></dd>
+<dt><a name="label:5" id="label:5"><code>OCObject.new_with_classname (<var>classname</var>, ...)</code></a></dt><!-- RDLabel: "OCObject.new_with_classname" -->
 <dd>
 <p>引数で与えられた名前を持つObjective-C側のクラスを探し、その
 Objective-C側のインスタンスを生成しラッパーとなります。Objective-C 
 側のクラスが存在しない場合は生成するクラスとして
-<a href="#label:38">RubyObjectクラス</a>を採用します。</p>
+<a href="#label:38">RBObjectクラス</a>を採用します。</p>
 <p>Objective-C側のインスタンスは...</p>
 <ol>
-<li>Objective-C側のクラスがinitWithRubyObjectメソッドを持つ場合、
-        allocメソッドで初期化しinitWithRubyObjectメソッドで初期化しま
-        す。初期化メソッドの引数には生成中のRubyオブジェクト自体を与え
-        ます。</li>
+<li>Objective-C側のクラスがRBObjectクラスの場合、allocメソッドで初
+        期化しinitWithRubyObjectメソッドで初期化します。初期化メソッド
+        の引数には生成中のRubyオブジェクト自体を与えます。</li>
 <li>その他の場合、allocメソッドにより生成しinitメソッドで初期化し
-        ます。さらに生成したObjective-C側のインスタンスがsetRubyObject
-        メソッドを持つ場合、生成中のRubyオブジェクト自体を引数としてそ
-        のメソッドを送ります。</li>
+        ます。</li>
 </ol>
 <p>というルールにより生成します。</p></dd>
 <dt><a name="label:6" id="label:6"><code>OCObject.new_with_ocid (<var>ocid</var>, ...)</code></a></dt><!-- RDLabel: "OCObject.new_with_ocid" -->
@@ -121,51 +118,27 @@ Objective-C側のインスタンスを生成しラッパーとなります。Objective-C
 <h2><a name="label:37" id="label:37">RubyCocoaフレームワーク</a></h2><!-- RDLabel: "RubyCocoaフレームワーク" -->
 <p>RubyCocoaフレームワークは、RubyCocoaのObjective-C側をフレームワーク化
 したものです。</p>
-<h3><a name="label:38" id="label:38">RubyObjectクラス</a></h3><!-- RDLabel: "RubyObjectクラス" -->
+<h3><a name="label:38" id="label:38">RBObjectクラス</a></h3><!-- RDLabel: "RBObjectクラス" -->
 <p>Rubyオブジェクトを包むオブジェクト(ラッパーオブジェクト)を定義するクラ
-スです。このクラスのインスタンスに対するメソッド呼び出しは以下のルール
-で処理されます。</p>
-<ol>
-<li>Objective-C側にメソッド定義があればそれを実行</li>
-<li>Ruby側にメソッド定義あればそれを実行</li>
-<li>どちらにも定義がなければ親クラス(NSObject)に処理を依頼</li>
-</ol>
+スです。</p>
 <dl>
-<dt><a name="label:39" id="label:39"><code>- <var>init</var></code></a></dt><!-- RDLabel: "- init" -->
-<dd>
-<p>自身のクラス名と同じ名前を持つRuby側のクラスを探し、そのRuby側のイ
-ンスタンスを生成しラッパーとなります。Ruby側のクラスが存在しない場
-合はRuby側クラスとして<a href="#label:3">OSX::OCObjectクラス</a>を採用します。</p></dd>
-<dt><a name="label:40" id="label:40"><code>- <var>initWithRubyClassName</var>: <var>a_name</var></code></a></dt><!-- RDLabel: "- initWithRubyClassName: a_name" -->
-<dd>
-<p>引数で与えられた名前を持つRuby側のクラスを探し、そのRuby側のインス
-タンスを生成しラッパーとなります。Ruby側のクラスが存在しない場合は
-Ruby側クラスとして<a href="#label:3">OSX::OCObjectクラス</a>を採用します。</p>
-<p>Ruby側のインスタンスは...</p>
-<ol>
-<li>Ruby側のクラスがnew_with_ocidメソッドを持つ場合、そのクラスが
-        OSX::OCObjectであると断定し、同メソッドにself(のRuby整数値表現)
-        を引数として与え生成します。</li>
-<li>その他のクラスの場合、newメソッドにより生成します。さらに生成
-        されたRuby側のインスタンスがset_ocobjメソッドを持つ場合、引数
-        に自身をOSX::OCObject化したRuby側インスタンスを与えてset_ocobj 
-        メソッドを送ります。</li>
-</ol>
-<p>というルールにより生成します。</p></dd>
-<dt><a name="label:41" id="label:41"><code>- <var>initWithRubyObject</var>: (<var>VALUE</var>) <var>a_rbobj</var></code></a></dt><!-- RDLabel: "- initWithRubyObject:" -->
+<dt><a name="label:39" id="label:39"><code>- <var>initWithRubyObject</var>: (<var>VALUE</var>) <var>a_rbobj</var></code></a></dt><!-- RDLabel: "- initWithRubyObject:" -->
 <dd>
 <p>引数で与えられたRuby側のオブジェクトのラッパーとなります。</p></dd>
+<dt><a name="label:40" id="label:40"><code>- <var>__rbobj__</var></code></a></dt><!-- RDLabel: "- __rbobj__" -->
+<dd>
+<p>ラップしているRuby側のオブジェクトを返します。</p></dd>
 </dl>
-<h3><a name="label:42" id="label:42">rb_main</a></h3><!-- RDLabel: "rb_main" -->
+<h3><a name="label:41" id="label:41">RBApplicationMain</a></h3><!-- RDLabel: "RBApplicationMain" -->
 <dl>
-<dt><a name="label:43" id="label:43"><code>int <var>rb_main</var>(<var>const</var> <var>char</var>* <var>rb_main_name</var>, <var>int</var> <var>argc</var>, <var>char</var>* <var>argv</var>[])</code></a><!-- RDLabel: "int rb_main" -->
+<dt><a name="label:42" id="label:42"><code>int <var>RBApplicationMain</var>(<var>const</var> <var>char</var>* <var>rb_main_name</var>, <var>int</var> <var>argc</var>, <var>char</var>* <var>argv</var>[])</code></a><!-- RDLabel: "int RBApplicationMain" -->
 </dl>
-<p>rb_mainはRubyCocoaアプリケーションをスタートさせるためのmain関数です。
-引数rb_main_nameにはRuby側のメインスクリプトファイル名を指定します。通
-常はmain.mの中で以下のように使います。</p>
+<p>RBApplicationMainはRubyCocoaアプリケーションをスタートさせるためのmain
+関数です。引数rb_main_nameにはRuby側のメインスクリプトファイル名を指定
+します。通常はmain.mの中で以下のように使います。</p>
 <pre>int main(int argc, char* argv[])
 {
-  return rb_main("rb_main.rb", argc, argv);
+  return RBApplicationMain("rb_main.rb", argc, argv);
 }</pre>
 
 </body>

@@ -1,8 +1,7 @@
 #!/usr/bin/env ruby
 
-SRCDIR = "doc"
-DSTDIR = "html"
-MSCDIR = "misc"
+SRCDIR = "../doc"
+DSTDIR = "."
 
 def command(cmd)
   $stderr.puts "execute '#{cmd}' ..."
@@ -26,9 +25,6 @@ def rd2(src, dst, title, lang, css = nil, charset = nil)
 end
 
 docs = Dir["#{SRCDIR}/*.{ja,en}"]
-
-command "mkdir -p #{DSTDIR}"
-command "cp -f #{MSCDIR}/rdtext.css #{DSTDIR}/"
 
 docs.each do |path|
   dirname = File.dirname(path)

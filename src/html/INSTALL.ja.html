@@ -12,20 +12,16 @@
 <h1><a name="label:0" id="label:0">RubyCocoaのインストール</a></h1><!-- RDLabel: "RubyCocoaのインストール" -->
 <h2><a name="label:1" id="label:1">インストールのおおまかな手順</a></h2><!-- RDLabel: "インストールのおおまかな手順" -->
 <ul>
-<li>RubyCocoaの展開</li>
 <li>Ruby 1.6.5のインストール</li>
-<li>LibRubyフレームワークの作成</li>
-<li>RubyCocoaのインストール</li>
+<li>RubyCocoaの展開</li>
+<li>LibRubyフレームワークのインストール</li>
+<li>RubyCocoaの構築とインストール</li>
 <li>インストール完了</li>
 <li>サンプルの動作確認</li>
 </ul>
 <p>インストールはTerminalアプリケーションなどでシェルからコマンド入力して
 行います。</p>
-<h2><a name="label:2" id="label:2">RubyCocoaの展開</a></h2><!-- RDLabel: "RubyCocoaの展開" -->
-<p>RubyCocoaソースのtarballを展開します。</p>
-<pre>% cd {どこか}
-% tar zxf rubycocoa-0.1.0.tgz</pre>
-<h2><a name="label:3" id="label:3">Ruby 1.6.5のインストール</a></h2><!-- RDLabel: "Ruby 1.6.5のインストール" -->
+<h2><a name="label:2" id="label:2">Ruby 1.6.5のインストール</a></h2><!-- RDLabel: "Ruby 1.6.5のインストール" -->
 <p>すでにRuby-1.6.5を"--enable-shared"オプション付きでインストールしてい
 る場合は読み飛ばしてください。</p>
 <p>MacOS X 10.1で バージョン1.6.5以前のRubyを作る場合、以下のようにRubyの
@@ -41,27 +37,33 @@
 % ./configure --enable-shared  # /usr/local にインストール
 % make ; make test
 % sudo make install</pre>
-<h2><a name="label:4" id="label:4">LibRubyフレームワークの作成</a></h2><!-- RDLabel: "LibRubyフレームワークの作成" -->
-<p>LibRubyフレームワークはすでにインストールされているRubyインタープリタ
-の共有ライブラリをフレームワーク化したものです。RubyCocoaやRubyCocoaの
-アプリケーションはこのフレームワークを必要とします。以下の手順で
-"/Library/Frameworks"の下にLibRubyフレームワークを作成します。</p>
+<h2><a name="label:3" id="label:3">RubyCocoaの展開</a></h2><!-- RDLabel: "RubyCocoaの展開" -->
+<p>RubyCocoaソースのtarballを展開します。</p>
+<pre>% cd {どこか}
+% tar zxf rubycocoa-0.1.0.tgz</pre>
+<h2><a name="label:4" id="label:4">LibRubyフレームワークのインストール</a></h2><!-- RDLabel: "LibRubyフレームワークのインストール" -->
+<p>LibRubyフレームワークは、すでにインストールされているRubyインタープリ
+タの共有ライブラリやヘッダファイルに、シンボリックリンクを張ったりコピー
+したりしてフレームワーク化したものです。RubyCocoaの構築やRubyCocoaのア
+プリケーションの構築実行にはこのフレームワークを必要とします。以下の手
+順で"/Library/Frameworks"の下にLibRubyフレームワークをインストールしま
+す。</p>
 <pre>% cd {RubyCocoaソースディレクトリ}
-% ruby tool/mk_libruby_frmwk.rb</pre>
+% ruby tool/install-libruby-frmwk.rb</pre>
 <p>フレームワークを作る場所を変えたい場合は</p>
-<pre>% ruby tool/mk_libruby_frmwk.rb {LibRuby.frameworkを置くディレクトリ}</pre>
+<pre>% ruby tool/install-libruby-frmwk.rb {フレームワークスディレクトリ}</pre>
 <p>のように引数にディレクトリを指定してスクリプトを起動してください。</p>
-<h2><a name="label:5" id="label:5">RubyCocoaのインストール</a></h2><!-- RDLabel: "RubyCocoaのインストール" -->
-<p>RubyCocoa本体を構成するライブラリ群とRubyCocoaフレームワークをインストー
-ルします。</p>
+<h2><a name="label:5" id="label:5">RubyCocoaの構築とインストール</a></h2><!-- RDLabel: "RubyCocoaの構築とインストール" -->
+<p>RubyCocoa本体を構成するライブラリ群とRubyCocoaフレームワークを構築イン
+ストールします。</p>
 <p>RubyCocoaのソースディレクトリに移動し以下のように入力します。</p>
 <pre>% cd {RubyCocoaソースディレクトリ}
 % ruby install.rb config
 % ruby install.rb setup
 % sudo ruby install.rb install</pre>
-<p>configのあと前述のLibRubyフレームワークが必要だよというメッセージが表
-示されます。このテキストの手順通りにインストールしている場合はすでに作
-成されているはずなので無視して構いません。</p>
+<p>LibRubyがインストールされていない場合、configのあと前述のLibRubyフレー
+ムワークが必要だよというメッセージが表示されますので、先にLibRubyを上
+記手順でインストールしてください。</p>
 <p>setupは時間がかかります。お茶でもしながら待ちましょう。</p>
 <p>installではRubyCocoaライブラリの他に、RubyCocoaフレームワークを
 "/Library/Frameworks"以下にインストールします。</p>
@@ -81,19 +83,27 @@
 % ruby sndplay.rb    # システムの警告音が順番に鳴ります
 % ruby sndplay2.rb   # システムの警告音が順番に間隔を詰めて鳴ります</pre>
 <p>うまく動作したでしょうか？うまくいったら次にRubyCocaアプリケーションを
-動かしてみましょう。</p>
-<pre>% cd {RubyCocoaソースディレクトリ}/sample/rubyapp
+動かしてみましょう。まずはMakefileベースのものを試してみましょう。</p>
+<pre>% cd {RubyCocoaソースディレクトリ}/sample/mk_app1
+% make</pre>
+<p>で構築します。できたら実行してみましょう。そのままコマンドラインから</p>
+<pre>% open open SimpleApp1.app</pre>
+<p>と入力するか、ファインダで SimpleApp をダブルクリックして起動してみて
+ください。動きましたか。次にProject Builderベースのものを試してみましょ
+う。コマンドラインからだと</p>
+<pre>% cd {RubyCocoaソースディレクトリ}/sample/pb_app1
 % pbxbuild      # アプリケーション作成</pre>
-<p>できたら</p>
-<pre>% open build/rubyapp.app</pre>
-<p>と打ち込むか、またはファインダでbuildディレクトリの中のrubyappをダブル
-クリックしてアプリケーションを起動してみてください。うまく動作したらお
-めでとう。だめだったらごめんなさい。</p>
+<p>で構築できます。もちろん Project Builder を起動して中から構築したり実
+行したりすることもできます。できたら実行してみましょう。</p>
+<pre>% open build/pb_app1.app</pre>
+<p>と打ち込むか、またはファインダでbuildディレクトリの中のpb_app1.appをダ
+ブルクリックしてアプリケーションを起動してみてください。うまく動作した
+らおめでとう。だめだったらごめんなさい。</p>
 <h2><a name="label:8" id="label:8">開発動作確認環境</a></h2><!-- RDLabel: "開発動作確認環境" -->
 <p>以下の環境で開発動作確認をしています。</p>
 <ul>
 <li>PowerMacintosh G4/400/320MB</li>
-<li>MacOS X 10.1</li>
+<li>MacOS X 10.1.1 (and 10.1)</li>
 <li>DevTools 10.1</li>
 <li>ruby-1.6.5 (configure --enable-shared)</li>
 </ul>
