@@ -3,6 +3,7 @@
 #
 
 require 'osx/cocoa'
+require 'osx/objc/ruby_thread_switcher'
 
 ######################
 #### BEGIN CONFIG ####
@@ -13,6 +14,8 @@ RUBY_SOURCES = [
   # :FooController,
   # :BarController
 ]
+
+SWITCH_INTERVAL = 0.1
 ######################
 ##### END CONFIG #####
 ######################
@@ -22,6 +25,7 @@ def rb_main_init
 end
 
 def ns_app_main
+  OSX::RubyThreadSwitcher.start (SWITCH_INTERVAL) if SWITCH_INTERVAL > 0.0
   app = OSX::NSApplication.sharedApplication
   OSX::NSBundle.loadNibNamed_owner (BUNDLE_NAME.to_s, app)
   OSX.NSApp.run
