@@ -4,27 +4,27 @@ RUBY = ruby
 SED = sed
 
 TARGET = \
-	$(TARGETDIR)/INDEX.en.html \
-	$(TARGETDIR)/INDEX.ja.html \
-	$(TARGETDIR)/CHANGES.en.html \
-	$(TARGETDIR)/CHANGES.ja.html \
-	$(TARGETDIR)/FAQ.en.html \
-	$(TARGETDIR)/FAQ.ja.html \
-	$(TARGETDIR)/GETTING.en.html \
-	$(TARGETDIR)/GETTING.ja.html \
-	$(TARGETDIR)/BUILD.en.html \
-	$(TARGETDIR)/BUILD.ja.html \
-	$(TARGETDIR)/LINKS.en.html \
-	$(TARGETDIR)/LINKS.ja.html \
-	$(TARGETDIR)/NEWS.en.html \
-	$(TARGETDIR)/NEWS.ja.html \
-	$(TARGETDIR)/PROGRAMMING.en.html \
-	$(TARGETDIR)/PROGRAMMING.ja.html \
-	$(TARGETDIR)/TRYSAMPLES.en.html \
-	$(TARGETDIR)/TRYSAMPLES.ja.html \
-	$(TARGETDIR)/REFERENCES.ja.html \
-	$(TARGETDIR)/REFERENCES.en.html \
-	$(TARGETDIR)/ChangeLog.html \
+	$(TARGETDIR)/index.en.html \
+	$(TARGETDIR)/index.ja.html \
+	$(TARGETDIR)/changes.en.html \
+	$(TARGETDIR)/changes.ja.html \
+	$(TARGETDIR)/faq.en.html \
+	$(TARGETDIR)/faq.ja.html \
+	$(TARGETDIR)/getting.en.html \
+	$(TARGETDIR)/getting.ja.html \
+	$(TARGETDIR)/build.en.html \
+	$(TARGETDIR)/build.ja.html \
+	$(TARGETDIR)/links.en.html \
+	$(TARGETDIR)/links.ja.html \
+	$(TARGETDIR)/news.en.html \
+	$(TARGETDIR)/news.ja.html \
+	$(TARGETDIR)/programming.en.html \
+	$(TARGETDIR)/programming.ja.html \
+	$(TARGETDIR)/trysamples.en.html \
+	$(TARGETDIR)/trysamples.ja.html \
+	$(TARGETDIR)/references.ja.html \
+	$(TARGETDIR)/references.en.html \
+	$(TARGETDIR)/changelog.html \
 	$(TARGETDIR)/rubycocoasite.css
 
 TEMPLATES = \
@@ -52,73 +52,73 @@ $(TARGETDIR):
 $(TARGETDIR)/rubycocoasite.css:	rubycocoasite.css
 	-cp -f $< $(TARGETDIR)/
 
-$(TARGETDIR)/INDEX.en.html:	INDEX.en
+$(TARGETDIR)/index.en.html:	INDEX.en
 	$(RUBY) make_html.rb $< $(TARGETDIR)
 
-$(TARGETDIR)/INDEX.ja.html:	INDEX.ja
+$(TARGETDIR)/index.ja.html:	INDEX.ja
 	$(RUBY) make_html.rb $< $(TARGETDIR)
 
-$(TARGETDIR)/CHANGES.en.html:	CHANGES.en
+$(TARGETDIR)/changes.en.html:	CHANGES.en
 	$(RUBY) make_html.rb $< $(TARGETDIR)
 
-$(TARGETDIR)/CHANGES.ja.html:	CHANGES.ja
+$(TARGETDIR)/changes.ja.html:	CHANGES.ja
 	$(RUBY) make_html.rb $< $(TARGETDIR)
 
-$(TARGETDIR)/FAQ.en.html:	FAQ.en
+$(TARGETDIR)/faq.en.html:	FAQ.en
 	$(RUBY) make_html.rb $< $(TARGETDIR)
 
-$(TARGETDIR)/FAQ.ja.html:	FAQ.ja
+$(TARGETDIR)/faq.ja.html:	FAQ.ja
 	$(RUBY) make_html.rb $< $(TARGETDIR)
 
-$(TARGETDIR)/GETTING.en.html:	GETTING.en
+$(TARGETDIR)/getting.en.html:	GETTING.en
 	$(RUBY) make_html.rb $< $(TARGETDIR)
 
-$(TARGETDIR)/GETTING.ja.html:	GETTING.ja
+$(TARGETDIR)/getting.ja.html:	GETTING.ja
 	$(RUBY) make_html.rb $< $(TARGETDIR)
 
-$(TARGETDIR)/BUILD.en.html:	BUILD.en
+$(TARGETDIR)/build.en.html:	BUILD.en
 	$(RUBY) make_html.rb $< $(TARGETDIR)
 
-$(TARGETDIR)/BUILD.ja.html:	BUILD.ja
+$(TARGETDIR)/build.ja.html:	BUILD.ja
 	$(RUBY) make_html.rb $< $(TARGETDIR)
 
-$(TARGETDIR)/LINKS.en.html:	LINKS.en
+$(TARGETDIR)/links.en.html:	LINKS.en
 	$(RUBY) make_html.rb $< $(TARGETDIR)
 
-$(TARGETDIR)/LINKS.ja.html:	LINKS.ja
+$(TARGETDIR)/links.ja.html:	LINKS.ja
 	$(RUBY) make_html.rb $< $(TARGETDIR)
 
-$(TARGETDIR)/NEWS.en.html:	NEWS.en
+$(TARGETDIR)/news.en.html:	NEWS.en
 	$(RUBY) make_html.rb $< $(TARGETDIR)
 
-$(TARGETDIR)/NEWS.ja.html:	NEWS.ja
+$(TARGETDIR)/news.ja.html:	NEWS.ja
 	$(RUBY) make_html.rb $< $(TARGETDIR)
 
-$(TARGETDIR)/PROGRAMMING.en.html:	PROGRAMMING.en
+$(TARGETDIR)/programming.en.html:	PROGRAMMING.en
 	$(RUBY) make_html.rb $< $(TARGETDIR)
 
-$(TARGETDIR)/PROGRAMMING.ja.html:	PROGRAMMING.ja
+$(TARGETDIR)/programming.ja.html:	PROGRAMMING.ja
 	$(RUBY) make_html.rb $< $(TARGETDIR)
 
-$(TARGETDIR)/TRYSAMPLES.en.html:	TRYSAMPLES.en
+$(TARGETDIR)/trysamples.en.html:	TRYSAMPLES.en
 	$(RUBY) make_html.rb $< $(TARGETDIR)
 
-$(TARGETDIR)/TRYSAMPLES.ja.html:	TRYSAMPLES.ja
+$(TARGETDIR)/trysamples.ja.html:	TRYSAMPLES.ja
 	$(RUBY) make_html.rb $< $(TARGETDIR)
 
-$(TARGETDIR)/REFERENCES.en.html:	REFERENCES.en
+$(TARGETDIR)/references.en.html:	REFERENCES.en
 	$(RUBY) make_html.rb $< $(TARGETDIR)
 
-$(TARGETDIR)/REFERENCES.ja.html:	REFERENCES.ja
+$(TARGETDIR)/references.ja.html:	REFERENCES.ja
 	$(RUBY) make_html.rb $< $(TARGETDIR)
 
-$(TARGETDIR)/ChangeLog.html:		../ChangeLog
-	echo "<html>" > $(TARGETDIR)/ChangeLog.html
-	echo "<head><title>RubyCocoa - ChangeLog</title></head>" >> $(TARGETDIR)/ChangeLog.html
-	echo "<body>"  >> $(TARGETDIR)/ChangeLog.html
-	echo "<pre>"  >> $(TARGETDIR)/ChangeLog.html
-#	$(SED) -e 's/</\&lt;/' -e 's/>/\&gt;/' $<  >> $(TARGETDIR)/ChangeLog.html
-	$(SED) -e 's/<.*@.*>//' $<  >> $(TARGETDIR)/ChangeLog.html
-	echo "</pre>" >> $(TARGETDIR)/ChangeLog.html
-	echo "</body></html>" >> $(TARGETDIR)/ChangeLog.html
+$(TARGETDIR)/changelog.html:		../ChangeLog
+	echo "<html>" > $(TARGETDIR)/changelog.html
+	echo "<head><title>RubyCocoa - ChangeLog</title></head>" >> $(TARGETDIR)/changelog.html
+	echo "<body>"  >> $(TARGETDIR)/changelog.html
+	echo "<pre>"  >> $(TARGETDIR)/changelog.html
+#	$(SED) -e 's/</\&lt;/' -e 's/>/\&gt;/' $<  >> $(TARGETDIR)/changelog.html
+	$(SED) -e 's/<.*@.*>//' $<  >> $(TARGETDIR)/changelog.html
+	echo "</pre>" >> $(TARGETDIR)/changelog.html
+	echo "</body></html>" >> $(TARGETDIR)/changelog.html
 
