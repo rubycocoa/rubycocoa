@@ -1,4 +1,42 @@
+2002-08-28  FUJIMOTO Hisakuni  <hisa@fobj.com>
+
+	* release 0.2.7
+
+	* post-config.rb: improved libruby_installed?
+
+	* tool/och_analyzer.rb: support OSX 10.2 cpp
+
+	* ext/osx_objc/cocoa-10.1/*, ext/osx_objc/cocoa-10.2/*, ext/osx_objc/cocoa/*:
+	separate cocoa directory for OS version 10.2 and 10.1.x
+
+	* sample/sndplay.rb, sample/sndplay2.rb, sample/sndplay3.rb:
+	support 10.2 and 10.1.5
+
+	* misc/ruby-1.6.7-osx10.2.patch: ruby-1.6.7 patch for Mac OS X 10.2
+
+	* sample/Pong/Model.rb:
+	fix problem that sound "Bonk" is missing on Mac OS X 10.2.
+
+2002-08-26  FUJIMOTO Hisakuni  <hisa@fobj.com>
+
+	* ext/osx_objc/mdl_objwrapper.m:
+	wrapper_to_s() - fix NSAutoreleasePool memory leak
+
+2002-08-25  FUJIMOTO Hisakuni  <hisa@fobj.com>
+
+	* tool/install-ruby.rb: bug fix - File.directory? was nothing.
+
 2002-08-19  FUJIMOTO Hisakuni  <hisa@fobj.com>
+
+	* framework/RBRuntime.m:
+	bugfix for modification RBApplicationMain(argc, argv)
+
+	* framework/ocdata_conv.m: use @encode
+
+	* framework/RBRuntime.m: modify RBApplicationMain(argc, argv)
+
+	* framework/RBObject.h, framework/RBObject.m:
+	implement initWithRubyScriptCString, initWithRubyScriptString, _copyDescription
 
 	* lib/osx/objc/oc_import.rb, ext/osx_objc/osx_objc.m, framework/RBRuntime.m, framework/RBRuntime.h, framework/RBSlaveObject.m:
 	new mechanism for searching a Ruby class from an OBJC class.
