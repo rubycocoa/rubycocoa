@@ -1,7 +1,7 @@
 # -*-rd-*-
 = Links
 
-* ((<RubyCocoa|URL:http://www.fobj.com/rubycocoa/>))
+* ((<RubyCocoa|URL:http://rubycocoa.sourceforge.net/>))
 * ((<RubyCocoa Project|URL:http://sourceforge.net/projects/rubycocoa/>))
 * ((<Mailing List (Japanese)|URL:http://www.freeml.com/info/rubycocoa@freeml.com>))
 * ((<Mailing List (English)|URL:http://sourceforge.net/mail/?group_id=44114>))
