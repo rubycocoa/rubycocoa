@@ -10,8 +10,8 @@
 
 require 'osx_objc'
 require 'osx/objc/ocexception'
-require 'osx/objc/objctypes'
-require 'osx/objc/objcfuncs'
+require 'osx/objc/octypes'
+require 'osx/objc/ocfuncs'
 
 module OSX
 
