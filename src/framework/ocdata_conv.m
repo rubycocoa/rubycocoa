@@ -447,7 +447,7 @@ static BOOL rbobj_convert_to_nsobj(VALUE obj, id* nsobj)
   case T_FALSE:
   case RB_T_DATA:
   default:
-    *nsobj = [[RBObject alloc] initWithRubyObject: obj];
+    *nsobj = [[[RBObject alloc] initWithRubyObject: obj] autorelease];
     return YES;
   }
   return YES;
