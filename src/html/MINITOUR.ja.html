@@ -9,7 +9,7 @@
 <link href="rdtext.css" type="text/css" rel="stylesheet"/>
 </head>
 <body>
-<h1><a name="label:0" id="label:0">RubyCocoaの概観</a></h1><!-- RDLabel: "RubyCocoaの概観" -->
+<h1><a name="label:0" id="label:0">RubyCocoaの使い方</a></h1><!-- RDLabel: "RubyCocoaの使い方" -->
 <h2><a name="label:1" id="label:1">ライブラリのロード</a></h2><!-- RDLabel: "ライブラリのロード" -->
 <p>RubyCocoaのライブラリは以下のようにロードします。</p>
 <pre>require 'osx/cocoa'</pre>
@@ -42,10 +42,11 @@ p obj      # =&gt; #&lt;OSX::NSObject:0x51f5b4 class='NSObject' id=976D90&gt;</p
 <p>Cocoaオブジェクトの生成には、Cocoaの各クラスのメソッドをそのまま使いま
 す。</p>
 <pre>obj = OSX::NSObject.alloc.init
-str = OSX::NSObject.stringWithString "hello"
-str = OSX::NSObject.alloc.initWithString "world"</pre>
+str = OSX::NSString.stringWithString "hello"
+str = OSX::NSString.alloc.initWithString "world"</pre>
 <p>生成されたCocoaオブジェクトは、RubyCocoa内部でOSX::ObjcIDというクラス
-のオブジェクトに包まれています。</p>
+のオブジェクトに包まれています。通常、OSX::ObjcIDクラスの存在を意識す
+る必要はありません。</p>
 <h2><a name="label:5" id="label:5">オーナーシップとメモリ管理</a></h2><!-- RDLabel: "オーナーシップとメモリ管理" -->
 <p>OSX::ObjcIDのインスタンスはかならず自身が包んでいるCocoaオブジェクトの
 オーナーシップを持ちます。オーナーシップはOSX::ObjcIDのインスタンスが
@@ -215,10 +216,10 @@ Cocoa派生クラスではどちらかいえばあまり奨められません。理由は先に述べ
 れていないからです。もっともCocoa側メソッドを呼ばない限りにおいてはと
 くに問題は発生しないと考えられます。</p>
 <p>nibファイルからロードされるような場合には awakeFromNib メソッドで初期
-化するのがもっとも無難です。おそらく実際にCocoaの派生クラスを定義する
-必要があるのはこのケースがもっとも多くなるのではないでしょうか。</p>
-<p>その他の場合、とくにNSObjectの派生クラスの場合には、Objective-Cの場合
-と同様に "init" 接頭辞を持つメソッドに書くのが無難なようです。</p>
+化するのがもっとも無難です。実際にCocoaの派生クラスを定義する
+必要があるのもこのケースがもっとも多いのではないでしょうか。</p>
+<p>その他の場合には、Cocoaの流儀で "init" 接頭辞を持つメソッドに書くのが
+よいでしょう。メソッドがselfを返すようにすることを忘れないでください。</p>
 <p>藤本尚邦 FUJIMOTO Hisakuni &lt;hisa@imasy.or.jp&gt;
 $Date$ : $Revision$</p>
 
