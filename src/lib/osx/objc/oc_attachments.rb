@@ -12,7 +12,7 @@ require 'osx_objc'
 
 module OSX
 
-  module NSArrayAttachment
+  module RCArrayAttachment
     include Enumerable
 
     def each
@@ -38,9 +38,9 @@ module OSX
       self.addObject (obj)
     end
 
-  end				# module NSArrayAttachment
+  end				# module RCArrayAttachment
 
-  module NSDictionaryAttachment
+  module RCDictionaryAttachment
     include Enumerable
 
     def each
@@ -60,6 +60,14 @@ module OSX
       obj
     end
 
-  end				# module NSDictionaryAttachment
+  end				# module RCDictionaryAttachment
+
+  module RCImageAttachment
+    def focus
+      lockFocus
+      yield
+      unlockFocus
+    end
+  end
 
 end
