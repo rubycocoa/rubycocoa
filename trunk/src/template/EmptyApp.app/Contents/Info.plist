@@ -14,7 +14,8 @@
 	<key>RubyAppConfig</key>
 	<dict>
 	  <key>RubyProgram</key>
-	  <string>/usr/bin/ruby</string>
+	  <!-- <string>/usr/bin/ruby</string> -->
+	  <string>ruby</string>
 	  <key>MainScript</key>
 	  <string>rb_main.rb</string>
 	</dict>
