@@ -10,12 +10,13 @@
  *
  **/
 
+#import "cls_objcid.h"
+
 #import "osx_ruby.h"
 #import <Foundation/Foundation.h>
 #import <string.h>
 #import <stdlib.h>
 #import "RBObject.h"
-#import "ocdata_conv.h"
 
 static VALUE _kObjcID = Qnil;
 
@@ -86,7 +87,7 @@ objcid_initialize(int argc, VALUE* argv, VALUE rcv)
 static VALUE
 objcid_ocid(VALUE rcv)
 {
-  return UINT2NUM((unsigned int) OCID_OF(rcv));
+  return UINT2NUM((unsigned int) OBJCID_ID(rcv));
 }
 
 static VALUE
@@ -94,7 +95,7 @@ objcid_inspect(VALUE rcv)
 {
   VALUE result;
   char s[512];
-  id ocid = OCID_OF(rcv);
+  id ocid = OBJCID_ID(rcv);
   id pool = [[NSAutoreleasePool alloc] init];
   const char* class_desc = [[[ocid class] description] cString];
   const char* desc = [[ocid description] cString];
@@ -106,6 +107,14 @@ objcid_inspect(VALUE rcv)
   result = rb_str_new2(s);
   [pool release];
   return result;
+}
+
+/** class methods **/
+
+VALUE
+objid_s_class ()
+{
+  return _kObjcID;
 }
 
 /*******/
