@@ -1,0 +1,38 @@
+# -*-rd-*-
+= RubyCocoaを入手する
+
+== バイナリ
+
+((<ファイル一覧|URL:http://www.imasy.or.jp/~hisa/mac/rubyosx/files/>))
+の中から
+((<RubyCocoa-0.3.2.dmg|URL:../rubyosx/files/RubyCocoa-0.3.2.dmg>))
+
+をダウンロードしてください。RubyCocoa とRubyAEOSA のライブラリと
+libruby.a、サンプルコードなどが含まれています。実行・開発に必要なライ
+ブラリ類は ".pkg"形式のパッケージになっていて、簡単にインストールでき
+ます。
+
+このバイナリは Mac OS X 10.2 用です。Mac OS X 10.1.x 用のバイナリはあ
+りません。
+
+== ソース
+
+((<ファイル一覧|URL:../rubyosx/files/>)) の中から
+((<rubycocoa-0.3.2.tgz|URL:../rubyosx/files/rubycocoa-0.3.2.tgz>))
+をダウンロードしてください。
+
+== CVS
+
+((<CVSサーバ|URL:http://sourceforge.net/cvs/?group_id=44114>))から最新
+の(あるいは最古の)ソースを入手できます。
+
+
+== PINEAPPLE RPMパッケージ
+
+((<Project PINEAPPLE(日本語)
+|URL:http://sacral.c.u-tokyo.ac.jp/~hasimoto/Pineapple/>))にRPM形式の
+バイナリ(0.2.x)があります。
+
+
+$Date$
+$Revision$

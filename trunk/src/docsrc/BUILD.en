@@ -1,0 +1,98 @@
+# -*-rd-*-
+= Build and Install RubyCocoa from Source
+
+== Install Sequence
+
+* ((<Install Ruby (optional)>))
+* ((<Extract RubyCocoa>))
+* ((<Build and Install RubyCocoa>))
+* ((<Done>))
+* ((<Check Sample>))
+
+You must use the Terminal application (command line shell) to install
+RubyCocoa.
+
+
+== Install Ruby (optional)
+
+=== Case in using a pre-installed Ruby on Mac OS X 10.2 (Jaguar)
+
+Install Developer Tools with BSD SDK (BSDSDK.pkg). It's contained in
+CD of Jaguar Package.
+
+=== Case in using the other Ruby
+
+If you have installed Ruby already, go to next section.
+
+==== Extract Ruby tarball
+
+  % cd {anywhere}
+  % tar zxf ruby-1.6.7.tar.gz
+  % cd ruby-1.6.7
+
+==== Apply patch for Ruby 1.6.7 with Jaguar (optional)
+
+If you want to install Ruby 1.6.7 in Jaguar yourself, apply patch
+which is contained in RubyCocoa source distribution. You have not to
+apply the patch in OS 10.1.x.
+
+  % patch -p1 < {RubyCocoa sources}/misc/ruby-1.6.7-osx10.2.patch
+
+==== Build Ruby
+
+  % ./configure         # install to /usr/local
+  % make ; make test
+  % sudo make install
+
+
+== Extract RubyCocoa
+
+extract RubyCocoa sources tarball.
+
+  % cd {anywhere}
+  % tar zxf rubycocoa-0.x.x.tgz
+
+((*Caution!*)) Using StuffIt, building RubyCocoa will fail
+because of a file name length problem. 
+
+
+== Build and Install RubyCocoa
+
+Install RubyCocoa libraries.
+
+Change directory to RubyCocoa sourcedir and type:
+
+  % cd {RubyCocoa srcdir}
+  % ruby install.rb config
+  % ruby install.rb setup
+  % sudo ruby install.rb install
+
+Setup takes a long time. It's tea time...
+
+== Done
+
+When the above installation is complete: 
+
+* RubyCocoa libraries A - {site_ruby}/1.6/{archdir}/osx_objc.bundle
+* RubyCocoa libraries B - {site_ruby}/1.6/osx/*.rb
+* RubyCocoa libraries B - {site_ruby}/1.6/osx/objc/*.rb
+
+was installed here  with Ruby itself. 
+((<Let's try samples!|URL:TRYSAMPLES.en.html>)).
+
+
+== Development and testing environment 
+
+* PowerMacintosh G4/400/384MB or iBook G3/600/384MB
+* Mac OS X 10.2
+* DevTools 10.2
+* ruby-1.6.7 (pre-installed in Mac OS X 10.2)
+
+
+== Have a fun
+
+Feel free to send comments, bug reports and patches for RubyCocoa.
+
+
+$Date$
+$Revision$

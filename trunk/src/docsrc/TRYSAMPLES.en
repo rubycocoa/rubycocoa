@@ -1,0 +1,78 @@
+# -*-rd-*-
+= Try RubyCocoa Samples
+
+Let's try scripts and applications in sample directory.
+
+== RubyCocoa application
+
+First, try to execute a RubyCocoa application which has already
+builded. In Finder, open sample folder and double click SimpleApp.
+Or type following at commandline:
+
+  % cd {RubyCocoa srcdir}/sample
+  % open SimpleApp.app
+
+
+== execute script at commandline (Terminal)
+
+You can write a script for command line with RubyCocoa.  Now, try to
+execute a simple script in sample directory.
+
+  % cd {RubyCocoa srcdir}/sample
+  % ruby fontnames.rb # fontname print to stdout.
+  % ruby sndplay.rb   # system sounds play in order.
+  % ruby sndplay2.rb  # system sounds play in order with short interval.
+
+For Mac OS X 10.2 users, furthermore:
+
+  % echo Hello World | ruby speak.rb
+  % head -5 ../README.en.txt | ruby speak.rb
+
+This will be interesting. When execute speak.rb without argument, Mac
+read an each line text you typed out until input 'control-D'.  In
+these script, it's used AppleScript (and AppleEvent) interface which
+have implemented since Mac OS X 10.2.
+
+
+== Build a Makefile based RubyCocoa application
+
+Next one is Makefile based. Type to build: 
+
+  % cd {RubyCocoa srcdir}/Hakoiri-Musume
+  % make
+
+And launch application:
+
+  % open CocoHako.app
+
+or double click 'CocoHako' on Finder. 
+
+
+== Build a Project Builder based RubyCocoa application
+
+Next one is Project Builder based. type to build:
+
+  % cd {RubyCocoa srcdir}/sample/simpleapp
+  % pbxbuild
+
+Of course you can build and run by Project Builder. Launch
+application:
+
+  % open build/SimpleApp.app
+
+You can build and launch this application in Project Builder.
+
+
+== more
+
+There are various samples. You may try to execute or read script
+source.
+
+RubyRaiseMan and RubyTypingTutor is a tutorial application in
+((<"Mac OS X Cocoa Programming"|URL:http://www.amazon.com/exec/obidos/tg/detail/-/0201726831>))
+by RubyCocoa.
+
+
+
+$Date$
+$Revision$

@@ -1,0 +1,25 @@
+# -*-rd-*-
+= ニュース
+
+== RubyCocoa 0.4をリリース(2002-12-24)
+
+=== RubyCocoa 0.4のおもな特徴
+
+* RubyCocoaフレームワークを復活させて、Ruby部分も含めて実装のほとんど
+  をRubyCocoaフレームワークの中に収めました。これによりRubyCocoaアプリ
+  ケーションが配付しやすくなりました。
+
+* Ruby 1.7に対応しました。
+
+
+== ホームページを移動(2002-12-24)
+
+RubyCocoaのホームページを
+((<URL:http://www.imasy.or.jp/~hisa/mac/rubycocoa/>))
+から
+((<URL:http://rubycocoa.sf.net/>))
+に移動しました。
+
+
+$Date$
+$Revision$
