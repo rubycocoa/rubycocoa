@@ -206,7 +206,7 @@ static id ocid_of(VALUE obj)
   NSMethodSignature* msig = [an_inv methodSignature];
   int octype = to_octype([msig methodReturnType]);
   BOOL f_success;
-  
+
   if (octype == _C_VOID) {
     f_success = true;
   }
