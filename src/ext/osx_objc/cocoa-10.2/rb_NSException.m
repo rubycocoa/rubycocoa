@@ -107,7 +107,7 @@ osx_NSOldStyleException(VALUE mdl)
 }
 
   /**** functions ****/
-// void _NSAddHandler2(NSHandler2 *handler);
+// void _NSAddHandler2 ( NSHandler2 * handler );
 static VALUE
 osx__NSAddHandler2(VALUE mdl, VALUE a0)
 {
@@ -126,7 +126,7 @@ osx__NSAddHandler2(VALUE mdl, VALUE a0)
   return rb_result;
 }
 
-// void _NSRemoveHandler2(NSHandler2 *handler);
+// void _NSRemoveHandler2 ( NSHandler2 * handler );
 static VALUE
 osx__NSRemoveHandler2(VALUE mdl, VALUE a0)
 {
@@ -145,7 +145,7 @@ osx__NSRemoveHandler2(VALUE mdl, VALUE a0)
   return rb_result;
 }
 
-// NSException *_NSExceptionObjectFromHandler2(NSHandler2 *handler);
+// NSException * _NSExceptionObjectFromHandler2 ( NSHandler2 * handler );
 static VALUE
 osx__NSExceptionObjectFromHandler2(VALUE mdl, VALUE a0)
 {
@@ -165,7 +165,7 @@ osx__NSExceptionObjectFromHandler2(VALUE mdl, VALUE a0)
   return rb_result;
 }
 
-// NSUncaughtExceptionHandler *NSGetUncaughtExceptionHandler(void);
+// NSUncaughtExceptionHandler * NSGetUncaughtExceptionHandler ( void );
 static VALUE
 osx_NSGetUncaughtExceptionHandler(VALUE mdl)
 {
@@ -173,7 +173,7 @@ osx_NSGetUncaughtExceptionHandler(VALUE mdl)
   return nsresult_to_rbresult(_C_PTR, &ns_result, nil);
 }
 
-// void NSSetUncaughtExceptionHandler(NSUncaughtExceptionHandler *);
+// void NSSetUncaughtExceptionHandler ( NSUncaughtExceptionHandler * );
 static VALUE
 osx_NSSetUncaughtExceptionHandler(VALUE mdl, VALUE a0)
 {

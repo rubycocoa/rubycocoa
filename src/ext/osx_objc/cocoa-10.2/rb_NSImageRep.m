@@ -8,7 +8,7 @@ static const int VA_MAX = 4;
 
 
   /**** constants ****/
-// NSString *NSImageRepRegistryDidChangeNotification;
+// NSString * NSImageRepRegistryDidChangeNotification;
 static VALUE
 osx_NSImageRepRegistryDidChangeNotification(VALUE mdl)
 {

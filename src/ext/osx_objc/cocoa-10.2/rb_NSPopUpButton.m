@@ -8,7 +8,7 @@ static const int VA_MAX = 4;
 
 
   /**** constants ****/
-// NSString *NSPopUpButtonWillPopUpNotification;
+// NSString * NSPopUpButtonWillPopUpNotification;
 static VALUE
 osx_NSPopUpButtonWillPopUpNotification(VALUE mdl)
 {

@@ -8,91 +8,91 @@ static const int VA_MAX = 4;
 
 
   /**** constants ****/
-// NSString *NSFontAttributeName;
+// NSString * NSFontAttributeName;
 static VALUE
 osx_NSFontAttributeName(VALUE mdl)
 {
   return nsresult_to_rbresult(_C_ID, &NSFontAttributeName, nil);
 }
 
-// NSString *NSParagraphStyleAttributeName;
+// NSString * NSParagraphStyleAttributeName;
 static VALUE
 osx_NSParagraphStyleAttributeName(VALUE mdl)
 {
   return nsresult_to_rbresult(_C_ID, &NSParagraphStyleAttributeName, nil);
 }
 
-// NSString *NSForegroundColorAttributeName;
+// NSString * NSForegroundColorAttributeName;
 static VALUE
 osx_NSForegroundColorAttributeName(VALUE mdl)
 {
   return nsresult_to_rbresult(_C_ID, &NSForegroundColorAttributeName, nil);
 }
 
-// NSString *NSUnderlineStyleAttributeName;
+// NSString * NSUnderlineStyleAttributeName;
 static VALUE
 osx_NSUnderlineStyleAttributeName(VALUE mdl)
 {
   return nsresult_to_rbresult(_C_ID, &NSUnderlineStyleAttributeName, nil);
 }
 
-// NSString *NSSuperscriptAttributeName;
+// NSString * NSSuperscriptAttributeName;
 static VALUE
 osx_NSSuperscriptAttributeName(VALUE mdl)
 {
   return nsresult_to_rbresult(_C_ID, &NSSuperscriptAttributeName, nil);
 }
 
-// NSString *NSBackgroundColorAttributeName;
+// NSString * NSBackgroundColorAttributeName;
 static VALUE
 osx_NSBackgroundColorAttributeName(VALUE mdl)
 {
   return nsresult_to_rbresult(_C_ID, &NSBackgroundColorAttributeName, nil);
 }
 
-// NSString *NSAttachmentAttributeName;
+// NSString * NSAttachmentAttributeName;
 static VALUE
 osx_NSAttachmentAttributeName(VALUE mdl)
 {
   return nsresult_to_rbresult(_C_ID, &NSAttachmentAttributeName, nil);
 }
 
-// NSString *NSLigatureAttributeName;
+// NSString * NSLigatureAttributeName;
 static VALUE
 osx_NSLigatureAttributeName(VALUE mdl)
 {
   return nsresult_to_rbresult(_C_ID, &NSLigatureAttributeName, nil);
 }
 
-// NSString *NSBaselineOffsetAttributeName;
+// NSString * NSBaselineOffsetAttributeName;
 static VALUE
 osx_NSBaselineOffsetAttributeName(VALUE mdl)
 {
   return nsresult_to_rbresult(_C_ID, &NSBaselineOffsetAttributeName, nil);
 }
 
-// NSString *NSKernAttributeName;
+// NSString * NSKernAttributeName;
 static VALUE
 osx_NSKernAttributeName(VALUE mdl)
 {
   return nsresult_to_rbresult(_C_ID, &NSKernAttributeName, nil);
 }
 
-// NSString *NSLinkAttributeName;
+// NSString * NSLinkAttributeName;
 static VALUE
 osx_NSLinkAttributeName(VALUE mdl)
 {
   return nsresult_to_rbresult(_C_ID, &NSLinkAttributeName, nil);
 }
 
-// NSString *NSCharacterShapeAttributeName;
+// NSString * NSCharacterShapeAttributeName;
 static VALUE
 osx_NSCharacterShapeAttributeName(VALUE mdl)
 {
   return nsresult_to_rbresult(_C_ID, &NSCharacterShapeAttributeName, nil);
 }
 
-// NSString *NSGlyphInfoAttributeName;
+// NSString * NSGlyphInfoAttributeName;
 static VALUE
 osx_NSGlyphInfoAttributeName(VALUE mdl)
 {
@@ -113,35 +113,35 @@ osx_NSUnderlineStrikethroughMask(VALUE mdl)
   return nsresult_to_rbresult(_C_UINT, &NSUnderlineStrikethroughMask, nil);
 }
 
-// NSString *NSPlainTextDocumentType;
+// NSString * NSPlainTextDocumentType;
 static VALUE
 osx_NSPlainTextDocumentType(VALUE mdl)
 {
   return nsresult_to_rbresult(_C_ID, &NSPlainTextDocumentType, nil);
 }
 
-// NSString *NSRTFTextDocumentType;
+// NSString * NSRTFTextDocumentType;
 static VALUE
 osx_NSRTFTextDocumentType(VALUE mdl)
 {
   return nsresult_to_rbresult(_C_ID, &NSRTFTextDocumentType, nil);
 }
 
-// NSString *NSRTFDTextDocumentType;
+// NSString * NSRTFDTextDocumentType;
 static VALUE
 osx_NSRTFDTextDocumentType(VALUE mdl)
 {
   return nsresult_to_rbresult(_C_ID, &NSRTFDTextDocumentType, nil);
 }
 
-// NSString *NSMacSimpleTextDocumentType;
+// NSString * NSMacSimpleTextDocumentType;
 static VALUE
 osx_NSMacSimpleTextDocumentType(VALUE mdl)
 {
   return nsresult_to_rbresult(_C_ID, &NSMacSimpleTextDocumentType, nil);
 }
 
-// NSString *NSHTMLTextDocumentType;
+// NSString * NSHTMLTextDocumentType;
 static VALUE
 osx_NSHTMLTextDocumentType(VALUE mdl)
 {

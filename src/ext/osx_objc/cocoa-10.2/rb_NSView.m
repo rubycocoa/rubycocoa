@@ -8,28 +8,28 @@ static const int VA_MAX = 4;
 
 
   /**** constants ****/
-// NSString *NSViewFrameDidChangeNotification;
+// NSString * NSViewFrameDidChangeNotification;
 static VALUE
 osx_NSViewFrameDidChangeNotification(VALUE mdl)
 {
   return nsresult_to_rbresult(_C_ID, &NSViewFrameDidChangeNotification, nil);
 }
 
-// NSString *NSViewFocusDidChangeNotification;
+// NSString * NSViewFocusDidChangeNotification;
 static VALUE
 osx_NSViewFocusDidChangeNotification(VALUE mdl)
 {
   return nsresult_to_rbresult(_C_ID, &NSViewFocusDidChangeNotification, nil);
 }
 
-// NSString *NSViewBoundsDidChangeNotification;
+// NSString * NSViewBoundsDidChangeNotification;
 static VALUE
 osx_NSViewBoundsDidChangeNotification(VALUE mdl)
 {
   return nsresult_to_rbresult(_C_ID, &NSViewBoundsDidChangeNotification, nil);
 }
 
-// NSString *NSViewGlobalFrameDidChangeNotification;
+// NSString * NSViewGlobalFrameDidChangeNotification;
 static VALUE
 osx_NSViewGlobalFrameDidChangeNotification(VALUE mdl)
 {

@@ -8,252 +8,252 @@ static const int VA_MAX = 4;
 
 
   /**** constants ****/
-// NSString *NSTextLineTooLongException;
+// NSString * NSTextLineTooLongException;
 static VALUE
 osx_NSTextLineTooLongException(VALUE mdl)
 {
   return nsresult_to_rbresult(_C_ID, &NSTextLineTooLongException, nil);
 }
 
-// NSString *NSTextNoSelectionException;
+// NSString * NSTextNoSelectionException;
 static VALUE
 osx_NSTextNoSelectionException(VALUE mdl)
 {
   return nsresult_to_rbresult(_C_ID, &NSTextNoSelectionException, nil);
 }
 
-// NSString *NSWordTablesWriteException;
+// NSString * NSWordTablesWriteException;
 static VALUE
 osx_NSWordTablesWriteException(VALUE mdl)
 {
   return nsresult_to_rbresult(_C_ID, &NSWordTablesWriteException, nil);
 }
 
-// NSString *NSWordTablesReadException;
+// NSString * NSWordTablesReadException;
 static VALUE
 osx_NSWordTablesReadException(VALUE mdl)
 {
   return nsresult_to_rbresult(_C_ID, &NSWordTablesReadException, nil);
 }
 
-// NSString *NSTextReadException;
+// NSString * NSTextReadException;
 static VALUE
 osx_NSTextReadException(VALUE mdl)
 {
   return nsresult_to_rbresult(_C_ID, &NSTextReadException, nil);
 }
 
-// NSString *NSTextWriteException;
+// NSString * NSTextWriteException;
 static VALUE
 osx_NSTextWriteException(VALUE mdl)
 {
   return nsresult_to_rbresult(_C_ID, &NSTextWriteException, nil);
 }
 
-// NSString *NSPasteboardCommunicationException;
+// NSString * NSPasteboardCommunicationException;
 static VALUE
 osx_NSPasteboardCommunicationException(VALUE mdl)
 {
   return nsresult_to_rbresult(_C_ID, &NSPasteboardCommunicationException, nil);
 }
 
-// NSString *NSPrintingCommunicationException;
+// NSString * NSPrintingCommunicationException;
 static VALUE
 osx_NSPrintingCommunicationException(VALUE mdl)
 {
   return nsresult_to_rbresult(_C_ID, &NSPrintingCommunicationException, nil);
 }
 
-// NSString *NSAbortModalException;
+// NSString * NSAbortModalException;
 static VALUE
 osx_NSAbortModalException(VALUE mdl)
 {
   return nsresult_to_rbresult(_C_ID, &NSAbortModalException, nil);
 }
 
-// NSString *NSAbortPrintingException;
+// NSString * NSAbortPrintingException;
 static VALUE
 osx_NSAbortPrintingException(VALUE mdl)
 {
   return nsresult_to_rbresult(_C_ID, &NSAbortPrintingException, nil);
 }
 
-// NSString *NSIllegalSelectorException;
+// NSString * NSIllegalSelectorException;
 static VALUE
 osx_NSIllegalSelectorException(VALUE mdl)
 {
   return nsresult_to_rbresult(_C_ID, &NSIllegalSelectorException, nil);
 }
 
-// NSString *NSAppKitVirtualMemoryException;
+// NSString * NSAppKitVirtualMemoryException;
 static VALUE
 osx_NSAppKitVirtualMemoryException(VALUE mdl)
 {
   return nsresult_to_rbresult(_C_ID, &NSAppKitVirtualMemoryException, nil);
 }
 
-// NSString *NSBadRTFDirectiveException;
+// NSString * NSBadRTFDirectiveException;
 static VALUE
 osx_NSBadRTFDirectiveException(VALUE mdl)
 {
   return nsresult_to_rbresult(_C_ID, &NSBadRTFDirectiveException, nil);
 }
 
-// NSString *NSBadRTFFontTableException;
+// NSString * NSBadRTFFontTableException;
 static VALUE
 osx_NSBadRTFFontTableException(VALUE mdl)
 {
   return nsresult_to_rbresult(_C_ID, &NSBadRTFFontTableException, nil);
 }
 
-// NSString *NSBadRTFStyleSheetException;
+// NSString * NSBadRTFStyleSheetException;
 static VALUE
 osx_NSBadRTFStyleSheetException(VALUE mdl)
 {
   return nsresult_to_rbresult(_C_ID, &NSBadRTFStyleSheetException, nil);
 }
 
-// NSString *NSTypedStreamVersionException;
+// NSString * NSTypedStreamVersionException;
 static VALUE
 osx_NSTypedStreamVersionException(VALUE mdl)
 {
   return nsresult_to_rbresult(_C_ID, &NSTypedStreamVersionException, nil);
 }
 
-// NSString *NSTIFFException;
+// NSString * NSTIFFException;
 static VALUE
 osx_NSTIFFException(VALUE mdl)
 {
   return nsresult_to_rbresult(_C_ID, &NSTIFFException, nil);
 }
 
-// NSString *NSPrintPackageException;
+// NSString * NSPrintPackageException;
 static VALUE
 osx_NSPrintPackageException(VALUE mdl)
 {
   return nsresult_to_rbresult(_C_ID, &NSPrintPackageException, nil);
 }
 
-// NSString *NSBadRTFColorTableException;
+// NSString * NSBadRTFColorTableException;
 static VALUE
 osx_NSBadRTFColorTableException(VALUE mdl)
 {
   return nsresult_to_rbresult(_C_ID, &NSBadRTFColorTableException, nil);
 }
 
-// NSString *NSDraggingException;
+// NSString * NSDraggingException;
 static VALUE
 osx_NSDraggingException(VALUE mdl)
 {
   return nsresult_to_rbresult(_C_ID, &NSDraggingException, nil);
 }
 
-// NSString *NSColorListIOException;
+// NSString * NSColorListIOException;
 static VALUE
 osx_NSColorListIOException(VALUE mdl)
 {
   return nsresult_to_rbresult(_C_ID, &NSColorListIOException, nil);
 }
 
-// NSString *NSColorListNotEditableException;
+// NSString * NSColorListNotEditableException;
 static VALUE
 osx_NSColorListNotEditableException(VALUE mdl)
 {
   return nsresult_to_rbresult(_C_ID, &NSColorListNotEditableException, nil);
 }
 
-// NSString *NSBadBitmapParametersException;
+// NSString * NSBadBitmapParametersException;
 static VALUE
 osx_NSBadBitmapParametersException(VALUE mdl)
 {
   return nsresult_to_rbresult(_C_ID, &NSBadBitmapParametersException, nil);
 }
 
-// NSString *NSWindowServerCommunicationException;
+// NSString * NSWindowServerCommunicationException;
 static VALUE
 osx_NSWindowServerCommunicationException(VALUE mdl)
 {
   return nsresult_to_rbresult(_C_ID, &NSWindowServerCommunicationException, nil);
 }
 
-// NSString *NSFontUnavailableException;
+// NSString * NSFontUnavailableException;
 static VALUE
 osx_NSFontUnavailableException(VALUE mdl)
 {
   return nsresult_to_rbresult(_C_ID, &NSFontUnavailableException, nil);
 }
 
-// NSString *NSPPDIncludeNotFoundException;
+// NSString * NSPPDIncludeNotFoundException;
 static VALUE
 osx_NSPPDIncludeNotFoundException(VALUE mdl)
 {
   return nsresult_to_rbresult(_C_ID, &NSPPDIncludeNotFoundException, nil);
 }
 
-// NSString *NSPPDParseException;
+// NSString * NSPPDParseException;
 static VALUE
 osx_NSPPDParseException(VALUE mdl)
 {
   return nsresult_to_rbresult(_C_ID, &NSPPDParseException, nil);
 }
 
-// NSString *NSPPDIncludeStackOverflowException;
+// NSString * NSPPDIncludeStackOverflowException;
 static VALUE
 osx_NSPPDIncludeStackOverflowException(VALUE mdl)
 {
   return nsresult_to_rbresult(_C_ID, &NSPPDIncludeStackOverflowException, nil);
 }
 
-// NSString *NSPPDIncludeStackUnderflowException;
+// NSString * NSPPDIncludeStackUnderflowException;
 static VALUE
 osx_NSPPDIncludeStackUnderflowException(VALUE mdl)
 {
   return nsresult_to_rbresult(_C_ID, &NSPPDIncludeStackUnderflowException, nil);
 }
 
-// NSString *NSRTFPropertyStackOverflowException;
+// NSString * NSRTFPropertyStackOverflowException;
 static VALUE
 osx_NSRTFPropertyStackOverflowException(VALUE mdl)
 {
   return nsresult_to_rbresult(_C_ID, &NSRTFPropertyStackOverflowException, nil);
 }
 
-// NSString *NSAppKitIgnoredException;
+// NSString * NSAppKitIgnoredException;
 static VALUE
 osx_NSAppKitIgnoredException(VALUE mdl)
 {
   return nsresult_to_rbresult(_C_ID, &NSAppKitIgnoredException, nil);
 }
 
-// NSString *NSBadComparisonException;
+// NSString * NSBadComparisonException;
 static VALUE
 osx_NSBadComparisonException(VALUE mdl)
 {
   return nsresult_to_rbresult(_C_ID, &NSBadComparisonException, nil);
 }
 
-// NSString *NSImageCacheException;
+// NSString * NSImageCacheException;
 static VALUE
 osx_NSImageCacheException(VALUE mdl)
 {
   return nsresult_to_rbresult(_C_ID, &NSImageCacheException, nil);
 }
 
-// NSString *NSNibLoadingException;
+// NSString * NSNibLoadingException;
 static VALUE
 osx_NSNibLoadingException(VALUE mdl)
 {
   return nsresult_to_rbresult(_C_ID, &NSNibLoadingException, nil);
 }
 
-// NSString *NSBrowserIllegalDelegateException;
+// NSString * NSBrowserIllegalDelegateException;
 static VALUE
 osx_NSBrowserIllegalDelegateException(VALUE mdl)
 {
   return nsresult_to_rbresult(_C_ID, &NSBrowserIllegalDelegateException, nil);
 }
 
-// NSString *NSAccessibilityException;
+// NSString * NSAccessibilityException;
 static VALUE
 osx_NSAccessibilityException(VALUE mdl)
 {

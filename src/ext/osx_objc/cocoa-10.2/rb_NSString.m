@@ -22,6 +22,13 @@ osx_NSCharacterConversionException(VALUE mdl)
   return nsresult_to_rbresult(_C_ID, &NSCharacterConversionException, nil);
 }
 
+// void * _NSConstantStringClassReference;
+static VALUE
+osx__NSConstantStringClassReference(VALUE mdl)
+{
+  return nsresult_to_rbresult(_C_PTR, &_NSConstantStringClassReference, nil);
+}
+
 void init_NSString(VALUE mOSX)
 {
   /**** enums ****/
@@ -51,4 +58,5 @@ void init_NSString(VALUE mOSX)
   /**** constants ****/
   rb_define_module_function(mOSX, "NSParseErrorException", osx_NSParseErrorException, 0);
   rb_define_module_function(mOSX, "NSCharacterConversionException", osx_NSCharacterConversionException, 0);
+  rb_define_module_function(mOSX, "_NSConstantStringClassReference", osx__NSConstantStringClassReference, 0);
 }

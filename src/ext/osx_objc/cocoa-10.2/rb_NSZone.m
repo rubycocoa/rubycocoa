@@ -8,7 +8,7 @@ static const int VA_MAX = 4;
 
 
   /**** functions ****/
-// NSZone *NSDefaultMallocZone(void);
+// NSZone * NSDefaultMallocZone ( void );
 static VALUE
 osx_NSDefaultMallocZone(VALUE mdl)
 {
@@ -16,7 +16,7 @@ osx_NSDefaultMallocZone(VALUE mdl)
   return nsresult_to_rbresult(_C_PTR, &ns_result, nil);
 }
 
-// NSZone *NSCreateZone(unsigned startSize, unsigned granularity, BOOL canFree);
+// NSZone * NSCreateZone ( unsigned startSize , unsigned granularity , BOOL canFree );
 static VALUE
 osx_NSCreateZone(VALUE mdl, VALUE a0, VALUE a1, VALUE a2)
 {
@@ -42,7 +42,7 @@ osx_NSCreateZone(VALUE mdl, VALUE a0, VALUE a1, VALUE a2)
   return rb_result;
 }
 
-// void NSRecycleZone(NSZone *zone);
+// void NSRecycleZone ( NSZone * zone );
 static VALUE
 osx_NSRecycleZone(VALUE mdl, VALUE a0)
 {
@@ -61,7 +61,7 @@ osx_NSRecycleZone(VALUE mdl, VALUE a0)
   return rb_result;
 }
 
-// void NSSetZoneName(NSZone *zone, NSString *name);
+// void NSSetZoneName ( NSZone * zone , NSString * name );
 static VALUE
 osx_NSSetZoneName(VALUE mdl, VALUE a0, VALUE a1)
 {
@@ -83,7 +83,7 @@ osx_NSSetZoneName(VALUE mdl, VALUE a0, VALUE a1)
   return rb_result;
 }
 
-// NSString *NSZoneName(NSZone *zone);
+// NSString * NSZoneName ( NSZone * zone );
 static VALUE
 osx_NSZoneName(VALUE mdl, VALUE a0)
 {
@@ -103,7 +103,7 @@ osx_NSZoneName(VALUE mdl, VALUE a0)
   return rb_result;
 }
 
-// NSZone *NSZoneFromPointer(void *ptr);
+// NSZone * NSZoneFromPointer ( void * ptr );
 static VALUE
 osx_NSZoneFromPointer(VALUE mdl, VALUE a0)
 {
@@ -123,7 +123,7 @@ osx_NSZoneFromPointer(VALUE mdl, VALUE a0)
   return rb_result;
 }
 
-// void *NSZoneMalloc(NSZone *zone, unsigned size);
+// void * NSZoneMalloc ( NSZone * zone , unsigned size );
 static VALUE
 osx_NSZoneMalloc(VALUE mdl, VALUE a0, VALUE a1)
 {
@@ -146,7 +146,7 @@ osx_NSZoneMalloc(VALUE mdl, VALUE a0, VALUE a1)
   return rb_result;
 }
 
-// void *NSZoneCalloc(NSZone *zone, unsigned numElems, unsigned byteSize);
+// void * NSZoneCalloc ( NSZone * zone , unsigned numElems , unsigned byteSize );
 static VALUE
 osx_NSZoneCalloc(VALUE mdl, VALUE a0, VALUE a1, VALUE a2)
 {
@@ -172,7 +172,7 @@ osx_NSZoneCalloc(VALUE mdl, VALUE a0, VALUE a1, VALUE a2)
   return rb_result;
 }
 
-// void *NSZoneRealloc(NSZone *zone, void *ptr, unsigned size);
+// void * NSZoneRealloc ( NSZone * zone , void * ptr , unsigned size );
 static VALUE
 osx_NSZoneRealloc(VALUE mdl, VALUE a0, VALUE a1, VALUE a2)
 {
@@ -198,7 +198,7 @@ osx_NSZoneRealloc(VALUE mdl, VALUE a0, VALUE a1, VALUE a2)
   return rb_result;
 }
 
-// void NSZoneFree(NSZone *zone, void *ptr);
+// void NSZoneFree ( NSZone * zone , void * ptr );
 static VALUE
 osx_NSZoneFree(VALUE mdl, VALUE a0, VALUE a1)
 {
@@ -220,7 +220,7 @@ osx_NSZoneFree(VALUE mdl, VALUE a0, VALUE a1)
   return rb_result;
 }
 
-// unsigned NSPageSize(void);
+// unsigned NSPageSize ( void );
 static VALUE
 osx_NSPageSize(VALUE mdl)
 {
@@ -228,7 +228,7 @@ osx_NSPageSize(VALUE mdl)
   return nsresult_to_rbresult(_C_UINT, &ns_result, nil);
 }
 
-// unsigned NSLogPageSize(void);
+// unsigned NSLogPageSize ( void );
 static VALUE
 osx_NSLogPageSize(VALUE mdl)
 {
@@ -236,7 +236,7 @@ osx_NSLogPageSize(VALUE mdl)
   return nsresult_to_rbresult(_C_UINT, &ns_result, nil);
 }
 
-// unsigned NSRoundUpToMultipleOfPageSize(unsigned bytes);
+// unsigned NSRoundUpToMultipleOfPageSize ( unsigned bytes );
 static VALUE
 osx_NSRoundUpToMultipleOfPageSize(VALUE mdl, VALUE a0)
 {
@@ -256,7 +256,7 @@ osx_NSRoundUpToMultipleOfPageSize(VALUE mdl, VALUE a0)
   return rb_result;
 }
 
-// unsigned NSRoundDownToMultipleOfPageSize(unsigned bytes);
+// unsigned NSRoundDownToMultipleOfPageSize ( unsigned bytes );
 static VALUE
 osx_NSRoundDownToMultipleOfPageSize(VALUE mdl, VALUE a0)
 {
@@ -276,7 +276,7 @@ osx_NSRoundDownToMultipleOfPageSize(VALUE mdl, VALUE a0)
   return rb_result;
 }
 
-// void *NSAllocateMemoryPages(unsigned bytes);
+// void * NSAllocateMemoryPages ( unsigned bytes );
 static VALUE
 osx_NSAllocateMemoryPages(VALUE mdl, VALUE a0)
 {
@@ -296,7 +296,7 @@ osx_NSAllocateMemoryPages(VALUE mdl, VALUE a0)
   return rb_result;
 }
 
-// void NSDeallocateMemoryPages(void *ptr, unsigned bytes);
+// void NSDeallocateMemoryPages ( void * ptr , unsigned bytes );
 static VALUE
 osx_NSDeallocateMemoryPages(VALUE mdl, VALUE a0, VALUE a1)
 {
@@ -318,7 +318,7 @@ osx_NSDeallocateMemoryPages(VALUE mdl, VALUE a0, VALUE a1)
   return rb_result;
 }
 
-// void NSCopyMemoryPages(const void *source, void *dest, unsigned bytes);
+// void NSCopyMemoryPages ( const void * source , void * dest , unsigned bytes );
 static VALUE
 osx_NSCopyMemoryPages(VALUE mdl, VALUE a0, VALUE a1, VALUE a2)
 {
@@ -343,7 +343,7 @@ osx_NSCopyMemoryPages(VALUE mdl, VALUE a0, VALUE a1, VALUE a2)
   return rb_result;
 }
 
-// unsigned NSRealMemoryAvailable(void);
+// unsigned NSRealMemoryAvailable ( void );
 static VALUE
 osx_NSRealMemoryAvailable(VALUE mdl)
 {

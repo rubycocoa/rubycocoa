@@ -8,35 +8,35 @@ static const int VA_MAX = 4;
 
 
   /**** functions ****/
-// id <NSObject> NSAllocateObject(Class aClass, unsigned extraBytes, NSZone *zone);
+// id < NSObject > NSAllocateObject ( Class aClass , unsigned extraBytes , NSZone * zone );
 static VALUE
 osx_NSAllocateObject(VALUE mdl, VALUE a0, VALUE a1, VALUE a2)
 {
   rb_notimplement();
 }
 
-// void NSDeallocateObject(id <NSObject>object);
+// void NSDeallocateObject ( id < NSObject > object );
 static VALUE
 osx_NSDeallocateObject(VALUE mdl, VALUE a0)
 {
   rb_notimplement();
 }
 
-// id <NSObject> NSCopyObject(id <NSObject>object, unsigned extraBytes, NSZone *zone);
+// id < NSObject > NSCopyObject ( id < NSObject > object , unsigned extraBytes , NSZone * zone );
 static VALUE
 osx_NSCopyObject(VALUE mdl, VALUE a0, VALUE a1, VALUE a2)
 {
   rb_notimplement();
 }
 
-// BOOL NSShouldRetainWithZone(id <NSObject> anObject, NSZone *requestedZone);
+// BOOL NSShouldRetainWithZone ( id < NSObject > anObject , NSZone * requestedZone );
 static VALUE
 osx_NSShouldRetainWithZone(VALUE mdl, VALUE a0, VALUE a1)
 {
   rb_notimplement();
 }
 
-// void NSIncrementExtraRefCount(id object);
+// void NSIncrementExtraRefCount ( id object );
 static VALUE
 osx_NSIncrementExtraRefCount(VALUE mdl, VALUE a0)
 {
@@ -55,7 +55,7 @@ osx_NSIncrementExtraRefCount(VALUE mdl, VALUE a0)
   return rb_result;
 }
 
-// BOOL NSDecrementExtraRefCountWasZero(id object);
+// BOOL NSDecrementExtraRefCountWasZero ( id object );
 static VALUE
 osx_NSDecrementExtraRefCountWasZero(VALUE mdl, VALUE a0)
 {
@@ -75,7 +75,7 @@ osx_NSDecrementExtraRefCountWasZero(VALUE mdl, VALUE a0)
   return rb_result;
 }
 
-// unsigned NSExtraRefCount(id object);
+// unsigned NSExtraRefCount ( id object );
 static VALUE
 osx_NSExtraRefCount(VALUE mdl, VALUE a0)
 {

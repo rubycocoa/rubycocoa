@@ -8,7 +8,7 @@ static const int VA_MAX = 4;
 
 
   /**** constants ****/
-// NSString *NSPrintPhotoJobStyleHint;
+// NSString * NSPrintPhotoJobStyleHint;
 static VALUE
 osx_NSPrintPhotoJobStyleHint(VALUE mdl)
 {

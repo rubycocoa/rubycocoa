@@ -8,7 +8,7 @@ static const int VA_MAX = 4;
 
 
   /**** constants ****/
-// NSString *NSURLFileScheme;
+// NSString * NSURLFileScheme;
 static VALUE
 osx_NSURLFileScheme(VALUE mdl)
 {

@@ -16,7 +16,7 @@ osx_NSFoundationVersionNumber(VALUE mdl)
 }
 
   /**** functions ****/
-// NSString *NSStringFromSelector(SEL aSelector);
+// NSString * NSStringFromSelector ( SEL aSelector );
 static VALUE
 osx_NSStringFromSelector(VALUE mdl, VALUE a0)
 {
@@ -36,7 +36,7 @@ osx_NSStringFromSelector(VALUE mdl, VALUE a0)
   return rb_result;
 }
 
-// SEL NSSelectorFromString(NSString *aSelectorName);
+// SEL NSSelectorFromString ( NSString * aSelectorName );
 static VALUE
 osx_NSSelectorFromString(VALUE mdl, VALUE a0)
 {
@@ -56,7 +56,7 @@ osx_NSSelectorFromString(VALUE mdl, VALUE a0)
   return rb_result;
 }
 
-// Class NSClassFromString(NSString *aClassName);
+// Class NSClassFromString ( NSString * aClassName );
 static VALUE
 osx_NSClassFromString(VALUE mdl, VALUE a0)
 {
@@ -76,7 +76,7 @@ osx_NSClassFromString(VALUE mdl, VALUE a0)
   return rb_result;
 }
 
-// NSString *NSStringFromClass(Class aClass);
+// NSString * NSStringFromClass ( Class aClass );
 static VALUE
 osx_NSStringFromClass(VALUE mdl, VALUE a0)
 {
@@ -96,13 +96,13 @@ osx_NSStringFromClass(VALUE mdl, VALUE a0)
   return rb_result;
 }
 
-// __const			 char *NSGetSizeAndAlignment(__const			 char *typePtr, unsigned int *sizep, unsigned int *alignp);
+// const char * NSGetSizeAndAlignment ( const char * typePtr , unsigned int * sizep , unsigned int * alignp );
 static VALUE
 osx_NSGetSizeAndAlignment(VALUE mdl, VALUE a0, VALUE a1, VALUE a2)
 {
-  __const			 char * ns_result;
+  const char * ns_result;
 
-  __const			 char * ns_a0;
+  const char * ns_a0;
   unsigned int * ns_a1;
   unsigned int * ns_a2;
 
@@ -122,7 +122,7 @@ osx_NSGetSizeAndAlignment(VALUE mdl, VALUE a0, VALUE a1, VALUE a2)
   return rb_result;
 }
 
-// void NSLog(NSString *format, ...);
+// void NSLog ( NSString * format , ... );
 static VALUE
 osx_NSLog(int argc, VALUE* argv, VALUE mdl)
 {
@@ -162,7 +162,7 @@ osx_NSLog(int argc, VALUE* argv, VALUE mdl)
   return rb_result;
 }
 
-// void NSLogv(NSString *format, va_list args);
+// void NSLogv ( NSString * format , va_list args );
 static VALUE
 osx_NSLogv(VALUE mdl, VALUE a0, VALUE a1)
 {

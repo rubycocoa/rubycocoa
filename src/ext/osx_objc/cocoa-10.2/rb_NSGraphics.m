@@ -8,70 +8,70 @@ static const int VA_MAX = 4;
 
 
   /**** constants ****/
-// NSString *NSCalibratedWhiteColorSpace;
+// NSString * NSCalibratedWhiteColorSpace;
 static VALUE
 osx_NSCalibratedWhiteColorSpace(VALUE mdl)
 {
   return nsresult_to_rbresult(_C_ID, &NSCalibratedWhiteColorSpace, nil);
 }
 
-// NSString *NSCalibratedBlackColorSpace;
+// NSString * NSCalibratedBlackColorSpace;
 static VALUE
 osx_NSCalibratedBlackColorSpace(VALUE mdl)
 {
   return nsresult_to_rbresult(_C_ID, &NSCalibratedBlackColorSpace, nil);
 }
 
-// NSString *NSCalibratedRGBColorSpace;
+// NSString * NSCalibratedRGBColorSpace;
 static VALUE
 osx_NSCalibratedRGBColorSpace(VALUE mdl)
 {
   return nsresult_to_rbresult(_C_ID, &NSCalibratedRGBColorSpace, nil);
 }
 
-// NSString *NSDeviceWhiteColorSpace;
+// NSString * NSDeviceWhiteColorSpace;
 static VALUE
 osx_NSDeviceWhiteColorSpace(VALUE mdl)
 {
   return nsresult_to_rbresult(_C_ID, &NSDeviceWhiteColorSpace, nil);
 }
 
-// NSString *NSDeviceBlackColorSpace;
+// NSString * NSDeviceBlackColorSpace;
 static VALUE
 osx_NSDeviceBlackColorSpace(VALUE mdl)
 {
   return nsresult_to_rbresult(_C_ID, &NSDeviceBlackColorSpace, nil);
 }
 
-// NSString *NSDeviceRGBColorSpace;
+// NSString * NSDeviceRGBColorSpace;
 static VALUE
 osx_NSDeviceRGBColorSpace(VALUE mdl)
 {
   return nsresult_to_rbresult(_C_ID, &NSDeviceRGBColorSpace, nil);
 }
 
-// NSString *NSDeviceCMYKColorSpace;
+// NSString * NSDeviceCMYKColorSpace;
 static VALUE
 osx_NSDeviceCMYKColorSpace(VALUE mdl)
 {
   return nsresult_to_rbresult(_C_ID, &NSDeviceCMYKColorSpace, nil);
 }
 
-// NSString *NSNamedColorSpace;
+// NSString * NSNamedColorSpace;
 static VALUE
 osx_NSNamedColorSpace(VALUE mdl)
 {
   return nsresult_to_rbresult(_C_ID, &NSNamedColorSpace, nil);
 }
 
-// NSString *NSPatternColorSpace;
+// NSString * NSPatternColorSpace;
 static VALUE
 osx_NSPatternColorSpace(VALUE mdl)
 {
   return nsresult_to_rbresult(_C_ID, &NSPatternColorSpace, nil);
 }
 
-// NSString *NSCustomColorSpace;
+// NSString * NSCustomColorSpace;
 static VALUE
 osx_NSCustomColorSpace(VALUE mdl)
 {
@@ -106,42 +106,42 @@ osx_NSBlack(VALUE mdl)
   return nsresult_to_rbresult(_C_FLT, &NSBlack, nil);
 }
 
-// NSString *NSDeviceResolution;
+// NSString * NSDeviceResolution;
 static VALUE
 osx_NSDeviceResolution(VALUE mdl)
 {
   return nsresult_to_rbresult(_C_ID, &NSDeviceResolution, nil);
 }
 
-// NSString *NSDeviceColorSpaceName;
+// NSString * NSDeviceColorSpaceName;
 static VALUE
 osx_NSDeviceColorSpaceName(VALUE mdl)
 {
   return nsresult_to_rbresult(_C_ID, &NSDeviceColorSpaceName, nil);
 }
 
-// NSString *NSDeviceBitsPerSample;
+// NSString * NSDeviceBitsPerSample;
 static VALUE
 osx_NSDeviceBitsPerSample(VALUE mdl)
 {
   return nsresult_to_rbresult(_C_ID, &NSDeviceBitsPerSample, nil);
 }
 
-// NSString *NSDeviceIsScreen;
+// NSString * NSDeviceIsScreen;
 static VALUE
 osx_NSDeviceIsScreen(VALUE mdl)
 {
   return nsresult_to_rbresult(_C_ID, &NSDeviceIsScreen, nil);
 }
 
-// NSString *NSDeviceIsPrinter;
+// NSString * NSDeviceIsPrinter;
 static VALUE
 osx_NSDeviceIsPrinter(VALUE mdl)
 {
   return nsresult_to_rbresult(_C_ID, &NSDeviceIsPrinter, nil);
 }
 
-// NSString *NSDeviceSize;
+// NSString * NSDeviceSize;
 static VALUE
 osx_NSDeviceSize(VALUE mdl)
 {
@@ -149,42 +149,42 @@ osx_NSDeviceSize(VALUE mdl)
 }
 
   /**** functions ****/
-// NSWindowDepth NSBestDepth (NSString *colorSpace, int bps, int bpp, BOOL planar, BOOL *exactMatch);
+// NSWindowDepth NSBestDepth ( NSString * colorSpace , int bps , int bpp , BOOL planar , BOOL * exactMatch );
 static VALUE
 osx_NSBestDepth(VALUE mdl, VALUE a0, VALUE a1, VALUE a2, VALUE a3, VALUE a4)
 {
   rb_notimplement();
 }
 
-// BOOL NSPlanarFromDepth (NSWindowDepth depth);
+// BOOL NSPlanarFromDepth ( NSWindowDepth depth );
 static VALUE
 osx_NSPlanarFromDepth(VALUE mdl, VALUE a0)
 {
   rb_notimplement();
 }
 
-// NSString *NSColorSpaceFromDepth (NSWindowDepth depth);
+// NSString * NSColorSpaceFromDepth ( NSWindowDepth depth );
 static VALUE
 osx_NSColorSpaceFromDepth(VALUE mdl, VALUE a0)
 {
   rb_notimplement();
 }
 
-// int NSBitsPerSampleFromDepth (NSWindowDepth depth);
+// int NSBitsPerSampleFromDepth ( NSWindowDepth depth );
 static VALUE
 osx_NSBitsPerSampleFromDepth(VALUE mdl, VALUE a0)
 {
   rb_notimplement();
 }
 
-// int NSBitsPerPixelFromDepth (NSWindowDepth depth);
+// int NSBitsPerPixelFromDepth ( NSWindowDepth depth );
 static VALUE
 osx_NSBitsPerPixelFromDepth(VALUE mdl, VALUE a0)
 {
   rb_notimplement();
 }
 
-// int NSNumberOfColorComponents (NSString *colorSpaceName);
+// int NSNumberOfColorComponents ( NSString * colorSpaceName );
 static VALUE
 osx_NSNumberOfColorComponents(VALUE mdl, VALUE a0)
 {
@@ -204,7 +204,7 @@ osx_NSNumberOfColorComponents(VALUE mdl, VALUE a0)
   return rb_result;
 }
 
-// const NSWindowDepth *NSAvailableWindowDepths (void);
+// const NSWindowDepth * NSAvailableWindowDepths ( void );
 static VALUE
 osx_NSAvailableWindowDepths(VALUE mdl)
 {
@@ -212,7 +212,7 @@ osx_NSAvailableWindowDepths(VALUE mdl)
   return nsresult_to_rbresult(_C_PTR, &ns_result, nil);
 }
 
-// void NSRectFill(NSRect aRect);
+// void NSRectFill ( NSRect aRect );
 static VALUE
 osx_NSRectFill(VALUE mdl, VALUE a0)
 {
@@ -231,7 +231,7 @@ osx_NSRectFill(VALUE mdl, VALUE a0)
   return rb_result;
 }
 
-// void NSRectFillList(const NSRect *rects, int count);
+// void NSRectFillList ( const NSRect * rects , int count );
 static VALUE
 osx_NSRectFillList(VALUE mdl, VALUE a0, VALUE a1)
 {
@@ -253,7 +253,7 @@ osx_NSRectFillList(VALUE mdl, VALUE a0, VALUE a1)
   return rb_result;
 }
 
-// void NSRectFillListWithGrays(const NSRect *rects, const float *grays, int num);
+// void NSRectFillListWithGrays ( const NSRect * rects , const float * grays , int num );
 static VALUE
 osx_NSRectFillListWithGrays(VALUE mdl, VALUE a0, VALUE a1, VALUE a2)
 {
@@ -278,13 +278,13 @@ osx_NSRectFillListWithGrays(VALUE mdl, VALUE a0, VALUE a1, VALUE a2)
   return rb_result;
 }
 
-// void NSRectFillListWithColors(const NSRect *rects, NSColor **colors, int num);
+// void NSRectFillListWithColors ( const NSRect * rects , NSColor * * colors , int num );
 static VALUE
 osx_NSRectFillListWithColors(VALUE mdl, VALUE a0, VALUE a1, VALUE a2)
 {
 
   const NSRect * ns_a0;
-  NSColor ** ns_a1;
+  NSColor * * ns_a1;
   int ns_a2;
 
   VALUE rb_result;
@@ -303,28 +303,82 @@ osx_NSRectFillListWithColors(VALUE mdl, VALUE a0, VALUE a1, VALUE a2)
   return rb_result;
 }
 
-// void NSRectFillUsingOperation(NSRect aRect, NSCompositingOperation op);
+// void NSRectFillUsingOperation ( NSRect aRect , NSCompositingOperation op );
 static VALUE
 osx_NSRectFillUsingOperation(VALUE mdl, VALUE a0, VALUE a1)
 {
-  rb_notimplement();
+
+  NSRect ns_a0;
+  NSCompositingOperation ns_a1;
+
+  VALUE rb_result;
+  id pool = [[NSAutoreleasePool alloc] init];
+  /* a0 */
+  rbarg_to_nsarg(a0, _PRIV_C_NSRECT, &ns_a0, pool, 0);
+  /* a1 */
+  rbarg_to_nsarg(a1, _C_INT, &ns_a1, pool, 1);
+
+  NSRectFillUsingOperation(ns_a0, ns_a1);
+
+  rb_result = Qnil;
+  [pool release];
+  return rb_result;
 }
 
-// void NSRectFillListUsingOperation(const NSRect *rects, int count, NSCompositingOperation op);
+// void NSRectFillListUsingOperation ( const NSRect * rects , int count , NSCompositingOperation op );
 static VALUE
 osx_NSRectFillListUsingOperation(VALUE mdl, VALUE a0, VALUE a1, VALUE a2)
 {
-  rb_notimplement();
+
+  const NSRect * ns_a0;
+  int ns_a1;
+  NSCompositingOperation ns_a2;
+
+  VALUE rb_result;
+  id pool = [[NSAutoreleasePool alloc] init];
+  /* a0 */
+  rbarg_to_nsarg(a0, _C_PTR, &ns_a0, pool, 0);
+  /* a1 */
+  rbarg_to_nsarg(a1, _C_INT, &ns_a1, pool, 1);
+  /* a2 */
+  rbarg_to_nsarg(a2, _C_INT, &ns_a2, pool, 2);
+
+  NSRectFillListUsingOperation(ns_a0, ns_a1, ns_a2);
+
+  rb_result = Qnil;
+  [pool release];
+  return rb_result;
 }
 
-// void NSRectFillListWithColorsUsingOperation(const NSRect *rects, NSColor **colors, int num, NSCompositingOperation op);
+// void NSRectFillListWithColorsUsingOperation ( const NSRect * rects , NSColor * * colors , int num , NSCompositingOperation op );
 static VALUE
 osx_NSRectFillListWithColorsUsingOperation(VALUE mdl, VALUE a0, VALUE a1, VALUE a2, VALUE a3)
 {
-  rb_notimplement();
+
+  const NSRect * ns_a0;
+  NSColor * * ns_a1;
+  int ns_a2;
+  NSCompositingOperation ns_a3;
+
+  VALUE rb_result;
+  id pool = [[NSAutoreleasePool alloc] init];
+  /* a0 */
+  rbarg_to_nsarg(a0, _C_PTR, &ns_a0, pool, 0);
+  /* a1 */
+  rbarg_to_nsarg(a1, _C_PTR, &ns_a1, pool, 1);
+  /* a2 */
+  rbarg_to_nsarg(a2, _C_INT, &ns_a2, pool, 2);
+  /* a3 */
+  rbarg_to_nsarg(a3, _C_INT, &ns_a3, pool, 3);
+
+  NSRectFillListWithColorsUsingOperation(ns_a0, ns_a1, ns_a2, ns_a3);
+
+  rb_result = Qnil;
+  [pool release];
+  return rb_result;
 }
 
-// void NSFrameRect(NSRect aRect);
+// void NSFrameRect ( NSRect aRect );
 static VALUE
 osx_NSFrameRect(VALUE mdl, VALUE a0)
 {
@@ -343,7 +397,7 @@ osx_NSFrameRect(VALUE mdl, VALUE a0)
   return rb_result;
 }
 
-// void NSFrameRectWithWidth(NSRect aRect, float frameWidth);
+// void NSFrameRectWithWidth ( NSRect aRect , float frameWidth );
 static VALUE
 osx_NSFrameRectWithWidth(VALUE mdl, VALUE a0, VALUE a1)
 {
@@ -365,14 +419,32 @@ osx_NSFrameRectWithWidth(VALUE mdl, VALUE a0, VALUE a1)
   return rb_result;
 }
 
-// void NSFrameRectWithWidthUsingOperation(NSRect aRect, float frameWidth, NSCompositingOperation op);
+// void NSFrameRectWithWidthUsingOperation ( NSRect aRect , float frameWidth , NSCompositingOperation op );
 static VALUE
 osx_NSFrameRectWithWidthUsingOperation(VALUE mdl, VALUE a0, VALUE a1, VALUE a2)
 {
-  rb_notimplement();
+
+  NSRect ns_a0;
+  float ns_a1;
+  NSCompositingOperation ns_a2;
+
+  VALUE rb_result;
+  id pool = [[NSAutoreleasePool alloc] init];
+  /* a0 */
+  rbarg_to_nsarg(a0, _PRIV_C_NSRECT, &ns_a0, pool, 0);
+  /* a1 */
+  rbarg_to_nsarg(a1, _C_FLT, &ns_a1, pool, 1);
+  /* a2 */
+  rbarg_to_nsarg(a2, _C_INT, &ns_a2, pool, 2);
+
+  NSFrameRectWithWidthUsingOperation(ns_a0, ns_a1, ns_a2);
+
+  rb_result = Qnil;
+  [pool release];
+  return rb_result;
 }
 
-// void NSRectClip(NSRect aRect);
+// void NSRectClip ( NSRect aRect );
 static VALUE
 osx_NSRectClip(VALUE mdl, VALUE a0)
 {
@@ -391,7 +463,7 @@ osx_NSRectClip(VALUE mdl, VALUE a0)
   return rb_result;
 }
 
-// void NSRectClipList(const NSRect *rects, int count);
+// void NSRectClipList ( const NSRect * rects , int count );
 static VALUE
 osx_NSRectClipList(VALUE mdl, VALUE a0, VALUE a1)
 {
@@ -413,7 +485,7 @@ osx_NSRectClipList(VALUE mdl, VALUE a0, VALUE a1)
   return rb_result;
 }
 
-// NSRect NSDrawTiledRects(NSRect boundsRect, NSRect clipRect, const NSRectEdge *sides, const float *grays, int count);
+// NSRect NSDrawTiledRects ( NSRect boundsRect , NSRect clipRect , const NSRectEdge * sides , const float * grays , int count );
 static VALUE
 osx_NSDrawTiledRects(VALUE mdl, VALUE a0, VALUE a1, VALUE a2, VALUE a3, VALUE a4)
 {
@@ -445,7 +517,7 @@ osx_NSDrawTiledRects(VALUE mdl, VALUE a0, VALUE a1, VALUE a2, VALUE a3, VALUE a4
   return rb_result;
 }
 
-// void NSDrawGrayBezel(NSRect aRect, NSRect clipRect);
+// void NSDrawGrayBezel ( NSRect aRect , NSRect clipRect );
 static VALUE
 osx_NSDrawGrayBezel(VALUE mdl, VALUE a0, VALUE a1)
 {
@@ -467,7 +539,7 @@ osx_NSDrawGrayBezel(VALUE mdl, VALUE a0, VALUE a1)
   return rb_result;
 }
 
-// void NSDrawGroove(NSRect aRect, NSRect clipRect);
+// void NSDrawGroove ( NSRect aRect , NSRect clipRect );
 static VALUE
 osx_NSDrawGroove(VALUE mdl, VALUE a0, VALUE a1)
 {
@@ -489,7 +561,7 @@ osx_NSDrawGroove(VALUE mdl, VALUE a0, VALUE a1)
   return rb_result;
 }
 
-// void NSDrawWhiteBezel(NSRect aRect, NSRect clipRect);
+// void NSDrawWhiteBezel ( NSRect aRect , NSRect clipRect );
 static VALUE
 osx_NSDrawWhiteBezel(VALUE mdl, VALUE a0, VALUE a1)
 {
@@ -511,7 +583,7 @@ osx_NSDrawWhiteBezel(VALUE mdl, VALUE a0, VALUE a1)
   return rb_result;
 }
 
-// void NSDrawButton(NSRect aRect, NSRect clipRect);
+// void NSDrawButton ( NSRect aRect , NSRect clipRect );
 static VALUE
 osx_NSDrawButton(VALUE mdl, VALUE a0, VALUE a1)
 {
@@ -533,7 +605,7 @@ osx_NSDrawButton(VALUE mdl, VALUE a0, VALUE a1)
   return rb_result;
 }
 
-// void NSEraseRect(NSRect aRect);
+// void NSEraseRect ( NSRect aRect );
 static VALUE
 osx_NSEraseRect(VALUE mdl, VALUE a0)
 {
@@ -552,7 +624,7 @@ osx_NSEraseRect(VALUE mdl, VALUE a0)
   return rb_result;
 }
 
-// NSColor *NSReadPixel(NSPoint passedPoint);
+// NSColor * NSReadPixel ( NSPoint passedPoint );
 static VALUE
 osx_NSReadPixel(VALUE mdl, VALUE a0)
 {
@@ -572,14 +644,14 @@ osx_NSReadPixel(VALUE mdl, VALUE a0)
   return rb_result;
 }
 
-// void NSDrawBitmap(NSRect rect, int width, int height, int bps, int spp, int bpp, int bpr, BOOL isPlanar, BOOL hasAlpha, NSString *colorSpaceName, const unsigned char *const data[5]);
+// void NSDrawBitmap ( NSRect rect , int width , int height , int bps , int spp , int bpp , int bpr , BOOL isPlanar , BOOL hasAlpha , NSString * colorSpaceName , const unsigned char * const data [ 5 ] );
 static VALUE
 osx_NSDrawBitmap(VALUE mdl, VALUE a0, VALUE a1, VALUE a2, VALUE a3, VALUE a4, VALUE a5, VALUE a6, VALUE a7, VALUE a8, VALUE a9, VALUE a10)
 {
   rb_notimplement();
 }
 
-// void NSCopyBits(int srcGState, NSRect srcRect, NSPoint destPoint);
+// void NSCopyBits ( int srcGState , NSRect srcRect , NSPoint destPoint );
 static VALUE
 osx_NSCopyBits(VALUE mdl, VALUE a0, VALUE a1, VALUE a2)
 {
@@ -604,7 +676,7 @@ osx_NSCopyBits(VALUE mdl, VALUE a0, VALUE a1, VALUE a2)
   return rb_result;
 }
 
-// void NSHighlightRect(NSRect aRect);
+// void NSHighlightRect ( NSRect aRect );
 static VALUE
 osx_NSHighlightRect(VALUE mdl, VALUE a0)
 {
@@ -623,7 +695,7 @@ osx_NSHighlightRect(VALUE mdl, VALUE a0)
   return rb_result;
 }
 
-// void NSBeep(void);
+// void NSBeep ( void );
 static VALUE
 osx_NSBeep(VALUE mdl)
 {
@@ -631,7 +703,7 @@ osx_NSBeep(VALUE mdl)
   return Qnil;
 }
 
-// void NSCountWindows(int *count);
+// void NSCountWindows ( int * count );
 static VALUE
 osx_NSCountWindows(VALUE mdl, VALUE a0)
 {
@@ -650,14 +722,14 @@ osx_NSCountWindows(VALUE mdl, VALUE a0)
   return rb_result;
 }
 
-// void NSWindowList(int size, int list[]);
+// void NSWindowList ( int size , int list [ ] );
 static VALUE
 osx_NSWindowList(VALUE mdl, VALUE a0, VALUE a1)
 {
   rb_notimplement();
 }
 
-// void NSCountWindowsForContext(int context, int *count);
+// void NSCountWindowsForContext ( int context , int * count );
 static VALUE
 osx_NSCountWindowsForContext(VALUE mdl, VALUE a0, VALUE a1)
 {
@@ -679,14 +751,14 @@ osx_NSCountWindowsForContext(VALUE mdl, VALUE a0, VALUE a1)
   return rb_result;
 }
 
-// void NSWindowListForContext(int context, int size, int list[]);
+// void NSWindowListForContext ( int context , int size , int list [ ] );
 static VALUE
 osx_NSWindowListForContext(VALUE mdl, VALUE a0, VALUE a1, VALUE a2)
 {
   rb_notimplement();
 }
 
-// int NSGetWindowServerMemory(int context, int *virtualMemory, int *windowBackingMemory, NSString **windowDumpString);
+// int NSGetWindowServerMemory ( int context , int * virtualMemory , int * windowBackingMemory , NSString * * windowDumpString );
 static VALUE
 osx_NSGetWindowServerMemory(VALUE mdl, VALUE a0, VALUE a1, VALUE a2, VALUE a3)
 {
@@ -695,7 +767,7 @@ osx_NSGetWindowServerMemory(VALUE mdl, VALUE a0, VALUE a1, VALUE a2, VALUE a3)
   int ns_a0;
   int * ns_a1;
   int * ns_a2;
-  NSString ** ns_a3;
+  NSString * * ns_a3;
 
   VALUE rb_result;
   id pool = [[NSAutoreleasePool alloc] init];
@@ -715,7 +787,7 @@ osx_NSGetWindowServerMemory(VALUE mdl, VALUE a0, VALUE a1, VALUE a2, VALUE a3)
   return rb_result;
 }
 
-// NSRect NSDrawColorTiledRects(NSRect boundsRect, NSRect clipRect, const NSRectEdge *sides, NSColor **colors, int count);
+// NSRect NSDrawColorTiledRects ( NSRect boundsRect , NSRect clipRect , const NSRectEdge * sides , NSColor * * colors , int count );
 static VALUE
 osx_NSDrawColorTiledRects(VALUE mdl, VALUE a0, VALUE a1, VALUE a2, VALUE a3, VALUE a4)
 {
@@ -724,7 +796,7 @@ osx_NSDrawColorTiledRects(VALUE mdl, VALUE a0, VALUE a1, VALUE a2, VALUE a3, VAL
   NSRect ns_a0;
   NSRect ns_a1;
   const NSRectEdge * ns_a2;
-  NSColor ** ns_a3;
+  NSColor * * ns_a3;
   int ns_a4;
 
   VALUE rb_result;
@@ -747,7 +819,7 @@ osx_NSDrawColorTiledRects(VALUE mdl, VALUE a0, VALUE a1, VALUE a2, VALUE a3, VAL
   return rb_result;
 }
 
-// void NSDrawDarkBezel(NSRect aRect, NSRect clipRect);
+// void NSDrawDarkBezel ( NSRect aRect , NSRect clipRect );
 static VALUE
 osx_NSDrawDarkBezel(VALUE mdl, VALUE a0, VALUE a1)
 {
@@ -769,7 +841,7 @@ osx_NSDrawDarkBezel(VALUE mdl, VALUE a0, VALUE a1)
   return rb_result;
 }
 
-// void NSDrawLightBezel(NSRect aRect, NSRect clipRect);
+// void NSDrawLightBezel ( NSRect aRect , NSRect clipRect );
 static VALUE
 osx_NSDrawLightBezel(VALUE mdl, VALUE a0, VALUE a1)
 {
@@ -791,7 +863,7 @@ osx_NSDrawLightBezel(VALUE mdl, VALUE a0, VALUE a1)
   return rb_result;
 }
 
-// void NSDottedFrameRect(NSRect aRect);
+// void NSDottedFrameRect ( NSRect aRect );
 static VALUE
 osx_NSDottedFrameRect(VALUE mdl, VALUE a0)
 {
@@ -810,7 +882,7 @@ osx_NSDottedFrameRect(VALUE mdl, VALUE a0)
   return rb_result;
 }
 
-// void NSDrawWindowBackground(NSRect aRect);
+// void NSDrawWindowBackground ( NSRect aRect );
 static VALUE
 osx_NSDrawWindowBackground(VALUE mdl, VALUE a0)
 {
@@ -829,11 +901,23 @@ osx_NSDrawWindowBackground(VALUE mdl, VALUE a0)
   return rb_result;
 }
 
-// void NSSetFocusRingStyle(NSFocusRingPlacement placement);
+// void NSSetFocusRingStyle ( NSFocusRingPlacement placement );
 static VALUE
 osx_NSSetFocusRingStyle(VALUE mdl, VALUE a0)
 {
-  rb_notimplement();
+
+  NSFocusRingPlacement ns_a0;
+
+  VALUE rb_result;
+  id pool = [[NSAutoreleasePool alloc] init];
+  /* a0 */
+  rbarg_to_nsarg(a0, _C_INT, &ns_a0, pool, 0);
+
+  NSSetFocusRingStyle(ns_a0);
+
+  rb_result = Qnil;
+  [pool release];
+  return rb_result;
 }
 
 void init_NSGraphics(VALUE mOSX)

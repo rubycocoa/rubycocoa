@@ -8,28 +8,28 @@ static const int VA_MAX = 4;
 
 
   /**** constants ****/
-// NSString *NSTableViewSelectionDidChangeNotification;
+// NSString * NSTableViewSelectionDidChangeNotification;
 static VALUE
 osx_NSTableViewSelectionDidChangeNotification(VALUE mdl)
 {
   return nsresult_to_rbresult(_C_ID, &NSTableViewSelectionDidChangeNotification, nil);
 }
 
-// NSString *NSTableViewColumnDidMoveNotification;
+// NSString * NSTableViewColumnDidMoveNotification;
 static VALUE
 osx_NSTableViewColumnDidMoveNotification(VALUE mdl)
 {
   return nsresult_to_rbresult(_C_ID, &NSTableViewColumnDidMoveNotification, nil);
 }
 
-// NSString *NSTableViewColumnDidResizeNotification;
+// NSString * NSTableViewColumnDidResizeNotification;
 static VALUE
 osx_NSTableViewColumnDidResizeNotification(VALUE mdl)
 {
   return nsresult_to_rbresult(_C_ID, &NSTableViewColumnDidResizeNotification, nil);
 }
 
-// NSString *NSTableViewSelectionIsChangingNotification;
+// NSString * NSTableViewSelectionIsChangingNotification;
 static VALUE
 osx_NSTableViewSelectionIsChangingNotification(VALUE mdl)
 {

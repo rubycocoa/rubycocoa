@@ -8,14 +8,14 @@ static const int VA_MAX = 4;
 
 
   /**** constants ****/
-// NSString *NSTextStorageWillProcessEditingNotification;
+// NSString * NSTextStorageWillProcessEditingNotification;
 static VALUE
 osx_NSTextStorageWillProcessEditingNotification(VALUE mdl)
 {
   return nsresult_to_rbresult(_C_ID, &NSTextStorageWillProcessEditingNotification, nil);
 }
 
-// NSString *NSTextStorageDidProcessEditingNotification;
+// NSString * NSTextStorageDidProcessEditingNotification;
 static VALUE
 osx_NSTextStorageDidProcessEditingNotification(VALUE mdl)
 {

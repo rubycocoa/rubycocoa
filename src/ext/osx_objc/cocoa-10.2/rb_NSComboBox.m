@@ -8,28 +8,28 @@ static const int VA_MAX = 4;
 
 
   /**** constants ****/
-// NSString *NSComboBoxWillPopUpNotification;
+// NSString * NSComboBoxWillPopUpNotification;
 static VALUE
 osx_NSComboBoxWillPopUpNotification(VALUE mdl)
 {
   return nsresult_to_rbresult(_C_ID, &NSComboBoxWillPopUpNotification, nil);
 }
 
-// NSString *NSComboBoxWillDismissNotification;
+// NSString * NSComboBoxWillDismissNotification;
 static VALUE
 osx_NSComboBoxWillDismissNotification(VALUE mdl)
 {
   return nsresult_to_rbresult(_C_ID, &NSComboBoxWillDismissNotification, nil);
 }
 
-// NSString *NSComboBoxSelectionDidChangeNotification;
+// NSString * NSComboBoxSelectionDidChangeNotification;
 static VALUE
 osx_NSComboBoxSelectionDidChangeNotification(VALUE mdl)
 {
   return nsresult_to_rbresult(_C_ID, &NSComboBoxSelectionDidChangeNotification, nil);
 }
 
-// NSString *NSComboBoxSelectionIsChangingNotification;
+// NSString * NSComboBoxSelectionIsChangingNotification;
 static VALUE
 osx_NSComboBoxSelectionIsChangingNotification(VALUE mdl)
 {

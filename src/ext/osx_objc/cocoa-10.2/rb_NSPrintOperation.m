@@ -8,7 +8,7 @@ static const int VA_MAX = 4;
 
 
   /**** constants ****/
-// NSString *NSPrintOperationExistsException;
+// NSString * NSPrintOperationExistsException;
 static VALUE
 osx_NSPrintOperationExistsException(VALUE mdl)
 {

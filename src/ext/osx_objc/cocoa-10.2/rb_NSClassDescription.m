@@ -8,7 +8,7 @@ static const int VA_MAX = 4;
 
 
   /**** constants ****/
-// NSString *NSClassDescriptionNeededForClassNotification;
+// NSString * NSClassDescriptionNeededForClassNotification;
 static VALUE
 osx_NSClassDescriptionNeededForClassNotification(VALUE mdl)
 {

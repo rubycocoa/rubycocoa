@@ -8,140 +8,140 @@ static const int VA_MAX = 4;
 
 
   /**** constants ****/
-// NSString *NSWorkspaceDidLaunchApplicationNotification;
+// NSString * NSWorkspaceDidLaunchApplicationNotification;
 static VALUE
 osx_NSWorkspaceDidLaunchApplicationNotification(VALUE mdl)
 {
   return nsresult_to_rbresult(_C_ID, &NSWorkspaceDidLaunchApplicationNotification, nil);
 }
 
-// NSString *NSWorkspaceDidMountNotification;
+// NSString * NSWorkspaceDidMountNotification;
 static VALUE
 osx_NSWorkspaceDidMountNotification(VALUE mdl)
 {
   return nsresult_to_rbresult(_C_ID, &NSWorkspaceDidMountNotification, nil);
 }
 
-// NSString *NSWorkspaceDidPerformFileOperationNotification;
+// NSString * NSWorkspaceDidPerformFileOperationNotification;
 static VALUE
 osx_NSWorkspaceDidPerformFileOperationNotification(VALUE mdl)
 {
   return nsresult_to_rbresult(_C_ID, &NSWorkspaceDidPerformFileOperationNotification, nil);
 }
 
-// NSString *NSWorkspaceDidTerminateApplicationNotification;
+// NSString * NSWorkspaceDidTerminateApplicationNotification;
 static VALUE
 osx_NSWorkspaceDidTerminateApplicationNotification(VALUE mdl)
 {
   return nsresult_to_rbresult(_C_ID, &NSWorkspaceDidTerminateApplicationNotification, nil);
 }
 
-// NSString *NSWorkspaceDidUnmountNotification;
+// NSString * NSWorkspaceDidUnmountNotification;
 static VALUE
 osx_NSWorkspaceDidUnmountNotification(VALUE mdl)
 {
   return nsresult_to_rbresult(_C_ID, &NSWorkspaceDidUnmountNotification, nil);
 }
 
-// NSString *NSWorkspaceWillLaunchApplicationNotification;
+// NSString * NSWorkspaceWillLaunchApplicationNotification;
 static VALUE
 osx_NSWorkspaceWillLaunchApplicationNotification(VALUE mdl)
 {
   return nsresult_to_rbresult(_C_ID, &NSWorkspaceWillLaunchApplicationNotification, nil);
 }
 
-// NSString *NSWorkspaceWillPowerOffNotification;
+// NSString * NSWorkspaceWillPowerOffNotification;
 static VALUE
 osx_NSWorkspaceWillPowerOffNotification(VALUE mdl)
 {
   return nsresult_to_rbresult(_C_ID, &NSWorkspaceWillPowerOffNotification, nil);
 }
 
-// NSString *NSWorkspaceWillUnmountNotification;
+// NSString * NSWorkspaceWillUnmountNotification;
 static VALUE
 osx_NSWorkspaceWillUnmountNotification(VALUE mdl)
 {
   return nsresult_to_rbresult(_C_ID, &NSWorkspaceWillUnmountNotification, nil);
 }
 
-// NSString *NSPlainFileType, *NSDirectoryFileType, *NSApplicationFileType;
+// NSString * NSPlainFileType , * NSDirectoryFileType , * NSApplicationFileType;
 static VALUE
 osx_NSApplicationFileType(VALUE mdl)
 {
   return nsresult_to_rbresult(_C_PTR, &NSApplicationFileType, nil);
 }
 
-// NSString *NSFilesystemFileType, *NSShellCommandFileType;
+// NSString * NSFilesystemFileType , * NSShellCommandFileType;
 static VALUE
 osx_NSShellCommandFileType(VALUE mdl)
 {
   return nsresult_to_rbresult(_C_PTR, &NSShellCommandFileType, nil);
 }
 
-// NSString *NSWorkspaceMoveOperation;
+// NSString * NSWorkspaceMoveOperation;
 static VALUE
 osx_NSWorkspaceMoveOperation(VALUE mdl)
 {
   return nsresult_to_rbresult(_C_ID, &NSWorkspaceMoveOperation, nil);
 }
 
-// NSString *NSWorkspaceCopyOperation;
+// NSString * NSWorkspaceCopyOperation;
 static VALUE
 osx_NSWorkspaceCopyOperation(VALUE mdl)
 {
   return nsresult_to_rbresult(_C_ID, &NSWorkspaceCopyOperation, nil);
 }
 
-// NSString *NSWorkspaceLinkOperation;
+// NSString * NSWorkspaceLinkOperation;
 static VALUE
 osx_NSWorkspaceLinkOperation(VALUE mdl)
 {
   return nsresult_to_rbresult(_C_ID, &NSWorkspaceLinkOperation, nil);
 }
 
-// NSString *NSWorkspaceCompressOperation;
+// NSString * NSWorkspaceCompressOperation;
 static VALUE
 osx_NSWorkspaceCompressOperation(VALUE mdl)
 {
   return nsresult_to_rbresult(_C_ID, &NSWorkspaceCompressOperation, nil);
 }
 
-// NSString *NSWorkspaceDecompressOperation;
+// NSString * NSWorkspaceDecompressOperation;
 static VALUE
 osx_NSWorkspaceDecompressOperation(VALUE mdl)
 {
   return nsresult_to_rbresult(_C_ID, &NSWorkspaceDecompressOperation, nil);
 }
 
-// NSString *NSWorkspaceEncryptOperation;
+// NSString * NSWorkspaceEncryptOperation;
 static VALUE
 osx_NSWorkspaceEncryptOperation(VALUE mdl)
 {
   return nsresult_to_rbresult(_C_ID, &NSWorkspaceEncryptOperation, nil);
 }
 
-// NSString *NSWorkspaceDecryptOperation;
+// NSString * NSWorkspaceDecryptOperation;
 static VALUE
 osx_NSWorkspaceDecryptOperation(VALUE mdl)
 {
   return nsresult_to_rbresult(_C_ID, &NSWorkspaceDecryptOperation, nil);
 }
 
-// NSString *NSWorkspaceDestroyOperation;
+// NSString * NSWorkspaceDestroyOperation;
 static VALUE
 osx_NSWorkspaceDestroyOperation(VALUE mdl)
 {
   return nsresult_to_rbresult(_C_ID, &NSWorkspaceDestroyOperation, nil);
 }
 
-// NSString *NSWorkspaceRecycleOperation;
+// NSString * NSWorkspaceRecycleOperation;
 static VALUE
 osx_NSWorkspaceRecycleOperation(VALUE mdl)
 {
   return nsresult_to_rbresult(_C_ID, &NSWorkspaceRecycleOperation, nil);
 }
 
-// NSString *NSWorkspaceDuplicateOperation;
+// NSString * NSWorkspaceDuplicateOperation;
 static VALUE
 osx_NSWorkspaceDuplicateOperation(VALUE mdl)
 {

@@ -8,7 +8,7 @@ static const int VA_MAX = 4;
 
 
   /**** functions ****/
-// NSString *NSUserName(void);
+// NSString * NSUserName ( void );
 static VALUE
 osx_NSUserName(VALUE mdl)
 {
@@ -16,7 +16,7 @@ osx_NSUserName(VALUE mdl)
   return nsresult_to_rbresult(_C_ID, &ns_result, nil);
 }
 
-// NSString *NSFullUserName(void);
+// NSString * NSFullUserName ( void );
 static VALUE
 osx_NSFullUserName(VALUE mdl)
 {
@@ -24,7 +24,7 @@ osx_NSFullUserName(VALUE mdl)
   return nsresult_to_rbresult(_C_ID, &ns_result, nil);
 }
 
-// NSString *NSHomeDirectory(void);
+// NSString * NSHomeDirectory ( void );
 static VALUE
 osx_NSHomeDirectory(VALUE mdl)
 {
@@ -32,7 +32,7 @@ osx_NSHomeDirectory(VALUE mdl)
   return nsresult_to_rbresult(_C_ID, &ns_result, nil);
 }
 
-// NSString *NSHomeDirectoryForUser(NSString *userName);
+// NSString * NSHomeDirectoryForUser ( NSString * userName );
 static VALUE
 osx_NSHomeDirectoryForUser(VALUE mdl, VALUE a0)
 {
@@ -52,7 +52,7 @@ osx_NSHomeDirectoryForUser(VALUE mdl, VALUE a0)
   return rb_result;
 }
 
-// NSString *NSTemporaryDirectory(void);
+// NSString * NSTemporaryDirectory ( void );
 static VALUE
 osx_NSTemporaryDirectory(VALUE mdl)
 {
@@ -60,7 +60,7 @@ osx_NSTemporaryDirectory(VALUE mdl)
   return nsresult_to_rbresult(_C_ID, &ns_result, nil);
 }
 
-// NSString *NSOpenStepRootDirectory(void);
+// NSString * NSOpenStepRootDirectory ( void );
 static VALUE
 osx_NSOpenStepRootDirectory(VALUE mdl)
 {
@@ -68,11 +68,30 @@ osx_NSOpenStepRootDirectory(VALUE mdl)
   return nsresult_to_rbresult(_C_ID, &ns_result, nil);
 }
 
-// NSArray *NSSearchPathForDirectoriesInDomains(NSSearchPathDirectory directory, NSSearchPathDomainMask domainMask, BOOL expandTilde);
+// NSArray * NSSearchPathForDirectoriesInDomains ( NSSearchPathDirectory directory , NSSearchPathDomainMask domainMask , BOOL expandTilde );
 static VALUE
 osx_NSSearchPathForDirectoriesInDomains(VALUE mdl, VALUE a0, VALUE a1, VALUE a2)
 {
-  rb_notimplement();
+  NSArray * ns_result;
+
+  NSSearchPathDirectory ns_a0;
+  NSSearchPathDomainMask ns_a1;
+  BOOL ns_a2;
+
+  VALUE rb_result;
+  id pool = [[NSAutoreleasePool alloc] init];
+  /* a0 */
+  rbarg_to_nsarg(a0, _C_INT, &ns_a0, pool, 0);
+  /* a1 */
+  rbarg_to_nsarg(a1, _C_INT, &ns_a1, pool, 1);
+  /* a2 */
+  rbarg_to_nsarg(a2, _C_UCHR, &ns_a2, pool, 2);
+
+  ns_result = NSSearchPathForDirectoriesInDomains(ns_a0, ns_a1, ns_a2);
+
+  rb_result = nsresult_to_rbresult(_C_ID, &ns_result, pool);
+  [pool release];
+  return rb_result;
 }
 
 void init_NSPathUtilities(VALUE mOSX)

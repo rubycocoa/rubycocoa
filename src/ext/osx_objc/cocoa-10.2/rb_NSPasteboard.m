@@ -8,154 +8,154 @@ static const int VA_MAX = 4;
 
 
   /**** constants ****/
-// NSString *NSStringPboardType;
+// NSString * NSStringPboardType;
 static VALUE
 osx_NSStringPboardType(VALUE mdl)
 {
   return nsresult_to_rbresult(_C_ID, &NSStringPboardType, nil);
 }
 
-// NSString *NSFilenamesPboardType;
+// NSString * NSFilenamesPboardType;
 static VALUE
 osx_NSFilenamesPboardType(VALUE mdl)
 {
   return nsresult_to_rbresult(_C_ID, &NSFilenamesPboardType, nil);
 }
 
-// NSString *NSPostScriptPboardType;
+// NSString * NSPostScriptPboardType;
 static VALUE
 osx_NSPostScriptPboardType(VALUE mdl)
 {
   return nsresult_to_rbresult(_C_ID, &NSPostScriptPboardType, nil);
 }
 
-// NSString *NSTIFFPboardType;
+// NSString * NSTIFFPboardType;
 static VALUE
 osx_NSTIFFPboardType(VALUE mdl)
 {
   return nsresult_to_rbresult(_C_ID, &NSTIFFPboardType, nil);
 }
 
-// NSString *NSRTFPboardType;
+// NSString * NSRTFPboardType;
 static VALUE
 osx_NSRTFPboardType(VALUE mdl)
 {
   return nsresult_to_rbresult(_C_ID, &NSRTFPboardType, nil);
 }
 
-// NSString *NSTabularTextPboardType;
+// NSString * NSTabularTextPboardType;
 static VALUE
 osx_NSTabularTextPboardType(VALUE mdl)
 {
   return nsresult_to_rbresult(_C_ID, &NSTabularTextPboardType, nil);
 }
 
-// NSString *NSFontPboardType;
+// NSString * NSFontPboardType;
 static VALUE
 osx_NSFontPboardType(VALUE mdl)
 {
   return nsresult_to_rbresult(_C_ID, &NSFontPboardType, nil);
 }
 
-// NSString *NSRulerPboardType;
+// NSString * NSRulerPboardType;
 static VALUE
 osx_NSRulerPboardType(VALUE mdl)
 {
   return nsresult_to_rbresult(_C_ID, &NSRulerPboardType, nil);
 }
 
-// NSString *NSFileContentsPboardType;
+// NSString * NSFileContentsPboardType;
 static VALUE
 osx_NSFileContentsPboardType(VALUE mdl)
 {
   return nsresult_to_rbresult(_C_ID, &NSFileContentsPboardType, nil);
 }
 
-// NSString *NSColorPboardType;
+// NSString * NSColorPboardType;
 static VALUE
 osx_NSColorPboardType(VALUE mdl)
 {
   return nsresult_to_rbresult(_C_ID, &NSColorPboardType, nil);
 }
 
-// NSString *NSRTFDPboardType;
+// NSString * NSRTFDPboardType;
 static VALUE
 osx_NSRTFDPboardType(VALUE mdl)
 {
   return nsresult_to_rbresult(_C_ID, &NSRTFDPboardType, nil);
 }
 
-// NSString *NSHTMLPboardType;
+// NSString * NSHTMLPboardType;
 static VALUE
 osx_NSHTMLPboardType(VALUE mdl)
 {
   return nsresult_to_rbresult(_C_ID, &NSHTMLPboardType, nil);
 }
 
-// NSString *NSPICTPboardType;
+// NSString * NSPICTPboardType;
 static VALUE
 osx_NSPICTPboardType(VALUE mdl)
 {
   return nsresult_to_rbresult(_C_ID, &NSPICTPboardType, nil);
 }
 
-// NSString *NSURLPboardType;
+// NSString * NSURLPboardType;
 static VALUE
 osx_NSURLPboardType(VALUE mdl)
 {
   return nsresult_to_rbresult(_C_ID, &NSURLPboardType, nil);
 }
 
-// NSString *NSPDFPboardType;
+// NSString * NSPDFPboardType;
 static VALUE
 osx_NSPDFPboardType(VALUE mdl)
 {
   return nsresult_to_rbresult(_C_ID, &NSPDFPboardType, nil);
 }
 
-// NSString *NSVCardPboardType;
+// NSString * NSVCardPboardType;
 static VALUE
 osx_NSVCardPboardType(VALUE mdl)
 {
   return nsresult_to_rbresult(_C_ID, &NSVCardPboardType, nil);
 }
 
-// NSString *NSFilesPromisePboardType;
+// NSString * NSFilesPromisePboardType;
 static VALUE
 osx_NSFilesPromisePboardType(VALUE mdl)
 {
   return nsresult_to_rbresult(_C_ID, &NSFilesPromisePboardType, nil);
 }
 
-// NSString *NSGeneralPboard;
+// NSString * NSGeneralPboard;
 static VALUE
 osx_NSGeneralPboard(VALUE mdl)
 {
   return nsresult_to_rbresult(_C_ID, &NSGeneralPboard, nil);
 }
 
-// NSString *NSFontPboard;
+// NSString * NSFontPboard;
 static VALUE
 osx_NSFontPboard(VALUE mdl)
 {
   return nsresult_to_rbresult(_C_ID, &NSFontPboard, nil);
 }
 
-// NSString *NSRulerPboard;
+// NSString * NSRulerPboard;
 static VALUE
 osx_NSRulerPboard(VALUE mdl)
 {
   return nsresult_to_rbresult(_C_ID, &NSRulerPboard, nil);
 }
 
-// NSString *NSFindPboard;
+// NSString * NSFindPboard;
 static VALUE
 osx_NSFindPboard(VALUE mdl)
 {
   return nsresult_to_rbresult(_C_ID, &NSFindPboard, nil);
 }
 
-// NSString *NSDragPboard;
+// NSString * NSDragPboard;
 static VALUE
 osx_NSDragPboard(VALUE mdl)
 {
@@ -163,7 +163,7 @@ osx_NSDragPboard(VALUE mdl)
 }
 
   /**** functions ****/
-// NSString *NSCreateFilenamePboardType(NSString *fileType);
+// NSString * NSCreateFilenamePboardType ( NSString * fileType );
 static VALUE
 osx_NSCreateFilenamePboardType(VALUE mdl, VALUE a0)
 {
@@ -183,7 +183,7 @@ osx_NSCreateFilenamePboardType(VALUE mdl, VALUE a0)
   return rb_result;
 }
 
-// NSString *NSCreateFileContentsPboardType(NSString *fileType);
+// NSString * NSCreateFileContentsPboardType ( NSString * fileType );
 static VALUE
 osx_NSCreateFileContentsPboardType(VALUE mdl, VALUE a0)
 {
@@ -203,7 +203,7 @@ osx_NSCreateFileContentsPboardType(VALUE mdl, VALUE a0)
   return rb_result;
 }
 
-// NSString *NSGetFileType(NSString *pboardType);
+// NSString * NSGetFileType ( NSString * pboardType );
 static VALUE
 osx_NSGetFileType(VALUE mdl, VALUE a0)
 {
@@ -223,7 +223,7 @@ osx_NSGetFileType(VALUE mdl, VALUE a0)
   return rb_result;
 }
 
-// NSArray *NSGetFileTypes(NSArray *pboardTypes);
+// NSArray * NSGetFileTypes ( NSArray * pboardTypes );
 static VALUE
 osx_NSGetFileTypes(VALUE mdl, VALUE a0)
 {

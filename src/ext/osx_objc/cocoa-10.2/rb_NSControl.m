@@ -8,21 +8,21 @@ static const int VA_MAX = 4;
 
 
   /**** constants ****/
-// NSString *NSControlTextDidBeginEditingNotification;
+// NSString * NSControlTextDidBeginEditingNotification;
 static VALUE
 osx_NSControlTextDidBeginEditingNotification(VALUE mdl)
 {
   return nsresult_to_rbresult(_C_ID, &NSControlTextDidBeginEditingNotification, nil);
 }
 
-// NSString *NSControlTextDidEndEditingNotification;
+// NSString * NSControlTextDidEndEditingNotification;
 static VALUE
 osx_NSControlTextDidEndEditingNotification(VALUE mdl)
 {
   return nsresult_to_rbresult(_C_ID, &NSControlTextDidEndEditingNotification, nil);
 }
 
-// NSString *NSControlTextDidChangeNotification;
+// NSString * NSControlTextDidChangeNotification;
 static VALUE
 osx_NSControlTextDidChangeNotification(VALUE mdl)
 {
