@@ -10,5 +10,14 @@
 	<string>APPL</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
+
+	<key>RubyAppConfig</key>
+	<dict>
+	  <key>RubyProgram</key>
+	  <string>/usr/bin/ruby</string>
+	  <key>MainScript</key>
+	  <string>rb_main.rb</string>
+	</dict>
+
 </dict>
 </plist>
