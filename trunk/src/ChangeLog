@@ -1,3 +1,8 @@
+2002-02-05  FUJIMOTO Hisakuni  <hisa@fobj.com>
+
+	* framework/ocdata_conv.m: rbobj_convert_to_nsobj(): default
+	behavior was changed into RBObject instantiation.
+
 2002-02-04  FUJIMOTO Hisakuni  <hisa@fobj.com>
 
 	* lib/osx/objc/oc_attachments.rb:
