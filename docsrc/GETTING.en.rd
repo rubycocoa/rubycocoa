@@ -59,7 +59,7 @@ for RubyCocoa. On the shell command line, type this:
 
   $ cvs -d:pserver:anonymous@cvs.rubycocoa.sf.net:/cvsroot/rubycocoa login
   $ cvs -z3 -d:pserver:anonymous@cvs.rubycocoa.sf.net:/cvsroot/rubycocoa \
-      co rubycocoa
+      co -P rubycocoa
 
 All of the source for RubyCocoa is downloaded into a directory named 'rubycocoa'.
 
