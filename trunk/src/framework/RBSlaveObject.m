@@ -16,7 +16,7 @@
 
 static VALUE rbobj_for(VALUE rbclass, id master)
 {
-  return rb_funcall(rbclass, rb_intern("new"), 1, OCID2NUM(master));
+  return rb_funcall(rbclass, rb_intern("new_with_ocid"), 1, OCID2NUM(master));
 }
 
 static VALUE rbclass_for(Class occlass)

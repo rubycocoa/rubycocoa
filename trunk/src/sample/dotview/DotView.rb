@@ -1,9 +1,9 @@
-require 'osx/ocobject'
+require 'osx/cocoa'
 
-class DotView < OSX::OCObject
+class DotView < OSX::NSView
 
-  ib_loadable :NSView
-  ib_outlets :colorWell, :sizeSlider
+  ib_loadable
+  ib_outlets   :colorWell, :sizeSlider
   ib_overrides 'drawRect:', 'isOpaque', 'mouseUp:'
 
   def initialize

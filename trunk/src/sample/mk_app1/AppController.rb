@@ -1,8 +1,8 @@
-require 'osx/ocobject'
+require 'osx/cocoa'
 
-class AppController < OSX::OCObject
+class AppController < OSX::NSObject
 
-  ib_loadable :NSObject
+  ib_loadable
   ib_outlets :msgField, :myView
 
   def awakeFromNib
