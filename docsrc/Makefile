@@ -54,10 +54,10 @@ install:	$(TARGETDIR) $(TARGET)
 
 
 rsync:	$(TARGET)
-	-rsync -v -t -e ssh html/* tasogare:public_html/mac/rubycocoa/
-	-rsync -v -t -e ssh html/index_sf.html  shell.sf.net:rubycocoa/htdocs/index.html
-	-rsync -v -t -e ssh html/rubycocoasite.css  shell.sf.net:rubycocoa/htdocs/
-	-rsync -v -t -e ssh html/simpleapp-sml.jpg  shell.sf.net:rubycocoa/htdocs/
+	-rsync -t -e ssh html/* tasogare:public_html/mac/rubycocoa/
+	-rsync -t -e ssh html/index_sf.html  shell.sf.net:rubycocoa/htdocs/index.html
+	-rsync -t -e ssh html/rubycocoasite.css  shell.sf.net:rubycocoa/htdocs/
+	-rsync -t -e ssh html/simpleapp-sml.jpg  shell.sf.net:rubycocoa/htdocs/
 
 $(TARGET):	$(TEMPLATES)
 
