@@ -1,3 +1,8 @@
+2002-01-23  Chris Thomas <kenshin@apple.com>
+
+	* framework/OverrideMixin.c:
+	Do not crash when ns_overrides specifies a non-existent method.
+
 2002-01-22  Ralph Broom <rbroom@broom.org>
 
 	* README.en.txt, doc/FAQ.en:
