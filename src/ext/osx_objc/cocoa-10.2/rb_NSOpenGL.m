@@ -43,7 +43,7 @@ osx_NSOpenGLGetOption(VALUE mdl, VALUE a0, VALUE a1)
   /* a0 */
   rbarg_to_nsarg(a0, _C_INT, &ns_a0, pool, 0);
   /* a1 */
-  rbarg_to_nsarg(a1, _C_PTR, &ns_a1, pool, 1);
+  rbarg_to_nsarg(a1, _PRIV_C_PTR, &ns_a1, pool, 1);
 
   NSOpenGLGetOption(ns_a0, ns_a1);
 
@@ -63,9 +63,9 @@ osx_NSOpenGLGetVersion(VALUE mdl, VALUE a0, VALUE a1)
   VALUE rb_result;
   id pool = [[NSAutoreleasePool alloc] init];
   /* a0 */
-  rbarg_to_nsarg(a0, _C_PTR, &ns_a0, pool, 0);
+  rbarg_to_nsarg(a0, _PRIV_C_PTR, &ns_a0, pool, 0);
   /* a1 */
-  rbarg_to_nsarg(a1, _C_PTR, &ns_a1, pool, 1);
+  rbarg_to_nsarg(a1, _PRIV_C_PTR, &ns_a1, pool, 1);
 
   NSOpenGLGetVersion(ns_a0, ns_a1);
 

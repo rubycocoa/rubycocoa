@@ -110,7 +110,7 @@ osx_NSFreeMapTable(VALUE mdl, VALUE a0)
   VALUE rb_result;
   id pool = [[NSAutoreleasePool alloc] init];
   /* a0 */
-  rbarg_to_nsarg(a0, _C_PTR, &ns_a0, pool, 0);
+  rbarg_to_nsarg(a0, _PRIV_C_PTR, &ns_a0, pool, 0);
 
   NSFreeMapTable(ns_a0);
 
@@ -129,7 +129,7 @@ osx_NSResetMapTable(VALUE mdl, VALUE a0)
   VALUE rb_result;
   id pool = [[NSAutoreleasePool alloc] init];
   /* a0 */
-  rbarg_to_nsarg(a0, _C_PTR, &ns_a0, pool, 0);
+  rbarg_to_nsarg(a0, _PRIV_C_PTR, &ns_a0, pool, 0);
 
   NSResetMapTable(ns_a0);
 
@@ -150,9 +150,9 @@ osx_NSCompareMapTables(VALUE mdl, VALUE a0, VALUE a1)
   VALUE rb_result;
   id pool = [[NSAutoreleasePool alloc] init];
   /* a0 */
-  rbarg_to_nsarg(a0, _C_PTR, &ns_a0, pool, 0);
+  rbarg_to_nsarg(a0, _PRIV_C_PTR, &ns_a0, pool, 0);
   /* a1 */
-  rbarg_to_nsarg(a1, _C_PTR, &ns_a1, pool, 1);
+  rbarg_to_nsarg(a1, _PRIV_C_PTR, &ns_a1, pool, 1);
 
   ns_result = NSCompareMapTables(ns_a0, ns_a1);
 
@@ -173,13 +173,13 @@ osx_NSCopyMapTableWithZone(VALUE mdl, VALUE a0, VALUE a1)
   VALUE rb_result;
   id pool = [[NSAutoreleasePool alloc] init];
   /* a0 */
-  rbarg_to_nsarg(a0, _C_PTR, &ns_a0, pool, 0);
+  rbarg_to_nsarg(a0, _PRIV_C_PTR, &ns_a0, pool, 0);
   /* a1 */
-  rbarg_to_nsarg(a1, _C_PTR, &ns_a1, pool, 1);
+  rbarg_to_nsarg(a1, _PRIV_C_PTR, &ns_a1, pool, 1);
 
   ns_result = NSCopyMapTableWithZone(ns_a0, ns_a1);
 
-  rb_result = nsresult_to_rbresult(_C_PTR, &ns_result, pool);
+  rb_result = nsresult_to_rbresult(_PRIV_C_PTR, &ns_result, pool);
   [pool release];
   return rb_result;
 }
@@ -198,13 +198,13 @@ osx_NSMapMember(VALUE mdl, VALUE a0, VALUE a1, VALUE a2, VALUE a3)
   VALUE rb_result;
   id pool = [[NSAutoreleasePool alloc] init];
   /* a0 */
-  rbarg_to_nsarg(a0, _C_PTR, &ns_a0, pool, 0);
+  rbarg_to_nsarg(a0, _PRIV_C_PTR, &ns_a0, pool, 0);
   /* a1 */
-  rbarg_to_nsarg(a1, _C_PTR, &ns_a1, pool, 1);
+  rbarg_to_nsarg(a1, _PRIV_C_PTR, &ns_a1, pool, 1);
   /* a2 */
-  rbarg_to_nsarg(a2, _C_PTR, &ns_a2, pool, 2);
+  rbarg_to_nsarg(a2, _PRIV_C_PTR, &ns_a2, pool, 2);
   /* a3 */
-  rbarg_to_nsarg(a3, _C_PTR, &ns_a3, pool, 3);
+  rbarg_to_nsarg(a3, _PRIV_C_PTR, &ns_a3, pool, 3);
 
   ns_result = NSMapMember(ns_a0, ns_a1, ns_a2, ns_a3);
 
@@ -225,13 +225,13 @@ osx_NSMapGet(VALUE mdl, VALUE a0, VALUE a1)
   VALUE rb_result;
   id pool = [[NSAutoreleasePool alloc] init];
   /* a0 */
-  rbarg_to_nsarg(a0, _C_PTR, &ns_a0, pool, 0);
+  rbarg_to_nsarg(a0, _PRIV_C_PTR, &ns_a0, pool, 0);
   /* a1 */
-  rbarg_to_nsarg(a1, _C_PTR, &ns_a1, pool, 1);
+  rbarg_to_nsarg(a1, _PRIV_C_PTR, &ns_a1, pool, 1);
 
   ns_result = NSMapGet(ns_a0, ns_a1);
 
-  rb_result = nsresult_to_rbresult(_C_PTR, &ns_result, pool);
+  rb_result = nsresult_to_rbresult(_PRIV_C_PTR, &ns_result, pool);
   [pool release];
   return rb_result;
 }
@@ -248,11 +248,11 @@ osx_NSMapInsert(VALUE mdl, VALUE a0, VALUE a1, VALUE a2)
   VALUE rb_result;
   id pool = [[NSAutoreleasePool alloc] init];
   /* a0 */
-  rbarg_to_nsarg(a0, _C_PTR, &ns_a0, pool, 0);
+  rbarg_to_nsarg(a0, _PRIV_C_PTR, &ns_a0, pool, 0);
   /* a1 */
-  rbarg_to_nsarg(a1, _C_PTR, &ns_a1, pool, 1);
+  rbarg_to_nsarg(a1, _PRIV_C_PTR, &ns_a1, pool, 1);
   /* a2 */
-  rbarg_to_nsarg(a2, _C_PTR, &ns_a2, pool, 2);
+  rbarg_to_nsarg(a2, _PRIV_C_PTR, &ns_a2, pool, 2);
 
   NSMapInsert(ns_a0, ns_a1, ns_a2);
 
@@ -273,11 +273,11 @@ osx_NSMapInsertKnownAbsent(VALUE mdl, VALUE a0, VALUE a1, VALUE a2)
   VALUE rb_result;
   id pool = [[NSAutoreleasePool alloc] init];
   /* a0 */
-  rbarg_to_nsarg(a0, _C_PTR, &ns_a0, pool, 0);
+  rbarg_to_nsarg(a0, _PRIV_C_PTR, &ns_a0, pool, 0);
   /* a1 */
-  rbarg_to_nsarg(a1, _C_PTR, &ns_a1, pool, 1);
+  rbarg_to_nsarg(a1, _PRIV_C_PTR, &ns_a1, pool, 1);
   /* a2 */
-  rbarg_to_nsarg(a2, _C_PTR, &ns_a2, pool, 2);
+  rbarg_to_nsarg(a2, _PRIV_C_PTR, &ns_a2, pool, 2);
 
   NSMapInsertKnownAbsent(ns_a0, ns_a1, ns_a2);
 
@@ -299,15 +299,15 @@ osx_NSMapInsertIfAbsent(VALUE mdl, VALUE a0, VALUE a1, VALUE a2)
   VALUE rb_result;
   id pool = [[NSAutoreleasePool alloc] init];
   /* a0 */
-  rbarg_to_nsarg(a0, _C_PTR, &ns_a0, pool, 0);
+  rbarg_to_nsarg(a0, _PRIV_C_PTR, &ns_a0, pool, 0);
   /* a1 */
-  rbarg_to_nsarg(a1, _C_PTR, &ns_a1, pool, 1);
+  rbarg_to_nsarg(a1, _PRIV_C_PTR, &ns_a1, pool, 1);
   /* a2 */
-  rbarg_to_nsarg(a2, _C_PTR, &ns_a2, pool, 2);
+  rbarg_to_nsarg(a2, _PRIV_C_PTR, &ns_a2, pool, 2);
 
   ns_result = NSMapInsertIfAbsent(ns_a0, ns_a1, ns_a2);
 
-  rb_result = nsresult_to_rbresult(_C_PTR, &ns_result, pool);
+  rb_result = nsresult_to_rbresult(_PRIV_C_PTR, &ns_result, pool);
   [pool release];
   return rb_result;
 }
@@ -323,9 +323,9 @@ osx_NSMapRemove(VALUE mdl, VALUE a0, VALUE a1)
   VALUE rb_result;
   id pool = [[NSAutoreleasePool alloc] init];
   /* a0 */
-  rbarg_to_nsarg(a0, _C_PTR, &ns_a0, pool, 0);
+  rbarg_to_nsarg(a0, _PRIV_C_PTR, &ns_a0, pool, 0);
   /* a1 */
-  rbarg_to_nsarg(a1, _C_PTR, &ns_a1, pool, 1);
+  rbarg_to_nsarg(a1, _PRIV_C_PTR, &ns_a1, pool, 1);
 
   NSMapRemove(ns_a0, ns_a1);
 
@@ -354,11 +354,11 @@ osx_NSNextMapEnumeratorPair(VALUE mdl, VALUE a0, VALUE a1, VALUE a2)
   VALUE rb_result;
   id pool = [[NSAutoreleasePool alloc] init];
   /* a0 */
-  rbarg_to_nsarg(a0, _C_PTR, &ns_a0, pool, 0);
+  rbarg_to_nsarg(a0, _PRIV_C_PTR, &ns_a0, pool, 0);
   /* a1 */
-  rbarg_to_nsarg(a1, _C_PTR, &ns_a1, pool, 1);
+  rbarg_to_nsarg(a1, _PRIV_C_PTR, &ns_a1, pool, 1);
   /* a2 */
-  rbarg_to_nsarg(a2, _C_PTR, &ns_a2, pool, 2);
+  rbarg_to_nsarg(a2, _PRIV_C_PTR, &ns_a2, pool, 2);
 
   ns_result = NSNextMapEnumeratorPair(ns_a0, ns_a1, ns_a2);
 
@@ -377,7 +377,7 @@ osx_NSEndMapTableEnumeration(VALUE mdl, VALUE a0)
   VALUE rb_result;
   id pool = [[NSAutoreleasePool alloc] init];
   /* a0 */
-  rbarg_to_nsarg(a0, _C_PTR, &ns_a0, pool, 0);
+  rbarg_to_nsarg(a0, _PRIV_C_PTR, &ns_a0, pool, 0);
 
   NSEndMapTableEnumeration(ns_a0);
 
@@ -397,7 +397,7 @@ osx_NSCountMapTable(VALUE mdl, VALUE a0)
   VALUE rb_result;
   id pool = [[NSAutoreleasePool alloc] init];
   /* a0 */
-  rbarg_to_nsarg(a0, _C_PTR, &ns_a0, pool, 0);
+  rbarg_to_nsarg(a0, _PRIV_C_PTR, &ns_a0, pool, 0);
 
   ns_result = NSCountMapTable(ns_a0);
 
@@ -417,7 +417,7 @@ osx_NSStringFromMapTable(VALUE mdl, VALUE a0)
   VALUE rb_result;
   id pool = [[NSAutoreleasePool alloc] init];
   /* a0 */
-  rbarg_to_nsarg(a0, _C_PTR, &ns_a0, pool, 0);
+  rbarg_to_nsarg(a0, _PRIV_C_PTR, &ns_a0, pool, 0);
 
   ns_result = NSStringFromMapTable(ns_a0);
 
@@ -437,7 +437,7 @@ osx_NSAllMapTableKeys(VALUE mdl, VALUE a0)
   VALUE rb_result;
   id pool = [[NSAutoreleasePool alloc] init];
   /* a0 */
-  rbarg_to_nsarg(a0, _C_PTR, &ns_a0, pool, 0);
+  rbarg_to_nsarg(a0, _PRIV_C_PTR, &ns_a0, pool, 0);
 
   ns_result = NSAllMapTableKeys(ns_a0);
 
@@ -457,7 +457,7 @@ osx_NSAllMapTableValues(VALUE mdl, VALUE a0)
   VALUE rb_result;
   id pool = [[NSAutoreleasePool alloc] init];
   /* a0 */
-  rbarg_to_nsarg(a0, _C_PTR, &ns_a0, pool, 0);
+  rbarg_to_nsarg(a0, _PRIV_C_PTR, &ns_a0, pool, 0);
 
   ns_result = NSAllMapTableValues(ns_a0);
 

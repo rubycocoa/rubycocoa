@@ -209,7 +209,7 @@ static VALUE
 osx_NSAvailableWindowDepths(VALUE mdl)
 {
   const NSWindowDepth * ns_result = NSAvailableWindowDepths();
-  return nsresult_to_rbresult(_C_PTR, &ns_result, nil);
+  return nsresult_to_rbresult(_PRIV_C_PTR, &ns_result, nil);
 }
 
 // void NSRectFill ( NSRect aRect );
@@ -242,7 +242,7 @@ osx_NSRectFillList(VALUE mdl, VALUE a0, VALUE a1)
   VALUE rb_result;
   id pool = [[NSAutoreleasePool alloc] init];
   /* a0 */
-  rbarg_to_nsarg(a0, _C_PTR, &ns_a0, pool, 0);
+  rbarg_to_nsarg(a0, _PRIV_C_PTR, &ns_a0, pool, 0);
   /* a1 */
   rbarg_to_nsarg(a1, _C_INT, &ns_a1, pool, 1);
 
@@ -265,9 +265,9 @@ osx_NSRectFillListWithGrays(VALUE mdl, VALUE a0, VALUE a1, VALUE a2)
   VALUE rb_result;
   id pool = [[NSAutoreleasePool alloc] init];
   /* a0 */
-  rbarg_to_nsarg(a0, _C_PTR, &ns_a0, pool, 0);
+  rbarg_to_nsarg(a0, _PRIV_C_PTR, &ns_a0, pool, 0);
   /* a1 */
-  rbarg_to_nsarg(a1, _C_PTR, &ns_a1, pool, 1);
+  rbarg_to_nsarg(a1, _PRIV_C_PTR, &ns_a1, pool, 1);
   /* a2 */
   rbarg_to_nsarg(a2, _C_INT, &ns_a2, pool, 2);
 
@@ -290,9 +290,9 @@ osx_NSRectFillListWithColors(VALUE mdl, VALUE a0, VALUE a1, VALUE a2)
   VALUE rb_result;
   id pool = [[NSAutoreleasePool alloc] init];
   /* a0 */
-  rbarg_to_nsarg(a0, _C_PTR, &ns_a0, pool, 0);
+  rbarg_to_nsarg(a0, _PRIV_C_PTR, &ns_a0, pool, 0);
   /* a1 */
-  rbarg_to_nsarg(a1, _C_PTR, &ns_a1, pool, 1);
+  rbarg_to_nsarg(a1, _PRIV_C_PTR, &ns_a1, pool, 1);
   /* a2 */
   rbarg_to_nsarg(a2, _C_INT, &ns_a2, pool, 2);
 
@@ -337,7 +337,7 @@ osx_NSRectFillListUsingOperation(VALUE mdl, VALUE a0, VALUE a1, VALUE a2)
   VALUE rb_result;
   id pool = [[NSAutoreleasePool alloc] init];
   /* a0 */
-  rbarg_to_nsarg(a0, _C_PTR, &ns_a0, pool, 0);
+  rbarg_to_nsarg(a0, _PRIV_C_PTR, &ns_a0, pool, 0);
   /* a1 */
   rbarg_to_nsarg(a1, _C_INT, &ns_a1, pool, 1);
   /* a2 */
@@ -363,9 +363,9 @@ osx_NSRectFillListWithColorsUsingOperation(VALUE mdl, VALUE a0, VALUE a1, VALUE 
   VALUE rb_result;
   id pool = [[NSAutoreleasePool alloc] init];
   /* a0 */
-  rbarg_to_nsarg(a0, _C_PTR, &ns_a0, pool, 0);
+  rbarg_to_nsarg(a0, _PRIV_C_PTR, &ns_a0, pool, 0);
   /* a1 */
-  rbarg_to_nsarg(a1, _C_PTR, &ns_a1, pool, 1);
+  rbarg_to_nsarg(a1, _PRIV_C_PTR, &ns_a1, pool, 1);
   /* a2 */
   rbarg_to_nsarg(a2, _C_INT, &ns_a2, pool, 2);
   /* a3 */
@@ -474,7 +474,7 @@ osx_NSRectClipList(VALUE mdl, VALUE a0, VALUE a1)
   VALUE rb_result;
   id pool = [[NSAutoreleasePool alloc] init];
   /* a0 */
-  rbarg_to_nsarg(a0, _C_PTR, &ns_a0, pool, 0);
+  rbarg_to_nsarg(a0, _PRIV_C_PTR, &ns_a0, pool, 0);
   /* a1 */
   rbarg_to_nsarg(a1, _C_INT, &ns_a1, pool, 1);
 
@@ -504,9 +504,9 @@ osx_NSDrawTiledRects(VALUE mdl, VALUE a0, VALUE a1, VALUE a2, VALUE a3, VALUE a4
   /* a1 */
   rbarg_to_nsarg(a1, _PRIV_C_NSRECT, &ns_a1, pool, 1);
   /* a2 */
-  rbarg_to_nsarg(a2, _C_PTR, &ns_a2, pool, 2);
+  rbarg_to_nsarg(a2, _PRIV_C_PTR, &ns_a2, pool, 2);
   /* a3 */
-  rbarg_to_nsarg(a3, _C_PTR, &ns_a3, pool, 3);
+  rbarg_to_nsarg(a3, _PRIV_C_PTR, &ns_a3, pool, 3);
   /* a4 */
   rbarg_to_nsarg(a4, _C_INT, &ns_a4, pool, 4);
 
@@ -713,7 +713,7 @@ osx_NSCountWindows(VALUE mdl, VALUE a0)
   VALUE rb_result;
   id pool = [[NSAutoreleasePool alloc] init];
   /* a0 */
-  rbarg_to_nsarg(a0, _C_PTR, &ns_a0, pool, 0);
+  rbarg_to_nsarg(a0, _PRIV_C_PTR, &ns_a0, pool, 0);
 
   NSCountWindows(ns_a0);
 
@@ -742,7 +742,7 @@ osx_NSCountWindowsForContext(VALUE mdl, VALUE a0, VALUE a1)
   /* a0 */
   rbarg_to_nsarg(a0, _C_INT, &ns_a0, pool, 0);
   /* a1 */
-  rbarg_to_nsarg(a1, _C_PTR, &ns_a1, pool, 1);
+  rbarg_to_nsarg(a1, _PRIV_C_PTR, &ns_a1, pool, 1);
 
   NSCountWindowsForContext(ns_a0, ns_a1);
 
@@ -774,11 +774,11 @@ osx_NSGetWindowServerMemory(VALUE mdl, VALUE a0, VALUE a1, VALUE a2, VALUE a3)
   /* a0 */
   rbarg_to_nsarg(a0, _C_INT, &ns_a0, pool, 0);
   /* a1 */
-  rbarg_to_nsarg(a1, _C_PTR, &ns_a1, pool, 1);
+  rbarg_to_nsarg(a1, _PRIV_C_PTR, &ns_a1, pool, 1);
   /* a2 */
-  rbarg_to_nsarg(a2, _C_PTR, &ns_a2, pool, 2);
+  rbarg_to_nsarg(a2, _PRIV_C_PTR, &ns_a2, pool, 2);
   /* a3 */
-  rbarg_to_nsarg(a3, _C_PTR, &ns_a3, pool, 3);
+  rbarg_to_nsarg(a3, _PRIV_C_PTR, &ns_a3, pool, 3);
 
   ns_result = NSGetWindowServerMemory(ns_a0, ns_a1, ns_a2, ns_a3);
 
@@ -806,9 +806,9 @@ osx_NSDrawColorTiledRects(VALUE mdl, VALUE a0, VALUE a1, VALUE a2, VALUE a3, VAL
   /* a1 */
   rbarg_to_nsarg(a1, _PRIV_C_NSRECT, &ns_a1, pool, 1);
   /* a2 */
-  rbarg_to_nsarg(a2, _C_PTR, &ns_a2, pool, 2);
+  rbarg_to_nsarg(a2, _PRIV_C_PTR, &ns_a2, pool, 2);
   /* a3 */
-  rbarg_to_nsarg(a3, _C_PTR, &ns_a3, pool, 3);
+  rbarg_to_nsarg(a3, _PRIV_C_PTR, &ns_a3, pool, 3);
   /* a4 */
   rbarg_to_nsarg(a4, _C_INT, &ns_a4, pool, 4);
 

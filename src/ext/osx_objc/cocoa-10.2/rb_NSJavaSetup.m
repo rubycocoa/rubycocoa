@@ -217,7 +217,7 @@ osx_NSJavaClassesFromPath(VALUE mdl, VALUE a0, VALUE a1, VALUE a2, VALUE a3)
   /* a2 */
   rbarg_to_nsarg(a2, _C_UCHR, &ns_a2, pool, 2);
   /* a3 */
-  rbarg_to_nsarg(a3, _C_PTR, &ns_a3, pool, 3);
+  rbarg_to_nsarg(a3, _PRIV_C_PTR, &ns_a3, pool, 3);
 
   ns_result = NSJavaClassesFromPath(ns_a0, ns_a1, ns_a2, ns_a3);
 
@@ -243,7 +243,7 @@ osx_NSJavaClassesForBundle(VALUE mdl, VALUE a0, VALUE a1, VALUE a2)
   /* a1 */
   rbarg_to_nsarg(a1, _C_UCHR, &ns_a1, pool, 1);
   /* a2 */
-  rbarg_to_nsarg(a2, _C_PTR, &ns_a2, pool, 2);
+  rbarg_to_nsarg(a2, _PRIV_C_PTR, &ns_a2, pool, 2);
 
   ns_result = NSJavaClassesForBundle(ns_a0, ns_a1, ns_a2);
 

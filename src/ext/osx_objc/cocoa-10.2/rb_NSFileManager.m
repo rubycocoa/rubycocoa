@@ -15,56 +15,56 @@ osx_NSFileType(VALUE mdl)
   return nsresult_to_rbresult(_C_ID, &NSFileType, nil);
 }
 
-// NSString 	* const NSFileTypeDirectory;
+// NSString * const NSFileTypeDirectory;
 static VALUE
 osx_NSFileTypeDirectory(VALUE mdl)
 {
   return nsresult_to_rbresult(_C_ID, &NSFileTypeDirectory, nil);
 }
 
-// NSString 	* const NSFileTypeRegular;
+// NSString * const NSFileTypeRegular;
 static VALUE
 osx_NSFileTypeRegular(VALUE mdl)
 {
   return nsresult_to_rbresult(_C_ID, &NSFileTypeRegular, nil);
 }
 
-// NSString 	* const NSFileTypeSymbolicLink;
+// NSString * const NSFileTypeSymbolicLink;
 static VALUE
 osx_NSFileTypeSymbolicLink(VALUE mdl)
 {
   return nsresult_to_rbresult(_C_ID, &NSFileTypeSymbolicLink, nil);
 }
 
-// NSString 	* const NSFileTypeSocket;
+// NSString * const NSFileTypeSocket;
 static VALUE
 osx_NSFileTypeSocket(VALUE mdl)
 {
   return nsresult_to_rbresult(_C_ID, &NSFileTypeSocket, nil);
 }
 
-// NSString 	* const NSFileTypeCharacterSpecial;
+// NSString * const NSFileTypeCharacterSpecial;
 static VALUE
 osx_NSFileTypeCharacterSpecial(VALUE mdl)
 {
   return nsresult_to_rbresult(_C_ID, &NSFileTypeCharacterSpecial, nil);
 }
 
-// NSString 	* const NSFileTypeBlockSpecial;
+// NSString * const NSFileTypeBlockSpecial;
 static VALUE
 osx_NSFileTypeBlockSpecial(VALUE mdl)
 {
   return nsresult_to_rbresult(_C_ID, &NSFileTypeBlockSpecial, nil);
 }
 
-// NSString 	* const NSFileTypeUnknown;
+// NSString * const NSFileTypeUnknown;
 static VALUE
 osx_NSFileTypeUnknown(VALUE mdl)
 {
   return nsresult_to_rbresult(_C_ID, &NSFileTypeUnknown, nil);
 }
 
-// NSString	* const NSFileSize;
+// NSString * const NSFileSize;
 static VALUE
 osx_NSFileSize(VALUE mdl)
 {

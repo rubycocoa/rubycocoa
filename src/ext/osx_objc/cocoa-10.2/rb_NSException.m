@@ -117,7 +117,7 @@ osx__NSAddHandler2(VALUE mdl, VALUE a0)
   VALUE rb_result;
   id pool = [[NSAutoreleasePool alloc] init];
   /* a0 */
-  rbarg_to_nsarg(a0, _C_PTR, &ns_a0, pool, 0);
+  rbarg_to_nsarg(a0, _PRIV_C_PTR, &ns_a0, pool, 0);
 
   _NSAddHandler2(ns_a0);
 
@@ -136,7 +136,7 @@ osx__NSRemoveHandler2(VALUE mdl, VALUE a0)
   VALUE rb_result;
   id pool = [[NSAutoreleasePool alloc] init];
   /* a0 */
-  rbarg_to_nsarg(a0, _C_PTR, &ns_a0, pool, 0);
+  rbarg_to_nsarg(a0, _PRIV_C_PTR, &ns_a0, pool, 0);
 
   _NSRemoveHandler2(ns_a0);
 
@@ -156,7 +156,7 @@ osx__NSExceptionObjectFromHandler2(VALUE mdl, VALUE a0)
   VALUE rb_result;
   id pool = [[NSAutoreleasePool alloc] init];
   /* a0 */
-  rbarg_to_nsarg(a0, _C_PTR, &ns_a0, pool, 0);
+  rbarg_to_nsarg(a0, _PRIV_C_PTR, &ns_a0, pool, 0);
 
   ns_result = _NSExceptionObjectFromHandler2(ns_a0);
 
@@ -170,7 +170,7 @@ static VALUE
 osx_NSGetUncaughtExceptionHandler(VALUE mdl)
 {
   NSUncaughtExceptionHandler * ns_result = NSGetUncaughtExceptionHandler();
-  return nsresult_to_rbresult(_C_PTR, &ns_result, nil);
+  return nsresult_to_rbresult(_PRIV_C_PTR, &ns_result, nil);
 }
 
 // void NSSetUncaughtExceptionHandler ( NSUncaughtExceptionHandler * );
@@ -183,7 +183,7 @@ osx_NSSetUncaughtExceptionHandler(VALUE mdl, VALUE a0)
   VALUE rb_result;
   id pool = [[NSAutoreleasePool alloc] init];
   /* a0 */
-  rbarg_to_nsarg(a0, _C_PTR, &ns_a0, pool, 0);
+  rbarg_to_nsarg(a0, _PRIV_C_PTR, &ns_a0, pool, 0);
 
   NSSetUncaughtExceptionHandler(ns_a0);
 

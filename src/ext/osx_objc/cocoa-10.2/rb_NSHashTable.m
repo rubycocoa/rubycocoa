@@ -82,7 +82,7 @@ osx_NSFreeHashTable(VALUE mdl, VALUE a0)
   VALUE rb_result;
   id pool = [[NSAutoreleasePool alloc] init];
   /* a0 */
-  rbarg_to_nsarg(a0, _C_PTR, &ns_a0, pool, 0);
+  rbarg_to_nsarg(a0, _PRIV_C_PTR, &ns_a0, pool, 0);
 
   NSFreeHashTable(ns_a0);
 
@@ -101,7 +101,7 @@ osx_NSResetHashTable(VALUE mdl, VALUE a0)
   VALUE rb_result;
   id pool = [[NSAutoreleasePool alloc] init];
   /* a0 */
-  rbarg_to_nsarg(a0, _C_PTR, &ns_a0, pool, 0);
+  rbarg_to_nsarg(a0, _PRIV_C_PTR, &ns_a0, pool, 0);
 
   NSResetHashTable(ns_a0);
 
@@ -122,9 +122,9 @@ osx_NSCompareHashTables(VALUE mdl, VALUE a0, VALUE a1)
   VALUE rb_result;
   id pool = [[NSAutoreleasePool alloc] init];
   /* a0 */
-  rbarg_to_nsarg(a0, _C_PTR, &ns_a0, pool, 0);
+  rbarg_to_nsarg(a0, _PRIV_C_PTR, &ns_a0, pool, 0);
   /* a1 */
-  rbarg_to_nsarg(a1, _C_PTR, &ns_a1, pool, 1);
+  rbarg_to_nsarg(a1, _PRIV_C_PTR, &ns_a1, pool, 1);
 
   ns_result = NSCompareHashTables(ns_a0, ns_a1);
 
@@ -145,13 +145,13 @@ osx_NSCopyHashTableWithZone(VALUE mdl, VALUE a0, VALUE a1)
   VALUE rb_result;
   id pool = [[NSAutoreleasePool alloc] init];
   /* a0 */
-  rbarg_to_nsarg(a0, _C_PTR, &ns_a0, pool, 0);
+  rbarg_to_nsarg(a0, _PRIV_C_PTR, &ns_a0, pool, 0);
   /* a1 */
-  rbarg_to_nsarg(a1, _C_PTR, &ns_a1, pool, 1);
+  rbarg_to_nsarg(a1, _PRIV_C_PTR, &ns_a1, pool, 1);
 
   ns_result = NSCopyHashTableWithZone(ns_a0, ns_a1);
 
-  rb_result = nsresult_to_rbresult(_C_PTR, &ns_result, pool);
+  rb_result = nsresult_to_rbresult(_PRIV_C_PTR, &ns_result, pool);
   [pool release];
   return rb_result;
 }
@@ -168,13 +168,13 @@ osx_NSHashGet(VALUE mdl, VALUE a0, VALUE a1)
   VALUE rb_result;
   id pool = [[NSAutoreleasePool alloc] init];
   /* a0 */
-  rbarg_to_nsarg(a0, _C_PTR, &ns_a0, pool, 0);
+  rbarg_to_nsarg(a0, _PRIV_C_PTR, &ns_a0, pool, 0);
   /* a1 */
-  rbarg_to_nsarg(a1, _C_PTR, &ns_a1, pool, 1);
+  rbarg_to_nsarg(a1, _PRIV_C_PTR, &ns_a1, pool, 1);
 
   ns_result = NSHashGet(ns_a0, ns_a1);
 
-  rb_result = nsresult_to_rbresult(_C_PTR, &ns_result, pool);
+  rb_result = nsresult_to_rbresult(_PRIV_C_PTR, &ns_result, pool);
   [pool release];
   return rb_result;
 }
@@ -190,9 +190,9 @@ osx_NSHashInsert(VALUE mdl, VALUE a0, VALUE a1)
   VALUE rb_result;
   id pool = [[NSAutoreleasePool alloc] init];
   /* a0 */
-  rbarg_to_nsarg(a0, _C_PTR, &ns_a0, pool, 0);
+  rbarg_to_nsarg(a0, _PRIV_C_PTR, &ns_a0, pool, 0);
   /* a1 */
-  rbarg_to_nsarg(a1, _C_PTR, &ns_a1, pool, 1);
+  rbarg_to_nsarg(a1, _PRIV_C_PTR, &ns_a1, pool, 1);
 
   NSHashInsert(ns_a0, ns_a1);
 
@@ -212,9 +212,9 @@ osx_NSHashInsertKnownAbsent(VALUE mdl, VALUE a0, VALUE a1)
   VALUE rb_result;
   id pool = [[NSAutoreleasePool alloc] init];
   /* a0 */
-  rbarg_to_nsarg(a0, _C_PTR, &ns_a0, pool, 0);
+  rbarg_to_nsarg(a0, _PRIV_C_PTR, &ns_a0, pool, 0);
   /* a1 */
-  rbarg_to_nsarg(a1, _C_PTR, &ns_a1, pool, 1);
+  rbarg_to_nsarg(a1, _PRIV_C_PTR, &ns_a1, pool, 1);
 
   NSHashInsertKnownAbsent(ns_a0, ns_a1);
 
@@ -235,13 +235,13 @@ osx_NSHashInsertIfAbsent(VALUE mdl, VALUE a0, VALUE a1)
   VALUE rb_result;
   id pool = [[NSAutoreleasePool alloc] init];
   /* a0 */
-  rbarg_to_nsarg(a0, _C_PTR, &ns_a0, pool, 0);
+  rbarg_to_nsarg(a0, _PRIV_C_PTR, &ns_a0, pool, 0);
   /* a1 */
-  rbarg_to_nsarg(a1, _C_PTR, &ns_a1, pool, 1);
+  rbarg_to_nsarg(a1, _PRIV_C_PTR, &ns_a1, pool, 1);
 
   ns_result = NSHashInsertIfAbsent(ns_a0, ns_a1);
 
-  rb_result = nsresult_to_rbresult(_C_PTR, &ns_result, pool);
+  rb_result = nsresult_to_rbresult(_PRIV_C_PTR, &ns_result, pool);
   [pool release];
   return rb_result;
 }
@@ -257,9 +257,9 @@ osx_NSHashRemove(VALUE mdl, VALUE a0, VALUE a1)
   VALUE rb_result;
   id pool = [[NSAutoreleasePool alloc] init];
   /* a0 */
-  rbarg_to_nsarg(a0, _C_PTR, &ns_a0, pool, 0);
+  rbarg_to_nsarg(a0, _PRIV_C_PTR, &ns_a0, pool, 0);
   /* a1 */
-  rbarg_to_nsarg(a1, _C_PTR, &ns_a1, pool, 1);
+  rbarg_to_nsarg(a1, _PRIV_C_PTR, &ns_a1, pool, 1);
 
   NSHashRemove(ns_a0, ns_a1);
 
@@ -286,11 +286,11 @@ osx_NSNextHashEnumeratorItem(VALUE mdl, VALUE a0)
   VALUE rb_result;
   id pool = [[NSAutoreleasePool alloc] init];
   /* a0 */
-  rbarg_to_nsarg(a0, _C_PTR, &ns_a0, pool, 0);
+  rbarg_to_nsarg(a0, _PRIV_C_PTR, &ns_a0, pool, 0);
 
   ns_result = NSNextHashEnumeratorItem(ns_a0);
 
-  rb_result = nsresult_to_rbresult(_C_PTR, &ns_result, pool);
+  rb_result = nsresult_to_rbresult(_PRIV_C_PTR, &ns_result, pool);
   [pool release];
   return rb_result;
 }
@@ -305,7 +305,7 @@ osx_NSEndHashTableEnumeration(VALUE mdl, VALUE a0)
   VALUE rb_result;
   id pool = [[NSAutoreleasePool alloc] init];
   /* a0 */
-  rbarg_to_nsarg(a0, _C_PTR, &ns_a0, pool, 0);
+  rbarg_to_nsarg(a0, _PRIV_C_PTR, &ns_a0, pool, 0);
 
   NSEndHashTableEnumeration(ns_a0);
 
@@ -325,7 +325,7 @@ osx_NSCountHashTable(VALUE mdl, VALUE a0)
   VALUE rb_result;
   id pool = [[NSAutoreleasePool alloc] init];
   /* a0 */
-  rbarg_to_nsarg(a0, _C_PTR, &ns_a0, pool, 0);
+  rbarg_to_nsarg(a0, _PRIV_C_PTR, &ns_a0, pool, 0);
 
   ns_result = NSCountHashTable(ns_a0);
 
@@ -345,7 +345,7 @@ osx_NSStringFromHashTable(VALUE mdl, VALUE a0)
   VALUE rb_result;
   id pool = [[NSAutoreleasePool alloc] init];
   /* a0 */
-  rbarg_to_nsarg(a0, _C_PTR, &ns_a0, pool, 0);
+  rbarg_to_nsarg(a0, _PRIV_C_PTR, &ns_a0, pool, 0);
 
   ns_result = NSStringFromHashTable(ns_a0);
 
@@ -365,7 +365,7 @@ osx_NSAllHashTableObjects(VALUE mdl, VALUE a0)
   VALUE rb_result;
   id pool = [[NSAutoreleasePool alloc] init];
   /* a0 */
-  rbarg_to_nsarg(a0, _C_PTR, &ns_a0, pool, 0);
+  rbarg_to_nsarg(a0, _PRIV_C_PTR, &ns_a0, pool, 0);
 
   ns_result = NSAllHashTableObjects(ns_a0);
 

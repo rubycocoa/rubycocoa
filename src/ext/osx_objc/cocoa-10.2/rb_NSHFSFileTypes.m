@@ -8,21 +8,21 @@ static const int VA_MAX = 4;
 
 
   /**** functions ****/
-// NSString *NSFileTypeForHFSTypeCode(OSType hfsFileTypeCode);
+// NSString * NSFileTypeForHFSTypeCode ( OSType hfsFileTypeCode );
 static VALUE
 osx_NSFileTypeForHFSTypeCode(VALUE mdl, VALUE a0)
 {
   rb_notimplement();
 }
 
-// OSType NSHFSTypeCodeFromFileType(NSString *fileTypeString);
+// OSType NSHFSTypeCodeFromFileType ( NSString * fileTypeString );
 static VALUE
 osx_NSHFSTypeCodeFromFileType(VALUE mdl, VALUE a0)
 {
   rb_notimplement();
 }
 
-// NSString *NSHFSTypeOfFile(NSString *fullFilePath);
+// NSString * NSHFSTypeOfFile ( NSString * fullFilePath );
 static VALUE
 osx_NSHFSTypeOfFile(VALUE mdl, VALUE a0)
 {

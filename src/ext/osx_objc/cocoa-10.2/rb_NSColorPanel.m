@@ -8,7 +8,7 @@ static const int VA_MAX = 4;
 
 
   /**** constants ****/
-// NSString *NSColorPanelColorDidChangeNotification;
+// NSString * NSColorPanelColorDidChangeNotification;
 static VALUE
 osx_NSColorPanelColorDidChangeNotification(VALUE mdl)
 {

@@ -8,7 +8,7 @@ static const int VA_MAX = 4;
 
 
   /**** functions ****/
-// int NSRunAlertPanel(NSString *title, NSString *msg, NSString *defaultButton, NSString *alternateButton, NSString *otherButton, ...);
+// int NSRunAlertPanel ( NSString * title , NSString * msg , NSString * defaultButton , NSString * alternateButton , NSString * otherButton , ... );
 static VALUE
 osx_NSRunAlertPanel(int argc, VALUE* argv, VALUE mdl)
 {
@@ -61,7 +61,7 @@ osx_NSRunAlertPanel(int argc, VALUE* argv, VALUE mdl)
   return rb_result;
 }
 
-// int NSRunInformationalAlertPanel(NSString *title, NSString *msg, NSString *defaultButton, NSString *alternateButton, NSString *otherButton, ...);
+// int NSRunInformationalAlertPanel ( NSString * title , NSString * msg , NSString * defaultButton , NSString * alternateButton , NSString * otherButton , ... );
 static VALUE
 osx_NSRunInformationalAlertPanel(int argc, VALUE* argv, VALUE mdl)
 {
@@ -114,7 +114,7 @@ osx_NSRunInformationalAlertPanel(int argc, VALUE* argv, VALUE mdl)
   return rb_result;
 }
 
-// int NSRunCriticalAlertPanel(NSString *title, NSString *msg, NSString *defaultButton, NSString *alternateButton, NSString *otherButton, ...);
+// int NSRunCriticalAlertPanel ( NSString * title , NSString * msg , NSString * defaultButton , NSString * alternateButton , NSString * otherButton , ... );
 static VALUE
 osx_NSRunCriticalAlertPanel(int argc, VALUE* argv, VALUE mdl)
 {
@@ -167,7 +167,7 @@ osx_NSRunCriticalAlertPanel(int argc, VALUE* argv, VALUE mdl)
   return rb_result;
 }
 
-// int NSRunAlertPanelRelativeToWindow(NSString *title, NSString *msg, NSString *defaultButton, NSString *alternateButton, NSString *otherButton, NSWindow *docWindow, ...);
+// int NSRunAlertPanelRelativeToWindow ( NSString * title , NSString * msg , NSString * defaultButton , NSString * alternateButton , NSString * otherButton , NSWindow * docWindow , ... );
 static VALUE
 osx_NSRunAlertPanelRelativeToWindow(int argc, VALUE* argv, VALUE mdl)
 {
@@ -223,7 +223,7 @@ osx_NSRunAlertPanelRelativeToWindow(int argc, VALUE* argv, VALUE mdl)
   return rb_result;
 }
 
-// int NSRunInformationalAlertPanelRelativeToWindow(NSString *title, NSString *msg, NSString *defaultButton, NSString *alternateButton, NSString *otherButton, NSWindow *docWindow, ...);
+// int NSRunInformationalAlertPanelRelativeToWindow ( NSString * title , NSString * msg , NSString * defaultButton , NSString * alternateButton , NSString * otherButton , NSWindow * docWindow , ... );
 static VALUE
 osx_NSRunInformationalAlertPanelRelativeToWindow(int argc, VALUE* argv, VALUE mdl)
 {
@@ -279,7 +279,7 @@ osx_NSRunInformationalAlertPanelRelativeToWindow(int argc, VALUE* argv, VALUE md
   return rb_result;
 }
 
-// int NSRunCriticalAlertPanelRelativeToWindow(NSString *title, NSString *msg, NSString *defaultButton, NSString *alternateButton, NSString *otherButton, NSWindow *docWindow, ...);
+// int NSRunCriticalAlertPanelRelativeToWindow ( NSString * title , NSString * msg , NSString * defaultButton , NSString * alternateButton , NSString * otherButton , NSWindow * docWindow , ... );
 static VALUE
 osx_NSRunCriticalAlertPanelRelativeToWindow(int argc, VALUE* argv, VALUE mdl)
 {
@@ -335,7 +335,7 @@ osx_NSRunCriticalAlertPanelRelativeToWindow(int argc, VALUE* argv, VALUE mdl)
   return rb_result;
 }
 
-// void NSBeginAlertSheet(NSString *title, NSString *defaultButton, NSString *alternateButton, NSString *otherButton, NSWindow *docWindow, id modalDelegate, SEL didEndSelector, SEL didDismissSelector, void *contextInfo, NSString *msg, ...);
+// void NSBeginAlertSheet ( NSString * title , NSString * defaultButton , NSString * alternateButton , NSString * otherButton , NSWindow * docWindow , id modalDelegate , SEL didEndSelector , SEL didDismissSelector , void * contextInfo , NSString * msg , ... );
 static VALUE
 osx_NSBeginAlertSheet(int argc, VALUE* argv, VALUE mdl)
 {
@@ -374,7 +374,7 @@ osx_NSBeginAlertSheet(int argc, VALUE* argv, VALUE mdl)
   /* argv[7] */
   rbarg_to_nsarg(argv[7], _C_SEL, &ns_a7, pool, 7);
   /* argv[8] */
-  rbarg_to_nsarg(argv[8], _C_PTR, &ns_a8, pool, 8);
+  rbarg_to_nsarg(argv[8], _PRIV_C_PTR, &ns_a8, pool, 8);
   /* argv[9] */
   rbarg_to_nsarg(argv[9], _C_ID, &ns_a9, pool, 9);
   /* ns_va */
@@ -402,7 +402,7 @@ osx_NSBeginAlertSheet(int argc, VALUE* argv, VALUE mdl)
   return rb_result;
 }
 
-// void NSBeginInformationalAlertSheet(NSString *title, NSString *defaultButton, NSString *alternateButton, NSString *otherButton, NSWindow *docWindow, id modalDelegate, SEL didEndSelector, SEL didDismissSelector, void *contextInfo, NSString *msg, ...);
+// void NSBeginInformationalAlertSheet ( NSString * title , NSString * defaultButton , NSString * alternateButton , NSString * otherButton , NSWindow * docWindow , id modalDelegate , SEL didEndSelector , SEL didDismissSelector , void * contextInfo , NSString * msg , ... );
 static VALUE
 osx_NSBeginInformationalAlertSheet(int argc, VALUE* argv, VALUE mdl)
 {
@@ -441,7 +441,7 @@ osx_NSBeginInformationalAlertSheet(int argc, VALUE* argv, VALUE mdl)
   /* argv[7] */
   rbarg_to_nsarg(argv[7], _C_SEL, &ns_a7, pool, 7);
   /* argv[8] */
-  rbarg_to_nsarg(argv[8], _C_PTR, &ns_a8, pool, 8);
+  rbarg_to_nsarg(argv[8], _PRIV_C_PTR, &ns_a8, pool, 8);
   /* argv[9] */
   rbarg_to_nsarg(argv[9], _C_ID, &ns_a9, pool, 9);
   /* ns_va */
@@ -469,7 +469,7 @@ osx_NSBeginInformationalAlertSheet(int argc, VALUE* argv, VALUE mdl)
   return rb_result;
 }
 
-// void NSBeginCriticalAlertSheet(NSString *title, NSString *defaultButton, NSString *alternateButton, NSString *otherButton, NSWindow *docWindow, id modalDelegate, SEL didEndSelector, SEL didDismissSelector, void *contextInfo, NSString *msg, ...);
+// void NSBeginCriticalAlertSheet ( NSString * title , NSString * defaultButton , NSString * alternateButton , NSString * otherButton , NSWindow * docWindow , id modalDelegate , SEL didEndSelector , SEL didDismissSelector , void * contextInfo , NSString * msg , ... );
 static VALUE
 osx_NSBeginCriticalAlertSheet(int argc, VALUE* argv, VALUE mdl)
 {
@@ -508,7 +508,7 @@ osx_NSBeginCriticalAlertSheet(int argc, VALUE* argv, VALUE mdl)
   /* argv[7] */
   rbarg_to_nsarg(argv[7], _C_SEL, &ns_a7, pool, 7);
   /* argv[8] */
-  rbarg_to_nsarg(argv[8], _C_PTR, &ns_a8, pool, 8);
+  rbarg_to_nsarg(argv[8], _PRIV_C_PTR, &ns_a8, pool, 8);
   /* argv[9] */
   rbarg_to_nsarg(argv[9], _C_ID, &ns_a9, pool, 9);
   /* ns_va */
@@ -536,7 +536,7 @@ osx_NSBeginCriticalAlertSheet(int argc, VALUE* argv, VALUE mdl)
   return rb_result;
 }
 
-// id NSGetAlertPanel(NSString *title, NSString *msg, NSString *defaultButton, NSString *alternateButton, NSString *otherButton, ...);
+// id NSGetAlertPanel ( NSString * title , NSString * msg , NSString * defaultButton , NSString * alternateButton , NSString * otherButton , ... );
 static VALUE
 osx_NSGetAlertPanel(int argc, VALUE* argv, VALUE mdl)
 {
@@ -589,7 +589,7 @@ osx_NSGetAlertPanel(int argc, VALUE* argv, VALUE mdl)
   return rb_result;
 }
 
-// id NSGetInformationalAlertPanel(NSString *title, NSString *msg, NSString *defaultButton, NSString *alternateButton, NSString *otherButton, ...);
+// id NSGetInformationalAlertPanel ( NSString * title , NSString * msg , NSString * defaultButton , NSString * alternateButton , NSString * otherButton , ... );
 static VALUE
 osx_NSGetInformationalAlertPanel(int argc, VALUE* argv, VALUE mdl)
 {
@@ -642,7 +642,7 @@ osx_NSGetInformationalAlertPanel(int argc, VALUE* argv, VALUE mdl)
   return rb_result;
 }
 
-// id NSGetCriticalAlertPanel(NSString *title, NSString *msg, NSString *defaultButton, NSString *alternateButton, NSString *otherButton, ...);
+// id NSGetCriticalAlertPanel ( NSString * title , NSString * msg , NSString * defaultButton , NSString * alternateButton , NSString * otherButton , ... );
 static VALUE
 osx_NSGetCriticalAlertPanel(int argc, VALUE* argv, VALUE mdl)
 {
@@ -695,7 +695,7 @@ osx_NSGetCriticalAlertPanel(int argc, VALUE* argv, VALUE mdl)
   return rb_result;
 }
 
-// void NSReleaseAlertPanel(id panel);
+// void NSReleaseAlertPanel ( id panel );
 static VALUE
 osx_NSReleaseAlertPanel(VALUE mdl, VALUE a0)
 {

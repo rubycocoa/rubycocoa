@@ -13,7 +13,7 @@ static VALUE
 osx_NSDefaultMallocZone(VALUE mdl)
 {
   NSZone * ns_result = NSDefaultMallocZone();
-  return nsresult_to_rbresult(_C_PTR, &ns_result, nil);
+  return nsresult_to_rbresult(_PRIV_C_PTR, &ns_result, nil);
 }
 
 // NSZone * NSCreateZone ( unsigned startSize , unsigned granularity , BOOL canFree );
@@ -37,7 +37,7 @@ osx_NSCreateZone(VALUE mdl, VALUE a0, VALUE a1, VALUE a2)
 
   ns_result = NSCreateZone(ns_a0, ns_a1, ns_a2);
 
-  rb_result = nsresult_to_rbresult(_C_PTR, &ns_result, pool);
+  rb_result = nsresult_to_rbresult(_PRIV_C_PTR, &ns_result, pool);
   [pool release];
   return rb_result;
 }
@@ -52,7 +52,7 @@ osx_NSRecycleZone(VALUE mdl, VALUE a0)
   VALUE rb_result;
   id pool = [[NSAutoreleasePool alloc] init];
   /* a0 */
-  rbarg_to_nsarg(a0, _C_PTR, &ns_a0, pool, 0);
+  rbarg_to_nsarg(a0, _PRIV_C_PTR, &ns_a0, pool, 0);
 
   NSRecycleZone(ns_a0);
 
@@ -72,7 +72,7 @@ osx_NSSetZoneName(VALUE mdl, VALUE a0, VALUE a1)
   VALUE rb_result;
   id pool = [[NSAutoreleasePool alloc] init];
   /* a0 */
-  rbarg_to_nsarg(a0, _C_PTR, &ns_a0, pool, 0);
+  rbarg_to_nsarg(a0, _PRIV_C_PTR, &ns_a0, pool, 0);
   /* a1 */
   rbarg_to_nsarg(a1, _C_ID, &ns_a1, pool, 1);
 
@@ -94,7 +94,7 @@ osx_NSZoneName(VALUE mdl, VALUE a0)
   VALUE rb_result;
   id pool = [[NSAutoreleasePool alloc] init];
   /* a0 */
-  rbarg_to_nsarg(a0, _C_PTR, &ns_a0, pool, 0);
+  rbarg_to_nsarg(a0, _PRIV_C_PTR, &ns_a0, pool, 0);
 
   ns_result = NSZoneName(ns_a0);
 
@@ -114,11 +114,11 @@ osx_NSZoneFromPointer(VALUE mdl, VALUE a0)
   VALUE rb_result;
   id pool = [[NSAutoreleasePool alloc] init];
   /* a0 */
-  rbarg_to_nsarg(a0, _C_PTR, &ns_a0, pool, 0);
+  rbarg_to_nsarg(a0, _PRIV_C_PTR, &ns_a0, pool, 0);
 
   ns_result = NSZoneFromPointer(ns_a0);
 
-  rb_result = nsresult_to_rbresult(_C_PTR, &ns_result, pool);
+  rb_result = nsresult_to_rbresult(_PRIV_C_PTR, &ns_result, pool);
   [pool release];
   return rb_result;
 }
@@ -135,13 +135,13 @@ osx_NSZoneMalloc(VALUE mdl, VALUE a0, VALUE a1)
   VALUE rb_result;
   id pool = [[NSAutoreleasePool alloc] init];
   /* a0 */
-  rbarg_to_nsarg(a0, _C_PTR, &ns_a0, pool, 0);
+  rbarg_to_nsarg(a0, _PRIV_C_PTR, &ns_a0, pool, 0);
   /* a1 */
   rbarg_to_nsarg(a1, _C_UINT, &ns_a1, pool, 1);
 
   ns_result = NSZoneMalloc(ns_a0, ns_a1);
 
-  rb_result = nsresult_to_rbresult(_C_PTR, &ns_result, pool);
+  rb_result = nsresult_to_rbresult(_PRIV_C_PTR, &ns_result, pool);
   [pool release];
   return rb_result;
 }
@@ -159,7 +159,7 @@ osx_NSZoneCalloc(VALUE mdl, VALUE a0, VALUE a1, VALUE a2)
   VALUE rb_result;
   id pool = [[NSAutoreleasePool alloc] init];
   /* a0 */
-  rbarg_to_nsarg(a0, _C_PTR, &ns_a0, pool, 0);
+  rbarg_to_nsarg(a0, _PRIV_C_PTR, &ns_a0, pool, 0);
   /* a1 */
   rbarg_to_nsarg(a1, _C_UINT, &ns_a1, pool, 1);
   /* a2 */
@@ -167,7 +167,7 @@ osx_NSZoneCalloc(VALUE mdl, VALUE a0, VALUE a1, VALUE a2)
 
   ns_result = NSZoneCalloc(ns_a0, ns_a1, ns_a2);
 
-  rb_result = nsresult_to_rbresult(_C_PTR, &ns_result, pool);
+  rb_result = nsresult_to_rbresult(_PRIV_C_PTR, &ns_result, pool);
   [pool release];
   return rb_result;
 }
@@ -185,15 +185,15 @@ osx_NSZoneRealloc(VALUE mdl, VALUE a0, VALUE a1, VALUE a2)
   VALUE rb_result;
   id pool = [[NSAutoreleasePool alloc] init];
   /* a0 */
-  rbarg_to_nsarg(a0, _C_PTR, &ns_a0, pool, 0);
+  rbarg_to_nsarg(a0, _PRIV_C_PTR, &ns_a0, pool, 0);
   /* a1 */
-  rbarg_to_nsarg(a1, _C_PTR, &ns_a1, pool, 1);
+  rbarg_to_nsarg(a1, _PRIV_C_PTR, &ns_a1, pool, 1);
   /* a2 */
   rbarg_to_nsarg(a2, _C_UINT, &ns_a2, pool, 2);
 
   ns_result = NSZoneRealloc(ns_a0, ns_a1, ns_a2);
 
-  rb_result = nsresult_to_rbresult(_C_PTR, &ns_result, pool);
+  rb_result = nsresult_to_rbresult(_PRIV_C_PTR, &ns_result, pool);
   [pool release];
   return rb_result;
 }
@@ -209,9 +209,9 @@ osx_NSZoneFree(VALUE mdl, VALUE a0, VALUE a1)
   VALUE rb_result;
   id pool = [[NSAutoreleasePool alloc] init];
   /* a0 */
-  rbarg_to_nsarg(a0, _C_PTR, &ns_a0, pool, 0);
+  rbarg_to_nsarg(a0, _PRIV_C_PTR, &ns_a0, pool, 0);
   /* a1 */
-  rbarg_to_nsarg(a1, _C_PTR, &ns_a1, pool, 1);
+  rbarg_to_nsarg(a1, _PRIV_C_PTR, &ns_a1, pool, 1);
 
   NSZoneFree(ns_a0, ns_a1);
 
@@ -291,7 +291,7 @@ osx_NSAllocateMemoryPages(VALUE mdl, VALUE a0)
 
   ns_result = NSAllocateMemoryPages(ns_a0);
 
-  rb_result = nsresult_to_rbresult(_C_PTR, &ns_result, pool);
+  rb_result = nsresult_to_rbresult(_PRIV_C_PTR, &ns_result, pool);
   [pool release];
   return rb_result;
 }
@@ -307,7 +307,7 @@ osx_NSDeallocateMemoryPages(VALUE mdl, VALUE a0, VALUE a1)
   VALUE rb_result;
   id pool = [[NSAutoreleasePool alloc] init];
   /* a0 */
-  rbarg_to_nsarg(a0, _C_PTR, &ns_a0, pool, 0);
+  rbarg_to_nsarg(a0, _PRIV_C_PTR, &ns_a0, pool, 0);
   /* a1 */
   rbarg_to_nsarg(a1, _C_UINT, &ns_a1, pool, 1);
 
@@ -330,9 +330,9 @@ osx_NSCopyMemoryPages(VALUE mdl, VALUE a0, VALUE a1, VALUE a2)
   VALUE rb_result;
   id pool = [[NSAutoreleasePool alloc] init];
   /* a0 */
-  rbarg_to_nsarg(a0, _C_PTR, &ns_a0, pool, 0);
+  rbarg_to_nsarg(a0, _PRIV_C_PTR, &ns_a0, pool, 0);
   /* a1 */
-  rbarg_to_nsarg(a1, _C_PTR, &ns_a1, pool, 1);
+  rbarg_to_nsarg(a1, _PRIV_C_PTR, &ns_a1, pool, 1);
   /* a2 */
   rbarg_to_nsarg(a2, _C_UINT, &ns_a2, pool, 2);
 

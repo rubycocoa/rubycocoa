@@ -26,7 +26,7 @@ osx_NSCharacterConversionException(VALUE mdl)
 static VALUE
 osx__NSConstantStringClassReference(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_PTR, &_NSConstantStringClassReference, nil);
+  return nsresult_to_rbresult(_PRIV_C_PTR, &_NSConstantStringClassReference, nil);
 }
 
 void init_NSString(VALUE mOSX)
