@@ -1,3 +1,17 @@
+2002-12-04  FUJIMOTO Hisakuni  <hisa@fobj.com>
+
+	* framework/tool/create-appkit-and-foundation.rb:
+	script to create appkit.rb & foundation.rb
+
+	* framework/src/ruby: add a ruby part of framework
+
+	* RubyCocoa.framework again. change directory tree largely.
+
+2002-10-16  FUJIMOTO Hisakuni  <hisa@fobj.com>
+
+	* lib/osx/addressbook.rb, lib/osx/appkit.rb, lib/osx/cocoa.rb, lib/osx/foundation.rb:
+	move all into framework
+
 2002-10-04  FUJIMOTO Hisakuni  <hisa@fobj.com>
 
 	* release 0.3.2
