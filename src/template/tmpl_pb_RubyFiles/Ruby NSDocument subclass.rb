@@ -7,7 +7,6 @@
 #
 
 require 'osx/cocoa'
-import com.apple.co
 
 class ÇFILEBASENAMEASIDENTIFIERÈ < OSX::NSDocument
 
