@@ -10,12 +10,12 @@ object in a Ruby script.
 
 0. HOW TO INSTALL
 
-  Read "html/INSTALL.(ja|en).html" or "doc/INSTALL.(ja|en)".
+  Read "doc/INSTALL.(ja|en).html" or "doc/INSTALL.(ja|en)".
 
 1. HOW TO USE
 
-  Read "html/USING.(ja|en).html" for usage information.  Read
-  "html/REFERENCES.(ja|en).html" for technical details.
+  Read "doc/USING.(ja|en).html" for usage information.  Read
+  "doc/REFERENCES.(ja|en).html" for technical details.
 
 2. EXAMPLES
 

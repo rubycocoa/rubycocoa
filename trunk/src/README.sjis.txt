@@ -9,12 +9,12 @@
 
 0. インストール方法
 
-  htmlディレクトリのINSTALL.(ja|en).html、もしくはdocディレクトリの
-  INSTALL.(ja|en)をご覧ください。
+  doc ディレクトリの INSTALL.(ja|en).html もしくは INSTALL.(ja|en) を
+  ご覧ください。
 
 1. 使い方
 
-  簡単な使い方はhtmlディレクトリのUSING.(ja|en).htmlをご覧ください。詳
+  簡単な使い方はdocディレクトリのUSING.(ja|en).htmlをご覧ください。詳
   細についてはREFERENCES.(ja|en).htmlをご覧ください。
 
 2. サンプル
