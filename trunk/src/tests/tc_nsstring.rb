@@ -10,24 +10,68 @@
 
 require 'test/unit'
 require 'osx/cocoa'
+require 'kconv'
 
 class TC_NSString < Test::Unit::TestCase
+  include OSX
 
-  TESTSTR = "Hello World".freeze
+  def setup
+    @teststr = "Hello World".freeze
+    @eucstr = "オブジェクト指向スクリプト言語Ruby".toeuc.freeze
+  end
 
   def test_s_alloc
-    obj = OSX::NSString.alloc.init
-    assert_equal( true, obj.isKindOfClass?(OSX::NSString) )
+    obj = NSString.alloc.init
+    assert( obj.isKindOfClass?(NSString) )
   end
 
   def test_s_stringWithString
-    obj = OSX::NSString.stringWithString(TESTSTR)
-    assert_equal(TESTSTR, obj.to_s)
+    obj = NSString.stringWithString(@teststr)
+    assert_equal(@teststr, obj.to_s)
   end
 
   def test_initWithString
-    obj = OSX::NSString.alloc.initWithString(TESTSTR)
-    assert_equal(TESTSTR, obj.to_s)
+    obj = NSString.alloc.initWithString(@teststr)
+    assert_equal(@teststr, obj.to_s)
+  end
+
+  def test_stringWithRubyString_euc
+    nsstr = NSString.stringWithRubyString( @eucstr )
+    assert_equal( @eucstr, nsstr.to_s.toeuc )
+  end
+
+  def test_stringWithRubyString_sjis
+    nsstr = NSString.stringWithRubyString( @eucstr.tosjis )
+    assert_equal( @eucstr, nsstr.to_s.toeuc )
+  end
+
+  def test_stringWithRubyString_jis
+    nsstr = NSString.stringWithRubyString( @eucstr.tojis )
+    assert_equal( @eucstr, nsstr.to_s.toeuc )
+  end
+
+  def test_dataUsingEncoding_euc
+    nsstr = NSString.stringWithRubyString( @eucstr )
+    data = nsstr.dataUsingEncoding( NSJapaneseEUCStringEncoding )
+    bytes = "." * data.length
+    data.getBytes( bytes )
+    assert_equal( @eucstr, bytes )
+  end
+
+  def test_dataUsingEncoding_sjis
+    nsstr = NSString.stringWithRubyString( @eucstr )
+    data = nsstr.dataUsingEncoding( NSShiftJISStringEncoding )
+    bytes = "." * data.length
+    data.getBytes( bytes )
+    assert_equal( @eucstr.tosjis, bytes )
+  end
+
+  def test_dataUsingEncoding_jis
+    nsstr = NSString.stringWithRubyString( @eucstr )
+    data = nsstr.dataUsingEncoding( NSISO2022JPStringEncoding )
+    bytes = "." * data.length
+    data.getBytes( bytes )
+    assert_equal( @eucstr.tojis, bytes )
   end
 
 end
