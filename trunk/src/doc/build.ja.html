@@ -120,7 +120,7 @@ $ ruby install.rb setup</pre>
 「<a href='#label-19'>RubyCocoa 0.4.0 を Ruby 1.6.8 で作るときの注意点</a>」を確認してください。</p>
 <h2><a name='label-9' id='label-9'>RubyCocoaの単体テスト</a></h2><!-- RDLabel: "RubyCocoaの単体テスト" -->
 <pre>$ cd {ソース}/tests
-$ DYLD_FRAMEWORK_PATH={ソース}/framework/build ruby -I../lib testall.rb</pre>
+$ DYLD_FRAMEWORK_PATH={ソース}/framework/build ruby -I../lib -I../ext/rubycocoa testall.rb</pre>
 <p>単体テストにはTest::Unitが必要です。このプロセスは省略可能です。</p>
 <h2><a name='label-10' id='label-10'>RubyCocoaのインストール</a></h2><!-- RDLabel: "RubyCocoaのインストール" -->
 <pre>$ sudo ruby install.rb install</pre>

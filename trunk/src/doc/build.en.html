@@ -123,7 +123,7 @@ required, specify option at the time of a config phase.</p>
 please check "<a href='#label-19'>Notice for build of RubyCocoa 0.4.0 to Ruby 1.6.8</a>".</p>
 <h2><a name='label-9' id='label-9'>Unit Test for RubyCocoa</a></h2><!-- RDLabel: "Unit Test for RubyCocoa" -->
 <pre>$ cd {source}/tests
-$ DYLD_FRAMEWORK_PATH={source}/framework/build ruby -I../lib testall.rb</pre>
+$ DYLD_FRAMEWORK_PATH={source}/framework/build ruby -I../lib -I../ext/rubycocoa testall.rb</pre>
 <p>Test::Unit is required for unit tests.  This process is optional.</p>
 <h2><a name='label-10' id='label-10'>Installation of RubyCocoa</a></h2><!-- RDLabel: "Installation of RubyCocoa" -->
 <pre>$ sudo ruby install.rb install</pre>
