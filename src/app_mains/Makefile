@@ -17,5 +17,5 @@ AppMain_LibrubyA: main_using_libruby.m
 	$(CC) $(CFLAGS) $(LIBRUBY_A) -o $@ $<
 	strip -x $@
 
-AppMain_LibrubyDylib: main_using_libruby.m
-	$(CC) $(CFLAGS) $(LIBRUBY_DYLIB) -o $@ $<
+# AppMain_LibrubyDylib: main_using_libruby.m
+# 	$(CC) $(CFLAGS) $(LIBRUBY_DYLIB) -o $@ $<
