@@ -39,7 +39,7 @@ RubyスクリプトとInterface BuilderのNibファイルのみで書かれたRubyCocoa
     sleep 0.5
   end
 
-以下の例はマックにテキストを読み上げさせるスクリプトです(OSX 10.2用)。
+以下の例はマックにテキストを読み上げさせるスクリプトです(OSX 10.2以降用)。
 
   require 'osx/cocoa'
   include OSX
@@ -94,7 +94,7 @@ RubyスクリプトとInterface BuilderのNibファイルのみで書かれたRubyCocoa
 
 Gesse Gam, Hiroyuki Shimura, John Platte, kimura wataru, Masaki Yatsu,
 Masatoshi Seki, Michael Miller, Ogino Junya, Ralph Broom, Rich Kilmer,
-Shirai Kaoru, Tetsuhumi Takaishi, Tosh, Matthew Fero
+Shirai Kaoru, Tetsuhumi Takaishi, Tosh, Matthew Fero, Rod Schmidt
 
 をはじめとする多くの方々に感謝いたします。
 
