@@ -1,11 +1,12 @@
 # -*-makefile-*-
 
-APPNAME = ThreadSample0
+APPNAME = SimpleApp
 BUNDLEID = rubyapp.$(APPNAME)
 NIBDIR = English.lproj
 
 RUBYSRCS = rb_main.rb AppController.rb
 OBJS = main.o
+LIBS = -lobjc -framework RubyCocoa
 
 TARGET = $(APPNAME).app
 CFLAGS = -Wall
@@ -15,7 +16,7 @@ SED_CMD_1 = -e "s/%%%BUNDLEID%%%/$(BUNDLEID)/"
 
 
 $(TARGET): $(OBJS) $(RUBYSRCS)
-	$(CC) $(OBJS) -framework Foundation
+	$(CC) $(OBJS) $(LIBS)
 	-/bin/rm -rf $(APPNAME).app
 	mkdir $(APPNAME).app
 	mkdir $(APPNAME).app/Contents
