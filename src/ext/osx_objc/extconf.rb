@@ -9,9 +9,16 @@ end
 $LDFLAGS = '-F../../framework/build -framework LibRuby -framework RubyCocoa'
 $CFLAGS  = '-F../../framework/build'
 
+cocoadir =
+  if `uname -r`.to_f >= 6.0 then
+    'cocoa-10.2'
+  else
+    'cocoa-10.1'
+  end
+
 $objs = 
-  `ls cocoa/*.[mc]`.split.map{|i| "#{i.split('.')[0]}.o" } +
-  `ls *.[mc]`.split.map{|i| "#{i.split('.')[0]}.o" }
+  `ls #{cocoadir}/*.[mc]`.split.map{|i| "#{i.sub(/.[mc]$/,"")}.o" } +
+  `ls *.[mc]`.split.map{|i| "#{i.sub(/.[mc]$/,"")}.o" }
 
 create_makefile('osx_objc')
 

@@ -1,0 +1,46 @@
+/** -*-objc-*-
+ *
+ *   $Id$
+ *
+ *   Copyright (c) 2001 FUJIMOTO Hisakuni <hisa@imasy.or.jp>
+ *
+ *   This program is free software.
+ *   You can distribute/modify this program under the terms of
+ *   the GNU Lesser General Public License version 2.
+ *
+ **/
+#import <Foundation/NSAutoreleasePool.h>
+#import <LibRuby/cocoa_ruby.h>
+#import <RubyCocoa/ocdata_conv.h>
+
+void
+rbarg_to_nsarg(VALUE rbarg, int octype, void* nsarg, id pool, int index)
+{
+  if (!rbobj_to_ocdata(rbarg, octype, nsarg)) {
+    if (pool) [pool release];
+    rb_raise(rb_eArgError, "arg #%d cannot convert to nsobj.", index);
+  }
+}
+
+VALUE
+nsresult_to_rbresult(int octype, const void* nsresult, id pool)
+{
+  VALUE rbresult;
+  if (!ocdata_to_rbobj(Qnil, octype, nsresult, &rbresult)) {
+    if (pool) [pool release];
+    rb_raise(rb_eRuntimeError, "result cannot convert to rbobj.");
+  }
+  return rbresult;
+}
+
+<%
+files = `ls rb_*.m`.split.map {|i| i.split('.')[0][3..-1] }
+files.each do |name|
+%>extern void init_<%=name%>(VALUE);
+<% end %>
+void init_cocoa(VALUE mOSX)
+{
+<%
+files.each do |name|
+%>  init_<%=name%>(mOSX);
+<% end %>}
