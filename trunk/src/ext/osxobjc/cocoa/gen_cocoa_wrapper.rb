@@ -10,7 +10,7 @@
 
 FORCE_MODE = (ARGV.size > 0 && ARGV[0] == "-f")
 
-require 'och_analyzer'
+require '../../../tool/och_analyzer'
 
 def collect_src_headers(src_path, re_pat)
   File.open(src_path) {|f|
