@@ -15,6 +15,9 @@
 #import "osx_ruby.h"
 #import "rubysig.h"
 
+#define DEFAULT_WAIT      0	// sec
+#define DEFAULT_INTERVAL  0.050 // sec
+
 static id rthread_switcher = nil;
 
 @implementation RBThreadSwitcher
@@ -61,10 +64,14 @@ static id rthread_switcher = nil;
 
   if (rthread_switcher) [self stop];
 
+#if DEFAULT_WAIT == 0
+  sel = @selector(sched:);
+#else
   if (a_wait <= 0.0)
     sel = @selector(sched:);
   else
     sel = @selector(schedWithWait:);
+#endif
 
   pool = [[NSAutoreleasePool alloc] init];
   rthread_switcher = [[self alloc] init];
@@ -80,12 +87,12 @@ static id rthread_switcher = nil;
 
 + (void) start: (double)interval
 {
-  [self start: interval wait: 0.0];
+  [self start: interval wait: DEFAULT_WAIT];
 }
 
 + (void) start
 {
-  [self start: 0.005];
+  [self start: DEFAULT_INTERVAL];
 }
 
 + (void) stop
