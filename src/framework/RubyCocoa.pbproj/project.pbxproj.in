@@ -116,12 +116,14 @@
 				HEADER_SEARCH_PATHS = "%%%ruby_header_dir%%%";
 				INSTALL_PATH = "@executable_path/../Frameworks";
 				LIBRARY_SEARCH_PATHS = "%%%libruby_path_dirname%%%";
+				OBJROOT = "$SRCROOT/build";
 				OTHER_CFLAGS = "-fno-common";
 				OTHER_LDFLAGS = "-undefined suppress -flat_namespace";
 				PREBINDING = NO;
 				PRODUCT_NAME = "%%%framework_name%%%";
 				SECTORDER_FLAGS = "";
 				SINGLE_MODULE = NO;
+				SYMROOT = "$SRCROOT/build";
 				WARNING_CFLAGS = "-Wmost -Wno-four-char-constants -Wno-unknown-pragmas";
 				WRAPPER_EXTENSION = framework;
 			};
