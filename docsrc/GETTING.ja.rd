@@ -3,12 +3,14 @@
 
 == バイナリ配付
 
-バイナリ配付に含まれているRubyCocoaは、Mac OS X 10.2に付属する
-Ruby 1.6.7 に合わせて構築しています。
+=== for Mac OS X 10.3
+
+バイナリ配付に含まれているRubyCocoaは、Mac OS X 10.3に付属する
+Ruby 1.6.8 に合わせて構築しています。
 
 ((<ファイル一覧|URL:http://rubycocoa.sourceforge.net/files/>))
 の中から
-((<RubyCocoa-0.4.0.dmg|URL:http://rubycocoa.sourceforge.net/files/RubyCocoa-0.4.0.dmg>))
+((<RubyCocoa-0.4.1-panther.dmg|URL:http://rubycocoa.sourceforge.net/files/RubyCocoa-0.4.1-panther.dmg>))
 をダウンロードしてください。
 
 RubyCocoaとRubyAEOSA のライブラリ・サンプルコード・ドキュメント・
@@ -24,8 +26,11 @@ ProjectBuilderテンプレートなどが含まれています。実行・開発に必要な
 : /usr/lib/ruby/site_ruby/1.6/osx/ の中
   RubyCocoaライブラリ (stub)
 
-: /usr/lib/ruby/site_ruby/1.6/powerpc-darwin6.0/rubycocoa.bundle
+: /usr/lib/ruby/site_ruby/1.6/powerpc-darwin7.0/rubycocoa.bundle
   RubyCocoa拡張ライブラリ (stub)
+
+: '/Library/Application Support/Apple/Developer Tools' の中
+  Xcodeのテンプレート
 
 : '/Developer/ProjectBuilder Extras/' の中
   ProjectBuilderのテンプレート
@@ -40,12 +45,36 @@ ProjectBuilderテンプレートなどが含まれています。実行・開発に必要な
 |URL:trysamples.ja.html>)) を参考にRubyCocoaで書かれたサンプルプログラ
 ムを動かしてみるとよいでしょう。
 
+=== for Mac OS X 10.2
+
+バイナリ配付に含まれているRubyCocoaは、Mac OS X 10.2に付属する
+Ruby 1.6.7 に合わせて構築しています。
+
+((<ファイル一覧|URL:http://rubycocoa.sourceforge.net/files/>))
+の中から
+((<RubyCocoa-0.4.1-jaguar.dmg|URL:http://rubycocoa.sourceforge.net/files/RubyCocoa-0.4.1-jaguar.dmg>))
+をダウンロードしてください。
+
+バイナリパッケージにより以下のものがインストールされます。
+
+: /Library/Frameworks/RubyCocoa.framework
+
+: /usr/lib/ruby/site_ruby/1.6/osx/ の中
+
+: /usr/lib/ruby/site_ruby/1.6/powerpc-darwin6.0/rubycocoa.bundle
+
+: '/Developer/ProjectBuilder Extras/' の中
+
+: /Developer/Documentation/RubyCocoa
+
+: /Developer/Examples/RubyCocoa
+
 
 == ソース配付
 
 ((<ファイル一覧|URL:http://rubycocoa.sourceforge.net/files/>))
 の中から
-((<rubycocoa-0.4.0.tgz|URL:http://rubycocoa.sourceforge.net/files/rubycocoa-0.4.0.tgz>))
+((<rubycocoa-0.4.1.tgz|URL:http://rubycocoa.sourceforge.net/files/rubycocoa-0.4.1.tgz>))
 をダウンロードしてください。
 
 ((<「RubyCocoaをソースから構築・インストールする」|URL:build.ja.html>))

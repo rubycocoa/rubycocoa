@@ -1,6 +1,20 @@
 # -*-rd-*-
 = 変更点
 
+== 0.4.0 からのおもな変更点 (0.4.1)
+
+: rubyスクリプト実行時にLoadErrorが発生する
+
+  rubyが--enable-sharedオプションなしでビルドされているとき、
+  そのrubyでRubyCocoaを構築すると次のエラーとなる問題を修正しました。
+
+    osx/cocoa.rb:12:in `require': No such file to load -- osx/objc/cocoa (LoadError)
+
+: Mac OS X 10.3(Panther)およびXcodeサポート
+
+  Mac OS X 10.3上で構築可能になりました。
+  また、Xcodeのプロジェクトテンプレートをインストールするようになりました。
+
 == 0.4.0 からのおもな変更点 (0.4.1d9)
 
 : ruby 1.8.0 対応
