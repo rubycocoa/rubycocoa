@@ -155,6 +155,42 @@ libruby.aのみをインストールします。
 動作確認してみてください。
 
 
+== [FYI] バイナリパッケージングに便利なインストールオプション
+
+RubyCocoaのバイナリパッケージを作るときに便利な'ruby install.rb
+config'のオプションがあります。
+
+  * --install-prefix : 
+    拡張ライブラリとライブラリのインストール先に影響
+  * --install-root :
+    フレームワーク・テンプレート・ドキュメント・サンプルのインストール先に影響
+
+=== 例
+
+  $ ruby -r rbconfig -e 'p Config::CONFIG["prefix"]'
+  "/usr"
+  $ ruby install.rb config \
+      --install-prefix=/tmp/build/usr --install-root=/tmp/build
+  $ ruby install.rb setup
+  $ sudo ruby install.rb install
+
+結果として以下の場所に(疑似)インストールされます。
+
+  /tmp/build/usr/lib/ruby/site_ruby/1.6/osx/addressbook.rb
+  /tmp/build/usr/lib/ruby/site_ruby/1.6/osx/appkit.rb
+  /tmp/build/usr/lib/ruby/site_ruby/1.6/osx/cocoa.rb
+  /tmp/build/usr/lib/ruby/site_ruby/1.6/osx/foundation.rb
+  /tmp/build/usr/lib/ruby/site_ruby/1.6/powerpc-darwin6.0/rubycocoa.bundle
+  /tmp/build/Library/Frameworks/RubyCocoa.framework
+  /tmp/build/Developer/ProjectBuilder Extras/File Templates/Ruby
+  /tmp/build/Developer/ProjectBuilder Extras/Project Templates/ \
+          Application/Cocoa-Ruby Application
+  /tmp/build/Developer/ProjectBuilder Extras/Project Templates/ \
+          Application/Cocoa-Ruby Document-based Application
+  /tmp/build/Developer/Examples/RubyCocoa
+  /tmp/build/Developer/Documentation/RubyCocoa
+
+
 == 開発動作確認環境
 
 以下の環境で開発動作確認をしています。

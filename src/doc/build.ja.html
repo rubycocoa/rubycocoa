@@ -167,7 +167,37 @@ $ DYLD_FRAMEWORK_PATH={ソース}/framework/build ruby -I../lib testall.rb</pre>
 </dl>
 <p><a href='trysamples.ja.html'>「付属サンプルを試してみる」</a> を参考に
 動作確認してみてください。</p>
-<h2><a name='label:17' id='label:17'>開発動作確認環境</a></h2><!-- RDLabel: "開発動作確認環境" -->
+<h2><a name='label:17' id='label:17'>[FYI] バイナリパッケージングに便利なインストールオプション</a></h2><!-- RDLabel: "[FYI] バイナリパッケージングに便利なインストールオプション" -->
+<p>RubyCocoaのバイナリパッケージを作るときに便利な'ruby install.rb
+config'のオプションがあります。</p>
+<ul>
+<li>--install-prefix : 
+    拡張ライブラリとライブラリのインストール先に影響</li>
+<li>--install-root :
+    フレームワーク・テンプレート・ドキュメント・サンプルのインストール先に影響</li>
+</ul>
+<h3><a name='label:18' id='label:18'>例</a></h3><!-- RDLabel: "例" -->
+<pre>$ ruby -r rbconfig -e 'p Config::CONFIG["prefix"]'
+"/usr"
+$ ruby install.rb config \
+    --install-prefix=/tmp/build/usr --install-root=/tmp/build
+$ ruby install.rb setup
+$ sudo ruby install.rb install</pre>
+<p>結果として以下の場所に(疑似)インストールされます。</p>
+<pre>/tmp/build/usr/lib/ruby/site_ruby/1.6/osx/addressbook.rb
+/tmp/build/usr/lib/ruby/site_ruby/1.6/osx/appkit.rb
+/tmp/build/usr/lib/ruby/site_ruby/1.6/osx/cocoa.rb
+/tmp/build/usr/lib/ruby/site_ruby/1.6/osx/foundation.rb
+/tmp/build/usr/lib/ruby/site_ruby/1.6/powerpc-darwin6.0/rubycocoa.bundle
+/tmp/build/Library/Frameworks/RubyCocoa.framework
+/tmp/build/Developer/ProjectBuilder Extras/File Templates/Ruby
+/tmp/build/Developer/ProjectBuilder Extras/Project Templates/ \
+        Application/Cocoa-Ruby Application
+/tmp/build/Developer/ProjectBuilder Extras/Project Templates/ \
+        Application/Cocoa-Ruby Document-based Application
+/tmp/build/Developer/Examples/RubyCocoa
+/tmp/build/Developer/Documentation/RubyCocoa</pre>
+<h2><a name='label:19' id='label:19'>開発動作確認環境</a></h2><!-- RDLabel: "開発動作確認環境" -->
 <p>以下の環境で開発動作確認をしています。</p>
 <ul>
 <li>PowerMacintosh G4/400/384MB or iBook G3/600/384MB</li>
@@ -176,7 +206,7 @@ $ DYLD_FRAMEWORK_PATH={ソース}/framework/build ruby -I../lib testall.rb</pre>
 <li>ruby-1.6.7 (pre-installed in Mac OS X 10.2)</li>
 <li>ruby-1.8 (preview 1 from cvs server)</li>
 </ul>
-<h2><a name='label:18' id='label:18'>ではお楽しみください</a></h2><!-- RDLabel: "ではお楽しみください" -->
+<h2><a name='label:20' id='label:20'>ではお楽しみください</a></h2><!-- RDLabel: "ではお楽しみください" -->
 <p>感想、アイデア、提案、疑問、質問などなんでも気軽に教えてください。</p>
 <p>$Date$</p>
 <hr/>
