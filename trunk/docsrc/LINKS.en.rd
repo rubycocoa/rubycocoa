@@ -9,7 +9,7 @@
 
 == RubyCocoa
 
-: ((<Let's make an application with RubyCocoa (Japanese)|URL:http://mwave.sppd.ne.jp/diary/calc_app/calc_app1.html>))
+: ((<Let's make an application with RubyCocoa (Japanese)|URL:http://www.mouseup.net/rubycocoa/calc_app1.html>))
 
   Tutorial for RubyCocoa. It describes programming in RubyCocoa through making
   a simple calculator application.
