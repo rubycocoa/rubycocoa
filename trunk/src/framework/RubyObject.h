@@ -26,4 +26,7 @@
 - initWithRubyClassName: (NSString*)a_rbclass_name ocObject: (id)a_ocobj;
 - initWithRubyObject: (unsigned long)a_rbobj;
 
+- (BOOL) hasObjcHandlerForSelector: (SEL)a_sel;
+- (BOOL) hasRubyHandlerForSelector: (SEL)a_sel;
+
 @end

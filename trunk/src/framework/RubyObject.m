@@ -92,20 +92,9 @@ static int argc_of(SEL a_sel)
 /** private methods **/
 /*********************/
 
-- (BOOL) hasObjcHandlerOf: (SEL)a_sel
-{
-  return [super respondsToSelector: a_sel];
-}
-
-- (BOOL) hasRubyHandlerOf: (SEL)a_sel
-{
-  RB_ID mid = sel_to_mid(a_sel);
-  return (rb_respond_to(rbobj, mid) != 0);
-}
-
 - (NSMethodSignature *)msigForRubyMethod: (SEL)a_sel
 {
-  if ([self hasRubyHandlerOf: a_sel]) {
+  if ([self hasRubyHandlerForSelector: a_sel]) {
     NSMethodSignature* msig;
     msig = [dummy methodSignatureForSelector: a_sel];
     if (msig == nil) {
@@ -257,11 +246,23 @@ static int argc_of(SEL a_sel)
 }
 
 
+- (BOOL) hasObjcHandlerForSelector: (SEL)a_sel
+{
+  return [super respondsToSelector: a_sel];
+}
+
+- (BOOL) hasRubyHandlerForSelector: (SEL)a_sel
+{
+  RB_ID mid = sel_to_mid(a_sel);
+  return (rb_respond_to(rbobj, mid) != 0);
+}
+
+
 - (BOOL) respondsToSelector: (SEL)a_sel
 {
   DLOG1(@"== respondsToSelector(%@)", NSStringFromSelector(a_sel));
-  if ([self hasObjcHandlerOf: a_sel]) return YES;
-  return [self hasRubyHandlerOf: a_sel];
+  if ([self hasObjcHandlerForSelector: a_sel]) return YES;
+  return [self hasRubyHandlerForSelector: a_sel];
 }
 
 - (NSMethodSignature *)methodSignatureForSelector:(SEL)aSelector
@@ -275,7 +276,7 @@ static int argc_of(SEL a_sel)
 - performSelector: (SEL)a_sel
 {
   DLOG1(@"== performSelector:%@", NSStringFromSelector(a_sel));
-  if ([self hasObjcHandlerOf: a_sel]) {
+  if ([self hasObjcHandlerForSelector: a_sel]) {
     return [super performSelector: a_sel];
   }
   else {
@@ -291,7 +292,7 @@ static int argc_of(SEL a_sel)
 - performSelector: (SEL)a_sel withObject: arg0
 {
   DLOG1(@"== performSelector:%@:", NSStringFromSelector(a_sel));
-  if ([self hasObjcHandlerOf: a_sel]) {
+  if ([self hasObjcHandlerForSelector: a_sel]) {
     return [super performSelector: a_sel];
   }
   else {
@@ -307,7 +308,7 @@ static int argc_of(SEL a_sel)
 - performSelector: (SEL)a_sel withObject: arg0 withObject: arg1
 {
   DLOG1(@"== performSelector:%@::", NSStringFromSelector(a_sel));
-  if ([self hasObjcHandlerOf: a_sel]) {
+  if ([self hasObjcHandlerForSelector: a_sel]) {
     return [super performSelector: a_sel];
   }
   else {
@@ -324,7 +325,7 @@ static int argc_of(SEL a_sel)
 {
   SEL a_sel = [an_inv selector];
   DLOG1(@"== forwardInvocation(%@)", an_inv);
-  if ([self hasObjcHandlerOf: a_sel]) {
+  if ([self hasObjcHandlerForSelector: a_sel]) {
     [super forwardInvocation: an_inv];
   }
   else {
