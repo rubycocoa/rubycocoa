@@ -1,4 +1,10 @@
+2004-01-29  kimura wataru <kimuraw@i.nifty.jp>
+
+	* install.rb:
+	use xcodebuild in place of pbxbuild, if xcodebuild exists.(for clean)
+
 2004-01-28  kimura wataru <kimuraw@i.nifty.jp>
+
 	* metaconfing:
 	fix: "dyld: ruby multiple definitions of symbol _rb_obj_id".
 
