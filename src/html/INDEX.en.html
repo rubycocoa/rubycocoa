@@ -30,23 +30,60 @@ X in Ruby scripts. You can use RubyCocoa for:</p>
 <li>Making of mission critical software</li>
 <li>Making of long life cycle software</li>
 </ul>
-<h2><a name="label:2" id="label:2">Getting RubyCocoa</a></h2><!-- RDLabel: "Getting RubyCocoa" -->
+<h2><a name="label:2" id="label:2">Script Examples</a></h2><!-- RDLabel: "Script Examples" -->
+<p>Next script is playing system sounds.</p>
+<pre>require 'osx/cocoa'
+snd_files =`ls /System/Library/Sounds/*.aiff`.split
+snd_files.each do |path|
+  snd = OSX::NSSound.alloc.
+    initWithContentsOfFile_byReference (path, true)
+  snd.play
+  sleep 0.25 while snd.isPlaying?
+end</pre>
+<p>Next script is a class definition that is related with nib file made
+by Interface Builder.</p>
+<pre>require 'osx/ocobject'
+
+class AppCtrl &lt; OSX::OCObject
+
+  ib_loadable
+  ib_outlets :monthField, :dayField, :mulField
+
+  def awakeFromNib
+    @monthField.setIntValue  Time.now.month
+    @dayField.setIntValue Time.now.day
+    convert
+  end
+
+  def convert (sender = nil)
+    val = @monthField.intValue * @dayField.intValue
+    @mulField.setIntValue (val)
+    @monthField.selectText (self)
+  end
+
+  def windowShouldClose (sender = nil)
+    OSX.NSApp.stop (self)
+    true
+  end    
+
+end</pre>
+<h2><a name="label:3" id="label:3">Getting RubyCocoa</a></h2><!-- RDLabel: "Getting RubyCocoa" -->
 <ul>
 <li><a href="rubycocoa-0.1.0.tgz">Source</a></li>
 <li>Binary (currently nothing)</li>
 </ul>
-<h2><a name="label:3" id="label:3">Documents</a></h2><!-- RDLabel: "Documents" -->
+<h2><a name="label:4" id="label:4">Documents</a></h2><!-- RDLabel: "Documents" -->
 <ul>
 <li><a href="INSTALL.en.html">Installing</a></li>
 <li><a href="MINITOUR.en.html">Mini Tour</a></li>
 <li><a href="DETAIL.ja.html">References (ja)</a></li>
 </ul>
-<h2><a name="label:4" id="label:4">Links</a></h2><!-- RDLabel: "Links" -->
+<h2><a name="label:5" id="label:5">Links</a></h2><!-- RDLabel: "Links" -->
 <ul>
 <li><a href="http://www.imasy.or.jp/~hisa/mac/rubycocoa/">RubyCocoa Web Site</a></li>
 <li><a href="http://www.ruby-lang.org/">Ruby Web Site</a></li>
 </ul>
-<h2><a name="label:5" id="label:5">Comments and Bug Reports</a></h2><!-- RDLabel: "Comments and Bug Reports" -->
+<h2><a name="label:6" id="label:6">Comments and Bug Reports</a></h2><!-- RDLabel: "Comments and Bug Reports" -->
 <p>Feel free to send comments, bug reports and patches about RubyCocoa.</p>
 <p>FUJIMOTO Hisakuni, &lt;hisa@imasy.or.jp&gt;, 
 $Date$ $Revision$</p>
