@@ -1,0 +1,13 @@
+#import <LibRuby/cocoa_ruby.h>
+
+<%
+files = `ls rb_*.m`.split.map {|i| i.split('.')[0][3..-1] }
+files.each do |name|
+%>extern void init_<%=name%>(VALUE);
+<% end %>
+void init_cocoa(VALUE mOSX)
+{
+<%
+files.each do |name|
+%>  init_<%=name%>(mOSX);
+<% end %>}
