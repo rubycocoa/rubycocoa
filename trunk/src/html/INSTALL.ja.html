@@ -9,84 +9,55 @@
 <link href="rdtext.css" type="text/css" rel="stylesheet" />
 </head>
 <body>
-<h1><a name="label:0" id="label:0">RubyCocoa のインストール</a></h1><!-- RDLabel: "RubyCocoa のインストール" -->
+<h1><a name="label:0" id="label:0">RubyCocoa をソースからインストールする</a></h1><!-- RDLabel: "RubyCocoa をソースからインストールする" -->
 <h2><a name="label:1" id="label:1">インストールのおおまかな手順</a></h2><!-- RDLabel: "インストールのおおまかな手順" -->
 <ul>
-<li><a href="#label:3">Ruby のインストール</a></li>
-<li><a href="#label:2">RubyCocoa の展開</a></li>
-<li><a href="#label:4">LibRuby フレームワークのインストール</a></li>
-<li><a href="#label:5">RubyCocoa の構築とインストール</a></li>
-<li><a href="#label:6">インストール完了</a></li>
-<li><a href="#label:7">サンプルの動作確認</a></li>
+<li><a href="#label:2">Ruby のインストール (必要な場合のみ)</a></li>
+<li><a href="#label:3">RubyCocoa の展開</a></li>
+<li><a href="#label:4">RubyCocoa の構築とインストール</a></li>
+<li><a href="#label:5">インストール完了</a></li>
+<li><a href="#label:6">サンプルの動作確認</a></li>
 </ul>
-<p>インストールはTerminalアプリケーションなどでシェルからコマンド入力して
-行います。</p>
-<h2><a name="label:2" id="label:2">RubyCocoa の展開</a></h2><!-- RDLabel: "RubyCocoa の展開" -->
-<p>RubyCocoaソースのtarballを展開します。</p>
-<pre>% cd {どこか}
-% tar zxf rubycocoa-0.2.x.tgz</pre>
-<p><em>注意</em> StuffItを使うとファイル名の長さの問題でRubyCocoaが正しくイ
-ンストールされないのでtarコマンドを使ってください。</p>
-<h2><a name="label:3" id="label:3">Ruby のインストール</a></h2><!-- RDLabel: "Ruby のインストール" -->
-<p>すでにRubyを"--enable-shared"オプション付きでインストールしている場合
-は読み飛ばしてください。</p>
-<p>まず Ruby 1.6.7 を展開します。</p>
-<pre>% cd {どこか}
-% tar zxf ruby-1.6.7.tar.gz    # tarball を展開
-% cd ruby-1.6.7</pre>
-<p>Mac OS X 10.2 には Ruby 1.6.7 が付属していますが共有ライブラリ libruby 
-が付属していないため、残念ながら RubyCocoa を使うことはできません。
-Ruby 1.6.7 を別途インストールする必要があります。Ruby 1.6.7 はそのまま
-では 10.2 で make できないので RubyCocoa のソース配付に含まれているパッ
-チを当ててください。OS X 10.1.x の場合このパッチは不要です。</p>
+<p>ソースからのインストールはTerminalアプリケーションなどでシェルからコマ
+ンド入力して行います。</p>
+<h2><a name="label:2" id="label:2">Ruby のインストール (必要な場合のみ)</a></h2><!-- RDLabel: "Ruby のインストール (必要な場合のみ)" -->
+<p>Mac OS X 10.2 (Jaguar) では付属の Ruby を使うことができるので別途 Ruby 
+をインストールする必要はありません。また 10.2 以前のシステムで、すでに
+Rubyをインストールしている場合は読み飛ばしてください。</p>
+<p>Jaguar に Ruby 1.6.7 を別途インストールする場合、RubyCocoa ソース配付
+に含まれているパッチを当ててください。OS X 10.1.x の場合このパッチは不
+要です。</p>
 <pre>% patch -p1 &lt; {RubyCocoaソース}/misc/ruby-1.6.7-osx10.2.patch</pre>
 <p>これで準備完了です。以下のように ruby を make します。</p>
-<pre>% ./configure --enable-shared  # /usr/local にインストール
+<pre>% cd {どこか}
+% tar zxf ruby-1.6.7.tar.gz    # tarball を展開
+% cd ruby-1.6.7
+% ./configure --enable-shared  # /usr/local にインストール
 % make ; make test
 % sudo make install</pre>
-<p>configure時には"--enable-shared"オプションを指定してください。なしの場
-合に動作するかはまったく未確認です。</p>
-<h2><a name="label:4" id="label:4">LibRuby フレームワークのインストール</a></h2><!-- RDLabel: "LibRuby フレームワークのインストール" -->
-<p>LibRubyフレームワークは、すでにインストールされているRubyインタープリ
-タの共有ライブラリやヘッダファイルに、シンボリックリンクを張ったりコピー
-したりしてフレームワーク化したものです。RubyCocoaの構築やRubyCocoaのア
-プリケーションの構築実行にはこのフレームワークを必要とします。以下の手
-順で"/Library/Frameworks"の下にLibRubyフレームワークをインストールしま
-す。</p>
-<pre>% cd {RubyCocoaソースディレクトリ}
-% ruby tool/install-libruby-frmwk.rb</pre>
-<p>フレームワークを作る場所を変えたい場合は</p>
-<pre>% ruby tool/install-libruby-frmwk.rb {フレームワークスディレクトリ}</pre>
-<p>のように引数にディレクトリを指定してスクリプトを起動してください。</p>
-<h2><a name="label:5" id="label:5">RubyCocoa の構築とインストール</a></h2><!-- RDLabel: "RubyCocoa の構築とインストール" -->
-<p>RubyCocoa本体を構成するライブラリ群とRubyCocoaフレームワークを構築イン
-ストールします。</p>
+<h2><a name="label:3" id="label:3">RubyCocoa の展開</a></h2><!-- RDLabel: "RubyCocoa の展開" -->
+<p>RubyCocoaソースのtarballを展開します。</p>
+<pre>% cd {どこか}
+% tar zxf rubycocoa-0.x.x.tgz</pre>
+<p><em>注意</em> StuffItを使うとファイル名の長さの問題でRubyCocoaが正しくイ
+ンストールされないのでtarコマンドを使ってください。</p>
+<h2><a name="label:4" id="label:4">RubyCocoa の構築とインストール</a></h2><!-- RDLabel: "RubyCocoa の構築とインストール" -->
+<p>RubyCocoaの拡張ライブラリを構築インストールします。</p>
 <p>RubyCocoaのソースディレクトリに移動し以下のように入力します。</p>
 <pre>% cd {RubyCocoaソースディレクトリ}
 % ruby install.rb config
 % ruby install.rb setup
 % sudo ruby install.rb install</pre>
-<p>LibRubyがインストールされていない場合、configのあと前述のLibRubyフレー
-ムワークが必要だよというメッセージが表示されますので、先にLibRubyを上
-記手順でインストールしてください。</p>
-<p>RubyCocoaフレームワークインストール先(デフォルト 
-"/Library/Frameworks/")を指定したい場合は config のときに次のようなオ
-プションで指定してください。</p>
-<pre>% ruby install.rb config --frameworks=/Networks/Library/Frameworks</pre>
 <p>setupは時間がかかります。お茶でもしながら待ちましょう。</p>
-<p>installではRubyCocoaライブラリの他に、RubyCocoaフレームワークを
-"/Library/Frameworks"以下にインストールします。</p>
-<h2><a name="label:6" id="label:6">インストール完了</a></h2><!-- RDLabel: "インストール完了" -->
+<h2><a name="label:5" id="label:5">インストール完了</a></h2><!-- RDLabel: "インストール完了" -->
 <p>以上でインストールは完了です。ここまでの手順でRuby自体の他に</p>
 <ul>
-<li>LibRubyフレームワーク   - /Library/Frameworks/LibRuby.framework</li>
-<li>RubyCocoaフレームワーク - /Library/Frameworks/RubyCocoa.framework</li>
 <li>RubyCocoaライブラリA    - {site_ruby}/1.6/{archdir}/osx_objc.bundle</li>
 <li>RubyCocoaライブラリB    - {site_ruby}/1.6/osx/*.rb</li>
 <li>RubyCocoaライブラリB    - {site_ruby}/1.6/osx/objc/*.rb</li>
 </ul>
 <p>がインストールされました。</p>
-<h2><a name="label:7" id="label:7">サンプルの動作確認</a></h2><!-- RDLabel: "サンプルの動作確認" -->
+<h2><a name="label:6" id="label:6">サンプルの動作確認</a></h2><!-- RDLabel: "サンプルの動作確認" -->
 <p>サンプルディレクトリに移動して簡単なスクリプトを実行してみましょう。</p>
 <pre>% cd {RubyCocoaソースディレクトリ}/sample
 % ruby fontnames.rb  # フォント名がずらずらと出力されます
@@ -111,15 +82,15 @@ Ruby 1.6.7 を別途インストールする必要があります。Ruby 1.6.7 はそのまま
 <pre>% open build/pb_app1.app</pre>
 <p>と打ち込むか、またはファインダでbuildディレクトリの中のpb_app1をダブル
 クリックしてアプリケーションを起動してみてください。うまく動きましたか？</p>
-<h2><a name="label:8" id="label:8">開発動作確認環境</a></h2><!-- RDLabel: "開発動作確認環境" -->
+<h2><a name="label:7" id="label:7">開発動作確認環境</a></h2><!-- RDLabel: "開発動作確認環境" -->
 <p>以下の環境で開発動作確認をしています。</p>
 <ul>
 <li>PowerMacintosh G4/400/384MB or iBook G3/600/384MB</li>
-<li>MacOS X 10.1.1 (or 10.1)</li>
-<li>DevTools 10.1</li>
-<li>ruby-1.6.5 or 1.6.6 (configure --enable-shared)</li>
+<li>Mac OS X 10.2</li>
+<li>DevTools 10.2</li>
+<li>ruby-1.6.7 (pre-installed in Mac OS X 10.2)</li>
 </ul>
-<h2><a name="label:9" id="label:9">ではお楽しみください</a></h2><!-- RDLabel: "ではお楽しみください" -->
+<h2><a name="label:8" id="label:8">ではお楽しみください</a></h2><!-- RDLabel: "ではお楽しみください" -->
 <p>感想、アイデア、提案、疑問、質問などなんでも気軽に教えてください。</p>
 <p>藤本尚邦 &lt;hisa@imasy.or.jp&gt;
 $Date$ $Revision$</p>

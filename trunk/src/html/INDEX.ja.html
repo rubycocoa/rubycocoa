@@ -10,36 +10,24 @@
 </head>
 <body>
 <h1><a name="label:0" id="label:0">RubyCocoa</a></h1><!-- RDLabel: "RubyCocoa" -->
-<p><em>ココアをどうぞ。このココアは甘くて暖かいよ。</em></p>
 <p>[RubyCocoa] [<a href="../rubyaeosa/">RubyAEOSA</a>]</p>
 <p>[<a href="INDEX.en.html">English</a>] [Japanese]</p>
+<p>最新バージョンは 0.2.100 です。Jaguar に対応しました！</p>
 <h2><a name="label:1" id="label:1">RubyCocoaとは ?</a></h2><!-- RDLabel: "RubyCocoaとは ?" -->
-<p>RubyCocoaは、MacOS XのCocoaオブジェクトをRubyスクリプトからRubyオブジェ
-クトとして扱うための、RubyライブラリとMac OS Xフレームワークです。
-RubyCocoaを使って</p>
+<p>RubyCocoaは、Mac OS XのCocoaオブジェクトをRubyスクリプトからRubyオブジェ
+クトとして扱うための、Ruby拡張ライブラリです。RubyCocoaを使うと</p>
 <ul>
 <li>Rubyスクリプトの中でCocoaのオブジェクトを生成して使う</li>
 <li>RubyとInterface Builderを使ってCocoaアプリケーションを書く</li>
-</ul>
-<p>といったことができます。RubyCocoaを使うのに適していると思われるのは</p>
-<ul>
 <li>irbやスクリプトでCocoaオブジェクトのお手軽動作チェック</li>
 <li>Cocoaアプリケーションのお手軽プロトタイピング</li>
 <li>小規模の簡単なCocoaアプリケーションの開発</li>
 <li>RubyスクリプトにOSX用の簡単なユーザインターフェースをかぶせる</li>
 </ul>
-<p>などでしょう。逆にあまり適していないと思われるのは</p>
-<ul>
-<li>商用ソフトウェアの開発</li>
-<li>ミッションクリティカルなソフトウェアの開発</li>
-<li>ライフサイクルの長いソフトウェアの開発</li>
-</ul>
-<p>などがあげられます。</p>
-<h2><a name="label:2" id="label:2">Mac OS X 10.2 (Jaguar) に関して</a></h2><!-- RDLabel: "Mac OS X 10.2 (Jaguar) に関して" -->
-<p>Jaguar には ruby コマンドが標準で入っていますが、libruby共有ライブラリ
-が含まれていないため RubyCocoa を使うためには、別途共有ライブラリ付き
-で Ruby をインストールする必要があります。詳細は<a href="INSTALL.ja.html">インストール
-</a>をご覧ください。</p>
+<p>といったことができます。</p>
+<h3><a name="label:2" id="label:2">Mac OS X 10.2 (Jaguar) に関して</a></h3><!-- RDLabel: "Mac OS X 10.2 (Jaguar) に関して" -->
+<p>Mac OS X 10.2 (Jaguar) では付属の Ruby で RubyCocoa を使うことができま
+す。別途 Ruby をインストールする必要はありません。</p>
 <h2><a name="label:3" id="label:3">スクリプト例</a></h2><!-- RDLabel: "スクリプト例" -->
 <p>以下の例はシステムの音を順番に鳴らすスクリプトです。</p>
 <pre>require 'osx/cocoa'
@@ -82,7 +70,6 @@ Nib ファイルのみで書かれた<a href="../rubyosx/files/CocoaAEOSA_app.zip">Cocoa ア
 </a> が動作しているところの<a href="screenshot.jpg">
 スクリーンショット</a>です。</p>
 <h2><a name="label:5" id="label:5">入手</a></h2><!-- RDLabel: "入手" -->
-<p>最新バージョンは 0.2.7 です。</p>
 <ul>
 <li><a href="../rubyosx/files/">ソース</a> </li>
 <li><a href="http://sourceforge.net/cvs/?group_id=44114">CVS</a></li>
@@ -94,7 +81,7 @@ Nib ファイルのみで書かれた<a href="../rubyosx/files/CocoaAEOSA_app.zip">Cocoa ア
 </ul>
 <h2><a name="label:6" id="label:6">ドキュメント</a></h2><!-- RDLabel: "ドキュメント" -->
 <ul>
-<li><a href="INSTALL.ja.html">インストール</a></li>
+<li><a href="INSTALL.ja.html">ソースからインストール</a></li>
 <li><a href="USING.ja.html">使い方</a></li>
 <li><a href="REFERENCES.ja.html">リファレンス</a></li>
 <li><a href="FAQ.ja.html">FAQ</a></li>
