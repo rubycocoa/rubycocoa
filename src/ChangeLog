@@ -1,4 +1,38 @@
+2002-09-04  FUJIMOTO Hisakuni  <hisa@fobj.com>
+
+	* template/tmpl_pb_RubyProjects:
+	Jaguar aware template
+
+	* template/rubycocoa_app_main, template/rubycocoa_app_main.m:
+	move it into app_mains directory
+
+	* template/EmptyApp.app, template/PureEmptyApp.app, sample/Expenses.app, sample/SimpleApp1.app:
+	strip -x
+
+	* sample/RubyRaiseMan, sample/RubyTypingTutor:
+	add samples TypingTutor and RaiseMan
+
+2002-09-03  FUJIMOTO Hisakuni  <hisa@fobj.com>
+
+	* sample/Expenses.app, sample/MyViewer, sample/Pong, sample/SimpleApp1.app, sample/dotview, sample/mk_app0, sample/mk_app1, sample/multinib, sample/pb_app0, sample/pb_app1, sample/thread0, template/EmptyApp.app, template/PureEmptyApp.app, template/tmpl_make_based:
+	use execvp("ruby") instead of execv("/usr/bin/ruby")
+
+	* template/rubycocoa_app_main, template/rubycocoa_app_main.m:
+	rename templates
+
+	* sample/SimpleApp1.app, sample/dotview, sample/mk_app1, sample/multinib, sample/thread0, template/EmptyApp, template/PureEmptyApp.app, template/tmpl_make_based, sample/Expenses.app:
+	Info.plist - add key RubyAppConfig
+
+	* README.en.txt, README.sjis.txt:
+	move html documents into doc directory
+
+	* sample/Pong, sample/pb_app0, sample/pb_app1:
+	project.pbxproj, main.m - Jaguar aware
+
 2002-09-02  FUJIMOTO Hisakuni  <hisa@fobj.com>
+
+	* sample/*:
+	Jaguar aware
 
 	* now executable with pre-installed ruby in Mac OS X 10.2 (Jaguar).
 
