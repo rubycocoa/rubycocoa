@@ -6,8 +6,9 @@ class DotView < OSX::OCObject
   ib_outlets :colorWell, :sizeSlider
   derived_methods 'drawRect:', 'isOpaque', 'mouseUp:'
 
-  def initialize
-    @center = OSX::NSPoint.new (50, 50)
+  def initialize(frame)
+    @center = OSX::NSPoint.new (frame.size.width / 2,
+				frame.size.height / 2)
     @color = OSX::NSColor.redColor
     @radius = 10.0
   end
