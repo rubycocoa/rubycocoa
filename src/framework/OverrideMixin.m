@@ -163,7 +163,7 @@ static id imp_respondsToSelector (id rcv, SEL method, SEL arg0)
   id slave = get_slave(rcv);
   ret = (*simp)(rcv, method, arg0);
   if (ret == NULL)
-    ret = (id) [slave respondsToSelector: arg0];
+    ret = (id)([slave respondsToSelector: arg0] != nil ? YES : NO);
   return ret;
 }
 
