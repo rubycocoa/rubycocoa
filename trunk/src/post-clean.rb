@@ -8,10 +8,6 @@
 #  the GNU Lesser General Public License version 2.
 #
 
-CONF_FILE_NAME = "config.framework"
-
-File.delete CONF_FILE_NAME if File.exist? CONF_FILE_NAME
-
 dive_into("framework") do
   command "pbxbuild clean"
 end

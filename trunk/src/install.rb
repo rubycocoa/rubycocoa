@@ -10,25 +10,28 @@
 #   the GNU Lesser General Public License version 2.
 #
 
-unless $".include? 'setup/compat.rb' then
-  $".push 'setup/compat.rb'
 ### begin compat.rb
 
 unless Enumerable.instance_methods.include? 'inject' then
-    module Enumerable
-      def inject( result )
-        each do |i|
-          result = yield( result, i )
-        end
-        result
-      end
+module Enumerable
+  def inject( result )
+    each do |i|
+      result = yield(result, i)
     end
+    result
+  end
+end
+end
+
+def File.read_all( fname )
+  File.open(fname, 'rb') {|f| return f.read }
+end
+
+def File.write( fname, str )
+  File.open(fname, 'wb') {|f| f.write str }
 end
 
 ### end compat.rb
-end
-unless $".include? 'setup/config.rb' then
-  $".push 'setup/config.rb'
 ### begin config.rb
 
 if i = ARGV.index(/\A--rbconfig=/) then
@@ -51,7 +54,7 @@ class ConfigTable
   teeny = c['TEENY'].to_i
   version = "#{major}.#{minor}"
 
-  # ruby version >= 3.0.2 ?
+  # ruby ver. >= 1.4.4?
   newpath_p = ((major >= 2) or
                ((major == 1) and
                 ((minor >= 5) or
@@ -59,32 +62,35 @@ class ConfigTable
   
   if c['rubylibdir'] then
     # V > 1.6.3
-    stdruby    = c['rubylibdir'] .sub( c['prefix'], '$prefix' )
-    siteruby   = c['sitelibdir'] .sub( c['prefix'], '$prefix' )
-    sodir      = c['sitearchdir'].sub( c['prefix'], '$prefix' )
+    stdruby    = c['rubylibdir'] .sub( c['prefix'], '$install-prefix' )
+    siteruby   = c['sitelibdir'] .sub( c['prefix'], '$install-prefix' )
+    sodir      = c['sitearchdir'].sub( c['prefix'], '$install-prefix' )
   elsif newpath_p then
     # 1.4.4 <= V <= 1.6.3
-    stdruby    = "$prefix/lib/ruby/#{version}"
-    siteruby   = c['sitedir'].sub( c['prefix'], '$prefix' ) + '/' + version
+    stdruby    = "$install-prefix/lib/ruby/#{version}"
+    siteruby   = c['sitedir'].sub( c['prefix'], '$install-prefix' ) + '/' + version
     sodir      = "$site-ruby/#{c['arch']}"
   else
     # V < 1.4.4
-    stdruby    = "$prefix/lib/ruby/#{version}"
-    siteruby   = "$prefix/lib/ruby/#{version}/site_ruby"
+    stdruby    = "$install-prefix/lib/ruby/#{version}"
+    siteruby   = "$install-prefix/lib/ruby/#{version}/site_ruby"
     sodir      = "$site-ruby/#{c['arch']}"
   end
 
   DESCRIPTER = [
     [ 'prefix',    [ c['prefix'],
                      'path',
-                     'path prefix' ] ],
+                     'path prefix of target environment' ] ],
+    [ 'install-prefix', [ '$prefix',
+                          'path',
+                          'path prefix to install' ] ],
     [ 'std-ruby',  [ stdruby,
                      'path',
                      'the directory for standard ruby libraries' ] ],
     [ 'site-ruby', [ siteruby,
                      'path',
                      'the directory for non-standard ruby libraries' ] ],
-    [ 'bin-dir',   [ '$prefix/bin',
+    [ 'bin-dir',   [ '$install-prefix/bin',
                      'path',
                      'the directory for commands' ] ],
     [ 'rb-dir',    [ '$site-ruby',
@@ -93,46 +99,94 @@ class ConfigTable
     [ 'so-dir',    [ sodir,
                      'path',
                      'the directory for ruby extentions' ] ],
-    [ 'data-dir',  [ '$prefix/share',
+    [ 'data-dir',  [ '$install-prefix/share',
                      'path',
                      'the directory for shared data' ] ],
     [ 'ruby-path', [ rubypath,
                      'path',
                      'path to set to #! line' ] ],
     [ 'ruby-prog', [ rubypath,
-                     'path',
+                     'name',
                      'the ruby program using for installation' ] ],
     [ 'make-prog', [ 'make',
                      'name',
                      'the make program to compile ruby extentions' ] ],
+    [ 'without-ext', [ 'no',
+                       'yes/no',
+                       'does not compile/install ruby extentions' ] ]
   ]
-
-  def self.each_name( &block )
-    keys().each( &block )
-  end
-
-  def self.keys
-    DESCRIPTER.collect {|k,*dummy| k }
-  end
-
 
   SAVE_FILE = 'config.save'
 
-  def self.create
-    c = new()
-    c.init
-    c
+  def ConfigTable.each_name( &block )
+    keys().each( &block )
   end
 
-  def self.load
-    c = new()
-    File.file? SAVE_FILE or
-            raise InstallError, "#{File.basename $0} config first"
-    File.foreach( SAVE_FILE ) do |line|
-      k, v = line.split( '=', 2 )
-      c.noproc_set k, v.strip
+  def ConfigTable.keys
+    DESCRIPTER.collect {|k,*dummy| k }
+  end
+
+  def ConfigTable.each_definition( &block )
+    DESCRIPTER.each( &block )
+  end
+
+  def ConfigTable.get_entry( name )
+    name, ent = DESCRIPTER.assoc(name)
+    ent
+  end
+
+  def ConfigTable.add_entry( name, vals )
+    ConfigTable::DESCRIPTER.push [name,vals]
+  end
+
+  def ConfigTable.remove_entry( name )
+    get_entry name or raise ArgumentError, "no such config: #{name}"
+    DESCRIPTER.delete_if {|n,arr| n == name }
+  end
+
+  def ConfigTable.config_key?( name )
+    get_entry(name) ? true : false
+  end
+
+  def ConfigTable.bool_config?( name )
+    ent = get_entry(name) or return false
+    ent[1] == 'yes/no'
+  end
+
+  def ConfigTable.value_config?( name )
+    ent = get_entry(name) or return false
+    ent[1] != 'yes/no'
+  end
+
+  def ConfigTable.path_config?( name )
+    ent = get_entry(name) or return false
+    ent[1] == 'path'
+  end
+
+
+  class << self
+
+    alias newobj new
+
+    def new
+      c = newobj()
+      c.__send__ :init
+      c
     end
-    c
+
+    def load
+      c = newobj()
+      File.file? SAVE_FILE or
+              raise InstallError, "#{File.basename $0} config first"
+      File.foreach( SAVE_FILE ) do |line|
+        k, v = line.split( '=', 2 )
+        c.instance_eval {
+            @table[k] = v.strip
+        }
+      end
+      c
+    end
+  
   end
 
   def initialize
@@ -144,43 +198,91 @@ class ConfigTable
       @table[k] = default
     end
   end
+  private :init
 
   def save
-    File.open( SAVE_FILE, 'w' ) do |f|
-      @table.each do |k, v|
-        f.printf "%s=%s\n", k, v if v
-      end
-    end
+    File.open( SAVE_FILE, 'w' ) {|f|
+        @table.each do |k, v|
+          f.printf "%s=%s\n", k, v if v
+        end
+    }
   end
 
   def []=( k, v )
-    d = DESCRIPTER.assoc(k) or
-            raise InstallError, "unknown config option #{k}"
-    if d[1][1] == 'path' and v[0,1] != '$' then
-      @table[k] = File.expand_path(v)
+    ConfigTable.config_key? k or raise InstallError, "unknown config option #{k}"
+    if ConfigTable.path_config? k then
+      @table[k] = (v[0,1] != '$') ? File.expand_path(v) : v
     else
       @table[k] = v
     end
   end
     
   def []( key )
-    @table[key] and @table[key].sub( %r_\$([^/]+)_ ) { self[$1] }
+    @table[key] or return nil
+    @table[key].gsub( %r<\$([^/]+)> ) { self[$1] }
   end
 
-  def noproc_set( key, val )
+  def set_raw( key, val )
     @table[key] = val
   end
 
-  def noproc_get( key )
+  def get_raw( key )
     @table[key]
   end
 
 end
 
-### end config.rb
+
+class MetaConfigEnvironment
+
+  def self.eval_file( file )
+    return unless File.file? file
+    new.instance_eval File.read_all(file), file, 1
+  end
+
+  private
+
+  def config_names
+    ConfigTable.keys
+  end
+
+  def config?( name )
+    ConfigTable.config_key? name
+  end
+
+  def bool_config?( name )
+    ConfigTable.bool_config? name
+  end
+
+  def value_config?( name )
+    ConfigTable.value_config? name
+  end
+
+  def path_config?( name )
+    ConfigTable.path_config? name
+  end
+
+  def add_config( name, argname, default, desc )
+    ConfigTable.add_entry name,[default,argname,desc]
+  end
+
+  def add_path_config( name, default, desc )
+    add_config name, 'path', default, desc
+  end
+
+  def add_bool_config( name, default, desc )
+    add_config name, 'yes/no', default ? 'yes' : 'no', desc
+  end
+
+  def remove_config( name )
+    ent = ConfigTable.get_entry(name)
+    ConfigTable.remove_entry name
+    ent
+  end
+
 end
-unless $".include? 'setup/fileop.rb' then
-  $".push 'setup/fileop.rb'
+
+### end config.rb
 ### begin fileop.rb
 
 module FileOperations
@@ -226,11 +328,11 @@ module FileOperations
       next if fn == '..'
       if dir? fn then
         verbose_off {
-          rm_rf fn
+            rm_rf fn
         }
       else
         verbose_off {
-          rm_f fn
+            rm_f fn
         }
       end
     end
@@ -243,39 +345,34 @@ module FileOperations
     begin
       File.link src, dest
     rescue
-      File.open( dest, 'wb' ) {|w|
-          File.open(src, 'rb') {|r| w.write r.read }
-      }
+      File.write dest, File.read_all(src)
       File.chmod File.stat(src).mode, dest
     end
     rm_f src
   end
 
-  def install( from, to, mode )
-    $stderr.puts "install #{from} #{to}" if verbose?
+  def install( from, dest, mode )
+    $stderr.puts "install #{from} #{dest}" if verbose?
     return if no_harm?
 
-    if dir? to then
-      to = to + '/' + File.basename(from)
+    if dir? dest then
+      dest = dest + '/' + File.basename(from)
     end
-    str = nil
-    File.open( from, 'rb' ) {|f| str = f.read }
-    if diff? str, to then
+    str = File.read_all(from)
+    if diff? str, dest then
       verbose_off {
-        rm_f to if File.exist? to
+          rm_f dest if File.exist? dest
       }
-      File.open( to, 'wb' ) {|f| f.write str }
-      File.chmod mode, to
+      File.write dest, str
+      File.chmod mode, dest
 
-      File.open( objdir + '/InstalledFiles', 'a' ) {|f| f.puts to }
+      File.open( objdir + '/InstalledFiles', 'a' ) {|f| f.puts dest }
     end
   end
 
-  def diff?( orig, comp )
-    return true unless File.exist? comp
-    s2 = nil
-    File.open( comp, 'rb' ) {|f| s2 = f.read }
-    orig != s2
+  def diff?( orig, targ )
+    return true unless File.exist? targ
+    orig != File.read_all(targ)
   end
 
   def command( str )
@@ -294,22 +391,19 @@ module FileOperations
 
   def all_files( dname )
     Dir.open( dname ) {|d|
-      return d.find_all {|n| File.file? "#{dname}/#{n}" }
+        return d.find_all {|n| File.file? "#{dname}/#{n}" }
     }
   end
 
   def all_dirs( dname )
     Dir.open( dname ) {|d|
-      return d.find_all {|n| dir? "#{dname}/#{n}" } - %w(. ..)
+        return d.find_all {|n| dir? "#{dname}/#{n}" } - %w(. ..)
     }
   end
 
 end
 
 ### end fileop.rb
-end
-unless $".include? 'setup/base.rb' then
-  $".push 'setup/base.rb'
 ### begin base.rb
 
 class InstallError < StandardError; end
@@ -317,7 +411,7 @@ class InstallError < StandardError; end
 
 class Installer
 
-  Version   = '3.0.2'
+  Version   = '3.1.0'
   Copyright = 'Copyright (c) 2000,2001 Minero Aoki'
 
 
@@ -354,8 +448,14 @@ class Installer
   # configs/options
   #
 
-  def config( key )
+  def get_config( key )
     @config[key]
+  end
+
+  alias config get_config
+
+  def set_config( key, val )
+    @config[key] = val
   end
 
   def no_harm?
@@ -490,11 +590,11 @@ class Installer
     begin
       File.open( path ) {|r|
       File.open( tmpfile, 'w' ) {|w|
-        first = r.gets
-        return unless SHEBANG_RE === first   # reject '/usr/bin/env ruby'
+          first = r.gets
+          return unless SHEBANG_RE === first   # reject '/usr/bin/env ruby'
 
-        w.print first.sub( SHEBANG_RE, '#!' + config('ruby-path') )
-        w.write r.read
+          w.print first.sub( SHEBANG_RE, '#!' + config('ruby-path') )
+          w.write r.read
       } }
       mv tmpfile, File.basename(path)
     ensure
@@ -556,13 +656,13 @@ class Installer
   end
   
   def targfiles
-    (targfilenames - hookfilenames).collect {|fname|
-        File.exist?(fname) ? fname : File.join(curr_srcdir, fname)
+    (targfilenames() - hookfilenames()).collect {|fname|
+        File.exist?(fname) ? fname : File.join(curr_srcdir(), fname)
     }
   end
 
   def targfilenames
-    [ curr_srcdir, '.' ].inject([]) {|ret, dir|
+    [ curr_srcdir(), '.' ].inject([]) {|ret, dir|
         ret | all_files(dir)
     }
   end
@@ -582,7 +682,7 @@ class Installer
 
   def _allext( dir )
     Dir.open( dir ) {|d|
-      return d.find_all {|fname| DLEXT === fname }
+        return d.find_all {|fname| DLEXT === fname }
     }
   end
 
@@ -620,6 +720,10 @@ class Installer
   def exec_task_traverse( task )
     run_hook 'pre-' + task
     FILETYPES.each do |type|
+      if config('without-ext') == 'yes' and type == 'ext' then
+        $stderr.puts 'skipping ext/* by user option' if verbose?
+        next
+      end
       traverse task, type, task + '_dir_' + type
     end
     run_hook 'post-' + task
@@ -628,12 +732,12 @@ class Installer
   def traverse( task, rel, mid )
     return if File.basename(rel) == 'CVS'
     dive_into( rel ) {
-      run_hook 'pre-' + task
-      __send__ mid, rel.sub( %r_\A.*?(?:/|\z)_, '' )
-      all_dirs( curr_srcdir ).each do |d|
-        traverse task, rel + '/' + d, mid
-      end
-      run_hook 'post-' + task
+        run_hook 'pre-' + task
+        __send__ mid, rel.sub( %r_\A.*?(?:/|\z)_, '' )
+        all_dirs( curr_srcdir ).each do |d|
+          traverse task, rel + '/' + d, mid
+        end
+        run_hook 'post-' + task
     }
   end
 
@@ -646,10 +750,8 @@ class Installer
     return false unless File.file? fname
 
     env = self.dup
-    s = nil
-    File.open( fname ) {|f| s = f.read }
     begin
-      env.instance_eval s, fname, 1
+      env.instance_eval File.read_all(fname), fname, 1
     rescue
       raise InstallError, "hook #{fname} failed:\n" + $!.message
     end
@@ -663,9 +765,6 @@ class Installer
 end
 
 ### end base.rb
-end
-unless $".include? 'setup/toplevel.rb' then
-  $".push 'setup/toplevel.rb'
 ### begin toplevel.rb
 
 class ToplevelInstaller < Installer
@@ -679,29 +778,35 @@ class ToplevelInstaller < Installer
   ]
 
 
-  def initialize( argv, root )
-    @argv = argv
+  def initialize( root )
     super nil, {'verbose' => true}, root, '.'
-
     Installer.declear_toplevel_installer self
   end
 
 
   def execute
-    argv = @argv
-    @argv = nil
-    task = parsearg_global( argv )
+    run_metaconfigs
 
-    case task
+    case task = parsearg_global()
     when 'config'
-      @config = ConfigTable.create
+      @config = ConfigTable.new
     else
       @config = ConfigTable.load
     end
-    parsearg_TASK task, argv
+    parsearg_TASK task
 
     exectask task
   end
+
+
+  def run_metaconfigs
+    MetaConfigEnvironment.eval_file "#{srcdir_root}/#{metaconfig}"
+  end
+
+  def metaconfig
+    'metaconfig'
+  end
+
 
   def exectask( task )
     if task == 'show' then
@@ -726,10 +831,10 @@ class ToplevelInstaller < Installer
   # processing arguments
   #
 
-  def parsearg_global( argv )
+  def parsearg_global
     task_re = /\A(?:#{TASKS.collect {|i| i[0] }.join '|'})\z/
 
-    while arg = argv.shift do
+    while arg = ARGV.shift do
       case arg
       when /\A\w+\z/
         task_re === arg or raise InstallError, "wrong task: #{arg}"
@@ -753,47 +858,56 @@ class ToplevelInstaller < Installer
         puts Copyright
         exit 0
 
-      when nil
-        raise InstallError, 'no task given'
-
       else
         raise InstallError, "unknown global option '#{arg}'"
       end
     end
+
+    raise InstallError, 'no task or global option given'
   end
 
 
-  def parsearg_TASK( task, argv )
+  def parsearg_TASK( task )
     mid = "parsearg_#{task}"
     if respond_to? mid, true then
-      __send__ mid, argv
+      __send__ mid
     else
-      argv.empty? or
-          raise InstallError, "#{task}:  unknown options: #{argv.join ' '}"
+      ARGV.empty? or
+          raise InstallError, "#{task}:  unknown options: #{ARGV.join ' '}"
     end
   end
 
-  def parsearg_config( args )
-    re = /\A--(#{ConfigTable.keys.join '|'})=/
+  def parsearg_config
+    re = /\A--(#{ConfigTable.keys.join '|'})(?:=(.*))?/
     @options['config-opt'] = []
 
-    while i = args.shift do
+    while i = ARGV.shift do
       if /\A--?\z/ === i then
-        @options['config-opt'] = args
+        @options['config-opt'] = ARGV.dup
         break
       end
       m = re.match(i) or raise InstallError, "config: unknown option #{i}"
-      @config[ m[1] ] = m.post_match
+      name, value = m.to_a[1,2]
+      if value then
+        if ConfigTable.bool_config?(name) then
+          /\A(y(es)?|n(o)?|t(rue)?|f(alse))\z/i === value or raise InstallError, "config: --#{name} allows only yes/no for argument"
+          value = (/\Ay(es)?|\At(rue)/i === value) ? 'yes' : 'no'
+        end
+      else
+        ConfigTable.bool_config?(name) or raise InstallError, "config: --#{name} requires argument"
+        value = 'yes'
+      end
+      @config[name] = value
     end
   end
 
-  def parsearg_install( args )
+  def parsearg_install
     @options['no-harm'] = false
-    args.each do |i|
-      if i == '--no-harm' then
+    while a = ARGV.shift do
+      if a == '--no-harm' then
         @options['no-harm'] = true
       else
-        raise InstallError, "install: unknown option #{i}"
+        raise InstallError, "install: unknown option #{a}"
       end
     end
   end
@@ -803,7 +917,7 @@ class ToplevelInstaller < Installer
     out.puts
     out.puts 'Usage:'
     out.puts "  ruby #{File.basename $0} <global option>"
-    out.puts "  ruby #{File.basename $0} <task> [<task options>]"
+    out.puts "  ruby #{File.basename $0} [<global options>] <task> [<task options>]"
 
     fmt = "  %-20s %s\n"
     out.puts
@@ -822,9 +936,11 @@ class ToplevelInstaller < Installer
 
     out.puts
     out.puts 'Options for config:'
-    ConfigTable::DESCRIPTER.each do |name, (default, arg, desc, default2)|
-      default = default2 || default
-      out.printf "  %-20s %s [%s]\n", "--#{name}=#{arg}", desc, default
+    ConfigTable.each_definition do |name, (default, arg, desc, default2)|
+      out.printf "  %-20s %s [%s]\n",
+                 '--'+ name + (ConfigTable.bool_config?(name) ? '' : '='+arg),
+                 desc,
+                 default2 || default
     end
     out.printf "  %-20s %s [%s]\n",
         '--rbconfig=path', 'your rbconfig.rb to load', "running ruby's"
@@ -852,7 +968,7 @@ class ToplevelInstaller < Installer
 
   def exec_show
     ConfigTable.each_name do |k|
-      v = @config.noproc_get(k)
+      v = @config.get_raw(k)
       if not v or v.empty? then
         v = '(not specified)'
       end
@@ -863,11 +979,10 @@ class ToplevelInstaller < Installer
 end
 
 ### end toplevel.rb
-end
 
 if $0 == __FILE__ then
   begin
-    installer = ToplevelInstaller.new( ARGV.dup, File.dirname($0) )
+    installer = ToplevelInstaller.new( File.dirname($0) )
     installer.execute
   rescue
     raise if $DEBUG
