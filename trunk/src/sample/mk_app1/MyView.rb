@@ -2,7 +2,6 @@ require 'osx/cocoa'
 
 class MyView < OSX::NSView
 
-  ib_loadable
   ib_overrides 'drawRect:'
 
   def initialize

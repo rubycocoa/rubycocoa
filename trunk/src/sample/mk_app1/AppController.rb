@@ -2,7 +2,6 @@ require 'osx/cocoa'
 
 class AppController < OSX::NSObject
 
-  ib_loadable
   ib_outlets :msgField, :myView
 
   def awakeFromNib

@@ -1,9 +1,7 @@
 require 'osx/cocoa'
 require 'Expense'
 
-class MyDataSource < OSX::OCObject
-
-  ib_loadable :NSObject
+class MyDataSource < OSX::NSObject
 
   def initialize
     @expenses = Array.new

@@ -2,7 +2,6 @@ require 'osx/cocoa'
 
 class DotView < OSX::NSView
 
-  ib_loadable
   ib_outlets   :colorWell, :sizeSlider
   ib_overrides 'drawRect:', 'isOpaque', 'mouseUp:'
 
