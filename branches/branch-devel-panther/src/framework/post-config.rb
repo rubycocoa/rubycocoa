@@ -20,4 +20,4 @@ intern_h = "#{Config::CONFIG['archdir']}/intern.h"
   end
 end
 
-command 'cd src/objc/cocoa; ruby gen_cocoa_wrapper.rb -f'
+command 'cd src/objc/cocoa; ruby gen_cocoa_wrapper.rb'
