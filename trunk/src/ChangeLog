@@ -1,5 +1,9 @@
 2002-01-28  FUJIMOTO Hisakuni  <hisa@fobj.com>
 
+	* framework/ocdata_conv.m:
+	rbobj_to_nsselstr(): fix a bug that invocation of a method name which
+	start with '_' failed.
+
 	* framework/OverrideMixin.m:
 	imp_c_addRubyMethod(): correct rb_raise's wrong message. (thanks Ogino-san)
 
