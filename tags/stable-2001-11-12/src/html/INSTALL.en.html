@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="us-ascii" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<title>RubyOSXOBJC-INSTALL</title>
+<meta http-equiv="Content-type" content="text/html; charset=us-ascii" />
+<link href="rdtext.css" type="text/css" rel="stylesheet"/>
+</head>
+<body>
+<h1><a name="label:0" id="label:0">Install RubyCocoa</a></h1><!-- RDLabel: "Install RubyCocoa" -->
+<h2><a name="label:1" id="label:1">Install Sequence</a></h2><!-- RDLabel: "Install Sequence" -->
+<ul>
+<li>Extract RubyCocoa</li>
+<li>Install Ruby 1.6.5</li>
+<li>Make LibRuby Framework</li>
+<li>Install RubyCocoa</li>
+<li>Install complete</li>
+<li>check sample</li>
+</ul>
+<p>Installing is command line input on shell by Terminal Application or
+others.</p>
+<h2><a name="label:2" id="label:2">Extract RubyCocoa</a></h2><!-- RDLabel: "Extract RubyCocoa" -->
+<p>extract RubyCocoa sources tarball.</p>
+<pre>% cd {anywhere}
+% tar zxf rubycocoa-0.1.0.tgz</pre>
+<h2><a name="label:3" id="label:3">Install Ruby 1.6.5</a></h2><!-- RDLabel: "Install Ruby 1.6.5" -->
+<p>If you have installed Ruby 1.6.5 with "--enable-shared" option
+already, go to next section. </p>
+<p>Next patch is required for Ruby sources for making Ruby before version
+1.6.5 in MacOS X 10.1.</p>
+<pre>% cd {anywhere}
+% tar zxf ruby-1.6.5.tar.gz
+% cd ruby-1.6.5
+% patch -p1 &lt; {RubyCocoa srcdir}/misc/ruby-osx10_1.patch</pre>
+<p>And you will be install the Ruby normal way. (I don't know without the
+configure option `--enable-shared')</p>
+<pre>% cd {ruby-1.6.5 srcdir}
+% ./configure --enable-shared  # install to /usr/local
+% make ; make test
+% sudo make install</pre>
+<h2><a name="label:4" id="label:4">Make LibRuby Framework</a></h2><!-- RDLabel: "Make LibRuby Framework" -->
+<p>LibRuby Framework is a framework for Ruby interpreter shared
+library. The framework is needed by RubyCocoa and RubyCocoa
+applications. For making the LibRuby Framework on
+"/Library/Frameworks", type:</p>
+<pre>% cd {RubyCocoa srcdir}
+% ruby tool/mk_libruby_frmwk.rb</pre>
+<p>When you want to install this to another location:</p>
+<pre>% ruby tool/mk_libruby_frmwk.rb {anywhere path}</pre>
+<h2><a name="label:5" id="label:5">Install RubyCocoa</a></h2><!-- RDLabel: "Install RubyCocoa" -->
+<p>Install RubyCocoa that consists of extention libraries and RubyCocoa
+Framework.</p>
+<p>Change directory to RubyCocoa sourcedir and type:</p>
+<pre>% cd {RubyCocoa srcdir}
+% ruby install.rb config
+% ruby install.rb setup
+% sudo ruby install.rb install</pre>
+<p>After config, you will look a message "require LibRuby Framework". If
+you are installing by this text seqeunce, the Framework already
+exists. So ignore the message.</p>
+<p>Setup need too long time. It's tea time...</p>
+<p>When install, RubyCocoa libraries will be installed.  And RubyCocoa
+Framework will be installed RubyCocoa Framework to
+"/Library/Frameworks".</p>
+<h2><a name="label:6" id="label:6">Install Complete</a></h2><!-- RDLabel: "Install Complete" -->
+<p>With the above installation is completion. </p>
+<ul>
+<li>LibRuby Framework   - /Library/Frameworks/LibRuby.framework</li>
+<li>RubyCocoa Framework - /Library/Frameworks/RubyCocoa.framework</li>
+<li>RubyCocoa extlib A  - {site_ruby}/1.6/{archdir}/osxobjc.bundle</li>
+<li>RubyCocoa extlib B  - {site_ruby}/1.6/osx/*.rb</li>
+</ul>
+<p>was installed other than a Ruby itself with procedure to this place.</p>
+<h2><a name="label:7" id="label:7">check sample</a></h2><!-- RDLabel: "check sample" -->
+<p>Now go to the sample dir, and try to execute some scripts.</p>
+<pre>% cd {RubyCocoa srcdir}/sample
+% ruby fontnames.rb # fontname print to stdout.
+% ruby sndplay.rb   # system sounds play in order.
+% ruby sndplay2.rb  # system sounds play in order with short interval.</pre>
+<p>OK? Yes, next try to execute RubyCocoa application.</p>
+<pre>% cd {RubyCocoa srcdir}/sample/rubyapp
+% pbxbuild      # build application</pre>
+<p>OK? Launch application:</p>
+<pre>% open build/rubyapp.app</pre>
+<p>or double click rubyapp in build directory by Finder.  
+OK? congratulation!
+NG? sorry.</p>
+<h2><a name="label:8" id="label:8">Development and testing environment </a></h2><!-- RDLabel: "Development and testing environment " -->
+<ul>
+<li>PowerMacintosh G4/400/320MB</li>
+<li>MacOS X 10.1</li>
+<li>DevTools 10.1</li>
+<li>ruby-1.6.5 (configure --enable-shared)</li>
+</ul>
+<h2><a name="label:9" id="label:9">Have a fun</a></h2><!-- RDLabel: "Have a fun" -->
+<p>impressions, ideas, suggests, questions, patches wellcome.</p>
+<p>FUJIMOTO Hisakuni &lt;hisa@imasy.or.jp&gt;
+$Date$ $Revision$</p>
+
+</body>
+</html>
