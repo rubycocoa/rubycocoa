@@ -123,7 +123,7 @@ osx_NSGetSizeAndAlignment(VALUE mdl, VALUE a0, VALUE a1, VALUE a2)
 
 // void NSLog(NSString *format, ...);
 static VALUE
-osx_NSLog(VALUE mdl, VALUE a0, VALUE a1)
+osx_NSLog(int argc, VALUE* argv, VALUE mdl)
 {
   rb_notimplement();
 }
@@ -151,6 +151,6 @@ void init_NSObjCRuntime(VALUE mOSX)
   rb_define_module_function(mOSX, "NSClassFromString", osx_NSClassFromString, 1);
   rb_define_module_function(mOSX, "NSStringFromClass", osx_NSStringFromClass, 1);
   rb_define_module_function(mOSX, "NSGetSizeAndAlignment", osx_NSGetSizeAndAlignment, 3);
-  rb_define_module_function(mOSX, "NSLog", osx_NSLog, 2);
+  rb_define_module_function(mOSX, "NSLog", osx_NSLog, -1);
   rb_define_module_function(mOSX, "NSLogv", osx_NSLogv, 2);
 }
