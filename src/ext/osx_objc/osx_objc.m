@@ -89,17 +89,23 @@ osx_mf_ruby_thread_switcher_start(int argc, VALUE* argv, VALUE mdl)
   VALUE arg_interval, arg_wait;
   double interval, wait;
 
-  rb_scan_args(argc, argv, "11", &arg_interval, &arg_wait);
-  Check_Type(arg_interval, T_FLOAT);
-  interval = RFLOAT(arg_interval)->value;
+  rb_scan_args(argc, argv, "02", &arg_interval, &arg_wait);
 
-  if (arg_wait == Qnil) {
-    [RBThreadSwitcher start: interval];
+  if (arg_interval == Qnil) {
+    [RBThreadSwitcher start];
   }
   else {
-    Check_Type(arg_wait, T_FLOAT);
-    wait = RFLOAT(arg_wait)->value;
-    [RBThreadSwitcher start: interval wait: wait];
+    Check_Type(arg_interval, T_FLOAT);
+    interval = RFLOAT(arg_interval)->value;
+
+    if (arg_wait == Qnil) {
+      [RBThreadSwitcher start: interval];
+    }
+    else {
+      Check_Type(arg_wait, T_FLOAT);
+      wait = RFLOAT(arg_wait)->value;
+      [RBThreadSwitcher start: interval wait: wait];
+    }
   }
   return Qnil;
 }
@@ -118,6 +124,12 @@ ns_autorelease_pool(VALUE mdl)
   rb_yield(Qnil);
   [pool release];
   return Qnil;
+}
+
+static void
+thread_switcher_start()
+{
+  [RBThreadSwitcher start];
 }
 
 /******************/
@@ -246,4 +258,5 @@ void Init_osx_objc()
 		  rb_obj_freeze(rb_str_new2(RUBYCOCOA_RELEASE_DATE)));
 
  init_cocoa(mOSX);
+ thread_switcher_start();
 }
