@@ -1,9 +1,8 @@
 # -*-rd-*-
 = Build and Installation RubyCocoa from Source
 
-This document is described about build and installation of RubyCocoa
-0.4 from source. You don't need to read this if binary distribution of
-RubyCocoa have been installed already.
+This document describes build and installation of RubyCocoa 0.4 from
+source. Skip this if you are going to install the binary distribution.
 
 Build/Installation would be done on shell command with Terminal
 application or etc. In this document, it's assumed to use 'bash' in
@@ -15,7 +14,7 @@ please read suitably.
 
 The following procedures perform build and installation.
 
-* ((<Build/Installation of Ruby>))
+* ((<Build and Installation of Ruby>))
 * ((<Build of RubyCocoa>))
 * ((<Unit Test for RubyCocoa>))
 * ((<Installation of RubyCocoa>))
@@ -29,7 +28,7 @@ On somewhere directory, extract RubyCocoa source from the '.tgz' file.
 because of a file name length problem. 
 
 
-== Build/Installation of Ruby
+== Build and Installation of Ruby
 
 To build RubyCocoa, Some C language header files and libruby of Ruby
 is required. Here, the build procedure of Ruby which serves as a base
@@ -38,10 +37,9 @@ of RubyCocoa in the case shown below at an example is explained.
   * Ruby 1.8 installed from source
   * Ruby 1.6.7 included in Mac OS X 10.2
 
-A case of the latter is equivalent to a case of a RubyCocoa 0.4 binary
-package. When Ruby is installed using packages, such as
-((<Fink|URL:http://fink.sf.net/>)), please read and change according
-to it.
+RubyCocoa 0.4 binary distribution has been built with the latter.
+When Ruby has been installed with some packages (such as
+((<Fink|URL:http://fink.sf.net/>))), read and change accordingly.
 
 
 === Ruby 1.8 installed from source

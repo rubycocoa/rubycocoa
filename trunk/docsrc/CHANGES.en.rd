@@ -5,16 +5,15 @@
 
 : support Ruby 1.8
 
-  It is available with Ruby 1.8. 
-  It was suppressed a warning message about argument of method when a
-  script was executed with the option '-w'.
+  RubyCocoa supports Ruby 1.8. It has been fixed such that there are
+  no warning messages with '-w' option.
 
 : revived RubyCocoa.framework
 
   All of basic implementation of RubyCocoa is included in RubyCocoa
-  framework. It contains also code written by Ruby. Libruby is linked
-  statically to RubyCocoa framework in binary distribution, too.
-  It may make easy to distribute a RubyCocoa application.
+  framework. It contains also code written with Ruby. Libruby itself
+  is linked statically to RubyCocoa framework in binary distribution.
+  It would make you easy to distribute a RubyCocoa application.
 
 : rename extended library
 
