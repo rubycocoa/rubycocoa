@@ -23,6 +23,20 @@ module OSX
     end
   end
 
+  class OCException < RuntimeError
+
+    attr_reader :name, :reason, :userInfo, :nsexception
+
+    def initialize(ocexcp)
+      @nsexception = ocexcp
+      @name = @nsexception.ocm_send(:name).to_s
+      @reason = @nsexception.ocm_send(:reason).to_s
+      @user_info = @nsexception.ocm_send(:userInfo)
+      super "#{@name}:#{@reason}"
+    end
+
+  end
+
   module OCStubCreator
 
     def ns_loadable(super_name = nil)
