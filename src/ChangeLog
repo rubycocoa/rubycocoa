@@ -1,3 +1,8 @@
+2004-02-07  kimura wataru <kimuraw@i.nifty.jp>
+
+	* install.rb:
+	remove rb_AppKit.m and rb_Foundation.m at clean.
+
 2004-01-29  kimura wataru <kimuraw@i.nifty.jp>
 
 	* install.rb:
