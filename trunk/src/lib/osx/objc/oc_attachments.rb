@@ -23,6 +23,10 @@ module OSX
       self
     end
 
+    def size
+      self.count
+    end
+
     def [] (index)
       index = self.count + index if index < 0
       self.objectAtIndex (index)
@@ -49,6 +53,18 @@ module OSX
 	yield (key, self.objectForKey (key))
       end
       self
+    end
+
+    def size
+      self.count
+    end
+
+    def keys
+      self.allKeys.to_a
+    end
+
+    def values
+      self.allValues.to_a
     end
 
     def [] (key)
