@@ -94,7 +94,7 @@ RubyスクリプトとInterface BuilderのNibファイルのみで書かれたRubyCocoa
 
 Gesse Gam, Hiroyuki Shimura, John Platte, kimura wataru, Masaki Yatsu,
 Masatoshi Seki, Michael Miller, Ogino Junya, Ralph Broom, Rich Kilmer,
-Shirai Kaoru, Tetsuhumi Takaishi, Tosh
+Shirai Kaoru, Tetsuhumi Takaishi, Tosh, Matthew Fero
 
 をはじめとする多くの方々に感謝いたします。
 

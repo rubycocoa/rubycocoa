@@ -197,11 +197,12 @@ When the same method name exists in Ruby and Objective-C, like in the case of
 
 == Inheriting from Cocoa
 
-So far, we've discussed existing Cocoa classes and their instances. From this
-point, we'll discuss the definition and instantiation of Cocoa-inherited
-classes, which is also needed when writing RubyCocoa applications. Since the
-implementation is a little tricky, although using inherited classes of Cocoa
-has some restrictions and peculiarities, let's see also including it.
+So far, we've discussed existing Cocoa classes and their
+instances. From this point, we'll discuss the definition and
+instantiation of derived class of Cocoa, which is also needed when
+writing RubyCocoa applications. Since the implementation of derived
+class mechanism for RubyCocoa is a little tricky, there are some
+restrictions and peculiarities.
 
 
 == Defining a Cocoa-inherited class
@@ -302,18 +303,18 @@ performed in the turn:
 
 == Where should initialization code be written?
 
-Although the initialization code is generally written into an
-(({initialize})) method in Ruby, if it says in which, I will seldom be
-recommended by the Cocoa-inherited class. A reason is not initialized
-only by a memory being assigned as a Cocoa object at the time by the
-timing which the initialize method at the time of the instance
-generation described previously is called. However, it is thought that
-especially a problem is not generated in the limitation which does not
-call the Cocoa side method.
+In Ruby an initialization procedure is written in the
+"(({initialize}))" method generally. But you should be careful in
+doing so.  When the "initialize" method is invoked, a Cocoa object in
+the Objective-C space is just only given memory. And it is not
+initialized yet. Therefore, in the "initialize" method, you must not
+invoke a method implemented in Objective-C space. You should use only
+a method by Ruby at the point.
 
 If the object needs to be loaded from a nib file, initializing by the
-"awakeFromNib" method is safest. Doesn't that it is also necessary
-to actually define the inherited class of Cocoa have most these cases?
+"awakeFromNib" method is safest. Doesn't it seem that it is also
+necessary to actually define the inherited class of Cocoa in most of
+these cases?
 
 In other cases, initialization is done in the style of Cocoa's (({init})).
 It is probably a good idea to write to a method with a prefix.
@@ -323,13 +324,14 @@ Please do not forget to return (({self})) from initialization methods.
 
 == Debugging a RubyCocoa application
 
-Currently (as of 2003-01-05), it is impossible that you use a ruby debugger
-in ProjectBuilder, because a plug-in module for a RubyCocoa
+Currently (as of 2003-01-05), it is impossible for you to use a ruby
+debugger in ProjectBuilder, because a plug-in module for a RubyCocoa
 application doesn't exist.
 
-But, you can debug with a debugger (e.g. debug.rb) by launching a application
-with appropriate options in the shell. If you like Emacs, you can also use a
-(({rubydb})) command which is contained in a ruby source distribution.
+But, you can debug with a debugger (e.g. debug.rb) by launching an
+application with appropriate options in the shell. If you like Emacs,
+you can also use a (({rubydb})) command which is contained in a ruby
+source distribution.
 
 The following shows a sequence in which the debugger breaks execution of a
 RubyCocoa application (simpleapp in samples).
