@@ -1,9 +1,9 @@
 2003-07-28  FUJIMOTO Hisakuni  <hisa@fobj.com>
 
 	* framework/src/objc/RBSlaveObject.h.in, framework/src/objc/RBSlaveObject.m:
-	Remove some initializer methods which don't have an argument as a
-	master object. This fix may suppress an error which occurs when an
-	intializer method is overridden.
+	Remove definition of initializer method "init". This fixes an
+	error which occurs when an intializer method is overridden with
+	invocation of "super_init".
 
 	* framework/RubyCocoa.pbproj/project.pbxproj.in, framework/src/ruby/osx/webkit.rb, lib/osx/webkit.rb:
 	add new library to support the WebKit.framework

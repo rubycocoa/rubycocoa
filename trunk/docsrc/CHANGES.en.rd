@@ -1,7 +1,7 @@
 # -*-rd-*-
 = Changes
 
-== changes from 0.4.0
+== changes from 0.4.0 (HEAD)
 
 : enable bundling RubyCocoa.framework within an application bundle
 
@@ -9,6 +9,16 @@
   execute a RubyCocoa application on the environment which is not
   installed RubyCocoa. It allows that RubyCocoa application itself
   bundles with RubyCocoa.framework.
+
+: Support WebKit.framework
+
+  add a library for WebKit.framework written by kimura wataru. ((-
+  Thanks to kimura wataru and s.sawada -))
+
+: Fix a bug about "init" method and ns_override
+
+  It is fixed an exception is raised when "super_init" is invoked in
+  definition of method "init" as ns_override.
 
 : misc
 
