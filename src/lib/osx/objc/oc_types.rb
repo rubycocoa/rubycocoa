@@ -25,6 +25,7 @@ module OSX
   class NSPoint
     include ToFloat
     attr_accessor :x, :y
+    ZERO = [0.0,0.0].freeze
     def initialize(*args)
       @x = force_to_f(args[0])
       @y = force_to_f(args[1])
@@ -37,6 +38,7 @@ module OSX
   class NSSize
     include ToFloat
     attr_accessor :width, :height
+    ZERO = [0.0,0.0].freeze
     def initialize(*args)
       @width = force_to_f(args[0])
       @height = force_to_f(args[1])
@@ -48,6 +50,7 @@ module OSX
 
   class NSRect
     attr_accessor :origin, :size
+    ZERO = [0.0,0.0,0.0,0.0].freeze
     def initialize(*args)
       if args.size == 2 then
 	@origin = NSPoint.new(*(args[0].to_a))
@@ -67,6 +70,7 @@ module OSX
 
   class NSRange
     attr_accessor :location, :length
+    ZERO = [0,0].freeze
     def initialize(*args)
       @location = @length = 0
       args.flatten!
