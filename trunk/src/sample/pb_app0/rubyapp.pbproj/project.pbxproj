@@ -142,7 +142,8 @@
 		};
 		29B97323FDCFA39411CA2CEA = {
 			children = (
-				E8107FD50323E3560319B165,
+				E8DD39BB03A99FE003A81C6F,
+				E837D05203A9BC0903A81C6F,
 			);
 			isa = PBXGroup;
 			name = Frameworks;
@@ -157,10 +158,11 @@
 				29B9732DFDCFA39411CA2CEA,
 			);
 			buildSettings = {
-				FRAMEWORK_SEARCH_PATHS = "";
+				FRAMEWORK_SEARCH_PATHS = "/Users/hisa/proj/rubyosx/rubycocoa/src-trunk/framework/build";
 				HEADER_SEARCH_PATHS = "";
 				INSTALL_PATH = "$(HOME)/Applications";
 				LIBRARY_SEARCH_PATHS = "";
+				PREBINDING = NO;
 				PRODUCT_NAME = pb_app0;
 				SECTORDER_FLAGS = "";
 				WARNING_CFLAGS = "-Wmost -Wno-four-char-constants -Wno-unknown-pragmas";
@@ -237,7 +239,8 @@
 		29B9732DFDCFA39411CA2CEA = {
 			buildActionMask = 2147483647;
 			files = (
-				E81081580323E3570319B165,
+				E8DD39C403A99FE103A81C6F,
+				E837D05A03A9BC0A03A81C6F,
 			);
 			isa = PBXFrameworksBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -281,14 +284,14 @@
 //E82
 //E83
 //E84
-		E8107FD50323E3560319B165 = {
+		E837D05203A9BC0903A81C6F = {
 			isa = PBXFrameworkReference;
-			name = Foundation.framework;
-			path = /System/Library/Frameworks/Foundation.framework;
+			name = Cocoa.framework;
+			path = /System/Library/Frameworks/Cocoa.framework;
 			refType = 0;
 		};
-		E81081580323E3570319B165 = {
-			fileRef = E8107FD50323E3560319B165;
+		E837D05A03A9BC0A03A81C6F = {
+			fileRef = E837D05203A9BC0903A81C6F;
 			isa = PBXBuildFile;
 			settings = {
 			};
@@ -320,6 +323,18 @@
 		};
 		E8CBFFC601B0F32C03A81C66 = {
 			fileRef = E8CBFFC501B0F32C03A81C66;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		E8DD39BB03A99FE003A81C6F = {
+			isa = PBXFrameworkReference;
+			name = RubyCocoa.framework;
+			path = /Library/Frameworks/RubyCocoa.framework;
+			refType = 0;
+		};
+		E8DD39C403A99FE103A81C6F = {
+			fileRef = E8DD39BB03A99FE003A81C6F;
 			isa = PBXBuildFile;
 			settings = {
 			};
