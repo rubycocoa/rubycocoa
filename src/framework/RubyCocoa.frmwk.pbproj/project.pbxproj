@@ -1,0 +1,332 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 34;
+	objects = {
+		E84BFC67019A08FF03A81C66 = {
+			isa = PBXFileReference;
+			path = rb_controller.rb;
+			refType = 4;
+		};
+		E84BFC68019A08FF03A81C66 = {
+			fileRef = E84BFC67019A08FF03A81C66;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		E8760F97019BA86503A81C66 = {
+			isa = PBXFileReference;
+			path = ocdata_conv.m;
+			refType = 4;
+		};
+		E8760F98019BA86503A81C66 = {
+			fileRef = E8760F97019BA86503A81C66;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		E8760F99019BA88D03A81C66 = {
+			isa = PBXFileReference;
+			path = ocdata_conv.h;
+			refType = 4;
+		};
+		E8760F9A019BA88D03A81C66 = {
+			fileRef = E8760F99019BA88D03A81C66;
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					Public,
+				);
+			};
+		};
+		E8A0705F01967D5B03A81C66 = {
+			buildStyles = (
+				E8A0706101967D5B03A81C66,
+				E8A0706201967D5B03A81C66,
+			);
+			isa = PBXProject;
+			mainGroup = E8A0706001967D5B03A81C66;
+			productRefGroup = E8A0706301967DAA03A81C66;
+			projectDirPath = "";
+			targets = (
+				E8A0706501967DAA03A81C66,
+			);
+		};
+		E8A0706001967D5B03A81C66 = {
+			children = (
+				E8A0706B01967E8C03A81C66,
+				E8A0707001967E8C03A81C66,
+				E8A0709501968E4B03A81C66,
+				E8A0707401967E8C03A81C66,
+				E8A0706301967DAA03A81C66,
+			);
+			isa = PBXGroup;
+			refType = 4;
+		};
+		E8A0706101967D5B03A81C66 = {
+			buildRules = (
+			);
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+			};
+			isa = PBXBuildStyle;
+			name = Development;
+		};
+		E8A0706201967D5B03A81C66 = {
+			buildRules = (
+			);
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+			};
+			isa = PBXBuildStyle;
+			name = Deployment;
+		};
+		E8A0706301967DAA03A81C66 = {
+			children = (
+				E8A0706401967DAA03A81C66,
+			);
+			isa = PBXGroup;
+			name = Products;
+			refType = 4;
+		};
+		E8A0706401967DAA03A81C66 = {
+			isa = PBXFrameworkReference;
+			path = RubyCocoa.framework;
+			refType = 3;
+		};
+		E8A0706501967DAA03A81C66 = {
+			buildPhases = (
+				E8A0706601967DAA03A81C66,
+				E8A0706701967DAA03A81C66,
+				E8A0706801967DAA03A81C66,
+				E8A0706901967DAA03A81C66,
+				E8A0706A01967DAA03A81C66,
+			);
+			buildSettings = {
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				FRAMEWORK_VERSION = A;
+				INSTALL_PATH = /Library/Frameworks;
+				OTHER_LDFLAGS = "-undefined suppress -flat_namespace";
+				OTHER_LIBTOOL_FLAGS = "";
+				OTHER_REZFLAGS = "";
+				PREBINDING = NO;
+				PRINCIPAL_CLASS = "";
+				PRODUCT_NAME = RubyCocoa;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = "-Wmost -Wno-four-char-constants -Wno-unknown-pragmas";
+				WRAPPER_EXTENSION = framework;
+			};
+			dependencies = (
+			);
+			isa = PBXFrameworkTarget;
+			name = RubyCocoa.frmwk;
+			productInstallPath = /Library/Frameworks;
+			productName = OSXOBJC;
+			productReference = E8A0706401967DAA03A81C66;
+			productSettingsXML = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
+<!DOCTYPE plist SYSTEM \"file://localhost/System/Library/DTDs/PropertyList.dtd\">
+<plist version=\"0.9\">
+<dict>
+	<key>CFBundleDevelopmentRegion</key>
+	<string>English</string>
+	<key>CFBundleExecutable</key>
+	<string>RubyCocoa</string>
+	<key>CFBundleGetInfoString</key>
+	<string></string>
+	<key>CFBundleIconFile</key>
+	<string></string>
+	<key>CFBundleIdentifier</key>
+	<string></string>
+	<key>CFBundleInfoDictionaryVersion</key>
+	<string>6.0</string>
+	<key>CFBundleName</key>
+	<string></string>
+	<key>CFBundlePackageType</key>
+	<string>FMWK</string>
+	<key>CFBundleShortVersionString</key>
+	<string></string>
+	<key>CFBundleSignature</key>
+	<string>????</string>
+	<key>CFBundleVersion</key>
+	<string>0.1.0</string>
+</dict>
+</plist>
+";
+			shouldUseHeadermap = 0;
+		};
+		E8A0706601967DAA03A81C66 = {
+			buildActionMask = 2147483647;
+			files = (
+				E8A0707601967E8C03A81C66,
+				E8A070A801969C2F03A81C66,
+				E8760F9A019BA88D03A81C66,
+			);
+			isa = PBXHeadersBuildPhase;
+			name = Headers;
+		};
+		E8A0706701967DAA03A81C66 = {
+			buildActionMask = 2147483647;
+			files = (
+				E84BFC68019A08FF03A81C66,
+			);
+			isa = PBXResourcesBuildPhase;
+			name = "Bundle Resources";
+		};
+		E8A0706801967DAA03A81C66 = {
+			buildActionMask = 2147483647;
+			files = (
+				E8A0707C01967E8C03A81C66,
+				E8A070A701969B3903A81C66,
+				E8760F98019BA86503A81C66,
+			);
+			isa = PBXSourcesBuildPhase;
+			name = Sources;
+		};
+		E8A0706901967DAA03A81C66 = {
+			buildActionMask = 2147483647;
+			files = (
+				E8A0707D01967E8C03A81C66,
+				E8A0707F01967EE003A81C66,
+			);
+			isa = PBXFrameworksBuildPhase;
+			name = "Frameworks & Libraries";
+		};
+		E8A0706A01967DAA03A81C66 = {
+			buildActionMask = 2147483647;
+			files = (
+			);
+			isa = PBXRezBuildPhase;
+			name = "ResourceManager Resources";
+		};
+		E8A0706B01967E8C03A81C66 = {
+			children = (
+				E8A0706E01967E8C03A81C66,
+				E8A0706F01967E8C03A81C66,
+				E8A070A401969B1303A81C66,
+				E8A070A601969B3903A81C66,
+				E8760F99019BA88D03A81C66,
+				E8760F97019BA86503A81C66,
+			);
+			isa = PBXGroup;
+			name = source;
+			refType = 4;
+		};
+		E8A0706E01967E8C03A81C66 = {
+			isa = PBXFileReference;
+			path = rb_main.h;
+			refType = 4;
+		};
+		E8A0706F01967E8C03A81C66 = {
+			isa = PBXFileReference;
+			path = rb_main.m;
+			refType = 4;
+		};
+		E8A0707001967E8C03A81C66 = {
+			children = (
+				E84BFC67019A08FF03A81C66,
+			);
+			isa = PBXGroup;
+			name = resources;
+			path = "";
+			refType = 4;
+		};
+		E8A0707201967E8C03A81C66 = {
+			isa = PBXFileReference;
+			path = rb_main.rb;
+			refType = 4;
+		};
+		E8A0707401967E8C03A81C66 = {
+			children = (
+				E8A0707E01967EE003A81C66,
+				E8A0707501967E8C03A81C66,
+			);
+			isa = PBXGroup;
+			name = frameworks;
+			path = "";
+			refType = 4;
+		};
+		E8A0707501967E8C03A81C66 = {
+			isa = PBXFrameworkReference;
+			name = LibRuby.framework;
+			path = /Library/Frameworks/LibRuby.framework;
+			refType = 0;
+		};
+		E8A0707601967E8C03A81C66 = {
+			fileRef = E8A0706E01967E8C03A81C66;
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					Public,
+				);
+			};
+		};
+		E8A0707C01967E8C03A81C66 = {
+			fileRef = E8A0706F01967E8C03A81C66;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		E8A0707D01967E8C03A81C66 = {
+			fileRef = E8A0707501967E8C03A81C66;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		E8A0707E01967EE003A81C66 = {
+			isa = PBXFrameworkReference;
+			name = Cocoa.framework;
+			path = /System/Library/Frameworks/Cocoa.framework;
+			refType = 0;
+		};
+		E8A0707F01967EE003A81C66 = {
+			fileRef = E8A0707E01967EE003A81C66;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		E8A0709501968E4B03A81C66 = {
+			children = (
+				E8A0707201967E8C03A81C66,
+				E8A0709601968E5F03A81C66,
+			);
+			isa = PBXGroup;
+			name = template;
+			path = "";
+			refType = 4;
+		};
+		E8A0709601968E5F03A81C66 = {
+			isa = PBXFileReference;
+			path = main.m;
+			refType = 4;
+		};
+		E8A070A401969B1303A81C66 = {
+			isa = PBXFileReference;
+			path = RubyController.h;
+			refType = 4;
+		};
+		E8A070A601969B3903A81C66 = {
+			isa = PBXFileReference;
+			path = RubyController.m;
+			refType = 4;
+		};
+		E8A070A701969B3903A81C66 = {
+			fileRef = E8A070A601969B3903A81C66;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		E8A070A801969C2F03A81C66 = {
+			fileRef = E8A070A401969B1303A81C66;
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					Public,
+				);
+			};
+		};
+	};
+	rootObject = E8A0705F01967D5B03A81C66;
+}

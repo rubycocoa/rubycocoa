@@ -1,4 +1,5 @@
+.DS_Store
 InstalledFiles
 config.save
-config.framework
-build
+junk
+tmp

@@ -8,5 +8,5 @@
 #  the GNU Lesser General Public License version 2.
 #
 
-require 'rubycocoa'
-require 'osx/objc/cocoa'
+require 'osx/foundation'
+require 'osx/appkit'

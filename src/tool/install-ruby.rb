@@ -3,7 +3,6 @@
 # $Id$
 
 DSTDIR = '/Library/Ruby'
-DOCDIR = DSTDIR
 BINDIR = '/usr/local/bin'
 MANDIR = '/usr/local/share/man'
 LIBDIR = '/usr/local/lib'
@@ -20,7 +19,7 @@ end
 
 def command(cmd)
   $stderr.puts "execute '#{cmd}' ..."
-  raise(RuntimeError, cmd) unless system(cmd)
+  raise (RuntimeError, cmd) unless system(cmd)
   $stderr.puts "execute '#{cmd}' done"
 end
 
@@ -41,9 +40,8 @@ command "./configure #{CONF_OPTION}"
 command "make"
 command "make test"
 command "sudo make install"
-
-command "sudo mkdir #{DOCDIR}" unless File.directory?(DOCDIR)
-command "sudo cp -p #{DOCS.join(' ')} #{DOCDIR}"
+command "sudo cp -p #{DOCS.join(' ')} #{DSTDIR}"
 
 chdir "#{DSTDIR}/lib"
 command "tar cf - libruby* | ( cd #{LIBDIR} ; sudo tar xf - )"
+
