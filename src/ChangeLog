@@ -1,3 +1,8 @@
+2002-01-05  FUJIMOTO Hisakuni  <hisa@fobj.com>
+
+	* framework/rb_main.rb.tmpl, lib/osx/objc/pre-setup.rb,
+	lib/osx/objc/ruby_thread_switcher.rb: support RubyThreadSwitcher
+
 2002-01-05  Chris Thomas <cjack@cjack.com>
 
 	* framework/OverrideMixin.m:
