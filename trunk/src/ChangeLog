@@ -1,3 +1,11 @@
+2002-09-25  FUJIMOTO Hisakuni  <hisa@fobj.com>
+
+	* ext/osx_objc/cocoa-10.1/*, ext/osx_objc/cocoa-10.2/*:
+	improve exception message description. exception handler for function call.
+
+	* lib/osx/objc/oc_exception.rb:
+	define class OCMessageSendException. add argument to OCException#initialize.
+
 2002-09-24  FUJIMOTO Hisakuni  <hisa@fobj.com>
 
 	* ext/osx_objc/mdl_objwrapper.m:
