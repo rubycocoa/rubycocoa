@@ -2187,6 +2187,7 @@
 				E84D81EC03ADA29603A81C6F,
 				E84D81ED03ADA29603A81C6F,
 				E84D81EE03ADA29603A81C6F,
+				E8AA467304D26DA70310F9A1,
 				E88C6E73035BB408031D1B90,
 			);
 			isa = PBXGroup;
@@ -2209,6 +2210,7 @@
 				E88C6E7F035BB408031D1B90,
 				E88C6E80035BB408031D1B90,
 				E8FD49D003D45B2603A81C6F,
+				E8AA467504D26DDD0310F9A1,
 			);
 			isa = PBXGroup;
 			path = objc;
@@ -2351,6 +2353,28 @@
 			settings = {
 			};
 		};
+		E8AA467304D26DA70310F9A1 = {
+			isa = PBXFileReference;
+			path = webkit.rb;
+			refType = 4;
+		};
+		E8AA467404D26DA70310F9A1 = {
+			fileRef = E8AA467304D26DA70310F9A1;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		E8AA467504D26DDD0310F9A1 = {
+			isa = PBXFileReference;
+			path = webkit.rb;
+			refType = 4;
+		};
+		E8AA467604D26DDD0310F9A1 = {
+			fileRef = E8AA467504D26DDD0310F9A1;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
 		E8B05557035C00D003E2294E = {
 			buildActionMask = 2147483647;
 			dstPath = ruby/osx/objc;
@@ -2370,6 +2394,7 @@
 				E88C6E90035BB408031D1B90,
 				E88C6E91035BB408031D1B90,
 				E8FD49D103D45B2603A81C6F,
+				E8AA467604D26DDD0310F9A1,
 			);
 			isa = PBXCopyFilesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
