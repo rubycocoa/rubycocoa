@@ -83,6 +83,11 @@ static id rthread_switcher = nil;
   [self start: interval wait: 0.0];
 }
 
++ (void) start
+{
+  [self start: 0.001];
+}
+
 + (void) stop
 {
   if (rthread_switcher == nil) return;
