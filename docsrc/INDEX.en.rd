@@ -39,7 +39,7 @@ The next script plays all the system sounds.
   end
 
 The following examples are scripts that read a text aloud.
-(for OS X 10.2)
+(for OS X 10.2 or later)
 
   require 'osx/cocoa'
   include OSX
@@ -94,7 +94,7 @@ And thanks to:
 
 Gesse Gam, Hiroyuki Shimura, John Platte, kimura wataru, Masaki Yatsu,
 Masatoshi Seki, Michael Miller, Ogino Junya, Ralph Broom, Rich Kilmer,
-Shirai Kaoru, Tetsuhumi Takaishi, Tosh, Matthew Fero
+Shirai Kaoru, Tetsuhumi Takaishi, Tosh, Matthew Fero, Rod Schmidt
 
 
 == Contact

@@ -1,6 +1,19 @@
 # -*-rd-*-
 = Changes
 
+== changes from 0.4.0 (0.4.1)
+
+: Fix LoadError on running ruby script
+
+  Fix following error, it occurs when ruby build without --enable-shared option.
+
+    osx/cocoa.rb:12:in `require': No such file to load -- osx/objc/cocoa (LoadError)
+
+: Mac OS X 10.3 and Xcode support
+
+  change some install process to build on Mac OS X 10.3(Panther).
+  install Xcode templates for RubyCocoa.
+
 == changes from 0.4.0 (0.4.1d9)
 
 : ruby 1.8.0 support
@@ -11,7 +24,7 @@
 
 : enable bundling RubyCocoa.framework within an application bundle
 
-  Change a buld configration of RubyCocoa.framework project, to
+  Change a build configration of RubyCocoa.framework project, to
   execute a RubyCocoa application on the environment which is not
   installed RubyCocoa. It allows that RubyCocoa application itself
   bundles with RubyCocoa.framework.

@@ -32,7 +32,7 @@ following command:
   % irb -r osx/cocoa
 
 (NOTE) In Mac OS X 10.1, bus errors often occur when using (({irb})) with
-RubyCocoa. Mac OS X 10.2 is recommended.
+RubyCocoa. Mac OS X 10.2 or later is recommended.
 
 
 == Load libraries
