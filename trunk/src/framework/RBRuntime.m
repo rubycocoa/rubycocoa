@@ -94,9 +94,10 @@ static Class objc_class_alloc(const char* name, Class super_class)
   Class isa = malloc(sizeof(struct objc_class));
   struct objc_method_list **mlp0, **mlp1;
   int i;
-  mlp0 = malloc(4 * sizeof(void*));
-  mlp1 = malloc(4 * sizeof(void*));
-  for (i = 0; i < 4; i++) {
+  const int cnt = 16;
+  mlp0 = malloc(cnt * sizeof(void*));
+  mlp1 = malloc(cnt * sizeof(void*));
+  for (i = 0; i < cnt; i++) {
     mlp0[i] = mlp1[i] = NULL;
   }
 
@@ -171,19 +172,3 @@ Class RBOCDerivedClassNew(const char* name, Class super_class)
   objc_addClass(c);
   return c;
 }
-
-#if 0
-static void add_methods(Class c)
-{
-  Method me;
-  struct objc_method_list* mlp = method_list_alloc(1);
-
-  me = class_getInstanceMethod(c, @selector(drawRect:));
-  mlp->method_list[0] = *me;
-  mlp->method_list[0].method_imp = override_mixin_ruby_handler;
-  mlp->method_count += 1;
-
-  class_addMethods(c, mlp);
-}
-
-#endif

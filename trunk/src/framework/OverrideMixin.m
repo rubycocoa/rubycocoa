@@ -60,7 +60,7 @@ static id get_slave(id rcv)
 
 static id handle_ruby_method(id rcv, SEL a_sel, ...)
 {
-  id ret;
+  id ret = nil;
   Method method;
   unsigned  argc, i;
   NSMethodSignature* msig;
@@ -82,7 +82,6 @@ static id handle_ruby_method(id rcv, SEL a_sel, ...)
     [inv setArgument: args atIndex: i];
     args += offset;
   }
-  va_end(args);
 
   // invoke
   [inv setTarget: [rcv __slave__]];
@@ -90,8 +89,16 @@ static id handle_ruby_method(id rcv, SEL a_sel, ...)
   [inv invoke];
 
   // result
-  ret = nil;
+  if ([msig methodReturnLength] > 0) {
+    unsigned len = [msig methodReturnLength];
+    if (len < sizeof(ret)) {
+      void* data = alloca(len);
+      [inv getReturnValue: data];
+      ret = (id)data;
+    }
+  }
 
+  va_end(args);
   return ret;
 }
 
@@ -171,7 +178,8 @@ static id imp_c_addRubyMethod(Class klass, SEL method, SEL arg0)
   struct objc_method_list* mlp = method_list_alloc(1);
 
   me = class_getInstanceMethod(klass, arg0);
-  mlp->method_list[0] = *me;
+  mlp->method_list[0].method_name = me->method_name;
+  mlp->method_list[0].method_types = strdup(me->method_types);
   mlp->method_list[0].method_imp = handle_ruby_method;
   mlp->method_count += 1;
 
@@ -291,7 +299,7 @@ struct objc_method_list* override_mixin_class_method_list()
     long cnt = sizeof(imp_c_methods) / sizeof(struct objc_method);
     imp_c_mlp = method_list_alloc(cnt);
     for (i = 0; i < cnt; i++) {
-      imp_c_mlp->method_list[i] = imp_c_methods[i];
+      imp_c_mlp->method_list[i]  = imp_c_methods[i];
       imp_c_mlp->method_list[i].method_name = sel_getUid(imp_c_method_names[i]);
       imp_c_mlp->method_count += 1;
     }
