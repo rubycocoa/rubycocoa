@@ -31,6 +31,6 @@ dive_into("framework") do
   mkdir_p frmwk_inst_dst_dir
   dst_path = "#{frmwk_inst_dst_dir}/#{frmwk_name}"
   command "rm -rf #{dst_path}.old"
-  command "mv -f #{dst_path} #{dst_path}.old"
+  command "mv -f #{dst_path} #{dst_path}.old" if File.exist? (dst_path)
   command "cp -R #{frmwk_inst_src_path} #{frmwk_inst_dst_dir}/"
 end
