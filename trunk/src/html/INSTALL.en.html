@@ -12,20 +12,16 @@
 <h1><a name="label:0" id="label:0">Install RubyCocoa</a></h1><!-- RDLabel: "Install RubyCocoa" -->
 <h2><a name="label:1" id="label:1">Install Sequence</a></h2><!-- RDLabel: "Install Sequence" -->
 <ul>
-<li>Extract RubyCocoa</li>
 <li>Install Ruby 1.6.5</li>
-<li>Make LibRuby Framework</li>
-<li>Install RubyCocoa</li>
-<li>Install complete</li>
-<li>check sample</li>
+<li>Extract RubyCocoa</li>
+<li>Install LibRuby Framework</li>
+<li>Build and Install RubyCocoa</li>
+<li>Done</li>
+<li>Check Sample</li>
 </ul>
 <p>Installing is command line input on shell by Terminal Application or
 others.</p>
-<h2><a name="label:2" id="label:2">Extract RubyCocoa</a></h2><!-- RDLabel: "Extract RubyCocoa" -->
-<p>extract RubyCocoa sources tarball.</p>
-<pre>% cd {anywhere}
-% tar zxf rubycocoa-0.1.0.tgz</pre>
-<h2><a name="label:3" id="label:3">Install Ruby 1.6.5</a></h2><!-- RDLabel: "Install Ruby 1.6.5" -->
+<h2><a name="label:2" id="label:2">Install Ruby 1.6.5</a></h2><!-- RDLabel: "Install Ruby 1.6.5" -->
 <p>If you have installed Ruby 1.6.5 with "--enable-shared" option
 already, go to next section. </p>
 <p>Next patch is required for Ruby sources for making Ruby before version
@@ -40,16 +36,20 @@ configure option `--enable-shared')</p>
 % ./configure --enable-shared  # install to /usr/local
 % make ; make test
 % sudo make install</pre>
-<h2><a name="label:4" id="label:4">Make LibRuby Framework</a></h2><!-- RDLabel: "Make LibRuby Framework" -->
-<p>LibRuby Framework is a framework for Ruby interpreter shared
-library. The framework is needed by RubyCocoa and RubyCocoa
-applications. For making the LibRuby Framework on
+<h2><a name="label:3" id="label:3">Extract RubyCocoa</a></h2><!-- RDLabel: "Extract RubyCocoa" -->
+<p>extract RubyCocoa sources tarball.</p>
+<pre>% cd {anywhere}
+% tar zxf rubycocoa-0.1.0.tgz</pre>
+<h2><a name="label:4" id="label:4">Install LibRuby Framework</a></h2><!-- RDLabel: "Install LibRuby Framework" -->
+<p>LibRuby Framework is a framework for Ruby interpreter shared library
+and related header files. The framework is needed by RubyCocoa and
+RubyCocoa applications. For installing the LibRuby Framework on
 "/Library/Frameworks", type:</p>
 <pre>% cd {RubyCocoa srcdir}
-% ruby tool/mk_libruby_frmwk.rb</pre>
+% ruby tool/install-libruby-frmwk.rb</pre>
 <p>When you want to install this to another location:</p>
-<pre>% ruby tool/mk_libruby_frmwk.rb {anywhere path}</pre>
-<h2><a name="label:5" id="label:5">Install RubyCocoa</a></h2><!-- RDLabel: "Install RubyCocoa" -->
+<pre>% ruby tool/install-libruby-frmwk.rb {anywhere path}</pre>
+<h2><a name="label:5" id="label:5">Build and Install RubyCocoa</a></h2><!-- RDLabel: "Build and Install RubyCocoa" -->
 <p>Install RubyCocoa that consists of libraries and RubyCocoa Framework.</p>
 <p>Change directory to RubyCocoa sourcedir and type:</p>
 <pre>% cd {RubyCocoa srcdir}
@@ -58,18 +58,18 @@ applications. For making the LibRuby Framework on
 % sudo ruby install.rb install</pre>
 <p>After config, you will look a message "require LibRuby Framework". If
 you are installing by this text seqeunce, the Framework already
-exists. So ignore the message.</p>
+exists.</p>
 <p>Setup need too long time. It's tea time...</p>
 <p>When install, RubyCocoa libraries will be installed.  And RubyCocoa
 Framework will be installed RubyCocoa Framework to
 "/Library/Frameworks".</p>
-<h2><a name="label:6" id="label:6">Install Complete</a></h2><!-- RDLabel: "Install Complete" -->
+<h2><a name="label:6" id="label:6">Done</a></h2><!-- RDLabel: "Done" -->
 <p>With the above installation is completion. </p>
 <ul>
-<li>LibRuby Framework   - /Library/Frameworks/LibRuby.framework</li>
-<li>RubyCocoa Framework - /Library/Frameworks/RubyCocoa.framework</li>
-<li>RubyCocoa extlib A  - {site_ruby}/1.6/{archdir}/osxobjc.bundle</li>
-<li>RubyCocoa extlib B  - {site_ruby}/1.6/osx/*.rb</li>
+<li>LibRuby framework     - /Library/Frameworks/LibRuby.framework</li>
+<li>RubyCocoa framework   - /Library/Frameworks/RubyCocoa.framework</li>
+<li>RubyCocoa libraries A - {site_ruby}/1.6/{archdir}/osxobjc.bundle</li>
+<li>RubyCocoa libraries B - {site_ruby}/1.6/osx/*.rb</li>
 </ul>
 <p>was installed other than a Ruby itself with procedure to this place.</p>
 <h2><a name="label:7" id="label:7">check sample</a></h2><!-- RDLabel: "check sample" -->
@@ -78,18 +78,23 @@ Framework will be installed RubyCocoa Framework to
 % ruby fontnames.rb # fontname print to stdout.
 % ruby sndplay.rb   # system sounds play in order.
 % ruby sndplay2.rb  # system sounds play in order with short interval.</pre>
-<p>OK? Yes, next try to execute RubyCocoa application.</p>
-<pre>% cd {RubyCocoa srcdir}/sample/rubyapp
-% pbxbuild      # build application</pre>
-<p>OK? Launch application:</p>
-<pre>% open build/rubyapp.app</pre>
-<p>or double click rubyapp in build directory by Finder.  
-OK? congratulation!
-NG? sorry.</p>
+<p>OK? Next try to execute some RubyCocoa applications. First one is
+Makefile based. Type to build: </p>
+<pre>% cd {RubyCocoa srcdir}/sample/mk_app1
+% make</pre>
+<p>And launch application:</p>
+<pre>% open open SimpleApp1.app</pre>
+<p>or double click 'SimpleApp1' on Finder. Next one is Project Builder
+based. type to build:</p>
+<pre>% cd {RubyCocoa srcdir}/sample/pb_app1
+% pbxbuild</pre>
+<p>Of course you can build and run by Project Builder. Launch
+application:</p>
+<pre>% open build/pb_app1.app</pre>
 <h2><a name="label:8" id="label:8">Development and testing environment </a></h2><!-- RDLabel: "Development and testing environment " -->
 <ul>
 <li>PowerMacintosh G4/400/320MB</li>
-<li>MacOS X 10.1</li>
+<li>MacOS X 10.1.1 (and 10.1)</li>
 <li>DevTools 10.1</li>
 <li>ruby-1.6.5 (configure --enable-shared)</li>
 </ul>
