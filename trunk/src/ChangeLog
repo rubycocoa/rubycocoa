@@ -1,3 +1,10 @@
+2001-11-30  FUJIMOTO Hisakuni  <hisa@fobj.com>
+
+	* framework: ocdata_conv.m: modify sel_to_rbobj.
+
+	* framework: RBObject.m: using Method#arity for getting argc of
+	ruby methods.
+
 2001-11-29  FUJIMOTO Hisakuni  <hisa@fobj.com>
 
 	* framework: RBObject.h, RBObject.m: hide RBObject#rbobjXXX
