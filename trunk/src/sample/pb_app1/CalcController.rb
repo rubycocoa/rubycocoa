@@ -11,7 +11,6 @@ class CalcController < OSX::OCObject
   ib_outlets :menuOp, :rbtnsOp, :textOp
 
   def initialize
-    super
     @op_syms = [ :plus, :minus, :mul, :div ].freeze
     @op_dic = { :plus => '+', :minus => '-', :mul => '*', :div => '/' }.freeze
   end

@@ -3,9 +3,9 @@ require 'osx/ocobject'
 class MyView < OSX::OCObject
 
   ib_loadable :NSView
-  derived_methods 'drawRect:'
+  ib_overrides 'drawRect:'
 
-  def initialize(frame)
+  def initialize
     @color_name = 'blue'
   end
 
