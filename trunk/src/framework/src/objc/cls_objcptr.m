@@ -245,7 +245,6 @@ init_cls_ObjcPtr(VALUE outer)
   _kObjcPtr = rb_define_class_under (outer, "ObjcPtr", rb_cObject);
 
   rb_define_singleton_method (_kObjcPtr, "new", rb_objcptr_s_allocate, 1);
-  rb_define_singleton_method (_kObjcPtr, "allocate", rb_objcptr_s_allocate, 1);
   rb_define_singleton_method (_kObjcPtr, "allocate_as_int", rb_objcptr_s_allocate_as_int32, 0);
   rb_define_singleton_method (_kObjcPtr, "allocate_as_bool", rb_objcptr_s_allocate_as_int8, 0);
   rb_define_singleton_method (_kObjcPtr, "allocate_as_int8", rb_objcptr_s_allocate_as_int8, 0);
