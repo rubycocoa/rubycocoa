@@ -14,6 +14,7 @@
 #import <Foundation/Foundation.h>
 #import "ocdata_conv.h"
 #import "RBObject.h"
+#import "cls_objcptr.h"
 
 VALUE
 rb_mdl_osx()
@@ -161,12 +162,10 @@ to_octype(const char* octype_str)
     }
   }
   else if (octype_str[0] == '^') {
-    if (strcmp(octype_str, "^I") == 0) {
-      oct = _PRIV_C_ARY_UI;
-    }
-    else if (strcmp(octype_str, "^@") == 0) {
+    if (strcmp(octype_str, "^@") == 0)
       oct = _PRIV_C_ID_PTR;
-    }
+    else
+      oct = _PRIV_C_PTR;
   }
 
   return oct;
@@ -207,7 +206,7 @@ ocdata_size(int octype, const char* octype_str)
   case _C_DBL:
     result = sizeof(double); break;
 
-  case _C_PTR:
+    // case _C_PTR:
   case _C_CHARPTR:
     result = sizeof(char*); break;
 
@@ -226,11 +225,11 @@ ocdata_size(int octype, const char* octype_str)
   case _PRIV_C_NSRANGE:
     result = sizeof(NSRange); break;
 
-  case _PRIV_C_ARY_UI:
-    result = sizeof(unsigned int *); break;
+  case _PRIV_C_PTR:
+    result = sizeof(void*); break;
 
   case _PRIV_C_ID_PTR:
-    result = sizeof(id *); break;
+    result = sizeof(id*); break;
 
   case _C_BFLD:
   case _C_UNDEF:
@@ -270,6 +269,10 @@ ocdata_to_rbobj(VALUE context_obj,
   case _C_ID:
   case _C_CLASS:
     rbval = ocid_to_rbobj(context_obj, *(id*)ocdata);
+    break;
+
+  case _PRIV_C_PTR:
+    rbval = objcptr_s_new_with_cptr (*(void**)ocdata);
     break;
 
   case _PRIV_C_BOOL:
@@ -314,7 +317,7 @@ ocdata_to_rbobj(VALUE context_obj,
   case _C_DBL:
     rbval = rb_float_new(*(double*)ocdata); break;
 
-  case _C_PTR:
+    // case _C_PTR:
   case _C_CHARPTR:
     rbval = rb_str_new2(*(char**)ocdata); break;
 
@@ -367,15 +370,6 @@ ocdata_to_rbobj(VALUE context_obj,
     break;
   }
 
-  case _PRIV_C_ARY_UI: {
-    const unsigned int* uip = *(unsigned int**)ocdata;
-    unsigned int val;
-    rbval = rb_ary_new();
-    while (val = *uip++) rb_ary_push(rbval, UINT2NUM(val));
-    f_success = YES;
-    break;
-  }
-
   case _C_BFLD:
   case _C_VOID:
   case _C_UNDEF:
@@ -412,6 +406,31 @@ static BOOL rbary_to_nsary(VALUE rbary, id* nsary)
   return YES;
 }
 
+static BOOL rbhash_to_nsdic(VALUE rbhash, id* nsdic)
+{
+  VALUE ary_keys;
+  VALUE* keys;
+  VALUE val;
+  long i, len;
+  NSMutableDictionary* result;
+  id nskey, nsval;
+
+  ary_keys = rb_funcall(rbhash, rb_intern("keys"), 0);
+  len = RARRAY(ary_keys)->len;
+  keys = RARRAY(ary_keys)->ptr;
+
+  result = [[[NSMutableDictionary alloc] init] autorelease];
+
+  for (i = 0; i < len; i++) {
+    if (!rbobj_to_nsobj(keys[i], &nskey)) return NO;
+    val = rb_hash_aref(rbhash, keys[i]);
+    if (!rbobj_to_nsobj(val, &nsval)) return NO;
+    [result setObject: nsval forKey: nskey];
+  }
+  *nsdic = result;
+  return YES;
+}
+
 static BOOL rbnum_to_nsnum(VALUE rbval, id* nsval)
 {
   BOOL result;
@@ -441,13 +460,15 @@ static BOOL rbobj_convert_to_nsobj(VALUE obj, id* nsobj)
 
   case T_ARRAY:
     return rbary_to_nsary(obj, nsobj);
+
+  case T_HASH:
+    return  rbhash_to_nsdic(obj, nsobj);
     
   case T_FIXNUM:
   case T_BIGNUM:
   case T_FLOAT:
     return rbnum_to_nsnum(obj, nsobj);
 
-  case T_HASH:
   case T_OBJECT:
   case T_CLASS:
   case T_MODULE:
@@ -561,6 +582,20 @@ SEL rbobj_to_nssel(VALUE obj)
   SEL nssel = NSSelectorFromString(nsstr);
   [pool release];
   return nssel;
+}
+
+static BOOL rbobj_to_objcptr(VALUE obj, void** cptr)
+{
+  if (TYPE(obj) == T_STRING) {
+    *cptr = RSTRING(obj)->ptr;
+  }
+  else if (rb_obj_is_kind_of(obj, objcptr_s_class()) == Qtrue) {
+    *cptr = objcptr_cptr(obj);
+  }
+  else {
+    return NO;
+  }
+  return YES;
 }
 
 static BOOL rbobj_to_nspoint(VALUE obj, NSPoint* result)
@@ -690,10 +725,17 @@ rbobj_to_ocdata(VALUE obj, int octype, void* ocdata)
     *(double*)ocdata = RFLOAT(rb_Float(obj))->value;
     break;
 
-  case _C_PTR:
+    // case _C_PTR:
   case _C_CHARPTR:
     *(char**)ocdata = STR2CSTR(rb_obj_as_string(obj));
     break;
+
+  case _PRIV_C_PTR: {
+    void* cptr;
+    f_success = rbobj_to_objcptr(obj, &cptr);
+    if (f_success) *(void**)ocdata = cptr;
+    break;
+  }
 
   case _PRIV_C_NSRECT: {
     NSRect nsval;
