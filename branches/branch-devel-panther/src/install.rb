@@ -627,12 +627,16 @@ class Installer
   end
 
   def setup_dir_framework( relpath )
-    if test(?x, '/usr/bin/xcodebuild') then
-      command 'xcodebuild'
-    else
-      command 'pbxbuild'
-    end
+    command buildcommand
   end
+
+  def buildcommand
+    if test(?x, '/usr/bin/xcodebuild') then
+      'xcodebuild'
+    else
+      'pbxbuild'
+    end
+  end 
 
   #
   # install
@@ -733,7 +737,7 @@ class Installer
   end
 
   def clean_dir_framework( rel )
-    command 'pbxbuild clean'
+    command buildcommand + ' clean'
     command 'rm -rf build'
   end
 
