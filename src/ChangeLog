@@ -1,5 +1,19 @@
 2002-12-17  FUJIMOTO Hisakuni  <hisa@fobj.com>
 
+	* sample/Hakoiri-Musume/cocoa_hako.rb: bug fix - bring the window
+	to front when the program is launched on command line.
+
+	* sample/TransparentHello.rb: add a new example by Chris Thomas,
+	the article on DDJ May 2002.
+
+	* sample/HelloWorld.rb: add a new example - translate
+	HelloWorld.py of PyObjc example to ruby with RubyCocoa.
+
+	* sample/HybridLangApp:
+	add a new example of using both Ruby and Objective-C.
+
+2002-12-17  FUJIMOTO Hisakuni  <hisa@fobj.com>
+
 	* template/*:
 	modify for RubyCocoa 0.4.
 	move a Makefile based template to directory named MakefileBased.
