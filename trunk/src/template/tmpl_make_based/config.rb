@@ -48,18 +48,7 @@ def gen_makefile
   gen_file (src, dst, arg)
 end
 
-def gen_rb_main
-  rbsrc_names = RUBY_SOURCES.map{|i| "  :#{i.to_s}" }.join(",\n")
-  dst = "rb_main.rb"
-  src = "#{TMPLDIR}/#{dst}.tmpl"
-  arg = [
-    [ /%%%%RUBY_SOURCES%%%%/, rbsrc_names ]
-  ]
-  gen_file (src, dst, arg)
-end
-
 if __FILE__ == $0 then
   gen_plist
   gen_makefile
-  gen_rb_main
 end
