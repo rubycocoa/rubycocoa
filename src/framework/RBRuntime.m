@@ -15,7 +15,7 @@
 #import <Foundation/NSAutoreleasePool.h>
 #import <Foundation/NSString.h>
 #import <Foundation/NSBundle.h>
-
+#import <Foundation/NSTimer.h>
 #import <RubyCocoa/RBObject.h>
 
 #import <objc/objc.h>
@@ -182,4 +182,44 @@ Class RBOCDerivedClassNew(const char* name, Class super_class)
   // add class to runtime system
   objc_addClass(c);
   return c;
+}
+
+/**
+ * RBThreadSchedulerStart
+ **/
+@interface RubyThreadSwitcher : NSObject
++ (void) start: (NSTimeInterval)interval;
+- (void) sched: (NSTimer*)timer;
+@end
+
+#define RUBYTHREADSWITCHER_DEFAULT_INTERVAL (0.1)
+static id rthread_switcher = nil;
+
+@implementation RubyThreadSwitcher
+
++ (void) start: (NSTimeInterval)interval
+{
+  id pool;
+  if (rthread_switcher) return;
+  pool = [[NSAutoreleasePool alloc] init];
+  rthread_switcher = [[self alloc] init];
+  [NSTimer scheduledTimerWithTimeInterval: interval
+	   target: rthread_switcher
+	   selector: @selector(sched:)
+	   userInfo: nil
+	   repeats: YES];
+  [pool release];
+}
+
+- (void) sched: (NSTimer*)timer
+{
+  rb_thread_schedule();
+}
+
+@end
+
+
+void RBThreadSchedulerStart(NSTimeInterval interval)
+{
+  [RubyThreadSwitcher start: interval];
 }
