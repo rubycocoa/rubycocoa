@@ -83,7 +83,7 @@
 
   Rubyに関するニュース・Wiki
 
-: ((<RWiki|URL:http://www.jin.gr.jp/~nahi/RWiki/>))
+: ((<RWiki|URL:http://pub.cozmixng.org/~the-rwiki/>))
 
   Rubyで書かれたWiki
 

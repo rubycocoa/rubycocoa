@@ -87,7 +87,7 @@
 
   News site about Ruby. There is also a Wiki for Ruby at this site.
 
-: ((<RWiki|URL:http://www.jin.gr.jp/~nahi/RWiki/>))
+: ((<RWiki|URL:http://pub.cozmixng.org/~the-rwiki/>))
 
   Wiki written with Ruby.
 
