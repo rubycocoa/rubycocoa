@@ -1,286 +1,352 @@
 #import <LibRuby/cocoa_ruby.h>
-#import "../framework/ocdata_conv.h"
+#import "ocdata_conv.h"
 #import <AppKit/AppKit.h>
+
+static void
+rbarg_to_nsarg(VALUE rbarg, int octype, void* nsarg, id pool, int index)
+{
+  if (!rbobj_to_ocdata(rbarg, octype, nsarg)) {
+    if (pool) [pool release];
+    rb_raise(rb_eArgError, "arg #%d cannot convert to nsobj.", index);
+  }
+}
+
+static VALUE
+nsresult_to_rbresult(int octype, const void* nsresult, id pool)
+{
+  VALUE rbresult;
+  if (octype == _C_ID) {
+    rbresult = ocobj_new_with_ocid(*(id*)nsresult);
+  }
+  else {
+    if (!ocdata_to_rbobj(octype, nsresult, &rbresult)) {
+      if (pool) [pool release];
+      rb_raise(rb_eRuntimeError, "result cannot convert to rbobj.");
+    }
+  }
+  return rbresult;
+}
+
 
   /**** constants ****/
 // NSString *NSPrintPaperName;
 static VALUE
 osx_NSPrintPaperName(VALUE mdl)
 {
-  return ocobj_new_with_ocid(NSPrintPaperName);
+  NSString * ns_result = NSPrintPaperName;
+  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
 }
 
 // NSString *NSPrintPaperSize;
 static VALUE
 osx_NSPrintPaperSize(VALUE mdl)
 {
-  return ocobj_new_with_ocid(NSPrintPaperSize);
+  NSString * ns_result = NSPrintPaperSize;
+  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
 }
 
 // NSString *NSPrintFormName;
 static VALUE
 osx_NSPrintFormName(VALUE mdl)
 {
-  return ocobj_new_with_ocid(NSPrintFormName);
+  NSString * ns_result = NSPrintFormName;
+  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
 }
 
 // NSString *NSPrintMustCollate;
 static VALUE
 osx_NSPrintMustCollate(VALUE mdl)
 {
-  return ocobj_new_with_ocid(NSPrintMustCollate);
+  NSString * ns_result = NSPrintMustCollate;
+  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
 }
 
 // NSString *NSPrintOrientation;
 static VALUE
 osx_NSPrintOrientation(VALUE mdl)
 {
-  return ocobj_new_with_ocid(NSPrintOrientation);
+  NSString * ns_result = NSPrintOrientation;
+  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
 }
 
 // NSString *NSPrintLeftMargin;
 static VALUE
 osx_NSPrintLeftMargin(VALUE mdl)
 {
-  return ocobj_new_with_ocid(NSPrintLeftMargin);
+  NSString * ns_result = NSPrintLeftMargin;
+  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
 }
 
 // NSString *NSPrintRightMargin;
 static VALUE
 osx_NSPrintRightMargin(VALUE mdl)
 {
-  return ocobj_new_with_ocid(NSPrintRightMargin);
+  NSString * ns_result = NSPrintRightMargin;
+  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
 }
 
 // NSString *NSPrintTopMargin;
 static VALUE
 osx_NSPrintTopMargin(VALUE mdl)
 {
-  return ocobj_new_with_ocid(NSPrintTopMargin);
+  NSString * ns_result = NSPrintTopMargin;
+  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
 }
 
 // NSString *NSPrintBottomMargin;
 static VALUE
 osx_NSPrintBottomMargin(VALUE mdl)
 {
-  return ocobj_new_with_ocid(NSPrintBottomMargin);
+  NSString * ns_result = NSPrintBottomMargin;
+  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
 }
 
 // NSString *NSPrintHorizontallyCentered;
 static VALUE
 osx_NSPrintHorizontallyCentered(VALUE mdl)
 {
-  return ocobj_new_with_ocid(NSPrintHorizontallyCentered);
+  NSString * ns_result = NSPrintHorizontallyCentered;
+  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
 }
 
 // NSString *NSPrintVerticallyCentered;
 static VALUE
 osx_NSPrintVerticallyCentered(VALUE mdl)
 {
-  return ocobj_new_with_ocid(NSPrintVerticallyCentered);
+  NSString * ns_result = NSPrintVerticallyCentered;
+  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
 }
 
 // NSString *NSPrintHorizontalPagination;
 static VALUE
 osx_NSPrintHorizontalPagination(VALUE mdl)
 {
-  return ocobj_new_with_ocid(NSPrintHorizontalPagination);
+  NSString * ns_result = NSPrintHorizontalPagination;
+  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
 }
 
 // NSString *NSPrintVerticalPagination;
 static VALUE
 osx_NSPrintVerticalPagination(VALUE mdl)
 {
-  return ocobj_new_with_ocid(NSPrintVerticalPagination);
+  NSString * ns_result = NSPrintVerticalPagination;
+  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
 }
 
 // NSString *NSPrintScalingFactor;
 static VALUE
 osx_NSPrintScalingFactor(VALUE mdl)
 {
-  return ocobj_new_with_ocid(NSPrintScalingFactor);
+  NSString * ns_result = NSPrintScalingFactor;
+  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
 }
 
 // NSString *NSPrintAllPages;
 static VALUE
 osx_NSPrintAllPages(VALUE mdl)
 {
-  return ocobj_new_with_ocid(NSPrintAllPages);
+  NSString * ns_result = NSPrintAllPages;
+  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
 }
 
 // NSString *NSPrintReversePageOrder;
 static VALUE
 osx_NSPrintReversePageOrder(VALUE mdl)
 {
-  return ocobj_new_with_ocid(NSPrintReversePageOrder);
+  NSString * ns_result = NSPrintReversePageOrder;
+  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
 }
 
 // NSString *NSPrintFirstPage;
 static VALUE
 osx_NSPrintFirstPage(VALUE mdl)
 {
-  return ocobj_new_with_ocid(NSPrintFirstPage);
+  NSString * ns_result = NSPrintFirstPage;
+  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
 }
 
 // NSString *NSPrintLastPage;
 static VALUE
 osx_NSPrintLastPage(VALUE mdl)
 {
-  return ocobj_new_with_ocid(NSPrintLastPage);
+  NSString * ns_result = NSPrintLastPage;
+  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
 }
 
 // NSString *NSPrintCopies;
 static VALUE
 osx_NSPrintCopies(VALUE mdl)
 {
-  return ocobj_new_with_ocid(NSPrintCopies);
+  NSString * ns_result = NSPrintCopies;
+  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
 }
 
 // NSString *NSPrintPagesPerSheet;
 static VALUE
 osx_NSPrintPagesPerSheet(VALUE mdl)
 {
-  return ocobj_new_with_ocid(NSPrintPagesPerSheet);
+  NSString * ns_result = NSPrintPagesPerSheet;
+  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
 }
 
 // NSString *NSPrintJobFeatures;
 static VALUE
 osx_NSPrintJobFeatures(VALUE mdl)
 {
-  return ocobj_new_with_ocid(NSPrintJobFeatures);
+  NSString * ns_result = NSPrintJobFeatures;
+  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
 }
 
 // NSString *NSPrintPaperFeed;
 static VALUE
 osx_NSPrintPaperFeed(VALUE mdl)
 {
-  return ocobj_new_with_ocid(NSPrintPaperFeed);
+  NSString * ns_result = NSPrintPaperFeed;
+  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
 }
 
 // NSString *NSPrintManualFeed;
 static VALUE
 osx_NSPrintManualFeed(VALUE mdl)
 {
-  return ocobj_new_with_ocid(NSPrintManualFeed);
+  NSString * ns_result = NSPrintManualFeed;
+  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
 }
 
 // NSString *NSPrintPrinter;
 static VALUE
 osx_NSPrintPrinter(VALUE mdl)
 {
-  return ocobj_new_with_ocid(NSPrintPrinter);
+  NSString * ns_result = NSPrintPrinter;
+  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
 }
 
 // NSString *NSPrintJobDisposition;
 static VALUE
 osx_NSPrintJobDisposition(VALUE mdl)
 {
-  return ocobj_new_with_ocid(NSPrintJobDisposition);
+  NSString * ns_result = NSPrintJobDisposition;
+  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
 }
 
 // NSString *NSPrintSavePath;
 static VALUE
 osx_NSPrintSavePath(VALUE mdl)
 {
-  return ocobj_new_with_ocid(NSPrintSavePath);
+  NSString * ns_result = NSPrintSavePath;
+  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
 }
 
 // NSString *NSPrintFaxReceiverNames;
 static VALUE
 osx_NSPrintFaxReceiverNames(VALUE mdl)
 {
-  return ocobj_new_with_ocid(NSPrintFaxReceiverNames);
+  NSString * ns_result = NSPrintFaxReceiverNames;
+  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
 }
 
 // NSString *NSPrintFaxReceiverNumbers;
 static VALUE
 osx_NSPrintFaxReceiverNumbers(VALUE mdl)
 {
-  return ocobj_new_with_ocid(NSPrintFaxReceiverNumbers);
+  NSString * ns_result = NSPrintFaxReceiverNumbers;
+  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
 }
 
 // NSString *NSPrintFaxSendTime;
 static VALUE
 osx_NSPrintFaxSendTime(VALUE mdl)
 {
-  return ocobj_new_with_ocid(NSPrintFaxSendTime);
+  NSString * ns_result = NSPrintFaxSendTime;
+  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
 }
 
 // NSString *NSPrintFaxUseCoverSheet;
 static VALUE
 osx_NSPrintFaxUseCoverSheet(VALUE mdl)
 {
-  return ocobj_new_with_ocid(NSPrintFaxUseCoverSheet);
+  NSString * ns_result = NSPrintFaxUseCoverSheet;
+  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
 }
 
 // NSString *NSPrintFaxCoverSheetName;
 static VALUE
 osx_NSPrintFaxCoverSheetName(VALUE mdl)
 {
-  return ocobj_new_with_ocid(NSPrintFaxCoverSheetName);
+  NSString * ns_result = NSPrintFaxCoverSheetName;
+  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
 }
 
 // NSString *NSPrintFaxReturnReceipt;
 static VALUE
 osx_NSPrintFaxReturnReceipt(VALUE mdl)
 {
-  return ocobj_new_with_ocid(NSPrintFaxReturnReceipt);
+  NSString * ns_result = NSPrintFaxReturnReceipt;
+  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
 }
 
 // NSString *NSPrintFaxHighResolution;
 static VALUE
 osx_NSPrintFaxHighResolution(VALUE mdl)
 {
-  return ocobj_new_with_ocid(NSPrintFaxHighResolution);
+  NSString * ns_result = NSPrintFaxHighResolution;
+  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
 }
 
 // NSString *NSPrintFaxTrimPageEnds;
 static VALUE
 osx_NSPrintFaxTrimPageEnds(VALUE mdl)
 {
-  return ocobj_new_with_ocid(NSPrintFaxTrimPageEnds);
+  NSString * ns_result = NSPrintFaxTrimPageEnds;
+  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
 }
 
 // NSString *NSPrintFaxModem;
 static VALUE
 osx_NSPrintFaxModem(VALUE mdl)
 {
-  return ocobj_new_with_ocid(NSPrintFaxModem);
+  NSString * ns_result = NSPrintFaxModem;
+  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
 }
 
 // NSString *NSPrintSpoolJob;
 static VALUE
 osx_NSPrintSpoolJob(VALUE mdl)
 {
-  return ocobj_new_with_ocid(NSPrintSpoolJob);
+  NSString * ns_result = NSPrintSpoolJob;
+  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
 }
 
 // NSString *NSPrintFaxJob;
 static VALUE
 osx_NSPrintFaxJob(VALUE mdl)
 {
-  return ocobj_new_with_ocid(NSPrintFaxJob);
+  NSString * ns_result = NSPrintFaxJob;
+  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
 }
 
 // NSString *NSPrintPreviewJob;
 static VALUE
 osx_NSPrintPreviewJob(VALUE mdl)
 {
-  return ocobj_new_with_ocid(NSPrintPreviewJob);
+  NSString * ns_result = NSPrintPreviewJob;
+  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
 }
 
 // NSString *NSPrintSaveJob;
 static VALUE
 osx_NSPrintSaveJob(VALUE mdl)
 {
-  return ocobj_new_with_ocid(NSPrintSaveJob);
+  NSString * ns_result = NSPrintSaveJob;
+  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
 }
 
 // NSString *NSPrintCancelJob;
 static VALUE
 osx_NSPrintCancelJob(VALUE mdl)
 {
-  return ocobj_new_with_ocid(NSPrintCancelJob);
+  NSString * ns_result = NSPrintCancelJob;
+  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
 }
 
 void init_NSPrintInfo(VALUE mOSX)

@@ -1,53 +1,76 @@
 #import <LibRuby/cocoa_ruby.h>
-#import "../framework/ocdata_conv.h"
+#import "ocdata_conv.h"
 #import <Foundation/Foundation.h>
+
+static void
+rbarg_to_nsarg(VALUE rbarg, int octype, void* nsarg, id pool, int index)
+{
+  if (!rbobj_to_ocdata(rbarg, octype, nsarg)) {
+    if (pool) [pool release];
+    rb_raise(rb_eArgError, "arg #%d cannot convert to nsobj.", index);
+  }
+}
+
+static VALUE
+nsresult_to_rbresult(int octype, const void* nsresult, id pool)
+{
+  VALUE rbresult;
+  if (octype == _C_ID) {
+    rbresult = ocobj_new_with_ocid(*(id*)nsresult);
+  }
+  else {
+    if (!ocdata_to_rbobj(octype, nsresult, &rbresult)) {
+      if (pool) [pool release];
+      rb_raise(rb_eRuntimeError, "result cannot convert to rbobj.");
+    }
+  }
+  return rbresult;
+}
+
 
   /**** functions ****/
 // id <NSObject> NSAllocateObject(Class aClass, unsigned extraBytes, NSZone *zone);
 static VALUE
-osx_NSAllocateObject(int argc, VALUE* argv, VALUE mdl)
+osx_NSAllocateObject(VALUE mdl, VALUE a0, VALUE a1, VALUE a2)
 {
   rb_notimplement();
 }
 
 // void NSDeallocateObject(id <NSObject>object);
 static VALUE
-osx_NSDeallocateObject(int argc, VALUE* argv, VALUE mdl)
+osx_NSDeallocateObject(VALUE mdl, VALUE a0)
 {
   rb_notimplement();
 }
 
 // id <NSObject> NSCopyObject(id <NSObject>object, unsigned extraBytes, NSZone *zone);
 static VALUE
-osx_NSCopyObject(int argc, VALUE* argv, VALUE mdl)
+osx_NSCopyObject(VALUE mdl, VALUE a0, VALUE a1, VALUE a2)
 {
   rb_notimplement();
 }
 
 // BOOL NSShouldRetainWithZone(id <NSObject> anObject, NSZone *requestedZone);
 static VALUE
-osx_NSShouldRetainWithZone(int argc, VALUE* argv, VALUE mdl)
+osx_NSShouldRetainWithZone(VALUE mdl, VALUE a0, VALUE a1)
 {
   rb_notimplement();
 }
 
 // void NSIncrementExtraRefCount(id object);
 static VALUE
-osx_NSIncrementExtraRefCount(int argc, VALUE* argv, VALUE mdl)
+osx_NSIncrementExtraRefCount(VALUE mdl, VALUE a0)
 {
-  id pool = [[NSAutoreleasePool alloc] init];
-  
-  VALUE rb_result;
-    int i;
-  id oc_args[1];
-  for (i = 0; i < argc; i++) {
-    if (!rbobj_to_nsobj(argv[i], &oc_args[i])) {
-      [pool release];
-      rb_raise(rb_eArgError, "arg #%d cannot convert to nsobj.", i);
-    }
-  }
 
-   NSIncrementExtraRefCount(oc_args[0]);
+  id ns_a0;
+
+  VALUE rb_result;
+  id pool = [[NSAutoreleasePool alloc] init];
+  /* a0 */
+  rbarg_to_nsarg(a0, _C_ID, &ns_a0, pool, 0);
+
+  NSIncrementExtraRefCount(ns_a0);
+
   rb_result = Qnil;
   [pool release];
   return rb_result;
@@ -55,29 +78,27 @@ osx_NSIncrementExtraRefCount(int argc, VALUE* argv, VALUE mdl)
 
 // BOOL NSDecrementExtraRefCountWasZero(id object);
 static VALUE
-osx_NSDecrementExtraRefCountWasZero(int argc, VALUE* argv, VALUE mdl)
+osx_NSDecrementExtraRefCountWasZero(VALUE mdl, VALUE a0)
 {
-  id pool = [[NSAutoreleasePool alloc] init];
   BOOL ns_result;
-  VALUE rb_result;
-    int i;
-  id oc_args[1];
-  for (i = 0; i < argc; i++) {
-    if (!rbobj_to_nsobj(argv[i], &oc_args[i])) {
-      [pool release];
-      rb_raise(rb_eArgError, "arg #%d cannot convert to nsobj.", i);
-    }
-  }
 
-  ns_result =  NSDecrementExtraRefCountWasZero(oc_args[0]);
-  rb_result = bool_to_rbobj(ns_result);
+  id ns_a0;
+
+  VALUE rb_result;
+  id pool = [[NSAutoreleasePool alloc] init];
+  /* a0 */
+  rbarg_to_nsarg(a0, _C_ID, &ns_a0, pool, 0);
+
+  ns_result = NSDecrementExtraRefCountWasZero(ns_a0);
+
+  rb_result = nsresult_to_rbresult(_PRIV_C_BOOL, &ns_result, pool);
   [pool release];
   return rb_result;
 }
 
 // unsigned NSExtraRefCount(id object);
 static VALUE
-osx_NSExtraRefCount(int argc, VALUE* argv, VALUE mdl)
+osx_NSExtraRefCount(VALUE mdl, VALUE a0)
 {
   rb_notimplement();
 }
@@ -85,11 +106,11 @@ osx_NSExtraRefCount(int argc, VALUE* argv, VALUE mdl)
 void init_NSObject(VALUE mOSX)
 {
   /**** functions ****/
-  rb_define_module_function(mOSX, "NSAllocateObject", osx_NSAllocateObject, -1);
-  rb_define_module_function(mOSX, "NSDeallocateObject", osx_NSDeallocateObject, -1);
-  rb_define_module_function(mOSX, "NSCopyObject", osx_NSCopyObject, -1);
-  rb_define_module_function(mOSX, "NSShouldRetainWithZone", osx_NSShouldRetainWithZone, -1);
-  rb_define_module_function(mOSX, "NSIncrementExtraRefCount", osx_NSIncrementExtraRefCount, -1);
-  rb_define_module_function(mOSX, "NSDecrementExtraRefCountWasZero", osx_NSDecrementExtraRefCountWasZero, -1);
-  rb_define_module_function(mOSX, "NSExtraRefCount", osx_NSExtraRefCount, -1);
+  rb_define_module_function(mOSX, "NSAllocateObject", osx_NSAllocateObject, 3);
+  rb_define_module_function(mOSX, "NSDeallocateObject", osx_NSDeallocateObject, 1);
+  rb_define_module_function(mOSX, "NSCopyObject", osx_NSCopyObject, 3);
+  rb_define_module_function(mOSX, "NSShouldRetainWithZone", osx_NSShouldRetainWithZone, 2);
+  rb_define_module_function(mOSX, "NSIncrementExtraRefCount", osx_NSIncrementExtraRefCount, 1);
+  rb_define_module_function(mOSX, "NSDecrementExtraRefCountWasZero", osx_NSDecrementExtraRefCountWasZero, 1);
+  rb_define_module_function(mOSX, "NSExtraRefCount", osx_NSExtraRefCount, 1);
 }

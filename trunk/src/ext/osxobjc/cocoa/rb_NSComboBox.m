@@ -1,34 +1,64 @@
 #import <LibRuby/cocoa_ruby.h>
-#import "../framework/ocdata_conv.h"
+#import "ocdata_conv.h"
 #import <AppKit/AppKit.h>
+
+static void
+rbarg_to_nsarg(VALUE rbarg, int octype, void* nsarg, id pool, int index)
+{
+  if (!rbobj_to_ocdata(rbarg, octype, nsarg)) {
+    if (pool) [pool release];
+    rb_raise(rb_eArgError, "arg #%d cannot convert to nsobj.", index);
+  }
+}
+
+static VALUE
+nsresult_to_rbresult(int octype, const void* nsresult, id pool)
+{
+  VALUE rbresult;
+  if (octype == _C_ID) {
+    rbresult = ocobj_new_with_ocid(*(id*)nsresult);
+  }
+  else {
+    if (!ocdata_to_rbobj(octype, nsresult, &rbresult)) {
+      if (pool) [pool release];
+      rb_raise(rb_eRuntimeError, "result cannot convert to rbobj.");
+    }
+  }
+  return rbresult;
+}
+
 
   /**** constants ****/
 // NSString *NSComboBoxWillPopUpNotification;
 static VALUE
 osx_NSComboBoxWillPopUpNotification(VALUE mdl)
 {
-  return ocobj_new_with_ocid(NSComboBoxWillPopUpNotification);
+  NSString * ns_result = NSComboBoxWillPopUpNotification;
+  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
 }
 
 // NSString *NSComboBoxWillDismissNotification;
 static VALUE
 osx_NSComboBoxWillDismissNotification(VALUE mdl)
 {
-  return ocobj_new_with_ocid(NSComboBoxWillDismissNotification);
+  NSString * ns_result = NSComboBoxWillDismissNotification;
+  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
 }
 
 // NSString *NSComboBoxSelectionDidChangeNotification;
 static VALUE
 osx_NSComboBoxSelectionDidChangeNotification(VALUE mdl)
 {
-  return ocobj_new_with_ocid(NSComboBoxSelectionDidChangeNotification);
+  NSString * ns_result = NSComboBoxSelectionDidChangeNotification;
+  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
 }
 
 // NSString *NSComboBoxSelectionIsChangingNotification;
 static VALUE
 osx_NSComboBoxSelectionIsChangingNotification(VALUE mdl)
 {
-  return ocobj_new_with_ocid(NSComboBoxSelectionIsChangingNotification);
+  NSString * ns_result = NSComboBoxSelectionIsChangingNotification;
+  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
 }
 
 void init_NSComboBox(VALUE mOSX)

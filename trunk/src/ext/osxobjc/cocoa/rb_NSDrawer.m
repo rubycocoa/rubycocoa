@@ -1,34 +1,64 @@
 #import <LibRuby/cocoa_ruby.h>
-#import "../framework/ocdata_conv.h"
+#import "ocdata_conv.h"
 #import <AppKit/AppKit.h>
+
+static void
+rbarg_to_nsarg(VALUE rbarg, int octype, void* nsarg, id pool, int index)
+{
+  if (!rbobj_to_ocdata(rbarg, octype, nsarg)) {
+    if (pool) [pool release];
+    rb_raise(rb_eArgError, "arg #%d cannot convert to nsobj.", index);
+  }
+}
+
+static VALUE
+nsresult_to_rbresult(int octype, const void* nsresult, id pool)
+{
+  VALUE rbresult;
+  if (octype == _C_ID) {
+    rbresult = ocobj_new_with_ocid(*(id*)nsresult);
+  }
+  else {
+    if (!ocdata_to_rbobj(octype, nsresult, &rbresult)) {
+      if (pool) [pool release];
+      rb_raise(rb_eRuntimeError, "result cannot convert to rbobj.");
+    }
+  }
+  return rbresult;
+}
+
 
   /**** constants ****/
 // NSString *NSDrawerWillOpenNotification;
 static VALUE
 osx_NSDrawerWillOpenNotification(VALUE mdl)
 {
-  return ocobj_new_with_ocid(NSDrawerWillOpenNotification);
+  NSString * ns_result = NSDrawerWillOpenNotification;
+  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
 }
 
 // NSString *NSDrawerDidOpenNotification;
 static VALUE
 osx_NSDrawerDidOpenNotification(VALUE mdl)
 {
-  return ocobj_new_with_ocid(NSDrawerDidOpenNotification);
+  NSString * ns_result = NSDrawerDidOpenNotification;
+  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
 }
 
 // NSString *NSDrawerWillCloseNotification;
 static VALUE
 osx_NSDrawerWillCloseNotification(VALUE mdl)
 {
-  return ocobj_new_with_ocid(NSDrawerWillCloseNotification);
+  NSString * ns_result = NSDrawerWillCloseNotification;
+  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
 }
 
 // NSString *NSDrawerDidCloseNotification;
 static VALUE
 osx_NSDrawerDidCloseNotification(VALUE mdl)
 {
-  return ocobj_new_with_ocid(NSDrawerDidCloseNotification);
+  NSString * ns_result = NSDrawerDidCloseNotification;
+  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
 }
 
 void init_NSDrawer(VALUE mOSX)

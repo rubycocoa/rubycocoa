@@ -1,62 +1,96 @@
 #import <LibRuby/cocoa_ruby.h>
-#import "../framework/ocdata_conv.h"
+#import "ocdata_conv.h"
 #import <AppKit/AppKit.h>
+
+static void
+rbarg_to_nsarg(VALUE rbarg, int octype, void* nsarg, id pool, int index)
+{
+  if (!rbobj_to_ocdata(rbarg, octype, nsarg)) {
+    if (pool) [pool release];
+    rb_raise(rb_eArgError, "arg #%d cannot convert to nsobj.", index);
+  }
+}
+
+static VALUE
+nsresult_to_rbresult(int octype, const void* nsresult, id pool)
+{
+  VALUE rbresult;
+  if (octype == _C_ID) {
+    rbresult = ocobj_new_with_ocid(*(id*)nsresult);
+  }
+  else {
+    if (!ocdata_to_rbobj(octype, nsresult, &rbresult)) {
+      if (pool) [pool release];
+      rb_raise(rb_eRuntimeError, "result cannot convert to rbobj.");
+    }
+  }
+  return rbresult;
+}
+
 
   /**** constants ****/
 // NSString *NSOutlineViewSelectionDidChangeNotification;
 static VALUE
 osx_NSOutlineViewSelectionDidChangeNotification(VALUE mdl)
 {
-  return ocobj_new_with_ocid(NSOutlineViewSelectionDidChangeNotification);
+  NSString * ns_result = NSOutlineViewSelectionDidChangeNotification;
+  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
 }
 
 // NSString *NSOutlineViewColumnDidMoveNotification;
 static VALUE
 osx_NSOutlineViewColumnDidMoveNotification(VALUE mdl)
 {
-  return ocobj_new_with_ocid(NSOutlineViewColumnDidMoveNotification);
+  NSString * ns_result = NSOutlineViewColumnDidMoveNotification;
+  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
 }
 
 // NSString *NSOutlineViewColumnDidResizeNotification;
 static VALUE
 osx_NSOutlineViewColumnDidResizeNotification(VALUE mdl)
 {
-  return ocobj_new_with_ocid(NSOutlineViewColumnDidResizeNotification);
+  NSString * ns_result = NSOutlineViewColumnDidResizeNotification;
+  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
 }
 
 // NSString *NSOutlineViewSelectionIsChangingNotification;
 static VALUE
 osx_NSOutlineViewSelectionIsChangingNotification(VALUE mdl)
 {
-  return ocobj_new_with_ocid(NSOutlineViewSelectionIsChangingNotification);
+  NSString * ns_result = NSOutlineViewSelectionIsChangingNotification;
+  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
 }
 
 // NSString *NSOutlineViewItemWillExpandNotification;
 static VALUE
 osx_NSOutlineViewItemWillExpandNotification(VALUE mdl)
 {
-  return ocobj_new_with_ocid(NSOutlineViewItemWillExpandNotification);
+  NSString * ns_result = NSOutlineViewItemWillExpandNotification;
+  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
 }
 
 // NSString *NSOutlineViewItemDidExpandNotification;
 static VALUE
 osx_NSOutlineViewItemDidExpandNotification(VALUE mdl)
 {
-  return ocobj_new_with_ocid(NSOutlineViewItemDidExpandNotification);
+  NSString * ns_result = NSOutlineViewItemDidExpandNotification;
+  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
 }
 
 // NSString *NSOutlineViewItemWillCollapseNotification;
 static VALUE
 osx_NSOutlineViewItemWillCollapseNotification(VALUE mdl)
 {
-  return ocobj_new_with_ocid(NSOutlineViewItemWillCollapseNotification);
+  NSString * ns_result = NSOutlineViewItemWillCollapseNotification;
+  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
 }
 
 // NSString *NSOutlineViewItemDidCollapseNotification;
 static VALUE
 osx_NSOutlineViewItemDidCollapseNotification(VALUE mdl)
 {
-  return ocobj_new_with_ocid(NSOutlineViewItemDidCollapseNotification);
+  NSString * ns_result = NSOutlineViewItemDidCollapseNotification;
+  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
 }
 
 void init_NSOutlineView(VALUE mOSX)

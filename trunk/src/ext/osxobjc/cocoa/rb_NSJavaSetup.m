@@ -1,6 +1,32 @@
 #import <LibRuby/cocoa_ruby.h>
-#import "../framework/ocdata_conv.h"
+#import "ocdata_conv.h"
 #import <Foundation/Foundation.h>
+
+static void
+rbarg_to_nsarg(VALUE rbarg, int octype, void* nsarg, id pool, int index)
+{
+  if (!rbobj_to_ocdata(rbarg, octype, nsarg)) {
+    if (pool) [pool release];
+    rb_raise(rb_eArgError, "arg #%d cannot convert to nsobj.", index);
+  }
+}
+
+static VALUE
+nsresult_to_rbresult(int octype, const void* nsresult, id pool)
+{
+  VALUE rbresult;
+  if (octype == _C_ID) {
+    rbresult = ocobj_new_with_ocid(*(id*)nsresult);
+  }
+  else {
+    if (!ocdata_to_rbobj(octype, nsresult, &rbresult)) {
+      if (pool) [pool release];
+      rb_raise(rb_eRuntimeError, "result cannot convert to rbobj.");
+    }
+  }
+  return rbresult;
+}
+
 
   /**** constants ****/
 // NSString * const NSJavaClasses;
@@ -83,88 +109,80 @@ osx_NSJavaDidCreateVirtualMachineNotification(VALUE mdl)
   /**** functions ****/
 // BOOL NSJavaNeedsVirtualMachine(NSDictionary *plist);
 static VALUE
-osx_NSJavaNeedsVirtualMachine(int argc, VALUE* argv, VALUE mdl)
+osx_NSJavaNeedsVirtualMachine(VALUE mdl, VALUE a0)
 {
-  id pool = [[NSAutoreleasePool alloc] init];
   BOOL ns_result;
-  VALUE rb_result;
-    int i;
-  id oc_args[1];
-  for (i = 0; i < argc; i++) {
-    if (!rbobj_to_nsobj(argv[i], &oc_args[i])) {
-      [pool release];
-      rb_raise(rb_eArgError, "arg #%d cannot convert to nsobj.", i);
-    }
-  }
 
-  ns_result =  NSJavaNeedsVirtualMachine(oc_args[0]);
-  rb_result = bool_to_rbobj(ns_result);
+  NSDictionary * ns_a0;
+
+  VALUE rb_result;
+  id pool = [[NSAutoreleasePool alloc] init];
+  /* a0 */
+  rbarg_to_nsarg(a0, _C_ID, &ns_a0, pool, 0);
+
+  ns_result = NSJavaNeedsVirtualMachine(ns_a0);
+
+  rb_result = nsresult_to_rbresult(_PRIV_C_BOOL, &ns_result, pool);
   [pool release];
   return rb_result;
 }
 
 // BOOL NSJavaProvidesClasses(NSDictionary *plist);
 static VALUE
-osx_NSJavaProvidesClasses(int argc, VALUE* argv, VALUE mdl)
+osx_NSJavaProvidesClasses(VALUE mdl, VALUE a0)
 {
-  id pool = [[NSAutoreleasePool alloc] init];
   BOOL ns_result;
-  VALUE rb_result;
-    int i;
-  id oc_args[1];
-  for (i = 0; i < argc; i++) {
-    if (!rbobj_to_nsobj(argv[i], &oc_args[i])) {
-      [pool release];
-      rb_raise(rb_eArgError, "arg #%d cannot convert to nsobj.", i);
-    }
-  }
 
-  ns_result =  NSJavaProvidesClasses(oc_args[0]);
-  rb_result = bool_to_rbobj(ns_result);
+  NSDictionary * ns_a0;
+
+  VALUE rb_result;
+  id pool = [[NSAutoreleasePool alloc] init];
+  /* a0 */
+  rbarg_to_nsarg(a0, _C_ID, &ns_a0, pool, 0);
+
+  ns_result = NSJavaProvidesClasses(ns_a0);
+
+  rb_result = nsresult_to_rbresult(_PRIV_C_BOOL, &ns_result, pool);
   [pool release];
   return rb_result;
 }
 
 // BOOL NSJavaNeedsToLoadClasses(NSDictionary *plist);
 static VALUE
-osx_NSJavaNeedsToLoadClasses(int argc, VALUE* argv, VALUE mdl)
+osx_NSJavaNeedsToLoadClasses(VALUE mdl, VALUE a0)
 {
-  id pool = [[NSAutoreleasePool alloc] init];
   BOOL ns_result;
-  VALUE rb_result;
-    int i;
-  id oc_args[1];
-  for (i = 0; i < argc; i++) {
-    if (!rbobj_to_nsobj(argv[i], &oc_args[i])) {
-      [pool release];
-      rb_raise(rb_eArgError, "arg #%d cannot convert to nsobj.", i);
-    }
-  }
 
-  ns_result =  NSJavaNeedsToLoadClasses(oc_args[0]);
-  rb_result = bool_to_rbobj(ns_result);
+  NSDictionary * ns_a0;
+
+  VALUE rb_result;
+  id pool = [[NSAutoreleasePool alloc] init];
+  /* a0 */
+  rbarg_to_nsarg(a0, _C_ID, &ns_a0, pool, 0);
+
+  ns_result = NSJavaNeedsToLoadClasses(ns_a0);
+
+  rb_result = nsresult_to_rbresult(_PRIV_C_BOOL, &ns_result, pool);
   [pool release];
   return rb_result;
 }
 
 // id NSJavaSetup(NSDictionary *plist);
 static VALUE
-osx_NSJavaSetup(int argc, VALUE* argv, VALUE mdl)
+osx_NSJavaSetup(VALUE mdl, VALUE a0)
 {
-  id pool = [[NSAutoreleasePool alloc] init];
   id ns_result;
-  VALUE rb_result;
-    int i;
-  id oc_args[1];
-  for (i = 0; i < argc; i++) {
-    if (!rbobj_to_nsobj(argv[i], &oc_args[i])) {
-      [pool release];
-      rb_raise(rb_eArgError, "arg #%d cannot convert to nsobj.", i);
-    }
-  }
 
-  ns_result =  NSJavaSetup(oc_args[0]);
-  rb_result = ocobj_new_with_ocid(ns_result);
+  NSDictionary * ns_a0;
+
+  VALUE rb_result;
+  id pool = [[NSAutoreleasePool alloc] init];
+  /* a0 */
+  rbarg_to_nsarg(a0, _C_ID, &ns_a0, pool, 0);
+
+  ns_result = NSJavaSetup(ns_a0);
+
+  rb_result = nsresult_to_rbresult(_C_ID, &ns_result, pool);
   [pool release];
   return rb_result;
 }
@@ -173,91 +191,128 @@ osx_NSJavaSetup(int argc, VALUE* argv, VALUE mdl)
 static VALUE
 osx_NSJavaSetupVirtualMachine(VALUE mdl)
 {
-  id pool = [[NSAutoreleasePool alloc] init];
-  id ns_result;
-  VALUE rb_result;
-  
-  ns_result =  NSJavaSetupVirtualMachine();
-  rb_result = ocobj_new_with_ocid(ns_result);
-  [pool release];
-  return rb_result;
+  id ns_result = NSJavaSetupVirtualMachine();
+  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
 }
 
 // id NSJavaObjectNamedInPath(NSString *name, NSArray *path);
 static VALUE
-osx_NSJavaObjectNamedInPath(int argc, VALUE* argv, VALUE mdl)
+osx_NSJavaObjectNamedInPath(VALUE mdl, VALUE a0, VALUE a1)
 {
-  id pool = [[NSAutoreleasePool alloc] init];
   id ns_result;
-  VALUE rb_result;
-    int i;
-  id oc_args[2];
-  for (i = 0; i < argc; i++) {
-    if (!rbobj_to_nsobj(argv[i], &oc_args[i])) {
-      [pool release];
-      rb_raise(rb_eArgError, "arg #%d cannot convert to nsobj.", i);
-    }
-  }
 
-  ns_result =  NSJavaObjectNamedInPath(oc_args[0], oc_args[1]);
-  rb_result = ocobj_new_with_ocid(ns_result);
+  NSString * ns_a0;
+  NSArray * ns_a1;
+
+  VALUE rb_result;
+  id pool = [[NSAutoreleasePool alloc] init];
+  /* a0 */
+  rbarg_to_nsarg(a0, _C_ID, &ns_a0, pool, 0);
+  /* a1 */
+  rbarg_to_nsarg(a1, _C_ID, &ns_a1, pool, 1);
+
+  ns_result = NSJavaObjectNamedInPath(ns_a0, ns_a1);
+
+  rb_result = nsresult_to_rbresult(_C_ID, &ns_result, pool);
   [pool release];
   return rb_result;
 }
 
 // NSArray *NSJavaClassesFromPath(NSArray *path, NSArray *wanted, BOOL usesyscl, id *vm);
 static VALUE
-osx_NSJavaClassesFromPath(int argc, VALUE* argv, VALUE mdl)
+osx_NSJavaClassesFromPath(VALUE mdl, VALUE a0, VALUE a1, VALUE a2, VALUE a3)
 {
-  rb_notimplement();
+  NSArray * ns_result;
+
+  NSArray * ns_a0;
+  NSArray * ns_a1;
+  BOOL ns_a2;
+  id * ns_a3;
+
+  VALUE rb_result;
+  id pool = [[NSAutoreleasePool alloc] init];
+  /* a0 */
+  rbarg_to_nsarg(a0, _C_ID, &ns_a0, pool, 0);
+  /* a1 */
+  rbarg_to_nsarg(a1, _C_ID, &ns_a1, pool, 1);
+  /* a2 */
+  rbarg_to_nsarg(a2, _C_UCHR, &ns_a2, pool, 2);
+  /* a3 */
+  rbarg_to_nsarg(a3, _C_PTR, &ns_a3, pool, 3);
+
+  ns_result = NSJavaClassesFromPath(ns_a0, ns_a1, ns_a2, ns_a3);
+
+  rb_result = nsresult_to_rbresult(_C_ID, &ns_result, pool);
+  [pool release];
+  return rb_result;
 }
 
 // NSArray *NSJavaClassesForBundle(NSBundle *bundle, BOOL usesyscl, id *vm);
 static VALUE
-osx_NSJavaClassesForBundle(int argc, VALUE* argv, VALUE mdl)
+osx_NSJavaClassesForBundle(VALUE mdl, VALUE a0, VALUE a1, VALUE a2)
 {
-  rb_notimplement();
+  NSArray * ns_result;
+
+  NSBundle * ns_a0;
+  BOOL ns_a1;
+  id * ns_a2;
+
+  VALUE rb_result;
+  id pool = [[NSAutoreleasePool alloc] init];
+  /* a0 */
+  rbarg_to_nsarg(a0, _C_ID, &ns_a0, pool, 0);
+  /* a1 */
+  rbarg_to_nsarg(a1, _C_UCHR, &ns_a1, pool, 1);
+  /* a2 */
+  rbarg_to_nsarg(a2, _C_PTR, &ns_a2, pool, 2);
+
+  ns_result = NSJavaClassesForBundle(ns_a0, ns_a1, ns_a2);
+
+  rb_result = nsresult_to_rbresult(_C_ID, &ns_result, pool);
+  [pool release];
+  return rb_result;
 }
 
 // id NSJavaBundleSetup(NSBundle *bundle, NSDictionary *plist);
 static VALUE
-osx_NSJavaBundleSetup(int argc, VALUE* argv, VALUE mdl)
+osx_NSJavaBundleSetup(VALUE mdl, VALUE a0, VALUE a1)
 {
-  id pool = [[NSAutoreleasePool alloc] init];
   id ns_result;
-  VALUE rb_result;
-    int i;
-  id oc_args[2];
-  for (i = 0; i < argc; i++) {
-    if (!rbobj_to_nsobj(argv[i], &oc_args[i])) {
-      [pool release];
-      rb_raise(rb_eArgError, "arg #%d cannot convert to nsobj.", i);
-    }
-  }
 
-  ns_result =  NSJavaBundleSetup(oc_args[0], oc_args[1]);
-  rb_result = ocobj_new_with_ocid(ns_result);
+  NSBundle * ns_a0;
+  NSDictionary * ns_a1;
+
+  VALUE rb_result;
+  id pool = [[NSAutoreleasePool alloc] init];
+  /* a0 */
+  rbarg_to_nsarg(a0, _C_ID, &ns_a0, pool, 0);
+  /* a1 */
+  rbarg_to_nsarg(a1, _C_ID, &ns_a1, pool, 1);
+
+  ns_result = NSJavaBundleSetup(ns_a0, ns_a1);
+
+  rb_result = nsresult_to_rbresult(_C_ID, &ns_result, pool);
   [pool release];
   return rb_result;
 }
 
 // void NSJavaBundleCleanup(NSBundle *bundle, NSDictionary *plist);
 static VALUE
-osx_NSJavaBundleCleanup(int argc, VALUE* argv, VALUE mdl)
+osx_NSJavaBundleCleanup(VALUE mdl, VALUE a0, VALUE a1)
 {
-  id pool = [[NSAutoreleasePool alloc] init];
-  
-  VALUE rb_result;
-    int i;
-  id oc_args[2];
-  for (i = 0; i < argc; i++) {
-    if (!rbobj_to_nsobj(argv[i], &oc_args[i])) {
-      [pool release];
-      rb_raise(rb_eArgError, "arg #%d cannot convert to nsobj.", i);
-    }
-  }
 
-   NSJavaBundleCleanup(oc_args[0], oc_args[1]);
+  NSBundle * ns_a0;
+  NSDictionary * ns_a1;
+
+  VALUE rb_result;
+  id pool = [[NSAutoreleasePool alloc] init];
+  /* a0 */
+  rbarg_to_nsarg(a0, _C_ID, &ns_a0, pool, 0);
+  /* a1 */
+  rbarg_to_nsarg(a1, _C_ID, &ns_a1, pool, 1);
+
+  NSJavaBundleCleanup(ns_a0, ns_a1);
+
   rb_result = Qnil;
   [pool release];
   return rb_result;
@@ -278,14 +333,14 @@ void init_NSJavaSetup(VALUE mOSX)
   rb_define_module_function(mOSX, "NSJavaWillCreateVirtualMachineNotification", osx_NSJavaWillCreateVirtualMachineNotification, 0);
   rb_define_module_function(mOSX, "NSJavaDidCreateVirtualMachineNotification", osx_NSJavaDidCreateVirtualMachineNotification, 0);
   /**** functions ****/
-  rb_define_module_function(mOSX, "NSJavaNeedsVirtualMachine", osx_NSJavaNeedsVirtualMachine, -1);
-  rb_define_module_function(mOSX, "NSJavaProvidesClasses", osx_NSJavaProvidesClasses, -1);
-  rb_define_module_function(mOSX, "NSJavaNeedsToLoadClasses", osx_NSJavaNeedsToLoadClasses, -1);
-  rb_define_module_function(mOSX, "NSJavaSetup", osx_NSJavaSetup, -1);
+  rb_define_module_function(mOSX, "NSJavaNeedsVirtualMachine", osx_NSJavaNeedsVirtualMachine, 1);
+  rb_define_module_function(mOSX, "NSJavaProvidesClasses", osx_NSJavaProvidesClasses, 1);
+  rb_define_module_function(mOSX, "NSJavaNeedsToLoadClasses", osx_NSJavaNeedsToLoadClasses, 1);
+  rb_define_module_function(mOSX, "NSJavaSetup", osx_NSJavaSetup, 1);
   rb_define_module_function(mOSX, "NSJavaSetupVirtualMachine", osx_NSJavaSetupVirtualMachine, 0);
-  rb_define_module_function(mOSX, "NSJavaObjectNamedInPath", osx_NSJavaObjectNamedInPath, -1);
-  rb_define_module_function(mOSX, "NSJavaClassesFromPath", osx_NSJavaClassesFromPath, -1);
-  rb_define_module_function(mOSX, "NSJavaClassesForBundle", osx_NSJavaClassesForBundle, -1);
-  rb_define_module_function(mOSX, "NSJavaBundleSetup", osx_NSJavaBundleSetup, -1);
-  rb_define_module_function(mOSX, "NSJavaBundleCleanup", osx_NSJavaBundleCleanup, -1);
+  rb_define_module_function(mOSX, "NSJavaObjectNamedInPath", osx_NSJavaObjectNamedInPath, 2);
+  rb_define_module_function(mOSX, "NSJavaClassesFromPath", osx_NSJavaClassesFromPath, 4);
+  rb_define_module_function(mOSX, "NSJavaClassesForBundle", osx_NSJavaClassesForBundle, 3);
+  rb_define_module_function(mOSX, "NSJavaBundleSetup", osx_NSJavaBundleSetup, 2);
+  rb_define_module_function(mOSX, "NSJavaBundleCleanup", osx_NSJavaBundleCleanup, 2);
 }

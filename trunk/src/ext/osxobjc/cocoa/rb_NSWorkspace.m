@@ -1,146 +1,192 @@
 #import <LibRuby/cocoa_ruby.h>
-#import "../framework/ocdata_conv.h"
+#import "ocdata_conv.h"
 #import <AppKit/AppKit.h>
+
+static void
+rbarg_to_nsarg(VALUE rbarg, int octype, void* nsarg, id pool, int index)
+{
+  if (!rbobj_to_ocdata(rbarg, octype, nsarg)) {
+    if (pool) [pool release];
+    rb_raise(rb_eArgError, "arg #%d cannot convert to nsobj.", index);
+  }
+}
+
+static VALUE
+nsresult_to_rbresult(int octype, const void* nsresult, id pool)
+{
+  VALUE rbresult;
+  if (octype == _C_ID) {
+    rbresult = ocobj_new_with_ocid(*(id*)nsresult);
+  }
+  else {
+    if (!ocdata_to_rbobj(octype, nsresult, &rbresult)) {
+      if (pool) [pool release];
+      rb_raise(rb_eRuntimeError, "result cannot convert to rbobj.");
+    }
+  }
+  return rbresult;
+}
+
 
   /**** constants ****/
 // NSString *NSWorkspaceDidLaunchApplicationNotification;
 static VALUE
 osx_NSWorkspaceDidLaunchApplicationNotification(VALUE mdl)
 {
-  return ocobj_new_with_ocid(NSWorkspaceDidLaunchApplicationNotification);
+  NSString * ns_result = NSWorkspaceDidLaunchApplicationNotification;
+  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
 }
 
 // NSString *NSWorkspaceDidMountNotification;
 static VALUE
 osx_NSWorkspaceDidMountNotification(VALUE mdl)
 {
-  return ocobj_new_with_ocid(NSWorkspaceDidMountNotification);
+  NSString * ns_result = NSWorkspaceDidMountNotification;
+  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
 }
 
 // NSString *NSWorkspaceDidPerformFileOperationNotification;
 static VALUE
 osx_NSWorkspaceDidPerformFileOperationNotification(VALUE mdl)
 {
-  return ocobj_new_with_ocid(NSWorkspaceDidPerformFileOperationNotification);
+  NSString * ns_result = NSWorkspaceDidPerformFileOperationNotification;
+  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
 }
 
 // NSString *NSWorkspaceDidTerminateApplicationNotification;
 static VALUE
 osx_NSWorkspaceDidTerminateApplicationNotification(VALUE mdl)
 {
-  return ocobj_new_with_ocid(NSWorkspaceDidTerminateApplicationNotification);
+  NSString * ns_result = NSWorkspaceDidTerminateApplicationNotification;
+  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
 }
 
 // NSString *NSWorkspaceDidUnmountNotification;
 static VALUE
 osx_NSWorkspaceDidUnmountNotification(VALUE mdl)
 {
-  return ocobj_new_with_ocid(NSWorkspaceDidUnmountNotification);
+  NSString * ns_result = NSWorkspaceDidUnmountNotification;
+  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
 }
 
 // NSString *NSWorkspaceWillLaunchApplicationNotification;
 static VALUE
 osx_NSWorkspaceWillLaunchApplicationNotification(VALUE mdl)
 {
-  return ocobj_new_with_ocid(NSWorkspaceWillLaunchApplicationNotification);
+  NSString * ns_result = NSWorkspaceWillLaunchApplicationNotification;
+  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
 }
 
 // NSString *NSWorkspaceWillPowerOffNotification;
 static VALUE
 osx_NSWorkspaceWillPowerOffNotification(VALUE mdl)
 {
-  return ocobj_new_with_ocid(NSWorkspaceWillPowerOffNotification);
+  NSString * ns_result = NSWorkspaceWillPowerOffNotification;
+  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
 }
 
 // NSString *NSWorkspaceWillUnmountNotification;
 static VALUE
 osx_NSWorkspaceWillUnmountNotification(VALUE mdl)
 {
-  return ocobj_new_with_ocid(NSWorkspaceWillUnmountNotification);
+  NSString * ns_result = NSWorkspaceWillUnmountNotification;
+  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
 }
 
 // NSString *NSPlainFileType, *NSDirectoryFileType, *NSApplicationFileType;
 static VALUE
 osx_NSApplicationFileType(VALUE mdl)
 {
-  rb_notimplement();
+  NSString *NSPlainFileType, *NSDirectoryFileType, * ns_result = NSApplicationFileType;
+  return nsresult_to_rbresult(_C_PTR, &ns_result, nil);
 }
 
 // NSString *NSFilesystemFileType, *NSShellCommandFileType;
 static VALUE
 osx_NSShellCommandFileType(VALUE mdl)
 {
-  rb_notimplement();
+  NSString *NSFilesystemFileType, * ns_result = NSShellCommandFileType;
+  return nsresult_to_rbresult(_C_PTR, &ns_result, nil);
 }
 
 // NSString *NSWorkspaceMoveOperation;
 static VALUE
 osx_NSWorkspaceMoveOperation(VALUE mdl)
 {
-  return ocobj_new_with_ocid(NSWorkspaceMoveOperation);
+  NSString * ns_result = NSWorkspaceMoveOperation;
+  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
 }
 
 // NSString *NSWorkspaceCopyOperation;
 static VALUE
 osx_NSWorkspaceCopyOperation(VALUE mdl)
 {
-  return ocobj_new_with_ocid(NSWorkspaceCopyOperation);
+  NSString * ns_result = NSWorkspaceCopyOperation;
+  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
 }
 
 // NSString *NSWorkspaceLinkOperation;
 static VALUE
 osx_NSWorkspaceLinkOperation(VALUE mdl)
 {
-  return ocobj_new_with_ocid(NSWorkspaceLinkOperation);
+  NSString * ns_result = NSWorkspaceLinkOperation;
+  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
 }
 
 // NSString *NSWorkspaceCompressOperation;
 static VALUE
 osx_NSWorkspaceCompressOperation(VALUE mdl)
 {
-  return ocobj_new_with_ocid(NSWorkspaceCompressOperation);
+  NSString * ns_result = NSWorkspaceCompressOperation;
+  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
 }
 
 // NSString *NSWorkspaceDecompressOperation;
 static VALUE
 osx_NSWorkspaceDecompressOperation(VALUE mdl)
 {
-  return ocobj_new_with_ocid(NSWorkspaceDecompressOperation);
+  NSString * ns_result = NSWorkspaceDecompressOperation;
+  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
 }
 
 // NSString *NSWorkspaceEncryptOperation;
 static VALUE
 osx_NSWorkspaceEncryptOperation(VALUE mdl)
 {
-  return ocobj_new_with_ocid(NSWorkspaceEncryptOperation);
+  NSString * ns_result = NSWorkspaceEncryptOperation;
+  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
 }
 
 // NSString *NSWorkspaceDecryptOperation;
 static VALUE
 osx_NSWorkspaceDecryptOperation(VALUE mdl)
 {
-  return ocobj_new_with_ocid(NSWorkspaceDecryptOperation);
+  NSString * ns_result = NSWorkspaceDecryptOperation;
+  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
 }
 
 // NSString *NSWorkspaceDestroyOperation;
 static VALUE
 osx_NSWorkspaceDestroyOperation(VALUE mdl)
 {
-  return ocobj_new_with_ocid(NSWorkspaceDestroyOperation);
+  NSString * ns_result = NSWorkspaceDestroyOperation;
+  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
 }
 
 // NSString *NSWorkspaceRecycleOperation;
 static VALUE
 osx_NSWorkspaceRecycleOperation(VALUE mdl)
 {
-  return ocobj_new_with_ocid(NSWorkspaceRecycleOperation);
+  NSString * ns_result = NSWorkspaceRecycleOperation;
+  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
 }
 
 // NSString *NSWorkspaceDuplicateOperation;
 static VALUE
 osx_NSWorkspaceDuplicateOperation(VALUE mdl)
 {
-  return ocobj_new_with_ocid(NSWorkspaceDuplicateOperation);
+  NSString * ns_result = NSWorkspaceDuplicateOperation;
+  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
 }
 
 void init_NSWorkspace(VALUE mOSX)

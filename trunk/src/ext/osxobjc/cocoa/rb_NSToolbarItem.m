@@ -1,55 +1,88 @@
 #import <LibRuby/cocoa_ruby.h>
-#import "../framework/ocdata_conv.h"
+#import "ocdata_conv.h"
 #import <AppKit/AppKit.h>
+
+static void
+rbarg_to_nsarg(VALUE rbarg, int octype, void* nsarg, id pool, int index)
+{
+  if (!rbobj_to_ocdata(rbarg, octype, nsarg)) {
+    if (pool) [pool release];
+    rb_raise(rb_eArgError, "arg #%d cannot convert to nsobj.", index);
+  }
+}
+
+static VALUE
+nsresult_to_rbresult(int octype, const void* nsresult, id pool)
+{
+  VALUE rbresult;
+  if (octype == _C_ID) {
+    rbresult = ocobj_new_with_ocid(*(id*)nsresult);
+  }
+  else {
+    if (!ocdata_to_rbobj(octype, nsresult, &rbresult)) {
+      if (pool) [pool release];
+      rb_raise(rb_eRuntimeError, "result cannot convert to rbobj.");
+    }
+  }
+  return rbresult;
+}
+
 
   /**** constants ****/
 // NSString *NSToolbarSeparatorItemIdentifier;
 static VALUE
 osx_NSToolbarSeparatorItemIdentifier(VALUE mdl)
 {
-  return ocobj_new_with_ocid(NSToolbarSeparatorItemIdentifier);
+  NSString * ns_result = NSToolbarSeparatorItemIdentifier;
+  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
 }
 
 // NSString *NSToolbarSpaceItemIdentifier;
 static VALUE
 osx_NSToolbarSpaceItemIdentifier(VALUE mdl)
 {
-  return ocobj_new_with_ocid(NSToolbarSpaceItemIdentifier);
+  NSString * ns_result = NSToolbarSpaceItemIdentifier;
+  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
 }
 
 // NSString *NSToolbarFlexibleSpaceItemIdentifier;
 static VALUE
 osx_NSToolbarFlexibleSpaceItemIdentifier(VALUE mdl)
 {
-  return ocobj_new_with_ocid(NSToolbarFlexibleSpaceItemIdentifier);
+  NSString * ns_result = NSToolbarFlexibleSpaceItemIdentifier;
+  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
 }
 
 // NSString *NSToolbarShowColorsItemIdentifier;
 static VALUE
 osx_NSToolbarShowColorsItemIdentifier(VALUE mdl)
 {
-  return ocobj_new_with_ocid(NSToolbarShowColorsItemIdentifier);
+  NSString * ns_result = NSToolbarShowColorsItemIdentifier;
+  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
 }
 
 // NSString *NSToolbarShowFontsItemIdentifier;
 static VALUE
 osx_NSToolbarShowFontsItemIdentifier(VALUE mdl)
 {
-  return ocobj_new_with_ocid(NSToolbarShowFontsItemIdentifier);
+  NSString * ns_result = NSToolbarShowFontsItemIdentifier;
+  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
 }
 
 // NSString *NSToolbarCustomizeToolbarItemIdentifier;
 static VALUE
 osx_NSToolbarCustomizeToolbarItemIdentifier(VALUE mdl)
 {
-  return ocobj_new_with_ocid(NSToolbarCustomizeToolbarItemIdentifier);
+  NSString * ns_result = NSToolbarCustomizeToolbarItemIdentifier;
+  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
 }
 
 // NSString *NSToolbarPrintItemIdentifier;
 static VALUE
 osx_NSToolbarPrintItemIdentifier(VALUE mdl)
 {
-  return ocobj_new_with_ocid(NSToolbarPrintItemIdentifier);
+  NSString * ns_result = NSToolbarPrintItemIdentifier;
+  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
 }
 
 void init_NSToolbarItem(VALUE mOSX)
