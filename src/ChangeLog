@@ -1,3 +1,17 @@
+2002-02-12  FUJIMOTO Hisakuni  <hisa@fobj.com>
+
+	* framework/ocdata_conv.m:
+	- to_octype(): avoid first character 'r' which is const meaning.
+	- rbobj_to_ocdata(): modified for _PRIV_C_ID_PTR "^@".
+
+	* framework/ocdata_conv.h:
+	- add the definition of "struct _objcid_data" from "framework/ocdata_conv.h".
+	- defined _PRIV_C_ID_PTR for "^@"
+
+	* ext/osx_objc/cls_objcid.m:
+	- changed the behavior of ObjcID.new into just only doing allocation.
+	- moved the definition of "struct _objcid_data" to "framework/ocdata_conv.h".
+
 2002-02-07  FUJIMOTO Hisakuni  <hisa@fobj.com>
 
 	* release 0.2.6
