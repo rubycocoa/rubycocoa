@@ -61,7 +61,7 @@ h2, h3, h4, h5, h6 {
 
 h2 {
   font-size: large;
-  margin-top: 1em;
+  margin-top: 2em;
   border-style: solid;
   border-top-width: 0;
   border-left-width: 0;
@@ -101,3 +101,6 @@ h2.body-sidebar {
   margin: 0em;
 }
 
+h2.body-news { 
+  font-size: medium;
+}
