@@ -25,12 +25,8 @@
 - ruby_method_7:a1 :a2 :a3 :a4 :a5 :a6 :a7 { return nil; }
 - ruby_method_8:a1 :a2 :a3 :a4 :a5 :a6 :a7 :a8 { return nil; }
 
-// NS???Panel
-- (void)openPanelDidEnd:(NSWindow *)sheet returnCode:(int)returnCode contextInfo:(void  *)contextInfo {}
-- (void)printPanelDidEnd:(NSWindow *)sheet returnCode:(int)returnCode contextInfo:(void  *)contextInfo {}
-- (void)savePanelDidEnd:(NSWindow *)sheet returnCode:(int)returnCode contextInfo:(void  *)contextInfo {}
-- (void)panelDidEnd:(NSWindow *)sheet returnCode:(int)returnCode contextInfo:(void  *)contextInfo {}
-- (void)didEnd:(NSWindow *)sheet returnCode:(int)returnCode contextInfo:(void  *)contextInfo {}
+// Sheet Panel Support
+- (void)sheetPanelDidEnd:(NSWindow *)sheet returnCode:(int)returnCode contextInfo:(void  *)contextInfo {}
 
 // as Observer
 - (void)receiveNotification: (NSNotification *)notification {}

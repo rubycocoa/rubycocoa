@@ -149,6 +149,32 @@ static SEL ruby_method_sel(int argc)
   return msig;
 }
 
+- (NSMethodSignature*) rbobjMethodSignatureForSheetSelector: (SEL)a_sel
+{
+  const char* tail = ":returnCode:contextInfo:";
+  const SEL dummy_sel = @selector(sheetPanelDidEnd:returnCode:contextInfo:);
+
+  const char* name;
+  int name_len, tail_len;
+  NSMethodSignature* msig;
+  id pool;
+
+  msig = nil;
+  pool = [[NSAutoreleasePool alloc] init];
+  name = [NSStringFromSelector(a_sel) cString];
+  name_len = strlen(name);
+  tail_len = strlen(tail);
+  if (name_len > tail_len) {
+    if (strcmp(name + name_len - tail_len, tail) == 0) {
+      // it's sheet panel selector
+      msig = [DummyProtocolHandler
+	       instanceMethodSignatureForSelector: dummy_sel];
+    }
+  }
+  [pool release];
+  return msig;
+}
+
 - (VALUE)fetchForwardArgumentsOf: (NSInvocation*)an_inv
 {
   int i;
@@ -248,9 +274,11 @@ static SEL ruby_method_sel(int argc)
 - (NSMethodSignature*)methodSignatureForSelector: (SEL)a_sel
 {
   NSMethodSignature* ret = nil;
-  DLOG1("methodSignatureForSelector(%@)", NSStringFromSelector(a_sel));
+  DLOG2("methodSignatureForSelector(%@,%u)", NSStringFromSelector(a_sel), a_sel);
+  if (*(char*)a_sel == NULL) return nil;
+  ret = [DummyProtocolHandler instanceMethodSignatureForSelector: a_sel];
   if (ret == nil)
-    ret = [DummyProtocolHandler instanceMethodSignatureForSelector: a_sel];
+    ret = [self rbobjMethodSignatureForSheetSelector: a_sel];
   if (ret == nil)
     ret = [self rbobjMethodSignatureForSelector: a_sel];
   DLOG1("   --> %@", ret);
