@@ -131,7 +131,14 @@ static id handle_ruby_method(id rcv, SEL a_sel, ...)
     if (retlen < sizeof(ret)) {
       void* data = alloca(retlen);
       [inv getReturnValue: data];
-      ret = (id)data;
+      if (retlen == sizeof(char))
+	ret = (id)(*(unsigned char*)data);
+      else if (retlen == sizeof(short))
+	ret = (id)(*(unsigned short*)data);
+      else
+	rb_raise( rb_eRuntimeError,
+		  "handle_ruby_method('%s'): can't handle the return value!",
+		  (char*)a_sel);
     }
     else if (retlen == sizeof(ret)) {
       [inv getReturnValue: &ret];
@@ -139,7 +146,9 @@ static id handle_ruby_method(id rcv, SEL a_sel, ...)
     else {
       // should we raise an error here, because we can't handle the
       // return value properly?
-      NSLog(@"handle_ruby_method(): can't handle the return value!");
+      rb_raise( rb_eRuntimeError,
+		"handle_ruby_method('%s'): can't handle the return value!",
+		(char*)a_sel);
     }
   }
 
