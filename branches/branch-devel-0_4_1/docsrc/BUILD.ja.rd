@@ -84,7 +84,7 @@ Ruby 1.6.7用パッチをあてます。
   $ cd {どこか}
   $ tar zxf ruby-1.6.7.tar.gz
   $ cd ruby-1.6.7
-  $ patch -p1 < {RubyCocoaソース}/ruby-1.6.7-osx10.2.patch
+  $ patch -p1 < {RubyCocoaソース}/misc/ruby-1.6.7-osx10.2.patch
 
 ==== librubyの構築・インストール
 
