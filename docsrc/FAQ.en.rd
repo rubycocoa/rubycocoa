@@ -105,7 +105,7 @@ I am having problems getting RubyCocoa working. I built and installed
 ruby-1.6.5 and RubyCocoa-0.1.2 with no problems.
 
 Following the instructions on:
-<http://www.imasy.or.jp/~hisa/mac/rubycocoa/install.en.html> I encountered
+<http://www.imasy.or.jp/%7ehisa/mac/rubycocoa/install.en.html> I encountered
 an error when i tried executing: "open SimpleApp1.app", which results in
 an "SimpleApp1 closed unexpectedly." The error it quits with is:
 

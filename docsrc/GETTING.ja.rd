@@ -6,9 +6,9 @@
 バイナリ配付に含まれているRubyCocoaは、Mac OS X 10.2に付属する
 Ruby 1.6.7 に合わせて構築しています。
 
-((<ファイル一覧|URL:http://www.imasy.or.jp/~hisa/mac/rubyosx/files/>))
+((<ファイル一覧|URL:http://www.imasy.or.jp/%7ehisa/mac/rubyosx/files/>))
 の中から
-((<RubyCocoa-0.4.0.dmg|URL:http://www.imasy.or.jp/~hisa/mac/rubyosx/files/RubyCocoa-0.4.0.dmg>))
+((<RubyCocoa-0.4.0.dmg|URL:http://www.imasy.or.jp/%7ehisa/mac/rubyosx/files/RubyCocoa-0.4.0.dmg>))
 をダウンロードしてください。
 
 RubyCocoaとRubyAEOSA のライブラリ・サンプルコード・ドキュメント・
@@ -43,9 +43,9 @@ ProjectBuilderテンプレートなどが含まれています。実行・開発に必要な
 
 == ソース配付
 
-((<ファイル一覧|URL:http://www.imasy.or.jp/~hisa/mac/rubyosx/files/>))
+((<ファイル一覧|URL:http://www.imasy.or.jp/%7ehisa/mac/rubyosx/files/>))
 の中から
-((<rubycocoa-0.4.0.tgz|URL:http://www.imasy.or.jp/~hisa/mac/rubyosx/files/rubycocoa-0.4.0.tgz>))
+((<rubycocoa-0.4.0.tgz|URL:http://www.imasy.or.jp/%7ehisa/mac/rubyosx/files/rubycocoa-0.4.0.tgz>))
 をダウンロードしてください。
 
 ((<「RubyCocoaをソースから構築・インストールする」|URL:build.ja.html>))
