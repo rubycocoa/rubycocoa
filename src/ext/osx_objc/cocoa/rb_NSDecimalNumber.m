@@ -12,28 +12,28 @@ static const int VA_MAX = 4;
 static VALUE
 osx_NSDecimalNumberExactnessException(VALUE mdl)
 {
-  rb_notimplement();
+  return nsresult_to_rbresult(_C_ID, &NSDecimalNumberExactnessException, nil);
 }
 
 // NSString * const NSDecimalNumberOverflowException;
 static VALUE
 osx_NSDecimalNumberOverflowException(VALUE mdl)
 {
-  rb_notimplement();
+  return nsresult_to_rbresult(_C_ID, &NSDecimalNumberOverflowException, nil);
 }
 
 // NSString * const NSDecimalNumberUnderflowException;
 static VALUE
 osx_NSDecimalNumberUnderflowException(VALUE mdl)
 {
-  rb_notimplement();
+  return nsresult_to_rbresult(_C_ID, &NSDecimalNumberUnderflowException, nil);
 }
 
 // NSString * const NSDecimalNumberDivideByZeroException;
 static VALUE
 osx_NSDecimalNumberDivideByZeroException(VALUE mdl)
 {
-  rb_notimplement();
+  return nsresult_to_rbresult(_C_ID, &NSDecimalNumberDivideByZeroException, nil);
 }
 
 void init_NSDecimalNumber(VALUE mOSX)

@@ -12,7 +12,7 @@ static const int VA_MAX = 4;
 static VALUE
 osx_NSPortDidBecomeInvalidNotification(VALUE mdl)
 {
-  rb_notimplement();
+  return nsresult_to_rbresult(_C_ID, &NSPortDidBecomeInvalidNotification, nil);
 }
 
 void init_NSPort(VALUE mOSX)

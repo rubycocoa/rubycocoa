@@ -12,7 +12,7 @@ static const int VA_MAX = 4;
 static VALUE
 osx_NSLocalNotificationCenterType(VALUE mdl)
 {
-  rb_notimplement();
+  return nsresult_to_rbresult(_C_ID, &NSLocalNotificationCenterType, nil);
 }
 
 void init_NSDistributedNotificationCenter(VALUE mOSX)

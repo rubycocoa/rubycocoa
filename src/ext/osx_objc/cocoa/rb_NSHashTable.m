@@ -318,7 +318,20 @@ osx_NSEndHashTableEnumeration(VALUE mdl, VALUE a0)
 static VALUE
 osx_NSCountHashTable(VALUE mdl, VALUE a0)
 {
-  rb_notimplement();
+  unsigned ns_result;
+
+  NSHashTable * ns_a0;
+
+  VALUE rb_result;
+  id pool = [[NSAutoreleasePool alloc] init];
+  /* a0 */
+  rbarg_to_nsarg(a0, _C_PTR, &ns_a0, pool, 0);
+
+  ns_result = NSCountHashTable(ns_a0);
+
+  rb_result = nsresult_to_rbresult(_C_UINT, &ns_result, pool);
+  [pool release];
+  return rb_result;
 }
 
 // NSString *NSStringFromHashTable(NSHashTable *table);

@@ -12,98 +12,98 @@ static const int VA_MAX = 4;
 static VALUE
 osx_NSGenericException(VALUE mdl)
 {
-  rb_notimplement();
+  return nsresult_to_rbresult(_C_ID, &NSGenericException, nil);
 }
 
 // NSString * __const NSRangeException;
 static VALUE
 osx_NSRangeException(VALUE mdl)
 {
-  rb_notimplement();
+  return nsresult_to_rbresult(_C_ID, &NSRangeException, nil);
 }
 
 // NSString * __const NSInvalidArgumentException;
 static VALUE
 osx_NSInvalidArgumentException(VALUE mdl)
 {
-  rb_notimplement();
+  return nsresult_to_rbresult(_C_ID, &NSInvalidArgumentException, nil);
 }
 
 // NSString * __const NSInternalInconsistencyException;
 static VALUE
 osx_NSInternalInconsistencyException(VALUE mdl)
 {
-  rb_notimplement();
+  return nsresult_to_rbresult(_C_ID, &NSInternalInconsistencyException, nil);
 }
 
 // NSString * __const NSMallocException;
 static VALUE
 osx_NSMallocException(VALUE mdl)
 {
-  rb_notimplement();
+  return nsresult_to_rbresult(_C_ID, &NSMallocException, nil);
 }
 
 // NSString * __const NSObjectInaccessibleException;
 static VALUE
 osx_NSObjectInaccessibleException(VALUE mdl)
 {
-  rb_notimplement();
+  return nsresult_to_rbresult(_C_ID, &NSObjectInaccessibleException, nil);
 }
 
 // NSString * __const NSObjectNotAvailableException;
 static VALUE
 osx_NSObjectNotAvailableException(VALUE mdl)
 {
-  rb_notimplement();
+  return nsresult_to_rbresult(_C_ID, &NSObjectNotAvailableException, nil);
 }
 
 // NSString * __const NSDestinationInvalidException;
 static VALUE
 osx_NSDestinationInvalidException(VALUE mdl)
 {
-  rb_notimplement();
+  return nsresult_to_rbresult(_C_ID, &NSDestinationInvalidException, nil);
 }
 
 // NSString * __const NSPortTimeoutException;
 static VALUE
 osx_NSPortTimeoutException(VALUE mdl)
 {
-  rb_notimplement();
+  return nsresult_to_rbresult(_C_ID, &NSPortTimeoutException, nil);
 }
 
 // NSString * __const NSInvalidSendPortException;
 static VALUE
 osx_NSInvalidSendPortException(VALUE mdl)
 {
-  rb_notimplement();
+  return nsresult_to_rbresult(_C_ID, &NSInvalidSendPortException, nil);
 }
 
 // NSString * __const NSInvalidReceivePortException;
 static VALUE
 osx_NSInvalidReceivePortException(VALUE mdl)
 {
-  rb_notimplement();
+  return nsresult_to_rbresult(_C_ID, &NSInvalidReceivePortException, nil);
 }
 
 // NSString * __const NSPortSendException;
 static VALUE
 osx_NSPortSendException(VALUE mdl)
 {
-  rb_notimplement();
+  return nsresult_to_rbresult(_C_ID, &NSPortSendException, nil);
 }
 
 // NSString * __const NSPortReceiveException;
 static VALUE
 osx_NSPortReceiveException(VALUE mdl)
 {
-  rb_notimplement();
+  return nsresult_to_rbresult(_C_ID, &NSPortReceiveException, nil);
 }
 
 // NSString * __const NSOldStyleException;
 static VALUE
 osx_NSOldStyleException(VALUE mdl)
 {
-  rb_notimplement();
+  return nsresult_to_rbresult(_C_ID, &NSOldStyleException, nil);
 }
 
   /**** functions ****/

@@ -12,21 +12,21 @@ static const int VA_MAX = 4;
 static VALUE
 osx_NSZeroPoint(VALUE mdl)
 {
-  rb_notimplement();
+  return nsresult_to_rbresult(_PRIV_C_NSPOINT, &NSZeroPoint, nil);
 }
 
 // const NSSize NSZeroSize;
 static VALUE
 osx_NSZeroSize(VALUE mdl)
 {
-  rb_notimplement();
+  return nsresult_to_rbresult(_PRIV_C_NSSIZE, &NSZeroSize, nil);
 }
 
 // const NSRect NSZeroRect;
 static VALUE
 osx_NSZeroRect(VALUE mdl)
 {
-  rb_notimplement();
+  return nsresult_to_rbresult(_PRIV_C_NSRECT, &NSZeroRect, nil);
 }
 
   /**** functions ****/

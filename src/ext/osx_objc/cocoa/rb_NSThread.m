@@ -12,21 +12,21 @@ static const int VA_MAX = 4;
 static VALUE
 osx_NSWillBecomeMultiThreadedNotification(VALUE mdl)
 {
-  rb_notimplement();
+  return nsresult_to_rbresult(_C_ID, &NSWillBecomeMultiThreadedNotification, nil);
 }
 
 // NSString * const NSDidBecomeSingleThreadedNotification;
 static VALUE
 osx_NSDidBecomeSingleThreadedNotification(VALUE mdl)
 {
-  rb_notimplement();
+  return nsresult_to_rbresult(_C_ID, &NSDidBecomeSingleThreadedNotification, nil);
 }
 
 // NSString * const NSThreadWillExitNotification;
 static VALUE
 osx_NSThreadWillExitNotification(VALUE mdl)
 {
-  rb_notimplement();
+  return nsresult_to_rbresult(_C_ID, &NSThreadWillExitNotification, nil);
 }
 
 void init_NSThread(VALUE mOSX)

@@ -12,77 +12,77 @@ static const int VA_MAX = 4;
 static VALUE
 osx_NSJavaClasses(VALUE mdl)
 {
-  rb_notimplement();
+  return nsresult_to_rbresult(_C_ID, &NSJavaClasses, nil);
 }
 
 // NSString * const NSJavaRoot;
 static VALUE
 osx_NSJavaRoot(VALUE mdl)
 {
-  rb_notimplement();
+  return nsresult_to_rbresult(_C_ID, &NSJavaRoot, nil);
 }
 
 // NSString * const NSJavaPath;
 static VALUE
 osx_NSJavaPath(VALUE mdl)
 {
-  rb_notimplement();
+  return nsresult_to_rbresult(_C_ID, &NSJavaPath, nil);
 }
 
 // NSString * const NSJavaUserPath;
 static VALUE
 osx_NSJavaUserPath(VALUE mdl)
 {
-  rb_notimplement();
+  return nsresult_to_rbresult(_C_ID, &NSJavaUserPath, nil);
 }
 
 // NSString * const NSJavaLibraryPath;
 static VALUE
 osx_NSJavaLibraryPath(VALUE mdl)
 {
-  rb_notimplement();
+  return nsresult_to_rbresult(_C_ID, &NSJavaLibraryPath, nil);
 }
 
 // NSString * const NSJavaOwnVirtualMachine;
 static VALUE
 osx_NSJavaOwnVirtualMachine(VALUE mdl)
 {
-  rb_notimplement();
+  return nsresult_to_rbresult(_C_ID, &NSJavaOwnVirtualMachine, nil);
 }
 
 // NSString * const NSJavaPathSeparator;
 static VALUE
 osx_NSJavaPathSeparator(VALUE mdl)
 {
-  rb_notimplement();
+  return nsresult_to_rbresult(_C_ID, &NSJavaPathSeparator, nil);
 }
 
 // NSString * const NSJavaWillSetupVirtualMachineNotification;
 static VALUE
 osx_NSJavaWillSetupVirtualMachineNotification(VALUE mdl)
 {
-  rb_notimplement();
+  return nsresult_to_rbresult(_C_ID, &NSJavaWillSetupVirtualMachineNotification, nil);
 }
 
 // NSString * const NSJavaDidSetupVirtualMachineNotification;
 static VALUE
 osx_NSJavaDidSetupVirtualMachineNotification(VALUE mdl)
 {
-  rb_notimplement();
+  return nsresult_to_rbresult(_C_ID, &NSJavaDidSetupVirtualMachineNotification, nil);
 }
 
 // NSString * const NSJavaWillCreateVirtualMachineNotification;
 static VALUE
 osx_NSJavaWillCreateVirtualMachineNotification(VALUE mdl)
 {
-  rb_notimplement();
+  return nsresult_to_rbresult(_C_ID, &NSJavaWillCreateVirtualMachineNotification, nil);
 }
 
 // NSString * const NSJavaDidCreateVirtualMachineNotification;
 static VALUE
 osx_NSJavaDidCreateVirtualMachineNotification(VALUE mdl)
 {
-  rb_notimplement();
+  return nsresult_to_rbresult(_C_ID, &NSJavaDidCreateVirtualMachineNotification, nil);
 }
 
   /**** functions ****/

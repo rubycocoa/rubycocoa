@@ -12,7 +12,7 @@ static const int VA_MAX = 4;
 static VALUE
 osx_NSTaskDidTerminateNotification(VALUE mdl)
 {
-  rb_notimplement();
+  return nsresult_to_rbresult(_C_ID, &NSTaskDidTerminateNotification, nil);
 }
 
 void init_NSTask(VALUE mOSX)

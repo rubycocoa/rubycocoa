@@ -82,28 +82,28 @@ osx_NSCustomColorSpace(VALUE mdl)
 static VALUE
 osx_NSWhite(VALUE mdl)
 {
-  rb_notimplement();
+  return nsresult_to_rbresult(_C_FLT, &NSWhite, nil);
 }
 
 // const float NSLightGray;
 static VALUE
 osx_NSLightGray(VALUE mdl)
 {
-  rb_notimplement();
+  return nsresult_to_rbresult(_C_FLT, &NSLightGray, nil);
 }
 
 // const float NSDarkGray;
 static VALUE
 osx_NSDarkGray(VALUE mdl)
 {
-  rb_notimplement();
+  return nsresult_to_rbresult(_C_FLT, &NSDarkGray, nil);
 }
 
 // const float NSBlack;
 static VALUE
 osx_NSBlack(VALUE mdl)
 {
-  rb_notimplement();
+  return nsresult_to_rbresult(_C_FLT, &NSBlack, nil);
 }
 
 // NSString *NSDeviceResolution;

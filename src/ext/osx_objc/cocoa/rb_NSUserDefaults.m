@@ -12,210 +12,210 @@ static const int VA_MAX = 4;
 static VALUE
 osx_NSGlobalDomain(VALUE mdl)
 {
-  rb_notimplement();
+  return nsresult_to_rbresult(_C_ID, &NSGlobalDomain, nil);
 }
 
 // NSString * const NSArgumentDomain;
 static VALUE
 osx_NSArgumentDomain(VALUE mdl)
 {
-  rb_notimplement();
+  return nsresult_to_rbresult(_C_ID, &NSArgumentDomain, nil);
 }
 
 // NSString * const NSRegistrationDomain;
 static VALUE
 osx_NSRegistrationDomain(VALUE mdl)
 {
-  rb_notimplement();
+  return nsresult_to_rbresult(_C_ID, &NSRegistrationDomain, nil);
 }
 
 // NSString * const NSUserDefaultsDidChangeNotification;
 static VALUE
 osx_NSUserDefaultsDidChangeNotification(VALUE mdl)
 {
-  rb_notimplement();
+  return nsresult_to_rbresult(_C_ID, &NSUserDefaultsDidChangeNotification, nil);
 }
 
 // NSString * const NSWeekDayNameArray;
 static VALUE
 osx_NSWeekDayNameArray(VALUE mdl)
 {
-  rb_notimplement();
+  return nsresult_to_rbresult(_C_ID, &NSWeekDayNameArray, nil);
 }
 
 // NSString * const NSShortWeekDayNameArray;
 static VALUE
 osx_NSShortWeekDayNameArray(VALUE mdl)
 {
-  rb_notimplement();
+  return nsresult_to_rbresult(_C_ID, &NSShortWeekDayNameArray, nil);
 }
 
 // NSString * const NSMonthNameArray;
 static VALUE
 osx_NSMonthNameArray(VALUE mdl)
 {
-  rb_notimplement();
+  return nsresult_to_rbresult(_C_ID, &NSMonthNameArray, nil);
 }
 
 // NSString * const NSShortMonthNameArray;
 static VALUE
 osx_NSShortMonthNameArray(VALUE mdl)
 {
-  rb_notimplement();
+  return nsresult_to_rbresult(_C_ID, &NSShortMonthNameArray, nil);
 }
 
 // NSString * const NSTimeFormatString;
 static VALUE
 osx_NSTimeFormatString(VALUE mdl)
 {
-  rb_notimplement();
+  return nsresult_to_rbresult(_C_ID, &NSTimeFormatString, nil);
 }
 
 // NSString * const NSDateFormatString;
 static VALUE
 osx_NSDateFormatString(VALUE mdl)
 {
-  rb_notimplement();
+  return nsresult_to_rbresult(_C_ID, &NSDateFormatString, nil);
 }
 
 // NSString * const NSTimeDateFormatString;
 static VALUE
 osx_NSTimeDateFormatString(VALUE mdl)
 {
-  rb_notimplement();
+  return nsresult_to_rbresult(_C_ID, &NSTimeDateFormatString, nil);
 }
 
 // NSString * const NSShortTimeDateFormatString;
 static VALUE
 osx_NSShortTimeDateFormatString(VALUE mdl)
 {
-  rb_notimplement();
+  return nsresult_to_rbresult(_C_ID, &NSShortTimeDateFormatString, nil);
 }
 
 // NSString * const NSCurrencySymbol;
 static VALUE
 osx_NSCurrencySymbol(VALUE mdl)
 {
-  rb_notimplement();
+  return nsresult_to_rbresult(_C_ID, &NSCurrencySymbol, nil);
 }
 
 // NSString * const NSDecimalSeparator;
 static VALUE
 osx_NSDecimalSeparator(VALUE mdl)
 {
-  rb_notimplement();
+  return nsresult_to_rbresult(_C_ID, &NSDecimalSeparator, nil);
 }
 
 // NSString * const NSThousandsSeparator;
 static VALUE
 osx_NSThousandsSeparator(VALUE mdl)
 {
-  rb_notimplement();
+  return nsresult_to_rbresult(_C_ID, &NSThousandsSeparator, nil);
 }
 
 // NSString * const NSDecimalDigits;
 static VALUE
 osx_NSDecimalDigits(VALUE mdl)
 {
-  rb_notimplement();
+  return nsresult_to_rbresult(_C_ID, &NSDecimalDigits, nil);
 }
 
 // NSString * const NSAMPMDesignation;
 static VALUE
 osx_NSAMPMDesignation(VALUE mdl)
 {
-  rb_notimplement();
+  return nsresult_to_rbresult(_C_ID, &NSAMPMDesignation, nil);
 }
 
 // NSString * const NSHourNameDesignations;
 static VALUE
 osx_NSHourNameDesignations(VALUE mdl)
 {
-  rb_notimplement();
+  return nsresult_to_rbresult(_C_ID, &NSHourNameDesignations, nil);
 }
 
 // NSString * const NSYearMonthWeekDesignations;
 static VALUE
 osx_NSYearMonthWeekDesignations(VALUE mdl)
 {
-  rb_notimplement();
+  return nsresult_to_rbresult(_C_ID, &NSYearMonthWeekDesignations, nil);
 }
 
 // NSString * const NSEarlierTimeDesignations;
 static VALUE
 osx_NSEarlierTimeDesignations(VALUE mdl)
 {
-  rb_notimplement();
+  return nsresult_to_rbresult(_C_ID, &NSEarlierTimeDesignations, nil);
 }
 
 // NSString * const NSLaterTimeDesignations;
 static VALUE
 osx_NSLaterTimeDesignations(VALUE mdl)
 {
-  rb_notimplement();
+  return nsresult_to_rbresult(_C_ID, &NSLaterTimeDesignations, nil);
 }
 
 // NSString * const NSThisDayDesignations;
 static VALUE
 osx_NSThisDayDesignations(VALUE mdl)
 {
-  rb_notimplement();
+  return nsresult_to_rbresult(_C_ID, &NSThisDayDesignations, nil);
 }
 
 // NSString * const NSNextDayDesignations;
 static VALUE
 osx_NSNextDayDesignations(VALUE mdl)
 {
-  rb_notimplement();
+  return nsresult_to_rbresult(_C_ID, &NSNextDayDesignations, nil);
 }
 
 // NSString * const NSNextNextDayDesignations;
 static VALUE
 osx_NSNextNextDayDesignations(VALUE mdl)
 {
-  rb_notimplement();
+  return nsresult_to_rbresult(_C_ID, &NSNextNextDayDesignations, nil);
 }
 
 // NSString * const NSPriorDayDesignations;
 static VALUE
 osx_NSPriorDayDesignations(VALUE mdl)
 {
-  rb_notimplement();
+  return nsresult_to_rbresult(_C_ID, &NSPriorDayDesignations, nil);
 }
 
 // NSString * const NSDateTimeOrdering;
 static VALUE
 osx_NSDateTimeOrdering(VALUE mdl)
 {
-  rb_notimplement();
+  return nsresult_to_rbresult(_C_ID, &NSDateTimeOrdering, nil);
 }
 
 // NSString * const NSInternationalCurrencyString;
 static VALUE
 osx_NSInternationalCurrencyString(VALUE mdl)
 {
-  rb_notimplement();
+  return nsresult_to_rbresult(_C_ID, &NSInternationalCurrencyString, nil);
 }
 
 // NSString * const NSShortDateFormatString;
 static VALUE
 osx_NSShortDateFormatString(VALUE mdl)
 {
-  rb_notimplement();
+  return nsresult_to_rbresult(_C_ID, &NSShortDateFormatString, nil);
 }
 
 // NSString * const NSPositiveCurrencyFormatString;
 static VALUE
 osx_NSPositiveCurrencyFormatString(VALUE mdl)
 {
-  rb_notimplement();
+  return nsresult_to_rbresult(_C_ID, &NSPositiveCurrencyFormatString, nil);
 }
 
 // NSString * const NSNegativeCurrencyFormatString;
 static VALUE
 osx_NSNegativeCurrencyFormatString(VALUE mdl)
 {
-  rb_notimplement();
+  return nsresult_to_rbresult(_C_ID, &NSNegativeCurrencyFormatString, nil);
 }
 
 void init_NSUserDefaults(VALUE mOSX)

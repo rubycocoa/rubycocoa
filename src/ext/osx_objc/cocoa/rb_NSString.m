@@ -12,14 +12,14 @@ static const int VA_MAX = 4;
 static VALUE
 osx_NSParseErrorException(VALUE mdl)
 {
-  rb_notimplement();
+  return nsresult_to_rbresult(_C_ID, &NSParseErrorException, nil);
 }
 
 // NSString * const NSCharacterConversionException;
 static VALUE
 osx_NSCharacterConversionException(VALUE mdl)
 {
-  rb_notimplement();
+  return nsresult_to_rbresult(_C_ID, &NSCharacterConversionException, nil);
 }
 
 void init_NSString(VALUE mOSX)

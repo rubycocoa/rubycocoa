@@ -12,49 +12,49 @@ static const int VA_MAX = 4;
 static VALUE
 osx_NSUndoManagerCheckpointNotification(VALUE mdl)
 {
-  rb_notimplement();
+  return nsresult_to_rbresult(_C_ID, &NSUndoManagerCheckpointNotification, nil);
 }
 
 // NSString * const NSUndoManagerWillUndoChangeNotification;
 static VALUE
 osx_NSUndoManagerWillUndoChangeNotification(VALUE mdl)
 {
-  rb_notimplement();
+  return nsresult_to_rbresult(_C_ID, &NSUndoManagerWillUndoChangeNotification, nil);
 }
 
 // NSString * const NSUndoManagerWillRedoChangeNotification;
 static VALUE
 osx_NSUndoManagerWillRedoChangeNotification(VALUE mdl)
 {
-  rb_notimplement();
+  return nsresult_to_rbresult(_C_ID, &NSUndoManagerWillRedoChangeNotification, nil);
 }
 
 // NSString * const NSUndoManagerDidUndoChangeNotification;
 static VALUE
 osx_NSUndoManagerDidUndoChangeNotification(VALUE mdl)
 {
-  rb_notimplement();
+  return nsresult_to_rbresult(_C_ID, &NSUndoManagerDidUndoChangeNotification, nil);
 }
 
 // NSString * const NSUndoManagerDidRedoChangeNotification;
 static VALUE
 osx_NSUndoManagerDidRedoChangeNotification(VALUE mdl)
 {
-  rb_notimplement();
+  return nsresult_to_rbresult(_C_ID, &NSUndoManagerDidRedoChangeNotification, nil);
 }
 
 // NSString * const NSUndoManagerDidOpenUndoGroupNotification;
 static VALUE
 osx_NSUndoManagerDidOpenUndoGroupNotification(VALUE mdl)
 {
-  rb_notimplement();
+  return nsresult_to_rbresult(_C_ID, &NSUndoManagerDidOpenUndoGroupNotification, nil);
 }
 
 // NSString * const NSUndoManagerWillCloseUndoGroupNotification;
 static VALUE
 osx_NSUndoManagerWillCloseUndoGroupNotification(VALUE mdl)
 {
-  rb_notimplement();
+  return nsresult_to_rbresult(_C_ID, &NSUndoManagerWillCloseUndoGroupNotification, nil);
 }
 
 void init_NSUndoManager(VALUE mOSX)
