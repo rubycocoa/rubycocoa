@@ -168,6 +168,8 @@ static int argc_of(SEL a_sel)
 /** public methods **/
 /********************/
 
+- (unsigned long) __rbobj__ { return rbobj; }
+
 + rubyObjectWithOCObject: (id)a_ocobj
 {
   id pool = [[NSAutoreleasePool alloc] init];
