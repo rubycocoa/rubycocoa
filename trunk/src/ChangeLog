@@ -1,3 +1,18 @@
+2003-08-09  FUJIMOTO Hisakuni  <hisa@fobj.com>
+
+	* tests/tc_nsdata.rb:
+	suppress the warning "parenthesize argument(s) for future version".
+
+	* framework/src/ruby/osx/objc/oc_types.rb, framework/src/objc/ocdata_conv.m:
+	Fix an inconvenient issue for that Range#length was obsoleted in ruby 1.8.
+
+2003-08-04  FUJIMOTO Hisakuni  <hisa@fobj.com>
+
+	* metaconfig:
+	To suppress warning, remove spaces between method name and argument list.
+
+	* install.rb: specify false to parameter of Module#instance_methods
+
 2003-07-28  FUJIMOTO Hisakuni  <hisa@fobj.com>
 
 	* framework/src/objc/RBSlaveObject.h.in, framework/src/objc/RBSlaveObject.m:
