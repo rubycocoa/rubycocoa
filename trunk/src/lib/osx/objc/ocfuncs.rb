@@ -12,7 +12,7 @@ require 'osx_objc'
 
 module OSX
 
-  module OCStubCreator
+  module OCStubAttachment
 
     def ns_overrides(*args)
       class_name = self.to_s
@@ -28,9 +28,6 @@ module OSX
     # for look and feel
     alias_method :ib_overrides, :ns_overrides
     alias_method :ib_outlets,   :ns_outlets
-
-    # for backword compatibility (<= 0.1.1)
-    alias_method :derived_methods, :ns_overrides
 
   end
 
@@ -48,7 +45,7 @@ module OSX
       cls_name = kls.name.split('::')[-1]
       occls = OSX.objc_derived_class_new (cls_name, spr_name)
       kls.instance_eval "@ocid = #{occls.__ocid__}"
-      kls.extend OCStubCreator
+      kls.extend OCStubAttachment
     end
 
     klass
