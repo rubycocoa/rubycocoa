@@ -121,7 +121,7 @@ please check "((<Notice for build of RubyCocoa 0.4.0 to Ruby 1.6.8>))".
 == Unit Test for RubyCocoa
 
   $ cd {source}/tests
-  $ DYLD_FRAMEWORK_PATH={source}/framework/build ruby -I../lib testall.rb
+  $ DYLD_FRAMEWORK_PATH={source}/framework/build ruby -I../lib -I../ext/rubycocoa testall.rb
 
 Test::Unit is required for unit tests.  This process is optional.
 
