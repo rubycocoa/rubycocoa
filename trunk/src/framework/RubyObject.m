@@ -19,19 +19,24 @@
 
 #define OCID2NUM(val) UINT2NUM((VALUE)(val))
 
-#define DEBUGLOG
+// debug message
+#define DLOG0(f)          if (ruby_debug == Qtrue) debug_log((f))
+#define DLOG1(f,a1)       if (ruby_debug == Qtrue) debug_log((f),(a1))
+#define DLOG2(f,a1,a2)    if (ruby_debug == Qtrue) debug_log((f),(a1),(a2))
+#define DLOG3(f,a1,a2,a3) if (ruby_debug == Qtrue) debug_log((f),(a1),(a2),(a3))
 
-#ifdef DEBUGLOG
-#  define DLOG(f)            if (ruby_debug == Qtrue) NSLog((f))
-#  define DLOG1(f,a0)        if (ruby_debug == Qtrue) NSLog((f),(a0))
-#  define DLOG2(f,a0,a1)     if (ruby_debug == Qtrue) NSLog((f),(a0),(a1))
-#  define DLOG3(f,a0,a1,a2)  if (ruby_debug == Qtrue) NSLog((f),(a0),(a1),(a2))
-#else
-#  define DLOG(f)
-#  define DLOG1(f,a0)
-#  define DLOG2(f,a0,a1)
-#  define DLOG3(f,a0,a1,a2)
-#endif
+static void debug_log(const char* fmt,...)
+{
+  if (ruby_debug == Qtrue) {
+    id pool = [[NSAutoreleasePool alloc] init];
+    NSString* nsfmt = [NSString stringWithFormat: @"RBOBJ:%s", fmt];
+    va_list args;
+    va_start(args, fmt);
+    NSLogv(nsfmt, args);
+    va_end(args);
+    [pool release];
+  }
+}
 
 static VALUE ocobject_class()
 {
@@ -41,8 +46,15 @@ static VALUE ocobject_class()
 
 static VALUE to_rbobj(id ocobj)
 {
-  VALUE cOCObject = ocobject_class();
-  return rb_funcall(cOCObject, rb_intern("new_with_ocid"), 1, OCID2NUM(ocobj));
+  VALUE ret = Qnil;
+  if (![ocobj isKindOfClass: [RubyObject class]]) {
+    VALUE cOCObject = ocobject_class();
+    ret = rb_funcall(cOCObject, rb_intern("new_with_ocid"), 1, OCID2NUM(ocobj));
+  }
+  else {
+    ret = [ocobj __rbobj__];
+  }
+  return ret;
 }
 
 static id to_nsobj(VALUE rbobj)
@@ -86,6 +98,20 @@ static int argc_of(SEL a_sel)
   return argc;
 }
 
+static SEL ruby_method_sel(int argc)
+{
+  SEL result;
+  id pool = [[NSAutoreleasePool alloc] init];
+  NSString* s = [@"ruby_method_" stringByAppendingFormat: @"%d", argc];
+  int i;
+  for (i = 0; i < argc; i++) {
+    s = [s stringByAppendingString: @":"];
+  }
+  result = NSSelectorFromString(s);
+  [pool release];
+  return result;
+}
+
 @implementation RubyObject
 
 /*********************/
@@ -100,12 +126,7 @@ static int argc_of(SEL a_sel)
     if (msig == nil) {
       // as Observer
       int argc = argc_of(a_sel);
-      if (argc == 0)
-	msig = [dummy methodSignatureForSelector: @selector(ruby_method_0)];
-      else if (argc == 1)
-	msig = [dummy methodSignatureForSelector: @selector(ruby_method_1:)];
-      else if (argc >= 2)
-	msig = [dummy methodSignatureForSelector: @selector(ruby_method_2:)];
+      msig = [dummy methodSignatureForSelector: ruby_method_sel(argc)];
     }
     return msig;
   }
@@ -260,7 +281,7 @@ static int argc_of(SEL a_sel)
 
 - (BOOL) respondsToSelector: (SEL)a_sel
 {
-  DLOG1(@"== respondsToSelector(%@)", NSStringFromSelector(a_sel));
+  DLOG1("respondsToSelector(%@)", NSStringFromSelector(a_sel));
   if ([self hasObjcHandlerForSelector: a_sel]) return YES;
   return [self hasRubyHandlerForSelector: a_sel];
 }
@@ -270,12 +291,16 @@ static int argc_of(SEL a_sel)
   NSMethodSignature* msig;
   msig = [super methodSignatureForSelector: a_sel];
   if (msig == nil) msig = [self msigForRubyMethod: a_sel];
+  if (ruby_debug == Qtrue) {
+    DLOG1("methodSignatureForSelector(%@)", NSStringFromSelector(a_sel));
+    DLOG1("    -> %@", msig);
+  }
   return msig;
 }
 
 - performSelector: (SEL)a_sel
 {
-  DLOG1(@"== performSelector:%@", NSStringFromSelector(a_sel));
+  DLOG1("performSelector:%@", NSStringFromSelector(a_sel));
   if ([self hasObjcHandlerForSelector: a_sel]) {
     return [super performSelector: a_sel];
   }
@@ -291,7 +316,7 @@ static int argc_of(SEL a_sel)
 
 - performSelector: (SEL)a_sel withObject: arg0
 {
-  DLOG1(@"== performSelector:%@:", NSStringFromSelector(a_sel));
+  DLOG1("performSelector:%@:", NSStringFromSelector(a_sel));
   if ([self hasObjcHandlerForSelector: a_sel]) {
     return [super performSelector: a_sel];
   }
@@ -307,7 +332,7 @@ static int argc_of(SEL a_sel)
 
 - performSelector: (SEL)a_sel withObject: arg0 withObject: arg1
 {
-  DLOG1(@"== performSelector:%@::", NSStringFromSelector(a_sel));
+  DLOG1("performSelector:%@::", NSStringFromSelector(a_sel));
   if ([self hasObjcHandlerForSelector: a_sel]) {
     return [super performSelector: a_sel];
   }
@@ -324,7 +349,7 @@ static int argc_of(SEL a_sel)
 - (void) forwardInvocation: (NSInvocation *)an_inv
 {
   SEL a_sel = [an_inv selector];
-  DLOG1(@"== forwardInvocation(%@)", an_inv);
+  DLOG1("forwardInvocation(%@)", an_inv);
   if ([self hasObjcHandlerForSelector: a_sel]) {
     [super forwardInvocation: an_inv];
   }

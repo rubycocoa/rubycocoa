@@ -34,7 +34,10 @@ static DummyProtocolHandler* the_instance = nil;
 // other
 - ruby_method_0 { return nil; }
 - ruby_method_1:a1 { return nil; }
-- ruby_method_2:a1,... { return nil; }
+- ruby_method_2:a1 :a2 { return nil; }
+- ruby_method_3:a1 :a2 :a3 { return nil; }
+- ruby_method_4:a1 :a2 :a3 :a4 { return nil; }
+- ruby_method_5:a1 :a2 :a3 :a4 :a5 { return nil; }
 
 // as Observer
 - (void)receiveNotification: (NSNotification *)notification {}
@@ -143,6 +146,22 @@ static DummyProtocolHandler* the_instance = nil;
 - (BOOL)outlineView:(NSOutlineView *)outlineView shouldExpandItem:(id)item { return NO; }
 - (BOOL)outlineView:(NSOutlineView *)outlineView shouldCollapseItem:(id)item { return NO; }
 - (void)outlineView:(NSOutlineView *)outlineView willDisplayOutlineCell:(id)cell forTableColumn:(NSTableColumn *)tableColumn item:(id)item {}
+
+// @interface NSObject(NSOutlineViewDataSource)
+// required
+- (id)outlineView:(NSOutlineView *)outlineView child:(int)index ofItem:(id)item { return nil; }
+- (BOOL)outlineView:(NSOutlineView *)outlineView isItemExpandable:(id)item { return NO; }
+- (int)outlineView:(NSOutlineView *)outlineView numberOfChildrenOfItem:(id)item { return 0; }
+- (id)outlineView:(NSOutlineView *)outlineView objectValueForTableColumn:(NSTableColumn *)tableColumn byItem:(id)item { return nil; }
+// optional
+- (void)outlineView:(NSOutlineView *)outlineView setObjectValue:(id)object forTableColumn:(NSTableColumn *)tableColumn byItem:(id)item {}
+- (id)outlineView:(NSOutlineView *)outlineView itemForPersistentObject:(id)object { return nil; }
+- (id)outlineView:(NSOutlineView *)outlineView persistentObjectForItem:(id)item { return nil; }
+// optional - drag and drop support
+- (BOOL)outlineView:(NSOutlineView *)olv writeItems:(NSArray*)items toPasteboard:(NSPasteboard*)pboard { return NO; }
+- (NSDragOperation)outlineView:(NSOutlineView*)olv validateDrop:(id <NSDraggingInfo>)info proposedItem:(id)item proposedChildIndex:(int)index { return 0; }
+- (BOOL)outlineView:(NSOutlineView*)olv acceptDrop:(id <NSDraggingInfo>)info item:(id)item childIndex:(int)index { return NO; }
+
 
 // @interface NSObject(NSSavePanelDelegate)
 - (NSString *)panel:(id)sender userEnteredFilename:(NSString *)filename confirmed:(BOOL)okFlag { return nil; }

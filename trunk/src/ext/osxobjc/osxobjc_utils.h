@@ -13,9 +13,7 @@
 #ifndef _RB_OSXOBJC_UTILS_H_
 #define _RB_OSXOBJC_UTILS_H_
 
-#import <Foundation/NSObjCRuntime.h>
-
 // debug message
-void debug_log(id fmt,...);
+void debug_log(const char* fmt,...);
 
 #endif /* _RB_OSXOBJC_UTILS_H_ */

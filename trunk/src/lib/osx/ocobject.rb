@@ -28,7 +28,6 @@ module OSX
       begin
 	val.to_f
       rescue NameError
-	$stderr.puts "#{val.inspect} cannot 'to_f'" if $DEBUG
 	0.0
       end
     end

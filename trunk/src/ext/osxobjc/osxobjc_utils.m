@@ -14,15 +14,19 @@
 
 #import <LibRuby/cocoa_ruby.h>
 #import <Foundation/NSString.h>
+#import <Foundation/NSAutoreleasePool.h>
 #import <stdarg.h>
 
 // debug message
-void debug_log(id fmt,...)
+void debug_log(const char* fmt,...)
 {
   if (ruby_debug == Qtrue) {
+    id pool = [[NSAutoreleasePool alloc] init];
+    NSString* nsfmt = [NSString stringWithFormat: @"OCOBJ:%s", fmt];
     va_list args;
     va_start(args, fmt);
-    NSLogv(fmt, args);
+    NSLogv(nsfmt, args);
     va_end(args);
+    [pool release];
   }
 }
