@@ -137,17 +137,39 @@ $ DYLD_FRAMEWORK_PATH={source}/framework/build ruby -I../lib testall.rb</pre>
 <pre>$ sudo ruby install.rb install</pre>
 <p>Installation is completion above. The following were installed:
 old procedure.</p>
-<ul>
-<li>/Library/Frameworks/RubyCocoa.framework     : framework (real)</li>
-<li>{sitedir}/{ruby_version}/osx/addressbook.rb : library (stub)</li>
-<li>{sitedir}/{ruby_version}/osx/appkit.rb      : library (stub)</li>
-<li>{sitedir}/{ruby_version}/osx/cocoa.rb       : library (stub)</li>
-<li>{sitedir}/{ruby_version}/osx/foundation.rb  : library  (stub)</li>
-<li>{sitearchdir}/rubycocoa.bundle              : extended library (stub)</li>
-</ul>
+<dl>
+<dt><a name='label:11' id='label:11'>/Library/Frameworks/RubyCocoa.framework</a></dt><!-- RDLabel: "/Library/Frameworks/RubyCocoa.framework" -->
+<dd>
+<p>RubyCocoa framework (real)</p>
+</dd>
+<dt><a name='label:12' id='label:12'>inside of /usr/lib/ruby/site_ruby/1.6/osx/</a></dt><!-- RDLabel: "inside of /usr/lib/ruby/site_ruby/1.6/osx/" -->
+<dd>
+<p>RubyCocoa library (stub)
+- addressbook.rb, appkit.rb, cocoa.rb, foundation.rb</p>
+</dd>
+<dt><a name='label:13' id='label:13'>/usr/lib/ruby/site_ruby/1.6/powerpc-darwin6.0/rubycocoa.bundle</a></dt><!-- RDLabel: "/usr/lib/ruby/site_ruby/1.6/powerpc-darwin6.0/rubycocoa.bundle" -->
+<dd>
+<p>RubyCocoa extended library (stub)</p>
+</dd>
+<dt><a name='label:14' id='label:14'>inside of '/Developer/ProjectBuilder Extras/'</a></dt><!-- RDLabel: "inside of '/Developer/ProjectBuilder Extras/'" -->
+<dd>
+<p>some templates for ProjectBuilder
+'File Templates/Ruby'
+'Project Templates/Application/Cocoa-Ruby Document-based Application'
+'Project Templates/Application/Cocoa-Ruby Application'</p>
+</dd>
+<dt><a name='label:15' id='label:15'>/Developer/Documentation/RubyCocoa</a></dt><!-- RDLabel: "/Developer/Documentation/RubyCocoa" -->
+<dd>
+<p>Documents (HTML)</p>
+</dd>
+<dt><a name='label:16' id='label:16'>/Developer/Examples/RubyCocoa</a></dt><!-- RDLabel: "/Developer/Examples/RubyCocoa" -->
+<dd>
+<p>sample programs</p>
+</dd>
+</dl>
 <p>After installation, let's try samples that are written by Ruby. Refer
 to <a href='trysamples.en.html'>'Try RubyCocoa Samples'</a>.</p>
-<h2><a name='label:11' id='label:11'>Development and testing environment</a></h2><!-- RDLabel: "Development and testing environment" -->
+<h2><a name='label:17' id='label:17'>Development and testing environment</a></h2><!-- RDLabel: "Development and testing environment" -->
 <ul>
 <li>PowerMacintosh G4/400/384MB or iBook G3/600/384MB</li>
 <li>Mac OS X 10.2.3</li>
@@ -155,7 +177,7 @@ to <a href='trysamples.en.html'>'Try RubyCocoa Samples'</a>.</p>
 <li>ruby-1.6.7 (pre-installed in Mac OS X 10.2)</li>
 <li>ruby-1.8 (preview 1 from cvs server)</li>
 </ul>
-<h2><a name='label:12' id='label:12'>Have a fun</a></h2><!-- RDLabel: "Have a fun" -->
+<h2><a name='label:18' id='label:18'>Have a fun</a></h2><!-- RDLabel: "Have a fun" -->
 <p>Feel free to send comments, bug reports and patches for RubyCocoa.</p>
 <p>$Date$</p>
 <hr/>

@@ -133,17 +133,41 @@ $ DYLD_FRAMEWORK_PATH={ソース}/framework/build ruby -I../lib testall.rb</pre>
 <pre>$ sudo ruby install.rb install</pre>
 <p>以上でインストールは完了です。ここまでの手順で以下のものがインストール
 されました。</p>
+<dl>
+<dt><a name='label:11' id='label:11'>/Library/Frameworks/RubyCocoa.framework</a></dt><!-- RDLabel: "/Library/Frameworks/RubyCocoa.framework" -->
+<dd>
+<p>RubyCocoaフレームワーク (本体)</p>
+</dd>
+<dt><a name='label:12' id='label:12'>/usr/lib/ruby/site_ruby/1.6/osx/ の中</a></dt><!-- RDLabel: "/usr/lib/ruby/site_ruby/1.6/osx/ の中" -->
+<dd>
+<p>RubyCocoaライブラリ (stub) 
+- addressbook.rb, appkit.rb, cocoa.rb, foundation.rb</p>
+</dd>
+<dt><a name='label:13' id='label:13'>/usr/lib/ruby/site_ruby/1.6/powerpc-darwin6.0/rubycocoa.bundle</a></dt><!-- RDLabel: "/usr/lib/ruby/site_ruby/1.6/powerpc-darwin6.0/rubycocoa.bundle" -->
+<dd>
+<p>RubyCocoa拡張ライブラリ (stub)</p>
+</dd>
+<dt><a name='label:14' id='label:14'>'/Developer/ProjectBuilder Extras/' の中</a></dt><!-- RDLabel: "'/Developer/ProjectBuilder Extras/' の中" -->
+<dd>
+<p>ProjectBuilderのテンプレート</p>
 <ul>
-<li>/Library/Frameworks/RubyCocoa.framework     : フレームワーク (本体)</li>
-<li>{sitedir}/{ruby_version}/osx/addressbook.rb : ライブラリ (stub)</li>
-<li>{sitedir}/{ruby_version}/osx/appkit.rb      : ライブラリ (stub)</li>
-<li>{sitedir}/{ruby_version}/osx/cocoa.rb       : ライブラリ (stub)</li>
-<li>{sitedir}/{ruby_version}/osx/foundation.rb  : ライブラリ (stub)</li>
-<li>{sitearchdir}/rubycocoa.bundle              : 拡張ライブラリ (stub)</li>
+<li>'File Templates/Ruby'</li>
+<li>'Project Templates/Application/Cocoa-Ruby Document-based Application'</li>
+<li>'Project Templates/Application/Cocoa-Ruby Application'</li>
 </ul>
+</dd>
+<dt><a name='label:15' id='label:15'>/Developer/Documentation/RubyCocoa</a></dt><!-- RDLabel: "/Developer/Documentation/RubyCocoa" -->
+<dd>
+<p>ドキュメント (HTML)</p>
+</dd>
+<dt><a name='label:16' id='label:16'>/Developer/Examples/RubyCocoa</a></dt><!-- RDLabel: "/Developer/Examples/RubyCocoa" -->
+<dd>
+<p>サンプルプログラム</p>
+</dd>
+</dl>
 <p><a href='trysamples.ja.html'>「付属サンプルを試してみる」</a> を参考に
 動作確認してみてください。</p>
-<h2><a name='label:11' id='label:11'>開発動作確認環境</a></h2><!-- RDLabel: "開発動作確認環境" -->
+<h2><a name='label:17' id='label:17'>開発動作確認環境</a></h2><!-- RDLabel: "開発動作確認環境" -->
 <p>以下の環境で開発動作確認をしています。</p>
 <ul>
 <li>PowerMacintosh G4/400/384MB or iBook G3/600/384MB</li>
@@ -152,7 +176,7 @@ $ DYLD_FRAMEWORK_PATH={ソース}/framework/build ruby -I../lib testall.rb</pre>
 <li>ruby-1.6.7 (pre-installed in Mac OS X 10.2)</li>
 <li>ruby-1.8 (preview 1 from cvs server)</li>
 </ul>
-<h2><a name='label:12' id='label:12'>ではお楽しみください</a></h2><!-- RDLabel: "ではお楽しみください" -->
+<h2><a name='label:18' id='label:18'>ではお楽しみください</a></h2><!-- RDLabel: "ではお楽しみください" -->
 <p>感想、アイデア、提案、疑問、質問などなんでも気軽に教えてください。</p>
 <p>$Date$</p>
 <hr/>
