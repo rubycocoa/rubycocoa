@@ -12,35 +12,34 @@
 <h1><a name="label:0" id="label:0">RubyCocoa FAQ</a></h1><!-- RDLabel: "RubyCocoa FAQ" -->
 <p>$Date$</p>
 <h2><a name="label:1" id="label:1">After Install</a></h2><!-- RDLabel: "After Install" -->
-<h3><a name="label:2" id="label:2">Q: I try to execute sample script, but error occured:</a></h3><!-- RDLabel: "Q: I try to execute sample script, but error occured:" -->
+<h3><a name="label:2" id="label:2">Q: I tried to execute a sample script, but I received the error:</a></h3><!-- RDLabel: "Q: I tried to execute a sample script, but I received the error:" -->
 <pre>% ruby fontnames.rb
 dyld: ruby Undefined symbols:
 _init_NSDistributedNotificationCenter
 _init_NSScriptStandardSuiteCommands</pre>
-<h4><a name="label:3" id="label:3">A: Do you use StuffIt when extracting a tgz file of RubyCocoa ?</a></h4><!-- RDLabel: "A: Do you use StuffIt when extracting a tgz file of RubyCocoa ?" -->
-<p>Using StuffIt, long file name to exceed 31 characters when I use
-SutffIt has been cut down. And building RubyCocoa was failed. You must
-use "tar" command on shell (Terminal application) when extracting the
-tgz file:</p>
+<h4><a name="label:3" id="label:3">A: Did you use StuffIt to extract tgz file of RubyCocoa?</a></h4><!-- RDLabel: "A: Did you use StuffIt to extract tgz file of RubyCocoa?" -->
+<p>Using StuffIt, file names that exceed 31 characters are cut down,
+causing the building of RubyCocoa to fail. You must use "tar" command
+in the shell (Termianl application) when extracting the .tgz file:</p>
 <pre>% tar zxf rubycocoa-0.1.0.tgz</pre>
-<p>And redo installing the RubyCocoa.</p>
+<p>And reinstall RubyCocoa.</p>
 <p>(thanks Shimura-san)</p>
-<h3><a name="label:4" id="label:4">Q: I look a warning on console when running a RubyCocoa application.</a></h3><!-- RDLabel: "Q: I look a warning on console when running a RubyCocoa application." -->
-<p>When running Cocoa application, sometimes warning message about memory
-allocation is appeared on Console: </p>
+<h3><a name="label:4" id="label:4">Q: I see a warning on the console when running a RubyCocoa application.</a></h3><!-- RDLabel: "Q: I see a warning on the console when running a RubyCocoa application." -->
+<p>When running a Cocoa application, sometimes a warning message about 
+memory allocation appears on the Console: </p>
 <pre>malloc[2461]: Deallocation of a pointer not malloced: 0x2718b20;
 This could be a double free(), or free() called with the middle of
 an allocated block; Try setting environment variable MallocHelp to
 see tools to help debug</pre>
-<h4><a name="label:5" id="label:5">A: It comes out cause unknown and is still unsolved. (2002-01-08)</a></h4><!-- RDLabel: "A: It comes out cause unknown and is still unsolved. (2002-01-08)" -->
+<h4><a name="label:5" id="label:5">A: The cause is unknown. (2002-01-08)</a></h4><!-- RDLabel: "A: The cause is unknown. (2002-01-08)" -->
 <p>Although I thought that this problem was solved by 0.1.2, it still
-occurs. If there is information which is likely to be consulted, such
-as "surely occurring by this pattern", please tell about.</p>
-<h3><a name="label:6" id="label:6">Q: Thread nothing seems to work properly.</a></h3><!-- RDLabel: "Q: Thread nothing seems to work properly." -->
+occurs. If there is a definite way to reproduce this, please contact
+me.</p>
+<h3><a name="label:6" id="label:6">Q: Thread seem not to work properly.</a></h3><!-- RDLabel: "Q: Thread seem not to work properly." -->
 <h4><a name="label:7" id="label:7">A: Do you use release 0.2.1 or later ?</a></h4><!-- RDLabel: "A: Do you use release 0.2.1 or later ?" -->
-<p>In release 0.2.1 or later, it's implemented the facility of using Ruby
-thread in a RubyCocoa application. For using Ruby thread in a
-RubyCocoa application of the older release, Correct "ns_app_main" of
+<p>In release 0.2.1 or later, the facility of using a Ruby
+thread in a RubyCocoa application is implemeted. For using Ruby threads in a
+RubyCocoa application of the older release, correct "ns_app_main" of
 "rb_main.rb" as follows:</p>
 <pre>def ns_app_main
   OSX.ruby_thread_switcher_start (0.05)  # switching interval sec
@@ -48,7 +47,7 @@ RubyCocoa application of the older release, Correct "ns_app_main" of
   OSX::NSBundle.loadNibNamed_owner (BUNDLE_NAME.to_s, app)
   OSX.NSApp.run
 end</pre>
-<h3><a name="label:8" id="label:8">Q: launch SimpleApp1, which results in an "SimpleApp1 closed unexpectedly."</a></h3><!-- RDLabel: "Q: launch SimpleApp1, which results in an "SimpleApp1 closed unexpectedly."" -->
+<h3><a name="label:8" id="label:8">Q: I launch SimpleApp1, which results in the error message "SimpleApp1 closed unexpectedly."</a></h3><!-- RDLabel: "Q: I launch SimpleApp1, which results in the error message "SimpleApp1 closed unexpectedly."" -->
 <p>I am having problems getting RubyCocoa working. I built and installed
 ruby-1.6.5 and RubyCocoa-0.1.2 with no problems.</p>
 <p>Following the instructions on:
@@ -68,21 +67,21 @@ what is causing this?</p>
 <p>I guess a dyld library is installed by some unix-tool package in your
 MacOS X system, mabye. As I know, this problem seems to occur by the
 system which old EasyPackage is installed in.</p>
-<p>If my guess is right, two solution methods exists. first way is to
+<p>If my guess is right, two solution methods exists. First way is to
 remove dyld library named 'libdl*.bundle' in '/usr/local/lib'. Second
-way is setting "-ldl" to linker option in each PB prject or Makefile
+way is setting "-ldl" to linker option in each PB project or Makefile
 files.</p>
-<p>The first way may produce side effect in installed other commands. But
-second way is troublesome.</p>
+<p>The first way may produce unwanted side effects in other commands. But
+the second way is troublesome.</p>
 <p>you can use 'otool -L' command for printing shared library names that
-is required by a RubyCocoa applicatoin binary.</p>
+are required by a RubyCocoa applicatoin binary.</p>
 <p>And the
 <a href="http://www.ruby-talk.com/cgi-bin/scat.rb/ruby/ruby-talk/29708">[ruby-talk:29708]</a>
 will also become reference of solution.</p>
 <h2><a name="label:10" id="label:10">Misc.</a></h2><!-- RDLabel: "Misc." -->
-<h3><a name="label:11" id="label:11">Q: I want to select RubyCocoa application template in PB.</a></h3><!-- RDLabel: "Q: I want to select RubyCocoa application template in PB." -->
-<p>I want to select RubyCocoa application template in Project Builder new
-Project menu.</p>
+<h3><a name="label:11" id="label:11">Q: I want to select a RubyCocoa application template in PB.</a></h3><!-- RDLabel: "Q: I want to select a RubyCocoa application template in PB." -->
+<p>I want to select a RubyCocoa application template in Project Builder
+new Project menu.</p>
 <h4><a name="label:12" id="label:12">A: copy "{rubycocoa srcdir}/template/tmpl_pb_based" to</a></h4><!-- RDLabel: "A: copy "{rubycocoa srcdir}/template/tmpl_pb_based" to" -->
 <p>"/Developer/ProjectBuilder Extras/Project Templates/Application/" and
 rename "RubyCocoa Application".</p>
