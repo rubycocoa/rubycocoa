@@ -126,12 +126,12 @@ module OSX
     :kABDatabaseChangedExternallyNotification
 
   ].each do |name|
-    module_eval <<-END,__FILE__,__LINE__+1
+    module_eval <<-EOE,__FILE__,__LINE__+1
       def #{name}
 	objc_symbol_to_obj('#{name}', '@')
       end
       module_function :#{name}
-    END
+    EOE
   end
 
 end
