@@ -4,16 +4,17 @@ class DotView < OSX::OCObject
 
   ib_loadable :NSView
   ib_outlets :colorWell, :sizeSlider
-  derived_methods 'drawRect:', 'isOpaque', 'mouseUp:'
+  ib_overrides 'drawRect:', 'isOpaque', 'mouseUp:'
 
-  def initialize(frame)
-    @center = OSX::NSPoint.new (frame.size.width / 2,
-				frame.size.height / 2)
+  def initialize
+    @center = OSX::NSPoint.new (10, 10)
     @color = OSX::NSColor.redColor
     @radius = 10.0
   end
 
   def awakeFromNib
+    @center = OSX::NSPoint.new (bounds.size.width / 2,
+				bounds.size.height / 2)
     @colorWell.setColor (@color)
     @sizeSlider.setFloatValue (@radius)
   end
