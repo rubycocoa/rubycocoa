@@ -22,7 +22,7 @@ Some useful cases of RubyCocoa:
 == Screenshot
 
 This is ((<a screenshot|URL:http://www.imasy.or.jp/~hisa/mac/rubycocoa/simpleapp.jpg>)) 
-of running a Cocoa application| that consists of only Ruby scripting and Interface
+of running a Cocoa application that consists of only Ruby scripting and Interface
 Builder's Nib file by RubyCocoa.
 
 
