@@ -130,7 +130,7 @@ static VALUE ocobj_s_new_with_name(int argc, VALUE* argv, VALUE klass)
   return obj;
 }
 
-static VALUE ocobj_s_new_nsobj(int argc, VALUE* argv, VALUE klass)
+static VALUE ocobj_s_new(int argc, VALUE* argv, VALUE klass)
 {
   VALUE obj;
   Class nsclass;
@@ -143,6 +143,7 @@ static VALUE ocobj_s_new_nsobj(int argc, VALUE* argv, VALUE klass)
   return obj;
 }
 
+#if 0
 static VALUE ocobj_s_new(int argc, VALUE* argv, VALUE klass)
 {
   VALUE obj;
@@ -151,6 +152,7 @@ static VALUE ocobj_s_new(int argc, VALUE* argv, VALUE klass)
   OCOBJ_DATA_PTR(obj)->ownership -= 1; // remove one ownership
   return obj;
 }
+#endif
 
 static BOOL
 ocm_perform(int argc, VALUE* argv, VALUE rcv, VALUE* result)
@@ -438,7 +440,6 @@ init_class_OCObject(VALUE outer)
 
   rb_define_singleton_method(kOCObject, "new_with_id", ocobj_s_new_with_id, -1);
   rb_define_singleton_method(kOCObject, "new_with_name", ocobj_s_new_with_name, -1);
-  rb_define_singleton_method(kOCObject, "new_nsobj", ocobj_s_new_nsobj, -1);
   rb_define_singleton_method(kOCObject, "new", ocobj_s_new, -1);
 
   rb_define_method(kOCObject, "__ocid__", ocobj_ocid, 0);
