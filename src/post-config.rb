@@ -18,7 +18,7 @@ end
 opt_frameworks = "/Library/Frameworks"
 @options['config-opt'].each do |i|
   next until i =~ /^--frameworks=/
-  opt_frameworks = i[2...-1]
+  opt_frameworks = i[2..-1]
   break
 end
 File.open (CONF_FILE_NAME, "w") {|f| f.puts (opt_frameworks) }
@@ -26,9 +26,7 @@ File.open (CONF_FILE_NAME, "w") {|f| f.puts (opt_frameworks) }
 # libruby alert
 unless libruby_installed? then
   print <<MSG_DEFINE
-!!!!!!!!!!!!!!!!!!!!!!!!
-!!!!!! begin Note !!!!!!
-!!!!!!!!!!!!!!!!!!!!!!!!
+!!! Note !!!
 if "LibRuby.framework" is not installed, require install it before
 execute setup. type:
 
