@@ -49,27 +49,13 @@
 			settings = {
 			};
 		};
-		E83626F9019F9D2403A81C66 = {
+		E86D40A901AB5EDD03A81C66 = {
 			isa = PBXFileReference;
-			path = RubyObject.h;
+			path = RBObject.m;
 			refType = 4;
 		};
-		E83626FA019F9D2403A81C66 = {
-			isa = PBXFileReference;
-			path = RubyObject.m;
-			refType = 4;
-		};
-		E83626FB019F9D2403A81C66 = {
-			fileRef = E83626F9019F9D2403A81C66;
-			isa = PBXBuildFile;
-			settings = {
-				ATTRIBUTES = (
-					Public,
-				);
-			};
-		};
-		E83626FC019F9D2403A81C66 = {
-			fileRef = E83626FA019F9D2403A81C66;
+		E86D40AC01AB5EDD03A81C66 = {
+			fileRef = E86D40A901AB5EDD03A81C66;
 			isa = PBXBuildFile;
 			settings = {
 			};
@@ -217,10 +203,10 @@
 		E8A0706601967DAA03A81C66 = {
 			buildActionMask = 2147483647;
 			files = (
-				E8A0707601967E8C03A81C66,
 				E8760F9A019BA88D03A81C66,
-				E83626FB019F9D2403A81C66,
 				E80B398101A21B6103A81C66,
+				E8B45E2001AC6FD903A81C66,
+				E8B45E2401AC709D03A81C66,
 			);
 			isa = PBXHeadersBuildPhase;
 			name = Headers;
@@ -237,10 +223,11 @@
 		E8A0706801967DAA03A81C66 = {
 			buildActionMask = 2147483647;
 			files = (
-				E8A0707C01967E8C03A81C66,
 				E8760F98019BA86503A81C66,
-				E83626FC019F9D2403A81C66,
 				E80B398201A21B6103A81C66,
+				E86D40AC01AB5EDD03A81C66,
+				E8B45E2101AC6FD903A81C66,
+				E8B45E2501AC709D03A81C66,
 			);
 			isa = PBXSourcesBuildPhase;
 			name = Sources;
@@ -263,10 +250,11 @@
 		};
 		E8A0706B01967E8C03A81C66 = {
 			children = (
-				E8A0706E01967E8C03A81C66,
-				E8A0706F01967E8C03A81C66,
-				E83626F9019F9D2403A81C66,
-				E83626FA019F9D2403A81C66,
+				E8B45E2201AC709D03A81C66,
+				E8B45E2301AC709D03A81C66,
+				E8B45E1E01AC6FD903A81C66,
+				E8B45E1F01AC6FD903A81C66,
+				E86D40A901AB5EDD03A81C66,
 				E80B397F01A21B6103A81C66,
 				E80B398001A21B6103A81C66,
 				E8760F99019BA88D03A81C66,
@@ -274,16 +262,6 @@
 			);
 			isa = PBXGroup;
 			name = source;
-			refType = 4;
-		};
-		E8A0706E01967E8C03A81C66 = {
-			isa = PBXFileReference;
-			path = rb_main.h;
-			refType = 4;
-		};
-		E8A0706F01967E8C03A81C66 = {
-			isa = PBXFileReference;
-			path = rb_main.m;
 			refType = 4;
 		};
 		E8A0707401967E8C03A81C66 = {
@@ -301,21 +279,6 @@
 			name = LibRuby.framework;
 			path = /Library/Frameworks/LibRuby.framework;
 			refType = 0;
-		};
-		E8A0707601967E8C03A81C66 = {
-			fileRef = E8A0706E01967E8C03A81C66;
-			isa = PBXBuildFile;
-			settings = {
-				ATTRIBUTES = (
-					Public,
-				);
-			};
-		};
-		E8A0707C01967E8C03A81C66 = {
-			fileRef = E8A0706F01967E8C03A81C66;
-			isa = PBXBuildFile;
-			settings = {
-			};
 		};
 		E8A0707D01967E8C03A81C66 = {
 			fileRef = E8A0707501967E8C03A81C66;
@@ -344,6 +307,56 @@
 			name = template;
 			path = "";
 			refType = 4;
+		};
+		E8B45E1E01AC6FD903A81C66 = {
+			isa = PBXFileReference;
+			path = RBProxy.m;
+			refType = 4;
+		};
+		E8B45E1F01AC6FD903A81C66 = {
+			isa = PBXFileReference;
+			path = RBProxy.h;
+			refType = 4;
+		};
+		E8B45E2001AC6FD903A81C66 = {
+			fileRef = E8B45E1F01AC6FD903A81C66;
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					Public,
+				);
+			};
+		};
+		E8B45E2101AC6FD903A81C66 = {
+			fileRef = E8B45E1E01AC6FD903A81C66;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		E8B45E2201AC709D03A81C66 = {
+			isa = PBXFileReference;
+			path = RBRuntime.h;
+			refType = 4;
+		};
+		E8B45E2301AC709D03A81C66 = {
+			isa = PBXFileReference;
+			path = RBRuntime.m;
+			refType = 4;
+		};
+		E8B45E2401AC709D03A81C66 = {
+			fileRef = E8B45E2201AC709D03A81C66;
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					Public,
+				);
+			};
+		};
+		E8B45E2501AC709D03A81C66 = {
+			fileRef = E8B45E2301AC709D03A81C66;
+			isa = PBXBuildFile;
+			settings = {
+			};
 		};
 	};
 	rootObject = E8A0705F01967D5B03A81C66;

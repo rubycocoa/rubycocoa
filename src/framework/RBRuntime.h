@@ -10,4 +10,4 @@
  *
  **/
 
-int rb_main(const char* rb_main_name, int argc, char* argv[]);
+int RBApplicationMain(const char* rb_main_name, int argc, char* argv[]);

@@ -11,7 +11,7 @@
  **/
 #import <Foundation/NSAutoreleasePool.h>
 #import <LibRuby/cocoa_ruby.h>
-#import "ocdata_conv.h"
+#import <RubyCocoa/ocdata_conv.h>
 
 void
 rbarg_to_nsarg(VALUE rbarg, int octype, void* nsarg, id pool, int index)

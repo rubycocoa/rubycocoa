@@ -12,5 +12,4 @@
 #import <Foundation/NSObject.h>
 
 @interface DummyProtocolHandler : NSObject
-+ instance;
 @end
