@@ -1,3 +1,12 @@
+2002-09-13  FUJIMOTO Hisakuni  <hisa@fobj.com>
+
+	* sample/itunes_albums.rb, sample/speak.rb: add NSAppleScript sample
+
+	* lib/osx/objc/oc_wrapper.rb: define ocnil? - Objective-C nil object?
+
+	* app_mains/main_for_pure_ruby.rb:
+	set Ruby String value into @ruby_program
+
 2002-09-12  FUJIMOTO Hisakuni  <hisa@fobj.com>
 
 	* app_mains/main_for_pure_ruby.rb:

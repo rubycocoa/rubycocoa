@@ -26,6 +26,12 @@
   mk_app1/     - NSViewを使うアプリケーション例 (Makefileベース)
   pb_app0/     - アウトレット、アクションを使うアプリ例 (ProjectBuilderベース)
 
+  itnues_albums.rb - NSAppleScript を使って iTunes のアルバム一覧を出力
+  speak.rb     - マックが標準入力やファイルからのテキストを読み上げる
+
+  itnues_albums.rb - NSAppleScriptを使うサンプル
+  speak.rb         - NSAppleScriptを使うサンプル
+
 3. ライセンス
 
   このライブラリに含まれるソースコードおよびドキュメントは藤本尚邦が著
