@@ -1,6 +1,27 @@
 # -*-rd-*-
 = RubyCocoaプログラミング
 
+== 目次
+
+* ((<irb - インターラクティブ Ruby>))
+* ((<ライブラリのロード>))
+* ((<動いた実感を味わえる例>))
+* ((<Cocoaクラス>))
+* ((<Cocoaオブジェクトの生成>))
+* ((<オーナーシップとメモリ管理>))
+* ((<メソッドの返す値>))
+* ((<メソッド名の決定方法とバリエーション>))
+* ((<メソッドの引数は可能な限り変換する>))
+* ((<メソッド名が重複するときに使う接頭辞 "oc_">))
+* ((<Cocoaクラスの派生クラスとそのインスタンス>))
+* ((<Cocoa派生クラスの定義>))
+* ((<アウトレット>))
+* ((<メソッドのオーバーライド>))
+* ((<Cocoa派生クラスのインスタンス生成>))
+* ((<インスタンス生成時の初期化コードはどこに書くべきか?>))
+* ((<RubyCocoaアプリケーションのデバッグ>))
+
+
 == irb - インターラクティブ Ruby
 
 ここにあるスクリプトの切れ端を試してみるのに irb を使うとよいでしょう。
@@ -292,5 +313,44 @@ nibファイルからロードされるような場合には awakeFromNib メソッドで初期
 よいでしょう。メソッドがselfを返すようにすることを忘れないでください。
 
 
+== RubyCocoaアプリケーションのデバッグ
+
+今のところ(2003-01-05)、RubyCocoaアプリケーションに対応する
+ProjectBuilderのプラグインモジュールが存在しないため、ProjectBuilder上
+でRubyのデバッガを使うことはできません。
+
+しかし、RubyCocoaアプリケーションをシェルなどからオプション付きで起動
+することにより、Rubyに付属のデバッガなどを使うことは可能です。Emacs使
+いであれば、rubydbコマンドを使ってデバッグできます。
+
+以下は、simpleapp(サンプル)を題材に、Ruby付属デバッガを使ってRubyCocoa 
+アプリケーションをブレークさせるときの様子です。
+
+  $ cd sample/simpleapp/
+  $ pbxbuild
+  $ build/SimpleApp.app/Contents/MacOS/SimpleApp -r debug
+  (rdb:1) b AppController.rb:24    # ブレークポイントを設定
+  Set breakpoint 1 at AppController.rb:24
+  (rdb:1) c
+  Breakpoint 1, aboutApp at AppController.rb:24
+  AppController.rb:24:
+  (rdb:1) l
+  [19, 28] in AppController.rb
+     19      @myView.set_alpha(@slider.floatValue)
+     20      @myView.set_color(@colorWell.color)
+     21    end
+     22  
+     23    def aboutApp (sender)
+  => 24      NSApp().orderFrontStandardAboutPanelWithOptions(
+     25        "Copyright" => "RubyCocoa #{RUBYCOCOA_VERSION}",
+     26        "ApplicationVersion" => "Ruby #{VERSION}")
+     27    end
+     28  
+     29    def colorBtnClicked (sender)
+  (rdb:1) sender
+  #<OSX::NSMenuItem:0xd439e class='NSMenuItem' id=0x3e27d0>
+  (rdb:1) q
+  Really quit? (y/n) y
+
+
 $Date$
-$Revision$
