@@ -112,6 +112,8 @@ libruby.aのみをインストールします。
 ((% ruby install.rb config %))にはいくつかRubyCocoa用のオプションがあります。
 必要ならconfigフェーズのときにオプションを指定してください。
 
+((*注意*)) config のときに Segmentation fault エラーが発生する場合は、
+「((<RubyCocoa 0.4.0 を Ruby 1.6.8 で作るときの注意点>))」を確認してください。
 
 == RubyCocoaの単体テスト
 
@@ -189,6 +191,41 @@ config'のオプションがあります。
           Application/Cocoa-Ruby Document-based Application
   /tmp/build/Developer/Examples/RubyCocoa
   /tmp/build/Developer/Documentation/RubyCocoa
+
+
+== RubyCocoa 0.4.0 を Ruby 1.6.8 で作るときの注意点
+
+((*Ruby 1.6.8*)) で RubyCocoa 0.4.0 をソースから構築するときに
+
+  ruby install.rb config
+
+を実行すると Segmentation fault が発生します。この問題を解決するため、
+rubycocoa-0.4.0.tgz を展開したあと、次のように
+((<パッチ|URL:http://www.imasy.or.jp/%7ehisa/mac/rubyosx/files/ruco0.4.0-fw-post-config.patch>))
+をあててください。
+
+  $ cd {rubycocoa-0.4.0}
+  $ patch -p0 < ruco0.4.0-fw-post-config.patch
+
+パッチの内容は以下の通りです。
+
+  diff -u -b -u -r1.4 post-config.rb
+  --- framework/post-config.rb	19 Dec 2002 08:41:50 -0000	1.4
+  +++ framework/post-config.rb	11 Jan 2003 14:02:17 -0000
+  @@ -12,10 +12,9 @@
+     $stderr.puts "create #{File.expand_path(dst_fname)} ..."
+     File.open(dst_fname, 'w') do |dstfile|
+       IO.foreach(src_path) do |line|
+  -      line = line.gsub( /\bID\b/, 'RB_ID' )
+  -      line = line.gsub( /\bT_DATA\b/, 'RB_T_DATA' )
+  -      line = line.gsub( /\bintern.h\b/, "#{new_filename_prefix}intern.h" )
+  -      dstfile.puts line
+  +      line.gsub!( /\b(ID|T_DATA)\b/, 'RB_\1' )
+  +      line.gsub!( /\bintern\.h\b/, "#{new_filename_prefix}intern.h" )
+  +      dstfile.puts( line )
+       end
+     end
+   end
 
 
 == 開発動作確認環境

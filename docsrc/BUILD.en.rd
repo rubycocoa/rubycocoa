@@ -114,6 +114,8 @@ Type as follows for build RubyCocoa:
 'ruby install.rb config' command have some options for RubyCocoa. If
 required, specify option at the time of a config phase.
 
+((*Caution!*)) If you got an error Segmentation Fault in config phase,
+please check "((<Notice for build of RubyCocoa 0.4.0 to Ruby 1.6.8>))".
 
 == Unit Test for RubyCocoa
 
@@ -189,6 +191,41 @@ As a result, these will be installed temporarily.
           Application/Cocoa-Ruby Document-based Application
   /tmp/build/Developer/Examples/RubyCocoa
   /tmp/build/Developer/Documentation/RubyCocoa
+
+
+== Notice for build of RubyCocoa 0.4.0 to Ruby 1.6.8
+
+In build of RubyCocoa 0.4.0 to ((*Ruby 1.6.8*)), you may see a error
+message Segmentation Fault in config phase:
+
+  ruby install.rb config
+
+For fix this, apply
+((<a patch|URL:http://www.imasy.or.jp/%7ehisa/mac/rubyosx/files/ruco0.4.0-fw-post-config.patch>))
+as follows after extracting rubycocoa-0.4.0.tgz.
+
+  $ cd {rubycocoa-0.4.0}
+  $ patch -p0 < ruco0.4.0-fw-post-config.patch
+
+The patch is:
+
+  diff -u -b -u -r1.4 post-config.rb
+  --- framework/post-config.rb	19 Dec 2002 08:41:50 -0000	1.4
+  +++ framework/post-config.rb	11 Jan 2003 14:02:17 -0000
+  @@ -12,10 +12,9 @@
+     $stderr.puts "create #{File.expand_path(dst_fname)} ..."
+     File.open(dst_fname, 'w') do |dstfile|
+       IO.foreach(src_path) do |line|
+  -      line = line.gsub( /\bID\b/, 'RB_ID' )
+  -      line = line.gsub( /\bT_DATA\b/, 'RB_T_DATA' )
+  -      line = line.gsub( /\bintern.h\b/, "#{new_filename_prefix}intern.h" )
+  -      dstfile.puts line
+  +      line.gsub!( /\b(ID|T_DATA)\b/, 'RB_\1' )
+  +      line.gsub!( /\bintern\.h\b/, "#{new_filename_prefix}intern.h" )
+  +      dstfile.puts( line )
+       end
+     end
+   end
 
 
 == Development and testing environment 
