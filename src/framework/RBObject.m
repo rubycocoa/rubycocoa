@@ -237,7 +237,7 @@ static SEL ruby_method_sel(int argc)
 {
   DLOG1("forwardInvocation(%@)", an_inv);
   if ([self rbobjRespondsToSelector: [an_inv selector]]) {
-    DLOG0("   -> forward to super Objective-C Object");
+    DLOG0("   -> forward to Ruby Object");
     [self rbobjForwardInvocation: an_inv];
   }
   else {
