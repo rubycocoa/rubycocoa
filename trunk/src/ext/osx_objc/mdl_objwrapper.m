@@ -203,7 +203,7 @@ ocm_invoke(int argc, VALUE* argv, VALUE rcv, VALUE* result)
     BOOL f_conv_success;
     DLOG2("    arg_type[%d]: %s", i, octype_str);
     ocdata = ocdata_malloc(octype);
-    f_conv_success = rbobj_to_ocdata(rcv, arg, octype, ocdata);
+    f_conv_success = rbobj_to_ocdata(arg, octype, ocdata);
     if (f_conv_success) {
       [oc_inv setArgument: ocdata atIndex: (i+2)];
       free(ocdata);

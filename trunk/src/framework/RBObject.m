@@ -184,25 +184,7 @@ static id ocid_of(VALUE obj)
     void* ocdata = ocdata_malloc(octype);
     BOOL f_conv_success;
     [an_inv getArgument: ocdata atIndex: (i+2)];
-    if ((octype == _C_ID) || (octype == _C_CLASS)) {
-      id ocid = *(id*)ocdata;
-      if ([ocid isKindOfClass: [self class]]) {
-	arg_val = [ocid __rbobj__];
-      }
-      else if ([ocid respondsToSelector: @selector(__rbobj__)]) {
-	arg_val = [ocid __rbobj__];
-      }
-      else if (ocid_of(m_rbobj) == ocid) {
-	arg_val = m_rbobj;
-      }
-      else {
-	arg_val = to_rbobj(ocid);
-      }
-      f_conv_success = YES;
-    }
-    else {
-      f_conv_success = ocdata_to_rbobj(octype, ocdata, &arg_val);
-    }
+    f_conv_success = ocdata_to_rbobj(Qnil, octype, ocdata, &arg_val);
     free(ocdata);
     if (f_conv_success == NO) {
       arg_val = Qnil;

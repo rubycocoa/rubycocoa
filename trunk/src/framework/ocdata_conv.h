@@ -22,25 +22,29 @@ enum osxobjc_nsdata_type {
   _PRIV_C_NSRANGE,
 };
 
-#define OCID2NUM(val) UINT2NUM((VALUE)(val))
+#define OCID2NUM(val) UINT2NUM((unsigned int)(val))
+#define NUM2OCID(val) ((id)NUM2UINT((VALUE)(val)))
 
-int    to_octype       (const char* oc_type_str);
-size_t ocdata_size     (int octype);
-void*  ocdata_malloc   (int octype);
-void*  ocdata_malloc_va_arg(va_list ap, int octype);
-BOOL   octype_object_p (int octype);
+int     to_octype       (const char* oc_type_str);
+size_t  ocdata_size     (int octype);
+void*   ocdata_malloc   (int octype);
+#define OCDATA_ALLOCA(octype)  alloca(ocdata_size(octype))
 
+id    rbobj_get_ocid (VALUE obj);
+VALUE ocid_get_rbobj (id ocid);
 
-id     rbobj_to_nsselstr  (VALUE obj);
-SEL    rbobj_to_nssel  (VALUE obj);
-BOOL   rbobj_to_nsobj  (VALUE obj, id* nsobj);
+id    rbobj_to_nsselstr (VALUE obj);
+SEL   rbobj_to_nssel    (VALUE obj);
+BOOL  rbobj_to_nsobj    (VALUE obj, id* nsobj);
+BOOL  rbobj_to_bool     (VALUE obj);
 
-BOOL   rbobj_to_bool   (VALUE obj);
-VALUE  bool_to_rbobj   (BOOL val);
-VALUE  sel_to_rbobj    (SEL val);
-VALUE  int_to_rbobj    (int val);
-VALUE  uint_to_rbobj   (unsigned int val);
-VALUE  double_to_rbobj (double val);
+VALUE    sel_to_rbobj (SEL val);
+VALUE    int_to_rbobj (int val);
+VALUE   uint_to_rbobj (unsigned int val);
+VALUE double_to_rbobj (double val);
+VALUE   bool_to_rbobj (BOOL val);
+VALUE   ocid_to_rbobj (VALUE context_obj, id ocid);
 
-BOOL   ocdata_to_rbobj (int octype, const void* ocdata, VALUE* result);
-BOOL   rbobj_to_ocdata (VALUE obj, int octype, void* ocdata);
+BOOL  ocdata_to_rbobj (VALUE context_obj,
+		       int octype, const void* ocdata, VALUE* result);
+BOOL  rbobj_to_ocdata (VALUE obj, int octype, void* ocdata);
