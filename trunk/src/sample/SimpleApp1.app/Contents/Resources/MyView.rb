@@ -1,4 +1,4 @@
-require 'osx/ocobject'
+require 'osx/cocoa'
 
 class MyView < OSX::NSView
 
