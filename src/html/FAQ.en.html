@@ -33,11 +33,46 @@ This could be a double free(), or free() called with the middle of
 an allocated block; Try setting environment variable MallocHelp to
 see tools to help debug</pre>
 <h4><a name="label:5" id="label:5">A: Solved in release 0.1.2.</a></h4><!-- RDLabel: "A: Solved in release 0.1.2." -->
-<h2><a name="label:6" id="label:6">Misc.</a></h2><!-- RDLabel: "Misc." -->
-<h3><a name="label:7" id="label:7">Q: I want to select RubyCocoa application template in PB.</a></h3><!-- RDLabel: "Q: I want to select RubyCocoa application template in PB." -->
+<h3><a name="label:6" id="label:6">Q: Thread nothing seems to work properly.</a></h3><!-- RDLabel: "Q: Thread nothing seems to work properly." -->
+<p>I've been playing with threads in a RubyCocoa application, but
+nothing seems to work properly.</p>
+<h4><a name="label:7" id="label:7">A: Currently (2001-12-12), this problem is not solved.</a></h4><!-- RDLabel: "A: Currently (2001-12-12), this problem is not solved." -->
+<p>I want to solve this problem. However, unfortunately it can seem to be
+settled immediately, and there is not it because I am not going to so
+know a lot. Please solve somebody this problem.</p>
+<h3><a name="label:8" id="label:8">Q: launch SimpleApp1, which results in an "SimpleApp1 closed unexpectedly."</a></h3><!-- RDLabel: "Q: launch SimpleApp1, which results in an "SimpleApp1 closed unexpectedly."" -->
+<p>I am having problems getting RubyCocoa working. I built and installed
+ruby-1.6.5 and RubyCocoa-0.1.2 with no problems.</p>
+<p>Following the instructions on:
+&lt;http://www.imasy.or.jp/~hisa/mac/rubycocoa/INSTALL.en.html&gt; I encountered
+an error when i tried executing: "open SimpleApp1.app", which results in
+an "SimpleApp1 closed unexpectedly." The error it quits with is:</p>
+<pre>bash-2.05# ./SimpleApp1.app/Contents/MacOS/SimpleApp1
+dyld: ./SimpleApp1.app/Contents/MacOS/SimpleApp1 Undefined symbols:
+_dlclose
+_dlerror
+_dlopen
+_dlsym</pre>
+<p>I run into the same error trying to build the other examples.</p>
+<p>fontnames.rb and sndplay?.rb worked with no problems.  Have you any ideas
+what is causing this?</p>
+<h4><a name="label:9" id="label:9">A: Do you have installed some unix-tools package ?</a></h4><!-- RDLabel: "A: Do you have installed some unix-tools package ?" -->
+<p>I guess a dyld library is installed by some unix-tool package in your
+MacOS X system, mabye. As I know, this problem seems to occur by the
+system which old EasyPackage is installed in.</p>
+<p>If my guess is right, two solution methods exists. first way is to
+remove dyld library named 'libdl*.bundle' in '/usr/local/lib'. Second
+way is setting "-ldl" to linker option in each PB prject or Makefile
+files.</p>
+<p>The first way may produce side effect in installed other commands. But
+second way is troublesome.</p>
+<p>you can use 'otool -L' command for printing shared library names that
+is required by a RubyCocoa applicatoin binary.</p>
+<h2><a name="label:10" id="label:10">Misc.</a></h2><!-- RDLabel: "Misc." -->
+<h3><a name="label:11" id="label:11">Q: I want to select RubyCocoa application template in PB.</a></h3><!-- RDLabel: "Q: I want to select RubyCocoa application template in PB." -->
 <p>I want to select RubyCocoa application template in Project Builder new
 Project menu.</p>
-<h4><a name="label:8" id="label:8">A: copy "{rubycocoa srcdir}/template/tmpl_pb_based" to</a></h4><!-- RDLabel: "A: copy "{rubycocoa srcdir}/template/tmpl_pb_based" to" -->
+<h4><a name="label:12" id="label:12">A: copy "{rubycocoa srcdir}/template/tmpl_pb_based" to</a></h4><!-- RDLabel: "A: copy "{rubycocoa srcdir}/template/tmpl_pb_based" to" -->
 <p>"/Developer/ProjectBuilder Extras/Project Templates/Application/" and
 rename "RubyCocoa Application".</p>
 <pre>% cd "/Developer/ProjectBuilder Extras/Project Templates/Application"
