@@ -368,7 +368,7 @@ FRAMEWORKS.each_key do |framework|
       system "mkdir -p old"
       File.rename(fname, "old/#{fname}")
     else
-      raise "'#{fname}' already exist !"
+      next
     end
   end
   gen_skelton_top(framework)
