@@ -179,13 +179,16 @@ static int argc_of(SEL a_sel)
 /** public methods **/
 /********************/
 
-- init
++ rubyObjectWithOCObject: (id)a_ocobj
 {
   id pool = [[NSAutoreleasePool alloc] init];
-  [self initWithRubyClassName: [[self class] description]];
+  id result = [[self alloc]
+		initWithRubyClassName: [[a_ocobj class] description]
+		ocObject: a_ocobj];
   [pool release];
-  return self;
+  return result;
 }
+
 
 - initWithRubyObject: (unsigned long) a_rbobj
 {
@@ -194,7 +197,29 @@ static int argc_of(SEL a_sel)
   return self;
 }
 
-- initWithRubyClassName: class_name
+- init
+{
+  id pool = [[NSAutoreleasePool alloc] init];
+  [self initWithRubyClassName: [[self class] description]];
+  [pool release];
+  return self;
+}
+
+- initWithRubyClassName: (NSString*)a_rbclass_name
+{
+  return [self initWithRubyClassName: a_rbclass_name ocObject: self];
+}
+
+- initWithOCObject: (id)a_ocobj
+{
+  id pool = [[NSAutoreleasePool alloc] init];
+  [self initWithRubyClassName: [[self class] description]
+	ocObject: a_ocobj];
+  [pool release];
+  return self;
+}
+
+- initWithRubyClassName: (NSString*)a_rbclass_name ocObject: (id)a_ocobj
 {
   RB_ID rb_class_id;
   VALUE rb_class;
@@ -202,34 +227,35 @@ static int argc_of(SEL a_sel)
 
   dummy = [DummyProtocolHandler instance];
 
-  rb_class_id = rb_intern([class_name cString]);
+  rb_class_id = rb_intern([a_rbclass_name cString]);
   rb_class = rb_const_get(rb_cObject, rb_class_id);
 
   if (rb_class == Qnil) rb_class = ocobject_class();
 
   /**
    * if rb_class.respond_to?(:new_with_ocid) then
-   *    rbobj = rb_class.new_with_ocid(self.__ocid__)
+   *    rbobj = rb_class.new_with_ocid(a_ocobj.__ocid__)
    *  else
    *    rbobj = rb_class.new
    *    if rbobj.respond_to?(:set_ocobj) then
-   *       rbobj.set_ocobj(self)
+   *       rbobj.set_ocobj(a_ocobj)
    *    end
    *  end
    **/
   rb_mid = rb_intern("new_with_ocid");
   if (rb_respond_to(rb_class, rb_mid)) {
-    rbobj = rb_funcall(rb_class, rb_mid, 1, OCID2NUM(self));
+    rbobj = rb_funcall(rb_class, rb_mid, 1, OCID2NUM(a_ocobj));
   }
   else {
     rbobj = rb_funcall(rb_class, rb_intern("new"), 0);
     rb_mid = rb_intern("set_ocobj");
     if (rb_respond_to(rb_class, rb_mid)) {
-      rb_funcall(rbobj, rb_mid, 1, to_rbobj(self));
+      rb_funcall(rbobj, rb_mid, 1, to_rbobj(a_ocobj));
     }
   }
   return self;
 }
+
 
 - (BOOL) respondsToSelector: (SEL)a_sel
 {
