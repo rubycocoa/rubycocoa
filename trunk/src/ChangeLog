@@ -1,3 +1,22 @@
+2002-01-09  FUJIMOTO Hisakuni  <hisa@fobj.com>
+
+	* ext/osx_objc/osx_objc.m: change OSX.ruby_thread_switcher_start()
+	arguments. "interval" is specified NSTimer interval, "wait"
+	(optional) is rb_thread_wait_for().
+
+	* framework/RBThreadSwitcher.m, framework/RBThreadSwitcher.h:
+	using rb_thread_schedule() or rb_thread_wait_for() for Ruby thread
+	switch is selecatable.
+
+	* framework/RubyCocoa.frmwk.pbproj/project.pbxproj:
+	add files RBThreadSwitcher.[hm]
+
+	* framework/RBRuntime.h, framework/RBRuntime.m:
+	separate files for RBThreadSwitcher
+
+	* framework/OverrideMixin.m:
+	imp_respondsToSelector(): suppress; compile warning by using cast
+
 2002-01-08  FUJIMOTO Hisakuni  <hisa@fobj.com>
 
 	* release 0.2.2
