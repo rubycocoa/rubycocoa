@@ -52,11 +52,22 @@ module OSX
   class NSString
 
     def NSString.guess_nsencoding(rbstr)
-      case NKF.guess(rbstr)
+      case NSString.guess_encoding(rbstr)
       when NKF::JIS then NSISO2022JPStringEncoding
       when NKF::EUC then NSJapaneseEUCStringEncoding
       when NKF::SJIS then NSShiftJISStringEncoding
       else NSProprietaryStringEncoding
+      end
+    end
+
+    def NSString.guess_encoding(rbstr)
+      NKF.guess(rbstr)
+    end
+
+    # NKF.guess fails on ruby-1.8.2
+    if NKF.respond_to? 'guess1'
+      def NSString.guess_encoding(rbstr)
+        NKF.guess1(rbstr)
       end
     end
 
