@@ -1,5 +1,7 @@
 2001-12-12  FUJIMOTO Hisakuni  <hisa@fobj.com>
 
+	* release 0.1.3
+	
 	* ext/osxobjc/extconf.rb: remove "-no-precomp" flag from the
 	CFLAGS of Makefile for the setup phase speed-up. 
 	(thanks Chris-san)
