@@ -1,12 +1,17 @@
+2002-01-22  Ralph Broom <rbroom@broom.org>
+
+	* README.en.txt, doc/FAQ.en:
+	Several text expression was corrected.
+
 2002-01-21  FUJIMOTO Hisakuni  <hisa@fobj.com>
 
-	* template/PureEmptyApp.app/Contents/Info.plist, template/PureEmptyApp.app/Contents/MacOS/PureEmptyApp, template/PureEmptyApp.app/Contents/PkgInfo, template/PureEmptyApp.app/Contents/Resources/rb_main.rb:
+	* template/PureEmptyApp.app:
 	added a new template named PureEmptyApp.app
 
 2002-01-20  Michael Miller  <blackmariah@techie.com>
 
 	* doc/FAQ.en, doc/INDEX.en, doc/INSTALL.en:
-	Several text expression was corrected.
+	Expression was corrected.
 
 2002-01-13  FUJIMOTO Hisakuni  <hisa@fobj.com>
 
