@@ -29,10 +29,10 @@ end
 
 # Install Examples & Document
 [
-  [ 'sample', "#{install_root}#{@config['examples']}" ],
-  [ 'doc',    "#{install_root}#{@config['documentation']}" ],
+  [ 'sample', "#{install_root}#{@config['examples']}", 'g+w' ],
+  [ 'doc',    "#{install_root}#{@config['documentation']}", nil ],
 
-].each do |srcdir, dstdir|
+].each do |srcdir, dstdir, chmod|
   if File.exist?( "#{dstdir}/RubyCocoa" ) then
     command "rm -rf '#{backup_dir}/#{srcdir}'"
     command "mkdir -p '#{backup_dir}'"
@@ -40,4 +40,5 @@ end
   end
   command "mkdir -p '#{dstdir}'"
   command "cp -R '#{srcdir}' '#{dstdir}/RubyCocoa'"
+  command "chmod -R #{chmod} '#{dstdir}/RubyCocoa'" if chmod
 end
