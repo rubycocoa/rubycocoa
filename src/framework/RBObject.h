@@ -21,6 +21,7 @@
 
 - initWithRubyObject: (VALUE) rbobj;
 - (VALUE) __rbobj__;
+- (BOOL) isKindOfClass:(Class)aClass;
 
 @end
 

@@ -14,6 +14,12 @@ module OSX
 
   module OCStubCreator
 
+    def ns_loadable
+      spr_name = self.superclass.name.split('::')[-1]
+      cls_name = self.name.split('::')[-1]
+      OSX.objc_derived_class_new (cls_name, spr_name)
+    end
+
     def ns_overrides(*args)
       class_name = self.to_s
       args.each do |method_name|
@@ -26,6 +32,7 @@ module OSX
     end
 
     # for look and feel
+    alias_method :ib_loadable,  :ns_loadable
     alias_method :ib_overrides, :ns_overrides
     alias_method :ib_outlets,   :ns_outlets
 
@@ -44,9 +51,6 @@ module OSX
     def klass.to_s() name end
 
     def klass.inherited(kls)
-      spr_name = self.description.to_s
-      cls_name = kls.name.split(':')[-1]
-      OSX.objc_derived_class_new (cls_name, spr_name)
       kls.extend OCStubCreator
     end
 

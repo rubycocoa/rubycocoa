@@ -65,7 +65,7 @@ rb_ocobj_s_new(id ocid)
 
   cls_name = [[ocid class] description];
   obj = rb_funcall(rb_cls_ocobj([cls_name cString]), 
-		   rb_intern("new"), 1, OCID2NUM(ocid));
+		   rb_intern("new_with_ocid"), 1, OCID2NUM(ocid));
 
   [pool release];
   return obj;

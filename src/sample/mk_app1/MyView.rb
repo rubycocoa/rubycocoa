@@ -1,8 +1,8 @@
-require 'osx/ocobject'
+require 'osx/cocoa'
 
-class MyView < OSX::OCObject
+class MyView < OSX::NSView
 
-  ib_loadable :NSView
+  ib_loadable
   ib_overrides 'drawRect:'
 
   def initialize

@@ -48,7 +48,7 @@ rb_ocexception_s_new(NSException* nsexcp)
   mosx = rb_const_get(rb_cObject, rb_intern("OSX"));;
   klass = rb_const_get(mosx, rb_intern("OCException"));
   val = ocid_to_rbobj(Qnil, nsexcp);
-  return rb_funcall(klass, rb_intern("new"), 1, val);
+  return rb_funcall(klass, rb_intern("new_with_ocid"), 1, val);
 }
 
 static BOOL

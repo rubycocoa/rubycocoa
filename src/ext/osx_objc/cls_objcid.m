@@ -14,6 +14,7 @@
 #import <Foundation/Foundation.h>
 #import <string.h>
 #import <stdlib.h>
+#import <RubyCocoa/RBObject.h>
 
 static VALUE _kObjcID = Qnil;
 
@@ -46,39 +47,82 @@ _objcid_data_new()
   return dp;
 }
 
-static VALUE
-_rb_cls_name(VALUE obj)
+#if 0
+static id
+_find_occls(VALUE obj)
 {
-  obj = rb_obj_as_string(CLASS_OF(obj));
-  obj = rb_str_split(obj, "::");
-  return rb_ary_entry(obj, -1);
+  id oc_cls = nil;
+  VALUE klass = CLASS_OF(obj);
+
+  id pool = [[NSAutoreleasePool alloc] init];
+
+  while (klass != Qnil) {
+    VALUE rname;
+    id oc_str;
+    rname = rb_obj_as_string(klass);
+    rname = rb_str_split(rname, "::");
+    rname = rb_ary_entry(rname, -1);
+    oc_str = [NSString stringWithCString: STR2CSTR(rname)];
+    oc_cls = NSClassFromString(oc_str);
+    if (oc_cls != nil) break;
+    klass = RCLASS(klass)->super;
+  }
+
+  [pool release];
+  return oc_cls;
 }
 
-static VALUE
-_objcid_real_initialize(int argc, VALUE* argv, VALUE rcv)
-{
-  VALUE arg_ocid;
-  id ocid;
+#else
 
-  rb_scan_args(argc, argv, "01", &arg_ocid);
-  if (arg_ocid != Qnil) {
-    ocid = (id) NUM2UINT(arg_ocid);
-    [ocid retain];
+static id
+_find_occls(VALUE obj)
+{
+  id oc_cls = nil;
+  VALUE klass = CLASS_OF(obj);
+
+  id pool = [[NSAutoreleasePool alloc] init];
+
+  VALUE rname;
+  id oc_str;
+  rname = rb_obj_as_string(klass);
+  rname = rb_str_split(rname, "::");
+  rname = rb_ary_entry(rname, -1);
+  oc_str = [NSString stringWithCString: STR2CSTR(rname)];
+  oc_cls = NSClassFromString(oc_str);
+
+  [pool release];
+  return oc_cls;
+}
+#endif
+
+static void
+_objcid_initialize_for_new(VALUE rcv)
+{
+  id ocid;
+  id oc_cls = _find_occls(rcv);
+  if (oc_cls) {
+    ocid = [[oc_cls alloc] init];
   }
   else {
-    id pool = [[NSAutoreleasePool alloc] init];
-    id oc_str, oc_cls;
-
-    oc_str = [NSString stringWithCString: STR2CSTR(_rb_cls_name(rcv))];
-    oc_cls = NSClassFromString(oc_str);
-    if (oc_cls)
-      ocid = [[oc_cls alloc] init];
-    else
-      ocid = [[NSObject alloc] init];
-    [pool release];
+    ocid = [[RBObject alloc] initWithRubyObject: rcv];
   }
   OBJCID_DATA_PTR(rcv)->ocid = ocid;
-  return rcv;
+}
+
+static void
+_objcid_initialize_for_new_with_ocid(int argc, VALUE* argv, VALUE rcv)
+{
+  VALUE arg_ocid;
+
+  rb_scan_args(argc, argv, "10*", &arg_ocid);
+  if (arg_ocid != Qnil) {
+    id ocid = (id) NUM2UINT(arg_ocid);
+    [ocid retain];
+    OBJCID_DATA_PTR(rcv)->ocid = ocid;
+  }
+  else {
+    _objcid_initialize_for_new(rcv);
+  }
 }
 
 static VALUE
@@ -86,10 +130,21 @@ objcid_s_new(int argc, VALUE* argv, VALUE klass)
 {
   VALUE obj;
   obj = Data_Wrap_Struct(klass, 0, _objcid_data_free, _objcid_data_new());
-  obj = _objcid_real_initialize(argc, argv, obj);
+  _objcid_initialize_for_new(obj);
+  rb_obj_call_init(obj, argc, argv);
+  return obj;
+}
+
+static VALUE
+objcid_s_new_with_ocid(int argc, VALUE* argv, VALUE klass)
+{
+  VALUE obj;
+  obj = Data_Wrap_Struct(klass, 0, _objcid_data_free, _objcid_data_new());
+  _objcid_initialize_for_new_with_ocid(argc, argv, obj);
   if (argc > 0) {
     argc--;
     argv++;
+    if (argc == 0) argv = NULL;
   }
   rb_obj_call_init(obj, argc, argv);
   return obj;
@@ -134,6 +189,7 @@ init_cls_ObjcID(VALUE outer)
   _kObjcID = rb_define_class_under(outer, "ObjcID", rb_cObject);
 
   rb_define_singleton_method(_kObjcID, "new", objcid_s_new, -1);
+  rb_define_singleton_method(_kObjcID, "new_with_ocid", objcid_s_new_with_ocid, -1);
 
   rb_define_method(_kObjcID, "initialize", objcid_initialize, -1);
   rb_define_method(_kObjcID, "__ocid__", objcid_ocid, 0);

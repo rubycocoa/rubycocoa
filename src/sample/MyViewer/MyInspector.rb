@@ -60,7 +60,6 @@ class MyInspector < OSX::OCObject
   end
 
   def initialize
-    super
     panelSetting
     center = OSX::NSNotificationCenter.defaultCenter
     center.addObserver (self, :selector, "showMain:",
