@@ -14,8 +14,9 @@ usage unless FileTest.directory?( TARGET )
 SRCS.each {|src| usage unless FileTest.file?( src ) }
 
 # diff ignore pattern
-PAT_1 = '\$Date:.*\$'
-PAT_2 = '\$Revision:.*\$'
+PAT_1 = '\2002/12/30 00:44:16'
+PAT_2 = '\1.4'
+
 
 # process
 SRCS.each do |src|
