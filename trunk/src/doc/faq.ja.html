@@ -41,21 +41,21 @@ RubyCocoa<font size='-1'> - A Ruby/Objective-C Bridge for Mac OS X with Cocoa</f
 
 <!-- body/main/contents -->
 <td class='body-contents' id='body-contents' valign='top'>
-<h1><a name='label:0' id='label:0'>RubyCocoa FAQ</a></h1><!-- RDLabel: "RubyCocoa FAQ" -->
-<h2><a name='label:1' id='label:1'>インストール</a></h2><!-- RDLabel: "インストール" -->
-<h3><a name='label:2' id='label:2'>Q: RubyCocoaを"dl file"というフォルダにダウンロードしてインストー</a></h3><!-- RDLabel: "Q: RubyCocoaを"dl file"というフォルダにダウンロードしてインストー" -->
+<h1><a name='label-0' id='label-0'>RubyCocoa FAQ</a></h1><!-- RDLabel: "RubyCocoa FAQ" -->
+<h2><a name='label-1' id='label-1'>インストール</a></h2><!-- RDLabel: "インストール" -->
+<h3><a name='label-2' id='label-2'>Q: RubyCocoaを"dl file"というフォルダにダウンロードしてインストー</a></h3><!-- RDLabel: "Q: RubyCocoaを"dl file"というフォルダにダウンロードしてインストー" -->
 <p>ルしたら失敗しました。</p>
-<h4><a name='label:3' id='label:3'>A: 間にスペースを含むディレクトリに入れて展開するとconfigの途中で</a></h4><!-- RDLabel: "A: 間にスペースを含むディレクトリに入れて展開するとconfigの途中で" -->
+<h4><a name='label-3' id='label-3'>A: 間にスペースを含むディレクトリに入れて展開するとconfigの途中で</a></h4><!-- RDLabel: "A: 間にスペースを含むディレクトリに入れて展開するとconfigの途中で" -->
 <p>エラーが出るようです。今までMacオンリーできた方は特にご注意ください。
 (sawada さんどうも)</p>
-<h2><a name='label:4' id='label:4'>インストール完了後</a></h2><!-- RDLabel: "インストール完了後" -->
-<h3><a name='label:5' id='label:5'>Q: インストールが完了してサンプルスクリプトを実行しようとすると</a></h3><!-- RDLabel: "Q: インストールが完了してサンプルスクリプトを実行しようとすると" -->
+<h2><a name='label-4' id='label-4'>インストール完了後</a></h2><!-- RDLabel: "インストール完了後" -->
+<h3><a name='label-5' id='label-5'>Q: インストールが完了してサンプルスクリプトを実行しようとすると</a></h3><!-- RDLabel: "Q: インストールが完了してサンプルスクリプトを実行しようとすると" -->
 <pre>% ruby fontnames.rb
 dyld: ruby Undefined symbols:
 _init_NSDistributedNotificationCenter
 _init_NSScriptStandardSuiteCommands</pre>
 <p>というエラーが起こり、osx/cocoa が require できません。</p>
-<h4><a name='label:6' id='label:6'>A: RubyCocoaのtgzファイルをStuffItで展開しましたか？</a></h4><!-- RDLabel: "A: RubyCocoaのtgzファイルをStuffItで展開しましたか？" -->
+<h4><a name='label-6' id='label-6'>A: RubyCocoaのtgzファイルをStuffItで展開しましたか？</a></h4><!-- RDLabel: "A: RubyCocoaのtgzファイルをStuffItで展開しましたか？" -->
 <p>RubyCocoaのtgzファイルをStuffItで展開した場合、ソースファイルに含まれ
 る31文字を越える長いファイル名が切り詰められてしまい、RubyCocoaを正し
 く作ることができません。インストールのドキュメントの手順どおりにシェル
@@ -63,9 +63,9 @@ _init_NSScriptStandardSuiteCommands</pre>
 <pre>% tar zxf rubycocoa-0.1.0.tgz</pre>
 <p>と入力してtgzファイルを展開しRubyCocoaを作り直してください。</p>
 <p>(志村さん、情報どうも)</p>
-<h2><a name='label:7' id='label:7'>その他</a></h2><!-- RDLabel: "その他" -->
-<h3><a name='label:8' id='label:8'>Q: ABAddressBookのようにNSで始まらないクラスには対応してないのですか? (2002-09-30)</a></h3><!-- RDLabel: "Q: ABAddressBookのようにNSで始まらないクラスには対応してないのですか? (2002-09-30)" -->
-<h4><a name='label:9' id='label:9'>A:</a></h4><!-- RDLabel: "A:" -->
+<h2><a name='label-7' id='label-7'>その他</a></h2><!-- RDLabel: "その他" -->
+<h3><a name='label-8' id='label-8'>Q: ABAddressBookのようにNSで始まらないクラスには対応してないのですか? (2002-09-30)</a></h3><!-- RDLabel: "Q: ABAddressBookのようにNSで始まらないクラスには対応してないのですか? (2002-09-30)" -->
+<h4><a name='label-9' id='label-9'>A:</a></h4><!-- RDLabel: "A:" -->
 <p>まず確認しておくべきこととして、RubyCocoa はデフォルトでは Foundation 
 と AppKit 以外のフレームワークに入ってるクラスを import していません。
 このようなクラスを使うためには OSX::NSBundle を使ってフレームワークを
@@ -80,19 +80,19 @@ abook = OSX::ABAddressBook.sharedAddressBook</pre>
 OSX::NSBundle.bundleWithPath("/System/Library/Frameworks/AddressBook.framework").load
 OSX.ns_import :ABAddressBook
 abook = OSX::ABAddressBook.sharedAddressBook</pre>
-<h2><a name='label:10' id='label:10'>過去のFAQ (2002-12-23現在)</a></h2><!-- RDLabel: "過去のFAQ (2002-12-23現在)" -->
-<h3><a name='label:11' id='label:11'>Q: Cocoaアプリ実行時にConsoleにmallocに関する警告が出ます</a></h3><!-- RDLabel: "Q: Cocoaアプリ実行時にConsoleにmallocに関する警告が出ます" -->
+<h2><a name='label-10' id='label-10'>過去のFAQ (2002-12-23現在)</a></h2><!-- RDLabel: "過去のFAQ (2002-12-23現在)" -->
+<h3><a name='label-11' id='label-11'>Q: Cocoaアプリ実行時にConsoleにmallocに関する警告が出ます</a></h3><!-- RDLabel: "Q: Cocoaアプリ実行時にConsoleにmallocに関する警告が出ます" -->
 <p>Cocoaアプリ実行時、Consoleにメモリアロケーションに関する以下のような警
 告メッセージが出るときがあります。</p>
 <pre>malloc[2461]: Deallocation of a pointer not malloced: 0x2718b20;
 This could be a double free(), or free() called with the middle of
 an allocated block; Try setting environment variable MallocHelp to
 see tools to help debug</pre>
-<h4><a name='label:12' id='label:12'>A: 原因不明でまだ未解決です (2002-01-08)</a></h4><!-- RDLabel: "A: 原因不明でまだ未解決です (2002-01-08)" -->
+<h4><a name='label-12' id='label-12'>A: 原因不明でまだ未解決です (2002-01-08)</a></h4><!-- RDLabel: "A: 原因不明でまだ未解決です (2002-01-08)" -->
 <p>リリース 0.1.2で解決したつもりでしたが、まだ発生します。「このパターン
 で必ず発生する」など何か参考になりそうな情報があれば知らせてください。</p>
-<h3><a name='label:13' id='label:13'>Q: スレッドを使うとうまく動かないようです。</a></h3><!-- RDLabel: "Q: スレッドを使うとうまく動かないようです。" -->
-<h4><a name='label:14' id='label:14'>A: 0.2.1 以降を使っていますか?</a></h4><!-- RDLabel: "A: 0.2.1 以降を使っていますか?" -->
+<h3><a name='label-13' id='label-13'>Q: スレッドを使うとうまく動かないようです。</a></h3><!-- RDLabel: "Q: スレッドを使うとうまく動かないようです。" -->
+<h4><a name='label-14' id='label-14'>A: 0.2.1 以降を使っていますか?</a></h4><!-- RDLabel: "A: 0.2.1 以降を使っていますか?" -->
 <p>リリース 0.2.1 から RubyCocoa アプリケーションで Ruby スレッドを動かす
 ための仕組みを実装しています。0.2.1 以前用に作った RubyCocoa アプリで 
 Rubyスレッドを使いたい場合には、rb_main.rb の ns_app_main を以下のよう
@@ -103,7 +103,7 @@ Rubyスレッドを使いたい場合には、rb_main.rb の ns_app_main を以下のよう
   OSX::NSBundle.loadNibNamed_owner (BUNDLE_NAME.to_s, app)
   OSX.NSApp.run
 end</pre>
-<h3><a name='label:15' id='label:15'>Q: 「アプリケーションは予期せぬ動作のため終了」ダイアログが出ます</a></h3><!-- RDLabel: "Q: 「アプリケーションは予期せぬ動作のため終了」ダイアログが出ます" -->
+<h3><a name='label-15' id='label-15'>Q: 「アプリケーションは予期せぬ動作のため終了」ダイアログが出ます</a></h3><!-- RDLabel: "Q: 「アプリケーションは予期せぬ動作のため終了」ダイアログが出ます" -->
 <p>fontname.rb や sndplay.rb は動いたのですが、サンプルのRubyCocoaアプリ
 を実行すると「アプリケーションは予期せぬ動作のため終了しました」という
 ダイアログが表示されます。コンソールを見ると</p>
@@ -114,7 +114,7 @@ _dlerror
 _dlopen
 _dlsym</pre>
 <p>というエラーメッセージが出ています。</p>
-<h4><a name='label:16' id='label:16'>A: EasyPackageなどでUNIX系ソフトをインストールしたことはありますか？</a></h4><!-- RDLabel: "A: EasyPackageなどでUNIX系ソフトをインストールしたことはありますか？" -->
+<h4><a name='label-16' id='label-16'>A: EasyPackageなどでUNIX系ソフトをインストールしたことはありますか？</a></h4><!-- RDLabel: "A: EasyPackageなどでUNIX系ソフトをインストールしたことはありますか？" -->
 <p>古いEasyPackageをインストールしていた場合などに /usr/local/lib に 
 libdl*.bundle という名前で共有ライブラリをリンクするための関数を持つラ
 イブラリが入っていて、そちらにリンクされたりして問題が起きるようです。
@@ -130,9 +130,9 @@ libdl*.bundle という名前で共有ライブラリをリンクするための関数を持つラ
 <p><a href='http://www.ruby-talk.com/cgi-bin/scat.rb/ruby/ruby-talk/29708'>[ruby-talk:29708](英語)
 </a> 
 も解決の参考になるかもしれません。</p>
-<h3><a name='label:17' id='label:17'>Q: Project Builderの新規プロジェクトでRubyCocoaアプリケーション</a></h3><!-- RDLabel: "Q: Project Builderの新規プロジェクトでRubyCocoaアプリケーション" -->
+<h3><a name='label-17' id='label-17'>Q: Project Builderの新規プロジェクトでRubyCocoaアプリケーション</a></h3><!-- RDLabel: "Q: Project Builderの新規プロジェクトでRubyCocoaアプリケーション" -->
 <p>用のプロジェクトを選びたいのですが？</p>
-<h4><a name='label:18' id='label:18'>A: templateディレクトリ内の名前が"tmpl_pb_"で始まるディレクトリ</a></h4><!-- RDLabel: "A: templateディレクトリ内の名前が"tmpl_pb_"で始まるディレクトリ" -->
+<h4><a name='label-18' id='label-18'>A: templateディレクトリ内の名前が"tmpl_pb_"で始まるディレクトリ</a></h4><!-- RDLabel: "A: templateディレクトリ内の名前が"tmpl_pb_"で始まるディレクトリ" -->
 <p>を"/Developer/ProjectBuilder Extras/Project Templates/Application/"の
 下にコピーして"RubyCocoa Application"というような名前に変えてください。</p>
 <pre>% cd "/Developer/ProjectBuilder Extras/Project Templates/Application"
@@ -175,8 +175,8 @@ $Revision$</p>
 <div id='sidebar-links'>
   <h2 class='body-sidebar'><a href='links.ja.html'>リンク</a></h2>
   <ul class='body-sidebar'>
-    <li><a href='http://www.imasy.or.jp/%7ehisa/mac/rubycocoa/'>RubyCocoa</a></li>
-    <li><a href='http://www.imasy.or.jp/%7ehisa/mac/rubyaeosa/'>RubyAEOSA</a></li>
+    <li><a href='http://www.fobj.com/rubycocoa/'>RubyCocoa</a></li>
+    <li><a href='http://www.fobj.com/rubyaeosa/'>RubyAEOSA</a></li>
     <li><a href='http://www.freeml.com/info/rubycocoa@freeml.com'>メーリングリスト (日本語)</a></li>
     <li><a href='http://sourceforge.net/mail/?group_id=44114'>メーリングリスト (英語)</a></li>
     <li><a href='http://sourceforge.net/projects/rubycocoa/'>RubyCocoaプロジェクト</a></li>
