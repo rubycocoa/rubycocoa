@@ -14,16 +14,16 @@ require 'osx/objc/appkit'
 module OSX
 
   # from NSBundle
-  def NSLocalizedString (key, comment = nil)
+  def NSLocalizedString(key, comment = nil)
     OSX::NSBundle.mainBundle.
-      localizedStringForKey_value_table (key, "", nil)
+      localizedStringForKey_value_table(key, "", nil)
   end
-  def NSLocalizedStringFromTable (key, tbl, comment = nil)
+  def NSLocalizedStringFromTable(key, tbl, comment = nil)
     OSX::NSBundle.mainBundle.
-      localizedStringForKey_value_table (key, "", tbl)
+      localizedStringForKey_value_table(key, "", tbl)
   end
-  def NSLocalizedStringFromTableInBundle (key, tbl, bundle, comment = nil)
-    bundle.localizedStringForKey_value_table (key, "", tbl)
+  def NSLocalizedStringFromTableInBundle(key, tbl, bundle, comment = nil)
+    bundle.localizedStringForKey_value_table(key, "", tbl)
   end
   module_function :NSLocalizedStringFromTableInBundle
   module_function :NSLocalizedStringFromTable
