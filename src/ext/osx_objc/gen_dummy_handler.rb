@@ -8,12 +8,11 @@
 #  the GNU Lesser General Public License version 2.
 #
 
-# if `uname -r`.to_f >= 6.0 then
-#   require '../../tool/och_analyzer3'
-# else
-#   require '../../tool/och_analyzer'
-# end
-require '../../tool/och_analyzer'
+if `uname -r`.to_f >= 6.0 then
+  require '../../tool/och_analyzer3'
+else
+  require '../../tool/och_analyzer'
+end
 
 def collect_src_headers(src_path, re_pat)
   File.open(src_path) {|f|
