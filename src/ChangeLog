@@ -1,3 +1,9 @@
+2003-01-15  FUJIMOTO Hisakuni  <hisa@fobj.com>
+
+	* tests/tc_nsdata.rb, tests/tc_objcptr.rb: add some unit tests
+
+	* framework/src/objc/cls_objcptr.m: add taint mark handling.
+
 2003-01-14  FUJIMOTO Hisakuni  <hisa@fobj.com>
 
 	* tests/tc_rubystring.rb, tests/tc_nsstring.rb:
