@@ -552,11 +552,16 @@ static BOOL rbobj_to_nssize(VALUE obj, NSSize* result)
 
 static BOOL rbobj_to_nsrange(VALUE obj, NSRange* result)
 {
+  unsigned long first, last;
+  int exclude_end_p;
   if (rb_respond_to(obj, rb_intern("to_range")))
     obj = rb_funcall(obj, rb_intern("to_range"), 0);
   if (rb_obj_is_kind_of(obj, rb_cRange)) {
-    result->location = NUM2UINT(rb_funcall(obj, rb_intern("begin"), 0));
-    result->length = NUM2UINT(rb_funcall(obj, rb_intern("length"), 0));
+    first = NUM2UINT(rb_funcall(obj, rb_intern("first"), 0));
+    last = NUM2UINT(rb_funcall(obj, rb_intern("last"), 0));
+	exclude_end_p = (rb_funcall(obj, rb_intern("exclude_end?"), 0) == Qtrue);
+    result->location = first;
+    result->length = (last - first + (exclude_end_p ? 0 : 1));
   }
   else {
     if (TYPE(obj) != T_ARRAY)
