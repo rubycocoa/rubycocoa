@@ -10,30 +10,30 @@
 
 : revived RubyCocoa.framework
 
-  All of basic implementation of RubyCocoa is included in RubyCocoa
+  All of the basic implementation of RubyCocoa is included in RubyCocoa
   framework. It contains also code written with Ruby. Libruby itself
-  is linked statically to RubyCocoa framework in binary distribution.
+  is linked statically to RubyCocoa framework in the binary distribution.
   It would make you easy to distribute a RubyCocoa application.
 
-: rename extended library
+: renamed extended library
 
   Name of the extended library was changed from 'osx_objc.bundle' into
   'rubycocoa.bundle'.
-  This library have become 'stub' extended library for using RubyCocoa
-  framework from 'ruby' command, 'irb' command and etc.
+  This library has become a 'stub' extended library for using RubyCocoa
+  framework from commands such as (({ruby})), (({irb})), etc.
 
-: relocate some libraries
+: relocated some libraries
 
-  All of libraries included in the directory 'osx/objc' was moved inside
-  RubyCocoa framework.
-  In addition, libraries included in the 'osx' directory have become
-  'stub' library for using RubyCocoa framework from 'ruby', 'irb'
-  andetc commands.
+  All of the libraries included in the directory 'osx/objc' were moved inside
+  the RubyCocoa framework.
+  In addition, the libraries included in the 'osx' directory have become a
+  'stub' library for using RubyCocoa framework from commands such as
+  (({ruby})), (({irb})), etc.
 
 
 == changes from 0.3.1 (0.3.2)
 
-=== add library for AddressBook.framework
+=== added library for AddressBook.framework
 
 e.g.:
 

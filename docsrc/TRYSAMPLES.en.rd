@@ -6,8 +6,8 @@ Let's try scripts and applications of samples.
 == RubyCocoa Application
 
 First, try to execute a RubyCocoa application which has already
-builded. In Finder, open '/Developer/Examples/RubyCocoa' folder and
-double click SimpleApp.  Or type following on command line:
+been built. In Finder, open '/Developer/Examples/RubyCocoa' folder and
+double-click SimpleApp.  Or type following on command line:
 
   % cd /Developer/Examples/RubyCocoa
   % open SimpleApp.app
@@ -28,10 +28,10 @@ For Mac OS X 10.2 users, furthermore:
   % echo Hello World | ruby speak.rb
   % head -5 speak_me.txt | ruby speak.rb
 
-This will be interesting. When execute speak.rb without argument, Mac
-read an each line text you typed out until input 'control-D'.  In
-these script, it's used AppleScript (and AppleEvent) interface which
-have implemented since Mac OS X 10.2.
+This will be interesting. When you execute speak.rb without arguments, the Mac
+will read all the text you type until 'control-D' is input.  This script uses
+the AppleScript (and AppleEvent) interface which has been implemented since Mac
+OS X 10.2.
 
 Next, try scripts with windowing.
 
@@ -40,45 +40,44 @@ Next, try scripts with windowing.
   $ (cd Hakoiri-Musume && ruby rb_main.rb )  # puzzle game
 
 
-== Build a Makefile based RubyCocoa application
+== Build a Makefile-based RubyCocoa application
 
-Next one is Makefile based. Type to build: 
+The next example is Makefile-based. Type this to build: 
 
   % cd /Developer/Examples/RubyCocoa/Hakoiri-Musume
   % make
 
-And launch application:
+Now launch the application:
 
   % open CocoHako.app
 
-or double click 'CocoHako' on Finder. 
+or double-click 'CocoHako' in the Finder. 
 
 
-== Build a Project Builder based RubyCocoa application
+== Build a Project Builder-based RubyCocoa application
 
-Next one is Project Builder based. type to build:
+The next example is Project Builder-based. Type this to build it:
 
   % cd /Developer/Examples/RubyCocoa/simpleapp
   % pbxbuild
   % open build/SimpleApp.app
 
-You can build and run the application in Project Builderm, too. Launch
+You can build and run the application in Project Builder, too. Launch the
 application:
 
 
 == Next...
 
-There are the other various samples. Please read and try them. Have a
-fun!
+There are various other samples. Please read and try them. Have fun!
 
 
-== supplement
+== Supplement
 
 * HelloWorld.rb is a sample script for ((<PyObjc|URL:http://pyobjc.sf.net/>))
   that was translated from Python into Ruby.
 
-* TransparentHello.rb appear in the article of
-  ((<'Dr.Dobbs Journal, May 2002'|URL:http://http://www.ddj.com/articles/2002/0205//>))
+* TransparentHello.rb appears in the article of
+  ((<'Dr. Dobbs Journal, May 2002'|URL:http://http://www.ddj.com/articles/2002/0205//>))
   written by Chris Thomas.
 
 * RubyRaiseMan and RubyTypingTutor is a tutorial application in
@@ -86,7 +85,7 @@ fun!
   that was translated from Objective-C into Ruby.
 
 * MyViewer is a sample in Japanese book
-  ((<'guide of Mac OS X Programming - Objective-C'|URL:http://www.amazon.co.jp/exec/obidos/ASIN/4877780688>))
+  ((<'Guide of Mac OS X Programming - Objective-C'|URL:http://www.amazon.co.jp/exec/obidos/ASIN/4877780688>))
   that was translated from Objective-C into Ruby.
 
 

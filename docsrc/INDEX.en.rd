@@ -6,30 +6,28 @@ RubyCocoa is a framework for ((<Mac OS X|URL:http://www.apple.com/macosx/>))
 that allows ((<Cocoa|URL:http://developer.apple.com/cocoa/>)) programming
 in the object-oriented scripting language ((<Ruby|URL:http://www.ruby-lang.org/>)).
 
-RubyCocoa allows you to write a Cocoa application in Ruby. It allows
-you to create a Cocoa object in a Ruby script and to use it. In Cocoa
-application, mixture of program written by both Ruby and Objective-C
-is possible.
+RubyCocoa lets you write a Cocoa application in Ruby. It allows you to create
+and use a Cocoa object in a Ruby script. It's possible to write a
+Cocoa application that mixes Ruby and Objective-C code.
 
-Some useful cases of RubyCocoa:
+Some useful applications of RubyCocoa:
 
-  * Exploration of a Cocoa object's feature with 'irb' interactively
+  * Exploration of a Cocoa object's features with (({irb})) interactively
   * Prototyping of a Cocoa application
-  * Cocoa application that include good feature of Ruby and Objective-C
-  * Wrapping Mac OS X native GUI for Ruby script
+  * Writing a Cocoa application that combines good features of Ruby and Objective-C
+  * Wrapping Mac OS X's native GUI for a Ruby script
 
 
 == Screenshot
 
-A following screenshot is an appearance of a RubyCocoa application
-which consist of just only ruby scripts and nib file of Interface
-Builder.
+The following screenshot is of a RubyCocoa application which consists of only
+Ruby scripts and a nib file created in Mac OS X's Interface Builder.
 <<< img_simpleapp
 
 
 == Script Examples
 
-Next script is playing system sounds.
+The next script plays all the system sounds.
 
   require 'osx/cocoa'
   snd_files =`ls /System/Library/Sounds/*.aiff`.split
@@ -40,8 +38,8 @@ Next script is playing system sounds.
     sleep 0.5
   end
 
-The following examples are scripts that Mac read a text aloud.
-(for OSX 10.2)
+The following examples are scripts that read a text aloud.
+(for OS X 10.2)
 
   require 'osx/cocoa'
   include OSX
@@ -53,8 +51,8 @@ The following examples are scripts that Mac read a text aloud.
   speak "Hello World!"
   speak "Kon nich Wah. Ogan key desu ka?" # "Hi. How are you." in Japanese
 
-Next script is a class definition that is related with nib file made
-by Interface Builder.
+The next script is a class definition that connects to a nib file created in
+Interface Builder.
 
   require 'osx/cocoa'
 
@@ -77,12 +75,12 @@ by Interface Builder.
     def windowShouldClose (sender = nil)
       OSX.NSApp.stop (self)
       true
-    end    
+    end
 
   end
 
 
-== LICENCE
+== LICENSE
 
 ((<GNU Lesser General Public License version 2. LGPL
 |URL:http://www.gnu.org/licenses/lgpl.html>))
@@ -90,24 +88,24 @@ by Interface Builder.
 
 == ACKNOWLEDGEMENT
 
-Special Thanks to Chris Thomas, Luc "lucsky" Heinrich and S.Sawada.
+Special thanks to Chris Thomas, Luc "lucsky" Heinrich and S. Sawada.
 
 And thanks to:
 
-Gesse Gam, Hiroyuki Shimura, Masaki Yatsu, Masatoshi Seki, Michael Miller, 
-Ogino Junya, Ralph Broom, Rich Kilmer, Tetsuhumi Takaishi, Tosh
-and more folks.
+Gesse Gam, Hiroyuki Shimura, John Platte, Masaki Yatsu, Masatoshi
+Seki, Michael Miller, Ogino Junya, Ralph Broom, Rich Kilmer, Tetsuhumi
+Takaishi, Tosh and other folks.
 
 
 == Contact
 
-Feel free to send comments, icon design, bug reports and patches about
-RubyCocoa. I want to ask a kind English native to correct my strange
-English writing. Thanks.
+Feel free to send comments, icon designs, bug reports and patches for
+RubyCocoa. I want to ask kind native English speakers to correct my strange
+English errors. Thanks.
 
-An author looks for job (an income source).  Is not there a supporter
-(sponsor, investor or etc...) with interest into development of
-RubyCocoa or other?
+An author looks for a job (an income source).  Is there a supporter
+(sponsor, investor, etc.) with interest in the development of RubyCocoa or
+other software?
 
 Contact ((<me|URL:mailto:contact.rubycocoa@fobj.com>)) freely please.
 

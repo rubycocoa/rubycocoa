@@ -1,52 +1,53 @@
 # -*-rd-*-
-= Build and Installation RubyCocoa from Source
+= Building and Installing RubyCocoa from Source
 
-This document describes build and installation of RubyCocoa 0.4 from
+This document describes building and installing RubyCocoa 0.4 from
 source. Skip this if you are going to install the binary distribution.
 
-Build/Installation would be done on shell command with Terminal
-application or etc. In this document, it's assumed to use 'bash' in
-shell command input example. When other shell (e.g. tcsh) is used,
-please read suitably.
+Building and installation are done from a shell, using the Terminal
+application or another program that provides a shell prompt, such as GLterm.
+This document assumes the use of the (({bash})) shell in shell command input
+examples. Please adjust the instructions accordingly when another shell (e.g.
+(({tcsh}))) is used.
 
 
-== Procedure of Build and Installation
+== Build and Installation Procedure
 
-The following procedures perform build and installation.
+The following steps perform the build and installation.
 
 * ((<Build and Installation of Ruby>))
 * ((<Build of RubyCocoa>))
 * ((<Unit Test for RubyCocoa>))
 * ((<Installation of RubyCocoa>))
 
-On somewhere directory, extract RubyCocoa source from the '.tgz' file.
+Extract RubyCocoa source from the '.tgz' file into a directory somewhere.
 
   $ cd {somewhere}
   $ tar zxf rubycocoa-0.4.0.tar.gz
 
-((*Caution!*)) Using StuffIt, building RubyCocoa will fail
-because of a file name length problem. 
+((*Caution!*)) Using StuffIt, building RubyCocoa will fail because of a file
+name length problem.
 
 
 == Build and Installation of Ruby
 
-To build RubyCocoa, Some C language header files and libruby of Ruby
-is required. Here, the build procedure of Ruby which serves as a base
-of RubyCocoa in the case shown below at an example is explained.
+To build RubyCocoa, some C language header files and Ruby's libruby library are
+required. Here, the build procedure of Ruby which serves as a base of RubyCocoa
+in the case shown below at an example is explained.
 
   * Ruby 1.8 installed from source
   * Ruby 1.6.7 included in Mac OS X 10.2
 
 RubyCocoa 0.4 binary distribution has been built with the latter.
-When Ruby has been installed with some packages (such as
-((<Fink|URL:http://fink.sf.net/>))), read and change accordingly.
+When Ruby has been installed with a package utility such as
+((<Fink|URL:http://fink.sf.net/>)), adapt these instructions accordingly.
 
 
 === Ruby 1.8 installed from source
 
-It moves to the sauce directory of Ruby 1.8, and builds and installs
+It moves to the source directory of Ruby 1.8, and builds and installs
 as follows. Please change an option if needed.
-((- RubyCocoa.framework cannot be linked without specify the
+((- RubyCocoa.framework cannot be linked without specifying the
 '-fno-common' option for CFLAGS. -))
 
   $ CFLAGS='-g -O2 -fno-common' ./configure
@@ -58,22 +59,22 @@ as follows. Please change an option if needed.
 
 === Ruby 1.6.7 included in Mac OS X 10.2
 
-==== The check of the Mac OS X package installed already
+==== Check that the necessary Mac OS X packages are installed
 
-The required package (BSD.pkg and BSDSDK.pkg) may not be installed
-according to the option setup when installing Mac OS X 10.2. Please
-check whether first of all, Ruby is installed, and if required,
-install.
+The required packages (BSD.pkg and BSDSDK.pkg) may not have been installed,
+depending on the options selected when Mac OS X 10.2 was installed. Please
+first check whether Ruby is installed, and if required, install it from the Mac
+OS X 10.2 installer.
 
   $ ls -dF /Library/Receipts/BSD*.pkg
   /Library/Receipts/BSD.pkg/   /Library/Receipts/BSDSDK.pkg/
 
-Although Ruby is contained in Mac OS X 10.2, what reason or libruby is
-not contained. Therefore, to build RubyCocoa, it is necessary to make
-libruby from the sauce of Ruby 1.6.7.
+Although Ruby is contained in Mac OS X 10.2, for some reason libruby is
+not included. Therefore, to build RubyCocoa, it is necessary to make libruby
+from the source of Ruby 1.6.7.
 
 
-==== apply patch to Ruby 1.6.7 source
+==== Apply patch to Ruby 1.6.7 source
 
 Extract source from Ruby 1.6.7 '.tgz' file, and apply the patch which
 is contained in RubyCocoa to Ruby 1.6.7.
@@ -84,11 +85,11 @@ is contained in RubyCocoa to Ruby 1.6.7.
   $ patch -p1 < {RubyCocoa source}/ruby-1.6.7-osx10.2.patch
 
 
-==== build/installation of libruby
+==== Build and install libruby
 
 Ruby 1.6.7 is built so that the environment of the Mac OS X attachment
 Ruby may be suited.
-((- RubyCocoa.framework cannot be linked without specify the
+((- RubyCocoa.framework cannot be linked without specifying the
 '-fno-common' option for CFLAGS. -))
 
   $ rbhost=`ruby -r rbconfig -e "print Config::CONFIG['host']"`
@@ -96,7 +97,7 @@ Ruby may be suited.
   $ make
   $ make test
 
-install only libruby.a.
+Install only libruby.a.
 
   $ ranlib libruby.a
   $ rubyarchdir=`ruby -r rbconfig -e 'print Config::CONFIG["archdir"]'`
@@ -105,7 +106,7 @@ install only libruby.a.
 
 == Build of RubyCocoa
 
-Type as follows for build RubyCocoa:
+Type as follows to build RubyCocoa:
 
   $ ruby install.rb --help   # print all options
   $ ruby install.rb config
@@ -114,7 +115,7 @@ Type as follows for build RubyCocoa:
 'ruby install.rb config' command have some options for RubyCocoa. If
 required, specify option at the time of a config phase.
 
-((*Caution!*)) If you got an error Segmentation Fault in config phase,
+((*Caution!*)) If you got a "Segmentation Fault" error in the config phase,
 please check "((<Notice for build of RubyCocoa 0.4.0 to Ruby 1.6.8>))".
 
 == Unit Test for RubyCocoa
@@ -122,15 +123,14 @@ please check "((<Notice for build of RubyCocoa 0.4.0 to Ruby 1.6.8>))".
   $ cd {source}/tests
   $ DYLD_FRAMEWORK_PATH={source}/framework/build ruby -I../lib testall.rb
 
-Test::Unit is required for unit test.
-This process is optional.
+Test::Unit is required for unit tests.  This process is optional.
 
 
 == Installation of RubyCocoa
 
   $ sudo ruby install.rb install
 
-Installation is completion above. The following were installed:
+Installation is completed above. The following were installed:
 old procedure.
 
 : /Library/Frameworks/RubyCocoa.framework
@@ -144,24 +144,24 @@ old procedure.
   RubyCocoa extended library (stub)
 
 : inside of '/Developer/ProjectBuilder Extras/'
-  some templates for ProjectBuilder
+  Some templates for ProjectBuilder
   'File Templates/Ruby'
   'Project Templates/Application/Cocoa-Ruby Document-based Application'
   'Project Templates/Application/Cocoa-Ruby Application'
 
 : /Developer/Documentation/RubyCocoa
-  Documents (HTML)
+  HTML Documentation
 
 : /Developer/Examples/RubyCocoa
-  sample programs
+  Sample programs
 
 After installation, let's try samples that are written by Ruby. Refer
 to ((<'Try RubyCocoa Samples'|URL:trysamples.en.html>)).
 
 
-== [FYI] Useful Installer's Options for a Binary Packaging
+== [FYI] Useful Installer Options for Binary Package Maintainers
 
-For a maintainer of a binary package, there're useful options in
+For a maintainer of a binary package, there are some useful options for the
 config phase.
 
   * --install-prefix  : effect to extended library and library
@@ -195,8 +195,8 @@ As a result, these will be installed temporarily.
 
 == Notice for build of RubyCocoa 0.4.0 to Ruby 1.6.8
 
-In build of RubyCocoa 0.4.0 to ((*Ruby 1.6.8*)), you may see a error
-message Segmentation Fault in config phase:
+When building RubyCocoa 0.4.0 against ((*Ruby 1.6.8*)), you may see a
+"Segmentation Fault" error message in the config phase:
 
   ruby install.rb config
 
@@ -228,16 +228,16 @@ The patch is:
    end
 
 
-== Development and testing environment 
+== Development and testing environment
 
-* PowerMacintosh G4/400/384MB or iBook G3/600/384MB
+* Power Macintosh G4/400/384MB or iBook G3/600/384MB
 * Mac OS X 10.2.3
 * DevTools 10.2
 * ruby-1.6.7 (pre-installed in Mac OS X 10.2)
 * ruby-1.8 (preview 1 from cvs server)
 
 
-== Have a fun
+== Have fun!
 
 Feel free to send comments, bug reports and patches for RubyCocoa.
 
