@@ -27,7 +27,7 @@ class RubyController
     setup_outlet if respond_to? :setup_outlet
   end
 
-  # Special method called from rb_controller.m
+  # Special method called from RubyController.m
   def set_ocobj(ocobj)
     @oc_self = ocobj
   end
