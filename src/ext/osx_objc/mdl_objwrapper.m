@@ -97,7 +97,7 @@ ocm_perform(int argc, VALUE* argv, VALUE rcv, VALUE* result)
 
   pool = [[NSAutoreleasePool alloc] init];
   oc_sel_str = NSStringFromSelector(oc_sel);
-  DLOG2("ocm_perfom (%@): ret_type=%s", oc_sel_str, ret_type);
+  DLOG2("ocm_perform (%@): ret_type=%s", oc_sel_str, ret_type);
 
   for (i = 0; i < num_of_args; i++) {
     const char* arg_type = [oc_msig getArgumentTypeAtIndex: (i+2)];
@@ -112,7 +112,7 @@ ocm_perform(int argc, VALUE* argv, VALUE rcv, VALUE* result)
     }
   }
 
-  DLOG1("    NSObject#performSelector (%@) ...", oc_sel_str);
+  DLOG2("    NSObject#performSelector (%@) num_of_args=%d...", oc_sel_str, num_of_args);
 
   NS_DURING  
     switch (num_of_args) {
