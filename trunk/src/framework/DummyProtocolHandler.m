@@ -21,6 +21,9 @@
 - ruby_method_3:a1 :a2 :a3 { return nil; }
 - ruby_method_4:a1 :a2 :a3 :a4 { return nil; }
 - ruby_method_5:a1 :a2 :a3 :a4 :a5 { return nil; }
+- ruby_method_6:a1 :a2 :a3 :a4 :a5 :a6 { return nil; }
+- ruby_method_7:a1 :a2 :a3 :a4 :a5 :a6 :a7 { return nil; }
+- ruby_method_8:a1 :a2 :a3 :a4 :a5 :a6 :a7 :a8 { return nil; }
 
 // as Observer
 - (void)receiveNotification: (NSNotification *)notification {}
