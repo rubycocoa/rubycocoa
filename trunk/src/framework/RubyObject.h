@@ -19,7 +19,6 @@
 }
 
 + rubyObjectWithOCObject: (id)a_ocobj;
-+ rubyDelegatorFor: (id)a_ocobj;
 
 - init;
 - initWithRubyClassName: (NSString*)a_rbclass_name;
@@ -32,8 +31,4 @@
 - (BOOL) hasObjcHandlerForSelector: (SEL)a_sel;
 - (BOOL) hasRubyHandlerForSelector: (SEL)a_sel;
 
-@end
-
-@interface NSObject(RubyDelegated)
-- rubyDelegator;
 @end

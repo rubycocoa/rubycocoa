@@ -14,7 +14,7 @@
 #import <LibRuby/cocoa_ruby.h>
 #import "ocdata_conv.h"
 #import "delegate_utils.h"
-#import "RubyObject.h"
+#import "RubyDelegator.h"
 #import <objc/objc-class.h>
 #import <stdarg.h>
 
