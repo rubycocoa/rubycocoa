@@ -159,7 +159,12 @@ class BallMoving
   end
 
   def snd_init
-    @wall_snd = OSX::NSSound.soundNamed "Bonk"
+    require 'rbconfig'
+    if File.basename (Config::CONFIG['archdir'])[-3..-1].to_f >= 6.0 then
+      @wall_snd = OSX::NSSound.soundNamed "Pop"
+    else
+      @wall_snd = OSX::NSSound.soundNamed "Bonk"
+    end
     @wall_snd.play ; @wall_snd.stop	# for pre-load
     @paddle_snd = OSX::NSSound.soundNamed "Ping"
     @paddle_snd.play ; @paddle_snd.stop	# for pre-load
