@@ -28,9 +28,15 @@
   on Mac OS X based Carbon framework. Recently, some classes
   (e.g. NSAppleScript) have been added to Cocoa incompletely.
 
-: ((<CocoaRBBR.app|URL:http://homepage3.nifty.com/kimuraw/proj/cocoarbbr.html>))
+: ((<CocoaRBBR.app (Japanese)|URL:http://homepage3.nifty.com/kimuraw/proj/cocoarbbr.html>))
 
   The application which implemented Ruby class browser with RubyCocoa.
+
+: ((<uptime|URL:http://homepage.mac.com/jptmoore/uptime/index.html>))
+
+  This is a GUI application for using
+  ((<.Mac|URL:http://www.mac.com/>)) as blog implemented with
+  RubyCocoa.
 
 
 == Same Kind of RubyCocoa
