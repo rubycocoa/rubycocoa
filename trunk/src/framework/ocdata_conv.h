@@ -13,6 +13,13 @@
 #import <LibRuby/cocoa_ruby.h>
 #import <objc/objc-class.h>
 
+enum osxobjc_nsdata_type {
+  _PRIV_C_BOOL = 1024,
+  _PRIV_C_NSRECT,
+  _PRIV_C_NSPOINT,
+  _PRIV_C_NSSIZE,
+};
+
 #define OCID2NUM(val) UINT2NUM((VALUE)(val))
 
 int    to_octype       (const char* oc_type_str);
@@ -24,6 +31,7 @@ BOOL   rbobj_to_nsobj  (VALUE obj, id* nsobj);
 
 BOOL   rbobj_to_bool   (VALUE obj);
 VALUE  bool_to_rbobj   (BOOL val);
+VALUE  sel_to_rbobj    (SEL val);
 VALUE  int_to_rbobj    (int val);
 VALUE  uint_to_rbobj   (unsigned int val);
 VALUE  double_to_rbobj (double val);
