@@ -23,6 +23,7 @@ SRCS.each do |src|
   cmdstr = "diff --brief -u -I '#{PAT_1}' -I '#{PAT_2}' #{src} #{dstpath}"
   unless system( cmdstr )  then
     cmdstr = "cp -f -p #{src} #{dstpath}"
-    $stderr.puts( cmdstr ) if system( cmdstr )
+    # $stderr.puts( cmdstr ) if system( cmdstr )
+    $stderr.puts( cmdstr )
   end
 end
