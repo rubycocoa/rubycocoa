@@ -20,7 +20,7 @@ def read_all_from(fnames)
   str
 end  
 
-header_str = "require 'osx/ocobject'\n\nmodule OSX\n\n"
+header_str = "require 'osx/objc/ocobject'\n\nmodule OSX\n\n"
 footer_str = "\nend\n"
 
 [
