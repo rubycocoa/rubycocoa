@@ -5,8 +5,8 @@
 
 === for Mac OS X 10.3
 
-バイナリ配付に含まれているRubyCocoaは、Mac OS X 10.2に付属する
-Ruby 1.6.7 に合わせて構築しています。
+バイナリ配付に含まれているRubyCocoaは、Mac OS X 10.3に付属する
+Ruby 1.6.8 に合わせて構築しています。
 
 ((<ファイル一覧|URL:http://rubycocoa.sourceforge.net/files/>))
 の中から
