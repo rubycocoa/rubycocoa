@@ -436,7 +436,8 @@ static BOOL rbobj_convert_to_nsobj(VALUE obj, id* nsobj)
 
   case T_STRING:
   case T_SYMBOL:
-    *nsobj = [NSString stringWithCString: STR2CSTR(rb_obj_as_string(obj))];
+    obj = rb_obj_as_string(obj);
+    *nsobj = [NSString stringWithCString: RSTRING(obj)->ptr length: RSTRING(obj)->len];
     return YES;
 
   case T_ARRAY:
