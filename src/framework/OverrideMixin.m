@@ -229,9 +229,10 @@ static id imp_c_addRubyMethod(Class klass, SEL method, SEL arg0)
 
   // warn if trying to override a method that isn't a member of the specified class
   if(me == NULL) {
-    rb_warning( "could not add '%s' to class '%s': "
-		"Objective-C cannot find it in the superclass",
-		(char *) method, klass->name );
+    rb_raise( rb_eRuntimeError, 
+	      "could not add '%s' to class '%s': "
+	      "Objective-C cannot find it in the superclass",
+	      (char *) method, klass->name );
   }
   else {
     // override method
