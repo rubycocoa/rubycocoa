@@ -1,3 +1,10 @@
+2002-12-17  FUJIMOTO Hisakuni  <hisa@fobj.com>
+
+	* template/*:
+	modify for RubyCocoa 0.4.
+	move a Makefile based template to directory named MakefileBased.
+	move templates for ProjectBuilder to directory named ProjectBuilder.
+
 2002-12-16  FUJIMOTO Hisakuni  <hisa@fobj.com>
 
 	* framework/RubyCocoa.pbproj/project_tmpl.pbxproj:
