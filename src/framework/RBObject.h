@@ -20,6 +20,9 @@
 }
 
 - initWithRubyObject: (VALUE) rbobj;
+- initWithRubyScriptCString: (const char*) cstr;
+- initWithRubyScriptString: (NSString*) str;
+
 - (VALUE) __rbobj__;
 - (BOOL) isKindOfClass:(Class)aClass;
 
