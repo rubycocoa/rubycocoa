@@ -98,23 +98,6 @@ def tmpl_a_gsub(tmpl, fname, argc)
   end
 end
 
-def tmpl_a_gsub_rettype(tmpl, rettype)
-  if rettype == 'void' then
-    tmpl.gsub! /%%retvar%%/, ""
-    tmpl.gsub! /%%retresult%%/, ""
-    tmpl.gsub! /%%rbretval%%/, "Qnil"
-  else
-    tmpl.gsub! /%%retvar%%/, "#{rettype} ns_result;"
-    tmpl.gsub! /%%retresult%%/, "ns_result = "
-    if rettype == 'id' then
-      tmpl.gsub! /%%rbretval%%/, "ocobj_new_with_ocid(ns_result)"
-    elsif rettype == 'BOOL' then
-      tmpl.gsub! /%%rbretval%%/, "bool_to_rbobj(ns_result)"
-    end
-  end
-end
-
-
 def is_objc_id?(val)
   if val.is_a? Array then
     val.each {|i| return false unless is_objc_id?(i) }
@@ -133,6 +116,60 @@ def is_objc_id?(val)
   end
 end
 
+def rettype_type(rettype)
+  rettype.strip!
+  if is_objc_id?(rettype) then
+    :_C_ID
+  else
+    case rettype
+    when 'void' then :_C_VOID
+    when 'SEL'  then :_C_SEL
+    when 'BOOL' then :_C_UCHR
+    when /^unsigned\s+char$/ then :_C_UCHR
+    when 'char' then '_C_CHR'
+    when /^unsigned\s+short(\s+int)?$/ then :_C_USHT
+    when /^short(\s+int)?$/ then :_C_SHT
+    when /^unsigned\s+int$/ then :_C_UINT
+    when 'int' then :_C_INT
+    when /^unsigned\s+long(\s+int)?$/ then :_C_ULNG
+    when /^long(\s+int)?$/ then :_C_LNG
+    when 'float' then :_C_FLT
+    when 'double' then :_C_DBL
+    else rettype.intern
+    end
+  end
+end
+
+def tmpl_a_gsub_rettype(tmpl, rettype)
+  typetype = rettype_type(rettype)
+  if typetype == :_C_VOID then
+    tmpl.gsub! /%%retvar%%/, ""
+    tmpl.gsub! /%%retresult%%/, ""
+    tmpl.gsub! /%%rbretval%%/, "Qnil"
+  else
+    tmpl.gsub! /%%retvar%%/, "#{rettype} ns_result;"
+    tmpl.gsub! /%%retresult%%/, "ns_result = "
+    case typetype
+    when :_C_ID then
+      tmpl.gsub! /%%rbretval%%/, "ocobj_new_with_ocid(ns_result)"
+    when :_C_BOOL then
+      tmpl.gsub! /%%rbretval%%/, "bool_to_rbobj(ns_result)"
+    when :_C_SEL then
+      tmpl.gsub! /%%rbretval%%/, "sel_to_rbobj(ns_result)"
+    when :_C_CHR, :_C_SRT, :_C_INT, :_C_LNG then
+      tmpl.gsub! /%%rbretval%%/, "int_to_rbobj((int)ns_result)"
+    when :_C_UCHR, :_C_USRT, :_C_UINT, :_C_ULNG then
+      tmpl.gsub! /%%rbretval%%/, "uint_to_rbobj((unsigned)ns_result)"
+    when :_C_FLT, :_C_DBL then
+      tmpl.gsub! /%%rbretval%%/, "double_to_rbobj((double)ns_result)"
+    else
+      return false
+    end
+  end
+  true
+end
+
+
 def gen_def_c_func(info, argc = -1)
   ret =      "// #{info.orig};\n"
   ret.concat "static VALUE\nosx_#{info.name}"
@@ -146,15 +183,8 @@ def gen_def_c_func(info, argc = -1)
     argtypes = info.args.map{|i|i.type}
     if is_objc_id?(argtypes) then
       tmpl = FUNC_TMPLATE_A.dup
-      tmpl_a_gsub(tmpl, info.name, info.args.size)
-      if is_objc_id?(info.type) then
-	tmpl_a_gsub_rettype(tmpl, "id")
-	ret.concat tmpl
-      elsif info.type == 'BOOL' then
-	tmpl_a_gsub_rettype(tmpl, info.type)
-	ret.concat tmpl
-      elsif info.type == 'void' then
-	tmpl_a_gsub_rettype(tmpl, info.type)
+      if tmpl_a_gsub_rettype(tmpl, info.type) then
+	tmpl_a_gsub(tmpl, info.name, info.args.size)
 	ret.concat tmpl
       else
 	ret.concat "  rb_notimplement();\n"
