@@ -1,14 +1,27 @@
+body {
+    background: white;
+    color: black;
+    margin-left: 2%;
+    margin-right: 2%;
+    font-family: verdana, arial, helvetica, Sans-Serif;
+}
+
 h1 {
-  text-align:center;
-  color:blue;
-  margin: 0% 5%;
+  font-family: "comic sans ms", verdana, sans-serif; 
+  text-align: center;
+  color: blue;
   border-bottom-color: #FF8080;
   border-bottom-style: solid;
   border-bottom-width: 8px;
 }
+
+h2, h3, h4, h5, h6 {
+    font-family: verdana, arial, helvetica, Sans-Serif;
+}
+
 h2 {
   color:green;
-  margin: 1em 0em 0em 0em;
+  margin-top: 1em;
   border-bottom-color: #FFE0E0;
   border-bottom-style: solid;
   border-bottom-width: 1;
@@ -25,7 +38,7 @@ pre {
  margin-right: 4em;
  background-color:#F0F0FF;
 }
-dt { color: #303070; margin: 0em 1em }
-dd { font-size: small; margin: 0em 2em }
+dt { font-weight: bold; color: #303070; margin: 0em 1em }
+dd { margin: 0em 2em }
 
 p { margin: 1em 1em }
