@@ -13,10 +13,7 @@
 #import <%%%framework_name%%%/osx_ruby.h>
 
 @interface RBObject(RBSlaveObject)
-- init;
 - initWithMasterObject: master;
-- initWithClass: (Class)occlass;
 - initWithClass: (Class)occlass masterObject: master;
-- initWithRubyClass: (VALUE)rbclass;
 - initWithRubyClass: (VALUE)rbclass masterObject: master;
 @end
