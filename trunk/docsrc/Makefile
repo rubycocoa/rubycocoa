@@ -6,7 +6,7 @@ INSTALL_TARGETDIR = $(RUBYCOCOA_DIR)/doc
 RUBY = ruby
 SED = sed
 
-TARGET = \
+TARGET_HTML = \
 	$(TARGETDIR)/index.en.html \
 	$(TARGETDIR)/index.ja.html \
 	$(TARGETDIR)/changes.en.html \
@@ -27,8 +27,9 @@ TARGET = \
 	$(TARGETDIR)/references.en.html \
 	$(TARGETDIR)/news.en.html \
 	$(TARGETDIR)/news.ja.html \
-	$(TARGETDIR)/changelog.html \
-	$(TARGETDIR)/rubycocoasite.css
+	$(TARGETDIR)/changelog.html
+
+TARGET = $(TARGET_HTML) $(TARGETDIR)/rubycocoasite.css
 
 SFINDEX = $(TARGETDIR)/index_sf.html
 
@@ -49,7 +50,7 @@ clean:
 	-rm -f $(TARGET) $(DYNAMIC_ITEMS) $(SFINDEX)
 
 install:	$(TARGETDIR) $(TARGET)
-	-cp -fp $(TARGET) $(INSTALL_TARGETDIR)
+	$(RUBY) copy_if_diff.rb $(TARGET) $(INSTALL_TARGETDIR)
 
 $(TARGET):	$(TEMPLATES)
 
