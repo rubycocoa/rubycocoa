@@ -1,5 +1,8 @@
 2002-09-04  FUJIMOTO Hisakuni  <hisa@fobj.com>
 
+	* app_mains/Makefile, app_mains/main_using_exec.m, app_mains/main_using_libruby.m:
+	application main variations
+
 	* template/tmpl_pb_RubyProjects:
 	Jaguar aware template
 
