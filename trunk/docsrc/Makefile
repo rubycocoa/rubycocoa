@@ -54,7 +54,8 @@ install:	$(TARGETDIR) $(TARGET)
 
 
 rsync:	$(TARGET)
-	-rsync -v -t -e ssh html/* www.fobj.com:www/www_html/rubycocoa/doc/
+	-rsync -v -t -e ssh html/* \
+		shell.sourceforge.net:/home/groups/r/ru/rubycocoa/htdocs/doc/
 
 $(TARGET):	$(TEMPLATES)
 
