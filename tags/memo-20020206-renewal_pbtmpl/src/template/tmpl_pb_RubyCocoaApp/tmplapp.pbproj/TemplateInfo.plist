@@ -1,0 +1,6 @@
+{
+	FilesToMacroExpand = (
+		"English.lproj/InfoPlist.strings",
+		"main.m"
+	);
+}
