@@ -12,6 +12,7 @@
 
 #import <LibRuby/cocoa_ruby.h>
 #import <objc/objc-class.h>
+#import <stdarg.h>
 
 enum osxobjc_nsdata_type {
   _PRIV_C_BOOL = 1024,
@@ -25,6 +26,7 @@ enum osxobjc_nsdata_type {
 int    to_octype       (const char* oc_type_str);
 size_t ocdata_size     (int octype);
 void*  ocdata_malloc   (int octype);
+void*  ocdata_malloc_va_arg(va_list ap, int octype);
 BOOL   octype_object_p (int octype);
 
 

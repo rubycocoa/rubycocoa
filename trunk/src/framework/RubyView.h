@@ -5,6 +5,7 @@
   id rbobj;
 }
 
-- (id)initWithFrame:(NSRect)frame;
+- initWithFrame:(NSRect)frame;
+- rbobj;
 
 @end

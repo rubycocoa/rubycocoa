@@ -140,9 +140,69 @@ ocdata_size(int octype)
 }
 
 void*
+ocdata_malloc_va_arg(va_list ap, int octype)
+{
+  void* data = ocdata_malloc(octype);
+
+  switch (octype) {
+
+  case _C_ID:
+  case _C_CLASS:
+    *(id*)data = va_arg(ap, id); break;
+  case _C_SEL:
+    *(SEL*)data = va_arg(ap, SEL); break;
+  case _C_CHR:
+    *(char*)data = va_arg(ap, char); break;
+  case _C_UCHR:
+    *(unsigned char*)data = va_arg(ap, unsigned char); break;
+  case _C_SHT:
+    *(short*)data = va_arg(ap, short); break;
+  case _C_USHT:
+    *(unsigned short*)data = va_arg(ap, unsigned short); break;
+  case _C_INT:
+    *(int*)data = va_arg(ap, int); break;
+  case _C_UINT:
+    *(unsigned int*)data = va_arg(ap, unsigned int); break;
+  case _C_LNG:
+    *(long*)data = va_arg(ap, long); break;
+  case _C_ULNG:
+    *(unsigned long*)data = va_arg(ap, unsigned long); break;
+  case _C_FLT:
+    *(float*)data = va_arg(ap, float); break;
+  case _C_DBL:
+    *(double*)data = va_arg(ap, double); break;
+  case _C_PTR:
+    *(void**)data = va_arg(ap, void*); break;
+  case _C_CHARPTR:
+    *(char**)data = va_arg(ap, char*); break;
+  case _C_VOID:
+    break;
+  case _PRIV_C_NSRECT:
+    *(NSRect*)data = va_arg(ap, NSRect); break;
+  case _PRIV_C_NSPOINT:
+    *(NSPoint*)data = va_arg(ap, NSPoint); break;
+  case _PRIV_C_NSSIZE:
+    *(NSSize*)data = va_arg(ap, NSSize); break;
+  case _C_BFLD:
+  case _C_UNDEF:
+  case _C_ARY_B:
+  case _C_ARY_E:
+  case _C_UNION_B:
+  case _C_UNION_E:
+  case _C_STRUCT_B:
+  case _C_STRUCT_E:
+  default:
+    break;
+  }
+  return data;
+}
+
+void*
 ocdata_malloc(int octype)
 {
-  return malloc(ocdata_size(octype));
+  size_t s = ocdata_size(octype);
+  if (s == 0) return NULL;
+  return malloc(s);
 }
 
 BOOL
