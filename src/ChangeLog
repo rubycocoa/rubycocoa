@@ -1,5 +1,19 @@
 2002-09-26  FUJIMOTO Hisakuni  <hisa@fobj.com>
 
+	* sample, template:
+	unnecessary to modify rb_main.rb in RubyCocoa application
+	development.
+
+	* ext/osx_objc/RBThreadSwitcher.m:
+	RBThreadSwitcher.start restart when it's running already.
+
+	* ext/osx_objc/osx_objc.m:
+	define ruby_thread_switcher_start without argments.
+	thread_switcher_start() when load this library.
+
+	* ext/osx_objc/RBThreadSwitcher.h, ext/osx_objc/RBThreadSwitcher.m:
+	define RBThreadSwitcher#start. interval time is 0.005 second.
+
 	* ext/osx_objc/RBObject.m:
 	Fix a bug that a wrapped Ruby object may be done GC. use
 	rb_gc_register_address() when init, and use rb_gc_unregister_address()
