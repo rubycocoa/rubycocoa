@@ -54,12 +54,22 @@ The latest (or the oldest) development source is available from the
 ((<CVS Server|URL:http://sourceforge.net/cvs/?group_id=44114>)).
 
 You can
-((<view the CVS Repository|URL:http://cvs.sourceforge.net/cgi-bin/viewcvs.cgi/rubycocoa/src/>))
+((<view the CVS Repository|URL:http://cvs.sourceforge.net/cgi-bin/viewcvs.cgi/rubycocoa/>))
 for RubyCocoa. On the shell command line, type this:
 
-  $ cvs -d:pserver:anonymous@cvs.rubycocoa.sf.net:/cvsroot/rubycocoa login
-  $ cvs -z3 -d:pserver:anonymous@cvs.rubycocoa.sf.net:/cvsroot/rubycocoa \
-      co -P rubycocoa
+  $ cvs -d:pserver:anonymous@cvs.sf.net:/cvsroot/rubycocoa login
+  $ cvs -z3 -d:pserver:anonymous@cvs.sf.net:/cvsroot/rubycocoa co \
+        -P -d rubycocoa src
+  $ cd rubycocoa
+  $ cvs update -d -P
+
+Or, you may want to get panther supported branch:
+
+  $ cvs -d:pserver:anonymous@cvs.sf.net:/cvsroot/rubycocoa login
+  $ cvs -z3 -d:pserver:anonymous@cvs.sf.net:/cvsroot/rubycocoa co \
+        -P -r branch-devel-panther -d rubycocoa-panther src
+  $ cd rubycocoa-panther
+  $ cvs update -d -P
 
 All of the source for RubyCocoa is downloaded into a directory named 'rubycocoa'.
 

@@ -59,13 +59,26 @@ ProjectBuilderテンプレートなどが含まれています。実行・開発に必要な
 (((<CVSリポジトリを見る|URL:http://cvs.sourceforge.net/cgi-bin/viewcvs.cgi/rubycocoa/src/>))
 ことができます。シェルで
 
-  $ cvs -d:pserver:anonymous@cvs.rubycocoa.sf.net:/cvsroot/rubycocoa login
-  $ cvs -z3 -d:pserver:anonymous@cvs.rubycocoa.sf.net:/cvsroot/rubycocoa \
-      co -P rubycocoa
+  $ cvs -d:pserver:anonymous@cvs.sf.net:/cvsroot/rubycocoa login
+  $ cvs -z3 -d:pserver:anonymous@cvs.sf.net:/cvsroot/rubycocoa co \
+        -P -d rubycocoa src
+  $ cd rubycocoa
+  $ cvs update -d -P
 
 と入力すると、'rubycocoa'というディレクトリにRubyCocoaのソース一式が
 ダウンロードされます。CVSの性質上、ダウンロードしたタイミングにより
 構築できないこともあります。
+
+また、Panther 対応ブランチを入手したい場合は:
+
+  $ cvs -d:pserver:anonymous@cvs.sf.net:/cvsroot/rubycocoa login
+  $ cvs -z3 -d:pserver:anonymous@cvs.sf.net:/cvsroot/rubycocoa co \
+        -P -r branch-devel-panther -d rubycocoa-panther src
+  $ cd rubycocoa-panther
+  $ cvs update -d -P
+
+とします。
+
 'cvs update'コマンドや'cvs status -v'コマンドを適当なオプションと
 いっしょに使うとよいでしょう。
 
