@@ -3,6 +3,7 @@
 # $Id$
 
 DSTDIR = '/Library/Ruby'
+DOCDIR = DSTDIR
 BINDIR = '/usr/local/bin'
 MANDIR = '/usr/local/share/man'
 LIBDIR = '/usr/local/lib'
@@ -40,8 +41,9 @@ command "./configure #{CONF_OPTION}"
 command "make"
 command "make test"
 command "sudo make install"
-command "sudo cp -p #{DOCS.join(' ')} #{DSTDIR}"
+
+command "sudo mkdir #{DOCDIR}" unless File.directory?
+command "sudo cp -p #{DOCS.join(' ')} #{DOCDIR}"
 
 chdir "#{DSTDIR}/lib"
 command "tar cf - libruby* | ( cd #{LIBDIR} ; sudo tar xf - )"
-
