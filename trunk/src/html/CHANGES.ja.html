@@ -10,14 +10,18 @@
 </head>
 <body>
 <h1><a name="label:0" id="label:0">変更点</a></h1><!-- RDLabel: "変更点" -->
-<h2><a name="label:1" id="label:1">0.2.4からのおもな変更点</a></h2><!-- RDLabel: "0.2.4からのおもな変更点" -->
+<h2><a name="label:1" id="label:1">0.2.5からのおもな変更点</a></h2><!-- RDLabel: "0.2.5からのおもな変更点" -->
+<p>[IMPROVE] バージョン情報のサポート</p>
+<pre>OSX::RUBYCOCOA_VERSION
+OSX::RUBYCOCOA_RELEASE_DATE</pre>
+<h2><a name="label:2" id="label:2">0.2.4からのおもな変更点</a></h2><!-- RDLabel: "0.2.4からのおもな変更点" -->
 <p>[BUGFIX] NSString.availableStringEncodingsが落ちるバグを修正</p>
 <p>[BUGFIX] スーパークラスに存在しないメソッドをns_overridesの引数に与え
 たときに落ちるバグを修正</p>
 <p>[IMPROVE] NSOpenPanel, NSSavePanel, NSPrintPanel のシートパネルに対応</p>
 <p>[CHANGE] テンプレートにPureEmptyApp.appを追加。これはEmptyApp.appから
 NIBファイルに関する内容を取り除いたもの。</p>
-<h2><a name="label:2" id="label:2">0.2.3からのおもな変更点</a></h2><!-- RDLabel: "0.2.3からのおもな変更点" -->
+<h2><a name="label:3" id="label:3">0.2.3からのおもな変更点</a></h2><!-- RDLabel: "0.2.3からのおもな変更点" -->
 <p>[BUGFIX] オーバーライドしたメソッドの引数の扱いに関するバグを修正。
 (Chrisさんありがとう)</p>
 <p>[BUGFIX] オーバーライドしたメソッドから<var>self</var>を返すコードなどがう
@@ -31,16 +35,16 @@ NIBファイルに関する内容を取り除いたもの。</p>
     suuper_initWithFrame (frame)
     self
   end</pre>
-<h2><a name="label:3" id="label:3">0.2.2からのおもな変更点</a></h2><!-- RDLabel: "0.2.2からのおもな変更点" -->
+<h2><a name="label:4" id="label:4">0.2.2からのおもな変更点</a></h2><!-- RDLabel: "0.2.2からのおもな変更点" -->
 <p>[BUGFIX] オブジェクト生成時にメモリを4バイト破壊していたバグを修正。
 (Chrisさんありがとう)</p>
 <p>[CHANGE] Rubyスレッド切り替え(OSX.ruby_thread_switcher_start)を改良。</p>
-<h2><a name="label:4" id="label:4">0.2.1からのおもな変更点</a></h2><!-- RDLabel: "0.2.1からのおもな変更点" -->
+<h2><a name="label:5" id="label:5">0.2.1からのおもな変更点</a></h2><!-- RDLabel: "0.2.1からのおもな変更点" -->
 <p>0.2.1 のインストールスクリプトの重大なバグを修正</p>
 <p>[CHANGE] RubyCocoaフレームワークをインストールするディレクトリの指定方
 法を以下のように変更</p>
 <pre>% ruby install.rb config --frameworks=/Network/Library/Frameworks</pre>
-<h2><a name="label:5" id="label:5">0.2.0からのおもな変更点</a></h2><!-- RDLabel: "0.2.0からのおもな変更点" -->
+<h2><a name="label:6" id="label:6">0.2.0からのおもな変更点</a></h2><!-- RDLabel: "0.2.0からのおもな変更点" -->
 <p>[IMPROVE] RubyCocoaアプリケーションでRubyスレッドを切替えるための仕組
 みをテスト的に実装。</p>
 <p>[IMPROVE] オーバーライドしたメソッド定義の中でスーパークラスの同メソッ
@@ -52,8 +56,8 @@ end</pre>
 <p>[IMPROVE] RubyCocoaフレームワークのインストール先をオプションで指定で
 きるようにした。</p>
 <pre>% ruby install.rb config -- --frameworks=/Network/Library/Frameworks</pre>
-<h2><a name="label:6" id="label:6">0.1.3からのおもな変更点</a></h2><!-- RDLabel: "0.1.3からのおもな変更点" -->
-<h3><a name="label:7" id="label:7">仕様/実装</a></h3><!-- RDLabel: "仕様/実装" -->
+<h2><a name="label:7" id="label:7">0.1.3からのおもな変更点</a></h2><!-- RDLabel: "0.1.3からのおもな変更点" -->
+<h3><a name="label:8" id="label:8">仕様/実装</a></h3><!-- RDLabel: "仕様/実装" -->
 <p>[CHANGE] OSX::OCObject は裏方になった。</p>
 <p>[CHANGE] Cocoa クラスを Ruby のクラスとして定義。</p>
 <pre>OSX::NSObject.is_a? Class # =&gt; true
@@ -73,34 +77,34 @@ end</pre>
 中に置くようにした。</p>
 <p>[CHANGE] C側ライブラリ名を"osxobjc.bundle"から"osx_objc.bundle"に変更。
 RubyAEOSAと統一。</p>
-<h3><a name="label:8" id="label:8">ドキュメント</a></h3><!-- RDLabel: "ドキュメント" -->
+<h3><a name="label:9" id="label:9">ドキュメント</a></h3><!-- RDLabel: "ドキュメント" -->
 <p>リファレンスマニュアルを加えました。使い方にクラス定義に関する記述を加
 えました。</p>
-<h2><a name="label:9" id="label:9">0.1.2からのおもな変更点</a></h2><!-- RDLabel: "0.1.2からのおもな変更点" -->
-<h3><a name="label:10" id="label:10">実装</a></h3><!-- RDLabel: "実装" -->
+<h2><a name="label:10" id="label:10">0.1.2からのおもな変更点</a></h2><!-- RDLabel: "0.1.2からのおもな変更点" -->
+<h3><a name="label:11" id="label:11">実装</a></h3><!-- RDLabel: "実装" -->
 <p>[IMPROVE] コンパイル速度が大幅アップ (Chrisさんどうも)</p>
 <p>[IMPROVE] Cocoaオブジェクトのメソッド実行時に発生した例外をRubyの例外
 として発生させる機能を実装 (Chrisさんどうも)</p>
-<h3><a name="label:11" id="label:11">その他</a></h3><!-- RDLabel: "その他" -->
+<h3><a name="label:12" id="label:12">その他</a></h3><!-- RDLabel: "その他" -->
 <p>FAQに数項目追加</p>
-<h2><a name="label:12" id="label:12">0.1.1からのおもな変更点</a></h2><!-- RDLabel: "0.1.1からのおもな変更点" -->
-<h3><a name="label:13" id="label:13">実装</a></h3><!-- RDLabel: "実装" -->
+<h2><a name="label:13" id="label:13">0.1.1からのおもな変更点</a></h2><!-- RDLabel: "0.1.1からのおもな変更点" -->
+<h3><a name="label:14" id="label:14">実装</a></h3><!-- RDLabel: "実装" -->
 <p>[BUGFIX] ib_loadalbeの中でObjective-Cのクラスを動的生成するさいのメモ
 リ割り当てに関するバグを修正。</p>
 <p>[CHANGE] 0.1.0の「<code>ib_lodable</code>なクラス定義の初期化メソッド
 <code>initialize</code> に引数を渡す仕組み」を廃止。Ruby側のinitializeには
 ObjC側のinitXXXの引数は渡りません。</p>
 <p>[IMPROVE] NSRange(Cocoa)とRange(Ruby)の変換をサポート(Chrisさんどうも)</p>
-<h3><a name="label:14" id="label:14">その他</a></h3><!-- RDLabel: "その他" -->
+<h3><a name="label:15" id="label:15">その他</a></h3><!-- RDLabel: "その他" -->
 <p>サンプルにmultinibを追加 (Lucさんどうも)</p>
-<h2><a name="label:15" id="label:15">0.1.0からのおもな変更点</a></h2><!-- RDLabel: "0.1.0からのおもな変更点" -->
-<h3><a name="label:16" id="label:16">実装</a></h3><!-- RDLabel: "実装" -->
+<h2><a name="label:16" id="label:16">0.1.0からのおもな変更点</a></h2><!-- RDLabel: "0.1.0からのおもな変更点" -->
+<h3><a name="label:17" id="label:17">実装</a></h3><!-- RDLabel: "実装" -->
 <p>[IMPROVE] 必要なときにRubyのNumericからCocoaのNSDecimalNumberへの変換
 を行う。(「Learning Cocoa CH.9」対応)</p>
 <p>[IMPROVE] (0.1.2で廃止) <code>ib_lodable</code>なクラス定義の初期化メソッド
 <code>initialize</code> に引数を渡す仕組みを準備。実際に使っているのは 
 <code>ib_loadable :NSView</code> のときのみ。</p>
-<h3><a name="label:17" id="label:17">その他</a></h3><!-- RDLabel: "その他" -->
+<h3><a name="label:18" id="label:18">その他</a></h3><!-- RDLabel: "その他" -->
 <p>サンプルdotviewを"Lerning Cocoa"の8章を読みながら書き直した。</p>
 <p>"Lerning Cocoa"に相当するサンプルExpenses.appを追加。</p>
 <p>テンプレート類をサンプルディレクトリからテンプレートディレクトリに移動。</p>
