@@ -1,0 +1,22 @@
+# -*-rd-*-
+= News
+
+== RubyCocoa 0.4 out (2002-12-24)
+
+=== 0.4 features
+
+* RubyCocoa framework was revived. And most implementation (even a
+  Ruby part) was included in RubyCocoa framework. It will be easy to
+  distribute RubyCocoa application.
+
+* Supported Ruby 1.8
+
+== Home page relocated (2002-12-24)
+
+* Relocated home page of RubyCocoa to 
+  ((<URL:http://rubycocoa.sf.net/>)) from
+  ((<URL:http://www.imasy.or.jp/~hisa/mac/rubycocoa/>)).
+
+
+$Date$
+$Revision$

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="euc-jp" ?>
+<menubar>
+  <td align="left">
+    <a href="index.ja.html">RubyCocoaとは？</a> |
+    <a href="getting.ja.html">ダウンロード</a> |
+    <a href="build.ja.html">ソースから構築</a> |
+    <a href="trysamples.ja.html">サンプルを試す</a> |
+    <a href="programming.ja.html">プログラミング</a> |
+    <a href="references.ja.html">リファレンス</a> |
+    <a href="changes.ja.html">変更点</a> |
+    <a href="changelog.html">変更ログ</a> |
+    <a href="faq.ja.html">FAQ</a> |
+    <a href="links.ja.html">リンク集</a>
+  </td>
+  <td align="right">
+    <a href="index.en.html">[英語]</a> [日本語]
+  </td>
+</menubar>
