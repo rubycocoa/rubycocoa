@@ -7,7 +7,7 @@
 a { text-decoration: none }
 a:link { color: #0000A0 }
 a:visited { color: #0060F0 }
-a:hover { text-decoration: underline }
+a[href]:hover { text-decoration: underline }
 /* a:active { color: pink } */
 
 /* configuration for color */

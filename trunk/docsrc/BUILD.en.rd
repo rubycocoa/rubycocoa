@@ -1,7 +1,7 @@
 # -*-rd-*-
 = Building and Installing RubyCocoa from Source
 
-This document describes building and installing RubyCocoa 0.4 from
+This document describes building and installing RubyCocoa 0.4.1 from
 source. Skip this if you are going to install the binary distribution.
 
 Building and installation are done from a shell, using the Terminal
@@ -23,7 +23,7 @@ The following steps perform the build and installation.
 Extract RubyCocoa source from the '.tgz' file into a directory somewhere.
 
   $ cd {somewhere}
-  $ tar zxf rubycocoa-0.4.0.tar.gz
+  $ tar zxf rubycocoa-0.4.1.tar.gz # use "gnutar" command on Mac OS X 10.2
 
 ((*Caution!*)) Using StuffIt, building RubyCocoa will fail because of a file
 name length problem.
@@ -35,17 +35,29 @@ To build RubyCocoa, some C language header files and Ruby's libruby library are
 required. Here, the build procedure of Ruby which serves as a base of RubyCocoa
 in the case shown below at an example is explained.
 
-  * Ruby 1.8 installed from source
-  * Ruby 1.6.7 included in Mac OS X 10.2
+  * Ruby 1.8.2 installed from source
+  * Ruby included in Mac OS X
+    * Ruby 1.6.8(Mac OS X 10.3)
+    * Ruby 1.6.7(Mac OS X 10.2)
 
-RubyCocoa 0.4 binary distribution has been built with the latter.
+RubyCocoa 0.4.1 binary distribution has been built with the 2nd way.
 When Ruby has been installed with a package utility such as
 ((<Fink|URL:http://fink.sf.net/>)), adapt these instructions accordingly.
 
+=== Check that the necessary Mac OS X packages are installed
 
-=== Ruby 1.8 installed from source
+The required packages (BSD.pkg and BSDSDK.pkg) may not have been installed,
+depending on the options selected when Mac OS X was installed. Please
+first check whether packages is installed, and if required, install it from 
+the Mac OS X installer.
 
-It moves to the source directory of Ruby 1.8, and builds and installs
+  $ ls -dF /Library/Receipts/BSD*.pkg
+  /Library/Receipts/BSD.pkg/   /Library/Receipts/BSDSDK.pkg/
+
+
+=== Ruby 1.8.2 installed from source
+
+It moves to the source directory of Ruby 1.8.2, and builds and installs
 as follows. Please change an option if needed.
 ((- RubyCocoa.framework cannot be linked without specifying the
 '-fno-common' option for CFLAGS. -))
@@ -57,22 +69,12 @@ as follows. Please change an option if needed.
   $ sudo ranlib /usr/local/lib/libruby-static.a
 
 
+=== Ruby 1.6.8 included in Mac OS X 10.3
+
+Ruby 1.6.8 included in Mac OS X 10.3 works fine.
+There is no action to do.
+
 === Ruby 1.6.7 included in Mac OS X 10.2
-
-==== Check that the necessary Mac OS X packages are installed
-
-The required packages (BSD.pkg and BSDSDK.pkg) may not have been installed,
-depending on the options selected when Mac OS X 10.2 was installed. Please
-first check whether Ruby is installed, and if required, install it from the Mac
-OS X 10.2 installer.
-
-  $ ls -dF /Library/Receipts/BSD*.pkg
-  /Library/Receipts/BSD.pkg/   /Library/Receipts/BSDSDK.pkg/
-
-Although Ruby is contained in Mac OS X 10.2, for some reason libruby is
-not included. Therefore, to build RubyCocoa, it is necessary to make libruby
-from the source of Ruby 1.6.7.
-
 
 ==== Apply patch to Ruby 1.6.7 source
 
@@ -82,7 +84,7 @@ is contained in RubyCocoa to Ruby 1.6.7.
   $ cd {somewhere}
   $ tar zxf ruby-1.6.7.tar.gz
   $ cd ruby-1.6.7
-  $ patch -p1 < {RubyCocoa source}/ruby-1.6.7-osx10.2.patch
+  $ patch -p1 < {RubyCocoa source}/misc/ruby-1.6.7-osx10.2.patch
 
 
 ==== Build and install libruby
@@ -99,9 +101,9 @@ Ruby may be suited.
 
 Install only libruby.a.
 
-  $ ranlib libruby.a
   $ rubyarchdir=`ruby -r rbconfig -e 'print Config::CONFIG["archdir"]'`
   $ sudo install -m 0644 libruby.a $rubyarchdir
+  $ sudo ranlib $rubyarchdir/libruby.a
 
 
 == Build of RubyCocoa
@@ -115,15 +117,15 @@ Type as follows to build RubyCocoa:
 'ruby install.rb config' command have some options for RubyCocoa. If
 required, specify option at the time of a config phase.
 
-((*Caution!*)) If you got a "Segmentation Fault" error in the config phase,
-please check "((<Notice for build of RubyCocoa 0.4.0 to Ruby 1.6.8>))".
-
 == Unit Test for RubyCocoa
 
   $ cd {source}/tests
-  $ DYLD_FRAMEWORK_PATH={source}/framework/build ruby -I../lib -I../ext/rubycocoa testall.rb
+  $ DYLD_FRAMEWORK_PATH=../framework/build ruby -I../lib -I../ext/rubycocoa testall.rb
 
-Test::Unit is required for unit tests.  This process is optional.
+((<"Test::Unit"|URL:http://raa.ruby-lang.org/list.rhtml?name=testunit>)) 
+is required for unit tests.  This process is optional.
+
+Ruby 1.8 includes Test::UNIT.
 
 
 == Installation of RubyCocoa
@@ -132,6 +134,7 @@ Test::Unit is required for unit tests.  This process is optional.
 
 Installation is completed above. The following were installed:
 old procedure.
+(case with Ruby 1.6.8 included in Mac OS X 10.3)
 
 : /Library/Frameworks/RubyCocoa.framework
   RubyCocoa framework (real)
@@ -140,14 +143,20 @@ old procedure.
   RubyCocoa library (stub)
   - addressbook.rb, appkit.rb, cocoa.rb, foundation.rb
 
-: /usr/lib/ruby/site_ruby/1.6/powerpc-darwin6.0/rubycocoa.bundle
+: /usr/lib/ruby/site_ruby/1.6/powerpc-darwin7.0/rubycocoa.bundle
   RubyCocoa extended library (stub)
+
+: inside of '/Library/Application Support/Apple/Developer Tools/'
+  Some templates for Xcode
+  * 'File Templates/Ruby'
+  * 'Project Templates/Application/Cocoa-Ruby Document-based Application'
+  * 'Project Templates/Application/Cocoa-Ruby Application'
 
 : inside of '/Developer/ProjectBuilder Extras/'
   Some templates for ProjectBuilder
-  'File Templates/Ruby'
-  'Project Templates/Application/Cocoa-Ruby Document-based Application'
-  'Project Templates/Application/Cocoa-Ruby Application'
+  * 'File Templates/Ruby'
+  * 'Project Templates/Application/Cocoa-Ruby Document-based Application'
+  * 'Project Templates/Application/Cocoa-Ruby Application'
 
 : /Developer/Documentation/RubyCocoa
   HTML Documentation
@@ -193,48 +202,17 @@ As a result, these will be installed temporarily.
   /tmp/build/Developer/Documentation/RubyCocoa
 
 
-== Notice for build of RubyCocoa 0.4.0 to Ruby 1.6.8
-
-When building RubyCocoa 0.4.0 against ((*Ruby 1.6.8*)), you may see a
-"Segmentation Fault" error message in the config phase:
-
-  ruby install.rb config
-
-For fix this, apply
-((<a patch|URL:http://rubycocoa.sourceforge.net/files/ruco0.4.0-fw-post-config.patch>))
-as follows after extracting rubycocoa-0.4.0.tgz.
-
-  $ cd {rubycocoa-0.4.0}
-  $ patch -p0 < ruco0.4.0-fw-post-config.patch
-
-The patch is:
-
-  diff -u -b -u -r1.4 post-config.rb
-  --- framework/post-config.rb	19 Dec 2002 08:41:50 -0000	1.4
-  +++ framework/post-config.rb	11 Jan 2003 14:02:17 -0000
-  @@ -12,10 +12,9 @@
-     $stderr.puts "create #{File.expand_path(dst_fname)} ..."
-     File.open(dst_fname, 'w') do |dstfile|
-       IO.foreach(src_path) do |line|
-  -      line = line.gsub( /\bID\b/, 'RB_ID' )
-  -      line = line.gsub( /\bT_DATA\b/, 'RB_T_DATA' )
-  -      line = line.gsub( /\bintern.h\b/, "#{new_filename_prefix}intern.h" )
-  -      dstfile.puts line
-  +      line.gsub!( /\b(ID|T_DATA)\b/, 'RB_\1' )
-  +      line.gsub!( /\bintern\.h\b/, "#{new_filename_prefix}intern.h" )
-  +      dstfile.puts( line )
-       end
-     end
-   end
-
-
 == Development and testing environment
 
-* Power Macintosh G4/400/384MB or iBook G3/600/384MB
-* Mac OS X 10.2.3
-* DevTools 10.2
-* ruby-1.6.7 (pre-installed in Mac OS X 10.2)
-* ruby-1.8 (preview 1 from cvs server)
+* iBook G3/900/600MB
+* Mac OS X 10.3.8
+  * XcodeTools 1.5
+  * ruby-1.6.8 (pre-installed in Mac OS X 10.3)
+  * ruby-1.8.2
+* Mac OS X 10.2.8
+  * DevTools 10.2
+  * ruby-1.6.7 (pre-installed in Mac OS X 10.2)
+  * ruby-1.8.2
 
 
 == Have fun!
