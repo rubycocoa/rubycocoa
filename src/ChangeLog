@@ -1,6 +1,13 @@
-2002-12-27  FUJIMOTO Hisakuni  <hisa@fobj.com>
+2002-12-28  FUJIMOTO Hisakuni  <hisa@fobj.com>
 
 	* release 0.4.0 (release-0_4_0)
+
+	* README.en.txt, README.sjis.txt, ReadMe.ascii.html, ReadMe.sjis.html:
+	rewrite ReadMe documents for binary package
+
+2002-12-27  FUJIMOTO Hisakuni  <hisa@fobj.com>
+
+	* framework/pre-install.rb: fix 'strip -x' failed.
 
 	* sample/speak_me.txt: text for speak.rb
 
