@@ -1,0 +1,17 @@
+#import <LibRuby/cocoa_ruby.h>
+#import "../framework/ocdata_conv.h"
+#import <Foundation/Foundation.h>
+
+void init_NSScriptWhoseTests(VALUE mOSX)
+{
+  /**** enums ****/
+  rb_define_const(mOSX, "NSEqualToComparison", INT2NUM(NSEqualToComparison));
+  rb_define_const(mOSX, "NSLessThanOrEqualToComparison", INT2NUM(NSLessThanOrEqualToComparison));
+  rb_define_const(mOSX, "NSLessThanComparison", INT2NUM(NSLessThanComparison));
+  rb_define_const(mOSX, "NSGreaterThanOrEqualToComparison", INT2NUM(NSGreaterThanOrEqualToComparison));
+  rb_define_const(mOSX, "NSGreaterThanComparison", INT2NUM(NSGreaterThanComparison));
+  rb_define_const(mOSX, "NSBeginsWithComparison", INT2NUM(NSBeginsWithComparison));
+  rb_define_const(mOSX, "NSEndsWithComparison", INT2NUM(NSEndsWithComparison));
+  rb_define_const(mOSX, "NSContainsComparison", INT2NUM(NSContainsComparison));
+
+}
