@@ -22,7 +22,7 @@ module OSX
       @reason = @nsexception.ocm_send(:reason).to_s
       @user_info = @nsexception.ocm_send(:userInfo)
       msg = "#{@name} - #{@reason}" if msg.nil?
-      super (msg)
+      super(msg)
     end
 
   end
