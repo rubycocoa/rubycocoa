@@ -23,6 +23,12 @@ module OSX
     end
   end
 
+  module OCStubCreator
+    def nib_loadable(super_name = nil)
+      OSX.create_objc_stub *[ self.to_s.intern, super_name ].compact
+    end
+  end
+
   module ToFloat
     def force_to_f(val)
       begin
@@ -77,6 +83,7 @@ module OSX
   end
 
   class OCObject
+    extend OCStubCreator
 
     def to_s
       if self.ocm_send(:isKindOfClass_, OSX::NSString) != 0 then
