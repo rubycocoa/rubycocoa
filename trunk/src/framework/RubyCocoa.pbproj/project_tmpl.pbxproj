@@ -101,6 +101,7 @@
 			buildPhases = (
 				0867D69DFE84028FC02AAC07,
 				0867D69EFE84028FC02AAC07,
+				E84D81F303ADA2EC03A81C6F,
 				E8B05557035C00D003E2294E,
 				0867D69FFE84028FC02AAC07,
 				0867D6A0FE84028FC02AAC07,
@@ -471,6 +472,63 @@
 			isa = PBXBuildFile;
 			settings = {
 			};
+		};
+		E84D81EB03ADA29603A81C6F = {
+			isa = PBXFileReference;
+			path = addressbook.rb;
+			refType = 4;
+		};
+		E84D81EC03ADA29603A81C6F = {
+			isa = PBXFileReference;
+			path = appkit.rb;
+			refType = 4;
+		};
+		E84D81ED03ADA29603A81C6F = {
+			isa = PBXFileReference;
+			path = cocoa.rb;
+			refType = 4;
+		};
+		E84D81EE03ADA29603A81C6F = {
+			isa = PBXFileReference;
+			path = foundation.rb;
+			refType = 4;
+		};
+		E84D81EF03ADA29603A81C6F = {
+			fileRef = E84D81EB03ADA29603A81C6F;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		E84D81F003ADA29603A81C6F = {
+			fileRef = E84D81EC03ADA29603A81C6F;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		E84D81F103ADA29603A81C6F = {
+			fileRef = E84D81ED03ADA29603A81C6F;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		E84D81F203ADA29603A81C6F = {
+			fileRef = E84D81EE03ADA29603A81C6F;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		E84D81F303ADA2EC03A81C6F = {
+			buildActionMask = 2147483647;
+			dstPath = ruby/osx;
+			dstSubfolderSpec = 7;
+			files = (
+				E84D81EF03ADA29603A81C6F,
+				E84D81F003ADA29603A81C6F,
+				E84D81F103ADA29603A81C6F,
+				E84D81F203ADA29603A81C6F,
+			);
+			isa = PBXCopyFilesBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
 		};
 		E88C6D21035BACFD031D1B90 = {
 			isa = PBXFileReference;
@@ -2125,6 +2183,10 @@
 		};
 		E88C6E6E035BB408031D1B90 = {
 			children = (
+				E84D81EB03ADA29603A81C6F,
+				E84D81EC03ADA29603A81C6F,
+				E84D81ED03ADA29603A81C6F,
+				E84D81EE03ADA29603A81C6F,
 				E88C6E73035BB408031D1B90,
 			);
 			isa = PBXGroup;
