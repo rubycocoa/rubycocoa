@@ -34,7 +34,7 @@ class AppleScript
     if raise_err_p then
       raise "AppleScriptError: #{errmsg_of errinfo}"
     else
-      $stderr.puts(errmsg_of errinfo)
+      $stderr.puts( errmsg_of(errinfo) )
     end
     return true
   end
