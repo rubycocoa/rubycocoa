@@ -1,4 +1,26 @@
+2002-12-20  FUJIMOTO Hisakuni  <hisa@fobj.com>
+
+	* metaconfig, pre-config.rb, VERSION, framework/src/objc/Version.h, framework/src/objc/Version.h.in:
+	create 'Version.h' at the time of config
+
+	* install.rb: clean_dir_framework - command 'rm -rf build'
+
+	* sample/SimpleApp.app/Contents/Resources/AppController.rb, sample/SimpleApp.app/Contents/MacOS/SimpleApp:
+	print ruby version in the About Box
+
+	* framework/src/ruby/osx/objc/oc_import.rb:
+	add comment for some methods which is defined in NSBehaviorAttachment.
+
 2002-12-19  FUJIMOTO Hisakuni  <hisa@fobj.com>
+
+	* sample/simpleapp/AppController.rb: display Ruby's version in AboutBox
+
+	* sample/simpleapp/main.m: replace main.m for RubyCocoa 0.4
+
+	* sample/speak.rb: modify for Ruby 1.7
+
+	* framework/src/objc/RBRuntime.m:
+	change return type of load_path_unshift to void
 
 	* add a new config option '--framework-name' for multiple
 	installing of RubyCocoa framework.
