@@ -14,6 +14,11 @@
   Tutorial for RubyCocoa. It describes programming in RubyCocoa through making
   a simple calculator application.
 
+: ((<An Introduction to RubyCocoa, Part 1 (English)|URL:http://www.macdevcenter.com/pub/a/mac/2004/10/05/cocoa.html>)) ((<, Part 2|URL:http://www.macdevcenter.com/pub/a/mac/2004/10/12/cocoa.html>)) 
+
+  Tutorial for RubyCocoa in MacDevCenter. It describes programming in RubyCocoa
+  through making wrapper of tar command.
+
 : ((<Project PINEAPPLE (Japanese)|URL:http://sacral.c.u-tokyo.ac.jp/~hasimoto/Pineapple/>))
 
   RPM-based distribution for Mac OS X.
