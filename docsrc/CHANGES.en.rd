@@ -1,6 +1,11 @@
 # -*-rd-*-
 = Changes
 
+== changes from 0.4.0
+
+* define module RCDataAttachment.
+* define some class methods for class NSData and NSStrng.
+
 == changes from 0.3.2 (0.4.0)
 
 : support Ruby 1.8
