@@ -61,7 +61,7 @@ ProjectBuilderテンプレートなどが含まれています。実行・開発に必要な
 
   $ cvs -d:pserver:anonymous@cvs.rubycocoa.sf.net:/cvsroot/rubycocoa login
   $ cvs -z3 -d:pserver:anonymous@cvs.rubycocoa.sf.net:/cvsroot/rubycocoa \
-      co rubycocoa
+      co -P rubycocoa
 
 と入力すると、'rubycocoa'というディレクトリにRubyCocoaのソース一式が
 ダウンロードされます。CVSの性質上、ダウンロードしたタイミングにより
