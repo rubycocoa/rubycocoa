@@ -1,5 +1,7 @@
 2002-09-26  FUJIMOTO Hisakuni  <hisa@fobj.com>
 
+	* release 0.3.1 (cvs tag only)
+
 	* sample, template:
 	unnecessary to modify rb_main.rb in RubyCocoa application
 	development.
