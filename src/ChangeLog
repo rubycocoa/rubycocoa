@@ -1,5 +1,9 @@
 2002-01-31  FUJIMOTO Hisakuni  <hisa@fobj.com>
 
+	* framework/RBObject.m, framework/DummyProtocolHandler.m, framework/DummyProtocolHandler.m.erb:
+	better sheet panel support. The callback method needs to have the name
+	end with "_returnCode_contextInfo."
+
 	* lib/osx/objc/cocoa.rb, lib/osx/objc/cocoa_macros.rb:
 	defined NSLocalizedStringFromTableInBundle(),
 	NSLocalizedStringFromTable() and NSLocalizedString().
