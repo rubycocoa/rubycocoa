@@ -1,5 +1,8 @@
 2002-08-19  FUJIMOTO Hisakuni  <hisa@fobj.com>
 
+	* lib/osx/objc/oc_import.rb, ext/osx_objc/osx_objc.m, framework/RBRuntime.m, framework/RBRuntime.h, framework/RBSlaveObject.m:
+	new mechanism for searching a Ruby class from an OBJC class.
+
 	* ext/osx_objc/osx_objc.m: implement OSX.ns_autorelease_pool.
 
 2002-08-16  FUJIMOTO Hisakuni  <hisa@fobj.com>

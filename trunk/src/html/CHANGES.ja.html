@@ -11,6 +11,12 @@
 <body>
 <h1><a name="label:0" id="label:0">変更点</a></h1><!-- RDLabel: "変更点" -->
 <h2><a name="label:1" id="label:1">0.2.6からのおもな変更点</a></h2><!-- RDLabel: "0.2.6からのおもな変更点" -->
+<p>[BUGFIX] TOPレベル以外で定義したCocoaの派生クラスのインスタンスを作る
+ことができない問題を解決した。</p>
+<pre>module MyModule
+  class AppController &lt; OSX::NSObject
+  end
+end</pre>
 <p>[BUGFIX] NSStringとの文字列変換のとき、中間に\0を含む文字列を正しく処
 理するようにした。</p>
 <p>[CHANGES] Objective-CとRubyの間でのオブジェクト変換ができなかったとき
