@@ -13,10 +13,7 @@
 #import "ocdata_conv.h"
 
 #import <objc/objc-class.h>
-#import <Foundation/NSGeometry.h>
-#import <Foundation/NSString.h>
-#import <Foundation/NSAutoreleasePool.h>
-#import <Foundation/NSArray.h>
+#import <Foundation/Foundation.h>
 
 struct _ocobj_data {
   id  obj;
@@ -337,6 +334,18 @@ static BOOL rbary_to_nsary(VALUE rbary, id* nsary)
   return YES;
 }
 
+static BOOL rbnum_to_nsnum(VALUE rbval, id* nsval)
+{
+  BOOL result;
+  VALUE rbstr = rb_obj_as_string(rbval);
+  id pool = [[NSAutoreleasePool alloc] init];
+  id nsstr = [NSString stringWithCString: STR2CSTR(rbstr)];
+  *nsval = [[NSDecimalNumber alloc] initWithString: nsstr];
+  result = [(*nsval) isKindOfClass: [NSDecimalNumber class]];
+  [pool release];
+  return result;
+}
+
 static BOOL rbobj_convert_to_nsobj(VALUE obj, id* nsobj)
 {
   
@@ -360,7 +369,7 @@ static BOOL rbobj_convert_to_nsobj(VALUE obj, id* nsobj)
   case T_FIXNUM:
   case T_BIGNUM:
   case T_FLOAT:
-    return NO;
+    return rbnum_to_nsnum(obj, nsobj);
 
   case T_OBJECT:
   case T_CLASS:
