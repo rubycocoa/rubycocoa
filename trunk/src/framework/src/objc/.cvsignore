@@ -3,3 +3,4 @@ osx_intern.h
 RBObject.h
 RBSlaveObject.h
 RubyCocoa.h
+Version.h
