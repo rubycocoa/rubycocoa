@@ -46,6 +46,8 @@ module OSX
       occls = OSX.objc_derived_class_new(kls, kls_name, spr_name)
       kls.instance_eval "@ocid = #{occls.__ocid__}"
       kls.extend NSBehaviorAttachment
+
+      # restrict creating an instance by Class#new.
       def kls.new
 	raise "use 'alloc.initXXX' to instantiate Cocoa Object"
       end
@@ -56,6 +58,8 @@ module OSX
 
   module NSBehaviorAttachment
 
+    # declare to override instance methods of super class which is
+    # defined by Objective-C.
     def ns_overrides(*args)
       args.each do |name|
 	name = name.to_s.gsub('_',':')
@@ -63,13 +67,19 @@ module OSX
       end
     end
 
+    # declare write-only attribute accessors which are named IBOutlet
+    # in the Objective-C world.
     def ns_outlets(*args)
       attr_writer(*args)
     end
 
     # for look and feel
+    alias_method :ns_override,  :ns_overrides
+    alias_method :ib_override,  :ns_overrides
     alias_method :ib_overrides, :ns_overrides
-    alias_method :ib_outlets,   :ns_outlets
+    alias_method :ns_outlet,  :ns_outlets
+    alias_method :ib_outlet,  :ns_outlets
+    alias_method :ib_outlets, :ns_outlets
 
   end				# module OSX::NSBehaviorAttachment
 
