@@ -40,8 +40,8 @@ as "surely occurring by this pattern", please tell about.</p>
 <h4><a name="label:7" id="label:7">A: Do you use release 0.2.1 or later ?</a></h4><!-- RDLabel: "A: Do you use release 0.2.1 or later ?" -->
 <p>In release 0.2.1 or later, it's implemented the facility of using Ruby
 thread in a RubyCocoa application. For using Ruby thread in a
-RubyCocoa application of the older release, Please correct
-"ns_app_main" of "rb_main.rb" as follows:</p>
+RubyCocoa application of the older release, Correct "ns_app_main" of
+"rb_main.rb" as follows:</p>
 <pre>def ns_app_main
   OSX.ruby_thread_switcher_start (0.05)  # switching interval sec
   app = OSX::NSApplication.sharedApplication
