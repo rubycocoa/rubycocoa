@@ -1,0 +1,10 @@
+MANIFEST
+cocoa
+extconf.rb
+framework
+osx_ocobject.h
+osx_ocobject.m
+osxobjc.m
+osxobjc_utils.h
+osxobjc_utils.m
+post-clean.rb

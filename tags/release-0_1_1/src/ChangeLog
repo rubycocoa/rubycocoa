@@ -1,0 +1,39 @@
+2001-11-30  FUJIMOTO Hisakuni  <hisa@fobj.com>
+
+	* release 0.1.1
+	
+	* framework: ocdata_conv.m: modify sel_to_rbobj.
+
+	* framework: RBObject.m: using Method#arity for getting argc of
+	ruby methods.
+
+	* framework: OverrideMixin.m: a little improvement for imp_init
+	and imp_intiWithFrame argument passing.
+	
+2001-11-29  FUJIMOTO Hisakuni  <hisa@fobj.com>
+
+	* framework: RBObject.h, RBObject.m: hide RBObject#rbobjXXX
+	  methods as private method. With reading 'Learning Cocoa Ch.9'.
+
+	* framework: OverrideMixin.m: replace sending method selector for
+	slave RBObject. Old was 'rbobjXXX' type selecotr.
+	
+	* framework: RBRuntime.m: change method list allocation size
+	(magical number)
+
+	* framework: ocdata_conv.m: rbobj_convert_to_nsobj() implement
+	converting Ruby's Numeric to NSDecimalNumber.
+
+2001-11-28  FUJIMOTO Hisakuni  <hisa@fobj.com>
+
+	* rewrite the dotview sample with reading 'Learning Cocoa Ch.8'
+
+	* add template directory and move template samples to this
+	directory.
+
+	* add FAQ document about StuffIt problem. (thanks Shimura-san)
+	
+2001-11-26  FUJIMOTO Hisakuni  <hisa@fobj.com>
+
+	* release 0.1.0
+
