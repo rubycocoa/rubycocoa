@@ -132,12 +132,27 @@ Test::Unit (testunit-0.1.5) is required for unit test.
 Installation is completion above. The following were installed:
 old procedure.
 
-* /Library/Frameworks/RubyCocoa.framework     : framework (real)
-* {sitedir}/{ruby_version}/osx/addressbook.rb : library (stub)
-* {sitedir}/{ruby_version}/osx/appkit.rb      : library (stub)
-* {sitedir}/{ruby_version}/osx/cocoa.rb       : library (stub)
-* {sitedir}/{ruby_version}/osx/foundation.rb  : library  (stub)
-* {sitearchdir}/rubycocoa.bundle              : extended library (stub)
+: /Library/Frameworks/RubyCocoa.framework
+  RubyCocoa framework (real)
+
+: inside of /usr/lib/ruby/site_ruby/1.6/osx/
+  RubyCocoa library (stub)
+  - addressbook.rb, appkit.rb, cocoa.rb, foundation.rb
+
+: /usr/lib/ruby/site_ruby/1.6/powerpc-darwin6.0/rubycocoa.bundle
+  RubyCocoa extended library (stub)
+
+: inside of '/Developer/ProjectBuilder Extras/'
+  some templates for ProjectBuilder
+  'File Templates/Ruby'
+  'Project Templates/Application/Cocoa-Ruby Document-based Application'
+  'Project Templates/Application/Cocoa-Ruby Application'
+
+: /Developer/Documentation/RubyCocoa
+  Documents (HTML)
+
+: /Developer/Examples/RubyCocoa
+  sample programs
 
 After installation, let's try samples that are written by Ruby. Refer
 to ((<'Try RubyCocoa Samples'|URL:trysamples.en.html>)).

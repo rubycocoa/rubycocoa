@@ -19,8 +19,6 @@ TARGET = \
 	$(TARGETDIR)/build.ja.html \
 	$(TARGETDIR)/links.en.html \
 	$(TARGETDIR)/links.ja.html \
-	$(TARGETDIR)/news.en.html \
-	$(TARGETDIR)/news.ja.html \
 	$(TARGETDIR)/programming.en.html \
 	$(TARGETDIR)/programming.ja.html \
 	$(TARGETDIR)/trysamples.en.html \
@@ -30,12 +28,17 @@ TARGET = \
 	$(TARGETDIR)/changelog.html \
 	$(TARGETDIR)/rubycocoasite.css
 
+# 	$(TARGETDIR)/news.en.html \
+# 	$(TARGETDIR)/news.ja.html \
+
+
 TEMPLATES = \
 	sidebar-contents.en.xml sidebar-contents.ja.xml \
 	sidebar-links.en.xml sidebar-links.ja.xml \
-	sidebar-news.en.xml sidebar-news.ja.xml \
 	site-menubar.en.xml site-menubar.ja.xml \
 	page-template.html
+
+# 	sidebar-news.en.xml sidebar-news.ja.xml \
 
 
 all:	$(TARGETDIR) $(TARGET)
@@ -91,11 +94,11 @@ $(TARGETDIR)/links.en.html:	LINKS.en
 $(TARGETDIR)/links.ja.html:	LINKS.ja
 	$(RUBY) make_html.rb $< $(TARGETDIR)
 
-$(TARGETDIR)/news.en.html:	NEWS.en
-	$(RUBY) make_html.rb $< $(TARGETDIR)
+# $(TARGETDIR)/news.en.html:	NEWS.en
+# 	$(RUBY) make_html.rb $< $(TARGETDIR)
 
-$(TARGETDIR)/news.ja.html:	NEWS.ja
-	$(RUBY) make_html.rb $< $(TARGETDIR)
+# $(TARGETDIR)/news.ja.html:	NEWS.ja
+# 	$(RUBY) make_html.rb $< $(TARGETDIR)
 
 $(TARGETDIR)/programming.en.html:	PROGRAMMING.en
 	$(RUBY) make_html.rb $< $(TARGETDIR)

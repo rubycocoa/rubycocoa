@@ -11,11 +11,32 @@ Ruby 1.6.7 に合わせて構築しています。
 ((<RubyCocoa-0.4.0.dmg|URL:http://www.imasy.or.jp/~hisa/mac/rubyosx/files/RubyCocoa-0.4.0.dmg>))
 をダウンロードしてください。
 
-RubyCocoaとRubyAEOSA のライブラリ・サンプルコード・ProjectBuilder 
-テンプレートなどが含まれています。実行・開発に必要なライブラリ類は
-.pkg形式のパッケージになっていて、簡単にインストールできます。
+RubyCocoaとRubyAEOSA のライブラリ・サンプルコード・ドキュメント・
+ProjectBuilderテンプレートなどが含まれています。実行・開発に必要な
+ライブラリ類は'.pkg'形式のパッケージになっていて、簡単にインストール
+できます。
 
-インストールできたら、((<「付属サンプルを試してみる」
+バイナリパッケージにより以下のものがインストールされます。
+
+: /Library/Frameworks/RubyCocoa.framework
+  RubyCocoaフレームワーク (本体)
+
+: /usr/lib/ruby/site_ruby/1.6/osx/ の中
+  RubyCocoaライブラリ (stub)
+
+: /usr/lib/ruby/site_ruby/1.6/powerpc-darwin6.0/rubycocoa.bundle
+  RubyCocoa拡張ライブラリ (stub)
+
+: '/Developer/ProjectBuilder Extras/' の中
+  ProjectBuilderのテンプレート
+
+: /Developer/Documentation/RubyCocoa
+  ドキュメント (HTML)
+
+: /Developer/Examples/RubyCocoa
+  サンプルプログラム
+
+インストールが完了したら、((<「付属サンプルを試してみる」
 |URL:trysamples.ja.html>)) を参考にRubyCocoaで書かれたサンプルプログラ
 ムを動かしてみるとよいでしょう。
 

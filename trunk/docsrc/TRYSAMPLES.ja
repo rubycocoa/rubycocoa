@@ -8,10 +8,11 @@
 == RubyCocoaアプリケーション
 
 まずはすでに完成しているRubyCocoaアプリケーションを起動してみましょう。
-Finderでsampleフォルダを開いてSimpleAppをダブルクリックしてみてくださ
-い。コマンドラインから以下のように入力しても起動できます。
+Finderで'/Developer/Examples/RubyCocoa'フォルダを開いてSimpleAppを
+ダブルクリックしてみてください。コマンドラインから以下のように入力
+しても起動できます。
 
-  $ cd {RubyCocoaソースディレクトリ}/sample
+  $ cd /Developer/Examples/RubyCocoa
   $ open SimpleApp.app
 
 
@@ -20,7 +21,7 @@ Finderでsampleフォルダを開いてSimpleAppをダブルクリックしてみてくださ
 RubyCocoaを使ってコマンドラインなどから実行する普通のスクリプトを書く
 ことができます。サンプルディレクトリに移動して
 
-  $ cd {RubyCocoaソースディレクトリ}/sample
+  $ cd /Developer/Examples/RubyCocoa
 
 簡単なスクリプトを実行してみましょう。
 
@@ -31,7 +32,7 @@ RubyCocoaを使ってコマンドラインなどから実行する普通のスクリプトを書く
 Mac OS X 10.2を使っている人はさらに
 
   $ echo Hello World | ruby speak.rb
-  $ head -5 ../README.en.txt | ruby speak.rb
+  $ head -5 speak_me.txt | ruby speak.rb
 
 などとやってみるとおもしろいでしょう。speak.rbを引数無しで実行すると
 '^D'(controlキーを押しながら'D')を入力するまで、1行入力するごとに読み上
@@ -49,7 +50,7 @@ Mac OS X 10.2を使っている人はさらに
 
 次にMakefileベースのものを試してみましょう。
 
-  $ cd {RubyCocoaソースディレクトリ}/sample/Hakoniwa-Musume
+  $ cd /Developer/Examples/RubyCocoa/Hakoniwa-Musume
   $ make
 
 で構築できます。できたら実行してみましょう。そのままコマンドラインから
@@ -64,7 +65,7 @@ Mac OS X 10.2を使っている人はさらに
 
 次にProject Builderベースのものを試してみましょう。コマンドラインから
 
-  $ cd {RubyCocoaソースディレクトリ}/sample/simpleapp
+  $ cd /Developer/Examples/RubyCocoa/simpleapp
   $ pbxbuild      # アプリケーション作成
 
 として構築します。もちろんProject Builderを起動してその中で構築したり
