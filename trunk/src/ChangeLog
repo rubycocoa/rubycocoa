@@ -1,5 +1,7 @@
 2002-12-18  FUJIMOTO Hisakuni  <hisa@fobj.com>
 
+	* 0.4.0a1 (alpha-0_4_0a1)
+
 	* modify ambiguous ruby code to suppress warning by Ruby
 	interpreter.
 
