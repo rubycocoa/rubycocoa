@@ -34,8 +34,9 @@ RubyCocoaを構築するためには、最低限librubyとRubyに付随するC言語の
 RubyCocoaのベースとなるRubyの構築手順を説明します。
 
   * ソースからインストールしたRuby 1.8.2
-  * Mac OS X 10.3付属のRuby 1.6.8
-  * Mac OS X 10.2付属のRuby 1.6.7
+  * Mac OS X付属のRuby
+    * Ruby 1.6.8(Mac OS X 10.3)
+    * Ruby 1.6.7(Mac OS X 10.2)
 
 RubyCocoa 0.4.1バイナリパッケージは、2番目の方法で作られたものです。
 ((<Fink|URL:http://fink.sf.net/>))などのパッケージを使ってRubyを
