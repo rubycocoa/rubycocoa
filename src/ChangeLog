@@ -1,3 +1,12 @@
+2002-02-04  FUJIMOTO Hisakuni  <hisa@fobj.com>
+
+	* lib/osx/objc/oc_attachments.rb:
+	- changed a prefix of attachment in "RC" from "NS".
+	- add RCImageAttachment.
+
+	* template/tmpl_pb_based:
+	support 'PROJECTNAME'
+
 2002-02-02  FUJIMOTO Hisakuni  <hisa@fobj.com>
 
 	* template/tmpl_pb_file:
