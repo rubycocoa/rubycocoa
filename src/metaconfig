@@ -9,8 +9,20 @@ unless File.exist?( libruby_path ) then
   libruby_path = File.join (Config::CONFIG['archdir'], Config::CONFIG['LIBRUBY_A'])
 end
 
+add_path_config 'install-root', '',
+  'path to the root directory for Frameworks and "ProjectBuilder Extras"'
+
 add_path_config 'frameworks', '/Library/Frameworks',
   'path to the directory for installing RubyCocoa.framework'
+
+add_path_config 'projectbuilder-extras', '/Developer/ProjectBuilder Extras',
+  'path to the directory for "ProjectBuilder Extras"'
+
+add_path_config 'examples', '/Developer/Examples',
+  'path to the directory for Examples'
+
+add_path_config 'documentation', '/Developer/Documentation',
+  'path to the directory for Documentation'
 
 add_config 'framework-name', 'name', 'RubyCocoa',
   'real name for RubyCocoa framework'
