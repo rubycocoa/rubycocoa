@@ -4,6 +4,8 @@
 
 	* doc/USING: add description to be related to class definitions.
 
+	* doc/REFERENCES: add.
+
 2001-12-19  FUJIMOTO Hisakuni  <hisa@fobj.com>
 
 	* global refactoring for release 0.2.x.
