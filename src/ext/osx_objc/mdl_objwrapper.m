@@ -40,31 +40,66 @@ _debug_log(const char* fmt,...)
 }
 
 static VALUE
-rb_ocexception_s_new(NSException* nsexcp)
+_oc_exception_class(const char* name)
 {
-  VALUE val;
-  VALUE mosx;
-  VALUE klass;
-  
-  mosx = rb_const_get(rb_cObject, rb_intern("OSX"));;
-  klass = rb_const_get(mosx, rb_intern("OCException"));
-  val = ocid_to_rbobj(Qnil, nsexcp);
-  return rb_funcall(klass, rb_intern("new"), 1, val);
+  VALUE mosx = rb_const_get(rb_cObject, rb_intern("OSX"));;
+  return rb_const_get(mosx, rb_intern(name));
 }
 
 static VALUE
-rb_ocdataconv_exception_class()
+_oc_exception_new(VALUE exc, id rcv, SEL sel, const char *fmt, va_list args)
 {
-  VALUE val;
-  VALUE mosx;
-  VALUE klass;
-  
-  mosx = rb_const_get(rb_cObject, rb_intern("OSX"));;
-  klass = rb_const_get(mosx, rb_intern("OCDataConvException"));
-  return klass;
+  char buf_a[BUFSIZ];
+  char buf_b[BUFSIZ];
+  snprintf(buf_a, BUFSIZ, "%s#%s - %s", rcv->isa->name, sel, fmt);
+  vsnprintf(buf_b, BUFSIZ, buf_a, args);
+  return rb_exc_new2(exc, buf_b);
 }
 
-static BOOL
+static VALUE
+oc_err_new(id rcv, SEL sel, NSException* nsexcp)
+{
+  id pool;
+  char buf[BUFSIZ];
+  static VALUE klass = Qnil;
+
+  if (klass == Qnil) klass = _oc_exception_class ("OCException");
+  pool = [[NSAutoreleasePool alloc] init];
+  snprintf(buf, BUFSIZ, "%s#%s - %s - %s",
+	   rcv->isa->name, sel, [[nsexcp name] cString], [[nsexcp reason] cString]);
+  [pool release];
+  return rb_funcall(klass, rb_intern("new"), 2, ocid_to_rbobj(Qnil, nsexcp), rb_str_new2(buf));
+}
+
+static VALUE
+ocdataconv_err_new(id rcv, SEL sel, const char *fmt, ...)
+{
+  va_list args;
+  VALUE ret;
+  static VALUE klass = Qnil;
+
+  if (klass == Qnil) klass = _oc_exception_class ("OCDataConvException");
+  va_start(args,fmt);
+  ret = _oc_exception_new (klass, rcv, sel, fmt, args);
+  va_end(args);
+  return ret;
+}
+
+static VALUE
+ocmsend_err_new(id rcv, SEL sel, const char *fmt, ...)
+{
+  va_list args;
+  VALUE ret;
+  static VALUE klass = Qnil;
+
+  if (klass == Qnil) klass = _oc_exception_class ("OCMessageSendException");
+  va_start(args,fmt);
+  ret = _oc_exception_new (klass, rcv, sel, fmt, args);
+  va_end(args);
+  return ret;
+}
+
+static VALUE
 ocm_perform(int argc, VALUE* argv, VALUE rcv, VALUE* result)
 {
   id oc_rcv = rbobj_get_ocid(rcv);
@@ -79,22 +114,26 @@ ocm_perform(int argc, VALUE* argv, VALUE rcv, VALUE* result)
   int i;
   VALUE excp = Qnil;
 
-  if (oc_rcv == nil) return NO;
+  if (oc_rcv == nil) return ocmsend_err_new (nil, NULL, "receiver is nil.");
 
-  if ((argc < 1) || (argc > 3)) return NO;
+  if ((argc < 1) || (argc > 3))
+    return ocmsend_err_new (oc_rcv, NULL, "require 0 to 2 arguments.");
 
   oc_sel = rbobj_to_nssel(argv[0]);
   argc--;
   argv++;
 
   oc_msig = [oc_rcv methodSignatureForSelector: oc_sel];
-  if (oc_msig == nil) return NO;
+  if (oc_msig == nil)
+    return ocmsend_err_new (oc_rcv, oc_sel, "methodSignature is nil.");
 
   ret_type = [oc_msig methodReturnType];
-  if (*ret_type != _C_ID && *ret_type != _C_CLASS) return NO;
+  if (*ret_type != _C_ID && *ret_type != _C_CLASS)
+    return ocmsend_err_new (oc_rcv, oc_sel, "return type is not Object. (%s)", ret_type);
 
   num_of_args = [oc_msig numberOfArguments] - 2;
-  if (num_of_args > 2) return NO;
+  if (num_of_args > 2)
+    return ocmsend_err_new (oc_rcv, oc_sel, "numberOfArguments is bigger than 2");
 
   pool = [[NSAutoreleasePool alloc] init];
   oc_sel_str = NSStringFromSelector(oc_sel);
@@ -103,12 +142,15 @@ ocm_perform(int argc, VALUE* argv, VALUE rcv, VALUE* result)
   for (i = 0; i < num_of_args; i++) {
     const char* arg_type = [oc_msig getArgumentTypeAtIndex: (i+2)];
     DLOG2("    arg_type[%d]: %s", i, arg_type);
-    if (*arg_type != _C_ID && *arg_type != _C_CLASS) return NO;
+    if (*arg_type != _C_ID && *arg_type != _C_CLASS)
+      return ocmsend_err_new
+	(oc_rcv, oc_sel, "argument[%d] type is not Object. (%s)", i, arg_type);
     args[i] = nil;
     if (i < argc) {
       if (!rbobj_to_nsobj(argv[i], &(args[i]))) {
 	[pool release];
-	return NO;
+	return ocdataconv_err_new 
+	  (oc_rcv, oc_sel, "cannot convert the argument[%d] as '%s' to NSObject.", i, arg_type);
       }
     }
   }
@@ -134,12 +176,10 @@ ocm_perform(int argc, VALUE* argv, VALUE rcv, VALUE* result)
   NS_HANDLER
     DLOG2("    NSObject#performSelector (%@): raise %@",
 	  oc_sel_str, localException);
-    excp = rb_ocexception_s_new(localException);
+    excp = oc_err_new (oc_rcv, oc_sel, localException);
 
   NS_ENDHANDLER
-  if (excp != Qnil) {
-    rb_funcall(rb_mKernel, rb_intern("raise"), 1, excp);
-  }
+  if (excp != Qnil) return excp;
   
   DLOG1("    NSObject#performSelector (%@): done.", oc_sel_str);
 
@@ -149,10 +189,10 @@ ocm_perform(int argc, VALUE* argv, VALUE rcv, VALUE* result)
     *result = ocid_to_rbobj(rcv, oc_result);
 
   [pool release];
-  return YES;
+  return Qnil;
 }
 
-static BOOL
+static VALUE
 ocm_invoke(int argc, VALUE* argv, VALUE rcv, VALUE* result)
 {
   id oc_rcv = rbobj_get_ocid(rcv);
@@ -168,16 +208,17 @@ ocm_invoke(int argc, VALUE* argv, VALUE rcv, VALUE* result)
   unsigned ret_len;
   VALUE excp = Qnil;
 
-  if (oc_rcv == nil) return NO;
+  if (oc_rcv == nil) return ocmsend_err_new (nil, NULL, "receiver is nil.");
 
-  if (argc < 1) return NO;
+  if (argc < 1) return ocmsend_err_new (oc_rcv, NULL, "argc is less than 1.");
 
   oc_sel = rbobj_to_nssel(argv[0]);
   argc--;
   argv++;
 
   oc_msig = [oc_rcv methodSignatureForSelector: oc_sel];
-  if (oc_msig == nil) return NO;
+  if (oc_msig == nil)
+    return ocmsend_err_new (oc_rcv, oc_sel, "methodSignature is nil.");
 
   ret_type = [oc_msig methodReturnType];
   num_of_args = [oc_msig numberOfArguments] - 2;
@@ -203,10 +244,8 @@ ocm_invoke(int argc, VALUE* argv, VALUE rcv, VALUE* result)
     }
     else {
       [pool release];
-      rb_raise(rb_ocdataconv_exception_class(),
-	       "cannot convert the argument #%d as '%s' to NS argument.",
-	       i, octype_str);
-      return NO;
+      return ocdataconv_err_new 
+	(oc_rcv, oc_sel, "cannot convert the argument #%d as '%s' to NS argument.", i, octype_str);
     }
   }
 
@@ -216,12 +255,10 @@ ocm_invoke(int argc, VALUE* argv, VALUE rcv, VALUE* result)
 
   NS_HANDLER
     DLOG2("    NSInvocation#invoke (%@): raise %@", oc_sel_str, localException);
-    excp = rb_ocexception_s_new(localException);
+    excp = oc_err_new (oc_rcv, oc_sel, localException);
 
   NS_ENDHANDLER
-  if (excp != Qnil) {
-    rb_funcall(rb_mKernel, rb_intern("raise"), 1, excp);
-  }
+  if (excp != Qnil) return excp;
 
   DLOG1("    NSInvocation#invoke (%@): done.", oc_sel_str);
 
@@ -245,9 +282,8 @@ ocm_invoke(int argc, VALUE* argv, VALUE rcv, VALUE* result)
     f_conv_success = ocdata_to_rbobj(rcv, octype, result_data, result);
     if (!f_conv_success) {
       [pool release];
-      rb_raise(rb_ocdataconv_exception_class(),
-	       "cannot convert the result as '%s' to Ruby Object.", ret_type);
-      return NO;
+      return ocdataconv_err_new 
+	(oc_rcv, oc_sel, "cannot convert the result as '%s' to Ruby Object.", ret_type);
     }
   }
   else {
@@ -255,22 +291,26 @@ ocm_invoke(int argc, VALUE* argv, VALUE rcv, VALUE* result)
   }
 
   [pool release];
-  return YES;
+  return Qnil;
 }
 
-static BOOL
+static VALUE
 ocm_send(int argc, VALUE* argv, VALUE rcv, VALUE* result)
 {
-  BOOL ret = NO;
-  if (argc < 1) return NO;
+  VALUE exc;
+  if (argc < 1) return Qnil;
 
   DLOG0("ocm_send ...");
 
-  if (ocm_perform(argc, argv, rcv, result)) ret = YES;
-  else if (ocm_invoke(argc, argv, rcv, result)) ret = YES;
+  exc = ocm_perform(argc, argv, rcv, result);
+  if (exc != Qnil) {
+    exc = ocm_invoke(argc, argv, rcv, result);
+    if (exc != Qnil) return exc;
+  }
+
   DLOG0("ocm_send done");
 
-  return ret;
+  return exc;
 }
 
 /*************************************************/
@@ -287,18 +327,9 @@ static VALUE
 wrapper_ocm_perform(int argc, VALUE* argv, VALUE rcv)
 {
   VALUE result;
-  // id pool = [[NSAutoreleasePool alloc] init];
-  if (!ocm_perform(argc, argv, rcv, &result)) {
-    // [pool release];
-    if (argc > 0) {
-      VALUE asstr = rb_obj_as_string(argv[0]);
-      rb_raise(rb_eRuntimeError, "ocm_perform failed: %s", STR2CSTR(asstr));
-    }
-    else {
-      rb_raise(rb_eRuntimeError, "ocm_perform failed");
-    }
-  }
-  // [pool release];
+  VALUE exc;
+  exc = ocm_perform(argc, argv, rcv, &result);
+  if (exc != Qnil) rb_exc_raise (exc);
   return result;
 }
 
@@ -306,18 +337,9 @@ static VALUE
 wrapper_ocm_invoke(int argc, VALUE* argv, VALUE rcv)
 {
   VALUE result;
-  // id pool = [[NSAutoreleasePool alloc] init];
-  if (!ocm_invoke(argc, argv, rcv, &result)) {
-    // [pool release];
-    if (argc > 0) {
-      VALUE asstr = rb_obj_as_string(argv[0]);
-      rb_raise(rb_eRuntimeError, "ocm_invoke failed: %s", STR2CSTR(asstr));
-    }
-    else {
-      rb_raise(rb_eRuntimeError, "ocm_invoke failed");
-    }
-  }
-  // [pool release];
+  VALUE exc;
+  exc = ocm_invoke(argc, argv, rcv, &result);
+  if (exc != Qnil) rb_exc_raise (exc);
   return result;
 }
 
@@ -325,18 +347,9 @@ static VALUE
 wrapper_ocm_send(int argc, VALUE* argv, VALUE rcv)
 {
   VALUE result;
-  // id pool = [[NSAutoreleasePool alloc] init];
-  if (!ocm_send(argc, argv, rcv, &result)) {
-    // [pool release];
-    if (argc > 0) {
-      VALUE asstr = rb_obj_as_string(argv[0]);
-      rb_raise(rb_eRuntimeError, "ocm_send failed: %s", STR2CSTR(asstr));
-    }
-    else {
-      rb_raise(rb_eRuntimeError, "ocm_send failed");
-    }
-  }
-  // [pool release];
+  VALUE exc;
+  exc = ocm_send(argc, argv, rcv, &result);
+  if (exc != Qnil) rb_exc_raise (exc);
   return result;
 }
 
