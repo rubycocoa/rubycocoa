@@ -1,8 +1,13 @@
 2002-12-22  FUJIMOTO Hisakuni  <hisa@fobj.com>
 
+	* tests/alltest.sh, tests/tc_nsattributedstring.rb, tests/tc_nsstring.rb, tests/tc_subclass.rb, tests/test_nsattributedstring.rb, tests/test_nsstring.rb, tests/testall.rb:
+	rewrite some unit tests using Test::Unit
+
 	* framework/src/ruby/osx/objc/oc_import.rb:
 	In Ruby 1.8 (after 2002.9.27), 'NSObject#ns_overrides' may be called
 	earlier than 'Class#inherited'.
+	define constant OSX::NSBehaviorAttachment::ERRMSG_FOR_RESTRICT_NEW as
+	exception message when NSObject.new invoked.
 	
 2002-12-20  FUJIMOTO Hisakuni  <hisa@fobj.com>
 
