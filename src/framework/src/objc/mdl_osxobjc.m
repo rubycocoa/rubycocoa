@@ -140,17 +140,21 @@ thread_switcher_start()
 /******************/
 
 static VALUE
-rb_cls_ocobj (const char* name)
+rb_osx_const (const char* name)
 {
-  VALUE cls = Qnil;
+  VALUE constant = Qnil;
   VALUE mOSX = osx_s_module();
   if (!mOSX) return Qnil;
-  if (rb_const_defined(mOSX, rb_intern(name))) {
-    cls = rb_const_get(mOSX, rb_intern(name));
-  }
-  else {
-    cls = rb_const_get(mOSX, rb_intern("OCObject"));
-  }
+  if (rb_const_defined(mOSX, rb_intern(name)))
+    constant = rb_const_get(mOSX, rb_intern(name));
+  return constant;
+}
+
+static VALUE
+rb_cls_ocobj (const char* name)
+{
+  VALUE cls = rb_osx_const(name);
+  if (cls == Qnil) cls = rb_osx_const("OCObject");
   return cls;
 }
 
@@ -193,6 +197,28 @@ osx_mf_objc_symbol_to_obj(VALUE mdl, VALUE const_name, VALUE const_type)
   return result;
 }
 
+static void
+add_attachments(VALUE rcv, id ocid)
+{
+  VALUE attachment = Qnil;
+
+  NS_DURING  
+    if ([ocid isKindOfClass: [NSArray class]])
+      attachment = rb_osx_const("RCArrayAttachment");
+
+    else if ([ocid isKindOfClass: [NSDictionary class]])
+      attachment = rb_osx_const("RCDictionaryAttachment");
+
+    else if ([ocid isKindOfClass: [NSData class]])
+      attachment = rb_osx_const("RCDataAttachment");
+  NS_HANDLER
+    attachment = Qnil;
+  NS_ENDHANDLER
+
+  if (attachment != Qnil)
+    rb_extend_object(rcv, attachment);
+}
+
 /***/
 
 VALUE
@@ -217,7 +243,7 @@ ocobj_s_new(id ocid)
   cls_name = [[ocid class] description];
   obj = rb_funcall(rb_cls_ocobj([cls_name cString]), 
 		   rb_intern("new_with_ocid"), 1, OCID2NUM(ocid));
-
+  add_attachments(obj, ocid);
   [pool release];
   return obj;
 }
@@ -234,8 +260,8 @@ rbobj_get_ocid (VALUE obj)
   if (rb_respond_to(obj, mtd))
     return rb_obj_ocid(obj);
 
-  if (rb_respond_to(obj, rb_intern("to_nsobj"))) {
-    VALUE nso = rb_funcall(obj, rb_intern("to_nsobj"), 0);
+  if (rb_respond_to(obj, rb_intern("to_nsobject"))) {
+    VALUE nso = rb_funcall(obj, rb_intern("to_nsobject"), 0);
     return rb_obj_ocid(nso);
   }
 
