@@ -27,53 +27,6 @@
 			settings = {
 			};
 		};
-		E8187A5F01A3B29003A81C66 = {
-			isa = PBXFileReference;
-			path = RubyView.h;
-			refType = 4;
-		};
-		E8187A6001A3B29003A81C66 = {
-			isa = PBXFileReference;
-			path = RubyView.m;
-			refType = 4;
-		};
-		E8187A6101A3B29003A81C66 = {
-			fileRef = E8187A5F01A3B29003A81C66;
-			isa = PBXBuildFile;
-			settings = {
-				ATTRIBUTES = (
-					Public,
-				);
-			};
-		};
-		E8187A6201A3B29003A81C66 = {
-			fileRef = E8187A6001A3B29003A81C66;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
-		E81D088701A776B103A81C66 = {
-			isa = PBXFileReference;
-			path = delegate_utils.m;
-			refType = 4;
-		};
-		E81D088801A776B103A81C66 = {
-			isa = PBXFileReference;
-			path = delegate_utils.h;
-			refType = 4;
-		};
-		E81D088901A776B103A81C66 = {
-			fileRef = E81D088801A776B103A81C66;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
-		E81D088A01A776B103A81C66 = {
-			fileRef = E81D088701A776B103A81C66;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
 		E82EFCE3019F475103A81C66 = {
 			isa = PBXFileReference;
 			path = rb_main.rb.tmpl;
@@ -267,10 +220,7 @@
 				E8A0707601967E8C03A81C66,
 				E8760F9A019BA88D03A81C66,
 				E83626FB019F9D2403A81C66,
-				E8187A6101A3B29003A81C66,
 				E80B398101A21B6103A81C66,
-				E81D088901A776B103A81C66,
-				E8E2BF6501A8024903A81C66,
 			);
 			isa = PBXHeadersBuildPhase;
 			name = Headers;
@@ -291,9 +241,6 @@
 				E8760F98019BA86503A81C66,
 				E83626FC019F9D2403A81C66,
 				E80B398201A21B6103A81C66,
-				E8187A6201A3B29003A81C66,
-				E81D088A01A776B103A81C66,
-				E8E2BF6601A8024903A81C66,
 			);
 			isa = PBXSourcesBuildPhase;
 			name = Sources;
@@ -320,16 +267,10 @@
 				E8A0706F01967E8C03A81C66,
 				E83626F9019F9D2403A81C66,
 				E83626FA019F9D2403A81C66,
-				E8E2BF6301A8024903A81C66,
-				E8E2BF6401A8024903A81C66,
-				E8187A5F01A3B29003A81C66,
-				E8187A6001A3B29003A81C66,
 				E80B397F01A21B6103A81C66,
 				E80B398001A21B6103A81C66,
 				E8760F99019BA88D03A81C66,
 				E8760F97019BA86503A81C66,
-				E81D088801A776B103A81C66,
-				E81D088701A776B103A81C66,
 			);
 			isa = PBXGroup;
 			name = source;
@@ -403,31 +344,6 @@
 			name = template;
 			path = "";
 			refType = 4;
-		};
-		E8E2BF6301A8024903A81C66 = {
-			isa = PBXFileReference;
-			path = RubyDelegator.h;
-			refType = 4;
-		};
-		E8E2BF6401A8024903A81C66 = {
-			isa = PBXFileReference;
-			path = RubyDelegator.m;
-			refType = 4;
-		};
-		E8E2BF6501A8024903A81C66 = {
-			fileRef = E8E2BF6301A8024903A81C66;
-			isa = PBXBuildFile;
-			settings = {
-				ATTRIBUTES = (
-					Public,
-				);
-			};
-		};
-		E8E2BF6601A8024903A81C66 = {
-			fileRef = E8E2BF6401A8024903A81C66;
-			isa = PBXBuildFile;
-			settings = {
-			};
 		};
 	};
 	rootObject = E8A0705F01967D5B03A81C66;
