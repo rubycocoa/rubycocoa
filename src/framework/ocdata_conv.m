@@ -77,13 +77,21 @@ id rbobj_get_ocid (VALUE obj)
 
 VALUE ocid_get_rbobj (id ocid)
 {
-  if ([ocid isKindOfClass: [RBObject class]])
-    return [ocid __rbobj__];
+  VALUE result = Qnil;
 
-  if ([ocid respondsToSelector: @selector(__rbobj__)])
-    return [ocid __rbobj__];
+  NS_DURING  
+    if ([ocid isKindOfClass: [RBObject class]])
+      result = [ocid __rbobj__];
 
-  return Qnil;
+    else if ([ocid respondsToSelector: @selector(__rbobj__)])
+      result = [ocid __rbobj__];
+
+  NS_HANDLER
+    result = Qnil;
+
+  NS_ENDHANDLER
+
+  return result;
 }
 
 
@@ -415,6 +423,11 @@ static BOOL rbobj_convert_to_nsobj(VALUE obj, id* nsobj)
 
 BOOL rbobj_to_nsobj(VALUE obj, id* nsobj)
 {
+  if (obj == Qnil) {
+    *nsobj = nil;
+    return YES;
+  }
+
   *nsobj = rbobj_get_ocid(obj);
   if (*nsobj != nil) return YES;
 
@@ -469,6 +482,8 @@ VALUE
 ocid_to_rbobj(VALUE context_obj, id ocid)
 {
   VALUE result;
+
+  if (ocid == nil) return Qnil;
 
   result = ocid_get_rbobj(ocid);
 

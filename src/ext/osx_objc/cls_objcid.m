@@ -40,35 +40,30 @@ _objcid_data_free(struct _objcid_data* dp)
 }
 
 static struct _objcid_data*
-_objcid_data_new(id ocid)
+_objcid_data_new()
 {
   struct _objcid_data* dp = NULL;
-  if (ocid != nil) {
-    dp = malloc(sizeof(struct _objcid_data));
-    dp->ocid = ocid;
-    [ocid retain];
-  }
+  dp = malloc(sizeof(struct _objcid_data));
+  dp->ocid = nil;
   return dp;
 }
-
-VALUE
-_objcid_s_new(VALUE klass, id ocid)
-{
-  if (ocid == nil) return Qnil;
-  return Data_Wrap_Struct(klass, 0, _objcid_data_free,
-			  _objcid_data_new(ocid));
-}
-
 
 static VALUE
 objcid_s_new(int argc, VALUE* argv, VALUE klass)
 {
   VALUE obj;
-  VALUE arg_ocid_num;
-  rb_scan_args(argc, argv, "10*", &arg_ocid_num);
-  obj = _objcid_s_new(klass, (id) NUM2UINT(arg_ocid_num));
+  obj = Data_Wrap_Struct(klass, 0, _objcid_data_free, _objcid_data_new());
   rb_obj_call_init(obj, argc, argv);
   return obj;
+}
+
+static VALUE
+objcid_initialize(VALUE rcv, VALUE arg)
+{
+  id ocid = (id) NUM2UINT(arg);
+  [ocid retain];
+  OBJCID_DATA_PTR(rcv)->ocid = ocid;
+  return rcv;
 }
 
 
@@ -105,13 +100,6 @@ rb_objcid()
   return _kObjcID;
 }
 
-VALUE
-rb_objcid_s_new(id ocid)
-{
-  if (ocid == nil) return Qnil;
-  return _objcid_s_new(_kObjcID, ocid);
-}
-
 id
 rb_objcid_ocid(VALUE rcv)
 {
@@ -125,6 +113,7 @@ init_cls_ObjcID(VALUE outer)
 
   rb_define_singleton_method(_kObjcID, "new", objcid_s_new, -1);
 
+  rb_define_method(_kObjcID, "initialize", objcid_initialize, 1);
   rb_define_method(_kObjcID, "__ocid__", objcid_ocid, 0);
   rb_define_method(_kObjcID, "__inspect__", objcid_inspect, 0);
   rb_define_method(_kObjcID, "inspect", objcid_inspect, 0);

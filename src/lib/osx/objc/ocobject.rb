@@ -17,6 +17,9 @@ module OSX
 
   class OCObject < ObjcID
     include OCObjWrapper
+  end				# class OCObject
+
+  module OCObjWrapper
 
     def to_s
       if self.ocm_send(:isKindOfClass_, OSX::NSString) != 0 then
@@ -101,7 +104,7 @@ module OSX
       [ m_name, m_args, m_predicate ]
     end
 
-    def occur_ownership?(obj, mname)
+    def occur_ownership?(obj, m_name)
       obj.is_a?(OSX::OCObject) &&
 	(m_name =~ /^alloc/ ||
 	 m_name =~ /^new/ ||
@@ -110,6 +113,6 @@ module OSX
 	 m_name =~ /^mutableCopy/)
     end
 
-  end				# class OCObject
+  end
 
 end				# module OSX

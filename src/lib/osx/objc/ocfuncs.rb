@@ -24,6 +24,17 @@ module OSX
     klass
   end
 
+  def OSX.ns_import_new(sym)
+    if not const_defined?(sym) then
+      const_name = sym.to_s
+      sym_name = ":#{sym}"
+      module_eval %[
+        nsc = objc_class_new(NSClassFromString(#{sym_name}).__ocid__)
+        #{const_name} = nsc if nsc
+      ]
+    end
+  end
+
   def OSX.ns_import(sym)
     if not const_defined?(sym) then
       const_name = sym.to_s
