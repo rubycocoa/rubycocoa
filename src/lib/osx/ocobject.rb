@@ -47,7 +47,7 @@ module OSX
       attr_writer *args
     end
 
-    # for easy undarstanding
+    # for look and feel
     alias_method :ib_loadable,  :ns_loadable
     alias_method :ib_overrides, :ns_overrides
     alias_method :ib_outlets,   :ns_outlets
