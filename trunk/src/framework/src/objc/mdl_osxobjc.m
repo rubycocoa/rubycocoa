@@ -243,7 +243,7 @@ ocobj_s_new(id ocid)
   cls_name = [[ocid class] description];
   obj = rb_funcall(rb_cls_ocobj([cls_name cString]), 
 		   rb_intern("new_with_ocid"), 1, OCID2NUM(ocid));
-  add_attachments(obj, ocid);
+  // add_attachments(obj, ocid);
   [pool release];
   return obj;
 }
@@ -259,6 +259,11 @@ rbobj_get_ocid (VALUE obj)
   mtd = rb_intern("__ocid__");
   if (rb_respond_to(obj, mtd))
     return rb_obj_ocid(obj);
+
+  if (rb_respond_to(obj, rb_intern("to_nsobj"))) {
+    VALUE nso = rb_funcall(obj, rb_intern("to_nsobj"), 0);
+    return rb_obj_ocid(nso);
+  }
 
   return nil;
 }
