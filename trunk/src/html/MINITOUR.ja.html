@@ -9,7 +9,7 @@
 <link href="rdtext.css" type="text/css" rel="stylesheet"/>
 </head>
 <body>
-<h1><a name="label:0" id="label:0">RubyCocoaの簡単な使い方</a></h1><!-- RDLabel: "RubyCocoaの簡単な使い方" -->
+<h1><a name="label:0" id="label:0">RubyCocoaの概観</a></h1><!-- RDLabel: "RubyCocoaの概観" -->
 <h2><a name="label:1" id="label:1">ライブラリのロード</a></h2><!-- RDLabel: "ライブラリのロード" -->
 <p>RubyCocoaのライブラリは以下のようにロードします。</p>
 <pre>require 'osx/cocoa'</pre>
@@ -29,36 +29,39 @@ sndfiles.each do |path|
 end</pre>
 <p>以降は、地味だけど理解の助けになると思われる例をあげていきます。説明の
 中で "# =&gt; "の右側は実行結果として標準出力される文字列です。</p>
-<h2><a name="label:3" id="label:3">OSX::OCObjectはObjective-Cオブジェクトを包むRubyオブジェクト</a></h2><!-- RDLabel: "OSX::OCObjectはObjective-Cオブジェクトを包むRubyオブジェクト" -->
-<pre>p OSX::NSObject  # =&gt; #&lt;OCObject:0x82f22 class='NSObject' id=80819B0C&gt;
-nobj = OSX::NSObject.alloc.init
-p nobj           # =&gt; #&lt;OCObject:0x53d1a class='NSObject' id=3C6BB0&gt;</pre>
-<p>RubyCocoaでは、Objective-Cオブジェクトはすべて(クラス自身も含めて)
-RubyのOSX::OCObjectクラスもしくはその派生クラスのインスタンスオブジェ
-クトになります。OSX::OCObject インスタンスはObjective-Cオブジェクトを
-包んだRubyオブジェクトということです。</p>
-<h2><a name="label:4" id="label:4">すべてはRubyのオブジェクト</a></h2><!-- RDLabel: "すべてはRubyのオブジェクト" -->
-<pre>p OSX::NSString.is_a?(Class)    # =&gt; false
-p OSX::NSString.type            # =&gt; OSX::OCObject
-p OSX::NSString.string.type     # =&gt; OSX::OCObject</pre>
-<p>例えばクラスNSStringのRubyCocoaでの表現はOSX::NSStringになります。こ
-の場合OSX::NSStringは、RubyオブジェクトとしてはOSX::OCObjectクラスのイ
-ンスタンスであってクラスそのものではないことに注意してください。</p>
-<h2><a name="label:5" id="label:5">オブジェクトの生成とオーナーシップ</a></h2><!-- RDLabel: "オブジェクトの生成とオーナーシップ" -->
-<p>OSX::OCObjectのオブジェクト生成は、Cocoa/Objective-Cのメソッドをそのま
-ま使います。OSX::OCObjectのインスタンスはかならず自身が包んでいる
-Objective-Cオブジェクトのオーナーシップを持ちます。オーナーシップはオ
-ブジェクトがGCに掃除されるときに自動的になくなりますので気にする必要は
-ありません。</p>
-<pre>OSX::NSString.alloc.initWithString "Hoge"
-OSX::NSString.stringWithString "Hoge"</pre>
+<h2><a name="label:3" id="label:3">Cocoaクラス</a></h2><!-- RDLabel: "Cocoaクラス" -->
+<pre>p OSX::NSObject # =&gt; OSX::NSObject
+obj = OSX::NSObject.description
+p obj      # =&gt; #&lt;OSX::OCObject:0x5194e8 class='NSCFString' id=A97910&gt;
+obj = OSX::NSObject.alloc.init
+p obj      # =&gt; #&lt;OSX::NSObject:0x51f5b4 class='NSObject' id=976D90&gt;</pre>
+<p>RubyCocoaでは、CocoaクラスはOSXモジュール配下のクラスとして定義されて
+います(0.2.0以降)。CocoaクラスはRubyのクラスであると同時にCocoaのオブ
+ジェクトとしても振る舞います。</p>
+<h2><a name="label:4" id="label:4">Cocoaオブジェクトの生成</a></h2><!-- RDLabel: "Cocoaオブジェクトの生成" -->
+<p>Cocoaオブジェクトの生成には、Cocoaの各クラスのメソッドをそのまま使いま
+す。</p>
+<pre>obj = OSX::NSObject.alloc.init
+str = OSX::NSObject.stringWithString "hello"
+str = OSX::NSObject.alloc.initWithString "world"</pre>
+<p>生成されたCocoaオブジェクトは、RubyCocoa内部でOSX::ObjcIDというクラス
+のオブジェクトに包まれています。</p>
+<h2><a name="label:5" id="label:5">オーナーシップとメモリ管理</a></h2><!-- RDLabel: "オーナーシップとメモリ管理" -->
+<p>OSX::ObjcIDのインスタンスはかならず自身が包んでいるCocoaオブジェクトの
+オーナーシップを持ちます。オーナーシップはOSX::ObjcIDのインスタンスが
+GCに掃除されるときに自動的になくなります。したがってRubyCocoaでは、オー
+ナーシップなどのメモリ管理を気にする必要はありません。また、通常
+OSX::ObjcIDというクラスの存在を意識する必要もありません。</p>
+<pre>str = OSX::NSObject.stringWithString "hello"
+str = OSX::NSObject.alloc.initWithString "world"</pre>
 <p>上記２行は、Objective-Cではオーナーシップを発生させるかさせないかとい
-う違いがありますが、RubyCocoa ではたいして違いがありません。release、
-autorelease、retainなどのメソッドは基本的に呼ぶ必要はありませんし、
-NSAutoreleasePoolを作る必要もありません。</p>
+う違いがありますが、オーナーシップを意識する必要のない RubyCocoa では
+たいして違いがありません。release、autorelease、retainなどのメソッドは
+基本的に呼ぶ必要はありませんし、NSAutoreleasePoolを作る必要もありませ
+ん。</p>
 <ul>
-<li>OSX::OCObjectオブジェクトはCocoaのメソッドで生成する</li>
-<li>できたオブジェクトはRubyのGCが管理するので作りっぱなしで良い</li>
+<li>Cocoaオブジェクトの生成にはCocoaクラスに対してCocoaのメソッドを使う</li>
+<li>Cocoaオブジェクトは作りっぱなしで良い、メモリ管理は不要</li>
 </ul>
 <h2><a name="label:6" id="label:6">メソッドの返す値</a></h2><!-- RDLabel: "メソッドの返す値" -->
 <pre>nstr = OSX::NSString.description
@@ -79,10 +82,10 @@ p ary       # =&gt; [#&lt;OCObject:0x6a9b8 class='NSCFString' id=3C2B50&gt;,...]
 ary.map! {|i| i.to_s }
 p ary       # =&gt; ["/", "Users", "hisa", "src", "ruby", "osxobjc"]</pre>
 <p>これらの例から推測できるようにRubyCocoaでは、NSStringやNSArrayなど
-Objective-Cオブジェクトを返すメソッドをOSX::OCObjectのインスタンスとし
-て返します。積極的にRubyの対応するオブジェクト(例えばStringなど)には変
-換しません。文字列と配列に関しては to_s や to_a が定義されているのでそ
-れを使うことができます。</p>
+Objective-Cオブジェクトを返すメソッドをCocoaオブジェクトとして返します。
+積極的にRubyの対応するオブジェクト(例えばStringなど)には変換しません。
+文字列と配列に関しては to_s や to_a が定義されているのでそれを使うこと
+ができます。</p>
 <h2><a name="label:7" id="label:7">メソッド名の決定方法とバリエーション</a></h2><!-- RDLabel: "メソッド名の決定方法とバリエーション" -->
 <pre># システム音を順番に鳴らす (2)
 sndfiles.each do |path|
@@ -120,14 +123,102 @@ p nary.containsObject?("hoge")  # =&gt; true</pre>
 換を試みます。</p>
 <h2><a name="label:9" id="label:9">メソッド名が重複するときに使う接頭辞 "oc_"</a></h2><!-- RDLabel: "メソッド名が重複するときに使う接頭辞 "oc_"" -->
 <pre>klass = OSX::NSObject.class
-p klass     # =&gt; OSX::OCObject
+p klass     # =&gt; Class
 klass = OSX::NSObject.oc_class
-p klass     # =&gt; #&lt;OCObject:0x82f22 class='NSObject' id=80819B0C&gt;</pre>
+p klass     # =&gt; OSX::NSObject</pre>
 <p>"Object#class"のようにRubyとObjective-Cでメソッド名(セレクタ)が全く同
 じ場合には、Rubyのメソッドが呼ばれます。このような場合には、メソッド名
 の頭に"oc_"という接頭辞をつけると、Objective-Cオブジェクトに対してメッ
 セージが送られます。"oc_" を付けてもRuby側にメソッドがある場合は？どう
 しようもありません(裏技はあるのでソースを読める人はどうぞ) 。</p>
+<h2><a name="label:10" id="label:10">Cocoaクラスの派生クラスとそのインスタンス</a></h2><!-- RDLabel: "Cocoaクラスの派生クラスとそのインスタンス" -->
+<p>ここまでは既存のCocoaクラスとそのインスタンスに関するトピックを扱いま
+した。ここからは、RubyCocoaアプリケーションを書く場合に必要となるCocoa 
+派生クラスの定義やそのインスタンスに関するトピックを扱います。Cocoaの
+派生クラスはややトリッキーな実装により実現しているため、多少の制約や癖
+がありますが、それも含めて見ていきましょう。</p>
+<h2><a name="label:11" id="label:11">Cocoa派生クラスの定義</a></h2><!-- RDLabel: "Cocoa派生クラスの定義" -->
+<p>Interface Builderで作成したGUI定義ファイル(nibファイル)の中で設定した
+Cocoaオブジェクトのクラスなどは派生クラスとして定義します(0.2.0以降)。
+例えばCocoaの入門書やチュートリアルなどで最初の方に出てくるようなMVCモ
+デルのコントローラは</p>
+<pre>class AppController &lt; OSX::NSObject
+
+  ib_outlets :messageField
+
+  def btnClicked(sender)
+  end
+
+end</pre>
+<p>のように定義します。RubyCocoaにおけるCocoaの派生クラス定義は、このよう
+に通常のRubyでの派生クラス定義と同様に記述します。</p>
+<h2><a name="label:12" id="label:12">アウトレット</a></h2><!-- RDLabel: "アウトレット" -->
+<p>nibファイル中でクラスに設定したアウトレットは派生クラスの定義の中で</p>
+<pre>ns_outlets :rateField, :dollerField</pre>
+<p>と書きます。ns_outletsは実際には Module#attr_writer と同じです。したがっ
+て代わりに</p>
+<pre>def rateField= (new_val)
+  @rateField = new_val
+end</pre>
+<p>のように定義することもできます。ns_outlets には ib_outlets という別名
+もあります。</p>
+<h2><a name="label:13" id="label:13">メソッドのオーバーライド</a></h2><!-- RDLabel: "メソッドのオーバーライド" -->
+<p>親クラスで定義されているメソッドをオーバライドする場合、ns_overrides
+(別名ib_overrides)を使ってオーバライドしたことを宣言する必要があります。</p>
+<pre>class MyCustomView &lt; OSX::NSView
+  ns_overrides :drawRect_, 'mouseUp:'
+
+  def drawRect(frame)
+  end
+
+  ...
+end</pre>
+<p>ns_overrides の引数には Objective-C のメッセージセレクタを文字列または
+シンボルで表現したものを与えます。ただし「メソッド名の決定方法とバリエー
+ション」で説明した末尾を省略する記法を使うことはできません。引数の数に
+合わせて正確に記述する必要があります。</p>
+<p>これ以上にCocoa派生クラスのメソッドオーバライドには痛い制約があります。
+オーバーライドしているメソッドの中から親クラスの同名メソッドを呼ぶこと
+はできません。例えば以下のような書き方をすると無限ループもしくはスタッ
+ク溢れに陥ります。</p>
+<pre>class MyCustomView &lt; OSX::NSView
+
+  ns_overrides :initWithFrame_
+
+  def initWithFrame(frame)
+    ...
+    super(frame)
+  end
+
+end</pre>
+<p>この制約は痛いので将来的には解決したいのですが今のところ解決方法があり
+ません。</p>
+<h2><a name="label:14" id="label:14">Cocoa派生クラスのインスタンス生成</a></h2><!-- RDLabel: "Cocoa派生クラスのインスタンス生成" -->
+<p>Cocoa派生クラスのインスタンスをRubyスクリプト中で生成する必要がある場
+合には、既存のCocoaクラスの場合と同様に</p>
+<pre>AppController.alloc.init</pre>
+<p>のように書きます。Rubyでのもっとも一般的な書き方である</p>
+<pre>AppControll.new</pre>
+<p>を使うことはできません(例外を発生するようにしてあります)。これにはいろ
+いろ事情があるのですが長くなるのでここでは詳しい説明は省きます。この制
+約はインスタンス生成が</p>
+<ul>
+<li>alloc (Objective-C側)</li>
+<li>alloc内でRubyオブジェクト生成(ここでinitializeメソッドが呼ばれる)</li>
+</ul>
+<p>という順番で行われることに深い関連があります。</p>
+<h2><a name="label:15" id="label:15">インスタンス生成時の初期化コードはどこに書くべきか?</a></h2><!-- RDLabel: "インスタンス生成時の初期化コードはどこに書くべきか?" -->
+<p>一般にRubyではinitializeメソッドの中に初期化のコードを書きますが、
+Cocoa派生クラスではどちらかいえばあまり奨められません。理由は先に述べ
+たインスタンス生成時のinitializeメソッドが呼ばれるタイミングにより、そ
+の時点でCocoaオブジェクトとしてはメモリが割り当てられただけで初期化さ
+れていないからです。もっともCocoa側メソッドを呼ばない限りにおいてはと
+くに問題は発生しないと考えられます。</p>
+<p>nibファイルからロードされるような場合には awakeFromNib メソッドで初期
+化するのがもっとも無難です。おそらく実際にCocoaの派生クラスを定義する
+必要があるのはこのケースがもっとも多くなるのではないでしょうか。</p>
+<p>その他の場合、とくにNSObjectの派生クラスの場合には、Objective-Cの場合
+と同様に "init" 接頭辞を持つメソッドに書くのが無難なようです。</p>
 <p>藤本尚邦 FUJIMOTO Hisakuni &lt;hisa@imasy.or.jp&gt;
 $Date$ : $Revision$</p>
 
