@@ -20,7 +20,7 @@ end
 
 def command(cmd)
   $stderr.puts "execute '#{cmd}' ..."
-  raise (RuntimeError, cmd) unless system(cmd)
+  raise(RuntimeError, cmd) unless system(cmd)
   $stderr.puts "execute '#{cmd}' done"
 end
 
@@ -42,7 +42,7 @@ command "make"
 command "make test"
 command "sudo make install"
 
-command "sudo mkdir #{DOCDIR}" unless File.directory? (DOCDIR)
+command "sudo mkdir #{DOCDIR}" unless File.directory?(DOCDIR)
 command "sudo cp -p #{DOCS.join(' ')} #{DOCDIR}"
 
 chdir "#{DSTDIR}/lib"

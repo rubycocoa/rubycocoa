@@ -15,9 +15,9 @@ class AppController < OSX::NSObject
     @thread.kill
     @thread = nil
     Thread.start do
-      sender.setEnabled (false)
+      sender.setEnabled(false)
       hello_sequence
-      sender.setEnabled (true)
+      sender.setEnabled(true)
       @thread = start_thread
     end
   end
@@ -30,7 +30,7 @@ class AppController < OSX::NSObject
   def start_thread
     Thread.start {
       loop do
-	set_msg (Time.now.to_s)
+	set_msg(Time.now.to_s)
 	sleep 0.5
       end
     }
@@ -38,12 +38,12 @@ class AppController < OSX::NSObject
 
   def set_msg (str)
     @mutex.synchronize do
-      @msgField.setStringValue (str)
+      @msgField.setStringValue(str)
     end
   end
 
   def quit
-    OSX.NSApp.stop (self)
+    OSX.NSApp.stop(self)
   end
 
   def hello_sequence
@@ -55,8 +55,8 @@ class AppController < OSX::NSObject
       [ "Hello RubyCocoa !", 0.3 ], [ "", 0.6 ],
       [ "Hello RubyCocoa !", 3 ]
     ].each do |msg, interval|
-      set_msg (msg)
-      sleep (interval)
+      set_msg(msg)
+      sleep(interval)
     end
   end
 

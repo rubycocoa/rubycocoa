@@ -16,20 +16,20 @@ class WinCtrl < OSX::NSObject
     rect = OSX::NSRect.new
 
     rect.size = image.size
-    rect.origin = OSX::NSPoint.new (100.0 + cas, 150.0 + cas)
+    rect.origin = OSX::NSPoint.new(100.0 + cas, 150.0 + cas)
     @window = OSX::NSWindow.alloc.
-      initWithContentRect (rect,
-			   :styleMask, (OSX::NSTitledWindowMask |
-					OSX::NSClosableWindowMask),
-			   :backing, OSX::NSBackingStoreBuffered,
-			   :defer, true)
-    @window.setReleasedWhenClosed (true)
+      initWithContentRect(rect,
+			  :styleMask, (OSX::NSTitledWindowMask |
+				       OSX::NSClosableWindowMask),
+			  :backing, OSX::NSBackingStoreBuffered,
+			  :defer, true)
+    @window.setReleasedWhenClosed(true)
     rect.origin = OSX::NSPoint.new
-    imageview = OSX::NSImageView.alloc.initWithFrame (rect)
-    imageview.setImage (image)
+    imageview = OSX::NSImageView.alloc.initWithFrame(rect)
+    imageview.setImage(image)
     imageview.setEditable false
     imageview.setImageScaling true
-    @window.setContentView (imageview)
+    @window.setContentView(imageview)
   end
 
   def initWithPath (path)
@@ -44,18 +44,18 @@ class WinCtrl < OSX::NSObject
     self.windowSetUp @docImage
     @mag = 1.0
     OSX::NSNotificationCenter.defaultCenter.
-      addObserver (self,
-		   :selector, 'shrink:',
-		   :name, OSX::ShrinkAllNotification,
-		   :object, nil)
+      addObserver(self,
+		  :selector, 'shrink:',
+		  :name, OSX::ShrinkAllNotification,
+		  :object, nil)
     @window.setTitleWithRepresentedFilename @filename
-    @window.setDelegate (self)
-    @window.makeKeyAndOrderFront (self)
+    @window.setDelegate(self)
+    @window.makeKeyAndOrderFront(self)
   end
 
   def dealloc
-    OSX::NSNotificationCenter.defaultCenter.removeObserver (self)
-    @window.setDelegate (nil)
+    OSX::NSNotificationCenter.defaultCenter.removeObserver(self)
+    @window.setDelegate(nil)
     # [filename release];
     # [docImage release];
     # [super dealloc];
@@ -80,13 +80,13 @@ class WinCtrl < OSX::NSObject
     yd = sz.height.to_i / 2
     sz.width -= xd
     sz.height -= yd
-    view.setFrameSize (sz)
+    view.setFrameSize(sz)
     wt = rect.origin.y + rect.size.height
     rect.size.width -= xd
     rect.size.height -= yd
     rect.origin.y = wt - rect.size.height
-    @window.setFrame (rect, :display, true)
-    @window.setDocumentEdited (true)
+    @window.setFrame(rect, :display, true)
+    @window.setDocumentEdited(true)
   end
 
   def windowShouldClose (sender)

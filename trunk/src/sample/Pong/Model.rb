@@ -5,7 +5,7 @@ class Shape
   attr_reader :rect, :color
 
   def initialize (x, y, w, h, c)
-    @rect = OSX::NSRect.new (x, y, w, h)
+    @rect = OSX::NSRect.new(x, y, w, h)
     @color = c
   end
 
@@ -29,7 +29,7 @@ class Paddle < Shape
   COLOR = OSX::NSColor.darkGrayColor
 
   def initialize
-    super (0.0, 0.0, WIDTH, HEIGHT, COLOR)
+    super(0.0, 0.0, WIDTH, HEIGHT, COLOR)
   end
 
 end
@@ -40,7 +40,7 @@ class Ball < Shape
   RADIUS = 6.0
 
   def initialize(c)
-    super (0.0, 0.0, RADIUS, RADIUS, c)
+    super(0.0, 0.0, RADIUS, RADIUS, c)
   end
 
 end
@@ -107,7 +107,7 @@ class BallMoving
 
     if @dv < 0 && ball_in_paddle? then
       bound_vertical
-      set_speed (@speed + 1)
+      set_speed(@speed + 1)
       paddle_beep
     end
     
@@ -160,7 +160,7 @@ class BallMoving
 
   def snd_init
     require 'rbconfig'
-    if File.basename (Config::CONFIG['archdir'])[-3..-1].to_f >= 6.0 then
+    if File.basename(Config::CONFIG['archdir'])[-3..-1].to_f >= 6.0 then
       @wall_snd = OSX::NSSound.soundNamed "Pop"
     else
       @wall_snd = OSX::NSSound.soundNamed "Bonk"

@@ -10,7 +10,7 @@ class MyView < OSX::NSView
 
   def drawRect(frame)
     color_set = "OSX::NSColor.#{@color_name}Color.set"
-    eval (color_set)
+    eval(color_set)
     OSX.NSRectFill(bounds)
   end
 

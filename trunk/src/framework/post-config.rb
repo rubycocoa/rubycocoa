@@ -11,7 +11,7 @@ tmpl = File.open(prj_tmpl_file){|f| f.read }
   [ :libruby_path_basename, File.basename(@config['libruby-path']) ]
 ].each do |sym, str|
   pat = "%%%#{sym}%%%"
-  tmpl.gsub! (pat, str)
+  tmpl.gsub!(pat, str)
 end
 File.open(prj_dst_file,"w"){|f| f.write(tmpl) }
 
@@ -30,9 +30,9 @@ intern_h = "#{Config::CONFIG['archdir']}/intern.h"
   $stderr.puts "create #{File.expand_path(dst_fname)} ..."
   File.open(dst_fname, 'w') do |dstfile|
     IO.foreach(src_path) do |line|
-      line = line.gsub (/\bID\b/, 'RB_ID')
-      line = line.gsub (/\bT_DATA\b/, 'RB_T_DATA')
-      line = line.gsub (/\bintern.h\b/, "#{new_filename_prefix}intern.h")
+      line = line.gsub( /\bID\b/, 'RB_ID' )
+      line = line.gsub( /\bT_DATA\b/, 'RB_T_DATA' )
+      line = line.gsub( /\bintern.h\b/, "#{new_filename_prefix}intern.h" )
       dstfile.puts line
     end
   end

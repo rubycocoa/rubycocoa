@@ -42,7 +42,7 @@ if $0 == __FILE__ then
   app.setDelegate(AppDelegate.alloc.init)
 
   frame = [[200.0, 300.0], [250.0, 100.0]]
-  win = NSWindow.alloc.initWithContentRect_styleMask_backing_defer (frame, 15, 2, 0)
+  win = NSWindow.alloc.initWithContentRect_styleMask_backing_defer(frame, 15, 2, 0)
   win.setTitle 'HelloWorld'
   win.setLevel(3)			# floating window
 

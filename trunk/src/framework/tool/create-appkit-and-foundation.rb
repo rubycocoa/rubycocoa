@@ -37,8 +37,8 @@ footer_str = "\nend\n"
   [ Dir["/System/Library/Frameworks/AppKit.framework/Headers/*.h"],
     "src/ruby/osx/objc/appkit.rb" ]
 ].each do |src_headers, dst_fname|
-  srcstr = read_all_from (src_headers)
-  cnames = extract_class_names (srcstr)
+  srcstr = read_all_from(src_headers)
+  cnames = extract_class_names(srcstr)
   File.open(dst_fname, "w") do |f|
     f.puts header_str
     cnames.each do |cname|

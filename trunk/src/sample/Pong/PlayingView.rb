@@ -19,7 +19,7 @@ class PlayingView < OSX::NSView
   end
 
   def mouseDragged (evt)
-    @appCtrl.mouseDragged (evt)
+    @appCtrl.mouseDragged(evt)
   end
 
   def drawRect (frame)
@@ -30,7 +30,7 @@ class PlayingView < OSX::NSView
 
   def draw_bg
     OSX::NSColor.whiteColor.set
-    OSX::NSRectFill (bounds)
+    OSX::NSRectFill(bounds)
   end
 
   def draw_balls
@@ -43,7 +43,7 @@ class PlayingView < OSX::NSView
   def draw_paddle
     if @paddle then
       @paddle.color.set
-      OSX::NSRectFill (@paddle.rect)
+      OSX::NSRectFill(@paddle.rect)
     end
   end
 

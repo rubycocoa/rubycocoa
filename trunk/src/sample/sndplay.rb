@@ -7,7 +7,7 @@ snd_files =
     ARGV
   end
 
-OSX.ruby_thread_switcher_start (0.001, 0.1)
+OSX.ruby_thread_switcher_start(0.001, 0.1)
 Thread.start { OSX::NSRunLoop.currentRunLoop.run }
 
 snd_files.each do |path|

@@ -6,7 +6,7 @@ class ApplicationDelegate < OSX::NSObject
 
   def createWindowA (sender)
     controller = WindowAController.alloc.init
-    controller.showWindow (self)
+    controller.showWindow(self)
   end
 
   def createWindowB (sender)

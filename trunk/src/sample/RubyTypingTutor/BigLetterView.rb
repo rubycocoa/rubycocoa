@@ -52,7 +52,7 @@ class BigLetterView < OSX::NSView
   end
 
   def initWithFrame (rect)
-    super_initWithFrame (rect)
+    super_initWithFrame(rect)
     log "initializing view"
     prepareAttributes
     setBgColor NSColor.yellowColor
@@ -71,7 +71,7 @@ class BigLetterView < OSX::NSView
   end
 
   def setString (c)
-    c = NSString.stringWithString (c) if c.is_a? String
+    c = NSString.stringWithString(c) if c.is_a? String
     @string = c
     log "The string is now #{@string.to_s}"
     setNeedsDisplay true
@@ -79,31 +79,31 @@ class BigLetterView < OSX::NSView
 
   def drawStringCenterdIn (r)
     sorig = NSPoint.new
-    ssize = @string.sizeWithAttributes (@attributes)
+    ssize = @string.sizeWithAttributes(@attributes)
     sorig.x = r.origin.x + (r.size.width - ssize.width) / 2
     sorig.y = r.origin.y + (r.size.height - ssize.height) / 2
 
-    font = @attributes.objectForKey (NSFontAttributeName())
+    font = @attributes.objectForKey(NSFontAttributeName())
 
     mask = @bold ? NSBoldFontMask : NSUnboldFontMask
-    font = @fmgr.convertFont (font, :toHaveTrait, mask)
-    @attributes.setObject_forKey (font, NSFontAttributeName())
+    font = @fmgr.convertFont(font, :toHaveTrait, mask)
+    @attributes.setObject_forKey(font, NSFontAttributeName())
 
     mask = @italic ? NSItalicFontMask : NSUnitalicFontMask
-    font = @fmgr.convertFont (font, :toHaveTrait, mask)
-    @attributes.setObject_forKey (font, NSFontAttributeName())
+    font = @fmgr.convertFont(font, :toHaveTrait, mask)
+    @attributes.setObject_forKey(font, NSFontAttributeName())
 
-    @string.drawAtPoint (sorig, :withAttributes, @attributes)
+    @string.drawAtPoint(sorig, :withAttributes, @attributes)
   end
 
   def drawRect (rect)
     b = bounds
     (@highlighted ? NSColor.whiteColor : @bgColor).set
-    NSBezierPath.fillRect (b)
-    drawStringCenterdIn (b)
+    NSBezierPath.fillRect(b)
+    drawStringCenterdIn(b)
     if window.firstResponder == self then
       NSColor.blackColor.set
-      NSBezierPath.strokeRect (b)
+      NSBezierPath.strokeRect(b)
     end
   end
 
@@ -127,43 +127,43 @@ class BigLetterView < OSX::NSView
   def keyDown (event)
     input = event.characters
     if input.isEqual? "\t" then
-      window.selectNextKeyView (nil)
+      window.selectNextKeyView(nil)
     elsif input.isEqual? "\031" then
-      window.selectPreviousKeyView (nil)
+      window.selectPreviousKeyView(nil)
     else
-      setString (input)
+      setString(input)
     end
   end
 
   def prepareAttributes
     @attributes = NSMutableDictionary.alloc.init
     @attributes.
-      setObject_forKey (NSFont.fontWithName_size("Helvetica", 75),
-			NSFontAttributeName())
+      setObject_forKey(NSFont.fontWithName_size("Helvetica", 75),
+		       NSFontAttributeName())
     @attributes.
-      setObject_forKey (NSSingleUnderlineStyle,
-			NSUnderlineStyleAttributeName())
+      setObject_forKey(NSSingleUnderlineStyle,
+		       NSUnderlineStyleAttributeName())
     @attributes.
-      setObject_forKey (NSColor.redColor,
-			NSForegroundColorAttributeName())
+      setObject_forKey(NSColor.redColor,
+		       NSForegroundColorAttributeName())
   end
 
   def savePDF (sender)
     panel = NSSavePanel.savePanel
     panel.setRequiredFileType "pdf"
     panel.
-      beginSheetForDirectory (nil,
-			      :file, nil,
-			      :modalForWindow, window,
-			      :modalDelegate, self,
-			      :didEndSelector, "didEnd_returnCode_contextInfo_",
-			      :contextInfo, nil)
+      beginSheetForDirectory(nil,
+			     :file, nil,
+			     :modalForWindow, window,
+			     :modalDelegate, self,
+			     :didEndSelector, "didEnd_returnCode_contextInfo_",
+			     :contextInfo, nil)
   end
 
   def didEnd_returnCode_contextInfo (sheet, code, contextInfo)
     if code == NSOKButton then
-      data = dataWithPDFInsideRect (bounds)
-      data.writeToFile (sheet.filename, :atomically, true)
+      data = dataWithPDFInsideRect(bounds)
+      data.writeToFile(sheet.filename, :atomically, true)
     end
   end
 
@@ -179,40 +179,40 @@ class BigLetterView < OSX::NSView
 
   def writePDFToPasteboard (pb)
     types = [NSPDFPboardType()]
-    pb.addTypes_owner (types, self)
-    pb.setData_forType (dataWithPDFInsideRect(bounds), types[0])
+    pb.addTypes_owner(types, self)
+    pb.setData_forType(dataWithPDFInsideRect(bounds), types[0])
   end
   
   def writeStringToPasteboard (pb)
     types = [NSStringPboardType()]
-    pb.declareTypes_owner (types, self)
-    pb.setString_forType (@string, types[0])
+    pb.declareTypes_owner(types, self)
+    pb.setString_forType(@string, types[0])
   end
   
   def readStringFromPasteboard (pb)
     if pb.availableTypeFromArray? [NSStringPboardType()] then
-      value = pb.stringForType (NSStringPboardType())
+      value = pb.stringForType(NSStringPboardType())
       value = value.to_s[0].chr if value.length > 1
-      setString (value)
+      setString(value)
       return true
     end
     false
   end
 
   def cut (sender)
-    copy (sender)
+    copy(sender)
     setString ""
   end
 
   def copy (sender)
     pb = NSPasteboard.generalPasteboard
-    writeStringToPasteboard (pb)
-    writePDFToPasteboard (pb)
+    writeStringToPasteboard(pb)
+    writePDFToPasteboard(pb)
   end
 
   def paste (sender)
     pb = NSPasteboard.generalPasteboard
-    NSBeep unless readStringFromPasteboard (pb)
+    NSBeep unless readStringFromPasteboard(pb)
   end
 
   def draggingSourceOperationMaskForLocal (flag)
@@ -224,36 +224,36 @@ class BigLetterView < OSX::NSView
     an_image = NSImage.alloc.init
 
     # create a rect in which you will draw the letter in the image
-    s = @string.sizeWithAttributes (@attributes)
-    image_bounds = NSRect.new ([0,0],s)
-    an_image.setSize (s)
+    s = @string.sizeWithAttributes(@attributes)
+    image_bounds = NSRect.new([0,0],s)
+    an_image.setSize(s)
 
     # draw the letter on the image
     an_image.lockFocus
-    drawStringCenterdIn (image_bounds)
+    drawStringCenterdIn(image_bounds)
     an_image.unlockFocus
 
     # get the location of the drag event
-    p = convertPoint_fromView (event.locationInWindow, nil)
+    p = convertPoint_fromView(event.locationInWindow, nil)
     
     # drag from the center of the image
     p.x = p.x  - s.width / 2
     p.y = p.y - s.height / 2
 
     # get the pasteboard
-    pb = NSPasteboard.pasteboardWithName (NSDragPboard())
+    pb = NSPasteboard.pasteboardWithName(NSDragPboard())
 
     # put the string on the pasteboard
-    writeStringToPasteboard (pb)
+    writeStringToPasteboard(pb)
 
     # start the drag
-    dragImage (an_image,
-	       :at, p,
-	       :offset, [0,0],
-	       :event, event,
-	       :pasteboard, pb,
-	       :source, self,
-	       :slideBack, true)
+    dragImage(an_image,
+	      :at, p,
+	      :offset, [0,0],
+	      :event, event,
+	      :pasteboard, pb,
+	      :source, self,
+	      :slideBack, true)
   end
 
   private
