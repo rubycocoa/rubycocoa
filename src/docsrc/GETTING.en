@@ -1,0 +1,36 @@
+# -*-rd-*-
+= Getting RubyCocoa
+
+== binary
+
+Donwload a file named
+((<RubyCocoa-0.3.2.dmg|URL:../rubyosx/files/RubyCocoa-0.3.2.dmg>))
+from
+((<the file list|URL:../rubyosx/files/>)).
+There are RubyCocoa and RubyAEOSA libraries, libruby.a, sample codes
+and etc. The libraries which is necessary for execution and
+development is a ".pkg" format package. So you can easily install it.
+
+This binary is for Mac OS X 10.2 or later.  There is not a binary for
+Mac OS X 10.1.x.
+
+== source
+
+Donwload a file named
+((<rubycocoa-0.3.2.tgz|URL:../rubyosx/files/rubycocoa-0.3.2.tgz>))
+from
+((<the file list|URL:../rubyosx/files/>)).
+
+== CVS
+
+You can get recent (or oldest) sources from 
+((<CVS Server|URL:http://sourceforge.net/cvs/?group_id=44114>)).
+
+== PINEAPPLE RPM Package
+
+RPM format binary (0.2.x) exist on
+((<Project PINEAPPLE (Japanese)|URL:http://sacral.c.u-tokyo.ac.jp/~hasimoto/Pineapple/>)).
+
+
+$Date$
+$Revision$

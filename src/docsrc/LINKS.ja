@@ -1,0 +1,39 @@
+# -*-rd-*-
+= 関連リンク集
+
+== RubyCocoa と RubyAEOSA
+
+* ((<RubyCocoaホームページ|URL:http://www.imasy.or.jp/~hisa/mac/rubycocoa/>))
+* ((<RubyAEOSAホームページ|URL:http://www.imasy.or.jp/~hisa/mac/rubyaeosa/>))
+* ((<RubyCocoa on SourceForge.net|URL:http://rubycocoa.sourceforge.net/>))
+* ((<メーリングリスト(日本語)|URL:http://www.freeml.com/info/rubycocoa@freeml.com>))
+* ((<メーリングリスト(英語)|URL:http://sourceforge.net/mail/?group_id=44114>))
+* ((<フォーラム|URL:http://sourceforge.net/forum/?group_id=44114>))
+* バグ追跡
+* 機能追加リクエスト
+* ((<RubyCocoaでアプリを作ろう(チュートリアル)
+  |URL:http://mwave.sppd.ne.jp/diary/calc_app/calc_app1.html>))
+
+
+== 関連するリンクなど
+
+* ((<Rubyホームページ|URL:http://www.ruby-lang.org/>))
+* ((<Ruby Garden|URL:http://www.rubygarden.org/>))
+* ((<Rubyist! Make Programming More Fun(日本語)|URL:http://www.rubycolor.org/r/>))
+* ((<RWiki|URL:http://www.jin.gr.jp/~nahi/RWiki/>))
+* ((<Mac OS X|URL:http://developer.apple.com/macosx/>))
+* ((<Cocoa|URL:http://developer.apple.com/cocoa/>))
+* ((<Interface Builder|URL:http://developer.apple.com/tools/interfacebuilder/>))
+* ((<AppleScript Studio|URL:http://www.apple.com/applescript/macosx/ascript_studio/>))
+* ((<F-script|URL:http://www.fscript.org/>))
+* ((<CamelBones|URL:http://camelbones.sourceforge.net/>))
+* ((<PyObjC|URL:http://pyobjc.sourceforge.net/>))(({ - 2002.12.03追加}))
+* ((<Ruby GNUstep|URL:http://www.ruby-lang.org/en/raa-list.rhtml?name=Ruby%2FGNUstep>))
+* ((<Ruby Carbon|URL:http://www.geocities.co.jp/SiliconValley-Oakland/2986/rubycarbon/>))
+* ((<FreeRIDE|URL:http://www.rubyide.org/cgi-bin/wiki.pl>))
+* ((<Project PINEAPPLE(日本語)|URL:http://sacral.c.u-tokyo.ac.jp/~hasimoto/Pineapple/>))
+* ((<DDJ 2002 5月号にRubyCocoaの記事|URL:http://www.ddj.com/articles/2002/0205/>))
+
+
+$Date$
+$Revision$
