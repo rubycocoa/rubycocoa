@@ -83,27 +83,26 @@
 % ruby sndplay.rb    # システムの警告音が順番に鳴ります
 % ruby sndplay2.rb   # システムの警告音が順番に間隔を詰めて鳴ります</pre>
 <p>うまく動作したでしょうか？うまくいったら次にRubyCocaアプリケーションを
-動かしてみましょう。まずはMakefileベースのものを試してみましょう。</p>
+動かしてみましょう。まずはMakefileベースのものを試します。</p>
 <pre>% cd {RubyCocoaソースディレクトリ}/sample/mk_app1
 % make</pre>
 <p>で構築します。できたら実行してみましょう。そのままコマンドラインから</p>
-<pre>% open open SimpleApp1.app</pre>
-<p>と入力するか、ファインダで SimpleApp をダブルクリックして起動してみて
+<pre>% open SimpleApp1.app</pre>
+<p>と入力するか、ファインダで SimpleApp1 をダブルクリックして起動してみて
 ください。動きましたか。次にProject Builderベースのものを試してみましょ
-う。コマンドラインからだと</p>
+う。コマンドラインから</p>
 <pre>% cd {RubyCocoaソースディレクトリ}/sample/pb_app1
 % pbxbuild      # アプリケーション作成</pre>
-<p>で構築できます。もちろん Project Builder を起動して中から構築したり実
-行したりすることもできます。できたら実行してみましょう。</p>
+<p>として構築します。もちろん Project Builder を起動してその中で構築した
+り実行したりすることもできます。実行してみましょう。</p>
 <pre>% open build/pb_app1.app</pre>
-<p>と打ち込むか、またはファインダでbuildディレクトリの中のpb_app1.appをダ
-ブルクリックしてアプリケーションを起動してみてください。うまく動作した
-らおめでとう。だめだったらごめんなさい。</p>
+<p>と打ち込むか、またはファインダでbuildディレクトリの中のpb_app1をダブル
+クリックしてアプリケーションを起動してみてください。うまく動きましたか？</p>
 <h2><a name="label:8" id="label:8">開発動作確認環境</a></h2><!-- RDLabel: "開発動作確認環境" -->
 <p>以下の環境で開発動作確認をしています。</p>
 <ul>
 <li>PowerMacintosh G4/400/320MB</li>
-<li>MacOS X 10.1.1 (and 10.1)</li>
+<li>MacOS X 10.1.1 (or 10.1)</li>
 <li>DevTools 10.1</li>
 <li>ruby-1.6.5 (configure --enable-shared)</li>
 </ul>
