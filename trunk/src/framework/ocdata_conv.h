@@ -39,6 +39,10 @@ size_t  ocdata_size     (int octype, const char* octype_str);
 void*   ocdata_malloc   (int octype, const char* octype_str);
 #define OCDATA_ALLOCA(octype,s)  alloca(ocdata_size((octype),(s)))
 
+VALUE rb_mdl_osx();
+VALUE rb_cls_objcid();
+VALUE rb_cls_ocobj(const char* name);
+
 id    rbobj_get_ocid (VALUE obj);
 VALUE ocid_get_rbobj (id ocid);
 VALUE rb_ocobj_s_new(id ocid);
