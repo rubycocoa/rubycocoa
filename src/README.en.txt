@@ -7,7 +7,8 @@ object in Ruby script.
 
 0. HOW TO INSTALL
 
-  Read "INSTALL.(ja|en)".
+  Read "INSTALL.(ja|en).html" in html directory or "INSTALL.(ja|en)"
+  in doc directory.
 
 1. HOW TO USE
 
