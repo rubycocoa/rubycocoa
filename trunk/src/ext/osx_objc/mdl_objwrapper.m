@@ -56,6 +56,7 @@ ocm_perform(int argc, VALUE* argv, VALUE rcv, VALUE* result)
 {
   id oc_rcv = rbobj_get_ocid(rcv);
   SEL oc_sel;
+  id oc_sel_str;
   const char* ret_type;
   int num_of_args;
   id args[2];
@@ -83,7 +84,8 @@ ocm_perform(int argc, VALUE* argv, VALUE rcv, VALUE* result)
   if (num_of_args > 2) return NO;
 
   pool = [[NSAutoreleasePool alloc] init];
-  DLOG2("ocm_perfom (%@): ret_type=%s", NSStringFromSelector(oc_sel), ret_type);
+  oc_sel_str = NSStringFromSelector(oc_sel);
+  DLOG2("ocm_perfom (%@): ret_type=%s", oc_sel_str, ret_type);
 
   for (i = 0; i < num_of_args; i++) {
     const char* arg_type = [oc_msig getArgumentTypeAtIndex: (i+2)];
@@ -98,7 +100,7 @@ ocm_perform(int argc, VALUE* argv, VALUE rcv, VALUE* result)
     }
   }
 
-  DLOG0("    NSObject#performSelector ...");
+  DLOG1("    NSObject#performSelector (%@) ...", oc_sel_str);
 
   NS_DURING  
     switch (num_of_args) {
@@ -117,6 +119,8 @@ ocm_perform(int argc, VALUE* argv, VALUE rcv, VALUE* result)
     }
 
   NS_HANDLER
+    DLOG2("    NSObject#performSelector (%@): raise %@",
+	  oc_sel_str, localException);
     excp = rb_ocexception_s_new(localException);
 
   NS_ENDHANDLER
@@ -124,7 +128,7 @@ ocm_perform(int argc, VALUE* argv, VALUE rcv, VALUE* result)
     rb_funcall(rb_mKernel, rb_intern("raise"), 1, excp);
   }
   
-  DLOG0("    NSObject#performSelector: done.");
+  DLOG1("    NSObject#performSelector (%@): done.", oc_sel_str);
 
   if (oc_result == oc_rcv)
     *result = rcv;
@@ -140,6 +144,7 @@ ocm_invoke(int argc, VALUE* argv, VALUE rcv, VALUE* result)
 {
   id oc_rcv = rbobj_get_ocid(rcv);
   SEL oc_sel;
+  id oc_sel_str;
   const char* ret_type;
   int num_of_args;
   id pool;
@@ -164,7 +169,8 @@ ocm_invoke(int argc, VALUE* argv, VALUE rcv, VALUE* result)
   num_of_args = [oc_msig numberOfArguments] - 2;
 
   pool = [[NSAutoreleasePool alloc] init];
-  DLOG2("ocm_invoke (%@): ret_type=%s", NSStringFromSelector(oc_sel), ret_type);
+  oc_sel_str = NSStringFromSelector(oc_sel);
+  DLOG2("ocm_invoke (%@): ret_type=%s", oc_sel_str, ret_type);
 
   oc_inv = [NSInvocation invocationWithMethodSignature: oc_msig];
   [oc_inv setTarget: oc_rcv];
@@ -194,11 +200,12 @@ ocm_invoke(int argc, VALUE* argv, VALUE rcv, VALUE* result)
     }
   }
 
-  DLOG0("    NSInvocation#invoke ...");
+  DLOG1("    NSInvocation#invoke (%@) ...", oc_sel_str);
   NS_DURING
     [oc_inv invoke];
 
   NS_HANDLER
+    DLOG2("    NSInvocation#invoke (%@): raise %@", oc_sel_str, localException);
     excp = rb_ocexception_s_new(localException);
 
   NS_ENDHANDLER
@@ -206,7 +213,7 @@ ocm_invoke(int argc, VALUE* argv, VALUE rcv, VALUE* result)
     rb_funcall(rb_mKernel, rb_intern("raise"), 1, excp);
   }
 
-  DLOG0("    NSInvocation#invoke: done.");
+  DLOG1("    NSInvocation#invoke (%@): done.", oc_sel_str);
 
   // get result
   if ([oc_msig methodReturnLength] > 0) {
