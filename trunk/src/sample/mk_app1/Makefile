@@ -15,7 +15,7 @@ SED_CMD_1 = -e "s/%%%BUNDLEID%%%/$(BUNDLEID)/"
 
 
 $(TARGET): $(OBJS) $(RUBYSRCS)
-	$(CC) $(OBJS) -framework Foundation -framework LibRuby -framework RubyCocoa
+	$(CC) $(OBJS) -framework Foundation
 	-/bin/rm -rf $(APPNAME).app
 	mkdir $(APPNAME).app
 	mkdir $(APPNAME).app/Contents
