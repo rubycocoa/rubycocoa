@@ -41,38 +41,38 @@ RubyCocoa<font size='-1'> - A Ruby/Objective-C Bridge for Mac OS X with Cocoa</f
 
 <!-- body/main/contents -->
 <td class='body-contents' id='body-contents' valign='top'>
-<h1><a name='label:0' id='label:0'>RubyCocoaプログラミング</a></h1><!-- RDLabel: "RubyCocoaプログラミング" -->
-<h2><a name='label:1' id='label:1'>目次</a></h2><!-- RDLabel: "目次" -->
+<h1><a name='label-0' id='label-0'>RubyCocoaプログラミング</a></h1><!-- RDLabel: "RubyCocoaプログラミング" -->
+<h2><a name='label-1' id='label-1'>目次</a></h2><!-- RDLabel: "目次" -->
 <ul>
-<li><a href='#label:2'>irb - インターラクティブ Ruby</a></li>
-<li><a href='#label:3'>ライブラリのロード</a></li>
-<li><a href='#label:4'>動いた実感を味わえる例</a></li>
-<li><a href='#label:5'>Cocoaクラス</a></li>
-<li><a href='#label:6'>Cocoaオブジェクトの生成</a></li>
-<li><a href='#label:7'>オーナーシップとメモリ管理</a></li>
-<li><a href='#label:8'>メソッドの返す値</a></li>
-<li><a href='#label:9'>メソッド名の決定方法とバリエーション</a></li>
-<li><a href='#label:10'>メソッドの引数は可能な限り変換する</a></li>
-<li><a href='#label:11'>メソッド名が重複するときに使う接頭辞 "oc_"</a></li>
-<li><a href='#label:12'>Cocoaクラスの派生クラスとそのインスタンス</a></li>
-<li><a href='#label:13'>Cocoa派生クラスの定義</a></li>
-<li><a href='#label:14'>アウトレット</a></li>
-<li><a href='#label:15'>メソッドのオーバーライド</a></li>
-<li><a href='#label:16'>Cocoa派生クラスのインスタンス生成</a></li>
-<li><a href='#label:17'>インスタンス生成時の初期化コードはどこに書くべきか?</a></li>
-<li><a href='#label:18'>RubyCocoaアプリケーションのデバッグ</a></li>
+<li><a href='#label-2'>irb - インターラクティブ Ruby</a></li>
+<li><a href='#label-3'>ライブラリのロード</a></li>
+<li><a href='#label-4'>動いた実感を味わえる例</a></li>
+<li><a href='#label-5'>Cocoaクラス</a></li>
+<li><a href='#label-6'>Cocoaオブジェクトの生成</a></li>
+<li><a href='#label-7'>オーナーシップとメモリ管理</a></li>
+<li><a href='#label-8'>メソッドの返す値</a></li>
+<li><a href='#label-9'>メソッド名の決定方法とバリエーション</a></li>
+<li><a href='#label-10'>メソッドの引数は可能な限り変換する</a></li>
+<li><a href='#label-11'>メソッド名が重複するときに使う接頭辞 "oc_"</a></li>
+<li><a href='#label-12'>Cocoaクラスの派生クラスとそのインスタンス</a></li>
+<li><a href='#label-13'>Cocoa派生クラスの定義</a></li>
+<li><a href='#label-14'>アウトレット</a></li>
+<li><a href='#label-15'>メソッドのオーバーライド</a></li>
+<li><a href='#label-16'>Cocoa派生クラスのインスタンス生成</a></li>
+<li><a href='#label-17'>インスタンス生成時の初期化コードはどこに書くべきか?</a></li>
+<li><a href='#label-18'>RubyCocoaアプリケーションのデバッグ</a></li>
 </ul>
-<h2><a name='label:2' id='label:2'>irb - インターラクティブ Ruby</a></h2><!-- RDLabel: "irb - インターラクティブ Ruby" -->
+<h2><a name='label-2' id='label-2'>irb - インターラクティブ Ruby</a></h2><!-- RDLabel: "irb - インターラクティブ Ruby" -->
 <p>ここにあるスクリプトの切れ端を試してみるのに irb を使うとよいでしょう。
 irb はコマンドラインで対話的に Ruby インタープリタを使う Ruby付属のコ
 マンドです。以下のよう起動します。</p>
 <pre>% irb -r osx/cocoa</pre>
 <p>(注) Mac OS X 10.1 では irb と RubyCocoa をいっしょに使うとしばしば
 バスエラーが発生します。Mac OS X 10.2 での使用をお勧めします。</p>
-<h2><a name='label:3' id='label:3'>ライブラリのロード</a></h2><!-- RDLabel: "ライブラリのロード" -->
+<h2><a name='label-3' id='label-3'>ライブラリのロード</a></h2><!-- RDLabel: "ライブラリのロード" -->
 <p>RubyCocoaのライブラリは以下のようにロードします。</p>
 <pre>require 'osx/cocoa'</pre>
-<h2><a name='label:4' id='label:4'>動いた実感を味わえる例</a></h2><!-- RDLabel: "動いた実感を味わえる例" -->
+<h2><a name='label-4' id='label-4'>動いた実感を味わえる例</a></h2><!-- RDLabel: "動いた実感を味わえる例" -->
 <p>まずは動いた実感を味わえる(音が鳴る)簡単な例です。irb を使って試してみ
 ましょう。</p>
 <pre>include OSX
@@ -82,7 +82,7 @@ NSSound.alloc.initWithContentsOfFile_byReference (files[1], true).play
 NSSound.alloc.initWithContentsOfFile_byReference (files[2], true).play</pre>
 <p>以降は、地味だけど理解の助けになると思われる例をあげていきます。説明の
 中で "# =&gt; "の右側は実行結果として標準出力される文字列です。</p>
-<h2><a name='label:5' id='label:5'>Cocoaクラス</a></h2><!-- RDLabel: "Cocoaクラス" -->
+<h2><a name='label-5' id='label-5'>Cocoaクラス</a></h2><!-- RDLabel: "Cocoaクラス" -->
 <pre>p OSX::NSObject # =&gt; OSX::NSObject
 obj = OSX::NSObject.description
 p obj      # =&gt; #&lt;OSX::OCObject:0x5194e8 class='NSCFString' id=A97910&gt;
@@ -91,7 +91,7 @@ p obj      # =&gt; #&lt;OSX::NSObject:0x51f5b4 class='NSObject' id=976D90&gt;</p
 <p>RubyCocoaでは、CocoaクラスはOSXモジュール配下のクラスとして定義されて
 います(0.2.0以降)。CocoaクラスはRubyのクラスであると同時にCocoaのオブ
 ジェクトとしても振る舞います。</p>
-<h2><a name='label:6' id='label:6'>Cocoaオブジェクトの生成</a></h2><!-- RDLabel: "Cocoaオブジェクトの生成" -->
+<h2><a name='label-6' id='label-6'>Cocoaオブジェクトの生成</a></h2><!-- RDLabel: "Cocoaオブジェクトの生成" -->
 <p>Cocoaオブジェクトの生成には、Cocoaの各クラスのメソッドをそのまま使いま
 す。</p>
 <pre>obj = OSX::NSObject.alloc.init
@@ -100,7 +100,7 @@ str = OSX::NSString.alloc.initWithString "world"</pre>
 <p>生成されたCocoaオブジェクトは、RubyCocoa内部でOSX::ObjcIDというクラス
 のオブジェクトに包まれています。通常、OSX::ObjcIDクラスの存在を意識す
 る必要はありません。</p>
-<h2><a name='label:7' id='label:7'>オーナーシップとメモリ管理</a></h2><!-- RDLabel: "オーナーシップとメモリ管理" -->
+<h2><a name='label-7' id='label-7'>オーナーシップとメモリ管理</a></h2><!-- RDLabel: "オーナーシップとメモリ管理" -->
 <p>OSX::ObjcIDのインスタンスはかならず自身が包んでいるCocoaオブジェクトの
 オーナーシップを持ちます。オーナーシップはOSX::ObjcIDのインスタンスが
 GCに掃除されるときに自動的になくなります。したがってRubyCocoaでは、オー
@@ -117,7 +117,7 @@ str = OSX::NSObject.alloc.initWithString "world"</pre>
 <li>Cocoaオブジェクトの生成にはCocoaクラスに対してCocoaのメソッドを使う</li>
 <li>Cocoaオブジェクトは作りっぱなしで良い、メモリ管理は不要</li>
 </ul>
-<h2><a name='label:8' id='label:8'>メソッドの返す値</a></h2><!-- RDLabel: "メソッドの返す値" -->
+<h2><a name='label-8' id='label-8'>メソッドの返す値</a></h2><!-- RDLabel: "メソッドの返す値" -->
 <pre>nstr = OSX::NSString.description
 p nstr      # =&gt; #&lt;OCObject:0x7233e class='NSCFString' id=687610&gt;
 p nstr.to_s # =&gt; "NSString"
@@ -140,7 +140,7 @@ Objective-Cオブジェクトを返すメソッドをCocoaオブジェクトとして返します。
 積極的にRubyの対応するオブジェクト(例えばStringなど)には変換しません。
 文字列と配列に関しては to_s や to_a が定義されているのでそれを使うこと
 ができます。</p>
-<h2><a name='label:9' id='label:9'>メソッド名の決定方法とバリエーション</a></h2><!-- RDLabel: "メソッド名の決定方法とバリエーション" -->
+<h2><a name='label-9' id='label-9'>メソッド名の決定方法とバリエーション</a></h2><!-- RDLabel: "メソッド名の決定方法とバリエーション" -->
 <pre># システム音を順番に鳴らす (2)
 sndfiles.each do |path|
   snd = OSX::NSSound.alloc.initWithContentsOfFile(path, :byReference, true)
@@ -171,11 +171,11 @@ p nary.containsObject?("hoge")  # =&gt; false
 nary.addObject("hoge")
 p nary.containsObject("hoge")   # =&gt; 1
 p nary.containsObject?("hoge")  # =&gt; true</pre>
-<h2><a name='label:10' id='label:10'>メソッドの引数は可能な限り変換する</a></h2><!-- RDLabel: "メソッドの引数は可能な限り変換する" -->
+<h2><a name='label-10' id='label-10'>メソッドの引数は可能な限り変換する</a></h2><!-- RDLabel: "メソッドの引数は可能な限り変換する" -->
 <p>上の例のcontainsObjectのように、引数の値としてObjective-Cオブジェクト
 をとるメソッドの場合に、Rubyオブジェクトをそのまま渡しても可能な限り変
 換を試みます。</p>
-<h2><a name='label:11' id='label:11'>メソッド名が重複するときに使う接頭辞 "oc_"</a></h2><!-- RDLabel: "メソッド名が重複するときに使う接頭辞 "oc_"" -->
+<h2><a name='label-11' id='label-11'>メソッド名が重複するときに使う接頭辞 "oc_"</a></h2><!-- RDLabel: "メソッド名が重複するときに使う接頭辞 "oc_"" -->
 <pre>klass = OSX::NSObject.class
 p klass     # =&gt; Class
 klass = OSX::NSObject.oc_class
@@ -185,13 +185,13 @@ p klass     # =&gt; OSX::NSObject</pre>
 の頭に"oc_"という接頭辞をつけると、Objective-Cオブジェクトに対してメッ
 セージが送られます。"oc_" を付けてもRuby側にメソッドがある場合は？どう
 しようもありません(裏技はあるのでソースを読める人はどうぞ) 。</p>
-<h2><a name='label:12' id='label:12'>Cocoaクラスの派生クラスとそのインスタンス</a></h2><!-- RDLabel: "Cocoaクラスの派生クラスとそのインスタンス" -->
+<h2><a name='label-12' id='label-12'>Cocoaクラスの派生クラスとそのインスタンス</a></h2><!-- RDLabel: "Cocoaクラスの派生クラスとそのインスタンス" -->
 <p>ここまでは既存のCocoaクラスとそのインスタンスに関するトピックを扱いま
 した。ここからは、RubyCocoaアプリケーションを書く場合に必要となるCocoa 
 派生クラスの定義やそのインスタンスに関するトピックを扱います。Cocoaの
 派生クラスはややトリッキーな実装により実現しているため、多少の制約や癖
 がありますが、それも含めて見ていきましょう。</p>
-<h2><a name='label:13' id='label:13'>Cocoa派生クラスの定義</a></h2><!-- RDLabel: "Cocoa派生クラスの定義" -->
+<h2><a name='label-13' id='label-13'>Cocoa派生クラスの定義</a></h2><!-- RDLabel: "Cocoa派生クラスの定義" -->
 <p>Interface Builderで作成したGUI定義ファイル(nibファイル)の中で設定した
 Cocoaオブジェクトのクラスなどは派生クラスとして定義します(0.2.0以降)。
 例えばCocoaの入門書やチュートリアルなどで最初の方に出てくるようなMVCモ
@@ -207,7 +207,7 @@ Cocoaオブジェクトのクラスなどは派生クラスとして定義します(0.2.0以降)。
 end</pre>
 <p>のように定義します。RubyCocoaにおけるCocoaの派生クラス定義は、このよう
 に通常のRubyでの派生クラス定義と同様に記述します。</p>
-<h2><a name='label:14' id='label:14'>アウトレット</a></h2><!-- RDLabel: "アウトレット" -->
+<h2><a name='label-14' id='label-14'>アウトレット</a></h2><!-- RDLabel: "アウトレット" -->
 <p>nibファイル中でクラスに設定したアウトレットは派生クラスの定義の中で</p>
 <pre>ns_outlets :rateField, :dollerField</pre>
 <p>と書きます。ns_outletsは実際には Module#attr_writer と同じです。したがっ
@@ -217,7 +217,7 @@ end</pre>
 end</pre>
 <p>のように定義することもできます。ns_outlets には ib_outlets という別名
 もあります。</p>
-<h2><a name='label:15' id='label:15'>メソッドのオーバーライド</a></h2><!-- RDLabel: "メソッドのオーバーライド" -->
+<h2><a name='label-15' id='label-15'>メソッドのオーバーライド</a></h2><!-- RDLabel: "メソッドのオーバーライド" -->
 <p>親クラスで定義されているメソッドをオーバーライドする場合、ns_overrides
 (別名ib_overrides)を使ってオーバーライドしたことを宣言する必要がありま
 す。</p>
@@ -245,7 +245,7 @@ end</pre>
   end
 
 end</pre>
-<h2><a name='label:16' id='label:16'>Cocoa派生クラスのインスタンス生成</a></h2><!-- RDLabel: "Cocoa派生クラスのインスタンス生成" -->
+<h2><a name='label-16' id='label-16'>Cocoa派生クラスのインスタンス生成</a></h2><!-- RDLabel: "Cocoa派生クラスのインスタンス生成" -->
 <p>Cocoa派生クラスのインスタンスをRubyスクリプト中で生成する必要がある場
 合には、既存のCocoaクラスの場合と同様に</p>
 <pre>AppController.alloc.init  # use this</pre>
@@ -259,7 +259,7 @@ end</pre>
 <li>alloc内でRubyオブジェクト生成(ここでinitializeメソッドが呼ばれる)</li>
 </ul>
 <p>という順番で行われることに深い関連があります。</p>
-<h2><a name='label:17' id='label:17'>インスタンス生成時の初期化コードはどこに書くべきか?</a></h2><!-- RDLabel: "インスタンス生成時の初期化コードはどこに書くべきか?" -->
+<h2><a name='label-17' id='label-17'>インスタンス生成時の初期化コードはどこに書くべきか?</a></h2><!-- RDLabel: "インスタンス生成時の初期化コードはどこに書くべきか?" -->
 <p>一般にRubyではinitializeメソッドの中に初期化のコードを書きますが、
 Cocoa派生クラスではどちらかいえばあまり奨められません。理由は先に述べ
 たインスタンス生成時のinitializeメソッドが呼ばれるタイミングにより、そ
@@ -271,7 +271,7 @@ Cocoa派生クラスではどちらかいえばあまり奨められません。理由は先に述べ
 るのもこのケースがもっとも多いのではないでしょうか。</p>
 <p>その他の場合には、Cocoaの流儀で "init" 接頭辞を持つメソッドに書くのが
 よいでしょう。メソッドがselfを返すようにすることを忘れないでください。</p>
-<h2><a name='label:18' id='label:18'>RubyCocoaアプリケーションのデバッグ</a></h2><!-- RDLabel: "RubyCocoaアプリケーションのデバッグ" -->
+<h2><a name='label-18' id='label-18'>RubyCocoaアプリケーションのデバッグ</a></h2><!-- RDLabel: "RubyCocoaアプリケーションのデバッグ" -->
 <p>今のところ(2003-01-05)、RubyCocoaアプリケーションに対応する
 ProjectBuilderのプラグインモジュールが存在しないため、ProjectBuilder上
 でRubyのデバッガを使うことはできません。</p>
@@ -338,8 +338,8 @@ Really quit? (y/n) y</pre>
 <div id='sidebar-links'>
   <h2 class='body-sidebar'><a href='links.ja.html'>リンク</a></h2>
   <ul class='body-sidebar'>
-    <li><a href='http://www.imasy.or.jp/%7ehisa/mac/rubycocoa/'>RubyCocoa</a></li>
-    <li><a href='http://www.imasy.or.jp/%7ehisa/mac/rubyaeosa/'>RubyAEOSA</a></li>
+    <li><a href='http://www.fobj.com/rubycocoa/'>RubyCocoa</a></li>
+    <li><a href='http://www.fobj.com/rubyaeosa/'>RubyAEOSA</a></li>
     <li><a href='http://www.freeml.com/info/rubycocoa@freeml.com'>メーリングリスト (日本語)</a></li>
     <li><a href='http://sourceforge.net/mail/?group_id=44114'>メーリングリスト (英語)</a></li>
     <li><a href='http://sourceforge.net/projects/rubycocoa/'>RubyCocoaプロジェクト</a></li>

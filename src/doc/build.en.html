@@ -24,7 +24,7 @@ RubyCocoa<font size='-1'> - A Ruby/Objective-C Bridge for Mac OS X with Cocoa</f
   <colgroup><col width='80%'/><col width='20%'/></colgroup>
   <tr id='site-menubar'>
   <td class='site-menubar' align='left' width='80%'>
-    <a href='index.en.html'>What?</a> | <a href='getting.en.html'>Download</a> | <a href='build.en.html'>Build & Install</a> | <a href='trysamples.en.html'>Try Samples</a> | <a href='programming.en.html'>Programming</a> | <a href='references.en.html'>References</a> | <a href='changes.en.html'>Changes</a> | <a href='faq.en.html'>FAQ</a> | <a href='links.en.html'>Links</a>
+    <a href='index.en.html'>What?</a> | <a href='getting.en.html'>Download</a> | <a href='build.en.html'>Build &amp; Install</a> | <a href='trysamples.en.html'>Try Samples</a> | <a href='programming.en.html'>Programming</a> | <a href='references.en.html'>References</a> | <a href='changes.en.html'>Changes</a> | <a href='faq.en.html'>FAQ</a> | <a href='links.en.html'>Links</a>
   </td>
   <td class='site-menubar' align='right' width='20%'>
     [ENGLISH] <a href='index.ja.html'>[JAPANESE]</a>
@@ -41,7 +41,7 @@ RubyCocoa<font size='-1'> - A Ruby/Objective-C Bridge for Mac OS X with Cocoa</f
 
 <!-- body/main/contents -->
 <td class='body-contents' id='body-contents' valign='top'>
-<h1><a name='label:0' id='label:0'>Building and Installing RubyCocoa from Source</a></h1><!-- RDLabel: "Building and Installing RubyCocoa from Source" -->
+<h1><a name='label-0' id='label-0'>Building and Installing RubyCocoa from Source</a></h1><!-- RDLabel: "Building and Installing RubyCocoa from Source" -->
 <p>This document describes building and installing RubyCocoa 0.4 from
 source. Skip this if you are going to install the binary distribution.</p>
 <p>Building and installation are done from a shell, using the Terminal
@@ -49,20 +49,20 @@ application or another program that provides a shell prompt, such as GLterm.
 This document assumes the use of the <code>bash</code> shell in shell command input
 examples. Please adjust the instructions accordingly when another shell (e.g.
 <code>tcsh</code>) is used.</p>
-<h2><a name='label:1' id='label:1'>Build and Installation Procedure</a></h2><!-- RDLabel: "Build and Installation Procedure" -->
+<h2><a name='label-1' id='label-1'>Build and Installation Procedure</a></h2><!-- RDLabel: "Build and Installation Procedure" -->
 <p>The following steps perform the build and installation.</p>
 <ul>
-<li><a href='#label:2'>Build and Installation of Ruby</a></li>
-<li><a href='#label:8'>Build of RubyCocoa</a></li>
-<li><a href='#label:9'>Unit Test for RubyCocoa</a></li>
-<li><a href='#label:10'>Installation of RubyCocoa</a></li>
+<li><a href='#label-2'>Build and Installation of Ruby</a></li>
+<li><a href='#label-8'>Build of RubyCocoa</a></li>
+<li><a href='#label-9'>Unit Test for RubyCocoa</a></li>
+<li><a href='#label-10'>Installation of RubyCocoa</a></li>
 </ul>
 <p>Extract RubyCocoa source from the '.tgz' file into a directory somewhere.</p>
 <pre>$ cd {somewhere}
 $ tar zxf rubycocoa-0.4.0.tar.gz</pre>
 <p><em>Caution!</em> Using StuffIt, building RubyCocoa will fail because of a file
 name length problem.</p>
-<h2><a name='label:2' id='label:2'>Build and Installation of Ruby</a></h2><!-- RDLabel: "Build and Installation of Ruby" -->
+<h2><a name='label-2' id='label-2'>Build and Installation of Ruby</a></h2><!-- RDLabel: "Build and Installation of Ruby" -->
 <p>To build RubyCocoa, some C language header files and Ruby's libruby library are
 required. Here, the build procedure of Ruby which serves as a base of RubyCocoa
 in the case shown below at an example is explained.</p>
@@ -73,17 +73,17 @@ in the case shown below at an example is explained.</p>
 <p>RubyCocoa 0.4 binary distribution has been built with the latter.
 When Ruby has been installed with a package utility such as
 <a href='http://fink.sf.net/'>Fink</a>, adapt these instructions accordingly.</p>
-<h3><a name='label:3' id='label:3'>Ruby 1.8 installed from source</a></h3><!-- RDLabel: "Ruby 1.8 installed from source" -->
+<h3><a name='label-3' id='label-3'>Ruby 1.8 installed from source</a></h3><!-- RDLabel: "Ruby 1.8 installed from source" -->
 <p>It moves to the source directory of Ruby 1.8, and builds and installs
 as follows. Please change an option if needed.
-<a name='footmark:1' href='#foottext:1' id='footmark:1'><sup><small>*1</small></sup></a></p>
+<a href='#foottext-1' name='footmark-1' id='footmark-1'><sup><small>*1</small></sup></a></p>
 <pre>$ CFLAGS='-g -O2 -fno-common' ./configure
 $ make
 $ make test
 $ sudo make install
 $ sudo ranlib /usr/local/lib/libruby-static.a</pre>
-<h3><a name='label:4' id='label:4'>Ruby 1.6.7 included in Mac OS X 10.2</a></h3><!-- RDLabel: "Ruby 1.6.7 included in Mac OS X 10.2" -->
-<h4><a name='label:5' id='label:5'>Check that the necessary Mac OS X packages are installed</a></h4><!-- RDLabel: "Check that the necessary Mac OS X packages are installed" -->
+<h3><a name='label-4' id='label-4'>Ruby 1.6.7 included in Mac OS X 10.2</a></h3><!-- RDLabel: "Ruby 1.6.7 included in Mac OS X 10.2" -->
+<h4><a name='label-5' id='label-5'>Check that the necessary Mac OS X packages are installed</a></h4><!-- RDLabel: "Check that the necessary Mac OS X packages are installed" -->
 <p>The required packages (BSD.pkg and BSDSDK.pkg) may not have been installed,
 depending on the options selected when Mac OS X 10.2 was installed. Please
 first check whether Ruby is installed, and if required, install it from the Mac
@@ -93,17 +93,17 @@ OS X 10.2 installer.</p>
 <p>Although Ruby is contained in Mac OS X 10.2, for some reason libruby is
 not included. Therefore, to build RubyCocoa, it is necessary to make libruby
 from the source of Ruby 1.6.7.</p>
-<h4><a name='label:6' id='label:6'>Apply patch to Ruby 1.6.7 source</a></h4><!-- RDLabel: "Apply patch to Ruby 1.6.7 source" -->
+<h4><a name='label-6' id='label-6'>Apply patch to Ruby 1.6.7 source</a></h4><!-- RDLabel: "Apply patch to Ruby 1.6.7 source" -->
 <p>Extract source from Ruby 1.6.7 '.tgz' file, and apply the patch which
 is contained in RubyCocoa to Ruby 1.6.7.</p>
 <pre>$ cd {somewhere}
 $ tar zxf ruby-1.6.7.tar.gz
 $ cd ruby-1.6.7
 $ patch -p1 &lt; {RubyCocoa source}/ruby-1.6.7-osx10.2.patch</pre>
-<h4><a name='label:7' id='label:7'>Build and install libruby</a></h4><!-- RDLabel: "Build and install libruby" -->
+<h4><a name='label-7' id='label-7'>Build and install libruby</a></h4><!-- RDLabel: "Build and install libruby" -->
 <p>Ruby 1.6.7 is built so that the environment of the Mac OS X attachment
 Ruby may be suited.
-<a name='footmark:2' href='#foottext:2' id='footmark:2'><sup><small>*2</small></sup></a></p>
+<a href='#foottext-2' name='footmark-2' id='footmark-2'><sup><small>*2</small></sup></a></p>
 <pre>$ rbhost=`ruby -r rbconfig -e "print Config::CONFIG['host']"`
 $ CFLAGS='-g -O2 -fno-common' ./configure --prefix=/usr --host=$rbhost
 $ make
@@ -112,7 +112,7 @@ $ make test</pre>
 <pre>$ ranlib libruby.a
 $ rubyarchdir=`ruby -r rbconfig -e 'print Config::CONFIG["archdir"]'`
 $ sudo install -m 0644 libruby.a $rubyarchdir</pre>
-<h2><a name='label:8' id='label:8'>Build of RubyCocoa</a></h2><!-- RDLabel: "Build of RubyCocoa" -->
+<h2><a name='label-8' id='label-8'>Build of RubyCocoa</a></h2><!-- RDLabel: "Build of RubyCocoa" -->
 <p>Type as follows to build RubyCocoa:</p>
 <pre>$ ruby install.rb --help   # print all options
 $ ruby install.rb config
@@ -120,55 +120,55 @@ $ ruby install.rb setup</pre>
 <p>'ruby install.rb config' command have some options for RubyCocoa. If
 required, specify option at the time of a config phase.</p>
 <p><em>Caution!</em> If you got a "Segmentation Fault" error in the config phase,
-please check "<a href='#label:19'>Notice for build of RubyCocoa 0.4.0 to Ruby 1.6.8</a>".</p>
-<h2><a name='label:9' id='label:9'>Unit Test for RubyCocoa</a></h2><!-- RDLabel: "Unit Test for RubyCocoa" -->
+please check "<a href='#label-19'>Notice for build of RubyCocoa 0.4.0 to Ruby 1.6.8</a>".</p>
+<h2><a name='label-9' id='label-9'>Unit Test for RubyCocoa</a></h2><!-- RDLabel: "Unit Test for RubyCocoa" -->
 <pre>$ cd {source}/tests
 $ DYLD_FRAMEWORK_PATH={source}/framework/build ruby -I../lib testall.rb</pre>
 <p>Test::Unit is required for unit tests.  This process is optional.</p>
-<h2><a name='label:10' id='label:10'>Installation of RubyCocoa</a></h2><!-- RDLabel: "Installation of RubyCocoa" -->
+<h2><a name='label-10' id='label-10'>Installation of RubyCocoa</a></h2><!-- RDLabel: "Installation of RubyCocoa" -->
 <pre>$ sudo ruby install.rb install</pre>
 <p>Installation is completed above. The following were installed:
 old procedure.</p>
 <dl>
-<dt><a name='label:11' id='label:11'>/Library/Frameworks/RubyCocoa.framework</a></dt><!-- RDLabel: "/Library/Frameworks/RubyCocoa.framework" -->
+<dt><a name='label-11' id='label-11'>/Library/Frameworks/RubyCocoa.framework</a></dt><!-- RDLabel: "/Library/Frameworks/RubyCocoa.framework" -->
 <dd>
-<p>RubyCocoa framework (real)</p>
+RubyCocoa framework (real)
 </dd>
-<dt><a name='label:12' id='label:12'>inside of /usr/lib/ruby/site_ruby/1.6/osx/</a></dt><!-- RDLabel: "inside of /usr/lib/ruby/site_ruby/1.6/osx/" -->
+<dt><a name='label-12' id='label-12'>inside of /usr/lib/ruby/site_ruby/1.6/osx/</a></dt><!-- RDLabel: "inside of /usr/lib/ruby/site_ruby/1.6/osx/" -->
 <dd>
-<p>RubyCocoa library (stub)
-- addressbook.rb, appkit.rb, cocoa.rb, foundation.rb</p>
+RubyCocoa library (stub)
+- addressbook.rb, appkit.rb, cocoa.rb, foundation.rb
 </dd>
-<dt><a name='label:13' id='label:13'>/usr/lib/ruby/site_ruby/1.6/powerpc-darwin6.0/rubycocoa.bundle</a></dt><!-- RDLabel: "/usr/lib/ruby/site_ruby/1.6/powerpc-darwin6.0/rubycocoa.bundle" -->
+<dt><a name='label-13' id='label-13'>/usr/lib/ruby/site_ruby/1.6/powerpc-darwin6.0/rubycocoa.bundle</a></dt><!-- RDLabel: "/usr/lib/ruby/site_ruby/1.6/powerpc-darwin6.0/rubycocoa.bundle" -->
 <dd>
-<p>RubyCocoa extended library (stub)</p>
+RubyCocoa extended library (stub)
 </dd>
-<dt><a name='label:14' id='label:14'>inside of '/Developer/ProjectBuilder Extras/'</a></dt><!-- RDLabel: "inside of '/Developer/ProjectBuilder Extras/'" -->
+<dt><a name='label-14' id='label-14'>inside of '/Developer/ProjectBuilder Extras/'</a></dt><!-- RDLabel: "inside of '/Developer/ProjectBuilder Extras/'" -->
 <dd>
-<p>Some templates for ProjectBuilder
+Some templates for ProjectBuilder
 'File Templates/Ruby'
 'Project Templates/Application/Cocoa-Ruby Document-based Application'
-'Project Templates/Application/Cocoa-Ruby Application'</p>
+'Project Templates/Application/Cocoa-Ruby Application'
 </dd>
-<dt><a name='label:15' id='label:15'>/Developer/Documentation/RubyCocoa</a></dt><!-- RDLabel: "/Developer/Documentation/RubyCocoa" -->
+<dt><a name='label-15' id='label-15'>/Developer/Documentation/RubyCocoa</a></dt><!-- RDLabel: "/Developer/Documentation/RubyCocoa" -->
 <dd>
-<p>HTML Documentation</p>
+HTML Documentation
 </dd>
-<dt><a name='label:16' id='label:16'>/Developer/Examples/RubyCocoa</a></dt><!-- RDLabel: "/Developer/Examples/RubyCocoa" -->
+<dt><a name='label-16' id='label-16'>/Developer/Examples/RubyCocoa</a></dt><!-- RDLabel: "/Developer/Examples/RubyCocoa" -->
 <dd>
-<p>Sample programs</p>
+Sample programs
 </dd>
 </dl>
 <p>After installation, let's try samples that are written by Ruby. Refer
 to <a href='trysamples.en.html'>'Try RubyCocoa Samples'</a>.</p>
-<h2><a name='label:17' id='label:17'>[FYI] Useful Installer Options for Binary Package Maintainers</a></h2><!-- RDLabel: "[FYI] Useful Installer Options for Binary Package Maintainers" -->
+<h2><a name='label-17' id='label-17'>[FYI] Useful Installer Options for Binary Package Maintainers</a></h2><!-- RDLabel: "[FYI] Useful Installer Options for Binary Package Maintainers" -->
 <p>For a maintainer of a binary package, there are some useful options for the
 config phase.</p>
 <ul>
 <li>--install-prefix  : effect to extended library and library</li>
 <li>--install-root    : effect to framework, templates, documents and examples</li>
 </ul>
-<h3><a name='label:18' id='label:18'>e.g.</a></h3><!-- RDLabel: "e.g." -->
+<h3><a name='label-18' id='label-18'>e.g.</a></h3><!-- RDLabel: "e.g." -->
 <pre>$ ruby -r rbconfig -e 'p Config::CONFIG["prefix"]'
 "/usr"
 $ ruby install.rb config \
@@ -189,12 +189,12 @@ $ sudo ruby install.rb install</pre>
         Application/Cocoa-Ruby Document-based Application
 /tmp/build/Developer/Examples/RubyCocoa
 /tmp/build/Developer/Documentation/RubyCocoa</pre>
-<h2><a name='label:19' id='label:19'>Notice for build of RubyCocoa 0.4.0 to Ruby 1.6.8</a></h2><!-- RDLabel: "Notice for build of RubyCocoa 0.4.0 to Ruby 1.6.8" -->
+<h2><a name='label-19' id='label-19'>Notice for build of RubyCocoa 0.4.0 to Ruby 1.6.8</a></h2><!-- RDLabel: "Notice for build of RubyCocoa 0.4.0 to Ruby 1.6.8" -->
 <p>When building RubyCocoa 0.4.0 against <em>Ruby 1.6.8</em>, you may see a
 "Segmentation Fault" error message in the config phase:</p>
 <pre>ruby install.rb config</pre>
 <p>For fix this, apply
-<a href='http://www.imasy.or.jp/%7ehisa/mac/rubyosx/files/ruco0.4.0-fw-post-config.patch'>a patch</a>
+<a href='http://rubycocoa.sourceforge.net/files/ruco0.4.0-fw-post-config.patch'>a patch</a>
 as follows after extracting rubycocoa-0.4.0.tgz.</p>
 <pre>$ cd {rubycocoa-0.4.0}
 $ patch -p0 &lt; ruco0.4.0-fw-post-config.patch</pre>
@@ -216,7 +216,7 @@ $ patch -p0 &lt; ruco0.4.0-fw-post-config.patch</pre>
      end
    end
  end</pre>
-<h2><a name='label:20' id='label:20'>Development and testing environment</a></h2><!-- RDLabel: "Development and testing environment" -->
+<h2><a name='label-20' id='label-20'>Development and testing environment</a></h2><!-- RDLabel: "Development and testing environment" -->
 <ul>
 <li>Power Macintosh G4/400/384MB or iBook G3/600/384MB</li>
 <li>Mac OS X 10.2.3</li>
@@ -224,14 +224,14 @@ $ patch -p0 &lt; ruco0.4.0-fw-post-config.patch</pre>
 <li>ruby-1.6.7 (pre-installed in Mac OS X 10.2)</li>
 <li>ruby-1.8 (preview 1 from cvs server)</li>
 </ul>
-<h2><a name='label:21' id='label:21'>Have fun!</a></h2><!-- RDLabel: "Have fun!" -->
+<h2><a name='label-21' id='label-21'>Have fun!</a></h2><!-- RDLabel: "Have fun!" -->
 <p>Feel free to send comments, bug reports and patches for RubyCocoa.</p>
 <p>$Date$</p>
 <hr/>
 <p class='foottext'>
-<a name='foottext:1' href='#footmark:1' id='foottext:1'><sup><small>*1</small></sup></a><small> RubyCocoa.framework cannot be linked without specifying the
+<a href='#footmark-1' name='foottext-1' id='foottext-1'><sup><small>*1</small></sup></a><small> RubyCocoa.framework cannot be linked without specifying the
 '-fno-common' option for CFLAGS. </small><br/>
-<a name='foottext:2' href='#footmark:2' id='foottext:2'><sup><small>*2</small></sup></a><small> RubyCocoa.framework cannot be linked without specifying the
+<a href='#footmark-2' name='foottext-2' id='foottext-2'><sup><small>*2</small></sup></a><small> RubyCocoa.framework cannot be linked without specifying the
 '-fno-common' option for CFLAGS. </small><br/>
 </p>
 </td>
@@ -249,7 +249,7 @@ $ patch -p0 &lt; ruco0.4.0-fw-post-config.patch</pre>
   <ul class='body-sidebar'>
     <li><a href='index.en.html'>What is RubyCocoa?</a></li>
     <li><a href='getting.en.html'>Getting RubyCocoa</a></li>
-    <li><a href='build.en.html'>Build & Install from Source</a></li>
+    <li><a href='build.en.html'>Build &amp; Install from Source</a></li>
     <li><a href='trysamples.en.html'>Try Samples</a></li>
     <li><a href='programming.en.html'>Programming</a></li>
     <li><a href='references.en.html'>References</a></li>
@@ -265,8 +265,8 @@ $ patch -p0 &lt; ruco0.4.0-fw-post-config.patch</pre>
 <div id='sidebar-links'>
   <h2 class='body-sidebar'><a href='links.en.html'>Links</a></h2>
   <ul class='body-sidebar'>
-    <li><a href='http://www.imasy.or.jp/%7ehisa/mac/rubycocoa/'>RubyCocoa</a></li>
-    <li><a href='http://www.imasy.or.jp/%7ehisa/mac/rubyaeosa/'>RubyAEOSA</a></li>
+    <li><a href='http://www.fobj.com/rubycocoa/'>RubyCocoa</a></li>
+    <li><a href='http://www.fobj.com/rubyaeosa/'>RubyAEOSA</a></li>
     <li><a href='http://www.freeml.com/info/rubycocoa@freeml.com'>Maling List (Japanese)</a></li>
     <li><a href='http://sourceforge.net/mail/?group_id=44114'>Maling list (English)</a></li>
     <li><a href='http://sourceforge.net/projects/rubycocoa/'>RubyCocoa Project</a></li>
