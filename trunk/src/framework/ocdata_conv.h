@@ -20,15 +20,16 @@ enum osxobjc_nsdata_type {
   _PRIV_C_NSPOINT,
   _PRIV_C_NSSIZE,
   _PRIV_C_NSRANGE,
+  _PRIV_C_ARY_UI,
 };
 
 #define OCID2NUM(val) UINT2NUM((unsigned int)(val))
 #define NUM2OCID(val) ((id)NUM2UINT((VALUE)(val)))
 
 int     to_octype       (const char* oc_type_str);
-size_t  ocdata_size     (int octype);
-void*   ocdata_malloc   (int octype);
-#define OCDATA_ALLOCA(octype)  alloca(ocdata_size(octype))
+size_t  ocdata_size     (int octype, const char* octype_str);
+void*   ocdata_malloc   (int octype, const char* octype_str);
+#define OCDATA_ALLOCA(octype,s)  alloca(ocdata_size((octype),(s)))
 
 id    rbobj_get_ocid (VALUE obj);
 VALUE ocid_get_rbobj (id ocid);
