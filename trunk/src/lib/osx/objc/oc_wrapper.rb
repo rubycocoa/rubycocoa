@@ -9,15 +9,8 @@
 #
 
 require 'osx_objc'
-require 'osx/objc/ocexception'
-require 'osx/objc/octypes'
-require 'osx/objc/ocfuncs'
 
 module OSX
-
-  class OCObject < ObjcID
-    include OCObjWrapper
-  end
 
   module OCObjWrapper
 
@@ -105,7 +98,7 @@ module OSX
     end
 
     def occur_ownership?(obj, m_name)
-      obj.is_a?(OSX::OCObject) &&
+      obj.is_a?(OSX::OCObjWrapper) &&
 	(m_name =~ /^alloc/ ||
 	 m_name =~ /^new/ ||
 	 m_name =~ /^retain/ ||
