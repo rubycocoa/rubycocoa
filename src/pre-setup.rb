@@ -8,4 +8,6 @@
 #  the GNU Lesser General Public License version 2.
 #
 
-command "pbxbuild"
+dive_into("framework") do
+  command "pbxbuild"
+end

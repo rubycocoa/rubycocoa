@@ -18,12 +18,6 @@
 #import <Foundation/NSAutoreleasePool.h>
 #import <Foundation/NSArray.h>
 
-enum osxobjc_nsdata_type {
-  _PRIV_C_NSRECT = 1024,
-  _PRIV_C_NSPOINT,
-  _PRIV_C_NSSIZE,
-};
-
 struct _ocobj_data {
   id  obj;
   int ownership;
@@ -135,6 +129,10 @@ ocdata_to_rbobj(int octype, const void* ocdata,	VALUE* result)
   case _C_ID:
   case _C_CLASS:
     rbval = OCID2NUM(*(id*)ocdata);
+    break;
+
+  case _PRIV_C_BOOL:
+    rbval = bool_to_rbobj(*(BOOL*)ocdata);
     break;
 
   case _C_SEL: {
@@ -332,6 +330,22 @@ BOOL rbobj_to_bool(VALUE obj)
 VALUE bool_to_rbobj (BOOL val)
 {
   return (val ? Qtrue : Qfalse);
+}
+
+VALUE sel_to_rbobj (SEL val)
+{
+  VALUE rbobj;
+  if (ocdata_to_rbobj(_C_SEL, &val, &rbobj)) {
+    rbobj = rb_obj_as_string(rbobj);
+    // str.tr!('_',':')
+    rb_funcall(rbobj, rb_intern("tr!"), 2, rb_str_new2(":"), rb_str_new2("_"));
+    // str.sub!(/(_)$/,'')
+    rb_funcall(rbobj, rb_intern("sub!"), 2, rb_str_new2("_$"), rb_str_new2(""));
+  }
+  else {
+    rbobj = Qnil;
+  }
+  return rbobj;
 }
 
 VALUE int_to_rbobj (int val)
