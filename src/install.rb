@@ -739,6 +739,8 @@ class Installer
   def clean_dir_framework( rel )
     command buildcommand + ' clean'
     command 'rm -rf build'
+    command 'rm -f src/objc/cocoa/rb_AppKit.m'
+    command 'rm -f src/objc/cocoa/rb_Foundation.m'
   end
 
   #
