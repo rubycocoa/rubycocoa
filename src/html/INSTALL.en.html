@@ -19,13 +19,13 @@
 <li><a href="#label:6">Done</a></li>
 <li><a href="#label:7">Check Sample</a></li>
 </ul>
-<p>You need to use command line shell (by Terminal Application or others)
-for installing.</p>
+<p>You must use the Terminal application (command line shell) to install
+RubyCocoa.</p>
 <h2><a name="label:2" id="label:2">Install Ruby</a></h2><!-- RDLabel: "Install Ruby" -->
 <p>If you have installed Ruby with "--enable-shared" option already, go
 to next section.</p>
 <p>If you newly install Ruby on MacOS X, use 1.6.6 or later. When
-installing it or earlier, it is necessary to apply a patch to source.</p>
+installing it or earlier, it is necessary to apply a patch to the source.</p>
 <p>The following is the most typical installation procedure of Ruby
 1.6.6.</p>
 <pre>% cd {anywhere}
@@ -34,17 +34,17 @@ installing it or earlier, it is necessary to apply a patch to source.</p>
 % ./configure --enable-shared  # install to /usr/local
 % make ; make test
 % sudo make install</pre>
-<p>At the time of configure, specify the "--enable-shared" option. </p>
+<p>During configuration, specify the "--enable-shared" option. </p>
 <h2><a name="label:3" id="label:3">Extract RubyCocoa</a></h2><!-- RDLabel: "Extract RubyCocoa" -->
 <p>extract RubyCocoa sources tarball.</p>
 <pre>% cd {anywhere}
 % tar zxf rubycocoa-0.2.x.tgz</pre>
-<p><em>Caution!</em> Using StuffIt, building RubyCocoa will be failed
-because of file name length problem.</p>
+<p><em>Caution!</em> Using StuffIt, building RubyCocoa will fail
+because of a file name length problem. </p>
 <h2><a name="label:4" id="label:4">Install LibRuby Framework</a></h2><!-- RDLabel: "Install LibRuby Framework" -->
 <p>LibRuby Framework is a framework for Ruby interpreter shared library
 and related header files. The framework is needed by RubyCocoa and
-RubyCocoa applications. For installing the LibRuby Framework on
+RubyCocoa applications. For installing the LibRuby Framework in
 "/Library/Frameworks", type:</p>
 <pre>% cd {RubyCocoa srcdir}
 % ruby tool/install-libruby-frmwk.rb</pre>
@@ -57,18 +57,17 @@ RubyCocoa applications. For installing the LibRuby Framework on
 % ruby install.rb config
 % ruby install.rb setup
 % sudo ruby install.rb install</pre>
-<p>After config, you will look a message "require LibRuby Framework". If
+<p>After config, you may see a message "require LibRuby Framework". If
 you are installing by this text seqeunce, the Framework already
 exists.</p>
-<p>If you want to specify the installing location of RubyCocoa framework
+<p>If you want to specify the install location of the RubyCocoa framework
 (default is "/Library/Frameworks"), use the config option as follows:</p>
 <pre>% ruby install.rb config --frameworks=/Networks/Library/Frameworks</pre>
-<p>Setup need too long time. It's tea time...</p>
-<p>When install, RubyCocoa libraries will be installed.  And RubyCocoa
-Framework will be installed RubyCocoa Framework to
-"/Library/Frameworks".</p>
+<p>Setup takes a long time. It's tea time...</p>
+<p>When finished, RubyCocoa libraries will be installed. RubyCocoa
+Framework will be installed to "/Library/Frameworks".</p>
 <h2><a name="label:6" id="label:6">Done</a></h2><!-- RDLabel: "Done" -->
-<p>With the above installation is completion. </p>
+<p>When the above installation is complete: </p>
 <ul>
 <li>LibRuby framework     - /Library/Frameworks/LibRuby.framework</li>
 <li>RubyCocoa framework   - /Library/Frameworks/RubyCocoa.framework</li>
@@ -76,7 +75,7 @@ Framework will be installed RubyCocoa Framework to
 <li>RubyCocoa libraries B - {site_ruby}/1.6/osx/*.rb</li>
 <li>RubyCocoa libraries B - {site_ruby}/1.6/osx/objc/*.rb</li>
 </ul>
-<p>was installed other than a Ruby itself with procedure to this place.</p>
+<p>was installed here  with Ruby itself.</p>
 <h2><a name="label:7" id="label:7">Check Sample</a></h2><!-- RDLabel: "Check Sample" -->
 <p>Now go to the sample dir, and try to execute some scripts.</p>
 <pre>% cd {RubyCocoa srcdir}/sample
@@ -106,7 +105,7 @@ application:</p>
 <li>ruby-1.6.5 or 1.6.6 (configure --enable-shared)</li>
 </ul>
 <h2><a name="label:9" id="label:9">Have a fun</a></h2><!-- RDLabel: "Have a fun" -->
-<p>Feel free to send comments, bug reports and patches about RubyCocoa.</p>
+<p>Feel free to send comments, bug reports and patches for RubyCocoa.</p>
 <p>FUJIMOTO Hisakuni &lt;hisa@imasy.or.jp&gt;
 $Date$ $Revision$</p>
 
