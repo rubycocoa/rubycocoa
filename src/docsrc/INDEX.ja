@@ -2,20 +2,30 @@
 
 == RubyCocoaとは？
 
-RubyCocoaは、((<Mac OS X|URL:http://www.apple.co.jp/macosx/>))
-の((<Cocoa|URL:http://developer.apple.com/cocoa/>))
-オブジェクトを((<Ruby|URL:http://www.ruby-lang.org/>))
-スクリプトからRubyオブジェクトとして扱うための、
-Ruby拡張ライブラリです。RubyCocoaを使うと
+RubyCocoaは、
+オブジェクト指向スクリプト言語((<Ruby|URL:http://www.ruby-lang.org/>))での
+((<Cocoa|URL:http://developer.apple.com/cocoa/>))プログラミングを可能とする、
+((<Mac OS X|URL:http://www.apple.co.jp/macosx/>))のフレームワークです。
 
-  * Rubyスクリプトの中でCocoaのオブジェクトを生成して使う
-  * RubyとInterface Builderを使ってCocoaアプリケーションを書く
-  * irbやスクリプトでCocoaオブジェクトのお手軽動作チェック
-  * Cocoaアプリケーションのお手軽プロトタイピング
-  * 小規模の簡単なCocoaアプリケーションの開発
-  * RubyスクリプトにOSX用の簡単なユーザインターフェースをかぶせる
+RubyCocoaを使って、CocoaアプリケーションをRubyで書いたり、Rubyスクリプトで
+Cocoaオブジェクトを生成して機能を利用することができます。
+Cocoaアプリケーションでは、RubyとObjective-Cのソースが混在するCocoa
+アプリケーションを作ることも可能です。
 
-といったことができます。
+次のようなときにRubyCocoaを使えます:
+
+  * irbで対話的にCocoaオブジェクトの性質を探求
+  * Cocoaアプリケーションのブロトタイピング・開発
+  * RubyとObjective-C双方の長所を活かしたCocoaアプリケーション
+  * RubyスクリプトにMac OS X風のユーザインターフェースをかぶせる
+
+
+== スクリーンショット
+
+RubyCocoaにより、RubyスクリプトとInterface BuilderのNibファイル
+のみで書かれたCocoaアプリケーションが動作しているところの
+((<スクリーンショット|URL:simpleapp.jpg>))です。
+
 
 == スクリプト例
 
@@ -71,24 +81,16 @@ Ruby拡張ライブラリです。RubyCocoaを使うと
 
   end
 
-== スクリーンショット
-
-RubyCocoa 0.3 により、Ruby スクリプトと Interface Builder の Nib ファ
-イルのみで書かれたCocoaアプリケーションが動作しているところの((<スクリー
-ンショット|URL:simpleapp.jpg>))です。
-
 == ライセンス
 
 ((<GNU Lesser General Public License version 2. LGPL
 |URL:http://www.gnu.org/licenses/lgpl.html>))
 
 
-== コメントなど
-
-バグリポート、こんなアイコン作りました、コメントなどお気軽にお寄せくだ
-さい。
-
 == コンタクト
+
+バグリポート、こんなアイコン作りました、コメントなどお気軽に
+お寄せください。
 
 作者は仕事を探しています。
 
@@ -102,6 +104,4 @@ RubyCocoa 0.3 により、Ruby スクリプトと Interface Builder の Nib ファ
 ((<こちら|URL:mailto:contact.rubycocoa@fobj.com>)) 
 までご連絡ください。
 
-
-藤本尚邦, <hisa@imasy.or.jp>,
-$Date$ $Revision$
+藤本尚邦, <hisa@imasy.or.jp>, $Date$

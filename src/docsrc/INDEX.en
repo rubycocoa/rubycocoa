@@ -2,17 +2,29 @@
 
 == What is RubyCocoa ?
 
-RubyCocoa is a ((<Ruby|URL:http://www.ruby-lang.org/>)) library for
-using ((<Cocoa|URL:http://developer.apple.com/cocoa/>)) Objects on
-((<Mac OS X|URL:http://www.apple.com/macosx/>)) in Ruby scripts. You
-can use RubyCocoa for:
+RubyCocoa is a ((<Mac OS X|URL:http://www.apple.com/macosx/>)) framework
+that allows ((<Cocoa|URL:http://developer.apple.com/cocoa/>)) programming
+in the object-oriented scripting language ((<Ruby|URL:http://www.ruby-lang.org/>)).
 
-  * using Cocoa objects in Ruby Script
-  * writing Cocoa application with Ruby and Interface Builder
-  * exploration of Cocoa with irb
-  * prototyping of a Cocoa Application
-  * development of a small scale simple Cocoa Application
-  * Wrapping OSX GUI for Ruby script
+RubyCocoa allows writing a Cocoa application in Ruby. 
+It allows creating and using a Cocoa object in a Ruby script.
+In Cocoa application, mixture of program written by both Ruby and
+Objective-C is possible.
+
+Some cases using RubyCocoa:
+
+  * Exploration of a Cocoa object's feature with 'irb' interactively
+  * Prototyping of a Cocoa application
+  * Cocoa application that include good feature of Ruby and Objective-C
+  * Wrapping Mac OS X native GUI for Ruby script
+
+
+== Screenshot
+
+((<This is a screenshot|URL:simpleapp.jpg>)) of running a Cocoa
+application| that consists of only Ruby scripting and Interface
+Builder's Nib file by RubyCocoa.
+
 
 == Script Examples
 
@@ -27,8 +39,8 @@ Next script is playing system sounds.
     sleep 0.5
   end
 
-The following examples are scripts that Mac read a text aloud. (for
-OSX 10.2)
+The following examples are scripts that Mac read a text aloud.
+(for OSX 10.2)
 
   require 'osx/cocoa'
   include OSX
@@ -68,24 +80,17 @@ by Interface Builder.
 
   end
 
-== Screenshot
-
-((<This is a screenshot|URL:simpleapp.jpg>)) of running a Cocoa
-application| that consists of only Ruby scripting and Interface
-Builder's Nib file by RubyCocoa 0.3.
-
 
 == LICENCE
 
 ((<GNU Lesser General Public License version 2. LGPL
 |URL:http://www.gnu.org/licenses/lgpl.html>))
 
-== Comments and Bug Reports
+
+== Contact
 
 Feel free to send comments, icon design, bug reports and patches about
 RubyCocoa.
-
-== Contact
 
 An author looks for job (an income source).  Is not there a supporter
 (sponsor, investor or etc...) with interest into development of
@@ -94,5 +99,4 @@ RubyCocoa or other?
 Contact ((<me|URL:mailto:contact.rubycocoa@fobj.com>)) freely please.
 
 
-FUJIMOTO, Hisakuni <hisa@imasy.or.jp>,
-$Date$ $Revision$
+FUJIMOTO, Hisakuni <hisa@imasy.or.jp> $Date$

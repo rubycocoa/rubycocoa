@@ -1,30 +1,54 @@
 # -*-rd-*-
 = Getting RubyCocoa
 
-== binary
+== Binary Distribution
 
-Donwload a file named
-((<RubyCocoa-0.3.2.dmg|URL:../rubyosx/files/RubyCocoa-0.3.2.dmg>))
-from
-((<the file list|URL:../rubyosx/files/>)).
-There are RubyCocoa and RubyAEOSA libraries, libruby.a, sample codes
-and etc. The libraries which is necessary for execution and
-development is a ".pkg" format package. So you can easily install it.
+RubyCocoa in a binary distribution have been built for Ruby 1.6.7
+attached to Mac OS X 10.2.
 
-This binary is for Mac OS X 10.2 or later.  There is not a binary for
-Mac OS X 10.1.x.
+Download a
+((<RubyCocoa-0.4.0.dmg|URL:http://www.imasy.or.jp/~hisa/mac/rubyosx/files/RubyCocoa-0.4.0.dmg>))
+from ((<file list|URL:http://www.imasy.or.jp/~hisa/mac/rubyosx/files/>)).
 
-== source
+It include library, samples, templates for Proejct Builder and etc of
+both RubyCocoa and RubyAEOSA. All of necessary for
+execution/development is included in a '.pkg' package file which is
+easy to install.
 
-Donwload a file named
-((<rubycocoa-0.3.2.tgz|URL:../rubyosx/files/rubycocoa-0.3.2.tgz>))
-from
-((<the file list|URL:../rubyosx/files/>)).
+After installation, let's try samples that are written by Ruby. Refer
+to ((<"Try RubyCocoa Samples"|URL:trysamples.en.html>)).
 
-== CVS
 
-You can get recent (or oldest) sources from 
-((<CVS Server|URL:http://sourceforge.net/cvs/?group_id=44114>)).
+== Source Distribution
+
+Download a
+((<rubycocoa-0.4.0.tgz|URL:http://www.imasy.or.jp/~hisa/mac/rubyosx/files/rubycocoa-0.4.0.tgz>))
+from ((<file list|URL:http://www.imasy.or.jp/~hisa/mac/rubyosx/files/>)).
+
+Let's build and install RubyCocoa. Refer to 
+((<"Build and Install RubyCocoa from Source"|URL:build.en.html>)).
+
+
+== Getting Source of Developing from CVS Server
+
+The latest (or the oldest) source of developing is available from 
+((<CVS Sever|URL:http://sourceforge.net/cvs/?group_id=44114>)).
+
+You can
+((<view CVS Repository|URL:http://cvs.sourceforge.net/cgi-bin/viewcvs.cgi/rubycocoa/src/>))
+for RubyCocoa. On shell command line, Type this:
+
+  $ cvs -d:pserver:anonymous@cvs.rubycocoa.sf.net:/cvsroot/rubycocoa login
+  $ cvs -z3 -d:pserver:anonymous@cvs.rubycocoa.sf.net:/cvsroot/rubycocoa \
+      co rubycocoa
+
+All of source for RubyCocoa is downloaed in a directory named
+'rubycocoa'.
+
+Build may fail because of nature of CVS. Some cvs commands such as
+'cvs update' or 'cvs status -v' will be helpful. Use these command
+with appropriate options.
+
 
 == PINEAPPLE RPM Package
 
@@ -33,4 +57,3 @@ RPM format binary (0.2.x) exist on
 
 
 $Date$
-$Revision$

@@ -1,30 +1,52 @@
 # -*-rd-*-
 = RubyCocoaを入手する
 
-== バイナリ
+== バイナリ配付
+
+バイナリ配付に含まれているRubyCocoaは、Mac OS X 10.2に付属する
+Ruby 1.6.7 に合わせて構築しています。
 
 ((<ファイル一覧|URL:http://www.imasy.or.jp/~hisa/mac/rubyosx/files/>))
 の中から
-((<RubyCocoa-0.3.2.dmg|URL:../rubyosx/files/RubyCocoa-0.3.2.dmg>))
-
-をダウンロードしてください。RubyCocoa とRubyAEOSA のライブラリと
-libruby.a、サンプルコードなどが含まれています。実行・開発に必要なライ
-ブラリ類は ".pkg"形式のパッケージになっていて、簡単にインストールでき
-ます。
-
-このバイナリは Mac OS X 10.2 用です。Mac OS X 10.1.x 用のバイナリはあ
-りません。
-
-== ソース
-
-((<ファイル一覧|URL:../rubyosx/files/>)) の中から
-((<rubycocoa-0.3.2.tgz|URL:../rubyosx/files/rubycocoa-0.3.2.tgz>))
+((<RubyCocoa-0.4.0.dmg|URL:http://www.imasy.or.jp/~hisa/mac/rubyosx/files/RubyCocoa-0.4.0.dmg>))
 をダウンロードしてください。
 
-== CVS
+RubyCocoaとRubyAEOSA のライブラリ・サンプルコード・ProjectBuilder 
+テンプレートなどが含まれています。実行・開発に必要なライブラリ類は
+.pkg形式のパッケージになっていて、簡単にインストールできます。
+
+インストールできたら、((<「付属サンプルを試してみる」
+|URL:trysamples.ja.html>)) を参考にRubyCocoaで書かれたサンプルプログラ
+ムを動かしてみるとよいでしょう。
+
+
+== ソース配付
+
+((<ファイル一覧|URL:http://www.imasy.or.jp/~hisa/mac/rubyosx/files/>))
+の中から
+((<rubycocoa-0.4.0.tgz|URL:http://www.imasy.or.jp/~hisa/mac/rubyosx/files/rubycocoa-0.4.0.tgz>))
+をダウンロードしてください。
+
+((<「RubyCocoaをソースから構築・インストールする」|URL:build.ja.html>))
+を参考に構築・インストールしてください。
+
+
+== CVSサーバから開発途上のソースを入手する
 
 ((<CVSサーバ|URL:http://sourceforge.net/cvs/?group_id=44114>))から最新
-の(あるいは最古の)ソースを入手できます。
+の(あるいは最古の)ソースを入手したり、
+(((<CVSリポジトリを見る|URL:http://cvs.sourceforge.net/cgi-bin/viewcvs.cgi/rubycocoa/src/>))
+ことができます。シェルで
+
+  $ cvs -d:pserver:anonymous@cvs.rubycocoa.sf.net:/cvsroot/rubycocoa login
+  $ cvs -z3 -d:pserver:anonymous@cvs.rubycocoa.sf.net:/cvsroot/rubycocoa \
+      co rubycocoa
+
+と入力すると、'rubycocoa'というディレクトリにRubyCocoaのソース一式が
+ダウンロードされます。CVSの性質上、ダウンロードしたタイミングにより
+構築できないこともあります。
+'cvs update'コマンドや'cvs status -v'コマンドを適当なオプションと
+いっしょに使うとよいでしょう。
 
 
 == PINEAPPLE RPMパッケージ
@@ -35,4 +57,3 @@ libruby.a、サンプルコードなどが含まれています。実行・開発に必要なライ
 
 
 $Date$
-$Revision$
