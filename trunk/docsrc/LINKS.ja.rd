@@ -1,7 +1,7 @@
 # -*-rd-*-
 = リンク集
 
-* ((<RubyCocoa|URL:http://www.imasy.or.jp/~hisa/mac/rubycocoa/>))
+* ((<RubyCocoa|URL:http://www.imasy.or.jp/%7ehisa/mac/rubycocoa/>))
 * ((<RubyCocoaプロジェクト|URL:http://sourceforge.net/projects/rubycocoa/>))
 * ((<メーリングリスト(日本語)|URL:http://www.freeml.com/info/rubycocoa@freeml.com>))
 * ((<メーリングリスト(英語)|URL:http://sourceforge.net/mail/?group_id=44114>))
@@ -22,7 +22,7 @@
 
   Chris Thomasさんの書いたRubyCocoaの記事が掲載されました。
 
-: ((<RubyAEOSA|URL:http://www.imasy.or.jp/~hisa/mac/rubyaeosa/>))
+: ((<RubyAEOSA|URL:http://www.imasy.or.jp/%7ehisa/mac/rubyaeosa/>))
 
   Mac OS XのCarbonフレームワークベースのAppleEventや
   Open Scripting Architecture (OSA)のRubyインターフェース。

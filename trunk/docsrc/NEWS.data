@@ -4,18 +4,18 @@ Date: 2003-01-12
 UID: 1042301135
 
 <p>X11 for Mac OS X で動く FreeRIDE からRubyCocoaスクリプトを起動してる様子のスクリーンショットです。</p>
-<a href='http://www.imasy.org/~hisa/mac/rubyosx/files/freeride-x11-osx.jpg'>
-<img src='http://www.imasy.org/~hisa/mac/rubyosx/files/freeride-x11-osx-sml.jpg' alt='screenshot' width='256' height='192'/></a>
-<a href='http://www.imasy.org/~hisa/mac/rubyosx/files/freeride-x11-osx-2.jpg'>
-<img src='http://www.imasy.org/~hisa/mac/rubyosx/files/freeride-x11-osx-2.jpg' alt='screenshot' width='256' height='192'/></a>
+<a href='http://www.imasy.org/%7ehisa/mac/rubyosx/files/freeride-x11-osx.jpg'>
+<img src='http://www.imasy.org/%7ehisa/mac/rubyosx/files/freeride-x11-osx-sml.jpg' alt='screenshot' width='256' height='192'/></a>
+<a href='http://www.imasy.org/%7ehisa/mac/rubyosx/files/freeride-x11-osx-2.jpg'>
+<img src='http://www.imasy.org/%7ehisa/mac/rubyosx/files/freeride-x11-osx-2.jpg' alt='screenshot' width='256' height='192'/></a>
 ..ja
 
 <p>These are appearances of invocation of a RubyCocoa script in FreeRIDE which is running on X11 for Mac OS X.</p>
 
-<a href='http://www.imasy.org/~hisa/mac/rubyosx/files/freeride-x11-osx.jpg'>
-<img src='http://www.imasy.org/~hisa/mac/rubyosx/files/freeride-x11-osx.jpg' alt='screenshot' width='256' height='192'/></a>
-<a href='http://www.imasy.org/~hisa/mac/rubyosx/files/freeride-x11-osx-2.jpg'>
-<img src='http://www.imasy.org/~hisa/mac/rubyosx/files/freeride-x11-osx-2.jpg' alt='screenshot' width='256' height='192'/></a>
+<a href='http://www.imasy.org/%7ehisa/mac/rubyosx/files/freeride-x11-osx.jpg'>
+<img src='http://www.imasy.org/%7ehisa/mac/rubyosx/files/freeride-x11-osx.jpg' alt='screenshot' width='256' height='192'/></a>
+<a href='http://www.imasy.org/%7ehisa/mac/rubyosx/files/freeride-x11-osx-2.jpg'>
+<img src='http://www.imasy.org/%7ehisa/mac/rubyosx/files/freeride-x11-osx-2.jpg' alt='screenshot' width='256' height='192'/></a>
 ..en
 
 
@@ -27,7 +27,7 @@ UID: 1042297376
 <p>Ruby 1.6.8 で RubyCocoa 0.4.0 をソースから構築するときに、
 'ruby install.rb config' を実行すると Segmentation fault が発生します。
 この問題を解決するための
-<a href='http://www.imasy.or.jp/~hisa/mac/rubyosx/files/ruco0.4.0-fw-post-config.patch'>パッチ</a>
+<a href='http://www.imasy.or.jp/%7ehisa/mac/rubyosx/files/ruco0.4.0-fw-post-config.patch'>パッチ</a>
 を置きました。パッチの当て方は以下のとおりです。</p>
 
 <pre>
@@ -38,7 +38,7 @@ $ patch -p0 &lt; ruco0.4.0-fw-post-config.patch
 
 <p>In build of RubyCocoa 0.4 with Ruby 1.6.8, segmentation fault occur at
 'ruby install.rb config'. This
-<a href='http://www.imasy.or.jp/~hisa/mac/rubyosx/files/ruco0.4.0-fw-post-config.patch'>patch</a>
+<a href='http://www.imasy.or.jp/%7ehisa/mac/rubyosx/files/ruco0.4.0-fw-post-config.patch'>patch</a>
 fix the problem. Apply the patch as following:</p>
 
 <pre>
