@@ -1,5 +1,8 @@
 2004-02-07  kimura wataru <kimuraw@i.nifty.jp>
 
+	* framework/post-config.rb, framework/src/objc/cocoa/gen_cocoa_wrapper.rb:
+	change mode of gen_cococa_wrapper.rb at config.
+
 	* install.rb:
 	remove rb_AppKit.m and rb_Foundation.m at clean.
 
