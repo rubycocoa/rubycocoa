@@ -8,9 +8,4 @@
 #  the GNU Lesser General Public License version 2.
 #
 
-frmwkdir = "/Library/Frameworks"
-path = File.join(curr_srcdir, 'framework/build/RubyCocoa.framework')
-
-command "mkdir -p #{frmwkdir}"
-command "rm -rf #{frmwkdir}/RubyCocoa.framework"
-command "cp -R #{path} #{frmwkdir}"
+command "pbxbuild"
