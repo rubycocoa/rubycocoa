@@ -636,8 +636,6 @@ class Installer
     else
       'pbxbuild'
     end
-    builddir = File.join(curr_srcdir, 'build')
-    cmd + " OBJROOT=#{builddir} SYMROOT=#{builddir}"
   end 
 
   #
