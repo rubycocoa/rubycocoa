@@ -1,7 +1,6 @@
 #
 # written by Chris Thomas for the article of DDJ May 2002.
 #
-$stderr.print "just wait ..." ; $stderr.flush
 
 require 'osx/cocoa'
 
@@ -61,6 +60,7 @@ if __FILE__ == $0
   # First, to establish a connection to the window server,
   # we must initialize the application
   #
+  $stderr.print "just wait ..." ; $stderr.flush
   application = OSX::NSApplication.sharedApplication
 
   # Create the window
