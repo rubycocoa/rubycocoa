@@ -50,10 +50,12 @@ clean:
 	-rm -f $(TARGET) $(DYNAMIC_ITEMS) $(SFINDEX)
 
 install:	$(TARGETDIR) $(TARGET)
-	$(RUBY) copy_if_diff.rb $(TARGET) $(INSTALL_TARGETDIR)
+		$(RUBY) copy_if_diff.rb $(TARGET) $(INSTALL_TARGETDIR)
 
-install-index-sf:	$(TARGETDIR)/index_sf.html
-	scp -p $< shell.sf.net:rubycocoa/htdocs/index.html
+
+rsync:	$(TARGET)
+	-rsync -v -t -e ssh html/* tasogare:public_html/mac/rubycocoa/
+	-rsync -v -t -e ssh html/index_sf.html  shell.sf.net:rubycocoa/htdocs/index.html
 
 $(TARGET):	$(TEMPLATES)
 
