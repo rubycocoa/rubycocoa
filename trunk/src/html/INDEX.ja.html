@@ -31,23 +31,60 @@
 <li>ライフサイクルの長いソフトウェアの作成</li>
 </ul>
 <p>などがあげられます。</p>
-<h2><a name="label:2" id="label:2">入手</a></h2><!-- RDLabel: "入手" -->
+<h2><a name="label:2" id="label:2">スクリプト例</a></h2><!-- RDLabel: "スクリプト例" -->
+<p>以下の例はシステムの音を順番に鳴らすスクリプトです。</p>
+<pre>require 'osx/cocoa'
+snd_files =`ls /System/Library/Sounds/*.aiff`.split
+snd_files.each do |path|
+  snd = OSX::NSSound.alloc.
+    initWithContentsOfFile_byReference (path, true)
+  snd.play
+  sleep 0.25 while snd.isPlaying?
+end</pre>
+<p>以下の例はインターフェースビルダーで作成したnibファイル内のクラスと関
+連づけられたクラス定義のサンプルです。</p>
+<pre>require 'osx/ocobject'
+
+class AppCtrl &lt; OSX::OCObject
+
+  ib_loadable
+  ib_outlets :monthField, :dayField, :mulField
+
+  def awakeFromNib
+    @monthField.setIntValue  Time.now.month
+    @dayField.setIntValue Time.now.day
+    convert
+  end
+
+  def convert (sender = nil)
+    val = @monthField.intValue * @dayField.intValue
+    @mulField.setIntValue (val)
+    @monthField.selectText (self)
+  end
+
+  def windowShouldClose (sender = nil)
+    OSX.NSApp.stop (self)
+    true
+  end    
+
+end</pre>
+<h2><a name="label:3" id="label:3">入手</a></h2><!-- RDLabel: "入手" -->
 <ul>
 <li><a href="rubycocoa-0.1.0.tgz">ソース</a></li>
 <li>バイナリ (今のところなし)</li>
 </ul>
-<h2><a name="label:3" id="label:3">ドキュメント</a></h2><!-- RDLabel: "ドキュメント" -->
+<h2><a name="label:4" id="label:4">ドキュメント</a></h2><!-- RDLabel: "ドキュメント" -->
 <ul>
 <li><a href="INSTALL.ja.html">インストール</a></li>
 <li><a href="MINITOUR.ja.html">使い方</a></li>
 <li><a href="DETAIL.ja.html">リファレンス</a></li>
 </ul>
-<h2><a name="label:4" id="label:4">リンク</a></h2><!-- RDLabel: "リンク" -->
+<h2><a name="label:5" id="label:5">リンク</a></h2><!-- RDLabel: "リンク" -->
 <ul>
 <li><a href="http://www.imasy.or.jp/~hisa/mac/rubycocoa/">RubyCocoaホームページ</a></li>
 <li><a href="http://www.ruby-lang.org/">Rubyホームページ</a></li>
 </ul>
-<h2><a name="label:5" id="label:5">コメントなど</a></h2><!-- RDLabel: "コメントなど" -->
+<h2><a name="label:6" id="label:6">コメントなど</a></h2><!-- RDLabel: "コメントなど" -->
 <p>バグリポート、コメントなどお気軽にお寄せください。</p>
 <p>藤本尚邦, &lt;hisa@imasy.or.jp&gt;,
 $Date$ $Revision$</p>
