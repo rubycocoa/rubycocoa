@@ -12,10 +12,8 @@
 
 #import <LibRuby/cocoa_ruby.h>
 #import <Foundation/Foundation.h>
-#import <RubyCocoa/RBRuntime.h>
-#import <RubyCocoa/RBObject.h>
+#import <RubyCocoa/RubyCocoa.h>
 #import <RubyCocoa/RBThreadSwitcher.h>
-#import <RubyCocoa/ocdata_conv.h>
 
 #define OSX_MODULE_NAME "OSX"
 
@@ -134,6 +132,11 @@ void Init_osx_objc()
 			    osx_mf_ruby_thread_switcher_start, -1);
   rb_define_module_function(mOSX, "ruby_thread_switcher_stop",
 			    osx_mf_ruby_thread_switcher_stop, 0);
+
+  rb_define_const(mOSX, "RUBYCOCOA_VERSION", 
+		  rb_obj_freeze(rb_str_new2(RUBYCOCOA_VERSION)));
+  rb_define_const(mOSX, "RUBYCOCOA_RELEASE_DATE", 
+		  rb_obj_freeze(rb_str_new2(RUBYCOCOA_RELEASE_DATE)));
 
   init_cocoa(mOSX);
 }

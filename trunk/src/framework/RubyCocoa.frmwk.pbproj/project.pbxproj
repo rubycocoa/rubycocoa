@@ -132,6 +132,20 @@
 			settings = {
 			};
 		};
+		E86E8A5C0204C79003A81C6F = {
+			isa = PBXFileReference;
+			path = Version.h;
+			refType = 4;
+		};
+		E86E8A5D0204C79003A81C6F = {
+			fileRef = E86E8A5C0204C79003A81C6F;
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					Public,
+				);
+			};
+		};
 		E8760F97019BA86503A81C66 = {
 			isa = PBXFileReference;
 			path = ocdata_conv.m;
@@ -296,6 +310,7 @@
 				E81117F601AFB88C03A81C66,
 				E811180101AFCC5E03A81C66,
 				E8560A1901EBCDF90339E1D7,
+				E86E8A5D0204C79003A81C6F,
 			);
 			isa = PBXHeadersBuildPhase;
 			name = Headers;
@@ -355,6 +370,7 @@
 				E80B397F01A21B6103A81C66,
 				E8560A1701EBCDF90339E1D7,
 				E8560A1801EBCDF90339E1D7,
+				E86E8A5C0204C79003A81C6F,
 			);
 			isa = PBXGroup;
 			name = source;

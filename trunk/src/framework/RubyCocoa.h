@@ -13,4 +13,4 @@
 #import <RubyCocoa/RBRuntime.h>
 #import <RubyCocoa/RBObject.h>
 #import <RubyCocoa/ocdata_conv.h>
-
+#import <RubyCocoa/Version.h>
