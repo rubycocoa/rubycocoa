@@ -12,10 +12,9 @@ intern_h = "#{Config::CONFIG['archdir']}/intern.h"
   $stderr.puts "create #{File.expand_path(dst_fname)} ..."
   File.open(dst_fname, 'w') do |dstfile|
     IO.foreach(src_path) do |line|
-      line = line.gsub( /\bID\b/, 'RB_ID' )
-      line = line.gsub( /\bT_DATA\b/, 'RB_T_DATA' )
-      line = line.gsub( /\bintern.h\b/, "#{new_filename_prefix}intern.h" )
-      dstfile.puts line
+      line.gsub!( /\b(ID|T_DATA)\b/, 'RB_\1' )
+      line.gsub!( /\bintern\.h\b/, "#{new_filename_prefix}intern.h" )
+      dstfile.puts( line )
     end
   end
 end
