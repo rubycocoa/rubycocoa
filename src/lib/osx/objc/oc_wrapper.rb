@@ -22,6 +22,10 @@ module OSX
       ret
     end
 
+    def ocnil?
+      self.__ocid__ == 0
+    end
+
     def to_a
       if self.ocm_send(:isKindOfClass_, OSX::NSArray) != 0 then
 	ary = Array.new
