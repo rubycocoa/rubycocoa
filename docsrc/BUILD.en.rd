@@ -120,7 +120,8 @@ required, specify option at the time of a config phase.
   $ cd {source}/tests
   $ DYLD_FRAMEWORK_PATH={source}/framework/build ruby -I../lib testall.rb
 
-Test::Unit (testunit-0.1.5) is required for unit test.
+Test::Unit is required for unit test.
+This process is optional.
 
 
 == Installation of RubyCocoa

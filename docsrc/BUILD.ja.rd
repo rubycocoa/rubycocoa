@@ -118,7 +118,7 @@ libruby.aのみをインストールします。
   $ cd {ソース}/tests
   $ DYLD_FRAMEWORK_PATH={ソース}/framework/build ruby -I../lib testall.rb
 
-単体テストにはTest::Unit(testunit-0.1.5)が必要です。
+単体テストにはTest::Unitが必要です。このプロセスは省略可能です。
 
 
 == RubyCocoaのインストール
