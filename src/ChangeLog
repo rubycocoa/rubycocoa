@@ -1,3 +1,9 @@
+2003-01-16  FUJIMOTO Hisakuni  <hisa@fobj.com>
+
+	* sample, template: rb_main_init() in every rb_main.rb - wrap an
+	argument of 'require' in 'File.basename'. This fixes loading a
+	library twice as the other library.
+
 2003-01-15  FUJIMOTO Hisakuni  <hisa@fobj.com>
 
 	* framework/src/ruby/osx/objc/oc_attachments.rb:
