@@ -631,11 +631,13 @@ class Installer
   end
 
   def buildcommand
-    if test(?x, '/usr/bin/xcodebuild') then
+    cmd = if test(?x, '/usr/bin/xcodebuild') then
       'xcodebuild'
     else
       'pbxbuild'
     end
+    builddir = File.join(curr_srcdir, 'build')
+    cmd + " OBJROOT=#{builddir} SYMROOT=#{builddir}"
   end 
 
   #
