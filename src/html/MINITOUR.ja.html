@@ -34,11 +34,11 @@ end</pre>
 nobj = OSX::NSObject.alloc.init
 p nobj           # =&gt; #&lt;OCObject:0x53d1a class='NSObject' id=3C6BB0&gt;</pre>
 <p>RubyCocoaでは、Objective-Cオブジェクトはすべて(クラス自身も含めて)
-Ruby のクラスOSX::OCObjectのインスタンスオブジェクトになります。
-OSX::OCObject インスタンスはObjective-Cオブジェクトを包んだRubyオブジェ
-クトということです。</p>
+RubyのOSX::OCObjectクラスもしくはその派生クラスのインスタンスオブジェ
+クトになります。OSX::OCObject インスタンスはObjective-Cオブジェクトを
+包んだRubyオブジェクトということです。</p>
 <h2><a name="label:4" id="label:4">すべてはRubyのオブジェクト</a></h2><!-- RDLabel: "すべてはRubyのオブジェクト" -->
-<pre>p OSX::NSString.kind_of?(Class) # =&gt; false
+<pre>p OSX::NSString.is_a?(Class)    # =&gt; false
 p OSX::NSString.type            # =&gt; OSX::OCObject
 p OSX::NSString.string.type     # =&gt; OSX::OCObject</pre>
 <p>例えばクラスNSStringのRubyCocoaでの表現はOSX::NSStringになります。こ
@@ -51,7 +51,7 @@ Objective-Cオブジェクトのオーナーシップを持ちます。オーナーシップはオ
 ブジェクトがGCに掃除されるときに自動的になくなりますので気にする必要は
 ありません。</p>
 <pre>OSX::NSString.alloc.initWithString "Hoge"
-OSX::NSString.alloc.stringWithString "Hoge"</pre>
+OSX::NSString.stringWithString "Hoge"</pre>
 <p>上記２行は、Objective-Cではオーナーシップを発生させるかさせないかとい
 う違いがありますが、RubyCocoa ではたいして違いがありません。release、
 autorelease、retainなどのメソッドは基本的に呼ぶ必要はありませんし、

@@ -32,11 +32,11 @@ output of as an execution result in description.</p>
 <pre>p OSX::NSObject  # =&gt; #&lt;OCObject:0x82f22 class='NSObject' id=80819B0C&gt;
 nobj = OSX::NSObject.alloc.init
 p nobj           # =&gt; #&lt;OCObject:0x53d1a class='NSObject' id=3C6BB0&gt;</pre>
-<p>In RubyCocoa, all Objective-C Object (even Class itself) is instance
-of the OSX::OCObject. An instance of The OSX::OCObject is a Ruby
-object wrapped Objective-C object.</p>
+<p>In RubyCocoa, all Objective-C Object even Class itself is instance of
+the class OSX::OCObject or its derived class. An instance of The
+OSX::OCObject is a Ruby object wrapped Objective-C object.</p>
 <h2><a name="label:4" id="label:4">Everything is Ruby objects</a></h2><!-- RDLabel: "Everything is Ruby objects" -->
-<pre>p OSX::NSString.kind_of?(Class) # =&gt; false
+<pre>p OSX::NSString.is_a?(Class)    # =&gt; false
 p OSX::NSString.type            # =&gt; OSX::OCObject
 p OSX::NSString.string.type     # =&gt; OSX::OCObject</pre>
 <p>For example, RubyCocoa representation of Class "NSString" is
@@ -48,7 +48,7 @@ Cocoa/Objective-C. An instance of OSX::OCObject has ownership for
 wrapped Objective-C object always. When the instance is died by GC,
 ownership is remove automatic. So you don't worry memory management.</p>
 <pre>OSX::NSString.alloc.initWithString "Hoge"
-OSX::NSString.alloc.stringWithString "Hoge"</pre>
+OSX::NSString.stringWithString "Hoge"</pre>
 <p>This 2 line is almost same meaning in RubyCocoa. You don't need to
 call methods release、autorelease、retain, and don't need to make
 NSAutoreleasePool.</p>
