@@ -48,6 +48,8 @@ to it.
 
 It moves to the sauce directory of Ruby 1.7, and builds and installs
 as follows. Please change an option if needed.
+((- RubyCocoa.framework cannot be linked without specify the
+'-fno-common' option for CFLAGS. -))
 
   $ CFLAGS='-g -O2 -fno-common' ./configure
   $ make
@@ -88,6 +90,8 @@ is contained in RubyCocoa to Ruby 1.6.7.
 
 Ruby 1.6.7 is built so that the environment of the Mac OS X attachment
 Ruby may be suited.
+((- RubyCocoa.framework cannot be linked without specify the
+'-fno-common' option for CFLAGS. -))
 
   $ rbhost=`ruby -r rbconfig -e "print Config::CONFIG['host']"`
   $ CFLAGS='-g -O2 -fno-common' ./configure --prefix=/usr --host=$rbhost
