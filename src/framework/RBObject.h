@@ -29,8 +29,6 @@
 - initWithMasterObject: master;
 - initWithClass: (Class)occlass;
 - initWithClass: (Class)occlass masterObject: master;
-- initWithClass: (Class)occlass withArg: (VALUE)arg masterObject: master;
 - initWithRubyClass: (VALUE)rbclass;
 - initWithRubyClass: (VALUE)rbclass masterObject: master;
-- initWithRubyClass: (VALUE)rbclass withArg: (VALUE)arg masterObject: master;
 @end
