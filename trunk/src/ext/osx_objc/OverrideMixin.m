@@ -132,9 +132,9 @@ static id handle_ruby_method(id rcv, SEL a_sel, ...)
       void* data = alloca(retlen);
       [inv getReturnValue: data];
       if (retlen == sizeof(char))
-	ret = (id)(*(unsigned char*)data);
+	ret = (id)(unsigned long)(*(unsigned char*)data);
       else if (retlen == sizeof(short))
-	ret = (id)(*(unsigned short*)data);
+	ret = (id)(unsigned long)(*(unsigned short*)data);
       else
 	rb_raise( rb_eRuntimeError,
 		  "handle_ruby_method('%s'): can't handle the return value!",
