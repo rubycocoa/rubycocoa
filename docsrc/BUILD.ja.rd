@@ -99,9 +99,9 @@ Mac OS X付属Rubyの環境に合わせてRuby 1.6.7を構築します。
 
 libruby.aのみをインストールします。
 
-  $ ranlib libruby.a
   $ rubyarchdir=`ruby -r rbconfig -e 'print Config::CONFIG["archdir"]'`
   $ sudo install -m 0644 libruby.a $rubyarchdir
+  $ sudo ranlib $rubyarchdir/libruby.a
 
 
 == RubyCocoaの構築

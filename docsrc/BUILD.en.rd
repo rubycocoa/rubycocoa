@@ -101,9 +101,9 @@ Ruby may be suited.
 
 Install only libruby.a.
 
-  $ ranlib libruby.a
   $ rubyarchdir=`ruby -r rbconfig -e 'print Config::CONFIG["archdir"]'`
   $ sudo install -m 0644 libruby.a $rubyarchdir
+  $ sudo ranlib $rubyarchdir/libruby.a
 
 
 == Build of RubyCocoa
