@@ -17,7 +17,7 @@ module OSX
 
   class OCObject < ObjcID
     include OCObjWrapper
-  end				# class OCObject
+  end
 
   module OCObjWrapper
 
