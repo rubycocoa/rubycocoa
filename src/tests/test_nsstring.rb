@@ -7,16 +7,16 @@ class TestNSString < RUNIT::TestCase
 
   def test_s_alloc
     obj = OSX::NSString.alloc.init
-    assert_equal (true, obj.isKindOfClass? (OSX::NSString))
+    assert_equal( true, obj.isKindOfClass?( OSX::NSString ))
   end
 
   def test_s_stringWithString
-    obj = OSX::NSString.stringWithString (TESTSTR)
+    obj = OSX::NSString.stringWithString(TESTSTR)
     assert_equal(TESTSTR, obj.to_s)
   end
 
   def test_initWithString
-    obj = OSX::NSString.alloc.initWithString (TESTSTR)
+    obj = OSX::NSString.alloc.initWithString(TESTSTR)
     assert_equal(TESTSTR, obj.to_s)
   end
 

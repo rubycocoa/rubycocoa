@@ -15,13 +15,13 @@ class AppController < OSX::NSObject
     :window, :threadBtn
 
   def awakeFromNib
-    @window.setOpaque (false)
-    @myView.set_alpha (@slider.floatValue)
-    @myView.set_color (@colorWell.color)
+    @window.setOpaque(false)
+    @myView.set_alpha(@slider.floatValue)
+    @myView.set_color(@colorWell.color)
   end
 
   def aboutApp (sender)
-    NSApp().orderFrontStandardAboutPanelWithOptions ("Copyright" => "with RubyCocoa #{RUBYCOCOA_VERSION}")
+    NSApp().orderFrontStandardAboutPanelWithOptions("Copyright" => "with RubyCocoa #{RUBYCOCOA_VERSION}")
   end
 
   def colorBtnClicked (sender)
@@ -31,36 +31,36 @@ class AppController < OSX::NSObject
 	    when 2 then NSColor.blueColor
 	    end
     if color then
-      @myView.set_color (color)
-      @colorWell.setColor (color)
+      @myView.set_color(color)
+      @colorWell.setColor(color)
     end
   end
 
   def colorWellChanged (sender)
-    @myView.set_color (sender.color)
+    @myView.set_color(sender.color)
   end
 
   def sliderChanged (sender)
-    @myView.set_alpha (sender.floatValue)
+    @myView.set_alpha(sender.floatValue)
   end
 
   def threadStart (sender)
     alpha_saved = @myView.alpha
     Thread.start do
-      @slider.setEnabled (false)
-      @threadBtn.setEnabled (false)
+      @slider.setEnabled(false)
+      @threadBtn.setEnabled(false)
       100.times do |i|
 	alpha = alpha_saved + (i.to_f / 100.0)
 	alpha = alpha - 1.0 if alpha > 1.0
-	@myView.set_alpha (alpha)
-	@slider.setFloatValue (alpha)
+	@myView.set_alpha(alpha)
+	@slider.setFloatValue(alpha)
 	sleep 0.02
       end
-      @slider.setEnabled (true)
-      @threadBtn.setEnabled (true)
+      @slider.setEnabled(true)
+      @threadBtn.setEnabled(true)
     end
-    @myView.set_alpha (alpha_saved)
-    @slider.setFloatValue (alpha_saved)
+    @myView.set_alpha(alpha_saved)
+    @slider.setFloatValue(alpha_saved)
   end
 
 end

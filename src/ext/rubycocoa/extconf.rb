@@ -2,7 +2,7 @@ require 'mkmf'
 
 def command(cmd)
   $stderr.puts "execute '#{cmd}' ..."
-  raise (RuntimeError, cmd) unless system(cmd)
+  raise(RuntimeError, cmd) unless system(cmd)
   $stderr.puts "execute '#{cmd}' done"
 end
 

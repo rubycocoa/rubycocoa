@@ -15,26 +15,26 @@ class MyView <  OSX::NSView
   ns_overrides 'initWithFrame:', 'drawRect:'
 
   def initWithFrame (frame)
-    super_initWithFrame (frame)
+    super_initWithFrame(frame)
     @alpha = 0.5
-    @color = NSColor.blueColor.colorWithAlphaComponent (@alpha)
+    @color = NSColor.blueColor.colorWithAlphaComponent(@alpha)
     return self
   end
 
   def drawRect (rect)
     @color.set
-    NSRectFill (rect)
+    NSRectFill(rect)
   end
 
   def set_color (color)
-    @color = color.colorWithAlphaComponent (@alpha)
-    setNeedsDisplay (true)
+    @color = color.colorWithAlphaComponent(@alpha)
+    setNeedsDisplay(true)
   end
 
   def set_alpha (alpha)
     @alpha = alpha
-    @color = @color.colorWithAlphaComponent (@alpha)
-    setNeedsDisplay (true)
+    @color = @color.colorWithAlphaComponent(@alpha)
+    setNeedsDisplay(true)
   end
 
 end

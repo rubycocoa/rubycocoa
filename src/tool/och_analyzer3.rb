@@ -176,7 +176,7 @@ class OCHeaderAnalyzer
   def OCHeaderAnalyzer.do_cpp(path)
     f_on = false
     `#{CPP} #{CPPFLAGS} #{path}`.map {|s|
-      s.sub (/\/\/.*$/, "")
+      s.sub( /\/\/.*$/, "" )
     }.select { |s|
       next if /^\s*$/ =~ s
       m = %r{^#\s*\d+\s+".*/(\w+\.h)"}.match(s)
@@ -194,12 +194,12 @@ class OCHeaderAnalyzer
       @type = type
       @name = name
       @orig = orig
-      @type.gsub! /\[[^\]]*\]/, '*'
+      @type.gsub!( /\[[^\]]*\]/, '*' )
       t = type.gsub(/\b(__)?const\b/,'').strip
-      t.gsub! /<[^>]*>/, ''
-      t.gsub! /\bconst\b/, ''
+      t.gsub!( /<[^>]*>/, '' )
+      t.gsub!( /\bconst\b/, '' )
       t.strip!
-      t = "int" if enum_types.include? (t)
+      t = "int" if enum_types.include?(t)
       @octype = OCHeaderAnalyzer.octype_of(t)
     end
 

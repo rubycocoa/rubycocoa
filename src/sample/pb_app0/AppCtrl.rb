@@ -16,8 +16,8 @@ class AppCtrl < OSX::NSObject
 
   def convert (sender = nil)
     val = @monthField.intValue * @dayField.intValue
-    @mulField.setIntValue (val)
-    @monthField.selectText (self)
+    @mulField.setIntValue(val)
+    @monthField.selectText(self)
   end
 
   def windowShouldClose (sender = nil)

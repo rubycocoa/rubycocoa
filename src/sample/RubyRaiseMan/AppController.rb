@@ -14,22 +14,22 @@ class AppController < OSX::NSObject
   OSX.ns_autorelease_pool do
     defaultValues = NSMutableDictionary.dictionary
     defaultValues.extend RCDictionaryAttachment
-    colorAsData = NSArchiver.archivedDataWithRootObject (NSColor.yellowColor)
+    colorAsData = NSArchiver.archivedDataWithRootObject(NSColor.yellowColor)
     defaultValues[PreferenceController::BNRTableBgColorKey] = colorAsData
     defaultValues[PreferenceController::BNREmptyDocKey] = true
-    NSUserDefaults.standardUserDefaults.registerDefaults (defaultValues)
+    NSUserDefaults.standardUserDefaults.registerDefaults(defaultValues)
   end
 
   def showPreferencePanel (sender)
     if @preferenceController.nil? then
       @preferenceController = PreferenceController.alloc.init
     end
-    @preferenceController.showWindow (self)
+    @preferenceController.showWindow(self)
   end
 
   def applicationShouldOpenUntitledFile (sender)
     NSUserDefaults.standardUserDefaults.
-      boolForKey (PreferenceController::BNREmptyDocKey)
+      boolForKey(PreferenceController::BNREmptyDocKey)
   end
 
   def applicationDidBecomeActive (ntfy)

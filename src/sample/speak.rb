@@ -5,16 +5,16 @@ class AppleScript
   include OSX
 
   def initialize (src, raise_err_p = true)
-    @script = NSAppleScript.alloc.initWithSource (src)
+    @script = NSAppleScript.alloc.initWithSource(src)
     @errinfo = OCObject.new
-    @script.compileAndReturnError? (@errinfo)
-    @script = nil if handle_error (@errinfo, raise_err_p)
+    @script.compileAndReturnError?(@errinfo)
+    @script = nil if handle_error(@errinfo, raise_err_p)
   end
 
   def execute (raise_err_p = false)
     @errinfo = OCObject.new
-    result = @script.executeAndReturnError (@errinfo)
-    handle_error (@errinfo, raise_err_p)
+    result = @script.executeAndReturnError(@errinfo)
+    handle_error(@errinfo, raise_err_p)
     return result
   end
 
@@ -34,7 +34,7 @@ class AppleScript
     if raise_err_p then
       raise "AppleScriptError: #{errmsg_of errinfo}"
     else
-      $stderr.puts (errmsg_of errinfo)
+      $stderr.puts(errmsg_of errinfo)
     end
     return true
   end
@@ -47,7 +47,7 @@ end
 
 if __FILE__ == $0 then
   ARGF.each do |str|
-    str.gsub! (/"/, '\"')
+    str.gsub!(/"/, '\"')
     src = %(say "#{str}")
     AppleScript.new(src).execute
   end

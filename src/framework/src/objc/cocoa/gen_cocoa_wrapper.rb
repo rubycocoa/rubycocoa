@@ -129,7 +129,7 @@ def gen_c_func_var_sets(finfo)
     ret.concat "&ns_a#{index}, \"#{finfo.name}\", pool, #{index});\n"
   end
   if finfo.argc == -1 then
-    ret.concat (VA_VAR_SETS.sub /%%func_name%%/, finfo.name)
+    ret.concat( VA_VAR_SETS.sub( /%%func_name%%/, finfo.name ))
   end
   ret
 end
@@ -138,11 +138,11 @@ def gen_c_func_func_call(finfo)
   fargs = ((0...finfo.args.size).map{|i| "ns_a#{i}"}.join(', '))
   if finfo.argc == -1 then
     s = VA_FUNC_CALL.dup
-    s.gsub! /%%fargs%%/, fargs
+    s.gsub!( /%%fargs%%/, fargs )
     if finfo.octype == :_C_VOID then
-      s.gsub! /%%fname%%/, "#{finfo.name}"
+      s.gsub!( /%%fname%%/, "#{finfo.name}" )
     else
-      s.gsub! /%%fname%%/, "ns_result = #{finfo.name}"
+      s.gsub!( /%%fname%%/, "ns_result = #{finfo.name}" )
     end
   else
     if finfo.octype == :_C_VOID then
@@ -192,22 +192,22 @@ FUNC_BODY_TMPL_DEFINE
 def gen_c_func_body(info)
   return gen_c_func_notimpl if info.octype == :UNKNOWN
   tmpl = FUNC_BODY_TMPL.dup
-  tmpl.sub! /%%func_name%%/, info.name
+  tmpl.sub!( /%%func_name%%/, info.name )
   if info.octype == :_C_VOID then
-    tmpl.sub! /%%ns_result_defs%%/, ''
+    tmpl.sub!( /%%ns_result_defs%%/, '' )
   else
-    tmpl.sub! /%%ns_result_defs%%/, "  #{info.type} ns_result;\n"
+    tmpl.sub!( /%%ns_result_defs%%/, "  #{info.type} ns_result;\n" )
   end
-  tmpl.sub! /%%var_defs%%/, gen_c_func_var_defs(info)
+  tmpl.sub!( /%%var_defs%%/, gen_c_func_var_defs(info) )
   unless s = gen_c_func_var_sets(info) then
     return gen_c_func_notimpl
   end
-  tmpl.sub! /%%var_set%%/,  s
-  tmpl.sub! /%%func_call%%/,  gen_c_func_func_call(info)
+  tmpl.sub!( /%%var_set%%/,  s )
+  tmpl.sub!( /%%func_call%%/,  gen_c_func_func_call(info) )
   unless s = gen_c_func_conv_call(info.octype, info.name) then
     return gen_c_func_notimpl
   end
-  tmpl.sub! /%%conv_call%%/, s
+  tmpl.sub!( /%%conv_call%%/, s )
   tmpl
 end
 

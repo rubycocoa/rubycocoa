@@ -8,16 +8,16 @@ class DotView < OSX::NSView
   def awakeFromNib
     @color = OSX::NSColor.redColor
     @radius = 10.0
-    @center = OSX::NSPoint.new (bounds.size.width / 2,
-				bounds.size.height / 2)
-    @colorWell.setColor (@color)
-    @sizeSlider.setFloatValue (@radius)
+    @center = OSX::NSPoint.new(bounds.size.width / 2,
+			       bounds.size.height / 2)
+    @colorWell.setColor(@color)
+    @sizeSlider.setFloatValue(@radius)
   end
 
   def drawRect (rect)
     OSX::NSColor.whiteColor.set
-    OSX::NSRectFill (bounds)
-    dot_rect = OSX::NSRect.new (@center.x - @radius, @center.y - @radius,
+    OSX::NSRectFill(bounds)
+    dot_rect = OSX::NSRect.new(@center.x - @radius, @center.y - @radius,
 			       2 * @radius, 2 * @radius)
     @color.set
     OSX::NSBezierPath.bezierPathWithOvalInRect(dot_rect).fill
@@ -28,7 +28,7 @@ class DotView < OSX::NSView
   end
 
   def mouseUp (event)
-    @center = convertPoint (event.locationInWindow, :fromView, nil)
+    @center = convertPoint(event.locationInWindow, :fromView, nil)
     setNeedsDisplay true
   end
 

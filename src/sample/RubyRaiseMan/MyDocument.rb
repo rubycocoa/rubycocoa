@@ -25,7 +25,7 @@ class MyDocument < OSX::NSDocument
   end
 
   def dealloc
-	NSNotificationCenter.defaultCenter.removeObserver (self)
+	NSNotificationCenter.defaultCenter.removeObserver(self)
 	super_dealloc
   end
 
@@ -36,15 +36,15 @@ class MyDocument < OSX::NSDocument
 	  peapleToRemove.push @employees[index.to_i]
 	end
 
-    choice = OSX.NSRunAlertPanel NSLocalizedString ("Delete"),
-	  NSLocalizedString ("SureDelete"),
-	  NSLocalizedString ("Yes"),
-	  NSLocalizedString ("No"),
+    choice = OSX.NSRunAlertPanel NSLocalizedString("Delete"),
+	  NSLocalizedString("SureDelete"),
+	  NSLocalizedString("Yes"),
+	  NSLocalizedString("No"),
 	  nil, peapleToRemove.size
 
     if choice == NSAlertDefaultReturn then
-	  peapleToRemove.each {|i| @employees.delete (i) }
-	  updateChangeCount (NSChangeDone)
+	  peapleToRemove.each {|i| @employees.delete(i) }
+	  updateChangeCount(NSChangeDone)
 	  update_ui
 	end
   end
@@ -68,29 +68,29 @@ class MyDocument < OSX::NSDocument
   def tableView_setObjectValue_forTableColumn_row (tblView, obj, col, row)
     identifier = col.identifier
     person = @employees[row]
-    if obj.isKindOf? (NSDecimalNumber) then
+    if obj.isKindOf?(NSDecimalNumber) then
       obj = obj.to_f
     else
       obj = obj.to_s
     end
-    person.send ("#{identifier}=".intern, obj)
-    updateChangeCount (NSChangeDone)
+    person.send("#{identifier}=".intern, obj)
+    updateChangeCount(NSChangeDone)
   end
 
 # delegate
   def tableViewSelectionDidChange (aNotification)
-    @deleteButton.setEnabled (@employees.size > 0 && @tableView.selectedRow != -1)
+    @deleteButton.setEnabled(@employees.size > 0 && @tableView.selectedRow != -1)
   end
 
   def create_new_employee
-    @employees.push (Person.new)
-    updateChangeCount (NSChangeDone)
+    @employees.push(Person.new)
+    updateChangeCount(NSChangeDone)
     @currentIndex = @employees.size - 1
   end
 
   def update_ui
     @tableView.reloadData if @tableView
-    @deleteButton.setEnabled (@employees.size > 0 && @tableView.selectedRow != -1) if @deleteButton
+    @deleteButton.setEnabled(@employees.size > 0 && @tableView.selectedRow != -1) if @deleteButton
   end
 
   ns_overrides 'windowNibName', 'windowControllerDidLoadNib:',
@@ -101,33 +101,33 @@ class MyDocument < OSX::NSDocument
   end
     
   def windowControllerDidLoadNib (aController)
-    super_windowControllerDidLoadNib (aController)
+    super_windowControllerDidLoadNib(aController)
 
     defaults = NSUserDefaults.standardUserDefaults
     defaults.extend RCDictionaryAttachment
     colorAsData = defaults[PreferenceController::BNRTableBgColorKey]
-    @tableView.setBackgroundColor (NSUnarchiver.unarchiveObjectWithData (colorAsData))
+    @tableView.setBackgroundColor NSUnarchiver.unarchiveObjectWithData(colorAsData)
 
     update_ui
   end
 
   def dataRepresentationOfType (type)
-    @tableView.deselectAll (nil)
+    @tableView.deselectAll(nil)
     dumped_data = Marshal.dump @employees
-    return NSArchiver.archivedDataWithRootObject (dumped_data)
+    return NSArchiver.archivedDataWithRootObject(dumped_data)
   end
     
   def loadDataRepresentation_ofType (data, type)
-    dumped_data = NSUnarchiver.unarchiveObjectWithData (data)
-    @employees = Marshal.load (dumped_data.to_s)
-    updateChangeCount (NSChangeCleared)
+    dumped_data = NSUnarchiver.unarchiveObjectWithData(data)
+    @employees = Marshal.load(dumped_data.to_s)
+    updateChangeCount(NSChangeCleared)
     update_ui
     return true
   end
 
   def handleColorChange (ntfy)
-	@tableView.setBackgroundColor (ntfy.object)
-	update_ui
+    @tableView.setBackgroundColor(ntfy.object)
+    update_ui
   end
 
 end

@@ -21,26 +21,26 @@ class MyInspector < OSX::NSObject
     button = Array.new(2)
 
     @panel = OSX::NSPanel.alloc.
-      initWithContentRect (OSX::NSRect.new(300, 300, PanelWidth, PanelHeight),
-			   :styleMask, (OSX::NSTitledWindowMask | 
-					OSX::NSClosableWindowMask | 
-					OSX::NSResizableWindowMask),
-			   :backing, OSX::NSBackingStoreBuffered,
-			   :defer, true)
+      initWithContentRect(OSX::NSRect.new(300, 300, PanelWidth, PanelHeight),
+			  :styleMask, (OSX::NSTitledWindowMask | 
+				       OSX::NSClosableWindowMask | 
+				       OSX::NSResizableWindowMask),
+			  :backing, OSX::NSBackingStoreBuffered,
+			  :defer, true)
     @panel.setReleasedWhenClosed false
-    @panel.setMinSize (OSX::NSSize.new(PanelWidth, PanelHeight))
+    @panel.setMinSize(OSX::NSSize.new(PanelWidth, PanelHeight))
     @panel.setTitle "Inspector"
-    @panel.setDelegate (self)
+    @panel.setDelegate(self)
     @isClosed = true
 
     2.times do |i|
       button[i] = OSX::NSButton.alloc.
-	initWithFrame(OSX::NSRect.new (Margin+(Margin+BtnWidth)*i,
-				       Margin, BtnWidth, BtnHeight))
+	initWithFrame(OSX::NSRect.new(Margin+(Margin+BtnWidth)*i,
+				      Margin, BtnWidth, BtnHeight))
       @panel.contentView.addSubview button[i]
       button[i].setAutoresizesSubviews true
-      button[i].setAutoresizingMask (OSX::NSViewMaxXMargin | OSX::NSViewMaxYMargin)
-      button[i].setTarget (self)
+      button[i].setAutoresizingMask(OSX::NSViewMaxXMargin | OSX::NSViewMaxYMargin)
+      button[i].setTarget(self)
     end
     button[0].setTitle "Shrink"
     button[0].setAction "shrink:"
@@ -56,24 +56,24 @@ class MyInspector < OSX::NSObject
     @text.setBezeled true
     @panel.contentView.addSubview @text
     @text.setAutoresizesSubviews true
-    @text.setAutoresizingMask (OSX::NSViewWidthSizable | OSX::NSViewHeightSizable)
+    @text.setAutoresizingMask(OSX::NSViewWidthSizable | OSX::NSViewHeightSizable)
   end
 
   # def initialize
   def init
     panelSetting
     center = OSX::NSNotificationCenter.defaultCenter
-    center.addObserver (self, :selector, "showMain:",
-			:name, OSX.NSWindowDidBecomeMainNotification,
-			:object, nil)
-    center.addObserver (self, :selector, "windowClosed:",
-			:name, OSX.NSWindowWillCloseNotification,
-			:object, nil)
+    center.addObserver(self, :selector, "showMain:",
+		       :name, OSX.NSWindowDidBecomeMainNotification,
+		       :object, nil)
+    center.addObserver(self, :selector, "windowClosed:",
+		       :name, OSX.NSWindowWillCloseNotification,
+		       :object, nil)
     self
   end
 
   def dealloc
-    OSX::NSNotificationCenter.defaultCenter.removeObserver (self)
+    OSX::NSNotificationCenter.defaultCenter.removeObserver(self)
     # [panel release];
     # [super dealloc];
   end
@@ -85,7 +85,7 @@ class MyInspector < OSX::NSObject
 
   def showInfo (obj)
     if obj and obj.isKindOfClass? OSX::NSWindow then
-      @text.setStringValue (obj.delegate.desc)
+      @text.setStringValue(obj.delegate.desc)
     else
       @text.setStringValue ""
     end
@@ -104,7 +104,7 @@ class MyInspector < OSX::NSObject
     obj = OSX.NSApp.mainWindow
     if obj then
       obj.delegate.shrink nil
-      showInfo (obj)
+      showInfo(obj)
     end
   end
 
@@ -112,14 +112,14 @@ class MyInspector < OSX::NSObject
     obj = OSX.NSApp.mainWindow
     if obj then
       OSX::NSNotificationCenter.defaultCenter.
-	postNotificationName (ShrinkAllNotification, :object, self)
-      showInfo (obj)
+	postNotificationName(ShrinkAllNotification, :object, self)
+      showInfo(obj)
     end
   end
 
   def windowDidBecomeKey (aNotification)
     @isClosed = false
-    showInfo (OSX.NSApp.mainWindow)
+    showInfo(OSX.NSApp.mainWindow)
   end
 
   def windowShouldClose (sender)

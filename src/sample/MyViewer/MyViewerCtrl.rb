@@ -11,17 +11,17 @@ class MyViewerCtrl < OSX::NSObject
 		       :action, "submenuAction:",
 		       :keyEquivalent, "")
     submenu = OSX::NSMenu.alloc.initWithTitle "File"
-    menu.setSubmenu (submenu, :forItem, item)
+    menu.setSubmenu(submenu, :forItem, item)
     item = submenu.
-      addItemWithTitle ("Open File...",
-			:action, "openFile:",
-			:keyEquivalent, "o")
-    item.setTarget (self)
+      addItemWithTitle("Open File...",
+		       :action, "openFile:",
+		       :keyEquivalent, "o")
+    item.setTarget(self)
     item = submenu.
-      addItemWithTitle ("Inspector...",
-			:action, "activateInspector:",
-			:keyEquivalent, "i")
-    item.setTarget (self)
+      addItemWithTitle("Inspector...",
+		       :action, "activateInspector:",
+		       :keyEquivalent, "i")
+    item.setTarget(self)
     menu
   end
 
@@ -33,16 +33,16 @@ class MyViewerCtrl < OSX::NSObject
     aFile = nil
     result = nil
 
-    oPanel.setAllowsMultipleSelection (true)
+    oPanel.setAllowsMultipleSelection(true)
     result = oPanel.
-      runModalForDirectory (OSX.NSHomeDirectory,
-			    :file, nil,
-			    :types, fileTypes)
+      runModalForDirectory(OSX.NSHomeDirectory,
+			   :file, nil,
+			   :types, fileTypes)
     return if result != OSX::NSOKButton
     filesToOpen = oPanel.filenames
     enumerator = filesToOpen.objectEnumerator
     while (aFile = enumerator.nextObject) != nil do
-      WinCtrl.alloc.initWithPath (aFile)
+      WinCtrl.alloc.initWithPath(aFile)
     end
   end
 
@@ -53,18 +53,18 @@ class MyViewerCtrl < OSX::NSObject
   def showTitleMessage (title, message)
     panel = OSX::NSGetAlertPanel(title, "%@", nil, nil, nil, message)
     panel.center
-    panel.makeKeyAndOrderFront (panel)
-    OSX::NSThread.sleepUntilDate (OSX::NSDate.dateWithTimeIntervalSinceNow(3))
+    panel.makeKeyAndOrderFront(panel)
+    OSX::NSThread.sleepUntilDate(OSX::NSDate.dateWithTimeIntervalSinceNow(3))
     panel.close
-    OSX::NSReleaseAlertPanel (panel)
+    OSX::NSReleaseAlertPanel(panel)
   end
 
   def applicationDidFinishLaunching (aNotification)
-    showTitleMessage ("Start", "Hello, World")
+    showTitleMessage("Start", "Hello, World")
   end
 
   def applicationWillTerminate (aNotification)
-    showTitleMessage ("Exit", "Sayonara, Baby.")
+    showTitleMessage("Exit", "Sayonara, Baby.")
   end
 
 end

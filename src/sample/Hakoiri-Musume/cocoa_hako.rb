@@ -19,14 +19,14 @@ class CocoaHako < OSX::NSObject
     @h = 5
     @unit_size = unit_size
     app_init
-    @house = house_new (@unit_size * @w, @unit_size * @h)
+    @house = house_new(@unit_size * @w, @unit_size * @h)
     @chips = {}
     return self
   end
 
   def add_chip(chip)
-    widget = ChipLabel.alloc.initWithChip (chip)
-    @house.addSubview (widget)
+    widget = ChipLabel.alloc.initWithChip(chip)
+    @house.addSubview(widget)
     @chips[chip] = widget
     widget.bind_b1_motion {|x, y| do_motion(x, y, chip)}
   end
@@ -60,14 +60,14 @@ class CocoaHako < OSX::NSObject
     widget = @chips[chip]
     widget.setFrame [@unit_size * x, @unit_size * (@h-y-chip.h),
       @unit_size * chip.w, @unit_size * chip.h]
-    widget.superview.setNeedsDisplay (true)
-    widget.setNeedsDisplay (true)
+    widget.superview.setNeedsDisplay(true)
+    widget.setNeedsDisplay(true)
   end
 
   # Cocoa GUI
 
   def app_init
-    OSX.ruby_thread_switcher_start (0.001, 0.01)
+    OSX.ruby_thread_switcher_start(0.001, 0.01)
     app = OSX::NSApplication.sharedApplication
     app.setMainMenu(OSX::NSMenu.alloc.init)
   end
@@ -78,15 +78,15 @@ class CocoaHako < OSX::NSObject
 	:styleMask, OSX::NSTitledWindowMask + OSX::NSClosableWindowMask,
 	:backing, OSX::NSBackingStoreBuffered,
 	:defer, true)
-    @window.setReleasedWhenClosed (false)
-    @window.setTitleWithRepresentedFilename (WIN_TITLE)
+    @window.setReleasedWhenClosed(false)
+    @window.setTitleWithRepresentedFilename(WIN_TITLE)
     house = view_new
-    @window.setContentView (house)
-    @window.makeKeyAndOrderFront (self)
+    @window.setContentView(house)
+    @window.makeKeyAndOrderFront(self)
     @window.orderFrontRegardless
-    @window.setDelegate (self)	# for handling windowShouldClose
-    @window.setOpaque (false)
-    @window.setHasShadow (true)
+    @window.setDelegate(self)	# for handling windowShouldClose
+    @window.setOpaque(false)
+    @window.setHasShadow(true)
     return house
   end
 
@@ -94,8 +94,8 @@ class CocoaHako < OSX::NSObject
     BackView.alloc.init
   end
   
-  def windowShouldClose (sender)
-    OSX.NSApp.stop (nil)
+  def windowShouldClose(sender)
+    OSX.NSApp.stop(nil)
     false
   end
 
@@ -108,15 +108,15 @@ class ChipLabel < OSX::NSTextField
   def initWithChip (chip)
     initWithFrame [0, 0, chip.w, chip.h]
     name = chip.name.to_s.tosjis
-    setStringValue (name)
-    setEditable (false)
-    setBackgroundColor (ChipLabel.color_for(name))
+    setStringValue(name)
+    setEditable(false)
+    setBackgroundColor(ChipLabel.color_for(name))
     self
   end
 
   def mouseDragged (evt)
-    point = convertPoint (evt.locationInWindow, :fromView, nil)
-    @b1_motion.call (point.x, point.y)
+    point = convertPoint(evt.locationInWindow, :fromView, nil)
+    @b1_motion.call(point.x, point.y)
   end
 
   def bind_b1_motion (&proc)
@@ -130,7 +130,7 @@ class ChipLabel < OSX::NSTextField
     end
     unless color = @col_dic[str] then
       color = OSX::NSColor.
-	colorWithCalibratedHue (@hue, :saturation, 0.5, :brightness, 1.0, :alpha, 1.0)
+	colorWithCalibratedHue(@hue, :saturation, 0.5, :brightness, 1.0, :alpha, 1.0)
       @hue += 0.1
       @col_dic[str] = color
     end

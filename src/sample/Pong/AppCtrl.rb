@@ -43,11 +43,11 @@ class AppCtrl < OSX::NSObject
   end
 
   def redraw
-    @playingView.setNeedsDisplay (true)
+    @playingView.setNeedsDisplay(true)
   end
 
   def mouseDragged (evt)
-    point = @playingView.convertPoint (evt.locationInWindow, :fromView, nil)
+    point = @playingView.convertPoint(evt.locationInWindow, :fromView, nil)
     @paddle.hpos = point.x
     redraw
   end
@@ -77,15 +77,15 @@ class AppCtrl < OSX::NSObject
       [ rand(200), rand(200), 5.0, angle_new, OSX::NSColor.redColor ],
       [ rand(200), rand(200), 4.0, 180 - angle_new, OSX::NSColor.blueColor ]
     ].each do |h,v,s,a,c|
-      ball = Ball.new (c)
+      ball = Ball.new(c)
       ball.hpos = h
       ball.vpos = v
-      moving = BallMoving.new (ball, paddle)
+      moving = BallMoving.new(ball, paddle)
       moving.speed = s
       moving.angle = a
       moving.area = @playingView
-      @playingView.balls.push (ball)
-      @movings.push (moving)
+      @playingView.balls.push(ball)
+      @movings.push(moving)
     end
   end
 
