@@ -11,8 +11,6 @@
 #    [ obj method: arg1 withOtherArgs: arg2 ] 
 #				obj.method_withOtherArgs( arg1, arg2 )
 
-$stderr.print "just wait..." ; $stderr.flush
-
 require 'osx/cocoa'
 include OSX
 
@@ -37,16 +35,17 @@ end
 
 
 if $0 == __FILE__ then
+  $stderr.print "just wait..." ; $stderr.flush
   app = NSApplication.sharedApplication()
 
   app.setDelegate(AppDelegate.alloc.init)
 
-  frame = [[200.0, 300.0], [250.0, 100.0]]
+  frame = [200.0, 300.0, 250.0, 100.0]
   win = NSWindow.alloc.initWithContentRect_styleMask_backing_defer(frame, 15, 2, 0)
   win.setTitle 'HelloWorld'
   win.setLevel(3)			# floating window
 
-  hel = NSButton.alloc.initWithFrame [[10.0, 10.0], [80.0, 80.0]]
+  hel = NSButton.alloc.initWithFrame [10.0, 10.0, 80.0, 80.0]
   win.contentView.addSubview(hel)
   hel.setBezelStyle(4)
   hel.setTitle( 'Hello!' )
@@ -56,15 +55,15 @@ if $0 == __FILE__ then
 #  beep = NSSound.alloc.initWithContentsOfFile_byReference( '/System/Library/Sounds/Tink.Aiff', 1 )
 #  hel.setSound( beep )
 
-  bye = NSButton.alloc.initWithFrame [[100.0, 10.0], [80.0, 80.0]]
+  bye = NSButton.alloc.initWithFrame [100.0, 10.0, 80.0, 80.0]
   win.contentView.addSubview(bye)
   bye.setBezelStyle( 4 )
   bye.setTarget(app)
   bye.setAction('stop:')
-  bye.setEnabled( 1 )
+  bye.setEnabled( true )
   bye.setTitle( 'Goodbye!' )
 
-  adios = NSSound.alloc.initWithContentsOfFile_byReference(  '/System/Library/Sounds/Basso.aiff', 1 )
+  adios = NSSound.alloc.initWithContentsOfFile_byReference(  '/System/Library/Sounds/Basso.aiff', true )
   bye.setSound( adios )
   
   win.display()
