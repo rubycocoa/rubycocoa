@@ -201,7 +201,7 @@ config'のオプションがあります。
 
 を実行すると Segmentation fault が発生します。この問題を解決するため、
 rubycocoa-0.4.0.tgz を展開したあと、次のように
-((<パッチ|URL:http://www.imasy.or.jp/%7ehisa/mac/rubyosx/files/ruco0.4.0-fw-post-config.patch>))
+((<パッチ|URL:http://rubycocoa.sourceforge.net/files/ruco0.4.0-fw-post-config.patch>))
 をあててください。
 
   $ cd {rubycocoa-0.4.0}

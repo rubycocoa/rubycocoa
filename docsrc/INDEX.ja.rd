@@ -116,4 +116,4 @@ Shirai Kaoru, Tetsuhumi Takaishi, Tosh, Matthew Fero
 ((<こちら|URL:mailto:contact.rubycocoa@fobj.com>)) 
 までご連絡ください。
 
-藤本尚邦, <hisa@imasy.or.jp>, $Date$
+藤本尚邦, <hisa at fobj.com>, $Date$

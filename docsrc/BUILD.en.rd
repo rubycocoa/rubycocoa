@@ -201,7 +201,7 @@ When building RubyCocoa 0.4.0 against ((*Ruby 1.6.8*)), you may see a
   ruby install.rb config
 
 For fix this, apply
-((<a patch|URL:http://www.imasy.or.jp/%7ehisa/mac/rubyosx/files/ruco0.4.0-fw-post-config.patch>))
+((<a patch|URL:http://rubycocoa.sourceforge.net/files/ruco0.4.0-fw-post-config.patch>))
 as follows after extracting rubycocoa-0.4.0.tgz.
 
   $ cd {rubycocoa-0.4.0}
