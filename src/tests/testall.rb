@@ -1,5 +1,7 @@
 require 'test/unit'
 
 `ls tc_*.rb`.each do |testcase|
-  require( testcase.chop )
+  testcase.chop!
+  $stderr.puts testcase
+  require( testcase )
 end
