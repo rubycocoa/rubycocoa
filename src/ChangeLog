@@ -1,9 +1,11 @@
 2001-11-29  FUJIMOTO Hisakuni  <hisa@fobj.com>
 
-	* framework: OverrideMixin.m, RBObject.h, RBObject.m: hide
-	RBObject#rbobjXXX methods as private method. With reading
-	'Learning Cocoa Ch.9'.
+	* framework: RBObject.h, RBObject.m: hide RBObject#rbobjXXX
+	  methods as private method. With reading 'Learning Cocoa Ch.9'.
 
+	* framework: OverrideMixin.m: replace sending method selector for
+	slave RBObject. Old was 'rbobjXXX' type selecotr.
+	
 	* framework: RBRuntime.m: change method list allocation size
 	(magical number)
 
