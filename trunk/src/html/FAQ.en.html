@@ -32,15 +32,22 @@ allocation is appeared on Console: </p>
 This could be a double free(), or free() called with the middle of
 an allocated block; Try setting environment variable MallocHelp to
 see tools to help debug</pre>
-<h4><a name="label:5" id="label:5">A: Solved in release 0.1.2.</a></h4><!-- RDLabel: "A: Solved in release 0.1.2." -->
+<h4><a name="label:5" id="label:5">A: It comes out cause unknown and is still unsolved. (2002-01-08)</a></h4><!-- RDLabel: "A: It comes out cause unknown and is still unsolved. (2002-01-08)" -->
+<p>Although I thought that this problem was solved by 0.1.2, it still
+occurs. If there is information which is likely to be consulted, such
+as "surely occurring by this pattern", please tell about.</p>
 <h3><a name="label:6" id="label:6">Q: Thread nothing seems to work properly.</a></h3><!-- RDLabel: "Q: Thread nothing seems to work properly." -->
-<p>I've been playing with threads in a RubyCocoa application, but
-nothing seems to work properly.</p>
-<h4><a name="label:7" id="label:7">A: Currently (2001-12-12), this problem is not solved.</a></h4><!-- RDLabel: "A: Currently (2001-12-12), this problem is not solved." -->
-<p>I want to solve this problem. However, unfortunately it can seem to be
-settled immediately, and there is not it because I am not going to so
-know a lot. Please solve somebody this problem. (thanks Lucsky-san for
-A detailed report)</p>
+<h4><a name="label:7" id="label:7">A: Do you use release 0.2.1 or later ?</a></h4><!-- RDLabel: "A: Do you use release 0.2.1 or later ?" -->
+<p>In release 0.2.1 or later, it's implemented the facility of using Ruby
+thread in a RubyCocoa application. For using Ruby thread in a
+RubyCocoa application of the older release, Please correct
+"ns_app_main" of "rb_main.rb" as follows:</p>
+<pre>def ns_app_main
+  OSX.ruby_thread_switcher_start (0.05)  # switching interval sec
+  app = OSX::NSApplication.sharedApplication
+  OSX::NSBundle.loadNibNamed_owner (BUNDLE_NAME.to_s, app)
+  OSX.NSApp.run
+end</pre>
 <h3><a name="label:8" id="label:8">Q: launch SimpleApp1, which results in an "SimpleApp1 closed unexpectedly."</a></h3><!-- RDLabel: "Q: launch SimpleApp1, which results in an "SimpleApp1 closed unexpectedly."" -->
 <p>I am having problems getting RubyCocoa working. I built and installed
 ruby-1.6.5 and RubyCocoa-0.1.2 with no problems.</p>

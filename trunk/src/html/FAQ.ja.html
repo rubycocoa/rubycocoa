@@ -33,12 +33,21 @@ _init_NSScriptStandardSuiteCommands</pre>
 This could be a double free(), or free() called with the middle of
 an allocated block; Try setting environment variable MallocHelp to
 see tools to help debug</pre>
-<h4><a name="label:5" id="label:5">A: リリース 0.1.2で解決しました。</a></h4><!-- RDLabel: "A: リリース 0.1.2で解決しました。" -->
+<h4><a name="label:5" id="label:5">A: 原因不明でまだ未解決です (2002-01-08)</a></h4><!-- RDLabel: "A: 原因不明でまだ未解決です (2002-01-08)" -->
+<p>リリース 0.1.2で解決したつもりでしたが、まだ発生します。「このパターン
+で必ず発生する」など何か参考になりそうな情報があれば知らせてください。</p>
 <h3><a name="label:6" id="label:6">Q: スレッドを使うとうまく動かないようです。</a></h3><!-- RDLabel: "Q: スレッドを使うとうまく動かないようです。" -->
-<h4><a name="label:7" id="label:7">A: そのとおりです。現在(2001-12-12)解決できていません。</a></h4><!-- RDLabel: "A: そのとおりです。現在(2001-12-12)解決できていません。" -->
-<p>この問題を解決/改善したいと思っていますが、あまり詳しくないところなの
-ですぐには解決できそうにありません。解決、改善案を提案してもらえると助
-かります。(Lucskyさん詳しい報告どうも)</p>
+<h4><a name="label:7" id="label:7">A: 0.2.1 以降を使っていますか?</a></h4><!-- RDLabel: "A: 0.2.1 以降を使っていますか?" -->
+<p>リリース 0.2.1 から RubyCocoa アプリケーションで Ruby スレッドを動かす
+ための仕組みを実装しています。0.2.1 以前用に作った RubyCocoa アプリで 
+Rubyスレッドを使いたい場合には、rb_main.rb の ns_app_main を以下のよう
+に修正してください。</p>
+<pre>def ns_app_main
+  OSX.ruby_thread_switcher_start (0.05)  # switching interval sec
+  app = OSX::NSApplication.sharedApplication
+  OSX::NSBundle.loadNibNamed_owner (BUNDLE_NAME.to_s, app)
+  OSX.NSApp.run
+end</pre>
 <h3><a name="label:8" id="label:8">Q: 「アプリケーションは予期せぬ動作のため終了」ダイアログが出ます</a></h3><!-- RDLabel: "Q: 「アプリケーションは予期せぬ動作のため終了」ダイアログが出ます" -->
 <p>fontname.rb や sndplay.rb は動いたのですが、サンプルのRubyCocoaアプリ
 を実行すると「アプリケーションは予期せぬ動作のため終了しました」という

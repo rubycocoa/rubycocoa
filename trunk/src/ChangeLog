@@ -1,7 +1,8 @@
 2002-01-06  FUJIMOTO Hisakuni  <hisa@fobj.com>
 
 	* ext/osx_objc/osx_objc.m, lib/osx/objc/ruby_thread_switcher.rb, framework/RBRuntime.h, framework/RBRuntime.m, framework/rb_main.rb.tmpl:
-	implement RubyThreadSwithcerStart and RubyThreadSwithcerStop
+	implement RubyThreadSwithcerStart and
+	RubyThreadSwithcerStop. (thanks Takaishi-san)
 
 2002-01-05  Chris Thomas <cjack@cjack.com>
 
