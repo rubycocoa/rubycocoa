@@ -1,3 +1,9 @@
+2002-12-22  FUJIMOTO Hisakuni  <hisa@fobj.com>
+
+	* framework/src/ruby/osx/objc/oc_import.rb:
+	In Ruby 1.8 (after 2002.9.27), 'NSObject#ns_overrides' may be called
+	earlier than 'Class#inherited'.
+	
 2002-12-20  FUJIMOTO Hisakuni  <hisa@fobj.com>
 
 	* metaconfig, pre-config.rb, VERSION, framework/src/objc/Version.h, framework/src/objc/Version.h.in:
