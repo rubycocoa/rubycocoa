@@ -65,6 +65,13 @@
 
   RIGS - ((<GNUstep|URL:http://www.gnustep.org/>))のためのRubyインターフェース
 
+: ((<Ruby/.NET Bridge|URL:http://www.saltypickle.com/RubyDotNet>))
+
+  マイクロソフトの.NETとRubyのブリッジ。
+
+  The Ruby/.NET Bridge lets you use .NET and Ruby objects together in
+  your programs. You can access .NET objects from Ruby and vice-versa.
+
 
 == Ruby関連
 
