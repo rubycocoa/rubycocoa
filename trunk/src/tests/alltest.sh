@@ -14,4 +14,4 @@ else
     exit 1
 fi
 
-$RUBY -I$RELPATH/lib -I$RELPATH/ext $RUNTEST $TARGET
+$RUBY -I$RELPATH/lib -I$RELPATH/ext/osx_objc $RUNTEST $TARGET
