@@ -97,7 +97,8 @@ static id handle_ruby_method(id rcv, SEL a_sel, ...)
   const char* type;
   int offset;
   va_list args;
-
+  unsigned retlen;
+  
   // prepare
   msig = [rcv methodSignatureForSelector: a_sel];
   inv = [NSInvocation invocationWithMethodSignature: msig];
@@ -118,12 +119,20 @@ static id handle_ruby_method(id rcv, SEL a_sel, ...)
   [inv invoke];
 
   // result
-  if ([msig methodReturnLength] > 0) {
-    unsigned len = [msig methodReturnLength];
-    if (len < sizeof(ret)) {
-      void* data = alloca(len);
+  retlen = [msig methodReturnLength];
+  if ( retlen > 0) {
+    if (retlen < sizeof(ret)) {
+      void* data = alloca(retlen);
       [inv getReturnValue: data];
       ret = (id)data;
+    }
+    else if (retlen == sizeof(ret)) {
+      [inv getReturnValue: &ret];
+    }
+    else {
+      // should we raise an error here, because we can't handle the
+      // return value properly?
+      NSLog(@"handle_ruby_method(): can't handle the return value!");
     }
   }
 
