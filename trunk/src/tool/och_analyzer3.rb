@@ -117,7 +117,7 @@ class OCHeaderAnalyzer
       VarInfo.new('...', '...', str, enum_types)
     else
       str += "dummy" if str[-1].chr == '*'
-      re = /^([^()]*)\b(\w+)\b(\[\])*$/
+      re = /^([^()]*)\b(\w+)\b\s*(\[[^\]]*\])*$/
       m = re.match(str.strip)
       if m then
 	m = m.to_a[1..-1].compact.map{|i|i.strip}
@@ -157,6 +157,8 @@ class OCHeaderAnalyzer
     when 'NSPoint' then :_PRIV_C_NSPOINT
     when 'NSSize' then :_PRIV_C_NSSIZE
     when 'NSRange' then :_PRIV_C_NSRANGE
+    when 'NSWindowDepth' then :_C_INT
+    when 'NSComparisonResult' then :_C_INT
     when /^unsigned\s+char$/ then :_C_UCHR
     when 'char' then '_C_CHR'
     when /^unsigned\s+short(\s+int)?$/ then :_C_USHT
@@ -195,7 +197,11 @@ class OCHeaderAnalyzer
       @type = type
       @name = name
       @orig = orig
+      @type.gsub! /\[[^\]]*\]/, '*'
       t = type.gsub(/\b(__)?const\b/,'').strip
+      t.gsub! /<[^>]*>/, ''
+      t.gsub! /\bconst\b/, ''
+      t.strip!
       t = "int" if enum_types.include? (t)
       @octype = OCHeaderAnalyzer.octype_of(t)
     end
