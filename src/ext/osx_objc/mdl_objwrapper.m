@@ -10,171 +10,40 @@
  *
  **/
 
-#import "osx_ocobject.h"
+#import "mdl_objwrapper.h"
+#import "cls_objcid.h"
+
 #import <LibRuby/cocoa_ruby.h>
 #import <RubyCocoa/ocdata_conv.h> // RubyCocoa.framework
-#import <RubyCocoa/RBObject.h>	// RubyCocoa.framework
-
-#import <Foundation/NSObject.h>
-#import <Foundation/NSArchiver.h>
-#import <Foundation/NSClassDescription.h>
-#import <Foundation/NSConnection.h>
-#import <Foundation/NSPortCoder.h>
-#import <Foundation/NSScriptClassDescription.h>
-#import <Foundation/NSURL.h>
-#import <Foundation/NSAutoreleasePool.h>
-#import <Foundation/NSString.h>
-#import <Foundation/NSMethodSignature.h>
-#import <Foundation/NSInvocation.h>
-#import <Foundation/NSException.h>
-
+#import <Foundation/Foundation.h>
 #import <objc/objc-class.h>
 #import <string.h>
 #import <stdlib.h>
+#import <stdarg.h>
 
-VALUE kOCObject = Qnil;
+static VALUE _mObjWrapper = Qnil;
 
-#define DLOG0(f)          if (ruby_debug == Qtrue) debug_log((f))
-#define DLOG1(f,a1)       if (ruby_debug == Qtrue) debug_log((f),(a1))
-#define DLOG2(f,a1,a2)    if (ruby_debug == Qtrue) debug_log((f),(a1),(a2))
-#define DLOG3(f,a1,a2,a3) if (ruby_debug == Qtrue) debug_log((f),(a1),(a2),(a3))
+#define DLOG0(f)          if (ruby_debug == Qtrue) _debug_log((f))
+#define DLOG1(f,a1)       if (ruby_debug == Qtrue) _debug_log((f),(a1))
+#define DLOG2(f,a1,a2)    if (ruby_debug == Qtrue) _debug_log((f),(a1),(a2))
+#define DLOG3(f,a1,a2,a3) if (ruby_debug == Qtrue) _debug_log((f),(a1),(a2),(a3))
 
 static void
-ocobj_data_free(struct _ocobj_data* dp)
+_debug_log(const char* fmt,...)
 {
-  id pool = [[NSAutoreleasePool alloc] init];
-  if (dp != nil) {
-    if (dp->obj != nil) {
-      int i;
-      for (i = 0; i < dp->ownership; i++) {
-	[dp->obj release];
-      }
-    }
-    free(dp);
+  if (ruby_debug == Qtrue) {
+    id pool = [[NSAutoreleasePool alloc] init];
+    NSString* nsfmt = [NSString stringWithFormat: @"OBJWRP:%s", fmt];
+    va_list args;
+    va_start(args, fmt);
+    NSLogv(nsfmt, args);
+    va_end(args);
+    [pool release];
   }
-  [pool release];
-}
-
-static struct _ocobj_data*
-ocobj_data_new(id oc_obj)
-{
-  struct _ocobj_data* dp;
-  dp = malloc(sizeof(struct _ocobj_data));
-  dp->obj = oc_obj;
-  dp->ownership = 0;
-  return dp;
-}
-
-
-static VALUE create_rbobj_with_ocid_with_class(id oc_obj, VALUE klass)
-{
-  VALUE new_obj;
-  struct _ocobj_data* dp;
-
-  if (oc_obj == nil) return Qnil;
-
-  dp = ocobj_data_new(oc_obj);
-
-  NS_DURING
-    [oc_obj retain];
-    dp->ownership += 1;
-
-  NS_HANDLER
-    NSString* name = [localException name];
-    DLOG2("%@:%@", name, localException);
-    if (![name isEqualToString: NSInvalidArgumentException]) {
-      [localException raise];
-    }
-
-  NS_ENDHANDLER
-  
-  new_obj = Data_Wrap_Struct(klass, 0, ocobj_data_free, dp);
-  return new_obj;
-}
-
-VALUE create_rbobj_with_ocid(id oc_obj)
-{
-  return create_rbobj_with_ocid_with_class(oc_obj, kOCObject);
-}
-
-static VALUE ocobj_s_new_with_ocid(int argc, VALUE* argv, VALUE klass)
-{
-  VALUE obj;
-  if (argc < 1) rb_raise(rb_eArgError, "wrong # of arguments");
-  obj = create_rbobj_with_ocid_with_class((id)NUM2ULONG(argv[0]), klass);
-  argc--; argv++;
-  rb_obj_call_init(obj, argc, argv);
-  return obj;
-}
-
-static Class rbstr_to_nsclass(VALUE rbstr)
-{
-  id pool = [[NSAutoreleasePool alloc] init];
-  Class result;
-  rbstr = rb_obj_as_string(rbstr);
-  result = NSClassFromString([NSString stringWithCString: STR2CSTR(rbstr)]);
-  [pool release];
-  return result;
-}
-
-static Class find_class_of(VALUE klass)
-{
-  Class result = nil;
-  id pool = [[NSAutoreleasePool alloc] init];
-  const char* classname = rb_class2name(klass);
-  result = NSClassFromString([NSString stringWithCString: classname]);
-  [pool release];
-  return result;
-} 
-
-static VALUE new_with_occlass(VALUE klass, Class nsclass)
-{
-  VALUE obj;
-  id nsobj;
-
-  if (nsclass == nil)
-    rb_raise(rb_eArgError, "class '%s' is nothing.",  
-	     STR2CSTR(rb_obj_as_string(klass)));
-
-  nsobj = [nsclass alloc];	// retainCount +1
-  obj = create_rbobj_with_ocid_with_class(nsobj, klass); // retainCount +1
-  [nsobj release]; // retainCount -1
-  OCOBJ_DATA_PTR(obj)->ownership -= 1; // remove one ownership
-
-  if (nsobj->isa == [RBObject class]) {
-    nsobj = [nsobj initWithRubyObject: obj];
-  }
-  else {
-    nsobj = [nsobj init];
-  }
-
-  return obj;
-}
-
-static VALUE ocobj_s_new_with_classname(int argc, VALUE* argv, VALUE klass)
-{
-  VALUE obj;
-  Class nsclass;
-  id nsobj;
-  if (argc < 1) rb_raise(rb_eArgError, "wrong # of arguments");
-  nsclass = rbstr_to_nsclass(argv[0]);
-  obj = new_with_occlass(klass, nsclass);
-  argc--; argv++;
-  rb_obj_call_init(obj, argc, argv);
-  return obj;
-}
-
-static VALUE ocobj_s_new(int argc, VALUE* argv, VALUE klass)
-{
-  VALUE obj;
-
-  obj = new_with_occlass(klass, [RBObject class]);
-  rb_obj_call_init(obj, argc, argv);
-  return obj;
 }
 
 static VALUE
-rb_ocexception_new(NSException* nsexcp)
+rb_ocexception_s_new(NSException* nsexcp)
 {
   VALUE val;
   VALUE mosx;
@@ -182,14 +51,14 @@ rb_ocexception_new(NSException* nsexcp)
   
   mosx = rb_const_get(rb_cObject, rb_intern("OSX"));;
   klass = rb_const_get(mosx, rb_intern("OCException"));
-  val = create_rbobj_with_ocid_with_class(nsexcp, kOCObject);
+  val = ocid_to_rbobj(Qnil, nsexcp);
   return rb_funcall(klass, rb_intern("new"), 1, val);
 }
 
 static BOOL
 ocm_perform(int argc, VALUE* argv, VALUE rcv, VALUE* result)
 {
-  id oc_rcv = OCOBJ_ID_OF(rcv);
+  id oc_rcv = rb_objwrapper_ocid(rcv);
   SEL oc_sel;
   const char* ret_type;
   int num_of_args;
@@ -250,7 +119,7 @@ ocm_perform(int argc, VALUE* argv, VALUE rcv, VALUE* result)
     }
 
   NS_HANDLER
-    excp = rb_ocexception_new(localException);
+    excp = rb_ocexception_s_new(localException);
 
   NS_ENDHANDLER
   if (excp != Qnil) {
@@ -262,7 +131,7 @@ ocm_perform(int argc, VALUE* argv, VALUE rcv, VALUE* result)
   if (oc_result == oc_rcv)
     *result = rcv;
   else
-    *result = create_rbobj_with_ocid(oc_result);
+    *result = ocid_to_rbobj(rcv, oc_result);
 
   [pool release];
   return YES;
@@ -271,7 +140,7 @@ ocm_perform(int argc, VALUE* argv, VALUE rcv, VALUE* result)
 static BOOL
 ocm_invoke(int argc, VALUE* argv, VALUE rcv, VALUE* result)
 {
-  id oc_rcv = OCOBJ_ID_OF(rcv);
+  id oc_rcv = rb_objwrapper_ocid(rcv);
   SEL oc_sel;
   const char* ret_type;
   int num_of_args;
@@ -330,7 +199,7 @@ ocm_invoke(int argc, VALUE* argv, VALUE rcv, VALUE* result)
     [oc_inv invoke];
 
   NS_HANDLER
-    excp = rb_ocexception_new(localException);
+    excp = rb_ocexception_s_new(localException);
 
   NS_ENDHANDLER
   if (excp != Qnil) {
@@ -345,11 +214,11 @@ ocm_invoke(int argc, VALUE* argv, VALUE rcv, VALUE* result)
     if ((octype == _C_ID) || (octype == _C_CLASS)) {
       id rcv_id, data_id;
       [oc_inv getReturnValue: &data_id];
-      rcv_id = OCOBJ_ID_OF(rcv);
+      rcv_id = rb_objwrapper_ocid(rcv);
       if (rcv_id == data_id)
 	*result = rcv;
       else
-	*result = create_rbobj_with_ocid(data_id);
+	*result = ocid_to_rbobj(rcv, data_id);
     }
     else {
       BOOL f_conv_success;
@@ -388,7 +257,7 @@ static BOOL
 ocm_ivar(VALUE rcv, VALUE name, VALUE* result)
 {
   BOOL f_ok = NO;
-  id ocrcv = OCOBJ_ID_OF(rcv);
+  id ocrcv = rb_objwrapper_ocid(rcv);
   id pool = [[NSAutoreleasePool alloc] init];
   id nsname = rbobj_to_nsselstr(name);
   Ivar iv = class_getInstanceVariable([ocrcv class], [nsname cString]);
@@ -399,7 +268,7 @@ ocm_ivar(VALUE rcv, VALUE name, VALUE* result)
     if (octype_object_p(octype)) {
       void* val;
       iv = object_getInstanceVariable(ocrcv, [nsname cString], &val);
-      *result = create_rbobj_with_ocid((id)val);
+      *result = rb_ocobj_s_new((id)val);
       f_ok = YES;
     }
     else {
@@ -431,38 +300,17 @@ ocm_send(int argc, VALUE* argv, VALUE rcv, VALUE* result)
 /*************************************************/
 
 static VALUE
-ocobj_ocid(VALUE rcv)
+wrapper_ocid(VALUE rcv)
 {
-  unsigned long oid = (unsigned long) OCOBJ_ID_OF(rcv);
-  return UINT2NUM(oid);
+  return UINT2NUM((unsigned long) rb_objwrapper_ocid(rcv));
 }
 
 static VALUE
-ocobj_inc_ownership(VALUE rcv)
-{
-  OCOBJ_DATA_PTR(rcv)->ownership += 1;
-  return INT2NUM(OCOBJ_DATA_PTR(rcv)->ownership);
-}
-
-static VALUE
-ocobj_dec_ownership(VALUE rcv)
-{
-  OCOBJ_DATA_PTR(rcv)->ownership -= 1;
-  return INT2NUM(OCOBJ_DATA_PTR(rcv)->ownership);
-}
-
-static VALUE
-ocobj_ownership_cnt(VALUE rcv)
-{
-  return INT2NUM(OCOBJ_DATA_PTR(rcv)->ownership);
-}
-
-static VALUE
-ocobj_inspect(VALUE rcv)
+wrapper_inspect(VALUE rcv)
 {
   VALUE result;
   char s[256];
-  id oc_rcv = OCOBJ_ID_OF(rcv);
+  id oc_rcv = rb_objwrapper_ocid(rcv);
   id pool = [[NSAutoreleasePool alloc] init];
   const char* class_desc = [[[oc_rcv class] description] cString];
   const char* desc = [[oc_rcv description] cString];
@@ -474,10 +322,10 @@ ocobj_inspect(VALUE rcv)
 }
 
 static VALUE
-ocobj_ocm_responds_p(VALUE rcv, VALUE sel)
+wrapper_ocm_responds_p(VALUE rcv, VALUE sel)
 {
   VALUE result = Qfalse;
-  id oc_rcv = OCOBJ_ID_OF(rcv);
+  id oc_rcv = rb_objwrapper_ocid(rcv);
   SEL oc_sel = rbobj_to_nssel(sel);
   if ([oc_rcv respondsToSelector: oc_sel] == NO) {
     if (ivar_for(oc_rcv, oc_sel) != nil)
@@ -487,7 +335,7 @@ ocobj_ocm_responds_p(VALUE rcv, VALUE sel)
 }
 
 static VALUE
-ocobj_ocm_perform(int argc, VALUE* argv, VALUE rcv)
+wrapper_ocm_perform(int argc, VALUE* argv, VALUE rcv)
 {
   VALUE result;
   id pool = [[NSAutoreleasePool alloc] init];
@@ -506,7 +354,7 @@ ocobj_ocm_perform(int argc, VALUE* argv, VALUE rcv)
 }
 
 static VALUE
-ocobj_ocm_invoke(int argc, VALUE* argv, VALUE rcv)
+wrapper_ocm_invoke(int argc, VALUE* argv, VALUE rcv)
 {
   VALUE result;
   id pool = [[NSAutoreleasePool alloc] init];
@@ -525,7 +373,7 @@ ocobj_ocm_invoke(int argc, VALUE* argv, VALUE rcv)
 }
 
 static VALUE
-ocobj_ocm_ivar(VALUE rcv, VALUE name)
+wrapper_ocm_ivar(VALUE rcv, VALUE name)
 {
   VALUE result;
   id pool = [[NSAutoreleasePool alloc] init];
@@ -538,7 +386,7 @@ ocobj_ocm_ivar(VALUE rcv, VALUE name)
 }
 
 static VALUE
-ocobj_ocm_send(int argc, VALUE* argv, VALUE rcv)
+wrapper_ocm_send(int argc, VALUE* argv, VALUE rcv)
 {
   VALUE result;
   id pool = [[NSAutoreleasePool alloc] init];
@@ -558,28 +406,39 @@ ocobj_ocm_send(int argc, VALUE* argv, VALUE rcv)
 
 /*****************************************/
 
-VALUE
-init_class_OCObject(VALUE outer)
+id
+rb_objwrapper_ocid(VALUE rcv)
 {
-  kOCObject = rb_define_class_under(outer, "OCObject", rb_cObject);
+  id ocid;
+  if (rb_obj_is_kind_of(rcv, rb_objcid()) == Qtrue) {
+    ocid = rb_objcid_ocid(rcv);
+  }
+  else {
+    VALUE objid = rb_ivar_get(rcv, rb_intern("__objcid__"));
+    ocid = rb_objcid_ocid(objid);
+  }
+  return ocid;
+}
 
-  rb_define_singleton_method(kOCObject, "new_with_ocid", ocobj_s_new_with_ocid, -1);
-  rb_define_singleton_method(kOCObject, "new_with_classname", ocobj_s_new_with_classname, -1);
-  rb_define_singleton_method(kOCObject, "new", ocobj_s_new, -1);
+VALUE
+rb_objwrapper()
+{
+  return _mObjWrapper;
+}
 
-  rb_define_method(kOCObject, "__ocid__", ocobj_ocid, 0);
-  rb_define_method(kOCObject, "__inspect__", ocobj_inspect, 0);
-  rb_define_method(kOCObject, "__inc_ownership__", ocobj_inc_ownership, 0);
-  rb_define_method(kOCObject, "__dec_ownership__", ocobj_dec_ownership, 0);
-  rb_define_method(kOCObject, "__ownership_cnt__", ocobj_ownership_cnt, 0);
+VALUE
+init_mdl_OCObjWrapper(VALUE outer)
+{
+  _mObjWrapper = rb_define_module_under(outer, "OCObjWrapper");
 
-  rb_define_method(kOCObject, "inspect", ocobj_inspect, 0);
+  rb_define_method(_mObjWrapper, "__ocid__", wrapper_ocid, 0);
+  rb_define_method(_mObjWrapper, "__inspect__", wrapper_inspect, 0);
 
-  rb_define_method(kOCObject, "ocm_responds?", ocobj_ocm_responds_p, 1);
-  rb_define_method(kOCObject, "ocm_perform", ocobj_ocm_perform, -1);
-  rb_define_method(kOCObject, "ocm_invoke", ocobj_ocm_invoke, -1);
-  rb_define_method(kOCObject, "ocm_ivar", ocobj_ocm_ivar, 1);
-  rb_define_method(kOCObject, "ocm_send", ocobj_ocm_send, -1);
+  rb_define_method(_mObjWrapper, "ocm_responds?", wrapper_ocm_responds_p, 1);
+  rb_define_method(_mObjWrapper, "ocm_perform", wrapper_ocm_perform, -1);
+  rb_define_method(_mObjWrapper, "ocm_invoke", wrapper_ocm_invoke, -1);
+  rb_define_method(_mObjWrapper, "ocm_ivar", wrapper_ocm_ivar, 1);
+  rb_define_method(_mObjWrapper, "ocm_send", wrapper_ocm_send, -1);
 
-  return kOCObject;
+  return _mObjWrapper;
 }

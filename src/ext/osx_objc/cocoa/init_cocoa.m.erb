@@ -27,7 +27,7 @@ nsresult_to_rbresult(int octype, const void* nsresult, id pool)
 {
   VALUE rbresult;
   if (octype == _C_ID) {
-    rbresult = create_rbobj_with_ocid(*(id*)nsresult);
+    rbresult = rb_ocobj_s_new(*(id*)nsresult);
   }
   else {
     if (!ocdata_to_rbobj(octype, nsresult, &rbresult)) {

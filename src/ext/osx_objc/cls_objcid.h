@@ -10,10 +10,14 @@
  *
  **/
 
-#ifndef _RB_OSXOBJC_UTILS_H_
-#define _RB_OSXOBJC_UTILS_H_
+#ifndef _CLS_OBJCID_H_
+#define _CLS_OBJCID_H_
 
-// debug message
-void debug_log(const char* fmt,...);
+#import <objc/objc.h>
+#import <LibRuby/cocoa_ruby.h>
 
-#endif /* _RB_OSXOBJC_UTILS_H_ */
+VALUE rb_objcid();
+VALUE rb_objcid_s_new(id ocid);
+id    rb_objcid_ocid(VALUE rcv);
+
+#endif

@@ -11,7 +11,6 @@
  **/
 
 #import <LibRuby/cocoa_ruby.h>
-#import "osx_ocobject.h"
 #import <Foundation/Foundation.h>
 #import <RubyCocoa/RBRuntime.h>	// RubyCocoa.framework
 #import <RubyCocoa/RBObject.h>	// RubyCocoa.framework
@@ -81,13 +80,14 @@ osx_mf_objc_derived_class_method_add(VALUE mdl, VALUE class_name, VALUE method_n
 }
 
 
-void Init_osxobjc()
+void Init_osx_objc()
 {
-  VALUE mOSX, cOCObject;
+  VALUE mOSX;
   extern void init_cocoa(VALUE);
 
   mOSX = init_module_OSX();
-  init_class_OCObject(mOSX);
+  init_cls_ObjcID(mOSX);
+  init_mdl_OCObjWrapper(mOSX);
 
   rb_define_module_function(mOSX, "objc_proxy_class_new", 
 			    osx_mf_objc_proxy_class_new, 1);
