@@ -16,7 +16,7 @@
 #import <Foundation/NSString.h>
 #import <Foundation/NSBundle.h>
 
-#import "RubyController.h"
+#import "RubyObject.h"
 
 #define RUBY_MAIN_NAME "rb_main.rb"
 
@@ -50,7 +50,7 @@ static char* osxobjc_resource_path()
   NSString* str;
   char* result;
   id pool = [[NSAutoreleasePool alloc] init];
-  NSBundle* bundle = [NSBundle bundleForClass: [RubyController class]];
+  NSBundle* bundle = [NSBundle bundleForClass: [RubyObject class]];
   str = [bundle resourcePath];
   result = strdup([str cString]);
   [pool release];

@@ -26,6 +26,27 @@ struct _ocobj_data {
 #define OCOBJ_DATA_PTR(o) ((struct _ocobj_data*)(DATA_PTR(o)))
 #define OCOBJ_ID_OF(o) (OCOBJ_DATA_PTR(o)->obj)
 
+static VALUE rbclass_nsrect()
+{
+  VALUE mOSX = rb_const_get(rb_cObject, rb_intern("OSX"));
+  if (!mOSX) return Qnil;
+  return rb_const_get(mOSX, rb_intern("NSRect"));
+}
+
+static VALUE rbclass_nspoint()
+{
+  VALUE mOSX = rb_const_get(rb_cObject, rb_intern("OSX"));
+  if (!mOSX) return Qnil;
+  return rb_const_get(mOSX, rb_intern("NSPoint"));
+}
+
+static VALUE rbclass_nssize()
+{
+  VALUE mOSX = rb_const_get(rb_cObject, rb_intern("OSX"));
+  if (!mOSX) return Qnil;
+  return rb_const_get(mOSX, rb_intern("NSSize"));
+}
+
 int
 to_octype(const char* octype_str)
 {
@@ -179,27 +200,39 @@ ocdata_to_rbobj(int octype, const void* ocdata,	VALUE* result)
 
   case _PRIV_C_NSRECT: {
     NSRect* vp = (NSRect*)ocdata;
-    rbval = rb_ary_new2(4);
-    rb_ary_push(rbval, rb_float_new((double)vp->origin.x));
-    rb_ary_push(rbval, rb_float_new((double)vp->origin.y));
-    rb_ary_push(rbval, rb_float_new((double)vp->size.width));
-    rb_ary_push(rbval, rb_float_new((double)vp->size.height));
+    VALUE klass = rbclass_nsrect();
+    if (klass != Qnil)
+      rbval = rb_funcall(klass, rb_intern("new"), 4,
+			 rb_float_new((double)vp->origin.x),
+			 rb_float_new((double)vp->origin.y),
+			 rb_float_new((double)vp->size.width),
+			 rb_float_new((double)vp->size.height));
+    else
+      f_success = NO;
     break;
   }
 
   case _PRIV_C_NSPOINT: {
     NSPoint* vp = (NSPoint*)ocdata;
-    rbval = rb_ary_new2(2);
-    rb_ary_push(rbval, rb_float_new((double)vp->x));
-    rb_ary_push(rbval, rb_float_new((double)vp->y));
+    VALUE klass = rbclass_nspoint();
+    if (klass != Qnil)
+      rbval = rb_funcall(klass, rb_intern("new"), 2,
+			 rb_float_new((double)vp->x),
+			 rb_float_new((double)vp->y));
+    else
+      f_success = NO;
     break;
   }
 
   case _PRIV_C_NSSIZE: {
     NSSize* vp = (NSSize*)ocdata;
-    rbval = rb_ary_new2(2);
-    rb_ary_push(rbval, rb_float_new((double)vp->width));
-    rb_ary_push(rbval, rb_float_new((double)vp->height));
+    VALUE klass = rbclass_nssize();
+    if (klass != Qnil)
+      rbval = rb_funcall(klass, rb_intern("new"), 2,
+			 rb_float_new((double)vp->width),
+			 rb_float_new((double)vp->height));
+    else
+      f_success = NO;
     break;
   }
 
@@ -382,7 +415,8 @@ SEL rbobj_to_nssel(VALUE obj)
 
 static BOOL rbobj_to_nspoint(VALUE obj, NSPoint* result)
 {
-  if (TYPE(obj) != T_ARRAY) return NO;
+  if (TYPE(obj) != T_ARRAY)
+    obj = rb_funcall(obj, rb_intern("to_a"), 0);
   if (RARRAY(obj)->len != 2) return NO;
   result->x = (float) RFLOAT(rb_Float(rb_ary_entry(obj, 0)))->value;
   result->y = (float) RFLOAT(rb_Float(rb_ary_entry(obj, 1)))->value;
@@ -391,7 +425,8 @@ static BOOL rbobj_to_nspoint(VALUE obj, NSPoint* result)
 
 static BOOL rbobj_to_nssize(VALUE obj, NSSize* result)
 {
-  if (TYPE(obj) != T_ARRAY) return NO;
+  if (TYPE(obj) != T_ARRAY)
+    obj = rb_funcall(obj, rb_intern("to_a"), 0);
   if (RARRAY(obj)->len != 2) return NO;
   result->width = (float) RFLOAT(rb_Float(rb_ary_entry(obj, 0)))->value;
   result->height = (float) RFLOAT(rb_Float(rb_ary_entry(obj, 1)))->value;
@@ -400,7 +435,8 @@ static BOOL rbobj_to_nssize(VALUE obj, NSSize* result)
 
 static BOOL rbobj_to_nsrect(VALUE obj, NSRect* result)
 {
-  if (TYPE(obj) != T_ARRAY) return NO;
+  if (TYPE(obj) != T_ARRAY)
+    obj = rb_funcall(obj, rb_intern("to_a"), 0);
   if (RARRAY(obj)->len == 2) {
     VALUE rb_orig = rb_ary_entry(obj, 0);
     VALUE rb_size = rb_ary_entry(obj, 1);
