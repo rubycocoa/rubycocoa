@@ -21,5 +21,6 @@
 }
 + (void) start: (double)interval wait: (double) a_wait;
 + (void) start: (double)interval;
++ (void) start;
 + (void) stop;
 @end
