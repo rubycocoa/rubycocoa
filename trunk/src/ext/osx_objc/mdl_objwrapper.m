@@ -112,7 +112,7 @@ ocm_perform(int argc, VALUE* argv, VALUE rcv, VALUE* result)
     }
   }
 
-  DLOG2("    NSObject#performSelector (%@) num_of_args=%d...", oc_sel_str, num_of_args);
+  DLOG3("    %@#performSelector (%@) num_of_args=%d...", oc_rcv, oc_sel_str, num_of_args);
 
   NS_DURING  
     switch (num_of_args) {
