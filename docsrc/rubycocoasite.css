@@ -1,0 +1,103 @@
+/** -*-css-*-
+ *   $Id$
+ *   Copyright (c) 2001 FUJIMOTO Hisakuni <hisa@imasy.or.jp>
+ **/
+
+/* configuration for color of link */
+a { text-decoration: none }
+a:link { color: #0000A0 }
+a:visited { color: #0060F0 }
+a:hover { text-decoration: underline }
+/* a:active { color: pink } */
+
+/* configuration for color */
+body { background: white; color: black; }
+h1 { color: #F02020; }
+h2 { color: #C02020; background-color: #FFF0B0; border-color: #FFE080; }
+h3,h4 { color: #F02020; border-color: #FFE080; }
+pre { border-color: #FFE0E0; background-color:#FFF0F0; }
+dt { color: #C02020 }
+
+.site-title { color: #F02020; background-color: #FFD0A0 }
+.site-menubar { color: #F02020; background-color: #FF9060 }
+.body-contents { background-color: white }
+.body-sidebar  { background-color: #FFF0B0 }
+.body-footer { background-color: #FFA080; }
+
+h2.body-sidebar { color: #FFEEEE; background-color: #F06060; }
+h3.body-sidebar { color: #803030; }
+
+
+/* configuration for size and shape */
+.site-title { 
+  font-family: "comic sans ms", verdana, sans-serif;
+  font-weight: bold;
+  font-size: 200%;
+  text-align: center;
+}
+
+.site-menubar {
+  font-weight: none;
+  font-size: 70%;
+}
+
+body {
+/*   margin-left: 2%; */
+/*   margin-right: 2%; */
+  font-family: verdana, arial, helvetica, Sans-Serif;
+}
+
+h1 {
+  font-family: "comic sans ms", verdana, sans-serif;
+  text-align: right;
+  font-weight: bold;
+  font-size: 150%;
+  margin-right: 1em;
+}
+
+h2, h3, h4, h5, h6 {
+  font-family: verdana, arial, helvetica, Sans-Serif;
+}
+
+h2 {
+  font-size: large;
+  margin-top: 1em;
+  border-style: solid;
+  border-top-width: 0;
+  border-left-width: 0;
+  border-bottom-width: 1;
+  border-right-width: 1;
+}
+
+h3 {
+  /* margin-left: 0.5em; */
+  border-bottom-style: solid;
+  border-bottom-width: 1;
+}
+
+h4 {
+  /* margin-left: 1em; */
+}
+
+pre { 
+  border-style: solid;
+  padding: 1em;
+  margin-left: 4em;
+  margin-right: 4em;
+}
+
+em { font-weight: bold }
+dt { font-weight: bold;  margin: 0em 1em }
+dd { font-size: small; margin: 0em 2em; margin-top: -1em }
+
+.body-sidebar {
+  font-size: small;
+  border-style: none
+}
+
+h2.body-sidebar {
+  text-align: center;
+  font-size: medium;
+  margin: 0em;
+}
+
