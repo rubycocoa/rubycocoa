@@ -12,6 +12,7 @@
 #import <Foundation/Foundation.h>
 #import <ctype.h>
 #import "RBObject.h"
+#import "osx_objc.h"
 #import "ocdata_conv.h"
 #import "DummyProtocolHandler.h"
 

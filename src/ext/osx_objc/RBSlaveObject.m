@@ -14,6 +14,7 @@
 #import "RBObject.h"
 #import "osx_ruby.h"
 #import "ocdata_conv.h"
+#import "osx_objc.h"
 
 static VALUE rbobj_for(VALUE rbclass, id master)
 {
