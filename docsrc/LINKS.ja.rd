@@ -9,7 +9,7 @@
 
 == RubyCocoa関連
 
-: ((<RubyCocoaでアプリを作ろう|URL:http://mwave.sppd.ne.jp/diary/calc_app/calc_app1.html>))
+: ((<RubyCocoaでアプリを作ろう|URL:http://www.mouseup.net/rubycocoa/calc_app1.html>))
 
   RubyCocoaのチュートリアル。簡単な電卓アプリケーションの作成を例題に
   RubyCocoaでのプログラミングについて解説しています。
