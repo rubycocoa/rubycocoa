@@ -1,3 +1,8 @@
+2002-12-18  FUJIMOTO Hisakuni  <hisa@fobj.com>
+
+	* modify ambiguous ruby code to suppress warning by Ruby
+	interpreter.
+
 2002-12-17  FUJIMOTO Hisakuni  <hisa@fobj.com>
 
 	* sample/Hakoiri-Musume/cocoa_hako.rb: bug fix - bring the window
