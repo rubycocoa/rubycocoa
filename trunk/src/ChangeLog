@@ -13,7 +13,7 @@
 	Ruby object.
 
 	* framework/RBRuntime.m: method_list_alloc(), BUG FIX, use
-	END_OF_METHODS_LIST when initialize allocated memory area.
+	END_OF_METHODS_LIST(-1) when initialize allocated memory area.
 
 	* lib/osx/ocobject.rb: add OSX.ns_import in
 	OCStubCreator.ib_loadable.
