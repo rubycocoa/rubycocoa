@@ -78,8 +78,9 @@ module OSX
       args.flatten!
       if args.size == 1 then
 	if args[0].is_a? Range then
-	  @location = args[0].begin
-	  @length = args[0].length
+	  rng = args[0]
+	  @location = rng.first
+	  @length = rng.last - rng.first + (rng.exclude_end? ? 0 : 1)
 	end
       elsif args.size == 2 then
 	@location = args[0].to_i
