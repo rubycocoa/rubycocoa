@@ -111,6 +111,14 @@ osx_mf_ruby_thread_switcher_stop(VALUE mdl)
   return Qnil;
 }
 
+static VALUE
+ns_autorelease_pool(VALUE mdl)
+{
+  id pool = [[NSAutoreleasePool alloc] init];
+  rb_yield(Qnil);
+  [pool release];
+  return Qnil;
+}
 
 void Init_osx_objc()
 {
@@ -132,6 +140,9 @@ void Init_osx_objc()
 			    osx_mf_ruby_thread_switcher_start, -1);
   rb_define_module_function(mOSX, "ruby_thread_switcher_stop",
 			    osx_mf_ruby_thread_switcher_stop, 0);
+
+  rb_define_module_function(mOSX, "ns_autorelease_pool",
+			    ns_autorelease_pool, 0);
 
   rb_define_const(mOSX, "RUBYCOCOA_VERSION", 
 		  rb_obj_freeze(rb_str_new2(RUBYCOCOA_VERSION)));
