@@ -52,7 +52,3 @@ add_config 'rubycocoa-version', 'name',
 add_config 'rubycocoa-release-date', 'name', 
   RubyCocoaConfig::RELEASE_DATE, 'RubyCocoa release date'
 
-ldflags = `/usr/bin/uname -r`.to_f >= 7.0 ? '-framework Foundation' : ''
-add_config 'other-ldflags', 'name',
-  ldflags, 'addtitional linker settings'
-  

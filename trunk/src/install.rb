@@ -627,7 +627,7 @@ class Installer
   end
 
   def setup_dir_framework( relpath )
-    command buildcommand
+    command buildcommand + ' SINGLE_MODULE=NO'
   end
 
   def buildcommand
