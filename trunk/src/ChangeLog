@@ -1,5 +1,7 @@
 2001-11-30  FUJIMOTO Hisakuni  <hisa@fobj.com>
 
+	* release 0.1.1
+	
 	* framework: ocdata_conv.m: modify sel_to_rbobj.
 
 	* framework: RBObject.m: using Method#arity for getting argc of
