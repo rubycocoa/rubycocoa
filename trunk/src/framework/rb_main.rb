@@ -7,13 +7,19 @@
 require 'osx/cocoa'
 require 'rb_controller'
 
+######################
 #### BEGIN CONFIG ####
+######################
 BUNDLE_NAME = :MainMenu
 
 RUBY_CLASSES = [
-  'HogeController'
+  # 'FooController',
+  # 'BarController',
+  # 'HogeController'
 ]
-#### END CONFIG ####
+######################
+##### END CONFIG #####
+######################
 
 def rb_main_init
   RUBY_CLASSES.each {|name| require name }
