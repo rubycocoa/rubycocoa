@@ -730,6 +730,7 @@ class Installer
 
   def clean_dir_framework( rel )
     command 'pbxbuild clean'
+    command 'rm -rf build'
   end
 
   #
