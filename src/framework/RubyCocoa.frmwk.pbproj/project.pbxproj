@@ -52,17 +52,6 @@
 			settings = {
 			};
 		};
-		E84BFC67019A08FF03A81C66 = {
-			isa = PBXFileReference;
-			path = rb_controller.rb;
-			refType = 4;
-		};
-		E84BFC68019A08FF03A81C66 = {
-			fileRef = E84BFC67019A08FF03A81C66;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
 		E8760F97019BA86503A81C66 = {
 			isa = PBXFileReference;
 			path = ocdata_conv.m;
@@ -104,7 +93,6 @@
 		E8A0706001967D5B03A81C66 = {
 			children = (
 				E8A0706B01967E8C03A81C66,
-				E8A0707001967E8C03A81C66,
 				E8A0709501968E4B03A81C66,
 				E8A0707401967E8C03A81C66,
 				E8A0706301967DAA03A81C66,
@@ -217,7 +205,6 @@
 		E8A0706701967DAA03A81C66 = {
 			buildActionMask = 2147483647;
 			files = (
-				E84BFC68019A08FF03A81C66,
 				E82EFCE4019F475103A81C66,
 				E82EFCE6019F478403A81C66,
 			);
@@ -271,15 +258,6 @@
 		E8A0706F01967E8C03A81C66 = {
 			isa = PBXFileReference;
 			path = rb_main.m;
-			refType = 4;
-		};
-		E8A0707001967E8C03A81C66 = {
-			children = (
-				E84BFC67019A08FF03A81C66,
-			);
-			isa = PBXGroup;
-			name = resources;
-			path = "";
 			refType = 4;
 		};
 		E8A0707401967E8C03A81C66 = {

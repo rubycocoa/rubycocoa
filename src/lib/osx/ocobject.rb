@@ -23,6 +23,63 @@ module OSX
     end
   end
 
+  class NSPoint
+    attr_accessor :x, :y
+    def initialize(*args)
+      @x = begin
+	     args[0].to_f
+	   rescue NameError
+	     0.0
+	   end
+      @y = begin
+	     args[1].to_f
+	   rescue NameError
+	     0.0
+	   end
+    end
+    def to_a
+      [ @x, @y ]
+    end
+  end
+
+  class NSSize
+    attr_accessor :width, :height
+    def initialize(*args)
+      @width = begin
+	     args[0].to_f
+	   rescue NameError
+	     0.0
+	   end
+      @height = begin
+	     args[1].to_f
+	   rescue NameError
+	     0.0
+	   end
+    end
+    def to_a
+      [ @width, @height ]
+    end
+  end
+
+  class NSRect
+    attr_accessor :origin, :size
+    def initialize(*args)
+      if args.size == 2 then
+	@origin = NSPoint.new(*(args[0].to_a))
+	@size = NSSize.new(*(args[1].to_a))
+      elsif args.size == 4 then
+	@origin = NSPoint.new(*(args[0,2]))
+	@size = NSSize.new(*(args[2,2]))
+      else
+	@origin = NSPoint.new
+	@size = NSSize.new
+      end
+    end
+    def to_a
+      [ @origin.to_a, @size.to_a ]
+    end
+  end
+
   class OCObject
 
     def to_s
