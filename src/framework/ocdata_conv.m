@@ -431,14 +431,12 @@ static BOOL rbobj_convert_to_nsobj(VALUE obj, id* nsobj)
   case T_ARRAY:
     return rbary_to_nsary(obj, nsobj);
     
-  case T_HASH:
-    return NO;
-
   case T_FIXNUM:
   case T_BIGNUM:
   case T_FLOAT:
     return rbnum_to_nsnum(obj, nsobj);
 
+  case T_HASH:
   case T_OBJECT:
   case T_CLASS:
   case T_MODULE:
@@ -449,7 +447,8 @@ static BOOL rbobj_convert_to_nsobj(VALUE obj, id* nsobj)
   case T_FALSE:
   case RB_T_DATA:
   default:
-    return NO;
+    *nsobj = [[RBObject alloc] initWithRubyObject: obj];
+    return YES;
   }
   return YES;
 }
