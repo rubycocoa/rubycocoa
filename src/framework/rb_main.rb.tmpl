@@ -9,17 +9,22 @@ require 'osx/cocoa'
 ######################
 BUNDLE_NAME = :MainMenu
 
-RUBY_CLASSES = [
-  # 'FooController',
-  # 'BarController',
-  # 'HogeController'
+
+# [ name, objc_super_class_name="RBProxy" ]
+
+NIB_RELATED_CLASSES = [
+  # [ :FooController ],
+  # [ :BarController, :NSView ],
 ]
 ######################
 ##### END CONFIG #####
 ######################
 
 def rb_main_init
-  RUBY_CLASSES.each {|name| require name }
+  NIB_RELATED_CLASSES.each do |*names|
+    require names[0].to_s
+    OSX.create_objc_stub *names
+  end
 end
 
 def ns_app_main
