@@ -12,30 +12,29 @@
 <h1><a name="label:0" id="label:0">Install RubyCocoa</a></h1><!-- RDLabel: "Install RubyCocoa" -->
 <h2><a name="label:1" id="label:1">Install Sequence</a></h2><!-- RDLabel: "Install Sequence" -->
 <ul>
-<li>Install Ruby 1.6.5</li>
-<li>Extract RubyCocoa</li>
-<li>Install LibRuby Framework</li>
-<li>Build and Install RubyCocoa</li>
-<li>Done</li>
-<li>Check Sample</li>
+<li><a href="#label:2">Install Ruby</a></li>
+<li><a href="#label:3">Extract RubyCocoa</a></li>
+<li><a href="#label:4">Install LibRuby Framework</a></li>
+<li><a href="#label:5">Build and Install RubyCocoa</a></li>
+<li><a href="#label:6">Done</a></li>
+<li><!-- Reference, RDLabel "Check Sample" doesn't exist --><em class="label-not-found">Check Sample</em><!-- Reference end --></li>
 </ul>
 <p>You need to use command line shell (by Terminal Application or others)
 for installing.</p>
-<h2><a name="label:2" id="label:2">Install Ruby 1.6.5</a></h2><!-- RDLabel: "Install Ruby 1.6.5" -->
-<p>If you have installed Ruby 1.6.5 with "--enable-shared" option
-already, go to next section. </p>
-<p>Next patch is required for Ruby sources for making Ruby before version
-1.6.5 in MacOS X 10.1.</p>
+<h2><a name="label:2" id="label:2">Install Ruby</a></h2><!-- RDLabel: "Install Ruby" -->
+<p>If you have installed Ruby with "--enable-shared" option already, go
+to next section.</p>
+<p>If you newly install Ruby on MacOS X, use 1.6.6 or later. When
+installing it or earlier, it is necessary to apply a patch to sauce.</p>
+<p>The following is the most typical installation procedure of Ruby
+1.6.6.</p>
 <pre>% cd {anywhere}
-% tar zxf ruby-1.6.5.tar.gz
-% cd ruby-1.6.5
-% patch -p1 &lt; {RubyCocoa srcdir}/misc/ruby-osx10_1.patch</pre>
-<p>And you will be install the Ruby normal way. (I don't know without the
-configure option `--enable-shared')</p>
-<pre>% cd {ruby-1.6.5 srcdir}
+% tar zxf ruby-1.6.6.tar.gz    # extract the tarball
+% cd ruby-1.6.6
 % ./configure --enable-shared  # install to /usr/local
 % make ; make test
 % sudo make install</pre>
+<p>At the time of configure, specify the "--enable-shared" option. </p>
 <h2><a name="label:3" id="label:3">Extract RubyCocoa</a></h2><!-- RDLabel: "Extract RubyCocoa" -->
 <p>extract RubyCocoa sources tarball.</p>
 <pre>% cd {anywhere}
@@ -98,10 +97,10 @@ application:</p>
 <pre>% open build/pb_app1.app</pre>
 <h2><a name="label:8" id="label:8">Development and testing environment </a></h2><!-- RDLabel: "Development and testing environment " -->
 <ul>
-<li>PowerMacintosh G4/400/320MB</li>
+<li>PowerMacintosh G4/400/384MB or iBook G3/600/384MB</li>
 <li>MacOS X 10.1.1 (or 10.1)</li>
 <li>DevTools 10.1</li>
-<li>ruby-1.6.5 (configure --enable-shared)</li>
+<li>ruby-1.6.5 or 1.6.6 (configure --enable-shared)</li>
 </ul>
 <h2><a name="label:9" id="label:9">Have a fun</a></h2><!-- RDLabel: "Have a fun" -->
 <p>Feel free to send comments, bug reports and patches about RubyCocoa.</p>

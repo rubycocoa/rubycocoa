@@ -9,41 +9,41 @@
 <link href="rdtext.css" type="text/css" rel="stylesheet"/>
 </head>
 <body>
-<h1><a name="label:0" id="label:0">RubyCocoaのインストール</a></h1><!-- RDLabel: "RubyCocoaのインストール" -->
+<h1><a name="label:0" id="label:0">RubyCocoa のインストール</a></h1><!-- RDLabel: "RubyCocoa のインストール" -->
 <h2><a name="label:1" id="label:1">インストールのおおまかな手順</a></h2><!-- RDLabel: "インストールのおおまかな手順" -->
 <ul>
-<li>Ruby 1.6.5のインストール</li>
-<li>RubyCocoaの展開</li>
-<li>LibRubyフレームワークのインストール</li>
-<li>RubyCocoaの構築とインストール</li>
-<li>インストール完了</li>
-<li>サンプルの動作確認</li>
+<li><a href="#label:2">Ruby のインストール</a></li>
+<li><a href="#label:3">RubyCocoa の展開</a></li>
+<li><a href="#label:4">LibRuby フレームワークのインストール</a></li>
+<li><a href="#label:5">RubyCocoa の構築とインストール</a></li>
+<li><a href="#label:6">インストール完了</a></li>
+<li><a href="#label:7">サンプルの動作確認</a></li>
 </ul>
 <p>インストールはTerminalアプリケーションなどでシェルからコマンド入力して
 行います。</p>
-<h2><a name="label:2" id="label:2">Ruby 1.6.5のインストール</a></h2><!-- RDLabel: "Ruby 1.6.5のインストール" -->
-<p>すでにRuby-1.6.5を"--enable-shared"オプション付きでインストールしてい
-る場合は読み飛ばしてください。</p>
-<p>MacOS X 10.1で バージョン1.6.5以前のRubyを作る場合、以下のようにRubyの
-ソースにパッチをあてる必要があります。</p>
+<h2><a name="label:2" id="label:2">Ruby のインストール</a></h2><!-- RDLabel: "Ruby のインストール" -->
+<p>すでにRubyを"--enable-shared"オプション付きでインストールしている場合
+は読み飛ばしてください。</p>
+<p>新たにRubyをインストールする場合、Ruby 1.6.6 以降のバージョンをインス
+トールしてください。それ以前のバージョンをインストールする場合には、ソー
+スにパッチをあてる必要があります。</p>
+<p>以下はもっとも典型的なRuby 1.6.6インストールのシェルコマンド入力手順で
+す。</p>
 <pre>% cd {どこか}
-% tar zxf ruby-1.6.5.tar.gz
-% cd ruby-1.6.5
-% patch -p1 &lt; {RubyCocoaソースディレクトリ}/misc/ruby-osx10_1.patch</pre>
-<p>あとは普通にインストールします。configure時には"--enable-shared"オプショ
-ンを指定することをお勧めします。なしの場合に動作するかはまったく未確認
-です。</p>
-<pre>% cd {ruby-1.6.5ソースディレクトリ}
+% tar zxf ruby-1.6.6.tar.gz    # tarball を展開
+% cd ruby-1.6.6
 % ./configure --enable-shared  # /usr/local にインストール
 % make ; make test
 % sudo make install</pre>
-<h2><a name="label:3" id="label:3">RubyCocoaの展開</a></h2><!-- RDLabel: "RubyCocoaの展開" -->
+<p>configure時には"--enable-shared"オプションを指定してください。なしの場
+合に動作するかはまったく未確認です。</p>
+<h2><a name="label:3" id="label:3">RubyCocoa の展開</a></h2><!-- RDLabel: "RubyCocoa の展開" -->
 <p>RubyCocoaソースのtarballを展開します。</p>
 <pre>% cd {どこか}
 % tar zxf rubycocoa-0.2.x.tgz</pre>
 <p><em>注意</em> StuffItを使うとファイル名の長さの問題でRubyCocoaが正しくイ
 ンストールされないのでtarコマンドを使ってください。</p>
-<h2><a name="label:4" id="label:4">LibRubyフレームワークのインストール</a></h2><!-- RDLabel: "LibRubyフレームワークのインストール" -->
+<h2><a name="label:4" id="label:4">LibRuby フレームワークのインストール</a></h2><!-- RDLabel: "LibRuby フレームワークのインストール" -->
 <p>LibRubyフレームワークは、すでにインストールされているRubyインタープリ
 タの共有ライブラリやヘッダファイルに、シンボリックリンクを張ったりコピー
 したりしてフレームワーク化したものです。RubyCocoaの構築やRubyCocoaのア
@@ -55,7 +55,7 @@
 <p>フレームワークを作る場所を変えたい場合は</p>
 <pre>% ruby tool/install-libruby-frmwk.rb {フレームワークスディレクトリ}</pre>
 <p>のように引数にディレクトリを指定してスクリプトを起動してください。</p>
-<h2><a name="label:5" id="label:5">RubyCocoaの構築とインストール</a></h2><!-- RDLabel: "RubyCocoaの構築とインストール" -->
+<h2><a name="label:5" id="label:5">RubyCocoa の構築とインストール</a></h2><!-- RDLabel: "RubyCocoa の構築とインストール" -->
 <p>RubyCocoa本体を構成するライブラリ群とRubyCocoaフレームワークを構築イン
 ストールします。</p>
 <p>RubyCocoaのソースディレクトリに移動し以下のように入力します。</p>
@@ -107,10 +107,10 @@
 <h2><a name="label:8" id="label:8">開発動作確認環境</a></h2><!-- RDLabel: "開発動作確認環境" -->
 <p>以下の環境で開発動作確認をしています。</p>
 <ul>
-<li>PowerMacintosh G4/400/320MB</li>
+<li>PowerMacintosh G4/400/384MB or iBook G3/600/384MB</li>
 <li>MacOS X 10.1.1 (or 10.1)</li>
 <li>DevTools 10.1</li>
-<li>ruby-1.6.5 (configure --enable-shared)</li>
+<li>ruby-1.6.5 or 1.6.6 (configure --enable-shared)</li>
 </ul>
 <h2><a name="label:9" id="label:9">ではお楽しみください</a></h2><!-- RDLabel: "ではお楽しみください" -->
 <p>感想、アイデア、提案、疑問、質問などなんでも気軽に教えてください。</p>

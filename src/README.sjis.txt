@@ -14,8 +14,8 @@
 
 1. 使い方
 
-  簡単な使い方はhtmlディレクトリのMINITOUR.(ja|en).htmlをご覧ください。
-  詳細についてはDETAIL.(ja|en).htmlをご覧ください。
+  簡単な使い方はhtmlディレクトリのUSING.(ja|en).htmlをご覧ください。詳
+  細についてはREFERENCES.(ja|en).htmlをご覧ください。
 
 2. サンプル
 
