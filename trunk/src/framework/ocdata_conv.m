@@ -53,15 +53,10 @@ rb_ocobj_s_new(id ocid)
 
 id rbobj_get_ocid (VALUE obj)
 {
-  VALUE val;
   RB_ID mtd;
 
   if (rb_obj_is_kind_of(obj, rb_cls_objcid()) == Qtrue)
     return rb_obj_ocid(obj);
-
-  val = rb_ivar_get(obj, rb_intern("__objcid__"));
-  if (rb_obj_is_kind_of(val, rb_cls_objcid()) == Qtrue)
-    return rb_obj_ocid(val);
 
   mtd = rb_intern("__ocid__");
   if (rb_respond_to(obj, mtd))
