@@ -14,6 +14,8 @@
 #import <Foundation/Foundation.h>
 #import "RubyCocoa.h"
 #import "RBThreadSwitcher.h"
+#import "osx_objc.h"
+#import "RBObject.h"
 
 #define OSX_MODULE_NAME "OSX"
 
@@ -57,7 +59,7 @@ osx_mf_objc_derived_class_new(VALUE mdl, VALUE kls, VALUE kls_name, VALUE super_
   [pool release];
 
   if (new_cls)
-    return rb_ocobj_s_new(new_cls);
+    return ocobj_s_new(new_cls);
   return Qnil;
 }
 
@@ -117,6 +119,101 @@ ns_autorelease_pool(VALUE mdl)
   [pool release];
   return Qnil;
 }
+
+/******************/
+
+static VALUE
+rb_cls_ocobj (const char* name)
+{
+  VALUE cls = Qnil;
+  VALUE mOSX = osx_s_module();
+  if (!mOSX) return Qnil;
+  if (rb_const_defined(mOSX, rb_intern(name))) {
+    cls = rb_const_get(mOSX, rb_intern(name));
+  }
+  else {
+    cls = rb_const_get(mOSX, rb_intern("OCObject"));
+  }
+  return cls;
+}
+
+static id
+rb_obj_ocid(VALUE rcv)
+{
+  VALUE val = rb_funcall(rcv, rb_intern("__ocid__"), 0);
+  return NUM2OCID(val);
+}
+
+/***/
+
+VALUE
+osx_s_module()
+{
+  RB_ID rid;
+
+  rid = rb_intern("OSX");
+  if (! rb_const_defined(rb_cObject, rid))
+    return rb_define_module("OSX");
+  return rb_const_get(rb_cObject, rid);
+}
+
+VALUE
+ocobj_s_new(id ocid)
+{
+  VALUE obj;
+  id pool, cls_name;
+
+  pool = [[NSAutoreleasePool alloc] init];
+
+  cls_name = [[ocid class] description];
+  obj = rb_funcall(rb_cls_ocobj([cls_name cString]), 
+		   rb_intern("new_with_ocid"), 1, OCID2NUM(ocid));
+
+  [pool release];
+  return obj;
+}
+
+id
+rbobj_get_ocid (VALUE obj)
+{
+  RB_ID mtd;
+
+  if (rb_obj_is_kind_of(obj, objid_s_class()) == Qtrue)
+    return rb_obj_ocid(obj);
+
+  mtd = rb_intern("__ocid__");
+  if (rb_respond_to(obj, mtd))
+    return rb_obj_ocid(obj);
+
+  if (rb_respond_to(obj, rb_intern("to_nsobj"))) {
+    VALUE nso = rb_funcall(obj, rb_intern("to_nsobj"), 0);
+    return rb_obj_ocid(nso);
+  }
+
+  return nil;
+}
+
+VALUE
+ocid_get_rbobj (id ocid)
+{
+  VALUE result = Qnil;
+
+  NS_DURING  
+    if ([ocid isKindOfClass: [RBObject class]])
+      result = [ocid __rbobj__];
+
+    else if ([ocid respondsToSelector: @selector(__rbobj__)])
+      result = [ocid __rbobj__];
+
+  NS_HANDLER
+    result = Qnil;
+
+  NS_ENDHANDLER
+
+  return result;
+}
+
+/******************/
 
 void Init_osx_objc()
 {
