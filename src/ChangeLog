@@ -3,7 +3,7 @@
 	* release 0.2.2
 
 	* post-config.rb, post-install.rb, install.rb, metaconfig, post-clean.rb:
-	update setup-3.1.0
+	update setup-3.1.0 and modify installing script.
 
 2002-01-08  FUJIMOTO Hisakuni  <hisa@fobj.com>
 
