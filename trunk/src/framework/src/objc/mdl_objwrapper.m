@@ -109,7 +109,7 @@ ocm_perform(int argc, VALUE* argv, VALUE rcv, VALUE* result)
   int num_of_args;
   id args[2];
   id pool;
-  id oc_result;
+  id oc_result = nil;
   id oc_msig;
   int i;
   VALUE excp = Qnil;
