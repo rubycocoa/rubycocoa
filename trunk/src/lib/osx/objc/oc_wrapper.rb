@@ -22,14 +22,6 @@ module OSX
       ret
     end
 
-    def to_s
-      if self.ocm_send(:isKindOfClass_, OSX::NSString) != 0 then
-	self.ocm_send(:cString)
-      else
-	self.ocm_send(:description).ocm_send(:cString)
-      end
-    end
-
     def to_a
       if self.ocm_send(:isKindOfClass_, OSX::NSArray) != 0 then
 	ary = Array.new
