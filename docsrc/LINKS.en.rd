@@ -87,14 +87,6 @@
 
   News site about Ruby. There is also a Wiki for Ruby at this site.
 
-: ((<Rubyist! Make Programming More Fun (Japanese)|URL:http://www.rubycolor.org/r/>))
-
-  News site about Ruby for Japanese speakers.
-
-: ((<RNN (Japanese)|URL:http://rnn.sourceforge.jp/modules/news/>))
-
-  News & forum site about Ruby for Japanese speakers.
-
 : ((<RWiki|URL:http://www.jin.gr.jp/~nahi/RWiki/>))
 
   Wiki written with Ruby.
