@@ -27,7 +27,7 @@ enum osxobjc_nsdata_type {
   _PRIV_C_NSPOINT,
   _PRIV_C_NSSIZE,
   _PRIV_C_NSRANGE,
-  _PRIV_C_ARY_UI,
+  _PRIV_C_PTR,
   _PRIV_C_ID_PTR,
 };
 
