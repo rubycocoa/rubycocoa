@@ -244,9 +244,16 @@ static SEL ruby_method_sel(int argc)
 
 - (VALUE) __rbobj__  { return m_rbobj; }
 
+- (void) dealloc
+{
+  rb_gc_unregister_address (&m_rbobj);
+  [super dealloc];
+}
+
 - initWithRubyObject: (VALUE)rbobj
 {
   m_rbobj = rbobj;
+  rb_gc_register_address (&m_rbobj);
   return self;
 }
 
