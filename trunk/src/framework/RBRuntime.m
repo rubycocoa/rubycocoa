@@ -194,7 +194,7 @@ Class RBOCDerivedClassNew(const char* name, Class super_class)
 + (void) start: (NSTimeInterval)interval;
 + (void) stop;
 - (NSTimer*) timer;
-- (void) setTimer: (NSTimer)a_timer;
+- (void) setTimer: (NSTimer*)a_timer;
 - (void) sched: (NSTimer*)a_timer;
 @end
 
