@@ -1,5 +1,6 @@
 # create appkit.rb and foundation.rb
 load 'tool/create-appkit-and-foundation.rb'
+GC.start
 
 # create osx_ruby.h and osx_intern.h
 # avoid `ID' and `T_DATA' confict headers between Cocoa and Ruby.
@@ -18,3 +19,5 @@ intern_h = "#{Config::CONFIG['archdir']}/intern.h"
     end
   end
 end
+
+`cd src/objc/cocoa; ruby gen_cocoa_wrapper.rb -f`
