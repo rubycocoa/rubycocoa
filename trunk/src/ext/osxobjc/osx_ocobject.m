@@ -13,6 +13,7 @@
 #import "osx_ocobject.h"
 #import <LibRuby/cocoa_ruby.h>
 #import "ocdata_conv.h"		// RubyCocoa.framework
+#import "RubyObject.h"		// RubyCocoa.framework
 
 #import <Foundation/NSObject.h>
 #import <Foundation/NSArchiver.h>
@@ -125,6 +126,19 @@ static VALUE ocobj_s_new_with_name(int argc, VALUE* argv, VALUE klass)
   obj = ocobj_new_with_ocid_with_class(nsobj, klass);
   OCOBJ_DATA_PTR(obj)->ownership -= 1; // remove one ownership
   argc--; argv++;
+  rb_obj_call_init(obj, argc, argv);
+  return obj;
+}
+
+static VALUE ocobj_s_new_nsobj(int argc, VALUE* argv, VALUE klass)
+{
+  VALUE obj;
+  Class nsclass;
+  id nsobj;
+  nsobj = [RubyObject alloc];
+  obj = ocobj_new_with_ocid_with_class(nsobj, klass);
+  [nsobj initWithRubyObject: obj];
+  OCOBJ_DATA_PTR(obj)->ownership -= 1; // remove one ownership
   rb_obj_call_init(obj, argc, argv);
   return obj;
 }
@@ -424,6 +438,7 @@ init_class_OCObject(VALUE outer)
 
   rb_define_singleton_method(kOCObject, "new_with_id", ocobj_s_new_with_id, -1);
   rb_define_singleton_method(kOCObject, "new_with_name", ocobj_s_new_with_name, -1);
+  rb_define_singleton_method(kOCObject, "new_nsobj", ocobj_s_new_nsobj, -1);
   rb_define_singleton_method(kOCObject, "new", ocobj_s_new, -1);
 
   rb_define_method(kOCObject, "__ocid__", ocobj_ocid, 0);
