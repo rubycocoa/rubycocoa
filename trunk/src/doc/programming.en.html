@@ -24,7 +24,7 @@ RubyCocoa<font size='-1'> - A Ruby/Objective-C Bridge for Mac OS X with Cocoa</f
   <colgroup><col width='80%'/><col width='20%'/></colgroup>
   <tr id='site-menubar'>
   <td class='site-menubar' align='left' width='80%'>
-    <a href='index.en.html'>What?</a> | <a href='getting.en.html'>Donwload</a> | <a href='build.en.html'>Build & Install</a> | <a href='trysamples.en.html'>Try Samples</a> | <a href='programming.en.html'>Programming</a> | <a href='references.en.html'>References</a> | <a href='changes.en.html'>Changes</a> | <a href='faq.en.html'>FAQ</a> | <a href='links.en.html'>Links</a>
+    <a href='index.en.html'>What?</a> | <a href='getting.en.html'>Download</a> | <a href='build.en.html'>Build & Install</a> | <a href='trysamples.en.html'>Try Samples</a> | <a href='programming.en.html'>Programming</a> | <a href='references.en.html'>References</a> | <a href='changes.en.html'>Changes</a> | <a href='faq.en.html'>FAQ</a> | <a href='links.en.html'>Links</a>
   </td>
   <td class='site-menubar' align='right' width='20%'>
     [ENGLISH] <a href='index.ja.html'>[JAPANESE]</a>
@@ -183,11 +183,12 @@ p klass     # =&gt; #&lt;OCObject:0x82f22 class='NSObject' id=80819B0C&gt;</pre>
 <p>When the same method name exists in Ruby and Objective-C, like in the case of
 <code>Object#class</code>, prefix the method name with "<code>oc_</code>".</p>
 <h2><a name='label:12' id='label:12'>Inheriting from Cocoa</a></h2><!-- RDLabel: "Inheriting from Cocoa" -->
-<p>So far, we've discussed existing Cocoa classes and their instances. From this
-point, we'll discuss the definition and instantiation of Cocoa-inherited
-classes, which is also needed when writing RubyCocoa applications. Since the
-implementation is a little tricky, although using inherited classes of Cocoa
-has some restrictions and peculiarities, let's see also including it.</p>
+<p>So far, we've discussed existing Cocoa classes and their
+instances. From this point, we'll discuss the definition and
+instantiation of derived class of Cocoa, which is also needed when
+writing RubyCocoa applications. Since the implementation of derived
+class mechanism for RubyCocoa is a little tricky, there are some
+restrictions and peculiarities.</p>
 <h2><a name='label:13' id='label:13'>Defining a Cocoa-inherited class</a></h2><!-- RDLabel: "Defining a Cocoa-inherited class" -->
 <p>The class of the Cocoa objects set up in the GUI definition file (nib file)
 created by Interface Builder is defined as an inherited class (after 0.2.0).
@@ -259,27 +260,28 @@ performed in the turn:</p>
 <li>in alloc, create a Ruby object (initialize method is called here)</li>
 </ul>
 <h2><a name='label:17' id='label:17'>Where should initialization code be written?</a></h2><!-- RDLabel: "Where should initialization code be written?" -->
-<p>Although the initialization code is generally written into an
-<code>initialize</code> method in Ruby, if it says in which, I will seldom be
-recommended by the Cocoa-inherited class. A reason is not initialized
-only by a memory being assigned as a Cocoa object at the time by the
-timing which the initialize method at the time of the instance
-generation described previously is called. However, it is thought that
-especially a problem is not generated in the limitation which does not
-call the Cocoa side method.</p>
+<p>In Ruby an initialization procedure is written in the
+"<code>initialize</code>" method generally. But you should be careful in
+doing so.  When the "initialize" method is invoked, a Cocoa object in
+the Objective-C space is just only given memory. And it is not
+initialized yet. Therefore, in the "initialize" method, you must not
+invoke a method implemented in Objective-C space. You should use only
+a method by Ruby at the point.</p>
 <p>If the object needs to be loaded from a nib file, initializing by the
-"awakeFromNib" method is safest. Doesn't that it is also necessary
-to actually define the inherited class of Cocoa have most these cases?</p>
+"awakeFromNib" method is safest. Doesn't it seem that it is also
+necessary to actually define the inherited class of Cocoa in most of
+these cases?</p>
 <p>In other cases, initialization is done in the style of Cocoa's <code>init</code>.
 It is probably a good idea to write to a method with a prefix.</p>
 <p>Please do not forget to return <code>self</code> from initialization methods.</p>
 <h2><a name='label:18' id='label:18'>Debugging a RubyCocoa application</a></h2><!-- RDLabel: "Debugging a RubyCocoa application" -->
-<p>Currently (as of 2003-01-05), it is impossible that you use a ruby debugger
-in ProjectBuilder, because a plug-in module for a RubyCocoa
+<p>Currently (as of 2003-01-05), it is impossible for you to use a ruby
+debugger in ProjectBuilder, because a plug-in module for a RubyCocoa
 application doesn't exist.</p>
-<p>But, you can debug with a debugger (e.g. debug.rb) by launching a application
-with appropriate options in the shell. If you like Emacs, you can also use a
-<code>rubydb</code> command which is contained in a ruby source distribution.</p>
+<p>But, you can debug with a debugger (e.g. debug.rb) by launching an
+application with appropriate options in the shell. If you like Emacs,
+you can also use a <code>rubydb</code> command which is contained in a ruby
+source distribution.</p>
 <p>The following shows a sequence in which the debugger breaks execution of a
 RubyCocoa application (simpleapp in samples).</p>
 <pre>$ cd sample/simpleapp/
