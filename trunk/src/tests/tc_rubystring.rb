@@ -10,6 +10,7 @@
 
 require 'test/unit'
 require 'osx/cocoa'
+require 'kconv'
 
 class TC_RubyString < Test::Unit::TestCase
   include OSX
@@ -34,7 +35,7 @@ class TC_RubyString < Test::Unit::TestCase
     assert( str.isEqualToString?( @nsstr ))
   end
 
-  def to_nsmutablestring
+  def test_to_nsmutablestring
     str = @rbstr.toeuc.to_nsmutablestring
     assert( str.isEqualToString?( @nsstr ))
     str = @rbstr.tosjis.to_nsmutablestring
