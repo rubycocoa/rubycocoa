@@ -28,7 +28,7 @@ static char* rb_main_path(const char* rb_main_name)
   NSBundle* bundle = [NSBundle mainBundle];
   if (rb_main_name == NULL) rb_main_name = RUBY_MAIN_NAME;
   path = [NSString stringWithCString: rb_main_name];
-  result = strdup([[bundle pathForResource: path ofType: nil] cString]);
+  result = strdup([[bundle pathForResource: path ofType: nil] fileSystemRepresentation]);
   [pool release];
   return result;
 }
@@ -40,7 +40,7 @@ static char* resource_path()
   id pool = [[NSAutoreleasePool alloc] init];
   NSBundle* bundle = [NSBundle mainBundle];
   str = [bundle resourcePath];
-  result = strdup([str cString]);
+  result = strdup([str fileSystemRepresentation]);
   [pool release];
   return result;
 }
@@ -53,8 +53,8 @@ static char* framework_ruby_path()
   id pool = [[NSAutoreleasePool alloc] init];
   NSBundle* bundle = [NSBundle bundleForClass: [RBObject class]];
   str = [bundle resourcePath];
-  result = (char*) malloc (strlen([str cString]) + strlen(dirname) + 1);
-  strcpy (result, [str cString]);
+  result = (char*) malloc (strlen([str fileSystemRepresentation]) + strlen(dirname) + 1);
+  strcpy (result, [str fileSystemRepresentation]);
   strcat (result, dirname);
   [pool release];
   return result;
