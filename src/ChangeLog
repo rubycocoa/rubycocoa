@@ -1,3 +1,31 @@
+2003-01-14  FUJIMOTO Hisakuni  <hisa@fobj.com>
+
+	* tests/tc_rubystring.rb, tests/tc_nsstring.rb:
+	test for ruby_addition.rb and NSString extended facility
+
+	* framework/RubyCocoa.pbproj/project.pbxproj.in: add ruby_addition.rb
+
+	* framework/src/ruby/osx/objc/oc_all.rb: require 'ruby_addition'
+
+	* framework/src/ruby/osx/objc/cocoa_macros.rb: 
+	define NSData.dataWithString, NSString.guess_nsencoding,
+	NSString.stringWithRubyString,
+	NSMutableString.stringWithRubyString
+
+	* framework/src/ruby/osx/objc/ruby_addition.rb:
+	define to_nsstring, to_nsmutablestring and nsencoding as instance
+	method of String.
+
+	* framework/src/objc/ocdata_conv.m:
+	Use a method named 'to_nsobject' if it is defined, to convert a ruby
+	object into an objective-c object.
+
+	* framework/src/ruby/osx/objc/oc_import.rb:
+	fix conflict of here document label
+
+	* framework/src/ruby/osx/objc/addressbook.rb:
+	modify here document label
+
 2003-01-11  FUJIMOTO Hisakuni  <hisa@fobj.com>
 
 	* framework/post-config.rb:
