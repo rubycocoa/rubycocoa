@@ -8,5 +8,9 @@
 #  the GNU Lesser General Public License version 2.
 #
 
-require 'rubycocoa'
-require 'osx/objc/addressbook'
+require 'osx/objc/oc_exception'
+require 'osx/objc/oc_import'
+require 'osx/objc/oc_object'
+require 'osx/objc/oc_types'
+require 'osx/objc/oc_wrapper'
+require 'osx/objc/oc_attachments'

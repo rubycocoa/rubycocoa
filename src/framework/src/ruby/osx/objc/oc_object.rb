@@ -8,5 +8,12 @@
 #  the GNU Lesser General Public License version 2.
 #
 
-require 'rubycocoa'
-require 'osx/objc/addressbook'
+require 'osx/objc/oc_wrapper'
+
+module OSX
+
+  class OCObject < ObjcID
+    include OCObjWrapper
+  end
+
+end

@@ -10,6 +10,11 @@
 #   the GNU Lesser General Public License version 2.
 #
 
+#
+#   modified for RubyCocoa.
+#   $Id$
+#
+
 ### begin compat.rb
 
 unless Enumerable.instance_methods.include? 'inject' then
@@ -428,7 +433,7 @@ class Installer
   end
 
 
-  FILETYPES = %w( bin lib ext data )
+  FILETYPES = %w( framework bin lib ext data )
 
   include FileOperations
 
@@ -566,6 +571,9 @@ class Installer
   def config_dir_data( rel )
   end
 
+  def config_dir_framework ( rel )
+  end
+
   #
   # setup
   #
@@ -618,6 +626,10 @@ class Installer
   def setup_dir_data( relpath )
   end
 
+  def setup_dir_framework( relpath )
+    command 'pbxbuild'
+  end
+
   #
   # install
   #
@@ -646,6 +658,9 @@ class Installer
 
   def install_dir_data( rel )
     install_files targfiles, config('data-dir') + '/' + rel, 0644
+  end
+
+  def install_dir_framework( rel )
   end
 
   def install_files( list, dest, mode )
@@ -713,6 +728,10 @@ class Installer
   def clean_dir_data( rel )
   end
 
+  def clean_dir_framework( rel )
+    command 'pbxbuild clean'
+  end
+
   #
   # lib
   #
@@ -731,6 +750,7 @@ class Installer
 
   def traverse( task, rel, mid )
     return if File.basename(rel) == 'CVS'
+    return if rel =~ /^framework\//
     dive_into( rel ) {
         run_hook 'pre-' + task
         __send__ mid, rel.sub( %r_\A.*?(?:/|\z)_, '' )

@@ -8,5 +8,4 @@
 #  the GNU Lesser General Public License version 2.
 #
 
-require 'rubycocoa'
-require 'osx/objc/addressbook'
+require 'osx/objc/appkit'
