@@ -9,8 +9,8 @@ RubyCocoa's binary distribution has been built for the Ruby 1.6.8 distributed
 with Mac OS X 10.3.
 
 Download
-((<RubyCocoa-0.4.1-panther.dmg|URL:http://rubycocoa.sourceforge.net/files/RubyCocoa-0.4.1-panther.dmg>))
-from ((<file list|URL:http://rubycocoa.sourceforge.net/files/>)).
+((<RubyCocoa-0.4.1-panther.dmg|URL:http://prdownloads.sourceforge.net/rubycocoa/RubyCocoa-0.4.1-panther.dmg?download>))
+from ((<file list|URL:http://sourceforge.net/project/showfiles.php?group_id=44114>)).
 
 It includes library, samples, templates for Project Builder, etc. for both
 RubyCocoa and RubyAEOSA. Everything necessary for execution and development is
@@ -48,8 +48,8 @@ RubyCocoa's binary distribution has been built for the Ruby 1.6.7 distributed
 with Mac OS X 10.2.
 
 Download
-((<RubyCocoa-0.4.1-jaguar.dmg|URL:http://rubycocoa.sourceforge.net/files/RubyCocoa-0.4.1-jaguar.dmg>))
-from ((<file list|URL:http://rubycocoa.sourceforge.net/files/>)).
+((<RubyCocoa-0.4.1-jaguar.dmg|URL:http://prdownloads.sourceforge.net/rubycocoa/RubyCocoa-0.4.1-jaguar.dmg?download>))
+from ((<file list|URL:http://sourceforge.net/project/showfiles.php?group_id=44114>)).
 
 This package installs  following items:
 
@@ -68,8 +68,8 @@ This package installs  following items:
 == Source Distribution
 
 Download
-((<rubycocoa-0.4.1.tgz|URL:http://rubycocoa.sourceforge.net/files/rubycocoa-0.4.1.tgz>))
-from ((<file list|URL:http://rubycocoa.sourceforge.net/files/>)).
+((<rubycocoa-0.4.1.tgz|URL:http://prdownloads.sourceforge.net/rubycocoa/rubycocoa-0.4.1.tgz?download>))
+from ((<file list|URL:http://sourceforge.net/project/showfiles.php?group_id=44114>)).
 
 To build and install RubyCocoa, refer to 
 ((<"Build and Install RubyCocoa from Source"|URL:build.en.html>)).
