@@ -16,21 +16,22 @@ object in Ruby script.
 
 2. EXAMPLES
 
-  sndplay.rb   - playing system sounds
-  sndplay2.rb  - playing system sounds (with Ruby Thread)
-  fontnames.rb - stdout font names
-  simpleapp/   - very simple application (based Makefile)
-  rubyapp/     - application template (based PB and IB)
-  rubyapp2/    - simple application (based PB and IB)
+  sndplay.rb    - playing system sounds
+  sndplay2.rb   - playing system sounds (with Ruby Thread)
+  fontnames.rb  - print font names to stdout
+  simpleapp/    - very simple application sample (based Makefile)
+  rubyapp_tmpl/ - RubyCocoa Application project template
+  rubyapp/      - simple application sample (based PB and IB)
+  rubyapp2/     - simple application sample (based PB and IB)
 
 3. LICENCE
 
   GNU Lesser General Public License version 2.
   For LGPL details, see file "LGPL".
 
-4. NEED YOUR HELP
+4. HAVE A FUN
 
-  Any bug reports, suggestions, ideas, opinions, patches are welcome !
+  Any bug reports, suggestions, ideas, opinions, patches welcome !
   Please e-mail to <hisa@imasy.or.jp>.
 
 
