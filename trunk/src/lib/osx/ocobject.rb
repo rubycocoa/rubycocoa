@@ -26,8 +26,12 @@ module OSX
   module OCStubCreator
 
     def nib_loadable(super_name = nil)
-      super_name = :NSObject unless super_name
-      OSX.create_objc_stub (self.to_s, super_name.to_s)
+      if super_name.nil? then
+	OSX.create_objc_proxy (self.to_s)
+      else
+	super_name = :NSObject unless super_name
+	OSX.create_objc_stub (self.to_s, super_name.to_s)
+      end
     end
 
     def derived_methods(*args)

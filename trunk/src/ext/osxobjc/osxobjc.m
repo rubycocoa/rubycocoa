@@ -30,6 +30,16 @@ static VALUE init_module_OSX()
   return module;
 }
 
+// def OSX.create_objc_proxy (class_name)
+// ex1.  OSX.create_objc_proxy (:AppController)
+static VALUE
+osx_mf_create_objc_proxy(VALUE mdl, VALUE proxy_name)
+{
+  proxy_name = rb_obj_as_string(proxy_name);
+  RBOCClassNew(STR2CSTR(proxy_name), [RBObject class]);
+  return Qnil;
+}
+
 // def OSX.create_objc_stub (stubname, supername)
 // ex1.  OSX.create_objc_stub (:CustomView, :NSView)
 static VALUE
@@ -80,6 +90,7 @@ void Init_osxobjc()
   mOSX = init_module_OSX();
   init_class_OCObject(mOSX);
 
+  rb_define_module_function(mOSX, "create_objc_proxy", osx_mf_create_objc_proxy, 1);
   rb_define_module_function(mOSX, "create_objc_stub", osx_mf_create_objc_stub, 2);
   rb_define_module_function(mOSX, "add_method_for_objc_stub", osx_mf_add_method_for_objc_stub, 2);
 
