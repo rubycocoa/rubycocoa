@@ -16,7 +16,7 @@ class TC_NSData < Test::Unit::TestCase
 
   def test_s_data
     data = NSData.data
-    assert( data.isKindOfClass NSData )
+    assert( data.isKindOfClass(NSData) )
     assert_equal( 0, data.length )
     assert_kind_of( ObjcPtr, data.bytes )
   end
@@ -24,7 +24,7 @@ class TC_NSData < Test::Unit::TestCase
   def test_s_dataWithBytes_length
     src = "hello world"
     data = NSData.dataWithBytes( src, :length, src.size )
-    assert( data.isKindOfClass NSData )
+    assert( data.isKindOfClass(NSData) )
     assert_equal( src.size, data.length )
     assert_kind_of( ObjcPtr, data.bytes )
   end
@@ -32,7 +32,7 @@ class TC_NSData < Test::Unit::TestCase
   def test_s_dataWithContentsOfFile
     src = File.open('/etc/passwd').read
     data = NSData.dataWithContentsOfFile('/etc/passwd')
-    assert( data.isKindOfClass NSData )
+    assert( data.isKindOfClass(NSData) )
     assert_equal( src.size, data.length )
     assert_kind_of( ObjcPtr, data.bytes )
   end
@@ -42,7 +42,7 @@ class TC_NSData < Test::Unit::TestCase
     src = File.open(fpath).read
     url = NSURL.URLWithString "file://#{fpath}"
     data = NSData.dataWithContentsOfURL( url )
-    assert( data.isKindOfClass NSData )
+    assert( data.isKindOfClass(NSData) )
     assert_equal( src.size, data.length )
     assert_kind_of( ObjcPtr, data.bytes )
   end
@@ -51,7 +51,7 @@ class TC_NSData < Test::Unit::TestCase
     src = 'hello world'
     srcdata = NSData.dataWithBytes( src, :length, src.size )
     data = NSData.dataWithData( srcdata )
-    assert( data.isKindOfClass NSData )
+    assert( data.isKindOfClass(NSData) )
     assert_equal( src.size, data.length )
     assert_kind_of( ObjcPtr, data.bytes )
   end
@@ -59,7 +59,7 @@ class TC_NSData < Test::Unit::TestCase
   def test_s_dataWithRubyString
     src = 'hello world'
     data = NSData.dataWithRubyString( src )
-    assert( data.isKindOfClass NSData )
+    assert( data.isKindOfClass(NSData) )
     assert_equal( src.size, data.length )
     assert_kind_of( ObjcPtr, data.bytes )
   end
