@@ -96,6 +96,31 @@
 			settings = {
 			};
 		};
+		E8560A1701EBCDF90339E1D7 = {
+			isa = PBXFileReference;
+			path = RBThreadSwitcher.h;
+			refType = 4;
+		};
+		E8560A1801EBCDF90339E1D7 = {
+			isa = PBXFileReference;
+			path = RBThreadSwitcher.m;
+			refType = 4;
+		};
+		E8560A1901EBCDF90339E1D7 = {
+			fileRef = E8560A1701EBCDF90339E1D7;
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					Public,
+				);
+			};
+		};
+		E8560A1A01EBCDF90339E1D7 = {
+			fileRef = E8560A1801EBCDF90339E1D7;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
 		E86D40A901AB5EDD03A81C66 = {
 			isa = PBXFileReference;
 			path = RBObject.m;
@@ -270,6 +295,7 @@
 				E8830AF101AE4C7D03A81C66,
 				E81117F601AFB88C03A81C66,
 				E811180101AFCC5E03A81C66,
+				E8560A1901EBCDF90339E1D7,
 			);
 			isa = PBXHeadersBuildPhase;
 			name = Headers;
@@ -292,6 +318,7 @@
 				E8B45E2501AC709D03A81C66,
 				E81117F701AFB88C03A81C66,
 				E811180201AFCC5E03A81C66,
+				E8560A1A01EBCDF90339E1D7,
 			);
 			isa = PBXSourcesBuildPhase;
 			name = Sources;
@@ -326,6 +353,8 @@
 				E811180001AFCC5E03A81C66,
 				E80B398001A21B6103A81C66,
 				E80B397F01A21B6103A81C66,
+				E8560A1701EBCDF90339E1D7,
+				E8560A1801EBCDF90339E1D7,
 			);
 			isa = PBXGroup;
 			name = source;
