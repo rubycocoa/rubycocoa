@@ -22,10 +22,9 @@ Cocoaアプリケーションでは、RubyとObjective-Cのソースが混在するCocoa
 
 == スクリーンショット
 
-RubyCocoaにより、RubyスクリプトとInterface BuilderのNibファイル
-のみで書かれたCocoaアプリケーションが動作しているところの
-((<スクリーンショット|URL:http://www.imasy.or.jp/~hisa/mac/rubycocoa/simpleapp.jpg>))です。
-
+RubyスクリプトとInterface BuilderのNibファイルのみで書かれたRubyCocoa
+アプリケーションが動作しているところのスクリーンショットです。
+<<< img_simpleapp
 
 == スクリプト例
 

@@ -1,15 +1,65 @@
+Subject-ja: FreeRIDE スクリーンショット
+Subject-en: screenshots of FreeRIDE
+Date: 2003-01-12
+UID: 1042301135
+
+<p>X11 for Mac OS X で動く FreeRIDE からRubyCocoaスクリプトを起動してる様子のスクリーンショットです。</p>
+<a href='http://www.imasy.org/~hisa/mac/rubyosx/files/freeride-x11-osx.jpg'>
+<img src='http://www.imasy.org/~hisa/mac/rubyosx/files/freeride-x11-osx-sml.jpg' alt='screenshot' width='256' height='192'/></a>
+<a href='http://www.imasy.org/~hisa/mac/rubyosx/files/freeride-x11-osx-2.jpg'>
+<img src='http://www.imasy.org/~hisa/mac/rubyosx/files/freeride-x11-osx-2.jpg' alt='screenshot' width='256' height='192'/></a>
+..ja
+
+<p>These are appearances of invocation of a RubyCocoa script in FreeRIDE which is running on X11 for Mac OS X.</p>
+
+<a href='http://www.imasy.org/~hisa/mac/rubyosx/files/freeride-x11-osx.jpg'>
+<img src='http://www.imasy.org/~hisa/mac/rubyosx/files/freeride-x11-osx.jpg' alt='screenshot' width='256' height='192'/></a>
+<a href='http://www.imasy.org/~hisa/mac/rubyosx/files/freeride-x11-osx-2.jpg'>
+<img src='http://www.imasy.org/~hisa/mac/rubyosx/files/freeride-x11-osx-2.jpg' alt='screenshot' width='256' height='192'/></a>
+..en
+
+
+Subject-ja: Ruby 1.6.8 で config エラーを直すパッチ
+Subject-en: a patch fix error of config with Ruby 1.6.8
+Date: 2003-01-12
+UID: 1042297376
+
+<p>Ruby 1.6.8 で RubyCocoa 0.4.0 をソースから構築するときに、
+'ruby install.rb config' を実行すると Segmentation fault が発生します。
+この問題を解決するための
+<a href='http://www.imasy.or.jp/~hisa/mac/rubyosx/files/ruco0.4.0-fw-post-config.patch'>パッチ</a>
+を置きました。パッチの当て方は以下のとおりです。</p>
+
+<pre>
+$ cd {rubycocoa-0.4.0}
+$ patch -p0 &lt; ruco0.4.0-fw-post-config.patch
+</pre>
+..ja
+
+<p>In build of RubyCocoa 0.4 with Ruby 1.6.8, segmentation fault occur at
+'ruby install.rb config'. This
+<a href='http://www.imasy.or.jp/~hisa/mac/rubyosx/files/ruco0.4.0-fw-post-config.patch'>patch</a>
+fix the problem. Apply the patch as following:</p>
+
+<pre>
+$ cd {rubycocoa-0.4.0}
+$ patch -p0 &lt; ruco0.4.0-fw-post-config.patch
+</pre>
+..en
+
+
 Subject-ja: デバッグ方法について
 Subject-en: short briefing about debugging
 Date: 2003-01-05
 UID: 1041750137
 
-RubyCocoaアプリケーションのデバッグ方法について、
+<p>RubyCocoaアプリケーションのデバッグ方法について、
 <a href="programming.ja.html#label:18">「プログラミング」</a>
-に簡単に書き加えました。
+に簡単に書き加えました。</p>
 ..ja
 
-Write briefly about debugging of RubyCocoa application to
-<a href="programming.en.html#label:18">"Programming"</a>.
+<p>Write briefly about debugging of RubyCocoa application to
+<a href="programming.en.html#label:18">"Programming"</a>.</p>
 ..en
 
 
@@ -18,12 +68,12 @@ Subject-en: RubyCocoa 0.4 was released!
 Date: 2002-12-28
 UID: 1041154613
 
-RubyCocoa 0.4をリリースしました。Ruby 1.8 に対応しています。
-詳しくは<a href="changes.ja.html">「変更点」</a>をご覧ください。
+<p>RubyCocoa 0.4をリリースしました。Ruby 1.8 に対応しています。
+詳しくは<a href="changes.ja.html">「変更点」</a>をご覧ください。</p>
 
 ..ja
 
-RubyCocoa 0.4 was released! Now it support Ruby 1.8. See
-<a href="changes.en.html">"Changes"</a> for more detail.
+<p>RubyCocoa 0.4 was released! Now it support Ruby 1.8. See
+<a href="changes.en.html">"Changes"</a> for more detail.</p>
 
 ..en
