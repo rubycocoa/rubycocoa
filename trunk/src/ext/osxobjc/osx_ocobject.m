@@ -13,7 +13,7 @@
 #import "osx_ocobject.h"
 #import <LibRuby/cocoa_ruby.h>
 #import <RubyCocoa/ocdata_conv.h> // RubyCocoa.framework
-#import <RubyCocoa/RBProxy.h>	// RubyCocoa.framework
+#import <RubyCocoa/RBObject.h>	// RubyCocoa.framework
 
 #import <Foundation/NSObject.h>
 #import <Foundation/NSArchiver.h>
@@ -141,8 +141,7 @@ static VALUE new_with_occlass(VALUE klass, Class nsclass)
   [nsobj release]; // retainCount -1
   OCOBJ_DATA_PTR(obj)->ownership -= 1; // remove one ownership
 
-  //  if ([nsobj isKindOfClass: [RBProxy class]]) {
-  if (nsobj->isa == [RBProxy class]) {
+  if (nsobj->isa == [RBObject class]) {
     nsobj = [nsobj initWithRubyObject: obj];
   }
   else {
@@ -169,7 +168,7 @@ static VALUE ocobj_s_new(int argc, VALUE* argv, VALUE klass)
 {
   VALUE obj;
 
-  obj = new_with_occlass(klass, [RBProxy class]);
+  obj = new_with_occlass(klass, [RBObject class]);
   rb_obj_call_init(obj, argc, argv);
   return obj;
 }

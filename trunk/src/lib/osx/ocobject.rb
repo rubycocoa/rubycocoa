@@ -24,16 +24,26 @@ module OSX
   end
 
   module OCStubCreator
+
     def nib_loadable(super_name = nil)
-      OSX.create_objc_stub *[ self.to_s.intern, super_name ].compact
+      super_name = :NSObject unless super_name
+      OSX.create_objc_stub (self.to_s, super_name.to_s)
     end
+
+    def derived_methods(*args)
+      class_name = self.to_s
+      args.each do |method_name|
+	OSX.add_method_for_objc_stub (class_name.to_s, method_name.to_s)
+      end
+    end
+
   end
 
-  class NIBObject < OCObject
-    def NIBObject.inherited(klass)
-      OSX.create_objc_stub klass.to_s.intern
-    end
-  end
+#   class NIBObject < OCObject
+#     def NIBObject.inherited(klass)
+#       OSX.create_objc_stub klass.to_s.intern
+#     end
+#   end
 
   module ToFloat
     def force_to_f(val)
