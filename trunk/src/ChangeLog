@@ -1,4 +1,22 @@
+2002-12-26  FUJIMOTO Hisakuni  <hisa@fobj.com>
+
+	* framework/src/objc/cls_objcptr.m:
+	remove ObjcPtr.allocate, because the method conflict with
+	Class#allocate in ruby 1.7.
+
+	* docsrc:
+	add sources of html documents.
+
 2002-12-22  FUJIMOTO Hisakuni  <hisa@fobj.com>
+
+	* sample/itunes_albums.rb:
+	modify ambiguous ruby code to suppress warning by Ruby interpreter.
+
+	* tests/testall.rb: replace CRLF to LF as line delimiter
+
+	* framework/src/ruby/osx/objc/oc_import.rb:
+	define constant OSX::NSBehaviorAttachment::ERRMSG_FOR_RESTRICT_NEW as
+	exception message when NSObject.new invoked.
 
 	* 0.4.0a5 (alpha-0_4_0a5)
 
