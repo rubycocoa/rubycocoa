@@ -2,6 +2,9 @@
 
 SRCDIR = "../doc"
 DSTDIR = "."
+VERS = (ARGV.size == 0) ? "0.x.x" : ARGV.shift
+raise "invalid VERS (#{VERS})" unless /([\dx]\.){2}[\dx]/ =~ VERS
+
 
 def command(cmd)
   $stderr.puts "execute '#{cmd}' ..."
