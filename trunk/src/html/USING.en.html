@@ -179,29 +179,16 @@ Objective-C as the string or the symbol is given. However, the
 notation for omitting ":" and "_" of the end explained previously
 cannot be used. It is necessary to describe correctly according to the
 number of arguments.</p>
-<p>Furthermore, overriding of the method of a Cocoa inherited class has
-severe restrictions. The same name method of a parent class cannot be
-called out of the method which is overriding. For example, if the
-following ways of writing are adopted, rotation of a method call will
-occur.</p>
+<p>For invocation of the same method of a super class in the definition
+of a override method, it is to a method name. "super_" prefix is
+attached and called.</p>
 <pre>class MyCustomView &lt; OSX::NSView
 
-  ns_overrides :initWithFrame_
+  ns_overrides :drawRect_
 
-  def initWithFrame(frame)
+  def drawRect (frame)
     p frame
-    super(frame)
-  end
-
-end</pre>
-<p>Although I want to solve in the future since existence of these
-restrictions is inconvenient, there is no solution method effective
-for the moment. In the upper example, when an instance is made by
-loading of a nib file, it can be coped with by writing it as:</p>
-<pre>class MyCustomView &lt; OSX::NSView
-
-  def awakeFromNib
-    p bounds
+    super_drawRect(frame)   # invoke the implement of NSView#drawRect
   end
 
 end</pre>

@@ -9,15 +9,15 @@
 <link href="rdtext.css" type="text/css" rel="stylesheet"/>
 </head>
 <body>
-<p>e= RubyCocoaの使い方</p>
-<h2><a name="label:0" id="label:0">ライブラリのロード</a></h2><!-- RDLabel: "ライブラリのロード" -->
+<h1><a name="label:0" id="label:0">RubyCocoaの使い方</a></h1><!-- RDLabel: "RubyCocoaの使い方" -->
+<h2><a name="label:1" id="label:1">ライブラリのロード</a></h2><!-- RDLabel: "ライブラリのロード" -->
 <p>RubyCocoaのライブラリは以下のようにロードします。</p>
 <pre>require 'osx/cocoa'</pre>
 <p>あるいは</p>
 <pre>require 'osx/foundation' # Foundationで定義されているクラスを使う
 require 'osx/appkit'     # AppKitで定義されているクラスを使う</pre>
 <p>のようにFoundationとAppKitのクラスを別々にロードすることもできます。</p>
-<h2><a name="label:1" id="label:1">動いた実感を味わえる例</a></h2><!-- RDLabel: "動いた実感を味わえる例" -->
+<h2><a name="label:2" id="label:2">動いた実感を味わえる例</a></h2><!-- RDLabel: "動いた実感を味わえる例" -->
 <p>まずは動いた実感を味わえる(音が鳴る)簡単な例です。</p>
 <pre># システム音を順番に鳴らす (1) (sample/sndplay.rb)
 require 'osx/cocoa'
@@ -29,7 +29,7 @@ sndfiles.each do |path|
 end</pre>
 <p>以降は、地味だけど理解の助けになると思われる例をあげていきます。説明の
 中で "# =&gt; "の右側は実行結果として標準出力される文字列です。</p>
-<h2><a name="label:2" id="label:2">Cocoaクラス</a></h2><!-- RDLabel: "Cocoaクラス" -->
+<h2><a name="label:3" id="label:3">Cocoaクラス</a></h2><!-- RDLabel: "Cocoaクラス" -->
 <pre>p OSX::NSObject # =&gt; OSX::NSObject
 obj = OSX::NSObject.description
 p obj      # =&gt; #&lt;OSX::OCObject:0x5194e8 class='NSCFString' id=A97910&gt;
@@ -38,7 +38,7 @@ p obj      # =&gt; #&lt;OSX::NSObject:0x51f5b4 class='NSObject' id=976D90&gt;</p
 <p>RubyCocoaでは、CocoaクラスはOSXモジュール配下のクラスとして定義されて
 います(0.2.0以降)。CocoaクラスはRubyのクラスであると同時にCocoaのオブ
 ジェクトとしても振る舞います。</p>
-<h2><a name="label:3" id="label:3">Cocoaオブジェクトの生成</a></h2><!-- RDLabel: "Cocoaオブジェクトの生成" -->
+<h2><a name="label:4" id="label:4">Cocoaオブジェクトの生成</a></h2><!-- RDLabel: "Cocoaオブジェクトの生成" -->
 <p>Cocoaオブジェクトの生成には、Cocoaの各クラスのメソッドをそのまま使いま
 す。</p>
 <pre>obj = OSX::NSObject.alloc.init
@@ -47,7 +47,7 @@ str = OSX::NSString.alloc.initWithString "world"</pre>
 <p>生成されたCocoaオブジェクトは、RubyCocoa内部でOSX::ObjcIDというクラス
 のオブジェクトに包まれています。通常、OSX::ObjcIDクラスの存在を意識す
 る必要はありません。</p>
-<h2><a name="label:4" id="label:4">オーナーシップとメモリ管理</a></h2><!-- RDLabel: "オーナーシップとメモリ管理" -->
+<h2><a name="label:5" id="label:5">オーナーシップとメモリ管理</a></h2><!-- RDLabel: "オーナーシップとメモリ管理" -->
 <p>OSX::ObjcIDのインスタンスはかならず自身が包んでいるCocoaオブジェクトの
 オーナーシップを持ちます。オーナーシップはOSX::ObjcIDのインスタンスが
 GCに掃除されるときに自動的になくなります。したがってRubyCocoaでは、オー
@@ -64,7 +64,7 @@ str = OSX::NSObject.alloc.initWithString "world"</pre>
 <li>Cocoaオブジェクトの生成にはCocoaクラスに対してCocoaのメソッドを使う</li>
 <li>Cocoaオブジェクトは作りっぱなしで良い、メモリ管理は不要</li>
 </ul>
-<h2><a name="label:5" id="label:5">メソッドの返す値</a></h2><!-- RDLabel: "メソッドの返す値" -->
+<h2><a name="label:6" id="label:6">メソッドの返す値</a></h2><!-- RDLabel: "メソッドの返す値" -->
 <pre>nstr = OSX::NSString.description
 p nstr      # =&gt; #&lt;OCObject:0x7233e class='NSCFString' id=687610&gt;
 p nstr.to_s # =&gt; "NSString"
@@ -87,7 +87,7 @@ Objective-Cオブジェクトを返すメソッドをCocoaオブジェクトとして返します。
 積極的にRubyの対応するオブジェクト(例えばStringなど)には変換しません。
 文字列と配列に関しては to_s や to_a が定義されているのでそれを使うこと
 ができます。</p>
-<h2><a name="label:6" id="label:6">メソッド名の決定方法とバリエーション</a></h2><!-- RDLabel: "メソッド名の決定方法とバリエーション" -->
+<h2><a name="label:7" id="label:7">メソッド名の決定方法とバリエーション</a></h2><!-- RDLabel: "メソッド名の決定方法とバリエーション" -->
 <pre># システム音を順番に鳴らす (2)
 sndfiles.each do |path|
   snd = OSX::NSSound.alloc.initWithContentsOfFile(path, :byReference, true)
@@ -118,11 +118,11 @@ p nary.containsObject?("hoge")  # =&gt; false
 nary.addObject("hoge")
 p nary.containsObject("hoge")   # =&gt; 1
 p nary.containsObject?("hoge")  # =&gt; true</pre>
-<h2><a name="label:7" id="label:7">メソッドの引数は可能な限り変換する</a></h2><!-- RDLabel: "メソッドの引数は可能な限り変換する" -->
+<h2><a name="label:8" id="label:8">メソッドの引数は可能な限り変換する</a></h2><!-- RDLabel: "メソッドの引数は可能な限り変換する" -->
 <p>上の例のcontainsObjectのように、引数の値としてObjective-Cオブジェクト
 をとるメソッドの場合に、Rubyオブジェクトをそのまま渡しても可能な限り変
 換を試みます。</p>
-<h2><a name="label:8" id="label:8">メソッド名が重複するときに使う接頭辞 "oc_"</a></h2><!-- RDLabel: "メソッド名が重複するときに使う接頭辞 "oc_"" -->
+<h2><a name="label:9" id="label:9">メソッド名が重複するときに使う接頭辞 "oc_"</a></h2><!-- RDLabel: "メソッド名が重複するときに使う接頭辞 "oc_"" -->
 <pre>klass = OSX::NSObject.class
 p klass     # =&gt; Class
 klass = OSX::NSObject.oc_class
@@ -132,13 +132,13 @@ p klass     # =&gt; OSX::NSObject</pre>
 の頭に"oc_"という接頭辞をつけると、Objective-Cオブジェクトに対してメッ
 セージが送られます。"oc_" を付けてもRuby側にメソッドがある場合は？どう
 しようもありません(裏技はあるのでソースを読める人はどうぞ) 。</p>
-<h2><a name="label:9" id="label:9">Cocoaクラスの派生クラスとそのインスタンス</a></h2><!-- RDLabel: "Cocoaクラスの派生クラスとそのインスタンス" -->
+<h2><a name="label:10" id="label:10">Cocoaクラスの派生クラスとそのインスタンス</a></h2><!-- RDLabel: "Cocoaクラスの派生クラスとそのインスタンス" -->
 <p>ここまでは既存のCocoaクラスとそのインスタンスに関するトピックを扱いま
 した。ここからは、RubyCocoaアプリケーションを書く場合に必要となるCocoa 
 派生クラスの定義やそのインスタンスに関するトピックを扱います。Cocoaの
 派生クラスはややトリッキーな実装により実現しているため、多少の制約や癖
 がありますが、それも含めて見ていきましょう。</p>
-<h2><a name="label:10" id="label:10">Cocoa派生クラスの定義</a></h2><!-- RDLabel: "Cocoa派生クラスの定義" -->
+<h2><a name="label:11" id="label:11">Cocoa派生クラスの定義</a></h2><!-- RDLabel: "Cocoa派生クラスの定義" -->
 <p>Interface Builderで作成したGUI定義ファイル(nibファイル)の中で設定した
 Cocoaオブジェクトのクラスなどは派生クラスとして定義します(0.2.0以降)。
 例えばCocoaの入門書やチュートリアルなどで最初の方に出てくるようなMVCモ
@@ -154,7 +154,7 @@ Cocoaオブジェクトのクラスなどは派生クラスとして定義します(0.2.0以降)。
 end</pre>
 <p>のように定義します。RubyCocoaにおけるCocoaの派生クラス定義は、このよう
 に通常のRubyでの派生クラス定義と同様に記述します。</p>
-<h2><a name="label:11" id="label:11">アウトレット</a></h2><!-- RDLabel: "アウトレット" -->
+<h2><a name="label:12" id="label:12">アウトレット</a></h2><!-- RDLabel: "アウトレット" -->
 <p>nibファイル中でクラスに設定したアウトレットは派生クラスの定義の中で</p>
 <pre>ns_outlets :rateField, :dollerField</pre>
 <p>と書きます。ns_outletsは実際には Module#attr_writer と同じです。したがっ
@@ -164,9 +164,10 @@ end</pre>
 end</pre>
 <p>のように定義することもできます。ns_outlets には ib_outlets という別名
 もあります。</p>
-<h2><a name="label:12" id="label:12">メソッドのオーバーライド</a></h2><!-- RDLabel: "メソッドのオーバーライド" -->
-<p>親クラスで定義されているメソッドをオーバライドする場合、ns_overrides
-(別名ib_overrides)を使ってオーバライドしたことを宣言する必要があります。</p>
+<h2><a name="label:13" id="label:13">メソッドのオーバーライド</a></h2><!-- RDLabel: "メソッドのオーバーライド" -->
+<p>親クラスで定義されているメソッドをオーバーライドする場合、ns_overrides
+(別名ib_overrides)を使ってオーバーライドしたことを宣言する必要がありま
+す。</p>
 <pre>class MyCustomView &lt; OSX::NSView
   ns_overrides :drawRect_, 'mouseUp:'
 
@@ -179,32 +180,19 @@ end</pre>
 シンボルで表現したものを与えます。ただし「メソッド名の決定方法とバリエー
 ション」で説明した末尾を省略する記法を使うことはできません。引数の数に
 合わせて正確に記述する必要があります。</p>
-<p>これ以上にCocoa派生クラスのメソッドオーバライドには痛い制約があります。
-オーバーライドしているメソッドの中から親クラスの同名メソッドを呼ぶこと
-はできません。例えば以下のような書き方をすると無限ループもしくはスタッ
-ク溢れに陥ります。</p>
+<p>オーバーライドしているメソッドの定義の中でスーパークラスの同じメソッド
+を呼ぶ場合にはメソッド名に "super_" 接頭辞を付けて呼びます。</p>
 <pre>class MyCustomView &lt; OSX::NSView
 
-  ns_overrides :initWithFrame_
+  ns_overrides :drawRect_
 
-  def initWithFrame(frame)
+  def drawRect (frame)
     p frame
-    super(frame)
+    super_drawRect(frame)   # NSViewのdrawRectを実行
   end
 
 end</pre>
-<p>この制約は痛いので将来的には解決したいのですが、今のところ根本的な解決
-方法はありません。上の例でnibファイルのロードでインスタンスが作られる
-場合には</p>
-<pre>class MyCustomView &lt; OSX::NSView
-
-  def awakeFromNib
-    p bounds
-  end
-
-end</pre>
-<p>と書くことで対処できます。</p>
-<h2><a name="label:13" id="label:13">Cocoa派生クラスのインスタンス生成</a></h2><!-- RDLabel: "Cocoa派生クラスのインスタンス生成" -->
+<h2><a name="label:14" id="label:14">Cocoa派生クラスのインスタンス生成</a></h2><!-- RDLabel: "Cocoa派生クラスのインスタンス生成" -->
 <p>Cocoa派生クラスのインスタンスをRubyスクリプト中で生成する必要がある場
 合には、既存のCocoaクラスの場合と同様に</p>
 <pre>AppController.alloc.init  # use this</pre>
@@ -218,7 +206,7 @@ end</pre>
 <li>alloc内でRubyオブジェクト生成(ここでinitializeメソッドが呼ばれる)</li>
 </ul>
 <p>という順番で行われることに深い関連があります。</p>
-<h2><a name="label:14" id="label:14">インスタンス生成時の初期化コードはどこに書くべきか?</a></h2><!-- RDLabel: "インスタンス生成時の初期化コードはどこに書くべきか?" -->
+<h2><a name="label:15" id="label:15">インスタンス生成時の初期化コードはどこに書くべきか?</a></h2><!-- RDLabel: "インスタンス生成時の初期化コードはどこに書くべきか?" -->
 <p>一般にRubyではinitializeメソッドの中に初期化のコードを書きますが、
 Cocoa派生クラスではどちらかいえばあまり奨められません。理由は先に述べ
 たインスタンス生成時のinitializeメソッドが呼ばれるタイミングにより、そ
