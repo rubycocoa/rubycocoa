@@ -3,13 +3,12 @@
 
 == Installation
 
-=== Q: It failed, when downloading and installing RubyCocoa in the
+=== Q: Installation failed when downloading and installing RubyCocoa in the
 folder "dl file."
 
-==== A: It seems that an error will be occured when 'ruby install.rb
-config' if it puts into the directory name which contains a space in
-between and extracted. Especially those who use Macintosh only until
-now should be careful.
+==== A: It seems that an error will occur when invoking 'ruby install.rb
+config' if it is installed into a directory whose name contains a space.
+Especially those who have only used Macintosh until now should be careful.
 
 == After Installation
 
@@ -22,7 +21,7 @@ now should be careful.
 
 ==== A: Did you use StuffIt to extract the tgz file of RubyCocoa ?
 
-When using StuffIt, long file name exceed 31 characters are truncated.
+When using StuffIt, long file names in excess of 31 characters are truncated.
 Building RubyCocoa with truncated filenames will fail. You must use
 the "tar" command in the shell (Terminal application) when extracting
 the tgz file:
@@ -38,11 +37,11 @@ And reinstall RubyCocoa.
 
 === Q: How can I use ABAddressBook class ? (2002-09-30)
 
-==== A: 
+==== A:
 
-In default, any class which isn't contained in Foundation or AppKit is
-not imported. For using such a class, load a appropriate framework by
-OSX_NSBundle and import a class by OSX_ns_import.
+By default, any class which isn't contained in Foundation or AppKit is
+not imported. For using such a class, load a appropriate framework with
+OSX_NSBundle and import a class with OSX_ns_import.
 
 For AddressBook.framework, you can use it in RubyCocoa 0.3.2 or later
 as following:
@@ -134,8 +133,8 @@ setting "-ldl" as a linker option in each PB project or Makefile.
 The first way may produce unwanted side effects in other installed
 commands. The second way is time-consuming.
 
-you can use 'otool -L' command for printing shared library names that
-are required by a RubyCocoa applicatoin binary.
+You can use 'otool -L' command for printing shared library names that
+are required by a RubyCocoa application binary.
 
 The thread
 ((<[ruby-talk:29708]|URL:http://www.ruby-talk.com/cgi-bin/scat.rb/ruby/ruby-talk/29708>))
@@ -147,9 +146,9 @@ also has some references to this problem.
 I want to select a RubyCocoa application template in the
 ProjectBuilder new Project menu.
 
-==== A: Copy sub directories of "template" that name start with
-"tmpl_pb_" into sub directory of "/Developer/ProjectBuilder Extras",
-and rename it as "RubyCocoa Application".
+==== A: Create a subdirectory of  "/Developer/ProjectBuilder Extras" named
+"RubyCocoa Application", and copy the subdirectories of "template" whose names
+start with "tmpl_pb_" into it.
 
   % cd "/Developer/ProjectBuilder Extras/Project Templates/Application"
   % cp -R {rubycocoa srcdir}/template/tmpl_pb_RubyCocoaApp "RubyCocoa Application"

@@ -1,56 +1,53 @@
 # -*-rd-*-
 = RubyCocoa References
 
-== OSX::ObjcID class
+== (({OSX::ObjcID})) class
 
-The wrapper of a Objective-C object. It becomes the owner of one
+The wrapper of an Objective-C object. It becomes the owner of one
 certain Objective-C object, and it is wrapped. Usually, you don't need
-to be conscious of existence of this class.
+to be conscious that this class exists.
 
-=== instance methods of OSX::ObjcID class
+=== Instance methods of OSX::ObjcID class
 
 --- OSX::ObjcID#inspect
 
-      The string showing the information on an object is returned.
+      Returns a string describing the object.
 
 --- OSX::ObjcID#__ocid__
 
-      The integer value of id of the wrapped Objective-C object is
+      The integer value of the (({id})) of the wrapped Objective-C object is
       returned.
 
 --- OSX::ObjcID#__inspect__
 
-      same as OSX::ObjcID#inspect.
+      Same as (({OSX::ObjcID#inspect})).
 
 
-== OSX::OCObjWrapper module
+== (({OSX::OCObjWrapper})) module
 
-It is the mix in module which implemented the facility to invoke
-message (method call) to a Objective-C object. In RubyCocoa, since the
-Cocoa object is attached with this module, the message invocation to a
-Cocoa object is possible.
+(({OSX::OCObjWrapper})) is the mixin module which implements the facility to send a message (method call) to an Objective-C object. RubyCocoa attaches Cocoa objects with this module, making it possible to invoke methods on Cocoa objects.
 
 Since the Objective-C object set as the object of operation is
 specified, the object attached with this module needs to fulfill one
-conditions of the following.
+of the following conditions:
 
-  * It is the instance of ((<OSX::ObjcID class>)).
-  * The method of the same specification as ((<OSX::ObjcID#__ocid__>)) is implemented.
+  * It is the instance of ((<(({OSX::ObjcID})) class>)).
+  * The method of the same specification as ((<(({OSX::ObjcID#__ocid__}))>)) is implemented.
 
 Usually, although you don't need to be conscious of the existence of
-this module itself, when you understand a motion of RubyCocoa, such as
+this module itself, when you understand a function of RubyCocoa, such as
 a mechanism of message invocation, it is also the most important
 portion.
 
 
-=== invoke a message to a Objective-C object
+=== Sending a message to an Objective-C object
 
-The OSX::OCObjWrapper module has invoked a message to the Objective-C
+The (({OSX::OCObjWrapper})) module has invoked a message to the Objective-C
 object for operation using the structure to which the method call
 which has not processed an object turns to ((|method_missing|)).
 
 
-=== Conversion to a Objective-C message selector from a Ruby method name
+=== Conversion to an Objective-C message selector from a Ruby method name
 
 In order to carry out the map of the message invocation (method call)
 in the world of Ruby to message invocation in the world of
@@ -82,9 +79,9 @@ also difficult to explain, an example shows.
 === "oc_" prefix of a method name
 
 As for the method from which a name begins in "oc_", a message is
-directly invoked to the Objective-C object for operation. It uses,
-mainly when the method of a same name exists in both by the side of
-Ruby and Objective-C.
+directly invoked to the Objective-C object for operation. It is used
+mainly when an identically-named method exists in both Ruby and Objective-C
+environments.
 
 
 === "?" suffix of a method name

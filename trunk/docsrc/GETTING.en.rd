@@ -3,20 +3,18 @@
 
 == Binary Distribution
 
-RubyCocoa in a binary distribution have been built for Ruby 1.6.7
-attached to Mac OS X 10.2.
+RubyCocoa's binary distribution has been built for the Ruby 1.6.7 distributed
+with Mac OS X 10.2.
 
-Download a
+Download
 ((<RubyCocoa-0.4.0.dmg|URL:http://www.imasy.or.jp/%7ehisa/mac/rubyosx/files/RubyCocoa-0.4.0.dmg>))
 from ((<file list|URL:http://www.imasy.or.jp/%7ehisa/mac/rubyosx/files/>)).
 
-It include library, samples, templates for Proejct Builder and etc of
-both RubyCocoa and RubyAEOSA. All of necessary for
-execution/development is included in a '.pkg' package file which is
-easy to install.
+It includes library, samples, templates for Project Builder, etc. for both
+RubyCocoa and RubyAEOSA. Everything necessary for execution and development is
+included in an easy-to-install '.pkg' package file.
 
-After installation of the binary package is successful, following
-items will appear:
+A successful installation of the binary package will add the following items:
 
 : /Library/Frameworks/RubyCocoa.framework
   RubyCocoa framework (core)
@@ -28,46 +26,45 @@ items will appear:
   RubyCocoa extended library (stub)
 
 : inside of '/Developer/ProjectBuilder Extras/'
-  some templates for ProjectBuilder
+  Some templates for ProjectBuilder
 
 : /Developer/Documentation/RubyCocoa
-  Documents (HTML)
+  HTML documentation
 
 : /Developer/Examples/RubyCocoa
-  sample programs
+  Sample programs
 
-After installation, let's try samples that are written by Ruby. Refer
+After installation, try the samples that are written in Ruby. Refer
 to ((<'Try RubyCocoa Samples'|URL:trysamples.en.html>)).
 
 
 == Source Distribution
 
-Download a
+Download
 ((<rubycocoa-0.4.0.tgz|URL:http://www.imasy.or.jp/%7ehisa/mac/rubyosx/files/rubycocoa-0.4.0.tgz>))
 from ((<file list|URL:http://www.imasy.or.jp/%7ehisa/mac/rubyosx/files/>)).
 
-Let's build and install RubyCocoa. Refer to 
+To build and install RubyCocoa, refer to 
 ((<"Build and Install RubyCocoa from Source"|URL:build.en.html>)).
 
 
-== Getting Source of Developing from CVS Server
+== Getting Development Source from CVS Server
 
-The latest (or the oldest) source of developing is available from 
-((<CVS Sever|URL:http://sourceforge.net/cvs/?group_id=44114>)).
+The latest (or the oldest) development source is available from the 
+((<CVS Server|URL:http://sourceforge.net/cvs/?group_id=44114>)).
 
 You can
-((<view CVS Repository|URL:http://cvs.sourceforge.net/cgi-bin/viewcvs.cgi/rubycocoa/src/>))
-for RubyCocoa. On shell command line, Type this:
+((<view the CVS Repository|URL:http://cvs.sourceforge.net/cgi-bin/viewcvs.cgi/rubycocoa/src/>))
+for RubyCocoa. On the shell command line, type this:
 
   $ cvs -d:pserver:anonymous@cvs.rubycocoa.sf.net:/cvsroot/rubycocoa login
   $ cvs -z3 -d:pserver:anonymous@cvs.rubycocoa.sf.net:/cvsroot/rubycocoa \
       co rubycocoa
 
-All of source for RubyCocoa is downloaed in a directory named
-'rubycocoa'.
+All of the source for RubyCocoa is downloaded into a directory named 'rubycocoa'.
 
-Build may fail because of nature of CVS. Some cvs commands such as
-'cvs update' or 'cvs status -v' will be helpful. Use these command
+Building may fail because of the nature of CVS. Some cvs commands such as
+'cvs update' or 'cvs status -v' will be helpful. Use these commands
 with appropriate options.
 
 

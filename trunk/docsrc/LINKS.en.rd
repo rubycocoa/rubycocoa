@@ -11,20 +11,20 @@
 
 : ((<Let's make an application with RubyCocoa (Japanese)|URL:http://mwave.sppd.ne.jp/diary/calc_app/calc_app1.html>))
 
-  Tutorial for RubyCocoa. It's described programming in RubyCocoa with
-  making a simple calculator application.
+  Tutorial for RubyCocoa. It describes programming in RubyCocoa through making
+  a simple calculator application.
 
 : ((<Project PINEAPPLE (Japanese)|URL:http://sacral.c.u-tokyo.ac.jp/~hasimoto/Pineapple/>))
 
-  RPM based distribution for Mac OS X.
+  RPM-based distribution for Mac OS X.
 
 : ((<Dr. Dobb's Journal May 2002|URL:http://www.ddj.com/articles/2002/0205/>))
 
-  an article about RubyCocoa wirtten by Chris Thomas.
+  an article about RubyCocoa written by Chris Thomas.
 
 : ((<RubyAEOSA|URL:http://www.imasy.or.jp/%7ehisa/mac/rubyaeosa/>))
 
-  Ruby interface for AppleEvent and Open Scripting Architecture (OSA)
+  Ruby interface for Apple Event and Open Scripting Architecture (OSA)
   on Mac OS X based Carbon framework. Recently, some classes
   (e.g. NSAppleScript) have been added to Cocoa incompletely.
 
@@ -70,15 +70,15 @@
 
 : ((<Ruby Garden (English)|URL:http://www.rubygarden.org/>))
 
-  News site about Ruby. Wiki exists.
+  News site about Ruby. There is also a Wiki for Ruby at this site.
 
 : ((<Rubyist! Make Programming More Fun (Japanese)|URL:http://www.rubycolor.org/r/>))
 
-  News site about Ruby for Japanese.
+  News site about Ruby for Japanese speakers.
 
 : ((<RNN (Japanese)|URL:http://rnn.sourceforge.jp/modules/news/>))
 
-  News & Forum site about Ruby for Japanse.
+  News & forum site about Ruby for Japanese speakers.
 
 : ((<RWiki|URL:http://www.jin.gr.jp/~nahi/RWiki/>))
 
@@ -86,10 +86,10 @@
 
 : ((<FreeRIDE|URL:http://www.rubyide.org/>))
 
-  The IDE for Ruby written by only Ruby.
+  The IDE for Ruby written completely in Ruby.
   FreeRIDE's GUI is written with FXRuby (FOX) currently. However, it
-  have abstraction layer for GUI. And, the implementation by GTK+
-  exists. Will implementation by RubyCocoa appear sometime, too?
+  has a GUI abstraction layer. And, the GTK+ implementation exists. Will a
+  RubyCocoa implementation appear sometime, too?
 
 
 == Misc
