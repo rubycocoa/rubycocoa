@@ -14,39 +14,103 @@
 
 #import <objc/objc-class.h>
 #import <Foundation/Foundation.h>
+#import <RubyCocoa/RBObject.h>
 
-struct _ocobj_data {
-  id  obj;
-  int ownership;
-};
+static VALUE
+rb_mdl_osx()
+{
+  return rb_const_get(rb_cObject, rb_intern("OSX"));
+}
 
-#define OCOBJ_DATA_PTR(o) ((struct _ocobj_data*)(DATA_PTR(o)))
-#define OCOBJ_ID_OF(o) (OCOBJ_DATA_PTR(o)->obj)
+static VALUE
+rb_cls_objcid()
+{
+  VALUE mOSX = rb_mdl_osx();
+  if (!mOSX) return Qnil;
+  return rb_const_get(mOSX, rb_intern("ObjcID"));
+}
+
+static VALUE
+rb_cls_ocobj()
+{
+  VALUE mOSX = rb_mdl_osx();
+  if (!mOSX) return Qnil;
+  return rb_const_get(mOSX, rb_intern("OCObject"));
+}
+
+static id
+rb_obj_ocid(VALUE rcv)
+{
+  VALUE val = rb_funcall(rcv, rb_intern("__ocid__"), 0);
+  return NUM2OCID(val);
+}
+
+static VALUE
+rb_ocobj_s_new(id ocid)
+{
+  return rb_funcall(rb_cls_ocobj(), rb_intern("new"), 1, OCID2NUM(ocid));
+}
+
+id rbobj_get_ocid (VALUE obj)
+{
+  VALUE val;
+  RB_ID mtd;
+
+  if (rb_obj_is_kind_of(obj, rb_cls_objcid()) == Qtrue)
+    return rb_obj_ocid(obj);
+
+  val = rb_ivar_get(obj, rb_intern("__objcid__"));
+  if (rb_obj_is_kind_of(val, rb_cls_objcid()) == Qtrue)
+    return rb_obj_ocid(val);
+
+  mtd = rb_intern("__ocid__");
+  if (rb_respond_to(obj, mtd))
+    return rb_obj_ocid(obj);
+
+  if (rb_respond_to(obj, rb_intern("to_nsobj"))) {
+    VALUE nso = rb_funcall(obj, rb_intern("to_nsobj"), 0);
+    return rb_obj_ocid(nso);
+  }
+
+  return nil;
+}
+
+VALUE ocid_get_rbobj (id ocid)
+{
+  if ([ocid isKindOfClass: [RBObject class]])
+    return [ocid __rbobj__];
+
+  if ([ocid respondsToSelector: @selector(__rbobj__)])
+    return [ocid __rbobj__];
+
+  return Qnil;
+}
+
 
 static VALUE rbclass_nsrect()
 {
-  VALUE mOSX = rb_const_get(rb_cObject, rb_intern("OSX"));
+  VALUE mOSX = rb_mdl_osx();
   if (!mOSX) return Qnil;
   return rb_const_get(mOSX, rb_intern("NSRect"));
 }
 
 static VALUE rbclass_nspoint()
 {
-  VALUE mOSX = rb_const_get(rb_cObject, rb_intern("OSX"));
+  VALUE mOSX = rb_mdl_osx();
   if (!mOSX) return Qnil;
   return rb_const_get(mOSX, rb_intern("NSPoint"));
 }
 
 static VALUE rbclass_nssize()
 {
-  VALUE mOSX = rb_const_get(rb_cObject, rb_intern("OSX"));
+  VALUE mOSX = rb_mdl_osx();
   if (!mOSX) return Qnil;
   return rb_const_get(mOSX, rb_intern("NSSize"));
 }
 
 static VALUE rbclass_nsrange()
 {
-  VALUE mOSX = rb_const_get(rb_cObject, rb_intern("OSX"));
+  VALUE mOSX = rb_mdl_osx();
   if (!mOSX) return Qnil;
   return rb_const_get(mOSX, rb_intern("NSRange"));
 }
@@ -73,11 +137,6 @@ to_octype(const char* octype_str)
   }
 
   return oct;
-}
-
-BOOL octype_object_p(int octype)
-{
-  return ((octype == _C_ID) || (octype == _C_CLASS));
 }
 
 size_t
@@ -150,66 +209,6 @@ ocdata_size(int octype)
 }
 
 void*
-ocdata_malloc_va_arg(va_list ap, int octype)
-{
-  void* data = ocdata_malloc(octype);
-
-  switch (octype) {
-
-  case _C_ID:
-  case _C_CLASS:
-    *(id*)data = va_arg(ap, id); break;
-  case _C_SEL:
-    *(SEL*)data = va_arg(ap, SEL); break;
-  case _C_CHR:
-    *(char*)data = va_arg(ap, char); break;
-  case _C_UCHR:
-    *(unsigned char*)data = va_arg(ap, unsigned char); break;
-  case _C_SHT:
-    *(short*)data = va_arg(ap, short); break;
-  case _C_USHT:
-    *(unsigned short*)data = va_arg(ap, unsigned short); break;
-  case _C_INT:
-    *(int*)data = va_arg(ap, int); break;
-  case _C_UINT:
-    *(unsigned int*)data = va_arg(ap, unsigned int); break;
-  case _C_LNG:
-    *(long*)data = va_arg(ap, long); break;
-  case _C_ULNG:
-    *(unsigned long*)data = va_arg(ap, unsigned long); break;
-  case _C_FLT:
-    *(float*)data = va_arg(ap, float); break;
-  case _C_DBL:
-    *(double*)data = va_arg(ap, double); break;
-  case _C_PTR:
-    *(void**)data = va_arg(ap, void*); break;
-  case _C_CHARPTR:
-    *(char**)data = va_arg(ap, char*); break;
-  case _C_VOID:
-    break;
-  case _PRIV_C_NSRECT:
-    *(NSRect*)data = va_arg(ap, NSRect); break;
-  case _PRIV_C_NSPOINT:
-    *(NSPoint*)data = va_arg(ap, NSPoint); break;
-  case _PRIV_C_NSSIZE:
-    *(NSSize*)data = va_arg(ap, NSSize); break;
-  case _PRIV_C_NSRANGE:
-    *(NSRange*)data = va_arg(ap, NSRange); break;
-  case _C_BFLD:
-  case _C_UNDEF:
-  case _C_ARY_B:
-  case _C_ARY_E:
-  case _C_UNION_B:
-  case _C_UNION_E:
-  case _C_STRUCT_B:
-  case _C_STRUCT_E:
-  default:
-    break;
-  }
-  return data;
-}
-
-void*
 ocdata_malloc(int octype)
 {
   size_t s = ocdata_size(octype);
@@ -218,15 +217,17 @@ ocdata_malloc(int octype)
 }
 
 BOOL
-ocdata_to_rbobj(int octype, const void* ocdata,	VALUE* result)
+ocdata_to_rbobj(VALUE context_obj,
+		int octype, const void* ocdata, VALUE* result)
 {
   BOOL f_success = YES;
   VALUE rbval = Qnil;
+
   switch (octype) {
 
   case _C_ID:
   case _C_CLASS:
-    rbval = OCID2NUM(*(id*)ocdata);
+    rbval = ocid_to_rbobj(context_obj, *(id*)ocdata);
     break;
 
   case _PRIV_C_BOOL:
@@ -414,43 +415,11 @@ static BOOL rbobj_convert_to_nsobj(VALUE obj, id* nsobj)
 
 BOOL rbobj_to_nsobj(VALUE obj, id* nsobj)
 {
-  VALUE mOSX, cOCObject, rb_ocobj;
+  *nsobj = rbobj_get_ocid(obj);
+  if (*nsobj != nil) return YES;
 
-  // Object#__ocid__ (OCObject ?)
-  if (rb_respond_to(obj, rb_intern("__ocid__"))) {
-    VALUE val = rb_funcall(obj, rb_intern("__ocid__"), 0);
-    *nsobj = (id) NUM2ULONG(val);
+  if (rbobj_convert_to_nsobj(obj, nsobj))
     return YES;
-  }
- 
- // Object#to_nsobj
-  if (rb_respond_to(obj, rb_intern("to_nsobj"))) {
-    VALUE nso = rb_funcall(obj, rb_intern("to_nsobj"), 0);
-    VALUE val = rb_funcall(nso, rb_intern("__ocid__"), 0);
-    *nsobj = (id) NUM2ULONG(val);
-    return YES;
-  }
-
-  // OSX::OCObject::rbobj_to_nsobj
-  mOSX = rb_const_get(rb_cObject, rb_intern("OSX"));
-  if (mOSX != Qnil) {
-    cOCObject = rb_const_get(mOSX, rb_intern("OCObject"));
-    if (cOCObject != Qnil) {
-      RB_ID mid = rb_intern("rbobj_to_nsobj");
-      if (rb_respond_to(cOCObject, mid)) {
-	rb_ocobj = rb_funcall(cOCObject, mid, 1, obj);
-	if (rb_ocobj != Qnil) {
-	  *nsobj = (id) OCOBJ_ID_OF(rb_ocobj);
-	  return YES;
-	}
-      }
-    }
-  }
-
-  // convert
-  if (rbobj_convert_to_nsobj(obj, nsobj)) {
-    return YES;
-  }
 
   return NO;
 }
@@ -468,7 +437,7 @@ VALUE bool_to_rbobj (BOOL val)
 VALUE sel_to_rbobj (SEL val)
 {
   VALUE rbobj;
-  if (ocdata_to_rbobj(_C_SEL, &val, &rbobj)) {
+  if (ocdata_to_rbobj(Qnil, _C_SEL, &val, &rbobj)) {
     rbobj = rb_obj_as_string(rbobj);
     // str.tr!(':','_')
     rb_funcall(rbobj, rb_intern("tr!"), 2, rb_str_new2(":"), rb_str_new2("_"));
@@ -494,6 +463,23 @@ VALUE uint_to_rbobj (unsigned int val)
 VALUE double_to_rbobj (double val)
 {
   return rb_float_new(val);
+}
+
+VALUE
+ocid_to_rbobj(VALUE context_obj, id ocid)
+{
+  VALUE result;
+
+  result = ocid_get_rbobj(ocid);
+
+  if (result == Qnil) {
+    if (rbobj_get_ocid(context_obj) == ocid)
+      result = context_obj;
+    else
+      result = rb_ocobj_s_new(ocid);
+  }
+
+  return result;
 }
 
 
@@ -692,3 +678,4 @@ rbobj_to_ocdata(VALUE obj, int octype, void* ocdata)
 
   return f_success;
 }
+

@@ -16,7 +16,7 @@
 void
 rbarg_to_nsarg(VALUE rbarg, int octype, void* nsarg, id pool, int index)
 {
-  if (!rbobj_to_ocdata(Qnil, rbarg, octype, nsarg)) {
+  if (!rbobj_to_ocdata(rbarg, octype, nsarg)) {
     if (pool) [pool release];
     rb_raise(rb_eArgError, "arg #%d cannot convert to nsobj.", index);
   }
