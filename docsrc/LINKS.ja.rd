@@ -5,8 +5,8 @@
 * ((<RubyCocoaプロジェクト|URL:http://sourceforge.net/projects/rubycocoa/>))
 * ((<メーリングリスト(日本語)|URL:http://www.freeml.com/info/rubycocoa@freeml.com>))
 * ((<メーリングリスト(英語)|URL:http://sourceforge.net/mail/?group_id=44114>))
-* ((<RubyCocoa Wiki (日本語)|URL:http://www.fobj.com/rubycocoa/w.ja/>))
-* ((<RubyCocoa Wiki (英語)|URL:http://www.fobj.com/rubycocoa/w.en/>))
+* ((<RubyCocoa Wiki (日本語)|URL:http://rubycocoa.sourceforge.net/w.ja>))
+* ((<RubyCocoa Wiki (英語)|URL:http://rubycocoa.sourceforge.net/w.en>))
 
 
 == RubyCocoa関連
