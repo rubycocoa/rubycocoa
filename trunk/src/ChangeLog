@@ -9,6 +9,9 @@
 	* framework: RBRuntime.m: change method list allocation size
 	(magical number)
 
+	* framework: ocdata_conv.m: rbobj_convert_to_nsobj() implement
+	converting Ruby's Numeric to NSDecimalNumber.
+
 2001-11-28  FUJIMOTO Hisakuni  <hisa@fobj.com>
 
 	* rewrite the dotview sample with reading 'Learning Cocoa Ch.8'
