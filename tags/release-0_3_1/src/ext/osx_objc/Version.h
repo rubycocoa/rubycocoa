@@ -1,0 +1,2 @@
+#define RUBYCOCOA_VERSION       "0.3.1"
+#define RUBYCOCOA_RELEASE_DATE  "2002-09-28"
