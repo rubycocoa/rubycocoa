@@ -15,7 +15,9 @@ class AppController < OSX::NSObject
     @thread.kill
     @thread = nil
     Thread.start do
+      sender.setEnabled (false)
       hello_sequence
+      sender.setEnabled (true)
       @thread = start_thread
     end
   end
