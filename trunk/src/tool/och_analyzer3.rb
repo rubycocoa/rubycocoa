@@ -169,7 +169,6 @@ class OCHeaderAnalyzer
     when 'float' then :_C_FLT
     when 'double' then :_C_DBL
     when /char\s*\*$/ then :_C_CHARPTR
-    when /NS\w+\s*\*$/ then :_PRIV_C_ID_PTR
     when /\*$/ then :_PRIV_C_PTR
     else :UNKNOWN
     end
