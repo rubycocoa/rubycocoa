@@ -152,6 +152,7 @@ ocm_invoke(int argc, VALUE* argv, VALUE rcv, VALUE* result)
   id oc_msig;
   id oc_inv;
   int i;
+  unsigned ret_len;
   VALUE excp = Qnil;
 
   if (oc_rcv == nil) return NO;
@@ -184,14 +185,12 @@ ocm_invoke(int argc, VALUE* argv, VALUE rcv, VALUE* result)
     void* ocdata;
     BOOL f_conv_success;
     DLOG2("    arg_type[%d]: %s", i, octype_str);
-    ocdata = ocdata_malloc(octype);
+    ocdata = OCDATA_ALLOCA(octype, octype_str);
     f_conv_success = rbobj_to_ocdata(arg, octype, ocdata);
     if (f_conv_success) {
       [oc_inv setArgument: ocdata atIndex: (i+2)];
-      free(ocdata);
     }
     else {
-      free(ocdata);
       [pool release];
       rb_raise(rb_eRuntimeError,
 	       "cannot convert the argument #%d as '%s' to NS argument.",
@@ -216,13 +215,13 @@ ocm_invoke(int argc, VALUE* argv, VALUE rcv, VALUE* result)
   DLOG1("    NSInvocation#invoke (%@): done.", oc_sel_str);
 
   // get result
-  if ([oc_msig methodReturnLength] > 0) {
+  ret_len = [oc_msig methodReturnLength];
+  if (ret_len > 0) {
     int octype = to_octype([oc_msig methodReturnType]);
     BOOL f_conv_success;
-    void* result_data = ocdata_malloc(octype);
+    void* result_data = alloca(ret_len);
     [oc_inv getReturnValue: result_data];
     f_conv_success = ocdata_to_rbobj(rcv, octype, result_data, result);
-    free(result_data);
     if (!f_conv_success) {
       [pool release];
       rb_raise(rb_eRuntimeError,

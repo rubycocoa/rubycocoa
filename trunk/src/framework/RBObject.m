@@ -159,11 +159,10 @@ static SEL ruby_method_sel(int argc)
     VALUE arg_val;
     const char* octstr = [msig getArgumentTypeAtIndex: (i+2)];
     int octype = to_octype(octstr);
-    void* ocdata = ocdata_malloc(octype);
+    void* ocdata = OCDATA_ALLOCA(octype, octstr);
     BOOL f_conv_success;
     [an_inv getArgument: ocdata atIndex: (i+2)];
     f_conv_success = ocdata_to_rbobj(Qnil, octype, ocdata, &arg_val);
-    free(ocdata);
     if (f_conv_success == NO) {
       arg_val = Qnil;
     }
@@ -175,7 +174,8 @@ static SEL ruby_method_sel(int argc)
 - (BOOL)stuffForwardResult: (VALUE)result to: (NSInvocation*)an_inv
 {
   NSMethodSignature* msig = [an_inv methodSignature];
-  int octype = to_octype([msig methodReturnType]);
+  const char* octype_str = [msig methodReturnType];
+  int octype = to_octype(octype_str);
   BOOL f_success;
 
   if (octype == _C_VOID) {
@@ -193,10 +193,9 @@ static SEL ruby_method_sel(int argc)
     f_success = YES;
   }
   else {
-    void* ocdata = ocdata_malloc(octype);
+    void* ocdata = OCDATA_ALLOCA(octype, octype_str);
     f_success = rbobj_to_ocdata (result, octype, ocdata);
     if (f_success) [an_inv setReturnValue: ocdata];
-    free(ocdata);
   }
   return f_success;
 }
