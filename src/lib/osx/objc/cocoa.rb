@@ -8,4 +8,5 @@
 #  the GNU Lesser General Public License version 2.
 #
 
-require 'osx/objc/cocoa'
+require 'osx/objc/foundation'
+require 'osx/objc/appkit'
