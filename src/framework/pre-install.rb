@@ -2,7 +2,10 @@ install_root = @config['install-root']
 
 # strip symbols for diet of the object file.
 fwname = @config['framework-name']
-command "strip -x 'build/#{fwname}.framework/Versions/Current/#{fwname}"
+curdir = Dir.pwd
+Dir.chdir "build/#{fwname}.framework/Versions/Current"
+command "strip -x #{fwname}"
+Dir.chdir curdir
 
 # If required, backup files create here.
 backup_dir = '/tmp/rubycocoa_backup'
