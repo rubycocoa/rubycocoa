@@ -232,7 +232,7 @@ static id imp_c_addRubyMethod(Class klass, SEL method, SEL arg0)
     rb_raise( rb_eRuntimeError, 
 	      "could not add '%s' to class '%s': "
 	      "Objective-C cannot find it in the superclass",
-	      (char *) method, klass->name );
+	      (char *) arg0, klass->name );
   }
   else {
     // override method
