@@ -25,11 +25,11 @@ TARGET = \
 	$(TARGETDIR)/trysamples.ja.html \
 	$(TARGETDIR)/references.ja.html \
 	$(TARGETDIR)/references.en.html \
+	$(TARGETDIR)/news.en.html \
+	$(TARGETDIR)/news.ja.html \
 	$(TARGETDIR)/changelog.html \
 	$(TARGETDIR)/rubycocoasite.css
 
-# 	$(TARGETDIR)/news.en.html \
-# 	$(TARGETDIR)/news.ja.html \
 
 
 TEMPLATES = \
@@ -38,13 +38,15 @@ TEMPLATES = \
 	site-menubar.en.xml site-menubar.ja.xml \
 	page-template.html
 
-# 	sidebar-news.en.xml sidebar-news.ja.xml \
+DYNAMIC_ITEMS = \
+	sidebar-news.en.xml sidebar-news.ja.xml \
+	news.en.xml news.ja.xml
 
 
 all:	$(TARGETDIR) $(TARGET)
 
 clean:
-	-rm -f $(TARGET)
+	-rm -f $(TARGET) $(DYNAMIC_ITEMS)
 
 install:	$(TARGETDIR) $(TARGET)
 	-cp -fp $(TARGET) $(INSTALL_TARGETDIR)
@@ -58,64 +60,76 @@ $(TARGETDIR):
 $(TARGETDIR)/rubycocoasite.css:	rubycocoasite.css
 	-cp -f $< $(TARGETDIR)/
 
-$(TARGETDIR)/index.en.html:	INDEX.en
+news.en.xml:	NEWS.data
+	$(RUBY) news_to_body.rb en < $< > $@
+
+news.ja.xml:	NEWS.data
+	$(RUBY) news_to_body.rb ja < $< > $@
+
+sidebar-news.en.xml:	NEWS.data
+	$(RUBY) news_to_headline.rb en < $< > $@
+
+sidebar-news.ja.xml:	NEWS.data
+	$(RUBY) news_to_headline.rb ja < $< > $@
+
+$(TARGETDIR)/index.en.html:	INDEX.en.rd sidebar-news.en.xml
+	$(RUBY) make_html.rb $< $(TARGETDIR) news
+
+$(TARGETDIR)/index.ja.html:	INDEX.ja.rd sidebar-news.ja.xml
+	$(RUBY) make_html.rb $< $(TARGETDIR) news
+
+$(TARGETDIR)/changes.en.html:	CHANGES.en.rd
 	$(RUBY) make_html.rb $< $(TARGETDIR)
 
-$(TARGETDIR)/index.ja.html:	INDEX.ja
+$(TARGETDIR)/changes.ja.html:	CHANGES.ja.rd
 	$(RUBY) make_html.rb $< $(TARGETDIR)
 
-$(TARGETDIR)/changes.en.html:	CHANGES.en
+$(TARGETDIR)/faq.en.html:	FAQ.en.rd
 	$(RUBY) make_html.rb $< $(TARGETDIR)
 
-$(TARGETDIR)/changes.ja.html:	CHANGES.ja
+$(TARGETDIR)/faq.ja.html:	FAQ.ja.rd
 	$(RUBY) make_html.rb $< $(TARGETDIR)
 
-$(TARGETDIR)/faq.en.html:	FAQ.en
+$(TARGETDIR)/getting.en.html:	GETTING.en.rd
 	$(RUBY) make_html.rb $< $(TARGETDIR)
 
-$(TARGETDIR)/faq.ja.html:	FAQ.ja
+$(TARGETDIR)/getting.ja.html:	GETTING.ja.rd
 	$(RUBY) make_html.rb $< $(TARGETDIR)
 
-$(TARGETDIR)/getting.en.html:	GETTING.en
+$(TARGETDIR)/build.en.html:	BUILD.en.rd
 	$(RUBY) make_html.rb $< $(TARGETDIR)
 
-$(TARGETDIR)/getting.ja.html:	GETTING.ja
+$(TARGETDIR)/build.ja.html:	BUILD.ja.rd
 	$(RUBY) make_html.rb $< $(TARGETDIR)
 
-$(TARGETDIR)/build.en.html:	BUILD.en
+$(TARGETDIR)/links.en.html:	LINKS.en.rd
 	$(RUBY) make_html.rb $< $(TARGETDIR)
 
-$(TARGETDIR)/build.ja.html:	BUILD.ja
+$(TARGETDIR)/links.ja.html:	LINKS.ja.rd
 	$(RUBY) make_html.rb $< $(TARGETDIR)
 
-$(TARGETDIR)/links.en.html:	LINKS.en
+$(TARGETDIR)/news.en.html:	news.en.xml
 	$(RUBY) make_html.rb $< $(TARGETDIR)
 
-$(TARGETDIR)/links.ja.html:	LINKS.ja
+$(TARGETDIR)/news.ja.html:	news.ja.xml
 	$(RUBY) make_html.rb $< $(TARGETDIR)
 
-# $(TARGETDIR)/news.en.html:	NEWS.en
-# 	$(RUBY) make_html.rb $< $(TARGETDIR)
-
-# $(TARGETDIR)/news.ja.html:	NEWS.ja
-# 	$(RUBY) make_html.rb $< $(TARGETDIR)
-
-$(TARGETDIR)/programming.en.html:	PROGRAMMING.en
+$(TARGETDIR)/programming.en.html:	PROGRAMMING.en.rd
 	$(RUBY) make_html.rb $< $(TARGETDIR)
 
-$(TARGETDIR)/programming.ja.html:	PROGRAMMING.ja
+$(TARGETDIR)/programming.ja.html:	PROGRAMMING.ja.rd
 	$(RUBY) make_html.rb $< $(TARGETDIR)
 
-$(TARGETDIR)/trysamples.en.html:	TRYSAMPLES.en
+$(TARGETDIR)/trysamples.en.html:	TRYSAMPLES.en.rd
 	$(RUBY) make_html.rb $< $(TARGETDIR)
 
-$(TARGETDIR)/trysamples.ja.html:	TRYSAMPLES.ja
+$(TARGETDIR)/trysamples.ja.html:	TRYSAMPLES.ja.rd
 	$(RUBY) make_html.rb $< $(TARGETDIR)
 
-$(TARGETDIR)/references.en.html:	REFERENCES.en
+$(TARGETDIR)/references.en.html:	REFERENCES.en.rd
 	$(RUBY) make_html.rb $< $(TARGETDIR)
 
-$(TARGETDIR)/references.ja.html:	REFERENCES.ja
+$(TARGETDIR)/references.ja.html:	REFERENCES.ja.rd
 	$(RUBY) make_html.rb $< $(TARGETDIR)
 
 $(TARGETDIR)/changelog.html:		$(CHANGELOG_SRC)
