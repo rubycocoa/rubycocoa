@@ -16,6 +16,7 @@
 #import <Foundation/NSBundle.h>
 #import <Foundation/NSAutoreleasePool.h>
 #import <Foundation/NSString.h>
+#import <Foundation/NSPathUtilities.h>
 #import "mdl_osxobjc.h"
 
 #define RUBY_MAIN_NAME "rb_main.rb"
