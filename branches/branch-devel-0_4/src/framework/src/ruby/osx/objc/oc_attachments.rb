@@ -16,7 +16,7 @@ module OSX
     def each
       iter = self.objectEnumerator
       while obj = iter.nextObject do
-	yield (obj)
+	yield(obj)
       end
       self
     end
@@ -27,17 +27,17 @@ module OSX
 
     def [] (index)
       index = self.count + index if index < 0
-      self.objectAtIndex (index)
+      self.objectAtIndex(index)
     end
 
     def []= (index, obj)
       index = self.count + index if index < 0
-      self.replaceObjectAtIndex_withObject (index, obj)
+      self.replaceObjectAtIndex_withObject(index, obj)
       obj
     end
 
     def push (obj)
-      self.addObject (obj)
+      self.addObject(obj)
     end
 
   end				# module RCArrayAttachment
@@ -48,7 +48,7 @@ module OSX
     def each
       iter = self.keyEnumerator
       while key = iter.nextObject do
-	yield (key, self.objectForKey (key))
+	yield(key, self.objectForKey(key))
       end
       self
     end
@@ -66,11 +66,11 @@ module OSX
     end
 
     def [] (key)
-      self.objectForKey (key)
+      self.objectForKey(key)
     end
 
     def []= (key, obj)
-      self.setObject_forKey (obj, key)
+      self.setObject_forKey(obj, key)
       obj
     end
 
