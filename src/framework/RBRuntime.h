@@ -20,6 +20,7 @@ Class RBOCClassNew(const char* name, Class superclass);
 Class RBOCDerivedClassNew(const char* name, Class superclass);
 
 void RBThreadSchedulerStart(NSTimeInterval interval);
+void RBThreadSchedulerStop();
 
 @interface NSObject(RBOverrideMixin)
 - __slave__;
