@@ -57,11 +57,11 @@ module OSX
     KABPrefixMatch
     KABPrefixMatchCaseInsensitive
   ).
-    each_with_index {|name, value| module_eval "#{name} = #{value}" }
+    each_with_index {|name, value| module_eval "#{name} = #{value}",__FILE__,__LINE__+1 }
 
   # typedef enum _ABSearchConjunction {...} ABSearchConjunction;
   %w(KABSearchAnd KABSearchOr).
-    each_with_index {|name, value| module_eval "#{name} = #{value}" }
+    each_with_index {|name, value| module_eval "#{name} = #{value}",__FILE__,__LINE__+1 }
 
   # constants
   [
@@ -126,12 +126,12 @@ module OSX
     :kABDatabaseChangedExternallyNotification
 
   ].each do |name|
-    module_eval %{
+    module_eval <<-END,__FILE__,__LINE__+1
       def #{name}
 	objc_symbol_to_obj('#{name}', '@')
       end
       module_function :#{name}
-    }
+    END
   end
 
 end
