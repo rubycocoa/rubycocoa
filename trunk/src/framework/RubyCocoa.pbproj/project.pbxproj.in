@@ -113,7 +113,7 @@
 				FRAMEWORK_SEARCH_PATHS = "";
 				FRAMEWORK_VERSION = A;
 				HEADER_SEARCH_PATHS = "%%%ruby_header_dir%%%";
-				INSTALL_PATH = %%%frameworks%%%;
+				INSTALL_PATH = "@executable_path/../Frameworks";
 				LIBRARY_SEARCH_PATHS = "%%%libruby_path_dirname%%%";
 				OTHER_CFLAGS = "-fno-common";
 				OTHER_LDFLAGS = "-undefined suppress -flat_namespace";
@@ -532,7 +532,7 @@
 		};
 		E88C6D21035BACFD031D1B90 = {
 			isa = PBXFileReference;
-			name = %%%libruby_path_basename%%%;
+			name = "%%%libruby_path_basename%%%";
 			path = "%%%libruby_path%%%";
 			refType = 0;
 		};
