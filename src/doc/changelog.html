@@ -2,6 +2,29 @@
 <head><title>RubyCocoa - ChangeLog</title></head>
 <body>
 <pre>
+2003-02-28  Shirai,Kaoru  
+	
+	* framework/src/objc/ocdata_conv.m:
+	In framework/src/objc/ocdata_conv.m, nil is converted into empty
+	selctor "", so we cannot pass NULL to Objective-C function.
+	(Example. didDismissSelector argument of NSApplication.beginAlertSheet)
+
+2003-01-23  FUJIMOTO Hisakuni  
+
+	* doc/index.en.html, doc/index.ja.html, doc/links.en.html, doc/programming.en.html, doc/references.en.html, doc/trysamples.en.html, doc/changes.en.html, doc/faq.en.html, doc/getting.en.html, doc/changelog.html, doc/build.en.html:
+	applied a patch by John Platte
+
+2003-01-17  FUJIMOTO Hisakuni  
+
+	* framework/src/objc/RBThreadSwitcher.m:
+	define DEFAULT_WAIT (default is 0) and DEFAULT_INTERVAL (defualt is 0.050).
+
+	* framework/src/objc/ocdata_conv.m:
+	rbobj_to_nsobj() - change to the same as behavior of 0.4.0 for "to_nsobj(ect)".
+
+	* framework/src/objc/mdl_osxobjc.m:
+	rbobj_get_ocid() - change to the same as behavior of 0.4.0 for "to_nsobj".
+
 2003-01-16  FUJIMOTO Hisakuni  
 
 	* sample, template: rb_main_init() in every rb_main.rb - wrap an

@@ -92,9 +92,9 @@ Special thanks to Chris Thomas, Luc "lucsky" Heinrich and S. Sawada.
 
 And thanks to:
 
-Gesse Gam, Hiroyuki Shimura, John Platte, Masaki Yatsu, 
-Masatoshi Seki, Michael Miller, Ogino Junya, Ralph Broom, Rich Kilmer, 
-Tetsuhumi Takaishi, Tosh and other folks.
+Gesse Gam, Hiroyuki Shimura, John Platte, Masaki Yatsu, Masatoshi Seki,
+Michael Miller, Ogino Junya, Ralph Broom, Rich Kilmer, Shirai Kaoru, 
+Tetsuhumi Takaishi, Tosh
 
 
 == Contact
