@@ -155,6 +155,7 @@ class OCHeaderAnalyzer
     when /^unsigned\s+short(\s+int)?$/ then :_C_USHT
     when /^short(\s+int)?$/ then :_C_SHT
     when /^unsigned\s+int$/ then :_C_UINT
+    when /^unsigned$/ then :_C_UINT
     when 'int' then :_C_INT
     when /^unsigned\s+long(\s+int)?$/ then :_C_ULNG
     when /^long(\s+int)?$/ then :_C_LNG
@@ -188,7 +189,8 @@ class OCHeaderAnalyzer
       @type = type
       @name = name
       @orig = orig
-      @octype = OCHeaderAnalyzer.octype_of(type)
+      t = type.gsub(/\b(__)?const\b/,'').strip
+      @octype = OCHeaderAnalyzer.octype_of(t)
     end
 
     def to_s
