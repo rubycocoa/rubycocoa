@@ -18,8 +18,12 @@
   unsigned long rbobj;
 }
 
++ rubyObjectWithOCObject: (id)a_ocobj;
+
 - init;
-- initWithRubyClassName: a_rbclass_name;
+- initWithRubyClassName: (NSString*)a_rbclass_name;
+- initWithOCObject: (id)a_ocobj;
+- initWithRubyClassName: (NSString*)a_rbclass_name ocObject: (id)a_ocobj;
 - initWithRubyObject: (unsigned long)a_rbobj;
 
 @end
