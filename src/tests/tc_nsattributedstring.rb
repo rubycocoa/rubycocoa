@@ -1,7 +1,17 @@
-require 'rubyunit'
+#
+#  $Id$
+#
+#  Copyright (c) 2001 FUJIMOTO Hisakuni <hisa@imasy.or.jp>
+#
+#  This program is free software.
+#  You can distribute/modify this program under the terms of
+#  the GNU Lesser General Public License version 2.
+#
+
+require 'test/unit'
 require 'osx/cocoa'
 
-class TestNSAttributedString < RUNIT::TestCase
+class TC_NSAttributedString < Test::Unit::TestCase
 
   STR = 'Hello World'
   HTML_A = "<h1>#{STR}</h1>".freeze # 
@@ -28,7 +38,7 @@ class TestNSAttributedString < RUNIT::TestCase
     # illegal 2nd arg
     data = OSX::NSData.dataWithBytes_length(HTML_B, HTML_B.size)
     arg1 = Object.new
-    assert_exception(OSX::OCDataConvException) do
+    assert_raises(OSX::OCDataConvException) do
       obj = OSX::NSAttributedString.alloc.initWithHTML_documentAttributes(data, arg1)
     end
   end
