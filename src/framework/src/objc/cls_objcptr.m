@@ -58,9 +58,11 @@ _objcptr_s_new(VALUE klass, long len)
 {
   VALUE obj;
   obj = Data_Wrap_Struct(klass, 0, _objcptr_data_free, _objcptr_data_new());
+  rb_obj_taint(obj);
   if (len > 0) {
     CPTR_OF (obj) = (void*) malloc (len);
     if (CPTR_OF (obj)) ALLOCATED_SIZE_OF(obj) = len;
+    rb_obj_untaint(obj);
   }
   return obj;
 }
@@ -114,7 +116,7 @@ rb_objcptr_allocated_size(VALUE rcv)
 static VALUE
 rb_objcptr_bytestr_at(VALUE rcv, VALUE offset, VALUE length)
 {
-  return rb_str_new ((char*)CPTR_OF(rcv) + NUM2LONG(offset), NUM2LONG(length));
+  return rb_tainted_str_new ((char*)CPTR_OF(rcv) + NUM2LONG(offset), NUM2LONG(length));
 }
 
 static VALUE
@@ -129,7 +131,7 @@ rb_objcptr_bytestr(int argc, VALUE* argv, VALUE rcv)
     Check_Type(rb_length, T_FIXNUM);
     length = NUM2LONG(rb_length);
   }
-  return rb_str_new (CPTR_OF(rcv), length);
+  return rb_tainted_str_new (CPTR_OF(rcv), length);
 }
 
 static VALUE
@@ -231,8 +233,10 @@ objcptr_s_new_with_cptr (void* cptr)
 /** instance methods called from the Objc World **/
 void* objcptr_cptr (VALUE rcv)
 {
-  if (CLASS_OF(rcv) == _kObjcPtr)
+  if (CLASS_OF(rcv) == _kObjcPtr) {
+    OBJ_TAINT(rcv);		   // A raw C pointer is passed to the C world, so it may taint.
     return CPTR_OF(rcv);
+  }
   return NULL;
 }
 
@@ -245,11 +249,11 @@ init_cls_ObjcPtr(VALUE outer)
   _kObjcPtr = rb_define_class_under (outer, "ObjcPtr", rb_cObject);
 
   rb_define_singleton_method (_kObjcPtr, "new", rb_objcptr_s_allocate, 1);
-  rb_define_singleton_method (_kObjcPtr, "allocate_as_int", rb_objcptr_s_allocate_as_int32, 0);
-  rb_define_singleton_method (_kObjcPtr, "allocate_as_bool", rb_objcptr_s_allocate_as_int8, 0);
   rb_define_singleton_method (_kObjcPtr, "allocate_as_int8", rb_objcptr_s_allocate_as_int8, 0);
   rb_define_singleton_method (_kObjcPtr, "allocate_as_int16", rb_objcptr_s_allocate_as_int16, 0);
   rb_define_singleton_method (_kObjcPtr, "allocate_as_int32", rb_objcptr_s_allocate_as_int32, 0);
+  rb_define_singleton_method (_kObjcPtr, "allocate_as_int", rb_objcptr_s_allocate_as_int32, 0);
+  rb_define_singleton_method (_kObjcPtr, "allocate_as_bool", rb_objcptr_s_allocate_as_int8, 0);
 
   rb_define_method (_kObjcPtr, "inspect", rb_objcptr_inspect, 0);
   rb_define_method (_kObjcPtr, "allocated_size", rb_objcptr_allocated_size, 0);
@@ -257,25 +261,25 @@ init_cls_ObjcPtr(VALUE outer)
   rb_define_method (_kObjcPtr, "bytestr_at", rb_objcptr_bytestr_at, 2);
   rb_define_method (_kObjcPtr, "bytestr", rb_objcptr_bytestr, -1);
 
-  rb_define_method (_kObjcPtr, "int_at", rb_objcptr_int32_at, 1);
-  rb_define_method (_kObjcPtr, "uint_at", rb_objcptr_uint32_at, 1);
-  rb_define_method (_kObjcPtr, "bool_at", rb_objcptr_uint8_at, 1);
   rb_define_method (_kObjcPtr, "int8_at", rb_objcptr_int8_at, 1);
   rb_define_method (_kObjcPtr, "uint8_at", rb_objcptr_uint8_at, 1);
   rb_define_method (_kObjcPtr, "int16_at", rb_objcptr_int16_at, 1);
   rb_define_method (_kObjcPtr, "uint16_at", rb_objcptr_uint16_at, 1);
   rb_define_method (_kObjcPtr, "int32_at", rb_objcptr_int32_at, 1);
   rb_define_method (_kObjcPtr, "uint32_at", rb_objcptr_uint32_at, 1);
+  rb_define_alias (_kObjcPtr, "int_at", "int32_at");
+  rb_define_alias (_kObjcPtr, "uint_at", "uint32_at");
+  rb_define_alias (_kObjcPtr, "bool_at", "uint8_at");
 
-  rb_define_method (_kObjcPtr, "int", rb_objcptr_int32, 0);
-  rb_define_method (_kObjcPtr, "uint", rb_objcptr_uint32, 0);
-  rb_define_method (_kObjcPtr, "bool", rb_objcptr_uint8, 0);
   rb_define_method (_kObjcPtr, "int8", rb_objcptr_int8, 0);
   rb_define_method (_kObjcPtr, "uint8", rb_objcptr_uint8, 0);
   rb_define_method (_kObjcPtr, "int16", rb_objcptr_int16, 0);
   rb_define_method (_kObjcPtr, "uint16", rb_objcptr_uint16, 0);
   rb_define_method (_kObjcPtr, "int32", rb_objcptr_int32, 0);
   rb_define_method (_kObjcPtr, "uint32", rb_objcptr_uint32, 0);
+  rb_define_alias (_kObjcPtr, "int", "int32");
+  rb_define_alias (_kObjcPtr, "uint", "uint32");
+  rb_define_alias (_kObjcPtr, "bool", "uint8");
 
   return _kObjcPtr;
 }
