@@ -19,9 +19,9 @@ osx_NSDecimalCopy(VALUE mdl, VALUE a0, VALUE a1)
   VALUE rb_result;
   id pool = [[NSAutoreleasePool alloc] init];
   /* a0 */
-  rbarg_to_nsarg(a0, _C_PTR, &ns_a0, pool, 0);
+  rbarg_to_nsarg(a0, _PRIV_C_PTR, &ns_a0, pool, 0);
   /* a1 */
-  rbarg_to_nsarg(a1, _C_PTR, &ns_a1, pool, 1);
+  rbarg_to_nsarg(a1, _PRIV_C_PTR, &ns_a1, pool, 1);
 
   NSDecimalCopy(ns_a0, ns_a1);
 
@@ -40,7 +40,7 @@ osx_NSDecimalCompact(VALUE mdl, VALUE a0)
   VALUE rb_result;
   id pool = [[NSAutoreleasePool alloc] init];
   /* a0 */
-  rbarg_to_nsarg(a0, _C_PTR, &ns_a0, pool, 0);
+  rbarg_to_nsarg(a0, _PRIV_C_PTR, &ns_a0, pool, 0);
 
   NSDecimalCompact(ns_a0);
 
@@ -69,9 +69,9 @@ osx_NSDecimalRound(VALUE mdl, VALUE a0, VALUE a1, VALUE a2, VALUE a3)
   VALUE rb_result;
   id pool = [[NSAutoreleasePool alloc] init];
   /* a0 */
-  rbarg_to_nsarg(a0, _C_PTR, &ns_a0, pool, 0);
+  rbarg_to_nsarg(a0, _PRIV_C_PTR, &ns_a0, pool, 0);
   /* a1 */
-  rbarg_to_nsarg(a1, _C_PTR, &ns_a1, pool, 1);
+  rbarg_to_nsarg(a1, _PRIV_C_PTR, &ns_a1, pool, 1);
   /* a2 */
   rbarg_to_nsarg(a2, _C_INT, &ns_a2, pool, 2);
   /* a3 */
@@ -97,9 +97,9 @@ osx_NSDecimalNormalize(VALUE mdl, VALUE a0, VALUE a1, VALUE a2)
   VALUE rb_result;
   id pool = [[NSAutoreleasePool alloc] init];
   /* a0 */
-  rbarg_to_nsarg(a0, _C_PTR, &ns_a0, pool, 0);
+  rbarg_to_nsarg(a0, _PRIV_C_PTR, &ns_a0, pool, 0);
   /* a1 */
-  rbarg_to_nsarg(a1, _C_PTR, &ns_a1, pool, 1);
+  rbarg_to_nsarg(a1, _PRIV_C_PTR, &ns_a1, pool, 1);
   /* a2 */
   rbarg_to_nsarg(a2, _C_INT, &ns_a2, pool, 2);
 
@@ -124,11 +124,11 @@ osx_NSDecimalAdd(VALUE mdl, VALUE a0, VALUE a1, VALUE a2, VALUE a3)
   VALUE rb_result;
   id pool = [[NSAutoreleasePool alloc] init];
   /* a0 */
-  rbarg_to_nsarg(a0, _C_PTR, &ns_a0, pool, 0);
+  rbarg_to_nsarg(a0, _PRIV_C_PTR, &ns_a0, pool, 0);
   /* a1 */
-  rbarg_to_nsarg(a1, _C_PTR, &ns_a1, pool, 1);
+  rbarg_to_nsarg(a1, _PRIV_C_PTR, &ns_a1, pool, 1);
   /* a2 */
-  rbarg_to_nsarg(a2, _C_PTR, &ns_a2, pool, 2);
+  rbarg_to_nsarg(a2, _PRIV_C_PTR, &ns_a2, pool, 2);
   /* a3 */
   rbarg_to_nsarg(a3, _C_INT, &ns_a3, pool, 3);
 
@@ -153,11 +153,11 @@ osx_NSDecimalSubtract(VALUE mdl, VALUE a0, VALUE a1, VALUE a2, VALUE a3)
   VALUE rb_result;
   id pool = [[NSAutoreleasePool alloc] init];
   /* a0 */
-  rbarg_to_nsarg(a0, _C_PTR, &ns_a0, pool, 0);
+  rbarg_to_nsarg(a0, _PRIV_C_PTR, &ns_a0, pool, 0);
   /* a1 */
-  rbarg_to_nsarg(a1, _C_PTR, &ns_a1, pool, 1);
+  rbarg_to_nsarg(a1, _PRIV_C_PTR, &ns_a1, pool, 1);
   /* a2 */
-  rbarg_to_nsarg(a2, _C_PTR, &ns_a2, pool, 2);
+  rbarg_to_nsarg(a2, _PRIV_C_PTR, &ns_a2, pool, 2);
   /* a3 */
   rbarg_to_nsarg(a3, _C_INT, &ns_a3, pool, 3);
 
@@ -182,11 +182,11 @@ osx_NSDecimalMultiply(VALUE mdl, VALUE a0, VALUE a1, VALUE a2, VALUE a3)
   VALUE rb_result;
   id pool = [[NSAutoreleasePool alloc] init];
   /* a0 */
-  rbarg_to_nsarg(a0, _C_PTR, &ns_a0, pool, 0);
+  rbarg_to_nsarg(a0, _PRIV_C_PTR, &ns_a0, pool, 0);
   /* a1 */
-  rbarg_to_nsarg(a1, _C_PTR, &ns_a1, pool, 1);
+  rbarg_to_nsarg(a1, _PRIV_C_PTR, &ns_a1, pool, 1);
   /* a2 */
-  rbarg_to_nsarg(a2, _C_PTR, &ns_a2, pool, 2);
+  rbarg_to_nsarg(a2, _PRIV_C_PTR, &ns_a2, pool, 2);
   /* a3 */
   rbarg_to_nsarg(a3, _C_INT, &ns_a3, pool, 3);
 
@@ -211,11 +211,11 @@ osx_NSDecimalDivide(VALUE mdl, VALUE a0, VALUE a1, VALUE a2, VALUE a3)
   VALUE rb_result;
   id pool = [[NSAutoreleasePool alloc] init];
   /* a0 */
-  rbarg_to_nsarg(a0, _C_PTR, &ns_a0, pool, 0);
+  rbarg_to_nsarg(a0, _PRIV_C_PTR, &ns_a0, pool, 0);
   /* a1 */
-  rbarg_to_nsarg(a1, _C_PTR, &ns_a1, pool, 1);
+  rbarg_to_nsarg(a1, _PRIV_C_PTR, &ns_a1, pool, 1);
   /* a2 */
-  rbarg_to_nsarg(a2, _C_PTR, &ns_a2, pool, 2);
+  rbarg_to_nsarg(a2, _PRIV_C_PTR, &ns_a2, pool, 2);
   /* a3 */
   rbarg_to_nsarg(a3, _C_INT, &ns_a3, pool, 3);
 
@@ -240,9 +240,9 @@ osx_NSDecimalPower(VALUE mdl, VALUE a0, VALUE a1, VALUE a2, VALUE a3)
   VALUE rb_result;
   id pool = [[NSAutoreleasePool alloc] init];
   /* a0 */
-  rbarg_to_nsarg(a0, _C_PTR, &ns_a0, pool, 0);
+  rbarg_to_nsarg(a0, _PRIV_C_PTR, &ns_a0, pool, 0);
   /* a1 */
-  rbarg_to_nsarg(a1, _C_PTR, &ns_a1, pool, 1);
+  rbarg_to_nsarg(a1, _PRIV_C_PTR, &ns_a1, pool, 1);
   /* a2 */
   rbarg_to_nsarg(a2, _C_UINT, &ns_a2, pool, 2);
   /* a3 */
@@ -269,9 +269,9 @@ osx_NSDecimalMultiplyByPowerOf10(VALUE mdl, VALUE a0, VALUE a1, VALUE a2, VALUE 
   VALUE rb_result;
   id pool = [[NSAutoreleasePool alloc] init];
   /* a0 */
-  rbarg_to_nsarg(a0, _C_PTR, &ns_a0, pool, 0);
+  rbarg_to_nsarg(a0, _PRIV_C_PTR, &ns_a0, pool, 0);
   /* a1 */
-  rbarg_to_nsarg(a1, _C_PTR, &ns_a1, pool, 1);
+  rbarg_to_nsarg(a1, _PRIV_C_PTR, &ns_a1, pool, 1);
   /* a2 */
   rbarg_to_nsarg(a2, _C_SHT, &ns_a2, pool, 2);
   /* a3 */
@@ -296,7 +296,7 @@ osx_NSDecimalString(VALUE mdl, VALUE a0, VALUE a1)
   VALUE rb_result;
   id pool = [[NSAutoreleasePool alloc] init];
   /* a0 */
-  rbarg_to_nsarg(a0, _C_PTR, &ns_a0, pool, 0);
+  rbarg_to_nsarg(a0, _PRIV_C_PTR, &ns_a0, pool, 0);
   /* a1 */
   rbarg_to_nsarg(a1, _C_ID, &ns_a1, pool, 1);
 

@@ -68,14 +68,14 @@ osx_NSWorkspaceWillUnmountNotification(VALUE mdl)
 static VALUE
 osx_NSApplicationFileType(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_PTR, &NSApplicationFileType, nil);
+  return nsresult_to_rbresult(_PRIV_C_PTR, &NSApplicationFileType, nil);
 }
 
 // NSString * NSFilesystemFileType , * NSShellCommandFileType;
 static VALUE
 osx_NSShellCommandFileType(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_PTR, &NSShellCommandFileType, nil);
+  return nsresult_to_rbresult(_PRIV_C_PTR, &NSShellCommandFileType, nil);
 }
 
 // NSString * NSWorkspaceMoveOperation;

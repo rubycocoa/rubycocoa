@@ -8,49 +8,49 @@ static const int VA_MAX = 4;
 
 
   /**** constants ****/
-// NSString *NSToolbarSeparatorItemIdentifier;
+// NSString * NSToolbarSeparatorItemIdentifier;
 static VALUE
 osx_NSToolbarSeparatorItemIdentifier(VALUE mdl)
 {
   return nsresult_to_rbresult(_C_ID, &NSToolbarSeparatorItemIdentifier, nil);
 }
 
-// NSString *NSToolbarSpaceItemIdentifier;
+// NSString * NSToolbarSpaceItemIdentifier;
 static VALUE
 osx_NSToolbarSpaceItemIdentifier(VALUE mdl)
 {
   return nsresult_to_rbresult(_C_ID, &NSToolbarSpaceItemIdentifier, nil);
 }
 
-// NSString *NSToolbarFlexibleSpaceItemIdentifier;
+// NSString * NSToolbarFlexibleSpaceItemIdentifier;
 static VALUE
 osx_NSToolbarFlexibleSpaceItemIdentifier(VALUE mdl)
 {
   return nsresult_to_rbresult(_C_ID, &NSToolbarFlexibleSpaceItemIdentifier, nil);
 }
 
-// NSString *NSToolbarShowColorsItemIdentifier;
+// NSString * NSToolbarShowColorsItemIdentifier;
 static VALUE
 osx_NSToolbarShowColorsItemIdentifier(VALUE mdl)
 {
   return nsresult_to_rbresult(_C_ID, &NSToolbarShowColorsItemIdentifier, nil);
 }
 
-// NSString *NSToolbarShowFontsItemIdentifier;
+// NSString * NSToolbarShowFontsItemIdentifier;
 static VALUE
 osx_NSToolbarShowFontsItemIdentifier(VALUE mdl)
 {
   return nsresult_to_rbresult(_C_ID, &NSToolbarShowFontsItemIdentifier, nil);
 }
 
-// NSString *NSToolbarCustomizeToolbarItemIdentifier;
+// NSString * NSToolbarCustomizeToolbarItemIdentifier;
 static VALUE
 osx_NSToolbarCustomizeToolbarItemIdentifier(VALUE mdl)
 {
   return nsresult_to_rbresult(_C_ID, &NSToolbarCustomizeToolbarItemIdentifier, nil);
 }
 
-// NSString *NSToolbarPrintItemIdentifier;
+// NSString * NSToolbarPrintItemIdentifier;
 static VALUE
 osx_NSToolbarPrintItemIdentifier(VALUE mdl)
 {

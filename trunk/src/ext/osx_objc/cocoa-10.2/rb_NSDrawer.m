@@ -8,28 +8,28 @@ static const int VA_MAX = 4;
 
 
   /**** constants ****/
-// NSString *NSDrawerWillOpenNotification;
+// NSString * NSDrawerWillOpenNotification;
 static VALUE
 osx_NSDrawerWillOpenNotification(VALUE mdl)
 {
   return nsresult_to_rbresult(_C_ID, &NSDrawerWillOpenNotification, nil);
 }
 
-// NSString *NSDrawerDidOpenNotification;
+// NSString * NSDrawerDidOpenNotification;
 static VALUE
 osx_NSDrawerDidOpenNotification(VALUE mdl)
 {
   return nsresult_to_rbresult(_C_ID, &NSDrawerDidOpenNotification, nil);
 }
 
-// NSString *NSDrawerWillCloseNotification;
+// NSString * NSDrawerWillCloseNotification;
 static VALUE
 osx_NSDrawerWillCloseNotification(VALUE mdl)
 {
   return nsresult_to_rbresult(_C_ID, &NSDrawerWillCloseNotification, nil);
 }
 
-// NSString *NSDrawerDidCloseNotification;
+// NSString * NSDrawerDidCloseNotification;
 static VALUE
 osx_NSDrawerDidCloseNotification(VALUE mdl)
 {

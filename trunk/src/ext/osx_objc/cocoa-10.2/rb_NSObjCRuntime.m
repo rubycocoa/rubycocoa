@@ -111,9 +111,9 @@ osx_NSGetSizeAndAlignment(VALUE mdl, VALUE a0, VALUE a1, VALUE a2)
   /* a0 */
   rbarg_to_nsarg(a0, _C_CHARPTR, &ns_a0, pool, 0);
   /* a1 */
-  rbarg_to_nsarg(a1, _C_PTR, &ns_a1, pool, 1);
+  rbarg_to_nsarg(a1, _PRIV_C_PTR, &ns_a1, pool, 1);
   /* a2 */
-  rbarg_to_nsarg(a2, _C_PTR, &ns_a2, pool, 2);
+  rbarg_to_nsarg(a2, _PRIV_C_PTR, &ns_a2, pool, 2);
 
   ns_result = NSGetSizeAndAlignment(ns_a0, ns_a1, ns_a2);
 

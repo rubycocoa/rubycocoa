@@ -12,7 +12,7 @@ static const int VA_MAX = 4;
 static VALUE
 osx_NSFontIdentityMatrix(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_PTR, &NSFontIdentityMatrix, nil);
+  return nsresult_to_rbresult(_PRIV_C_PTR, &NSFontIdentityMatrix, nil);
 }
 
 // NSString * NSAFMFamilyName;

@@ -8,14 +8,14 @@ static const int VA_MAX = 4;
 
 
   /**** constants ****/
-// NSString *NSToolbarWillAddItemNotification;
+// NSString * NSToolbarWillAddItemNotification;
 static VALUE
 osx_NSToolbarWillAddItemNotification(VALUE mdl)
 {
   return nsresult_to_rbresult(_C_ID, &NSToolbarWillAddItemNotification, nil);
 }
 
-// NSString *NSToolbarDidRemoveItemNotification;
+// NSString * NSToolbarDidRemoveItemNotification;
 static VALUE
 osx_NSToolbarDidRemoveItemNotification(VALUE mdl)
 {
