@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 34;
+	objectVersion = 38;
 	objects = {
 		080E96DCFE201CFB7F000001 = {
 			fileRef = 29B97318FDCFA39411CA2CEA;
@@ -142,7 +142,7 @@
 		};
 		29B97323FDCFA39411CA2CEA = {
 			children = (
-				E825AFA9019D146803A81C66,
+				E8107FD50323E3560319B165,
 			);
 			isa = PBXGroup;
 			name = Frameworks;
@@ -161,8 +161,6 @@
 				HEADER_SEARCH_PATHS = "";
 				INSTALL_PATH = "$(HOME)/Applications";
 				LIBRARY_SEARCH_PATHS = "";
-				OTHER_LDFLAGS = "-undefined suppress -flat_namespace";
-				PREBINDING = NO;
 				PRODUCT_NAME = pb_app0;
 				SECTORDER_FLAGS = "";
 				WARNING_CFLAGS = "-Wmost -Wno-four-char-constants -Wno-unknown-pragmas";
@@ -176,8 +174,8 @@
 			productName = rubyapp;
 			productReference = 17587328FF379C6511CA2CBB;
 			productSettingsXML = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
-<!DOCTYPE plist SYSTEM \"file://localhost/System/Library/DTDs/PropertyList.dtd\">
-<plist version=\"0.9\">
+<!DOCTYPE plist PUBLIC \"-//Apple Computer//DTD PLIST 1.0//EN\" \"http://www.apple.com/DTDs/PropertyList-1.0.dtd\">
+<plist version=\"1.0\">
 <dict>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>English</string>
@@ -207,7 +205,7 @@
 			files = (
 			);
 			isa = PBXHeadersBuildPhase;
-			name = Headers;
+			runOnlyForDeploymentPostprocessing = 0;
 		};
 		29B97328FDCFA39411CA2CEA = {
 			buildActionMask = 2147483647;
@@ -218,7 +216,7 @@
 				E8CBFFC601B0F32C03A81C66,
 			);
 			isa = PBXResourcesBuildPhase;
-			name = "Bundle Resources";
+			runOnlyForDeploymentPostprocessing = 0;
 		};
 		29B9732BFDCFA39411CA2CEA = {
 			buildActionMask = 2147483647;
@@ -226,7 +224,7 @@
 				29B9732CFDCFA39411CA2CEA,
 			);
 			isa = PBXSourcesBuildPhase;
-			name = Sources;
+			runOnlyForDeploymentPostprocessing = 0;
 		};
 		29B9732CFDCFA39411CA2CEA = {
 			fileRef = 29B97316FDCFA39411CA2CEA;
@@ -239,10 +237,10 @@
 		29B9732DFDCFA39411CA2CEA = {
 			buildActionMask = 2147483647;
 			files = (
-				E825AFAA019D146803A81C66,
+				E81081580323E3570319B165,
 			);
 			isa = PBXFrameworksBuildPhase;
-			name = "Frameworks & Libraries";
+			runOnlyForDeploymentPostprocessing = 0;
 		};
 //290
 //291
@@ -283,14 +281,14 @@
 //E82
 //E83
 //E84
-		E825AFA9019D146803A81C66 = {
+		E8107FD50323E3560319B165 = {
 			isa = PBXFrameworkReference;
-			name = RubyCocoa.framework;
-			path = /Library/Frameworks/RubyCocoa.framework;
+			name = Foundation.framework;
+			path = /System/Library/Frameworks/Foundation.framework;
 			refType = 0;
 		};
-		E825AFAA019D146803A81C66 = {
-			fileRef = E825AFA9019D146803A81C66;
+		E81081580323E3570319B165 = {
+			fileRef = E8107FD50323E3560319B165;
 			isa = PBXBuildFile;
 			settings = {
 			};
