@@ -65,7 +65,7 @@
 
   RIGS - ((<GNUstep|URL:http://www.gnustep.org/>))のためのRubyインターフェース
 
-: ((<Ruby/.NET Bridge|URL:http://www.saltypickle.com/RubyDotNet>))
+: ((<"Ruby/.NET Bridge"|URL:http://www.saltypickle.com/RubyDotNet>))
 
   マイクロソフトの.NETとRubyのブリッジ。
 

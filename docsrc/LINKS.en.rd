@@ -71,7 +71,7 @@
   RIGS is a Ruby interface to the GNUstep development environment and
   indirectly to the Objective C language.
 
-: ((<Ruby/.NET Bridge|URL:http://www.saltypickle.com/RubyDotNet>))
+: ((<"Ruby/.NET Bridge"|URL:http://www.saltypickle.com/RubyDotNet>))
 
   The Ruby/.NET Bridge lets you use .NET and Ruby objects together in
   your programs. You can access .NET objects from Ruby and vice-versa.
