@@ -361,17 +361,16 @@ wrapper_ocm_send(int argc, VALUE* argv, VALUE rcv)
 static VALUE
 wrapper_to_s (VALUE rcv)
 {
-  VALUE ret = Qnil;
-  id oc_rcv = rbobj_get_ocid(rcv);
-  if ([oc_rcv isKindOfClass: [NSString class]]) {
-    ret = rb_str_new ([oc_rcv cString], [oc_rcv cStringLength]);
-  }
-  else {
-    id pool = [[NSAutoreleasePool alloc] init];
+  VALUE ret;
+  id oc_rcv;
+  id pool;
+
+  pool = [[NSAutoreleasePool alloc] init];
+  oc_rcv = rbobj_get_ocid(rcv);
+  if ([oc_rcv isKindOfClass: [NSString class]] == NO)
     oc_rcv = [oc_rcv description];
-    ret = rb_str_new ([oc_rcv cString], [oc_rcv cStringLength]);
-    [pool release];
-  }
+  ret = rb_str_new ([oc_rcv cString], [oc_rcv cStringLength]);
+  [pool release];
   return ret;
 }
 
