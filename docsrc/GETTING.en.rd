@@ -63,8 +63,6 @@ for RubyCocoa. On the shell command line, type this:
   $ cd rubycocoa
   $ cvs update -d -P
 
-The latest source supports panther. branch-devel-panther was merged into main trunk.
-
 All of the source for RubyCocoa is downloaded into a directory named 'rubycocoa'.
 
 Building may fail because of the nature of CVS. Some cvs commands such as

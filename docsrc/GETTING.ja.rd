@@ -69,7 +69,6 @@ ProjectBuilderテンプレートなどが含まれています。実行・開発に必要な
 ダウンロードされます。CVSの性質上、ダウンロードしたタイミングにより
 構築できないこともあります。
 
-また、最新のコードはPantherに対応しています。Panther開発ブランチ(branch-devel-panther)はマージされました。
 
 == PINEAPPLE RPMパッケージ
 
