@@ -1,3 +1,8 @@
+2002-02-02  FUJIMOTO Hisakuni  <hisa@fobj.com>
+
+	* template/tmpl_pb_file:
+	add ProjectBuilder template files
+
 2002-01-31  FUJIMOTO Hisakuni  <hisa@fobj.com>
 
 	* framework/RBObject.m, framework/DummyProtocolHandler.m, framework/DummyProtocolHandler.m.erb:
