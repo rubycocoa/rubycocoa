@@ -172,7 +172,9 @@ class OCHeaderAnalyzer
     cppflags = [ CPP_TARGET_CPU, CPP_ARCH, CPP_ENDIAN ].map {|i|
       "-D#{i}"
     }.join(' ')
-    `cpp #{cppflags} -lang-objc #{path}`.select { |s|
+    `cpp #{cppflags} #{path}`.map {|s|
+      s.sub (/\/\/.*$/, "")
+    }.select { |s|
       next if /^\s*$/ =~ s
       m = %r{^#\s*\d+\s+".*/(\w+\.h)"}.match(s)
       f_on = (m[1] == File.basename(path)) if m
