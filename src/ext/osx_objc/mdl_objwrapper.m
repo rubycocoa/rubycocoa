@@ -356,6 +356,90 @@ wrapper_to_s (VALUE rcv)
   return ret;
 }
 
+static void
+_ary_push_objc_methods (VALUE ary, Class cls)
+{
+  struct objc_method_list** list;
+  int i, cnt;
+  struct objc_method* methods;
+
+  list = cls->methodLists;
+  while (*list && *list != (struct objc_method_list*)-1) {
+    cnt = (*list)->method_count;
+    methods = (*list)->method_list;
+    for (i = 0; i < cnt; i++) {
+      rb_ary_push (ary, rb_str_new2((const char*)(methods[i].method_name)));
+    }
+    list++;
+  }
+  if (cls->super_class)
+    _ary_push_objc_methods (ary, cls->super_class);
+  rb_funcall(ary, rb_intern("uniq!"), 0);
+}
+
+static VALUE
+wrapper_objc_methods (VALUE rcv)
+{
+  VALUE ary;
+  id oc_rcv;
+
+  ary = rb_ary_new();
+  oc_rcv = rbobj_get_ocid (rcv);
+  _ary_push_objc_methods (ary, oc_rcv->isa);
+  return ary;
+}
+
+static const char*
+_objc_method_type (Class cls, const char* name)
+{
+  struct objc_method_list** list;
+  int i, cnt;
+  struct objc_method* methods;
+
+  list = cls->methodLists;
+  while (*list && *list != (struct objc_method_list*)-1) {
+    cnt = (*list)->method_count;
+    methods = (*list)->method_list;
+    for (i = 0; i < cnt; i++) {
+      if (strcmp ((const char*)(methods[i].method_name), name) == 0) {
+	return methods[i].method_types;
+      }
+    }
+    list++;
+  }
+  if (cls->super_class)
+    return _objc_method_type (cls->super_class, name);
+  return NULL;
+}
+
+static VALUE
+_name_to_selstr (VALUE name)
+{
+  VALUE re;
+  const char* patstr = "([^^])_";
+  const char* repstr = "\\1:";
+
+  name = rb_obj_as_string (name);
+  re = rb_reg_new (patstr, strlen(patstr), 0);
+  rb_funcall (name, rb_intern("gsub!"), 2, re, rb_str_new2(repstr));
+  return name;
+}
+
+static VALUE
+wrapper_objc_method_type (VALUE rcv, VALUE name)
+{
+  VALUE ary;
+  id oc_rcv;
+  const char* str;
+
+  ary = rb_ary_new();
+  oc_rcv = rbobj_get_ocid (rcv);
+  name = _name_to_selstr (name);
+  str = _objc_method_type (oc_rcv, STR2CSTR(name));
+  if (str == NULL) return Qnil;
+  return rb_str_new2(str);
+}
+
 /*****************************************/
 
 VALUE
@@ -368,6 +452,9 @@ init_mdl_OCObjWrapper(VALUE outer)
   rb_define_method(_mObjWrapper, "ocm_invoke", wrapper_ocm_invoke, -1);
   rb_define_method(_mObjWrapper, "ocm_send", wrapper_ocm_send, -1);
   rb_define_method(_mObjWrapper, "to_s", wrapper_to_s, 0);
+
+  rb_define_method(_mObjWrapper, "objc_methods", wrapper_objc_methods, 0);
+  rb_define_method(_mObjWrapper, "objc_method_type", wrapper_objc_method_type, 1);
 
   return _mObjWrapper;
 }
