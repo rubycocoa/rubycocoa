@@ -1,3 +1,14 @@
+2002-10-03  FUJIMOTO Hisakuni  <hisa@fobj.com>
+
+	* lib/osx/addressbook.rb, lib/osx/objc/addressbook.rb:
+	add a library for AddressBook.framework
+
+	* ext/osx_objc/osx_objc.m: define objc_symbol_to_obj
+
+	* lib/osx/objc/oc_import.rb: OSX.ns_import become module function
+
+	* tool/och_analyzer3.rb: independent from AppKit and Foundation
+
 2002-09-26  FUJIMOTO Hisakuni  <hisa@fobj.com>
 
 	* release 0.3.1
