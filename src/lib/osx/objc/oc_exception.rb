@@ -26,4 +26,7 @@ module OSX
 
   end
 
+  class OCDataConvException < RuntimeError
+  end
+
 end
