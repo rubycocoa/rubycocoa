@@ -8,7 +8,7 @@ h1 {
 }
 h2 {
   color:green;
-  margin: 2em 0em 1em 0em;
+  margin: 1em 0em 0em 0em;
   border-bottom-color: #FFE0E0;
   border-bottom-style: solid;
   border-bottom-width: 1;
@@ -18,7 +18,6 @@ h3 {
   margin: 1em 0.2em
 }
 pre { 
- border-width: thin;
  border-style: solid;
  border-color: gray;
  padding: 1em;
