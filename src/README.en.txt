@@ -25,7 +25,6 @@ Cocoa objects as Ruby object in Ruby script.
   fontnames.rb - print font names to stdout
   mk_app0/     - application using IB outlet and action (Makefile base)
   mk_app1/     - application using custom NSView (Makefile base)
-  pb_tmpl/     - RubyCocoa application template (ProjectBuilder base)
   pb_app0/     - application using IB outlet and action (PB base)
   pb_app1/     - application using IB outlet and action (PB base)
 

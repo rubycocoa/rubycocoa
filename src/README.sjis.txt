@@ -24,7 +24,6 @@
   fontnames.rb - フォント名を表示するサンプル
   mk_app0/     - アウトレット、アクションを使うアプリ例 (Makefileベース)
   mk_app1/     - NSViewを使うアプリケーション例 (Makefileベース)
-  pb_tmpl/     - RubyCocoaアプリケーションの雛型(ProjectBuilderベース)
   pb_app0/     - アウトレット、アクションを使うアプリ例 (ProjectBuilderベース)
   pb_app1/     - アウトレット、アクションを使うアプリ例 (ProjectBuilderベース)
 
