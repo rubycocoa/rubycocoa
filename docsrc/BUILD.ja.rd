@@ -24,7 +24,8 @@
   $ tar zxf rubycocoa-0.4.1.tar.gz
 
 ((*注意*)) StuffItを使うとファイル名の長さの問題でRubyCocoaが正しく
-インストールされないのでtarコマンドを使ってください。
+インストールされないのでtarコマンド(Mac OS X 10.2ではgnutarコマンド)を
+使ってください。
 
 
 == Rubyの構築・インストール

@@ -23,7 +23,7 @@ The following steps perform the build and installation.
 Extract RubyCocoa source from the '.tgz' file into a directory somewhere.
 
   $ cd {somewhere}
-  $ tar zxf rubycocoa-0.4.1.tar.gz
+  $ tar zxf rubycocoa-0.4.1.tar.gz # use "gnutar" command on Mac OS X 10.2
 
 ((*Caution!*)) Using StuffIt, building RubyCocoa will fail because of a file
 name length problem.
