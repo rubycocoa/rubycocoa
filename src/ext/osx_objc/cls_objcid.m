@@ -114,7 +114,7 @@ _objcid_initialize_for_new_with_ocid(int argc, VALUE* argv, VALUE rcv)
 {
   VALUE arg_ocid;
 
-  rb_scan_args(argc, argv, "10*", &arg_ocid);
+  rb_scan_args(argc, argv, "10", &arg_ocid);
   if (arg_ocid != Qnil) {
     id ocid = (id) NUM2UINT(arg_ocid);
     [ocid retain];
