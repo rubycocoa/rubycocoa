@@ -15,7 +15,7 @@ body { background: white; color: black; }
 h1 { color: #F02020; }
 h2 { color: #C02020; background-color: #FFF0B0; border-color: #FFE080; }
 h3,h4 { color: #F02020; border-color: #FFE080; }
-pre { border-color: #FFE0E0; background-color:#FFF0F0; }
+pre { border-color: #E0E0E0; background-color:#F0F0F0; }
 dt { color: #C02020 }
 
 .site-title { color: #F02020; background-color: #FFD0A0 }
@@ -38,13 +38,14 @@ h3.body-sidebar { color: #803030; }
 
 .site-menubar {
   font-weight: none;
-  font-size: 70%;
+  font-size: 80%;
 }
 
 body {
-/*   margin-left: 2%; */
-/*   margin-right: 2%; */
-/*   font-family: verdana, arial, helvetica, Sans-Serif; */
+  margin-left: 2%;
+  margin-right: 2%;
+  font-size: 90%;
+  font-family: verdana, arial, helvetica, Sans-Serif;
 }
 
 h1 {
@@ -80,10 +81,18 @@ h4 {
 }
 
 pre { 
-  border-style: solid;
-  padding: 1em;
-  margin-left: 4em;
-  margin-right: 4em;
+    border-right: #646464 1px solid;
+    padding-right: 0.5em;
+    border-top: #646464 1px solid;
+    padding-top: 0.5em;
+    border-left: #646464 1px solid;
+    padding-left: 0.5em;
+    border-bottom: #646464 1px solid;
+    padding-bottom: 0.5em;
+    margin-left: 1em;
+    margin-right: 2em;
+    white-space: pre;
+    font-family: mono-space;
 }
 
 em { font-weight: bold }
