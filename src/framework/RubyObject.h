@@ -12,9 +12,13 @@
 
 #import <Foundation/NSObject.h>
 
-@interface RubyController : NSObject
+@interface RubyObject : NSObject
 {
   unsigned long rbobj;
 }
+
+- init;
+- initWithRubyClassName: a_rbclass_name;
+- initWithRubyObject: (unsigned long)a_rbobj;
 
 @end

@@ -9,7 +9,7 @@
  *   the GNU Lesser General Public License version 2.
  *
  **/
-#import "RubyController.h"
+#import "RubyObject.h"
 
 #import <LibRuby/cocoa_ruby.h>
 #import <Cocoa/Cocoa.h>
@@ -81,7 +81,7 @@ static SEL dummy_selector_of(SEL a_sel)
   return newsel;
 }
 
-@implementation RubyController
+@implementation RubyObject
 
 /*********************/
 /** private methods **/
@@ -165,21 +165,34 @@ static SEL dummy_selector_of(SEL a_sel)
 
 - init
 {
-  NSString* class_name;
-  id pool;
+  id pool = [[NSAutoreleasePool alloc] init];
+  [self initWithRubyClassName: [[self class] description]];
+  [pool release];
+  return self;
+}
+
+- initWithRubyObject: (unsigned long) a_rbobj
+{
+  rbobj = a_rbobj;
+  return self;
+}
+
+- initWithRubyClassName: class_name
+{
   RB_ID rb_class_id;
   VALUE rb_class;
 
-  self = [super init];
-  pool = [[NSAutoreleasePool alloc] init];
-
-  class_name = [[self class] description];
   rb_class_id = rb_intern([class_name cString]);
   rb_class = rb_const_get(rb_cObject, rb_class_id);
-  rbobj = rb_funcall(rb_class, rb_intern("new"), 0);
-  rb_funcall(rbobj, rb_intern("set_ocobj"), 1, to_rbobj(self));
-
-  [pool release];
+  // responds? new_with_id
+  if (rb_respond_to(rb_class, rb_intern("new_with_id"))) {
+    // OSX::OCObject
+    rbobj = rb_funcall(rb_class, rb_intern("new_with_id"), 1, OCID2NUM(self));
+  }
+  else {
+    rbobj = rb_funcall(rb_class, rb_intern("new"), 0);
+    rb_funcall(rbobj, rb_intern("set_ocobj"), 1, to_rbobj(self));
+  }
   return self;
 }
 
