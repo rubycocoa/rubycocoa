@@ -10,8 +10,8 @@
  *
  **/
 #import <Foundation/NSAutoreleasePool.h>
-#import <LibRuby/cocoa_ruby.h>
-#import <RubyCocoa/ocdata_conv.h>
+#import "osx_ruby.h"
+#import "ocdata_conv.h"
 
 void
 rbarg_to_nsarg(VALUE rbarg, int octype, void* nsarg, id pool, int index)
@@ -33,6 +33,7 @@ nsresult_to_rbresult(int octype, const void* nsresult, id pool)
   return rbresult;
 }
 
+extern void init_NSAppleScript(VALUE);
 extern void init_NSApplication(VALUE);
 extern void init_NSArchiver(VALUE);
 extern void init_NSAttributedString(VALUE);
@@ -67,20 +68,25 @@ extern void init_NSFont(VALUE);
 extern void init_NSFontManager(VALUE);
 extern void init_NSFontPanel(VALUE);
 extern void init_NSGeometry(VALUE);
+extern void init_NSGlyphInfo(VALUE);
 extern void init_NSGraphics(VALUE);
 extern void init_NSGraphicsContext(VALUE);
+extern void init_NSHFSFileTypes(VALUE);
 extern void init_NSHashTable(VALUE);
 extern void init_NSHelpManager(VALUE);
+extern void init_NSImage(VALUE);
 extern void init_NSImageCell(VALUE);
 extern void init_NSImageRep(VALUE);
 extern void init_NSInterfaceStyle(VALUE);
 extern void init_NSInvocation(VALUE);
 extern void init_NSJavaSetup(VALUE);
+extern void init_NSKeyedArchiver(VALUE);
 extern void init_NSLayoutManager(VALUE);
 extern void init_NSMapTable(VALUE);
 extern void init_NSMatrix(VALUE);
 extern void init_NSMenu(VALUE);
 extern void init_NSMovieView(VALUE);
+extern void init_NSNetServices(VALUE);
 extern void init_NSNotificationQueue(VALUE);
 extern void init_NSObjCRuntime(VALUE);
 extern void init_NSObject(VALUE);
@@ -100,6 +106,7 @@ extern void init_NSPrintPanel(VALUE);
 extern void init_NSPrinter(VALUE);
 extern void init_NSProcessInfo(VALUE);
 extern void init_NSProgressIndicator(VALUE);
+extern void init_NSPropertyList(VALUE);
 extern void init_NSRange(VALUE);
 extern void init_NSRulerView(VALUE);
 extern void init_NSRunLoop(VALUE);
@@ -120,6 +127,7 @@ extern void init_NSTask(VALUE);
 extern void init_NSText(VALUE);
 extern void init_NSTextAttachment(VALUE);
 extern void init_NSTextContainer(VALUE);
+extern void init_NSTextFieldCell(VALUE);
 extern void init_NSTextStorage(VALUE);
 extern void init_NSTextView(VALUE);
 extern void init_NSThread(VALUE);
@@ -136,6 +144,7 @@ extern void init_NSZone(VALUE);
 
 void init_cocoa(VALUE mOSX)
 {
+  init_NSAppleScript(mOSX);
   init_NSApplication(mOSX);
   init_NSArchiver(mOSX);
   init_NSAttributedString(mOSX);
@@ -170,20 +179,25 @@ void init_cocoa(VALUE mOSX)
   init_NSFontManager(mOSX);
   init_NSFontPanel(mOSX);
   init_NSGeometry(mOSX);
+  init_NSGlyphInfo(mOSX);
   init_NSGraphics(mOSX);
   init_NSGraphicsContext(mOSX);
+  init_NSHFSFileTypes(mOSX);
   init_NSHashTable(mOSX);
   init_NSHelpManager(mOSX);
+  init_NSImage(mOSX);
   init_NSImageCell(mOSX);
   init_NSImageRep(mOSX);
   init_NSInterfaceStyle(mOSX);
   init_NSInvocation(mOSX);
   init_NSJavaSetup(mOSX);
+  init_NSKeyedArchiver(mOSX);
   init_NSLayoutManager(mOSX);
   init_NSMapTable(mOSX);
   init_NSMatrix(mOSX);
   init_NSMenu(mOSX);
   init_NSMovieView(mOSX);
+  init_NSNetServices(mOSX);
   init_NSNotificationQueue(mOSX);
   init_NSObjCRuntime(mOSX);
   init_NSObject(mOSX);
@@ -203,6 +217,7 @@ void init_cocoa(VALUE mOSX)
   init_NSPrinter(mOSX);
   init_NSProcessInfo(mOSX);
   init_NSProgressIndicator(mOSX);
+  init_NSPropertyList(mOSX);
   init_NSRange(mOSX);
   init_NSRulerView(mOSX);
   init_NSRunLoop(mOSX);
@@ -223,6 +238,7 @@ void init_cocoa(VALUE mOSX)
   init_NSText(mOSX);
   init_NSTextAttachment(mOSX);
   init_NSTextContainer(mOSX);
+  init_NSTextFieldCell(mOSX);
   init_NSTextStorage(mOSX);
   init_NSTextView(mOSX);
   init_NSThread(mOSX);

@@ -10,8 +10,8 @@
  *
  **/
 
-#import <LibRuby/cocoa_ruby.h>
-#import <RubyCocoa/ocdata_conv.h> // RubyCocoa.framework
+#import "osx_ruby.h"
+#import "ocdata_conv.h"
 #import <Foundation/Foundation.h>
 #import <string.h>
 #import <stdlib.h>

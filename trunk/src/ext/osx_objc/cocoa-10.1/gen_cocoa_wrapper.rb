@@ -311,8 +311,8 @@ def gen_skelton(hpath)
       end
     end
     File.open(fname, "w") do |f|
-      f.print "\#import <LibRuby/cocoa_ruby.h>\n"
-      f.print "\#import <RubyCocoa/ocdata_conv.h>\n"
+      f.print "\#import \"osx_ruby.h\"\n"
+      f.print "\#import \"ocdata_conv.h\"\n"
       f.print "\#import <#{och.framework}/#{och.framework}.h>\n\n"
       f.print STATIC_FUNCS
       f.print "\n\n"
