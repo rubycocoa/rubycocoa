@@ -280,6 +280,32 @@ static SEL dummy_selector_of(SEL a_sel)
 // @interface NSObject (NSNibAwaking)
 - (void)dummy_awakeFromNib {}
 
+// @interface NSApplication(NSWindowsMenu)
+- (void)dummy_setWindowsMenu:(NSMenu *)aMenu {}
+- (NSMenu *)dummy_windowsMenu { return nil; }
+- (void)dummy_arrangeInFront:(id)sender {}
+- (void)dummy_removeWindowsItem:(NSWindow *)win {}
+- (void)dummy_addWindowsItem:(NSWindow *)win title:(NSString *)aString filename:(BOOL)isFilename {}
+- (void)dummy_changeWindowsItem:(NSWindow *)win title:(NSString *)aString filename:(BOOL)isFilename {}
+- (void)dummy_updateWindowsItem:(NSWindow *)win {}
+- (void)dummy_miniaturizeAll:(id)sender {}
+
+// @interface NSObject(NSApplicationNotifications)
+- (void)dummy_applicationWillFinishLaunching:(NSNotification *)notification {}
+- (void)dummy_applicationDidFinishLaunching:(NSNotification *)notification {}
+- (void)dummy_applicationWillHide:(NSNotification *)notification {}
+- (void)dummy_applicationDidHide:(NSNotification *)notification {}
+- (void)dummy_applicationWillUnhide:(NSNotification *)notification {}
+- (void)dummy_applicationDidUnhide:(NSNotification *)notification {}
+- (void)dummy_applicationWillBecomeActive:(NSNotification *)notification {}
+- (void)dummy_applicationDidBecomeActive:(NSNotification *)notification {}
+- (void)dummy_applicationWillResignActive:(NSNotification *)notification {}
+- (void)dummy_applicationDidResignActive:(NSNotification *)notification {}
+- (void)dummy_applicationWillUpdate:(NSNotification *)notification {}
+- (void)dummy_applicationDidUpdate:(NSNotification *)notification {}
+- (void)dummy_applicationWillTerminate:(NSNotification *)notification {}
+- (void)dummy_applicationDidChangeScreenParameters:(NSNotification *)notification {}
+
 // @interface NSObject (NSConnectionDelegateMethods)
 - (BOOL)dummy_makeNewConnection:(NSConnection *)conn sender:(NSConnection *)ancestor { return NO; }
 - (BOOL)dummy_connection:(NSConnection *)ancestor shouldMakeNewConnection:(NSConnection *)conn { return NO; }
