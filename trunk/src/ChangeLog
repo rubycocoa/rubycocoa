@@ -1,3 +1,7 @@
+2001-12-26  FUJIMOTO Hisakuni  <hisa@fobj.com>
+
+	* Documents are corrected according to the release of Ruby 1.6.6.
+
 2001-12-21  FUJIMOTO Hisakuni  <hisa@fobj.com>
 
 	* doc/REFERENCES: add description about "?" suffix.

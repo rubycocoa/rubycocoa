@@ -10,13 +10,12 @@ Cocoa objects as Ruby object in Ruby script.
 
 0. HOW TO INSTALL
 
-  Read "INSTALL.(ja|en).html" in html directory or "INSTALL.(ja|en)"
-  in doc directory.
+  Read "html/INSTALL.(ja|en).html" or "doc/INSTALL.(ja|en)".
 
 1. HOW TO USE
 
-  Read "doc/MINITOUR.(ja|en)" when you want simple tutorial.
-  Read "doc/DETAIL.(ja|en)" when you want to know the detail.
+  Read "html/USING.(ja|en).html" when you want how to use.  Read
+  "html/REFERENCES.(ja|en).html" when you want to know the detail.
 
 2. EXAMPLES
 
