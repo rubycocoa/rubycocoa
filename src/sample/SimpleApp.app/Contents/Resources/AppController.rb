@@ -21,7 +21,8 @@ class AppController < OSX::NSObject
   end
 
   def aboutApp (sender)
-    NSApp().orderFrontStandardAboutPanelWithOptions("Copyright" => "with RubyCocoa #{RUBYCOCOA_VERSION}")
+    NSApp().orderFrontStandardAboutPanelWithOptions("Copyright" => "RubyCocoa #{RUBYCOCOA_VERSION}",
+						    "ApplicationVersion" => "Ruby #{VERSION}")
   end
 
   def colorBtnClicked (sender)
