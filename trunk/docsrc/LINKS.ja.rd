@@ -83,14 +83,6 @@
 
   Rubyに関するニュース・Wiki
 
-: ((<Rubyist! Make Programming More Fun (日本語)|URL:http://www.rubycolor.org/r/>))
-
-  Rubyに関するニュース
-
-: ((<RNN (日本語)|URL:http://rnn.sourceforge.jp/modules/news/>))
-
-  Rubyに関するニュース
-
 : ((<RWiki|URL:http://www.jin.gr.jp/~nahi/RWiki/>))
 
   Rubyで書かれたWiki
