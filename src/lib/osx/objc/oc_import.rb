@@ -65,7 +65,7 @@ module OSX
     end
 
     def ns_outlets(*args)
-      attr_writer *args
+      attr_writer (*args)
     end
 
     # for look and feel
