@@ -17,7 +17,6 @@
 #import <LibRuby/cocoa_ruby.h>
 
 VALUE rb_objcid();
-VALUE rb_objcid_s_new(id ocid);
 id    rb_objcid_ocid(VALUE rcv);
 
 #endif

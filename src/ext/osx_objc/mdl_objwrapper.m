@@ -10,9 +10,6 @@
  *
  **/
 
-#import "mdl_objwrapper.h"
-#import "cls_objcid.h"
-
 #import <LibRuby/cocoa_ruby.h>
 #import <RubyCocoa/ocdata_conv.h> // RubyCocoa.framework
 #import <Foundation/Foundation.h>
@@ -20,6 +17,8 @@
 #import <string.h>
 #import <stdlib.h>
 #import <stdarg.h>
+
+#import "cls_objcid.h"
 
 static VALUE _mObjWrapper = Qnil;
 
@@ -40,6 +39,31 @@ _debug_log(const char* fmt,...)
     va_end(args);
     [pool release];
   }
+}
+
+static id
+rb_objwrapper_ocid(VALUE rcv)
+{
+  id ocid = nil;
+
+  if (rb_obj_is_kind_of(rcv, rb_objcid()) == Qtrue) {
+    ocid = rb_objcid_ocid(rcv);
+  }
+  else {
+    VALUE obj;
+    obj = rb_ivar_get(rcv, rb_intern("__objcid__"));
+    if (rb_obj_is_kind_of(obj, rb_objcid()) == Qtrue) {
+      ocid = rb_objcid_ocid(obj);
+    }
+    else {
+      RB_ID mtd = rb_intern("__ocid__");
+      if (rb_respond_to(rcv, mtd)) {
+	obj = rb_funcall(rcv, mtd, 0);
+	ocid = (id) NUM2UINT(obj);
+      }
+    }
+  }
+  return ocid;
 }
 
 static VALUE
@@ -179,7 +203,7 @@ ocm_invoke(int argc, VALUE* argv, VALUE rcv, VALUE* result)
     BOOL f_conv_success;
     DLOG2("    arg_type[%d]: %s", i, octype_str);
     ocdata = ocdata_malloc(octype);
-    f_conv_success = rbobj_to_ocdata(arg, octype, ocdata);
+    f_conv_success = rbobj_to_ocdata(rcv, arg, octype, ocdata);
     if (f_conv_success) {
       [oc_inv setArgument: ocdata atIndex: (i+2)];
       free(ocdata);
@@ -211,27 +235,16 @@ ocm_invoke(int argc, VALUE* argv, VALUE rcv, VALUE* result)
   // get result
   if ([oc_msig methodReturnLength] > 0) {
     int octype = to_octype([oc_msig methodReturnType]);
-    if ((octype == _C_ID) || (octype == _C_CLASS)) {
-      id rcv_id, data_id;
-      [oc_inv getReturnValue: &data_id];
-      rcv_id = rb_objwrapper_ocid(rcv);
-      if (rcv_id == data_id)
-	*result = rcv;
-      else
-	*result = ocid_to_rbobj(rcv, data_id);
-    }
-    else {
-      BOOL f_conv_success;
-      void* result_data = ocdata_malloc(octype);
-      [oc_inv getReturnValue: result_data];
-      f_conv_success = ocdata_to_rbobj(octype, result_data, result);
-      free(result_data);
-      if (!f_conv_success) {
-	[pool release];
-	rb_raise(rb_eRuntimeError,
-		 "cannot convert the result as '%s' to Ruby Object.", ret_type);
-	return NO;
-      }
+    BOOL f_conv_success;
+    void* result_data = ocdata_malloc(octype);
+    [oc_inv getReturnValue: result_data];
+    f_conv_success = ocdata_to_rbobj(rcv, octype, result_data, result);
+    free(result_data);
+    if (!f_conv_success) {
+      [pool release];
+      rb_raise(rb_eRuntimeError,
+	       "cannot convert the result as '%s' to Ruby Object.", ret_type);
+      return NO;
     }
   }
   else {
@@ -264,18 +277,10 @@ ocm_ivar(VALUE rcv, VALUE name, VALUE* result)
   DLOG1("ocm_ivar (%@)", nsname);
   if (iv) {
     int octype = to_octype(iv->ivar_type);
+    void* val;
     DLOG2("    ocm_ivar (%@) ret_type: %s", nsname, iv->ivar_type);
-    if (octype_object_p(octype)) {
-      void* val;
-      iv = object_getInstanceVariable(ocrcv, [nsname cString], &val);
-      *result = rb_ocobj_s_new((id)val);
-      f_ok = YES;
-    }
-    else {
-      void* val;
-      iv = object_getInstanceVariable(ocrcv, [nsname cString], &val);
-      f_ok = ocdata_to_rbobj(octype, val, result);
-    }
+    iv = object_getInstanceVariable(ocrcv, [nsname cString], &val);
+    f_ok = ocdata_to_rbobj(rcv, octype, val, result);
   }
   [pool release];
   return f_ok;
@@ -404,32 +409,22 @@ wrapper_ocm_send(int argc, VALUE* argv, VALUE rcv)
   return result;
 }
 
+static VALUE
+wrapper_m_rbobj_to_ocid(VALUE mdl, VALUE arg)
+{
+  id ocid = rb_objwrapper_ocid(arg);
+  return UINT2NUM((unsigned int) ocid);
+}
+
 /*****************************************/
-
-id
-rb_objwrapper_ocid(VALUE rcv)
-{
-  id ocid;
-  if (rb_obj_is_kind_of(rcv, rb_objcid()) == Qtrue) {
-    ocid = rb_objcid_ocid(rcv);
-  }
-  else {
-    VALUE objid = rb_ivar_get(rcv, rb_intern("__objcid__"));
-    ocid = rb_objcid_ocid(objid);
-  }
-  return ocid;
-}
-
-VALUE
-rb_objwrapper()
-{
-  return _mObjWrapper;
-}
 
 VALUE
 init_mdl_OCObjWrapper(VALUE outer)
 {
   _mObjWrapper = rb_define_module_under(outer, "OCObjWrapper");
+
+  rb_define_module_function(_mObjWrapper, "rbobj_to_ocid",
+			    wrapper_m_rbobj_to_ocid, 1);
 
   rb_define_method(_mObjWrapper, "__ocid__", wrapper_ocid, 0);
   rb_define_method(_mObjWrapper, "__inspect__", wrapper_inspect, 0);
