@@ -42,7 +42,7 @@ command "make"
 command "make test"
 command "sudo make install"
 
-command "sudo mkdir #{DOCDIR}" unless File.directory?
+command "sudo mkdir #{DOCDIR}" unless File.directory? (DOCDIR)
 command "sudo cp -p #{DOCS.join(' ')} #{DOCDIR}"
 
 chdir "#{DSTDIR}/lib"
