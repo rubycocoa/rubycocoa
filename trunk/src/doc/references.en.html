@@ -42,44 +42,41 @@ RubyCocoa<font size='-1'> - A Ruby/Objective-C Bridge for Mac OS X with Cocoa</f
 <!-- body/main/contents -->
 <td class='body-contents' id='body-contents' valign='top'>
 <h1><a name='label:0' id='label:0'>RubyCocoa References</a></h1><!-- RDLabel: "RubyCocoa References" -->
-<h2><a name='label:1' id='label:1'>OSX::ObjcID class</a></h2><!-- RDLabel: "OSX::ObjcID class" -->
-<p>The wrapper of a Objective-C object. It becomes the owner of one
+<h2><a name='label:1' id='label:1'><code>OSX::ObjcID</code> class</a></h2><!-- RDLabel: "OSX::ObjcID class" -->
+<p>The wrapper of an Objective-C object. It becomes the owner of one
 certain Objective-C object, and it is wrapped. Usually, you don't need
-to be conscious of existence of this class.</p>
-<h3><a name='label:2' id='label:2'>instance methods of OSX::ObjcID class</a></h3><!-- RDLabel: "instance methods of OSX::ObjcID class" -->
+to be conscious that this class exists.</p>
+<h3><a name='label:2' id='label:2'>Instance methods of OSX::ObjcID class</a></h3><!-- RDLabel: "Instance methods of OSX::ObjcID class" -->
 <dl>
 <dt><a name='label:3' id='label:3'><code>OSX::ObjcID#inspect</code></a></dt><!-- RDLabel: "OSX::ObjcID#inspect" -->
 <dd>
-<p>The string showing the information on an object is returned.</p></dd>
+<p>Returns a string describing the object.</p></dd>
 <dt><a name='label:4' id='label:4'><code>OSX::ObjcID#__ocid__</code></a></dt><!-- RDLabel: "OSX::ObjcID#__ocid__" -->
 <dd>
-<p>The integer value of id of the wrapped Objective-C object is
+<p>The integer value of the <code>id</code> of the wrapped Objective-C object is
 returned.</p></dd>
 <dt><a name='label:5' id='label:5'><code>OSX::ObjcID#__inspect__</code></a></dt><!-- RDLabel: "OSX::ObjcID#__inspect__" -->
 <dd>
-<p>same as OSX::ObjcID#inspect.</p></dd>
+<p>Same as <code>OSX::ObjcID#inspect</code>.</p></dd>
 </dl>
-<h2><a name='label:6' id='label:6'>OSX::OCObjWrapper module</a></h2><!-- RDLabel: "OSX::OCObjWrapper module" -->
-<p>It is the mix in module which implemented the facility to invoke
-message (method call) to a Objective-C object. In RubyCocoa, since the
-Cocoa object is attached with this module, the message invocation to a
-Cocoa object is possible.</p>
+<h2><a name='label:6' id='label:6'><code>OSX::OCObjWrapper</code> module</a></h2><!-- RDLabel: "OSX::OCObjWrapper module" -->
+<p><code>OSX::OCObjWrapper</code> is the mixin module which implements the facility to send a message (method call) to an Objective-C object. RubyCocoa attaches Cocoa objects with this module, making it possible to invoke methods on Cocoa objects.</p>
 <p>Since the Objective-C object set as the object of operation is
 specified, the object attached with this module needs to fulfill one
-conditions of the following.</p>
+of the following conditions:</p>
 <ul>
-<li>It is the instance of <a href='#label:1'>OSX::ObjcID class</a>.</li>
-<li>The method of the same specification as <a href='#label:4'>OSX::ObjcID#__ocid__</a> is implemented.</li>
+<li>It is the instance of <a href='#label:1'><code>OSX::ObjcID</code> class</a>.</li>
+<li>The method of the same specification as <a href='#label:4'><code>OSX::ObjcID#__ocid__</code></a> is implemented.</li>
 </ul>
 <p>Usually, although you don't need to be conscious of the existence of
-this module itself, when you understand a motion of RubyCocoa, such as
+this module itself, when you understand a function of RubyCocoa, such as
 a mechanism of message invocation, it is also the most important
 portion.</p>
-<h3><a name='label:7' id='label:7'>invoke a message to a Objective-C object</a></h3><!-- RDLabel: "invoke a message to a Objective-C object" -->
-<p>The OSX::OCObjWrapper module has invoked a message to the Objective-C
+<h3><a name='label:7' id='label:7'>Sending a message to an Objective-C object</a></h3><!-- RDLabel: "Sending a message to an Objective-C object" -->
+<p>The <code>OSX::OCObjWrapper</code> module has invoked a message to the Objective-C
 object for operation using the structure to which the method call
 which has not processed an object turns to <var>method_missing</var>.</p>
-<h3><a name='label:8' id='label:8'>Conversion to a Objective-C message selector from a Ruby method name</a></h3><!-- RDLabel: "Conversion to a Objective-C message selector from a Ruby method name" -->
+<h3><a name='label:8' id='label:8'>Conversion to an Objective-C message selector from a Ruby method name</a></h3><!-- RDLabel: "Conversion to an Objective-C message selector from a Ruby method name" -->
 <p>In order to carry out the map of the message invocation (method call)
 in the world of Ruby to message invocation in the world of
 Objective-C, it is necessary to change the method name of Ruby into
@@ -103,9 +100,9 @@ rcv.doSomething_with_with (a, b, c)       # variation (1)
 rcv.doSomething (a, :with, b, :with, c)   # variation (2)</pre>
 <h3><a name='label:9' id='label:9'>"oc_" prefix of a method name</a></h3><!-- RDLabel: ""oc_" prefix of a method name" -->
 <p>As for the method from which a name begins in "oc_", a message is
-directly invoked to the Objective-C object for operation. It uses,
-mainly when the method of a same name exists in both by the side of
-Ruby and Objective-C.</p>
+directly invoked to the Objective-C object for operation. It is used
+mainly when an identically-named method exists in both Ruby and Objective-C
+environments.</p>
 <h3><a name='label:10' id='label:10'>"?" suffix of a method name</a></h3><!-- RDLabel: ""?" suffix of a method name" -->
 <p>At the last of a name the message which attached "?" and invoked
 confirms whether the value to which it came on the contrary is 0, and
