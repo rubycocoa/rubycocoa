@@ -61,7 +61,7 @@
   ((<GNUstep|URL:http://www.gnustep.org/>)).
   It contrasts with the fact that RubyCocoa is closed in Mac OS X currently.
 
-: ((<AppleScript Studio|URL:http://developer.apple.com/techpubs/macosx/CoreTechnologies/AppleScriptStudio/index.html>))
+: ((<AppleScript Studio|URL:http://www.apple.com/applescript/studio/>))
 
    AppleScript Studio combines an application framework with a
    development environment.

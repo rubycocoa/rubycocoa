@@ -57,7 +57,7 @@
   ((<GNUstep|URL:http://www.gnustep.org/>))に対しても同レベルでのサポートを指向している。
   今のところRubyCocoaがMac OS Xに閉じ気味なのと比べてひと味違う模様。
 
-: ((<AppleScript Studio|URL:http://developer.apple.com/techpubs/macosx/CoreTechnologies/AppleScriptStudio/index.html>))
+: ((<AppleScript Studio|URL:http://www.apple.com/applescript/studio/>))
 
   AppleScriptでCocoaアプリケーションを作るための統合環境。
   
