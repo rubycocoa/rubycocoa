@@ -141,25 +141,33 @@ static VALUE rbclass_nsrange()
 int
 to_octype(const char* octype_str)
 {
-  int oct = *octype_str;
+  int oct;
 
-  if (strcmp(octype_str, "r*") == 0) {
-    oct = _C_CHARPTR;
+  /* avoid first character 'r' which is const meaning */
+  if (octype_str[0] == 'r') octype_str++;
+  oct = *octype_str;
+
+  if (octype_str[0] == '{' && octype_str[1] == '_') {
+    if (strcmp(octype_str, "{_NSRect={_NSPoint=ff}{_NSSize=ff}}") == 0) {
+      oct = _PRIV_C_NSRECT;
+    }
+    else if (strcmp(octype_str, "{_NSPoint=ff}") == 0) {
+      oct = _PRIV_C_NSPOINT;
+    }
+    else if (strcmp(octype_str, "{_NSSize=ff}") == 0) {
+      oct = _PRIV_C_NSSIZE;
+    }
+    else if (strcmp(octype_str, "{_NSRange=II}") == 0) {
+      oct = _PRIV_C_NSRANGE;
+    }
   }
-  else if (strcmp(octype_str, "{_NSRect={_NSPoint=ff}{_NSSize=ff}}") == 0) {
-    oct = _PRIV_C_NSRECT;
-  }
-  else if (strcmp(octype_str, "{_NSPoint=ff}") == 0) {
-    oct = _PRIV_C_NSPOINT;
-  }
-  else if (strcmp(octype_str, "{_NSSize=ff}") == 0) {
-    oct = _PRIV_C_NSSIZE;
-  }
-  else if (strcmp(octype_str, "{_NSRange=II}") == 0) {
-    oct = _PRIV_C_NSRANGE;
-  }
-  else if (strcmp(octype_str, "r^I") == 0) {
-    oct = _PRIV_C_ARY_UI;
+  else if (octype_str[0] == '^') {
+    if (strcmp(octype_str, "^I") == 0) {
+      oct = _PRIV_C_ARY_UI;
+    }
+    else if (strcmp(octype_str, "^@") == 0) {
+      oct = _PRIV_C_ID_PTR;
+    }
   }
 
   return oct;
@@ -221,6 +229,9 @@ ocdata_size(int octype, const char* octype_str)
 
   case _PRIV_C_ARY_UI:
     result = sizeof(unsigned int *); break;
+
+  case _PRIV_C_ID_PTR:
+    result = sizeof(id *); break;
 
   case _C_BFLD:
   case _C_UNDEF:
@@ -709,6 +720,19 @@ rbobj_to_ocdata(VALUE obj, int octype, void* ocdata)
     NSRange nsval;
     f_success = rbobj_to_nsrange(obj, &nsval);
     if (f_success) *(NSRange*)ocdata = nsval;
+    break;
+  }
+
+  case _PRIV_C_ID_PTR: {
+    if (obj == Qnil) {
+      *(id**)ocdata = NULL;
+      f_success = YES;
+    }
+    else if (rb_obj_is_kind_of(obj, rb_cls_objcid()) == Qtrue) {
+      // something bugs are here, maybe.
+      *(id**)ocdata = &OCID_OF(obj);
+      f_success = YES;
+    }
     break;
   }
 
