@@ -3,11 +3,13 @@
 
 == Binary Distribution
 
-RubyCocoa's binary distribution has been built for the Ruby 1.6.7 distributed
-with Mac OS X 10.2.
+=== for Mac OS X 10.3
+
+RubyCocoa's binary distribution has been built for the Ruby 1.6.8 distributed
+with Mac OS X 10.3.
 
 Download
-((<RubyCocoa-0.4.0.dmg|URL:http://rubycocoa.sourceforge.net/files/RubyCocoa-0.4.0.dmg>))
+((<RubyCocoa-0.4.1-panther.dmg|URL:http://rubycocoa.sourceforge.net/files/RubyCocoa-0.4.1-panther.dmg>))
 from ((<file list|URL:http://rubycocoa.sourceforge.net/files/>)).
 
 It includes library, samples, templates for Project Builder, etc. for both
@@ -22,8 +24,11 @@ A successful installation of the binary package will add the following items:
 : inside of /usr/lib/ruby/site_ruby/1.6/osx/
   RubyCocoa library (stub)
 
-: /usr/lib/ruby/site_ruby/1.6/powerpc-darwin6.0/rubycocoa.bundle
+: /usr/lib/ruby/site_ruby/1.6/powerpc-darwin7.0/rubycocoa.bundle
   RubyCocoa extended library (stub)
+
+: inside of '/Library/Application Support/Apple/Developer Tools'
+  Some templates for Xcode
 
 : inside of '/Developer/ProjectBuilder Extras/'
   Some templates for ProjectBuilder
@@ -37,11 +42,33 @@ A successful installation of the binary package will add the following items:
 After installation, try the samples that are written in Ruby. Refer
 to ((<'Try RubyCocoa Samples'|URL:trysamples.en.html>)).
 
+=== for Mac OS X 10.2
+
+RubyCocoa's binary distribution has been built for the Ruby 1.6.7 distributed
+with Mac OS X 10.2.
+
+Download
+((<RubyCocoa-0.4.1-jaguar.dmg|URL:http://rubycocoa.sourceforge.net/files/RubyCocoa-0.4.1-jaguar.dmg>))
+from ((<file list|URL:http://rubycocoa.sourceforge.net/files/>)).
+
+This package installs  following items:
+
+: /Library/Frameworks/RubyCocoa.framework
+
+: inside of /usr/lib/ruby/site_ruby/1.6/osx/
+
+: /usr/lib/ruby/site_ruby/1.6/powerpc-darwin6.0/rubycocoa.bundle
+
+: inside of '/Developer/ProjectBuilder Extras/'
+
+: /Developer/Documentation/RubyCocoa
+
+: /Developer/Examples/RubyCocoa
 
 == Source Distribution
 
 Download
-((<rubycocoa-0.4.0.tgz|URL:http://rubycocoa.sourceforge.net/files/rubycocoa-0.4.0.tgz>))
+((<rubycocoa-0.4.1.tgz|URL:http://rubycocoa.sourceforge.net/files/rubycocoa-0.4.1.tgz>))
 from ((<file list|URL:http://rubycocoa.sourceforge.net/files/>)).
 
 To build and install RubyCocoa, refer to 
