@@ -19,7 +19,7 @@ After installation of the binary package is successful, following
 items will appear:
 
 : /Library/Frameworks/RubyCocoa.framework
-  RubyCocoa framework (real)
+  RubyCocoa framework (core)
 
 : inside of /usr/lib/ruby/site_ruby/1.6/osx/
   RubyCocoa library (stub)
