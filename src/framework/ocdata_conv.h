@@ -14,6 +14,13 @@
 #import <objc/objc-class.h>
 #import <stdarg.h>
 
+struct _objcid_data {
+  id  ocid;
+};
+
+#define OBJCID_DATA_PTR(o) ((struct _objcid_data*)(DATA_PTR(o)))
+#define OCID_OF(o) (OBJCID_DATA_PTR(o)->ocid)
+
 enum osxobjc_nsdata_type {
   _PRIV_C_BOOL = 1024,
   _PRIV_C_NSRECT,
@@ -21,6 +28,7 @@ enum osxobjc_nsdata_type {
   _PRIV_C_NSSIZE,
   _PRIV_C_NSRANGE,
   _PRIV_C_ARY_UI,
+  _PRIV_C_ID_PTR,
 };
 
 #define OCID2NUM(val) UINT2NUM((unsigned int)(val))
