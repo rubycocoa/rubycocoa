@@ -1,0 +1,2 @@
+add_path_config 'frameworks', '/Library/Frameworks',
+  'path to the directory putting RubyCocoa framework'

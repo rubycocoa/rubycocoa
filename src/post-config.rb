@@ -8,20 +8,9 @@
 #  the GNU Lesser General Public License version 2.
 #
 
-CONF_FILE_NAME = "config.framework"
-
 def libruby_installed?
   /ld.*Undefined\s+symbols/ =~ `cc -framework LibRuby`
 end
-
-# save framework dir
-opt_frameworks = "/Library/Frameworks"
-@options['config-opt'].each do |i|
-  next until i =~ /^--frameworks=/
-  opt_frameworks = i[2..-1]
-  break
-end
-File.open (CONF_FILE_NAME, "w") {|f| f.puts (opt_frameworks) }
 
 # libruby alert
 unless libruby_installed? then
