@@ -14,6 +14,7 @@
 #import <Foundation/Foundation.h>
 #import <RubyCocoa/RBRuntime.h>
 #import <RubyCocoa/RBObject.h>
+#import <RubyCocoa/RBThreadSwitcher.h>
 #import <RubyCocoa/ocdata_conv.h>
 
 #define OSX_MODULE_NAME "OSX"
@@ -85,16 +86,31 @@ osx_mf_objc_derived_class_method_add(VALUE mdl, VALUE class_name, VALUE method_n
 }
 
 static VALUE
-osx_mf_ruby_thread_switcher_start(VALUE mdl, VALUE interval)
+osx_mf_ruby_thread_switcher_start(int argc, VALUE* argv, VALUE mdl)
 {
-  Check_Type(interval, T_FLOAT);
-  RBThreadSchedulerStart(RFLOAT(interval)->value);
+  VALUE arg_interval, arg_wait;
+  double interval, wait;
+
+  rb_scan_args(argc, argv, "11", &arg_interval, &arg_wait);
+  Check_Type(arg_interval, T_FLOAT);
+  interval = RFLOAT(arg_interval)->value;
+
+  if (arg_wait == Qnil) {
+    [RBThreadSwitcher start: interval];
+  }
+  else {
+    Check_Type(arg_wait, T_FLOAT);
+    wait = RFLOAT(arg_wait)->value;
+    [RBThreadSwitcher start: interval wait: wait];
+  }
+  return Qnil;
 }
 
 static VALUE
 osx_mf_ruby_thread_switcher_stop(VALUE mdl)
 {
-  RBThreadSchedulerStop();
+  [RBThreadSwitcher stop];
+  return Qnil;
 }
 
 
@@ -115,7 +131,7 @@ void Init_osx_objc()
 			    osx_mf_objc_derived_class_method_add, 2);
 
   rb_define_module_function(mOSX, "ruby_thread_switcher_start",
-			    osx_mf_ruby_thread_switcher_start, 1);
+			    osx_mf_ruby_thread_switcher_start, -1);
   rb_define_module_function(mOSX, "ruby_thread_switcher_stop",
 			    osx_mf_ruby_thread_switcher_stop, 0);
 
