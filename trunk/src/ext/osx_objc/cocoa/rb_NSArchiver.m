@@ -12,7 +12,7 @@ static const int VA_MAX = 4;
 static VALUE
 osx_NSInconsistentArchiveException(VALUE mdl)
 {
-  rb_notimplement();
+  return nsresult_to_rbresult(_C_ID, &NSInconsistentArchiveException, nil);
 }
 
 void init_NSArchiver(VALUE mOSX)

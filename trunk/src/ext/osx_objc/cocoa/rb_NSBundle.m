@@ -12,14 +12,14 @@ static const int VA_MAX = 4;
 static VALUE
 osx_NSBundleDidLoadNotification(VALUE mdl)
 {
-  rb_notimplement();
+  return nsresult_to_rbresult(_C_ID, &NSBundleDidLoadNotification, nil);
 }
 
 // NSString * const NSLoadedClasses;
 static VALUE
 osx_NSLoadedClasses(VALUE mdl)
 {
-  rb_notimplement();
+  return nsresult_to_rbresult(_C_ID, &NSLoadedClasses, nil);
 }
 
 void init_NSBundle(VALUE mOSX)

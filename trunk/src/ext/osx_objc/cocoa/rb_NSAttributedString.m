@@ -96,14 +96,14 @@ osx_NSCharacterShapeAttributeName(VALUE mdl)
 static VALUE
 osx_NSUnderlineByWordMask(VALUE mdl)
 {
-  rb_notimplement();
+  return nsresult_to_rbresult(_C_UINT, &NSUnderlineByWordMask, nil);
 }
 
 // unsigned NSUnderlineStrikethroughMask;
 static VALUE
 osx_NSUnderlineStrikethroughMask(VALUE mdl)
 {
-  rb_notimplement();
+  return nsresult_to_rbresult(_C_UINT, &NSUnderlineStrikethroughMask, nil);
 }
 
 // NSString *NSPlainTextDocumentType;

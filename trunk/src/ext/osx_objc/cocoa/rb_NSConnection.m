@@ -12,28 +12,28 @@ static const int VA_MAX = 4;
 static VALUE
 osx_NSConnectionReplyMode(VALUE mdl)
 {
-  rb_notimplement();
+  return nsresult_to_rbresult(_C_ID, &NSConnectionReplyMode, nil);
 }
 
 // NSString * const NSConnectionDidDieNotification;
 static VALUE
 osx_NSConnectionDidDieNotification(VALUE mdl)
 {
-  rb_notimplement();
+  return nsresult_to_rbresult(_C_ID, &NSConnectionDidDieNotification, nil);
 }
 
 // NSString * const NSFailedAuthenticationException;
 static VALUE
 osx_NSFailedAuthenticationException(VALUE mdl)
 {
-  rb_notimplement();
+  return nsresult_to_rbresult(_C_ID, &NSFailedAuthenticationException, nil);
 }
 
 // NSString * const NSConnectionDidInitializeNotification;
 static VALUE
 osx_NSConnectionDidInitializeNotification(VALUE mdl)
 {
-  rb_notimplement();
+  return nsresult_to_rbresult(_C_ID, &NSConnectionDidInitializeNotification, nil);
 }
 
 void init_NSConnection(VALUE mOSX)

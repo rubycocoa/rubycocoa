@@ -79,7 +79,20 @@ osx_NSDecrementExtraRefCountWasZero(VALUE mdl, VALUE a0)
 static VALUE
 osx_NSExtraRefCount(VALUE mdl, VALUE a0)
 {
-  rb_notimplement();
+  unsigned ns_result;
+
+  id ns_a0;
+
+  VALUE rb_result;
+  id pool = [[NSAutoreleasePool alloc] init];
+  /* a0 */
+  rbarg_to_nsarg(a0, _C_ID, &ns_a0, pool, 0);
+
+  ns_result = NSExtraRefCount(ns_a0);
+
+  rb_result = nsresult_to_rbresult(_C_UINT, &ns_result, pool);
+  [pool release];
+  return rb_result;
 }
 
 void init_NSObject(VALUE mOSX)
