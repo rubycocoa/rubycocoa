@@ -30,7 +30,7 @@ TARGET = \
 	$(TARGETDIR)/changelog.html \
 	$(TARGETDIR)/rubycocoasite.css
 
-
+SFINDEX = $(TARGETDIR)/index_sf.html
 
 TEMPLATES = \
 	sidebar-contents.en.xml sidebar-contents.ja.xml \
@@ -43,10 +43,10 @@ DYNAMIC_ITEMS = \
 	news.en.xml news.ja.xml
 
 
-all:	$(TARGETDIR) $(TARGET)
+all:	$(TARGETDIR) $(TARGET) $(SFINDEX)
 
 clean:
-	-rm -f $(TARGET) $(DYNAMIC_ITEMS)
+	-rm -f $(TARGET) $(DYNAMIC_ITEMS) $(SFINDEX)
 
 install:	$(TARGETDIR) $(TARGET)
 	-cp -fp $(TARGET) $(INSTALL_TARGETDIR)
@@ -71,6 +71,9 @@ sidebar-news.en.xml:	NEWS.data
 
 sidebar-news.ja.xml:	NEWS.data
 	$(RUBY) news_to_headline.rb ja < $< > $@
+
+$(TARGETDIR)/index_sf.html:	$(TARGETDIR)/index.en.html
+	$(RUBY) to_index_sf.rb < $< > $@
 
 $(TARGETDIR)/index.en.html:	INDEX.en.rd sidebar-news.en.xml
 	$(RUBY) make_html.rb $< $(TARGETDIR) news
