@@ -6,13 +6,14 @@ RUBYSRCS = ApplicationDelegate.rb WindowAController.rb WindowBController.rb
 NIBDIR = English.lproj
 RUBYSRC_MAIN = rb_main.rb
 OBJS = main.o
+LIBS = -lobjc -framework RubyCocoa
 
 TARGET = $(APPNAME).app
 CFLAGS = -Wall
 
 
 $(TARGET): $(OBJS) $(RUBYSRCS) $(RUBYSRC_MAIN)
-	$(CC) $(OBJS) -framework Foundation
+	$(CC) $(OBJS) $(LIBS)
 	-/bin/rm -rf $(APPNAME).app
 	mkdir $(APPNAME).app
 	mkdir $(APPNAME).app/Contents
