@@ -2,6 +2,38 @@
 <head><title>RubyCocoa - ChangeLog</title></head>
 <body>
 <pre>
+2002-02-22  FUJIMOTO Hisakuni  
+
+	* tests/alltest.sh, tests/test_nsattributedstring.rb, tests/test_nsstring.rb:
+	prepared unit test framework
+
+	* ext/osx_objc/mdl_objwrapper.m:
+	- ocm_perform(): add the code for _PRIV_C_ID_PTR from
+	  framework/ocdata_conv.m. support OSX::OCDataConvException.
+
+	* lib/osx/objc/oc_exception.rb: defined OSX::OCDataConvException
+
+	* framework/ocdata_conv.m:
+	- rb_mdl_osx(), rb_cls_objcid(), rb_cls_ocobj(const char* name): became global functions.
+	- rbobj_to_ocdata(): moved the code for _PRIV_C_ID_PTR into mdl_objcwrapper.m.
+
+	* framework/ocdata_conv.h:
+	rb_mdl_osx(), rb_cls_objcid(), rb_cls_ocobj(const char* name): became global functions.
+
+2002-02-12  FUJIMOTO Hisakuni  
+
+	* framework/ocdata_conv.m:
+	- to_octype(): avoid first character 'r' which is const meaning.
+	- rbobj_to_ocdata(): modified for _PRIV_C_ID_PTR "^@".
+
+	* framework/ocdata_conv.h:
+	- add the definition of "struct _objcid_data" from "framework/ocdata_conv.h".
+	- defined _PRIV_C_ID_PTR for "^@"
+
+	* ext/osx_objc/cls_objcid.m:
+	- changed the behavior of ObjcID.new into just only doing allocation.
+	- moved the definition of "struct _objcid_data" to "framework/ocdata_conv.h".
+
 2002-02-07  FUJIMOTO Hisakuni  
 
 	* release 0.2.6
