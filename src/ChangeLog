@@ -1,7 +1,38 @@
+2002-09-12  FUJIMOTO Hisakuni  <hisa@fobj.com>
+
+	* app_mains/main_for_pure_ruby.rb:
+	CFBundleExecutable for pure ruby application.
+
+	* lib/osx/objc/application.rb:
+	define APP_BUNDLE which is behavior like a mainBundle instead of
+	"NSBundle </usr/bin> (loaded)"
+
+	* ext/osx_objc/osx_objc.m:
+	move method like functions for ObjcID and OCObject to appropriate file.
+
+	* ext/osx_objc/RBSlaveObject.m, ext/osx_objc/RBObject.m:
+	add objcid public interface.
+	all-in-one header file.
+
+	* ext/osx_objc/OverrideMixin.m: Add cast to restrain warning
+
+	* ext/osx_objc/cls_objcid.m:
+	move method like functions for ObjcID and OCObject to appropriate file.
+
+	* ext/osx_objc/osx_objc.h: add objcid public interface.
+	all-in-one header file.
+
+	* ext/osx_objc/cls_objcid.h: add objcid public interface.
+
+	* ext/osx_objc/mdl_objwrapper.m:
+	move method like functions for ObjcID and OCObject to appropriate file.
+	Move most of procedure about argument of _PRIV_C_ID_PTR  to ocdata_conv.m.
+
+	* ext/osx_objc/ocdata_conv.m, ext/osx_objc/ocdata_conv.h:
+	move method like functions for ObjcID and OCObject to appropriate file.
+
 2002-09-11  FUJIMOTO Hisakuni  <hisa@fobj.com>
 
-	* release 0.3.0
-	
 	* tool/och_analyzer3.rb: NSWindowDepth and NSComparisonResult as int
 	remove 'const'
 	'[]' as pointer
