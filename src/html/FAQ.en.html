@@ -6,7 +6,7 @@
 <head>
 <title>RubyCocoa - FAQ</title>
 <meta http-equiv="Content-type" content="text/html; charset=us-ascii" />
-<link href="rdtext.css" type="text/css" rel="stylesheet"/>
+<link href="rdtext.css" type="text/css" rel="stylesheet" />
 </head>
 <body>
 <h1><a name="label:0" id="label:0">RubyCocoa FAQ</a></h1><!-- RDLabel: "RubyCocoa FAQ" -->
@@ -91,11 +91,14 @@ also has some references to this problem.</p>
 <h3><a name="label:14" id="label:14">Q: I want to select a RubyCocoa application template in PB.</a></h3><!-- RDLabel: "Q: I want to select a RubyCocoa application template in PB." -->
 <p>I want to select a RubyCocoa application template in the
 ProjectBuilder new Project menu.</p>
-<h4><a name="label:15" id="label:15">A: Copy "{rubycocoa srcdir}/template/tmpl_pb_based" to</a></h4><!-- RDLabel: "A: Copy "{rubycocoa srcdir}/template/tmpl_pb_based" to" -->
-<p>"/Developer/ProjectBuilder Extras/Project Templates/Application/" and
-rename it as "RubyCocoa Application".</p>
+<h4><a name="label:15" id="label:15">A: Copy sub directories of "template" that name start with</a></h4><!-- RDLabel: "A: Copy sub directories of "template" that name start with" -->
+<p>"tmpl_pb_" into sub directory of "/Developer/ProjectBuilder Extras",
+and rename it as "RubyCocoa Application".</p>
 <pre>% cd "/Developer/ProjectBuilder Extras/Project Templates/Application"
-% cp -R {rubycocoa srcdir}/template/tmpl_pb_based "RubyCocoa Application"</pre>
+% cp -R {rubycocoa srcdir}/template/tmpl_pb_RubyCocoaApp "RubyCocoa Application"
+% cp -R {rubycocoa srcdir}/template/tmpl_pb_RubyCocoaDocApp "RubyCocoa Doc Application"
+% cd "../../File Templates"
+% cp -R {rubycocoa srcdir}/template/tmpl_pb_RubyFiles Ruby</pre>
 <p>(thanks Shimura-san)</p>
 
 </body>
