@@ -2,9 +2,9 @@ require 'osx/ocobject'
 
 class MyView < OSX::NSView
 
-  ib_overrides 'drawRect:'
+  ib_overrides :drawRect_
 
-  def initialize
+  def awakeFromNib
     @color_name = 'blue'
   end
 

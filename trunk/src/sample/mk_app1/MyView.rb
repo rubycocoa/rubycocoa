@@ -4,7 +4,7 @@ class MyView < OSX::NSView
 
   ib_overrides 'drawRect:'
 
-  def initialize
+  def awakeFromNib
     @color_name = 'blue'
   end
 

@@ -9,14 +9,10 @@ class CalcController < OSX::NSObject
   ib_outlets :fieldA, :fieldB, :fieldResult
   ib_outlets :menuOp, :rbtnsOp, :textOp
 
-  def initialize
+  def awakeFromNib
     @op_syms = [ :plus, :minus, :mul, :div ].freeze
     @op_dic = { :plus => '+', :minus => '-', :mul => '*', :div => '/' }.freeze
-  end
-
-  def awakeFromNib
-    opval = op_value_rbtn
-    update_op (opval)
+    update_op (op_value_rbtn)
     @fieldA.setFloatValue (rand(100).to_f)
     @fieldB.setFloatValue (rand(100).to_f)
     calc

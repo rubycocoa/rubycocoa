@@ -1,7 +1,7 @@
 require 'osx/cocoa'
 require 'MyNotification'
 
-class WinCtrl < OSX::OCObject
+class WinCtrl < OSX::NSObject
 
   ImageSizeMIN = 32
 
@@ -32,7 +32,7 @@ class WinCtrl < OSX::OCObject
     @window.setContentView (imageview)
   end
 
-  def initialize (path)
+  def initWithPath (path)
     @filename = nil		# NSString *filename;
     @docImage = nil		# id docImage;
     @window = nil		# NSWindow *window;

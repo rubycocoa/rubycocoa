@@ -9,7 +9,7 @@
 #
 
 require 'osx_objc'
-require 'oc_wrapper'
+require 'osx/objc/oc_wrapper'
 
 module OSX
 
@@ -47,7 +47,7 @@ module OSX
       kls.instance_eval "@ocid = #{occls.__ocid__}"
       kls.extend NSBehaviorAttachment
       def kls.new
-	raise "use 'alloc.initXXX' to instatiate Cocoa Object"
+	raise "use 'alloc.initXXX' to instantiate Cocoa Object"
       end
     end
 

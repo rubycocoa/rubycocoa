@@ -2,7 +2,7 @@ require 'osx/cocoa'
 require 'WinCtrl'
 require 'MyInspector'
 
-class MyViewerCtrl < OSX::OCObject
+class MyViewerCtrl < OSX::NSObject
 
   def mainMenu
     menu = OSX::NSMenu.alloc.initWithTitle "MyViewer"
@@ -42,7 +42,7 @@ class MyViewerCtrl < OSX::OCObject
     filesToOpen = oPanel.filenames
     enumerator = filesToOpen.objectEnumerator
     while (aFile = enumerator.nextObject) != nil do
-      WinCtrl.new (aFile)
+      WinCtrl.alloc.initWithPath (aFile)
     end
   end
 

@@ -3,15 +3,11 @@ require 'osx/cocoa'
 class DotView < OSX::NSView
 
   ib_outlets   :colorWell, :sizeSlider
-  ib_overrides 'drawRect:', 'isOpaque', 'mouseUp:'
-
-  def initialize
-    @center = OSX::NSPoint.new (10, 10)
-    @color = OSX::NSColor.redColor
-    @radius = 10.0
-  end
+  ib_overrides :drawRect_, :isOpaque, :mouseUp_
 
   def awakeFromNib
+    @color = OSX::NSColor.redColor
+    @radius = 10.0
     @center = OSX::NSPoint.new (bounds.size.width / 2,
 				bounds.size.height / 2)
     @colorWell.setColor (@color)

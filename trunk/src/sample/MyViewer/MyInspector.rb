@@ -1,7 +1,7 @@
 require 'osx/cocoa'
 require 'MyNotification'
 
-class MyInspector < OSX::OCObject
+class MyInspector < OSX::NSObject
 
   PanelWidth  = 200
   PanelHeight = 200
@@ -12,7 +12,7 @@ class MyInspector < OSX::OCObject
   @@defaultInstance = nil
 
   def MyInspector.defaultInstance
-    @@defaultInstance = MyInspector.new if @@defaultInstance == nil
+    @@defaultInstance = MyInspector.alloc.init if @@defaultInstance == nil
     @@defaultInstance.activate
     @@defaultInstance
   end
@@ -59,7 +59,8 @@ class MyInspector < OSX::OCObject
     @text.setAutoresizingMask (OSX::NSViewWidthSizable | OSX::NSViewHeightSizable)
   end
 
-  def initialize
+  # def initialize
+  def init
     panelSetting
     center = OSX::NSNotificationCenter.defaultCenter
     center.addObserver (self, :selector, "showMain:",
@@ -68,6 +69,7 @@ class MyInspector < OSX::OCObject
     center.addObserver (self, :selector, "windowClosed:",
 			:name, OSX.NSWindowWillCloseNotification,
 			:object, nil)
+    self
   end
 
   def dealloc
