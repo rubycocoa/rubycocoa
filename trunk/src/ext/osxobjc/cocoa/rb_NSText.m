@@ -11,24 +11,21 @@ extern VALUE nsresult_to_rbresult(int octype, const void* nsresult, id pool);
 static VALUE
 osx_NSTextDidBeginEditingNotification(VALUE mdl)
 {
-  NSString * ns_result = NSTextDidBeginEditingNotification;
-  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
+  return nsresult_to_rbresult(_C_ID, &NSTextDidBeginEditingNotification, nil);
 }
 
 // NSString *NSTextDidEndEditingNotification;
 static VALUE
 osx_NSTextDidEndEditingNotification(VALUE mdl)
 {
-  NSString * ns_result = NSTextDidEndEditingNotification;
-  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
+  return nsresult_to_rbresult(_C_ID, &NSTextDidEndEditingNotification, nil);
 }
 
 // NSString *NSTextDidChangeNotification;
 static VALUE
 osx_NSTextDidChangeNotification(VALUE mdl)
 {
-  NSString * ns_result = NSTextDidChangeNotification;
-  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
+  return nsresult_to_rbresult(_C_ID, &NSTextDidChangeNotification, nil);
 }
 
 void init_NSText(VALUE mOSX)

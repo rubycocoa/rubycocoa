@@ -11,16 +11,14 @@ extern VALUE nsresult_to_rbresult(int octype, const void* nsresult, id pool);
 static VALUE
 osx_NSTextStorageWillProcessEditingNotification(VALUE mdl)
 {
-  NSString * ns_result = NSTextStorageWillProcessEditingNotification;
-  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
+  return nsresult_to_rbresult(_C_ID, &NSTextStorageWillProcessEditingNotification, nil);
 }
 
 // NSString *NSTextStorageDidProcessEditingNotification;
 static VALUE
 osx_NSTextStorageDidProcessEditingNotification(VALUE mdl)
 {
-  NSString * ns_result = NSTextStorageDidProcessEditingNotification;
-  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
+  return nsresult_to_rbresult(_C_ID, &NSTextStorageDidProcessEditingNotification, nil);
 }
 
 void init_NSTextStorage(VALUE mOSX)

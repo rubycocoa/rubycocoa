@@ -11,40 +11,35 @@ extern VALUE nsresult_to_rbresult(int octype, const void* nsresult, id pool);
 static VALUE
 osx_NSHTTPPropertyStatusCodeKey(VALUE mdl)
 {
-  NSString * ns_result = NSHTTPPropertyStatusCodeKey;
-  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
+  return nsresult_to_rbresult(_C_ID, &NSHTTPPropertyStatusCodeKey, nil);
 }
 
 // NSString *NSHTTPPropertyStatusReasonKey;
 static VALUE
 osx_NSHTTPPropertyStatusReasonKey(VALUE mdl)
 {
-  NSString * ns_result = NSHTTPPropertyStatusReasonKey;
-  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
+  return nsresult_to_rbresult(_C_ID, &NSHTTPPropertyStatusReasonKey, nil);
 }
 
 // NSString *NSHTTPPropertyServerHTTPVersionKey;
 static VALUE
 osx_NSHTTPPropertyServerHTTPVersionKey(VALUE mdl)
 {
-  NSString * ns_result = NSHTTPPropertyServerHTTPVersionKey;
-  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
+  return nsresult_to_rbresult(_C_ID, &NSHTTPPropertyServerHTTPVersionKey, nil);
 }
 
 // NSString *NSHTTPPropertyRedirectionHeadersKey;
 static VALUE
 osx_NSHTTPPropertyRedirectionHeadersKey(VALUE mdl)
 {
-  NSString * ns_result = NSHTTPPropertyRedirectionHeadersKey;
-  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
+  return nsresult_to_rbresult(_C_ID, &NSHTTPPropertyRedirectionHeadersKey, nil);
 }
 
 // NSString *NSHTTPPropertyErrorPageDataKey;
 static VALUE
 osx_NSHTTPPropertyErrorPageDataKey(VALUE mdl)
 {
-  NSString * ns_result = NSHTTPPropertyErrorPageDataKey;
-  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
+  return nsresult_to_rbresult(_C_ID, &NSHTTPPropertyErrorPageDataKey, nil);
 }
 
 void init_NSURLHandle(VALUE mOSX)

@@ -11,32 +11,28 @@ extern VALUE nsresult_to_rbresult(int octype, const void* nsresult, id pool);
 static VALUE
 osx_NSViewFrameDidChangeNotification(VALUE mdl)
 {
-  NSString * ns_result = NSViewFrameDidChangeNotification;
-  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
+  return nsresult_to_rbresult(_C_ID, &NSViewFrameDidChangeNotification, nil);
 }
 
 // NSString *NSViewFocusDidChangeNotification;
 static VALUE
 osx_NSViewFocusDidChangeNotification(VALUE mdl)
 {
-  NSString * ns_result = NSViewFocusDidChangeNotification;
-  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
+  return nsresult_to_rbresult(_C_ID, &NSViewFocusDidChangeNotification, nil);
 }
 
 // NSString *NSViewBoundsDidChangeNotification;
 static VALUE
 osx_NSViewBoundsDidChangeNotification(VALUE mdl)
 {
-  NSString * ns_result = NSViewBoundsDidChangeNotification;
-  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
+  return nsresult_to_rbresult(_C_ID, &NSViewBoundsDidChangeNotification, nil);
 }
 
 // NSString *NSViewGlobalFrameDidChangeNotification;
 static VALUE
 osx_NSViewGlobalFrameDidChangeNotification(VALUE mdl)
 {
-  NSString * ns_result = NSViewGlobalFrameDidChangeNotification;
-  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
+  return nsresult_to_rbresult(_C_ID, &NSViewGlobalFrameDidChangeNotification, nil);
 }
 
 void init_NSView(VALUE mOSX)

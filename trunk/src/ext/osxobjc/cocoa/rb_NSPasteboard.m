@@ -11,160 +11,140 @@ extern VALUE nsresult_to_rbresult(int octype, const void* nsresult, id pool);
 static VALUE
 osx_NSStringPboardType(VALUE mdl)
 {
-  NSString * ns_result = NSStringPboardType;
-  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
+  return nsresult_to_rbresult(_C_ID, &NSStringPboardType, nil);
 }
 
 // NSString *NSFilenamesPboardType;
 static VALUE
 osx_NSFilenamesPboardType(VALUE mdl)
 {
-  NSString * ns_result = NSFilenamesPboardType;
-  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
+  return nsresult_to_rbresult(_C_ID, &NSFilenamesPboardType, nil);
 }
 
 // NSString *NSPostScriptPboardType;
 static VALUE
 osx_NSPostScriptPboardType(VALUE mdl)
 {
-  NSString * ns_result = NSPostScriptPboardType;
-  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
+  return nsresult_to_rbresult(_C_ID, &NSPostScriptPboardType, nil);
 }
 
 // NSString *NSTIFFPboardType;
 static VALUE
 osx_NSTIFFPboardType(VALUE mdl)
 {
-  NSString * ns_result = NSTIFFPboardType;
-  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
+  return nsresult_to_rbresult(_C_ID, &NSTIFFPboardType, nil);
 }
 
 // NSString *NSRTFPboardType;
 static VALUE
 osx_NSRTFPboardType(VALUE mdl)
 {
-  NSString * ns_result = NSRTFPboardType;
-  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
+  return nsresult_to_rbresult(_C_ID, &NSRTFPboardType, nil);
 }
 
 // NSString *NSTabularTextPboardType;
 static VALUE
 osx_NSTabularTextPboardType(VALUE mdl)
 {
-  NSString * ns_result = NSTabularTextPboardType;
-  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
+  return nsresult_to_rbresult(_C_ID, &NSTabularTextPboardType, nil);
 }
 
 // NSString *NSFontPboardType;
 static VALUE
 osx_NSFontPboardType(VALUE mdl)
 {
-  NSString * ns_result = NSFontPboardType;
-  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
+  return nsresult_to_rbresult(_C_ID, &NSFontPboardType, nil);
 }
 
 // NSString *NSRulerPboardType;
 static VALUE
 osx_NSRulerPboardType(VALUE mdl)
 {
-  NSString * ns_result = NSRulerPboardType;
-  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
+  return nsresult_to_rbresult(_C_ID, &NSRulerPboardType, nil);
 }
 
 // NSString *NSFileContentsPboardType;
 static VALUE
 osx_NSFileContentsPboardType(VALUE mdl)
 {
-  NSString * ns_result = NSFileContentsPboardType;
-  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
+  return nsresult_to_rbresult(_C_ID, &NSFileContentsPboardType, nil);
 }
 
 // NSString *NSColorPboardType;
 static VALUE
 osx_NSColorPboardType(VALUE mdl)
 {
-  NSString * ns_result = NSColorPboardType;
-  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
+  return nsresult_to_rbresult(_C_ID, &NSColorPboardType, nil);
 }
 
 // NSString *NSRTFDPboardType;
 static VALUE
 osx_NSRTFDPboardType(VALUE mdl)
 {
-  NSString * ns_result = NSRTFDPboardType;
-  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
+  return nsresult_to_rbresult(_C_ID, &NSRTFDPboardType, nil);
 }
 
 // NSString *NSHTMLPboardType;
 static VALUE
 osx_NSHTMLPboardType(VALUE mdl)
 {
-  NSString * ns_result = NSHTMLPboardType;
-  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
+  return nsresult_to_rbresult(_C_ID, &NSHTMLPboardType, nil);
 }
 
 // NSString *NSPICTPboardType;
 static VALUE
 osx_NSPICTPboardType(VALUE mdl)
 {
-  NSString * ns_result = NSPICTPboardType;
-  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
+  return nsresult_to_rbresult(_C_ID, &NSPICTPboardType, nil);
 }
 
 // NSString *NSURLPboardType;
 static VALUE
 osx_NSURLPboardType(VALUE mdl)
 {
-  NSString * ns_result = NSURLPboardType;
-  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
+  return nsresult_to_rbresult(_C_ID, &NSURLPboardType, nil);
 }
 
 // NSString *NSPDFPboardType;
 static VALUE
 osx_NSPDFPboardType(VALUE mdl)
 {
-  NSString * ns_result = NSPDFPboardType;
-  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
+  return nsresult_to_rbresult(_C_ID, &NSPDFPboardType, nil);
 }
 
 // NSString *NSGeneralPboard;
 static VALUE
 osx_NSGeneralPboard(VALUE mdl)
 {
-  NSString * ns_result = NSGeneralPboard;
-  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
+  return nsresult_to_rbresult(_C_ID, &NSGeneralPboard, nil);
 }
 
 // NSString *NSFontPboard;
 static VALUE
 osx_NSFontPboard(VALUE mdl)
 {
-  NSString * ns_result = NSFontPboard;
-  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
+  return nsresult_to_rbresult(_C_ID, &NSFontPboard, nil);
 }
 
 // NSString *NSRulerPboard;
 static VALUE
 osx_NSRulerPboard(VALUE mdl)
 {
-  NSString * ns_result = NSRulerPboard;
-  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
+  return nsresult_to_rbresult(_C_ID, &NSRulerPboard, nil);
 }
 
 // NSString *NSFindPboard;
 static VALUE
 osx_NSFindPboard(VALUE mdl)
 {
-  NSString * ns_result = NSFindPboard;
-  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
+  return nsresult_to_rbresult(_C_ID, &NSFindPboard, nil);
 }
 
 // NSString *NSDragPboard;
 static VALUE
 osx_NSDragPboard(VALUE mdl)
 {
-  NSString * ns_result = NSDragPboard;
-  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
+  return nsresult_to_rbresult(_C_ID, &NSDragPboard, nil);
 }
 
   /**** functions ****/

@@ -11,32 +11,28 @@ extern VALUE nsresult_to_rbresult(int octype, const void* nsresult, id pool);
 static VALUE
 osx_NSDrawerWillOpenNotification(VALUE mdl)
 {
-  NSString * ns_result = NSDrawerWillOpenNotification;
-  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
+  return nsresult_to_rbresult(_C_ID, &NSDrawerWillOpenNotification, nil);
 }
 
 // NSString *NSDrawerDidOpenNotification;
 static VALUE
 osx_NSDrawerDidOpenNotification(VALUE mdl)
 {
-  NSString * ns_result = NSDrawerDidOpenNotification;
-  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
+  return nsresult_to_rbresult(_C_ID, &NSDrawerDidOpenNotification, nil);
 }
 
 // NSString *NSDrawerWillCloseNotification;
 static VALUE
 osx_NSDrawerWillCloseNotification(VALUE mdl)
 {
-  NSString * ns_result = NSDrawerWillCloseNotification;
-  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
+  return nsresult_to_rbresult(_C_ID, &NSDrawerWillCloseNotification, nil);
 }
 
 // NSString *NSDrawerDidCloseNotification;
 static VALUE
 osx_NSDrawerDidCloseNotification(VALUE mdl)
 {
-  NSString * ns_result = NSDrawerDidCloseNotification;
-  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
+  return nsresult_to_rbresult(_C_ID, &NSDrawerDidCloseNotification, nil);
 }
 
 void init_NSDrawer(VALUE mOSX)

@@ -11,8 +11,7 @@ extern VALUE nsresult_to_rbresult(int octype, const void* nsresult, id pool);
 static VALUE
 osx_NSPopUpButtonWillPopUpNotification(VALUE mdl)
 {
-  NSString * ns_result = NSPopUpButtonWillPopUpNotification;
-  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
+  return nsresult_to_rbresult(_C_ID, &NSPopUpButtonWillPopUpNotification, nil);
 }
 
 void init_NSPopUpButton(VALUE mOSX)

@@ -11,32 +11,28 @@ extern VALUE nsresult_to_rbresult(int octype, const void* nsresult, id pool);
 static VALUE
 osx_NSGraphicsContextDestinationAttributeName(VALUE mdl)
 {
-  NSString * ns_result = NSGraphicsContextDestinationAttributeName;
-  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
+  return nsresult_to_rbresult(_C_ID, &NSGraphicsContextDestinationAttributeName, nil);
 }
 
 // NSString *NSGraphicsContextRepresentationFormatAttributeName;
 static VALUE
 osx_NSGraphicsContextRepresentationFormatAttributeName(VALUE mdl)
 {
-  NSString * ns_result = NSGraphicsContextRepresentationFormatAttributeName;
-  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
+  return nsresult_to_rbresult(_C_ID, &NSGraphicsContextRepresentationFormatAttributeName, nil);
 }
 
 // NSString *NSGraphicsContextPSFormat;
 static VALUE
 osx_NSGraphicsContextPSFormat(VALUE mdl)
 {
-  NSString * ns_result = NSGraphicsContextPSFormat;
-  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
+  return nsresult_to_rbresult(_C_ID, &NSGraphicsContextPSFormat, nil);
 }
 
 // NSString *NSGraphicsContextPDFFormat;
 static VALUE
 osx_NSGraphicsContextPDFFormat(VALUE mdl)
 {
-  NSString * ns_result = NSGraphicsContextPDFFormat;
-  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
+  return nsresult_to_rbresult(_C_ID, &NSGraphicsContextPDFFormat, nil);
 }
 
 void init_NSGraphicsContext(VALUE mOSX)

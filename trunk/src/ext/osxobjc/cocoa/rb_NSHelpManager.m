@@ -11,16 +11,14 @@ extern VALUE nsresult_to_rbresult(int octype, const void* nsresult, id pool);
 static VALUE
 osx_NSContextHelpModeDidActivateNotification(VALUE mdl)
 {
-  NSString * ns_result = NSContextHelpModeDidActivateNotification;
-  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
+  return nsresult_to_rbresult(_C_ID, &NSContextHelpModeDidActivateNotification, nil);
 }
 
 // NSString *NSContextHelpModeDidDeactivateNotification;
 static VALUE
 osx_NSContextHelpModeDidDeactivateNotification(VALUE mdl)
 {
-  NSString * ns_result = NSContextHelpModeDidDeactivateNotification;
-  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
+  return nsresult_to_rbresult(_C_ID, &NSContextHelpModeDidDeactivateNotification, nil);
 }
 
 void init_NSHelpManager(VALUE mOSX)

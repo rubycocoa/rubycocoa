@@ -1,3 +1,4 @@
+#import <Foundation/NSAutoreleasePool.h>
 #import <LibRuby/cocoa_ruby.h>
 #import "ocdata_conv.h"
 

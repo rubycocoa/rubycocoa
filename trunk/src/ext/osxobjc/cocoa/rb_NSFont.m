@@ -11,144 +11,126 @@ extern VALUE nsresult_to_rbresult(int octype, const void* nsresult, id pool);
 static VALUE
 osx_NSFontIdentityMatrix(VALUE mdl)
 {
-  const float * ns_result = NSFontIdentityMatrix;
-  return nsresult_to_rbresult(_C_PTR, &ns_result, nil);
+  return nsresult_to_rbresult(_C_PTR, &NSFontIdentityMatrix, nil);
 }
 
 // NSString *NSAFMFamilyName;
 static VALUE
 osx_NSAFMFamilyName(VALUE mdl)
 {
-  NSString * ns_result = NSAFMFamilyName;
-  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
+  return nsresult_to_rbresult(_C_ID, &NSAFMFamilyName, nil);
 }
 
 // NSString *NSAFMFontName;
 static VALUE
 osx_NSAFMFontName(VALUE mdl)
 {
-  NSString * ns_result = NSAFMFontName;
-  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
+  return nsresult_to_rbresult(_C_ID, &NSAFMFontName, nil);
 }
 
 // NSString *NSAFMFormatVersion;
 static VALUE
 osx_NSAFMFormatVersion(VALUE mdl)
 {
-  NSString * ns_result = NSAFMFormatVersion;
-  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
+  return nsresult_to_rbresult(_C_ID, &NSAFMFormatVersion, nil);
 }
 
 // NSString *NSAFMFullName;
 static VALUE
 osx_NSAFMFullName(VALUE mdl)
 {
-  NSString * ns_result = NSAFMFullName;
-  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
+  return nsresult_to_rbresult(_C_ID, &NSAFMFullName, nil);
 }
 
 // NSString *NSAFMNotice;
 static VALUE
 osx_NSAFMNotice(VALUE mdl)
 {
-  NSString * ns_result = NSAFMNotice;
-  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
+  return nsresult_to_rbresult(_C_ID, &NSAFMNotice, nil);
 }
 
 // NSString *NSAFMVersion;
 static VALUE
 osx_NSAFMVersion(VALUE mdl)
 {
-  NSString * ns_result = NSAFMVersion;
-  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
+  return nsresult_to_rbresult(_C_ID, &NSAFMVersion, nil);
 }
 
 // NSString *NSAFMWeight;
 static VALUE
 osx_NSAFMWeight(VALUE mdl)
 {
-  NSString * ns_result = NSAFMWeight;
-  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
+  return nsresult_to_rbresult(_C_ID, &NSAFMWeight, nil);
 }
 
 // NSString *NSAFMEncodingScheme;
 static VALUE
 osx_NSAFMEncodingScheme(VALUE mdl)
 {
-  NSString * ns_result = NSAFMEncodingScheme;
-  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
+  return nsresult_to_rbresult(_C_ID, &NSAFMEncodingScheme, nil);
 }
 
 // NSString *NSAFMCharacterSet;
 static VALUE
 osx_NSAFMCharacterSet(VALUE mdl)
 {
-  NSString * ns_result = NSAFMCharacterSet;
-  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
+  return nsresult_to_rbresult(_C_ID, &NSAFMCharacterSet, nil);
 }
 
 // NSString *NSAFMCapHeight;
 static VALUE
 osx_NSAFMCapHeight(VALUE mdl)
 {
-  NSString * ns_result = NSAFMCapHeight;
-  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
+  return nsresult_to_rbresult(_C_ID, &NSAFMCapHeight, nil);
 }
 
 // NSString *NSAFMXHeight;
 static VALUE
 osx_NSAFMXHeight(VALUE mdl)
 {
-  NSString * ns_result = NSAFMXHeight;
-  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
+  return nsresult_to_rbresult(_C_ID, &NSAFMXHeight, nil);
 }
 
 // NSString *NSAFMAscender;
 static VALUE
 osx_NSAFMAscender(VALUE mdl)
 {
-  NSString * ns_result = NSAFMAscender;
-  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
+  return nsresult_to_rbresult(_C_ID, &NSAFMAscender, nil);
 }
 
 // NSString *NSAFMDescender;
 static VALUE
 osx_NSAFMDescender(VALUE mdl)
 {
-  NSString * ns_result = NSAFMDescender;
-  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
+  return nsresult_to_rbresult(_C_ID, &NSAFMDescender, nil);
 }
 
 // NSString *NSAFMUnderlinePosition;
 static VALUE
 osx_NSAFMUnderlinePosition(VALUE mdl)
 {
-  NSString * ns_result = NSAFMUnderlinePosition;
-  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
+  return nsresult_to_rbresult(_C_ID, &NSAFMUnderlinePosition, nil);
 }
 
 // NSString *NSAFMUnderlineThickness;
 static VALUE
 osx_NSAFMUnderlineThickness(VALUE mdl)
 {
-  NSString * ns_result = NSAFMUnderlineThickness;
-  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
+  return nsresult_to_rbresult(_C_ID, &NSAFMUnderlineThickness, nil);
 }
 
 // NSString *NSAFMItalicAngle;
 static VALUE
 osx_NSAFMItalicAngle(VALUE mdl)
 {
-  NSString * ns_result = NSAFMItalicAngle;
-  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
+  return nsresult_to_rbresult(_C_ID, &NSAFMItalicAngle, nil);
 }
 
 // NSString *NSAFMMappingScheme;
 static VALUE
 osx_NSAFMMappingScheme(VALUE mdl)
 {
-  NSString * ns_result = NSAFMMappingScheme;
-  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
+  return nsresult_to_rbresult(_C_ID, &NSAFMMappingScheme, nil);
 }
 
 void init_NSFont(VALUE mOSX)
