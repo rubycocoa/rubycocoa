@@ -50,7 +50,7 @@ class OCHeaderAnalyzer
 
   def enums
     if @enums.nil? then
-      re = /\benum\b.*{([^}]*)}/
+      re = /\benum\b.*\{([^}]*)\}/
       @enums = @cpp_result.scan(re).map {|m|
 	m[0].split(',').map {|i|
 	  i.split('=')[0].strip
