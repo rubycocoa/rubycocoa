@@ -247,12 +247,14 @@ def gen_def_enums(och)
 end
 
 def reconfig_info(info)
-  if CLASSES.find {|c| /^(const\s+)?#{c}\s*\*$/.match(info.type) } then
+  if CLASSES.find {|c|
+      /^(const\s+)?#{c}\s*\*(\s*(__)?const)?$/.match(info.type) } then
     info.octype = :_C_ID
   end
   if info.is_a? OCHeaderAnalyzer::FuncInfo then
     info.args.each do |i|
-      if CLASSES.find {|c| /^(const\s+)?#{c}\s*\*$/.match(i.type) } then
+      if CLASSES.find {|c|
+	  /^(const\s+)?#{c}\s*\*(\s*(__)?const)?$/.match(i.type) } then
 	i.octype = :_C_ID
       end
     end
@@ -293,7 +295,7 @@ end
 
 def gen_skelton(hpath)
   och = OCHeaderAnalyzer.new(hpath)
-  $stderr.print "#{och.filename}..." ; $stderr.flush
+  $stderr.print "#{och.filename}" ; $stderr.flush
   enums = gen_def_enums(och)
   consts = gen_def_consts(och)
   funcs = gen_def_funcs(och)
