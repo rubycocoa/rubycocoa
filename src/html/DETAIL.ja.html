@@ -9,7 +9,7 @@
 <link href="rdtext.css" type="text/css" rel="stylesheet"/>
 </head>
 <body>
-<h1><a name="label:0" id="label:0">RubyCocoaの詳細 (不完全)</a></h1><!-- RDLabel: "RubyCocoaの詳細 (不完全)" -->
+<h1><a name="label:0" id="label:0">RubyCocoaの詳細 (とりあえず)</a></h1><!-- RDLabel: "RubyCocoaの詳細 (とりあえず)" -->
 <p>RubyCocoaは、Ruby側を担当するRubyCocoaライブラリとObjective-C側を担当
 するRubyCocoaフレームワークから構成されます。</p>
 <h2><a name="label:1" id="label:1">RubyCocoaライブラリ</a></h2><!-- RDLabel: "RubyCocoaライブラリ" -->
@@ -136,7 +136,8 @@ Objective-C側のインスタンスを生成しラッパーとなります。Objective-C
 <p>RBApplicationMainはRubyCocoaアプリケーションをスタートさせるためのmain
 関数です。引数rb_main_nameにはRuby側のメインスクリプトファイル名を指定
 します。通常はmain.mの中で以下のように使います。</p>
-<pre>int main(int argc, char* argv[])
+<pre>#import &lt;RubyCocoa/RBRuntime.h&gt;
+int main(int argc, char* argv[])
 {
   return RBApplicationMain("rb_main.rb", argc, argv);
 }</pre>
