@@ -12,24 +12,7 @@
 #import "DummyProtocolHandler.h"
 #import <Cocoa/Cocoa.h>
 
-static DummyProtocolHandler* the_instance = nil;
-
 @implementation DummyProtocolHandler
-
-+ (void) initialize
-{
-  if (the_instance == nil) {
-    the_instance = [[self alloc] init];
-  }
-}
-
-+ instance
-{
-  if (the_instance == nil) {
-    the_instance = [[self alloc] init];
-  }
-  return the_instance;
-}
 
 // other
 - ruby_method_0 { return nil; }

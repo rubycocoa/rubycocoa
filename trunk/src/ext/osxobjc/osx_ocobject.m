@@ -12,8 +12,8 @@
 
 #import "osx_ocobject.h"
 #import <LibRuby/cocoa_ruby.h>
-#import "ocdata_conv.h"		// RubyCocoa.framework
-#import "RubyObject.h"		// RubyCocoa.framework
+#import <RubyCocoa/ocdata_conv.h> // RubyCocoa.framework
+#import <RubyCocoa/RBProxy.h>	// RubyCocoa.framework
 
 #import <Foundation/NSObject.h>
 #import <Foundation/NSArchiver.h>
@@ -133,33 +133,31 @@ static VALUE new_with_occlass(VALUE klass, Class nsclass)
   id nsobj;
 
   if (nsclass == nil)
-    nsclass = [RubyObject class];
-  nsobj = [nsclass alloc];
-  obj = create_rbobj_with_ocid_with_class(nsobj, klass);
-  if ([nsobj respondsToSelector: @selector(initWithRubyObject:)]) {
+    rb_raise(rb_eArgError, "class '%s' is nothing.",  
+	     STR2CSTR(rb_obj_as_string(klass)));
+
+  nsobj = [nsclass alloc];	// retainCount +1
+  obj = create_rbobj_with_ocid_with_class(nsobj, klass); // retainCount +1
+  [nsobj release]; // retainCount -1
+  OCOBJ_DATA_PTR(obj)->ownership -= 1; // remove one ownership
+
+  if ([nsobj isKindOfClass: [RBProxy class]]) {
     nsobj = [nsobj initWithRubyObject: obj];
   }
   else {
     nsobj = [nsobj init];
-    if ([nsobj respondsToSelector: @selector(setRubyObject:)]) {
-      objc_msgSend(nsobj, @selector(setRubyObject:), obj);
-    }
   }
-  OCOBJ_DATA_PTR(obj)->ownership -= 1; // remove one ownership
+
   return obj;
 }
 
-static VALUE ocobj_s_new_with_ocname(int argc, VALUE* argv, VALUE klass)
+static VALUE ocobj_s_new_with_classname(int argc, VALUE* argv, VALUE klass)
 {
   VALUE obj;
   Class nsclass;
   id nsobj;
   if (argc < 1) rb_raise(rb_eArgError, "wrong # of arguments");
   nsclass = rbstr_to_nsclass(argv[0]);
-  if (nsclass == nil)
-    rb_raise(rb_eArgError, "class '%s' is nothing.", 
-	     STR2CSTR(rb_obj_as_string(argv[0])));
-
   obj = new_with_occlass(klass, nsclass);
   argc--; argv++;
   rb_obj_call_init(obj, argc, argv);
@@ -169,10 +167,8 @@ static VALUE ocobj_s_new_with_ocname(int argc, VALUE* argv, VALUE klass)
 static VALUE ocobj_s_new(int argc, VALUE* argv, VALUE klass)
 {
   VALUE obj;
-  Class nsclass;
 
-  nsclass = find_class_of(klass);
-  obj = new_with_occlass(klass, nsclass);
+  obj = new_with_occlass(klass, [NSObject class]);
   rb_obj_call_init(obj, argc, argv);
   return obj;
 }
@@ -531,7 +527,7 @@ init_class_OCObject(VALUE outer)
   kOCObject = rb_define_class_under(outer, "OCObject", rb_cObject);
 
   rb_define_singleton_method(kOCObject, "new_with_ocid", ocobj_s_new_with_ocid, -1);
-  rb_define_singleton_method(kOCObject, "new_with_ocname", ocobj_s_new_with_ocname, -1);
+  rb_define_singleton_method(kOCObject, "new_with_classname", ocobj_s_new_with_classname, -1);
   rb_define_singleton_method(kOCObject, "new", ocobj_s_new, -1);
 
   rb_define_method(kOCObject, "__ocid__", ocobj_ocid, 0);
