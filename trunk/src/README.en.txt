@@ -26,6 +26,9 @@ object in a Ruby script.
   mk_app1/     - application using custom NSView (Makefile base)
   pb_app0/     - application using IB outlet and action (PB base)
 
+  itnues_albums.rb - communicate with iTunes via NSAppleScript
+  speak.rb     - Mac read a text from stdin or files out to you. (NSAppleScript)
+
 3. LICENCE
 
   GNU Lesser General Public License version 2.
