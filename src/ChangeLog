@@ -1,7 +1,12 @@
+2004-07-23  kimura wataru <kimuraw@i.nifty.jp>
+
+	* metaconfig, pre-config.rb, framework/RubyCocoa.pbproj/project.pbxproj.in:
+	enable build on 10.2.x.
+
 2004-05-03  kimura wataru <kimuraw@i.nifty.jp>
 
 	* framework/src/ruby/osx/objc/webkit.rb:
-	fix worning 'already initialized constant' on Panther.
+	fix warning 'already initialized constant' on Panther.
 
 2004-02-11  kimura wataru <kimuraw@i.nifty.jp>
 
