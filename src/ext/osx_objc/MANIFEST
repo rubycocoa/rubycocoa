@@ -22,3 +22,5 @@ mdl_objwrapper.m
 ocdata_conv.h
 ocdata_conv.m
 osx_objc.m
+cls_objcptr.h
+cls_objcptr.m
