@@ -1,9 +1,9 @@
 #!/usr/bin/env ruby
 
-SRCDIR = "../doc"
+SRCFILE = ARGV.shift
 DSTDIR = "."
-VERS = (ARGV.size == 0) ? "0.x.x" : ARGV.shift
-raise "invalid VERS (#{VERS})" unless /([\dx]\.){2}[\dx]/ =~ VERS
+# VERS = (ARGV.size == 0) ? "0.x.x" : ARGV.shift
+# raise "invalid VERS (#{VERS})" unless /([\dx]\.){2}[\dx]/ =~ VERS
 
 
 def command(cmd)
@@ -27,7 +27,7 @@ def rd2(src, dst, title, lang, css = nil, charset = nil)
   command "#{cmdstr} #{src} > #{dst}"
 end
 
-docs = Dir["#{SRCDIR}/*.{ja,en}"]
+docs = [ SRCFILE ]
 
 docs.each do |path|
   dirname = File.dirname(path)
