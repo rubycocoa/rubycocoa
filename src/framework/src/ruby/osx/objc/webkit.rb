@@ -88,6 +88,11 @@ module OSX
     :WebElementLinkTitleKey,
     :WebElementLinkLabelKey,
 
+    # -- WebView Notification Names
+    :WebViewProgressStartedNotification,
+    :WebViewProgressEstimateChangedNotification,
+    :WebViewProgressFinishedNotification,
+
     # -- Other Web Kit Errors
     :WebKitErrorDomain,
     :WebKitErrorMIMETypeKey,

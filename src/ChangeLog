@@ -1,3 +1,8 @@
+2004-11-25  kimura wataru <kimuraw@i.nifty.jp>
+
+	* framework/src/ruby/osx/objc/webkit.rb:
+	add missing constants.
+
 2004-11-23  kimura wataru <kimuraw@i.nifty.jp>
 
 	* tools/och_analyzer3.rb:
