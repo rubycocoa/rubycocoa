@@ -83,23 +83,20 @@ class PageTemplate
     @doc.to_s
   end
 
-end
+end				# class PageTemplate
 
 
 
 class RDDocument
 
-  attr_reader :src_name, :title, :body
+  attr_reader :src_name, :title, :body, :lang, :charset
 
-  def initialize(fname)
+  def initialize( fname, lang, charset )
     @src_name = fname
-    charset = "us-ascii"
-    lang = "en"
-    if /\.ja\z/ =~ fname then
-      charset = "euc-jp"
-      lang = "ja"
-    end
-    rd2(fname, "/tmp/rubycocoahoge" , lang)
+    @lang = lang
+    @charset = charset
+
+    rd2(fname, "/tmp/rubycocoahoge")
     xml_src = `cat /tmp/rubycocoahoge`
     command 'rm -f /tmp/rubycocoahoge'
     @doc = REXML::Document.new(xml_src)
@@ -121,19 +118,77 @@ class RDDocument
     raise(RuntimeError, cmd) unless system(cmd)
   end
 
-  def rd2(src, dst, lang, css = nil, charset = nil)
-    unless charset then
-      charset = case lang
-		when 'en' then "us-ascii"
-		when 'ja' then "euc-jp"
-		end
-    end
-    css = "rdtext.css" unless css
-    opt_lang = "--html-lang=#{lang}" if lang
-    opt_charset = "--html-charset=#{charset}" if charset
-    opt_css = "--with-css=#{css}" if css
-    cmdstr = "rd2 -r rd/rd2html-lib #{opt_css} #{opt_charset} #{opt_lang}"
+  def rd2(src, dst)
+    opt_lang = "--html-lang=#{@lang}" if @lang
+    opt_charset = "--html-charset=#{@charset}" if @charset
+    cmdstr = "rd2 -r rd/rd2html-lib #{opt_charset} #{opt_lang}"
     command "#{cmdstr} #{src} > #{dst}"
   end
 
-end
+end				# class RDDocument
+
+
+
+class NewsArticle
+
+  attr_reader :subject_ja, :subject_en, :date, :uid,
+    :body_ja, :body_en
+
+  def parse( input )
+    begin
+      return nil unless parse_header( input )
+      parse_body( input, 'ja' ) if @subject_ja
+      parse_body( input, 'en' ) if @subject_en
+      return self
+    rescue EOFError
+      return nil
+    end
+  end
+
+  def parse_header( input )
+    line = ""
+    line = input.readline while /^$/ =~ line
+    until /^$/ =~ line do
+      case line
+      when /^subject-ja:(.*)$/i then @subject_ja = $1.strip
+      when /^subject-en:(.*)$/i then @subject_en = $1.strip
+      when /^date:(.*)$/i then @date = $1.strip
+      when /^uid:(.*)$/i then @uid = $1.strip
+      else
+	raise "#{self.class}#parse_header: #{line.chop}"
+      end
+      line = input.readline
+    end
+    return true
+  end
+
+  def parse_body( input, lang )
+    body = ''
+    line = input.readline
+    delim = /^\.\.#{lang}$/
+    until delim =~ line do
+      body << line
+      line = input.readline
+    end
+    if lang == 'ja' then
+      @body_ja = body.strip
+    else
+      @body_en = body.strip
+    end
+  end
+
+  def to_div_en
+    return '' unless @subject_en
+    ret = "<div><h2><a name='#{@uid}'>#{@subject_en} (#{@date})</a></h2>\n"
+    ret << "<p>#{@body_en}</p></div>"
+    return ret
+  end
+
+  def to_div_ja
+    return '' unless @subject_ja
+    ret = "<div><h2><a name='#{@uid}'>#{@subject_ja} (#{@date})</a></h2>\n"
+    ret << "<p>#{@body_ja}</p></div>"
+    return ret
+  end
+
+end 				# class NewsArticle
