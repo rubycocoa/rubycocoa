@@ -1,3 +1,8 @@
+2002-12-10  FUJIMOTO Hisakuni  <hisa@fobj.com>
+
+	* framework/src/ruby/osx/objc/addressbook.rb, framework/src/ruby/osx/objc/application.rb, framework/src/ruby/osx/objc/cocoa_macros.rb, framework/src/ruby/osx/objc/oc_attachments.rb, framework/src/ruby/osx/objc/oc_exception.rb, framework/src/ruby/osx/objc/oc_import.rb, framework/src/ruby/osx/objc/oc_wrapper.rb:
+	fixed ambiguous method call with arguments.
+
 2002-12-09  FUJIMOTO Hisakuni  <hisa@fobj.com>
 
 	* framework/post-config.rb:
