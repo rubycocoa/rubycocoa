@@ -1,3 +1,7 @@
+2002-09-05  FUJIMOTO Hisakuni  <hisa@fobj.com>
+
+	* memo-0_3_0-a1
+
 2002-09-04  FUJIMOTO Hisakuni  <hisa@fobj.com>
 
 	* app_mains/Makefile, app_mains/main_using_exec.m, app_mains/main_using_libruby.m:
