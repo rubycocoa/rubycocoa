@@ -104,7 +104,7 @@ static Class objc_class_alloc(const char* name, Class super_class)
   Class isa = malloc(sizeof(struct objc_class));
   struct objc_method_list **mlp0, **mlp1;
   mlp0 = method_list_alloc(16);
-  mlp1 = method_list_alloc(4);
+  mlp1 = method_list_alloc(3);
 
   c->isa = isa;
   c->super_class = super_class;
