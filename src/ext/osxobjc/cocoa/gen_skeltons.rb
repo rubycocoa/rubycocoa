@@ -140,6 +140,25 @@ def rettype_type(rettype)
   end
 end
 
+def result_conv_func_of(typetype, srcvarstr)
+  case typetype
+  when :_C_ID then
+    "ocobj_new_with_ocid(#{srcvarstr})"
+  when :_C_BOOL then
+    "bool_to_rbobj(#{srcvarstr})"
+  when :_C_SEL then
+    "sel_to_rbobj(#{srcvarstr})"
+  when :_C_CHR, :_C_SRT, :_C_INT, :_C_LNG then
+    "int_to_rbobj((int)#{srcvarstr})"
+  when :_C_UCHR, :_C_USRT, :_C_UINT, :_C_ULNG then
+    "uint_to_rbobj((unsigned)#{srcvarstr})"
+  when :_C_FLT, :_C_DBL then
+    "double_to_rbobj((double)#{srcvarstr})"
+  else
+    nil
+  end
+end
+
 def tmpl_a_gsub_rettype(tmpl, rettype)
   typetype = rettype_type(rettype)
   if typetype == :_C_VOID then
@@ -149,19 +168,8 @@ def tmpl_a_gsub_rettype(tmpl, rettype)
   else
     tmpl.gsub! /%%retvar%%/, "#{rettype} ns_result;"
     tmpl.gsub! /%%retresult%%/, "ns_result = "
-    case typetype
-    when :_C_ID then
-      tmpl.gsub! /%%rbretval%%/, "ocobj_new_with_ocid(ns_result)"
-    when :_C_BOOL then
-      tmpl.gsub! /%%rbretval%%/, "bool_to_rbobj(ns_result)"
-    when :_C_SEL then
-      tmpl.gsub! /%%rbretval%%/, "sel_to_rbobj(ns_result)"
-    when :_C_CHR, :_C_SRT, :_C_INT, :_C_LNG then
-      tmpl.gsub! /%%rbretval%%/, "int_to_rbobj((int)ns_result)"
-    when :_C_UCHR, :_C_USRT, :_C_UINT, :_C_ULNG then
-      tmpl.gsub! /%%rbretval%%/, "uint_to_rbobj((unsigned)ns_result)"
-    when :_C_FLT, :_C_DBL then
-      tmpl.gsub! /%%rbretval%%/, "double_to_rbobj((double)ns_result)"
+    if conv_func_str = result_conv_func_of(typetype, "ns_result") then
+      tmpl.gsub! /%%rbretval%%/, conv_func_str
     else
       return false
     end
@@ -198,7 +206,12 @@ def gen_def_c_func(info, argc = -1)
     if argc == 0 && is_objc_id?(info.type) then
       ret.concat "  return ocobj_new_with_ocid(#{info.name});\n"
     else
-      ret.concat "  rb_notimplement();\n"
+      tmpl = FUNC_TMPLATE_A.dup
+      if str = result_conv_func_of(rettype_type(info.type), info.name) then
+	ret.concat "  return #{str};\n"
+      else
+	ret.concat "  rb_notimplement();\n"
+      end
     end
   end
   ret.concat "}\n\n"

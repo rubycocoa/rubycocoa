@@ -1,132 +1,176 @@
 #import <LibRuby/cocoa_ruby.h>
-#import "../framework/ocdata_conv.h"
+#import "ocdata_conv.h"
 #import <AppKit/AppKit.h>
+
+static void
+rbarg_to_nsarg(VALUE rbarg, int octype, void* nsarg, id pool, int index)
+{
+  if (!rbobj_to_ocdata(rbarg, octype, nsarg)) {
+    if (pool) [pool release];
+    rb_raise(rb_eArgError, "arg #%d cannot convert to nsobj.", index);
+  }
+}
+
+static VALUE
+nsresult_to_rbresult(int octype, const void* nsresult, id pool)
+{
+  VALUE rbresult;
+  if (octype == _C_ID) {
+    rbresult = ocobj_new_with_ocid(*(id*)nsresult);
+  }
+  else {
+    if (!ocdata_to_rbobj(octype, nsresult, &rbresult)) {
+      if (pool) [pool release];
+      rb_raise(rb_eRuntimeError, "result cannot convert to rbobj.");
+    }
+  }
+  return rbresult;
+}
+
 
   /**** constants ****/
 // NSSize NSIconSize;
 static VALUE
 osx_NSIconSize(VALUE mdl)
 {
-  rb_notimplement();
+  NSSize ns_result = NSIconSize;
+  return nsresult_to_rbresult(_PRIV_C_NSSIZE, &ns_result, nil);
 }
 
 // NSSize NSTokenSize;
 static VALUE
 osx_NSTokenSize(VALUE mdl)
 {
-  rb_notimplement();
+  NSSize ns_result = NSTokenSize;
+  return nsresult_to_rbresult(_PRIV_C_NSSIZE, &ns_result, nil);
 }
 
 // NSString *NSWindowDidBecomeKeyNotification;
 static VALUE
 osx_NSWindowDidBecomeKeyNotification(VALUE mdl)
 {
-  return ocobj_new_with_ocid(NSWindowDidBecomeKeyNotification);
+  NSString * ns_result = NSWindowDidBecomeKeyNotification;
+  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
 }
 
 // NSString *NSWindowDidBecomeMainNotification;
 static VALUE
 osx_NSWindowDidBecomeMainNotification(VALUE mdl)
 {
-  return ocobj_new_with_ocid(NSWindowDidBecomeMainNotification);
+  NSString * ns_result = NSWindowDidBecomeMainNotification;
+  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
 }
 
 // NSString *NSWindowDidChangeScreenNotification;
 static VALUE
 osx_NSWindowDidChangeScreenNotification(VALUE mdl)
 {
-  return ocobj_new_with_ocid(NSWindowDidChangeScreenNotification);
+  NSString * ns_result = NSWindowDidChangeScreenNotification;
+  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
 }
 
 // NSString *NSWindowDidDeminiaturizeNotification;
 static VALUE
 osx_NSWindowDidDeminiaturizeNotification(VALUE mdl)
 {
-  return ocobj_new_with_ocid(NSWindowDidDeminiaturizeNotification);
+  NSString * ns_result = NSWindowDidDeminiaturizeNotification;
+  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
 }
 
 // NSString *NSWindowDidExposeNotification;
 static VALUE
 osx_NSWindowDidExposeNotification(VALUE mdl)
 {
-  return ocobj_new_with_ocid(NSWindowDidExposeNotification);
+  NSString * ns_result = NSWindowDidExposeNotification;
+  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
 }
 
 // NSString *NSWindowDidMiniaturizeNotification;
 static VALUE
 osx_NSWindowDidMiniaturizeNotification(VALUE mdl)
 {
-  return ocobj_new_with_ocid(NSWindowDidMiniaturizeNotification);
+  NSString * ns_result = NSWindowDidMiniaturizeNotification;
+  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
 }
 
 // NSString *NSWindowDidMoveNotification;
 static VALUE
 osx_NSWindowDidMoveNotification(VALUE mdl)
 {
-  return ocobj_new_with_ocid(NSWindowDidMoveNotification);
+  NSString * ns_result = NSWindowDidMoveNotification;
+  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
 }
 
 // NSString *NSWindowDidResignKeyNotification;
 static VALUE
 osx_NSWindowDidResignKeyNotification(VALUE mdl)
 {
-  return ocobj_new_with_ocid(NSWindowDidResignKeyNotification);
+  NSString * ns_result = NSWindowDidResignKeyNotification;
+  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
 }
 
 // NSString *NSWindowDidResignMainNotification;
 static VALUE
 osx_NSWindowDidResignMainNotification(VALUE mdl)
 {
-  return ocobj_new_with_ocid(NSWindowDidResignMainNotification);
+  NSString * ns_result = NSWindowDidResignMainNotification;
+  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
 }
 
 // NSString *NSWindowDidResizeNotification;
 static VALUE
 osx_NSWindowDidResizeNotification(VALUE mdl)
 {
-  return ocobj_new_with_ocid(NSWindowDidResizeNotification);
+  NSString * ns_result = NSWindowDidResizeNotification;
+  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
 }
 
 // NSString *NSWindowDidUpdateNotification;
 static VALUE
 osx_NSWindowDidUpdateNotification(VALUE mdl)
 {
-  return ocobj_new_with_ocid(NSWindowDidUpdateNotification);
+  NSString * ns_result = NSWindowDidUpdateNotification;
+  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
 }
 
 // NSString *NSWindowWillCloseNotification;
 static VALUE
 osx_NSWindowWillCloseNotification(VALUE mdl)
 {
-  return ocobj_new_with_ocid(NSWindowWillCloseNotification);
+  NSString * ns_result = NSWindowWillCloseNotification;
+  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
 }
 
 // NSString *NSWindowWillMiniaturizeNotification;
 static VALUE
 osx_NSWindowWillMiniaturizeNotification(VALUE mdl)
 {
-  return ocobj_new_with_ocid(NSWindowWillMiniaturizeNotification);
+  NSString * ns_result = NSWindowWillMiniaturizeNotification;
+  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
 }
 
 // NSString *NSWindowWillMoveNotification;
 static VALUE
 osx_NSWindowWillMoveNotification(VALUE mdl)
 {
-  return ocobj_new_with_ocid(NSWindowWillMoveNotification);
+  NSString * ns_result = NSWindowWillMoveNotification;
+  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
 }
 
 // NSString *NSWindowWillBeginSheetNotification;
 static VALUE
 osx_NSWindowWillBeginSheetNotification(VALUE mdl)
 {
-  return ocobj_new_with_ocid(NSWindowWillBeginSheetNotification);
+  NSString * ns_result = NSWindowWillBeginSheetNotification;
+  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
 }
 
 // NSString *NSWindowDidEndSheetNotification;
 static VALUE
 osx_NSWindowDidEndSheetNotification(VALUE mdl)
 {
-  return ocobj_new_with_ocid(NSWindowDidEndSheetNotification);
+  NSString * ns_result = NSWindowDidEndSheetNotification;
+  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
 }
 
 void init_NSWindow(VALUE mOSX)

@@ -1,68 +1,74 @@
 #import <LibRuby/cocoa_ruby.h>
-#import "../framework/ocdata_conv.h"
+#import "ocdata_conv.h"
 #import <Foundation/Foundation.h>
+
+static void
+rbarg_to_nsarg(VALUE rbarg, int octype, void* nsarg, id pool, int index)
+{
+  if (!rbobj_to_ocdata(rbarg, octype, nsarg)) {
+    if (pool) [pool release];
+    rb_raise(rb_eArgError, "arg #%d cannot convert to nsobj.", index);
+  }
+}
+
+static VALUE
+nsresult_to_rbresult(int octype, const void* nsresult, id pool)
+{
+  VALUE rbresult;
+  if (octype == _C_ID) {
+    rbresult = ocobj_new_with_ocid(*(id*)nsresult);
+  }
+  else {
+    if (!ocdata_to_rbobj(octype, nsresult, &rbresult)) {
+      if (pool) [pool release];
+      rb_raise(rb_eRuntimeError, "result cannot convert to rbobj.");
+    }
+  }
+  return rbresult;
+}
+
 
   /**** functions ****/
 // NSString *NSUserName(void);
 static VALUE
 osx_NSUserName(VALUE mdl)
 {
-  id pool = [[NSAutoreleasePool alloc] init];
-  id ns_result;
-  VALUE rb_result;
-  
-  ns_result =  NSUserName();
-  rb_result = ocobj_new_with_ocid(ns_result);
-  [pool release];
-  return rb_result;
+  NSString * ns_result = NSUserName();
+  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
 }
 
 // NSString *NSFullUserName(void);
 static VALUE
 osx_NSFullUserName(VALUE mdl)
 {
-  id pool = [[NSAutoreleasePool alloc] init];
-  id ns_result;
-  VALUE rb_result;
-  
-  ns_result =  NSFullUserName();
-  rb_result = ocobj_new_with_ocid(ns_result);
-  [pool release];
-  return rb_result;
+  NSString * ns_result = NSFullUserName();
+  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
 }
 
 // NSString *NSHomeDirectory(void);
 static VALUE
 osx_NSHomeDirectory(VALUE mdl)
 {
-  id pool = [[NSAutoreleasePool alloc] init];
-  id ns_result;
-  VALUE rb_result;
-  
-  ns_result =  NSHomeDirectory();
-  rb_result = ocobj_new_with_ocid(ns_result);
-  [pool release];
-  return rb_result;
+  NSString * ns_result = NSHomeDirectory();
+  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
 }
 
 // NSString *NSHomeDirectoryForUser(NSString *userName);
 static VALUE
-osx_NSHomeDirectoryForUser(int argc, VALUE* argv, VALUE mdl)
+osx_NSHomeDirectoryForUser(VALUE mdl, VALUE a0)
 {
-  id pool = [[NSAutoreleasePool alloc] init];
-  id ns_result;
-  VALUE rb_result;
-    int i;
-  id oc_args[1];
-  for (i = 0; i < argc; i++) {
-    if (!rbobj_to_nsobj(argv[i], &oc_args[i])) {
-      [pool release];
-      rb_raise(rb_eArgError, "arg #%d cannot convert to nsobj.", i);
-    }
-  }
+  NSString * ns_result;
 
-  ns_result =  NSHomeDirectoryForUser(oc_args[0]);
-  rb_result = ocobj_new_with_ocid(ns_result);
+  NSString * ns_a0;
+
+  VALUE rb_result;
+  id pool = [[NSAutoreleasePool alloc] init];
+  /* a0 */
+  rbarg_to_nsarg(a0, _C_ID, &ns_a0, pool, 0);
+
+  ns_result = NSHomeDirectoryForUser(ns_a0);
+
+  rb_result = nsresult_to_rbresult(_C_ID, &ns_result, pool);
   [pool release];
   return rb_result;
 }
@@ -71,33 +77,21 @@ osx_NSHomeDirectoryForUser(int argc, VALUE* argv, VALUE mdl)
 static VALUE
 osx_NSTemporaryDirectory(VALUE mdl)
 {
-  id pool = [[NSAutoreleasePool alloc] init];
-  id ns_result;
-  VALUE rb_result;
-  
-  ns_result =  NSTemporaryDirectory();
-  rb_result = ocobj_new_with_ocid(ns_result);
-  [pool release];
-  return rb_result;
+  NSString * ns_result = NSTemporaryDirectory();
+  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
 }
 
 // NSString *NSOpenStepRootDirectory(void);
 static VALUE
 osx_NSOpenStepRootDirectory(VALUE mdl)
 {
-  id pool = [[NSAutoreleasePool alloc] init];
-  id ns_result;
-  VALUE rb_result;
-  
-  ns_result =  NSOpenStepRootDirectory();
-  rb_result = ocobj_new_with_ocid(ns_result);
-  [pool release];
-  return rb_result;
+  NSString * ns_result = NSOpenStepRootDirectory();
+  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
 }
 
 // NSArray *NSSearchPathForDirectoriesInDomains(NSSearchPathDirectory directory, NSSearchPathDomainMask domainMask, BOOL expandTilde);
 static VALUE
-osx_NSSearchPathForDirectoriesInDomains(int argc, VALUE* argv, VALUE mdl)
+osx_NSSearchPathForDirectoriesInDomains(VALUE mdl, VALUE a0, VALUE a1, VALUE a2)
 {
   rb_notimplement();
 }
@@ -125,8 +119,8 @@ void init_NSPathUtilities(VALUE mOSX)
   rb_define_module_function(mOSX, "NSUserName", osx_NSUserName, 0);
   rb_define_module_function(mOSX, "NSFullUserName", osx_NSFullUserName, 0);
   rb_define_module_function(mOSX, "NSHomeDirectory", osx_NSHomeDirectory, 0);
-  rb_define_module_function(mOSX, "NSHomeDirectoryForUser", osx_NSHomeDirectoryForUser, -1);
+  rb_define_module_function(mOSX, "NSHomeDirectoryForUser", osx_NSHomeDirectoryForUser, 1);
   rb_define_module_function(mOSX, "NSTemporaryDirectory", osx_NSTemporaryDirectory, 0);
   rb_define_module_function(mOSX, "NSOpenStepRootDirectory", osx_NSOpenStepRootDirectory, 0);
-  rb_define_module_function(mOSX, "NSSearchPathForDirectoriesInDomains", osx_NSSearchPathForDirectoriesInDomains, -1);
+  rb_define_module_function(mOSX, "NSSearchPathForDirectoriesInDomains", osx_NSSearchPathForDirectoriesInDomains, 3);
 }

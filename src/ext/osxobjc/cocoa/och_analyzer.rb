@@ -78,15 +78,18 @@ class OCHeaderAnalyzer
   private
 
   def OCHeaderAnalyzer.constant?(str)
-    # re = /^([^()]*)(\b\w\b)*(\[\])*$/
-    str += "dummy" if str[-1].chr == '*'
-    re = /^([^()]*)\b(\w+)\b(\[\])*$/
-    m = re.match(str.strip)
-    if m then
-      m = m.to_a[1..-1].compact.map{|i|i.strip}
-      m[0] += m[2] if m.size == 3
-      m[0] = 'void' if m[1] == 'void'
-      VarInfo.new(m[0],m[1],str)
+    if str == '...' then
+      VarInfo.new('...', '...', str)
+    else
+      str += "dummy" if str[-1].chr == '*'
+      re = /^([^()]*)\b(\w+)\b(\[\])*$/
+      m = re.match(str.strip)
+      if m then
+	m = m.to_a[1..-1].compact.map{|i|i.strip}
+	m[0] += m[2] if m.size == 3
+	m[0] = 'void' if m[1] == 'void'
+	VarInfo.new(m[0],m[1],str)
+      end
     end
   end
 
@@ -96,13 +99,40 @@ class OCHeaderAnalyzer
     if m then
       func = constant?(m[1])
       if func then
-	args = m[2].split(',').map{|i| constant?(i)}.compact
-	if str =~ /\.\.\./ then
-	  args.push VarInfo.new('...', '...', '...')
-	end
+	args = m[2].split(',').map{|i|
+	  ai = constant?(i)
+	  ai = VarInfo.new('unknown', 'unknown', i) if ai.nil?
+	  ai
+	}
 	args = [] if args.size == 1 && args[0].type == 'void'
 	FuncInfo.new(func, args, str)
       end
+    end
+  end
+
+  def OCHeaderAnalyzer.octype_of(str)
+    case str.strip
+    when 'id' then :_C_ID
+    when 'Class' then :_C_ID
+    when 'void' then :_C_VOID
+    when 'SEL'  then :_C_SEL
+    when 'BOOL' then :_PRIV_C_BOOL
+    when 'NSRect' then :_PRIV_C_NSRECT
+    when 'NSPoint' then :_PRIV_C_NSPOINT
+    when 'NSSize' then :_PRIV_C_NSSIZE
+    when /^unsigned\s+char$/ then :_C_UCHR
+    when 'char' then '_C_CHR'
+    when /^unsigned\s+short(\s+int)?$/ then :_C_USHT
+    when /^short(\s+int)?$/ then :_C_SHT
+    when /^unsigned\s+int$/ then :_C_UINT
+    when 'int' then :_C_INT
+    when /^unsigned\s+long(\s+int)?$/ then :_C_ULNG
+    when /^long(\s+int)?$/ then :_C_LNG
+    when 'float' then :_C_FLT
+    when 'double' then :_C_DBL
+    when /char\s*\*$/ then :_C_CHARPTR
+    when /\*$/ then :_C_PTR
+    else :UNKNOWN
     end
   end
 
@@ -122,38 +152,38 @@ class OCHeaderAnalyzer
   class VarInfo
 
     attr_reader :type, :name, :orig
+    attr_accessor :octype
 
     def initialize(type, name, orig)
       @type = type
       @name = name
       @orig = orig
+      @octype = OCHeaderAnalyzer.octype_of(type)
     end
 
     def to_s
       @orig
-    end
-
-    def inspect
-      "<name=#{@name} type=#{@type}>"
     end
 
   end
 
   class FuncInfo < VarInfo
 
-    attr_reader :args
+    attr_reader :args, :argc
 
     def initialize(func, args, orig)
       super(func.type, func.name, orig)
       @args = args
+      @argc = @args.size
+      if @args[-1].type == '...' then
+	@argc = -1
+	@args.pop
+      end
+      self
     end
 
     def to_s
       @orig
-    end
-
-    def inspect
-      "#{super} [ #{args.map{|i|i.inspect}.join(', ')} ]"
     end
 
   end

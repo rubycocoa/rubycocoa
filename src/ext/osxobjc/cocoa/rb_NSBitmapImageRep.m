@@ -1,48 +1,80 @@
 #import <LibRuby/cocoa_ruby.h>
-#import "../framework/ocdata_conv.h"
+#import "ocdata_conv.h"
 #import <AppKit/AppKit.h>
+
+static void
+rbarg_to_nsarg(VALUE rbarg, int octype, void* nsarg, id pool, int index)
+{
+  if (!rbobj_to_ocdata(rbarg, octype, nsarg)) {
+    if (pool) [pool release];
+    rb_raise(rb_eArgError, "arg #%d cannot convert to nsobj.", index);
+  }
+}
+
+static VALUE
+nsresult_to_rbresult(int octype, const void* nsresult, id pool)
+{
+  VALUE rbresult;
+  if (octype == _C_ID) {
+    rbresult = ocobj_new_with_ocid(*(id*)nsresult);
+  }
+  else {
+    if (!ocdata_to_rbobj(octype, nsresult, &rbresult)) {
+      if (pool) [pool release];
+      rb_raise(rb_eRuntimeError, "result cannot convert to rbobj.");
+    }
+  }
+  return rbresult;
+}
+
 
   /**** constants ****/
 // NSString* NSImageCompressionMethod;
 static VALUE
 osx_NSImageCompressionMethod(VALUE mdl)
 {
-  return ocobj_new_with_ocid(NSImageCompressionMethod);
+  NSString* ns_result = NSImageCompressionMethod;
+  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
 }
 
 // NSString* NSImageCompressionFactor;
 static VALUE
 osx_NSImageCompressionFactor(VALUE mdl)
 {
-  return ocobj_new_with_ocid(NSImageCompressionFactor);
+  NSString* ns_result = NSImageCompressionFactor;
+  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
 }
 
 // NSString* NSImageDitherTransparency;
 static VALUE
 osx_NSImageDitherTransparency(VALUE mdl)
 {
-  return ocobj_new_with_ocid(NSImageDitherTransparency);
+  NSString* ns_result = NSImageDitherTransparency;
+  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
 }
 
 // NSString* NSImageRGBColorTable;
 static VALUE
 osx_NSImageRGBColorTable(VALUE mdl)
 {
-  return ocobj_new_with_ocid(NSImageRGBColorTable);
+  NSString* ns_result = NSImageRGBColorTable;
+  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
 }
 
 // NSString* NSImageInterlaced;
 static VALUE
 osx_NSImageInterlaced(VALUE mdl)
 {
-  return ocobj_new_with_ocid(NSImageInterlaced);
+  NSString* ns_result = NSImageInterlaced;
+  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
 }
 
 // NSString* NSImageColorSyncProfileData;
 static VALUE
 osx_NSImageColorSyncProfileData(VALUE mdl)
 {
-  return ocobj_new_with_ocid(NSImageColorSyncProfileData);
+  NSString* ns_result = NSImageColorSyncProfileData;
+  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
 }
 
 void init_NSBitmapImageRep(VALUE mOSX)

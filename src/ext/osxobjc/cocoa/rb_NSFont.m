@@ -1,132 +1,176 @@
 #import <LibRuby/cocoa_ruby.h>
-#import "../framework/ocdata_conv.h"
+#import "ocdata_conv.h"
 #import <AppKit/AppKit.h>
+
+static void
+rbarg_to_nsarg(VALUE rbarg, int octype, void* nsarg, id pool, int index)
+{
+  if (!rbobj_to_ocdata(rbarg, octype, nsarg)) {
+    if (pool) [pool release];
+    rb_raise(rb_eArgError, "arg #%d cannot convert to nsobj.", index);
+  }
+}
+
+static VALUE
+nsresult_to_rbresult(int octype, const void* nsresult, id pool)
+{
+  VALUE rbresult;
+  if (octype == _C_ID) {
+    rbresult = ocobj_new_with_ocid(*(id*)nsresult);
+  }
+  else {
+    if (!ocdata_to_rbobj(octype, nsresult, &rbresult)) {
+      if (pool) [pool release];
+      rb_raise(rb_eRuntimeError, "result cannot convert to rbobj.");
+    }
+  }
+  return rbresult;
+}
+
 
   /**** constants ****/
 // const float *NSFontIdentityMatrix;
 static VALUE
 osx_NSFontIdentityMatrix(VALUE mdl)
 {
-  rb_notimplement();
+  const float * ns_result = NSFontIdentityMatrix;
+  return nsresult_to_rbresult(_C_PTR, &ns_result, nil);
 }
 
 // NSString *NSAFMFamilyName;
 static VALUE
 osx_NSAFMFamilyName(VALUE mdl)
 {
-  return ocobj_new_with_ocid(NSAFMFamilyName);
+  NSString * ns_result = NSAFMFamilyName;
+  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
 }
 
 // NSString *NSAFMFontName;
 static VALUE
 osx_NSAFMFontName(VALUE mdl)
 {
-  return ocobj_new_with_ocid(NSAFMFontName);
+  NSString * ns_result = NSAFMFontName;
+  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
 }
 
 // NSString *NSAFMFormatVersion;
 static VALUE
 osx_NSAFMFormatVersion(VALUE mdl)
 {
-  return ocobj_new_with_ocid(NSAFMFormatVersion);
+  NSString * ns_result = NSAFMFormatVersion;
+  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
 }
 
 // NSString *NSAFMFullName;
 static VALUE
 osx_NSAFMFullName(VALUE mdl)
 {
-  return ocobj_new_with_ocid(NSAFMFullName);
+  NSString * ns_result = NSAFMFullName;
+  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
 }
 
 // NSString *NSAFMNotice;
 static VALUE
 osx_NSAFMNotice(VALUE mdl)
 {
-  return ocobj_new_with_ocid(NSAFMNotice);
+  NSString * ns_result = NSAFMNotice;
+  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
 }
 
 // NSString *NSAFMVersion;
 static VALUE
 osx_NSAFMVersion(VALUE mdl)
 {
-  return ocobj_new_with_ocid(NSAFMVersion);
+  NSString * ns_result = NSAFMVersion;
+  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
 }
 
 // NSString *NSAFMWeight;
 static VALUE
 osx_NSAFMWeight(VALUE mdl)
 {
-  return ocobj_new_with_ocid(NSAFMWeight);
+  NSString * ns_result = NSAFMWeight;
+  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
 }
 
 // NSString *NSAFMEncodingScheme;
 static VALUE
 osx_NSAFMEncodingScheme(VALUE mdl)
 {
-  return ocobj_new_with_ocid(NSAFMEncodingScheme);
+  NSString * ns_result = NSAFMEncodingScheme;
+  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
 }
 
 // NSString *NSAFMCharacterSet;
 static VALUE
 osx_NSAFMCharacterSet(VALUE mdl)
 {
-  return ocobj_new_with_ocid(NSAFMCharacterSet);
+  NSString * ns_result = NSAFMCharacterSet;
+  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
 }
 
 // NSString *NSAFMCapHeight;
 static VALUE
 osx_NSAFMCapHeight(VALUE mdl)
 {
-  return ocobj_new_with_ocid(NSAFMCapHeight);
+  NSString * ns_result = NSAFMCapHeight;
+  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
 }
 
 // NSString *NSAFMXHeight;
 static VALUE
 osx_NSAFMXHeight(VALUE mdl)
 {
-  return ocobj_new_with_ocid(NSAFMXHeight);
+  NSString * ns_result = NSAFMXHeight;
+  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
 }
 
 // NSString *NSAFMAscender;
 static VALUE
 osx_NSAFMAscender(VALUE mdl)
 {
-  return ocobj_new_with_ocid(NSAFMAscender);
+  NSString * ns_result = NSAFMAscender;
+  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
 }
 
 // NSString *NSAFMDescender;
 static VALUE
 osx_NSAFMDescender(VALUE mdl)
 {
-  return ocobj_new_with_ocid(NSAFMDescender);
+  NSString * ns_result = NSAFMDescender;
+  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
 }
 
 // NSString *NSAFMUnderlinePosition;
 static VALUE
 osx_NSAFMUnderlinePosition(VALUE mdl)
 {
-  return ocobj_new_with_ocid(NSAFMUnderlinePosition);
+  NSString * ns_result = NSAFMUnderlinePosition;
+  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
 }
 
 // NSString *NSAFMUnderlineThickness;
 static VALUE
 osx_NSAFMUnderlineThickness(VALUE mdl)
 {
-  return ocobj_new_with_ocid(NSAFMUnderlineThickness);
+  NSString * ns_result = NSAFMUnderlineThickness;
+  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
 }
 
 // NSString *NSAFMItalicAngle;
 static VALUE
 osx_NSAFMItalicAngle(VALUE mdl)
 {
-  return ocobj_new_with_ocid(NSAFMItalicAngle);
+  NSString * ns_result = NSAFMItalicAngle;
+  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
 }
 
 // NSString *NSAFMMappingScheme;
 static VALUE
 osx_NSAFMMappingScheme(VALUE mdl)
 {
-  return ocobj_new_with_ocid(NSAFMMappingScheme);
+  NSString * ns_result = NSAFMMappingScheme;
+  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
 }
 
 void init_NSFont(VALUE mOSX)

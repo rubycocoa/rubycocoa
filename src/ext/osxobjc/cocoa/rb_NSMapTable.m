@@ -1,6 +1,32 @@
 #import <LibRuby/cocoa_ruby.h>
-#import "../framework/ocdata_conv.h"
+#import "ocdata_conv.h"
 #import <Foundation/Foundation.h>
+
+static void
+rbarg_to_nsarg(VALUE rbarg, int octype, void* nsarg, id pool, int index)
+{
+  if (!rbobj_to_ocdata(rbarg, octype, nsarg)) {
+    if (pool) [pool release];
+    rb_raise(rb_eArgError, "arg #%d cannot convert to nsobj.", index);
+  }
+}
+
+static VALUE
+nsresult_to_rbresult(int octype, const void* nsresult, id pool)
+{
+  VALUE rbresult;
+  if (octype == _C_ID) {
+    rbresult = ocobj_new_with_ocid(*(id*)nsresult);
+  }
+  else {
+    if (!ocdata_to_rbobj(octype, nsresult, &rbresult)) {
+      if (pool) [pool release];
+      rb_raise(rb_eRuntimeError, "result cannot convert to rbobj.");
+    }
+  }
+  return rbresult;
+}
+
 
   /**** constants ****/
 // const NSMapTableKeyCallBacks NSIntMapKeyCallBacks;
@@ -83,135 +109,369 @@ osx_NSOwnedPointerMapValueCallBacks(VALUE mdl)
   /**** functions ****/
 // NSMapTable *NSCreateMapTableWithZone(NSMapTableKeyCallBacks keyCallBacks, NSMapTableValueCallBacks valueCallBacks, unsigned capacity, NSZone *zone);
 static VALUE
-osx_NSCreateMapTableWithZone(int argc, VALUE* argv, VALUE mdl)
+osx_NSCreateMapTableWithZone(VALUE mdl, VALUE a0, VALUE a1, VALUE a2, VALUE a3)
 {
   rb_notimplement();
 }
 
 // NSMapTable *NSCreateMapTable(NSMapTableKeyCallBacks keyCallBacks, NSMapTableValueCallBacks valueCallBacks, unsigned capacity);
 static VALUE
-osx_NSCreateMapTable(int argc, VALUE* argv, VALUE mdl)
+osx_NSCreateMapTable(VALUE mdl, VALUE a0, VALUE a1, VALUE a2)
 {
   rb_notimplement();
 }
 
 // void NSFreeMapTable(NSMapTable *table);
 static VALUE
-osx_NSFreeMapTable(int argc, VALUE* argv, VALUE mdl)
+osx_NSFreeMapTable(VALUE mdl, VALUE a0)
 {
-  rb_notimplement();
+
+  NSMapTable * ns_a0;
+
+  VALUE rb_result;
+  id pool = [[NSAutoreleasePool alloc] init];
+  /* a0 */
+  rbarg_to_nsarg(a0, _C_PTR, &ns_a0, pool, 0);
+
+  NSFreeMapTable(ns_a0);
+
+  rb_result = Qnil;
+  [pool release];
+  return rb_result;
 }
 
 // void NSResetMapTable(NSMapTable *table);
 static VALUE
-osx_NSResetMapTable(int argc, VALUE* argv, VALUE mdl)
+osx_NSResetMapTable(VALUE mdl, VALUE a0)
 {
-  rb_notimplement();
+
+  NSMapTable * ns_a0;
+
+  VALUE rb_result;
+  id pool = [[NSAutoreleasePool alloc] init];
+  /* a0 */
+  rbarg_to_nsarg(a0, _C_PTR, &ns_a0, pool, 0);
+
+  NSResetMapTable(ns_a0);
+
+  rb_result = Qnil;
+  [pool release];
+  return rb_result;
 }
 
 // BOOL NSCompareMapTables(NSMapTable *table1, NSMapTable *table2);
 static VALUE
-osx_NSCompareMapTables(int argc, VALUE* argv, VALUE mdl)
+osx_NSCompareMapTables(VALUE mdl, VALUE a0, VALUE a1)
 {
-  rb_notimplement();
+  BOOL ns_result;
+
+  NSMapTable * ns_a0;
+  NSMapTable * ns_a1;
+
+  VALUE rb_result;
+  id pool = [[NSAutoreleasePool alloc] init];
+  /* a0 */
+  rbarg_to_nsarg(a0, _C_PTR, &ns_a0, pool, 0);
+  /* a1 */
+  rbarg_to_nsarg(a1, _C_PTR, &ns_a1, pool, 1);
+
+  ns_result = NSCompareMapTables(ns_a0, ns_a1);
+
+  rb_result = nsresult_to_rbresult(_PRIV_C_BOOL, &ns_result, pool);
+  [pool release];
+  return rb_result;
 }
 
 // NSMapTable *NSCopyMapTableWithZone(NSMapTable *table, NSZone *zone);
 static VALUE
-osx_NSCopyMapTableWithZone(int argc, VALUE* argv, VALUE mdl)
+osx_NSCopyMapTableWithZone(VALUE mdl, VALUE a0, VALUE a1)
 {
-  rb_notimplement();
+  NSMapTable * ns_result;
+
+  NSMapTable * ns_a0;
+  NSZone * ns_a1;
+
+  VALUE rb_result;
+  id pool = [[NSAutoreleasePool alloc] init];
+  /* a0 */
+  rbarg_to_nsarg(a0, _C_PTR, &ns_a0, pool, 0);
+  /* a1 */
+  rbarg_to_nsarg(a1, _C_PTR, &ns_a1, pool, 1);
+
+  ns_result = NSCopyMapTableWithZone(ns_a0, ns_a1);
+
+  rb_result = nsresult_to_rbresult(_C_PTR, &ns_result, pool);
+  [pool release];
+  return rb_result;
 }
 
 // BOOL NSMapMember(NSMapTable *table, const void *key, void **originalKey, void **value);
 static VALUE
-osx_NSMapMember(int argc, VALUE* argv, VALUE mdl)
+osx_NSMapMember(VALUE mdl, VALUE a0, VALUE a1, VALUE a2, VALUE a3)
 {
-  rb_notimplement();
+  BOOL ns_result;
+
+  NSMapTable * ns_a0;
+  const void * ns_a1;
+  void ** ns_a2;
+  void ** ns_a3;
+
+  VALUE rb_result;
+  id pool = [[NSAutoreleasePool alloc] init];
+  /* a0 */
+  rbarg_to_nsarg(a0, _C_PTR, &ns_a0, pool, 0);
+  /* a1 */
+  rbarg_to_nsarg(a1, _C_PTR, &ns_a1, pool, 1);
+  /* a2 */
+  rbarg_to_nsarg(a2, _C_PTR, &ns_a2, pool, 2);
+  /* a3 */
+  rbarg_to_nsarg(a3, _C_PTR, &ns_a3, pool, 3);
+
+  ns_result = NSMapMember(ns_a0, ns_a1, ns_a2, ns_a3);
+
+  rb_result = nsresult_to_rbresult(_PRIV_C_BOOL, &ns_result, pool);
+  [pool release];
+  return rb_result;
 }
 
 // void *NSMapGet(NSMapTable *table, const void *key);
 static VALUE
-osx_NSMapGet(int argc, VALUE* argv, VALUE mdl)
+osx_NSMapGet(VALUE mdl, VALUE a0, VALUE a1)
 {
-  rb_notimplement();
+  void * ns_result;
+
+  NSMapTable * ns_a0;
+  const void * ns_a1;
+
+  VALUE rb_result;
+  id pool = [[NSAutoreleasePool alloc] init];
+  /* a0 */
+  rbarg_to_nsarg(a0, _C_PTR, &ns_a0, pool, 0);
+  /* a1 */
+  rbarg_to_nsarg(a1, _C_PTR, &ns_a1, pool, 1);
+
+  ns_result = NSMapGet(ns_a0, ns_a1);
+
+  rb_result = nsresult_to_rbresult(_C_PTR, &ns_result, pool);
+  [pool release];
+  return rb_result;
 }
 
 // void NSMapInsert(NSMapTable *table, const void *key, const void *value);
 static VALUE
-osx_NSMapInsert(int argc, VALUE* argv, VALUE mdl)
+osx_NSMapInsert(VALUE mdl, VALUE a0, VALUE a1, VALUE a2)
 {
-  rb_notimplement();
+
+  NSMapTable * ns_a0;
+  const void * ns_a1;
+  const void * ns_a2;
+
+  VALUE rb_result;
+  id pool = [[NSAutoreleasePool alloc] init];
+  /* a0 */
+  rbarg_to_nsarg(a0, _C_PTR, &ns_a0, pool, 0);
+  /* a1 */
+  rbarg_to_nsarg(a1, _C_PTR, &ns_a1, pool, 1);
+  /* a2 */
+  rbarg_to_nsarg(a2, _C_PTR, &ns_a2, pool, 2);
+
+  NSMapInsert(ns_a0, ns_a1, ns_a2);
+
+  rb_result = Qnil;
+  [pool release];
+  return rb_result;
 }
 
 // void NSMapInsertKnownAbsent(NSMapTable *table, const void *key, const void *value);
 static VALUE
-osx_NSMapInsertKnownAbsent(int argc, VALUE* argv, VALUE mdl)
+osx_NSMapInsertKnownAbsent(VALUE mdl, VALUE a0, VALUE a1, VALUE a2)
 {
-  rb_notimplement();
+
+  NSMapTable * ns_a0;
+  const void * ns_a1;
+  const void * ns_a2;
+
+  VALUE rb_result;
+  id pool = [[NSAutoreleasePool alloc] init];
+  /* a0 */
+  rbarg_to_nsarg(a0, _C_PTR, &ns_a0, pool, 0);
+  /* a1 */
+  rbarg_to_nsarg(a1, _C_PTR, &ns_a1, pool, 1);
+  /* a2 */
+  rbarg_to_nsarg(a2, _C_PTR, &ns_a2, pool, 2);
+
+  NSMapInsertKnownAbsent(ns_a0, ns_a1, ns_a2);
+
+  rb_result = Qnil;
+  [pool release];
+  return rb_result;
 }
 
 // void *NSMapInsertIfAbsent(NSMapTable *table, const void *key, const void *value);
 static VALUE
-osx_NSMapInsertIfAbsent(int argc, VALUE* argv, VALUE mdl)
+osx_NSMapInsertIfAbsent(VALUE mdl, VALUE a0, VALUE a1, VALUE a2)
 {
-  rb_notimplement();
+  void * ns_result;
+
+  NSMapTable * ns_a0;
+  const void * ns_a1;
+  const void * ns_a2;
+
+  VALUE rb_result;
+  id pool = [[NSAutoreleasePool alloc] init];
+  /* a0 */
+  rbarg_to_nsarg(a0, _C_PTR, &ns_a0, pool, 0);
+  /* a1 */
+  rbarg_to_nsarg(a1, _C_PTR, &ns_a1, pool, 1);
+  /* a2 */
+  rbarg_to_nsarg(a2, _C_PTR, &ns_a2, pool, 2);
+
+  ns_result = NSMapInsertIfAbsent(ns_a0, ns_a1, ns_a2);
+
+  rb_result = nsresult_to_rbresult(_C_PTR, &ns_result, pool);
+  [pool release];
+  return rb_result;
 }
 
 // void NSMapRemove(NSMapTable *table, const void *key);
 static VALUE
-osx_NSMapRemove(int argc, VALUE* argv, VALUE mdl)
+osx_NSMapRemove(VALUE mdl, VALUE a0, VALUE a1)
 {
-  rb_notimplement();
+
+  NSMapTable * ns_a0;
+  const void * ns_a1;
+
+  VALUE rb_result;
+  id pool = [[NSAutoreleasePool alloc] init];
+  /* a0 */
+  rbarg_to_nsarg(a0, _C_PTR, &ns_a0, pool, 0);
+  /* a1 */
+  rbarg_to_nsarg(a1, _C_PTR, &ns_a1, pool, 1);
+
+  NSMapRemove(ns_a0, ns_a1);
+
+  rb_result = Qnil;
+  [pool release];
+  return rb_result;
 }
 
 // NSMapEnumerator NSEnumerateMapTable(NSMapTable *table);
 static VALUE
-osx_NSEnumerateMapTable(int argc, VALUE* argv, VALUE mdl)
+osx_NSEnumerateMapTable(VALUE mdl, VALUE a0)
 {
   rb_notimplement();
 }
 
 // BOOL NSNextMapEnumeratorPair(NSMapEnumerator *enumerator, void **key, void **value);
 static VALUE
-osx_NSNextMapEnumeratorPair(int argc, VALUE* argv, VALUE mdl)
+osx_NSNextMapEnumeratorPair(VALUE mdl, VALUE a0, VALUE a1, VALUE a2)
 {
-  rb_notimplement();
+  BOOL ns_result;
+
+  NSMapEnumerator * ns_a0;
+  void ** ns_a1;
+  void ** ns_a2;
+
+  VALUE rb_result;
+  id pool = [[NSAutoreleasePool alloc] init];
+  /* a0 */
+  rbarg_to_nsarg(a0, _C_PTR, &ns_a0, pool, 0);
+  /* a1 */
+  rbarg_to_nsarg(a1, _C_PTR, &ns_a1, pool, 1);
+  /* a2 */
+  rbarg_to_nsarg(a2, _C_PTR, &ns_a2, pool, 2);
+
+  ns_result = NSNextMapEnumeratorPair(ns_a0, ns_a1, ns_a2);
+
+  rb_result = nsresult_to_rbresult(_PRIV_C_BOOL, &ns_result, pool);
+  [pool release];
+  return rb_result;
 }
 
 // void NSEndMapTableEnumeration(NSMapEnumerator *enumerator);
 static VALUE
-osx_NSEndMapTableEnumeration(int argc, VALUE* argv, VALUE mdl)
+osx_NSEndMapTableEnumeration(VALUE mdl, VALUE a0)
 {
-  rb_notimplement();
+
+  NSMapEnumerator * ns_a0;
+
+  VALUE rb_result;
+  id pool = [[NSAutoreleasePool alloc] init];
+  /* a0 */
+  rbarg_to_nsarg(a0, _C_PTR, &ns_a0, pool, 0);
+
+  NSEndMapTableEnumeration(ns_a0);
+
+  rb_result = Qnil;
+  [pool release];
+  return rb_result;
 }
 
 // unsigned NSCountMapTable(NSMapTable *table);
 static VALUE
-osx_NSCountMapTable(int argc, VALUE* argv, VALUE mdl)
+osx_NSCountMapTable(VALUE mdl, VALUE a0)
 {
   rb_notimplement();
 }
 
 // NSString *NSStringFromMapTable(NSMapTable *table);
 static VALUE
-osx_NSStringFromMapTable(int argc, VALUE* argv, VALUE mdl)
+osx_NSStringFromMapTable(VALUE mdl, VALUE a0)
 {
-  rb_notimplement();
+  NSString * ns_result;
+
+  NSMapTable * ns_a0;
+
+  VALUE rb_result;
+  id pool = [[NSAutoreleasePool alloc] init];
+  /* a0 */
+  rbarg_to_nsarg(a0, _C_PTR, &ns_a0, pool, 0);
+
+  ns_result = NSStringFromMapTable(ns_a0);
+
+  rb_result = nsresult_to_rbresult(_C_ID, &ns_result, pool);
+  [pool release];
+  return rb_result;
 }
 
 // NSArray *NSAllMapTableKeys(NSMapTable *table);
 static VALUE
-osx_NSAllMapTableKeys(int argc, VALUE* argv, VALUE mdl)
+osx_NSAllMapTableKeys(VALUE mdl, VALUE a0)
 {
-  rb_notimplement();
+  NSArray * ns_result;
+
+  NSMapTable * ns_a0;
+
+  VALUE rb_result;
+  id pool = [[NSAutoreleasePool alloc] init];
+  /* a0 */
+  rbarg_to_nsarg(a0, _C_PTR, &ns_a0, pool, 0);
+
+  ns_result = NSAllMapTableKeys(ns_a0);
+
+  rb_result = nsresult_to_rbresult(_C_ID, &ns_result, pool);
+  [pool release];
+  return rb_result;
 }
 
 // NSArray *NSAllMapTableValues(NSMapTable *table);
 static VALUE
-osx_NSAllMapTableValues(int argc, VALUE* argv, VALUE mdl)
+osx_NSAllMapTableValues(VALUE mdl, VALUE a0)
 {
-  rb_notimplement();
+  NSArray * ns_result;
+
+  NSMapTable * ns_a0;
+
+  VALUE rb_result;
+  id pool = [[NSAutoreleasePool alloc] init];
+  /* a0 */
+  rbarg_to_nsarg(a0, _C_PTR, &ns_a0, pool, 0);
+
+  ns_result = NSAllMapTableValues(ns_a0);
+
+  rb_result = nsresult_to_rbresult(_C_ID, &ns_result, pool);
+  [pool release];
+  return rb_result;
 }
 
 void init_NSMapTable(VALUE mOSX)
@@ -229,23 +489,23 @@ void init_NSMapTable(VALUE mOSX)
   rb_define_module_function(mOSX, "NSNonRetainedObjectMapValueCallBacks", osx_NSNonRetainedObjectMapValueCallBacks, 0);
   rb_define_module_function(mOSX, "NSOwnedPointerMapValueCallBacks", osx_NSOwnedPointerMapValueCallBacks, 0);
   /**** functions ****/
-  rb_define_module_function(mOSX, "NSCreateMapTableWithZone", osx_NSCreateMapTableWithZone, -1);
-  rb_define_module_function(mOSX, "NSCreateMapTable", osx_NSCreateMapTable, -1);
-  rb_define_module_function(mOSX, "NSFreeMapTable", osx_NSFreeMapTable, -1);
-  rb_define_module_function(mOSX, "NSResetMapTable", osx_NSResetMapTable, -1);
-  rb_define_module_function(mOSX, "NSCompareMapTables", osx_NSCompareMapTables, -1);
-  rb_define_module_function(mOSX, "NSCopyMapTableWithZone", osx_NSCopyMapTableWithZone, -1);
-  rb_define_module_function(mOSX, "NSMapMember", osx_NSMapMember, -1);
-  rb_define_module_function(mOSX, "NSMapGet", osx_NSMapGet, -1);
-  rb_define_module_function(mOSX, "NSMapInsert", osx_NSMapInsert, -1);
-  rb_define_module_function(mOSX, "NSMapInsertKnownAbsent", osx_NSMapInsertKnownAbsent, -1);
-  rb_define_module_function(mOSX, "NSMapInsertIfAbsent", osx_NSMapInsertIfAbsent, -1);
-  rb_define_module_function(mOSX, "NSMapRemove", osx_NSMapRemove, -1);
-  rb_define_module_function(mOSX, "NSEnumerateMapTable", osx_NSEnumerateMapTable, -1);
-  rb_define_module_function(mOSX, "NSNextMapEnumeratorPair", osx_NSNextMapEnumeratorPair, -1);
-  rb_define_module_function(mOSX, "NSEndMapTableEnumeration", osx_NSEndMapTableEnumeration, -1);
-  rb_define_module_function(mOSX, "NSCountMapTable", osx_NSCountMapTable, -1);
-  rb_define_module_function(mOSX, "NSStringFromMapTable", osx_NSStringFromMapTable, -1);
-  rb_define_module_function(mOSX, "NSAllMapTableKeys", osx_NSAllMapTableKeys, -1);
-  rb_define_module_function(mOSX, "NSAllMapTableValues", osx_NSAllMapTableValues, -1);
+  rb_define_module_function(mOSX, "NSCreateMapTableWithZone", osx_NSCreateMapTableWithZone, 4);
+  rb_define_module_function(mOSX, "NSCreateMapTable", osx_NSCreateMapTable, 3);
+  rb_define_module_function(mOSX, "NSFreeMapTable", osx_NSFreeMapTable, 1);
+  rb_define_module_function(mOSX, "NSResetMapTable", osx_NSResetMapTable, 1);
+  rb_define_module_function(mOSX, "NSCompareMapTables", osx_NSCompareMapTables, 2);
+  rb_define_module_function(mOSX, "NSCopyMapTableWithZone", osx_NSCopyMapTableWithZone, 2);
+  rb_define_module_function(mOSX, "NSMapMember", osx_NSMapMember, 4);
+  rb_define_module_function(mOSX, "NSMapGet", osx_NSMapGet, 2);
+  rb_define_module_function(mOSX, "NSMapInsert", osx_NSMapInsert, 3);
+  rb_define_module_function(mOSX, "NSMapInsertKnownAbsent", osx_NSMapInsertKnownAbsent, 3);
+  rb_define_module_function(mOSX, "NSMapInsertIfAbsent", osx_NSMapInsertIfAbsent, 3);
+  rb_define_module_function(mOSX, "NSMapRemove", osx_NSMapRemove, 2);
+  rb_define_module_function(mOSX, "NSEnumerateMapTable", osx_NSEnumerateMapTable, 1);
+  rb_define_module_function(mOSX, "NSNextMapEnumeratorPair", osx_NSNextMapEnumeratorPair, 3);
+  rb_define_module_function(mOSX, "NSEndMapTableEnumeration", osx_NSEndMapTableEnumeration, 1);
+  rb_define_module_function(mOSX, "NSCountMapTable", osx_NSCountMapTable, 1);
+  rb_define_module_function(mOSX, "NSStringFromMapTable", osx_NSStringFromMapTable, 1);
+  rb_define_module_function(mOSX, "NSAllMapTableKeys", osx_NSAllMapTableKeys, 1);
+  rb_define_module_function(mOSX, "NSAllMapTableValues", osx_NSAllMapTableValues, 1);
 }
