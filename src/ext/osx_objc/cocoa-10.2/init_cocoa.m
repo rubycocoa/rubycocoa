@@ -33,6 +33,7 @@ nsresult_to_rbresult(int octype, const void* nsresult, id pool)
   return rbresult;
 }
 
+extern void init_NSAppleEventManager(VALUE);
 extern void init_NSAppleScript(VALUE);
 extern void init_NSApplication(VALUE);
 extern void init_NSArchiver(VALUE);
@@ -112,6 +113,7 @@ extern void init_NSRulerView(VALUE);
 extern void init_NSRunLoop(VALUE);
 extern void init_NSSavePanel(VALUE);
 extern void init_NSScriptCommand(VALUE);
+extern void init_NSScriptKeyValueCoding(VALUE);
 extern void init_NSScriptObjectSpecifiers(VALUE);
 extern void init_NSScriptStandardSuiteCommands(VALUE);
 extern void init_NSScriptWhoseTests(VALUE);
@@ -144,6 +146,7 @@ extern void init_NSZone(VALUE);
 
 void init_cocoa(VALUE mOSX)
 {
+  init_NSAppleEventManager(mOSX);
   init_NSAppleScript(mOSX);
   init_NSApplication(mOSX);
   init_NSArchiver(mOSX);
@@ -223,6 +226,7 @@ void init_cocoa(VALUE mOSX)
   init_NSRunLoop(mOSX);
   init_NSSavePanel(mOSX);
   init_NSScriptCommand(mOSX);
+  init_NSScriptKeyValueCoding(mOSX);
   init_NSScriptObjectSpecifiers(mOSX);
   init_NSScriptStandardSuiteCommands(mOSX);
   init_NSScriptWhoseTests(mOSX);
