@@ -25,7 +25,7 @@ module OSX
       else
 	dic.extend RCDictionaryAttachment
 	# ruby program 
-	@ruby_program = dic["RubyProgram"]
+	@ruby_program = dic["RubyProgram"].to_s
 	# main script path
 	nsstr = dic["MainScript"]
 	exit_with_msg ("config error: MainScript missing.") if nsstr.nil?
