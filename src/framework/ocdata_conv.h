@@ -19,6 +19,7 @@ enum osxobjc_nsdata_type {
   _PRIV_C_NSRECT,
   _PRIV_C_NSPOINT,
   _PRIV_C_NSSIZE,
+  _PRIV_C_NSRANGE,
 };
 
 #define OCID2NUM(val) UINT2NUM((VALUE)(val))
