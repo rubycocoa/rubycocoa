@@ -1,7 +1,8 @@
-2001-12-04  FUJIMOTO Hisakuni  <hisa@fobj.com>
+2001-12-07  Chris Thomas <kenshin@apple.com>
 
 	* framework/ocdata_conv.h, framework/ocdata_conv.m,
-	lib/osx/ocobject.rb: implement NSRange and Range conversion.
+	lib/osx/osxobjc.rb: enable basic support for the NSRange data
+	structure.
 
 2001-12-03  FUJIMOTO Hisakuni  <hisa@fobj.com>
 
