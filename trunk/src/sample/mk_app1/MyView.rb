@@ -17,9 +17,7 @@ class MyView < OSX::OCObject
 
   def set_color(color_name)
     @color_name = color_name.to_s.downcase
-    lockFocus
-    drawRect(bounds)
-    unlockFocus
+    setNeedsDisplay true
   end
 
 end
