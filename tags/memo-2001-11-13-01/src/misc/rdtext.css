@@ -1,0 +1,14 @@
+h1 { text-align:center; color:blue; }
+h2 { color:green; }
+h3 { color:cyan; }
+pre { 
+ border-width: thin;
+ border-style: solid;
+ border-color: gray;
+ padding: 1em;
+ margin-left: 2em;
+ margin-right: 2em;
+ background-color:#F0F0FF;
+}
+dt { color: #404080 }
+dd { font-style: italic }
