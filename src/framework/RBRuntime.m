@@ -88,11 +88,16 @@ RBApplicationMain(const char* rb_main_name, int argc, char* argv[])
 
 /////
 
+static void* alloc_from_default_zone(unsigned int size)
+{
+  return NSZoneMalloc(NSDefaultMallocZone(), size);
+}
+
 static struct objc_method_list** method_list_alloc(int cnt)
 {
   int i;
   struct objc_method_list** mlp;
-  mlp = malloc(cnt * sizeof(void*));
+  mlp = alloc_from_default_zone(cnt * sizeof(void*));
   for (i = 0; i < cnt; i++)
     mlp[i] = NULL;
   return mlp;
@@ -100,8 +105,8 @@ static struct objc_method_list** method_list_alloc(int cnt)
 
 static Class objc_class_alloc(const char* name, Class super_class)
 {
-  Class c = malloc(sizeof(struct objc_class));
-  Class isa = malloc(sizeof(struct objc_class));
+  Class c = alloc_from_default_zone(sizeof(struct objc_class));
+  Class isa = alloc_from_default_zone(sizeof(struct objc_class));
   struct objc_method_list **mlp0, **mlp1;
   mlp0 = method_list_alloc(16);
   mlp1 = method_list_alloc(3);
@@ -133,7 +138,7 @@ static Class objc_class_alloc(const char* name, Class super_class)
 static void install_ivar_list(Class c)
 {
   int i;
-  struct objc_ivar_list* ivlp = malloc(override_mixin_ivar_list_size());
+  struct objc_ivar_list* ivlp = alloc_from_default_zone(override_mixin_ivar_list_size());
   *ivlp = *(override_mixin_ivar_list());
   for (i = 0; i < ivlp->ivar_count; i++) {
     int octype = to_octype(ivlp->ivar_list[i].ivar_type);

@@ -25,25 +25,35 @@ module OSX
 
   module OCStubCreator
 
-    def ib_loadable(super_name = nil)
+    def ns_loadable(super_name = nil)
+      name = self.to_s
       if super_name.nil? then
-	OSX.objc_proxy_class_new (self.to_s)
+	OSX.objc_proxy_class_new (name)
       else
 	super_name = :NSObject unless super_name
-	OSX.objc_derived_class_new (self.to_s, super_name.to_s)
+	OSX.objc_derived_class_new (name, super_name.to_s)
       end
+      OSX.ns_import name
     end
 
-    def derived_methods(*args)
+    def ns_overrides(*args)
       class_name = self.to_s
       args.each do |method_name|
 	OSX.objc_derived_class_method_add (class_name, method_name.to_s)
       end
     end
 
-    def ib_outlets(*args)
+    def ns_outlets(*args)
       attr_writer *args
     end
+
+    # for easy undarstanding
+    alias_method :ib_loadable,  :ns_loadable
+    alias_method :ib_overrides, :ns_overrides
+    alias_method :ib_outlets,   :ns_outlets
+
+    # for backword compatibility (<= 0.1.1)
+    alias_method :derived_methods, :ns_overrides
 
   end
 

@@ -19,10 +19,16 @@
 #  define LOG3(f,a0,a1,a2) NSLog((f),(a0),(a1),(a2))
 #endif
 
+static void* alloc_from_default_zone(unsigned int size)
+{
+  return NSZoneMalloc(NSDefaultMallocZone(), size);
+}
+
 static struct objc_method_list* method_list_alloc(long cnt)
 {
   struct objc_method_list* mlp;
-  mlp = malloc(sizeof(struct objc_method_list) + (cnt-1) * sizeof(struct objc_method));
+  mlp = alloc_from_default_zone(sizeof(struct objc_method_list)
+				+ (cnt-1) * sizeof(struct objc_method));
   mlp->obsolete = NULL;
   mlp->method_count = 0;
   return mlp;
@@ -118,33 +124,6 @@ static id imp_rbobj (id rcv, SEL method)
   return (id)rbobj;
 }
 
-static id imp_init (id rcv, SEL method)
-{
-  IMP simp = super_imp(rcv, method);
-  id slave = slave_obj_new(rcv, Qnil);
-  set_slave(rcv, slave);
-  return (*simp)(rcv, method);
-}
-
-static id imp_initWithFrame (id rcv, SEL method, NSRect arg0)
-{
-  IMP simp;
-  id slave;
-  char script[256];
-  VALUE arg;
-
-  snprintf(script, sizeof(script), "OSX::NSRect.new(%f,%f,%f,%f)", 
-	   arg0.origin.x, arg0.origin.x,
-	   arg0.size.width, arg0.size.height);
-  arg = rb_eval_string(script);
-
-  simp = super_imp(rcv, method);
-  slave = slave_obj_new(rcv, arg);
-
-  set_slave(rcv, slave);
-  return (*simp)(rcv, method, arg0);
-}
-
 static id imp_respondsToSelector (id rcv, SEL method, SEL arg0)
 {
   id ret;
@@ -179,10 +158,43 @@ static id imp_forwardInvocation (id rcv, SEL method, NSInvocation* arg0)
   return nil;
 }
 
+static id imp_supersend (id rcv, SEL method, SEL a_sel,...)
+{
+  id ret = nil;
+  va_list args;
+  IMP simp;
+
+  simp = super_imp(rcv, a_sel);
+  va_start(args, a_sel);
+  NSLog(@"imp_supersend");
+  ret = (*simp)(rcv, a_sel, args);
+  va_end(args);
+  return ret;
+}
 
 /**
  * class methods implementation
  **/
+static id imp_c_alloc(Class klass, SEL method)
+{
+  id new_obj;
+  id slave;
+  new_obj = class_createInstance(klass, 0);
+  slave = slave_obj_new(new_obj, Qnil);
+  set_slave(new_obj, slave);
+  return new_obj;
+}
+
+static id imp_c_allocWithZone(Class klass, SEL method, NSZone* zone)
+{
+  id new_obj;
+  id slave;
+  new_obj = class_createInstanceFromZone(klass, 0, zone);
+  slave = slave_obj_new(new_obj, Qnil);
+  set_slave(new_obj, slave);
+  return new_obj;
+}
+
 static id imp_c_addRubyMethod(Class klass, SEL method, SEL arg0)
 {
   Method me;
@@ -214,11 +226,12 @@ static struct objc_ivar imp_ivars[] = {
 static const char* imp_method_names[] = {
   "__slave__",
   "__rbobj__",
-  "init",
-  "initWithFrame:",
   "respondsToSelector:",
   "methodSignatureForSelector:",
   "forwardInvocation:",
+#if 0
+  "supersend:"
+#endif
 };
 
 static struct objc_method imp_methods[] = {
@@ -231,14 +244,6 @@ static struct objc_method imp_methods[] = {
     (IMP)imp_rbobj 
   },
   { NULL,
-    "@4@4:8",
-    (IMP)imp_init
-  },
-  { NULL,
-    "@20@4:8{_NSRect={_NSPoint=ff}{_NSSize=ff}}12",
-    (IMP)imp_initWithFrame
-  },
-  { NULL,
     "c8@4:8:12",
     (IMP)imp_respondsToSelector
   },
@@ -249,15 +254,32 @@ static struct objc_method imp_methods[] = {
   { NULL,
     "v8@4:8@12",
     (IMP)imp_forwardInvocation
+  },
+#if 0
+  { NULL,
+    "@12@4:8:16",
+    (IMP)imp_supersend
   }
+#endif
+
 };
 
 
 static const char* imp_c_method_names[] = {
+  "alloc",
+  "allocWithZone:",
   "addRubyMethod:"
 };
 
 static struct objc_method imp_c_methods[] = {
+  { NULL,
+    "@4@4:8",
+    (IMP)imp_c_alloc
+  },
+  { NULL,
+    "@8@4:8^{_NSZone=}12",
+    (IMP)imp_c_allocWithZone
+  },
   { NULL,
     "@4@4:8:12",
     (IMP)imp_c_addRubyMethod
@@ -277,7 +299,7 @@ struct objc_ivar_list* override_mixin_ivar_list()
   static struct objc_ivar_list* imp_ilp = NULL;
   if (imp_ilp == NULL) {
     int i;
-    imp_ilp = malloc(override_mixin_ivar_list_size());
+    imp_ilp = alloc_from_default_zone(override_mixin_ivar_list_size());
     imp_ilp->ivar_count = sizeof(imp_ivars) / sizeof(struct objc_ivar);
     for (i = 0; i < imp_ilp->ivar_count; i++) {
       imp_ilp->ivar_list[i] = imp_ivars[i];
