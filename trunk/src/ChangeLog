@@ -1,3 +1,8 @@
+2005-03-21  kimura wataru <kimuraw@i.nifty.jp>
+
+	* ReadMe.ascii.html, ReadMe.sjis.html:
+	change about contacting
+
 2005-03-18  kimura wataru <kimuraw@i.nifty.jp>
 
 	* framework/src/objc/RBRuntime.m:
