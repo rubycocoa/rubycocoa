@@ -44,7 +44,7 @@
 		};
 		034768E0FF38A50411DB9C8B = {
 			isa = PBXFrameworkReference;
-			path = RubyCocoa.framework;
+			path = "%%%framework_name%%%.framework";
 			refType = 3;
 		};
 //030
@@ -118,7 +118,7 @@
 				OTHER_CFLAGS = "-fno-common";
 				OTHER_LDFLAGS = "-undefined suppress -flat_namespace";
 				PREBINDING = NO;
-				PRODUCT_NAME = RubyCocoa;
+				PRODUCT_NAME = "%%%framework_name%%%";
 				SECTORDER_FLAGS = "";
 				WARNING_CFLAGS = "-Wmost -Wno-four-char-constants -Wno-unknown-pragmas";
 				WRAPPER_EXTENSION = framework;
@@ -137,7 +137,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>English</string>
 	<key>CFBundleExecutable</key>
-	<string>RubyCocoa</string>
+	<string>%%%framework_name%%%</string>
 	<key>CFBundleIconFile</key>
 	<string></string>
 	<key>CFBundleIdentifier</key>

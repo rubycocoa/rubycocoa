@@ -1,12 +1,18 @@
 # -*-ruby-*-
 
-LIBRUBY_PATH = File.join (Config::CONFIG['archdir'], Config::CONFIG['LIBRUBY_A'])
+libruby_path = File.join (Config::CONFIG['libdir'], Config::CONFIG['LIBRUBY_A'])
+unless File.exist?( libruby_path ) then
+  libruby_path = File.join (Config::CONFIG['archdir'], Config::CONFIG['LIBRUBY_A'])
+end
 
 add_path_config 'frameworks', '/Library/Frameworks',
   'path to the directory for installing RubyCocoa.framework'
 
+add_path_config 'framework-name', 'RubyCocoa',
+  'real name for RubyCocoa framework'
+
 add_path_config 'ruby-header-dir', Config::CONFIG['archdir'],
   'path to the ruby header directory'
 
-add_path_config 'libruby-path', LIBRUBY_PATH,
+add_path_config 'libruby-path', libruby_path,
   'path to the libruby file'
