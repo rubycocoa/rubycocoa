@@ -1,5 +1,7 @@
 2002-09-11  FUJIMOTO Hisakuni  <hisa@fobj.com>
 
+	* release 0.3.0
+	
 	* tool/och_analyzer3.rb: NSWindowDepth and NSComparisonResult as int
 	remove 'const'
 	'[]' as pointer
