@@ -16,6 +16,8 @@
 #import "RBThreadSwitcher.h"
 #import "osx_objc.h"
 #import "RBObject.h"
+#import <mach-o/dyld.h>
+#import <string.h>
 
 #define OSX_MODULE_NAME "OSX"
 
@@ -156,6 +158,38 @@ rb_obj_ocid(VALUE rcv)
   return NUM2OCID(val);
 }
 
+static VALUE
+osx_mf_objc_symbol_to_obj(VALUE mdl, VALUE const_name, VALUE const_type)
+{
+  VALUE result = Qnil;
+  char buf[BUFSIZ];
+  NSSymbol sym = NULL;
+  void* addr = NULL;
+  int octype;
+
+  const_name = rb_obj_as_string(const_name);
+  const_type = rb_obj_as_string(const_type);
+
+  strncpy(buf+1, STR2CSTR(const_name), BUFSIZ - 1);
+  buf[0] = '_';
+  if (NSIsSymbolNameDefined(buf) == FALSE)
+    rb_raise(rb_eRuntimeError, "symbol '%s' not found.", STR2CSTR(const_name));
+
+  sym = NSLookupAndBindSymbol(buf);
+  if (sym == NULL)
+    rb_raise(rb_eRuntimeError, "symbol'%s' is NULL.", STR2CSTR(const_name));
+
+  addr = NSAddressOfSymbol(sym);
+  if (addr == NULL)
+    rb_raise(rb_eRuntimeError, "address of '%s' is NULL.", STR2CSTR(const_name));
+
+  octype = to_octype(STR2CSTR(const_type));
+  if (!ocdata_to_rbobj(Qnil, octype, addr, &result))
+    rb_raise(rb_eRuntimeError, "cannot convert to rbobj for type '%s'.", STR2CSTR(const_type));
+
+  return result;
+}
+
 /***/
 
 VALUE
@@ -256,6 +290,8 @@ void Init_osx_objc()
 		  rb_obj_freeze(rb_str_new2(RUBYCOCOA_VERSION)));
   rb_define_const(mOSX, "RUBYCOCOA_RELEASE_DATE", 
 		  rb_obj_freeze(rb_str_new2(RUBYCOCOA_RELEASE_DATE)));
+
+  rb_define_module_function(mOSX, "objc_symbol_to_obj", osx_mf_objc_symbol_to_obj, 2);
 
  init_cocoa(mOSX);
  thread_switcher_start();

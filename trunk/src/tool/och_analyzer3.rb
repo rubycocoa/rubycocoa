@@ -18,12 +18,9 @@ class OCHeaderAnalyzer
   def initialize(path)
     @path = path
     @cpp_result = OCHeaderAnalyzer.do_cpp(path)
-    if /AppKit/ =~ path then
-      @externname = "extern"
-      @framework = "AppKit"
-    elsif /Foundation/ =~ path then
-      @externname = "extern"
-      @framework = "Foundation"
+    @externname = "extern"
+    if ma = /\b(\w+)\.framework\b/.match(path) then
+      @framework = ma[1]
     end
   end
 
