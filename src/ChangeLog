@@ -1,3 +1,21 @@
+2002-02-22  FUJIMOTO Hisakuni  <hisa@fobj.com>
+
+	* tests/alltest.sh, tests/test_nsattributedstring.rb, tests/test_nsstring.rb:
+	prepared unit test framework
+
+	* ext/osx_objc/mdl_objwrapper.m:
+	- ocm_perform(): add the code for _PRIV_C_ID_PTR from
+	  framework/ocdata_conv.m. support OSX::OCDataConvException.
+
+	* lib/osx/objc/oc_exception.rb: defined OSX::OCDataConvException
+
+	* framework/ocdata_conv.m:
+	- rb_mdl_osx(), rb_cls_objcid(), rb_cls_ocobj(const char* name): became global functions.
+	- rbobj_to_ocdata(): moved the code for _PRIV_C_ID_PTR into mdl_objcwrapper.m.
+
+	* framework/ocdata_conv.h:
+	rb_mdl_osx(), rb_cls_objcid(), rb_cls_ocobj(const char* name): became global functions.
+
 2002-02-12  FUJIMOTO Hisakuni  <hisa@fobj.com>
 
 	* framework/ocdata_conv.m:
