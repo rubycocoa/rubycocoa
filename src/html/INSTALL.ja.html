@@ -66,6 +66,10 @@
 <p>LibRubyがインストールされていない場合、configのあと前述のLibRubyフレー
 ムワークが必要だよというメッセージが表示されますので、先にLibRubyを上
 記手順でインストールしてください。</p>
+<p>RubyCocoaフレームワークインストール先(デフォルト 
+"/Library/Frameworks/")を指定したい場合は config のときに次のようなオ
+プションで指定してください。</p>
+<pre>% ruby install.rb config -- --frameworks=/Networks/Library/Frameworks</pre>
 <p>setupは時間がかかります。お茶でもしながら待ちましょう。</p>
 <p>installではRubyCocoaライブラリの他に、RubyCocoaフレームワークを
 "/Library/Frameworks"以下にインストールします。</p>

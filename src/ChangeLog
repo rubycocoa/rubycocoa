@@ -1,3 +1,19 @@
+2002-01-05  Chris Thomas <cjack@cjack.com>
+
+	* framework/OverrideMixin.m:
+	handle_ruby_method(): return-values from ns_override methods that are
+	exactly 4 bytes long. This obviously prevents a lot of stuff from
+	working properly, such as the -[NSDocument windowNibName] method. With
+	this patch, you can create simple document-based apps entirely in
+	RubyCocoa.
+
+2002-01-05  FUJIMOTO Hisakuni  <hisa@fobj.com>
+
+	* tool/och_analyzer.rb: NSRange support
+
+	* post-clean.rb, post-config.rb, post-install.rb:
+	add installing option to specify the location of RubyCocoa framework
+
 2002-01-01  FUJIMOTO Hisakuni  <hisa@fobj.com>
 
 	* framework/OverrideMixin.m:
