@@ -1,6 +1,14 @@
 2002-12-27  FUJIMOTO Hisakuni  <hisa@fobj.com>
 
-	* 0.4.0a6 (alpha-0_4_0a6)
+	* release 0.4.0 (release-0_4_0)
+
+	* sample/speak_me.txt: text for speak.rb
+
+	* framework/pre-install.rb, metaconfig, pre-install.rb: add
+	installation of template, examples and documents. add option
+	'install-root' which make convenient for packaging.
+
+	* README.en.txt, README.sjis.txt: revise for 0.4
 
 	* apply downcase to all html document names.
 

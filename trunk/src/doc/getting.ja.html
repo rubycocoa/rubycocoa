@@ -58,20 +58,48 @@ Ruby 1.6.7 に合わせて構築しています。</p>
 の中から
 <a href='http://www.imasy.or.jp/~hisa/mac/rubyosx/files/RubyCocoa-0.4.0.dmg'>RubyCocoa-0.4.0.dmg</a>
 をダウンロードしてください。</p>
-<p>RubyCocoaとRubyAEOSA のライブラリ・サンプルコード・ProjectBuilder 
-テンプレートなどが含まれています。実行・開発に必要なライブラリ類は
-.pkg形式のパッケージになっていて、簡単にインストールできます。</p>
-<p>インストールできたら、<a href='trysamples.ja.html'>「付属サンプルを試してみる」
+<p>RubyCocoaとRubyAEOSA のライブラリ・サンプルコード・ドキュメント・
+ProjectBuilderテンプレートなどが含まれています。実行・開発に必要な
+ライブラリ類は'.pkg'形式のパッケージになっていて、簡単にインストール
+できます。</p>
+<p>バイナリパッケージにより以下のものがインストールされます。</p>
+<dl>
+<dt><a name='label:2' id='label:2'>/Library/Frameworks/RubyCocoa.framework</a></dt><!-- RDLabel: "/Library/Frameworks/RubyCocoa.framework" -->
+<dd>
+<p>RubyCocoaフレームワーク (本体)</p>
+</dd>
+<dt><a name='label:3' id='label:3'>/usr/lib/ruby/site_ruby/1.6/osx/ の中</a></dt><!-- RDLabel: "/usr/lib/ruby/site_ruby/1.6/osx/ の中" -->
+<dd>
+<p>RubyCocoaライブラリ (stub)</p>
+</dd>
+<dt><a name='label:4' id='label:4'>/usr/lib/ruby/site_ruby/1.6/powerpc-darwin6.0/rubycocoa.bundle</a></dt><!-- RDLabel: "/usr/lib/ruby/site_ruby/1.6/powerpc-darwin6.0/rubycocoa.bundle" -->
+<dd>
+<p>RubyCocoa拡張ライブラリ (stub)</p>
+</dd>
+<dt><a name='label:5' id='label:5'>'/Developer/ProjectBuilder Extras/' の中</a></dt><!-- RDLabel: "'/Developer/ProjectBuilder Extras/' の中" -->
+<dd>
+<p>ProjectBuilderのテンプレート</p>
+</dd>
+<dt><a name='label:6' id='label:6'>/Developer/Documentation/RubyCocoa</a></dt><!-- RDLabel: "/Developer/Documentation/RubyCocoa" -->
+<dd>
+<p>ドキュメント (HTML)</p>
+</dd>
+<dt><a name='label:7' id='label:7'>/Developer/Examples/RubyCocoa</a></dt><!-- RDLabel: "/Developer/Examples/RubyCocoa" -->
+<dd>
+<p>サンプルプログラム</p>
+</dd>
+</dl>
+<p>インストールが完了したら、<a href='trysamples.ja.html'>「付属サンプルを試してみる」
 </a> を参考にRubyCocoaで書かれたサンプルプログラ
 ムを動かしてみるとよいでしょう。</p>
-<h2><a name='label:2' id='label:2'>ソース配付</a></h2><!-- RDLabel: "ソース配付" -->
+<h2><a name='label:8' id='label:8'>ソース配付</a></h2><!-- RDLabel: "ソース配付" -->
 <p><a href='http://www.imasy.or.jp/~hisa/mac/rubyosx/files/'>ファイル一覧</a>
 の中から
 <a href='http://www.imasy.or.jp/~hisa/mac/rubyosx/files/rubycocoa-0.4.0.tgz'>rubycocoa-0.4.0.tgz</a>
 をダウンロードしてください。</p>
 <p><a href='build.ja.html'>「RubyCocoaをソースから構築・インストールする」</a>
 を参考に構築・インストールしてください。</p>
-<h2><a name='label:3' id='label:3'>CVSサーバから開発途上のソースを入手する</a></h2><!-- RDLabel: "CVSサーバから開発途上のソースを入手する" -->
+<h2><a name='label:9' id='label:9'>CVSサーバから開発途上のソースを入手する</a></h2><!-- RDLabel: "CVSサーバから開発途上のソースを入手する" -->
 <p><a href='http://sourceforge.net/cvs/?group_id=44114'>CVSサーバ</a>から最新
 の(あるいは最古の)ソースを入手したり、
 (<a href='http://cvs.sourceforge.net/cgi-bin/viewcvs.cgi/rubycocoa/src/'>CVSリポジトリを見る</a>
@@ -84,7 +112,7 @@ $ cvs -z3 -d:pserver:anonymous@cvs.rubycocoa.sf.net:/cvsroot/rubycocoa \
 構築できないこともあります。
 'cvs update'コマンドや'cvs status -v'コマンドを適当なオプションと
 いっしょに使うとよいでしょう。</p>
-<h2><a name='label:4' id='label:4'>PINEAPPLE RPMパッケージ</a></h2><!-- RDLabel: "PINEAPPLE RPMパッケージ" -->
+<h2><a name='label:10' id='label:10'>PINEAPPLE RPMパッケージ</a></h2><!-- RDLabel: "PINEAPPLE RPMパッケージ" -->
 <p><a href='http://sacral.c.u-tokyo.ac.jp/~hasimoto/Pineapple/'>Project PINEAPPLE(日本語)
 </a>にRPM形式の
 バイナリ(0.2.x)があります。</p>
