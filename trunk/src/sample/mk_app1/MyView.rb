@@ -5,7 +5,7 @@ class MyView < OSX::OCObject
   ib_loadable :NSView
   derived_methods 'drawRect:'
 
-  def initialize
+  def initialize(frame)
     @color_name = 'blue'
   end
 
