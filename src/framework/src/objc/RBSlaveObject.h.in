@@ -9,8 +9,8 @@
  *   the GNU Lesser General Public License version 2.
  *
  **/
-#import <RubyCocoa/RBObject.h>
-#import <RubyCocoa/osx_ruby.h>
+#import <%%%framework_name%%%/RBObject.h>
+#import <%%%framework_name%%%/osx_ruby.h>
 
 @interface RBObject(RBSlaveObject)
 - init;

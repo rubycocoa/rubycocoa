@@ -10,7 +10,7 @@
  *
  **/
 
-#import <RubyCocoa/RBRuntime.h>
+#import <%%%framework_name%%%/RBRuntime.h>
 
 void Init_rubycocoa()
 {

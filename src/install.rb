@@ -67,9 +67,9 @@ class ConfigTable
   
   if c['rubylibdir'] then
     # V > 1.6.3
-    stdruby    = c['rubylibdir'] .sub( c['prefix'], '$install-prefix' )
-    siteruby   = c['sitelibdir'] .sub( c['prefix'], '$install-prefix' )
-    sodir      = c['sitearchdir'].sub( c['prefix'], '$install-prefix' )
+    stdruby    = c['rubylibdir'] .sub( /#{c['prefix']}/, '$install-prefix' )
+    siteruby   = c['sitelibdir'] .sub( /#{c['prefix']}/, '$install-prefix' )
+    sodir      = c['sitearchdir'].sub( /#{c['prefix']}/, '$install-prefix' )
   elsif newpath_p then
     # 1.4.4 <= V <= 1.6.3
     stdruby    = "$install-prefix/lib/ruby/#{version}"

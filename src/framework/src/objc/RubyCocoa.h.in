@@ -10,5 +10,5 @@
  *
  **/
 
-#import <RubyCocoa/RBRuntime.h>
-#import <RubyCocoa/RBObject.h>
+#import <%%%framework_name%%%/RBRuntime.h>
+#import <%%%framework_name%%%/RBObject.h>
