@@ -21,7 +21,7 @@ module OSX
       @name = @nsexception.ocm_send(:name).to_s
       @reason = @nsexception.ocm_send(:reason).to_s
       @user_info = @nsexception.ocm_send(:userInfo)
-      super "#{@name}:#{@reason}"
+      super "#{@name}"
     end
 
   end

@@ -9,8 +9,12 @@
 #
 
 require 'osx_objc'
-require 'osx/objc/oc_exception'
-require 'osx/objc/oc_import'
-require 'osx/objc/oc_object'
-require 'osx/objc/oc_types'
 require 'osx/objc/oc_wrapper'
+
+module OSX
+
+  class OCObject < ObjcID
+    include OCObjWrapper
+  end
+
+end
