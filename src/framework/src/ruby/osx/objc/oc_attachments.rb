@@ -10,6 +10,7 @@
 
 module OSX
 
+  # attachment module for NSArray group
   module RCArrayAttachment
     include Enumerable
 
@@ -42,6 +43,8 @@ module OSX
 
   end				# module RCArrayAttachment
 
+
+  # attachment module for NSDictionary group
   module RCDictionaryAttachment
     include Enumerable
 
@@ -76,6 +79,19 @@ module OSX
 
   end				# module RCDictionaryAttachment
 
+
+  # attachment module for NSData group
+  module RCDataAttachment
+
+    def rubyString
+      cptr = self.bytes
+      return cptr.bytestr( self.length )
+    end
+
+  end
+
+
+  # attachment module for NSImage group
   module RCImageAttachment
     def focus
       lockFocus
