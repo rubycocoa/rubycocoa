@@ -1,7 +1,10 @@
-RubyCocoa
+			      RubyCocoa
 
   RubyCocoaは、MacOS XのCocoaオブジェクトをRubyスクリプトからRubyオ
   ブジェクトとして扱うためのRuby用ライブラリとフレームワークです。
+
+    RubyCocoa - http://www.imasy.or.jp/~hisa/mac/rubycocoa/
+    Ruby      - http://www.ruby-lang.org/
 
 
 0. インストール方法
@@ -16,13 +19,14 @@ RubyCocoa
 
 2. サンプル
 
-  sndplay.rb    - システム音を鳴らすサンプル
-  sndplay2.rb   - システム音を鳴らすサンプル(Ruby Thread使用)
-  fontnames.rb  - フォント名を表示するサンプル
-  simpleapp/    - とても簡単なアプリケーション例 (Makefileベース)
-  rubyapp_tmpl/ - RubyCocoaアプリケーションプロジェクトの雛型
-  rubyapp/      - 簡単なアプリケーション例 (PB and IBベース)
-  rubyapp2/     - 簡単なアプリケーション例 (PB and IBベース)
+  sndplay.rb   - システム音を鳴らすサンプル
+  sndplay2.rb  - システム音を鳴らすサンプル(Ruby Thread使用)
+  fontnames.rb - フォント名を表示するサンプル
+  mk_app0/     - アウトレット、アクションを使うアプリ例 (Makefileベース)
+  mk_app1/     - NSViewを使うアプリケーション例 (Makefileベース)
+  pb_tmpl/     - RubyCocoaアプリケーションの雛型(ProjectBuilderベース)
+  pb_app0/     - アウトレット、アクションを使うアプリ例 (ProjectBuilderベース)
+  pb_app1/     - アウトレット、アクションを使うアプリ例 (ProjectBuilderベース)
 
 3. ライセンス
 
@@ -32,10 +36,16 @@ RubyCocoa
   詳細についてはファイル LGPL を参照してください。Free Software
   Foundation からも入手できます。
 
-4. 意見など
+4. 免責事項
+
+  本プログラムは無保証です。作者は、本プログラムをサポートする意志はあ
+  りますが、プログラム自身のバグ、あるいは、本プログラムの実行などから
+  発生するいかなる損害に対しても責任を持ちません。
+
+5. コメントなど
 
   バグリポート、提案、アイデア、意見、パッチなどあったら気軽に関連MLや
-  <hisa@imasy.or.jp>までメールください。お便り待ってます。
+  <hisa@imasy.or.jp>までメールください。
 
 
 藤本尚邦 FUJIMOTO Hisakuni <hisa@imasy.or.jp>
