@@ -83,6 +83,7 @@ class CocoaHako < OSX::NSObject
     house = view_new
     @window.setContentView (house)
     @window.makeKeyAndOrderFront (self)
+    @window.orderFrontRegardless
     @window.setDelegate (self)	# for handling windowShouldClose
     @window.setOpaque (false)
     @window.setHasShadow (true)
