@@ -1,3 +1,8 @@
+2004-05-03  kimura wataru <kimuraw@i.nifty.jp>
+
+	* framework/src/ruby/osx/objc/webkit.rb:
+	fix worning 'already initialized constant' on Panther.
+
 2004-02-11  kimura wataru <kimuraw@i.nifty.jp>
 
 	* metaconfig, pre-install.rb
