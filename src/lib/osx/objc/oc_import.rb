@@ -15,17 +15,18 @@ module OSX
 
   # create Ruby's class for Cocoa class,
   # then define Constant under module 'OSX'.
-  def OSX.ns_import(sym)
-    if not const_defined?(sym) then
+  def ns_import(sym)
+    if not OSX.const_defined?(sym) then
       const_name = sym.to_s
       sym_name = ":#{sym}"
-      module_eval %[
+      OSX.module_eval %[
         clsobj = NSClassFromString(#{sym_name})
         rbcls = class_new_for_occlass(clsobj)
         #{const_name} = rbcls if rbcls
       ]
     end
   end
+  module_function :ns_import
 
   # create Ruby's class for Cocoa class
   def OSX.class_new_for_occlass(occls)
