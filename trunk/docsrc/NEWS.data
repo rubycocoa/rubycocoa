@@ -1,3 +1,25 @@
+Subject-ja: RubyCocoa.framework 0.4.1d8 を公開
+Subject-en: RubyCocoa.framework 0.4.1d8 is available
+Date: 2003-07-28
+UID: 1059364663
+
+開発バージョン 0.4.1d8 より、フレームワークのみのバイナリ<a href='http://www.imasy.org/~hisa/mac/rubyosx/files/snapshot/RubyCocoa.framework.041d8.tgz'>RubyCocoa.framework.041d8.tgz</a> (サイズ354KB)を公開します。ソースは、CVSサーバより入手可能(タグは<kbd>snapshot-0_4_1_d8</kbd>)です。0.4.0との違いは、<a href='changes.ja.html'>「変更点」</a>などをご覧ください。
+..ja
+
+Now, <a href='http://www.imasy.org/~hisa/mac/rubyosx/files/snapshot/RubyCocoa.framework.041d8.tgz'>RubyCocoa.framework.041d8.tgz</a> (size 354KB) is available. This is only a framework binary from development version 0.4.1d8. The source code is available from the CVS server with tag <kbd>snapshot-0_4_1_d8</kbd>. Refer to <a href='changes.en.html'>"Changes"</a> about difference from 0.4.0.
+..en
+
+Subject-ja: uptime - RubyCocoaアプリケーション
+Subject-en: uptime - RubyCocoa App
+Date: 2003-07-28
+UID: 1059366471
+
+jptmoore さんが、<a href='http://www.mac.com/'>.Mac</a>をblogとして使うためのRubyCocoaアプリケーション <a href='http://homepage.mac.com/jptmoore/uptime/index.html'>uptime</a> を公開しています。
+..ja
+
+A RubyCocoa App <a href='http://homepage.mac.com/jptmoore/uptime/index.html'>uptime</a> by jptmoore is available. This is a GUI application for using <a href='http://www.mac.com/'>.Mac</a> as blog.
+..en
+
 Subject-ja: RubyCocoaで実装されたRubyクラスブラウザ
 Subject-en: Ruby class browser implemented with RubyCocoa
 Date: 2003-07-25

@@ -32,6 +32,11 @@
 
   RubyクラスブラウザをRubyCocoaで実装したアプリケーション。
 
+: ((<uptime|URL:http://homepage.mac.com/jptmoore/uptime/index.html>))
+
+  ((<.Mac|URL:http://www.mac.com/>))をblogとして使うためのRubyCocoaアプリケーション。
+
+
 == RubyCocoaと同種のソフトウェア
 
 : ((<F-script|URL:http://www.fscript.org/>))

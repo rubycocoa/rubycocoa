@@ -1,7 +1,7 @@
 # -*-rd-*-
 = Changes
 
-== changes from 0.4.0 (HEAD)
+== changes from 0.4.0 (0.4.1d8)
 
 : enable bundling RubyCocoa.framework within an application bundle
 
