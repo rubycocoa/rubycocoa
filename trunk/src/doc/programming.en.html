@@ -51,19 +51,39 @@ RubyCocoa<font size='-1'> - A Ruby/Objective-C Bridge for Mac OS X with Cocoa</f
 <!-- body/main/contents -->
 <td class='body-contents' id='body-contents' valign='top'>
 <h1><a name='label:0' id='label:0'>RubyCocoa Programming</a></h1><!-- RDLabel: "RubyCocoa Programming" -->
-<h2><a name='label:1' id='label:1'>irb - Interactive Ruby</a></h2><!-- RDLabel: "irb - Interactive Ruby" -->
+<h2><a name='label:1' id='label:1'>INDEX</a></h2><!-- RDLabel: "INDEX" -->
+<ul>
+<li><a href='#label:2'>irb - Interactive Ruby</a></li>
+<li><a href='#label:3'>load libraries</a></li>
+<li><a href='#label:4'>an example the action with feeling</a></li>
+<li><a href='#label:5'>Cocoa class</a></li>
+<li><a href='#label:6'>create a Cocoa object</a></li>
+<li><a href='#label:7'>onwership and memory management</a></li>
+<li><a href='#label:8'>return value of method</a></li>
+<li><a href='#label:9'>A decision and a variation of method name</a></li>
+<li><a href='#label:10'>convert Ruby object argument of method as possible</a></li>
+<li><a href='#label:11'>method name prefix "oc_" - using this when method name conflict</a></li>
+<li><a href='#label:12'>inherited class and its instance of a Cocoa class</a></li>
+<li><a href='#label:13'>definition of a Cocoa inherited class</a></li>
+<li><a href='#label:14'>outlet</a></li>
+<li><a href='#label:15'>override of a method</a></li>
+<li><a href='#label:16'>create an instance of a Cocoa inherited class</a></li>
+<li><a href='#label:17'>Where should an initialization code be written?</a></li>
+<li><a href='#label:18'>Debugging of a RubyCocoa application</a></li>
+</ul>
+<h2><a name='label:2' id='label:2'>irb - Interactive Ruby</a></h2><!-- RDLabel: "irb - Interactive Ruby" -->
 <p>It may be good to use "irb" for trying script snippet in this
 document. It is a command to use a Ruby interpreter as interactively
 in command line. launch following:</p>
 <pre>% irb -r osx/cocoa</pre>
 <p>(NOTE) In Mac OS X 10.1, using both "irb" and RubyCocoa often is
 occured Bus Error. recommend Mac OS X 10.2.</p>
-<h2><a name='label:2' id='label:2'>load libraries</a></h2><!-- RDLabel: "load libraries" -->
+<h2><a name='label:3' id='label:3'>load libraries</a></h2><!-- RDLabel: "load libraries" -->
 <pre>require 'osx/cocoa'      # classes defined in Foundation and AppKit.</pre>
 <p>or</p>
 <pre>require 'osx/foundation' # classes defined in Foundation
 require 'osx/appkit'     # classes defined in AppKit</pre>
-<h2><a name='label:3' id='label:3'>an example the action with feeling</a></h2><!-- RDLabel: "an example the action with feeling" -->
+<h2><a name='label:4' id='label:4'>an example the action with feeling</a></h2><!-- RDLabel: "an example the action with feeling" -->
 <p>At first it is a simple example to can taste the actual feeling that
 changed (a sound sounds). try this with "irb":</p>
 <pre>include OSX
@@ -73,7 +93,7 @@ NSSound.alloc.initWithContentsOfFile_byReference (files[1], true).play
 NSSound.alloc.initWithContentsOfFile_byReference (files[2], true).play</pre>
 <p>Below, the right side of "# =&gt;" is character string done standard
 output of as an execution result in description.</p>
-<h2><a name='label:4' id='label:4'>Cocoa class</a></h2><!-- RDLabel: "Cocoa class" -->
+<h2><a name='label:5' id='label:5'>Cocoa class</a></h2><!-- RDLabel: "Cocoa class" -->
 <pre>p OSX::NSObject # =&gt; OSX::NSObject
 nsstr = OSX::NSObject.description
 p nsstr         # =&gt; #&lt;OSX::OCObject:0x5194e8 class='NSCFString' id=A97910&gt;
@@ -82,7 +102,7 @@ p nsobj         # =&gt; #&lt;OSX::NSObject:0x51f5b4 class='NSObject' id=976D90&g
 <p>In RubyCocoa, a Cocoa class is defined as a Ruby's Class under OSX
 module (after 0.2.0). A Cocoa class is a Ruby's Class and behaves as
 object of Cocoa.</p>
-<h2><a name='label:5' id='label:5'>create a Cocoa object</a></h2><!-- RDLabel: "create a Cocoa object" -->
+<h2><a name='label:6' id='label:6'>create a Cocoa object</a></h2><!-- RDLabel: "create a Cocoa object" -->
 <p>The method of Cocoa is used for creation of a Cocoa object as it is.</p>
 <pre>obj = OSX::NSObject.alloc.init
 str = OSX::NSString.stringWithString "hello"
@@ -90,7 +110,7 @@ str = OSX::NSString.alloc.initWithString "world"</pre>
 <p>The created Cocoa object is wrapped in the object of a class called
 OSX::ObjcID inside RubyCocoa. Usually, You don't need to be conscious
 of existence of an OSX::ObjcID class.</p>
-<h2><a name='label:6' id='label:6'>onwership and memory management</a></h2><!-- RDLabel: "onwership and memory management" -->
+<h2><a name='label:7' id='label:7'>onwership and memory management</a></h2><!-- RDLabel: "onwership and memory management" -->
 <p>The instance of OSX::ObjcID surely has the ownership of the Cocoa
 object which self has wrapped. Ownership is automatically lost, when
 the instance of OSX::ObjcID is cleaned by GC. Therefore, it is not
@@ -108,7 +128,7 @@ to make NSAutoreleasePool.</p>
 <li>use Cocoa method for creating a Cocoa object</li>
 <li>don't worry ownership and memory management.</li>
 </ul>
-<h2><a name='label:7' id='label:7'>return value of method</a></h2><!-- RDLabel: "return value of method" -->
+<h2><a name='label:8' id='label:8'>return value of method</a></h2><!-- RDLabel: "return value of method" -->
 <pre>nstr = OSX::NSString.description
 p nstr      # =&gt; #&lt;OCObject:0x7233e class='NSCFString' id=687610&gt;
 p nstr.to_s # =&gt; "NSString"
@@ -131,7 +151,7 @@ NSString and NSArray, is returned as a Cocoa object so that it can
 guess from these examples. It does not change into the object to which
 Ruby corresponds positively (for example, String etc.). For a NSString
 and NSArray, "to_s" and "to_a" is defined, it can be used.</p>
-<h2><a name='label:8' id='label:8'>A decision and a variation of method name</a></h2><!-- RDLabel: "A decision and a variation of method name" -->
+<h2><a name='label:9' id='label:9'>A decision and a variation of method name</a></h2><!-- RDLabel: "A decision and a variation of method name" -->
 <pre># play system sounds (2)
 sndfiles.each do |path|
   snd = OSX::NSSound.alloc.initWithContentsOfFile(path, :byReference, true)
@@ -160,25 +180,25 @@ p nary.containsObject?("hoge")  # =&gt; false
 nary.addObject("hoge")
 p nary.containsObject("hoge")   # =&gt; 1
 p nary.containsObject?("hoge")  # =&gt; true</pre>
-<h2><a name='label:9' id='label:9'>convert Ruby object argument of method as possible</a></h2><!-- RDLabel: "convert Ruby object argument of method as possible" -->
+<h2><a name='label:10' id='label:10'>convert Ruby object argument of method as possible</a></h2><!-- RDLabel: "convert Ruby object argument of method as possible" -->
 <p>It seems to be usual containsObject of the top and, in case of method
 to catch Objective-C object as a value of argument, tries conversion
 even if it just hands Ruby object so long as it is possible.</p>
-<h2><a name='label:10' id='label:10'>method name prefix "oc_" - using this when method name conflict</a></h2><!-- RDLabel: "method name prefix "oc_" - using this when method name conflict" -->
+<h2><a name='label:11' id='label:11'>method name prefix "oc_" - using this when method name conflict</a></h2><!-- RDLabel: "method name prefix "oc_" - using this when method name conflict" -->
 <pre>klass = OSX::NSObject.class
 p klass     # =&gt; OSX::OCObject
 klass = OSX::NSObject.oc_class
 p klass     # =&gt; #&lt;OCObject:0x82f22 class='NSObject' id=80819B0C&gt;</pre>
 <p>When the case same method name in Ruby and Objective-C like
 "Object#class", use method name prefix "oc_".</p>
-<h2><a name='label:11' id='label:11'>inherited class and its instance of a Cocoa class</a></h2><!-- RDLabel: "inherited class and its instance of a Cocoa class" -->
+<h2><a name='label:12' id='label:12'>inherited class and its instance of a Cocoa class</a></h2><!-- RDLabel: "inherited class and its instance of a Cocoa class" -->
 <p>The topic about the existing Cocoa class and its instance was treated
 so far. From here, the topic about the definition of the Cocoa
 inherited class which is needed when writing RubyCocoa application, or
 its instance is treated. Since the implementation is tricky a little ,
 although the inherited class of Cocoa has some restrictions and
 peculiarities, let's see also including it.</p>
-<h2><a name='label:12' id='label:12'>definition of a Cocoa inherited class</a></h2><!-- RDLabel: "definition of a Cocoa inherited class" -->
+<h2><a name='label:13' id='label:13'>definition of a Cocoa inherited class</a></h2><!-- RDLabel: "definition of a Cocoa inherited class" -->
 <p>The class of the Cocoa object set up in the GUI definition file (nib
 file) created by Interface Builder etc. is defined as an inherited
 class (after 0.2.0). For example, the controller of a MVC model which
@@ -196,7 +216,7 @@ end</pre>
 <p>The inherited class definition of Cocoa in RubyCocoa is similarly
 described to be the inherited class definition by the usual Ruby in
 this way.</p>
-<h2><a name='label:13' id='label:13'>outlet</a></h2><!-- RDLabel: "outlet" -->
+<h2><a name='label:14' id='label:14'>outlet</a></h2><!-- RDLabel: "outlet" -->
 <p>The outlet set as the class in the nib file is written to be:</p>
 <pre>ns_outlets :rateField, :dollerField</pre>
 <p>in the definition of an inherited class. In fact, ns_outlets is the
@@ -206,7 +226,7 @@ instead given like:</p>
   @rateField = new_val
 end</pre>
 <p>ns_outlets has also an alias called ib_outlets.</p>
-<h2><a name='label:14' id='label:14'>override of a method</a></h2><!-- RDLabel: "override of a method" -->
+<h2><a name='label:15' id='label:15'>override of a method</a></h2><!-- RDLabel: "override of a method" -->
 <p>When overriding the method defined by the parent class, it is
 necessary to declare having overridden using ns_overrides (alias
 ib_overrides).</p>
@@ -237,7 +257,7 @@ attached and called.</p>
   end
 
 end</pre>
-<h2><a name='label:15' id='label:15'>create an instance of a Cocoa inherited class</a></h2><!-- RDLabel: "create an instance of a Cocoa inherited class" -->
+<h2><a name='label:16' id='label:16'>create an instance of a Cocoa inherited class</a></h2><!-- RDLabel: "create an instance of a Cocoa inherited class" -->
 <p>When the instance of a Cocoa inherited class needs to be created in a
 Ruby script, it writes like:</p>
 <pre>AppController.alloc.init  # use this</pre>
@@ -253,7 +273,7 @@ performed in the turn:</p>
 <li>alloc (in Objective-C world)</li>
 <li>in alloc, create a Ruby object (initialize method is called here)</li>
 </ul>
-<h2><a name='label:16' id='label:16'>Where should an initialization code be written?</a></h2><!-- RDLabel: "Where should an initialization code be written?" -->
+<h2><a name='label:17' id='label:17'>Where should an initialization code be written?</a></h2><!-- RDLabel: "Where should an initialization code be written?" -->
 <p>Although the code of initialization is generally written into an
 "initialize" method by Ruby, if it says in which, I will seldom be
 recommended by the Cocoa inherited class. A reason is not initialized
@@ -268,8 +288,42 @@ to actually define the inherited class of Cocoa have most these cases?</p>
 <p>In the case of others, it is in the style of Cocoa "init" Probably,
 writing to a method with a prefix will be good. Please do not forget
 for a method to return "self".</p>
-<p>$Date$
-$Revision$</p>
+<h2><a name='label:18' id='label:18'>Debugging of a RubyCocoa application</a></h2><!-- RDLabel: "Debugging of a RubyCocoa application" -->
+<p>Currently (2003-01-05), it is impossible that you use a ruby debugger
+in ProjectBuilder, because a plug-in module for a RubyCocoa
+application doesn't exist.</p>
+<p>But, you can debug with a debugger (e.g. debug.rb) by launching a
+application with appropriate options on shell. If you like Emacs, you
+can use as well a command 'rubydb' which is contained in a ruby source
+distribution.</p>
+<p>The following shows a sequence that the debugger breaks execution of
+a RubyCocoa application (simpleapp in samples).</p>
+<pre>$ cd sample/simpleapp/
+$ pbxbuild
+$ build/SimpleApp.app/Contents/MacOS/SimpleApp -r debug
+(rdb:1) b AppController.rb:24    # set a break point
+Set breakpoint 1 at AppController.rb:24
+(rdb:1) c
+Breakpoint 1, aboutApp at AppController.rb:24
+AppController.rb:24:
+(rdb:1) l
+[19, 28] in AppController.rb
+   19      @myView.set_alpha(@slider.floatValue)
+   20      @myView.set_color(@colorWell.color)
+   21    end
+   22  
+   23    def aboutApp (sender)
+=&gt; 24      NSApp().orderFrontStandardAboutPanelWithOptions(
+   25        "Copyright" =&gt; "RubyCocoa #{RUBYCOCOA_VERSION}",
+   26        "ApplicationVersion" =&gt; "Ruby #{VERSION}")
+   27    end
+   28  
+   29    def colorBtnClicked (sender)
+(rdb:1) sender
+#&lt;OSX::NSMenuItem:0xd439e class='NSMenuItem' id=0x3e27d0&gt;
+(rdb:1) q
+Really quit? (y/n) y</pre>
+<p>$Date$</p>
 
 </td>
 
