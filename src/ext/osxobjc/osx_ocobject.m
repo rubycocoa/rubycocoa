@@ -34,6 +34,11 @@
 
 VALUE kOCObject = Qnil;
 
+#define DLOG0(f)          if (ruby_debug == Qtrue) debug_log((f))
+#define DLOG1(f,a1)       if (ruby_debug == Qtrue) debug_log((f),(a1))
+#define DLOG2(f,a1,a2)    if (ruby_debug == Qtrue) debug_log((f),(a1),(a2))
+#define DLOG3(f,a1,a2,a3) if (ruby_debug == Qtrue) debug_log((f),(a1),(a2),(a3))
+
 static void
 ocobj_data_free(struct _ocobj_data* dp)
 {
@@ -76,7 +81,7 @@ static VALUE create_rbobj_with_ocid_with_class(id oc_obj, VALUE klass)
 
   NS_HANDLER
     NSString* name = [localException name];
-    debug_log(@"%@:%@", name, localException);
+    DLOG2("%@:%@", name, localException);
     if (![name isEqualToString: NSInvalidArgumentException]) {
       [localException raise];
     }
@@ -187,8 +192,6 @@ ocm_perform(int argc, VALUE* argv, VALUE rcv, VALUE* result)
 
   if ((argc < 1) || (argc > 3)) return NO;
 
-  debug_log(@"ocm_perfom ...");
-
   oc_sel = rbobj_to_nssel(argv[0]);
   argc--;
   argv++;
@@ -197,18 +200,17 @@ ocm_perform(int argc, VALUE* argv, VALUE rcv, VALUE* result)
   if (oc_msig == nil) return NO;
 
   ret_type = [oc_msig methodReturnType];
-  debug_log(@"ret_type: %s", ret_type);
   if (*ret_type != _C_ID && *ret_type != _C_CLASS) return NO;
 
   num_of_args = [oc_msig numberOfArguments] - 2;
   if (num_of_args > 2) return NO;
 
   pool = [[NSAutoreleasePool alloc] init];
-  debug_log(@"ocm_perfom (%@)", NSStringFromSelector(oc_sel));
+  DLOG2("ocm_perfom (%@): ret_type=%s", NSStringFromSelector(oc_sel), ret_type);
 
   for (i = 0; i < num_of_args; i++) {
     const char* arg_type = [oc_msig getArgumentTypeAtIndex: (i+2)];
-    debug_log(@"arg_type[%d]: %s", i, arg_type);
+    DLOG2("    arg_type[%d]: %s", i, arg_type);
     if (*arg_type != _C_ID && *arg_type != _C_CLASS) return NO;
     args[i] = nil;
     if (i < argc) {
@@ -219,7 +221,7 @@ ocm_perform(int argc, VALUE* argv, VALUE rcv, VALUE* result)
     }
   }
 
-  debug_log(@"Object#performSelector");
+  DLOG0("    NSObject#performSelector ...");
   switch (num_of_args) {
   case 0:
     oc_result = [oc_rcv performSelector: oc_sel];
@@ -234,7 +236,7 @@ ocm_perform(int argc, VALUE* argv, VALUE rcv, VALUE* result)
   default:
     oc_result = nil;
   }
-  debug_log(@"Object#performSelector: succeeded.");
+  DLOG0("    NSObject#performSelector: done.");
 
   if (oc_result == oc_rcv)
     *result = rcv;
@@ -260,8 +262,6 @@ ocm_invoke(int argc, VALUE* argv, VALUE rcv, VALUE* result)
 
   if (argc < 1) return NO;
 
-  debug_log(@"ocm_invoke ...");
-
   oc_sel = rbobj_to_nssel(argv[0]);
   argc--;
   argv++;
@@ -270,11 +270,10 @@ ocm_invoke(int argc, VALUE* argv, VALUE rcv, VALUE* result)
   if (oc_msig == nil) return NO;
 
   ret_type = [oc_msig methodReturnType];
-  debug_log(@"ret_type: %s", ret_type);
   num_of_args = [oc_msig numberOfArguments] - 2;
 
   pool = [[NSAutoreleasePool alloc] init];
-  debug_log(@"ocm_invoke (%@)", NSStringFromSelector(oc_sel));
+  DLOG2("ocm_invoke (%@): ret_type=%s", NSStringFromSelector(oc_sel), ret_type);
 
   oc_inv = [NSInvocation invocationWithMethodSignature: oc_msig];
   [oc_inv setTarget: oc_rcv];
@@ -287,7 +286,7 @@ ocm_invoke(int argc, VALUE* argv, VALUE rcv, VALUE* result)
     int octype = to_octype(octype_str);
     void* ocdata;
     BOOL f_conv_success;
-    debug_log(@"arg_type[%d]: %s", i, octype_str);
+    DLOG2("    arg_type[%d]: %s", i, octype_str);
     ocdata = ocdata_malloc(octype);
     f_conv_success = rbobj_to_ocdata(arg, octype, ocdata);
     if (f_conv_success) {
@@ -304,9 +303,9 @@ ocm_invoke(int argc, VALUE* argv, VALUE rcv, VALUE* result)
     }
   }
 
-  debug_log(@"NSInvocation#invoke");
+  DLOG0("    NSInvocation#invoke ...");
   [oc_inv invoke];
-  debug_log(@"NSInvocation#invoke: succeeded.");
+  DLOG0("    NSInvocation#invoke: done.");
 
   // get result
   if ([oc_msig methodReturnLength] > 0) {
@@ -361,9 +360,10 @@ ocm_ivar(VALUE rcv, VALUE name, VALUE* result)
   id pool = [[NSAutoreleasePool alloc] init];
   id nsname = rbobj_to_nsselstr(name);
   Ivar iv = class_getInstanceVariable([ocrcv class], [nsname cString]);
-  debug_log(@"ocm_invar ...");
+  DLOG1("ocm_ivar (%@)", nsname);
   if (iv) {
     int octype = to_octype(iv->ivar_type);
+    DLOG2("    ocm_ivar (%@) ret_type: %s", nsname, iv->ivar_type);
     if (octype_object_p(octype)) {
       void* val;
       iv = object_getInstanceVariable(ocrcv, [nsname cString], &val);
@@ -383,13 +383,16 @@ ocm_ivar(VALUE rcv, VALUE name, VALUE* result)
 static BOOL
 ocm_send(int argc, VALUE* argv, VALUE rcv, VALUE* result)
 {
-  debug_log(@"ocm_send ...");
+  BOOL ret = NO;
+  if (argc < 1) return NO;
 
-  if (ocm_perform(argc, argv, rcv, result)) return YES;
-  if (ocm_invoke(argc, argv, rcv, result)) return YES;
-  if (argc == 1)
-    if (ocm_ivar(rcv, argv[0], result)) return YES;
-  return NO;
+  DLOG0("ocm_send ...");
+  if (ocm_perform(argc, argv, rcv, result)) ret = YES;
+  else if (ocm_invoke(argc, argv, rcv, result)) ret = YES;
+  else if (ocm_ivar(rcv, argv[0], result)) ret = YES;
+  DLOG0("ocm_send done");
+
+  return ret;
 }
 
 /*************************************************/
