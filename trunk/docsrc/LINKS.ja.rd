@@ -1,7 +1,7 @@
 # -*-rd-*-
 = リンク集
 
-* ((<RubyCocoa|URL:http://www.fobj.com/rubycocoa/>))
+* ((<RubyCocoa|URL:http://rubycocoa.sourceforge.net/>))
 * ((<RubyCocoaプロジェクト|URL:http://sourceforge.net/projects/rubycocoa/>))
 * ((<メーリングリスト(日本語)|URL:http://www.freeml.com/info/rubycocoa@freeml.com>))
 * ((<メーリングリスト(英語)|URL:http://sourceforge.net/mail/?group_id=44114>))
