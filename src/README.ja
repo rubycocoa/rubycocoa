@@ -15,12 +15,13 @@ RubyCocoa
 
 2. サンプル
 
-  sndplay.rb   - システム音を鳴らすサンプル
-  sndplay2.rb  - システム音を鳴らすサンプル(Ruby Thread使用)
-  fontnames.rb - フォント名を表示するサンプル
-  simpleapp/   - とても簡単なアプリケーション例 (Makefileベース)
-  rubyapp/     - アプリケーションの雛型 (PB and IBベース)
-  rubyapp2/    - 簡単なアプリケーション例 (PB and IBベース)
+  sndplay.rb    - システム音を鳴らすサンプル
+  sndplay2.rb   - システム音を鳴らすサンプル(Ruby Thread使用)
+  fontnames.rb  - フォント名を表示するサンプル
+  simpleapp/    - とても簡単なアプリケーション例 (Makefileベース)
+  rubyapp_tmpl/ - RubyCocoaアプリケーションプロジェクトの雛型
+  rubyapp/      - 簡単なアプリケーション例 (PB and IBベース)
+  rubyapp2/     - 簡単なアプリケーション例 (PB and IBベース)
 
 3. ライセンス
 
