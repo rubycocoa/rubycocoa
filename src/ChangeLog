@@ -1,3 +1,42 @@
+2001-12-19  FUJIMOTO Hisakuni  <hisa@fobj.com>
+
+	* global refactoring for release 0.2.x.
+
+	* ext/osxobjc/*: remove all
+
+	* ext/osx_objc/cls_objcid.m: new file. implement class
+	OSX::ObjcID.
+
+	* ext/osx_objc/mdl_objcwrapper.m: new file. implement a
+	Objective-C part of mixin module OSX::OCObjWrapper.
+
+	* ext/osx_objc/osx_objc.m: new file. implement osx_objc extension
+	library initializer.
+
+	* framework/RBObject.[hm], framework/ocdata_conv.[hm]: modify for
+	refactoring.
+
+	* lib/osx/objc: new directory. 
+
+	* lib/osx/ocobject.rb: remove. lib/osx/objc/oc_object.rb
+
+	* lib/osx/objc/oc_exception.rb: new file. implement class
+	OSX::OCException.
+	
+	* lib/osx/objc/oc_import.rb: new file. implement module function
+	OSX::ns_import and facility of deriving Cocoa class.
+
+	* lib/osx/objc/oc_object.rb: new file. implement class
+	OSX::OCObject.
+
+	* lib/osx/objc/oc_types.rb: new file. implement some Foundation
+	Framework data types.
+
+	* lib/osx/objc/oc_wrapper.rb: new file. implement a Rubby part of
+	mixin module OSX::OCObjWrapper.
+
+	* samples/*: rewrite for release 0.2.x.
+	
 2001-12-12  FUJIMOTO Hisakuni  <hisa@fobj.com>
 
 	* release 0.1.3
