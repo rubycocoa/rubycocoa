@@ -11,8 +11,7 @@ extern VALUE nsresult_to_rbresult(int octype, const void* nsresult, id pool);
 static VALUE
 osx_NSFoundationVersionNumber(VALUE mdl)
 {
-  double ns_result = NSFoundationVersionNumber;
-  return nsresult_to_rbresult(_C_DBL, &ns_result, nil);
+  return nsresult_to_rbresult(_C_DBL, &NSFoundationVersionNumber, nil);
 }
 
   /**** functions ****/

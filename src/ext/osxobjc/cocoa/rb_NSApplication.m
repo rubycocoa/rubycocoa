@@ -11,144 +11,126 @@ extern VALUE nsresult_to_rbresult(int octype, const void* nsresult, id pool);
 static VALUE
 osx_NSAppKitVersionNumber(VALUE mdl)
 {
-  double ns_result = NSAppKitVersionNumber;
-  return nsresult_to_rbresult(_C_DBL, &ns_result, nil);
+  return nsresult_to_rbresult(_C_DBL, &NSAppKitVersionNumber, nil);
 }
 
 // NSString *NSModalPanelRunLoopMode;
 static VALUE
 osx_NSModalPanelRunLoopMode(VALUE mdl)
 {
-  NSString * ns_result = NSModalPanelRunLoopMode;
-  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
+  return nsresult_to_rbresult(_C_ID, &NSModalPanelRunLoopMode, nil);
 }
 
 // NSString *NSEventTrackingRunLoopMode;
 static VALUE
 osx_NSEventTrackingRunLoopMode(VALUE mdl)
 {
-  NSString * ns_result = NSEventTrackingRunLoopMode;
-  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
+  return nsresult_to_rbresult(_C_ID, &NSEventTrackingRunLoopMode, nil);
 }
 
 // id NSApp;
 static VALUE
 osx_NSApp(VALUE mdl)
 {
-  id ns_result = NSApp;
-  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
+  return nsresult_to_rbresult(_C_ID, &NSApp, nil);
 }
 
 // NSString *NSApplicationDidBecomeActiveNotification;
 static VALUE
 osx_NSApplicationDidBecomeActiveNotification(VALUE mdl)
 {
-  NSString * ns_result = NSApplicationDidBecomeActiveNotification;
-  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
+  return nsresult_to_rbresult(_C_ID, &NSApplicationDidBecomeActiveNotification, nil);
 }
 
 // NSString *NSApplicationDidHideNotification;
 static VALUE
 osx_NSApplicationDidHideNotification(VALUE mdl)
 {
-  NSString * ns_result = NSApplicationDidHideNotification;
-  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
+  return nsresult_to_rbresult(_C_ID, &NSApplicationDidHideNotification, nil);
 }
 
 // NSString *NSApplicationDidFinishLaunchingNotification;
 static VALUE
 osx_NSApplicationDidFinishLaunchingNotification(VALUE mdl)
 {
-  NSString * ns_result = NSApplicationDidFinishLaunchingNotification;
-  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
+  return nsresult_to_rbresult(_C_ID, &NSApplicationDidFinishLaunchingNotification, nil);
 }
 
 // NSString *NSApplicationDidResignActiveNotification;
 static VALUE
 osx_NSApplicationDidResignActiveNotification(VALUE mdl)
 {
-  NSString * ns_result = NSApplicationDidResignActiveNotification;
-  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
+  return nsresult_to_rbresult(_C_ID, &NSApplicationDidResignActiveNotification, nil);
 }
 
 // NSString *NSApplicationDidUnhideNotification;
 static VALUE
 osx_NSApplicationDidUnhideNotification(VALUE mdl)
 {
-  NSString * ns_result = NSApplicationDidUnhideNotification;
-  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
+  return nsresult_to_rbresult(_C_ID, &NSApplicationDidUnhideNotification, nil);
 }
 
 // NSString *NSApplicationDidUpdateNotification;
 static VALUE
 osx_NSApplicationDidUpdateNotification(VALUE mdl)
 {
-  NSString * ns_result = NSApplicationDidUpdateNotification;
-  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
+  return nsresult_to_rbresult(_C_ID, &NSApplicationDidUpdateNotification, nil);
 }
 
 // NSString *NSApplicationWillBecomeActiveNotification;
 static VALUE
 osx_NSApplicationWillBecomeActiveNotification(VALUE mdl)
 {
-  NSString * ns_result = NSApplicationWillBecomeActiveNotification;
-  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
+  return nsresult_to_rbresult(_C_ID, &NSApplicationWillBecomeActiveNotification, nil);
 }
 
 // NSString *NSApplicationWillHideNotification;
 static VALUE
 osx_NSApplicationWillHideNotification(VALUE mdl)
 {
-  NSString * ns_result = NSApplicationWillHideNotification;
-  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
+  return nsresult_to_rbresult(_C_ID, &NSApplicationWillHideNotification, nil);
 }
 
 // NSString *NSApplicationWillFinishLaunchingNotification;
 static VALUE
 osx_NSApplicationWillFinishLaunchingNotification(VALUE mdl)
 {
-  NSString * ns_result = NSApplicationWillFinishLaunchingNotification;
-  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
+  return nsresult_to_rbresult(_C_ID, &NSApplicationWillFinishLaunchingNotification, nil);
 }
 
 // NSString *NSApplicationWillResignActiveNotification;
 static VALUE
 osx_NSApplicationWillResignActiveNotification(VALUE mdl)
 {
-  NSString * ns_result = NSApplicationWillResignActiveNotification;
-  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
+  return nsresult_to_rbresult(_C_ID, &NSApplicationWillResignActiveNotification, nil);
 }
 
 // NSString *NSApplicationWillUnhideNotification;
 static VALUE
 osx_NSApplicationWillUnhideNotification(VALUE mdl)
 {
-  NSString * ns_result = NSApplicationWillUnhideNotification;
-  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
+  return nsresult_to_rbresult(_C_ID, &NSApplicationWillUnhideNotification, nil);
 }
 
 // NSString *NSApplicationWillUpdateNotification;
 static VALUE
 osx_NSApplicationWillUpdateNotification(VALUE mdl)
 {
-  NSString * ns_result = NSApplicationWillUpdateNotification;
-  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
+  return nsresult_to_rbresult(_C_ID, &NSApplicationWillUpdateNotification, nil);
 }
 
 // NSString *NSApplicationWillTerminateNotification;
 static VALUE
 osx_NSApplicationWillTerminateNotification(VALUE mdl)
 {
-  NSString * ns_result = NSApplicationWillTerminateNotification;
-  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
+  return nsresult_to_rbresult(_C_ID, &NSApplicationWillTerminateNotification, nil);
 }
 
 // NSString *NSApplicationDidChangeScreenParametersNotification;
 static VALUE
 osx_NSApplicationDidChangeScreenParametersNotification(VALUE mdl)
 {
-  NSString * ns_result = NSApplicationDidChangeScreenParametersNotification;
-  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
+  return nsresult_to_rbresult(_C_ID, &NSApplicationDidChangeScreenParametersNotification, nil);
 }
 
   /**** functions ****/

@@ -11,32 +11,28 @@ extern VALUE nsresult_to_rbresult(int octype, const void* nsresult, id pool);
 static VALUE
 osx_NSTableViewSelectionDidChangeNotification(VALUE mdl)
 {
-  NSString * ns_result = NSTableViewSelectionDidChangeNotification;
-  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
+  return nsresult_to_rbresult(_C_ID, &NSTableViewSelectionDidChangeNotification, nil);
 }
 
 // NSString *NSTableViewColumnDidMoveNotification;
 static VALUE
 osx_NSTableViewColumnDidMoveNotification(VALUE mdl)
 {
-  NSString * ns_result = NSTableViewColumnDidMoveNotification;
-  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
+  return nsresult_to_rbresult(_C_ID, &NSTableViewColumnDidMoveNotification, nil);
 }
 
 // NSString *NSTableViewColumnDidResizeNotification;
 static VALUE
 osx_NSTableViewColumnDidResizeNotification(VALUE mdl)
 {
-  NSString * ns_result = NSTableViewColumnDidResizeNotification;
-  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
+  return nsresult_to_rbresult(_C_ID, &NSTableViewColumnDidResizeNotification, nil);
 }
 
 // NSString *NSTableViewSelectionIsChangingNotification;
 static VALUE
 osx_NSTableViewSelectionIsChangingNotification(VALUE mdl)
 {
-  NSString * ns_result = NSTableViewSelectionIsChangingNotification;
-  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
+  return nsresult_to_rbresult(_C_ID, &NSTableViewSelectionIsChangingNotification, nil);
 }
 
 void init_NSTableView(VALUE mOSX)

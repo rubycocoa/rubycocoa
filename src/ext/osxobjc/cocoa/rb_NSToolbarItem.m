@@ -11,56 +11,49 @@ extern VALUE nsresult_to_rbresult(int octype, const void* nsresult, id pool);
 static VALUE
 osx_NSToolbarSeparatorItemIdentifier(VALUE mdl)
 {
-  NSString * ns_result = NSToolbarSeparatorItemIdentifier;
-  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
+  return nsresult_to_rbresult(_C_ID, &NSToolbarSeparatorItemIdentifier, nil);
 }
 
 // NSString *NSToolbarSpaceItemIdentifier;
 static VALUE
 osx_NSToolbarSpaceItemIdentifier(VALUE mdl)
 {
-  NSString * ns_result = NSToolbarSpaceItemIdentifier;
-  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
+  return nsresult_to_rbresult(_C_ID, &NSToolbarSpaceItemIdentifier, nil);
 }
 
 // NSString *NSToolbarFlexibleSpaceItemIdentifier;
 static VALUE
 osx_NSToolbarFlexibleSpaceItemIdentifier(VALUE mdl)
 {
-  NSString * ns_result = NSToolbarFlexibleSpaceItemIdentifier;
-  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
+  return nsresult_to_rbresult(_C_ID, &NSToolbarFlexibleSpaceItemIdentifier, nil);
 }
 
 // NSString *NSToolbarShowColorsItemIdentifier;
 static VALUE
 osx_NSToolbarShowColorsItemIdentifier(VALUE mdl)
 {
-  NSString * ns_result = NSToolbarShowColorsItemIdentifier;
-  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
+  return nsresult_to_rbresult(_C_ID, &NSToolbarShowColorsItemIdentifier, nil);
 }
 
 // NSString *NSToolbarShowFontsItemIdentifier;
 static VALUE
 osx_NSToolbarShowFontsItemIdentifier(VALUE mdl)
 {
-  NSString * ns_result = NSToolbarShowFontsItemIdentifier;
-  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
+  return nsresult_to_rbresult(_C_ID, &NSToolbarShowFontsItemIdentifier, nil);
 }
 
 // NSString *NSToolbarCustomizeToolbarItemIdentifier;
 static VALUE
 osx_NSToolbarCustomizeToolbarItemIdentifier(VALUE mdl)
 {
-  NSString * ns_result = NSToolbarCustomizeToolbarItemIdentifier;
-  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
+  return nsresult_to_rbresult(_C_ID, &NSToolbarCustomizeToolbarItemIdentifier, nil);
 }
 
 // NSString *NSToolbarPrintItemIdentifier;
 static VALUE
 osx_NSToolbarPrintItemIdentifier(VALUE mdl)
 {
-  NSString * ns_result = NSToolbarPrintItemIdentifier;
-  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
+  return nsresult_to_rbresult(_C_ID, &NSToolbarPrintItemIdentifier, nil);
 }
 
 void init_NSToolbarItem(VALUE mOSX)

@@ -11,16 +11,14 @@ extern VALUE nsresult_to_rbresult(int octype, const void* nsresult, id pool);
 static VALUE
 osx_NSToolbarWillAddItemNotification(VALUE mdl)
 {
-  NSString * ns_result = NSToolbarWillAddItemNotification;
-  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
+  return nsresult_to_rbresult(_C_ID, &NSToolbarWillAddItemNotification, nil);
 }
 
 // NSString *NSToolbarDidRemoveItemNotification;
 static VALUE
 osx_NSToolbarDidRemoveItemNotification(VALUE mdl)
 {
-  NSString * ns_result = NSToolbarDidRemoveItemNotification;
-  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
+  return nsresult_to_rbresult(_C_ID, &NSToolbarDidRemoveItemNotification, nil);
 }
 
 void init_NSToolbar(VALUE mOSX)

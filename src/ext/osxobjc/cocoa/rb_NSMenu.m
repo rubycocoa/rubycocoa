@@ -11,40 +11,35 @@ extern VALUE nsresult_to_rbresult(int octype, const void* nsresult, id pool);
 static VALUE
 osx_NSMenuWillSendActionNotification(VALUE mdl)
 {
-  NSString * ns_result = NSMenuWillSendActionNotification;
-  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
+  return nsresult_to_rbresult(_C_ID, &NSMenuWillSendActionNotification, nil);
 }
 
 // NSString *NSMenuDidSendActionNotification;
 static VALUE
 osx_NSMenuDidSendActionNotification(VALUE mdl)
 {
-  NSString * ns_result = NSMenuDidSendActionNotification;
-  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
+  return nsresult_to_rbresult(_C_ID, &NSMenuDidSendActionNotification, nil);
 }
 
 // NSString *NSMenuDidAddItemNotification;
 static VALUE
 osx_NSMenuDidAddItemNotification(VALUE mdl)
 {
-  NSString * ns_result = NSMenuDidAddItemNotification;
-  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
+  return nsresult_to_rbresult(_C_ID, &NSMenuDidAddItemNotification, nil);
 }
 
 // NSString *NSMenuDidRemoveItemNotification;
 static VALUE
 osx_NSMenuDidRemoveItemNotification(VALUE mdl)
 {
-  NSString * ns_result = NSMenuDidRemoveItemNotification;
-  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
+  return nsresult_to_rbresult(_C_ID, &NSMenuDidRemoveItemNotification, nil);
 }
 
 // NSString *NSMenuDidChangeItemNotification;
 static VALUE
 osx_NSMenuDidChangeItemNotification(VALUE mdl)
 {
-  NSString * ns_result = NSMenuDidChangeItemNotification;
-  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
+  return nsresult_to_rbresult(_C_ID, &NSMenuDidChangeItemNotification, nil);
 }
 
 void init_NSMenu(VALUE mOSX)

@@ -11,8 +11,7 @@ extern VALUE nsresult_to_rbresult(int octype, const void* nsresult, id pool);
 static VALUE
 osx_NSClassDescriptionNeededForClassNotification(VALUE mdl)
 {
-  NSString * ns_result = NSClassDescriptionNeededForClassNotification;
-  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
+  return nsresult_to_rbresult(_C_ID, &NSClassDescriptionNeededForClassNotification, nil);
 }
 
 void init_NSClassDescription(VALUE mOSX)

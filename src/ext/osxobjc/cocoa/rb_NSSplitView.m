@@ -11,16 +11,14 @@ extern VALUE nsresult_to_rbresult(int octype, const void* nsresult, id pool);
 static VALUE
 osx_NSSplitViewDidResizeSubviewsNotification(VALUE mdl)
 {
-  NSString * ns_result = NSSplitViewDidResizeSubviewsNotification;
-  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
+  return nsresult_to_rbresult(_C_ID, &NSSplitViewDidResizeSubviewsNotification, nil);
 }
 
 // NSString *NSSplitViewWillResizeSubviewsNotification;
 static VALUE
 osx_NSSplitViewWillResizeSubviewsNotification(VALUE mdl)
 {
-  NSString * ns_result = NSSplitViewWillResizeSubviewsNotification;
-  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
+  return nsresult_to_rbresult(_C_ID, &NSSplitViewWillResizeSubviewsNotification, nil);
 }
 
 void init_NSSplitView(VALUE mOSX)

@@ -11,16 +11,14 @@ extern VALUE nsresult_to_rbresult(int octype, const void* nsresult, id pool);
 static VALUE
 osx_NSTextViewWillChangeNotifyingTextViewNotification(VALUE mdl)
 {
-  NSString * ns_result = NSTextViewWillChangeNotifyingTextViewNotification;
-  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
+  return nsresult_to_rbresult(_C_ID, &NSTextViewWillChangeNotifyingTextViewNotification, nil);
 }
 
 // NSString *NSTextViewDidChangeSelectionNotification;
 static VALUE
 osx_NSTextViewDidChangeSelectionNotification(VALUE mdl)
 {
-  NSString * ns_result = NSTextViewDidChangeSelectionNotification;
-  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
+  return nsresult_to_rbresult(_C_ID, &NSTextViewDidChangeSelectionNotification, nil);
 }
 
 void init_NSTextView(VALUE mOSX)

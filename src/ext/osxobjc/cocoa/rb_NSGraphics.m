@@ -11,80 +11,70 @@ extern VALUE nsresult_to_rbresult(int octype, const void* nsresult, id pool);
 static VALUE
 osx_NSCalibratedWhiteColorSpace(VALUE mdl)
 {
-  NSString * ns_result = NSCalibratedWhiteColorSpace;
-  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
+  return nsresult_to_rbresult(_C_ID, &NSCalibratedWhiteColorSpace, nil);
 }
 
 // NSString *NSCalibratedBlackColorSpace;
 static VALUE
 osx_NSCalibratedBlackColorSpace(VALUE mdl)
 {
-  NSString * ns_result = NSCalibratedBlackColorSpace;
-  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
+  return nsresult_to_rbresult(_C_ID, &NSCalibratedBlackColorSpace, nil);
 }
 
 // NSString *NSCalibratedRGBColorSpace;
 static VALUE
 osx_NSCalibratedRGBColorSpace(VALUE mdl)
 {
-  NSString * ns_result = NSCalibratedRGBColorSpace;
-  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
+  return nsresult_to_rbresult(_C_ID, &NSCalibratedRGBColorSpace, nil);
 }
 
 // NSString *NSDeviceWhiteColorSpace;
 static VALUE
 osx_NSDeviceWhiteColorSpace(VALUE mdl)
 {
-  NSString * ns_result = NSDeviceWhiteColorSpace;
-  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
+  return nsresult_to_rbresult(_C_ID, &NSDeviceWhiteColorSpace, nil);
 }
 
 // NSString *NSDeviceBlackColorSpace;
 static VALUE
 osx_NSDeviceBlackColorSpace(VALUE mdl)
 {
-  NSString * ns_result = NSDeviceBlackColorSpace;
-  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
+  return nsresult_to_rbresult(_C_ID, &NSDeviceBlackColorSpace, nil);
 }
 
 // NSString *NSDeviceRGBColorSpace;
 static VALUE
 osx_NSDeviceRGBColorSpace(VALUE mdl)
 {
-  NSString * ns_result = NSDeviceRGBColorSpace;
-  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
+  return nsresult_to_rbresult(_C_ID, &NSDeviceRGBColorSpace, nil);
 }
 
 // NSString *NSDeviceCMYKColorSpace;
 static VALUE
 osx_NSDeviceCMYKColorSpace(VALUE mdl)
 {
-  NSString * ns_result = NSDeviceCMYKColorSpace;
-  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
+  return nsresult_to_rbresult(_C_ID, &NSDeviceCMYKColorSpace, nil);
 }
 
 // NSString *NSNamedColorSpace;
 static VALUE
 osx_NSNamedColorSpace(VALUE mdl)
 {
-  NSString * ns_result = NSNamedColorSpace;
-  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
+  return nsresult_to_rbresult(_C_ID, &NSNamedColorSpace, nil);
 }
 
 // NSString *NSPatternColorSpace;
 static VALUE
 osx_NSPatternColorSpace(VALUE mdl)
 {
-  NSString * ns_result = NSPatternColorSpace;
-  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
+  return nsresult_to_rbresult(_C_ID, &NSPatternColorSpace, nil);
 }
 
 // NSString *NSCustomColorSpace;
 static VALUE
 osx_NSCustomColorSpace(VALUE mdl)
 {
-  NSString * ns_result = NSCustomColorSpace;
-  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
+  return nsresult_to_rbresult(_C_ID, &NSCustomColorSpace, nil);
 }
 
 // const float NSWhite;
@@ -119,48 +109,42 @@ osx_NSBlack(VALUE mdl)
 static VALUE
 osx_NSDeviceResolution(VALUE mdl)
 {
-  NSString * ns_result = NSDeviceResolution;
-  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
+  return nsresult_to_rbresult(_C_ID, &NSDeviceResolution, nil);
 }
 
 // NSString *NSDeviceColorSpaceName;
 static VALUE
 osx_NSDeviceColorSpaceName(VALUE mdl)
 {
-  NSString * ns_result = NSDeviceColorSpaceName;
-  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
+  return nsresult_to_rbresult(_C_ID, &NSDeviceColorSpaceName, nil);
 }
 
 // NSString *NSDeviceBitsPerSample;
 static VALUE
 osx_NSDeviceBitsPerSample(VALUE mdl)
 {
-  NSString * ns_result = NSDeviceBitsPerSample;
-  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
+  return nsresult_to_rbresult(_C_ID, &NSDeviceBitsPerSample, nil);
 }
 
 // NSString *NSDeviceIsScreen;
 static VALUE
 osx_NSDeviceIsScreen(VALUE mdl)
 {
-  NSString * ns_result = NSDeviceIsScreen;
-  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
+  return nsresult_to_rbresult(_C_ID, &NSDeviceIsScreen, nil);
 }
 
 // NSString *NSDeviceIsPrinter;
 static VALUE
 osx_NSDeviceIsPrinter(VALUE mdl)
 {
-  NSString * ns_result = NSDeviceIsPrinter;
-  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
+  return nsresult_to_rbresult(_C_ID, &NSDeviceIsPrinter, nil);
 }
 
 // NSString *NSDeviceSize;
 static VALUE
 osx_NSDeviceSize(VALUE mdl)
 {
-  NSString * ns_result = NSDeviceSize;
-  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
+  return nsresult_to_rbresult(_C_ID, &NSDeviceSize, nil);
 }
 
   /**** functions ****/
@@ -598,25 +582,7 @@ osx_NSDrawBitmap(VALUE mdl, VALUE a0, VALUE a1, VALUE a2, VALUE a3, VALUE a4, VA
 static VALUE
 osx_NSCopyBitmapFromGState(VALUE mdl, VALUE a0, VALUE a1, VALUE a2)
 {
-
-  int ns_a0;
-  NSRect ns_a1;
-  NSRect ns_a2;
-
-  VALUE rb_result;
-  id pool = [[NSAutoreleasePool alloc] init];
-  /* a0 */
-  rbarg_to_nsarg(a0, _C_INT, &ns_a0, pool, 0);
-  /* a1 */
-  rbarg_to_nsarg(a1, _PRIV_C_NSRECT, &ns_a1, pool, 1);
-  /* a2 */
-  rbarg_to_nsarg(a2, _PRIV_C_NSRECT, &ns_a2, pool, 2);
-
-  NSCopyBitmapFromGState(ns_a0, ns_a1, ns_a2);
-
-  rb_result = Qnil;
-  [pool release];
-  return rb_result;
+  rb_notimplement();
 }
 
 // void NSCopyBits(int srcGState, NSRect srcRect, NSPoint destPoint);

@@ -55,21 +55,10 @@ extern void rbarg_to_nsarg(VALUE rbarg, int octype, void* nsarg, id pool, int in
 extern VALUE nsresult_to_rbresult(int octype, const void* nsresult, id pool);
 STATIC_FUNCS_DEFINE
 
-GEN_C_FUNC_NOTIMPL =  "  rb_notimplement();\n"
 
-
-def gen_c_func_body_noarg(info)
-  name = info.name
-  name += "()" if info.is_a? OCHeaderAnalyzer::FuncInfo
-  if info.octype == :UNKNOWN then
-    GEN_C_FUNC_NOTIMPL
-  elsif info.octype == :_C_VOID then
-    "  #{name};\n" +
-    "  return Qnil;\n"
-  else
-    "  #{info.type} ns_result = #{name};\n" +
-    "  return nsresult_to_rbresult(#{info.octype}, &ns_result, nil);\n"
-  end
+def gen_c_func_notimpl
+  $notimpl_cnt += 1
+  "  rb_notimplement();\n"
 end
 
 def gen_c_func_arglist(argc)
@@ -140,9 +129,8 @@ FUNC_BODY_TMPL = <<'FUNC_BODY_TMPL_DEFINE'
   return rb_result;
 FUNC_BODY_TMPL_DEFINE
 
-def gen_def_c_func_body(info, va = false)
-  ngresult = GEN_C_FUNC_NOTIMPL
-  return ngresult if info.octype == :UNKNOWN
+def gen_c_func_body(info, va = false)
+  return gen_c_func_notimpl if info.octype == :UNKNOWN
   tmpl = FUNC_BODY_TMPL.dup
   if info.octype == :_C_VOID then
     tmpl.sub! /%%ns_result_defs%%/, ''
@@ -151,17 +139,31 @@ def gen_def_c_func_body(info, va = false)
   end
   tmpl.sub! /%%var_defs%%/, gen_c_func_var_defs(info.args)
   unless s = gen_c_func_var_sets(info.args, va) then
-    return ngresult
+    return gen_c_func_notimpl
   end
   tmpl.sub! /%%var_set%%/,  s
   tmpl.sub! /%%func_call%%/,  gen_c_func_func_call(info)
   unless s = gen_c_func_conv_call(info.octype) then
-    return ngresult
+    return gen_c_func_notimpl
   end
   tmpl.sub! /%%conv_call%%/, s
   tmpl
 end
 
+def gen_c_func_body_noarg(info)
+  return gen_c_func_notimpl if info.octype == :UNKNOWN
+  if info.instance_of? OCHeaderAnalyzer::FuncInfo then
+    if info.octype == :_C_VOID then
+      "  #{info.name}();\n" +
+	"  return Qnil;\n"
+    else
+      "  #{info.type} ns_result = #{info.name}();\n" +
+	"  return nsresult_to_rbresult(#{info.octype}, &ns_result, nil);\n"
+    end
+  else
+    "  return nsresult_to_rbresult(#{info.octype}, &#{info.name}, nil);\n"
+  end
+end
 
 def gen_def_c_func(info, argc = -1)
   ret =      "// #{info.orig};\n"
@@ -169,12 +171,14 @@ def gen_def_c_func(info, argc = -1)
   ret.concat gen_c_func_arglist(argc)
   ret.concat "\n{\n"
 
-  if argc == 0 then
+  if info.name == "NSCopyBitmapFromGState" then
+    ret.concat gen_c_func_notimpl # AppKit/NSGraphics.h BUG ?
+  elsif argc == 0 then
     ret.concat gen_c_func_body_noarg(info)
   elsif argc > 0 then
-    ret.concat gen_def_c_func_body(info)
+    ret.concat gen_c_func_body(info)
   else
-    ret.concat GEN_C_FUNC_NOTIMPL
+    ret.concat gen_c_func_notimpl
   end
 
   ret.concat "}\n\n"
@@ -216,11 +220,14 @@ def gen_def_consts(och)
   return nil if consts.size == 0
   ret_a = "  /**** constants ****/\n"
   ret_b = "  /**** constants ****/\n"
+  $notimpl_cnt = 0
   consts.each do |info|
     reconfig_info(info)
     ret_a.concat gen_def_c_func(info, 0)
     ret_b.concat gen_def_rb_mod_func(info, 0)
   end
+  $stderr.print " : #{$notimpl_cnt}/#{consts.size} consts NG"
+  $stderr.flush
   [ ret_a, ret_b ]
 end
 
@@ -229,17 +236,20 @@ def gen_def_funcs(och)
   return nil if funcs.size == 0
   ret_a = "  /**** functions ****/\n"
   ret_b = "  /**** functions ****/\n"
+  $notimpl_cnt = 0
   funcs.each do |info|
     reconfig_info(info)
     ret_a.concat gen_def_c_func(info, info.argc)
     ret_b.concat gen_def_rb_mod_func(info, info.argc)
   end
+  $stderr.print " : #{$notimpl_cnt}/#{funcs.size} funcs NG"
+  $stderr.flush
   [ ret_a, ret_b ]
 end
 
 def gen_skelton(hpath)
   och = OCHeaderAnalyzer.new(hpath)
-  $stderr.puts "#{och.filename}..."
+  $stderr.print "#{och.filename}..." ; $stderr.flush
   enums = gen_def_enums(och)
   consts = gen_def_consts(och)
   funcs = gen_def_funcs(och)
@@ -270,6 +280,7 @@ def gen_skelton(hpath)
       f.print "}\n"
     end
   end
+  $stderr.print "\n"
 end
 
 fnd_headers = collect_foundation_headers

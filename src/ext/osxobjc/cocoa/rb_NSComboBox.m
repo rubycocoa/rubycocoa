@@ -11,32 +11,28 @@ extern VALUE nsresult_to_rbresult(int octype, const void* nsresult, id pool);
 static VALUE
 osx_NSComboBoxWillPopUpNotification(VALUE mdl)
 {
-  NSString * ns_result = NSComboBoxWillPopUpNotification;
-  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
+  return nsresult_to_rbresult(_C_ID, &NSComboBoxWillPopUpNotification, nil);
 }
 
 // NSString *NSComboBoxWillDismissNotification;
 static VALUE
 osx_NSComboBoxWillDismissNotification(VALUE mdl)
 {
-  NSString * ns_result = NSComboBoxWillDismissNotification;
-  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
+  return nsresult_to_rbresult(_C_ID, &NSComboBoxWillDismissNotification, nil);
 }
 
 // NSString *NSComboBoxSelectionDidChangeNotification;
 static VALUE
 osx_NSComboBoxSelectionDidChangeNotification(VALUE mdl)
 {
-  NSString * ns_result = NSComboBoxSelectionDidChangeNotification;
-  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
+  return nsresult_to_rbresult(_C_ID, &NSComboBoxSelectionDidChangeNotification, nil);
 }
 
 // NSString *NSComboBoxSelectionIsChangingNotification;
 static VALUE
 osx_NSComboBoxSelectionIsChangingNotification(VALUE mdl)
 {
-  NSString * ns_result = NSComboBoxSelectionIsChangingNotification;
-  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
+  return nsresult_to_rbresult(_C_ID, &NSComboBoxSelectionIsChangingNotification, nil);
 }
 
 void init_NSComboBox(VALUE mOSX)

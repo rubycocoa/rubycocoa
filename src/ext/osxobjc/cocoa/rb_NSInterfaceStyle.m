@@ -11,8 +11,7 @@ extern VALUE nsresult_to_rbresult(int octype, const void* nsresult, id pool);
 static VALUE
 osx_NSInterfaceStyleDefault(VALUE mdl)
 {
-  NSString * ns_result = NSInterfaceStyleDefault;
-  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
+  return nsresult_to_rbresult(_C_ID, &NSInterfaceStyleDefault, nil);
 }
 
   /**** functions ****/

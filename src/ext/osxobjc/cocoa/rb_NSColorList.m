@@ -11,8 +11,7 @@ extern VALUE nsresult_to_rbresult(int octype, const void* nsresult, id pool);
 static VALUE
 osx_NSColorListDidChangeNotification(VALUE mdl)
 {
-  NSString * ns_result = NSColorListDidChangeNotification;
-  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
+  return nsresult_to_rbresult(_C_ID, &NSColorListDidChangeNotification, nil);
 }
 
 void init_NSColorList(VALUE mOSX)
