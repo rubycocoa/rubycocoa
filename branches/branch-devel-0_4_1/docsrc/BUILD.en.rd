@@ -39,7 +39,7 @@ in the case shown below at an example is explained.
   * Ruby 1.6.8 included in Mac OS X 10.3
   * Ruby 1.6.7 included in Mac OS X 10.2
 
-RubyCocoa 0.4.1 binary distribution has been built with the latter.
+RubyCocoa 0.4.1 binary distribution has been built with the 2nd way.
 When Ruby has been installed with a package utility such as
 ((<Fink|URL:http://fink.sf.net/>)), adapt these instructions accordingly.
 
