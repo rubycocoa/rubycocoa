@@ -117,7 +117,7 @@
 				INSTALL_PATH = "@executable_path/../Frameworks";
 				LIBRARY_SEARCH_PATHS = "%%%libruby_path_dirname%%%";
 				OTHER_CFLAGS = "-fno-common";
-				OTHER_LDFLAGS = "-undefined suppress -flat_namespace";
+				OTHER_LDFLAGS = "%%%other_ldflags%%% -undefined suppress -flat_namespace";
 				PREBINDING = NO;
 				PRODUCT_NAME = "%%%framework_name%%%";
 				SECTORDER_FLAGS = "";
@@ -214,7 +214,6 @@
 			files = (
 				1058C7B3FEA5585E11CA2CBB,
 				E88C6D22035BACFD031D1B90,
-				A52D44EE0565C3D50001B46D,
 			);
 			isa = PBXFrameworksBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -328,12 +327,6 @@
 		};
 		A5244F800595D2CE00FB7045 = {
 			fileRef = A5244F7E0595D2CE00FB7045;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
-		A52D44EE0565C3D50001B46D = {
-			fileRef = 0867D69BFE84028FC02AAC07;
 			isa = PBXBuildFile;
 			settings = {
 			};
