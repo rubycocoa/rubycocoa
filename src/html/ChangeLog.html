@@ -2,6 +2,19 @@
 <head><title>RubyCocoa - ChangeLog</title></head>
 <body>
 <pre>
+2002-08-16  FUJIMOTO Hisakuni  
+
+	* framework/ocdata_conv.m:
+	In rbobj_convert_to_nsobj(), use NSString#stringWithCString:length:
+	for converting T_STRING.
+
+	* lib/osx/objc/oc_wrapper.rb, ext/osx_objc/mdl_objwrapper.m:
+	moved definition of OCObjWrapper#to_s to mdl_objwrapper.m
+
+2002-04-07  FUJIMOTO Hisakuni  
+
+	* tool/install-libruby-frmwk.rb: add version and license term
+
 2002-02-23  FUJIMOTO Hisakuni  
 
 	* tests/alltest.sh: fix wrong path of extention library
