@@ -1,15 +1,15 @@
 # -*-rd-*-
 = Try RubyCocoa Samples
 
-Let's try scripts and applications in sample directory.
+Let's try scripts and applications of samples.
 
 == RubyCocoa Application
 
 First, try to execute a RubyCocoa application which has already
-builded. In Finder, open sample folder and double click SimpleApp.
-Or type following at commandline:
+builded. In Finder, open '/Developer/Examples/RubyCocoa' folder and
+double click SimpleApp.  Or type following on command line:
 
-  % cd {RubyCocoa srcdir}/sample
+  % cd /Developer/Examples/RubyCocoa
   % open SimpleApp.app
 
 
@@ -18,7 +18,7 @@ Or type following at commandline:
 You can write a script for command line with RubyCocoa.  Now, let's
 try to execute a simple script in sample directory.
 
-  % cd {RubyCocoa srcdir}/sample
+  % cd /Developer/Examples/RubyCocoa
   % ruby fontnames.rb # fontname print to stdout.
   % ruby sndplay.rb   # system sounds play in order.
   % ruby sndplay2.rb  # system sounds play in order with short interval.
@@ -26,7 +26,7 @@ try to execute a simple script in sample directory.
 For Mac OS X 10.2 users, furthermore:
 
   % echo Hello World | ruby speak.rb
-  % head -5 ../README.en.txt | ruby speak.rb
+  % head -5 speak_me.txt | ruby speak.rb
 
 This will be interesting. When execute speak.rb without argument, Mac
 read an each line text you typed out until input 'control-D'.  In
@@ -44,7 +44,7 @@ Next, try scripts with windowing.
 
 Next one is Makefile based. Type to build: 
 
-  % cd {RubyCocoa srcdir}/Hakoiri-Musume
+  % cd /Developer/Examples/RubyCocoa/Hakoiri-Musume
   % make
 
 And launch application:
@@ -58,7 +58,7 @@ or double click 'CocoHako' on Finder.
 
 Next one is Project Builder based. type to build:
 
-  % cd {RubyCocoa srcdir}/sample/simpleapp
+  % cd /Developer/Examples/RubyCocoa/simpleapp
   % pbxbuild
   % open build/SimpleApp.app
 

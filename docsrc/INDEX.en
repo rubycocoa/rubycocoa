@@ -21,8 +21,8 @@ Some cases using RubyCocoa:
 
 == Screenshot
 
-((<This is a screenshot|URL:simpleapp.jpg>)) of running a Cocoa
-application| that consists of only Ruby scripting and Interface
+This is ((<a screenshot|URL:http://www.imasy.or.jp/~hisa/mac/rubycocoa/simpleapp.jpg>)) 
+of running a Cocoa application| that consists of only Ruby scripting and Interface
 Builder's Nib file by RubyCocoa.
 
 
@@ -85,6 +85,17 @@ by Interface Builder.
 
 ((<GNU Lesser General Public License version 2. LGPL
 |URL:http://www.gnu.org/licenses/lgpl.html>))
+
+
+== ACKNOWLEDGEMENT
+
+Special Thanks to Chris Thomas, Luc "lucsky" Heinrich and S.Sawada.
+
+And thanks to:
+
+Gesse Gam, Hiroyuki Shimura, Masaki Yatsu, Masatoshi Seki, Michael Miller, 
+Ogino Junya, Ralph Broom, Rich Kilmer, Tetsuhumi Takaishi, Tosh
+and more folks.
 
 
 == Contact

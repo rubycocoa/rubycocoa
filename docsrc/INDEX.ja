@@ -24,7 +24,7 @@ Cocoaアプリケーションでは、RubyとObjective-Cのソースが混在するCocoa
 
 RubyCocoaにより、RubyスクリプトとInterface BuilderのNibファイル
 のみで書かれたCocoaアプリケーションが動作しているところの
-((<スクリーンショット|URL:simpleapp.jpg>))です。
+((<スクリーンショット|URL:http://www.imasy.or.jp/~hisa/mac/rubycocoa/simpleapp.jpg>))です。
 
 
 == スクリプト例
@@ -85,6 +85,18 @@ RubyCocoaにより、RubyスクリプトとInterface BuilderのNibファイル
 
 ((<GNU Lesser General Public License version 2. LGPL
 |URL:http://www.gnu.org/licenses/lgpl.html>))
+
+
+== 謝辞
+
+まずChris Thomasさん、Luc "lucsky" Heinrichさん、S.Sawadaさんに感謝いたします。
+
+さらに
+
+Gesse Gam, Hiroyuki Shimura, Masaki Yatsu, Masatoshi Seki, Michael Miller, 
+Ogino Junya, Ralph Broom, Rich Kilmer, Tetsuhumi Takaishi, Tosh
+
+をはじめとする多くの方々に感謝いたします。
 
 
 == コンタクト

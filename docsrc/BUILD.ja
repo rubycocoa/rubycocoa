@@ -128,12 +128,27 @@ libruby.aのみをインストールします。
 以上でインストールは完了です。ここまでの手順で以下のものがインストール
 されました。
 
-* /Library/Frameworks/RubyCocoa.framework     : フレームワーク (本体)
-* {sitedir}/{ruby_version}/osx/addressbook.rb : ライブラリ (stub)
-* {sitedir}/{ruby_version}/osx/appkit.rb      : ライブラリ (stub)
-* {sitedir}/{ruby_version}/osx/cocoa.rb       : ライブラリ (stub)
-* {sitedir}/{ruby_version}/osx/foundation.rb  : ライブラリ (stub)
-* {sitearchdir}/rubycocoa.bundle              : 拡張ライブラリ (stub)
+: /Library/Frameworks/RubyCocoa.framework
+  RubyCocoaフレームワーク (本体)
+
+: /usr/lib/ruby/site_ruby/1.6/osx/ の中
+  RubyCocoaライブラリ (stub) 
+  - addressbook.rb, appkit.rb, cocoa.rb, foundation.rb
+
+: /usr/lib/ruby/site_ruby/1.6/powerpc-darwin6.0/rubycocoa.bundle
+  RubyCocoa拡張ライブラリ (stub)
+
+: '/Developer/ProjectBuilder Extras/' の中
+  ProjectBuilderのテンプレート
+  * 'File Templates/Ruby'
+  * 'Project Templates/Application/Cocoa-Ruby Document-based Application'
+  * 'Project Templates/Application/Cocoa-Ruby Application'
+
+: /Developer/Documentation/RubyCocoa
+  ドキュメント (HTML)
+
+: /Developer/Examples/RubyCocoa
+  サンプルプログラム
 
 
 ((<「付属サンプルを試してみる」|URL:trysamples.ja.html>)) を参考に

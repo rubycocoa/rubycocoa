@@ -15,6 +15,27 @@ both RubyCocoa and RubyAEOSA. All of necessary for
 execution/development is included in a '.pkg' package file which is
 easy to install.
 
+After installation of the binary package is successful, following
+items will appear:
+
+: /Library/Frameworks/RubyCocoa.framework
+  RubyCocoa framework (real)
+
+: inside of /usr/lib/ruby/site_ruby/1.6/osx/
+  RubyCocoa library (stub)
+
+: /usr/lib/ruby/site_ruby/1.6/powerpc-darwin6.0/rubycocoa.bundle
+  RubyCocoa extended library (stub)
+
+: inside of '/Developer/ProjectBuilder Extras/'
+  some templates for ProjectBuilder
+
+: /Developer/Documentation/RubyCocoa
+  Documents (HTML)
+
+: /Developer/Examples/RubyCocoa
+  sample programs
+
 After installation, let's try samples that are written by Ruby. Refer
 to ((<'Try RubyCocoa Samples'|URL:trysamples.en.html>)).
 
