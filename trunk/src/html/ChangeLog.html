@@ -2,9 +2,26 @@
 <head><title>RubyCocoa - ChangeLog</title></head>
 <body>
 <pre>
+2002-01-24  FUJIMOTO Hisakuni  
+
+	* framework/ocdata_conv.m, framework/ocdata_conv.h:
+	- define _PRIV_C_ARY_UI for 'const unsigned *'
+	- ocdata_size(), ocdata_malloc(), OCDATA_ALLOCA(): change arguments spec.
+
+	* framework/RBRuntime.m:
+	install_ivar_list(): ocdata_size() arguments spec. changed.
+
+	* framework/OverrideMixin.m:
+	imp_c_addRubyMethod(): use rb_raise instead of rb_warning.
+
+	* framework/RBObject.m:
+	* ext/osx_objc/mdl_objwrapper.m:
+	- use alloca instead of malloc for arguments and return data.
+	- fix the return length bug of ocm_invoke (NSString.availableStringEncodings).
+
 2002-01-23  Chris Thomas 
 
-	* framework/OverrideMixin.c:
+	* framework/OverrideMixin.m:
 	Do not crash when ns_overrides specifies a non-existent method.
 
 2002-01-22  Ralph Broom 
