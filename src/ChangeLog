@@ -1,3 +1,16 @@
+2002-01-13  FUJIMOTO Hisakuni  <hisa@fobj.com>
+
+	* lib/osx/objc/oc_all.rb, lib/osx/objc/oc_attachments.rb:
+	prepare implementation of mix-in modules named OSX::NSArrayAttachment
+	and OSX::NSDictionaryAttachment. These modules are add behavior like
+	Array or Hash to NSArray and NSDictionary.
+
+	* framework/DummyProtocolHandler.m.erb, framework/DummyProtocolHandler.m:
+	panelDidEnd: support the method signature for sheet panels
+	(NSOpenPanel, NSSavePanel and NSPrintPanel).
+
+	* framework/RBObject.m: forwardInvocation: correct a wrong log message.
+
 2002-01-10  FUJIMOTO Hisakuni  <hisa@fobj.com>
 
 	* release 0.2.4
