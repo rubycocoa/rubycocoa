@@ -10,8 +10,14 @@
  *
  **/
 #import <objc/objc.h>
+#import <Foundation/NSObject.h>
 
 int RBApplicationMain(const char* rb_main_name, int argc, char* argv[]);
 
 Class RBOCClassNew(const char* name, Class superclass);
+Class RBOCDerivedClassNew(const char* name, Class superclass);
 
+@interface NSObject(RBOverrideMixin)
+- slave;
++ addRubyMethod: (SEL)a_sel;
+@end

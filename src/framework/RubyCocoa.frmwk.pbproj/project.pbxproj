@@ -27,6 +27,53 @@
 			settings = {
 			};
 		};
+		E81117F401AFB88C03A81C66 = {
+			isa = PBXFileReference;
+			path = RBObject.h;
+			refType = 4;
+		};
+		E81117F501AFB88C03A81C66 = {
+			isa = PBXFileReference;
+			path = RBSlaveObject.m;
+			refType = 4;
+		};
+		E81117F601AFB88C03A81C66 = {
+			fileRef = E81117F401AFB88C03A81C66;
+			isa = PBXBuildFile;
+			settings = {
+				ATTRIBUTES = (
+					Public,
+				);
+			};
+		};
+		E81117F701AFB88C03A81C66 = {
+			fileRef = E81117F501AFB88C03A81C66;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		E81117FF01AFCC5E03A81C66 = {
+			isa = PBXFileReference;
+			path = OverrideMixin.h;
+			refType = 4;
+		};
+		E811180001AFCC5E03A81C66 = {
+			isa = PBXFileReference;
+			path = OverrideMixin.m;
+			refType = 4;
+		};
+		E811180101AFCC5E03A81C66 = {
+			fileRef = E81117FF01AFCC5E03A81C66;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		E811180201AFCC5E03A81C66 = {
+			fileRef = E811180001AFCC5E03A81C66;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
 		E82EFCE3019F475103A81C66 = {
 			isa = PBXFileReference;
 			path = rb_main.rb.tmpl;
@@ -219,9 +266,10 @@
 			files = (
 				E8760F9A019BA88D03A81C66,
 				E80B398101A21B6103A81C66,
-				E8B45E2001AC6FD903A81C66,
 				E8B45E2401AC709D03A81C66,
 				E8830AF101AE4C7D03A81C66,
+				E81117F601AFB88C03A81C66,
+				E811180101AFCC5E03A81C66,
 			);
 			isa = PBXHeadersBuildPhase;
 			name = Headers;
@@ -241,8 +289,9 @@
 				E8760F98019BA86503A81C66,
 				E80B398201A21B6103A81C66,
 				E86D40AC01AB5EDD03A81C66,
-				E8B45E2101AC6FD903A81C66,
 				E8B45E2501AC709D03A81C66,
+				E81117F701AFB88C03A81C66,
+				E811180201AFCC5E03A81C66,
 			);
 			isa = PBXSourcesBuildPhase;
 			name = Sources;
@@ -267,14 +316,16 @@
 			children = (
 				E8830AF001AE4C7D03A81C66,
 				E8B45E2201AC709D03A81C66,
-				E8B45E1F01AC6FD903A81C66,
-				E8760F99019BA88D03A81C66,
-				E80B398001A21B6103A81C66,
 				E8B45E2301AC709D03A81C66,
-				E8B45E1E01AC6FD903A81C66,
+				E81117F401AFB88C03A81C66,
 				E86D40A901AB5EDD03A81C66,
-				E80B397F01A21B6103A81C66,
+				E81117F501AFB88C03A81C66,
+				E8760F99019BA88D03A81C66,
 				E8760F97019BA86503A81C66,
+				E81117FF01AFCC5E03A81C66,
+				E811180001AFCC5E03A81C66,
+				E80B398001A21B6103A81C66,
+				E80B397F01A21B6103A81C66,
 			);
 			isa = PBXGroup;
 			name = source;
@@ -323,31 +374,6 @@
 			name = template;
 			path = "";
 			refType = 4;
-		};
-		E8B45E1E01AC6FD903A81C66 = {
-			isa = PBXFileReference;
-			path = RBProxy.m;
-			refType = 4;
-		};
-		E8B45E1F01AC6FD903A81C66 = {
-			isa = PBXFileReference;
-			path = RBProxy.h;
-			refType = 4;
-		};
-		E8B45E2001AC6FD903A81C66 = {
-			fileRef = E8B45E1F01AC6FD903A81C66;
-			isa = PBXBuildFile;
-			settings = {
-				ATTRIBUTES = (
-					Public,
-				);
-			};
-		};
-		E8B45E2101AC6FD903A81C66 = {
-			fileRef = E8B45E1E01AC6FD903A81C66;
-			isa = PBXBuildFile;
-			settings = {
-			};
 		};
 		E8B45E2201AC709D03A81C66 = {
 			isa = PBXFileReference;

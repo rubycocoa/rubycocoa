@@ -3,7 +3,7 @@
 #import <Foundation/NSInvocation.h>
 #import <LibRuby/cocoa_ruby.h>
 
-@interface RBProxy : NSProxy
+@interface RBObject : NSProxy
 {
   VALUE m_rbobj;
 }
@@ -17,12 +17,12 @@
 
 @end
 
-@interface RBProxy(RBObject)
+@interface RBObject(RBSlaveObject)
 - init;
-- initWithParent: parent;
+- initWithMasterObject: master;
 - initWithClass: (Class)occlass;
-- initWithClass: (Class)occlass parent: parent;
+- initWithClass: (Class)occlass masterObject: master;
 - initWithRubyClass: (VALUE)rbclass;
-- initWithRubyClass: (VALUE)rbclass parent: parent;
+- initWithRubyClass: (VALUE)rbclass masterObject: master;
 @end
 

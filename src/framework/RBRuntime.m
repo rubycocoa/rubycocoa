@@ -16,12 +16,14 @@
 #import <Foundation/NSString.h>
 #import <Foundation/NSBundle.h>
 
-#import <RubyCocoa/RBProxy.h>
+#import <RubyCocoa/RBObject.h>
 
 #import <objc/objc.h>
 #import <objc/objc-class.h>
 #import <objc/objc-runtime.h>
 
+#import "OverrideMixin.h"
+#import "ocdata_conv.h"
 
 #define RUBY_MAIN_NAME "rb_main.rb"
 
@@ -55,7 +57,7 @@ static char* osxobjc_resource_path()
   NSString* str;
   char* result;
   id pool = [[NSAutoreleasePool alloc] init];
-  NSBundle* bundle = [NSBundle bundleForClass: [RBProxy class]];
+  NSBundle* bundle = [NSBundle bundleForClass: [RBObject class]];
   str = [bundle resourcePath];
   result = strdup([str cString]);
   [pool release];
@@ -86,37 +88,102 @@ RBApplicationMain(const char* rb_main_name, int argc, char* argv[])
 
 /////
 
-Class RBOCClassNew(const char* name, Class superclass)
+static Class objc_class_alloc(const char* name, Class super_class)
 {
   Class c = malloc(sizeof(struct objc_class));
   Class isa = malloc(sizeof(struct objc_class));
   struct objc_method_list **mlp0, **mlp1;
-  mlp0 = malloc(sizeof(void*));
-  mlp1 = malloc(sizeof(void*));
-  *mlp0 = *mlp1 = NULL;
+  int i;
+  mlp0 = malloc(4 * sizeof(void*));
+  mlp1 = malloc(4 * sizeof(void*));
+  for (i = 0; i < 4; i++) {
+    mlp0[i] = mlp1[i] = NULL;
+  }
 
   c->isa = isa;
-  c->super_class = superclass;
+  c->super_class = super_class;
   c->name = strdup(name);
   c->version = 0;
   c->info = CLS_CLASS + CLS_METHOD_ARRAY;
-  c->instance_size = superclass->instance_size;
+  c->instance_size = super_class->instance_size;
   c->ivars = NULL;
   c->methodLists = mlp0;
   c->cache = NULL;
   c->protocols = NULL;
 
-  isa->isa = superclass->isa->isa;
-  isa->super_class = superclass->isa;
+  isa->isa = super_class->isa->isa;
+  isa->super_class = super_class->isa;
   isa->name = c->name;
   isa->version = 5;
   isa->info = CLS_META + CLS_INITIALIZED + CLS_METHOD_ARRAY;
-  isa->instance_size = superclass->isa->instance_size;
+  isa->instance_size = super_class->isa->instance_size;
   isa->ivars = NULL;
   isa->methodLists = mlp1;
   isa->cache = NULL;
   isa->protocols = NULL;
+  return c;
+}
 
+static void install_ivar_list(Class c)
+{
+  int i;
+  struct objc_ivar_list* ivlp = malloc(override_mixin_ivar_list_size());
+  *ivlp = *(override_mixin_ivar_list());
+  for (i = 0; i < ivlp->ivar_count; i++) {
+    int octype = to_octype(ivlp->ivar_list[i].ivar_type);
+    ivlp->ivar_list[i].ivar_offset = c->instance_size;
+    c->instance_size += ocdata_size(octype);
+  }
+  c->ivars = ivlp;
+}
+
+static void install_method_list(Class c)
+{
+  class_addMethods(c, override_mixin_method_list());
+}
+
+static void install_class_method_list(Class c)
+{
+  class_addMethods((c->isa), override_mixin_class_method_list());
+}
+
+Class RBOCClassNew(const char* name, Class super_class)
+{
+  Class c = objc_class_alloc(name, super_class);
   objc_addClass(c);
   return c;
 }
+
+Class RBOCDerivedClassNew(const char* name, Class super_class)
+{
+  Class c = objc_class_alloc(name, super_class);
+
+  // init instance variable (m_proxy)
+  install_ivar_list(c);
+
+  // init instance methods
+  install_method_list(c);
+
+  // init class methods
+  install_class_method_list(c);
+
+  // add class to runtime system
+  objc_addClass(c);
+  return c;
+}
+
+#if 0
+static void add_methods(Class c)
+{
+  Method me;
+  struct objc_method_list* mlp = method_list_alloc(1);
+
+  me = class_getInstanceMethod(c, @selector(drawRect:));
+  mlp->method_list[0] = *me;
+  mlp->method_list[0].method_imp = override_mixin_ruby_handler;
+  mlp->method_count += 1;
+
+  class_addMethods(c, mlp);
+}
+
+#endif

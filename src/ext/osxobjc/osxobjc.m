@@ -14,7 +14,7 @@
 #import "osx_ocobject.h"
 #import <Foundation/Foundation.h>
 #import <RubyCocoa/RBRuntime.h>	// RubyCocoa.framework
-#import <RubyCocoa/RBProxy.h>	// RubyCocoa.framework
+#import <RubyCocoa/RBObject.h>	// RubyCocoa.framework
 
 #define OSX_MODULE_NAME "OSX"
 
@@ -30,28 +30,44 @@ static VALUE init_module_OSX()
   return module;
 }
 
-// def OSX.create_objc_stub (stubname, supername = nil)
-// ex0.  OSX.create_objc_stub (:AppController)
+// def OSX.create_objc_stub (stubname, supername)
 // ex1.  OSX.create_objc_stub (:CustomView, :NSView)
-static VALUE osx_mf_create_objc_stub(int argc, VALUE* argv, VALUE mdl)
+static VALUE
+osx_mf_create_objc_stub(VALUE mdl, VALUE stub_name, VALUE super_name)
 {
   Class super_class;
-  VALUE stub_name;
-  if (argc == 1) {
-    super_class = [RBProxy class];
-  }
-  else if (argc == 2) {
-    id pool = [[NSAutoreleasePool alloc] init];
-    VALUE super_name = rb_obj_as_string(argv[1]);
-    super_class = 
+  id pool = [[NSAutoreleasePool alloc] init];
+
+  stub_name = rb_obj_as_string(stub_name);
+  super_name = rb_obj_as_string(super_name);
+  super_class = 
       NSClassFromString([NSString stringWithCString: STR2CSTR(super_name)]);
-    [pool release];
+  if (super_class) {
+    RBOCDerivedClassNew(STR2CSTR(stub_name), super_class);
   }
-  else {
-    rb_raise(rb_eArgError, "wrong # of arguments");
+  [pool release];
+  return Qnil;
+}
+
+// def OSX.add_method_for_objc_stub (class_name, method_name)
+// ex1.  OSX.add_method_for_objc_stub (:CustomView, "drawRect:")
+static VALUE
+osx_mf_add_method_for_objc_stub(VALUE mdl, VALUE class_name, VALUE method_name)
+{
+  Class a_class;
+  SEL a_sel;
+  id pool = [[NSAutoreleasePool alloc] init];
+
+  class_name = rb_obj_as_string(class_name);
+  method_name = rb_obj_as_string(method_name);
+  a_class = 
+    NSClassFromString([NSString stringWithCString: STR2CSTR(class_name)]);
+  a_sel =
+    NSSelectorFromString([NSString stringWithCString: STR2CSTR(method_name)]);
+  if (a_class && a_sel) {
+    [a_class addRubyMethod: a_sel];
   }
-  stub_name = rb_obj_as_string(argv[0]);
-  RBOCClassNew(STR2CSTR(stub_name), super_class);
+  [pool release];
   return Qnil;
 }
 
@@ -63,6 +79,9 @@ void Init_osxobjc()
 
   mOSX = init_module_OSX();
   init_class_OCObject(mOSX);
-  rb_define_module_function(mOSX, "create_objc_stub", osx_mf_create_objc_stub, -1);
+
+  rb_define_module_function(mOSX, "create_objc_stub", osx_mf_create_objc_stub, 2);
+  rb_define_module_function(mOSX, "add_method_for_objc_stub", osx_mf_add_method_for_objc_stub, 2);
+
   init_cocoa(mOSX);
 }

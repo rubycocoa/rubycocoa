@@ -11,6 +11,6 @@
  **/
 
 #import <RubyCocoa/RBRuntime.h>
-#import <RubyCocoa/RBProxy.h>
+#import <RubyCocoa/RBObject.h>
 #import <RubyCocoa/ocdata_conv.h>
 
