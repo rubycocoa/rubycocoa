@@ -16,7 +16,7 @@
 #import <Foundation/Foundation.h>
 #import <RubyCocoa/RBObject.h>
 
-static VALUE
+VALUE
 rb_mdl_osx()
 {
   RB_ID rid = rb_intern("OSX");
@@ -25,7 +25,7 @@ rb_mdl_osx()
   return rb_const_get(rb_cObject, rid);
 }
 
-static VALUE
+VALUE
 rb_cls_objcid()
 {
   VALUE mOSX = rb_mdl_osx();
@@ -33,7 +33,7 @@ rb_cls_objcid()
   return rb_const_get(mOSX, rb_intern("ObjcID"));
 }
 
-static VALUE
+VALUE
 rb_cls_ocobj(const char* name)
 {
   VALUE cls = Qnil;
@@ -720,19 +720,6 @@ rbobj_to_ocdata(VALUE obj, int octype, void* ocdata)
     NSRange nsval;
     f_success = rbobj_to_nsrange(obj, &nsval);
     if (f_success) *(NSRange*)ocdata = nsval;
-    break;
-  }
-
-  case _PRIV_C_ID_PTR: {
-    if (obj == Qnil) {
-      *(id**)ocdata = NULL;
-      f_success = YES;
-    }
-    else if (rb_obj_is_kind_of(obj, rb_cls_objcid()) == Qtrue) {
-      // something bugs are here, maybe.
-      *(id**)ocdata = &OCID_OF(obj);
-      f_success = YES;
-    }
     break;
   }
 
