@@ -28,32 +28,39 @@ sndfiles.each do |path|
 end</pre>
 <p>Below, the right side of "# =&gt;" is character string done standard
 output of as an execution result in description.</p>
-<h2><a name="label:3" id="label:3">Instance of OSX::OCObject is an Objective-C Object wrapper</a></h2><!-- RDLabel: "Instance of OSX::OCObject is an Objective-C Object wrapper" -->
-<pre>p OSX::NSObject  # =&gt; #&lt;OCObject:0x82f22 class='NSObject' id=80819B0C&gt;
-nobj = OSX::NSObject.alloc.init
-p nobj           # =&gt; #&lt;OCObject:0x53d1a class='NSObject' id=3C6BB0&gt;</pre>
-<p>In RubyCocoa, all Objective-C Object even Class itself is instance of
-the class OSX::OCObject or its derived class. An instance of The
-OSX::OCObject is a Ruby object wrapped Objective-C object.</p>
-<h2><a name="label:4" id="label:4">Everything is Ruby objects</a></h2><!-- RDLabel: "Everything is Ruby objects" -->
-<pre>p OSX::NSString.is_a?(Class)    # =&gt; false
-p OSX::NSString.type            # =&gt; OSX::OCObject
-p OSX::NSString.string.type     # =&gt; OSX::OCObject</pre>
-<p>For example, RubyCocoa representation of Class "NSString" is
-"OSX::NSString". This "OSX::NSString" as Ruby object is an instance of
-OSX::OCObject and not is Ruby's Class itself.</p>
-<h2><a name="label:5" id="label:5">creating an object and owenership</a></h2><!-- RDLabel: "creating an object and owenership" -->
-<p>For creating an instance of OSX::OCObject, you can use methods for
-Cocoa/Objective-C. An instance of OSX::OCObject has ownership for
-wrapped Objective-C object always. When the instance is died by GC,
-ownership is remove automatic. So you don't worry memory management.</p>
-<pre>OSX::NSString.alloc.initWithString "Hoge"
-OSX::NSString.stringWithString "Hoge"</pre>
-<p>This 2 line is almost same semantics in RubyCocoa, different
-Objective-C. You don't need to call methods "release", "autorelease"
-and "retain", and don't need to make NSAutoreleasePool.</p>
+<h2><a name="label:3" id="label:3">Cocoa class</a></h2><!-- RDLabel: "Cocoa class" -->
+<pre>p OSX::NSObject # =&gt; OSX::NSObject
+nsstr = OSX::NSObject.description
+p nsstr         # =&gt; #&lt;OSX::OCObject:0x5194e8 class='NSCFString' id=A97910&gt;
+nsobj = OSX::NSObject.alloc.init
+p nsobj         # =&gt; #&lt;OSX::NSObject:0x51f5b4 class='NSObject' id=976D90&gt;</pre>
+<p>In RubyCocoa, a Cocoa class is defined as a Ruby's Class under OSX
+module (after 0.2.0). A Cocoa class is a Ruby's Class and behaves as
+object of Cocoa.</p>
+<h2><a name="label:4" id="label:4">create a Cocoa object</a></h2><!-- RDLabel: "create a Cocoa object" -->
+<p>The method of Cocoa is used for creation of a Cocoa object as it is.</p>
+<pre>obj = OSX::NSObject.alloc.init
+str = OSX::NSString.stringWithString "hello"
+str = OSX::NSString.alloc.initWithString "world"</pre>
+<p>The created Cocoa object is wrapped in the object of a class called
+OSX::ObjcID inside RubyCocoa. Usually, You don't need to be conscious
+of existence of an OSX::ObjcID class.</p>
+<h2><a name="label:5" id="label:5">onwership and memory management</a></h2><!-- RDLabel: "onwership and memory management" -->
+<p>The instance of OSX::ObjcID surely has the ownership of the Cocoa
+object which self has wrapped. Ownership is automatically lost, when
+the instance of OSX::ObjcID is cleaned by GC. Therefore, it is not
+necessary to care about memory management of ownership etc. in
+RubyCocoa.</p>
+<pre>str = OSX::NSObject.stringWithString "hello"
+str = OSX::NSObject.alloc.initWithString "world"</pre>
+<p>Although the two above-mentioned lines have difference whether
+ownership is generated or it carries out, in Objective-C, there is no
+necessity that he is conscious of ownership. In RubyCocoa, there is no
+difference so much. It is not necessary to call methods, such as
+release, autorelease, and retain, fundamentally, and they do not need
+to make NSAutoreleasePool.</p>
 <ul>
-<li>use Cocoa method for creating an instance of OSX::OCObject.</li>
+<li>use Cocoa method for creating a Cocoa object</li>
 <li>don't worry ownership and memory management.</li>
 </ul>
 <h2><a name="label:6" id="label:6">return value of method</a></h2><!-- RDLabel: "return value of method" -->
@@ -74,6 +81,11 @@ p ary       # =&gt; [#&lt;OCObject:0x6a9b8 class='NSCFString' id=3C2B50&gt;,...]
 
 ary.map! {|i| i.to_s }
 p ary       # =&gt; ["/", "Users", "hisa", "src", "ruby", "osxobjc"]</pre>
+<p>In RubyCocoa, the method which returns Objective-C objects, such as
+NSString and NSArray, is returned as a Cocoa object so that it can
+guess from these examples. It does not change into the object to which
+Ruby corresponds positively (for example, String etc.). For a NSString
+and NSArray, "to_s" and "to_a" is defined, it can be used.</p>
 <h2><a name="label:7" id="label:7">A decision and a variation of method name</a></h2><!-- RDLabel: "A decision and a variation of method name" -->
 <pre># play system sounds (2)
 sndfiles.each do |path|
@@ -114,6 +126,108 @@ klass = OSX::NSObject.oc_class
 p klass     # =&gt; #&lt;OCObject:0x82f22 class='NSObject' id=80819B0C&gt;</pre>
 <p>When the case same method name in Ruby and Objective-C like
 "Object#class", use method name prefix "oc_".</p>
+<h2><a name="label:10" id="label:10">inherited class and its instance of a Cocoa class</a></h2><!-- RDLabel: "inherited class and its instance of a Cocoa class" -->
+<p>The topic about the existing Cocoa class and its instance was treated
+so far. From here, the topic about the definition of the Cocoa
+inherited class which is needed when writing RubyCocoa application, or
+its instance is treated. Since a little tricky mounting has realized,
+although the inherited class of Cocoa has some restrictions and
+peculiarities, let's see also including it.</p>
+<h2><a name="label:11" id="label:11">The definition of a Cocoa inherited class</a></h2><!-- RDLabel: "The definition of a Cocoa inherited class" -->
+<p>The class of the Cocoa object set up in the GUI definition file (nib
+file) created by Interface Builder etc. is defined as an inherited
+class (after 0.2.0). For example, the controller of a MVC model which
+comes out to the first direction by a primer, a tutorial, etc. of
+Cocoa is defined like ...</p>
+<pre>class AppController &lt; OSX::NSObject
+
+  ib_outlets :messageField
+
+  def btnClicked(sender)
+  end
+
+end</pre>
+<p>The inherited class definition of Cocoa in RubyCocoa is similarly
+described to be the inherited class definition by the usual Ruby in
+this way.</p>
+<h2><a name="label:12" id="label:12">Outlet</a></h2><!-- RDLabel: "Outlet" -->
+<p>The outlet set as the class in the nib file is written to be:</p>
+<pre>ns_outlets :rateField, :dollerField</pre>
+<p>in the definition of an inherited class. In fact, ns_outlets is the
+same as Module#attr_writer. Therefore, a definition can also be
+instead given like:</p>
+<pre>def rateField= (new_val)
+  @rateField = new_val
+end</pre>
+<p>ns_outlets has also an alias called ib_outlets.</p>
+<h2><a name="label:13" id="label:13">The override of a method</a></h2><!-- RDLabel: "The override of a method" -->
+<p>When overriding the method defined by the parent class, it is
+necessary to declare having overridden using ns_overrides (alias
+ib_overrides).</p>
+<pre>class MyCustomView &lt; OSX::NSView
+
+  ns_overrides :drawRect_, 'mouseUp:'
+
+  def drawRect(frame)
+  end
+
+  ...
+end</pre>
+<p>In the argument of ns_overrides what expressed the message selector of
+Objective-C as the string or the symbol is given. However, the
+notation for omitting ":" and "_" of the end explained previously
+cannot be used. It is necessary to describe correctly according to the
+number of arguments.</p>
+<p>Furthermore, overriding of the method of a Cocoa inherited class has
+severe restrictions. The same name method of a parent class cannot be
+called out of the method which is overriding. For example, if the
+following ways of writing are adopted, rotation of a method call will
+occur.</p>
+<pre>class MyCustomView &lt; OSX::NSView
+
+  ns_overrides :initWithFrame_
+
+  def initWithFrame(frame)
+    ...
+    super(frame)
+  end
+
+end</pre>
+<p>Although I want to solve in the future since existence of these
+restrictions is inconvenient, there is no solution method effective
+for the moment.</p>
+<h2><a name="label:14" id="label:14">create an instance of a Cocoa inherited class</a></h2><!-- RDLabel: "create an instance of a Cocoa inherited class" -->
+<p>When the instance of a Cocoa inherited class needs to be created in a
+Ruby script, it writes like:</p>
+<pre>AppController.alloc.init</pre>
+<p>like the case of the existing Cocoa class. The most general way of
+writing in Ruby:</p>
+<pre>AppControll.new</pre>
+<p>cannot be used (it is made to raise the exception). Although there are
+various situations in this, since it becomes long, detailed
+explanation is omitted here.</p>
+<p>These restrictions have deep relation in instance generation being
+performed in the turn:</p>
+<ul>
+<li>alloc (in Objective-C world)</li>
+<li>in alloc, create a Ruby object (initialize method is called here)</li>
+</ul>
+<h2><a name="label:15" id="label:15">Where should the initialization code at the time of instance generation be written?</a></h2><!-- RDLabel: "Where should the initialization code at the time of instance generation be written?" -->
+<h2><a name="label:16" id="label:16">Where should an initialization code be written?</a></h2><!-- RDLabel: "Where should an initialization code be written?" -->
+<p>Although the code of initialization is generally written into an
+"initialize" method by Ruby, if it says in which, I will seldom be
+recommended by the Cocoa inherited class. A reason is not initialized
+only by a memory being assigned as a Cocoa object at the time by the
+timing which the initialize method at the time of the instance
+generation described previously is called. However, it is thought that
+especially a problem is not generated in the limitation which does not
+call the Cocoa side method.</p>
+<p>In the case so that it may be loaded from a nib file initializing by
+the "awakeFromNib" method is safest. Doesn't that it is also necessary
+to actually define the inherited class of Cocoa have most these cases?</p>
+<p>In the case of others, it is in the style of Cocoa "init" Probably,
+writing to a method with a prefix will be good. Please do not forget
+for a method to return "self".</p>
 <p>FUJIMOTO Hisakuni &lt;hisa@imasy.or.jp&gt;
 $Date$ $Revision$</p>
 
