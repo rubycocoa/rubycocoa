@@ -9,13 +9,14 @@ OBJS = main.o
 
 TARGET = $(APPNAME).app
 CFLAGS = -Wall
+LIBS = -lobjc -framework RubyCocoa
 
 SED_CMD_0 = -e "s/%%%APPNAME%%%/$(APPNAME)/"
 SED_CMD_1 = -e "s/%%%BUNDLEID%%%/$(BUNDLEID)/"
 
 
 $(TARGET): $(OBJS) $(RUBYSRCS)
-	$(CC) $(OBJS) -framework Foundation
+	$(CC) $(OBJS) $(LIBS)
 	-/bin/rm -rf $(APPNAME).app
 	mkdir $(APPNAME).app
 	mkdir $(APPNAME).app/Contents
