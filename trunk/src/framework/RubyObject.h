@@ -14,6 +14,7 @@
 
 @interface RubyObject : NSObject
 {
+  id dummy;			// DummyProtocolHandler
   unsigned long rbobj;
 }
 
