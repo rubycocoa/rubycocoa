@@ -1,3 +1,9 @@
+2003-07-25  FUJIMOTO Hisakuni  <hisa@fobj.com>
+
+	* framework/RubyCocoa.pbproj/project.pbxproj.in:
+	for bundling within an application bundle, set INSTALL_PATH to
+	"@executable_path/../Frameworks".  suggested by Rod Schmidt.
+
 2003-02-28  Shirai,Kaoru  <shirai@korinkan.co.jp>
 	
 	* framework/src/objc/ocdata_conv.m:
