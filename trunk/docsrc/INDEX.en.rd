@@ -6,10 +6,10 @@ RubyCocoa is a framework for ((<Mac OS X|URL:http://www.apple.com/macosx/>))
 that allows ((<Cocoa|URL:http://developer.apple.com/cocoa/>)) programming
 in the object-oriented scripting language ((<Ruby|URL:http://www.ruby-lang.org/>)).
 
-RubyCocoa allows writing a Cocoa application in Ruby. 
-It allows creating and using a Cocoa object in a Ruby script.
-In Cocoa application, mixture of program written by both Ruby and
-Objective-C is possible.
+RubyCocoa allows you to write a Cocoa application in Ruby. It allows
+you to create a Cocoa object in a Ruby script and to use it. In Cocoa
+application, mixture of program written by both Ruby and Objective-C
+is possible.
 
 Some useful cases of RubyCocoa:
 
@@ -101,7 +101,8 @@ and more folks.
 == Contact
 
 Feel free to send comments, icon design, bug reports and patches about
-RubyCocoa.
+RubyCocoa. I want to ask a kind English native to correct my strange
+English writing. Thanks.
 
 An author looks for job (an income source).  Is not there a supporter
 (sponsor, investor or etc...) with interest into development of
