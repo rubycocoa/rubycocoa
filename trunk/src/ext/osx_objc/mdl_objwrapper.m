@@ -12,6 +12,7 @@
 
 #import "osx_ruby.h"
 #import "ocdata_conv.h"
+#import "osx_objc.h"
 #import <Foundation/Foundation.h>
 #import <string.h>
 #import <stdlib.h>
@@ -195,28 +196,9 @@ ocm_invoke(int argc, VALUE* argv, VALUE rcv, VALUE* result)
     const char* octype_str = [oc_msig getArgumentTypeAtIndex: (i+2)];
     int octype = to_octype(octype_str);
     void* ocdata;
-    BOOL f_conv_success;
     DLOG2("    arg_type[%d]: %s", i, octype_str);
     ocdata = OCDATA_ALLOCA(octype, octype_str);
-    if (octype == _PRIV_C_ID_PTR) {
-      if (arg == Qnil) {
-	*(id**)ocdata = NULL;
-	f_conv_success = YES;
-      }
-      else if (rb_obj_is_kind_of(arg, rb_cls_objcid()) == Qtrue) {
-	id old_id = OCID_OF(arg);
-	if (old_id) [old_id release];
-	*(id**)ocdata = &OCID_OF(arg);
-	f_conv_success = YES;
-      }
-      else {
-	f_conv_success = NO;
-      }
-    }
-    else {
-      f_conv_success = rbobj_to_ocdata(arg, octype, ocdata);
-    }
-    if (f_conv_success) {
+    if (rbobj_to_ocdata(arg, octype, ocdata)) {
       [oc_inv setArgument: ocdata atIndex: (i+2)];
     }
     else {
@@ -247,10 +229,10 @@ ocm_invoke(int argc, VALUE* argv, VALUE rcv, VALUE* result)
   for (i = 0; i < num_of_args; i++) {
     VALUE arg = argv[i];
     if (arg == Qnil) continue;
-    if (rb_obj_is_kind_of(arg, rb_cls_objcid()) != Qtrue) continue;
+    if (rb_obj_is_kind_of(arg, objid_s_class()) != Qtrue) continue;
     if (to_octype([oc_msig getArgumentTypeAtIndex: (i+2)]) != _PRIV_C_ID_PTR) continue;
-    if (OCID_OF(arg))
-      [OCID_OF(arg) retain];
+    if (OBJCID_ID(arg))
+      [OBJCID_ID(arg) retain];
   }
 
   // get result
