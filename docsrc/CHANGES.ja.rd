@@ -12,8 +12,7 @@
 
 : その他
 
-  * RCDataAttachmentモジュールを定義
-  * NSData, NSStrng クラスにいくつかのクラスメソッドを定義
+  RCDataAttachmentモジュールを定義。NSData, NSStrng クラスにいくつかのクラスメソッドを定義。
 
 == 0.3.2 からのおもな変更点 (0.4.0)
 
