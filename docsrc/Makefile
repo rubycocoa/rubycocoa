@@ -29,7 +29,7 @@ TARGET_HTML = \
 	$(TARGETDIR)/news.ja.html \
 	$(TARGETDIR)/changelog.html
 
-TARGET = $(TARGET_HTML) $(TARGETDIR)/rubycocoasite.css
+TARGET = $(TARGET_HTML) $(TARGETDIR)/rubycocoasite.css $(TARGETDIR)/simpleapp-sml.jpg
 
 SFINDEX = $(TARGETDIR)/index_sf.html
 
@@ -56,7 +56,8 @@ install:	$(TARGETDIR) $(TARGET)
 rsync:	$(TARGET)
 	-rsync -v -t -e ssh html/* tasogare:public_html/mac/rubycocoa/
 	-rsync -v -t -e ssh html/index_sf.html  shell.sf.net:rubycocoa/htdocs/index.html
-	-rsync -v -t -e ssh html/rubycocoasite.css  shell.sf.net:rubycocoa/htdocs/rubycocoasite.css
+	-rsync -v -t -e ssh html/rubycocoasite.css  shell.sf.net:rubycocoa/htdocs/
+	-rsync -v -t -e ssh html/simpleapp-sml.jpg  shell.sf.net:rubycocoa/htdocs/
 
 $(TARGET):	$(TEMPLATES)
 
@@ -65,6 +66,9 @@ $(TARGETDIR):
 	-mkdir -p $(TARGETDIR)
 
 $(TARGETDIR)/rubycocoasite.css:	rubycocoasite.css
+	-cp -f $< $(TARGETDIR)/
+
+$(TARGETDIR)/simpleapp-sml.jpg:	simpleapp-sml.jpg
 	-cp -f $< $(TARGETDIR)/
 
 news.en.xml:	NEWS.data
@@ -82,10 +86,10 @@ sidebar-news.ja.xml:	NEWS.data
 $(TARGETDIR)/index_sf.html:	$(TARGETDIR)/index.en.html
 	$(RUBY) to_index_sf.rb < $< > $@
 
-$(TARGETDIR)/index.en.html:	INDEX.en.rd sidebar-news.en.xml
+$(TARGETDIR)/index.en.html:	INDEX.en.rd sidebar-news.en.xml simpleapp-sml.jpg
 	$(RUBY) make_html.rb $< $(TARGETDIR) news
 
-$(TARGETDIR)/index.ja.html:	INDEX.ja.rd sidebar-news.ja.xml
+$(TARGETDIR)/index.ja.html:	INDEX.ja.rd sidebar-news.ja.xml simpleapp-sml.jpg
 	$(RUBY) make_html.rb $< $(TARGETDIR) news
 
 $(TARGETDIR)/changes.en.html:	CHANGES.en.rd

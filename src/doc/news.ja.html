@@ -23,19 +23,10 @@ RubyCocoa<font size='-1'> - A Ruby/Objective-C Bridge for Mac OS X with Cocoa</f
 <table cellspacing='0' cellpadding='2' width='100%'>
   <colgroup><col width='80%'/><col width='20%'/></colgroup>
   <tr id='site-menubar'>
-  <td align='left'>
-    <a href='index.ja.html'>RubyCocoaとは？</a> |
-    <a href='getting.ja.html'>ダウンロード</a> |
-    <a href='build.ja.html'>ソースから構築</a> |
-    <a href='trysamples.ja.html'>サンプルを試す</a> |
-    <a href='programming.ja.html'>プログラミング</a> |
-    <a href='references.ja.html'>リファレンス</a> |
-    <a href='changes.ja.html'>変更点</a> |
-    <a href='changelog.html'>変更ログ</a> |
-    <a href='faq.ja.html'>FAQ</a> |
-    <a href='links.ja.html'>リンク集</a>
+  <td class='site-menubar' align='left' width='80%'>
+    <a href='index.ja.html'>RubyCocoaとは？</a> | <a href='getting.ja.html'>ダウンロード</a> | <a href='build.ja.html'>ソースから構築</a> | <a href='trysamples.ja.html'>サンプルを試す</a> | <a href='programming.ja.html'>プログラミング</a> | <a href='references.ja.html'>リファレンス</a> | <a href='changes.ja.html'>変更点</a> | <a href='faq.ja.html'>FAQ</a> | <a href='links.ja.html'>リンク集</a>
   </td>
-  <td align='right'>
+  <td class='site-menubar' align='right' width='20%'>
     <a href='index.en.html'>[英語]</a> [日本語]
   </td>
 </tr>
@@ -50,12 +41,29 @@ RubyCocoa<font size='-1'> - A Ruby/Objective-C Bridge for Mac OS X with Cocoa</f
 
 <!-- body/main/contents -->
 <td class='body-contents' id='body-contents' valign='top'><h1>ニュース</h1>
+<div><h2 class='body-news'><a name='1042301135'>FreeRIDE スクリーンショット (2003-01-12)</a></h2>
+<p>X11 for Mac OS X で動く FreeRIDE からRubyCocoaスクリプトを起動してる様子のスクリーンショットです。</p>
+<a href='http://www.imasy.org/~hisa/mac/rubyosx/files/freeride-x11-osx.jpg'>
+<img src='http://www.imasy.org/~hisa/mac/rubyosx/files/freeride-x11-osx-sml.jpg' height='192' alt='screenshot' width='256'/></a>
+<a href='http://www.imasy.org/~hisa/mac/rubyosx/files/freeride-x11-osx-2.jpg'>
+<img src='http://www.imasy.org/~hisa/mac/rubyosx/files/freeride-x11-osx-2.jpg' height='192' alt='screenshot' width='256'/></a></div>
+<div><h2 class='body-news'><a name='1042297376'>Ruby 1.6.8 で config エラーを直すパッチ (2003-01-12)</a></h2>
+<p>Ruby 1.6.8 で RubyCocoa 0.4.0 をソースから構築するときに、
+'ruby install.rb config' を実行すると Segmentation fault が発生します。
+この問題を解決するための
+<a href='http://www.imasy.or.jp/~hisa/mac/rubyosx/files/ruco0.4.0-fw-post-config.patch'>パッチ</a>
+を置きました。パッチの当て方は以下のとおりです。</p>
+
+<pre>
+$ cd {rubycocoa-0.4.0}
+$ patch -p0 &lt; ruco0.4.0-fw-post-config.patch
+</pre></div>
 <div><h2 class='body-news'><a name='1041750137'>デバッグ方法について (2003-01-05)</a></h2>
-<p class='body-news'>RubyCocoaアプリケーションのデバッグ方法について、
+<p>RubyCocoaアプリケーションのデバッグ方法について、
 <a href='programming.ja.html#label:18'>「プログラミング」</a>
 に簡単に書き加えました。</p></div>
 <div><h2 class='body-news'><a name='1041154613'>RubyCocoa 0.4をリリース！ (2002-12-28)</a></h2>
-<p class='body-news'>RubyCocoa 0.4をリリースしました。Ruby 1.8 に対応しています。
+<p>RubyCocoa 0.4をリリースしました。Ruby 1.8 に対応しています。
 詳しくは<a href='changes.ja.html'>「変更点」</a>をご覧ください。</p></div>
 </td>
 

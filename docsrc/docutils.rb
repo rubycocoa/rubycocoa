@@ -180,14 +180,16 @@ class NewsArticle
   def to_div_en
     return '' unless @subject_en
     ret = "<div><h2 class='body-news'><a name='#{@uid}'>#{@subject_en} (#{@date})</a></h2>\n"
-    ret << "<p class='body-news'>#{@body_en}</p></div>"
+    # ret << "<p class='body-news'>#{@body_en}</p></div>"
+    ret << "#{@body_en}</div>"
     return ret
   end
 
   def to_div_ja
     return '' unless @subject_ja
     ret = "<div><h2 class='body-news'><a name='#{@uid}'>#{@subject_ja} (#{@date})</a></h2>\n"
-    ret << "<p class='body-news'>#{@body_ja}</p></div>"
+    # ret << "<p class='body-news'>#{@body_ja}</p></div>"
+    ret << "#{@body_ja}</div>"
     return ret
   end
 

@@ -23,20 +23,11 @@ RubyCocoa<font size='-1'> - A Ruby/Objective-C Bridge for Mac OS X with Cocoa</f
 <table cellspacing='0' cellpadding='2' width='100%'>
   <colgroup><col width='80%'/><col width='20%'/></colgroup>
   <tr id='site-menubar'>
-  <td align='left'>
-    <a href='index.en.html'>What?</a> |
-    <a href='getting.en.html'>Donwload</a> |
-    <a href='build.en.html'>Build & Install</a> |
-    <a href='trysamples.en.html'>Try Samples</a> |
-    <a href='programming.en.html'>Programming</a> |
-    <a href='references.en.html'>References</a> |
-    <a href='changes.en.html'>Changes</a> |
-    <a href='changelog.html'>ChangeLog</a> |
-    <a href='faq.en.html'>FAQ</a> |
-    <a href='links.en.html'>Links</a>
+  <td class='site-menubar' align='left' width='80%'>
+    <a href='index.en.html'>What?</a> | <a href='getting.en.html'>Donwload</a> | <a href='build.en.html'>Build & Install</a> | <a href='trysamples.en.html'>Try Samples</a> | <a href='programming.en.html'>Programming</a> | <a href='references.en.html'>References</a> | <a href='changes.en.html'>Changes</a> | <a href='faq.en.html'>FAQ</a> | <a href='links.en.html'>Links</a>
   </td>
-  <td align='right'>
-    [English] <a href='index.ja.html'>[Japanese]</a>
+  <td class='site-menubar' align='right' width='20%'>
+    [ENGLISH] <a href='index.ja.html'>[JAPANESE]</a>
   </td>
 </tr>
 </table>
@@ -50,11 +41,28 @@ RubyCocoa<font size='-1'> - A Ruby/Objective-C Bridge for Mac OS X with Cocoa</f
 
 <!-- body/main/contents -->
 <td class='body-contents' id='body-contents' valign='top'><h1>NEWS</h1>
+<div><h2 class='body-news'><a name='1042301135'>screenshots of FreeRIDE (2003-01-12)</a></h2>
+<p>These are appearances of invocation of a RubyCocoa script in FreeRIDE which is running on X11 for Mac OS X.</p>
+
+<a href='http://www.imasy.org/~hisa/mac/rubyosx/files/freeride-x11-osx.jpg'>
+<img src='http://www.imasy.org/~hisa/mac/rubyosx/files/freeride-x11-osx.jpg' height='192' alt='screenshot' width='256'/></a>
+<a href='http://www.imasy.org/~hisa/mac/rubyosx/files/freeride-x11-osx-2.jpg'>
+<img src='http://www.imasy.org/~hisa/mac/rubyosx/files/freeride-x11-osx-2.jpg' height='192' alt='screenshot' width='256'/></a></div>
+<div><h2 class='body-news'><a name='1042297376'>a patch fix error of config with Ruby 1.6.8 (2003-01-12)</a></h2>
+<p>In build of RubyCocoa 0.4 with Ruby 1.6.8, segmentation fault occur at
+'ruby install.rb config'. This
+<a href='http://www.imasy.or.jp/~hisa/mac/rubyosx/files/ruco0.4.0-fw-post-config.patch'>patch</a>
+fix the problem. Apply the patch as following:</p>
+
+<pre>
+$ cd {rubycocoa-0.4.0}
+$ patch -p0 &lt; ruco0.4.0-fw-post-config.patch
+</pre></div>
 <div><h2 class='body-news'><a name='1041750137'>short briefing about debugging (2003-01-05)</a></h2>
-<p class='body-news'>Write briefly about debugging of RubyCocoa application to
+<p>Write briefly about debugging of RubyCocoa application to
 <a href='programming.en.html#label:18'>"Programming"</a>.</p></div>
 <div><h2 class='body-news'><a name='1041154613'>RubyCocoa 0.4 was released! (2002-12-28)</a></h2>
-<p class='body-news'>RubyCocoa 0.4 was released! Now it support Ruby 1.8. See
+<p>RubyCocoa 0.4 was released! Now it support Ruby 1.8. See
 <a href='changes.en.html'>"Changes"</a> for more detail.</p></div>
 </td>
 
