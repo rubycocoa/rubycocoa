@@ -1,3 +1,8 @@
+2003-12-03  kimura wataru <kimuraw@i.nifty.jp>
+
+	* metaconfig (branch-devel-panther): 
+	fix bad libruby-path on Panther's /usr/bin/ruby.
+
 2003-08-09  FUJIMOTO Hisakuni  <hisa@fobj.com>
 
 	* tests/tc_nsdata.rb:
