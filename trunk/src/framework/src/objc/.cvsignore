@@ -1,2 +1,5 @@
 osx_ruby.h
 osx_intern.h
+RBObject.h
+RBSlaveObject.h
+RubyCocoa.h
