@@ -399,11 +399,14 @@ BOOL rbobj_to_nsobj(VALUE obj, id* nsobj)
     return YES;
   }
 
-  if (rb_respond_to(obj, rb_intern("to_nsobject")))
-    obj = rb_funcall(obj, rb_intern("to_nsobject"), 0);
-
   *nsobj = rbobj_get_ocid(obj);
   if (*nsobj != nil) return YES;
+
+  if (rb_respond_to(obj, rb_intern("to_nsobject"))) {
+    VALUE nso = rb_funcall(obj, rb_intern("to_nsobject"), 0);
+    *nsobj = rbobj_get_ocid(nso);
+    return YES;
+  }
 
   if (rbobj_convert_to_nsobj(obj, nsobj))
     return YES;
@@ -720,4 +723,3 @@ rbobj_to_ocdata(VALUE obj, int octype, void* ocdata)
 
   return f_success;
 }
-
