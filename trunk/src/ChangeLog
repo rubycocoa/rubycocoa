@@ -1,3 +1,7 @@
+2005-03-25  kimura wataru <kimuraw@i.nifty.jp>
+
+	* release 0.4.1 (release-0_4_1)
+
 2005-03-23  kimura wataru <kimuraw@i.nifty.jp>
 
 	* doc/build.en.html, doc/build.ja.html, doc/changes.en.html, doc/changes.ja.html, doc/getting.en.html, doc/getting.ja.html, doc/index.en.html, doc/index.ja.html, doc/programming.en.html, doc/programming.ja.html:
@@ -8,6 +12,9 @@
 
 	* doc/links.en.html, doc/links.ja.html:
 	mantenance links
+
+	* ReadMe.ascii.html, ReadMe.sjis.html:
+	update date of copyright
 
 2005-03-21  kimura wataru <kimuraw@i.nifty.jp>
 
