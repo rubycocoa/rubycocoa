@@ -1,3 +1,11 @@
+2005-03-18  kimura wataru <kimuraw@i.nifty.jp>
+
+	* framework/src/objc/RBRuntime.m:
+	add import <Foundation/NSPathUtilities.h>
+
+	* tool/och_analyzer3
+	suppress the warning "regexp has `}' without escape".
+
 2005-02-27  kimura wataru <kimuraw@i.nifty.jp>
 
 	* sample/HybridLangApp/rb_main.rb, sample/Pong/rb_main.rb, sample/RubyRaiseMan/rb_main.rb, sample/RubyTypingTutor/rb_main.rb, sample/SimpleApp.app/Contents/Resources/rb_main.rb, sample/dotview/rb_main.rb, sample/mk_app0/rb_main.rb, sample/mk_app1/rb_main.rb, sample/multinib/rb_main.rb, sample/pb_app0/rb_main.rb, sample/simpleapp/rb_main.rb, sample/thread0/rb_main.rb, template/EmptyApp.app/Contents/Resources/rb_main.rb, template/MakefileBased/rb_main.rb, template/ProjectBuilder/Application/Cocoa-Ruby Application/rb_main.rb, template/ProjectBuilder/Application/Cocoa-Ruby Document-based Application/rb_main.rb
