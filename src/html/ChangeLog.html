@@ -1,24 +1,28 @@
-2002-01-10  FUJIMOTO Hisakuni  <hisa@fobj.com>
+<html>
+<head><title>RubyCocoa - ChangeLog</title></head>
+<body>
+<pre>
+2002-01-10  FUJIMOTO Hisakuni  
 
 	* release 0.2.4
 
-2002-01-10  Chris Thomas <kenshin@apple.com>
+2002-01-10  Chris Thomas 
 
 	* framework/OverrideMixin.m:
 	handle_ruby_method(): using NSGetSizeAndAlignment for va_arg offset.
 
-2002-01-10  FUJIMOTO Hisakuni  <hisa@fobj.com>
+2002-01-10  FUJIMOTO Hisakuni  
 
 	* framework/RBObject.m: 
 	stuffForwardResult: modify return value when methodReturnType is
 	_C_ID or _C_CLASS. This modification is for solving the problem
 	which returns "self" from override method of inherited class.
 
-2002-01-09  FUJIMOTO Hisakuni  <hisa@fobj.com>
+2002-01-09  FUJIMOTO Hisakuni  
 
 	* release 0.2.3
 
-2002-01-09  Chris Thomas <kenshin@apple.com>
+2002-01-09  Chris Thomas 
 
 	* ext/osx_objc/cls_objcid.m: 
 	_objcid_initialize_for_new_with_ocid was passing the argument
@@ -28,7 +32,7 @@
 	off the end of the argument array with the VALUE for an empty
 	array. Fixed by changing the method signature to "10".
 
-2002-01-09  FUJIMOTO Hisakuni  <hisa@fobj.com>
+2002-01-09  FUJIMOTO Hisakuni  
 
 	* ext/osx_objc/osx_objc.m:
 	change OSX.ruby_thread_switcher_start() arguments. "interval" is
@@ -48,26 +52,26 @@
 	* framework/OverrideMixin.m:
 	imp_respondsToSelector(): suppress; compile warning by using cast
 
-2002-01-08  FUJIMOTO Hisakuni  <hisa@fobj.com>
+2002-01-08  FUJIMOTO Hisakuni  
 
 	* release 0.2.2
 
 	* post-config.rb, post-install.rb, install.rb, metaconfig, post-clean.rb:
 	update setup-3.1.0 and modify installing script.
 
-2002-01-08  FUJIMOTO Hisakuni  <hisa@fobj.com>
+2002-01-08  FUJIMOTO Hisakuni  
 
 	* release 0.2.1
 	
 	* sample/thread0, sample/Pong: add samples for using Ruby thread.
 
-2002-01-06  FUJIMOTO Hisakuni  <hisa@fobj.com>
+2002-01-06  FUJIMOTO Hisakuni  
 
 	* ext/osx_objc/osx_objc.m, lib/osx/objc/ruby_thread_switcher.rb, framework/RBRuntime.h, framework/RBRuntime.m, framework/rb_main.rb.tmpl:
 	implement RubyThreadSwithcerStart and
 	RubyThreadSwithcerStop. (thanks Takaishi-san)
 
-2002-01-05  Chris Thomas <cjack@cjack.com>
+2002-01-05  Chris Thomas 
 
 	* framework/OverrideMixin.m:
 	handle_ruby_method(): return-values from ns_override methods that are
@@ -76,14 +80,14 @@
 	this patch, you can create simple document-based apps entirely in
 	RubyCocoa.
 
-2002-01-05  FUJIMOTO Hisakuni  <hisa@fobj.com>
+2002-01-05  FUJIMOTO Hisakuni  
 
 	* tool/och_analyzer.rb: NSRange support
 
 	* post-clean.rb, post-config.rb, post-install.rb:
 	add installing option to specify the location of RubyCocoa framework
 
-2002-01-01  FUJIMOTO Hisakuni  <hisa@fobj.com>
+2002-01-01  FUJIMOTO Hisakuni  
 
 	* framework/OverrideMixin.m:
 	imp_c_addRubyMethod(): implement super invocation facility in override
@@ -96,15 +100,15 @@
 
 	* html/make_html.rb: corresponds to Makefile.
 	
-2001-12-26  FUJIMOTO Hisakuni  <hisa@fobj.com>
+2001-12-26  FUJIMOTO Hisakuni  
 
 	* Documents are corrected according to the release of Ruby 1.6.6.
 
-2001-12-21  FUJIMOTO Hisakuni  <hisa@fobj.com>
+2001-12-21  FUJIMOTO Hisakuni  
 
 	* doc/REFERENCES: add description about "?" suffix.
 
-2001-12-20  FUJIMOTO Hisakuni  <hisa@fobj.com>
+2001-12-20  FUJIMOTO Hisakuni  
 
 	* release 0.2.0
 	
@@ -114,7 +118,7 @@
 
 	* doc/REFERENCES: add.
 
-2001-12-19  FUJIMOTO Hisakuni  <hisa@fobj.com>
+2001-12-19  FUJIMOTO Hisakuni  
 
 	* global refactoring for release 0.2.x.
 
@@ -153,7 +157,7 @@
 
 	* samples/*: rewrite for release 0.2.x.
 	
-2001-12-12  FUJIMOTO Hisakuni  <hisa@fobj.com>
+2001-12-12  FUJIMOTO Hisakuni  
 
 	* release 0.1.3
 	
@@ -164,22 +168,22 @@
 	* ext/osxobjc/osx_ocobject.m, lib/osx/ocobject.rb: add
 	OSX::OCException class for Objective-C excepitons.
 	
-2001-12-12  Chris Thomas <kenshin@apple.com>
+2001-12-12  Chris Thomas 
 
 	* ext/osxobjc/osx_ocobject.m: converts Objective-C exceptions into
 	Ruby exceptions.
 
-2001-12-07  FUJIMOTO Hisakuni  <hisa@fobj.com>
+2001-12-07  FUJIMOTO Hisakuni  
 
 	* release 0.1.2
 
-2001-12-07  Chris Thomas <kenshin@apple.com>
+2001-12-07  Chris Thomas 
 
 	* framework/ocdata_conv.h, framework/ocdata_conv.m,
 	lib/osx/osxobjc.rb: enable basic support for the NSRange data
 	structure.
 
-2001-12-03  FUJIMOTO Hisakuni  <hisa@fobj.com>
+2001-12-03  FUJIMOTO Hisakuni  
 
 	* framework/OverrideMixin.m, framework/RBRuntime.m: use
 	NSZoneMalloc instead of malloc when memory allocation.
@@ -196,7 +200,7 @@
 	
 	* lib/osx/ocobject.rb: ib_loadable, ib_outlets, ib_overrides.
 
-2001-11-30  FUJIMOTO Hisakuni  <hisa@fobj.com>
+2001-11-30  FUJIMOTO Hisakuni  
 
 	* release 0.1.1
 	
@@ -208,7 +212,7 @@
 	* framework: OverrideMixin.m: a little improvement for imp_init
 	and imp_intiWithFrame argument passing.
 	
-2001-11-29  FUJIMOTO Hisakuni  <hisa@fobj.com>
+2001-11-29  FUJIMOTO Hisakuni  
 
 	* framework: RBObject.h, RBObject.m: hide RBObject#rbobjXXX
 	  methods as private method. With reading 'Learning Cocoa Ch.9'.
@@ -222,7 +226,7 @@
 	* framework: ocdata_conv.m: rbobj_convert_to_nsobj() implement
 	converting Ruby's Numeric to NSDecimalNumber.
 
-2001-11-28  FUJIMOTO Hisakuni  <hisa@fobj.com>
+2001-11-28  FUJIMOTO Hisakuni  
 
 	* rewrite the dotview sample with reading 'Learning Cocoa Ch.8'
 
@@ -231,7 +235,9 @@
 
 	* add FAQ document about StuffIt problem. (thanks Shimura-san)
 	
-2001-11-26  FUJIMOTO Hisakuni  <hisa@fobj.com>
+2001-11-26  FUJIMOTO Hisakuni  
 
 	* release 0.1.0
 
+</pre>
+</body></html>

@@ -1,5 +1,3 @@
-
-
 TARGET = CHANGES.en.html \
 	CHANGES.ja.html \
 	FAQ.en.html \
@@ -11,7 +9,8 @@ TARGET = CHANGES.en.html \
 	REFERENCES.en.html \
 	REFERENCES.ja.html \
 	USING.en.html \
-	USING.ja.html
+	USING.ja.html \
+	ChangeLog.html
 
 
 all:	$(TARGET)
@@ -55,4 +54,14 @@ USING.en.html:		../doc/USING.en
 
 USING.ja.html:		../doc/USING.ja
 	ruby make_html.rb $<
+
+ChangeLog.html:		../ChangeLog
+	echo "<html>" > ChangeLog.html
+	echo "<head><title>RubyCocoa - ChangeLog</title></head>" >> ChangeLog.html
+	echo "<body>"  >> ChangeLog.html
+	echo "<pre>"  >> ChangeLog.html
+#	sed -e 's/</\&lt;/' -e 's/>/\&gt;/' $<  >> ChangeLog.html
+	sed -e 's/<.*@.*>//' $<  >> ChangeLog.html
+	echo "</pre>" >> ChangeLog.html
+	echo "</body></html>" >> ChangeLog.html
 
