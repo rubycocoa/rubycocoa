@@ -227,17 +227,25 @@ static id imp_c_addRubyMethod(Class klass, SEL method, SEL arg0)
 
   me = class_getInstanceMethod(klass, arg0);
 
-  // overrice method
-  mlp->method_list[0].method_name = me->method_name;
-  mlp->method_list[0].method_types = strdup(me->method_types);
-  mlp->method_list[0].method_imp = handle_ruby_method;
-  mlp->method_count += 1;
+  // warn if trying to override a method that isn't a member of the specified class
+  if(me == NULL) {
+    rb_warning( "could not add '%s' to class '%s': "
+		"Objective-C cannot find it in the superclass",
+		(char *) method, klass->name );
+  }
+  else {
+    // override method
+    mlp->method_list[0].method_name = me->method_name;
+    mlp->method_list[0].method_types = strdup(me->method_types);
+    mlp->method_list[0].method_imp = handle_ruby_method;
+    mlp->method_count += 1;
 
-  // super method
-  mlp->method_list[1].method_name = super_selector(me->method_name);
-  mlp->method_list[1].method_types = strdup(me->method_types);
-  mlp->method_list[1].method_imp = me->method_imp;
-  mlp->method_count += 1;
+    // super method
+    mlp->method_list[1].method_name = super_selector(me->method_name);
+    mlp->method_list[1].method_types = strdup(me->method_types);
+    mlp->method_list[1].method_imp = me->method_imp;
+    mlp->method_count += 1;
+  }
 
   class_addMethods(klass, mlp);
   return nil;
