@@ -66,6 +66,10 @@ module OSX
     def to_a
       [ @origin.to_a, @size.to_a ]
     end
+    def x() @origin.x end
+    def y() @origin.y end
+    def width() @size.width end
+    def height() @size.height end
   end
 
   class NSRange
