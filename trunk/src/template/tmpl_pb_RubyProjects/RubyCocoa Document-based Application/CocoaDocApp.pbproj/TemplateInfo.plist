@@ -1,8 +1,0 @@
-{
-	FilesToMacroExpand = (
-		"English.lproj/InfoPlist.strings",
-		"MyDocument.rb",
-		"main.m",
-		"rb_main.rb"
-	);
-}
