@@ -444,10 +444,10 @@ VALUE sel_to_rbobj (SEL val)
   VALUE rbobj;
   if (ocdata_to_rbobj(_C_SEL, &val, &rbobj)) {
     rbobj = rb_obj_as_string(rbobj);
-    // str.tr!('_',':')
+    // str.tr!(':','_')
     rb_funcall(rbobj, rb_intern("tr!"), 2, rb_str_new2(":"), rb_str_new2("_"));
-    // str.sub!(/(_)$/,'')
-    rb_funcall(rbobj, rb_intern("sub!"), 2, rb_str_new2("_$"), rb_str_new2(""));
+    // str.sub!(/_+$/,'')
+    rb_funcall(rbobj, rb_intern("sub!"), 2, rb_str_new2("_+$"), rb_str_new2(""));
   }
   else {
     rbobj = Qnil;

@@ -43,8 +43,10 @@ static RB_ID sel_to_mid(SEL a_sel)
   // selstr.sub(/:/,'_').sub(/^(.*)_$/, "\1")
   for (i = 0; i < [selstr length]; i++)
     if (mname[i] == ':') mname[i] = '_';
-  if (mname[[selstr length]-1] == '_')
-    mname[[selstr length]-1] = '\0';
+  for (i = [selstr length] - 1; i >= 0; i--) {
+    if (mname[i] != '_') break;
+    mname[i] = '\0';
+  }
   [pool release];
 
   return rb_intern(mname);
@@ -70,16 +72,28 @@ static RB_ID sel_to_mid_as_setter(SEL a_sel)
   return rb_to_id(str);
 }
 
-static int argc_of(SEL a_sel)
+static RB_ID rb_obj_sel_to_mid(VALUE rcv, SEL a_sel)
+{
+  RB_ID mid = sel_to_mid(a_sel);
+  if (rb_respond_to(rcv, mid) == 0)
+    mid = sel_to_mid_as_setter(a_sel);
+  return mid;
+}
+
+static int rb_obj_arity_of_method(VALUE rcv, SEL a_sel)
 {
   id pool = [[NSAutoreleasePool alloc] init];
-  const char* cp = [NSStringFromSelector(a_sel) cString];
-  int ch;
-  int argc = 0;
-  while (ch = *cp++)
-    if (ch == ':') argc++;
+  VALUE mstr;
+  RB_ID mid;
+  VALUE method;
+  VALUE argc;
+
+  mid = rb_obj_sel_to_mid(rcv, a_sel);
+  mstr = rb_str_new2(rb_id2name(mid)); // mstr = sel_to_rbobj (a_sel);
+  method = rb_funcall(rcv, rb_intern("method"), 1, mstr);
+  argc = rb_funcall(method, rb_intern("arity"), 0);
   [pool release];
-  return argc;
+  return NUM2INT(argc);
 }
 
 static SEL ruby_method_sel(int argc)
@@ -127,12 +141,8 @@ static id ocid_of(VALUE obj)
   BOOL ret;
   RB_ID mid;
   DLOG1("rbobjRespondsToSelector(%@)", NSStringFromSelector(a_sel));
-  mid = sel_to_mid(a_sel);
+  mid = rb_obj_sel_to_mid(m_rbobj, a_sel);
   ret = (rb_respond_to(m_rbobj, mid) != 0);
-  if (ret == NO) {
-    mid = sel_to_mid_as_setter(a_sel);
-    ret = (rb_respond_to(m_rbobj, mid) != 0);
-  }
   DLOG1("   --> %d", ret);
   return ret;
 }
@@ -142,7 +152,8 @@ static id ocid_of(VALUE obj)
   NSMethodSignature* msig;
   int argc;
   DLOG1("rbobjMethodSignatureForSelector(%@)", NSStringFromSelector(a_sel));
-  argc = argc_of(a_sel);
+  argc = rb_obj_arity_of_method(m_rbobj, a_sel);
+  if (argc < 0) argc *= -1;
   msig = [DummyProtocolHandler 
 	   instanceMethodSignatureForSelector: ruby_method_sel(argc)];
   DLOG1("   --> %@", msig);
@@ -164,14 +175,18 @@ static id ocid_of(VALUE obj)
     [an_inv getArgument: ocdata atIndex: (i+2)];
     if ((octype == _C_ID) || (octype == _C_CLASS)) {
       id ocid = *(id*)ocdata;
-      if ([ocid isKindOfClass: [self class]])
+      if ([ocid isKindOfClass: [self class]]) {
 	arg_val = [ocid __rbobj__];
-      else if ([ocid respondsToSelector: @selector(__rbobj__)])
+      }
+      else if ([ocid respondsToSelector: @selector(__rbobj__)]) {
 	arg_val = [ocid __rbobj__];
-      else if (ocid_of(m_rbobj) == ocid)
+      }
+      else if (ocid_of(m_rbobj) == ocid) {
 	arg_val = m_rbobj;
-      else
+      }
+      else {
 	arg_val = to_rbobj(ocid);
+      }
       f_conv_success = YES;
     }
     else {
@@ -216,9 +231,7 @@ static id ocid_of(VALUE obj)
   VALUE rb_result;
   RB_ID mid;
   DLOG1("rbobjForwardInvocation(%@)", an_inv);
-  mid = sel_to_mid([an_inv selector]);
-  if (rb_respond_to(m_rbobj, mid) == 0)
-    mid = sel_to_mid_as_setter([an_inv selector]);
+  mid = rb_obj_sel_to_mid(m_rbobj, [an_inv selector]);
   rb_args = [self fetchForwardArgumentsOf: an_inv];
   rb_result = rb_apply(m_rbobj, mid, rb_args);
   [self stuffForwardResult: rb_result to: an_inv];
