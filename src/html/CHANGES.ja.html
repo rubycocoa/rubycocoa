@@ -17,8 +17,7 @@
 <pre>OSX::NSObject.is_a? Class # =&gt; true
 OSX::NSObject.name        # =&gt; "OSX::NSObject"</pre>
 <p>[CHANGE] OSX::OCObject#ib_loadable を廃止。Cocoa クラスの派生クラスの
-定義を、Ruby の派生クラスの定義と同様の方法で書けるように変更。実装内
-部はややトリッキー。</p>
+定義を、Ruby の派生クラスの定義と同様の方法で書けるように変更。</p>
 <pre>class Hoge &lt; OSX::NSView
   ns_outlets   :hoge
   ns_overrides :drawRect_

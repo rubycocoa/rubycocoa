@@ -57,7 +57,7 @@ str = OSX::NSObject.alloc.initWithString "world"</pre>
 ownership is generated or it carries out, in Objective-C, there is no
 necessity that he is conscious of ownership. In RubyCocoa, there is no
 difference so much. It is not necessary to call methods, such as
-release, autorelease, and retain, fundamentally, and they do not need
+release, autorelease, and retain, fundamentally, and you do not need
 to make NSAutoreleasePool.</p>
 <ul>
 <li>use Cocoa method for creating a Cocoa object</li>
@@ -130,10 +130,10 @@ p klass     # =&gt; #&lt;OCObject:0x82f22 class='NSObject' id=80819B0C&gt;</pre>
 <p>The topic about the existing Cocoa class and its instance was treated
 so far. From here, the topic about the definition of the Cocoa
 inherited class which is needed when writing RubyCocoa application, or
-its instance is treated. Since a little tricky mounting has realized,
+its instance is treated. Since the implementation is tricky a little ,
 although the inherited class of Cocoa has some restrictions and
 peculiarities, let's see also including it.</p>
-<h2><a name="label:11" id="label:11">The definition of a Cocoa inherited class</a></h2><!-- RDLabel: "The definition of a Cocoa inherited class" -->
+<h2><a name="label:11" id="label:11">definition of a Cocoa inherited class</a></h2><!-- RDLabel: "definition of a Cocoa inherited class" -->
 <p>The class of the Cocoa object set up in the GUI definition file (nib
 file) created by Interface Builder etc. is defined as an inherited
 class (after 0.2.0). For example, the controller of a MVC model which
@@ -144,13 +144,14 @@ Cocoa is defined like ...</p>
   ib_outlets :messageField
 
   def btnClicked(sender)
+    @messageField.setStringValue "Merry Xmas !"
   end
 
 end</pre>
 <p>The inherited class definition of Cocoa in RubyCocoa is similarly
 described to be the inherited class definition by the usual Ruby in
 this way.</p>
-<h2><a name="label:12" id="label:12">Outlet</a></h2><!-- RDLabel: "Outlet" -->
+<h2><a name="label:12" id="label:12">outlet</a></h2><!-- RDLabel: "outlet" -->
 <p>The outlet set as the class in the nib file is written to be:</p>
 <pre>ns_outlets :rateField, :dollerField</pre>
 <p>in the definition of an inherited class. In fact, ns_outlets is the
@@ -160,7 +161,7 @@ instead given like:</p>
   @rateField = new_val
 end</pre>
 <p>ns_outlets has also an alias called ib_outlets.</p>
-<h2><a name="label:13" id="label:13">The override of a method</a></h2><!-- RDLabel: "The override of a method" -->
+<h2><a name="label:13" id="label:13">override of a method</a></h2><!-- RDLabel: "override of a method" -->
 <p>When overriding the method defined by the parent class, it is
 necessary to declare having overridden using ns_overrides (alias
 ib_overrides).</p>
@@ -188,21 +189,29 @@ occur.</p>
   ns_overrides :initWithFrame_
 
   def initWithFrame(frame)
-    ...
+    p frame
     super(frame)
   end
 
 end</pre>
 <p>Although I want to solve in the future since existence of these
 restrictions is inconvenient, there is no solution method effective
-for the moment.</p>
+for the moment. In the upper example, when an instance is made by
+loading of a nib file, it can be coped with by writing it as:</p>
+<pre>class MyCustomView &lt; OSX::NSView
+
+  def awakeFromNib
+    p bounds
+  end
+
+end</pre>
 <h2><a name="label:14" id="label:14">create an instance of a Cocoa inherited class</a></h2><!-- RDLabel: "create an instance of a Cocoa inherited class" -->
 <p>When the instance of a Cocoa inherited class needs to be created in a
 Ruby script, it writes like:</p>
-<pre>AppController.alloc.init</pre>
+<pre>AppController.alloc.init  # use this</pre>
 <p>like the case of the existing Cocoa class. The most general way of
 writing in Ruby:</p>
-<pre>AppControll.new</pre>
+<pre>AppController.new    # don't use this</pre>
 <p>cannot be used (it is made to raise the exception). Although there are
 various situations in this, since it becomes long, detailed
 explanation is omitted here.</p>
@@ -212,8 +221,7 @@ performed in the turn:</p>
 <li>alloc (in Objective-C world)</li>
 <li>in alloc, create a Ruby object (initialize method is called here)</li>
 </ul>
-<h2><a name="label:15" id="label:15">Where should the initialization code at the time of instance generation be written?</a></h2><!-- RDLabel: "Where should the initialization code at the time of instance generation be written?" -->
-<h2><a name="label:16" id="label:16">Where should an initialization code be written?</a></h2><!-- RDLabel: "Where should an initialization code be written?" -->
+<h2><a name="label:15" id="label:15">Where should an initialization code be written?</a></h2><!-- RDLabel: "Where should an initialization code be written?" -->
 <p>Although the code of initialization is generally written into an
 "initialize" method by Ruby, if it says in which, I will seldom be
 recommended by the Cocoa inherited class. A reason is not initialized
