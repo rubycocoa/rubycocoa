@@ -1,6 +1,27 @@
 # -*-rd-*-
 = RubyCocoa Programming
 
+== INDEX
+
+* ((<irb - Interactive Ruby>))
+* ((<load libraries>))
+* ((<an example the action with feeling>))
+* ((<Cocoa class>))
+* ((<create a Cocoa object>))
+* ((<onwership and memory management>))
+* ((<return value of method>))
+* ((<A decision and a variation of method name>))
+* ((<convert Ruby object argument of method as possible>))
+* ((<method name prefix "oc_" - using this when method name conflict>))
+* ((<inherited class and its instance of a Cocoa class>))
+* ((<definition of a Cocoa inherited class>))
+* ((<outlet>))
+* ((<override of a method>))
+* ((<create an instance of a Cocoa inherited class>))
+* ((<Where should an initialization code be written?>))
+* ((<Debugging of a RubyCocoa application>))
+
+
 == irb - Interactive Ruby
 
 It may be good to use "irb" for trying script snippet in this
@@ -305,5 +326,45 @@ writing to a method with a prefix will be good. Please do not forget
 for a method to return "self".
 
 
+== Debugging of a RubyCocoa application
+
+Currently (2003-01-05), it is impossible that you use a ruby debugger
+in ProjectBuilder, because a plug-in module for a RubyCocoa
+application doesn't exist.
+
+But, you can debug with a debugger (e.g. debug.rb) by launching a
+application with appropriate options on shell. If you like Emacs, you
+can use as well a command 'rubydb' which is contained in a ruby source
+distribution.
+
+The following shows a sequence that the debugger breaks execution of
+a RubyCocoa application (simpleapp in samples).
+
+  $ cd sample/simpleapp/
+  $ pbxbuild
+  $ build/SimpleApp.app/Contents/MacOS/SimpleApp -r debug
+  (rdb:1) b AppController.rb:24    # set a break point
+  Set breakpoint 1 at AppController.rb:24
+  (rdb:1) c
+  Breakpoint 1, aboutApp at AppController.rb:24
+  AppController.rb:24:
+  (rdb:1) l
+  [19, 28] in AppController.rb
+     19      @myView.set_alpha(@slider.floatValue)
+     20      @myView.set_color(@colorWell.color)
+     21    end
+     22  
+     23    def aboutApp (sender)
+  => 24      NSApp().orderFrontStandardAboutPanelWithOptions(
+     25        "Copyright" => "RubyCocoa #{RUBYCOCOA_VERSION}",
+     26        "ApplicationVersion" => "Ruby #{VERSION}")
+     27    end
+     28  
+     29    def colorBtnClicked (sender)
+  (rdb:1) sender
+  #<OSX::NSMenuItem:0xd439e class='NSMenuItem' id=0x3e27d0>
+  (rdb:1) q
+  Really quit? (y/n) y
+
+
 $Date$
-$Revision$
