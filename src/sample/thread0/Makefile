@@ -1,6 +1,6 @@
 # -*-makefile-*-
 
-APPNAME = SimpleApp
+APPNAME = ThreadSample0
 BUNDLEID = rubyapp.$(APPNAME)
 NIBDIR = English.lproj
 
