@@ -1,3 +1,8 @@
+2005-01-06  kimura wataru <kimuraw@i.nifty.jp>
+
+	* framework/src/ruby/osx/objc/cocoa_macros.rb, framework/src/ruby/osx/objc/ruby_additon.rb:
+	support ruby-1.8.2. ruby-1.8.2's NKF.guess fails in some case.
+
 2004-12-09  kimura wataru <kimuraw@i.nifty.jp>
 
 	* merged branch-devel-panther
