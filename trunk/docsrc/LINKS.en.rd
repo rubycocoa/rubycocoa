@@ -1,7 +1,7 @@
 # -*-rd-*-
 = Links
 
-* ((<RubyCocoa|URL:http://www.imasy.or.jp/%7ehisa/mac/rubycocoa/>))
+* ((<RubyCocoa|URL:http://www.fobj.com/rubycocoa/>))
 * ((<RubyCocoa Project|URL:http://sourceforge.net/projects/rubycocoa/>))
 * ((<Mailing List (Japanese)|URL:http://www.freeml.com/info/rubycocoa@freeml.com>))
 * ((<Mailing List (English)|URL:http://sourceforge.net/mail/?group_id=44114>))
@@ -22,7 +22,7 @@
 
   an article about RubyCocoa written by Chris Thomas.
 
-: ((<RubyAEOSA|URL:http://www.imasy.or.jp/%7ehisa/mac/rubyaeosa/>))
+: ((<RubyAEOSA|URL:http://www.fobj.com/rubyaeosa/>))
 
   Ruby interface for Apple Event and Open Scripting Architecture (OSA)
   on Mac OS X based Carbon framework. Recently, some classes

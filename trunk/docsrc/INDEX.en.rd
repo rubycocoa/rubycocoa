@@ -110,4 +110,4 @@ other software?
 Contact ((<me|URL:mailto:contact.rubycocoa@fobj.com>)) freely please.
 
 
-FUJIMOTO, Hisakuni <hisa@imasy.or.jp> $Date$
+FUJIMOTO, Hisakuni <hisa at fobj.com> $Date$

@@ -7,8 +7,8 @@ RubyCocoa's binary distribution has been built for the Ruby 1.6.7 distributed
 with Mac OS X 10.2.
 
 Download
-((<RubyCocoa-0.4.0.dmg|URL:http://www.imasy.or.jp/%7ehisa/mac/rubyosx/files/RubyCocoa-0.4.0.dmg>))
-from ((<file list|URL:http://www.imasy.or.jp/%7ehisa/mac/rubyosx/files/>)).
+((<RubyCocoa-0.4.0.dmg|URL:http://rubycocoa.sourceforge.net/files/RubyCocoa-0.4.0.dmg>))
+from ((<file list|URL:http://rubycocoa.sourceforge.net/files/>)).
 
 It includes library, samples, templates for Project Builder, etc. for both
 RubyCocoa and RubyAEOSA. Everything necessary for execution and development is
@@ -41,8 +41,8 @@ to ((<'Try RubyCocoa Samples'|URL:trysamples.en.html>)).
 == Source Distribution
 
 Download
-((<rubycocoa-0.4.0.tgz|URL:http://www.imasy.or.jp/%7ehisa/mac/rubyosx/files/rubycocoa-0.4.0.tgz>))
-from ((<file list|URL:http://www.imasy.or.jp/%7ehisa/mac/rubyosx/files/>)).
+((<rubycocoa-0.4.0.tgz|URL:http://rubycocoa.sourceforge.net/files/rubycocoa-0.4.0.tgz>))
+from ((<file list|URL:http://rubycocoa.sourceforge.net/files/>)).
 
 To build and install RubyCocoa, refer to 
 ((<"Build and Install RubyCocoa from Source"|URL:build.en.html>)).
