@@ -128,7 +128,7 @@ module OSX
   ].each do |name|
     module_eval %{
       def #{name}
-	objc_symbol_to_obj ('#{name}', '@')
+	objc_symbol_to_obj('#{name}', '@')
       end
       module_function :#{name}
     }

@@ -78,7 +78,7 @@ module OSX
 	args = Array.new
 	m_args.each_with_index do |val, index|
 	  if (index % 2) == 0 then
-	    args.push (val)
+	    args.push(val)
 	  else
 	    mname += "_#{val.to_s}"
 	  end
