@@ -14,6 +14,8 @@ RUBY_SOURCES = [
   :WindowAController,
   :WindowBController
 ]
+
+SWITCH_INTERVAL = 0.1
 ######################
 ##### END CONFIG #####
 ######################
@@ -23,6 +25,9 @@ def rb_main_init
 end
 
 def ns_app_main
+  if SWITCH_INTERVAL && SWITCH_INTERVAL > 0.0 then
+    OSX.ruby_thread_switcher_start (SWITCH_INTERVAL)
+  end
   app = OSX::NSApplication.sharedApplication
   OSX::NSBundle.loadNibNamed_owner (BUNDLE_NAME.to_s, app)
   OSX.NSApp.run
