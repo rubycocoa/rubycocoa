@@ -141,9 +141,10 @@ static void install_ivar_list(Class c)
   struct objc_ivar_list* ivlp = alloc_from_default_zone(override_mixin_ivar_list_size());
   *ivlp = *(override_mixin_ivar_list());
   for (i = 0; i < ivlp->ivar_count; i++) {
+    const char* tp = ivlp->ivar_list[i].ivar_type;
     int octype = to_octype(ivlp->ivar_list[i].ivar_type);
     ivlp->ivar_list[i].ivar_offset = c->instance_size;
-    c->instance_size += ocdata_size(octype);
+    c->instance_size += ocdata_size(octype, tp);
   }
   c->ivars = ivlp;
 }
