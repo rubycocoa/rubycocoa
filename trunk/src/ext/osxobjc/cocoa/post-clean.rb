@@ -8,9 +8,6 @@
 #  the GNU Lesser General Public License version 2.
 #
 
-savedir = Dir.pwd
-
-Dir.chdir File.join(curr_srcdir, "framework")
-system "pbxbuild"
-
-Dir.chdir savedir
+Dir["*.o"].each do|path|
+  rm_f(path)
+end

@@ -1,11 +1,10 @@
 require 'mkmf'
 
-def objs
-  `ls cocoa/*.[mc]`.split.map{|i| "#{i.split('.')[0]}.o" } +
-    `ls *.[mc]`.split.map{|i| "#{i.split('.')[0]}.o" }
-end
+$LDFLAGS = '-F../../framework/build -framework RubyCocoa'
+$CFLAGS  = '-I../../framework'
 
-$objs = objs
-$LDFLAGS = ' -Fframework/build -framework RubyCocoa'
+$objs = 
+  `ls cocoa/*.[mc]`.split.map{|i| "#{i.split('.')[0]}.o" } +
+  `ls *.[mc]`.split.map{|i| "#{i.split('.')[0]}.o" }
 
 create_makefile('osxobjc')

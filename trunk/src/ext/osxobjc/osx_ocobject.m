@@ -12,7 +12,7 @@
 
 #import "osx_ocobject.h"
 #import <LibRuby/cocoa_ruby.h>
-#import "framework/ocdata_conv.h"
+#import "ocdata_conv.h"		// RubyCocoa.framework
 
 #import <Foundation/NSObject.h>
 #import <Foundation/NSArchiver.h>
