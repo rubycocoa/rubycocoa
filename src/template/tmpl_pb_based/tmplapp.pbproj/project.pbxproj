@@ -91,7 +91,7 @@
 //174
 		17587328FF379C6511CA2CBB = {
 			isa = PBXApplicationReference;
-			path = rubyapp.app;
+			path = "«PROJECTNAME».app";
 			refType = 3;
 		};
 //170
@@ -143,7 +143,7 @@
 				19C28FACFE9D520D11CA2CBB,
 			);
 			isa = PBXGroup;
-			name = tmplapp;
+			name = "«PROJECTNAMEASXML»";
 			path = "";
 			refType = 4;
 		};
@@ -225,7 +225,7 @@
 				OTHER_CFLAGS = "-undefined suppress -flat_namespace";
 				OTHER_LDFLAGS = "-undefined suppress -flat_namespace";
 				PREBINDING = NO;
-				PRODUCT_NAME = rubyapp;
+				PRODUCT_NAME = "«PROJECTNAME»";
 				SECTORDER_FLAGS = "";
 				WARNING_CFLAGS = "-Wmost -Wno-four-char-constants -Wno-unknown-pragmas";
 				WRAPPER_EXTENSION = app;
@@ -233,9 +233,9 @@
 			dependencies = (
 			);
 			isa = PBXApplicationTarget;
-			name = rubyapp;
+			name = "«PROJECTNAME»";
 			productInstallPath = "$(HOME)/Applications";
-			productName = tmplapp;
+			productName = "«PROJECTNAME»";
 			productReference = 17587328FF379C6511CA2CBB;
 			productSettingsXML = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
 <!DOCTYPE plist SYSTEM \"file://localhost/System/Library/DTDs/PropertyList.dtd\">
@@ -244,7 +244,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>English</string>
 	<key>CFBundleExecutable</key>
-	<string>rubyapp</string>
+	<string>«PROJECTNAMEASXML»</string>
 	<key>CFBundleIconFile</key>
 	<string></string>
 	<key>CFBundleInfoDictionaryVersion</key>
