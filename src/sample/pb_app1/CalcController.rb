@@ -2,11 +2,10 @@
 # $Id$
 #
 
-require 'osx/ocobject'
+require 'osx/cocoa'
 
-class CalcController < OSX::OCObject
+class CalcController < OSX::NSObject
 
-  ib_loadable
   ib_outlets :fieldA, :fieldB, :fieldResult
   ib_outlets :menuOp, :rbtnsOp, :textOp
 

@@ -1,11 +1,10 @@
 #
 # $Id$
 #
-require 'osx/ocobject'
+require 'osx/cocoa'
 
-class AppCtrl < OSX::OCObject
+class AppCtrl < OSX::NSObject
 
-  ib_loadable
   ib_outlets :monthField, :dayField, :mulField
 
   def initialize

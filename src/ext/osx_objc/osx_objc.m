@@ -12,8 +12,9 @@
 
 #import <LibRuby/cocoa_ruby.h>
 #import <Foundation/Foundation.h>
-#import <RubyCocoa/RBRuntime.h>	// RubyCocoa.framework
-#import <RubyCocoa/RBObject.h>	// RubyCocoa.framework
+#import <RubyCocoa/RBRuntime.h>
+#import <RubyCocoa/RBObject.h>
+#import <RubyCocoa/ocdata_conv.h>
 
 #define OSX_MODULE_NAME "OSX"
 
@@ -45,6 +46,7 @@ static VALUE
 osx_mf_objc_derived_class_new(VALUE mdl, VALUE class_name, VALUE super_name)
 {
   Class super_class;
+  Class new_cls = nil;
   id pool = [[NSAutoreleasePool alloc] init];
 
   class_name = rb_obj_as_string(class_name);
@@ -52,8 +54,11 @@ osx_mf_objc_derived_class_new(VALUE mdl, VALUE class_name, VALUE super_name)
   super_class = NSClassFromString([NSString 
 				    stringWithCString: STR2CSTR(super_name)]);
   if (super_class)
-    RBOCDerivedClassNew(STR2CSTR(class_name), super_class);
+    new_cls = RBOCDerivedClassNew(STR2CSTR(class_name), super_class);
   [pool release];
+
+  if (new_cls)
+    return rb_ocobj_s_new(new_cls);
   return Qnil;
 }
 
