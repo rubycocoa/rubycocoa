@@ -9,17 +9,8 @@
  *   the GNU Lesser General Public License version 2.
  *
  **/
-
 #import <Foundation/NSObject.h>
 
-@interface RubyObject : NSObject
-{
-  id dummy;			// DummyProtocolHandler
-  unsigned long rbobj;
-}
-
-- init;
-- initWithRubyClassName: a_rbclass_name;
-- initWithRubyObject: (unsigned long)a_rbobj;
-
+@interface DummyProtocolHandler : NSObject
++ instance;
 @end

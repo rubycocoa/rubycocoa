@@ -4,7 +4,7 @@
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="ja" xml:lang="ja">
 <head>
-<title>RubyOSXOBJC-INSTALL</title>
+<title>RubyCocoa - INSTALL</title>
 <meta http-equiv="Content-type" content="text/html; charset=euc-jp" />
 <link href="rdtext.css" type="text/css" rel="stylesheet"/>
 </head>
@@ -52,8 +52,8 @@
 <pre>% ruby tool/mk_libruby_frmwk.rb {LibRuby.frameworkを置くディレクトリ}</pre>
 <p>のように引数にディレクトリを指定してスクリプトを起動してください。</p>
 <h2><a name="label:5" id="label:5">RubyCocoaのインストール</a></h2><!-- RDLabel: "RubyCocoaのインストール" -->
-<p>RubyCocoa本体を構成する拡張ライブラリ群とRubyCocoaフレームワークをイン
-ストールします。</p>
+<p>RubyCocoa本体を構成するライブラリ群とRubyCocoaフレームワークをインストー
+ルします。</p>
 <p>RubyCocoaのソースディレクトリに移動し以下のように入力します。</p>
 <pre>% cd {RubyCocoaソースディレクトリ}
 % ruby install.rb config
@@ -63,15 +63,15 @@
 示されます。このテキストの手順通りにインストールしている場合はすでに作
 成されているはずなので無視して構いません。</p>
 <p>setupは時間がかかります。お茶でもしながら待ちましょう。</p>
-<p>installではRubyCocoa拡張ライブラリの他に、RubyCocoaフレームワークを
+<p>installではRubyCocoaライブラリの他に、RubyCocoaフレームワークを
 "/Library/Frameworks"以下にインストールします。</p>
 <h2><a name="label:6" id="label:6">インストール完了</a></h2><!-- RDLabel: "インストール完了" -->
 <p>以上でインストールは完了です。ここまでの手順でRuby自体の他に</p>
 <ul>
-<li>LibRubyフレームワーク    - /Library/Frameworks/LibRuby.framework</li>
-<li>RubyCocoaフレームワーク  - /Library/Frameworks/RubyCocoa.framework</li>
-<li>RubyCocoa拡張ライブラリA - {site_ruby}/1.6/{archdir}/osxobjc.bundle</li>
-<li>RubyCocoa拡張ライブラリB - {site_ruby}/1.6/osx/*.rb</li>
+<li>LibRubyフレームワーク   - /Library/Frameworks/LibRuby.framework</li>
+<li>RubyCocoaフレームワーク - /Library/Frameworks/RubyCocoa.framework</li>
+<li>RubyCocoaライブラリA    - {site_ruby}/1.6/{archdir}/osxobjc.bundle</li>
+<li>RubyCocoaライブラリB    - {site_ruby}/1.6/osx/*.rb</li>
 </ul>
 <p>がインストールされました。</p>
 <h2><a name="label:7" id="label:7">サンプルの動作確認</a></h2><!-- RDLabel: "サンプルの動作確認" -->

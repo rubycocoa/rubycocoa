@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="euc-jp" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="ja" xml:lang="ja">
+<head>
+<title>RubyCocoa - DETAIL</title>
+<meta http-equiv="Content-type" content="text/html; charset=euc-jp" />
+<link href="rdtext.css" type="text/css" rel="stylesheet"/>
+</head>
+<body>
+<h1><a name="label:0" id="label:0">RubyCocoaの詳細</a></h1><!-- RDLabel: "RubyCocoaの詳細" -->
+<p>RubyCocoaは、Ruby側を担当するRubyCocoaライブラリとObjective-C側を担当
+するRubyCocoaフレームワークから構成されます。</p>
+<h2><a name="label:1" id="label:1">RubyCocoaライブラリ</a></h2><!-- RDLabel: "RubyCocoaライブラリ" -->
+<h3><a name="label:2" id="label:2">ライブラリのロード</a></h3><!-- RDLabel: "ライブラリのロード" -->
+<p>RubyCocoaライブラリは、RubyCocoaのRuby側ライブラリです。Objective-Cで
+書かれている拡張ライブラリのosxobjc.bundleとrubyで書かれているいくつか
+のライブラリにより構成されています。使うときは</p>
+<pre>require 'osx/cocoa'</pre>
+<p>とします。Foundationクラスしか使わない場合は</p>
+<pre>require 'osx/foundation'</pre>
+<p>と書くこともできます。</p>
+<h3><a name="label:3" id="label:3">OSX::OCObjectクラス</a></h3><!-- RDLabel: "OSX::OCObjectクラス" -->
+<p>Objective-Cオブジェクトを包むオブジェクト(ラッパーオブジェクト)を定義
+するクラスです。</p>
+<dl>
+<dt><a name="label:4" id="label:4"><code>OCObject.new (...)</code></a></dt><!-- RDLabel: "OCObject.new" -->
+<dd>
+<p>自身のクラス名と同じ名前を持つObjective-C側のクラスを探し、その
+Objective-C側のインスタンスを生成しラッパーとなります。Objective-C 
+側のクラスが存在しない場合は生成するクラスとして
+<a href="#label:38">RubyObjectクラス</a>を採用します。</p></dd>
+<dt><a name="label:5" id="label:5"><code>OCObject.new_with_ocname (<var>ocname</var>, ...)</code></a></dt><!-- RDLabel: "OCObject.new_with_ocname" -->
+<dd>
+<p>引数で与えられた名前を持つObjective-C側のクラスを探し、その
+Objective-C側のインスタンスを生成しラッパーとなります。Objective-C 
+側のクラスが存在しない場合は生成するクラスとして
+<a href="#label:38">RubyObjectクラス</a>を採用します。</p>
+<p>Objective-C側のインスタンスは...</p>
+<ol>
+<li>Objective-C側のクラスがinitWithRubyObjectメソッドを持つ場合、
+        allocメソッドで初期化しinitWithRubyObjectメソッドで初期化しま
+        す。初期化メソッドの引数には生成中のRubyオブジェクト自体を与え
+        ます。</li>
+<li>その他の場合、allocメソッドにより生成しinitメソッドで初期化し
+        ます。さらに生成したObjective-C側のインスタンスがsetRubyObject
+        メソッドを持つ場合、生成中のRubyオブジェクト自体を引数としてそ
+        のメソッドを送ります。</li>
+</ol>
+<p>というルールにより生成します。</p></dd>
+<dt><a name="label:6" id="label:6"><code>OCObject.new_with_ocid (<var>ocid</var>, ...)</code></a></dt><!-- RDLabel: "OCObject.new_with_ocid" -->
+<dd>
+<p>引数で与えられた整数値をidとするObjective-C側のオブジェクトのラッ
+パーとなります。</p></dd>
+<dt><a name="label:7" id="label:7"><code>OCObject#to_s</code></a></dt><!-- RDLabel: "OCObject#to_s" -->
+<dd>
+<p>Objective-C側のオブジェクトにdescriptionを送信し返って来た文字列を
+返します。</p></dd>
+<dt><a name="label:8" id="label:8"><code>OCObject#to_a</code></a></dt><!-- RDLabel: "OCObject#to_a" -->
+<dd>
+<p>Objective-C側のオブジェクトがNSArrayであればRubyの配列に変換して返
+します。NSEnumeratorであればallObjectsメソッドの結果をRubyの配列に
+変換して返します。その他の場合にはオブジェクト自身を要素として持つ
+配列を返します。</p></dd>
+<dt><a name="label:9" id="label:9"><code>OCObject#oc_xxx (...)</code></a></dt><!-- RDLabel: "OCObject#oc_xxx" -->
+<dd>
+<p>"oc_"という接頭辞を持つメソッドは"oc_"を取り除いてObjective-C側の
+オブジェクトに送信します。</p></dd>
+<dt><a name="label:10" id="label:10"><code>OCObject#__ocid__</code></a></dt><!-- RDLabel: "OCObject#__ocid__" -->
+<dd>
+<p>Objective-C側のオブジェクトのidを返します。</p></dd>
+<dt><a name="label:11" id="label:11"><code>OCObject#ocm_responds? (<var>mselstr</var>)</code></a></dt><!-- RDLabel: "OCObject#ocm_responds?" -->
+<dd>
+<p>Objective-C側のオブジェクトが、引数で与えられた文字列もしくはシン
+ボルに対応するメソッドに応答できるかどうかを返します。</p></dd>
+<dt><a name="label:12" id="label:12"><code>OCObject#ocm_perform (<var>mselstr</var>, ...)</code></a></dt><!-- RDLabel: "OCObject#ocm_perform" -->
+<dd>
+<p>Objective-C側のオブジェクトに対しperformSelctorを使ってメソッドを
+送り結果を返します。</p></dd>
+<dt><a name="label:13" id="label:13"><code>OCObject#ocm_invoke (<var>mselstr</var>, ...)</code></a></dt><!-- RDLabel: "OCObject#ocm_invoke" -->
+<dd>
+<p>Objective-C側のオブジェクトに対しforwardInvocationを使ってメソッド
+を送り結果を返します。</p></dd>
+<dt><a name="label:14" id="label:14"><code>OCObject#ocm_send (<var>mselstr</var>, ...)</code></a></dt><!-- RDLabel: "OCObject#ocm_send" -->
+<dd>
+<p>Objective-C側のオブジェクトに対しメソッドを送り結果を返します。</p></dd>
+<dt><a name="label:15" id="label:15"><code>OCObject.ns_import (<var>sym</var>)</code></a></dt><!-- RDLabel: "OCObject.ns_import" -->
+<dd>
+<p>引数symで与えられた名前を持つObjective-C側のクラスそのもの(クラス
+オブジェクト)を探し、そのラッパーオブジェクトを生成してOSXモジュー
+ルの定数として定義します。通常このメソッドを使う必要はあまりません。</p></dd>
+</dl>
+<h3><a name="label:16" id="label:16">OSX::NSPointクラス</a></h3><!-- RDLabel: "OSX::NSPointクラス" -->
+<dl>
+<dt><a name="label:17" id="label:17"><code>OSX::NSPoint.new (...)</code></a><!-- RDLabel: "OSX::NSPoint.new" -->
+<dt><a name="label:18" id="label:18"><code>OSX::NSPoint#x</code></a><!-- RDLabel: "OSX::NSPoint#x" -->
+<dt><a name="label:19" id="label:19"><code>OSX::NSPoint#y</code></a><!-- RDLabel: "OSX::NSPoint#y" -->
+<dt><a name="label:20" id="label:20"><code>OSX::NSPoint#x= (<var>val</var>)</code></a><!-- RDLabel: "OSX::NSPoint#x=" -->
+<dt><a name="label:21" id="label:21"><code>OSX::NSPoint#y= (<var>val</var>)</code></a><!-- RDLabel: "OSX::NSPoint#y=" -->
+<dt><a name="label:22" id="label:22"><code>OSX::NSPoint#to_a</code></a><!-- RDLabel: "OSX::NSPoint#to_a" -->
+</dl>
+<h3><a name="label:23" id="label:23">OSX::NSSizeクラス</a></h3><!-- RDLabel: "OSX::NSSizeクラス" -->
+<dl>
+<dt><a name="label:24" id="label:24"><code>OSX::NSSize.new (...)</code></a><!-- RDLabel: "OSX::NSSize.new" -->
+<dt><a name="label:25" id="label:25"><code>OSX::NSSize#width</code></a><!-- RDLabel: "OSX::NSSize#width" -->
+<dt><a name="label:26" id="label:26"><code>OSX::NSSize#height</code></a><!-- RDLabel: "OSX::NSSize#height" -->
+<dt><a name="label:27" id="label:27"><code>OSX::NSSize#width= (<var>val</var>)</code></a><!-- RDLabel: "OSX::NSSize#width=" -->
+<dt><a name="label:28" id="label:28"><code>OSX::NSSize#height= (<var>val</var>)</code></a><!-- RDLabel: "OSX::NSSize#height=" -->
+<dt><a name="label:29" id="label:29"><code>OSX::NSSize#to_a</code></a><!-- RDLabel: "OSX::NSSize#to_a" -->
+</dl>
+<h3><a name="label:30" id="label:30">OSX::NSRectクラス</a></h3><!-- RDLabel: "OSX::NSRectクラス" -->
+<dl>
+<dt><a name="label:31" id="label:31"><code>OSX::NSRect.new (...)</code></a><!-- RDLabel: "OSX::NSRect.new" -->
+<dt><a name="label:32" id="label:32"><code>OSX::NSRect#origin</code></a><!-- RDLabel: "OSX::NSRect#origin" -->
+<dt><a name="label:33" id="label:33"><code>OSX::NSRect#size</code></a><!-- RDLabel: "OSX::NSRect#size" -->
+<dt><a name="label:34" id="label:34"><code>OSX::NSRect#origin= (<var>nspoint</var>)</code></a><!-- RDLabel: "OSX::NSRect#origin=" -->
+<dt><a name="label:35" id="label:35"><code>OSX::NSRect#size= (<var>nssize</var>)</code></a><!-- RDLabel: "OSX::NSRect#size=" -->
+<dt><a name="label:36" id="label:36"><code>OSX::NSRect#to_a</code></a><!-- RDLabel: "OSX::NSRect#to_a" -->
+</dl>
+<h2><a name="label:37" id="label:37">RubyCocoaフレームワーク</a></h2><!-- RDLabel: "RubyCocoaフレームワーク" -->
+<p>RubyCocoaフレームワークは、RubyCocoaのObjective-C側をフレームワーク化
+したものです。</p>
+<h3><a name="label:38" id="label:38">RubyObjectクラス</a></h3><!-- RDLabel: "RubyObjectクラス" -->
+<p>Rubyオブジェクトを包むオブジェクト(ラッパーオブジェクト)を定義するクラ
+スです。このクラスのインスタンスに対するメソッド呼び出しは以下のルール
+で処理されます。</p>
+<ol>
+<li>Objective-C側にメソッド定義があればそれを実行</li>
+<li>Ruby側にメソッド定義あればそれを実行</li>
+<li>どちらにも定義がなければ親クラス(NSObject)に処理を依頼</li>
+</ol>
+<dl>
+<dt><a name="label:39" id="label:39"><code>- <var>init</var></code></a></dt><!-- RDLabel: "- init" -->
+<dd>
+<p>自身のクラス名と同じ名前を持つRuby側のクラスを探し、そのRuby側のイ
+ンスタンスを生成しラッパーとなります。Ruby側のクラスが存在しない場
+合はRuby側クラスとして<a href="#label:3">OSX::OCObjectクラス</a>を採用します。</p></dd>
+<dt><a name="label:40" id="label:40"><code>- <var>initWithRubyClassName</var>: <var>a_name</var></code></a></dt><!-- RDLabel: "- initWithRubyClassName: a_name" -->
+<dd>
+<p>引数で与えられた名前を持つRuby側のクラスを探し、そのRuby側のインス
+タンスを生成しラッパーとなります。Ruby側のクラスが存在しない場合は
+Ruby側クラスとして<a href="#label:3">OSX::OCObjectクラス</a>を採用します。</p>
+<p>Ruby側のインスタンスは...</p>
+<ol>
+<li>Ruby側のクラスがnew_with_ocidメソッドを持つ場合、そのクラスが
+        OSX::OCObjectであると断定し、同メソッドにself(のRuby整数値表現)
+        を引数として与え生成します。</li>
+<li>その他のクラスの場合、newメソッドにより生成します。さらに生成
+        されたRuby側のインスタンスがset_ocobjメソッドを持つ場合、引数
+        に自身をOSX::OCObject化したRuby側インスタンスを与えてset_ocobj 
+        メソッドを送ります。</li>
+</ol>
+<p>というルールにより生成します。</p></dd>
+<dt><a name="label:41" id="label:41"><code>- <var>initWithRubyObject</var>: (<var>VALUE</var>) <var>a_rbobj</var></code></a></dt><!-- RDLabel: "- initWithRubyObject:" -->
+<dd>
+<p>引数で与えられたRuby側のオブジェクトのラッパーとなります。</p></dd>
+</dl>
+<h3><a name="label:42" id="label:42">rb_main</a></h3><!-- RDLabel: "rb_main" -->
+<dl>
+<dt><a name="label:43" id="label:43"><code>int <var>rb_main</var>(<var>const</var> <var>char</var>* <var>rb_main_name</var>, <var>int</var> <var>argc</var>, <var>char</var>* <var>argv</var>[])</code></a><!-- RDLabel: "int rb_main" -->
+</dl>
+<p>rb_mainはRubyCocoaアプリケーションをスタートさせるためのmain関数です。
+引数rb_main_nameにはRuby側のメインスクリプトファイル名を指定します。通
+常はmain.mの中で以下のように使います。</p>
+<pre>int main(int argc, char* argv[])
+{
+  return rb_main("rb_main.rb", argc, argv);
+}</pre>
+
+</body>
+</html>

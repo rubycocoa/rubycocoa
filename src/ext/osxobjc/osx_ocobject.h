@@ -27,6 +27,6 @@ struct _ocobj_data {
 extern VALUE kOCObject;
 
 VALUE init_class_OCObject(VALUE outer);
-VALUE ocobj_new_with_ocid(id ocobj);
+VALUE create_rbobj_with_ocid(id ocobj);
 
 #endif /* _OSX_OCOBJECT_H_ */

@@ -15,7 +15,7 @@
 #import <Cocoa/Cocoa.h>
 #import <stdarg.h>
 #import "ocdata_conv.h"
-
+#import "DummyProtocolHandler.h"
 
 #define OCID2NUM(val) UINT2NUM((VALUE)(val))
 
@@ -25,19 +25,24 @@
 #  define DLOG(f)            NSLog((f))
 #  define DLOG1(f,a0)        NSLog((f),(a0))
 #  define DLOG2(f,a0,a1)     NSLog((f),(a0),(a1))
-#  define DLOG3(f,a0,a1,a2)) NSLog((f),(a0),(a1),(a2))
+#  define DLOG3(f,a0,a1,a2)  NSLog((f),(a0),(a1),(a2))
 #else
 #  define DLOG(f)
 #  define DLOG1(f,a0)
 #  define DLOG2(f,a0,a1)
-#  define DLOG3(f,a0,a1,a2))
+#  define DLOG3(f,a0,a1,a2)
 #endif
+
+static VALUE ocobject_class()
+{
+  VALUE mOSX = rb_const_get(rb_cObject, rb_intern("OSX"));;
+  return rb_const_get(mOSX, rb_intern("OCObject"));
+}
 
 static VALUE to_rbobj(id ocobj)
 {
-  VALUE mOSX = rb_const_get(rb_cObject, rb_intern("OSX"));
-  VALUE cOCObject = rb_const_get(mOSX, rb_intern("OCObject"));
-  return rb_funcall(cOCObject, rb_intern("new_with_id"), 1, OCID2NUM(ocobj));
+  VALUE cOCObject = ocobject_class();
+  return rb_funcall(cOCObject, rb_intern("new_with_ocid"), 1, OCID2NUM(ocobj));
 }
 
 static id to_nsobj(VALUE rbobj)
@@ -81,18 +86,6 @@ static int argc_of(SEL a_sel)
   return argc;
 }
 
-static SEL dummy_selector_of(SEL a_sel)
-{
-  id selstr;
-  SEL newsel;
-  id pool = [[NSAutoreleasePool alloc] init];
-  selstr = NSStringFromSelector(a_sel);
-  selstr = [@"dummy_" stringByAppendingString: selstr];
-  newsel = NSSelectorFromString(selstr);
-  [pool release];
-  return newsel;
-}
-
 @implementation RubyObject
 
 /*********************/
@@ -114,24 +107,23 @@ static SEL dummy_selector_of(SEL a_sel)
 {
   if ([self hasRubyHandlerOf: a_sel]) {
     NSMethodSignature* msig;
-    a_sel = dummy_selector_of(a_sel);
-    msig = [self methodSignatureForSelector: a_sel];
+    msig = [dummy methodSignatureForSelector: a_sel];
     if (msig == nil) {
       // as Observer
       int argc = argc_of(a_sel);
       if (argc == 0)
-	msig = [self methodSignatureForSelector: @selector(ruby_method_0)];
+	msig = [dummy methodSignatureForSelector: @selector(ruby_method_0)];
       else if (argc == 1)
-	msig = [self methodSignatureForSelector: @selector(ruby_method_1:)];
+	msig = [dummy methodSignatureForSelector: @selector(ruby_method_1:)];
       else if (argc >= 2)
-	msig = [self methodSignatureForSelector: @selector(ruby_method_2:)];
+	msig = [dummy methodSignatureForSelector: @selector(ruby_method_2:)];
     }
     return msig;
   }
   return nil;
 }
 
-- (VALUE) forwardArgumentsOf: (NSInvocation*)an_inv
+- (VALUE) fetchForwardArgumentsOf: (NSInvocation*)an_inv
 {
   int i;
   NSMethodSignature* msig = [an_inv methodSignature];
@@ -161,7 +153,7 @@ static SEL dummy_selector_of(SEL a_sel)
   return args;
 }
 
-- (void) setForwardResult: (VALUE) result to:(NSInvocation*)an_inv
+- (void) stuffForwardResult: (VALUE) result to:(NSInvocation*)an_inv
 {
   NSMethodSignature* msig = [an_inv methodSignature];
   int octype = to_octype([msig methodReturnType]);
@@ -178,9 +170,9 @@ static SEL dummy_selector_of(SEL a_sel)
   VALUE rb_result;
   RB_ID mid = sel_to_mid([an_inv selector]);
   if (!rb_respond_to(rbobj, mid)) return;
-  rb_args = [self forwardArgumentsOf: an_inv];
+  rb_args = [self fetchForwardArgumentsOf: an_inv];
   rb_result = rb_apply(rbobj, mid, rb_args);
-  [self setForwardResult: rb_result to: an_inv];
+  [self stuffForwardResult: rb_result to: an_inv];
 }
 
 /********************/
@@ -198,6 +190,7 @@ static SEL dummy_selector_of(SEL a_sel)
 - initWithRubyObject: (unsigned long) a_rbobj
 {
   rbobj = a_rbobj;
+  dummy = [DummyProtocolHandler instance];
   return self;
 }
 
@@ -205,17 +198,35 @@ static SEL dummy_selector_of(SEL a_sel)
 {
   RB_ID rb_class_id;
   VALUE rb_class;
+  RB_ID rb_mid;
+
+  dummy = [DummyProtocolHandler instance];
 
   rb_class_id = rb_intern([class_name cString]);
   rb_class = rb_const_get(rb_cObject, rb_class_id);
-  // responds? new_with_id
-  if (rb_respond_to(rb_class, rb_intern("new_with_id"))) {
-    // OSX::OCObject
-    rbobj = rb_funcall(rb_class, rb_intern("new_with_id"), 1, OCID2NUM(self));
+
+  if (rb_class == Qnil) rb_class = ocobject_class();
+
+  /**
+   * if rb_class.respond_to?(:new_with_ocid) then
+   *    rbobj = rb_class.new_with_ocid(self.__ocid__)
+   *  else
+   *    rbobj = rb_class.new
+   *    if rbobj.respond_to?(:set_ocobj) then
+   *       rbobj.set_ocobj(self)
+   *    end
+   *  end
+   **/
+  rb_mid = rb_intern("new_with_ocid");
+  if (rb_respond_to(rb_class, rb_mid)) {
+    rbobj = rb_funcall(rb_class, rb_mid, 1, OCID2NUM(self));
   }
   else {
     rbobj = rb_funcall(rb_class, rb_intern("new"), 0);
-    rb_funcall(rbobj, rb_intern("set_ocobj"), 1, to_rbobj(self));
+    rb_mid = rb_intern("set_ocobj");
+    if (rb_respond_to(rb_class, rb_mid)) {
+      rb_funcall(rbobj, rb_mid, 1, to_rbobj(self));
+    }
   }
   return self;
 }
@@ -294,219 +305,5 @@ static SEL dummy_selector_of(SEL a_sel)
     [self forwardToRuby: an_inv];
   }
 }
-
-
-/************************/
-/** informal protocols **/
-/************************/
-
-// other
-- ruby_method_0 { return nil; }
-- ruby_method_1:a1 { return nil; }
-- ruby_method_2:a1,... { return nil; }
-
-// as Observer
-- (void)dummy_receiveNotification: (NSNotification *)notification {}
-
-// @interface NSObject (NSNibAwaking)
-- (void)dummy_awakeFromNib {}
-
-// @interface NSApplication(NSWindowsMenu)
-- (void)dummy_setWindowsMenu:(NSMenu *)aMenu {}
-- (NSMenu *)dummy_windowsMenu { return nil; }
-- (void)dummy_arrangeInFront:(id)sender {}
-- (void)dummy_removeWindowsItem:(NSWindow *)win {}
-- (void)dummy_addWindowsItem:(NSWindow *)win title:(NSString *)aString filename:(BOOL)isFilename {}
-- (void)dummy_changeWindowsItem:(NSWindow *)win title:(NSString *)aString filename:(BOOL)isFilename {}
-- (void)dummy_updateWindowsItem:(NSWindow *)win {}
-- (void)dummy_miniaturizeAll:(id)sender {}
-
-// @interface NSObject(NSApplicationNotifications)
-- (void)dummy_applicationWillFinishLaunching:(NSNotification *)notification {}
-- (void)dummy_applicationDidFinishLaunching:(NSNotification *)notification {}
-- (void)dummy_applicationWillHide:(NSNotification *)notification {}
-- (void)dummy_applicationDidHide:(NSNotification *)notification {}
-- (void)dummy_applicationWillUnhide:(NSNotification *)notification {}
-- (void)dummy_applicationDidUnhide:(NSNotification *)notification {}
-- (void)dummy_applicationWillBecomeActive:(NSNotification *)notification {}
-- (void)dummy_applicationDidBecomeActive:(NSNotification *)notification {}
-- (void)dummy_applicationWillResignActive:(NSNotification *)notification {}
-- (void)dummy_applicationDidResignActive:(NSNotification *)notification {}
-- (void)dummy_applicationWillUpdate:(NSNotification *)notification {}
-- (void)dummy_applicationDidUpdate:(NSNotification *)notification {}
-- (void)dummy_applicationWillTerminate:(NSNotification *)notification {}
-- (void)dummy_applicationDidChangeScreenParameters:(NSNotification *)notification {}
-
-// @interface NSObject(NSApplicationDelegate)
-- (NSApplicationTerminateReply)dummy_applicationShouldTerminate:(NSApplication *)sender { return 0; }
-- (BOOL)dummy_application:(NSApplication *)sender openFile:(NSString *)filename { return NO; }
-- (BOOL)dummy_application:(NSApplication *)sender openTempFile:(NSString *)filename { return NO; }
-- (BOOL)dummy_applicationShouldOpenUntitledFile:(NSApplication *)sender { return NO; }
-- (BOOL)dummy_applicationOpenUntitledFile:(NSApplication *)sender { return NO; }
-- (BOOL)dummy_application:(id)sender openFileWithoutUI:(NSString *)filename { return NO; }
-- (BOOL)dummy_application:(NSApplication *)sender printFile:(NSString *)filename { return NO; }
-- (BOOL)dummy_applicationShouldTerminateAfterLastWindowClosed:(NSApplication *)sender { return NO; }
-- (BOOL)dummy_applicationShouldHandleReopen:(NSApplication *)sender hasVisibleWindows:(BOOL)flag { return NO; }
-- (NSMenu *)dummy_applicationDockMenu:(NSApplication *)sender { return nil; }
-
-// @interface NSObject (NSConnectionDelegateMethods)
-- (BOOL)dummy_makeNewConnection:(NSConnection *)conn sender:(NSConnection *)ancestor { return NO; }
-- (BOOL)dummy_connection:(NSConnection *)ancestor shouldMakeNewConnection:(NSConnection *)conn { return NO; }
-- (NSData *)dummy_authenticationDataForComponents:(NSArray *)components { return nil; }
-- (BOOL)dummy_authenticateComponents:(NSArray *)components withData:(NSData *)signature { return NO; }
-- (id)dummy_createConversationForConnection:(NSConnection *)conn { return nil; }
-
-// @interface NSObject (NSPortDelegateMethods)
-- (void)dummy_handlePortMessage:(NSPortMessage *)message {}
-
-// @interface NSObject (NSMachPortDelegateMethods)
-- (void)dummy_handleMachMessage:(void *)msg {}
-
-// @interface NSObject(NSSpellServerDelegate)
-- (NSRange)dummy_spellServer:(NSSpellServer *)sender findMisspelledWordInString:(NSString *)stringToCheck language:(NSString *)language wordCount:(int *)wordCount countOnly:(BOOL)countOnly { NSRange dummy = {0,0}; return dummy; }
-- (NSArray *)dummy_spellServer:(NSSpellServer *)sender suggestGuessesForWord:(NSString *)word inLanguage:(NSString *)language { return nil; }
-- (void)dummy_spellServer:(NSSpellServer *)sender didLearnWord:(NSString *)word inLanguage:(NSString *)language {}
-- (void)dummy_spellServer:(NSSpellServer *)sender didForgetWord:(NSString *)word inLanguage:(NSString *)language {}
-
-// @interface NSObject(NSBrowserDelegate)
-- (int)dummy_browser:(NSBrowser *)sender numberOfRowsInColumn:(int)column { return 0; }
-- (void)dummy_browser:(NSBrowser *)sender createRowsForColumn:(int)column inMatrix:(NSMatrix *)matrix {}
-- (void)dummy_browser:(NSBrowser *)sender willDisplayCell:(id)cell atRow:(int)row column:(int)column {}
-- (NSString *)dummy_browser:(NSBrowser *)sender titleOfColumn:(int)column { return nil; }
-- (BOOL)dummy_browser:(NSBrowser *)sender selectCellWithString:(NSString *)title inColumn:(int)column { return NO; }
-- (BOOL)dummy_browser:(NSBrowser *)sender selectRow:(int)row inColumn:(int)column { return NO; }
-- (BOOL)dummy_browser:(NSBrowser *)sender isColumnValid:(int)column { return NO; }
-- (void)dummy_browserWillScroll:(NSBrowser *)sender {}
-- (void)dummy_browserDidScroll:(NSBrowser *)sender {}
-
-// @interface NSObject(NSControlSubclassDelegate)
-- (BOOL)dummy_control:(NSControl *)control textShouldBeginEditing:(NSText *)fieldEditor { return NO; }
-- (BOOL)dummy_control:(NSControl *)control textShouldEndEditing:(NSText *)fieldEditor { return NO; }
-- (BOOL)dummy_control:(NSControl *)control didFailToFormatString:(NSString *)string errorDescription:(NSString *)error { return NO; }
-- (void)dummy_control:(NSControl *)control didFailToValidatePartialString:(NSString *)string errorDescription:(NSString *)error {}
-- (BOOL)dummy_control:(NSControl *)control isValidObject:(id)obj { return NO; }
-
-- (BOOL)dummy_control:(NSControl *)control textView:(NSTextView *)textView doCommandBySelector:(SEL)commandSelector { return NO; }
-
-// @interface NSObject(NSDrawerDelegate)
-- (BOOL)dummy_drawerShouldOpen:(NSDrawer *)sender { return NO; }
-- (BOOL)dummy_drawerShouldClose:(NSDrawer *)sender { return NO; }
-- (NSSize)dummy_drawerWillResizeContents:(NSDrawer *)sender toSize:(NSSize)contentSize { NSSize s = {0.0,0.0}; return s; }
-
-// @interface NSObject(NSFontManagerDelegate)
-- (BOOL)dummy_fontManager:(id)sender willIncludeFont:(NSString *)fontName { return NO; }
-
-// @interface NSObject(NSImageDelegate)
-- (NSImage *)dummy_imageDidNotDraw:(id)sender inRect:(NSRect)aRect { return nil; }
-
-// @interface NSObject (NSLayoutManagerDelegate)
-- (void)dummy_layoutManagerDidInvalidateLayout:(NSLayoutManager *)sender {}
-- (void)dummy_layoutManager:(NSLayoutManager *)layoutManager didCompleteLayoutForTextContainer:(NSTextContainer *)textContainer atEnd:(BOOL)layoutFinishedFlag {}
-
-// @interface NSObject(NSOutlineViewDelegate)
-- (void)dummy_outlineView:(NSOutlineView *)outlineView willDisplayCell:(id)cell forTableColumn:(NSTableColumn *)tableColumn item:(id)item {}
-- (BOOL)dummy_outlineView:(NSOutlineView *)outlineView shouldEditTableColumn:(NSTableColumn *)tableColumn item:(id)item { return NO; }
-- (BOOL)dummy_selectionShouldChangeInOutlineView:(NSOutlineView *)outlineView { return NO; }
-- (BOOL)dummy_outlineView:(NSOutlineView *)outlineView shouldSelectItem:(id)item { return NO; }
-- (BOOL)dummy_outlineView:(NSOutlineView *)outlineView shouldSelectTableColumn:(NSTableColumn *)tableColumn { return NO; }
-- (BOOL)dummy_outlineView:(NSOutlineView *)outlineView shouldExpandItem:(id)item { return NO; }
-- (BOOL)dummy_outlineView:(NSOutlineView *)outlineView shouldCollapseItem:(id)item { return NO; }
-- (void)dummy_outlineView:(NSOutlineView *)outlineView willDisplayOutlineCell:(id)cell forTableColumn:(NSTableColumn *)tableColumn item:(id)item {}
-
-// @interface NSObject(NSSavePanelDelegate)
-- (NSString *)dummy_panel:(id)sender userEnteredFilename:(NSString *)filename confirmed:(BOOL)okFlag { return nil; }
-- (BOOL)dummy_panel:(id)sender isValidFilename:(NSString *)filename { return NO; }
-- (BOOL)dummy_panel:(id)sender shouldShowFilename:(NSString *)filename { return NO; }
-- (NSComparisonResult)dummy_panel:(id)sender compareFilename:(NSString *)file1 with:(NSString *)file2 caseSensitive:(BOOL)caseSensitive { return NSOrderedSame; }
-- (void)dummy_panel:(id)sender willExpand:(BOOL)expanding {}
-
-// @interface NSObject (NSSoundDelegateMethods)
-- (void)dummy_sound:(NSSound *)sound didFinishPlaying:(BOOL)aBool {}
-
-// @interface NSObject(NSSplitViewDelegate)
-- (void)dummy_splitView:(NSSplitView *)sender resizeSubviewsWithOldSize:(NSSize)oldSize {}
-- (float)dummy_splitView:(NSSplitView *)sender constrainMinCoordinate:(float)proposedCoord ofSubviewAt:(int)offset { return 0.0; }
-- (float)dummy_splitView:(NSSplitView *)sender constrainMaxCoordinate:(float)proposedCoord ofSubviewAt:(int)offset { return 0.0; }
-- (void)dummy_splitViewWillResizeSubviews:(NSNotification *)notification {}
-- (void)dummy_splitViewDidResizeSubviews:(NSNotification *)notification {}
-- (BOOL)dummy_splitView:(NSSplitView *)sender canCollapseSubview:(NSView *)subview { return NO; }
-- (float)dummy_splitView:(NSSplitView *)splitView constrainSplitPosition:(float)proposedPosition ofSubviewAt:(int)index { return 0.0; }
-
-// @interface NSObject(NSTabViewDelegate)
-- (BOOL)dummy_tabView:(NSTabView *)tabView shouldSelectTabViewItem:(NSTabViewItem *)tabViewItem { return NO; }
-- (void)dummy_tabView:(NSTabView *)tabView willSelectTabViewItem:(NSTabViewItem *)tabViewItem {}
-- (void)dummy_tabView:(NSTabView *)tabView didSelectTabViewItem:(NSTabViewItem *)tabViewItem {}
-- (void)dummy_tabViewDidChangeNumberOfTabViewItems:(NSTabView *)TabView {}
-
-// @interface NSObject(NSTableViewDelegate)
-- (void)dummy_tableView:(NSTableView *)tableView willDisplayCell:(id)cell forTableColumn:(NSTableColumn *)tableColumn row:(int)row {}
-- (BOOL)dummy_tableView:(NSTableView *)tableView shouldEditTableColumn:(NSTableColumn *)tableColumn row:(int)row { return NO; }
-- (BOOL)dummy_selectionShouldChangeInTableView:(NSTableView *)aTableView { return NO; }
-- (BOOL)dummy_tableView:(NSTableView *)tableView shouldSelectRow:(int)row { return NO; }
-- (BOOL)dummy_tableView:(NSTableView *)tableView shouldSelectTableColumn:(NSTableColumn *)tableColumn { return NO; }
-
-- (void)dummy_tableView:(NSTableView*)tableView mouseDownInHeaderOfTableColumn:(NSTableColumn *)tableColumn {}
-- (void)dummy_tableView:(NSTableView*)tableView didClickTableColumn:(NSTableColumn *)tableColumn {}
-- (void)dummy_tableView:(NSTableView*)tableView didDragTableColumn:(NSTableColumn *)tableColumn {}
-
-// @interface NSObject(NSTextDelegate)
-- (BOOL)dummy_textShouldBeginEditing:(NSText *)textObject { return NO; }
-- (BOOL)dummy_textShouldEndEditing:(NSText *)textObject { return NO; }
-- (void)dummy_textDidBeginEditing:(NSNotification *)notification {}
-- (void)dummy_textDidEndEditing:(NSNotification *)notification {}
-- (void)dummy_textDidChange:(NSNotification *)notification {}
-
-// @interface NSObject (NSTextStorageDelegate)
-- (void)dummy_textStorageWillProcessEditing:(NSNotification *)notification {}
-- (void)dummy_textStorageDidProcessEditing:(NSNotification *)notification {}
-
-// @interface NSObject (NSTextViewDelegate)
-- (BOOL)dummy_textView:(NSTextView *)textView clickedOnLink:(id)link atIndex:(unsigned)charIndex { return NO; }
-- (void)dummy_textView:(NSTextView *)textView clickedOnCell:(id <NSTextAttachmentCell>)cell inRect:(NSRect)cellFrame atIndex:(unsigned)charIndex {}
-- (void)dummy_textView:(NSTextView *)textView doubleClickedOnCell:(id <NSTextAttachmentCell>)cell inRect:(NSRect)cellFrame atIndex:(unsigned)charIndex {}
-- (void)dummy_textView:(NSTextView *)view draggedCell:(id <NSTextAttachmentCell>)cell inRect:(NSRect)rect event:(NSEvent *)event atIndex:(unsigned)charIndex {}
-- (NSArray *)dummy_textView:(NSTextView *)view writablePasteboardTypesForCell:(id <NSTextAttachmentCell>)cell atIndex:(unsigned)charIndex { return nil; }
-- (BOOL)dummy_textView:(NSTextView *)view writeCell:(id <NSTextAttachmentCell>)cell atIndex:(unsigned)charIndex toPasteboard:(NSPasteboard *)pboard type:(NSString *)type { return NO; }
-- (NSRange)dummy_textView:(NSTextView *)textView willChangeSelectionFromCharacterRange:(NSRange)oldSelectedCharRange toCharacterRange:(NSRange)newSelectedCharRange { NSRange r = {0,0}; return r; }
-- (void)dummy_textViewDidChangeSelection:(NSNotification *)notification {}
-- (BOOL)dummy_textView:(NSTextView *)textView shouldChangeTextInRange:(NSRange)affectedCharRange replacementString:(NSString *)replacementString { return NO; }
-- (BOOL)dummy_textView:(NSTextView *)textView doCommandBySelector:(SEL)commandSelector { return NO; }
-- (BOOL)dummy_textView:(NSTextView *)textView clickedOnLink:(id)link { return NO; }
-- (void)dummy_textView:(NSTextView *)textView clickedOnCell:(id <NSTextAttachmentCell>)cell inRect:(NSRect)cellFrame {}
-- (void)dummy_textView:(NSTextView *)textView doubleClickedOnCell:(id <NSTextAttachmentCell>)cell inRect:(NSRect)cellFrame {}
-- (void)dummy_textView:(NSTextView *)view draggedCell:(id <NSTextAttachmentCell>)cell inRect:(NSRect)rect event:(NSEvent *)event {}
-- (NSUndoManager *)dummy_undoManagerForTextView:(NSTextView *)view { return nil; }
-
-// @interface NSObject (NSToolbarDelegate)
-- (NSToolbarItem *)dummy_toolbar:(NSToolbar *)toolbar itemForItemIdentifier:(NSString *)itemIdentifier willBeInsertedIntoToolbar:(BOOL)flag { return nil; }
-- (NSArray *)dummy_toolbarDefaultItemIdentifiers:(NSToolbar*)toolbar { return nil; }
-- (NSArray *)dummy_toolbarAllowedItemIdentifiers:(NSToolbar*)toolbar { return nil; }
-
-// @interface NSObject(NSWindowNotifications)
-- (void)dummy_windowDidResize:(NSNotification *)notification {}
-- (void)dummy_windowDidExpose:(NSNotification *)notification {}
-- (void)dummy_windowWillMove:(NSNotification *)notification {}
-- (void)dummy_windowDidMove:(NSNotification *)notification {}
-- (void)dummy_windowDidBecomeKey:(NSNotification *)notification {}
-- (void)dummy_windowDidResignKey:(NSNotification *)notification {}
-- (void)dummy_windowDidBecomeMain:(NSNotification *)notification {}
-- (void)dummy_windowDidResignMain:(NSNotification *)notification {}
-- (void)dummy_windowWillClose:(NSNotification *)notification {}
-- (void)dummy_windowWillMiniaturize:(NSNotification *)notification {}
-- (void)dummy_windowDidMiniaturize:(NSNotification *)notification {}
-- (void)dummy_windowDidDeminiaturize:(NSNotification *)notification {}
-- (void)dummy_windowDidUpdate:(NSNotification *)notification {}
-- (void)dummy_windowDidChangeScreen:(NSNotification *)notification {}
-- (void)dummy_windowWillBeginSheet:(NSNotification *)notification {}
-- (void)dummy_windowDidEndSheet:(NSNotification *)notification {}
-
-// @interface NSObject(NSWindowDelegate)
-- (BOOL)dummy_windowShouldClose:(id)sender { return NO; }
-- (id)dummy_windowWillReturnFieldEditor:(NSWindow *)sender toObject:(id)client { return nil; }
-- (NSSize)dummy_windowWillResize:(NSWindow *)sender toSize:(NSSize)frameSize { NSSize r = { 0.0,0.0}; return r; }
-- (NSRect)dummy_windowWillUseStandardFrame:(NSWindow *)window defaultFrame:(NSRect)newFrame { NSRect r = {{0.0,0.0},{0.0,0.0}}; return r; }
-- (BOOL)dummy_windowShouldZoom:(NSWindow *)window toFrame:(NSRect)newFrame { return NO; }
-- (NSUndoManager *)dummy_windowWillReturnUndoManager:(NSWindow *)window { return nil; }
-
 
 @end

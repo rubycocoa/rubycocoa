@@ -61,7 +61,7 @@ ocobj_data_new(id oc_obj)
 }
 
 
-static VALUE ocobj_new_with_ocid_with_class(id oc_obj, VALUE klass)
+static VALUE create_rbobj_with_ocid_with_class(id oc_obj, VALUE klass)
 {
   VALUE new_obj;
   struct _ocobj_data* dp;
@@ -87,16 +87,16 @@ static VALUE ocobj_new_with_ocid_with_class(id oc_obj, VALUE klass)
   return new_obj;
 }
 
-VALUE ocobj_new_with_ocid(id oc_obj)
+VALUE create_rbobj_with_ocid(id oc_obj)
 {
-  return ocobj_new_with_ocid_with_class(oc_obj, kOCObject);
+  return create_rbobj_with_ocid_with_class(oc_obj, kOCObject);
 }
 
-static VALUE ocobj_s_new_with_id(int argc, VALUE* argv, VALUE klass)
+static VALUE ocobj_s_new_with_ocid(int argc, VALUE* argv, VALUE klass)
 {
   VALUE obj;
   if (argc < 1) rb_raise(rb_eArgError, "wrong # of arguments");
-  obj = ocobj_new_with_ocid_with_class((id)NUM2ULONG(argv[0]), klass);
+  obj = create_rbobj_with_ocid_with_class((id)NUM2ULONG(argv[0]), klass);
   argc--; argv++;
   rb_obj_call_init(obj, argc, argv);
   return obj;
@@ -112,7 +112,39 @@ static Class rbstr_to_nsclass(VALUE rbstr)
   return result;
 }
 
-static VALUE ocobj_s_new_with_name(int argc, VALUE* argv, VALUE klass)
+static Class find_class_of(VALUE klass)
+{
+  Class result = nil;
+  id pool = [[NSAutoreleasePool alloc] init];
+  const char* classname = rb_class2name(klass);
+  result = NSClassFromString([NSString stringWithCString: classname]);
+  [pool release];
+  return result;
+} 
+
+static VALUE new_with_occlass(VALUE klass, Class nsclass)
+{
+  VALUE obj;
+  id nsobj;
+
+  if (nsclass == nil)
+    nsclass = [RubyObject class];
+  nsobj = [nsclass alloc];
+  obj = create_rbobj_with_ocid_with_class(nsobj, klass);
+  if ([nsobj respondsToSelector: @selector(initWithRubyObject:)]) {
+    nsobj = [nsobj initWithRubyObject: obj];
+  }
+  else {
+    nsobj = [nsobj init];
+    if ([nsobj respondsToSelector: @selector(setRubyObject:)]) {
+      [nsobj setRubyObject: obj];
+    }
+  }
+  OCOBJ_DATA_PTR(obj)->ownership -= 1; // remove one ownership
+  return obj;
+}
+
+static VALUE ocobj_s_new_with_ocname(int argc, VALUE* argv, VALUE klass)
 {
   VALUE obj;
   Class nsclass;
@@ -122,9 +154,8 @@ static VALUE ocobj_s_new_with_name(int argc, VALUE* argv, VALUE klass)
   if (nsclass == nil)
     rb_raise(rb_eArgError, "class '%s' is nothing.", 
 	     STR2CSTR(rb_obj_as_string(argv[0])));
-  nsobj = [[nsclass alloc] init];
-  obj = ocobj_new_with_ocid_with_class(nsobj, klass);
-  OCOBJ_DATA_PTR(obj)->ownership -= 1; // remove one ownership
+
+  obj = new_with_occlass(klass, nsclass);
   argc--; argv++;
   rb_obj_call_init(obj, argc, argv);
   return obj;
@@ -134,25 +165,12 @@ static VALUE ocobj_s_new(int argc, VALUE* argv, VALUE klass)
 {
   VALUE obj;
   Class nsclass;
-  id nsobj;
-  nsobj = [RubyObject alloc];
-  obj = ocobj_new_with_ocid_with_class(nsobj, klass);
-  [nsobj initWithRubyObject: obj];
-  OCOBJ_DATA_PTR(obj)->ownership -= 1; // remove one ownership
-  rb_obj_call_init(obj, argc, argv);
-  return obj;
-}
 
-#if 0
-static VALUE ocobj_s_new(int argc, VALUE* argv, VALUE klass)
-{
-  VALUE obj;
-  obj = ocobj_new_with_ocid_with_class([[NSObject alloc] init], klass);
+  nsclass = find_class_of(klass);
+  obj = new_with_occlass(klass, nsclass);
   rb_obj_call_init(obj, argc, argv);
-  OCOBJ_DATA_PTR(obj)->ownership -= 1; // remove one ownership
   return obj;
 }
-#endif
 
 static BOOL
 ocm_perform(int argc, VALUE* argv, VALUE rcv, VALUE* result)
@@ -221,7 +239,7 @@ ocm_perform(int argc, VALUE* argv, VALUE rcv, VALUE* result)
   if (oc_result == oc_rcv)
     *result = rcv;
   else
-    *result = ocobj_new_with_ocid(oc_result);
+    *result = create_rbobj_with_ocid(oc_result);
 
   [pool release];
   return YES;
@@ -300,7 +318,7 @@ ocm_invoke(int argc, VALUE* argv, VALUE rcv, VALUE* result)
       if (rcv_id == data_id)
 	*result = rcv;
       else
-	*result = ocobj_new_with_ocid(data_id);
+	*result = create_rbobj_with_ocid(data_id);
     }
     else {
       BOOL f_conv_success;
@@ -344,9 +362,22 @@ ocobj_ocid(VALUE rcv)
 }
 
 static VALUE
-ocobj_add_ownership(VALUE rcv)
+ocobj_inc_ownership(VALUE rcv)
 {
   OCOBJ_DATA_PTR(rcv)->ownership += 1;
+  return INT2NUM(OCOBJ_DATA_PTR(rcv)->ownership);
+}
+
+static VALUE
+ocobj_dec_ownership(VALUE rcv)
+{
+  OCOBJ_DATA_PTR(rcv)->ownership -= 1;
+  return INT2NUM(OCOBJ_DATA_PTR(rcv)->ownership);
+}
+
+static VALUE
+ocobj_ownership_cnt(VALUE rcv)
+{
   return INT2NUM(OCOBJ_DATA_PTR(rcv)->ownership);
 }
 
@@ -438,13 +469,15 @@ init_class_OCObject(VALUE outer)
 {
   kOCObject = rb_define_class_under(outer, "OCObject", rb_cObject);
 
-  rb_define_singleton_method(kOCObject, "new_with_id", ocobj_s_new_with_id, -1);
-  rb_define_singleton_method(kOCObject, "new_with_name", ocobj_s_new_with_name, -1);
+  rb_define_singleton_method(kOCObject, "new_with_ocid", ocobj_s_new_with_ocid, -1);
+  rb_define_singleton_method(kOCObject, "new_with_ocname", ocobj_s_new_with_ocname, -1);
   rb_define_singleton_method(kOCObject, "new", ocobj_s_new, -1);
 
   rb_define_method(kOCObject, "__ocid__", ocobj_ocid, 0);
   rb_define_method(kOCObject, "__inspect__", ocobj_inspect, 0);
-  rb_define_method(kOCObject, "__add_ownership__", ocobj_add_ownership, 0);
+  rb_define_method(kOCObject, "__inc_ownership__", ocobj_inc_ownership, 0);
+  rb_define_method(kOCObject, "__dec_ownership__", ocobj_dec_ownership, 0);
+  rb_define_method(kOCObject, "__ownership_cnt__", ocobj_ownership_cnt, 0);
 
   rb_define_method(kOCObject, "inspect", ocobj_inspect, 0);
 
