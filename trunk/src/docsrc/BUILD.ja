@@ -1,15 +1,15 @@
 # -*-rd-*-
 = RubyCocoaをソースから構築・インストールする
 
-この文書ではRubyCocoa 0.4をソースから構築・インストールする方法に
-ついて説明します。
+この文書ではRubyCocoa 0.4をソースから構築・インストールする方法について
+説明します。バイナリ配付をインストールした場合は読む必要はありません。
 
 構築・インストール作業は、Terminalアプリケーションなどからシェルコマンド
 を入力して行います。シェルコマンド入力例にはbashを想定して記述しています。
 その他のシェル(例えばtcsh)を使っている場合、適当に読み変えてください。
 
 
-== 手順
+== 構築・インストールの手順
 
 構築・インストールは、おおよそ以下のような手順で行います。
 
@@ -17,7 +17,6 @@
   * ((<RubyCocoaの構築>))
   * ((<RubyCocoaの単体テスト>))
   * ((<RubyCocoaのインストール>))
-  * ((<サンプルなどで動作確認>))
 
 あらかじめどこかにRubyCocoaのソースを展開しておいてください。
 
@@ -32,29 +31,29 @@
 
 RubyCocoaを構築するためには、最低限librubyとRubyに付随するC言語の
 ヘッダーファイルが必要となります。ここでは次に示すケースを例に、
-RubyCocoa のベースとなるのRubyの構築手順を説明します。
+RubyCocoaのベースとなるRubyの構築手順を説明します。
 
   * ソースからインストールしたRuby 1.7
   * Mac OS X 10.2付属のRuby 1.6.7
 
-後者は、RubyCocoa 0.4バイナリパッケージと同等です。
-((<Fink|URL:http://fink.sf.net/>))のパッケージを使ってRubyをインストール
-している場合などは、それに合わせて読み変えてください。
+後者のケースは、RubyCocoa 0.4バイナリパッケージのケースに相当します。
+((<Fink|URL:http://fink.sf.net/>))などのパッケージを使ってRubyを
+インストールしている場合などは、それに合わせて読み変えてください。
 
 
 === ソースからインストールしたRuby 1.7
 
-Ruby 1.7のソースディレクトリに移動して以下のように構築・インストール
+Ruby 1.7のソースディレクトリに移動して、以下のように構築・インストール
 します。オプションは必要に応じて変更してください。
 
   $ CFLAGS='-g -O2 -fno-common' ./configure
   $ make
   $ make test
-  $ ranlib libruby-static.a  # 
   $ sudo make install
+  $ sudo ranlib /usr/local/lib/libruby-static.a  # 
 
 
-=== Mac OS X 10.2付属のRuby 1.6.7をベースにする場合
+=== Mac OS X 10.2付属のRuby 1.6.7
 
 ==== インストールされているMac OS Xパッケージの確認
 
@@ -66,9 +65,9 @@ Mac OS X 10.2をインストールした時のオプション設定次第では、必要な
   $ ls -dF /Library/Receipts/BSD*.pkg   # 確認
   /Library/Receipts/BSD.pkg/   /Library/Receipts/BSDSDK.pkg/
 
-Mac OS X 10.2にはRubyが含まれていますが、どういうわけがlibrubyは
-含まれていません。それゆえ、RubyCocoaを構築するためには、Ruby 1.6.7
-のソースからlibrubyを作る必要があります。
+Mac OS X 10.2にはRubyが含まれていますが、どういうわけかlibruby
+が含まれていません。したがって、RubyCocoaを構築するためには、
+Ruby 1.6.7のソースからlibrubyを作る必要があります。
 
 ==== Ruby 1.6.7のソースにパッチをあてる
 
@@ -82,7 +81,7 @@ Ruby 1.6.7用パッチをあてます。
 
 ==== librubyの構築・インストール
 
-Mac OS X付属Rubyの環境に合われてRuby 1.6.7を構築します。
+Mac OS X付属Rubyの環境に合わせてRuby 1.6.7を構築します。
 
   $ rbhost=`ruby -r rbconfig -e "print Config::CONFIG['host']"`
   $ CFLAGS='-g -O2 -fno-common' ./configure --prefix=/usr --host=$rbhost
@@ -123,12 +122,12 @@ libruby.aのみをインストールします。
 以上でインストールは完了です。ここまでの手順で以下のものがインストール
 されました。
 
-* /Library/Frameworks/RubyCocoa.framework     : フレームワーク(本体)
-* {sitedir}/{ruby_version}/osx/addressbook.rb : ライブラリ(stub)
-* {sitedir}/{ruby_version}/osx/appkit.rb      : ライブラリ(stub)
-* {sitedir}/{ruby_version}/osx/cocoa.rb       : ライブラリ(stub)
-* {sitedir}/{ruby_version}/osx/foundation.rb  : ライブラリ(stub)
-* {sitearchdir}/rubycocoa.bundle              : 拡張ライブラリ(stub)
+* /Library/Frameworks/RubyCocoa.framework     : フレームワーク (本体)
+* {sitedir}/{ruby_version}/osx/addressbook.rb : ライブラリ (stub)
+* {sitedir}/{ruby_version}/osx/appkit.rb      : ライブラリ (stub)
+* {sitedir}/{ruby_version}/osx/cocoa.rb       : ライブラリ (stub)
+* {sitedir}/{ruby_version}/osx/foundation.rb  : ライブラリ (stub)
+* {sitearchdir}/rubycocoa.bundle              : 拡張ライブラリ (stub)
 
 
 ((<「付属サンプルを試してみる」|URL:trysamples.ja.html>)) を参考に
@@ -151,4 +150,3 @@ libruby.aのみをインストールします。
 
 
 $Date$
-$Revision$
