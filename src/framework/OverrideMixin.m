@@ -33,9 +33,9 @@ static IMP super_imp(id rcv, SEL a_sel)
   return [[rcv superclass] instanceMethodForSelector: a_sel];
 }
 
-static id slave_obj_new(id rcv)
+static id slave_obj_new(id rcv, VALUE arg)
 {
-  return [[RBObject alloc] initWithClass: [rcv class] masterObject: rcv];
+  return [[RBObject alloc] initWithClass: [rcv class] withArg: arg masterObject: rcv];
 }
 
 /**
@@ -121,15 +121,26 @@ static id imp_rbobj (id rcv, SEL method)
 static id imp_init (id rcv, SEL method)
 {
   IMP simp = super_imp(rcv, method);
-  id slave = slave_obj_new(rcv);
+  id slave = slave_obj_new(rcv, Qnil);
   set_slave(rcv, slave);
   return (*simp)(rcv, method);
 }
 
 static id imp_initWithFrame (id rcv, SEL method, NSRect arg0)
 {
-  IMP simp = super_imp(rcv, method);
-  id slave = slave_obj_new(rcv);
+  IMP simp;
+  id slave;
+  char script[256];
+  VALUE arg;
+
+  snprintf(script, sizeof(script), "OSX::NSRect.new(%f,%f,%f,%f)", 
+	   arg0.origin.x, arg0.origin.x,
+	   arg0.size.width, arg0.size.height);
+  arg = rb_eval_string(script);
+
+  simp = super_imp(rcv, method);
+  slave = slave_obj_new(rcv, arg);
+
   set_slave(rcv, slave);
   return (*simp)(rcv, method, arg0);
 }

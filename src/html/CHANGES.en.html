@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="us-ascii" ?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<title>RubyCocoa - CHANGES</title>
+<meta http-equiv="Content-type" content="text/html; charset=us-ascii" />
+<link href="rdtext.css" type="text/css" rel="stylesheet"/>
+</head>
+<body>
+<h1><a name="label:0" id="label:0">Changes</a></h1><!-- RDLabel: "Changes" -->
+<h2><a name="label:1" id="label:1">changes from 0.1.0</a></h2><!-- RDLabel: "changes from 0.1.0" -->
+<h3><a name="label:2" id="label:2">Implementation</a></h3><!-- RDLabel: "Implementation" -->
+<p>[IMPROVE] Converting Ruby's Numeric to Cocoa's NSDeccimalNumber if
+required. (For "Learning Cocoa" CH.9)</p>
+<p>[IMPROVE] the method <code>initialize</code> for class extended
+<code>ib_lodable</code>. add mechanism for argument passing. Actually, this
+facility is only <code>ib_loadable :NSView</code> that use.</p>
+<pre>class HogeView : OSX::OCObject
+  ib_loadable :NSView
+  def initialize(frame)
+    p frame.is_a? OSX::NSRect   # =&gt; true
+  end
+end</pre>
+<h3><a name="label:3" id="label:3">Misc.</a></h3><!-- RDLabel: "Misc." -->
+<p>Rewrite the sample dotview with reading "Learning Cocoa" CH.8</p>
+<p>Add sample Expenses.app in  "Learning Cocoa" CH.9</p>
+<p>Move templates to template directory from sample directory.</p>
+<p>Add template Empty.app. Using copy of this, you can create a Cocoa
+application by Ruby scripting and some contents modification only.</p>
+
+</body>
+</html>

@@ -25,6 +25,27 @@ tgz file:</p>
 <pre>% tar zxf rubycocoa-0.1.0.tgz</pre>
 <p>And redo installing the RubyCocoa.</p>
 <p>(thanks Shimura-san)</p>
+<h3><a name="label:4" id="label:4">Q: I look a warning on console when running a RubyCocoa application.</a></h3><!-- RDLabel: "Q: I look a warning on console when running a RubyCocoa application." -->
+<p>When running Cocoa application, sometimes warning message about memory
+allocation is appeared on Console: </p>
+<pre>malloc[2461]: Deallocation of a pointer not malloced: 0x2718b20;
+This could be a double free(), or free() called with the middle of
+an allocated block; Try setting environment variable MallocHelp to
+see tools to help debug</pre>
+<h4><a name="label:5" id="label:5">A: Currently I can't solve this. (2001-11-30)</a></h4><!-- RDLabel: "A: Currently I can't solve this. (2001-11-30)" -->
+<p>Maybe this warning message is generated in OCStubCreator#ib_loadable.
+My understanding about the function "objc_addClass" using in
+"framework/RBRuntime.m" is wrong. Please debug somebody it.</p>
+<h2><a name="label:6" id="label:6">Misc.</a></h2><!-- RDLabel: "Misc." -->
+<h3><a name="label:7" id="label:7">Q: I want to select RubyCocoa application template in PB.</a></h3><!-- RDLabel: "Q: I want to select RubyCocoa application template in PB." -->
+<p>I want to select RubyCocoa application template in Project Builder new
+Project menu.</p>
+<h4><a name="label:8" id="label:8">A: copy "{rubycocoa srcdir}/template/tmpl_pb_based" to</a></h4><!-- RDLabel: "A: copy "{rubycocoa srcdir}/template/tmpl_pb_based" to" -->
+<p>"/Developer/ProjectBuilder Extras/Project Templates/Application/" and
+rename "RubyCocoa Application".</p>
+<pre>% cd "/Developer/ProjectBuilder Extras/Project Templates/Application"
+% cp -R {rubycocoa srcdir}/template/tmpl_pb_based "RubyCocoa Application"</pre>
+<p>(thanks Shimura-san)</p>
 
 </body>
 </html>

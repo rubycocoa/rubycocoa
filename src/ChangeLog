@@ -5,6 +5,9 @@
 	* framework: RBObject.m: using Method#arity for getting argc of
 	ruby methods.
 
+	* framework: OverrideMixin.m: a little improvement for imp_init
+	and imp_intiWithFrame argument passing.
+	
 2001-11-29  FUJIMOTO Hisakuni  <hisa@fobj.com>
 
 	* framework: RBObject.h, RBObject.m: hide RBObject#rbobjXXX

@@ -126,6 +126,22 @@ module OSX
       end
     end
 
+    def to_i
+      if self.ocm_send(:isKindOfClass_, OSX::NSNumber) != 0 then
+	self.ocm_send(:stringValue).to_s.to_i
+      else
+	super
+      end
+    end
+
+    def to_f
+      if self.ocm_send(:isKindOfClass_, OSX::NSNumber) != 0 then
+	self.ocm_send(:floatValue)
+      else
+	super
+      end
+    end
+
     def method_missing(mname, *args)
       analyze_missing(mname, args)
       ret = self.ocm_send(@m_name, *@m_args)
