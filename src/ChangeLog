@@ -1,21 +1,29 @@
+2002-01-10  FUJIMOTO Hisakuni  <hisa@fobj.com>
+
+	* framework/RBObject.m: 
+	stuffForwardResult: modify return value when methodReturnType is
+	_C_ID or _C_CLASS. This modification is for solving the problem
+	which returns "self" from override method of inherited class.
+
 2002-01-09  FUJIMOTO Hisakuni  <hisa@fobj.com>
 
 	* release 0.2.3
 
 2002-01-09  Chris Thomas <kenshin@apple.com>
 
-	* ext/osx_objc/cls_objcid.m: _objcid_initialize_for_new_with_ocid
-	was passing the argument signature "10*" to rb_scan_args, but was
-	only passing a pointer to one output argument and was thus missing
-	a second argument for the array. This caused rb_scan_args to
-	overwrite the next four bytes off the end of the argument array
-	with the VALUE for an empty array. Fixed by changing the method
-	signature to "10".
+	* ext/osx_objc/cls_objcid.m: 
+	_objcid_initialize_for_new_with_ocid was passing the argument
+	signature "10*" to rb_scan_args, but was only passing a pointer to
+	one output argument and was thus missing a second argument for the
+	array. This caused rb_scan_args to overwrite the next four bytes
+	off the end of the argument array with the VALUE for an empty
+	array. Fixed by changing the method signature to "10".
 
 2002-01-09  FUJIMOTO Hisakuni  <hisa@fobj.com>
 
-	* ext/osx_objc/osx_objc.m: change OSX.ruby_thread_switcher_start()
-	arguments. "interval" is specified NSTimer interval, "wait"
+	* ext/osx_objc/osx_objc.m:
+	change OSX.ruby_thread_switcher_start() arguments. "interval" is
+	specified NSTimer interval, "wait"
 	(optional) is rb_thread_wait_for().
 
 	* framework/RBThreadSwitcher.m, framework/RBThreadSwitcher.h:
