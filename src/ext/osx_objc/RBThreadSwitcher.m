@@ -59,7 +59,7 @@ static id rthread_switcher = nil;
   id pool, a_timer;
   SEL sel;
 
-  if (rthread_switcher) return;
+  if (rthread_switcher) [self stop];
 
   if (a_wait <= 0.0)
     sel = @selector(sched:);
@@ -85,7 +85,7 @@ static id rthread_switcher = nil;
 
 + (void) start
 {
-  [self start: 0.001];
+  [self start: 0.005];
 }
 
 + (void) stop
