@@ -1,0 +1,16 @@
+#import <LibRuby/cocoa_ruby.h>
+#import "../framework/ocdata_conv.h"
+#import <AppKit/AppKit.h>
+
+void init_NSTabView(VALUE mOSX)
+{
+  /**** enums ****/
+  rb_define_const(mOSX, "NSTopTabsBezelBorder", INT2NUM(NSTopTabsBezelBorder));
+  rb_define_const(mOSX, "NSLeftTabsBezelBorder", INT2NUM(NSLeftTabsBezelBorder));
+  rb_define_const(mOSX, "NSBottomTabsBezelBorder", INT2NUM(NSBottomTabsBezelBorder));
+  rb_define_const(mOSX, "NSRightTabsBezelBorder", INT2NUM(NSRightTabsBezelBorder));
+  rb_define_const(mOSX, "NSNoTabsBezelBorder", INT2NUM(NSNoTabsBezelBorder));
+  rb_define_const(mOSX, "NSNoTabsLineBorder", INT2NUM(NSNoTabsLineBorder));
+  rb_define_const(mOSX, "NSNoTabsNoBorder", INT2NUM(NSNoTabsNoBorder));
+
+}
