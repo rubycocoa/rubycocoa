@@ -28,6 +28,10 @@
   on Mac OS X based Carbon framework. Recently, some classes
   (e.g. NSAppleScript) have been added to Cocoa incompletely.
 
+: ((<CocoaRBBR.app|URL:http://homepage3.nifty.com/kimuraw/proj/cocoarbbr.html>))
+
+  The application which implemented Ruby class browser with RubyCocoa.
+
 
 == Same Kind of RubyCocoa
 
