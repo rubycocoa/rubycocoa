@@ -156,6 +156,8 @@ static id ocid_of(VALUE obj)
       id ocid = *(id*)ocdata;
       if ([ocid isKindOfClass: [self class]])
 	arg_val = [ocid __rbobj__];
+      else if ([ocid respondsToSelector: @selector(__rbobj__)])
+	arg_val = [ocid __rbobj__];
       else if (ocid_of(m_rbobj) == ocid)
 	arg_val = m_rbobj;
       else
