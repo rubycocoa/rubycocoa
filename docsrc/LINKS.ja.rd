@@ -87,7 +87,7 @@
 
   Rubyで書かれたWiki
 
-: ((<FreeRIDE|URL:http://www.rubyide.org/>))
+: ((<FreeRIDE|URL:http://freeride.rubyforge.org/wiki/wiki.pl>))
 
   Rubyだけで書かれたRubyのためのIDE。GUIはFXRuby(FOX)で書かれているが、
   GUIを抽象化するレイヤーがありGTK+で実装したものもあるらしい。

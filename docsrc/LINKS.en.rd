@@ -91,7 +91,7 @@
 
   Wiki written with Ruby.
 
-: ((<FreeRIDE|URL:http://www.rubyide.org/>))
+: ((<FreeRIDE|URL:http://freeride.rubyforge.org/wiki/wiki.pl>))
 
   The IDE for Ruby written completely in Ruby.
   FreeRIDE's GUI is written with FXRuby (FOX) currently. However, it
