@@ -1,27 +1,31 @@
 # -*-makefile-*-
 
-APPNAME = %%%%APP_NAME%%%%
-RUBYSRCS = %%%%RUBY_SOURCES%%%%
-
+APPNAME = SimpleApp
+BUNDLEID = rubyapp.$(APPNAME)
 NIBDIR = English.lproj
-RUBYSRC_MAIN = rb_main.rb
+
+RUBYSRCS = rb_main.rb AppController.rb
 OBJS = main.o
+LIBS = -lobjc -framework RubyCocoa
 
 TARGET = $(APPNAME).app
 CFLAGS = -Wall
 
+SED_CMD_0 = -e "s/%%%APPNAME%%%/$(APPNAME)/"
+SED_CMD_1 = -e "s/%%%BUNDLEID%%%/$(BUNDLEID)/"
 
-$(TARGET): $(OBJS) $(RUBYSRCS) $(RUBYSRC_MAIN)
-	$(CC) $(OBJS) -framework Foundation
+
+$(TARGET): $(OBJS) $(RUBYSRCS)
+	$(CC) $(OBJS) $(LIBS)
 	-/bin/rm -rf $(APPNAME).app
 	mkdir $(APPNAME).app
 	mkdir $(APPNAME).app/Contents
 	mkdir $(APPNAME).app/Contents/MacOS
 	mkdir $(APPNAME).app/Contents/Resources
 	mv a.out $(APPNAME).app/Contents/MacOS/$(APPNAME)
-	cp -p Info.plist $(APPNAME).app/Contents/
+	sed $(SED_CMD_0) $(SED_CMD_1) Info.plist.tmpl > $(APPNAME).app/Contents/Info.plist
 	echo -n "APPL????" > $(APPNAME).app/Contents/PkgInfo
-	cp -p $(RUBYSRC_MAIN) $(RUBYSRCS) $(APPNAME).app/Contents/Resources/
+	cp -p $(RUBYSRCS) $(APPNAME).app/Contents/Resources/
 	cp -R $(NIBDIR) $(APPNAME).app/Contents/Resources/
 
 clean:
