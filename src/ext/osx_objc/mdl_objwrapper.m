@@ -358,6 +358,23 @@ wrapper_ocm_send(int argc, VALUE* argv, VALUE rcv)
   return result;
 }
 
+static VALUE
+wrapper_to_s (VALUE rcv)
+{
+  VALUE ret = Qnil;
+  id oc_rcv = rbobj_get_ocid(rcv);
+  if ([oc_rcv isKindOfClass: [NSString class]]) {
+    ret = rb_str_new ([oc_rcv cString], [oc_rcv cStringLength]);
+  }
+  else {
+    id pool = [[NSAutoreleasePool alloc] init];
+    oc_rcv = [oc_rcv description];
+    ret = rb_str_new ([oc_rcv cString], [oc_rcv cStringLength]);
+    [pool release];
+  }
+  return ret;
+}
+
 /*****************************************/
 
 VALUE
@@ -369,6 +386,7 @@ init_mdl_OCObjWrapper(VALUE outer)
   rb_define_method(_mObjWrapper, "ocm_perform", wrapper_ocm_perform, -1);
   rb_define_method(_mObjWrapper, "ocm_invoke", wrapper_ocm_invoke, -1);
   rb_define_method(_mObjWrapper, "ocm_send", wrapper_ocm_send, -1);
+  rb_define_method(_mObjWrapper, "to_s", wrapper_to_s, 0);
 
   return _mObjWrapper;
 }
