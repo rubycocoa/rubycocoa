@@ -260,11 +260,6 @@ rbobj_get_ocid (VALUE obj)
   if (rb_respond_to(obj, mtd))
     return rb_obj_ocid(obj);
 
-  if (rb_respond_to(obj, rb_intern("to_nsobject"))) {
-    VALUE nso = rb_funcall(obj, rb_intern("to_nsobject"), 0);
-    return rb_obj_ocid(nso);
-  }
-
   return nil;
 }
 
