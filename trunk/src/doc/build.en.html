@@ -51,9 +51,8 @@ RubyCocoa<font size='-1'> - A Ruby/Objective-C Bridge for Mac OS X with Cocoa</f
 <!-- body/main/contents -->
 <td class='body-contents' id='body-contents' valign='top'>
 <h1><a name='label:0' id='label:0'>Build and Installation RubyCocoa from Source</a></h1><!-- RDLabel: "Build and Installation RubyCocoa from Source" -->
-<p>This document is described about build and installation of RubyCocoa
-0.4 from source. You don't need to read this if binary distribution of
-RubyCocoa have been installed already.</p>
+<p>This document describes build and installation of RubyCocoa 0.4 from
+source. Skip this if you are going to install the binary distribution.</p>
 <p>Build/Installation would be done on shell command with Terminal
 application or etc. In this document, it's assumed to use 'bash' in
 shell command input example. When other shell (e.g. tcsh) is used,
@@ -61,7 +60,7 @@ please read suitably.</p>
 <h2><a name='label:1' id='label:1'>Procedure of Build and Installation</a></h2><!-- RDLabel: "Procedure of Build and Installation" -->
 <p>The following procedures perform build and installation.</p>
 <ul>
-<li><a href='Build'>Installation of Ruby</a></li>
+<li><a href='#label:2'>Build and Installation of Ruby</a></li>
 <li><a href='#label:8'>Build of RubyCocoa</a></li>
 <li><a href='#label:9'>Unit Test for RubyCocoa</a></li>
 <li><a href='#label:10'>Installation of RubyCocoa</a></li>
@@ -71,7 +70,7 @@ please read suitably.</p>
 $ tar zxf rubycocoa-0.4.0.tar.gz</pre>
 <p><em>Caution!</em> Using StuffIt, building RubyCocoa will fail
 because of a file name length problem. </p>
-<h2><a name='label:2' id='label:2'>Build/Installation of Ruby</a></h2><!-- RDLabel: "Build/Installation of Ruby" -->
+<h2><a name='label:2' id='label:2'>Build and Installation of Ruby</a></h2><!-- RDLabel: "Build and Installation of Ruby" -->
 <p>To build RubyCocoa, Some C language header files and libruby of Ruby
 is required. Here, the build procedure of Ruby which serves as a base
 of RubyCocoa in the case shown below at an example is explained.</p>
@@ -79,10 +78,9 @@ of RubyCocoa in the case shown below at an example is explained.</p>
 <li>Ruby 1.8 installed from source</li>
 <li>Ruby 1.6.7 included in Mac OS X 10.2</li>
 </ul>
-<p>A case of the latter is equivalent to a case of a RubyCocoa 0.4 binary
-package. When Ruby is installed using packages, such as
-<a href='http://fink.sf.net/'>Fink</a>, please read and change according
-to it.</p>
+<p>RubyCocoa 0.4 binary distribution has been built with the latter.
+When Ruby has been installed with some packages (such as
+<a href='http://fink.sf.net/'>Fink</a>), read and change accordingly.</p>
 <h3><a name='label:3' id='label:3'>Ruby 1.8 installed from source</a></h3><!-- RDLabel: "Ruby 1.8 installed from source" -->
 <p>It moves to the sauce directory of Ruby 1.8, and builds and installs
 as follows. Please change an option if needed.
