@@ -1,3 +1,7 @@
+2001-12-07  FUJIMOTO Hisakuni  <hisa@fobj.com>
+
+	* release 0.1.2
+
 2001-12-07  Chris Thomas <kenshin@apple.com>
 
 	* framework/ocdata_conv.h, framework/ocdata_conv.m,

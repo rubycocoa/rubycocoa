@@ -125,6 +125,9 @@ module OSX
 	@length = args[1].to_i
       end
     end
+    def to_a
+      [ @location, @length ]
+    end
     def to_range
       Range.new(@location, @location + @length - 1)
     end
