@@ -6,14 +6,14 @@
 <head>
 <title>RubyCocoa - INSTALL</title>
 <meta http-equiv="Content-type" content="text/html; charset=us-ascii" />
-<link href="rdtext.css" type="text/css" rel="stylesheet"/>
+<link href="rdtext.css" type="text/css" rel="stylesheet" />
 </head>
 <body>
 <h1><a name="label:0" id="label:0">Install RubyCocoa</a></h1><!-- RDLabel: "Install RubyCocoa" -->
 <h2><a name="label:1" id="label:1">Install Sequence</a></h2><!-- RDLabel: "Install Sequence" -->
 <ul>
-<li><a href="#label:2">Install Ruby</a></li>
-<li><a href="#label:3">Extract RubyCocoa</a></li>
+<li><a href="#label:3">Install Ruby</a></li>
+<li><a href="#label:2">Extract RubyCocoa</a></li>
 <li><a href="#label:4">Install LibRuby Framework</a></li>
 <li><a href="#label:5">Build and Install RubyCocoa</a></li>
 <li><a href="#label:6">Done</a></li>
@@ -21,26 +21,31 @@
 </ul>
 <p>You must use the Terminal application (command line shell) to install
 RubyCocoa.</p>
-<h2><a name="label:2" id="label:2">Install Ruby</a></h2><!-- RDLabel: "Install Ruby" -->
-<p>If you have installed Ruby with "--enable-shared" option already, go
-to next section.</p>
-<p>If you newly install Ruby on MacOS X, use 1.6.6 or later. When
-installing it or earlier, it is necessary to apply a patch to the source.</p>
-<p>The following is the most typical installation procedure of Ruby
-1.6.6.</p>
-<pre>% cd {anywhere}
-% tar zxf ruby-1.6.6.tar.gz    # extract the tarball
-% cd ruby-1.6.6
-% ./configure --enable-shared  # install to /usr/local
-% make ; make test
-% sudo make install</pre>
-<p>During configuration, specify the "--enable-shared" option. </p>
-<h2><a name="label:3" id="label:3">Extract RubyCocoa</a></h2><!-- RDLabel: "Extract RubyCocoa" -->
+<h2><a name="label:2" id="label:2">Extract RubyCocoa</a></h2><!-- RDLabel: "Extract RubyCocoa" -->
 <p>extract RubyCocoa sources tarball.</p>
 <pre>% cd {anywhere}
 % tar zxf rubycocoa-0.2.x.tgz</pre>
 <p><em>Caution!</em> Using StuffIt, building RubyCocoa will fail
 because of a file name length problem. </p>
+<h2><a name="label:3" id="label:3">Install Ruby</a></h2><!-- RDLabel: "Install Ruby" -->
+<p>If you have installed Ruby with "--enable-shared" option already, go
+to next section.</p>
+<p>At first, extract ruby-1.6.7.tar.gz:</p>
+<pre>% cd {anywhere}
+% tar zxf ruby-1.6.7.tar.gz    # extract the tarball
+% cd ruby-1.6.7</pre>
+<p>`ruby' command is contained in Mac OS X 10.2, but the shared library
+"libruby.dylib" isn't contained in. So you cannot use it for
+RubyCocoa. You need to install Ruby 1.6.7 separately. Plain Ruby 1.6.7
+cannot make with Mac OS X 10.2. Apply patch that is contained in
+RubyCocoa source distribution. This patch is unnecessary in case of
+Mac OS X 10.1.x.</p>
+<pre>% patch -p1 &lt; {RubyCocoa sources}/misc/ruby-1.6.7-osx10.2.patch</pre>
+<p>It is setup completion therefore. You do make of ruby as follows:</p>
+<pre>% ./configure --enable-shared  # install into /usr/local
+% make ; make test
+% sudo make install</pre>
+<p>During configuration, specify the "--enable-shared" option. </p>
 <h2><a name="label:4" id="label:4">Install LibRuby Framework</a></h2><!-- RDLabel: "Install LibRuby Framework" -->
 <p>LibRuby Framework is a framework for Ruby interpreter shared library
 and related header files. The framework is needed by RubyCocoa and
