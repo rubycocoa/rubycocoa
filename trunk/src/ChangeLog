@@ -1,3 +1,20 @@
+2001-12-03  FUJIMOTO Hisakuni  <hisa@fobj.com>
+
+	* framework/OverrideMixin.m, framework/RBRuntime.m: use
+	NSZoneMalloc instead of malloc when memory allocation.
+
+	* framework/OverrideMixin.m: remove overrided
+	"init/initWithFrame". Add overriced "alloc" for creating Ruby
+	object.
+
+	* framework/RBRuntime.m: method_list_alloc(), BUG FIX, use
+	END_OF_METHODS_LIST when initialize allocated memory area.
+
+	* lib/osx/ocobject.rb: add OSX.ns_import in
+	OCStubCreator.ib_loadable.
+	
+	* lib/osx/ocobject.rb: ib_loadable, ib_outlets, ib_overrides.
+
 2001-11-30  FUJIMOTO Hisakuni  <hisa@fobj.com>
 
 	* release 0.1.1
