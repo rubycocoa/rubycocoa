@@ -2208,6 +2208,7 @@
 				E88C6E7E035BB408031D1B90,
 				E88C6E7F035BB408031D1B90,
 				E88C6E80035BB408031D1B90,
+				E8FD49D003D45B2603A81C6F,
 			);
 			isa = PBXGroup;
 			path = objc;
@@ -2368,6 +2369,7 @@
 				E88C6E8F035BB408031D1B90,
 				E88C6E90035BB408031D1B90,
 				E88C6E91035BB408031D1B90,
+				E8FD49D103D45B2603A81C6F,
 			);
 			isa = PBXCopyFilesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -2413,6 +2415,17 @@
 				ATTRIBUTES = (
 					Public,
 				);
+			};
+		};
+		E8FD49D003D45B2603A81C6F = {
+			isa = PBXFileReference;
+			path = ruby_addition.rb;
+			refType = 4;
+		};
+		E8FD49D103D45B2603A81C6F = {
+			fileRef = E8FD49D003D45B2603A81C6F;
+			isa = PBXBuildFile;
+			settings = {
 			};
 		};
 	};
