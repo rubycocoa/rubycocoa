@@ -1,7 +1,7 @@
 # -*-rd-*-
 = 変更点
 
-== 0.4.0 からのおもな変更点
+== 0.4.0 からのおもな変更点 (HEAD)
 
 : RubyCocoa.frameworkを組み込み可能にした
 
@@ -10,9 +10,21 @@
   RubyCocoaアプリケーション自体にRubyCocoa.frameworkを組み込んで使うこ
   とができます。
 
+: WebKit.framework対応
+
+  kimura wataru さんによって書かれた WebKit.framework 用のライブラリを
+  追加しました。((- WebKit対応について、kimura wataruさんと s.sawada さ
+  んの取り組みに感謝します。-))
+
+: initメソッドをns_overrideすると例外があがるバグを修正
+
+  ns_overrideしたinitメソッドの定義の中で、super_initを呼ぶと例外が発生
+  するバグを、修正しました。
+
 : その他
 
-  RCDataAttachmentモジュールを定義。NSData, NSStrng クラスにいくつかのクラスメソッドを定義。
+  RCDataAttachmentモジュールを定義。NSData, NSStrng クラスにいくつかの
+  クラスメソッドを定義。
 
 == 0.3.2 からのおもな変更点 (0.4.0)
 
