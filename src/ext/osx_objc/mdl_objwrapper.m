@@ -269,7 +269,7 @@ ocm_invoke(int argc, VALUE* argv, VALUE rcv, VALUE* result)
     }
   }
   else {
-    *result = nil;
+    *result = Qnil;
   }
 
   [pool release];
@@ -305,9 +305,9 @@ static VALUE
 wrapper_ocm_perform(int argc, VALUE* argv, VALUE rcv)
 {
   VALUE result;
-  id pool = [[NSAutoreleasePool alloc] init];
+  // id pool = [[NSAutoreleasePool alloc] init];
   if (!ocm_perform(argc, argv, rcv, &result)) {
-    [pool release];
+    // [pool release];
     if (argc > 0) {
       VALUE asstr = rb_obj_as_string(argv[0]);
       rb_raise(rb_eRuntimeError, "ocm_perform failed: %s", STR2CSTR(asstr));
@@ -316,7 +316,7 @@ wrapper_ocm_perform(int argc, VALUE* argv, VALUE rcv)
       rb_raise(rb_eRuntimeError, "ocm_perform failed");
     }
   }
-  [pool release];
+  // [pool release];
   return result;
 }
 
@@ -324,9 +324,9 @@ static VALUE
 wrapper_ocm_invoke(int argc, VALUE* argv, VALUE rcv)
 {
   VALUE result;
-  id pool = [[NSAutoreleasePool alloc] init];
+  // id pool = [[NSAutoreleasePool alloc] init];
   if (!ocm_invoke(argc, argv, rcv, &result)) {
-    [pool release];
+    // [pool release];
     if (argc > 0) {
       VALUE asstr = rb_obj_as_string(argv[0]);
       rb_raise(rb_eRuntimeError, "ocm_invoke failed: %s", STR2CSTR(asstr));
@@ -335,7 +335,7 @@ wrapper_ocm_invoke(int argc, VALUE* argv, VALUE rcv)
       rb_raise(rb_eRuntimeError, "ocm_invoke failed");
     }
   }
-  [pool release];
+  // [pool release];
   return result;
 }
 
@@ -343,9 +343,9 @@ static VALUE
 wrapper_ocm_send(int argc, VALUE* argv, VALUE rcv)
 {
   VALUE result;
-  id pool = [[NSAutoreleasePool alloc] init];
+  // id pool = [[NSAutoreleasePool alloc] init];
   if (!ocm_send(argc, argv, rcv, &result)) {
-    [pool release];
+    // [pool release];
     if (argc > 0) {
       VALUE asstr = rb_obj_as_string(argv[0]);
       rb_raise(rb_eRuntimeError, "ocm_send failed: %s", STR2CSTR(asstr));
@@ -354,7 +354,7 @@ wrapper_ocm_send(int argc, VALUE* argv, VALUE rcv)
       rb_raise(rb_eRuntimeError, "ocm_send failed");
     }
   }
-  [pool release];
+  // [pool release];
   return result;
 }
 
