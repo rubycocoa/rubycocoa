@@ -32,9 +32,20 @@ module OSX
 
   # for NSData
   class NSData
+
     def NSData.dataWithRubyString (str)
       NSData.dataWithBytes_length( str, str.size )
     end
+
+  end
+
+  # for NSMutableData
+  class NSMutableData
+
+    def NSMutableData.dataWithRubyString (str)
+      NSMutableData.dataWithBytes_length( str, str.size )
+    end
+
   end
 
   # for NSString
