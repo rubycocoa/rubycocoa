@@ -4,13 +4,16 @@
 <pre>
 2002-02-07  FUJIMOTO Hisakuni  
 
+	* framework/OverrideMixin.m:
+	handle_ruby_method(): fixed a bug of case that size of return value is
+	less than sizeof(id).
+
 	* ext/osx_objc/cocoa/rb_*.m:
 	renew with 'const' and 'unsigned' supported auto wrapper generator.
 
 	* ext/osx_objc/cocoa/gen_cocoa_wrapper.rb: fix 'const' bug.
 
-	* tool/och_analyzer.rb:
-	- fix a type checking bug for 'unsigned'.
+	* tool/och_analyzer.rb: - fix a type checking bug for 'unsigned'.
 	- improve type checking for 'const'.
 
 	* lib/osx/objc/oc_types.rb:
