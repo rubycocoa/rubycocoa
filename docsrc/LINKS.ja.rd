@@ -14,6 +14,12 @@
   RubyCocoaのチュートリアル。簡単な電卓アプリケーションの作成を例題に
   RubyCocoaでのプログラミングについて解説しています。
 
+: ((<An Introduction to RubyCocoa, Part 1 (英語)|URL:http://www.macdevcenter.com/pub/a/mac/2004/10/05/cocoa.html>)) ((<, Part 2|URL:http://www.macdevcenter.com/pub/a/mac/2004/10/12/cocoa.html>)) 
+
+  MacDevCenterに掲載されたRubyCocoaのチュートリアル。tarコマンドのラッパー
+  アプリケーションの作成を例題にRubyCocoaでのプログラミングについて解説
+  しています。
+
 : ((<Project PINEAPPLE (日本語)|URL:http://sacral.c.u-tokyo.ac.jp/~hasimoto/Pineapple/>))
 
   Mac OS X用に作られたrpmベースのディストリビューション
