@@ -16,7 +16,7 @@ execution/development is included in a '.pkg' package file which is
 easy to install.
 
 After installation, let's try samples that are written by Ruby. Refer
-to ((<"Try RubyCocoa Samples"|URL:trysamples.en.html>)).
+to ((<'Try RubyCocoa Samples'|URL:trysamples.en.html>)).
 
 
 == Source Distribution

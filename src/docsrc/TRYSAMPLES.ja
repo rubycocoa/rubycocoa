@@ -9,12 +9,10 @@
 
 まずはすでに完成しているRubyCocoaアプリケーションを起動してみましょう。
 Finderでsampleフォルダを開いてSimpleAppをダブルクリックしてみてくださ
-い。動きましたか？コマンドラインから以下のように入力しても起動できます。
+い。コマンドラインから以下のように入力しても起動できます。
 
   $ cd {RubyCocoaソースディレクトリ}/sample
   $ open SimpleApp.app
-
-動きましたか？
 
 
 == コマンドライン(Terminal)から
@@ -38,7 +36,7 @@ Mac OS X 10.2を使っている人はさらに
 などとやってみるとおもしろいでしょう。speak.rbを引数無しで実行すると
 '^D'(controlキーを押しながら'D')を入力するまで、1行入力するごとに読み上
 げます。これは10.2からCocoaに実装されたAppleScript/AppleEventインター
-フェース機能を使っています。動きましたか？
+フェース機能を使っています。
 
 次に、ウィンドウを表示するスクリプトサンプルを実行してみましょう。
 
@@ -59,7 +57,7 @@ Mac OS X 10.2を使っている人はさらに
   $ open CocoHako.app
 
 と入力するか、ファインダでCocoHakoをダブルクリックして起動してみてくだ
-さい。動きましたか？
+さい。
 
 
 == Project BuilderベースのソースからRubyCocoaアプリケーションを作る
@@ -75,16 +73,18 @@ Mac OS X 10.2を使っている人はさらに
   % open build/SimpleApp.app
 
 と打ち込むか、またはファインダでbuildフォルダの中のSimpleAppをダブルク
-リックしてアプリケーションを起動してみてください。うまく動きましたか？
+リックしてアプリケーションを起動してみてください。
 
 
-== さらに
+== さらに...
 
 他にもサンプルがいろいろあるので、適当に試してみたりスクリプトを読んで
 みてください。
 
+== 補足
+
 * HelloWorld.rb は ((<PyObjc|URL:http://pyobjc.sf.net/>))
-  付属のサンプルをRubyCocoaで書いたものです。
+  付属のPythonで書かれていたサンプルスクリプトをRubyで書いたものです。
 
 * TransparentHello.rbは雑誌
   ((<DDJ(Dr.Dobbs Journal)2002年5月号
@@ -94,14 +94,12 @@ Mac OS X 10.2を使っている人はさらに
 * RubyRaiseManとRubyTypingTutorは
   ((<『Mac OS X Cocoa プログラミング』
   |URL:http://www.amazon.co.jp/exec/obidos/ASIN/489471440X>))
-  で作るプログラムをRubyCocoaで書いたものです。
+  で作るObjective-CのプログラムをRubyで書いたものです。
 
 * MyViewerは
   ((<『Mac OS X プログラミング入門 Objective-C』
   |URL:http://www.amazon.co.jp/exec/obidos/ASIN/4877780688>))
-  で作るプログラムをRubyCocoaで書いたものです。
-
+  で作るObjective-CのプログラムをRubyで書いたものです。
 
 
 $Date$
-$Revision$

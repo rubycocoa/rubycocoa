@@ -1,6 +1,22 @@
 # -*-rd-*-
 = Changes
 
+== changes from 0.3.2 (0.4.0)
+
+: support Ruby 1.8
+
+  It is available with Ruby 1.8. 
+  It was suppressed a warning message about argument of method when a
+  script was executed with the option '-w'.
+
+: revived RubyCocoa.framework
+
+  All of basic implementation of RubyCocoa is included in RubyCocoa
+  framework. It contains also code written by Ruby. Libruby is linked
+  statically to RubyCocoa framework in binary distribution, too.
+  It may make easy to distribute a RubyCocoa application.
+
+
 == changes from 0.3.1 (0.3.2)
 
 === add library for AddressBook.framework

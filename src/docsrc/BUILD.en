@@ -35,7 +35,7 @@ To build RubyCocoa, Some C language header files and libruby of Ruby
 is required. Here, the build procedure of Ruby which serves as a base
 of RubyCocoa in the case shown below at an example is explained.
 
-  * Ruby 1.7 installed from source
+  * Ruby 1.8 installed from source
   * Ruby 1.6.7 included in Mac OS X 10.2
 
 A case of the latter is equivalent to a case of a RubyCocoa 0.4 binary
@@ -44,9 +44,9 @@ package. When Ruby is installed using packages, such as
 to it.
 
 
-=== Ruby 1.7 installed from source
+=== Ruby 1.8 installed from source
 
-It moves to the sauce directory of Ruby 1.7, and builds and installs
+It moves to the sauce directory of Ruby 1.8, and builds and installs
 as follows. Please change an option if needed.
 ((- RubyCocoa.framework cannot be linked without specify the
 '-fno-common' option for CFLAGS. -))
@@ -140,7 +140,7 @@ old procedure.
 * {sitearchdir}/rubycocoa.bundle              : extended library (stub)
 
 After installation, let's try samples that are written by Ruby. Refer
-to ((<"Try RubyCocoa Samples"|URL:trysamples.en.html>)).
+to ((<'Try RubyCocoa Samples'|URL:trysamples.en.html>)).
 
 
 == Development and testing environment 
@@ -149,7 +149,7 @@ to ((<"Try RubyCocoa Samples"|URL:trysamples.en.html>)).
 * Mac OS X 10.2.3
 * DevTools 10.2
 * ruby-1.6.7 (pre-installed in Mac OS X 10.2)
-* ruby-1.7.3 (from cvs server)
+* ruby-1.8 (preview 1 from cvs server)
 
 
 == Have a fun

@@ -70,13 +70,13 @@ h2 {
 }
 
 h3 {
-  margin-left: 0.5em;
+  /* margin-left: 0.5em; */
   border-bottom-style: solid;
   border-bottom-width: 1;
 }
 
 h4 {
-  margin-left: 1em;
+  /* margin-left: 1em; */
 }
 
 pre { 
@@ -86,11 +86,9 @@ pre {
   margin-right: 4em;
 }
 
-dt { font-weight: bold; margin: 0em 1em }
 em { font-weight: bold }
-dd { margin: 0em 2em }
-
-/* p  { margin: 1em 1em } */
+dt { font-weight: bold;  margin: 0em 1em }
+dd { font-size: small; margin: 0em 2em; margin-top: -1em }
 
 .body-sidebar {
   font-size: small;
