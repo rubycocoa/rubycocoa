@@ -68,10 +68,10 @@ int
 RBApplicationMain(const char* rb_main_name, int argc, char* argv[])
 {
   int i;
+  int ruby_argc;
   char** ruby_argv;
   int my_argc;
   char* my_argv[] = {
-    argv[0],
     "-I",
     resource_path(),
     "-I",
@@ -81,12 +81,17 @@ RBApplicationMain(const char* rb_main_name, int argc, char* argv[])
 
   my_argc = sizeof(my_argv) / sizeof(char*);
 
-  ruby_argv = malloc (sizeof(char*) * (argc + my_argc));
-  for (i = 0; i < argc; i++)    ruby_argv[i] = argv[i];
-  for (i = 0; i < my_argc; i++) ruby_argv[argc + i] = my_argv[i];
+  ruby_argc = 0;
+  ruby_argv = malloc (sizeof(char*) * (argc + my_argc + 1));
+  for (i = 0; i < argc; i++) {
+    if (strncmp(argv[i], "-psn_", 5) == 0) continue;
+    ruby_argv[ruby_argc++] = argv[i];
+  }
+  for (i = 0; i < my_argc; i++) ruby_argv[ruby_argc++] = my_argv[i];
+  ruby_argv[ruby_argc] = NULL;
 
   ruby_init();
-  ruby_options(argc + my_argc, ruby_argv);
+  ruby_options(ruby_argc, ruby_argv);
   ruby_run();
   return 0;
 }
