@@ -97,7 +97,7 @@ pre {
 
 em { font-weight: bold }
 dt { font-weight: bold;  margin: 0em 1em }
-dd { font-size: small; margin: 0em 2em; margin-top: -1em; margin-bottom: 1em }
+dd { font-size: small; margin: 0em 2em; margin-top: 0em; margin-bottom: 1em }
 
 .body-sidebar {
   font-size: small;
