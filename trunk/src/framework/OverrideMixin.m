@@ -166,8 +166,8 @@ static id imp_supersend (id rcv, SEL method, SEL a_sel,...)
 
   simp = super_imp(rcv, a_sel);
   va_start(args, a_sel);
-  NSLog(@"imp_supersend");
-  ret = (*simp)(rcv, a_sel, args);
+  NSLog(@"imp_supersend not implemented");
+  // ret = (*simp)(rcv, a_sel, args);
   va_end(args);
   return ret;
 }
