@@ -88,6 +88,11 @@ module OSX
     :WebElementLinkTitleKey,
     :WebElementLinkLabelKey,
 
+    # -- WebView Notification Names
+    :WebViewProgressStartedNotification,
+    :WebViewProgressEstimateChangedNotification,
+    :WebViewProgressFinishedNotification,
+
     # -- Other Web Kit Errors
     :WebKitErrorDomain,
     :WebKitErrorMIMETypeKey,
@@ -103,141 +108,147 @@ module OSX
   end
 
 
-  ## Web Foundation
-  # import classes
-  ns_import :NSCachedURLResponse
-  ns_import :NSError
-  ns_import :NSHTTPCookie
-  ns_import :NSHTTPCookieStorage
-  ns_import :NSHTTPURLResponse
-  ns_import :NSMutableURLRequest
-  ns_import :NSURLAuthenticationChallenge
-  ns_import :NSURLCache
-  ns_import :NSURLConnection
-  ns_import :NSURLCredential
-  ns_import :NSURLCredentialStorage
-  ns_import :NSURLDownload
-  ns_import :NSURLProtectionSpace
-  ns_import :NSURLProtocol
-  ns_import :NSURLRequest
-  ns_import :NSURLResponse
+  module WebFoundation
+	 ## Web Foundation (needs earlier Jaguar)
+	 # import classes
+	 OSX.ns_import :NSCachedURLResponse
+	 OSX.ns_import :NSError
+	 OSX.ns_import :NSHTTPCookie
+	 OSX.ns_import :NSHTTPCookieStorage
+	 OSX.ns_import :NSHTTPURLResponse
+	 OSX.ns_import :NSMutableURLRequest
+	 OSX.ns_import :NSURLAuthenticationChallenge
+	 OSX.ns_import :NSURLCache
+	 OSX.ns_import :NSURLConnection
+	 OSX.ns_import :NSURLCredential
+	 OSX.ns_import :NSURLCredentialStorage
+	 OSX.ns_import :NSURLDownload
+	 OSX.ns_import :NSURLProtectionSpace
+	 OSX.ns_import :NSURLProtocol
+	 OSX.ns_import :NSURLRequest
+	 OSX.ns_import :NSURLResponse
 
 
-  # enums
-  # -- NSURLCacheStoragePolicy(in Foundation/NSURLCache.h)
-  NSURLCacheStorageAllowed = 0x0
-  NSURLCacheStorageAllowedInMemoryOnly = 0x1
-  NSURLCacheStorageNotAllowed = 0x2
+	 # enums
+	 # -- NSURLCacheStoragePolicy(in Foundation/NSURLCache.h)
+	 NSURLCacheStorageAllowed = 0x0
+	 NSURLCacheStorageAllowedInMemoryOnly = 0x1
+	 NSURLCacheStorageNotAllowed = 0x2
 
-  # -- NSHTTPCookieAcceptPolicy(in Foundation/NSHTTPCookieStorage.h)
-  NSHTTPCookieAcceptPolicyAlways = 0x0
-  NSHTTPCookieAcceptPolicyNever = 0x1
-  NSHTTPCookieAcceptPolicyOnlyFromMainDocumentDomain = 0x2
+	 # -- NSHTTPCookieAcceptPolicy(in Foundation/NSHTTPCookieStorage.h)
+	 NSHTTPCookieAcceptPolicyAlways = 0x0
+	 NSHTTPCookieAcceptPolicyNever = 0x1
+	 NSHTTPCookieAcceptPolicyOnlyFromMainDocumentDomain = 0x2
 
-  # -- NSURLCredentialPersistence(in Foundation/NSURLCredential.h)
-  NSURLCredentialPersistenceNone = 0x0
-  NSURLCredentialPersistenceForSession = 0x1
-  NSURLCredentialPersistencePermanent = 0x2
-  
-  # -- NSURLRequestCachePolicy(in Foundation/NSURLRequest.h)
-  NSURLRequestUseProtocolCachePolicy = 0x0
-  NSURLRequestReloadIgnoringCacheData = 0x1
-  NSURLRequestReturnCacheDataElseLoad = 0x2
-  NSURLRequestReturnCacheDataDontLoad = 0x3
+	 # -- NSURLCredentialPersistence(in Foundation/NSURLCredential.h)
+	 NSURLCredentialPersistenceNone = 0x0
+	 NSURLCredentialPersistenceForSession = 0x1
+	 NSURLCredentialPersistencePermanent = 0x2
+	 
+	 # -- NSURLRequestCachePolicy(in Foundation/NSURLRequest.h)
+	 NSURLRequestUseProtocolCachePolicy = 0x0
+	 NSURLRequestReloadIgnoringCacheData = 0x1
+	 NSURLRequestReturnCacheDataElseLoad = 0x2
+	 NSURLRequestReturnCacheDataDontLoad = 0x3
 
-  # -- Web Foundation Error codes(in Foundation/NSURLError.h)
-  NSURLErrorUnknown = -1
-  NSURLErrorCancelled = -999 
-  NSURLErrorBadURL = -1000
-  NSURLErrorTimedOut = -1001
-  NSURLErrorUnsupportedURL = -1002
-  NSURLErrorCannotFindHost = -1003
-  NSURLErrorCannotConnectToHost = -1004
-  NSURLErrorNetworkConnectionLost = -1005
-  NSURLErrorDNSLookupFailed = -1006
-  NSURLErrorHTTPTooManyRedirects = -1007
-  NSURLErrorResourceUnavailable = -1008
-  NSURLErrorNotConnectedToInternet = -1009
-  NSURLErrorRedirectToNonExistentLocation = -1010
-  NSURLErrorBadServerResponse = -1011
-  NSURLErrorUserCancelledAuthentication = -1012
-  NSURLErrorUserAuthenticationRequired = -1013
-  NSURLErrorZeroByteResource = -1014
-  NSURLErrorFileDoesNotExist = -1100
-  NSURLErrorFileIsDirectory = -1101
-  NSURLErrorNoPermissionsToReadFile = -1102
-  NSURLErrorSecureConnectionFailed = -1200
-  NSURLErrorServerCertificateHasBadDate = -1201
-  NSURLErrorServerCertificateUntrusted = -1202
-  NSURLErrorServerCertificateHasUnknownRoot = -1203
-  NSURLErrorCannotLoadFromNetwork = -2000
-  #   -- Download and file I/O errors
-  NSURLErrorCannotCreateFile = -3000
-  NSURLErrorCannotOpenFile = -3001
-  NSURLErrorCannotCloseFile = -3002
-  NSURLErrorCannotWriteToFile = -3003
-  NSURLErrorCannotRemoveFile = -3004
-  NSURLErrorCannotMoveFile = -3005
-  NSURLErrorDownloadDecodingFailedMidStream = -3006
-  NSURLErrorDownloadDecodingFailedToComplete = -3007
+	 # -- Web Foundation Error codes(in Foundation/NSURLError.h)
+	 NSURLErrorUnknown = -1
+	 NSURLErrorCancelled = -999 
+	 NSURLErrorBadURL = -1000
+	 NSURLErrorTimedOut = -1001
+	 NSURLErrorUnsupportedURL = -1002
+	 NSURLErrorCannotFindHost = -1003
+	 NSURLErrorCannotConnectToHost = -1004
+	 NSURLErrorNetworkConnectionLost = -1005
+	 NSURLErrorDNSLookupFailed = -1006
+	 NSURLErrorHTTPTooManyRedirects = -1007
+	 NSURLErrorResourceUnavailable = -1008
+	 NSURLErrorNotConnectedToInternet = -1009
+	 NSURLErrorRedirectToNonExistentLocation = -1010
+	 NSURLErrorBadServerResponse = -1011
+	 NSURLErrorUserCancelledAuthentication = -1012
+	 NSURLErrorUserAuthenticationRequired = -1013
+	 NSURLErrorZeroByteResource = -1014
+	 NSURLErrorFileDoesNotExist = -1100
+	 NSURLErrorFileIsDirectory = -1101
+	 NSURLErrorNoPermissionsToReadFile = -1102
+	 NSURLErrorSecureConnectionFailed = -1200
+	 NSURLErrorServerCertificateHasBadDate = -1201
+	 NSURLErrorServerCertificateUntrusted = -1202
+	 NSURLErrorServerCertificateHasUnknownRoot = -1203
+	 NSURLErrorCannotLoadFromNetwork = -2000
+	 #   -- Download and file I/O errors
+	 NSURLErrorCannotCreateFile = -3000
+	 NSURLErrorCannotOpenFile = -3001
+	 NSURLErrorCannotCloseFile = -3002
+	 NSURLErrorCannotWriteToFile = -3003
+	 NSURLErrorCannotRemoveFile = -3004
+	 NSURLErrorCannotMoveFile = -3005
+	 NSURLErrorDownloadDecodingFailedMidStream = -3006
+	 NSURLErrorDownloadDecodingFailedToComplete = -3007
 
 
-  # constants
-  [
-    # -- NSError Description Localization Key
-    :NSLocalizedDescriptionKey,
+	 # constants
+	 [
+		# -- NSError Description Localization Key
+		:NSLocalizedDescriptionKey,
 
-    # -- NSError Error Domains
-    :NSPOSIXErrorDomain,
-    :NSOSStatusErrorDomain,
-    :NSMachErrorDomain,
-    :NSURLErrorDomain,		# in Foundation/NSURLError
-    :NSURLCFStreamErrorDomain,	# ??? precompiled header ???
+		# -- NSError Error Domains
+		:NSPOSIXErrorDomain,
+		:NSOSStatusErrorDomain,
+		:NSMachErrorDomain,
+		:NSURLErrorDomain,		# in Foundation/NSURLError
+		:NSURLCFStreamErrorDomain,	# ??? precompiled header ???
 
-    # -- NSError URL Key
-    :NSErrorFailingURLStringKey,
+		# -- NSError URL Key
+		:NSErrorFailingURLStringKey,
 
-    # -- HTTP Cookie Property Keys
-    :NSHTTPCookieComment,
-    :NSHTTPCookieCommentURL,
-    :NSHTTPCookieDiscard,
-    :NSHTTPCookieDomain,
-    :NSHTTPCookieExpires,
-    :NSHTTPCookieMaximumAge,
-    :NSHTTPCookieName,
-    :NSHTTPCookieOriginURL,
-    :NSHTTPCookiePath,
-    :NSHTTPCookiePort,
-    :NSHTTPCookieSecure,
-    :NSHTTPCookieValue,
-    :NSHTTPCookieVersion,
+		# -- HTTP Cookie Property Keys
+		:NSHTTPCookieComment,
+		:NSHTTPCookieCommentURL,
+		:NSHTTPCookieDiscard,
+		:NSHTTPCookieDomain,
+		:NSHTTPCookieExpires,
+		:NSHTTPCookieMaximumAge,
+		:NSHTTPCookieName,
+		:NSHTTPCookieOriginURL,
+		:NSHTTPCookiePath,
+		:NSHTTPCookiePort,
+		:NSHTTPCookieSecure,
+		:NSHTTPCookieValue,
+		:NSHTTPCookieVersion,
 
-    # -- NSURLProtectionSpace Authentication Methods
-    :NSURLAuthenticationMethodDefault,
-    :NSURLAuthenticationMethodHTTPBasic,
-    :NSURLAuthenticationMethodHTTPDigest,
-    :NSURLAuthenticationMethodHTMLForm,
+		# -- NSURLProtectionSpace Authentication Methods
+		:NSURLAuthenticationMethodDefault,
+		:NSURLAuthenticationMethodHTTPBasic,
+		:NSURLAuthenticationMethodHTTPDigest,
+		:NSURLAuthenticationMethodHTMLForm,
 
-    # -- NSURLProtectionSpace Proxy Types
-    :NSURLProtectionSpaceHTTPProxy,
-    :NSURLProtectionSpaceHTTPSProxy,
-    :NSURLProtectionSpaceFTPProxy,
-    :NSURLProtectionSpaceSOCKSProxy,
+		# -- NSURLProtectionSpace Proxy Types
+		:NSURLProtectionSpaceHTTPProxy,
+		:NSURLProtectionSpaceHTTPSProxy,
+		:NSURLProtectionSpaceFTPProxy,
+		:NSURLProtectionSpaceSOCKSProxy,
 
-    # -- NSHTTPCookieStorage Notification Names
-    :NSHTTPCookieStorageAcceptPolicyChangedNotification,
-    :NSHTTPCookieStorageCookiesChangedNotification,
+		# -- NSHTTPCookieStorage Notification Names
+		:NSHTTPCookieStorageAcceptPolicyChangedNotification,
+		:NSHTTPCookieStorageCookiesChangedNotification,
 
-    # -- NSURLCredentialStorage Notification Names
-    :NSURLCredentialStorageChangedNotification
+		# -- NSURLCredentialStorage Notification Names
+		:NSURLCredentialStorageChangedNotification
 
-  ].each do |name|
-    module_eval %{
-      def #{name}
-	objc_symbol_to_obj('#{name}', '@')
-      end
-      module_function :#{name}
-    }
+	 ].each do |name|
+		module_eval %{
+		  def #{name}
+	  objc_symbol_to_obj('#{name}', '@')
+		  end
+		  module_function :#{name}
+		}
+	 end
+  end
+
+  if OSX.NSFoundationVersionNumber <= 462.0 then
+    include WebFoundation
   end
 
 end

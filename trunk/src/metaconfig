@@ -4,9 +4,13 @@ module RubyCocoaConfig
   eval File.open('VERSION'){|f|f.read}
 end
 
-libruby_path = File.join(Config::CONFIG['libdir'], Config::CONFIG['LIBRUBY_A'])
+libruby_path = File.join(Config::CONFIG['libdir'], Config::CONFIG['LIBRUBY'])
 unless File.exist?( libruby_path ) then
   libruby_path = File.join(Config::CONFIG['archdir'], Config::CONFIG['LIBRUBY_A'])
+end
+# On Panther, /usr/lib/ruby reports wrong CONFIG
+unless File.exist?( libruby_path ) then
+  libruby_path = File.join(Config::CONFIG['libdir'], 'libruby.dylib')
 end
 
 add_path_config 'install-root', '',
@@ -15,8 +19,16 @@ add_path_config 'install-root', '',
 add_path_config 'frameworks', '/Library/Frameworks',
   'path to the directory for installing RubyCocoa.framework'
 
-add_path_config 'projectbuilder-extras', '/Developer/ProjectBuilder Extras',
-  'path to the directory for "ProjectBuilder Extras"'
+if File.exists?('/Developer/Applications/Project Builder.app') then
+  add_path_config 'projectbuilder-extras', '/Developer/ProjectBuilder Extras',
+    'path to the directory for "Project Bulder Extras"'
+end 
+
+if File.exists?('/Developer/Applications/Xcode.app') then
+  add_path_config 'xcode-extras', 
+    '/Library/Application Support/Apple/Developer Tools',
+    'path to the directory for "Xcode Extras"'
+end 
 
 add_path_config 'examples', '/Developer/Examples',
   'path to the directory for Examples'
@@ -39,3 +51,8 @@ add_config 'rubycocoa-version', 'name',
 
 add_config 'rubycocoa-release-date', 'name', 
   RubyCocoaConfig::RELEASE_DATE, 'RubyCocoa release date'
+
+ldflags = `/usr/bin/uname -r`.to_f >= 7.0 ? '-framework Foundation' : ''
+add_config 'other-ldflags', 'name',
+  ldflags, 'addtitional linker settings'
+  
