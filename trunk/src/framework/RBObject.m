@@ -129,7 +129,7 @@ static SEL ruby_method_sel(int argc)
 {
   BOOL ret;
   RB_ID mid;
-  DLOG1("rbobjRespondsToSelector(%@)", NSStringFromSelector(a_sel));
+  DLOG1("rbobjRespondsToSelector(%s)", a_sel);
   mid = rb_obj_sel_to_mid(m_rbobj, a_sel);
   ret = (rb_respond_to(m_rbobj, mid) != 0);
   DLOG1("   --> %d", ret);
@@ -140,7 +140,7 @@ static SEL ruby_method_sel(int argc)
 {
   NSMethodSignature* msig;
   int argc;
-  DLOG1("rbobjMethodSignatureForSelector(%@)", NSStringFromSelector(a_sel));
+  DLOG1("rbobjMethodSignatureForSelector(%s)", a_sel);
   argc = rb_obj_arity_of_method(m_rbobj, a_sel);
   if (argc < 0) argc *= -1;
   msig = [DummyProtocolHandler 
@@ -249,6 +249,21 @@ static SEL ruby_method_sel(int argc)
   return self;
 }
 
+- initWithRubyScriptCString: (const char*) cstr
+{
+  return [self initWithRubyObject: rb_eval_string(cstr)];
+}
+
+- initWithRubyScriptString: (NSString*) str
+{
+  return [self initWithRubyScriptCString: [str cString]];
+}
+
+- (NSString*) _copyDescription
+{
+  return [[NSString alloc] initWithCString: STR2CSTR(rb_inspect(m_rbobj))];
+}
+
 - (BOOL)isKindOfClass: (Class)klass
 {
   BOOL ret;
@@ -274,7 +289,7 @@ static SEL ruby_method_sel(int argc)
 - (NSMethodSignature*)methodSignatureForSelector: (SEL)a_sel
 {
   NSMethodSignature* ret = nil;
-  DLOG2("methodSignatureForSelector(%@,%u)", NSStringFromSelector(a_sel), a_sel);
+  DLOG1("methodSignatureForSelector(%s)", a_sel);
   if (*(char*)a_sel == NULL) return nil;
   ret = [DummyProtocolHandler instanceMethodSignatureForSelector: a_sel];
   if (ret == nil)
@@ -288,7 +303,7 @@ static SEL ruby_method_sel(int argc)
 - (BOOL)respondsToSelector: (SEL)a_sel
 {
   BOOL ret;
-  DLOG1("respondsToSelector(%@)", NSStringFromSelector(a_sel));
+  DLOG1("respondsToSelector(%s)", a_sel);
   ret = [self rbobjRespondsToSelector: a_sel];
   DLOG1("   --> %d", ret);
   return ret;
