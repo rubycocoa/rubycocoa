@@ -1,5 +1,7 @@
 2002-12-22  FUJIMOTO Hisakuni  <hisa@fobj.com>
 
+	* 0.4.0a5 (alpha-0_4_0a5)
+
 	* tests/alltest.sh, tests/tc_nsattributedstring.rb, tests/tc_nsstring.rb, tests/tc_subclass.rb, tests/test_nsattributedstring.rb, tests/test_nsstring.rb, tests/testall.rb:
 	rewrite some unit tests using Test::Unit
 
