@@ -10,6 +10,6 @@
  *
  **/
 
-int RBApplicationMain(const char* rb_main_name, int argc, char* argv[]);
+int RBApplicationMain(const char* rb_main_name, int argc, const char* argv[]);
 
 int RBRubyCocoaInit();
