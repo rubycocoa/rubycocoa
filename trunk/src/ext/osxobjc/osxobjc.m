@@ -30,39 +30,38 @@ static VALUE init_module_OSX()
   return module;
 }
 
-// def OSX.create_objc_proxy (class_name)
-// ex1.  OSX.create_objc_proxy (:AppController)
+// def OSX.objc_proxy_class_new (class_name)
+// ex1.  OSX.objc_proxy_class_new (:AppController)
 static VALUE
-osx_mf_create_objc_proxy(VALUE mdl, VALUE proxy_name)
+osx_mf_objc_proxy_class_new(VALUE mdl, VALUE class_name)
 {
-  proxy_name = rb_obj_as_string(proxy_name);
-  RBOCClassNew(STR2CSTR(proxy_name), [RBObject class]);
+  class_name = rb_obj_as_string(class_name);
+  RBOCClassNew(STR2CSTR(class_name), [RBObject class]);
   return Qnil;
 }
 
-// def OSX.create_objc_stub (stubname, supername)
-// ex1.  OSX.create_objc_stub (:CustomView, :NSView)
+// def OSX.objc_derived_class_new (class_name, super_name)
+// ex1.  OSX.objc_derived_class_new (:CustomView, :NSView)
 static VALUE
-osx_mf_create_objc_stub(VALUE mdl, VALUE stub_name, VALUE super_name)
+osx_mf_objc_derived_class_new(VALUE mdl, VALUE class_name, VALUE super_name)
 {
   Class super_class;
   id pool = [[NSAutoreleasePool alloc] init];
 
-  stub_name = rb_obj_as_string(stub_name);
+  class_name = rb_obj_as_string(class_name);
   super_name = rb_obj_as_string(super_name);
-  super_class = 
-      NSClassFromString([NSString stringWithCString: STR2CSTR(super_name)]);
-  if (super_class) {
-    RBOCDerivedClassNew(STR2CSTR(stub_name), super_class);
-  }
+  super_class = NSClassFromString([NSString 
+				    stringWithCString: STR2CSTR(super_name)]);
+  if (super_class)
+    RBOCDerivedClassNew(STR2CSTR(class_name), super_class);
   [pool release];
   return Qnil;
 }
 
-// def OSX.add_method_for_objc_stub (class_name, method_name)
-// ex1.  OSX.add_method_for_objc_stub (:CustomView, "drawRect:")
+// def OSX.objc_derived_class_method_add (class_name, method_name)
+// ex1.  OSX.objc_derived_class_method_add (:CustomView, "drawRect:")
 static VALUE
-osx_mf_add_method_for_objc_stub(VALUE mdl, VALUE class_name, VALUE method_name)
+osx_mf_objc_derived_class_method_add(VALUE mdl, VALUE class_name, VALUE method_name)
 {
   Class a_class;
   SEL a_sel;
@@ -90,9 +89,12 @@ void Init_osxobjc()
   mOSX = init_module_OSX();
   init_class_OCObject(mOSX);
 
-  rb_define_module_function(mOSX, "create_objc_proxy", osx_mf_create_objc_proxy, 1);
-  rb_define_module_function(mOSX, "create_objc_stub", osx_mf_create_objc_stub, 2);
-  rb_define_module_function(mOSX, "add_method_for_objc_stub", osx_mf_add_method_for_objc_stub, 2);
+  rb_define_module_function(mOSX, "objc_proxy_class_new", 
+			    osx_mf_objc_proxy_class_new, 1);
+  rb_define_module_function(mOSX, "objc_derived_class_new", 
+			    osx_mf_objc_derived_class_new, 2);
+  rb_define_module_function(mOSX, "objc_derived_class_method_add",
+			    osx_mf_objc_derived_class_method_add, 2);
 
   init_cocoa(mOSX);
 }

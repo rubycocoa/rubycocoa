@@ -85,7 +85,7 @@ static id handle_ruby_method(id rcv, SEL a_sel, ...)
   va_end(args);
 
   // invoke
-  [inv setTarget: [rcv slave]];
+  [inv setTarget: [rcv __slave__]];
   [inv setSelector: a_sel];
   [inv invoke];
 
@@ -102,6 +102,13 @@ static id handle_ruby_method(id rcv, SEL a_sel, ...)
 static id imp_slave (id rcv, SEL method)
 {
   return get_slave(rcv);
+}
+
+static id imp_rbobj (id rcv, SEL method)
+{
+  id slave = get_slave(rcv);
+  VALUE rbobj = [slave __rbobj__];
+  return (id)rbobj;
 }
 
 static id imp_init (id rcv, SEL method)
@@ -186,7 +193,8 @@ static struct objc_ivar imp_ivars[] = {
 };
 
 static const char* imp_method_names[] = {
-  "slave",
+  "__slave__",
+  "__rbobj__",
   "init",
   "initWithFrame:",
   "respondsToSelector:",
@@ -198,6 +206,10 @@ static struct objc_method imp_methods[] = {
   { NULL,
     "@4@4:8",
     (IMP)imp_slave 
+  },
+  { NULL,
+    "L4@4:8",
+    (IMP)imp_rbobj 
   },
   { NULL,
     "@4@4:8",

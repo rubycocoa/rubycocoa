@@ -25,29 +25,27 @@ module OSX
 
   module OCStubCreator
 
-    def nib_loadable(super_name = nil)
+    def ib_loadable(super_name = nil)
       if super_name.nil? then
-	OSX.create_objc_proxy (self.to_s)
+	OSX.objc_proxy_class_new (self.to_s)
       else
 	super_name = :NSObject unless super_name
-	OSX.create_objc_stub (self.to_s, super_name.to_s)
+	OSX.objc_derived_class_new (self.to_s, super_name.to_s)
       end
     end
 
     def derived_methods(*args)
       class_name = self.to_s
       args.each do |method_name|
-	OSX.add_method_for_objc_stub (class_name.to_s, method_name.to_s)
+	OSX.objc_derived_class_method_add (class_name, method_name.to_s)
       end
     end
 
-  end
+    def ib_outlets(*args)
+      attr_writer *args
+    end
 
-#   class NIBObject < OCObject
-#     def NIBObject.inherited(klass)
-#       OSX.create_objc_stub klass.to_s.intern
-#     end
-#   end
+  end
 
   module ToFloat
     def force_to_f(val)
