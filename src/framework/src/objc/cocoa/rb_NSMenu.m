@@ -44,6 +44,13 @@ osx_NSMenuDidChangeItemNotification(VALUE mdl)
   return nsresult_to_rbresult(_C_ID, &NSMenuDidChangeItemNotification, "NSMenuDidChangeItemNotification", nil);
 }
 
+// NSString * NSMenuDidEndTrackingNotification;
+static VALUE
+osx_NSMenuDidEndTrackingNotification(VALUE mdl)
+{
+  return nsresult_to_rbresult(_C_ID, &NSMenuDidEndTrackingNotification, "NSMenuDidEndTrackingNotification", nil);
+}
+
 void init_NSMenu(VALUE mOSX)
 {
   /**** constants ****/
@@ -52,4 +59,5 @@ void init_NSMenu(VALUE mOSX)
   rb_define_module_function(mOSX, "NSMenuDidAddItemNotification", osx_NSMenuDidAddItemNotification, 0);
   rb_define_module_function(mOSX, "NSMenuDidRemoveItemNotification", osx_NSMenuDidRemoveItemNotification, 0);
   rb_define_module_function(mOSX, "NSMenuDidChangeItemNotification", osx_NSMenuDidChangeItemNotification, 0);
+  rb_define_module_function(mOSX, "NSMenuDidEndTrackingNotification", osx_NSMenuDidEndTrackingNotification, 0);
 }

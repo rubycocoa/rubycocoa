@@ -1463,6 +1463,66 @@ NS_ENDHANDLER
   return rb_result;
 }
 
+// void NSDisableScreenUpdates ( void );
+static VALUE
+osx_NSDisableScreenUpdates(VALUE mdl)
+{
+  NSDisableScreenUpdates();
+  return Qnil;
+}
+
+// void NSEnableScreenUpdates ( void );
+static VALUE
+osx_NSEnableScreenUpdates(VALUE mdl)
+{
+  NSEnableScreenUpdates();
+  return Qnil;
+}
+
+// void NSShowAnimationEffect ( NSAnimationEffect animationEffect , NSPoint centerLocation , NSSize size , id animationDelegate , SEL didEndSelector , void * contextInfo );
+static VALUE
+osx_NSShowAnimationEffect(VALUE mdl, VALUE a0, VALUE a1, VALUE a2, VALUE a3, VALUE a4, VALUE a5)
+{
+
+  NSAnimationEffect ns_a0;
+  NSPoint ns_a1;
+  NSSize ns_a2;
+  id ns_a3;
+  SEL ns_a4;
+  void * ns_a5;
+
+  VALUE excp = Qnil;
+  VALUE rb_result;
+  id pool = [[NSAutoreleasePool alloc] init];
+  /* a0 */
+  rbarg_to_nsarg(a0, _C_INT, &ns_a0, "NSShowAnimationEffect", pool, 0);
+  /* a1 */
+  rbarg_to_nsarg(a1, _PRIV_C_NSPOINT, &ns_a1, "NSShowAnimationEffect", pool, 1);
+  /* a2 */
+  rbarg_to_nsarg(a2, _PRIV_C_NSSIZE, &ns_a2, "NSShowAnimationEffect", pool, 2);
+  /* a3 */
+  rbarg_to_nsarg(a3, _C_ID, &ns_a3, "NSShowAnimationEffect", pool, 3);
+  /* a4 */
+  rbarg_to_nsarg(a4, _C_SEL, &ns_a4, "NSShowAnimationEffect", pool, 4);
+  /* a5 */
+  rbarg_to_nsarg(a5, _PRIV_C_PTR, &ns_a5, "NSShowAnimationEffect", pool, 5);
+
+NS_DURING
+  NSShowAnimationEffect(ns_a0, ns_a1, ns_a2, ns_a3, ns_a4, ns_a5);
+NS_HANDLER
+  excp = oc_err_new ("NSShowAnimationEffect", localException);
+NS_ENDHANDLER
+  if (excp != Qnil) {
+    [pool release];
+    rb_exc_raise (excp);
+    return Qnil;
+  }
+
+  rb_result = Qnil;
+  [pool release];
+  return rb_result;
+}
+
 void init_NSGraphics(VALUE mOSX)
 {
   /**** enums ****/
@@ -1480,8 +1540,6 @@ void init_NSGraphics(VALUE mOSX)
   rb_define_const(mOSX, "NSCompositePlusDarker", INT2NUM(NSCompositePlusDarker));
   rb_define_const(mOSX, "NSCompositeHighlight", INT2NUM(NSCompositeHighlight));
   rb_define_const(mOSX, "NSCompositePlusLighter", INT2NUM(NSCompositePlusLighter));
-  rb_define_const(mOSX, "NSAlphaEqualToData", INT2NUM(NSAlphaEqualToData));
-  rb_define_const(mOSX, "NSAlphaAlwaysOne", INT2NUM(NSAlphaAlwaysOne));
   rb_define_const(mOSX, "NSBackingStoreRetained", INT2NUM(NSBackingStoreRetained));
   rb_define_const(mOSX, "NSBackingStoreNonretained", INT2NUM(NSBackingStoreNonretained));
   rb_define_const(mOSX, "NSBackingStoreBuffered", INT2NUM(NSBackingStoreBuffered));
@@ -1491,6 +1549,11 @@ void init_NSGraphics(VALUE mOSX)
   rb_define_const(mOSX, "NSFocusRingOnly", INT2NUM(NSFocusRingOnly));
   rb_define_const(mOSX, "NSFocusRingBelow", INT2NUM(NSFocusRingBelow));
   rb_define_const(mOSX, "NSFocusRingAbove", INT2NUM(NSFocusRingAbove));
+  rb_define_const(mOSX, "NSFocusRingTypeDefault", INT2NUM(NSFocusRingTypeDefault));
+  rb_define_const(mOSX, "NSFocusRingTypeNone", INT2NUM(NSFocusRingTypeNone));
+  rb_define_const(mOSX, "NSFocusRingTypeExterior", INT2NUM(NSFocusRingTypeExterior));
+  rb_define_const(mOSX, "NSAnimationEffectDisappearingItemDefault", INT2NUM(NSAnimationEffectDisappearingItemDefault));
+  rb_define_const(mOSX, "NSAnimationEffectPoof", INT2NUM(NSAnimationEffectPoof));
 
   /**** constants ****/
   rb_define_module_function(mOSX, "NSCalibratedWhiteColorSpace", osx_NSCalibratedWhiteColorSpace, 0);
@@ -1555,4 +1618,7 @@ void init_NSGraphics(VALUE mOSX)
   rb_define_module_function(mOSX, "NSDottedFrameRect", osx_NSDottedFrameRect, 1);
   rb_define_module_function(mOSX, "NSDrawWindowBackground", osx_NSDrawWindowBackground, 1);
   rb_define_module_function(mOSX, "NSSetFocusRingStyle", osx_NSSetFocusRingStyle, 1);
+  rb_define_module_function(mOSX, "NSDisableScreenUpdates", osx_NSDisableScreenUpdates, 0);
+  rb_define_module_function(mOSX, "NSEnableScreenUpdates", osx_NSEnableScreenUpdates, 0);
+  rb_define_module_function(mOSX, "NSShowAnimationEffect", osx_NSShowAnimationEffect, 6);
 }

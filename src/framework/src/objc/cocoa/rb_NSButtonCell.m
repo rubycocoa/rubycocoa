@@ -25,8 +25,11 @@ void init_NSButtonCell(VALUE mOSX)
   rb_define_const(mOSX, "NSRegularSquareBezelStyle", INT2NUM(NSRegularSquareBezelStyle));
   rb_define_const(mOSX, "NSThickSquareBezelStyle", INT2NUM(NSThickSquareBezelStyle));
   rb_define_const(mOSX, "NSThickerSquareBezelStyle", INT2NUM(NSThickerSquareBezelStyle));
+  rb_define_const(mOSX, "NSDisclosureBezelStyle", INT2NUM(NSDisclosureBezelStyle));
   rb_define_const(mOSX, "NSShadowlessSquareBezelStyle", INT2NUM(NSShadowlessSquareBezelStyle));
   rb_define_const(mOSX, "NSCircularBezelStyle", INT2NUM(NSCircularBezelStyle));
+  rb_define_const(mOSX, "NSTexturedSquareBezelStyle", INT2NUM(NSTexturedSquareBezelStyle));
+  rb_define_const(mOSX, "NSHelpButtonBezelStyle", INT2NUM(NSHelpButtonBezelStyle));
   rb_define_const(mOSX, "NSSmallIconButtonBezelStyle", INT2NUM(NSSmallIconButtonBezelStyle));
   rb_define_const(mOSX, "NSGradientNone", INT2NUM(NSGradientNone));
   rb_define_const(mOSX, "NSGradientConcaveWeak", INT2NUM(NSGradientConcaveWeak));

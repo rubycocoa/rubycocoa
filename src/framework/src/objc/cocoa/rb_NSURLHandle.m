@@ -79,6 +79,13 @@ osx_NSFTPPropertyFileOffsetKey(VALUE mdl)
   return nsresult_to_rbresult(_C_ID, &NSFTPPropertyFileOffsetKey, "NSFTPPropertyFileOffsetKey", nil);
 }
 
+// NSString * NSFTPPropertyFTPProxy;
+static VALUE
+osx_NSFTPPropertyFTPProxy(VALUE mdl)
+{
+  return nsresult_to_rbresult(_C_ID, &NSFTPPropertyFTPProxy, "NSFTPPropertyFTPProxy", nil);
+}
+
 void init_NSURLHandle(VALUE mOSX)
 {
   /**** enums ****/
@@ -98,4 +105,5 @@ void init_NSURLHandle(VALUE mOSX)
   rb_define_module_function(mOSX, "NSFTPPropertyUserPasswordKey", osx_NSFTPPropertyUserPasswordKey, 0);
   rb_define_module_function(mOSX, "NSFTPPropertyActiveTransferModeKey", osx_NSFTPPropertyActiveTransferModeKey, 0);
   rb_define_module_function(mOSX, "NSFTPPropertyFileOffsetKey", osx_NSFTPPropertyFileOffsetKey, 0);
+  rb_define_module_function(mOSX, "NSFTPPropertyFTPProxy", osx_NSFTPPropertyFTPProxy, 0);
 }

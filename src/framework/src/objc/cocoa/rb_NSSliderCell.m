@@ -15,5 +15,7 @@ void init_NSSliderCell(VALUE mOSX)
   rb_define_const(mOSX, "NSTickMarkAbove", INT2NUM(NSTickMarkAbove));
   rb_define_const(mOSX, "NSTickMarkLeft", INT2NUM(NSTickMarkLeft));
   rb_define_const(mOSX, "NSTickMarkRight", INT2NUM(NSTickMarkRight));
+  rb_define_const(mOSX, "NSLinearSlider", INT2NUM(NSLinearSlider));
+  rb_define_const(mOSX, "NSCircularSlider", INT2NUM(NSCircularSlider));
 
 }

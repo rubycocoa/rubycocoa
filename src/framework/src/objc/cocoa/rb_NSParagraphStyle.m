@@ -8,6 +8,14 @@ extern VALUE nsresult_to_rbresult(int octype, const void* nsresult, const char* 
 static const int VA_MAX = 4;
 
 
+  /**** constants ****/
+// NSString * NSTabColumnTerminatorsAttributeName;
+static VALUE
+osx_NSTabColumnTerminatorsAttributeName(VALUE mdl)
+{
+  return nsresult_to_rbresult(_C_ID, &NSTabColumnTerminatorsAttributeName, "NSTabColumnTerminatorsAttributeName", nil);
+}
+
 void init_NSParagraphStyle(VALUE mOSX)
 {
   /**** enums ****/
@@ -24,4 +32,6 @@ void init_NSParagraphStyle(VALUE mOSX)
   rb_define_const(mOSX, "NSWritingDirectionLeftToRight", INT2NUM(NSWritingDirectionLeftToRight));
   rb_define_const(mOSX, "NSWritingDirectionRightToLeft", INT2NUM(NSWritingDirectionRightToLeft));
 
+  /**** constants ****/
+  rb_define_module_function(mOSX, "NSTabColumnTerminatorsAttributeName", osx_NSTabColumnTerminatorsAttributeName, 0);
 }

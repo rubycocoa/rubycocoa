@@ -24,5 +24,6 @@ void init_NSLayoutManager(VALUE mOSX)
   rb_define_const(mOSX, "NSTypesetterOriginalBehavior", INT2NUM(NSTypesetterOriginalBehavior));
   rb_define_const(mOSX, "NSTypesetterBehavior_10_2_WithCompatibility", INT2NUM(NSTypesetterBehavior_10_2_WithCompatibility));
   rb_define_const(mOSX, "NSTypesetterBehavior_10_2", INT2NUM(NSTypesetterBehavior_10_2));
+  rb_define_const(mOSX, "NSTypesetterBehavior_10_3", INT2NUM(NSTypesetterBehavior_10_3));
 
 }

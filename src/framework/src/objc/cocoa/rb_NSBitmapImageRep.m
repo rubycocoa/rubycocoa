@@ -72,6 +72,13 @@ osx_NSImageCurrentFrameDuration(VALUE mdl)
   return nsresult_to_rbresult(_C_ID, &NSImageCurrentFrameDuration, "NSImageCurrentFrameDuration", nil);
 }
 
+// NSString * NSImageLoopCount;
+static VALUE
+osx_NSImageLoopCount(VALUE mdl)
+{
+  return nsresult_to_rbresult(_C_ID, &NSImageLoopCount, "NSImageLoopCount", nil);
+}
+
 void init_NSBitmapImageRep(VALUE mOSX)
 {
   /**** enums ****/
@@ -105,4 +112,5 @@ void init_NSBitmapImageRep(VALUE mOSX)
   rb_define_module_function(mOSX, "NSImageFrameCount", osx_NSImageFrameCount, 0);
   rb_define_module_function(mOSX, "NSImageCurrentFrame", osx_NSImageCurrentFrame, 0);
   rb_define_module_function(mOSX, "NSImageCurrentFrameDuration", osx_NSImageCurrentFrameDuration, 0);
+  rb_define_module_function(mOSX, "NSImageLoopCount", osx_NSImageLoopCount, 0);
 }

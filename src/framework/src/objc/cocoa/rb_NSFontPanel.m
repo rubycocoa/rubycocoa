@@ -18,5 +18,10 @@ void init_NSFontPanel(VALUE mOSX)
   rb_define_const(mOSX, "NSFPSizeField", INT2NUM(NSFPSizeField));
   rb_define_const(mOSX, "NSFPSizeTitle", INT2NUM(NSFPSizeTitle));
   rb_define_const(mOSX, "NSFPCurrentField", INT2NUM(NSFPCurrentField));
+  rb_define_const(mOSX, "NSFontPanelFaceModeMask", INT2NUM(NSFontPanelFaceModeMask));
+  rb_define_const(mOSX, "NSFontPanelSizeModeMask", INT2NUM(NSFontPanelSizeModeMask));
+  rb_define_const(mOSX, "NSFontPanelCollectionModeMask", INT2NUM(NSFontPanelCollectionModeMask));
+  rb_define_const(mOSX, "NSFontPanelStandardModesMask", INT2NUM(NSFontPanelStandardModesMask));
+  rb_define_const(mOSX, "NSFontPanelAllModesMask", INT2NUM(NSFontPanelAllModesMask));
 
 }

@@ -42,6 +42,9 @@ void init_NSTableView(VALUE mOSX)
   /**** enums ****/
   rb_define_const(mOSX, "NSTableViewDropOn", INT2NUM(NSTableViewDropOn));
   rb_define_const(mOSX, "NSTableViewDropAbove", INT2NUM(NSTableViewDropAbove));
+  rb_define_const(mOSX, "NSTableViewGridNone", INT2NUM(NSTableViewGridNone));
+  rb_define_const(mOSX, "NSTableViewSolidVerticalGridLineMask", INT2NUM(NSTableViewSolidVerticalGridLineMask));
+  rb_define_const(mOSX, "NSTableViewSolidHorizontalGridLineMask", INT2NUM(NSTableViewSolidHorizontalGridLineMask));
 
   /**** constants ****/
   rb_define_module_function(mOSX, "NSTableViewSelectionDidChangeNotification", osx_NSTableViewSelectionDidChangeNotification, 0);

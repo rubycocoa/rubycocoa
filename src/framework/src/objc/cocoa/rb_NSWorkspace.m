@@ -65,6 +65,34 @@ osx_NSWorkspaceWillUnmountNotification(VALUE mdl)
   return nsresult_to_rbresult(_C_ID, &NSWorkspaceWillUnmountNotification, "NSWorkspaceWillUnmountNotification", nil);
 }
 
+// NSString * NSWorkspaceWillSleepNotification;
+static VALUE
+osx_NSWorkspaceWillSleepNotification(VALUE mdl)
+{
+  return nsresult_to_rbresult(_C_ID, &NSWorkspaceWillSleepNotification, "NSWorkspaceWillSleepNotification", nil);
+}
+
+// NSString * NSWorkspaceDidWakeNotification;
+static VALUE
+osx_NSWorkspaceDidWakeNotification(VALUE mdl)
+{
+  return nsresult_to_rbresult(_C_ID, &NSWorkspaceDidWakeNotification, "NSWorkspaceDidWakeNotification", nil);
+}
+
+// NSString * NSWorkspaceSessionDidBecomeActiveNotification;
+static VALUE
+osx_NSWorkspaceSessionDidBecomeActiveNotification(VALUE mdl)
+{
+  return nsresult_to_rbresult(_C_ID, &NSWorkspaceSessionDidBecomeActiveNotification, "NSWorkspaceSessionDidBecomeActiveNotification", nil);
+}
+
+// NSString * NSWorkspaceSessionDidResignActiveNotification;
+static VALUE
+osx_NSWorkspaceSessionDidResignActiveNotification(VALUE mdl)
+{
+  return nsresult_to_rbresult(_C_ID, &NSWorkspaceSessionDidResignActiveNotification, "NSWorkspaceSessionDidResignActiveNotification", nil);
+}
+
 // NSString * NSPlainFileType , * NSDirectoryFileType , * NSApplicationFileType;
 static VALUE
 osx_NSApplicationFileType(VALUE mdl)
@@ -151,6 +179,19 @@ osx_NSWorkspaceDuplicateOperation(VALUE mdl)
 
 void init_NSWorkspace(VALUE mOSX)
 {
+  /**** enums ****/
+  rb_define_const(mOSX, "NSWorkspaceLaunchAndPrint", INT2NUM(NSWorkspaceLaunchAndPrint));
+  rb_define_const(mOSX, "NSWorkspaceLaunchInhibitingBackgroundOnly", INT2NUM(NSWorkspaceLaunchInhibitingBackgroundOnly));
+  rb_define_const(mOSX, "NSWorkspaceLaunchWithoutAddingToRecents", INT2NUM(NSWorkspaceLaunchWithoutAddingToRecents));
+  rb_define_const(mOSX, "NSWorkspaceLaunchWithoutActivation", INT2NUM(NSWorkspaceLaunchWithoutActivation));
+  rb_define_const(mOSX, "NSWorkspaceLaunchAsync", INT2NUM(NSWorkspaceLaunchAsync));
+  rb_define_const(mOSX, "NSWorkspaceLaunchAllowingClassicStartup", INT2NUM(NSWorkspaceLaunchAllowingClassicStartup));
+  rb_define_const(mOSX, "NSWorkspaceLaunchPreferringClassic", INT2NUM(NSWorkspaceLaunchPreferringClassic));
+  rb_define_const(mOSX, "NSWorkspaceLaunchNewInstance", INT2NUM(NSWorkspaceLaunchNewInstance));
+  rb_define_const(mOSX, "NSWorkspaceLaunchAndHide", INT2NUM(NSWorkspaceLaunchAndHide));
+  rb_define_const(mOSX, "NSWorkspaceLaunchAndHideOthers", INT2NUM(NSWorkspaceLaunchAndHideOthers));
+  rb_define_const(mOSX, "NSWorkspaceLaunchDefault", INT2NUM(NSWorkspaceLaunchDefault));
+
   /**** constants ****/
   rb_define_module_function(mOSX, "NSWorkspaceDidLaunchApplicationNotification", osx_NSWorkspaceDidLaunchApplicationNotification, 0);
   rb_define_module_function(mOSX, "NSWorkspaceDidMountNotification", osx_NSWorkspaceDidMountNotification, 0);
@@ -160,6 +201,10 @@ void init_NSWorkspace(VALUE mOSX)
   rb_define_module_function(mOSX, "NSWorkspaceWillLaunchApplicationNotification", osx_NSWorkspaceWillLaunchApplicationNotification, 0);
   rb_define_module_function(mOSX, "NSWorkspaceWillPowerOffNotification", osx_NSWorkspaceWillPowerOffNotification, 0);
   rb_define_module_function(mOSX, "NSWorkspaceWillUnmountNotification", osx_NSWorkspaceWillUnmountNotification, 0);
+  rb_define_module_function(mOSX, "NSWorkspaceWillSleepNotification", osx_NSWorkspaceWillSleepNotification, 0);
+  rb_define_module_function(mOSX, "NSWorkspaceDidWakeNotification", osx_NSWorkspaceDidWakeNotification, 0);
+  rb_define_module_function(mOSX, "NSWorkspaceSessionDidBecomeActiveNotification", osx_NSWorkspaceSessionDidBecomeActiveNotification, 0);
+  rb_define_module_function(mOSX, "NSWorkspaceSessionDidResignActiveNotification", osx_NSWorkspaceSessionDidResignActiveNotification, 0);
   rb_define_module_function(mOSX, "NSApplicationFileType", osx_NSApplicationFileType, 0);
   rb_define_module_function(mOSX, "NSShellCommandFileType", osx_NSShellCommandFileType, 0);
   rb_define_module_function(mOSX, "NSWorkspaceMoveOperation", osx_NSWorkspaceMoveOperation, 0);

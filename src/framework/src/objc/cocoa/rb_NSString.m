@@ -37,6 +37,7 @@ void init_NSString(VALUE mOSX)
   rb_define_const(mOSX, "NSLiteralSearch", INT2NUM(NSLiteralSearch));
   rb_define_const(mOSX, "NSBackwardsSearch", INT2NUM(NSBackwardsSearch));
   rb_define_const(mOSX, "NSAnchoredSearch", INT2NUM(NSAnchoredSearch));
+  rb_define_const(mOSX, "NSNumericSearch", INT2NUM(NSNumericSearch));
   rb_define_const(mOSX, "NSASCIIStringEncoding", INT2NUM(NSASCIIStringEncoding));
   rb_define_const(mOSX, "NSNEXTSTEPStringEncoding", INT2NUM(NSNEXTSTEPStringEncoding));
   rb_define_const(mOSX, "NSJapaneseEUCStringEncoding", INT2NUM(NSJapaneseEUCStringEncoding));
