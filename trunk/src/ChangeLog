@@ -1,3 +1,7 @@
+2002-01-09  FUJIMOTO Hisakuni  <hisa@fobj.com>
+
+	* release 0.2.3
+
 2002-01-09  Chris Thomas <kenshin@apple.com>
 
 	* ext/osx_objc/cls_objcid.m: _objcid_initialize_for_new_with_ocid
