@@ -15,11 +15,15 @@
 
 int RBApplicationMain(const char* rb_main_name, int argc, char* argv[]);
 
-Class RBOCClassNew(const char* name, Class superclass);
-Class RBOCDerivedClassNew(const char* name, Class superclass);
+Class RBOCObjcClassFromRubyClass (VALUE kls);
+VALUE RBOCRubyClassFromObjcClass (Class cls);
+
+Class RBOCClassNew(VALUE kls, const char* name, Class super_class);
+Class RBOCDerivedClassNew(VALUE kls, const char* name, Class super_class);
 
 @interface NSObject(RBOverrideMixin)
 - __slave__;
 - (VALUE) __rbobj__;
 + addRubyMethod: (SEL)a_sel;
 @end
+

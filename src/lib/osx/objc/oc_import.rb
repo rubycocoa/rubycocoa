@@ -42,8 +42,8 @@ module OSX
 
     def klass.inherited(kls)
       spr_name = self.name.split('::')[-1]
-      cls_name = kls.name.split('::')[-1]
-      occls = OSX.objc_derived_class_new (cls_name, spr_name)
+      kls_name = kls.name.split('::')[-1]
+      occls = OSX.objc_derived_class_new (kls, kls_name, spr_name)
       kls.instance_eval "@ocid = #{occls.__ocid__}"
       kls.extend NSBehaviorAttachment
       def kls.new
@@ -57,10 +57,9 @@ module OSX
   module NSBehaviorAttachment
 
     def ns_overrides(*args)
-      class_name = self.to_s
       args.each do |name|
 	name = name.to_s.gsub('_',':')
-	OSX.objc_derived_class_method_add (class_name, name)
+	OSX.objc_derived_class_method_add (self, name)
       end
     end
 
