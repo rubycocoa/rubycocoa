@@ -2,6 +2,73 @@
 <head><title>RubyCocoa - ChangeLog</title></head>
 <body>
 <pre>
+2003-01-16  FUJIMOTO Hisakuni  
+
+	* sample, template: rb_main_init() in every rb_main.rb - wrap an
+	argument of 'require' in 'File.basename'. This fixes loading a
+	library twice as the other library.
+
+2003-01-15  FUJIMOTO Hisakuni  
+
+	* framework/src/ruby/osx/objc/oc_attachments.rb:
+	define module RCDataAttachment and RCDataAttachment#rubyString.
+
+	* framework/src/ruby/osx/objc/cocoa_macros.rb:
+	define NSData.dataWithRubyString and NSMutableData.dataWithRubyString.
+
+	* framework/src/objc/ocdata_conv.m:
+	rbobj_to_nsobj() - call a method named "to_nsobject" if it is
+	defined, to convert aruby object into an objective-c object.
+
+	* framework/src/objc/mdl_osxobjc.m:
+	rbobj_get_ocid() - relocate invocation of "to_nsobject" into rbobj_to_nsobj().
+
+	* framework/src/objc/mdl_osxobjc.m:
+	ocobj_s_new() - add an attachment into a new object if it is a
+	NSArray, NSDictionary or NSData.
+
+	* tests/tc_nsdata.rb, tests/tc_objcptr.rb: add some unit tests
+
+	* framework/src/objc/cls_objcptr.m: add taint mark handling.
+
+2003-01-14  FUJIMOTO Hisakuni  
+
+	* tests/tc_rubystring.rb, tests/tc_nsstring.rb:
+	test for ruby_addition.rb and NSString extended facility
+
+	* framework/RubyCocoa.pbproj/project.pbxproj.in: add ruby_addition.rb
+
+	* framework/src/ruby/osx/objc/oc_all.rb: require 'ruby_addition'
+
+	* framework/src/ruby/osx/objc/cocoa_macros.rb: 
+	define NSData.dataWithString, NSString.guess_nsencoding,
+	NSString.stringWithRubyString,
+	NSMutableString.stringWithRubyString
+
+	* framework/src/ruby/osx/objc/ruby_addition.rb:
+	define to_nsstring, to_nsmutablestring and nsencoding as instance
+	method of String.
+
+	* framework/src/objc/ocdata_conv.m:
+	Use a method named 'to_nsobject' if it is defined, to convert a ruby
+	object into an objective-c object.
+
+	* framework/src/ruby/osx/objc/oc_import.rb:
+	fix conflict of here document label
+
+	* framework/src/ruby/osx/objc/addressbook.rb:
+	modify here document label
+
+2003-01-11  FUJIMOTO Hisakuni  
+
+	* framework/post-config.rb:
+	fix a config phase error in rb_gc_mark() of ruby 1.6.8.
+
+2003-01-05  FUJIMOTO Hisakuni  
+
+	* framework/src/ruby/osx/objc/oc_import.rb, framework/src/ruby/osx/objc/addressbook.rb:
+	add a filename and line number to module_eval arguments
+
 2002-12-28  FUJIMOTO Hisakuni  
 
 	* release 0.4.0 (release-0_4_0)
