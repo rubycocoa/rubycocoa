@@ -28,6 +28,9 @@
   Open Scripting Architecture (OSA)のRubyインターフェース。
   その後Cocoaにも不完全ながらNSAppleScriptなどのクラスが追加されています。
 
+: ((<CocoaRBBR.app|URL:http://homepage3.nifty.com/kimuraw/proj/cocoarbbr.html>))
+
+  RubyクラスブラウザをRubyCocoaで実装したアプリケーション。
 
 == RubyCocoaと同種のソフトウェア
 

@@ -1,3 +1,52 @@
+Subject-ja: CocoaRBBR.app - RubyクラスブラウザのRubyCocoa実装
+Subject-en: CocoaRBBR.app - Ruby class browser implemented with RubyCocoa
+Date: 2003-07-25
+UID: 1059131865
+
+kimura wataruさんが、RubyCocoaで実装されたRubyクラスブラウザ
+<a href='http://homepage3.nifty.com/kimuraw/proj/cocoarbbr.html'>CocoaRBBR.app</a>
+を公開しています。
+..ja
+
+kimura wataru shows Ruby class browser
+<a href='http://homepage3.nifty.com/kimuraw/proj/cocoarbbr.html'>CocoaRBBR.app (Japanese web page)</a>
+implemented with RubyCocoa.
+..en
+
+Subject-ja: オライリーMac OS XカンファレンスでRubyCocoaのセッション
+Subject-en: A session about RubyCocoa in O'Reilly Mac OS X Conference
+Date: 2003-07-25
+UID: 1059131505
+
+オライリーMac OS Xカンファレンスで、Rod Schmidtさん (infiniteNIL Software)によるセッション
+<a href='http://conferences.oreillynet.com/cs/macosx2003/view/e_sess/4457'>"Cocoa Programming with Ruby and RubyCocoa"</a>
+が予定されています。
+..ja
+
+In O'Reilly Mac OS X Conference, a session 
+<a href='http://conferences.oreillynet.com/cs/macosx2003/view/e_sess/4457'>"Cocoa Programming with Ruby and RubyCocoa"</a>
+by Mr. Rod Schmidt (infiniteNIL Software) is planned.
+..en
+
+Subject-ja: RubyCocoaでWebKit
+Subject-en: WebKit with RubyCocoa
+Date: 2003-07-25
+UID: 1059129687
+
+<p><a href='http://mwave.sppd.ne.jp/diary/?date=20030701#p01'>s.sawadaさんの日記</a>で
+WebKit SDKの使い方を解説しているWEBページ
+<a href='http://homepage.mac.com/mkino2/safari/myfirst/index.html'>「はじめてのブラウザのつくり方」</a>
+をRubyCocoaで追いかけるという試みが行われています。</p>
+..ja
+
+"How To Make My First Browser" which is a web page described about development with WebKit SDK.
+
+<p>On <a href='http://mwave.sppd.ne.jp/diary/?date=20030701#p01'>s.sawada's blog (Japanese)</a>, 
+it is progressing to follow up with RubyCocoa the page
+<a href='http://homepage.mac.com/mkino2/safari/myfirst/index.html'>"How To Make My First Browser"(Japanese)</a>
+which describe about WebKit SDK.</p>
+..en
+
 Subject-ja: FreeRIDE スクリーンショット
 Subject-en: screenshots of FreeRIDE
 Date: 2003-01-12
