@@ -1,3 +1,17 @@
+2001-12-12  FUJIMOTO Hisakuni  <hisa@fobj.com>
+
+	* ext/osxobjc/extconf.rb: remove "-no-precomp" flag from the
+	CFLAGS of Makefile for the setup phase speed-up. 
+	(thanks Chris-san)
+
+	* ext/osxobjc/osx_ocobject.m, lib/osx/ocobject.rb: add
+	OSX::OCException class for Objective-C excepitons.
+	
+2001-12-12  Chris Thomas <kenshin@apple.com>
+
+	* ext/osxobjc/osx_ocobject.m: converts Objective-C exceptions into
+	Ruby exceptions.
+
 2001-12-07  FUJIMOTO Hisakuni  <hisa@fobj.com>
 
 	* release 0.1.2

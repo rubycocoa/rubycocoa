@@ -173,6 +173,19 @@ static VALUE ocobj_s_new(int argc, VALUE* argv, VALUE klass)
   return obj;
 }
 
+static VALUE
+rb_ocexception_new(NSException* nsexcp)
+{
+  VALUE val;
+  VALUE mosx;
+  VALUE klass;
+  
+  mosx = rb_const_get(rb_cObject, rb_intern("OSX"));;
+  klass = rb_const_get(mosx, rb_intern("OCException"));
+  val = create_rbobj_with_ocid_with_class(nsexcp, kOCObject);
+  return rb_funcall(klass, rb_intern("new"), 1, val);
+}
+
 static BOOL
 ocm_perform(int argc, VALUE* argv, VALUE rcv, VALUE* result)
 {
@@ -185,6 +198,7 @@ ocm_perform(int argc, VALUE* argv, VALUE rcv, VALUE* result)
   id oc_result;
   id oc_msig;
   int i;
+  VALUE excp = Qnil;
 
   if ((argc < 1) || (argc > 3)) return NO;
 
@@ -218,20 +232,31 @@ ocm_perform(int argc, VALUE* argv, VALUE rcv, VALUE* result)
   }
 
   DLOG0("    NSObject#performSelector ...");
-  switch (num_of_args) {
-  case 0:
-    oc_result = [oc_rcv performSelector: oc_sel];
-    break;
-  case 1:
-    oc_result = [oc_rcv performSelector: oc_sel withObject: args[0]];
-    break;
-  case 2:
-    oc_result = [oc_rcv performSelector: oc_sel withObject: args[0]
-			withObject: args[1]];
-    break;
-  default:
-    oc_result = nil;
+
+  NS_DURING  
+    switch (num_of_args) {
+    case 0:
+      oc_result = [oc_rcv performSelector: oc_sel];
+      break;
+    case 1:
+      oc_result = [oc_rcv performSelector: oc_sel withObject: args[0]];
+      break;
+    case 2:
+      oc_result = [oc_rcv performSelector: oc_sel withObject: args[0]
+			  withObject: args[1]];
+      break;
+    default:
+      oc_result = nil;
+    }
+
+  NS_HANDLER
+    excp = rb_ocexception_new(localException);
+
+  NS_ENDHANDLER
+  if (excp != Qnil) {
+    rb_funcall(rb_mKernel, rb_intern("raise"), 1, excp);
   }
+  
   DLOG0("    NSObject#performSelector: done.");
 
   if (oc_result == oc_rcv)
@@ -255,6 +280,7 @@ ocm_invoke(int argc, VALUE* argv, VALUE rcv, VALUE* result)
   id oc_msig;
   id oc_inv;
   int i;
+  VALUE excp = Qnil;
 
   if (argc < 1) return NO;
 
@@ -300,7 +326,17 @@ ocm_invoke(int argc, VALUE* argv, VALUE rcv, VALUE* result)
   }
 
   DLOG0("    NSInvocation#invoke ...");
-  [oc_inv invoke];
+  NS_DURING
+    [oc_inv invoke];
+
+  NS_HANDLER
+    excp = rb_ocexception_new(localException);
+
+  NS_ENDHANDLER
+  if (excp != Qnil) {
+    rb_funcall(rb_mKernel, rb_intern("raise"), 1, excp);
+  }
+
   DLOG0("    NSInvocation#invoke: done.");
 
   // get result
@@ -383,6 +419,7 @@ ocm_send(int argc, VALUE* argv, VALUE rcv, VALUE* result)
   if (argc < 1) return NO;
 
   DLOG0("ocm_send ...");
+
   if (ocm_perform(argc, argv, rcv, result)) ret = YES;
   else if (ocm_invoke(argc, argv, rcv, result)) ret = YES;
   else if (ocm_ivar(rcv, argv[0], result)) ret = YES;
