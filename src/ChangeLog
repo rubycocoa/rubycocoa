@@ -9,8 +9,8 @@
 	NSZoneMalloc instead of malloc when memory allocation.
 
 	* framework/OverrideMixin.m: remove overrided
-	"init/initWithFrame". Add overriced "alloc" for creating Ruby
-	object.
+	"init/initWithFrame". Add overrided "allocWithZone" for creating
+	Ruby object.
 
 	* framework/RBRuntime.m: method_list_alloc(), BUG FIX, use
 	END_OF_METHODS_LIST when initialize allocated memory area.
