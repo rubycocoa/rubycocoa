@@ -1,3 +1,8 @@
+2002-01-20  Michael Miller  <blackmariah@techie.com>
+
+	* doc/FAQ.en, doc/INDEX.en, doc/INSTALL.en:
+	Several text expression was corrected.
+
 2002-01-13  FUJIMOTO Hisakuni  <hisa@fobj.com>
 
 	* lib/osx/objc/oc_all.rb, lib/osx/objc/oc_attachments.rb:
