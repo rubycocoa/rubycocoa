@@ -2,8 +2,9 @@
 #import "ocdata_conv.h"
 #import <AppKit/AppKit.h>
 
-extern void rbarg_to_nsarg(VALUE rbarg, int octype, void* nsarg, id pool, int index);
-extern VALUE nsresult_to_rbresult(int octype, const void* nsresult, id pool);
+extern VALUE oc_err_new (const char* fname, NSException* nsexcp);
+extern void rbarg_to_nsarg(VALUE rbarg, int octype, void* nsarg, const char* fname, id pool, int index);
+extern VALUE nsresult_to_rbresult(int octype, const void* nsresult, const char* fname, id pool);
 static const int VA_MAX = 4;
 
 
@@ -12,63 +13,63 @@ static const int VA_MAX = 4;
 static VALUE
 osx_NSImageCompressionMethod(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSImageCompressionMethod, nil);
+  return nsresult_to_rbresult(_C_ID, &NSImageCompressionMethod, "NSImageCompressionMethod", nil);
 }
 
 // NSString * NSImageCompressionFactor;
 static VALUE
 osx_NSImageCompressionFactor(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSImageCompressionFactor, nil);
+  return nsresult_to_rbresult(_C_ID, &NSImageCompressionFactor, "NSImageCompressionFactor", nil);
 }
 
 // NSString * NSImageDitherTransparency;
 static VALUE
 osx_NSImageDitherTransparency(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSImageDitherTransparency, nil);
+  return nsresult_to_rbresult(_C_ID, &NSImageDitherTransparency, "NSImageDitherTransparency", nil);
 }
 
 // NSString * NSImageRGBColorTable;
 static VALUE
 osx_NSImageRGBColorTable(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSImageRGBColorTable, nil);
+  return nsresult_to_rbresult(_C_ID, &NSImageRGBColorTable, "NSImageRGBColorTable", nil);
 }
 
 // NSString * NSImageInterlaced;
 static VALUE
 osx_NSImageInterlaced(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSImageInterlaced, nil);
+  return nsresult_to_rbresult(_C_ID, &NSImageInterlaced, "NSImageInterlaced", nil);
 }
 
 // NSString * NSImageColorSyncProfileData;
 static VALUE
 osx_NSImageColorSyncProfileData(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSImageColorSyncProfileData, nil);
+  return nsresult_to_rbresult(_C_ID, &NSImageColorSyncProfileData, "NSImageColorSyncProfileData", nil);
 }
 
 // NSString * NSImageFrameCount;
 static VALUE
 osx_NSImageFrameCount(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSImageFrameCount, nil);
+  return nsresult_to_rbresult(_C_ID, &NSImageFrameCount, "NSImageFrameCount", nil);
 }
 
 // NSString * NSImageCurrentFrame;
 static VALUE
 osx_NSImageCurrentFrame(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSImageCurrentFrame, nil);
+  return nsresult_to_rbresult(_C_ID, &NSImageCurrentFrame, "NSImageCurrentFrame", nil);
 }
 
 // NSString * NSImageCurrentFrameDuration;
 static VALUE
 osx_NSImageCurrentFrameDuration(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSImageCurrentFrameDuration, nil);
+  return nsresult_to_rbresult(_C_ID, &NSImageCurrentFrameDuration, "NSImageCurrentFrameDuration", nil);
 }
 
 void init_NSBitmapImageRep(VALUE mOSX)

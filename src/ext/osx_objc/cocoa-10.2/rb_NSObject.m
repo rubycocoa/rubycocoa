@@ -2,8 +2,9 @@
 #import "ocdata_conv.h"
 #import <Foundation/Foundation.h>
 
-extern void rbarg_to_nsarg(VALUE rbarg, int octype, void* nsarg, id pool, int index);
-extern VALUE nsresult_to_rbresult(int octype, const void* nsresult, id pool);
+extern VALUE oc_err_new (const char* fname, NSException* nsexcp);
+extern void rbarg_to_nsarg(VALUE rbarg, int octype, void* nsarg, const char* fname, id pool, int index);
+extern VALUE nsresult_to_rbresult(int octype, const void* nsresult, const char* fname, id pool);
 static const int VA_MAX = 4;
 
 
@@ -18,18 +19,28 @@ osx_NSAllocateObject(VALUE mdl, VALUE a0, VALUE a1, VALUE a2)
   unsigned ns_a1;
   NSZone * ns_a2;
 
+  VALUE excp = Qnil;
   VALUE rb_result;
   id pool = [[NSAutoreleasePool alloc] init];
   /* a0 */
-  rbarg_to_nsarg(a0, _C_ID, &ns_a0, pool, 0);
+  rbarg_to_nsarg(a0, _C_ID, &ns_a0, "NSAllocateObject", pool, 0);
   /* a1 */
-  rbarg_to_nsarg(a1, _C_UINT, &ns_a1, pool, 1);
+  rbarg_to_nsarg(a1, _C_UINT, &ns_a1, "NSAllocateObject", pool, 1);
   /* a2 */
-  rbarg_to_nsarg(a2, _PRIV_C_PTR, &ns_a2, pool, 2);
+  rbarg_to_nsarg(a2, _PRIV_C_PTR, &ns_a2, "NSAllocateObject", pool, 2);
 
+NS_DURING
   ns_result = NSAllocateObject(ns_a0, ns_a1, ns_a2);
+NS_HANDLER
+  excp = oc_err_new ("NSAllocateObject", localException);
+NS_ENDHANDLER
+  if (excp != Qnil) {
+    [pool release];
+    rb_exc_raise (excp);
+    return Qnil;
+  }
 
-  rb_result = nsresult_to_rbresult(_C_ID, &ns_result, pool);
+  rb_result = nsresult_to_rbresult(_C_ID, &ns_result, "NSAllocateObject", pool);
   [pool release];
   return rb_result;
 }
@@ -41,12 +52,22 @@ osx_NSDeallocateObject(VALUE mdl, VALUE a0)
 
   id < NSObject > ns_a0;
 
+  VALUE excp = Qnil;
   VALUE rb_result;
   id pool = [[NSAutoreleasePool alloc] init];
   /* a0 */
-  rbarg_to_nsarg(a0, _C_ID, &ns_a0, pool, 0);
+  rbarg_to_nsarg(a0, _C_ID, &ns_a0, "NSDeallocateObject", pool, 0);
 
+NS_DURING
   NSDeallocateObject(ns_a0);
+NS_HANDLER
+  excp = oc_err_new ("NSDeallocateObject", localException);
+NS_ENDHANDLER
+  if (excp != Qnil) {
+    [pool release];
+    rb_exc_raise (excp);
+    return Qnil;
+  }
 
   rb_result = Qnil;
   [pool release];
@@ -63,18 +84,28 @@ osx_NSCopyObject(VALUE mdl, VALUE a0, VALUE a1, VALUE a2)
   unsigned ns_a1;
   NSZone * ns_a2;
 
+  VALUE excp = Qnil;
   VALUE rb_result;
   id pool = [[NSAutoreleasePool alloc] init];
   /* a0 */
-  rbarg_to_nsarg(a0, _C_ID, &ns_a0, pool, 0);
+  rbarg_to_nsarg(a0, _C_ID, &ns_a0, "NSCopyObject", pool, 0);
   /* a1 */
-  rbarg_to_nsarg(a1, _C_UINT, &ns_a1, pool, 1);
+  rbarg_to_nsarg(a1, _C_UINT, &ns_a1, "NSCopyObject", pool, 1);
   /* a2 */
-  rbarg_to_nsarg(a2, _PRIV_C_PTR, &ns_a2, pool, 2);
+  rbarg_to_nsarg(a2, _PRIV_C_PTR, &ns_a2, "NSCopyObject", pool, 2);
 
+NS_DURING
   ns_result = NSCopyObject(ns_a0, ns_a1, ns_a2);
+NS_HANDLER
+  excp = oc_err_new ("NSCopyObject", localException);
+NS_ENDHANDLER
+  if (excp != Qnil) {
+    [pool release];
+    rb_exc_raise (excp);
+    return Qnil;
+  }
 
-  rb_result = nsresult_to_rbresult(_C_ID, &ns_result, pool);
+  rb_result = nsresult_to_rbresult(_C_ID, &ns_result, "NSCopyObject", pool);
   [pool release];
   return rb_result;
 }
@@ -88,16 +119,26 @@ osx_NSShouldRetainWithZone(VALUE mdl, VALUE a0, VALUE a1)
   id < NSObject > ns_a0;
   NSZone * ns_a1;
 
+  VALUE excp = Qnil;
   VALUE rb_result;
   id pool = [[NSAutoreleasePool alloc] init];
   /* a0 */
-  rbarg_to_nsarg(a0, _C_ID, &ns_a0, pool, 0);
+  rbarg_to_nsarg(a0, _C_ID, &ns_a0, "NSShouldRetainWithZone", pool, 0);
   /* a1 */
-  rbarg_to_nsarg(a1, _PRIV_C_PTR, &ns_a1, pool, 1);
+  rbarg_to_nsarg(a1, _PRIV_C_PTR, &ns_a1, "NSShouldRetainWithZone", pool, 1);
 
+NS_DURING
   ns_result = NSShouldRetainWithZone(ns_a0, ns_a1);
+NS_HANDLER
+  excp = oc_err_new ("NSShouldRetainWithZone", localException);
+NS_ENDHANDLER
+  if (excp != Qnil) {
+    [pool release];
+    rb_exc_raise (excp);
+    return Qnil;
+  }
 
-  rb_result = nsresult_to_rbresult(_PRIV_C_BOOL, &ns_result, pool);
+  rb_result = nsresult_to_rbresult(_PRIV_C_BOOL, &ns_result, "NSShouldRetainWithZone", pool);
   [pool release];
   return rb_result;
 }
@@ -109,12 +150,22 @@ osx_NSIncrementExtraRefCount(VALUE mdl, VALUE a0)
 
   id ns_a0;
 
+  VALUE excp = Qnil;
   VALUE rb_result;
   id pool = [[NSAutoreleasePool alloc] init];
   /* a0 */
-  rbarg_to_nsarg(a0, _C_ID, &ns_a0, pool, 0);
+  rbarg_to_nsarg(a0, _C_ID, &ns_a0, "NSIncrementExtraRefCount", pool, 0);
 
+NS_DURING
   NSIncrementExtraRefCount(ns_a0);
+NS_HANDLER
+  excp = oc_err_new ("NSIncrementExtraRefCount", localException);
+NS_ENDHANDLER
+  if (excp != Qnil) {
+    [pool release];
+    rb_exc_raise (excp);
+    return Qnil;
+  }
 
   rb_result = Qnil;
   [pool release];
@@ -129,14 +180,24 @@ osx_NSDecrementExtraRefCountWasZero(VALUE mdl, VALUE a0)
 
   id ns_a0;
 
+  VALUE excp = Qnil;
   VALUE rb_result;
   id pool = [[NSAutoreleasePool alloc] init];
   /* a0 */
-  rbarg_to_nsarg(a0, _C_ID, &ns_a0, pool, 0);
+  rbarg_to_nsarg(a0, _C_ID, &ns_a0, "NSDecrementExtraRefCountWasZero", pool, 0);
 
+NS_DURING
   ns_result = NSDecrementExtraRefCountWasZero(ns_a0);
+NS_HANDLER
+  excp = oc_err_new ("NSDecrementExtraRefCountWasZero", localException);
+NS_ENDHANDLER
+  if (excp != Qnil) {
+    [pool release];
+    rb_exc_raise (excp);
+    return Qnil;
+  }
 
-  rb_result = nsresult_to_rbresult(_PRIV_C_BOOL, &ns_result, pool);
+  rb_result = nsresult_to_rbresult(_PRIV_C_BOOL, &ns_result, "NSDecrementExtraRefCountWasZero", pool);
   [pool release];
   return rb_result;
 }
@@ -149,14 +210,24 @@ osx_NSExtraRefCount(VALUE mdl, VALUE a0)
 
   id ns_a0;
 
+  VALUE excp = Qnil;
   VALUE rb_result;
   id pool = [[NSAutoreleasePool alloc] init];
   /* a0 */
-  rbarg_to_nsarg(a0, _C_ID, &ns_a0, pool, 0);
+  rbarg_to_nsarg(a0, _C_ID, &ns_a0, "NSExtraRefCount", pool, 0);
 
+NS_DURING
   ns_result = NSExtraRefCount(ns_a0);
+NS_HANDLER
+  excp = oc_err_new ("NSExtraRefCount", localException);
+NS_ENDHANDLER
+  if (excp != Qnil) {
+    [pool release];
+    rb_exc_raise (excp);
+    return Qnil;
+  }
 
-  rb_result = nsresult_to_rbresult(_C_UINT, &ns_result, pool);
+  rb_result = nsresult_to_rbresult(_C_UINT, &ns_result, "NSExtraRefCount", pool);
   [pool release];
   return rb_result;
 }

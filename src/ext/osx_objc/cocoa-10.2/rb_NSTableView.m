@@ -2,8 +2,9 @@
 #import "ocdata_conv.h"
 #import <AppKit/AppKit.h>
 
-extern void rbarg_to_nsarg(VALUE rbarg, int octype, void* nsarg, id pool, int index);
-extern VALUE nsresult_to_rbresult(int octype, const void* nsresult, id pool);
+extern VALUE oc_err_new (const char* fname, NSException* nsexcp);
+extern void rbarg_to_nsarg(VALUE rbarg, int octype, void* nsarg, const char* fname, id pool, int index);
+extern VALUE nsresult_to_rbresult(int octype, const void* nsresult, const char* fname, id pool);
 static const int VA_MAX = 4;
 
 
@@ -12,28 +13,28 @@ static const int VA_MAX = 4;
 static VALUE
 osx_NSTableViewSelectionDidChangeNotification(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSTableViewSelectionDidChangeNotification, nil);
+  return nsresult_to_rbresult(_C_ID, &NSTableViewSelectionDidChangeNotification, "NSTableViewSelectionDidChangeNotification", nil);
 }
 
 // NSString * NSTableViewColumnDidMoveNotification;
 static VALUE
 osx_NSTableViewColumnDidMoveNotification(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSTableViewColumnDidMoveNotification, nil);
+  return nsresult_to_rbresult(_C_ID, &NSTableViewColumnDidMoveNotification, "NSTableViewColumnDidMoveNotification", nil);
 }
 
 // NSString * NSTableViewColumnDidResizeNotification;
 static VALUE
 osx_NSTableViewColumnDidResizeNotification(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSTableViewColumnDidResizeNotification, nil);
+  return nsresult_to_rbresult(_C_ID, &NSTableViewColumnDidResizeNotification, "NSTableViewColumnDidResizeNotification", nil);
 }
 
 // NSString * NSTableViewSelectionIsChangingNotification;
 static VALUE
 osx_NSTableViewSelectionIsChangingNotification(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSTableViewSelectionIsChangingNotification, nil);
+  return nsresult_to_rbresult(_C_ID, &NSTableViewSelectionIsChangingNotification, "NSTableViewSelectionIsChangingNotification", nil);
 }
 
 void init_NSTableView(VALUE mOSX)

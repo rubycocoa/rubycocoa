@@ -2,8 +2,9 @@
 #import "ocdata_conv.h"
 #import <Foundation/Foundation.h>
 
-extern void rbarg_to_nsarg(VALUE rbarg, int octype, void* nsarg, id pool, int index);
-extern VALUE nsresult_to_rbresult(int octype, const void* nsresult, id pool);
+extern VALUE oc_err_new (const char* fname, NSException* nsexcp);
+extern void rbarg_to_nsarg(VALUE rbarg, int octype, void* nsarg, const char* fname, id pool, int index);
+extern VALUE nsresult_to_rbresult(int octype, const void* nsresult, const char* fname, id pool);
 static const int VA_MAX = 4;
 
 
@@ -16,14 +17,24 @@ osx_NSDecimalCopy(VALUE mdl, VALUE a0, VALUE a1)
   NSDecimal * ns_a0;
   const NSDecimal * ns_a1;
 
+  VALUE excp = Qnil;
   VALUE rb_result;
   id pool = [[NSAutoreleasePool alloc] init];
   /* a0 */
-  rbarg_to_nsarg(a0, _PRIV_C_PTR, &ns_a0, pool, 0);
+  rbarg_to_nsarg(a0, _PRIV_C_PTR, &ns_a0, "NSDecimalCopy", pool, 0);
   /* a1 */
-  rbarg_to_nsarg(a1, _PRIV_C_PTR, &ns_a1, pool, 1);
+  rbarg_to_nsarg(a1, _PRIV_C_PTR, &ns_a1, "NSDecimalCopy", pool, 1);
 
+NS_DURING
   NSDecimalCopy(ns_a0, ns_a1);
+NS_HANDLER
+  excp = oc_err_new ("NSDecimalCopy", localException);
+NS_ENDHANDLER
+  if (excp != Qnil) {
+    [pool release];
+    rb_exc_raise (excp);
+    return Qnil;
+  }
 
   rb_result = Qnil;
   [pool release];
@@ -37,12 +48,22 @@ osx_NSDecimalCompact(VALUE mdl, VALUE a0)
 
   NSDecimal * ns_a0;
 
+  VALUE excp = Qnil;
   VALUE rb_result;
   id pool = [[NSAutoreleasePool alloc] init];
   /* a0 */
-  rbarg_to_nsarg(a0, _PRIV_C_PTR, &ns_a0, pool, 0);
+  rbarg_to_nsarg(a0, _PRIV_C_PTR, &ns_a0, "NSDecimalCompact", pool, 0);
 
+NS_DURING
   NSDecimalCompact(ns_a0);
+NS_HANDLER
+  excp = oc_err_new ("NSDecimalCompact", localException);
+NS_ENDHANDLER
+  if (excp != Qnil) {
+    [pool release];
+    rb_exc_raise (excp);
+    return Qnil;
+  }
 
   rb_result = Qnil;
   [pool release];
@@ -58,16 +79,26 @@ osx_NSDecimalCompare(VALUE mdl, VALUE a0, VALUE a1)
   const NSDecimal * ns_a0;
   const NSDecimal * ns_a1;
 
+  VALUE excp = Qnil;
   VALUE rb_result;
   id pool = [[NSAutoreleasePool alloc] init];
   /* a0 */
-  rbarg_to_nsarg(a0, _PRIV_C_PTR, &ns_a0, pool, 0);
+  rbarg_to_nsarg(a0, _PRIV_C_PTR, &ns_a0, "NSDecimalCompare", pool, 0);
   /* a1 */
-  rbarg_to_nsarg(a1, _PRIV_C_PTR, &ns_a1, pool, 1);
+  rbarg_to_nsarg(a1, _PRIV_C_PTR, &ns_a1, "NSDecimalCompare", pool, 1);
 
+NS_DURING
   ns_result = NSDecimalCompare(ns_a0, ns_a1);
+NS_HANDLER
+  excp = oc_err_new ("NSDecimalCompare", localException);
+NS_ENDHANDLER
+  if (excp != Qnil) {
+    [pool release];
+    rb_exc_raise (excp);
+    return Qnil;
+  }
 
-  rb_result = nsresult_to_rbresult(_C_INT, &ns_result, pool);
+  rb_result = nsresult_to_rbresult(_C_INT, &ns_result, "NSDecimalCompare", pool);
   [pool release];
   return rb_result;
 }
@@ -82,18 +113,28 @@ osx_NSDecimalRound(VALUE mdl, VALUE a0, VALUE a1, VALUE a2, VALUE a3)
   int ns_a2;
   NSRoundingMode ns_a3;
 
+  VALUE excp = Qnil;
   VALUE rb_result;
   id pool = [[NSAutoreleasePool alloc] init];
   /* a0 */
-  rbarg_to_nsarg(a0, _PRIV_C_PTR, &ns_a0, pool, 0);
+  rbarg_to_nsarg(a0, _PRIV_C_PTR, &ns_a0, "NSDecimalRound", pool, 0);
   /* a1 */
-  rbarg_to_nsarg(a1, _PRIV_C_PTR, &ns_a1, pool, 1);
+  rbarg_to_nsarg(a1, _PRIV_C_PTR, &ns_a1, "NSDecimalRound", pool, 1);
   /* a2 */
-  rbarg_to_nsarg(a2, _C_INT, &ns_a2, pool, 2);
+  rbarg_to_nsarg(a2, _C_INT, &ns_a2, "NSDecimalRound", pool, 2);
   /* a3 */
-  rbarg_to_nsarg(a3, _C_INT, &ns_a3, pool, 3);
+  rbarg_to_nsarg(a3, _C_INT, &ns_a3, "NSDecimalRound", pool, 3);
 
+NS_DURING
   NSDecimalRound(ns_a0, ns_a1, ns_a2, ns_a3);
+NS_HANDLER
+  excp = oc_err_new ("NSDecimalRound", localException);
+NS_ENDHANDLER
+  if (excp != Qnil) {
+    [pool release];
+    rb_exc_raise (excp);
+    return Qnil;
+  }
 
   rb_result = Qnil;
   [pool release];
@@ -110,18 +151,28 @@ osx_NSDecimalNormalize(VALUE mdl, VALUE a0, VALUE a1, VALUE a2)
   NSDecimal * ns_a1;
   NSRoundingMode ns_a2;
 
+  VALUE excp = Qnil;
   VALUE rb_result;
   id pool = [[NSAutoreleasePool alloc] init];
   /* a0 */
-  rbarg_to_nsarg(a0, _PRIV_C_PTR, &ns_a0, pool, 0);
+  rbarg_to_nsarg(a0, _PRIV_C_PTR, &ns_a0, "NSDecimalNormalize", pool, 0);
   /* a1 */
-  rbarg_to_nsarg(a1, _PRIV_C_PTR, &ns_a1, pool, 1);
+  rbarg_to_nsarg(a1, _PRIV_C_PTR, &ns_a1, "NSDecimalNormalize", pool, 1);
   /* a2 */
-  rbarg_to_nsarg(a2, _C_INT, &ns_a2, pool, 2);
+  rbarg_to_nsarg(a2, _C_INT, &ns_a2, "NSDecimalNormalize", pool, 2);
 
+NS_DURING
   ns_result = NSDecimalNormalize(ns_a0, ns_a1, ns_a2);
+NS_HANDLER
+  excp = oc_err_new ("NSDecimalNormalize", localException);
+NS_ENDHANDLER
+  if (excp != Qnil) {
+    [pool release];
+    rb_exc_raise (excp);
+    return Qnil;
+  }
 
-  rb_result = nsresult_to_rbresult(_C_INT, &ns_result, pool);
+  rb_result = nsresult_to_rbresult(_C_INT, &ns_result, "NSDecimalNormalize", pool);
   [pool release];
   return rb_result;
 }
@@ -137,20 +188,30 @@ osx_NSDecimalAdd(VALUE mdl, VALUE a0, VALUE a1, VALUE a2, VALUE a3)
   const NSDecimal * ns_a2;
   NSRoundingMode ns_a3;
 
+  VALUE excp = Qnil;
   VALUE rb_result;
   id pool = [[NSAutoreleasePool alloc] init];
   /* a0 */
-  rbarg_to_nsarg(a0, _PRIV_C_PTR, &ns_a0, pool, 0);
+  rbarg_to_nsarg(a0, _PRIV_C_PTR, &ns_a0, "NSDecimalAdd", pool, 0);
   /* a1 */
-  rbarg_to_nsarg(a1, _PRIV_C_PTR, &ns_a1, pool, 1);
+  rbarg_to_nsarg(a1, _PRIV_C_PTR, &ns_a1, "NSDecimalAdd", pool, 1);
   /* a2 */
-  rbarg_to_nsarg(a2, _PRIV_C_PTR, &ns_a2, pool, 2);
+  rbarg_to_nsarg(a2, _PRIV_C_PTR, &ns_a2, "NSDecimalAdd", pool, 2);
   /* a3 */
-  rbarg_to_nsarg(a3, _C_INT, &ns_a3, pool, 3);
+  rbarg_to_nsarg(a3, _C_INT, &ns_a3, "NSDecimalAdd", pool, 3);
 
+NS_DURING
   ns_result = NSDecimalAdd(ns_a0, ns_a1, ns_a2, ns_a3);
+NS_HANDLER
+  excp = oc_err_new ("NSDecimalAdd", localException);
+NS_ENDHANDLER
+  if (excp != Qnil) {
+    [pool release];
+    rb_exc_raise (excp);
+    return Qnil;
+  }
 
-  rb_result = nsresult_to_rbresult(_C_INT, &ns_result, pool);
+  rb_result = nsresult_to_rbresult(_C_INT, &ns_result, "NSDecimalAdd", pool);
   [pool release];
   return rb_result;
 }
@@ -166,20 +227,30 @@ osx_NSDecimalSubtract(VALUE mdl, VALUE a0, VALUE a1, VALUE a2, VALUE a3)
   const NSDecimal * ns_a2;
   NSRoundingMode ns_a3;
 
+  VALUE excp = Qnil;
   VALUE rb_result;
   id pool = [[NSAutoreleasePool alloc] init];
   /* a0 */
-  rbarg_to_nsarg(a0, _PRIV_C_PTR, &ns_a0, pool, 0);
+  rbarg_to_nsarg(a0, _PRIV_C_PTR, &ns_a0, "NSDecimalSubtract", pool, 0);
   /* a1 */
-  rbarg_to_nsarg(a1, _PRIV_C_PTR, &ns_a1, pool, 1);
+  rbarg_to_nsarg(a1, _PRIV_C_PTR, &ns_a1, "NSDecimalSubtract", pool, 1);
   /* a2 */
-  rbarg_to_nsarg(a2, _PRIV_C_PTR, &ns_a2, pool, 2);
+  rbarg_to_nsarg(a2, _PRIV_C_PTR, &ns_a2, "NSDecimalSubtract", pool, 2);
   /* a3 */
-  rbarg_to_nsarg(a3, _C_INT, &ns_a3, pool, 3);
+  rbarg_to_nsarg(a3, _C_INT, &ns_a3, "NSDecimalSubtract", pool, 3);
 
+NS_DURING
   ns_result = NSDecimalSubtract(ns_a0, ns_a1, ns_a2, ns_a3);
+NS_HANDLER
+  excp = oc_err_new ("NSDecimalSubtract", localException);
+NS_ENDHANDLER
+  if (excp != Qnil) {
+    [pool release];
+    rb_exc_raise (excp);
+    return Qnil;
+  }
 
-  rb_result = nsresult_to_rbresult(_C_INT, &ns_result, pool);
+  rb_result = nsresult_to_rbresult(_C_INT, &ns_result, "NSDecimalSubtract", pool);
   [pool release];
   return rb_result;
 }
@@ -195,20 +266,30 @@ osx_NSDecimalMultiply(VALUE mdl, VALUE a0, VALUE a1, VALUE a2, VALUE a3)
   const NSDecimal * ns_a2;
   NSRoundingMode ns_a3;
 
+  VALUE excp = Qnil;
   VALUE rb_result;
   id pool = [[NSAutoreleasePool alloc] init];
   /* a0 */
-  rbarg_to_nsarg(a0, _PRIV_C_PTR, &ns_a0, pool, 0);
+  rbarg_to_nsarg(a0, _PRIV_C_PTR, &ns_a0, "NSDecimalMultiply", pool, 0);
   /* a1 */
-  rbarg_to_nsarg(a1, _PRIV_C_PTR, &ns_a1, pool, 1);
+  rbarg_to_nsarg(a1, _PRIV_C_PTR, &ns_a1, "NSDecimalMultiply", pool, 1);
   /* a2 */
-  rbarg_to_nsarg(a2, _PRIV_C_PTR, &ns_a2, pool, 2);
+  rbarg_to_nsarg(a2, _PRIV_C_PTR, &ns_a2, "NSDecimalMultiply", pool, 2);
   /* a3 */
-  rbarg_to_nsarg(a3, _C_INT, &ns_a3, pool, 3);
+  rbarg_to_nsarg(a3, _C_INT, &ns_a3, "NSDecimalMultiply", pool, 3);
 
+NS_DURING
   ns_result = NSDecimalMultiply(ns_a0, ns_a1, ns_a2, ns_a3);
+NS_HANDLER
+  excp = oc_err_new ("NSDecimalMultiply", localException);
+NS_ENDHANDLER
+  if (excp != Qnil) {
+    [pool release];
+    rb_exc_raise (excp);
+    return Qnil;
+  }
 
-  rb_result = nsresult_to_rbresult(_C_INT, &ns_result, pool);
+  rb_result = nsresult_to_rbresult(_C_INT, &ns_result, "NSDecimalMultiply", pool);
   [pool release];
   return rb_result;
 }
@@ -224,20 +305,30 @@ osx_NSDecimalDivide(VALUE mdl, VALUE a0, VALUE a1, VALUE a2, VALUE a3)
   const NSDecimal * ns_a2;
   NSRoundingMode ns_a3;
 
+  VALUE excp = Qnil;
   VALUE rb_result;
   id pool = [[NSAutoreleasePool alloc] init];
   /* a0 */
-  rbarg_to_nsarg(a0, _PRIV_C_PTR, &ns_a0, pool, 0);
+  rbarg_to_nsarg(a0, _PRIV_C_PTR, &ns_a0, "NSDecimalDivide", pool, 0);
   /* a1 */
-  rbarg_to_nsarg(a1, _PRIV_C_PTR, &ns_a1, pool, 1);
+  rbarg_to_nsarg(a1, _PRIV_C_PTR, &ns_a1, "NSDecimalDivide", pool, 1);
   /* a2 */
-  rbarg_to_nsarg(a2, _PRIV_C_PTR, &ns_a2, pool, 2);
+  rbarg_to_nsarg(a2, _PRIV_C_PTR, &ns_a2, "NSDecimalDivide", pool, 2);
   /* a3 */
-  rbarg_to_nsarg(a3, _C_INT, &ns_a3, pool, 3);
+  rbarg_to_nsarg(a3, _C_INT, &ns_a3, "NSDecimalDivide", pool, 3);
 
+NS_DURING
   ns_result = NSDecimalDivide(ns_a0, ns_a1, ns_a2, ns_a3);
+NS_HANDLER
+  excp = oc_err_new ("NSDecimalDivide", localException);
+NS_ENDHANDLER
+  if (excp != Qnil) {
+    [pool release];
+    rb_exc_raise (excp);
+    return Qnil;
+  }
 
-  rb_result = nsresult_to_rbresult(_C_INT, &ns_result, pool);
+  rb_result = nsresult_to_rbresult(_C_INT, &ns_result, "NSDecimalDivide", pool);
   [pool release];
   return rb_result;
 }
@@ -253,20 +344,30 @@ osx_NSDecimalPower(VALUE mdl, VALUE a0, VALUE a1, VALUE a2, VALUE a3)
   unsigned ns_a2;
   NSRoundingMode ns_a3;
 
+  VALUE excp = Qnil;
   VALUE rb_result;
   id pool = [[NSAutoreleasePool alloc] init];
   /* a0 */
-  rbarg_to_nsarg(a0, _PRIV_C_PTR, &ns_a0, pool, 0);
+  rbarg_to_nsarg(a0, _PRIV_C_PTR, &ns_a0, "NSDecimalPower", pool, 0);
   /* a1 */
-  rbarg_to_nsarg(a1, _PRIV_C_PTR, &ns_a1, pool, 1);
+  rbarg_to_nsarg(a1, _PRIV_C_PTR, &ns_a1, "NSDecimalPower", pool, 1);
   /* a2 */
-  rbarg_to_nsarg(a2, _C_UINT, &ns_a2, pool, 2);
+  rbarg_to_nsarg(a2, _C_UINT, &ns_a2, "NSDecimalPower", pool, 2);
   /* a3 */
-  rbarg_to_nsarg(a3, _C_INT, &ns_a3, pool, 3);
+  rbarg_to_nsarg(a3, _C_INT, &ns_a3, "NSDecimalPower", pool, 3);
 
+NS_DURING
   ns_result = NSDecimalPower(ns_a0, ns_a1, ns_a2, ns_a3);
+NS_HANDLER
+  excp = oc_err_new ("NSDecimalPower", localException);
+NS_ENDHANDLER
+  if (excp != Qnil) {
+    [pool release];
+    rb_exc_raise (excp);
+    return Qnil;
+  }
 
-  rb_result = nsresult_to_rbresult(_C_INT, &ns_result, pool);
+  rb_result = nsresult_to_rbresult(_C_INT, &ns_result, "NSDecimalPower", pool);
   [pool release];
   return rb_result;
 }
@@ -282,20 +383,30 @@ osx_NSDecimalMultiplyByPowerOf10(VALUE mdl, VALUE a0, VALUE a1, VALUE a2, VALUE 
   short ns_a2;
   NSRoundingMode ns_a3;
 
+  VALUE excp = Qnil;
   VALUE rb_result;
   id pool = [[NSAutoreleasePool alloc] init];
   /* a0 */
-  rbarg_to_nsarg(a0, _PRIV_C_PTR, &ns_a0, pool, 0);
+  rbarg_to_nsarg(a0, _PRIV_C_PTR, &ns_a0, "NSDecimalMultiplyByPowerOf10", pool, 0);
   /* a1 */
-  rbarg_to_nsarg(a1, _PRIV_C_PTR, &ns_a1, pool, 1);
+  rbarg_to_nsarg(a1, _PRIV_C_PTR, &ns_a1, "NSDecimalMultiplyByPowerOf10", pool, 1);
   /* a2 */
-  rbarg_to_nsarg(a2, _C_SHT, &ns_a2, pool, 2);
+  rbarg_to_nsarg(a2, _C_SHT, &ns_a2, "NSDecimalMultiplyByPowerOf10", pool, 2);
   /* a3 */
-  rbarg_to_nsarg(a3, _C_INT, &ns_a3, pool, 3);
+  rbarg_to_nsarg(a3, _C_INT, &ns_a3, "NSDecimalMultiplyByPowerOf10", pool, 3);
 
+NS_DURING
   ns_result = NSDecimalMultiplyByPowerOf10(ns_a0, ns_a1, ns_a2, ns_a3);
+NS_HANDLER
+  excp = oc_err_new ("NSDecimalMultiplyByPowerOf10", localException);
+NS_ENDHANDLER
+  if (excp != Qnil) {
+    [pool release];
+    rb_exc_raise (excp);
+    return Qnil;
+  }
 
-  rb_result = nsresult_to_rbresult(_C_INT, &ns_result, pool);
+  rb_result = nsresult_to_rbresult(_C_INT, &ns_result, "NSDecimalMultiplyByPowerOf10", pool);
   [pool release];
   return rb_result;
 }
@@ -309,16 +420,26 @@ osx_NSDecimalString(VALUE mdl, VALUE a0, VALUE a1)
   const NSDecimal * ns_a0;
   NSDictionary * ns_a1;
 
+  VALUE excp = Qnil;
   VALUE rb_result;
   id pool = [[NSAutoreleasePool alloc] init];
   /* a0 */
-  rbarg_to_nsarg(a0, _PRIV_C_PTR, &ns_a0, pool, 0);
+  rbarg_to_nsarg(a0, _PRIV_C_PTR, &ns_a0, "NSDecimalString", pool, 0);
   /* a1 */
-  rbarg_to_nsarg(a1, _C_ID, &ns_a1, pool, 1);
+  rbarg_to_nsarg(a1, _C_ID, &ns_a1, "NSDecimalString", pool, 1);
 
+NS_DURING
   ns_result = NSDecimalString(ns_a0, ns_a1);
+NS_HANDLER
+  excp = oc_err_new ("NSDecimalString", localException);
+NS_ENDHANDLER
+  if (excp != Qnil) {
+    [pool release];
+    rb_exc_raise (excp);
+    return Qnil;
+  }
 
-  rb_result = nsresult_to_rbresult(_C_ID, &ns_result, pool);
+  rb_result = nsresult_to_rbresult(_C_ID, &ns_result, "NSDecimalString", pool);
   [pool release];
   return rb_result;
 }

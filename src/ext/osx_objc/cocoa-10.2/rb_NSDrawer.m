@@ -2,8 +2,9 @@
 #import "ocdata_conv.h"
 #import <AppKit/AppKit.h>
 
-extern void rbarg_to_nsarg(VALUE rbarg, int octype, void* nsarg, id pool, int index);
-extern VALUE nsresult_to_rbresult(int octype, const void* nsresult, id pool);
+extern VALUE oc_err_new (const char* fname, NSException* nsexcp);
+extern void rbarg_to_nsarg(VALUE rbarg, int octype, void* nsarg, const char* fname, id pool, int index);
+extern VALUE nsresult_to_rbresult(int octype, const void* nsresult, const char* fname, id pool);
 static const int VA_MAX = 4;
 
 
@@ -12,28 +13,28 @@ static const int VA_MAX = 4;
 static VALUE
 osx_NSDrawerWillOpenNotification(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSDrawerWillOpenNotification, nil);
+  return nsresult_to_rbresult(_C_ID, &NSDrawerWillOpenNotification, "NSDrawerWillOpenNotification", nil);
 }
 
 // NSString * NSDrawerDidOpenNotification;
 static VALUE
 osx_NSDrawerDidOpenNotification(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSDrawerDidOpenNotification, nil);
+  return nsresult_to_rbresult(_C_ID, &NSDrawerDidOpenNotification, "NSDrawerDidOpenNotification", nil);
 }
 
 // NSString * NSDrawerWillCloseNotification;
 static VALUE
 osx_NSDrawerWillCloseNotification(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSDrawerWillCloseNotification, nil);
+  return nsresult_to_rbresult(_C_ID, &NSDrawerWillCloseNotification, "NSDrawerWillCloseNotification", nil);
 }
 
 // NSString * NSDrawerDidCloseNotification;
 static VALUE
 osx_NSDrawerDidCloseNotification(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSDrawerDidCloseNotification, nil);
+  return nsresult_to_rbresult(_C_ID, &NSDrawerDidCloseNotification, "NSDrawerDidCloseNotification", nil);
 }
 
 void init_NSDrawer(VALUE mOSX)

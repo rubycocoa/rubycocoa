@@ -2,8 +2,9 @@
 #import "ocdata_conv.h"
 #import <AppKit/AppKit.h>
 
-extern void rbarg_to_nsarg(VALUE rbarg, int octype, void* nsarg, id pool, int index);
-extern VALUE nsresult_to_rbresult(int octype, const void* nsresult, id pool);
+extern VALUE oc_err_new (const char* fname, NSException* nsexcp);
+extern void rbarg_to_nsarg(VALUE rbarg, int octype, void* nsarg, const char* fname, id pool, int index);
+extern VALUE nsresult_to_rbresult(int octype, const void* nsresult, const char* fname, id pool);
 static const int VA_MAX = 4;
 
 
@@ -12,280 +13,280 @@ static const int VA_MAX = 4;
 static VALUE
 osx_NSPrintSpoolJob(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSPrintSpoolJob, nil);
+  return nsresult_to_rbresult(_C_ID, &NSPrintSpoolJob, "NSPrintSpoolJob", nil);
 }
 
 // NSString * NSPrintPreviewJob;
 static VALUE
 osx_NSPrintPreviewJob(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSPrintPreviewJob, nil);
+  return nsresult_to_rbresult(_C_ID, &NSPrintPreviewJob, "NSPrintPreviewJob", nil);
 }
 
 // NSString * NSPrintSaveJob;
 static VALUE
 osx_NSPrintSaveJob(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSPrintSaveJob, nil);
+  return nsresult_to_rbresult(_C_ID, &NSPrintSaveJob, "NSPrintSaveJob", nil);
 }
 
 // NSString * NSPrintCancelJob;
 static VALUE
 osx_NSPrintCancelJob(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSPrintCancelJob, nil);
+  return nsresult_to_rbresult(_C_ID, &NSPrintCancelJob, "NSPrintCancelJob", nil);
 }
 
 // NSString * NSPrintPaperName;
 static VALUE
 osx_NSPrintPaperName(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSPrintPaperName, nil);
+  return nsresult_to_rbresult(_C_ID, &NSPrintPaperName, "NSPrintPaperName", nil);
 }
 
 // NSString * NSPrintPaperSize;
 static VALUE
 osx_NSPrintPaperSize(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSPrintPaperSize, nil);
+  return nsresult_to_rbresult(_C_ID, &NSPrintPaperSize, "NSPrintPaperSize", nil);
 }
 
 // NSString * NSPrintOrientation;
 static VALUE
 osx_NSPrintOrientation(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSPrintOrientation, nil);
+  return nsresult_to_rbresult(_C_ID, &NSPrintOrientation, "NSPrintOrientation", nil);
 }
 
 // NSString * NSPrintScalingFactor;
 static VALUE
 osx_NSPrintScalingFactor(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSPrintScalingFactor, nil);
+  return nsresult_to_rbresult(_C_ID, &NSPrintScalingFactor, "NSPrintScalingFactor", nil);
 }
 
 // NSString * NSPrintLeftMargin;
 static VALUE
 osx_NSPrintLeftMargin(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSPrintLeftMargin, nil);
+  return nsresult_to_rbresult(_C_ID, &NSPrintLeftMargin, "NSPrintLeftMargin", nil);
 }
 
 // NSString * NSPrintRightMargin;
 static VALUE
 osx_NSPrintRightMargin(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSPrintRightMargin, nil);
+  return nsresult_to_rbresult(_C_ID, &NSPrintRightMargin, "NSPrintRightMargin", nil);
 }
 
 // NSString * NSPrintTopMargin;
 static VALUE
 osx_NSPrintTopMargin(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSPrintTopMargin, nil);
+  return nsresult_to_rbresult(_C_ID, &NSPrintTopMargin, "NSPrintTopMargin", nil);
 }
 
 // NSString * NSPrintBottomMargin;
 static VALUE
 osx_NSPrintBottomMargin(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSPrintBottomMargin, nil);
+  return nsresult_to_rbresult(_C_ID, &NSPrintBottomMargin, "NSPrintBottomMargin", nil);
 }
 
 // NSString * NSPrintHorizontallyCentered;
 static VALUE
 osx_NSPrintHorizontallyCentered(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSPrintHorizontallyCentered, nil);
+  return nsresult_to_rbresult(_C_ID, &NSPrintHorizontallyCentered, "NSPrintHorizontallyCentered", nil);
 }
 
 // NSString * NSPrintVerticallyCentered;
 static VALUE
 osx_NSPrintVerticallyCentered(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSPrintVerticallyCentered, nil);
+  return nsresult_to_rbresult(_C_ID, &NSPrintVerticallyCentered, "NSPrintVerticallyCentered", nil);
 }
 
 // NSString * NSPrintHorizontalPagination;
 static VALUE
 osx_NSPrintHorizontalPagination(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSPrintHorizontalPagination, nil);
+  return nsresult_to_rbresult(_C_ID, &NSPrintHorizontalPagination, "NSPrintHorizontalPagination", nil);
 }
 
 // NSString * NSPrintVerticalPagination;
 static VALUE
 osx_NSPrintVerticalPagination(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSPrintVerticalPagination, nil);
+  return nsresult_to_rbresult(_C_ID, &NSPrintVerticalPagination, "NSPrintVerticalPagination", nil);
 }
 
 // NSString * NSPrintPrinter;
 static VALUE
 osx_NSPrintPrinter(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSPrintPrinter, nil);
+  return nsresult_to_rbresult(_C_ID, &NSPrintPrinter, "NSPrintPrinter", nil);
 }
 
 // NSString * NSPrintCopies;
 static VALUE
 osx_NSPrintCopies(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSPrintCopies, nil);
+  return nsresult_to_rbresult(_C_ID, &NSPrintCopies, "NSPrintCopies", nil);
 }
 
 // NSString * NSPrintAllPages;
 static VALUE
 osx_NSPrintAllPages(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSPrintAllPages, nil);
+  return nsresult_to_rbresult(_C_ID, &NSPrintAllPages, "NSPrintAllPages", nil);
 }
 
 // NSString * NSPrintFirstPage;
 static VALUE
 osx_NSPrintFirstPage(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSPrintFirstPage, nil);
+  return nsresult_to_rbresult(_C_ID, &NSPrintFirstPage, "NSPrintFirstPage", nil);
 }
 
 // NSString * NSPrintLastPage;
 static VALUE
 osx_NSPrintLastPage(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSPrintLastPage, nil);
+  return nsresult_to_rbresult(_C_ID, &NSPrintLastPage, "NSPrintLastPage", nil);
 }
 
 // NSString * NSPrintMustCollate;
 static VALUE
 osx_NSPrintMustCollate(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSPrintMustCollate, nil);
+  return nsresult_to_rbresult(_C_ID, &NSPrintMustCollate, "NSPrintMustCollate", nil);
 }
 
 // NSString * NSPrintReversePageOrder;
 static VALUE
 osx_NSPrintReversePageOrder(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSPrintReversePageOrder, nil);
+  return nsresult_to_rbresult(_C_ID, &NSPrintReversePageOrder, "NSPrintReversePageOrder", nil);
 }
 
 // NSString * NSPrintJobDisposition;
 static VALUE
 osx_NSPrintJobDisposition(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSPrintJobDisposition, nil);
+  return nsresult_to_rbresult(_C_ID, &NSPrintJobDisposition, "NSPrintJobDisposition", nil);
 }
 
 // NSString * NSPrintSavePath;
 static VALUE
 osx_NSPrintSavePath(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSPrintSavePath, nil);
+  return nsresult_to_rbresult(_C_ID, &NSPrintSavePath, "NSPrintSavePath", nil);
 }
 
 // NSString * NSPrintFormName;
 static VALUE
 osx_NSPrintFormName(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSPrintFormName, nil);
+  return nsresult_to_rbresult(_C_ID, &NSPrintFormName, "NSPrintFormName", nil);
 }
 
 // NSString * NSPrintJobFeatures;
 static VALUE
 osx_NSPrintJobFeatures(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSPrintJobFeatures, nil);
+  return nsresult_to_rbresult(_C_ID, &NSPrintJobFeatures, "NSPrintJobFeatures", nil);
 }
 
 // NSString * NSPrintManualFeed;
 static VALUE
 osx_NSPrintManualFeed(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSPrintManualFeed, nil);
+  return nsresult_to_rbresult(_C_ID, &NSPrintManualFeed, "NSPrintManualFeed", nil);
 }
 
 // NSString * NSPrintPagesPerSheet;
 static VALUE
 osx_NSPrintPagesPerSheet(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSPrintPagesPerSheet, nil);
+  return nsresult_to_rbresult(_C_ID, &NSPrintPagesPerSheet, "NSPrintPagesPerSheet", nil);
 }
 
 // NSString * NSPrintPaperFeed;
 static VALUE
 osx_NSPrintPaperFeed(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSPrintPaperFeed, nil);
+  return nsresult_to_rbresult(_C_ID, &NSPrintPaperFeed, "NSPrintPaperFeed", nil);
 }
 
 // NSString * NSPrintFaxCoverSheetName;
 static VALUE
 osx_NSPrintFaxCoverSheetName(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSPrintFaxCoverSheetName, nil);
+  return nsresult_to_rbresult(_C_ID, &NSPrintFaxCoverSheetName, "NSPrintFaxCoverSheetName", nil);
 }
 
 // NSString * NSPrintFaxHighResolution;
 static VALUE
 osx_NSPrintFaxHighResolution(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSPrintFaxHighResolution, nil);
+  return nsresult_to_rbresult(_C_ID, &NSPrintFaxHighResolution, "NSPrintFaxHighResolution", nil);
 }
 
 // NSString * NSPrintFaxModem;
 static VALUE
 osx_NSPrintFaxModem(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSPrintFaxModem, nil);
+  return nsresult_to_rbresult(_C_ID, &NSPrintFaxModem, "NSPrintFaxModem", nil);
 }
 
 // NSString * NSPrintFaxReceiverNames;
 static VALUE
 osx_NSPrintFaxReceiverNames(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSPrintFaxReceiverNames, nil);
+  return nsresult_to_rbresult(_C_ID, &NSPrintFaxReceiverNames, "NSPrintFaxReceiverNames", nil);
 }
 
 // NSString * NSPrintFaxReceiverNumbers;
 static VALUE
 osx_NSPrintFaxReceiverNumbers(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSPrintFaxReceiverNumbers, nil);
+  return nsresult_to_rbresult(_C_ID, &NSPrintFaxReceiverNumbers, "NSPrintFaxReceiverNumbers", nil);
 }
 
 // NSString * NSPrintFaxReturnReceipt;
 static VALUE
 osx_NSPrintFaxReturnReceipt(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSPrintFaxReturnReceipt, nil);
+  return nsresult_to_rbresult(_C_ID, &NSPrintFaxReturnReceipt, "NSPrintFaxReturnReceipt", nil);
 }
 
 // NSString * NSPrintFaxSendTime;
 static VALUE
 osx_NSPrintFaxSendTime(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSPrintFaxSendTime, nil);
+  return nsresult_to_rbresult(_C_ID, &NSPrintFaxSendTime, "NSPrintFaxSendTime", nil);
 }
 
 // NSString * NSPrintFaxTrimPageEnds;
 static VALUE
 osx_NSPrintFaxTrimPageEnds(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSPrintFaxTrimPageEnds, nil);
+  return nsresult_to_rbresult(_C_ID, &NSPrintFaxTrimPageEnds, "NSPrintFaxTrimPageEnds", nil);
 }
 
 // NSString * NSPrintFaxUseCoverSheet;
 static VALUE
 osx_NSPrintFaxUseCoverSheet(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSPrintFaxUseCoverSheet, nil);
+  return nsresult_to_rbresult(_C_ID, &NSPrintFaxUseCoverSheet, "NSPrintFaxUseCoverSheet", nil);
 }
 
 // NSString * NSPrintFaxJob;
 static VALUE
 osx_NSPrintFaxJob(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSPrintFaxJob, nil);
+  return nsresult_to_rbresult(_C_ID, &NSPrintFaxJob, "NSPrintFaxJob", nil);
 }
 
 void init_NSPrintInfo(VALUE mOSX)

@@ -2,8 +2,9 @@
 #import "ocdata_conv.h"
 #import <Foundation/Foundation.h>
 
-extern void rbarg_to_nsarg(VALUE rbarg, int octype, void* nsarg, id pool, int index);
-extern VALUE nsresult_to_rbresult(int octype, const void* nsresult, id pool);
+extern VALUE oc_err_new (const char* fname, NSException* nsexcp);
+extern void rbarg_to_nsarg(VALUE rbarg, int octype, void* nsarg, const char* fname, id pool, int index);
+extern VALUE nsresult_to_rbresult(int octype, const void* nsresult, const char* fname, id pool);
 static const int VA_MAX = 4;
 
 
@@ -12,98 +13,98 @@ static const int VA_MAX = 4;
 static VALUE
 osx_NSGenericException(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSGenericException, nil);
+  return nsresult_to_rbresult(_C_ID, &NSGenericException, "NSGenericException", nil);
 }
 
 // NSString * const NSRangeException;
 static VALUE
 osx_NSRangeException(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSRangeException, nil);
+  return nsresult_to_rbresult(_C_ID, &NSRangeException, "NSRangeException", nil);
 }
 
 // NSString * const NSInvalidArgumentException;
 static VALUE
 osx_NSInvalidArgumentException(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSInvalidArgumentException, nil);
+  return nsresult_to_rbresult(_C_ID, &NSInvalidArgumentException, "NSInvalidArgumentException", nil);
 }
 
 // NSString * const NSInternalInconsistencyException;
 static VALUE
 osx_NSInternalInconsistencyException(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSInternalInconsistencyException, nil);
+  return nsresult_to_rbresult(_C_ID, &NSInternalInconsistencyException, "NSInternalInconsistencyException", nil);
 }
 
 // NSString * const NSMallocException;
 static VALUE
 osx_NSMallocException(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSMallocException, nil);
+  return nsresult_to_rbresult(_C_ID, &NSMallocException, "NSMallocException", nil);
 }
 
 // NSString * const NSObjectInaccessibleException;
 static VALUE
 osx_NSObjectInaccessibleException(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSObjectInaccessibleException, nil);
+  return nsresult_to_rbresult(_C_ID, &NSObjectInaccessibleException, "NSObjectInaccessibleException", nil);
 }
 
 // NSString * const NSObjectNotAvailableException;
 static VALUE
 osx_NSObjectNotAvailableException(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSObjectNotAvailableException, nil);
+  return nsresult_to_rbresult(_C_ID, &NSObjectNotAvailableException, "NSObjectNotAvailableException", nil);
 }
 
 // NSString * const NSDestinationInvalidException;
 static VALUE
 osx_NSDestinationInvalidException(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSDestinationInvalidException, nil);
+  return nsresult_to_rbresult(_C_ID, &NSDestinationInvalidException, "NSDestinationInvalidException", nil);
 }
 
 // NSString * const NSPortTimeoutException;
 static VALUE
 osx_NSPortTimeoutException(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSPortTimeoutException, nil);
+  return nsresult_to_rbresult(_C_ID, &NSPortTimeoutException, "NSPortTimeoutException", nil);
 }
 
 // NSString * const NSInvalidSendPortException;
 static VALUE
 osx_NSInvalidSendPortException(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSInvalidSendPortException, nil);
+  return nsresult_to_rbresult(_C_ID, &NSInvalidSendPortException, "NSInvalidSendPortException", nil);
 }
 
 // NSString * const NSInvalidReceivePortException;
 static VALUE
 osx_NSInvalidReceivePortException(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSInvalidReceivePortException, nil);
+  return nsresult_to_rbresult(_C_ID, &NSInvalidReceivePortException, "NSInvalidReceivePortException", nil);
 }
 
 // NSString * const NSPortSendException;
 static VALUE
 osx_NSPortSendException(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSPortSendException, nil);
+  return nsresult_to_rbresult(_C_ID, &NSPortSendException, "NSPortSendException", nil);
 }
 
 // NSString * const NSPortReceiveException;
 static VALUE
 osx_NSPortReceiveException(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSPortReceiveException, nil);
+  return nsresult_to_rbresult(_C_ID, &NSPortReceiveException, "NSPortReceiveException", nil);
 }
 
 // NSString * const NSOldStyleException;
 static VALUE
 osx_NSOldStyleException(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSOldStyleException, nil);
+  return nsresult_to_rbresult(_C_ID, &NSOldStyleException, "NSOldStyleException", nil);
 }
 
   /**** functions ****/
@@ -114,12 +115,22 @@ osx__NSAddHandler2(VALUE mdl, VALUE a0)
 
   NSHandler2 * ns_a0;
 
+  VALUE excp = Qnil;
   VALUE rb_result;
   id pool = [[NSAutoreleasePool alloc] init];
   /* a0 */
-  rbarg_to_nsarg(a0, _PRIV_C_PTR, &ns_a0, pool, 0);
+  rbarg_to_nsarg(a0, _PRIV_C_PTR, &ns_a0, "_NSAddHandler2", pool, 0);
 
+NS_DURING
   _NSAddHandler2(ns_a0);
+NS_HANDLER
+  excp = oc_err_new ("_NSAddHandler2", localException);
+NS_ENDHANDLER
+  if (excp != Qnil) {
+    [pool release];
+    rb_exc_raise (excp);
+    return Qnil;
+  }
 
   rb_result = Qnil;
   [pool release];
@@ -133,12 +144,22 @@ osx__NSRemoveHandler2(VALUE mdl, VALUE a0)
 
   NSHandler2 * ns_a0;
 
+  VALUE excp = Qnil;
   VALUE rb_result;
   id pool = [[NSAutoreleasePool alloc] init];
   /* a0 */
-  rbarg_to_nsarg(a0, _PRIV_C_PTR, &ns_a0, pool, 0);
+  rbarg_to_nsarg(a0, _PRIV_C_PTR, &ns_a0, "_NSRemoveHandler2", pool, 0);
 
+NS_DURING
   _NSRemoveHandler2(ns_a0);
+NS_HANDLER
+  excp = oc_err_new ("_NSRemoveHandler2", localException);
+NS_ENDHANDLER
+  if (excp != Qnil) {
+    [pool release];
+    rb_exc_raise (excp);
+    return Qnil;
+  }
 
   rb_result = Qnil;
   [pool release];
@@ -153,14 +174,24 @@ osx__NSExceptionObjectFromHandler2(VALUE mdl, VALUE a0)
 
   NSHandler2 * ns_a0;
 
+  VALUE excp = Qnil;
   VALUE rb_result;
   id pool = [[NSAutoreleasePool alloc] init];
   /* a0 */
-  rbarg_to_nsarg(a0, _PRIV_C_PTR, &ns_a0, pool, 0);
+  rbarg_to_nsarg(a0, _PRIV_C_PTR, &ns_a0, "_NSExceptionObjectFromHandler2", pool, 0);
 
+NS_DURING
   ns_result = _NSExceptionObjectFromHandler2(ns_a0);
+NS_HANDLER
+  excp = oc_err_new ("_NSExceptionObjectFromHandler2", localException);
+NS_ENDHANDLER
+  if (excp != Qnil) {
+    [pool release];
+    rb_exc_raise (excp);
+    return Qnil;
+  }
 
-  rb_result = nsresult_to_rbresult(_C_ID, &ns_result, pool);
+  rb_result = nsresult_to_rbresult(_C_ID, &ns_result, "_NSExceptionObjectFromHandler2", pool);
   [pool release];
   return rb_result;
 }
@@ -170,7 +201,7 @@ static VALUE
 osx_NSGetUncaughtExceptionHandler(VALUE mdl)
 {
   NSUncaughtExceptionHandler * ns_result = NSGetUncaughtExceptionHandler();
-  return nsresult_to_rbresult(_PRIV_C_PTR, &ns_result, nil);
+  return nsresult_to_rbresult(_PRIV_C_PTR, &ns_result, "NSGetUncaughtExceptionHandler", nil);
 }
 
 // void NSSetUncaughtExceptionHandler ( NSUncaughtExceptionHandler * );
@@ -180,12 +211,22 @@ osx_NSSetUncaughtExceptionHandler(VALUE mdl, VALUE a0)
 
   NSUncaughtExceptionHandler * ns_a0;
 
+  VALUE excp = Qnil;
   VALUE rb_result;
   id pool = [[NSAutoreleasePool alloc] init];
   /* a0 */
-  rbarg_to_nsarg(a0, _PRIV_C_PTR, &ns_a0, pool, 0);
+  rbarg_to_nsarg(a0, _PRIV_C_PTR, &ns_a0, "NSSetUncaughtExceptionHandler", pool, 0);
 
+NS_DURING
   NSSetUncaughtExceptionHandler(ns_a0);
+NS_HANDLER
+  excp = oc_err_new ("NSSetUncaughtExceptionHandler", localException);
+NS_ENDHANDLER
+  if (excp != Qnil) {
+    [pool release];
+    rb_exc_raise (excp);
+    return Qnil;
+  }
 
   rb_result = Qnil;
   [pool release];

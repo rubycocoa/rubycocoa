@@ -2,8 +2,9 @@
 #import "ocdata_conv.h"
 #import <Foundation/Foundation.h>
 
-extern void rbarg_to_nsarg(VALUE rbarg, int octype, void* nsarg, id pool, int index);
-extern VALUE nsresult_to_rbresult(int octype, const void* nsresult, id pool);
+extern VALUE oc_err_new (const char* fname, NSException* nsexcp);
+extern void rbarg_to_nsarg(VALUE rbarg, int octype, void* nsarg, const char* fname, id pool, int index);
+extern VALUE nsresult_to_rbresult(int octype, const void* nsresult, const char* fname, id pool);
 static const int VA_MAX = 4;
 
 
@@ -12,77 +13,77 @@ static const int VA_MAX = 4;
 static VALUE
 osx_NSJavaClasses(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSJavaClasses, nil);
+  return nsresult_to_rbresult(_C_ID, &NSJavaClasses, "NSJavaClasses", nil);
 }
 
 // NSString * const NSJavaRoot;
 static VALUE
 osx_NSJavaRoot(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSJavaRoot, nil);
+  return nsresult_to_rbresult(_C_ID, &NSJavaRoot, "NSJavaRoot", nil);
 }
 
 // NSString * const NSJavaPath;
 static VALUE
 osx_NSJavaPath(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSJavaPath, nil);
+  return nsresult_to_rbresult(_C_ID, &NSJavaPath, "NSJavaPath", nil);
 }
 
 // NSString * const NSJavaUserPath;
 static VALUE
 osx_NSJavaUserPath(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSJavaUserPath, nil);
+  return nsresult_to_rbresult(_C_ID, &NSJavaUserPath, "NSJavaUserPath", nil);
 }
 
 // NSString * const NSJavaLibraryPath;
 static VALUE
 osx_NSJavaLibraryPath(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSJavaLibraryPath, nil);
+  return nsresult_to_rbresult(_C_ID, &NSJavaLibraryPath, "NSJavaLibraryPath", nil);
 }
 
 // NSString * const NSJavaOwnVirtualMachine;
 static VALUE
 osx_NSJavaOwnVirtualMachine(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSJavaOwnVirtualMachine, nil);
+  return nsresult_to_rbresult(_C_ID, &NSJavaOwnVirtualMachine, "NSJavaOwnVirtualMachine", nil);
 }
 
 // NSString * const NSJavaPathSeparator;
 static VALUE
 osx_NSJavaPathSeparator(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSJavaPathSeparator, nil);
+  return nsresult_to_rbresult(_C_ID, &NSJavaPathSeparator, "NSJavaPathSeparator", nil);
 }
 
 // NSString * const NSJavaWillSetupVirtualMachineNotification;
 static VALUE
 osx_NSJavaWillSetupVirtualMachineNotification(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSJavaWillSetupVirtualMachineNotification, nil);
+  return nsresult_to_rbresult(_C_ID, &NSJavaWillSetupVirtualMachineNotification, "NSJavaWillSetupVirtualMachineNotification", nil);
 }
 
 // NSString * const NSJavaDidSetupVirtualMachineNotification;
 static VALUE
 osx_NSJavaDidSetupVirtualMachineNotification(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSJavaDidSetupVirtualMachineNotification, nil);
+  return nsresult_to_rbresult(_C_ID, &NSJavaDidSetupVirtualMachineNotification, "NSJavaDidSetupVirtualMachineNotification", nil);
 }
 
 // NSString * const NSJavaWillCreateVirtualMachineNotification;
 static VALUE
 osx_NSJavaWillCreateVirtualMachineNotification(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSJavaWillCreateVirtualMachineNotification, nil);
+  return nsresult_to_rbresult(_C_ID, &NSJavaWillCreateVirtualMachineNotification, "NSJavaWillCreateVirtualMachineNotification", nil);
 }
 
 // NSString * const NSJavaDidCreateVirtualMachineNotification;
 static VALUE
 osx_NSJavaDidCreateVirtualMachineNotification(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSJavaDidCreateVirtualMachineNotification, nil);
+  return nsresult_to_rbresult(_C_ID, &NSJavaDidCreateVirtualMachineNotification, "NSJavaDidCreateVirtualMachineNotification", nil);
 }
 
   /**** functions ****/
@@ -94,14 +95,24 @@ osx_NSJavaNeedsVirtualMachine(VALUE mdl, VALUE a0)
 
   NSDictionary * ns_a0;
 
+  VALUE excp = Qnil;
   VALUE rb_result;
   id pool = [[NSAutoreleasePool alloc] init];
   /* a0 */
-  rbarg_to_nsarg(a0, _C_ID, &ns_a0, pool, 0);
+  rbarg_to_nsarg(a0, _C_ID, &ns_a0, "NSJavaNeedsVirtualMachine", pool, 0);
 
+NS_DURING
   ns_result = NSJavaNeedsVirtualMachine(ns_a0);
+NS_HANDLER
+  excp = oc_err_new ("NSJavaNeedsVirtualMachine", localException);
+NS_ENDHANDLER
+  if (excp != Qnil) {
+    [pool release];
+    rb_exc_raise (excp);
+    return Qnil;
+  }
 
-  rb_result = nsresult_to_rbresult(_PRIV_C_BOOL, &ns_result, pool);
+  rb_result = nsresult_to_rbresult(_PRIV_C_BOOL, &ns_result, "NSJavaNeedsVirtualMachine", pool);
   [pool release];
   return rb_result;
 }
@@ -114,14 +125,24 @@ osx_NSJavaProvidesClasses(VALUE mdl, VALUE a0)
 
   NSDictionary * ns_a0;
 
+  VALUE excp = Qnil;
   VALUE rb_result;
   id pool = [[NSAutoreleasePool alloc] init];
   /* a0 */
-  rbarg_to_nsarg(a0, _C_ID, &ns_a0, pool, 0);
+  rbarg_to_nsarg(a0, _C_ID, &ns_a0, "NSJavaProvidesClasses", pool, 0);
 
+NS_DURING
   ns_result = NSJavaProvidesClasses(ns_a0);
+NS_HANDLER
+  excp = oc_err_new ("NSJavaProvidesClasses", localException);
+NS_ENDHANDLER
+  if (excp != Qnil) {
+    [pool release];
+    rb_exc_raise (excp);
+    return Qnil;
+  }
 
-  rb_result = nsresult_to_rbresult(_PRIV_C_BOOL, &ns_result, pool);
+  rb_result = nsresult_to_rbresult(_PRIV_C_BOOL, &ns_result, "NSJavaProvidesClasses", pool);
   [pool release];
   return rb_result;
 }
@@ -134,14 +155,24 @@ osx_NSJavaNeedsToLoadClasses(VALUE mdl, VALUE a0)
 
   NSDictionary * ns_a0;
 
+  VALUE excp = Qnil;
   VALUE rb_result;
   id pool = [[NSAutoreleasePool alloc] init];
   /* a0 */
-  rbarg_to_nsarg(a0, _C_ID, &ns_a0, pool, 0);
+  rbarg_to_nsarg(a0, _C_ID, &ns_a0, "NSJavaNeedsToLoadClasses", pool, 0);
 
+NS_DURING
   ns_result = NSJavaNeedsToLoadClasses(ns_a0);
+NS_HANDLER
+  excp = oc_err_new ("NSJavaNeedsToLoadClasses", localException);
+NS_ENDHANDLER
+  if (excp != Qnil) {
+    [pool release];
+    rb_exc_raise (excp);
+    return Qnil;
+  }
 
-  rb_result = nsresult_to_rbresult(_PRIV_C_BOOL, &ns_result, pool);
+  rb_result = nsresult_to_rbresult(_PRIV_C_BOOL, &ns_result, "NSJavaNeedsToLoadClasses", pool);
   [pool release];
   return rb_result;
 }
@@ -154,14 +185,24 @@ osx_NSJavaSetup(VALUE mdl, VALUE a0)
 
   NSDictionary * ns_a0;
 
+  VALUE excp = Qnil;
   VALUE rb_result;
   id pool = [[NSAutoreleasePool alloc] init];
   /* a0 */
-  rbarg_to_nsarg(a0, _C_ID, &ns_a0, pool, 0);
+  rbarg_to_nsarg(a0, _C_ID, &ns_a0, "NSJavaSetup", pool, 0);
 
+NS_DURING
   ns_result = NSJavaSetup(ns_a0);
+NS_HANDLER
+  excp = oc_err_new ("NSJavaSetup", localException);
+NS_ENDHANDLER
+  if (excp != Qnil) {
+    [pool release];
+    rb_exc_raise (excp);
+    return Qnil;
+  }
 
-  rb_result = nsresult_to_rbresult(_C_ID, &ns_result, pool);
+  rb_result = nsresult_to_rbresult(_C_ID, &ns_result, "NSJavaSetup", pool);
   [pool release];
   return rb_result;
 }
@@ -171,7 +212,7 @@ static VALUE
 osx_NSJavaSetupVirtualMachine(VALUE mdl)
 {
   id ns_result = NSJavaSetupVirtualMachine();
-  return nsresult_to_rbresult(_C_ID, &ns_result, nil);
+  return nsresult_to_rbresult(_C_ID, &ns_result, "NSJavaSetupVirtualMachine", nil);
 }
 
 // id NSJavaObjectNamedInPath ( NSString * name , NSArray * path );
@@ -183,16 +224,26 @@ osx_NSJavaObjectNamedInPath(VALUE mdl, VALUE a0, VALUE a1)
   NSString * ns_a0;
   NSArray * ns_a1;
 
+  VALUE excp = Qnil;
   VALUE rb_result;
   id pool = [[NSAutoreleasePool alloc] init];
   /* a0 */
-  rbarg_to_nsarg(a0, _C_ID, &ns_a0, pool, 0);
+  rbarg_to_nsarg(a0, _C_ID, &ns_a0, "NSJavaObjectNamedInPath", pool, 0);
   /* a1 */
-  rbarg_to_nsarg(a1, _C_ID, &ns_a1, pool, 1);
+  rbarg_to_nsarg(a1, _C_ID, &ns_a1, "NSJavaObjectNamedInPath", pool, 1);
 
+NS_DURING
   ns_result = NSJavaObjectNamedInPath(ns_a0, ns_a1);
+NS_HANDLER
+  excp = oc_err_new ("NSJavaObjectNamedInPath", localException);
+NS_ENDHANDLER
+  if (excp != Qnil) {
+    [pool release];
+    rb_exc_raise (excp);
+    return Qnil;
+  }
 
-  rb_result = nsresult_to_rbresult(_C_ID, &ns_result, pool);
+  rb_result = nsresult_to_rbresult(_C_ID, &ns_result, "NSJavaObjectNamedInPath", pool);
   [pool release];
   return rb_result;
 }
@@ -208,20 +259,30 @@ osx_NSJavaClassesFromPath(VALUE mdl, VALUE a0, VALUE a1, VALUE a2, VALUE a3)
   BOOL ns_a2;
   id * ns_a3;
 
+  VALUE excp = Qnil;
   VALUE rb_result;
   id pool = [[NSAutoreleasePool alloc] init];
   /* a0 */
-  rbarg_to_nsarg(a0, _C_ID, &ns_a0, pool, 0);
+  rbarg_to_nsarg(a0, _C_ID, &ns_a0, "NSJavaClassesFromPath", pool, 0);
   /* a1 */
-  rbarg_to_nsarg(a1, _C_ID, &ns_a1, pool, 1);
+  rbarg_to_nsarg(a1, _C_ID, &ns_a1, "NSJavaClassesFromPath", pool, 1);
   /* a2 */
-  rbarg_to_nsarg(a2, _C_UCHR, &ns_a2, pool, 2);
+  rbarg_to_nsarg(a2, _C_UCHR, &ns_a2, "NSJavaClassesFromPath", pool, 2);
   /* a3 */
-  rbarg_to_nsarg(a3, _PRIV_C_PTR, &ns_a3, pool, 3);
+  rbarg_to_nsarg(a3, _PRIV_C_PTR, &ns_a3, "NSJavaClassesFromPath", pool, 3);
 
+NS_DURING
   ns_result = NSJavaClassesFromPath(ns_a0, ns_a1, ns_a2, ns_a3);
+NS_HANDLER
+  excp = oc_err_new ("NSJavaClassesFromPath", localException);
+NS_ENDHANDLER
+  if (excp != Qnil) {
+    [pool release];
+    rb_exc_raise (excp);
+    return Qnil;
+  }
 
-  rb_result = nsresult_to_rbresult(_C_ID, &ns_result, pool);
+  rb_result = nsresult_to_rbresult(_C_ID, &ns_result, "NSJavaClassesFromPath", pool);
   [pool release];
   return rb_result;
 }
@@ -236,18 +297,28 @@ osx_NSJavaClassesForBundle(VALUE mdl, VALUE a0, VALUE a1, VALUE a2)
   BOOL ns_a1;
   id * ns_a2;
 
+  VALUE excp = Qnil;
   VALUE rb_result;
   id pool = [[NSAutoreleasePool alloc] init];
   /* a0 */
-  rbarg_to_nsarg(a0, _C_ID, &ns_a0, pool, 0);
+  rbarg_to_nsarg(a0, _C_ID, &ns_a0, "NSJavaClassesForBundle", pool, 0);
   /* a1 */
-  rbarg_to_nsarg(a1, _C_UCHR, &ns_a1, pool, 1);
+  rbarg_to_nsarg(a1, _C_UCHR, &ns_a1, "NSJavaClassesForBundle", pool, 1);
   /* a2 */
-  rbarg_to_nsarg(a2, _PRIV_C_PTR, &ns_a2, pool, 2);
+  rbarg_to_nsarg(a2, _PRIV_C_PTR, &ns_a2, "NSJavaClassesForBundle", pool, 2);
 
+NS_DURING
   ns_result = NSJavaClassesForBundle(ns_a0, ns_a1, ns_a2);
+NS_HANDLER
+  excp = oc_err_new ("NSJavaClassesForBundle", localException);
+NS_ENDHANDLER
+  if (excp != Qnil) {
+    [pool release];
+    rb_exc_raise (excp);
+    return Qnil;
+  }
 
-  rb_result = nsresult_to_rbresult(_C_ID, &ns_result, pool);
+  rb_result = nsresult_to_rbresult(_C_ID, &ns_result, "NSJavaClassesForBundle", pool);
   [pool release];
   return rb_result;
 }
@@ -261,16 +332,26 @@ osx_NSJavaBundleSetup(VALUE mdl, VALUE a0, VALUE a1)
   NSBundle * ns_a0;
   NSDictionary * ns_a1;
 
+  VALUE excp = Qnil;
   VALUE rb_result;
   id pool = [[NSAutoreleasePool alloc] init];
   /* a0 */
-  rbarg_to_nsarg(a0, _C_ID, &ns_a0, pool, 0);
+  rbarg_to_nsarg(a0, _C_ID, &ns_a0, "NSJavaBundleSetup", pool, 0);
   /* a1 */
-  rbarg_to_nsarg(a1, _C_ID, &ns_a1, pool, 1);
+  rbarg_to_nsarg(a1, _C_ID, &ns_a1, "NSJavaBundleSetup", pool, 1);
 
+NS_DURING
   ns_result = NSJavaBundleSetup(ns_a0, ns_a1);
+NS_HANDLER
+  excp = oc_err_new ("NSJavaBundleSetup", localException);
+NS_ENDHANDLER
+  if (excp != Qnil) {
+    [pool release];
+    rb_exc_raise (excp);
+    return Qnil;
+  }
 
-  rb_result = nsresult_to_rbresult(_C_ID, &ns_result, pool);
+  rb_result = nsresult_to_rbresult(_C_ID, &ns_result, "NSJavaBundleSetup", pool);
   [pool release];
   return rb_result;
 }
@@ -283,14 +364,24 @@ osx_NSJavaBundleCleanup(VALUE mdl, VALUE a0, VALUE a1)
   NSBundle * ns_a0;
   NSDictionary * ns_a1;
 
+  VALUE excp = Qnil;
   VALUE rb_result;
   id pool = [[NSAutoreleasePool alloc] init];
   /* a0 */
-  rbarg_to_nsarg(a0, _C_ID, &ns_a0, pool, 0);
+  rbarg_to_nsarg(a0, _C_ID, &ns_a0, "NSJavaBundleCleanup", pool, 0);
   /* a1 */
-  rbarg_to_nsarg(a1, _C_ID, &ns_a1, pool, 1);
+  rbarg_to_nsarg(a1, _C_ID, &ns_a1, "NSJavaBundleCleanup", pool, 1);
 
+NS_DURING
   NSJavaBundleCleanup(ns_a0, ns_a1);
+NS_HANDLER
+  excp = oc_err_new ("NSJavaBundleCleanup", localException);
+NS_ENDHANDLER
+  if (excp != Qnil) {
+    [pool release];
+    rb_exc_raise (excp);
+    return Qnil;
+  }
 
   rb_result = Qnil;
   [pool release];

@@ -2,8 +2,9 @@
 #import "ocdata_conv.h"
 #import <AppKit/AppKit.h>
 
-extern void rbarg_to_nsarg(VALUE rbarg, int octype, void* nsarg, id pool, int index);
-extern VALUE nsresult_to_rbresult(int octype, const void* nsresult, id pool);
+extern VALUE oc_err_new (const char* fname, NSException* nsexcp);
+extern void rbarg_to_nsarg(VALUE rbarg, int octype, void* nsarg, const char* fname, id pool, int index);
+extern VALUE nsresult_to_rbresult(int octype, const void* nsresult, const char* fname, id pool);
 static const int VA_MAX = 4;
 
 
@@ -24,23 +25,25 @@ osx_NSRunAlertPanel(int argc, VALUE* argv, VALUE mdl)
   id ns_va[VA_MAX];
   int i;
 
+  VALUE excp = Qnil;
   VALUE rb_result;
   id pool = [[NSAutoreleasePool alloc] init];
   /* argv[0] */
-  rbarg_to_nsarg(argv[0], _C_ID, &ns_a0, pool, 0);
+  rbarg_to_nsarg(argv[0], _C_ID, &ns_a0, "NSRunAlertPanel", pool, 0);
   /* argv[1] */
-  rbarg_to_nsarg(argv[1], _C_ID, &ns_a1, pool, 1);
+  rbarg_to_nsarg(argv[1], _C_ID, &ns_a1, "NSRunAlertPanel", pool, 1);
   /* argv[2] */
-  rbarg_to_nsarg(argv[2], _C_ID, &ns_a2, pool, 2);
+  rbarg_to_nsarg(argv[2], _C_ID, &ns_a2, "NSRunAlertPanel", pool, 2);
   /* argv[3] */
-  rbarg_to_nsarg(argv[3], _C_ID, &ns_a3, pool, 3);
+  rbarg_to_nsarg(argv[3], _C_ID, &ns_a3, "NSRunAlertPanel", pool, 3);
   /* argv[4] */
-  rbarg_to_nsarg(argv[4], _C_ID, &ns_a4, pool, 4);
+  rbarg_to_nsarg(argv[4], _C_ID, &ns_a4, "NSRunAlertPanel", pool, 4);
   /* ns_va */
   va_last = va_first + VA_MAX;
   for (i = va_first; (i < argc) && (i < va_last); i++)
-    rbarg_to_nsarg(argv[i], _C_ID, &ns_va[i - va_first], pool, i);
+    rbarg_to_nsarg(argv[i], _C_ID, &ns_va[i - va_first], "NSRunAlertPanel", pool, i);
 
+NS_DURING
   if (argc == va_first)
     ns_result = NSRunAlertPanel(ns_a0, ns_a1, ns_a2, ns_a3, ns_a4);
   else if (argc == (va_first + 1))
@@ -56,7 +59,16 @@ osx_NSRunAlertPanel(int argc, VALUE* argv, VALUE mdl)
     ns_result = NSRunAlertPanel(ns_a0, ns_a1, ns_a2, ns_a3, ns_a4,
       ns_va[0], ns_va[1], ns_va[2], ns_va[3]);
 
-  rb_result = nsresult_to_rbresult(_C_INT, &ns_result, pool);
+NS_HANDLER
+  excp = oc_err_new ("NSRunAlertPanel", localException);
+NS_ENDHANDLER
+  if (excp != Qnil) {
+    [pool release];
+    rb_exc_raise (excp);
+    return Qnil;
+  }
+
+  rb_result = nsresult_to_rbresult(_C_INT, &ns_result, "NSRunAlertPanel", pool);
   [pool release];
   return rb_result;
 }
@@ -77,23 +89,25 @@ osx_NSRunInformationalAlertPanel(int argc, VALUE* argv, VALUE mdl)
   id ns_va[VA_MAX];
   int i;
 
+  VALUE excp = Qnil;
   VALUE rb_result;
   id pool = [[NSAutoreleasePool alloc] init];
   /* argv[0] */
-  rbarg_to_nsarg(argv[0], _C_ID, &ns_a0, pool, 0);
+  rbarg_to_nsarg(argv[0], _C_ID, &ns_a0, "NSRunInformationalAlertPanel", pool, 0);
   /* argv[1] */
-  rbarg_to_nsarg(argv[1], _C_ID, &ns_a1, pool, 1);
+  rbarg_to_nsarg(argv[1], _C_ID, &ns_a1, "NSRunInformationalAlertPanel", pool, 1);
   /* argv[2] */
-  rbarg_to_nsarg(argv[2], _C_ID, &ns_a2, pool, 2);
+  rbarg_to_nsarg(argv[2], _C_ID, &ns_a2, "NSRunInformationalAlertPanel", pool, 2);
   /* argv[3] */
-  rbarg_to_nsarg(argv[3], _C_ID, &ns_a3, pool, 3);
+  rbarg_to_nsarg(argv[3], _C_ID, &ns_a3, "NSRunInformationalAlertPanel", pool, 3);
   /* argv[4] */
-  rbarg_to_nsarg(argv[4], _C_ID, &ns_a4, pool, 4);
+  rbarg_to_nsarg(argv[4], _C_ID, &ns_a4, "NSRunInformationalAlertPanel", pool, 4);
   /* ns_va */
   va_last = va_first + VA_MAX;
   for (i = va_first; (i < argc) && (i < va_last); i++)
-    rbarg_to_nsarg(argv[i], _C_ID, &ns_va[i - va_first], pool, i);
+    rbarg_to_nsarg(argv[i], _C_ID, &ns_va[i - va_first], "NSRunInformationalAlertPanel", pool, i);
 
+NS_DURING
   if (argc == va_first)
     ns_result = NSRunInformationalAlertPanel(ns_a0, ns_a1, ns_a2, ns_a3, ns_a4);
   else if (argc == (va_first + 1))
@@ -109,7 +123,16 @@ osx_NSRunInformationalAlertPanel(int argc, VALUE* argv, VALUE mdl)
     ns_result = NSRunInformationalAlertPanel(ns_a0, ns_a1, ns_a2, ns_a3, ns_a4,
       ns_va[0], ns_va[1], ns_va[2], ns_va[3]);
 
-  rb_result = nsresult_to_rbresult(_C_INT, &ns_result, pool);
+NS_HANDLER
+  excp = oc_err_new ("NSRunInformationalAlertPanel", localException);
+NS_ENDHANDLER
+  if (excp != Qnil) {
+    [pool release];
+    rb_exc_raise (excp);
+    return Qnil;
+  }
+
+  rb_result = nsresult_to_rbresult(_C_INT, &ns_result, "NSRunInformationalAlertPanel", pool);
   [pool release];
   return rb_result;
 }
@@ -130,23 +153,25 @@ osx_NSRunCriticalAlertPanel(int argc, VALUE* argv, VALUE mdl)
   id ns_va[VA_MAX];
   int i;
 
+  VALUE excp = Qnil;
   VALUE rb_result;
   id pool = [[NSAutoreleasePool alloc] init];
   /* argv[0] */
-  rbarg_to_nsarg(argv[0], _C_ID, &ns_a0, pool, 0);
+  rbarg_to_nsarg(argv[0], _C_ID, &ns_a0, "NSRunCriticalAlertPanel", pool, 0);
   /* argv[1] */
-  rbarg_to_nsarg(argv[1], _C_ID, &ns_a1, pool, 1);
+  rbarg_to_nsarg(argv[1], _C_ID, &ns_a1, "NSRunCriticalAlertPanel", pool, 1);
   /* argv[2] */
-  rbarg_to_nsarg(argv[2], _C_ID, &ns_a2, pool, 2);
+  rbarg_to_nsarg(argv[2], _C_ID, &ns_a2, "NSRunCriticalAlertPanel", pool, 2);
   /* argv[3] */
-  rbarg_to_nsarg(argv[3], _C_ID, &ns_a3, pool, 3);
+  rbarg_to_nsarg(argv[3], _C_ID, &ns_a3, "NSRunCriticalAlertPanel", pool, 3);
   /* argv[4] */
-  rbarg_to_nsarg(argv[4], _C_ID, &ns_a4, pool, 4);
+  rbarg_to_nsarg(argv[4], _C_ID, &ns_a4, "NSRunCriticalAlertPanel", pool, 4);
   /* ns_va */
   va_last = va_first + VA_MAX;
   for (i = va_first; (i < argc) && (i < va_last); i++)
-    rbarg_to_nsarg(argv[i], _C_ID, &ns_va[i - va_first], pool, i);
+    rbarg_to_nsarg(argv[i], _C_ID, &ns_va[i - va_first], "NSRunCriticalAlertPanel", pool, i);
 
+NS_DURING
   if (argc == va_first)
     ns_result = NSRunCriticalAlertPanel(ns_a0, ns_a1, ns_a2, ns_a3, ns_a4);
   else if (argc == (va_first + 1))
@@ -162,7 +187,16 @@ osx_NSRunCriticalAlertPanel(int argc, VALUE* argv, VALUE mdl)
     ns_result = NSRunCriticalAlertPanel(ns_a0, ns_a1, ns_a2, ns_a3, ns_a4,
       ns_va[0], ns_va[1], ns_va[2], ns_va[3]);
 
-  rb_result = nsresult_to_rbresult(_C_INT, &ns_result, pool);
+NS_HANDLER
+  excp = oc_err_new ("NSRunCriticalAlertPanel", localException);
+NS_ENDHANDLER
+  if (excp != Qnil) {
+    [pool release];
+    rb_exc_raise (excp);
+    return Qnil;
+  }
+
+  rb_result = nsresult_to_rbresult(_C_INT, &ns_result, "NSRunCriticalAlertPanel", pool);
   [pool release];
   return rb_result;
 }
@@ -184,25 +218,27 @@ osx_NSRunAlertPanelRelativeToWindow(int argc, VALUE* argv, VALUE mdl)
   id ns_va[VA_MAX];
   int i;
 
+  VALUE excp = Qnil;
   VALUE rb_result;
   id pool = [[NSAutoreleasePool alloc] init];
   /* argv[0] */
-  rbarg_to_nsarg(argv[0], _C_ID, &ns_a0, pool, 0);
+  rbarg_to_nsarg(argv[0], _C_ID, &ns_a0, "NSRunAlertPanelRelativeToWindow", pool, 0);
   /* argv[1] */
-  rbarg_to_nsarg(argv[1], _C_ID, &ns_a1, pool, 1);
+  rbarg_to_nsarg(argv[1], _C_ID, &ns_a1, "NSRunAlertPanelRelativeToWindow", pool, 1);
   /* argv[2] */
-  rbarg_to_nsarg(argv[2], _C_ID, &ns_a2, pool, 2);
+  rbarg_to_nsarg(argv[2], _C_ID, &ns_a2, "NSRunAlertPanelRelativeToWindow", pool, 2);
   /* argv[3] */
-  rbarg_to_nsarg(argv[3], _C_ID, &ns_a3, pool, 3);
+  rbarg_to_nsarg(argv[3], _C_ID, &ns_a3, "NSRunAlertPanelRelativeToWindow", pool, 3);
   /* argv[4] */
-  rbarg_to_nsarg(argv[4], _C_ID, &ns_a4, pool, 4);
+  rbarg_to_nsarg(argv[4], _C_ID, &ns_a4, "NSRunAlertPanelRelativeToWindow", pool, 4);
   /* argv[5] */
-  rbarg_to_nsarg(argv[5], _C_ID, &ns_a5, pool, 5);
+  rbarg_to_nsarg(argv[5], _C_ID, &ns_a5, "NSRunAlertPanelRelativeToWindow", pool, 5);
   /* ns_va */
   va_last = va_first + VA_MAX;
   for (i = va_first; (i < argc) && (i < va_last); i++)
-    rbarg_to_nsarg(argv[i], _C_ID, &ns_va[i - va_first], pool, i);
+    rbarg_to_nsarg(argv[i], _C_ID, &ns_va[i - va_first], "NSRunAlertPanelRelativeToWindow", pool, i);
 
+NS_DURING
   if (argc == va_first)
     ns_result = NSRunAlertPanelRelativeToWindow(ns_a0, ns_a1, ns_a2, ns_a3, ns_a4, ns_a5);
   else if (argc == (va_first + 1))
@@ -218,7 +254,16 @@ osx_NSRunAlertPanelRelativeToWindow(int argc, VALUE* argv, VALUE mdl)
     ns_result = NSRunAlertPanelRelativeToWindow(ns_a0, ns_a1, ns_a2, ns_a3, ns_a4, ns_a5,
       ns_va[0], ns_va[1], ns_va[2], ns_va[3]);
 
-  rb_result = nsresult_to_rbresult(_C_INT, &ns_result, pool);
+NS_HANDLER
+  excp = oc_err_new ("NSRunAlertPanelRelativeToWindow", localException);
+NS_ENDHANDLER
+  if (excp != Qnil) {
+    [pool release];
+    rb_exc_raise (excp);
+    return Qnil;
+  }
+
+  rb_result = nsresult_to_rbresult(_C_INT, &ns_result, "NSRunAlertPanelRelativeToWindow", pool);
   [pool release];
   return rb_result;
 }
@@ -240,25 +285,27 @@ osx_NSRunInformationalAlertPanelRelativeToWindow(int argc, VALUE* argv, VALUE md
   id ns_va[VA_MAX];
   int i;
 
+  VALUE excp = Qnil;
   VALUE rb_result;
   id pool = [[NSAutoreleasePool alloc] init];
   /* argv[0] */
-  rbarg_to_nsarg(argv[0], _C_ID, &ns_a0, pool, 0);
+  rbarg_to_nsarg(argv[0], _C_ID, &ns_a0, "NSRunInformationalAlertPanelRelativeToWindow", pool, 0);
   /* argv[1] */
-  rbarg_to_nsarg(argv[1], _C_ID, &ns_a1, pool, 1);
+  rbarg_to_nsarg(argv[1], _C_ID, &ns_a1, "NSRunInformationalAlertPanelRelativeToWindow", pool, 1);
   /* argv[2] */
-  rbarg_to_nsarg(argv[2], _C_ID, &ns_a2, pool, 2);
+  rbarg_to_nsarg(argv[2], _C_ID, &ns_a2, "NSRunInformationalAlertPanelRelativeToWindow", pool, 2);
   /* argv[3] */
-  rbarg_to_nsarg(argv[3], _C_ID, &ns_a3, pool, 3);
+  rbarg_to_nsarg(argv[3], _C_ID, &ns_a3, "NSRunInformationalAlertPanelRelativeToWindow", pool, 3);
   /* argv[4] */
-  rbarg_to_nsarg(argv[4], _C_ID, &ns_a4, pool, 4);
+  rbarg_to_nsarg(argv[4], _C_ID, &ns_a4, "NSRunInformationalAlertPanelRelativeToWindow", pool, 4);
   /* argv[5] */
-  rbarg_to_nsarg(argv[5], _C_ID, &ns_a5, pool, 5);
+  rbarg_to_nsarg(argv[5], _C_ID, &ns_a5, "NSRunInformationalAlertPanelRelativeToWindow", pool, 5);
   /* ns_va */
   va_last = va_first + VA_MAX;
   for (i = va_first; (i < argc) && (i < va_last); i++)
-    rbarg_to_nsarg(argv[i], _C_ID, &ns_va[i - va_first], pool, i);
+    rbarg_to_nsarg(argv[i], _C_ID, &ns_va[i - va_first], "NSRunInformationalAlertPanelRelativeToWindow", pool, i);
 
+NS_DURING
   if (argc == va_first)
     ns_result = NSRunInformationalAlertPanelRelativeToWindow(ns_a0, ns_a1, ns_a2, ns_a3, ns_a4, ns_a5);
   else if (argc == (va_first + 1))
@@ -274,7 +321,16 @@ osx_NSRunInformationalAlertPanelRelativeToWindow(int argc, VALUE* argv, VALUE md
     ns_result = NSRunInformationalAlertPanelRelativeToWindow(ns_a0, ns_a1, ns_a2, ns_a3, ns_a4, ns_a5,
       ns_va[0], ns_va[1], ns_va[2], ns_va[3]);
 
-  rb_result = nsresult_to_rbresult(_C_INT, &ns_result, pool);
+NS_HANDLER
+  excp = oc_err_new ("NSRunInformationalAlertPanelRelativeToWindow", localException);
+NS_ENDHANDLER
+  if (excp != Qnil) {
+    [pool release];
+    rb_exc_raise (excp);
+    return Qnil;
+  }
+
+  rb_result = nsresult_to_rbresult(_C_INT, &ns_result, "NSRunInformationalAlertPanelRelativeToWindow", pool);
   [pool release];
   return rb_result;
 }
@@ -296,25 +352,27 @@ osx_NSRunCriticalAlertPanelRelativeToWindow(int argc, VALUE* argv, VALUE mdl)
   id ns_va[VA_MAX];
   int i;
 
+  VALUE excp = Qnil;
   VALUE rb_result;
   id pool = [[NSAutoreleasePool alloc] init];
   /* argv[0] */
-  rbarg_to_nsarg(argv[0], _C_ID, &ns_a0, pool, 0);
+  rbarg_to_nsarg(argv[0], _C_ID, &ns_a0, "NSRunCriticalAlertPanelRelativeToWindow", pool, 0);
   /* argv[1] */
-  rbarg_to_nsarg(argv[1], _C_ID, &ns_a1, pool, 1);
+  rbarg_to_nsarg(argv[1], _C_ID, &ns_a1, "NSRunCriticalAlertPanelRelativeToWindow", pool, 1);
   /* argv[2] */
-  rbarg_to_nsarg(argv[2], _C_ID, &ns_a2, pool, 2);
+  rbarg_to_nsarg(argv[2], _C_ID, &ns_a2, "NSRunCriticalAlertPanelRelativeToWindow", pool, 2);
   /* argv[3] */
-  rbarg_to_nsarg(argv[3], _C_ID, &ns_a3, pool, 3);
+  rbarg_to_nsarg(argv[3], _C_ID, &ns_a3, "NSRunCriticalAlertPanelRelativeToWindow", pool, 3);
   /* argv[4] */
-  rbarg_to_nsarg(argv[4], _C_ID, &ns_a4, pool, 4);
+  rbarg_to_nsarg(argv[4], _C_ID, &ns_a4, "NSRunCriticalAlertPanelRelativeToWindow", pool, 4);
   /* argv[5] */
-  rbarg_to_nsarg(argv[5], _C_ID, &ns_a5, pool, 5);
+  rbarg_to_nsarg(argv[5], _C_ID, &ns_a5, "NSRunCriticalAlertPanelRelativeToWindow", pool, 5);
   /* ns_va */
   va_last = va_first + VA_MAX;
   for (i = va_first; (i < argc) && (i < va_last); i++)
-    rbarg_to_nsarg(argv[i], _C_ID, &ns_va[i - va_first], pool, i);
+    rbarg_to_nsarg(argv[i], _C_ID, &ns_va[i - va_first], "NSRunCriticalAlertPanelRelativeToWindow", pool, i);
 
+NS_DURING
   if (argc == va_first)
     ns_result = NSRunCriticalAlertPanelRelativeToWindow(ns_a0, ns_a1, ns_a2, ns_a3, ns_a4, ns_a5);
   else if (argc == (va_first + 1))
@@ -330,7 +388,16 @@ osx_NSRunCriticalAlertPanelRelativeToWindow(int argc, VALUE* argv, VALUE mdl)
     ns_result = NSRunCriticalAlertPanelRelativeToWindow(ns_a0, ns_a1, ns_a2, ns_a3, ns_a4, ns_a5,
       ns_va[0], ns_va[1], ns_va[2], ns_va[3]);
 
-  rb_result = nsresult_to_rbresult(_C_INT, &ns_result, pool);
+NS_HANDLER
+  excp = oc_err_new ("NSRunCriticalAlertPanelRelativeToWindow", localException);
+NS_ENDHANDLER
+  if (excp != Qnil) {
+    [pool release];
+    rb_exc_raise (excp);
+    return Qnil;
+  }
+
+  rb_result = nsresult_to_rbresult(_C_INT, &ns_result, "NSRunCriticalAlertPanelRelativeToWindow", pool);
   [pool release];
   return rb_result;
 }
@@ -355,33 +422,35 @@ osx_NSBeginAlertSheet(int argc, VALUE* argv, VALUE mdl)
   id ns_va[VA_MAX];
   int i;
 
+  VALUE excp = Qnil;
   VALUE rb_result;
   id pool = [[NSAutoreleasePool alloc] init];
   /* argv[0] */
-  rbarg_to_nsarg(argv[0], _C_ID, &ns_a0, pool, 0);
+  rbarg_to_nsarg(argv[0], _C_ID, &ns_a0, "NSBeginAlertSheet", pool, 0);
   /* argv[1] */
-  rbarg_to_nsarg(argv[1], _C_ID, &ns_a1, pool, 1);
+  rbarg_to_nsarg(argv[1], _C_ID, &ns_a1, "NSBeginAlertSheet", pool, 1);
   /* argv[2] */
-  rbarg_to_nsarg(argv[2], _C_ID, &ns_a2, pool, 2);
+  rbarg_to_nsarg(argv[2], _C_ID, &ns_a2, "NSBeginAlertSheet", pool, 2);
   /* argv[3] */
-  rbarg_to_nsarg(argv[3], _C_ID, &ns_a3, pool, 3);
+  rbarg_to_nsarg(argv[3], _C_ID, &ns_a3, "NSBeginAlertSheet", pool, 3);
   /* argv[4] */
-  rbarg_to_nsarg(argv[4], _C_ID, &ns_a4, pool, 4);
+  rbarg_to_nsarg(argv[4], _C_ID, &ns_a4, "NSBeginAlertSheet", pool, 4);
   /* argv[5] */
-  rbarg_to_nsarg(argv[5], _C_ID, &ns_a5, pool, 5);
+  rbarg_to_nsarg(argv[5], _C_ID, &ns_a5, "NSBeginAlertSheet", pool, 5);
   /* argv[6] */
-  rbarg_to_nsarg(argv[6], _C_SEL, &ns_a6, pool, 6);
+  rbarg_to_nsarg(argv[6], _C_SEL, &ns_a6, "NSBeginAlertSheet", pool, 6);
   /* argv[7] */
-  rbarg_to_nsarg(argv[7], _C_SEL, &ns_a7, pool, 7);
+  rbarg_to_nsarg(argv[7], _C_SEL, &ns_a7, "NSBeginAlertSheet", pool, 7);
   /* argv[8] */
-  rbarg_to_nsarg(argv[8], _PRIV_C_PTR, &ns_a8, pool, 8);
+  rbarg_to_nsarg(argv[8], _PRIV_C_PTR, &ns_a8, "NSBeginAlertSheet", pool, 8);
   /* argv[9] */
-  rbarg_to_nsarg(argv[9], _C_ID, &ns_a9, pool, 9);
+  rbarg_to_nsarg(argv[9], _C_ID, &ns_a9, "NSBeginAlertSheet", pool, 9);
   /* ns_va */
   va_last = va_first + VA_MAX;
   for (i = va_first; (i < argc) && (i < va_last); i++)
-    rbarg_to_nsarg(argv[i], _C_ID, &ns_va[i - va_first], pool, i);
+    rbarg_to_nsarg(argv[i], _C_ID, &ns_va[i - va_first], "NSBeginAlertSheet", pool, i);
 
+NS_DURING
   if (argc == va_first)
     NSBeginAlertSheet(ns_a0, ns_a1, ns_a2, ns_a3, ns_a4, ns_a5, ns_a6, ns_a7, ns_a8, ns_a9);
   else if (argc == (va_first + 1))
@@ -396,6 +465,15 @@ osx_NSBeginAlertSheet(int argc, VALUE* argv, VALUE mdl)
   else if (argc == (va_first + 4))
     NSBeginAlertSheet(ns_a0, ns_a1, ns_a2, ns_a3, ns_a4, ns_a5, ns_a6, ns_a7, ns_a8, ns_a9,
       ns_va[0], ns_va[1], ns_va[2], ns_va[3]);
+
+NS_HANDLER
+  excp = oc_err_new ("NSBeginAlertSheet", localException);
+NS_ENDHANDLER
+  if (excp != Qnil) {
+    [pool release];
+    rb_exc_raise (excp);
+    return Qnil;
+  }
 
   rb_result = Qnil;
   [pool release];
@@ -422,33 +500,35 @@ osx_NSBeginInformationalAlertSheet(int argc, VALUE* argv, VALUE mdl)
   id ns_va[VA_MAX];
   int i;
 
+  VALUE excp = Qnil;
   VALUE rb_result;
   id pool = [[NSAutoreleasePool alloc] init];
   /* argv[0] */
-  rbarg_to_nsarg(argv[0], _C_ID, &ns_a0, pool, 0);
+  rbarg_to_nsarg(argv[0], _C_ID, &ns_a0, "NSBeginInformationalAlertSheet", pool, 0);
   /* argv[1] */
-  rbarg_to_nsarg(argv[1], _C_ID, &ns_a1, pool, 1);
+  rbarg_to_nsarg(argv[1], _C_ID, &ns_a1, "NSBeginInformationalAlertSheet", pool, 1);
   /* argv[2] */
-  rbarg_to_nsarg(argv[2], _C_ID, &ns_a2, pool, 2);
+  rbarg_to_nsarg(argv[2], _C_ID, &ns_a2, "NSBeginInformationalAlertSheet", pool, 2);
   /* argv[3] */
-  rbarg_to_nsarg(argv[3], _C_ID, &ns_a3, pool, 3);
+  rbarg_to_nsarg(argv[3], _C_ID, &ns_a3, "NSBeginInformationalAlertSheet", pool, 3);
   /* argv[4] */
-  rbarg_to_nsarg(argv[4], _C_ID, &ns_a4, pool, 4);
+  rbarg_to_nsarg(argv[4], _C_ID, &ns_a4, "NSBeginInformationalAlertSheet", pool, 4);
   /* argv[5] */
-  rbarg_to_nsarg(argv[5], _C_ID, &ns_a5, pool, 5);
+  rbarg_to_nsarg(argv[5], _C_ID, &ns_a5, "NSBeginInformationalAlertSheet", pool, 5);
   /* argv[6] */
-  rbarg_to_nsarg(argv[6], _C_SEL, &ns_a6, pool, 6);
+  rbarg_to_nsarg(argv[6], _C_SEL, &ns_a6, "NSBeginInformationalAlertSheet", pool, 6);
   /* argv[7] */
-  rbarg_to_nsarg(argv[7], _C_SEL, &ns_a7, pool, 7);
+  rbarg_to_nsarg(argv[7], _C_SEL, &ns_a7, "NSBeginInformationalAlertSheet", pool, 7);
   /* argv[8] */
-  rbarg_to_nsarg(argv[8], _PRIV_C_PTR, &ns_a8, pool, 8);
+  rbarg_to_nsarg(argv[8], _PRIV_C_PTR, &ns_a8, "NSBeginInformationalAlertSheet", pool, 8);
   /* argv[9] */
-  rbarg_to_nsarg(argv[9], _C_ID, &ns_a9, pool, 9);
+  rbarg_to_nsarg(argv[9], _C_ID, &ns_a9, "NSBeginInformationalAlertSheet", pool, 9);
   /* ns_va */
   va_last = va_first + VA_MAX;
   for (i = va_first; (i < argc) && (i < va_last); i++)
-    rbarg_to_nsarg(argv[i], _C_ID, &ns_va[i - va_first], pool, i);
+    rbarg_to_nsarg(argv[i], _C_ID, &ns_va[i - va_first], "NSBeginInformationalAlertSheet", pool, i);
 
+NS_DURING
   if (argc == va_first)
     NSBeginInformationalAlertSheet(ns_a0, ns_a1, ns_a2, ns_a3, ns_a4, ns_a5, ns_a6, ns_a7, ns_a8, ns_a9);
   else if (argc == (va_first + 1))
@@ -463,6 +543,15 @@ osx_NSBeginInformationalAlertSheet(int argc, VALUE* argv, VALUE mdl)
   else if (argc == (va_first + 4))
     NSBeginInformationalAlertSheet(ns_a0, ns_a1, ns_a2, ns_a3, ns_a4, ns_a5, ns_a6, ns_a7, ns_a8, ns_a9,
       ns_va[0], ns_va[1], ns_va[2], ns_va[3]);
+
+NS_HANDLER
+  excp = oc_err_new ("NSBeginInformationalAlertSheet", localException);
+NS_ENDHANDLER
+  if (excp != Qnil) {
+    [pool release];
+    rb_exc_raise (excp);
+    return Qnil;
+  }
 
   rb_result = Qnil;
   [pool release];
@@ -489,33 +578,35 @@ osx_NSBeginCriticalAlertSheet(int argc, VALUE* argv, VALUE mdl)
   id ns_va[VA_MAX];
   int i;
 
+  VALUE excp = Qnil;
   VALUE rb_result;
   id pool = [[NSAutoreleasePool alloc] init];
   /* argv[0] */
-  rbarg_to_nsarg(argv[0], _C_ID, &ns_a0, pool, 0);
+  rbarg_to_nsarg(argv[0], _C_ID, &ns_a0, "NSBeginCriticalAlertSheet", pool, 0);
   /* argv[1] */
-  rbarg_to_nsarg(argv[1], _C_ID, &ns_a1, pool, 1);
+  rbarg_to_nsarg(argv[1], _C_ID, &ns_a1, "NSBeginCriticalAlertSheet", pool, 1);
   /* argv[2] */
-  rbarg_to_nsarg(argv[2], _C_ID, &ns_a2, pool, 2);
+  rbarg_to_nsarg(argv[2], _C_ID, &ns_a2, "NSBeginCriticalAlertSheet", pool, 2);
   /* argv[3] */
-  rbarg_to_nsarg(argv[3], _C_ID, &ns_a3, pool, 3);
+  rbarg_to_nsarg(argv[3], _C_ID, &ns_a3, "NSBeginCriticalAlertSheet", pool, 3);
   /* argv[4] */
-  rbarg_to_nsarg(argv[4], _C_ID, &ns_a4, pool, 4);
+  rbarg_to_nsarg(argv[4], _C_ID, &ns_a4, "NSBeginCriticalAlertSheet", pool, 4);
   /* argv[5] */
-  rbarg_to_nsarg(argv[5], _C_ID, &ns_a5, pool, 5);
+  rbarg_to_nsarg(argv[5], _C_ID, &ns_a5, "NSBeginCriticalAlertSheet", pool, 5);
   /* argv[6] */
-  rbarg_to_nsarg(argv[6], _C_SEL, &ns_a6, pool, 6);
+  rbarg_to_nsarg(argv[6], _C_SEL, &ns_a6, "NSBeginCriticalAlertSheet", pool, 6);
   /* argv[7] */
-  rbarg_to_nsarg(argv[7], _C_SEL, &ns_a7, pool, 7);
+  rbarg_to_nsarg(argv[7], _C_SEL, &ns_a7, "NSBeginCriticalAlertSheet", pool, 7);
   /* argv[8] */
-  rbarg_to_nsarg(argv[8], _PRIV_C_PTR, &ns_a8, pool, 8);
+  rbarg_to_nsarg(argv[8], _PRIV_C_PTR, &ns_a8, "NSBeginCriticalAlertSheet", pool, 8);
   /* argv[9] */
-  rbarg_to_nsarg(argv[9], _C_ID, &ns_a9, pool, 9);
+  rbarg_to_nsarg(argv[9], _C_ID, &ns_a9, "NSBeginCriticalAlertSheet", pool, 9);
   /* ns_va */
   va_last = va_first + VA_MAX;
   for (i = va_first; (i < argc) && (i < va_last); i++)
-    rbarg_to_nsarg(argv[i], _C_ID, &ns_va[i - va_first], pool, i);
+    rbarg_to_nsarg(argv[i], _C_ID, &ns_va[i - va_first], "NSBeginCriticalAlertSheet", pool, i);
 
+NS_DURING
   if (argc == va_first)
     NSBeginCriticalAlertSheet(ns_a0, ns_a1, ns_a2, ns_a3, ns_a4, ns_a5, ns_a6, ns_a7, ns_a8, ns_a9);
   else if (argc == (va_first + 1))
@@ -530,6 +621,15 @@ osx_NSBeginCriticalAlertSheet(int argc, VALUE* argv, VALUE mdl)
   else if (argc == (va_first + 4))
     NSBeginCriticalAlertSheet(ns_a0, ns_a1, ns_a2, ns_a3, ns_a4, ns_a5, ns_a6, ns_a7, ns_a8, ns_a9,
       ns_va[0], ns_va[1], ns_va[2], ns_va[3]);
+
+NS_HANDLER
+  excp = oc_err_new ("NSBeginCriticalAlertSheet", localException);
+NS_ENDHANDLER
+  if (excp != Qnil) {
+    [pool release];
+    rb_exc_raise (excp);
+    return Qnil;
+  }
 
   rb_result = Qnil;
   [pool release];
@@ -552,23 +652,25 @@ osx_NSGetAlertPanel(int argc, VALUE* argv, VALUE mdl)
   id ns_va[VA_MAX];
   int i;
 
+  VALUE excp = Qnil;
   VALUE rb_result;
   id pool = [[NSAutoreleasePool alloc] init];
   /* argv[0] */
-  rbarg_to_nsarg(argv[0], _C_ID, &ns_a0, pool, 0);
+  rbarg_to_nsarg(argv[0], _C_ID, &ns_a0, "NSGetAlertPanel", pool, 0);
   /* argv[1] */
-  rbarg_to_nsarg(argv[1], _C_ID, &ns_a1, pool, 1);
+  rbarg_to_nsarg(argv[1], _C_ID, &ns_a1, "NSGetAlertPanel", pool, 1);
   /* argv[2] */
-  rbarg_to_nsarg(argv[2], _C_ID, &ns_a2, pool, 2);
+  rbarg_to_nsarg(argv[2], _C_ID, &ns_a2, "NSGetAlertPanel", pool, 2);
   /* argv[3] */
-  rbarg_to_nsarg(argv[3], _C_ID, &ns_a3, pool, 3);
+  rbarg_to_nsarg(argv[3], _C_ID, &ns_a3, "NSGetAlertPanel", pool, 3);
   /* argv[4] */
-  rbarg_to_nsarg(argv[4], _C_ID, &ns_a4, pool, 4);
+  rbarg_to_nsarg(argv[4], _C_ID, &ns_a4, "NSGetAlertPanel", pool, 4);
   /* ns_va */
   va_last = va_first + VA_MAX;
   for (i = va_first; (i < argc) && (i < va_last); i++)
-    rbarg_to_nsarg(argv[i], _C_ID, &ns_va[i - va_first], pool, i);
+    rbarg_to_nsarg(argv[i], _C_ID, &ns_va[i - va_first], "NSGetAlertPanel", pool, i);
 
+NS_DURING
   if (argc == va_first)
     ns_result = NSGetAlertPanel(ns_a0, ns_a1, ns_a2, ns_a3, ns_a4);
   else if (argc == (va_first + 1))
@@ -584,7 +686,16 @@ osx_NSGetAlertPanel(int argc, VALUE* argv, VALUE mdl)
     ns_result = NSGetAlertPanel(ns_a0, ns_a1, ns_a2, ns_a3, ns_a4,
       ns_va[0], ns_va[1], ns_va[2], ns_va[3]);
 
-  rb_result = nsresult_to_rbresult(_C_ID, &ns_result, pool);
+NS_HANDLER
+  excp = oc_err_new ("NSGetAlertPanel", localException);
+NS_ENDHANDLER
+  if (excp != Qnil) {
+    [pool release];
+    rb_exc_raise (excp);
+    return Qnil;
+  }
+
+  rb_result = nsresult_to_rbresult(_C_ID, &ns_result, "NSGetAlertPanel", pool);
   [pool release];
   return rb_result;
 }
@@ -605,23 +716,25 @@ osx_NSGetInformationalAlertPanel(int argc, VALUE* argv, VALUE mdl)
   id ns_va[VA_MAX];
   int i;
 
+  VALUE excp = Qnil;
   VALUE rb_result;
   id pool = [[NSAutoreleasePool alloc] init];
   /* argv[0] */
-  rbarg_to_nsarg(argv[0], _C_ID, &ns_a0, pool, 0);
+  rbarg_to_nsarg(argv[0], _C_ID, &ns_a0, "NSGetInformationalAlertPanel", pool, 0);
   /* argv[1] */
-  rbarg_to_nsarg(argv[1], _C_ID, &ns_a1, pool, 1);
+  rbarg_to_nsarg(argv[1], _C_ID, &ns_a1, "NSGetInformationalAlertPanel", pool, 1);
   /* argv[2] */
-  rbarg_to_nsarg(argv[2], _C_ID, &ns_a2, pool, 2);
+  rbarg_to_nsarg(argv[2], _C_ID, &ns_a2, "NSGetInformationalAlertPanel", pool, 2);
   /* argv[3] */
-  rbarg_to_nsarg(argv[3], _C_ID, &ns_a3, pool, 3);
+  rbarg_to_nsarg(argv[3], _C_ID, &ns_a3, "NSGetInformationalAlertPanel", pool, 3);
   /* argv[4] */
-  rbarg_to_nsarg(argv[4], _C_ID, &ns_a4, pool, 4);
+  rbarg_to_nsarg(argv[4], _C_ID, &ns_a4, "NSGetInformationalAlertPanel", pool, 4);
   /* ns_va */
   va_last = va_first + VA_MAX;
   for (i = va_first; (i < argc) && (i < va_last); i++)
-    rbarg_to_nsarg(argv[i], _C_ID, &ns_va[i - va_first], pool, i);
+    rbarg_to_nsarg(argv[i], _C_ID, &ns_va[i - va_first], "NSGetInformationalAlertPanel", pool, i);
 
+NS_DURING
   if (argc == va_first)
     ns_result = NSGetInformationalAlertPanel(ns_a0, ns_a1, ns_a2, ns_a3, ns_a4);
   else if (argc == (va_first + 1))
@@ -637,7 +750,16 @@ osx_NSGetInformationalAlertPanel(int argc, VALUE* argv, VALUE mdl)
     ns_result = NSGetInformationalAlertPanel(ns_a0, ns_a1, ns_a2, ns_a3, ns_a4,
       ns_va[0], ns_va[1], ns_va[2], ns_va[3]);
 
-  rb_result = nsresult_to_rbresult(_C_ID, &ns_result, pool);
+NS_HANDLER
+  excp = oc_err_new ("NSGetInformationalAlertPanel", localException);
+NS_ENDHANDLER
+  if (excp != Qnil) {
+    [pool release];
+    rb_exc_raise (excp);
+    return Qnil;
+  }
+
+  rb_result = nsresult_to_rbresult(_C_ID, &ns_result, "NSGetInformationalAlertPanel", pool);
   [pool release];
   return rb_result;
 }
@@ -658,23 +780,25 @@ osx_NSGetCriticalAlertPanel(int argc, VALUE* argv, VALUE mdl)
   id ns_va[VA_MAX];
   int i;
 
+  VALUE excp = Qnil;
   VALUE rb_result;
   id pool = [[NSAutoreleasePool alloc] init];
   /* argv[0] */
-  rbarg_to_nsarg(argv[0], _C_ID, &ns_a0, pool, 0);
+  rbarg_to_nsarg(argv[0], _C_ID, &ns_a0, "NSGetCriticalAlertPanel", pool, 0);
   /* argv[1] */
-  rbarg_to_nsarg(argv[1], _C_ID, &ns_a1, pool, 1);
+  rbarg_to_nsarg(argv[1], _C_ID, &ns_a1, "NSGetCriticalAlertPanel", pool, 1);
   /* argv[2] */
-  rbarg_to_nsarg(argv[2], _C_ID, &ns_a2, pool, 2);
+  rbarg_to_nsarg(argv[2], _C_ID, &ns_a2, "NSGetCriticalAlertPanel", pool, 2);
   /* argv[3] */
-  rbarg_to_nsarg(argv[3], _C_ID, &ns_a3, pool, 3);
+  rbarg_to_nsarg(argv[3], _C_ID, &ns_a3, "NSGetCriticalAlertPanel", pool, 3);
   /* argv[4] */
-  rbarg_to_nsarg(argv[4], _C_ID, &ns_a4, pool, 4);
+  rbarg_to_nsarg(argv[4], _C_ID, &ns_a4, "NSGetCriticalAlertPanel", pool, 4);
   /* ns_va */
   va_last = va_first + VA_MAX;
   for (i = va_first; (i < argc) && (i < va_last); i++)
-    rbarg_to_nsarg(argv[i], _C_ID, &ns_va[i - va_first], pool, i);
+    rbarg_to_nsarg(argv[i], _C_ID, &ns_va[i - va_first], "NSGetCriticalAlertPanel", pool, i);
 
+NS_DURING
   if (argc == va_first)
     ns_result = NSGetCriticalAlertPanel(ns_a0, ns_a1, ns_a2, ns_a3, ns_a4);
   else if (argc == (va_first + 1))
@@ -690,7 +814,16 @@ osx_NSGetCriticalAlertPanel(int argc, VALUE* argv, VALUE mdl)
     ns_result = NSGetCriticalAlertPanel(ns_a0, ns_a1, ns_a2, ns_a3, ns_a4,
       ns_va[0], ns_va[1], ns_va[2], ns_va[3]);
 
-  rb_result = nsresult_to_rbresult(_C_ID, &ns_result, pool);
+NS_HANDLER
+  excp = oc_err_new ("NSGetCriticalAlertPanel", localException);
+NS_ENDHANDLER
+  if (excp != Qnil) {
+    [pool release];
+    rb_exc_raise (excp);
+    return Qnil;
+  }
+
+  rb_result = nsresult_to_rbresult(_C_ID, &ns_result, "NSGetCriticalAlertPanel", pool);
   [pool release];
   return rb_result;
 }
@@ -702,12 +835,22 @@ osx_NSReleaseAlertPanel(VALUE mdl, VALUE a0)
 
   id ns_a0;
 
+  VALUE excp = Qnil;
   VALUE rb_result;
   id pool = [[NSAutoreleasePool alloc] init];
   /* a0 */
-  rbarg_to_nsarg(a0, _C_ID, &ns_a0, pool, 0);
+  rbarg_to_nsarg(a0, _C_ID, &ns_a0, "NSReleaseAlertPanel", pool, 0);
 
+NS_DURING
   NSReleaseAlertPanel(ns_a0);
+NS_HANDLER
+  excp = oc_err_new ("NSReleaseAlertPanel", localException);
+NS_ENDHANDLER
+  if (excp != Qnil) {
+    [pool release];
+    rb_exc_raise (excp);
+    return Qnil;
+  }
 
   rb_result = Qnil;
   [pool release];

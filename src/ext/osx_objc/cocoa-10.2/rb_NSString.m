@@ -2,8 +2,9 @@
 #import "ocdata_conv.h"
 #import <Foundation/Foundation.h>
 
-extern void rbarg_to_nsarg(VALUE rbarg, int octype, void* nsarg, id pool, int index);
-extern VALUE nsresult_to_rbresult(int octype, const void* nsresult, id pool);
+extern VALUE oc_err_new (const char* fname, NSException* nsexcp);
+extern void rbarg_to_nsarg(VALUE rbarg, int octype, void* nsarg, const char* fname, id pool, int index);
+extern VALUE nsresult_to_rbresult(int octype, const void* nsresult, const char* fname, id pool);
 static const int VA_MAX = 4;
 
 
@@ -12,21 +13,21 @@ static const int VA_MAX = 4;
 static VALUE
 osx_NSParseErrorException(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSParseErrorException, nil);
+  return nsresult_to_rbresult(_C_ID, &NSParseErrorException, "NSParseErrorException", nil);
 }
 
 // NSString * const NSCharacterConversionException;
 static VALUE
 osx_NSCharacterConversionException(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSCharacterConversionException, nil);
+  return nsresult_to_rbresult(_C_ID, &NSCharacterConversionException, "NSCharacterConversionException", nil);
 }
 
 // void * _NSConstantStringClassReference;
 static VALUE
 osx__NSConstantStringClassReference(VALUE mdl)
 {
-  return nsresult_to_rbresult(_PRIV_C_PTR, &_NSConstantStringClassReference, nil);
+  return nsresult_to_rbresult(_PRIV_C_PTR, &_NSConstantStringClassReference, "_NSConstantStringClassReference", nil);
 }
 
 void init_NSString(VALUE mOSX)

@@ -2,8 +2,9 @@
 #import "ocdata_conv.h"
 #import <Foundation/Foundation.h>
 
-extern void rbarg_to_nsarg(VALUE rbarg, int octype, void* nsarg, id pool, int index);
-extern VALUE nsresult_to_rbresult(int octype, const void* nsresult, id pool);
+extern VALUE oc_err_new (const char* fname, NSException* nsexcp);
+extern void rbarg_to_nsarg(VALUE rbarg, int octype, void* nsarg, const char* fname, id pool, int index);
+extern VALUE nsresult_to_rbresult(int octype, const void* nsresult, const char* fname, id pool);
 static const int VA_MAX = 4;
 
 
@@ -12,14 +13,14 @@ static const int VA_MAX = 4;
 static VALUE
 osx_NSInvalidArchiveOperationException(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSInvalidArchiveOperationException, nil);
+  return nsresult_to_rbresult(_C_ID, &NSInvalidArchiveOperationException, "NSInvalidArchiveOperationException", nil);
 }
 
 // NSString * const NSInvalidUnarchiveOperationException;
 static VALUE
 osx_NSInvalidUnarchiveOperationException(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSInvalidUnarchiveOperationException, nil);
+  return nsresult_to_rbresult(_C_ID, &NSInvalidUnarchiveOperationException, "NSInvalidUnarchiveOperationException", nil);
 }
 
 void init_NSKeyedArchiver(VALUE mOSX)

@@ -2,8 +2,9 @@
 #import "ocdata_conv.h"
 #import <Foundation/Foundation.h>
 
-extern void rbarg_to_nsarg(VALUE rbarg, int octype, void* nsarg, id pool, int index);
-extern VALUE nsresult_to_rbresult(int octype, const void* nsresult, id pool);
+extern VALUE oc_err_new (const char* fname, NSException* nsexcp);
+extern void rbarg_to_nsarg(VALUE rbarg, int octype, void* nsarg, const char* fname, id pool, int index);
+extern VALUE nsresult_to_rbresult(int octype, const void* nsresult, const char* fname, id pool);
 static const int VA_MAX = 4;
 
 
@@ -79,12 +80,22 @@ osx_NSFreeHashTable(VALUE mdl, VALUE a0)
 
   NSHashTable * ns_a0;
 
+  VALUE excp = Qnil;
   VALUE rb_result;
   id pool = [[NSAutoreleasePool alloc] init];
   /* a0 */
-  rbarg_to_nsarg(a0, _PRIV_C_PTR, &ns_a0, pool, 0);
+  rbarg_to_nsarg(a0, _PRIV_C_PTR, &ns_a0, "NSFreeHashTable", pool, 0);
 
+NS_DURING
   NSFreeHashTable(ns_a0);
+NS_HANDLER
+  excp = oc_err_new ("NSFreeHashTable", localException);
+NS_ENDHANDLER
+  if (excp != Qnil) {
+    [pool release];
+    rb_exc_raise (excp);
+    return Qnil;
+  }
 
   rb_result = Qnil;
   [pool release];
@@ -98,12 +109,22 @@ osx_NSResetHashTable(VALUE mdl, VALUE a0)
 
   NSHashTable * ns_a0;
 
+  VALUE excp = Qnil;
   VALUE rb_result;
   id pool = [[NSAutoreleasePool alloc] init];
   /* a0 */
-  rbarg_to_nsarg(a0, _PRIV_C_PTR, &ns_a0, pool, 0);
+  rbarg_to_nsarg(a0, _PRIV_C_PTR, &ns_a0, "NSResetHashTable", pool, 0);
 
+NS_DURING
   NSResetHashTable(ns_a0);
+NS_HANDLER
+  excp = oc_err_new ("NSResetHashTable", localException);
+NS_ENDHANDLER
+  if (excp != Qnil) {
+    [pool release];
+    rb_exc_raise (excp);
+    return Qnil;
+  }
 
   rb_result = Qnil;
   [pool release];
@@ -119,16 +140,26 @@ osx_NSCompareHashTables(VALUE mdl, VALUE a0, VALUE a1)
   NSHashTable * ns_a0;
   NSHashTable * ns_a1;
 
+  VALUE excp = Qnil;
   VALUE rb_result;
   id pool = [[NSAutoreleasePool alloc] init];
   /* a0 */
-  rbarg_to_nsarg(a0, _PRIV_C_PTR, &ns_a0, pool, 0);
+  rbarg_to_nsarg(a0, _PRIV_C_PTR, &ns_a0, "NSCompareHashTables", pool, 0);
   /* a1 */
-  rbarg_to_nsarg(a1, _PRIV_C_PTR, &ns_a1, pool, 1);
+  rbarg_to_nsarg(a1, _PRIV_C_PTR, &ns_a1, "NSCompareHashTables", pool, 1);
 
+NS_DURING
   ns_result = NSCompareHashTables(ns_a0, ns_a1);
+NS_HANDLER
+  excp = oc_err_new ("NSCompareHashTables", localException);
+NS_ENDHANDLER
+  if (excp != Qnil) {
+    [pool release];
+    rb_exc_raise (excp);
+    return Qnil;
+  }
 
-  rb_result = nsresult_to_rbresult(_PRIV_C_BOOL, &ns_result, pool);
+  rb_result = nsresult_to_rbresult(_PRIV_C_BOOL, &ns_result, "NSCompareHashTables", pool);
   [pool release];
   return rb_result;
 }
@@ -142,16 +173,26 @@ osx_NSCopyHashTableWithZone(VALUE mdl, VALUE a0, VALUE a1)
   NSHashTable * ns_a0;
   NSZone * ns_a1;
 
+  VALUE excp = Qnil;
   VALUE rb_result;
   id pool = [[NSAutoreleasePool alloc] init];
   /* a0 */
-  rbarg_to_nsarg(a0, _PRIV_C_PTR, &ns_a0, pool, 0);
+  rbarg_to_nsarg(a0, _PRIV_C_PTR, &ns_a0, "NSCopyHashTableWithZone", pool, 0);
   /* a1 */
-  rbarg_to_nsarg(a1, _PRIV_C_PTR, &ns_a1, pool, 1);
+  rbarg_to_nsarg(a1, _PRIV_C_PTR, &ns_a1, "NSCopyHashTableWithZone", pool, 1);
 
+NS_DURING
   ns_result = NSCopyHashTableWithZone(ns_a0, ns_a1);
+NS_HANDLER
+  excp = oc_err_new ("NSCopyHashTableWithZone", localException);
+NS_ENDHANDLER
+  if (excp != Qnil) {
+    [pool release];
+    rb_exc_raise (excp);
+    return Qnil;
+  }
 
-  rb_result = nsresult_to_rbresult(_PRIV_C_PTR, &ns_result, pool);
+  rb_result = nsresult_to_rbresult(_PRIV_C_PTR, &ns_result, "NSCopyHashTableWithZone", pool);
   [pool release];
   return rb_result;
 }
@@ -165,16 +206,26 @@ osx_NSHashGet(VALUE mdl, VALUE a0, VALUE a1)
   NSHashTable * ns_a0;
   const void * ns_a1;
 
+  VALUE excp = Qnil;
   VALUE rb_result;
   id pool = [[NSAutoreleasePool alloc] init];
   /* a0 */
-  rbarg_to_nsarg(a0, _PRIV_C_PTR, &ns_a0, pool, 0);
+  rbarg_to_nsarg(a0, _PRIV_C_PTR, &ns_a0, "NSHashGet", pool, 0);
   /* a1 */
-  rbarg_to_nsarg(a1, _PRIV_C_PTR, &ns_a1, pool, 1);
+  rbarg_to_nsarg(a1, _PRIV_C_PTR, &ns_a1, "NSHashGet", pool, 1);
 
+NS_DURING
   ns_result = NSHashGet(ns_a0, ns_a1);
+NS_HANDLER
+  excp = oc_err_new ("NSHashGet", localException);
+NS_ENDHANDLER
+  if (excp != Qnil) {
+    [pool release];
+    rb_exc_raise (excp);
+    return Qnil;
+  }
 
-  rb_result = nsresult_to_rbresult(_PRIV_C_PTR, &ns_result, pool);
+  rb_result = nsresult_to_rbresult(_PRIV_C_PTR, &ns_result, "NSHashGet", pool);
   [pool release];
   return rb_result;
 }
@@ -187,14 +238,24 @@ osx_NSHashInsert(VALUE mdl, VALUE a0, VALUE a1)
   NSHashTable * ns_a0;
   const void * ns_a1;
 
+  VALUE excp = Qnil;
   VALUE rb_result;
   id pool = [[NSAutoreleasePool alloc] init];
   /* a0 */
-  rbarg_to_nsarg(a0, _PRIV_C_PTR, &ns_a0, pool, 0);
+  rbarg_to_nsarg(a0, _PRIV_C_PTR, &ns_a0, "NSHashInsert", pool, 0);
   /* a1 */
-  rbarg_to_nsarg(a1, _PRIV_C_PTR, &ns_a1, pool, 1);
+  rbarg_to_nsarg(a1, _PRIV_C_PTR, &ns_a1, "NSHashInsert", pool, 1);
 
+NS_DURING
   NSHashInsert(ns_a0, ns_a1);
+NS_HANDLER
+  excp = oc_err_new ("NSHashInsert", localException);
+NS_ENDHANDLER
+  if (excp != Qnil) {
+    [pool release];
+    rb_exc_raise (excp);
+    return Qnil;
+  }
 
   rb_result = Qnil;
   [pool release];
@@ -209,14 +270,24 @@ osx_NSHashInsertKnownAbsent(VALUE mdl, VALUE a0, VALUE a1)
   NSHashTable * ns_a0;
   const void * ns_a1;
 
+  VALUE excp = Qnil;
   VALUE rb_result;
   id pool = [[NSAutoreleasePool alloc] init];
   /* a0 */
-  rbarg_to_nsarg(a0, _PRIV_C_PTR, &ns_a0, pool, 0);
+  rbarg_to_nsarg(a0, _PRIV_C_PTR, &ns_a0, "NSHashInsertKnownAbsent", pool, 0);
   /* a1 */
-  rbarg_to_nsarg(a1, _PRIV_C_PTR, &ns_a1, pool, 1);
+  rbarg_to_nsarg(a1, _PRIV_C_PTR, &ns_a1, "NSHashInsertKnownAbsent", pool, 1);
 
+NS_DURING
   NSHashInsertKnownAbsent(ns_a0, ns_a1);
+NS_HANDLER
+  excp = oc_err_new ("NSHashInsertKnownAbsent", localException);
+NS_ENDHANDLER
+  if (excp != Qnil) {
+    [pool release];
+    rb_exc_raise (excp);
+    return Qnil;
+  }
 
   rb_result = Qnil;
   [pool release];
@@ -232,16 +303,26 @@ osx_NSHashInsertIfAbsent(VALUE mdl, VALUE a0, VALUE a1)
   NSHashTable * ns_a0;
   const void * ns_a1;
 
+  VALUE excp = Qnil;
   VALUE rb_result;
   id pool = [[NSAutoreleasePool alloc] init];
   /* a0 */
-  rbarg_to_nsarg(a0, _PRIV_C_PTR, &ns_a0, pool, 0);
+  rbarg_to_nsarg(a0, _PRIV_C_PTR, &ns_a0, "NSHashInsertIfAbsent", pool, 0);
   /* a1 */
-  rbarg_to_nsarg(a1, _PRIV_C_PTR, &ns_a1, pool, 1);
+  rbarg_to_nsarg(a1, _PRIV_C_PTR, &ns_a1, "NSHashInsertIfAbsent", pool, 1);
 
+NS_DURING
   ns_result = NSHashInsertIfAbsent(ns_a0, ns_a1);
+NS_HANDLER
+  excp = oc_err_new ("NSHashInsertIfAbsent", localException);
+NS_ENDHANDLER
+  if (excp != Qnil) {
+    [pool release];
+    rb_exc_raise (excp);
+    return Qnil;
+  }
 
-  rb_result = nsresult_to_rbresult(_PRIV_C_PTR, &ns_result, pool);
+  rb_result = nsresult_to_rbresult(_PRIV_C_PTR, &ns_result, "NSHashInsertIfAbsent", pool);
   [pool release];
   return rb_result;
 }
@@ -254,14 +335,24 @@ osx_NSHashRemove(VALUE mdl, VALUE a0, VALUE a1)
   NSHashTable * ns_a0;
   const void * ns_a1;
 
+  VALUE excp = Qnil;
   VALUE rb_result;
   id pool = [[NSAutoreleasePool alloc] init];
   /* a0 */
-  rbarg_to_nsarg(a0, _PRIV_C_PTR, &ns_a0, pool, 0);
+  rbarg_to_nsarg(a0, _PRIV_C_PTR, &ns_a0, "NSHashRemove", pool, 0);
   /* a1 */
-  rbarg_to_nsarg(a1, _PRIV_C_PTR, &ns_a1, pool, 1);
+  rbarg_to_nsarg(a1, _PRIV_C_PTR, &ns_a1, "NSHashRemove", pool, 1);
 
+NS_DURING
   NSHashRemove(ns_a0, ns_a1);
+NS_HANDLER
+  excp = oc_err_new ("NSHashRemove", localException);
+NS_ENDHANDLER
+  if (excp != Qnil) {
+    [pool release];
+    rb_exc_raise (excp);
+    return Qnil;
+  }
 
   rb_result = Qnil;
   [pool release];
@@ -283,14 +374,24 @@ osx_NSNextHashEnumeratorItem(VALUE mdl, VALUE a0)
 
   NSHashEnumerator * ns_a0;
 
+  VALUE excp = Qnil;
   VALUE rb_result;
   id pool = [[NSAutoreleasePool alloc] init];
   /* a0 */
-  rbarg_to_nsarg(a0, _PRIV_C_PTR, &ns_a0, pool, 0);
+  rbarg_to_nsarg(a0, _PRIV_C_PTR, &ns_a0, "NSNextHashEnumeratorItem", pool, 0);
 
+NS_DURING
   ns_result = NSNextHashEnumeratorItem(ns_a0);
+NS_HANDLER
+  excp = oc_err_new ("NSNextHashEnumeratorItem", localException);
+NS_ENDHANDLER
+  if (excp != Qnil) {
+    [pool release];
+    rb_exc_raise (excp);
+    return Qnil;
+  }
 
-  rb_result = nsresult_to_rbresult(_PRIV_C_PTR, &ns_result, pool);
+  rb_result = nsresult_to_rbresult(_PRIV_C_PTR, &ns_result, "NSNextHashEnumeratorItem", pool);
   [pool release];
   return rb_result;
 }
@@ -302,12 +403,22 @@ osx_NSEndHashTableEnumeration(VALUE mdl, VALUE a0)
 
   NSHashEnumerator * ns_a0;
 
+  VALUE excp = Qnil;
   VALUE rb_result;
   id pool = [[NSAutoreleasePool alloc] init];
   /* a0 */
-  rbarg_to_nsarg(a0, _PRIV_C_PTR, &ns_a0, pool, 0);
+  rbarg_to_nsarg(a0, _PRIV_C_PTR, &ns_a0, "NSEndHashTableEnumeration", pool, 0);
 
+NS_DURING
   NSEndHashTableEnumeration(ns_a0);
+NS_HANDLER
+  excp = oc_err_new ("NSEndHashTableEnumeration", localException);
+NS_ENDHANDLER
+  if (excp != Qnil) {
+    [pool release];
+    rb_exc_raise (excp);
+    return Qnil;
+  }
 
   rb_result = Qnil;
   [pool release];
@@ -322,14 +433,24 @@ osx_NSCountHashTable(VALUE mdl, VALUE a0)
 
   NSHashTable * ns_a0;
 
+  VALUE excp = Qnil;
   VALUE rb_result;
   id pool = [[NSAutoreleasePool alloc] init];
   /* a0 */
-  rbarg_to_nsarg(a0, _PRIV_C_PTR, &ns_a0, pool, 0);
+  rbarg_to_nsarg(a0, _PRIV_C_PTR, &ns_a0, "NSCountHashTable", pool, 0);
 
+NS_DURING
   ns_result = NSCountHashTable(ns_a0);
+NS_HANDLER
+  excp = oc_err_new ("NSCountHashTable", localException);
+NS_ENDHANDLER
+  if (excp != Qnil) {
+    [pool release];
+    rb_exc_raise (excp);
+    return Qnil;
+  }
 
-  rb_result = nsresult_to_rbresult(_C_UINT, &ns_result, pool);
+  rb_result = nsresult_to_rbresult(_C_UINT, &ns_result, "NSCountHashTable", pool);
   [pool release];
   return rb_result;
 }
@@ -342,14 +463,24 @@ osx_NSStringFromHashTable(VALUE mdl, VALUE a0)
 
   NSHashTable * ns_a0;
 
+  VALUE excp = Qnil;
   VALUE rb_result;
   id pool = [[NSAutoreleasePool alloc] init];
   /* a0 */
-  rbarg_to_nsarg(a0, _PRIV_C_PTR, &ns_a0, pool, 0);
+  rbarg_to_nsarg(a0, _PRIV_C_PTR, &ns_a0, "NSStringFromHashTable", pool, 0);
 
+NS_DURING
   ns_result = NSStringFromHashTable(ns_a0);
+NS_HANDLER
+  excp = oc_err_new ("NSStringFromHashTable", localException);
+NS_ENDHANDLER
+  if (excp != Qnil) {
+    [pool release];
+    rb_exc_raise (excp);
+    return Qnil;
+  }
 
-  rb_result = nsresult_to_rbresult(_C_ID, &ns_result, pool);
+  rb_result = nsresult_to_rbresult(_C_ID, &ns_result, "NSStringFromHashTable", pool);
   [pool release];
   return rb_result;
 }
@@ -362,14 +493,24 @@ osx_NSAllHashTableObjects(VALUE mdl, VALUE a0)
 
   NSHashTable * ns_a0;
 
+  VALUE excp = Qnil;
   VALUE rb_result;
   id pool = [[NSAutoreleasePool alloc] init];
   /* a0 */
-  rbarg_to_nsarg(a0, _PRIV_C_PTR, &ns_a0, pool, 0);
+  rbarg_to_nsarg(a0, _PRIV_C_PTR, &ns_a0, "NSAllHashTableObjects", pool, 0);
 
+NS_DURING
   ns_result = NSAllHashTableObjects(ns_a0);
+NS_HANDLER
+  excp = oc_err_new ("NSAllHashTableObjects", localException);
+NS_ENDHANDLER
+  if (excp != Qnil) {
+    [pool release];
+    rb_exc_raise (excp);
+    return Qnil;
+  }
 
-  rb_result = nsresult_to_rbresult(_C_ID, &ns_result, pool);
+  rb_result = nsresult_to_rbresult(_C_ID, &ns_result, "NSAllHashTableObjects", pool);
   [pool release];
   return rb_result;
 }

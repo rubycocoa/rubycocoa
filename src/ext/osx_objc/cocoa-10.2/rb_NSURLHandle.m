@@ -2,8 +2,9 @@
 #import "ocdata_conv.h"
 #import <Foundation/Foundation.h>
 
-extern void rbarg_to_nsarg(VALUE rbarg, int octype, void* nsarg, id pool, int index);
-extern VALUE nsresult_to_rbresult(int octype, const void* nsresult, id pool);
+extern VALUE oc_err_new (const char* fname, NSException* nsexcp);
+extern void rbarg_to_nsarg(VALUE rbarg, int octype, void* nsarg, const char* fname, id pool, int index);
+extern VALUE nsresult_to_rbresult(int octype, const void* nsresult, const char* fname, id pool);
 static const int VA_MAX = 4;
 
 
@@ -12,70 +13,70 @@ static const int VA_MAX = 4;
 static VALUE
 osx_NSHTTPPropertyStatusCodeKey(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSHTTPPropertyStatusCodeKey, nil);
+  return nsresult_to_rbresult(_C_ID, &NSHTTPPropertyStatusCodeKey, "NSHTTPPropertyStatusCodeKey", nil);
 }
 
 // NSString * NSHTTPPropertyStatusReasonKey;
 static VALUE
 osx_NSHTTPPropertyStatusReasonKey(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSHTTPPropertyStatusReasonKey, nil);
+  return nsresult_to_rbresult(_C_ID, &NSHTTPPropertyStatusReasonKey, "NSHTTPPropertyStatusReasonKey", nil);
 }
 
 // NSString * NSHTTPPropertyServerHTTPVersionKey;
 static VALUE
 osx_NSHTTPPropertyServerHTTPVersionKey(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSHTTPPropertyServerHTTPVersionKey, nil);
+  return nsresult_to_rbresult(_C_ID, &NSHTTPPropertyServerHTTPVersionKey, "NSHTTPPropertyServerHTTPVersionKey", nil);
 }
 
 // NSString * NSHTTPPropertyRedirectionHeadersKey;
 static VALUE
 osx_NSHTTPPropertyRedirectionHeadersKey(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSHTTPPropertyRedirectionHeadersKey, nil);
+  return nsresult_to_rbresult(_C_ID, &NSHTTPPropertyRedirectionHeadersKey, "NSHTTPPropertyRedirectionHeadersKey", nil);
 }
 
 // NSString * NSHTTPPropertyErrorPageDataKey;
 static VALUE
 osx_NSHTTPPropertyErrorPageDataKey(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSHTTPPropertyErrorPageDataKey, nil);
+  return nsresult_to_rbresult(_C_ID, &NSHTTPPropertyErrorPageDataKey, "NSHTTPPropertyErrorPageDataKey", nil);
 }
 
 // NSString * NSHTTPPropertyHTTPProxy;
 static VALUE
 osx_NSHTTPPropertyHTTPProxy(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSHTTPPropertyHTTPProxy, nil);
+  return nsresult_to_rbresult(_C_ID, &NSHTTPPropertyHTTPProxy, "NSHTTPPropertyHTTPProxy", nil);
 }
 
 // NSString * NSFTPPropertyUserLoginKey;
 static VALUE
 osx_NSFTPPropertyUserLoginKey(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSFTPPropertyUserLoginKey, nil);
+  return nsresult_to_rbresult(_C_ID, &NSFTPPropertyUserLoginKey, "NSFTPPropertyUserLoginKey", nil);
 }
 
 // NSString * NSFTPPropertyUserPasswordKey;
 static VALUE
 osx_NSFTPPropertyUserPasswordKey(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSFTPPropertyUserPasswordKey, nil);
+  return nsresult_to_rbresult(_C_ID, &NSFTPPropertyUserPasswordKey, "NSFTPPropertyUserPasswordKey", nil);
 }
 
 // NSString * NSFTPPropertyActiveTransferModeKey;
 static VALUE
 osx_NSFTPPropertyActiveTransferModeKey(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSFTPPropertyActiveTransferModeKey, nil);
+  return nsresult_to_rbresult(_C_ID, &NSFTPPropertyActiveTransferModeKey, "NSFTPPropertyActiveTransferModeKey", nil);
 }
 
 // NSString * NSFTPPropertyFileOffsetKey;
 static VALUE
 osx_NSFTPPropertyFileOffsetKey(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSFTPPropertyFileOffsetKey, nil);
+  return nsresult_to_rbresult(_C_ID, &NSFTPPropertyFileOffsetKey, "NSFTPPropertyFileOffsetKey", nil);
 }
 
 void init_NSURLHandle(VALUE mOSX)

@@ -2,8 +2,9 @@
 #import "ocdata_conv.h"
 #import <AppKit/AppKit.h>
 
-extern void rbarg_to_nsarg(VALUE rbarg, int octype, void* nsarg, id pool, int index);
-extern VALUE nsresult_to_rbresult(int octype, const void* nsresult, id pool);
+extern VALUE oc_err_new (const char* fname, NSException* nsexcp);
+extern void rbarg_to_nsarg(VALUE rbarg, int octype, void* nsarg, const char* fname, id pool, int index);
+extern VALUE nsresult_to_rbresult(int octype, const void* nsresult, const char* fname, id pool);
 static const int VA_MAX = 4;
 
 
@@ -12,140 +13,140 @@ static const int VA_MAX = 4;
 static VALUE
 osx_NSFontAttributeName(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSFontAttributeName, nil);
+  return nsresult_to_rbresult(_C_ID, &NSFontAttributeName, "NSFontAttributeName", nil);
 }
 
 // NSString * NSParagraphStyleAttributeName;
 static VALUE
 osx_NSParagraphStyleAttributeName(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSParagraphStyleAttributeName, nil);
+  return nsresult_to_rbresult(_C_ID, &NSParagraphStyleAttributeName, "NSParagraphStyleAttributeName", nil);
 }
 
 // NSString * NSForegroundColorAttributeName;
 static VALUE
 osx_NSForegroundColorAttributeName(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSForegroundColorAttributeName, nil);
+  return nsresult_to_rbresult(_C_ID, &NSForegroundColorAttributeName, "NSForegroundColorAttributeName", nil);
 }
 
 // NSString * NSUnderlineStyleAttributeName;
 static VALUE
 osx_NSUnderlineStyleAttributeName(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSUnderlineStyleAttributeName, nil);
+  return nsresult_to_rbresult(_C_ID, &NSUnderlineStyleAttributeName, "NSUnderlineStyleAttributeName", nil);
 }
 
 // NSString * NSSuperscriptAttributeName;
 static VALUE
 osx_NSSuperscriptAttributeName(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSSuperscriptAttributeName, nil);
+  return nsresult_to_rbresult(_C_ID, &NSSuperscriptAttributeName, "NSSuperscriptAttributeName", nil);
 }
 
 // NSString * NSBackgroundColorAttributeName;
 static VALUE
 osx_NSBackgroundColorAttributeName(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSBackgroundColorAttributeName, nil);
+  return nsresult_to_rbresult(_C_ID, &NSBackgroundColorAttributeName, "NSBackgroundColorAttributeName", nil);
 }
 
 // NSString * NSAttachmentAttributeName;
 static VALUE
 osx_NSAttachmentAttributeName(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSAttachmentAttributeName, nil);
+  return nsresult_to_rbresult(_C_ID, &NSAttachmentAttributeName, "NSAttachmentAttributeName", nil);
 }
 
 // NSString * NSLigatureAttributeName;
 static VALUE
 osx_NSLigatureAttributeName(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSLigatureAttributeName, nil);
+  return nsresult_to_rbresult(_C_ID, &NSLigatureAttributeName, "NSLigatureAttributeName", nil);
 }
 
 // NSString * NSBaselineOffsetAttributeName;
 static VALUE
 osx_NSBaselineOffsetAttributeName(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSBaselineOffsetAttributeName, nil);
+  return nsresult_to_rbresult(_C_ID, &NSBaselineOffsetAttributeName, "NSBaselineOffsetAttributeName", nil);
 }
 
 // NSString * NSKernAttributeName;
 static VALUE
 osx_NSKernAttributeName(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSKernAttributeName, nil);
+  return nsresult_to_rbresult(_C_ID, &NSKernAttributeName, "NSKernAttributeName", nil);
 }
 
 // NSString * NSLinkAttributeName;
 static VALUE
 osx_NSLinkAttributeName(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSLinkAttributeName, nil);
+  return nsresult_to_rbresult(_C_ID, &NSLinkAttributeName, "NSLinkAttributeName", nil);
 }
 
 // NSString * NSCharacterShapeAttributeName;
 static VALUE
 osx_NSCharacterShapeAttributeName(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSCharacterShapeAttributeName, nil);
+  return nsresult_to_rbresult(_C_ID, &NSCharacterShapeAttributeName, "NSCharacterShapeAttributeName", nil);
 }
 
 // NSString * NSGlyphInfoAttributeName;
 static VALUE
 osx_NSGlyphInfoAttributeName(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSGlyphInfoAttributeName, nil);
+  return nsresult_to_rbresult(_C_ID, &NSGlyphInfoAttributeName, "NSGlyphInfoAttributeName", nil);
 }
 
 // unsigned NSUnderlineByWordMask;
 static VALUE
 osx_NSUnderlineByWordMask(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_UINT, &NSUnderlineByWordMask, nil);
+  return nsresult_to_rbresult(_C_UINT, &NSUnderlineByWordMask, "NSUnderlineByWordMask", nil);
 }
 
 // unsigned NSUnderlineStrikethroughMask;
 static VALUE
 osx_NSUnderlineStrikethroughMask(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_UINT, &NSUnderlineStrikethroughMask, nil);
+  return nsresult_to_rbresult(_C_UINT, &NSUnderlineStrikethroughMask, "NSUnderlineStrikethroughMask", nil);
 }
 
 // NSString * NSPlainTextDocumentType;
 static VALUE
 osx_NSPlainTextDocumentType(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSPlainTextDocumentType, nil);
+  return nsresult_to_rbresult(_C_ID, &NSPlainTextDocumentType, "NSPlainTextDocumentType", nil);
 }
 
 // NSString * NSRTFTextDocumentType;
 static VALUE
 osx_NSRTFTextDocumentType(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSRTFTextDocumentType, nil);
+  return nsresult_to_rbresult(_C_ID, &NSRTFTextDocumentType, "NSRTFTextDocumentType", nil);
 }
 
 // NSString * NSRTFDTextDocumentType;
 static VALUE
 osx_NSRTFDTextDocumentType(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSRTFDTextDocumentType, nil);
+  return nsresult_to_rbresult(_C_ID, &NSRTFDTextDocumentType, "NSRTFDTextDocumentType", nil);
 }
 
 // NSString * NSMacSimpleTextDocumentType;
 static VALUE
 osx_NSMacSimpleTextDocumentType(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSMacSimpleTextDocumentType, nil);
+  return nsresult_to_rbresult(_C_ID, &NSMacSimpleTextDocumentType, "NSMacSimpleTextDocumentType", nil);
 }
 
 // NSString * NSHTMLTextDocumentType;
 static VALUE
 osx_NSHTMLTextDocumentType(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSHTMLTextDocumentType, nil);
+  return nsresult_to_rbresult(_C_ID, &NSHTMLTextDocumentType, "NSHTMLTextDocumentType", nil);
 }
 
 void init_NSAttributedString(VALUE mOSX)

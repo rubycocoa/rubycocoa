@@ -2,8 +2,9 @@
 #import "ocdata_conv.h"
 #import <AppKit/AppKit.h>
 
-extern void rbarg_to_nsarg(VALUE rbarg, int octype, void* nsarg, id pool, int index);
-extern VALUE nsresult_to_rbresult(int octype, const void* nsresult, id pool);
+extern VALUE oc_err_new (const char* fname, NSException* nsexcp);
+extern void rbarg_to_nsarg(VALUE rbarg, int octype, void* nsarg, const char* fname, id pool, int index);
+extern VALUE nsresult_to_rbresult(int octype, const void* nsresult, const char* fname, id pool);
 static const int VA_MAX = 4;
 
 
@@ -12,28 +13,28 @@ static const int VA_MAX = 4;
 static VALUE
 osx_NSComboBoxWillPopUpNotification(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSComboBoxWillPopUpNotification, nil);
+  return nsresult_to_rbresult(_C_ID, &NSComboBoxWillPopUpNotification, "NSComboBoxWillPopUpNotification", nil);
 }
 
 // NSString * NSComboBoxWillDismissNotification;
 static VALUE
 osx_NSComboBoxWillDismissNotification(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSComboBoxWillDismissNotification, nil);
+  return nsresult_to_rbresult(_C_ID, &NSComboBoxWillDismissNotification, "NSComboBoxWillDismissNotification", nil);
 }
 
 // NSString * NSComboBoxSelectionDidChangeNotification;
 static VALUE
 osx_NSComboBoxSelectionDidChangeNotification(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSComboBoxSelectionDidChangeNotification, nil);
+  return nsresult_to_rbresult(_C_ID, &NSComboBoxSelectionDidChangeNotification, "NSComboBoxSelectionDidChangeNotification", nil);
 }
 
 // NSString * NSComboBoxSelectionIsChangingNotification;
 static VALUE
 osx_NSComboBoxSelectionIsChangingNotification(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSComboBoxSelectionIsChangingNotification, nil);
+  return nsresult_to_rbresult(_C_ID, &NSComboBoxSelectionIsChangingNotification, "NSComboBoxSelectionIsChangingNotification", nil);
 }
 
 void init_NSComboBox(VALUE mOSX)

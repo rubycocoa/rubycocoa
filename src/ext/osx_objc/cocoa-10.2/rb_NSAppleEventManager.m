@@ -2,8 +2,9 @@
 #import "ocdata_conv.h"
 #import <Foundation/Foundation.h>
 
-extern void rbarg_to_nsarg(VALUE rbarg, int octype, void* nsarg, id pool, int index);
-extern VALUE nsresult_to_rbresult(int octype, const void* nsresult, id pool);
+extern VALUE oc_err_new (const char* fname, NSException* nsexcp);
+extern void rbarg_to_nsarg(VALUE rbarg, int octype, void* nsarg, const char* fname, id pool, int index);
+extern VALUE nsresult_to_rbresult(int octype, const void* nsresult, const char* fname, id pool);
 static const int VA_MAX = 4;
 
 
@@ -12,21 +13,21 @@ static const int VA_MAX = 4;
 static VALUE
 osx_NSAppleEventTimeOutDefault(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_DBL, &NSAppleEventTimeOutDefault, nil);
+  return nsresult_to_rbresult(_C_DBL, &NSAppleEventTimeOutDefault, "NSAppleEventTimeOutDefault", nil);
 }
 
 // const double NSAppleEventTimeOutNone;
 static VALUE
 osx_NSAppleEventTimeOutNone(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_DBL, &NSAppleEventTimeOutNone, nil);
+  return nsresult_to_rbresult(_C_DBL, &NSAppleEventTimeOutNone, "NSAppleEventTimeOutNone", nil);
 }
 
 // NSString * NSAppleEventManagerWillProcessFirstEventNotification;
 static VALUE
 osx_NSAppleEventManagerWillProcessFirstEventNotification(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSAppleEventManagerWillProcessFirstEventNotification, nil);
+  return nsresult_to_rbresult(_C_ID, &NSAppleEventManagerWillProcessFirstEventNotification, "NSAppleEventManagerWillProcessFirstEventNotification", nil);
 }
 
 void init_NSAppleEventManager(VALUE mOSX)

@@ -2,8 +2,9 @@
 #import "ocdata_conv.h"
 #import <AppKit/AppKit.h>
 
-extern void rbarg_to_nsarg(VALUE rbarg, int octype, void* nsarg, id pool, int index);
-extern VALUE nsresult_to_rbresult(int octype, const void* nsresult, id pool);
+extern VALUE oc_err_new (const char* fname, NSException* nsexcp);
+extern void rbarg_to_nsarg(VALUE rbarg, int octype, void* nsarg, const char* fname, id pool, int index);
+extern VALUE nsresult_to_rbresult(int octype, const void* nsresult, const char* fname, id pool);
 static const int VA_MAX = 4;
 
 
@@ -12,28 +13,28 @@ static const int VA_MAX = 4;
 static VALUE
 osx_NSViewFrameDidChangeNotification(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSViewFrameDidChangeNotification, nil);
+  return nsresult_to_rbresult(_C_ID, &NSViewFrameDidChangeNotification, "NSViewFrameDidChangeNotification", nil);
 }
 
 // NSString * NSViewFocusDidChangeNotification;
 static VALUE
 osx_NSViewFocusDidChangeNotification(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSViewFocusDidChangeNotification, nil);
+  return nsresult_to_rbresult(_C_ID, &NSViewFocusDidChangeNotification, "NSViewFocusDidChangeNotification", nil);
 }
 
 // NSString * NSViewBoundsDidChangeNotification;
 static VALUE
 osx_NSViewBoundsDidChangeNotification(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSViewBoundsDidChangeNotification, nil);
+  return nsresult_to_rbresult(_C_ID, &NSViewBoundsDidChangeNotification, "NSViewBoundsDidChangeNotification", nil);
 }
 
 // NSString * NSViewGlobalFrameDidChangeNotification;
 static VALUE
 osx_NSViewGlobalFrameDidChangeNotification(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSViewGlobalFrameDidChangeNotification, nil);
+  return nsresult_to_rbresult(_C_ID, &NSViewGlobalFrameDidChangeNotification, "NSViewGlobalFrameDidChangeNotification", nil);
 }
 
 void init_NSView(VALUE mOSX)

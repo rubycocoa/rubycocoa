@@ -2,8 +2,9 @@
 #import "ocdata_conv.h"
 #import <Foundation/Foundation.h>
 
-extern void rbarg_to_nsarg(VALUE rbarg, int octype, void* nsarg, id pool, int index);
-extern VALUE nsresult_to_rbresult(int octype, const void* nsresult, id pool);
+extern VALUE oc_err_new (const char* fname, NSException* nsexcp);
+extern void rbarg_to_nsarg(VALUE rbarg, int octype, void* nsarg, const char* fname, id pool, int index);
+extern VALUE nsresult_to_rbresult(int octype, const void* nsresult, const char* fname, id pool);
 static const int VA_MAX = 4;
 
 
@@ -107,12 +108,22 @@ osx_NSFreeMapTable(VALUE mdl, VALUE a0)
 
   NSMapTable * ns_a0;
 
+  VALUE excp = Qnil;
   VALUE rb_result;
   id pool = [[NSAutoreleasePool alloc] init];
   /* a0 */
-  rbarg_to_nsarg(a0, _PRIV_C_PTR, &ns_a0, pool, 0);
+  rbarg_to_nsarg(a0, _PRIV_C_PTR, &ns_a0, "NSFreeMapTable", pool, 0);
 
+NS_DURING
   NSFreeMapTable(ns_a0);
+NS_HANDLER
+  excp = oc_err_new ("NSFreeMapTable", localException);
+NS_ENDHANDLER
+  if (excp != Qnil) {
+    [pool release];
+    rb_exc_raise (excp);
+    return Qnil;
+  }
 
   rb_result = Qnil;
   [pool release];
@@ -126,12 +137,22 @@ osx_NSResetMapTable(VALUE mdl, VALUE a0)
 
   NSMapTable * ns_a0;
 
+  VALUE excp = Qnil;
   VALUE rb_result;
   id pool = [[NSAutoreleasePool alloc] init];
   /* a0 */
-  rbarg_to_nsarg(a0, _PRIV_C_PTR, &ns_a0, pool, 0);
+  rbarg_to_nsarg(a0, _PRIV_C_PTR, &ns_a0, "NSResetMapTable", pool, 0);
 
+NS_DURING
   NSResetMapTable(ns_a0);
+NS_HANDLER
+  excp = oc_err_new ("NSResetMapTable", localException);
+NS_ENDHANDLER
+  if (excp != Qnil) {
+    [pool release];
+    rb_exc_raise (excp);
+    return Qnil;
+  }
 
   rb_result = Qnil;
   [pool release];
@@ -147,16 +168,26 @@ osx_NSCompareMapTables(VALUE mdl, VALUE a0, VALUE a1)
   NSMapTable * ns_a0;
   NSMapTable * ns_a1;
 
+  VALUE excp = Qnil;
   VALUE rb_result;
   id pool = [[NSAutoreleasePool alloc] init];
   /* a0 */
-  rbarg_to_nsarg(a0, _PRIV_C_PTR, &ns_a0, pool, 0);
+  rbarg_to_nsarg(a0, _PRIV_C_PTR, &ns_a0, "NSCompareMapTables", pool, 0);
   /* a1 */
-  rbarg_to_nsarg(a1, _PRIV_C_PTR, &ns_a1, pool, 1);
+  rbarg_to_nsarg(a1, _PRIV_C_PTR, &ns_a1, "NSCompareMapTables", pool, 1);
 
+NS_DURING
   ns_result = NSCompareMapTables(ns_a0, ns_a1);
+NS_HANDLER
+  excp = oc_err_new ("NSCompareMapTables", localException);
+NS_ENDHANDLER
+  if (excp != Qnil) {
+    [pool release];
+    rb_exc_raise (excp);
+    return Qnil;
+  }
 
-  rb_result = nsresult_to_rbresult(_PRIV_C_BOOL, &ns_result, pool);
+  rb_result = nsresult_to_rbresult(_PRIV_C_BOOL, &ns_result, "NSCompareMapTables", pool);
   [pool release];
   return rb_result;
 }
@@ -170,16 +201,26 @@ osx_NSCopyMapTableWithZone(VALUE mdl, VALUE a0, VALUE a1)
   NSMapTable * ns_a0;
   NSZone * ns_a1;
 
+  VALUE excp = Qnil;
   VALUE rb_result;
   id pool = [[NSAutoreleasePool alloc] init];
   /* a0 */
-  rbarg_to_nsarg(a0, _PRIV_C_PTR, &ns_a0, pool, 0);
+  rbarg_to_nsarg(a0, _PRIV_C_PTR, &ns_a0, "NSCopyMapTableWithZone", pool, 0);
   /* a1 */
-  rbarg_to_nsarg(a1, _PRIV_C_PTR, &ns_a1, pool, 1);
+  rbarg_to_nsarg(a1, _PRIV_C_PTR, &ns_a1, "NSCopyMapTableWithZone", pool, 1);
 
+NS_DURING
   ns_result = NSCopyMapTableWithZone(ns_a0, ns_a1);
+NS_HANDLER
+  excp = oc_err_new ("NSCopyMapTableWithZone", localException);
+NS_ENDHANDLER
+  if (excp != Qnil) {
+    [pool release];
+    rb_exc_raise (excp);
+    return Qnil;
+  }
 
-  rb_result = nsresult_to_rbresult(_PRIV_C_PTR, &ns_result, pool);
+  rb_result = nsresult_to_rbresult(_PRIV_C_PTR, &ns_result, "NSCopyMapTableWithZone", pool);
   [pool release];
   return rb_result;
 }
@@ -195,20 +236,30 @@ osx_NSMapMember(VALUE mdl, VALUE a0, VALUE a1, VALUE a2, VALUE a3)
   void * * ns_a2;
   void * * ns_a3;
 
+  VALUE excp = Qnil;
   VALUE rb_result;
   id pool = [[NSAutoreleasePool alloc] init];
   /* a0 */
-  rbarg_to_nsarg(a0, _PRIV_C_PTR, &ns_a0, pool, 0);
+  rbarg_to_nsarg(a0, _PRIV_C_PTR, &ns_a0, "NSMapMember", pool, 0);
   /* a1 */
-  rbarg_to_nsarg(a1, _PRIV_C_PTR, &ns_a1, pool, 1);
+  rbarg_to_nsarg(a1, _PRIV_C_PTR, &ns_a1, "NSMapMember", pool, 1);
   /* a2 */
-  rbarg_to_nsarg(a2, _PRIV_C_PTR, &ns_a2, pool, 2);
+  rbarg_to_nsarg(a2, _PRIV_C_PTR, &ns_a2, "NSMapMember", pool, 2);
   /* a3 */
-  rbarg_to_nsarg(a3, _PRIV_C_PTR, &ns_a3, pool, 3);
+  rbarg_to_nsarg(a3, _PRIV_C_PTR, &ns_a3, "NSMapMember", pool, 3);
 
+NS_DURING
   ns_result = NSMapMember(ns_a0, ns_a1, ns_a2, ns_a3);
+NS_HANDLER
+  excp = oc_err_new ("NSMapMember", localException);
+NS_ENDHANDLER
+  if (excp != Qnil) {
+    [pool release];
+    rb_exc_raise (excp);
+    return Qnil;
+  }
 
-  rb_result = nsresult_to_rbresult(_PRIV_C_BOOL, &ns_result, pool);
+  rb_result = nsresult_to_rbresult(_PRIV_C_BOOL, &ns_result, "NSMapMember", pool);
   [pool release];
   return rb_result;
 }
@@ -222,16 +273,26 @@ osx_NSMapGet(VALUE mdl, VALUE a0, VALUE a1)
   NSMapTable * ns_a0;
   const void * ns_a1;
 
+  VALUE excp = Qnil;
   VALUE rb_result;
   id pool = [[NSAutoreleasePool alloc] init];
   /* a0 */
-  rbarg_to_nsarg(a0, _PRIV_C_PTR, &ns_a0, pool, 0);
+  rbarg_to_nsarg(a0, _PRIV_C_PTR, &ns_a0, "NSMapGet", pool, 0);
   /* a1 */
-  rbarg_to_nsarg(a1, _PRIV_C_PTR, &ns_a1, pool, 1);
+  rbarg_to_nsarg(a1, _PRIV_C_PTR, &ns_a1, "NSMapGet", pool, 1);
 
+NS_DURING
   ns_result = NSMapGet(ns_a0, ns_a1);
+NS_HANDLER
+  excp = oc_err_new ("NSMapGet", localException);
+NS_ENDHANDLER
+  if (excp != Qnil) {
+    [pool release];
+    rb_exc_raise (excp);
+    return Qnil;
+  }
 
-  rb_result = nsresult_to_rbresult(_PRIV_C_PTR, &ns_result, pool);
+  rb_result = nsresult_to_rbresult(_PRIV_C_PTR, &ns_result, "NSMapGet", pool);
   [pool release];
   return rb_result;
 }
@@ -245,16 +306,26 @@ osx_NSMapInsert(VALUE mdl, VALUE a0, VALUE a1, VALUE a2)
   const void * ns_a1;
   const void * ns_a2;
 
+  VALUE excp = Qnil;
   VALUE rb_result;
   id pool = [[NSAutoreleasePool alloc] init];
   /* a0 */
-  rbarg_to_nsarg(a0, _PRIV_C_PTR, &ns_a0, pool, 0);
+  rbarg_to_nsarg(a0, _PRIV_C_PTR, &ns_a0, "NSMapInsert", pool, 0);
   /* a1 */
-  rbarg_to_nsarg(a1, _PRIV_C_PTR, &ns_a1, pool, 1);
+  rbarg_to_nsarg(a1, _PRIV_C_PTR, &ns_a1, "NSMapInsert", pool, 1);
   /* a2 */
-  rbarg_to_nsarg(a2, _PRIV_C_PTR, &ns_a2, pool, 2);
+  rbarg_to_nsarg(a2, _PRIV_C_PTR, &ns_a2, "NSMapInsert", pool, 2);
 
+NS_DURING
   NSMapInsert(ns_a0, ns_a1, ns_a2);
+NS_HANDLER
+  excp = oc_err_new ("NSMapInsert", localException);
+NS_ENDHANDLER
+  if (excp != Qnil) {
+    [pool release];
+    rb_exc_raise (excp);
+    return Qnil;
+  }
 
   rb_result = Qnil;
   [pool release];
@@ -270,16 +341,26 @@ osx_NSMapInsertKnownAbsent(VALUE mdl, VALUE a0, VALUE a1, VALUE a2)
   const void * ns_a1;
   const void * ns_a2;
 
+  VALUE excp = Qnil;
   VALUE rb_result;
   id pool = [[NSAutoreleasePool alloc] init];
   /* a0 */
-  rbarg_to_nsarg(a0, _PRIV_C_PTR, &ns_a0, pool, 0);
+  rbarg_to_nsarg(a0, _PRIV_C_PTR, &ns_a0, "NSMapInsertKnownAbsent", pool, 0);
   /* a1 */
-  rbarg_to_nsarg(a1, _PRIV_C_PTR, &ns_a1, pool, 1);
+  rbarg_to_nsarg(a1, _PRIV_C_PTR, &ns_a1, "NSMapInsertKnownAbsent", pool, 1);
   /* a2 */
-  rbarg_to_nsarg(a2, _PRIV_C_PTR, &ns_a2, pool, 2);
+  rbarg_to_nsarg(a2, _PRIV_C_PTR, &ns_a2, "NSMapInsertKnownAbsent", pool, 2);
 
+NS_DURING
   NSMapInsertKnownAbsent(ns_a0, ns_a1, ns_a2);
+NS_HANDLER
+  excp = oc_err_new ("NSMapInsertKnownAbsent", localException);
+NS_ENDHANDLER
+  if (excp != Qnil) {
+    [pool release];
+    rb_exc_raise (excp);
+    return Qnil;
+  }
 
   rb_result = Qnil;
   [pool release];
@@ -296,18 +377,28 @@ osx_NSMapInsertIfAbsent(VALUE mdl, VALUE a0, VALUE a1, VALUE a2)
   const void * ns_a1;
   const void * ns_a2;
 
+  VALUE excp = Qnil;
   VALUE rb_result;
   id pool = [[NSAutoreleasePool alloc] init];
   /* a0 */
-  rbarg_to_nsarg(a0, _PRIV_C_PTR, &ns_a0, pool, 0);
+  rbarg_to_nsarg(a0, _PRIV_C_PTR, &ns_a0, "NSMapInsertIfAbsent", pool, 0);
   /* a1 */
-  rbarg_to_nsarg(a1, _PRIV_C_PTR, &ns_a1, pool, 1);
+  rbarg_to_nsarg(a1, _PRIV_C_PTR, &ns_a1, "NSMapInsertIfAbsent", pool, 1);
   /* a2 */
-  rbarg_to_nsarg(a2, _PRIV_C_PTR, &ns_a2, pool, 2);
+  rbarg_to_nsarg(a2, _PRIV_C_PTR, &ns_a2, "NSMapInsertIfAbsent", pool, 2);
 
+NS_DURING
   ns_result = NSMapInsertIfAbsent(ns_a0, ns_a1, ns_a2);
+NS_HANDLER
+  excp = oc_err_new ("NSMapInsertIfAbsent", localException);
+NS_ENDHANDLER
+  if (excp != Qnil) {
+    [pool release];
+    rb_exc_raise (excp);
+    return Qnil;
+  }
 
-  rb_result = nsresult_to_rbresult(_PRIV_C_PTR, &ns_result, pool);
+  rb_result = nsresult_to_rbresult(_PRIV_C_PTR, &ns_result, "NSMapInsertIfAbsent", pool);
   [pool release];
   return rb_result;
 }
@@ -320,14 +411,24 @@ osx_NSMapRemove(VALUE mdl, VALUE a0, VALUE a1)
   NSMapTable * ns_a0;
   const void * ns_a1;
 
+  VALUE excp = Qnil;
   VALUE rb_result;
   id pool = [[NSAutoreleasePool alloc] init];
   /* a0 */
-  rbarg_to_nsarg(a0, _PRIV_C_PTR, &ns_a0, pool, 0);
+  rbarg_to_nsarg(a0, _PRIV_C_PTR, &ns_a0, "NSMapRemove", pool, 0);
   /* a1 */
-  rbarg_to_nsarg(a1, _PRIV_C_PTR, &ns_a1, pool, 1);
+  rbarg_to_nsarg(a1, _PRIV_C_PTR, &ns_a1, "NSMapRemove", pool, 1);
 
+NS_DURING
   NSMapRemove(ns_a0, ns_a1);
+NS_HANDLER
+  excp = oc_err_new ("NSMapRemove", localException);
+NS_ENDHANDLER
+  if (excp != Qnil) {
+    [pool release];
+    rb_exc_raise (excp);
+    return Qnil;
+  }
 
   rb_result = Qnil;
   [pool release];
@@ -351,18 +452,28 @@ osx_NSNextMapEnumeratorPair(VALUE mdl, VALUE a0, VALUE a1, VALUE a2)
   void * * ns_a1;
   void * * ns_a2;
 
+  VALUE excp = Qnil;
   VALUE rb_result;
   id pool = [[NSAutoreleasePool alloc] init];
   /* a0 */
-  rbarg_to_nsarg(a0, _PRIV_C_PTR, &ns_a0, pool, 0);
+  rbarg_to_nsarg(a0, _PRIV_C_PTR, &ns_a0, "NSNextMapEnumeratorPair", pool, 0);
   /* a1 */
-  rbarg_to_nsarg(a1, _PRIV_C_PTR, &ns_a1, pool, 1);
+  rbarg_to_nsarg(a1, _PRIV_C_PTR, &ns_a1, "NSNextMapEnumeratorPair", pool, 1);
   /* a2 */
-  rbarg_to_nsarg(a2, _PRIV_C_PTR, &ns_a2, pool, 2);
+  rbarg_to_nsarg(a2, _PRIV_C_PTR, &ns_a2, "NSNextMapEnumeratorPair", pool, 2);
 
+NS_DURING
   ns_result = NSNextMapEnumeratorPair(ns_a0, ns_a1, ns_a2);
+NS_HANDLER
+  excp = oc_err_new ("NSNextMapEnumeratorPair", localException);
+NS_ENDHANDLER
+  if (excp != Qnil) {
+    [pool release];
+    rb_exc_raise (excp);
+    return Qnil;
+  }
 
-  rb_result = nsresult_to_rbresult(_PRIV_C_BOOL, &ns_result, pool);
+  rb_result = nsresult_to_rbresult(_PRIV_C_BOOL, &ns_result, "NSNextMapEnumeratorPair", pool);
   [pool release];
   return rb_result;
 }
@@ -374,12 +485,22 @@ osx_NSEndMapTableEnumeration(VALUE mdl, VALUE a0)
 
   NSMapEnumerator * ns_a0;
 
+  VALUE excp = Qnil;
   VALUE rb_result;
   id pool = [[NSAutoreleasePool alloc] init];
   /* a0 */
-  rbarg_to_nsarg(a0, _PRIV_C_PTR, &ns_a0, pool, 0);
+  rbarg_to_nsarg(a0, _PRIV_C_PTR, &ns_a0, "NSEndMapTableEnumeration", pool, 0);
 
+NS_DURING
   NSEndMapTableEnumeration(ns_a0);
+NS_HANDLER
+  excp = oc_err_new ("NSEndMapTableEnumeration", localException);
+NS_ENDHANDLER
+  if (excp != Qnil) {
+    [pool release];
+    rb_exc_raise (excp);
+    return Qnil;
+  }
 
   rb_result = Qnil;
   [pool release];
@@ -394,14 +515,24 @@ osx_NSCountMapTable(VALUE mdl, VALUE a0)
 
   NSMapTable * ns_a0;
 
+  VALUE excp = Qnil;
   VALUE rb_result;
   id pool = [[NSAutoreleasePool alloc] init];
   /* a0 */
-  rbarg_to_nsarg(a0, _PRIV_C_PTR, &ns_a0, pool, 0);
+  rbarg_to_nsarg(a0, _PRIV_C_PTR, &ns_a0, "NSCountMapTable", pool, 0);
 
+NS_DURING
   ns_result = NSCountMapTable(ns_a0);
+NS_HANDLER
+  excp = oc_err_new ("NSCountMapTable", localException);
+NS_ENDHANDLER
+  if (excp != Qnil) {
+    [pool release];
+    rb_exc_raise (excp);
+    return Qnil;
+  }
 
-  rb_result = nsresult_to_rbresult(_C_UINT, &ns_result, pool);
+  rb_result = nsresult_to_rbresult(_C_UINT, &ns_result, "NSCountMapTable", pool);
   [pool release];
   return rb_result;
 }
@@ -414,14 +545,24 @@ osx_NSStringFromMapTable(VALUE mdl, VALUE a0)
 
   NSMapTable * ns_a0;
 
+  VALUE excp = Qnil;
   VALUE rb_result;
   id pool = [[NSAutoreleasePool alloc] init];
   /* a0 */
-  rbarg_to_nsarg(a0, _PRIV_C_PTR, &ns_a0, pool, 0);
+  rbarg_to_nsarg(a0, _PRIV_C_PTR, &ns_a0, "NSStringFromMapTable", pool, 0);
 
+NS_DURING
   ns_result = NSStringFromMapTable(ns_a0);
+NS_HANDLER
+  excp = oc_err_new ("NSStringFromMapTable", localException);
+NS_ENDHANDLER
+  if (excp != Qnil) {
+    [pool release];
+    rb_exc_raise (excp);
+    return Qnil;
+  }
 
-  rb_result = nsresult_to_rbresult(_C_ID, &ns_result, pool);
+  rb_result = nsresult_to_rbresult(_C_ID, &ns_result, "NSStringFromMapTable", pool);
   [pool release];
   return rb_result;
 }
@@ -434,14 +575,24 @@ osx_NSAllMapTableKeys(VALUE mdl, VALUE a0)
 
   NSMapTable * ns_a0;
 
+  VALUE excp = Qnil;
   VALUE rb_result;
   id pool = [[NSAutoreleasePool alloc] init];
   /* a0 */
-  rbarg_to_nsarg(a0, _PRIV_C_PTR, &ns_a0, pool, 0);
+  rbarg_to_nsarg(a0, _PRIV_C_PTR, &ns_a0, "NSAllMapTableKeys", pool, 0);
 
+NS_DURING
   ns_result = NSAllMapTableKeys(ns_a0);
+NS_HANDLER
+  excp = oc_err_new ("NSAllMapTableKeys", localException);
+NS_ENDHANDLER
+  if (excp != Qnil) {
+    [pool release];
+    rb_exc_raise (excp);
+    return Qnil;
+  }
 
-  rb_result = nsresult_to_rbresult(_C_ID, &ns_result, pool);
+  rb_result = nsresult_to_rbresult(_C_ID, &ns_result, "NSAllMapTableKeys", pool);
   [pool release];
   return rb_result;
 }
@@ -454,14 +605,24 @@ osx_NSAllMapTableValues(VALUE mdl, VALUE a0)
 
   NSMapTable * ns_a0;
 
+  VALUE excp = Qnil;
   VALUE rb_result;
   id pool = [[NSAutoreleasePool alloc] init];
   /* a0 */
-  rbarg_to_nsarg(a0, _PRIV_C_PTR, &ns_a0, pool, 0);
+  rbarg_to_nsarg(a0, _PRIV_C_PTR, &ns_a0, "NSAllMapTableValues", pool, 0);
 
+NS_DURING
   ns_result = NSAllMapTableValues(ns_a0);
+NS_HANDLER
+  excp = oc_err_new ("NSAllMapTableValues", localException);
+NS_ENDHANDLER
+  if (excp != Qnil) {
+    [pool release];
+    rb_exc_raise (excp);
+    return Qnil;
+  }
 
-  rb_result = nsresult_to_rbresult(_C_ID, &ns_result, pool);
+  rb_result = nsresult_to_rbresult(_C_ID, &ns_result, "NSAllMapTableValues", pool);
   [pool release];
   return rb_result;
 }

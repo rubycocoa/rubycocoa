@@ -2,8 +2,9 @@
 #import "ocdata_conv.h"
 #import <AppKit/AppKit.h>
 
-extern void rbarg_to_nsarg(VALUE rbarg, int octype, void* nsarg, id pool, int index);
-extern VALUE nsresult_to_rbresult(int octype, const void* nsresult, id pool);
+extern VALUE oc_err_new (const char* fname, NSException* nsexcp);
+extern void rbarg_to_nsarg(VALUE rbarg, int octype, void* nsarg, const char* fname, id pool, int index);
+extern VALUE nsresult_to_rbresult(int octype, const void* nsresult, const char* fname, id pool);
 static const int VA_MAX = 4;
 
 
@@ -12,35 +13,35 @@ static const int VA_MAX = 4;
 static VALUE
 osx_NSMenuWillSendActionNotification(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSMenuWillSendActionNotification, nil);
+  return nsresult_to_rbresult(_C_ID, &NSMenuWillSendActionNotification, "NSMenuWillSendActionNotification", nil);
 }
 
 // NSString * NSMenuDidSendActionNotification;
 static VALUE
 osx_NSMenuDidSendActionNotification(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSMenuDidSendActionNotification, nil);
+  return nsresult_to_rbresult(_C_ID, &NSMenuDidSendActionNotification, "NSMenuDidSendActionNotification", nil);
 }
 
 // NSString * NSMenuDidAddItemNotification;
 static VALUE
 osx_NSMenuDidAddItemNotification(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSMenuDidAddItemNotification, nil);
+  return nsresult_to_rbresult(_C_ID, &NSMenuDidAddItemNotification, "NSMenuDidAddItemNotification", nil);
 }
 
 // NSString * NSMenuDidRemoveItemNotification;
 static VALUE
 osx_NSMenuDidRemoveItemNotification(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSMenuDidRemoveItemNotification, nil);
+  return nsresult_to_rbresult(_C_ID, &NSMenuDidRemoveItemNotification, "NSMenuDidRemoveItemNotification", nil);
 }
 
 // NSString * NSMenuDidChangeItemNotification;
 static VALUE
 osx_NSMenuDidChangeItemNotification(VALUE mdl)
 {
-  return nsresult_to_rbresult(_C_ID, &NSMenuDidChangeItemNotification, nil);
+  return nsresult_to_rbresult(_C_ID, &NSMenuDidChangeItemNotification, "NSMenuDidChangeItemNotification", nil);
 }
 
 void init_NSMenu(VALUE mOSX)
