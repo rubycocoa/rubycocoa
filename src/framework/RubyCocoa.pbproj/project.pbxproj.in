@@ -11,6 +11,7 @@
 			buildSettings = {
 				COPY_PHASE_STRIP = NO;
 				OPTIMIZATION_CFLAGS = "-O0";
+				SINGLE_MODULE = NO;
 			};
 			isa = PBXBuildStyle;
 			name = Development;
@@ -20,6 +21,7 @@
 			);
 			buildSettings = {
 				COPY_PHASE_STRIP = YES;
+				SINGLE_MODULE = NO;
 			};
 			isa = PBXBuildStyle;
 			name = Deployment;
@@ -117,7 +119,7 @@
 				INSTALL_PATH = "@executable_path/../Frameworks";
 				LIBRARY_SEARCH_PATHS = "%%%libruby_path_dirname%%%";
 				OTHER_CFLAGS = "-fno-common";
-				OTHER_LDFLAGS = "%%%other_ldflags%%% -undefined suppress -flat_namespace";
+				OTHER_LDFLAGS = "-undefined suppress -flat_namespace";
 				PREBINDING = NO;
 				PRODUCT_NAME = "%%%framework_name%%%";
 				SECTORDER_FLAGS = "";
