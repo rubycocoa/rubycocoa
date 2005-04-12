@@ -1,3 +1,8 @@
+2005-04-12  kimura wataru <kimuraw@i.nifty.jp>
+
+	* framework/src/objc/RBObject.m:
+	fix bad classname in debug mesage at -[RBObject isKindOfClass:].
+
 2005-03-25  kimura wataru <kimuraw@i.nifty.jp>
 
 	* release 0.4.1 (release-0_4_1)
