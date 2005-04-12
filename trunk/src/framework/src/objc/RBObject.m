@@ -286,7 +286,7 @@ static SEL ruby_method_sel(int argc)
 - (BOOL)isKindOfClass: (Class)klass
 {
   BOOL ret;
-  DLOG1("isKindOfClass(%@)", klass);
+  DLOG1("isKindOfClass(%@)", NSStringFromClass(klass));
   ret = NO;
   DLOG1("   --> %d", ret);
   return ret;
