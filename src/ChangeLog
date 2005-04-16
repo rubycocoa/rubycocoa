@@ -1,3 +1,8 @@
+2005-04-16  kimura wataru <kimuraw@i.nifty.jp>
+
+	* framework/src/objc/mdl_osxobjc.m:
+	fix: ocid_get_rbobj() - pure ruby object becomes instance of OSX::OCObject
+
 2005-04-12  kimura wataru <kimuraw@i.nifty.jp>
 
 	* framework/src/objc/RBObject.m:

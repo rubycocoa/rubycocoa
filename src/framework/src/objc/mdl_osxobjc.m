@@ -274,7 +274,7 @@ ocid_get_rbobj (id ocid)
   VALUE result = Qnil;
 
   NS_DURING  
-    if ([ocid isKindOfClass: [RBObject class]])
+    if ([ocid class] == [RBObject class])
       result = [ocid __rbobj__];
 
     else if ([ocid respondsToSelector: @selector(__rbobj__)])
