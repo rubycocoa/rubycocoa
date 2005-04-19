@@ -189,7 +189,7 @@ ocdata_to_rbobj(VALUE context_obj,
   case _C_SEL: {
     id pool = [[NSAutoreleasePool alloc] init];
     NSString* arg_str = NSStringFromSelector(*(SEL*)ocdata);
-    rbval = rb_str_new2([arg_str cString]);
+    rbval = rb_str_new2([arg_str UTF8String]);
     [pool release];
     break;
   }
@@ -343,7 +343,7 @@ static BOOL rbnum_to_nsnum(VALUE rbval, id* nsval)
   BOOL result;
   VALUE rbstr = rb_obj_as_string(rbval);
   id pool = [[NSAutoreleasePool alloc] init];
-  id nsstr = [NSString stringWithCString: STR2CSTR(rbstr)];
+  id nsstr = [NSString stringWithUTF8String: STR2CSTR(rbstr)];
   *nsval = [[NSDecimalNumber alloc] initWithString: nsstr];
   result = [(*nsval) isKindOfClass: [NSDecimalNumber class]];
   [pool release];
@@ -360,9 +360,13 @@ static BOOL rbobj_convert_to_nsobj(VALUE obj, id* nsobj)
     return YES;
 
   case T_STRING:
-  case T_SYMBOL:
     obj = rb_obj_as_string(obj);
     *nsobj = [NSString stringWithCString: RSTRING(obj)->ptr length: RSTRING(obj)->len];
+    return YES;
+
+  case T_SYMBOL:
+    obj = rb_obj_as_string(obj);
+    *nsobj = [NSString stringWithUTF8String: RSTRING(obj)->ptr];
     return YES;
 
   case T_ARRAY:
@@ -479,7 +483,7 @@ id rbobj_to_nsselstr(VALUE obj)
     if (RSTRING(str)->ptr[i] == '_')
       RSTRING(str)->ptr[i] = ':';
   }
-  return [NSString stringWithCString: STR2CSTR(str)];
+  return [NSString stringWithUTF8String: STR2CSTR(str)];
 }
 
 SEL rbobj_to_nssel(VALUE obj)
