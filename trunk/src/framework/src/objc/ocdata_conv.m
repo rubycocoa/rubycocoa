@@ -15,6 +15,7 @@
 #import "ocdata_conv.h"
 #import "RBObject.h"
 #import "mdl_osxobjc.h"
+#import <CoreFoundation/CFString.h> // CFStringEncoding
 
 
 static VALUE rbclass_nsrect()
@@ -730,4 +731,33 @@ rbobj_to_ocdata(VALUE obj, int octype, void* ocdata)
   }
 
   return f_success;
+}
+
+static NSStringEncoding kcode_to_nsencoding(const char* kcode) 
+{ 
+  if (kcode == "UTF8")
+    return NSUTF8StringEncoding;
+  else if (kcode == "SJIS")
+    return CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingMacJapanese);
+  else if (kcode == "EUC")
+    return NSJapaneseEUCStringEncoding;
+  else // "NONE"
+    return NSUTF8StringEncoding;
+}
+#define KCODE_NSSTRENCODING kcode_to_nsencoding(rb_get_kcode()) 
+
+id
+rbstr_to_ocstr(VALUE obj)
+{
+  return [[[NSString alloc] initWithBytes: RSTRING(obj)->ptr
+			    length: RSTRING(obj)->len
+			    encoding:KCODE_NSSTRENCODING] autorelease];
+}
+
+VALUE
+ocstr_to_rbstr(id ocstr)
+{
+  NSData * data = [(NSString *)ocstr dataUsingEncoding:KCODE_NSSTRENCODING
+				     allowLossyConversion:YES];
+  return rb_str_new ([data bytes], [data length]);
 }
