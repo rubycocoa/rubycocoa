@@ -50,7 +50,8 @@ static RB_ID sel_to_mid(SEL a_sel)
 
   pool = [[NSAutoreleasePool alloc] init];
   selstr = NSStringFromSelector(a_sel);
-  [selstr getCString: mname maxLength: sizeof(mname)];
+  memset(mname, 0, sizeof(mname));
+  strncpy(mname, [selstr UTF8String], sizeof(mname) - 1);
 
   // selstr.sub(/:/,'_').sub(/^(.*)_$/, "\1")
   for (i = 0; i < [selstr length]; i++)
@@ -67,7 +68,7 @@ static RB_ID sel_to_mid(SEL a_sel)
 static RB_ID sel_to_mid_as_setter(SEL a_sel)
 {
   id pool = [[NSAutoreleasePool alloc] init];
-  VALUE str = rb_str_new2([NSStringFromSelector(a_sel) cString]);
+  VALUE str = rb_str_new2([NSStringFromSelector(a_sel) UTF8String]);
 
   // if str.sub!(/^set([A-Z][^:]*):$/, '\1=') then
   //   str = str[0].chr.downcase + str[1..-1]
@@ -162,7 +163,7 @@ static SEL ruby_method_sel(int argc)
 
   msig = nil;
   pool = [[NSAutoreleasePool alloc] init];
-  name = [NSStringFromSelector(a_sel) cString];
+  name = [NSStringFromSelector(a_sel) UTF8String];
   name_len = strlen(name);
   tail_len = strlen(tail);
   if (name_len > tail_len) {
@@ -275,12 +276,12 @@ static SEL ruby_method_sel(int argc)
 
 - initWithRubyScriptString: (NSString*) str
 {
-  return [self initWithRubyScriptCString: [str cString]];
+  return [self initWithRubyScriptCString: [str UTF8String]];
 }
 
 - (NSString*) _copyDescription
 {
-  return [[NSString alloc] initWithCString: STR2CSTR(rb_inspect(m_rbobj))];
+  return [[NSString alloc] initWithUTF8String: STR2CSTR(rb_inspect(m_rbobj))];
 }
 
 - (BOOL)isKindOfClass: (Class)klass
