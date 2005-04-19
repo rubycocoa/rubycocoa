@@ -33,6 +33,7 @@ id    rbobj_to_nsselstr (VALUE obj);
 SEL   rbobj_to_nssel    (VALUE obj);
 BOOL  rbobj_to_nsobj    (VALUE obj, id* nsobj);
 BOOL  rbobj_to_bool     (VALUE obj);
+id    rbstr_to_ocstr    (VALUE obj);
 
 VALUE    sel_to_rbobj (SEL val);
 VALUE    int_to_rbobj (int val);
@@ -40,6 +41,7 @@ VALUE   uint_to_rbobj (unsigned int val);
 VALUE double_to_rbobj (double val);
 VALUE   bool_to_rbobj (BOOL val);
 VALUE   ocid_to_rbobj (VALUE context_obj, id ocid);
+VALUE  ocstr_to_rbstr (id ocstr);
 
 BOOL  ocdata_to_rbobj (VALUE context_obj,
 		       int octype, const void* ocdata, VALUE* result);
