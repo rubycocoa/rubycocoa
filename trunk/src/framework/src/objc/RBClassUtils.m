@@ -123,7 +123,7 @@ static void class_map_dic_add (const char* name, VALUE kls)
   NSString* kls_name;
   NSNumber* kls_value;
 
-  kls_name = [[NSString alloc] initWithCString: name];
+  kls_name = [[NSString alloc] initWithUTF8String: name];
   kls_value = [[NSNumber alloc] initWithUnsignedLong: kls];
   [class_dic_name_to_value() setObject: kls_value forKey: kls_name];
   [class_dic_value_to_name() setObject: kls_name forKey: kls_value];

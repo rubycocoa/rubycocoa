@@ -28,7 +28,7 @@ static char* rb_main_path(const char* rb_main_name)
   id pool = [[NSAutoreleasePool alloc] init];
   NSBundle* bundle = [NSBundle mainBundle];
   if (rb_main_name == NULL) rb_main_name = RUBY_MAIN_NAME;
-  path = [NSString stringWithCString: rb_main_name];
+  path = [NSString stringWithUTF8String: rb_main_name];
   result = strdup([[bundle pathForResource: path ofType: nil] fileSystemRepresentation]);
   [pool release];
   return result;

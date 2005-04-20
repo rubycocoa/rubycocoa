@@ -58,7 +58,7 @@ osx_mf_objc_derived_class_new(VALUE mdl, VALUE kls, VALUE kls_name, VALUE super_
   kls_name = rb_obj_as_string(kls_name);
   super_name = rb_obj_as_string(super_name);
   super_class = NSClassFromString([NSString 
-				    stringWithCString: STR2CSTR(super_name)]);
+				    stringWithUTF8String: STR2CSTR(super_name)]);
   if (super_class)
     new_cls = RBObjcDerivedClassNew(kls, STR2CSTR(kls_name), super_class);
   [pool release];
@@ -241,7 +241,7 @@ ocobj_s_new(id ocid)
   pool = [[NSAutoreleasePool alloc] init];
 
   cls_name = [[ocid class] description];
-  obj = rb_funcall(rb_cls_ocobj([cls_name cString]), 
+  obj = rb_funcall(rb_cls_ocobj([cls_name UTF8String]), 
 		   rb_intern("new_with_ocid"), 1, OCID2NUM(ocid));
   // add_attachments(obj, ocid);
   [pool release];

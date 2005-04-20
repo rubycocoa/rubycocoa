@@ -66,7 +66,7 @@ oc_err_new(id rcv, SEL sel, NSException* nsexcp)
   if (klass == Qnil) klass = _oc_exception_class ("OCException");
   pool = [[NSAutoreleasePool alloc] init];
   snprintf(buf, BUFSIZ, "%s#%s - %s - %s",
-	   rcv->isa->name, (char*)sel, [[nsexcp name] cString], [[nsexcp reason] cString]);
+	   rcv->isa->name, (char*)sel, [[nsexcp name] UTF8String], [[nsexcp reason] UTF8String]);
   [pool release];
   return rb_funcall(klass, rb_intern("new"), 2, ocid_to_rbobj(Qnil, nsexcp), rb_str_new2(buf));
 }
