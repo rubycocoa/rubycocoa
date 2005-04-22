@@ -1,3 +1,13 @@
+2005-04-22  kimura wataru <kimuraw@i.nifty.jp>
+
+	* framework/src/objc/overridemixin.m:
+
+	KVC support: add override valueForUndefinedKey: and setValue:forUndefinedkey:
+
+	* framework/src/ruby/osx/objc/oc_import.rb:
+
+	KVC support: add module OSX::NSKeyValueCodingAttachment
+
 2005-04-20  kimura wataru <kimuraw@i.nifty.jp>
 
 	* framework/src/objc/RBClassUtils.m, framework/src/objc/RBRuntime.m, framework/src/objc/cls_objcid.m, framework/src/objc/mdl_objwrapper.m, framework/src/objc/mdl_osxobjc.m,

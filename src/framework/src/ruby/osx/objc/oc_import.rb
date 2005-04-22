@@ -59,6 +59,7 @@ module OSX
       kls_name = self.name.split('::')[-1]
       occls = OSX.objc_derived_class_new(self, kls_name, spr_name)
       self.instance_eval "@ocid = #{occls.__ocid__}",__FILE__,__LINE__+1
+      self.extend NSKeyValueCodingAttachment
       @inherited = true
     end
 
@@ -91,5 +92,48 @@ module OSX
     alias_method :ib_outlets, :ns_outlets
 
   end				# module OSX::NSBehaviorAttachment
+
+  module NSKeyValueCodingAttachment
+
+    # invoked from valueForUndefinedKey: of a Cocoa object
+    def rbValueForKey(key)
+      if m = kvc_getter_method(key.to_s)
+	return send(m)
+      else
+	super.valueForUndefinedKey(key)
+      end
+    end
+
+    # invoked from setValue:forUndefinedKey: of a Cocoa object
+    def rbSetValue_forKey(value, key)
+      if m = kvc_setter_method(key.to_s)
+	willChangeValueForKey(key)
+	send(m, value)
+	didChangeValueForKey(key)
+      else
+	super.setValue_forUndefinedKey(value, key)
+      end
+    end
+
+    private
+    
+    # find accesor for key-value coding
+    # "key" must be a ruby string
+
+    def kvc_getter_method(key)
+      [key, key + '?'].each do |m|
+	return m if respond_to? m
+      end
+      return nil # accessor not found
+    end
+ 
+    def kvc_setter_method(key)
+      [key + '='].each do |m|
+	return m if respond_to? m
+      end
+      return nil
+    end
+
+  end				# module OSX::NSKeyValueCodingAttachment
 
 end				# module OSX
