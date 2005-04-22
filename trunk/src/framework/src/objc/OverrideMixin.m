@@ -208,6 +208,28 @@ static id imp_forwardInvocation (id rcv, SEL method, NSInvocation* arg0)
   return nil;
 }
 
+static id imp_valueForUndefinedKey (id rcv, SEL method, NSString* key)
+{
+  id ret = nil;
+  id slave = get_slave(rcv);
+
+  if ([slave respondsToSelector: @selector(rbValueForKey:)])
+    ret = (id)[slave rbValueForKey: key];
+  else
+    ret = (id)[[rcv superclass] valueForUndefinedKey: key];
+  return ret;
+}
+
+static void imp_setValue_forUndefinedKey (id rcv, SEL method, id value, NSString* key)
+{
+  id slave = get_slave(rcv);
+
+  if ([slave respondsToSelector: @selector(rbSetValue:forKey:)])
+    [slave rbSetValue: value forKey: key];
+  else
+    [[rcv superclass] setValue: value forUndefinedKey: key];
+}
+
 /**
  * class methods implementation
  **/
@@ -282,6 +304,8 @@ static const char* imp_method_names[] = {
   "respondsToSelector:",
   "methodSignatureForSelector:",
   "forwardInvocation:",
+  "valueForUndefinedKey:",
+  "setValue:forUndefinedKey:",
 };
 
 static struct objc_method imp_methods[] = {
@@ -304,6 +328,14 @@ static struct objc_method imp_methods[] = {
   { NULL,
     "v8@4:8@12",
     (IMP)imp_forwardInvocation
+  },
+  { NULL,
+    "@12@0:4@8",
+    (IMP)imp_valueForUndefinedKey
+  },
+  { NULL,
+    "v16@0:4@8@12",
+    (IMP)imp_setValue_forUndefinedKey
   },
 };
 
