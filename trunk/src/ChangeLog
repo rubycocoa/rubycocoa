@@ -1,3 +1,9 @@
+2005-04-28  kimura wataru <kimuraw@i.nifty.jp>
+
+	* framework/src/ruby/osx/objc/oc_import.rb:
+
+	include OSX::NSKeyValueCodingAttachment, not extend
+
 2005-04-22  kimura wataru <kimuraw@i.nifty.jp>
 
 	* framework/src/objc/overridemixin.m:
