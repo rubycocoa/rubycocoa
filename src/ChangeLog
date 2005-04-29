@@ -1,3 +1,8 @@
+2005-04-29  kimura wataru <kimuraw@i.nifty.jp>
+
+	* ext/osxobjc/extconf.rb.in:
+	fix: wrong change at 2005-04-18
+
 2005-04-28  kimura wataru <kimuraw@i.nifty.jp>
 
 	* framework/src/ruby/osx/objc/oc_import.rb:
