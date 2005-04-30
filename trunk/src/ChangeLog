@@ -1,3 +1,9 @@
+2005-04-30  kimura wataru <kimuraw@i.nifty.jp>
+
+	* framework/src/ruby/osx/objc/oc_import.rb:
+
+	add kvc_accessor, kvc_reader and kvc_writer. suggested by Jonathan Paisley.
+
 2005-04-29  kimura wataru <kimuraw@i.nifty.jp>
 
 	* ext/osxobjc/extconf.rb.in:
