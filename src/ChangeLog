@@ -3,6 +3,7 @@
 	* framework/src/ruby/osx/objc/oc_import.rb:
 
 	add kvc_accessor, kvc_reader and kvc_writer. suggested by Jonathan Paisley.
+	fix: inifinit loop when kvc-accessor is not found.
 
 2005-04-29  kimura wataru <kimuraw@i.nifty.jp>
 

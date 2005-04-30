@@ -114,7 +114,7 @@ module OSX
       if m = kvc_getter_method(key.to_s)
 	return send(m)
       else
-	super.valueForUndefinedKey(key)
+	kvc_accessor_notfound(key)
       end
     end
 
@@ -125,7 +125,7 @@ module OSX
 	send(m, value)
 	didChangeValueForKey(key)
       else
-	super.setValue_forUndefinedKey(value, key)
+	kvc_accessor_notfound(key)
       end
     end
 
@@ -146,6 +146,11 @@ module OSX
 	return m if respond_to? m
       end
       return nil
+    end
+
+    def kvc_accessor_notfound(key)
+      fmt = '%s: this class is not key value coding-compliant for the key "%s"'
+      raise sprintf(fmt, self.class, key.to_s)
     end
 
   end				# module OSX::NSKeyValueCodingAttachment
