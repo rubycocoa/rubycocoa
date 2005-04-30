@@ -60,6 +60,7 @@ module OSX
       occls = OSX.objc_derived_class_new(self, kls_name, spr_name)
       self.instance_eval "@ocid = #{occls.__ocid__}",__FILE__,__LINE__+1
       include NSKeyValueCodingAttachment
+      self.extend NSKVCBehaviorAttachment
       @inherited = true
     end
 
@@ -93,7 +94,20 @@ module OSX
 
   end				# module OSX::NSBehaviorAttachment
 
+  module NSKVCAccessorUtil
+    private
+
+    def kvc_internal_setter(key)
+      return '_kvc_internal_' + key.to_s + '=' 
+    end
+
+    def kvc_setter_wrapper(key)
+      return '_kvc_wrapper_' + key.to_s + '=' 
+    end
+  end				# module OSX::NSKVCAccessorUtil
+
   module NSKeyValueCodingAttachment
+    include NSKVCAccessorUtil
 
     # invoked from valueForUndefinedKey: of a Cocoa object
     def rbValueForKey(key)
@@ -128,12 +142,54 @@ module OSX
     end
  
     def kvc_setter_method(key)
-      [key + '='].each do |m|
+      [kvc_internal_setter(key), key + '='].each do |m|
 	return m if respond_to? m
       end
       return nil
     end
 
   end				# module OSX::NSKeyValueCodingAttachment
+
+  module NSKVCBehaviorAttachment
+    include NSKVCAccessorUtil
+
+    def kvc_reader(*args)
+      attr_reader(*args)
+    end
+
+    def kvc_writer(*args)
+      args.each do |key|
+	setter = key.to_s + '='
+	attr_writer(key) unless method_defined?(setter)
+	alias_method kvc_internal_setter(key), setter
+	self.class_eval <<-EOE_KVC_WRITER,__FILE__,__LINE__+1
+	  def #{kvc_setter_wrapper(key)}(value)
+	    willChangeValueForKey('#{key.to_s}')
+	    send('#{kvc_internal_setter(key)}', value)
+	    didChangeValueForKey('#{key.to_s}')
+	  end
+	EOE_KVC_WRITER
+	alias_method setter, kvc_setter_wrapper(key)
+      end
+    end
+
+    def kvc_accessor(*args)
+      kvc_reader(*args)
+      kvc_writer(*args)
+    end
+
+    # re-wrap at overriding setter method
+    def method_added(sym)
+      return unless sym.to_s =~ /\A([^=]+)=\z/
+      key = $1
+      setter = kvc_internal_setter(key)
+      wrapper = kvc_setter_wrapper(key)
+      return unless method_defined?(setter) && method_defined?(wrapper)
+      return if instance_method(wrapper) == instance_method(sym)
+      alias_method setter, sym
+      alias_method sym, wrapper
+    end
+
+  end				# module OSX::NSKVCBehaviorAttachment
 
 end				# module OSX
