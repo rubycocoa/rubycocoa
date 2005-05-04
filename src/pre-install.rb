@@ -4,7 +4,9 @@ install_root = @config['install-root']
 backup_dir = '/tmp/rubycocoa_backup'
 
 # Install ProjectBuilder Templates 
-pbextras_dir = File.expand_path("#{install_root}#{@config['projectbuilder-extras']}")
+pbextras_dir = 
+  @config['projectbuilder-extras'] ?
+    File.expand_path("#{install_root}#{@config['projectbuilder-extras']}") : nil
 xcodeextras_dir = 
   @config['xcode-extras'] ?
     File.expand_path("#{install_root}#{@config['xcode-extras']}") : nil

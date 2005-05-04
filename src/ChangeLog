@@ -1,3 +1,8 @@
+2005-05-04  kimura wataru <kimuraw@i.nifty.jp>
+
+	* pre-install.rb:
+	fix installataion of Project Builder's templates.
+
 2005-04-30  kimura wataru <kimuraw@i.nifty.jp>
 
 	* framework/src/ruby/osx/objc/oc_import.rb:
