@@ -19,9 +19,9 @@ module OSX
       const_name = sym.to_s
       sym_name = ":#{sym}"
       OSX.module_eval <<-EOE_NS_IMPORT,__FILE__,__LINE__+1
-        clsobj = NSClassFromString(#{sym_name})
-        rbcls = class_new_for_occlass(clsobj)
-        #{const_name} = rbcls if rbcls
+	clsobj = NSClassFromString(#{sym_name})
+	rbcls = class_new_for_occlass(clsobj)
+	#{const_name} = rbcls if rbcls
       EOE_NS_IMPORT
     end
   end
@@ -181,6 +181,65 @@ module OSX
     def kvc_accessor(*args)
       kvc_reader(*args)
       kvc_writer(*args)
+    end
+
+    # Define accessors that send change notifications for an array.
+    # The array instance variable must respond to the following methods:
+    #
+    #  length
+    #  [index]
+    #  [index]=
+    #  insert(index,obj)
+    #  delete_at(index)
+    #
+    # Notifications are only sent for accesses through the Cocoa methods:
+    #  countOfKey, objectInKeyAtIndex_, insertObject_inKeyAtIndex_,
+    #  removeObjectFromKeyAtIndex_, replaceObjectInKeyAtIndex_withObject_
+    #
+    def kvc_array_accessor(*args)
+      args.each do |key|
+	keyname = key.to_s
+	keyname[0..0] = keyname[0..0].upcase
+	self.addRubyMethod_withType("countOf#{keyname}".to_sym, "i4@8:12")
+	self.addRubyMethod_withType("objectIn#{keyname}AtIndex:".to_sym, "@4@8:12i16")
+	self.addRubyMethod_withType("insertObject:in#{keyname}AtIndex:".to_sym, "@4@8:12@16i20")
+	self.addRubyMethod_withType("removeObjectFrom#{keyname}AtIndex:".to_sym, "@4@8:12i16")
+	self.addRubyMethod_withType("replaceObjectIn#{keyname}AtIndex:withObject:".to_sym, "@4@8:12i16@20")
+	# get%s:range: - unimplemented. You can implement this method for performance improvements.
+	self.class_eval <<-EOT,__FILE__,__LINE__+1
+	  def countOf#{keyname}()
+	    return @#{key.to_s}.length
+	  end
+
+	  def objectIn#{keyname}AtIndex(index)
+	    return @#{key.to_s}[index]
+	  end
+
+	  def insertObject_in#{keyname}AtIndex(obj, index)
+	    indexes = OSX::NSIndexSet.indexSetWithIndex(index)
+	    willChange_valuesAtIndexes_forKey(OSX::NSKeyValueChangeInsertion, indexes, #{key.inspect})
+	    @#{key.to_s}.insert(index, obj)
+	    didChange_valuesAtIndexes_forKey(OSX::NSKeyValueChangeInsertion, indexes, #{key.inspect})
+	    nil
+	  end
+
+	  def removeObjectFrom#{keyname}AtIndex(index)
+	    indexes = OSX::NSIndexSet.indexSetWithIndex(index)
+	    willChange_valuesAtIndexes_forKey(OSX::NSKeyValueChangeRemoval, indexes, #{key.inspect})
+	    @#{key.to_s}.delete_at(index)
+	    didChange_valuesAtIndexes_forKey(OSX::NSKeyValueChangeRemoval, indexes, #{key.inspect})
+	    nil
+	  end
+
+	  def replaceObjectIn#{keyname}AtIndex_withObject(index, obj)
+	    indexes = OSX::NSIndexSet.indexSetWithIndex(index)
+	    willChange_valuesAtIndexes_forKey(OSX::NSKeyValueChangeReplacement, indexes, #{key.inspect})
+	    @#{key.to_s}[index] = obj
+	    didChange_valuesAtIndexes_forKey(OSX::NSKeyValueChangeReplacement, indexes, #{key.inspect})
+	    nil
+	  end
+	EOT
+      end
     end
 
     # re-wrap at overriding setter method
