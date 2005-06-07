@@ -285,6 +285,20 @@ static id imp_c_addRubyMethod(Class klass, SEL method, SEL arg0)
   return nil;
 }
 
+static id imp_c_addRubyMethod_withType(Class klass, SEL method, SEL arg0, const char *type)
+{
+  struct objc_method_list* mlp = method_list_alloc(1);
+
+  // add method
+  mlp->method_list[0].method_name = sel_registerName(arg0);
+  mlp->method_list[0].method_types = strdup(type);
+  mlp->method_list[0].method_imp = handle_ruby_method;
+  mlp->method_count += 1;
+
+  class_addMethods(klass, mlp);
+  return nil;
+}
+
 
 
 static struct objc_ivar imp_ivars[] = {
@@ -298,6 +312,9 @@ static struct objc_ivar imp_ivars[] = {
   }                             // } ivar_list[1];
 };
 
+/**
+ *  instance methods
+ **/
 static const char* imp_method_names[] = {
   "__slave__",
   "__rbobj__",
@@ -340,10 +357,14 @@ static struct objc_method imp_methods[] = {
 };
 
 
+/**
+ *  class methods
+ **/
 static const char* imp_c_method_names[] = {
   "alloc",
   "allocWithZone:",
-  "addRubyMethod:"
+  "addRubyMethod:",
+  "addRubyMethod:withType:",
 };
 
 static struct objc_method imp_c_methods[] = {
@@ -358,6 +379,10 @@ static struct objc_method imp_c_methods[] = {
   { NULL,
     "@4@4:8:12",
     (IMP)imp_c_addRubyMethod
+  },
+  { NULL,
+    "@4@4:8:12*16",
+    (IMP)imp_c_addRubyMethod_withType
   }
 };
 
