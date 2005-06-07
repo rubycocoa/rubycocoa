@@ -1,3 +1,11 @@
+2005-06-07  kimura wataru <kimuraw@i.nifty.jp>
+
+	* framework/src/ruby/osx/objc/oc_import.rb:
+	add kvc_array_accessor. patch from Jonathan Paisley.
+
+	* framework/src/objc/OverrideMixin.m:
+	add method +[(id) addRubyMethod:withType]. patch from Jonathan Paisley.
+
 2005-05-04  kimura wataru <kimuraw@i.nifty.jp>
 
 	* pre-install.rb:
