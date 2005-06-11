@@ -54,7 +54,7 @@ module OSX
     # initializer for definition of a derived class of a class on
     # Objective-C World.
     def ns_inherited()
-      return if @inherited
+      return if defined?(@inherited) && @inherited
       spr_name = superclass.name.split('::')[-1]
       kls_name = self.name.split('::')[-1]
       occls = OSX.objc_derived_class_new(self, kls_name, spr_name)
