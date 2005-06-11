@@ -3,6 +3,9 @@
 	* tests/tc_subclass.rb:
 	add test for +[(id) addRubyMethod:withType:]
 
+	* framework/src/ruby/osx/objc/oc_import.rb:
+	suppress warning "@inherited not initialized" in debug mode.
+
 2005-06-07  kimura wataru <kimuraw@i.nifty.jp>
 
 	* framework/src/ruby/osx/objc/oc_import.rb:
