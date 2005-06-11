@@ -53,4 +53,14 @@ class TC_SubClass < Test::Unit::TestCase
     assert_equal( 12345.to_s, obj.instance_eval{ @dummy_outlet } )
   end
 
+  def test_addmethod
+    obj = SubClassA.alloc.init
+    assert_raise( NameError ) { obj.unknownMethod('dummy') }
+    SubClassA.module_eval <<-EOS
+      addRubyMethod_withType('unknownMethod:', 'i4@8@12' )
+      def unknownMethod(text) return 123 end
+    EOS
+    assert_equal( 123, obj.unknownMethod('dummy') )
+  end
+
 end
