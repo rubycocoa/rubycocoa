@@ -735,11 +735,11 @@ rbobj_to_ocdata(VALUE obj, int octype, void* ocdata)
 
 static NSStringEncoding kcode_to_nsencoding(const char* kcode) 
 { 
-  if (kcode == "UTF8")
+  if (strcmp(kcode, "UTF8") == 0)
     return NSUTF8StringEncoding;
-  else if (kcode == "SJIS")
+  else if (strcmp(kcode, "SJIS") == 0)
     return CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingMacJapanese);
-  else if (kcode == "EUC")
+  else if (strcmp(kcode, "EUC") == 0)
     return NSJapaneseEUCStringEncoding;
   else // "NONE"
     return NSUTF8StringEncoding;
