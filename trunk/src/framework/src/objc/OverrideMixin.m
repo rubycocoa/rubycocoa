@@ -216,7 +216,7 @@ static id imp_valueForUndefinedKey (id rcv, SEL method, NSString* key)
   if ([slave respondsToSelector: @selector(rbValueForKey:)])
     ret = (id)[slave rbValueForKey: key];
   else
-    ret = (id)[[rcv superclass] valueForUndefinedKey: key];
+    ret = [rcv performSelector: super_selector(method) withObject: key];
   return ret;
 }
 
@@ -227,7 +227,7 @@ static void imp_setValue_forUndefinedKey (id rcv, SEL method, id value, NSString
   if ([slave respondsToSelector: @selector(rbSetValue:forKey:)])
     [slave rbSetValue: value forKey: key];
   else
-    [[rcv superclass] setValue: value forUndefinedKey: key];
+    [rcv performSelector: super_selector(method) withObject: value withObject: key];
 }
 
 /**
