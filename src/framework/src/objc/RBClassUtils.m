@@ -10,13 +10,9 @@
  *
  **/
 
-#import "RBClassUtils.h"
 #import <Foundation/Foundation.h>
-
+#import "RBClassUtils.h"
 #import <objc/objc.h>
-#import <objc/objc-class.h>
-#import <objc/objc-runtime.h>
-
 #import "RBObject.h"
 #import "OverrideMixin.h"
 #import "ocdata_conv.h"
@@ -24,9 +20,10 @@
 
 static void* alloc_from_default_zone(unsigned int size)
 {
-  return NSZoneMalloc(NSDefaultMallocZone(), size);
+  return NSZoneCalloc(NSDefaultMallocZone(), 1, size);
 }
 
+#ifndef GNUSTEP
 static struct objc_method_list** method_list_alloc(int cnt)
 {
   int i;
@@ -37,25 +34,22 @@ static struct objc_method_list** method_list_alloc(int cnt)
   mlp[cnt-1] = (struct objc_method_list*)-1; // END_OF_METHODS_LIST
   return mlp;
 }
+#endif
 
 static Class objc_class_alloc(const char* name, Class super_class)
 {
   Class c = alloc_from_default_zone(sizeof(struct objc_class));
   Class isa = alloc_from_default_zone(sizeof(struct objc_class));
-  struct objc_method_list **mlp0, **mlp1;
-  mlp0 = method_list_alloc(16);
-  mlp1 = method_list_alloc(4);
 
+  fprintf(stderr, "objc_class_alloc(%s)\n", name);
   c->isa = isa;
   c->super_class = super_class;
   c->name = strdup(name);
-  c->version = 0;
   c->info = CLS_CLASS + CLS_METHOD_ARRAY;
   c->instance_size = super_class->instance_size;
-  c->ivars = NULL;
-  c->methodLists = mlp0;
-  c->cache = NULL;
-  c->protocols = NULL;
+#ifndef GNUSTEP
+  c->methodLists = method_list_alloc(16);
+#endif
 
   isa->isa = super_class->isa->isa;
   isa->super_class = super_class->isa;
@@ -63,10 +57,18 @@ static Class objc_class_alloc(const char* name, Class super_class)
   isa->version = 5;
   isa->info = CLS_META + CLS_INITIALIZED + CLS_METHOD_ARRAY;
   isa->instance_size = super_class->isa->instance_size;
-  isa->ivars = NULL;
-  isa->methodLists = mlp1;
-  isa->cache = NULL;
-  isa->protocols = NULL;
+#ifndef GNUSTEP
+  isa->methodLists = method_list_alloc(4);
+#endif
+
+  /*
+   * GNUstep must have the class method hash tables initialized before
+   * adding any methods.
+   */
+#ifdef GNUSTEP
+  __objc_install_premature_dtable (c);
+  __objc_install_premature_dtable (isa);
+#endif
   return c;
 }
 

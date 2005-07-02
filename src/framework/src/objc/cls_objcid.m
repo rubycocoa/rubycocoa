@@ -1,3 +1,4 @@
+
 /** -*-objc-*-
  *
  *   $Id$
@@ -9,12 +10,11 @@
  *   the GNU Lesser General Public License version 2.
  *
  **/
-
+#import <Foundation/Foundation.h>
 #import "cls_objcid.h"
 
 #import "osx_ruby.h"
 #import "ocdata_conv.h"
-#import <Foundation/Foundation.h>
 #import <string.h>
 #import <stdlib.h>
 #import "RBObject.h"
@@ -26,7 +26,7 @@ _objcid_data_free(struct _objcid_data* dp)
 {
   id pool = [[NSAutoreleasePool alloc] init];
   if (dp != NULL) {
-    if (dp->ocid != nil)
+    if (dp->ocid != nil && !CLS_ISMETA(dp->ocid->isa))
       [dp->ocid release];
     free(dp);
   }
@@ -42,17 +42,15 @@ _objcid_data_new()
   return dp;
 }
 
-static void
-_objcid_initialize_for_new_with_ocid(int argc, VALUE* argv, VALUE rcv)
+VALUE
+objcid_new(VALUE klass, id ocid, BOOL retain)
 {
-  VALUE arg_ocid;
-
-  rb_scan_args(argc, argv, "10", &arg_ocid);
-  if (arg_ocid != Qnil) {
-    id ocid = (id) NUM2UINT(arg_ocid);
-    [ocid retain];
-    OBJCID_DATA_PTR(rcv)->ocid = ocid;
-  }
+    VALUE obj = Data_Wrap_Struct(klass, 0, _objcid_data_free, _objcid_data_new());
+    OBJCID_DATA_PTR(obj)->ocid = ocid;
+    if( retain && !CLS_ISMETA(ocid->isa) )
+	[ocid retain];
+    rb_obj_call_init(obj, 0, 0);
+    return obj;
 }
 
 static VALUE
@@ -60,21 +58,6 @@ objcid_s_new(int argc, VALUE* argv, VALUE klass)
 {
   VALUE obj;
   obj = Data_Wrap_Struct(klass, 0, _objcid_data_free, _objcid_data_new());
-  rb_obj_call_init(obj, argc, argv);
-  return obj;
-}
-
-static VALUE
-objcid_s_new_with_ocid(int argc, VALUE* argv, VALUE klass)
-{
-  VALUE obj;
-  obj = Data_Wrap_Struct(klass, 0, _objcid_data_free, _objcid_data_new());
-  _objcid_initialize_for_new_with_ocid(argc, argv, obj);
-  if (argc > 0) {
-    argc--;
-    argv++;
-    if (argc == 0) argv = NULL;
-  }
   rb_obj_call_init(obj, argc, argv);
   return obj;
 }
@@ -125,7 +108,6 @@ init_cls_ObjcID(VALUE outer)
   _kObjcID = rb_define_class_under(outer, "ObjcID", rb_cObject);
 
   rb_define_singleton_method(_kObjcID, "new", objcid_s_new, -1);
-  rb_define_singleton_method(_kObjcID, "new_with_ocid", objcid_s_new_with_ocid, -1);
 
   rb_define_method(_kObjcID, "initialize", objcid_initialize, -1);
   rb_define_method(_kObjcID, "__ocid__", objcid_ocid, 0);

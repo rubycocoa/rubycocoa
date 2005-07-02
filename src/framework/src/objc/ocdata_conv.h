@@ -9,8 +9,31 @@
  *   the GNU Lesser General Public License version 2.
  *
  **/
-
-#import <objc/objc-class.h>
+#ifdef GNUSTEP
+#	import <objc/objc-api.h>
+#	define isa 			class_pointer
+#	define Method			Method_t
+#	define class_getInstanceMethod	class_get_instance_method
+#	define class_createInstanceFromZone(class, extra, zone) \
+	class_create_instance(class)
+	extern void class_add_method_list (Class class, MethodList_t list);
+#	undef sel_getUid
+#	define sel_getUid(name)		(SEL)name
+#	define CLS_CLASS 	(_CLS_CLASS|_CLS_RESOLV)
+#	define CLS_META		(_CLS_META|_CLS_RESOLV)
+#	define CLS_METHOD_ARRAY	0
+#	define CLS_INITIALIZED	_CLS_INITIALIZED
+#	define CLS_GETINFO(c,m)	((c)->info&(m))
+#	define methodLists	methods
+#	define objc_addClass	__objc_add_class_to_hash
+	extern void class_add_method_list (Class class, MethodList_t list);
+	extern void __objc_add_class_to_hash(Class);
+	extern void __objc_install_premature_dtable(Class);
+#else
+#	import <objc/objc-class.h>
+#	import <objc/objc-runtime.h>
+#	define CLS_ISMETA(c)	((c)->info&CLS_META)
+#endif
 #import <stdarg.h>
 #import "osx_ruby.h"
 
@@ -42,6 +65,7 @@ VALUE double_to_rbobj (double val);
 VALUE   bool_to_rbobj (BOOL val);
 VALUE   ocid_to_rbobj (VALUE context_obj, id ocid);
 VALUE  ocstr_to_rbstr (id ocstr);
+VALUE      objcid_new (VALUE klass, id ocid, BOOL retain);
 
 BOOL  ocdata_to_rbobj (VALUE context_obj,
 		       int octype, const void* ocdata, VALUE* result);

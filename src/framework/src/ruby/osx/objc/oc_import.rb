@@ -19,9 +19,13 @@ module OSX
       const_name = sym.to_s
       sym_name = ":#{sym}"
       OSX.module_eval <<-EOE_NS_IMPORT,__FILE__,__LINE__+1
-	clsobj = NSClassFromString(#{sym_name})
-	rbcls = class_new_for_occlass(clsobj)
-	#{const_name} = rbcls if rbcls
+	      clsobj = NSClassFromString(#{sym_name})
+        if clsobj then
+          rbcls = class_new_for_occlass(clsobj)
+          #{const_name} = rbcls if rbcls
+        else
+          $stderr.puts "ns_import: unknown class #{sym_name}"
+        end
       EOE_NS_IMPORT
     end
   end

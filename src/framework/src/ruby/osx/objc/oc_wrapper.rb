@@ -15,7 +15,6 @@ module OSX
     def method_missing(mname, *args)
       m_name, m_args, m_predicate = analyze_missing(mname, args)
       ret = self.ocm_send(m_name, *m_args)
-      ret.ocm_send(:release) if occur_ownership?(ret, m_name)
       ret = (ret != 0) if m_predicate
       ret
     end
@@ -89,15 +88,6 @@ module OSX
 	m_name.sub!(/[^_:]$/, '\0_') if m_args.size > 0
       end
       [ m_name, m_args, m_predicate ]
-    end
-
-    def occur_ownership?(obj, m_name)
-      obj.is_a?(OSX::OCObjWrapper) &&
-	(m_name =~ /^alloc/ ||
-	 m_name =~ /^new/ ||
-	 m_name =~ /^retain/ ||
-	 m_name =~ /^copy/ ||
-	 m_name =~ /^mutableCopy/)
     end
 
   end

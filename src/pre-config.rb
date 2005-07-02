@@ -5,6 +5,7 @@ target_files = %w[
   ext/rubycocoa/extconf.rb
   ext/rubycocoa/rubycocoa.m
   framework/RubyCocoa.pbproj/project.pbxproj
+  framework/GNUmakefile
   framework/src/objc/RBObject.h
   framework/src/objc/RBSlaveObject.h
   framework/src/objc/RubyCocoa.h
@@ -15,6 +16,7 @@ config_ary = [
   [ :frameworks,      @config['frameworks'] ],
   [ :framework_name,  @config['framework-name'] ],
   [ :ruby_header_dir, @config['ruby-header-dir'] ],
+  [ :std_ruby,        @config['std-ruby'] ],
   [ :libruby_path,    @config['libruby-path'] ],
   [ :libruby_path_dirname,  File.dirname(@config['libruby-path']) ],
   [ :libruby_path_basename, File.basename(@config['libruby-path']) ],
