@@ -1,0 +1,25 @@
+require 'mkmf'
+
+def command(cmd)
+  $stderr.puts "execute '#{cmd}' ..."
+  raise(RuntimeError, cmd) unless system(cmd)
+  $stderr.puts "execute '#{cmd}' done"
+end
+
+# Modify mkmf.rb to create a default compile rule for .m files
+system "sed -e 's/%w\\[c]/%w[c m]/' -e 's/^$extmk = .*/$extmk = false/' < %%%std_ruby%%%/mkmf.rb > mkmf.rb"
+
+require './mkmf'
+
+if File.exists?("/System/Library") then
+  $CFLAGS  = ""
+  $LDFLAGS = "-F../../framework/build -F../../framework/build/Default -framework %%%framework_name%%%"
+else
+  $CFLAGS  = "-I../../framework/build/derived_src"
+  $LDFLAGS = "-L../../framework/build/%%%framework_name%%%.framework/Versions/Current -l%%%framework_name%%% -Wl,-rpath -Wl,#{ENV['GNUSTEP_ROOT']}/Local/Library/Libraries"
+end
+
+
+create_makefile('rubycocoa')
+command "mv -f Makefile Makefile.bak"
+command "sed -e 's/-no-cpp-precomp//' -e 's/-no-precomp//' Makefile.bak > Makefile"
