@@ -9,7 +9,6 @@
  *   the GNU Lesser General Public License version 2.
  *
  **/
-#import <objc/objc-class.h>
 #import <Foundation/NSObject.h>
 
 long override_mixin_ivar_list_size();

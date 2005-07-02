@@ -9,14 +9,13 @@
  *   the GNU Lesser General Public License version 2.
  *
  **/
-
-#import "RBRuntime.h"
-#import "RBObject.h"
-#import <string.h>
 #import <Foundation/NSBundle.h>
 #import <Foundation/NSAutoreleasePool.h>
 #import <Foundation/NSString.h>
 #import <Foundation/NSPathUtilities.h>
+#import "RBRuntime.h"
+#import "RBObject.h"
+#import <string.h>
 #import "mdl_osxobjc.h"
 
 #define RUBY_MAIN_NAME "rb_main.rb"

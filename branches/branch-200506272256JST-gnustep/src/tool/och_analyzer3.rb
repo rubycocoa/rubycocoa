@@ -17,7 +17,13 @@ end
 unless defined? CPP
   raise "cpp not found"
 end
-CPPFLAGS = "-x objective-c -D__GNUC__ -D__APPLE_CPP__"
+if File.exists?('/System/Library/Frameworks')
+  CPPFLAGS = "-x objective-c -D__GNUC__ -D__APPLE_CPP__"
+  RE_FRAMEWORK = /\b(\w+)\.framework\b/
+else
+  CPPFLAGS = "-x objective-c -DGNUSTEP -I"+ENV['GNUSTEP_ROOT']+"/System/Library/Headers"
+  RE_FRAMEWORK = /Headers\/(\w+)\/(\w+)\.h/
+end
 
 class OCHeaderAnalyzer
 
@@ -27,7 +33,7 @@ class OCHeaderAnalyzer
     @path = path
     @cpp_result = OCHeaderAnalyzer.do_cpp(path)
     @externname = "extern"
-    if ma = /\b(\w+)\.framework\b/.match(path) then
+    if ma = RE_FRAMEWORK.match(path) then
       @framework = ma[1]
     end
   end
@@ -50,7 +56,7 @@ class OCHeaderAnalyzer
 
   def enums
     if @enums.nil? then
-      re = /\benum\b.*\{([^}]*)\}/
+      re = /\benum\s+\w*\s*\{([^}]*)\}/
       @enums = @cpp_result.scan(re).map {|m|
 	m[0].split(',').map {|i|
 	  i.split('=')[0].strip

@@ -10,16 +10,30 @@
  *
  **/
 
+#import <Foundation/Foundation.h>
 #import "mdl_osxobjc.h"
 #import "osx_ruby.h"
-#import <Foundation/Foundation.h>
 #import "RubyCocoa.h"
 #import "Version.h"
 #import "RBThreadSwitcher.h"
-#import "RBObject.h"
 #import "RBClassUtils.h"
 #import "ocdata_conv.h"
-#import <mach-o/dyld.h>
+#ifdef GNUSTEP
+#	import <dlfcn.h>
+#	define NSIsSymbolNameDefined(name) YES
+	typedef void *NSSymbol;
+	static void *NSLookupAndBindSymbol(const char *symbol) {
+	    static void *dlopenHandle;
+	    if( !dlopenHandle )
+		dlopenHandle = dlopen(0, 0);
+	    return dlsym(dlopenHandle, symbol);
+	}
+#	define NSAddressOfSymbol(sym)	sym
+#else
+#	import <objc/objc-class.h>
+#	import <objc/objc-runtime.h>
+#	import <mach-o/dyld.h>
+#endif
 #import <string.h>
 
 #define OSX_MODULE_NAME "OSX"
@@ -179,7 +193,7 @@ osx_mf_objc_symbol_to_obj(VALUE mdl, VALUE const_name, VALUE const_type)
 
   strncpy(buf+1, STR2CSTR(const_name), BUFSIZ - 1);
   buf[0] = '_';
-  if (NSIsSymbolNameDefined(buf) == FALSE)
+  if (NSIsSymbolNameDefined(buf) == NO)
     rb_raise(rb_eRuntimeError, "symbol '%s' not found.", STR2CSTR(const_name));
 
   sym = NSLookupAndBindSymbol(buf);
@@ -235,17 +249,7 @@ osx_s_module()
 VALUE
 ocobj_s_new(id ocid)
 {
-  VALUE obj;
-  id pool, cls_name;
-
-  pool = [[NSAutoreleasePool alloc] init];
-
-  cls_name = [[ocid class] description];
-  obj = rb_funcall(rb_cls_ocobj([cls_name UTF8String]), 
-		   rb_intern("new_with_ocid"), 1, OCID2NUM(ocid));
-  // add_attachments(obj, ocid);
-  [pool release];
-  return obj;
+  return objcid_new(rb_cls_ocobj(ocid->isa->name), ocid, YES);
 }
 
 id
@@ -273,19 +277,23 @@ ocid_get_rbobj (id ocid)
 {
   VALUE result = Qnil;
 
-  NS_DURING  
-    if ([ocid class] == [RBObject class])
-      result = [ocid __rbobj__];
-
-    else if ([ocid respondsToSelector: @selector(__rbobj__)])
-      result = [ocid __rbobj__];
-
-  NS_HANDLER
-    result = Qnil;
-
-  NS_ENDHANDLER
-
-  return result;
+  /*
+   * Don't check types of Class objects to avoid invoking
+   * initialize methods of all classes at startup time.
+   * Some AppKit classes don't like to be initialized before
+   * creating the NSApplication object.
+   */
+  if( !CLS_ISMETA(ocid->isa) ) {
+    NS_DURING
+      if ([ocid isKindOfClass: [RBObject class]])
+	result = [ocid __rbobj__];
+      else if ([ocid respondsToSelector: @selector(__rbobj__)])
+	result = [ocid __rbobj__];
+    NS_HANDLER
+      result = Qnil;
+    NS_ENDHANDLER
+  }
+ return result;
 }
 
 /******************/

@@ -12,27 +12,30 @@ xcodeextras_dir =
     File.expand_path("#{install_root}#{@config['xcode-extras']}") : nil
 pbtmpldir = "template/ProjectBuilder"
 
-[pbextras_dir, xcodeextras_dir].compact.each do |extras_dir|
-  [
-    [ "#{pbtmpldir}/File",
-      "#{extras_dir}/File Templates/Ruby" ],
+if @config['libtype'] == 'cocoa' then
+  [pbextras_dir, xcodeextras_dir].compact.each do |extras_dir|
+    [
+      [ "#{pbtmpldir}/File",
+        "#{extras_dir}/File Templates/Ruby" ],
 
-    [ "#{pbtmpldir}/Application/Cocoa-Ruby Application",
-      "#{extras_dir}/Project Templates/Application/Cocoa-Ruby Application" ],
+      [ "#{pbtmpldir}/Application/Cocoa-Ruby Application",
+        "#{extras_dir}/Project Templates/Application/Cocoa-Ruby Application" ],
 
-    [ "#{pbtmpldir}/Application/Cocoa-Ruby Document-based Application",
-      "#{extras_dir}/Project Templates/Application/Cocoa-Ruby Document-based Application" ],
+      [ "#{pbtmpldir}/Application/Cocoa-Ruby Document-based Application",
+        "#{extras_dir}/Project Templates/Application/Cocoa-Ruby Document-based Application" ],
 
-  ].each do |srcdir, dstdir|
-    if FileTest.exist?( dstdir ) then
-      backupname = File.basename( dstdir )
-      command "rm -rf '#{backup_dir}/#{backupname}'"
-      command "mkdir -p '#{backup_dir}'"
-      command "mv '#{dstdir}' '#{backup_dir}/'"
+    ].each do |srcdir, dstdir|
+      if FileTest.exist?( dstdir ) then
+        backupname = File.basename( dstdir )
+        command "rm -rf '#{backup_dir}/#{backupname}'"
+        command "mkdir -p '#{backup_dir}'"
+        command "mv '#{dstdir}' '#{backup_dir}/'"
+      end
+      command "mkdir -p '#{File.dirname(dstdir)}'"
+      command "cp -R '#{srcdir}' '#{dstdir}'"
     end
-    command "mkdir -p '#{File.dirname(dstdir)}'"
-    command "cp -R '#{srcdir}' '#{dstdir}'"
   end
+else
 end
 
 # Install Examples & Document

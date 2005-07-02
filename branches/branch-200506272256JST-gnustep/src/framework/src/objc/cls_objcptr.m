@@ -9,8 +9,8 @@
  *   the GNU Lesser General Public License version 2.
  *
  **/
-#import "cls_objcptr.h"
 #import <Foundation/Foundation.h>
+#import "cls_objcptr.h"
 
 static VALUE _kObjcPtr = Qnil;
 

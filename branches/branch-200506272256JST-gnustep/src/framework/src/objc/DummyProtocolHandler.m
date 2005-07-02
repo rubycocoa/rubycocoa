@@ -9,8 +9,9 @@
  *   the GNU Lesser General Public License version 2.
  *
  **/
+#import <Foundation/Foundation.h>
+#import <AppKit/AppKit.h>
 #import "DummyProtocolHandler.h"
-#import <Cocoa/Cocoa.h>
 
 @implementation DummyProtocolHandler
 
@@ -56,8 +57,10 @@
 - ( BOOL ) authenticateComponents : ( NSArray * ) components withData : ( NSData * ) signature { return NO; }
 - ( id ) createConversationForConnection : ( NSConnection * ) conn { return nil; }
 
+#ifndef GNUSTEP
 // @interface NSObject ( NSDistantObjectRequestMethods )
 - ( BOOL ) connection : ( NSConnection * ) connection handleRequest : ( NSDistantObjectRequest * ) doreq { return NO; }
+#endif
 
 /**** NSData.h ****/
 /**** NSDate.h ****/
@@ -114,6 +117,7 @@
 // @interface NSObject ( NSKeyedUnarchiverObjectSubstitution )
 + ( Class ) classForKeyedUnarchiver { return nil; }
 
+#ifndef GNUSTEP
 /**** NSNetServices.h ****/
 // @interface NSObject ( NSNetServiceDelegateMethods )
 - ( void ) netServiceWillPublish : ( NSNetService * ) sender {  }
@@ -131,6 +135,7 @@
 - ( void ) netServiceBrowserDidStopSearch : ( NSNetServiceBrowser * ) aNetServiceBrowser {  }
 - ( void ) netServiceBrowser : ( NSNetServiceBrowser * ) aNetServiceBrowser didRemoveDomain : ( NSString * ) domainString moreComing : ( BOOL ) moreComing {  }
 - ( void ) netServiceBrowser : ( NSNetServiceBrowser * ) aNetServiceBrowser didRemoveService : ( NSNetService * ) aNetService moreComing : ( BOOL ) moreComing {  }
+#endif
 
 /**** NSNotification.h ****/
 /**** NSPathUtilities.h ****/
@@ -201,10 +206,12 @@
 - ( void ) insertValue : ( id ) value inPropertyWithKey : ( NSString * ) key {  }
 - ( id ) coerceValue : ( id ) value forKey : ( NSString * ) key { return nil; }
 
+#ifndef GNUSTEP
 /**** NSScriptObjectSpecifiers.h ****/
 // @interface NSObject ( NSScriptObjectSpecifiers )
 - ( NSScriptObjectSpecifier * ) objectSpecifier { return nil; }
 - ( NSArray * ) indicesOfObjectsByEvaluatingObjectSpecifier : ( NSScriptObjectSpecifier * ) specifier { return nil; }
+#endif
 
 /**** NSScriptWhoseTests.h ****/
 // @interface NSObject ( NSComparisonMethods )
@@ -335,12 +342,14 @@
 
 /**** NSHelpManager.h ****/
 /**** NSImage.h ****/
+#ifndef GNUSTEP
 // @interface NSObject ( NSImageDelegate )
 - ( NSImage * ) imageDidNotDraw : ( id ) sender inRect : ( NSRect ) aRect { return nil; }
 - ( void ) image : ( NSImage * ) image willLoadRepresentation : ( NSImageRep * ) rep {  }
 - ( void ) image : ( NSImage * ) image didLoadRepresentationHeader : ( NSImageRep * ) rep {  }
 - ( void ) image : ( NSImage * ) image didLoadPartOfRepresentation : ( NSImageRep * ) rep withValidRows : ( int ) rows {  }
 - ( void ) image : ( NSImage * ) image didLoadRepresentation : ( NSImageRep * ) rep withStatus : ( NSImageLoadStatus ) status {  }
+#endif
 
 /**** NSNibLoading.h ****/
 // @interface NSObject ( NSNibAwaking )
@@ -496,7 +505,11 @@
 /**** NSLayoutManager.h ****/
 // @interface NSObject ( NSLayoutManagerDelegate )
 - ( void ) layoutManagerDidInvalidateLayout : ( NSLayoutManager * ) sender {  }
+#ifdef GNUSTEP
+- ( void ) layoutManager : ( GSLayoutManager * ) layoutManager didCompleteLayoutForTextContainer : ( NSTextContainer * ) textContainer atEnd : ( BOOL ) layoutFinishedFlag {  }
+#else
 - ( void ) layoutManager : ( NSLayoutManager * ) layoutManager didCompleteLayoutForTextContainer : ( NSTextContainer * ) textContainer atEnd : ( BOOL ) layoutFinishedFlag {  }
+#endif
 
 /**** NSTextStorage.h ****/
 // @interface NSObject ( NSTextStorageDelegate )

@@ -4,6 +4,17 @@ module RubyCocoaConfig
   eval File.open('VERSION'){|f|f.read}
 end
 
+if File.exists?('/Library/Frameworks') then
+  libtype = 'cocoa';
+elsif ENV['GNUSTEP_ROOT'] then
+  libtype = 'gnustep';
+else
+  puts "Cannot determine Objective-C library type"
+  exit 1
+end
+
+add_config 'libtype', 'name', libtype, 'Objective-C library type'
+
 libruby_path = File.join(Config::CONFIG['libdir'], Config::CONFIG['LIBRUBY'])
 unless File.exist?( libruby_path ) then
   libruby_path = File.join(Config::CONFIG['archdir'], Config::CONFIG['LIBRUBY_A'])
@@ -16,7 +27,8 @@ end
 add_path_config 'install-root', '',
   'path to the root directory for Frameworks and "ProjectBuilder Extras"'
 
-add_path_config 'frameworks', '/Library/Frameworks',
+add_path_config 'frameworks',
+  libtype == 'cocoa' ? '/Library/Frameworks' : "#{ENV['GNUSTEP_ROOT']}/Local/Library/Frameworks",
   'path to the directory for installing RubyCocoa.framework'
 
 if File.exists?('/Developer/Applications/Project Builder.app') then
@@ -30,10 +42,12 @@ if File.exists?('/Developer/Applications/Xcode.app') then
     'path to the directory for "Xcode Extras"'
 end 
 
-add_path_config 'examples', '/Developer/Examples',
+developer_prefix = libtype == 'cocoa' ? '' : "#{ENV['GNUSTEP_ROOT']}/Local"
+
+add_path_config 'examples', developer_prefix+'/Developer/Examples',
   'path to the directory for Examples'
 
-add_path_config 'documentation', '/Developer/Documentation',
+add_path_config 'documentation', developer_prefix+'/Developer/Documentation',
   'path to the directory for Documentation'
 
 add_config 'framework-name', 'name', 'RubyCocoa',

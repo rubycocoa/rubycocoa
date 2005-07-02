@@ -38,7 +38,7 @@ class TC_NSData < Test::Unit::TestCase
   end
 
   def test_s_dataWithContentsOfURL
-    fpath = '/System/Library/Frameworks/Cocoa.framework/Headers/Cocoa.h'
+    fpath = '/etc/passwd'
     src = File.open(fpath).read
     url = NSURL.URLWithString "file://#{fpath}"
     data = NSData.dataWithContentsOfURL( url )

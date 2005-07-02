@@ -10,7 +10,6 @@
  *
  **/
 
-#import <objc/objc-class.h>
 #import <Foundation/Foundation.h>
 #import "ocdata_conv.h"
 #import "RBObject.h"
@@ -56,16 +55,16 @@ to_octype(const char* octype_str)
   oct = *octype_str;
 
   if (octype_str[0] == '{' && octype_str[1] == '_') {
-    if (strcmp(octype_str, @encode(NSRect)) == 0) {
+    if (strncmp(octype_str, @encode(NSRect), sizeof(@encode(NSRect))-1) == 0) {
       oct = _PRIV_C_NSRECT;
     }
-    else if (strcmp(octype_str, @encode(NSPoint)) == 0) {
+    else if (strncmp(octype_str, @encode(NSPoint), sizeof(@encode(NSPoint))-1) == 0) {
       oct = _PRIV_C_NSPOINT;
     }
-    else if (strcmp(octype_str, @encode(NSSize)) == 0) {
+    else if (strncmp(octype_str, @encode(NSSize), sizeof(@encode(NSSize))-1) == 0) {
       oct = _PRIV_C_NSSIZE;
     }
-    else if (strcmp(octype_str, @encode(NSRange)) == 0) {
+    else if (strncmp(octype_str, @encode(NSRange), sizeof(@encode(NSRange))-1) == 0) {
       oct = _PRIV_C_NSRANGE;
     }
   }

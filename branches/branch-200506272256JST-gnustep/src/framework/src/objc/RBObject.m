@@ -207,7 +207,7 @@ static SEL ruby_method_sel(int argc)
   BOOL f_success;
 
   if (octype == _C_VOID) {
-    f_success = true;
+    f_success = YES;
   }
   else if ((octype == _C_ID) || (octype == _C_CLASS)) {
     id ocdata = rbobj_get_ocid(result);
@@ -310,7 +310,7 @@ static SEL ruby_method_sel(int argc)
 {
   NSMethodSignature* ret = nil;
   DLOG1("methodSignatureForSelector(%s)", a_sel);
-  if (*(char*)a_sel == NULL) return nil;
+  if (*(char*)a_sel == '\0') return nil;
   ret = [DummyProtocolHandler instanceMethodSignatureForSelector: a_sel];
   if (ret == nil)
     ret = [self rbobjMethodSignatureForSheetSelector: a_sel];

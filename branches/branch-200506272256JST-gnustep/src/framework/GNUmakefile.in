@@ -1,0 +1,41 @@
+include $(GNUSTEP_MAKEFILES)/common.make
+
+RUBY_ARCH_DIR := $(shell ruby -rrbconfig -e "puts Config::CONFIG['archdir']")
+
+GNUSTEP_BUILD_DIR = build
+PACKAGE_NAME = %%%framework_name%%%
+FRAMEWORK_NAME = %%%framework_name%%%
+
+%%%framework_name%%%_OBJC_FILES = \
+	./src/objc/cls_objcid.m \
+	./src/objc/RBSlaveObject.m \
+	./src/objc/RBClassUtils.m \
+	./src/objc/RBObject.m \
+	./src/objc/OverrideMixin.m \
+	./src/objc/cocoa/init_cocoa.m \
+	./src/objc/cocoa/rb_AppKit.m \
+	./src/objc/cocoa/rb_Foundation.m \
+	./src/objc/mdl_objwrapper.m \
+	./src/objc/mdl_osxobjc.m \
+	./src/objc/cls_objcptr.m \
+	./src/objc/RBThreadSwitcher.m \
+	./src/objc/ocdata_conv.m \
+	./src/objc/RBRuntime.m \
+	./src/objc/DummyProtocolHandler.m
+
+%%%framework_name%%%_HEADER_FILES_DIR = ./src/objc
+%%%framework_name%%%_HEADER_FILES = RBObject.h RBRuntime.h RubyCocoa.h osx_intern.h osx_ruby.h
+
+%%%framework_name%%%_RESOURCE_FILES = ./src/ruby/
+%%%framework_name%%%_LIBRARIES_DEPEND_UPON = -lgnustep-base -lgnustep-gui -lobjc
+%%%framework_name%%%_INCLUDE_DIRS = -I./src/objc -I$(RUBY_ARCH_DIR)
+%%%framework_name%%%_VERSION = %%%rubycocoa_version%%%
+
+include $(GNUSTEP_MAKEFILES)/framework.make
+
+# Create object directories to mirror source directories before building
+before-all::
+	@mkdir -p $(GNUSTEP_BUILD_DIR)/$(GNUSTEP_OBJ_PREFIX)/src/objc/cocoa
+
+# GNUstep makefiles need dummy targets for all header files to install in framework
+$(%%%framework_name%%%_HEADER_FILES):

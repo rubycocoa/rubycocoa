@@ -9,11 +9,10 @@
  *   the GNU Lesser General Public License version 2.
  *
  **/
-
+#import <Foundation/Foundation.h>
 #import "osx_ruby.h"
 #import "ocdata_conv.h"
 #import "mdl_osxobjc.h"
-#import <Foundation/Foundation.h>
 #import <string.h>
 #import <stdlib.h>
 #import <stdarg.h>
@@ -123,19 +122,25 @@ ocm_perform(int argc, VALUE* argv, VALUE rcv, VALUE* result)
   argc--;
   argv++;
 
+  pool = [[NSAutoreleasePool alloc] init];
   oc_msig = [oc_rcv methodSignatureForSelector: oc_sel];
-  if (oc_msig == nil)
+  if (oc_msig == nil) {
+    [pool release];
     return ocmsend_err_new (oc_rcv, oc_sel, "methodSignature is nil.");
+  }
 
   ret_type = [oc_msig methodReturnType];
-  if (*ret_type != _C_ID && *ret_type != _C_CLASS)
+  if (*ret_type != _C_ID && *ret_type != _C_CLASS) {
+    [pool release];
     return ocmsend_err_new (oc_rcv, oc_sel, "return type is not Object. (%s)", ret_type);
+  }
 
   num_of_args = [oc_msig numberOfArguments] - 2;
-  if (num_of_args > 2)
+  if (num_of_args > 2) {
+    [pool release];
     return ocmsend_err_new (oc_rcv, oc_sel, "numberOfArguments is bigger than 2");
+  }
 
-  pool = [[NSAutoreleasePool alloc] init];
   oc_sel_str = NSStringFromSelector(oc_sel);
   DLOG2("ocm_perform (%@): ret_type=%s", oc_sel_str, ret_type);
 
@@ -179,7 +184,10 @@ ocm_perform(int argc, VALUE* argv, VALUE rcv, VALUE* result)
     excp = oc_err_new (oc_rcv, oc_sel, localException);
 
   NS_ENDHANDLER
-  if (excp != Qnil) return excp;
+      if (excp != Qnil) {
+	  [pool release];
+	  return excp;
+      }
   
   DLOG1("    NSObject#performSelector (%@): done.", oc_sel_str);
 
@@ -215,14 +223,16 @@ ocm_invoke(int argc, VALUE* argv, VALUE rcv, VALUE* result)
   argc--;
   argv++;
 
+  pool = [[NSAutoreleasePool alloc] init];
   oc_msig = [oc_rcv methodSignatureForSelector: oc_sel];
-  if (oc_msig == nil)
+  if (oc_msig == nil) {
+    [pool release];
     return ocmsend_err_new (oc_rcv, oc_sel, "methodSignature is nil.");
+  }
 
   ret_type = [oc_msig methodReturnType];
   num_of_args = [oc_msig numberOfArguments] - 2;
 
-  pool = [[NSAutoreleasePool alloc] init];
   oc_sel_str = NSStringFromSelector(oc_sel);
   DLOG2("ocm_invoke (%@): ret_type=%s", oc_sel_str, ret_type);
 
@@ -257,7 +267,10 @@ ocm_invoke(int argc, VALUE* argv, VALUE rcv, VALUE* result)
     excp = oc_err_new (oc_rcv, oc_sel, localException);
 
   NS_ENDHANDLER
-  if (excp != Qnil) return excp;
+    if (excp != Qnil) {
+      [pool release];
+      return excp;
+    }
 
   DLOG1("    NSInvocation#invoke (%@): done.", oc_sel_str);
 
@@ -363,7 +376,15 @@ wrapper_to_s (VALUE rcv)
   oc_rcv = rbobj_get_ocid(rcv);
   if ([oc_rcv isKindOfClass: [NSString class]] == NO)
     oc_rcv = [oc_rcv description];
+#if 0				// trunk
   ret = ocstr_to_rbstr(oc_rcv);
+#else  // gnustep
+  {
+    const char* cstr;
+    cstr = [oc_rcv UTF8String];
+    ret = rb_str_new (cstr, strlen(cstr));
+  }
+#endif
   [pool release];
   return ret;
 }
@@ -371,18 +392,17 @@ wrapper_to_s (VALUE rcv)
 static void
 _ary_push_objc_methods (VALUE ary, Class cls)
 {
-  struct objc_method_list** list;
+  void *list_iter = 0;
+  struct objc_method_list *list;
   int i, cnt;
   struct objc_method* methods;
 
-  list = cls->methodLists;
-  while (*list && *list != (struct objc_method_list*)-1) {
-    cnt = (*list)->method_count;
-    methods = (*list)->method_list;
+  while( (list = class_nextMethodList(cls, &list_iter)) ) {
+    cnt = list->method_count;
+    methods = list->method_list;
     for (i = 0; i < cnt; i++) {
       rb_ary_push (ary, rb_str_new2((const char*)(methods[i].method_name)));
     }
-    list++;
   }
   if (cls->super_class)
     _ary_push_objc_methods (ary, cls->super_class);
@@ -404,20 +424,19 @@ wrapper_objc_methods (VALUE rcv)
 static const char*
 _objc_method_type (Class cls, const char* name)
 {
-  struct objc_method_list** list;
+  void *list_iter = 0;
+  struct objc_method_list *list;
   int i, cnt;
   struct objc_method* methods;
 
-  list = cls->methodLists;
-  while (*list && *list != (struct objc_method_list*)-1) {
-    cnt = (*list)->method_count;
-    methods = (*list)->method_list;
+  while( (list = class_nextMethodList(cls, &list_iter)) ) {
+    cnt = list->method_count;
+    methods = list->method_list;
     for (i = 0; i < cnt; i++) {
       if (strcmp ((const char*)(methods[i].method_name), name) == 0) {
 	return methods[i].method_types;
       }
     }
-    list++;
   }
   if (cls->super_class)
     return _objc_method_type (cls->super_class, name);
