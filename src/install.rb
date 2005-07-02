@@ -631,11 +631,13 @@ class Installer
   end
 
   def buildcommand
-    cmd = if test(?x, '/usr/bin/xcodebuild') then
-      'xcodebuild'
-    else
-      'pbxbuild'
-    end
+    cmd = if !File.exists?('/System/Library') then
+            'make'
+          elsif test(?x, '/usr/bin/xcodebuild') then
+            'xcodebuild'
+          else
+            'pbxbuild'
+          end
   end 
 
   #

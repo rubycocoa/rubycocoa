@@ -9,16 +9,59 @@
  *   the GNU Lesser General Public License version 2.
  *
  **/
-#import <Cocoa/Cocoa.h>
+#import <Foundation/Foundation.h>
 #import <stdarg.h>
 #import "OverrideMixin.h"
-#import "RBObject.h"
 #import "RBSlaveObject.h"
 #import "RBRuntime.h"
 #import "RBClassUtils.h"
 #import "ocdata_conv.h"
 
 #define sel_to_s(a) NSStringFromSelector((a))
+
+#ifdef GNUSTEP
+static Ivar_t
+object_setInstanceVariable(id anObj, const char *aName, id aValue)
+{
+    Class aClass = anObj->class_pointer;
+    IvarList_t ivars = aClass->ivars;
+    int i;
+
+    for( i = 0; i < ivars->ivar_count; i++ ) {
+	Ivar_t ivar = &ivars->ivar_list[i];
+	if( !strcmp(aName, ivar->ivar_name) ) {
+	    *(id *)((char *)anObj + ivar->ivar_offset) = aValue;
+	    return ivar;
+	}
+    }
+    return NULL;
+}
+
+static Ivar_t
+object_getInstanceVariable(id anObj, const char *aName, id *aValue)
+{
+    Class aClass = anObj->class_pointer;
+    IvarList_t ivars = aClass->ivars;
+    int i;
+
+    for( i = 0; i < ivars->ivar_count; i++ ) {
+	Ivar_t ivar = &ivars->ivar_list[i];
+	if( !strcmp(aName, ivar->ivar_name) ) {
+	    *aValue = *(id *)((char *)anObj + ivar->ivar_offset);
+	    return ivar;
+	}
+    }
+    return NULL;
+}
+
+const char *
+NSGetSizeAndAlignment(const char *typePtr, unsigned int *sizep, unsigned int *alignp)
+{
+    *sizep  = objc_sizeof_type(typePtr);
+    *alignp = objc_alignof_type(typePtr);
+    return objc_skip_typespec(typePtr);
+}
+#endif
 
 #if 0
 #  define LOG0(f)
@@ -34,7 +77,7 @@
 
 static void* alloc_from_default_zone(unsigned int size)
 {
-  return NSZoneMalloc(NSDefaultMallocZone(), size);
+  return NSZoneCalloc(NSDefaultMallocZone(), 1, size);
 }
 
 static struct objc_method_list* method_list_alloc(long cnt)
@@ -42,8 +85,6 @@ static struct objc_method_list* method_list_alloc(long cnt)
   struct objc_method_list* mlp;
   mlp = alloc_from_default_zone(sizeof(struct objc_method_list)
 				+ (cnt-1) * sizeof(struct objc_method));
-  mlp->obsolete = NULL;
-  mlp->method_count = 0;
   return mlp;
 }
 
@@ -54,7 +95,12 @@ static SEL super_selector(SEL a_sel)
 
   pool = [[NSAutoreleasePool alloc] init];
   str = [@"super:" stringByAppendingString: NSStringFromSelector(a_sel)];
+  // GNUstep initially sets all selectors to cStrings and resolves them later
+#ifdef GNUSTEP
+  a_sel = (SEL)[str cString];
+#else
   a_sel = NSSelectorFromString(str);
+#endif
   [pool release];
   return a_sel;
 }
@@ -93,33 +139,33 @@ static id handle_ruby_method(id rcv, SEL a_sel, ...)
 {
   id ret = nil;
   Method method;
-  unsigned  argc, i;
   NSMethodSignature* msig;
   NSInvocation* inv;
   va_list args;
+  int i;
   unsigned retlen;
+  const char* type;
 
   // prepare
   msig = [rcv methodSignatureForSelector: a_sel];
   inv = [NSInvocation invocationWithMethodSignature: msig];
   method = class_getInstanceMethod([rcv class], a_sel);
-  argc = method_getNumberOfArguments(method);
 
   // set argument
   va_start(args, a_sel);
+  type = method->method_types;
 
-  for (i = 2; i < argc; i++) {
+  // method_types include return result, receiver, and selector.
+
+  for (i = 0; *type; i++) {
     unsigned int size;
     unsigned int align;
-    const char* type;
-    int offset;
-	
-    method_getArgumentInfo(method, i, &type, &offset);
-
-    [inv setArgument: args atIndex: i];
-
-    NSGetSizeAndAlignment( type, &size, &align );
-    args += align;
+    type = NSGetSizeAndAlignment(type, &size, &align);
+    while( *type && isdigit(*type) ) ++type;
+    if( i < 3 )
+	continue;
+    [inv setArgument: args atIndex: i - 1];
+    args += (size + align - 1) & ~(align - 1);
   }
 
   // invoke
@@ -181,7 +227,7 @@ static id imp_respondsToSelector (id rcv, SEL method, SEL arg0)
   id slave = get_slave(rcv);
   ret = (*simp)(rcv, method, arg0);
   if (ret == NULL)
-    ret = (id)([slave respondsToSelector: arg0] != nil ? YES : NO);
+    ret = (id)([slave respondsToSelector: arg0] ? YES : NO);
   return ret;
 }
 

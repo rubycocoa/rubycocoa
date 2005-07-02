@@ -9,28 +9,40 @@
 #
 
 FORCE_MODE = (ARGV.size > 0 && ARGV[0] == "-f")
-FRAMEWORKS = {
-  'Foundation' => '/System/Library/Frameworks/Foundation.framework/Headers/Foundation.h',
-  'AppKit' => '/System/Library/Frameworks/AppKit.framework/Headers/AppKit.h'}
 
-if `uname -r`.to_f >= 6.0 then
+if File.exists?("/System/Library/Frameworks") then
+  FRAMEWORKS = {
+    'Foundation' => '/System/Library/Frameworks/Foundation.framework/Headers/Foundation.h',
+    'AppKit' => '/System/Library/Frameworks/AppKit.framework/Headers/AppKit.h'}
+  if `uname -r`.to_f >= 6.0 then
+    require '../../../../tool/och_analyzer3'
+  else
+    require '../../../../tool/och_analyzer'
+  end
+  require '../../../tool/cocoa_ignored'
+elsif ENV['GNUSTEP_ROOT'] then
+  FRAMEWORKS = {
+    'Foundation' => ENV['GNUSTEP_ROOT']+'/System/Library/Headers/Foundation/Foundation.h',
+    'AppKit' => ENV['GNUSTEP_ROOT']+'/System/Library/Headers/AppKit/AppKit.h'}
   require '../../../../tool/och_analyzer3'
+  require '../../../tool/gnustep_ignored'
 else
-  require '../../../../tool/och_analyzer'
+  $stderr.puts 'Cannot find Cocoa nor GNUstep frameworks'
+  exit 1
 end
 
 def collect_src_headers(src_path, re_pat)
   File.open(src_path) {|f|
     f.map {|s|
       if m = re_pat.match(s) then
-	File.join(File.dirname(src_path), m[1])
+	File.join(File.dirname(src_path), m[2])
       end
     }.compact.uniq
   }
 end
 
 def collect_headers(framework, hpath)
-  re = %r{^\s*#import\s*<#{framework}/(\w+\.h)>}
+  re = %r{^\s*#(import|include)\s*<#{framework}/(\w+\.h)>}
   collect_src_headers(hpath, re)
 end
 
@@ -102,7 +114,7 @@ end
 def gen_c_func_var_defs(finfo)
   ret = ""
   finfo.args.each_with_index do |ai,index|
-    ret.concat "  #{ai.type} ns_a#{index};\n"
+    ret.concat "  #{ai.type.gsub(/\bconst /,'')} ns_a#{index};\n"
   end
   if finfo.argc == -1 then
     ret.concat "  int va_first = #{finfo.args.size};\n"
@@ -249,7 +261,7 @@ def gen_def_rb_mod_func(info, argc = -1)
 end
 
 def gen_def_enums(och)
-  enums = och.enums
+  enums = och.enums.delete_if { |e| @ignored[e] }
   return nil if enums.size == 0
   ret = "  /**** enums ****/\n"
   enums.each do |name|
@@ -275,7 +287,7 @@ def reconfig_info(info)
 end
 
 def gen_def_consts(och)
-  consts = och.constants
+  consts = och.constants.delete_if { |c| @ignored[c.name] }
   return nil if consts.size == 0
   ret_a = "  /**** constants ****/\n"
   ret_b = "  /**** constants ****/\n"
@@ -291,7 +303,7 @@ def gen_def_consts(och)
 end
 
 def gen_def_funcs(och)
-  funcs = och.functions
+  funcs = och.functions.delete_if { |f| @ignored[f.name] }
   return nil if funcs.size == 0
   ret_a = "  /**** functions ****/\n"
   ret_b = "  /**** functions ****/\n"
@@ -332,9 +344,9 @@ end
 def gen_skelton_top(framework)
   fname = "rb_#{framework}.m"
   File.open(fname, "w") do |f|
+    f.print "\#import <#{framework}/#{framework}.h>\n\n"
     f.print "\#import \"osx_ruby.h\"\n"
     f.print "\#import \"ocdata_conv.h\"\n"
-    f.print "\#import <#{framework}/#{framework}.h>\n\n"
     f.print STATIC_FUNCS
     f.print "\n\n"
   end

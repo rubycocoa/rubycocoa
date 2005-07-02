@@ -9,7 +9,6 @@
  *   the GNU Lesser General Public License version 2.
  *
  **/
-
 #import <Foundation/NSAutoreleasePool.h>
 #import "RBThreadSwitcher.h"
 #import "osx_ruby.h"
