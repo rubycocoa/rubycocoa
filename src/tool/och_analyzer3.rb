@@ -8,7 +8,11 @@
 #  the GNU Lesser General Public License version 2.
 #
 
-['/usr/bin/cpp3', '/usr/bin/cpp-3.3'].each do |cpp|
+def gnustep?
+  ENV['GNUSTEP_ROOT'] and (! File.exists?('/System/Library/Frameworks'))
+end
+
+(['/usr/bin/cpp3'] + Dir['/usr/bin/cpp-3*']).each do |cpp|
   if test(?x, cpp) 
     CPP = cpp
     break
@@ -17,7 +21,7 @@ end
 unless defined? CPP
   raise "cpp not found"
 end
-if File.exists?('/System/Library/Frameworks')
+if not gnustep? then
   CPPFLAGS = "-x objective-c -D__GNUC__ -D__APPLE_CPP__"
   RE_FRAMEWORK = /\b(\w+)\.framework\b/
 else
