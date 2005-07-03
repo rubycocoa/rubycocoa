@@ -235,7 +235,7 @@ class OCHeaderAnalyzer
       super(func.type, func.name, orig, enum_types)
       @args = args
       @argc = @args.size
-      if @args[-1].type == '...' then
+      if @args[-1].class == '...' then
 	@argc = -1
 	@args.pop
       end
