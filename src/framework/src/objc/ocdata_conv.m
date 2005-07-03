@@ -736,8 +736,10 @@ static NSStringEncoding kcode_to_nsencoding(const char* kcode)
 { 
   if (strcmp(kcode, "UTF8") == 0)
     return NSUTF8StringEncoding;
+#ifndef GNUSTEP				   	// GNUSTEP not support SJIS at 2005.7.3
   else if (strcmp(kcode, "SJIS") == 0)
     return CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingMacJapanese);
+#endif
   else if (strcmp(kcode, "EUC") == 0)
     return NSJapaneseEUCStringEncoding;
   else // "NONE"
