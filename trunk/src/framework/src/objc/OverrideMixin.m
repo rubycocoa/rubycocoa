@@ -290,7 +290,7 @@ static id imp_c_addRubyMethod_withType(Class klass, SEL method, SEL arg0, const 
   struct objc_method_list* mlp = method_list_alloc(1);
 
   // add method
-  mlp->method_list[0].method_name = sel_registerName(arg0);
+  mlp->method_list[0].method_name = sel_registerName((const char*)arg0);
   mlp->method_list[0].method_types = strdup(type);
   mlp->method_list[0].method_imp = handle_ruby_method;
   mlp->method_count += 1;
