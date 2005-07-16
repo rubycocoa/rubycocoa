@@ -57,6 +57,12 @@ class OCHeaderAnalyzer
 	  i.split('=')[0].strip
 	}.delete_if {|i| i == "" }
       }.flatten.uniq
+      if filename == 'NSWindow.h' # window level support
+	File.open(path) do |f|
+	  re = /^#define\s+(NS\w+Level)\s+k[[:upper:]]\w+$/
+	  @enums += f.read.scan(re)
+	end 
+      end
     end
     @enums
   end
