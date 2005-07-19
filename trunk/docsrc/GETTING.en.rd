@@ -42,6 +42,15 @@ A successful installation of the binary package will add the following items:
 After installation, try the samples that are written in Ruby. Refer
 to ((<'Try RubyCocoa Samples'|URL:trysamples.en.html>)).
 
+=== for Mac OS X 10.4
+
+RubyCocoa's binary distribution has been built for the Ruby 1.8.2 distributed
+with Mac OS X 10.4.
+
+Download
+((<RubyCocoa-0.4.1-tiger.dmg|URL:http://prdownloads.sourceforge.net/rubycocoa/RubyCocoa-0.4.1-tiger.dmg?download>))
+from ((<file list|URL:http://sourceforge.net/project/showfiles.php?group_id=44114>)).
+
 === for Mac OS X 10.2
 
 RubyCocoa's binary distribution has been built for the Ruby 1.6.7 distributed
@@ -68,7 +77,7 @@ This package installs  following items:
 == Source Distribution
 
 Download
-((<rubycocoa-0.4.1.tgz|URL:http://prdownloads.sourceforge.net/rubycocoa/rubycocoa-0.4.1.tgz?download>))
+((<rubycocoa-0.4.1a.tgz|URL:http://prdownloads.sourceforge.net/rubycocoa/rubycocoa-0.4.1a.tgz?download>))
 from ((<file list|URL:http://sourceforge.net/project/showfiles.php?group_id=44114>)).
 
 To build and install RubyCocoa, refer to 
