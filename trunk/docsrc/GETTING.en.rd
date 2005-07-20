@@ -77,7 +77,7 @@ This package installs  following items:
 == Source Distribution
 
 Download
-((<rubycocoa-0.4.1a.tgz|URL:http://prdownloads.sourceforge.net/rubycocoa/rubycocoa-0.4.1a.tgz?download>))
+((<rubycocoa-0.4.1-xcode-2.1-patched.tgz|URL:http://prdownloads.sourceforge.net/rubycocoa/rubycocoa-0.4.1-xcode-2.1-patched.tgz?download>))
 from ((<file list|URL:http://sourceforge.net/project/showfiles.php?group_id=44114>)).
 
 To build and install RubyCocoa, refer to 
