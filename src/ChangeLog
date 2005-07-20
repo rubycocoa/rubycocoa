@@ -1,14 +1,14 @@
-2005-06-19  kimura wataru <kimuraw@i.nifty.jp>
+2005-07-19  kimura wataru <kimuraw@i.nifty.jp>
 
 	* framework/pre-install.rb:
 	support installation with XcodeTools 2.1.
 
-2005-06-16  kimura wataru <kimuraw@i.nifty.jp>
+2005-07-16  kimura wataru <kimuraw@i.nifty.jp>
 
 	* tool/och_analyzer.rb, tool/och_analyzer3.rb:
 	support constants about window level, such as NSNormalWindowLevel.
 
-2005-06-15  kimura wataru <kimuraw@i.nifty.jp>
+2005-07-15  kimura wataru <kimuraw@i.nifty.jp>
 
 	* framework/RubyCocoa.pbproj/project.pbxproj.in, framework/pre-install.rb:
 	add "-Wl,-x" to OTHER_LDFLAGS. remove `strip' at install phase.
