@@ -638,6 +638,21 @@ class Installer
     end
   end 
 
+  # XcodeTools 2.1 generates object file into framework/build/Default
+  # (2.0 or older generates into framework/build)
+  def framework_obj_path
+    obj_path = 'build'
+    if File.basename(buildcommand) == 'xcodebuild'
+      if /DevToolsCore-(\d+)/.match(`#{buildcommand} -version`)
+        xcode_version = $1.to_i
+      else
+        xcode_version = 0 # unknown(< Xcode 2.0)
+      end
+      obj_path = "#{obj_path}/Default" if xcode_version >= 620
+    end
+    obj_path
+  end
+
   #
   # install
   #
