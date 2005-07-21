@@ -20,6 +20,7 @@ config_ary = [
   [ :libruby_path_basename, File.basename(@config['libruby-path']) ],
   [ :rubycocoa_version,      @config['rubycocoa-version'] ],
   [ :rubycocoa_release_date, @config['rubycocoa-release-date'] ],
+  [ :build_dir, framework_obj_path ],
 ]
 
 target_files.each do |dst_name|

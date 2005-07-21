@@ -6,8 +6,8 @@ def command(cmd)
   $stderr.puts "execute '#{cmd}' done"
 end
 
-$CFLAGS = '-F../../framework/build'
-$LDFLAGS  = '-F../../framework/build -framework %%%framework_name%%%'
+$CFLAGS = '-F../../framework/%%%build_dir%%%'
+$LDFLAGS  = '-F../../framework/%%%build_dir%%% -framework %%%framework_name%%%'
 
 create_makefile('rubycocoa')
 command "mv -f Makefile Makefile.bak"
