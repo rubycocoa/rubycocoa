@@ -632,9 +632,9 @@ class Installer
 
   def buildcommand
     cmd = if test(?x, '/usr/bin/xcodebuild') then
-      'xcodebuild'
+      '/usr/bin/xcodebuild'
     else
-      'pbxbuild'
+      '/usr/bin/pbxbuild'
     end
   end 
 

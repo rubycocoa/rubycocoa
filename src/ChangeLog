@@ -1,3 +1,8 @@
+2005-07-27  kimura wataru <kimuraw@i.nifty.jp>
+
+	* install.rb:
+	use fullpath of build-command.
+
 2005-07-21  kimura wataru <kimuraw@i.nifty.jp>
 
 	* ext/osxobjc/extconf.rb.in:
