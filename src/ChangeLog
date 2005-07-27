@@ -51,7 +51,7 @@
 
 	* framework/src/ruby/osx/objc/oc_import.rb:
 	add kvc_accessor, kvc_reader and kvc_writer. suggested by Jonathan Paisley.
-	fix: inifinit loop when kvc-accessor is not found.
+	fix: infinite loop when kvc-accessor is not found.
 
 	* sample/CurrencyConverter/:
 	new sample for Key-Value Coding
