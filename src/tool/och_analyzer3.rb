@@ -189,7 +189,7 @@ class OCHeaderAnalyzer
 
   def OCHeaderAnalyzer.do_cpp(path)
     f_on = false
-    `#{CPP} #{CPPFLAGS} #{path}`.map {|s|
+    result = `#{CPP} #{CPPFLAGS} #{path}`.map {|s|
       s.sub( /\/\/.*$/, "" )
     }.select { |s|
       next if /^\s*$/ =~ s
@@ -197,6 +197,10 @@ class OCHeaderAnalyzer
       f_on = (m[1] == File.basename(path)) if m
       f_on
     }.join
+    if $?.to_i != 0 then
+      raise "#{CPP} fails"
+    end
+    return result
   end
 
   class VarInfo
