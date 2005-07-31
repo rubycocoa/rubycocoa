@@ -196,7 +196,7 @@ class OCHeaderAnalyzer
       f_on
     }.join
     if $?.to_i != 0 then
-      raise "#{CPP} fails"
+      raise "#{CPP} returned #{$?.to_int/256} exits status"
     end
     return result
   end
