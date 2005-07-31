@@ -198,7 +198,7 @@ class OCHeaderAnalyzer
       f_on
     }.join
     if $?.to_i != 0 then
-      raise "#{CPP} returned #{$?.to_int/256} exits status"
+      raise "#{CPP} returned #{$?.to_int/256} exit status"
     end
     return result
   end
