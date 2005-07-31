@@ -1,3 +1,8 @@
+2005-07-31  kimura wataru <kimuraw@i.nifty.jp>
+
+	* tool/och_analyzer.rb, tool/och_analyzer3.rb:
+	check status of CPP command.
+
 2005-07-27  kimura wataru <kimuraw@i.nifty.jp>
 
 	* install.rb:
