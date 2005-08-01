@@ -20,4 +20,7 @@ intern_h = "#{Config::CONFIG['archdir']}/intern.h"
   end
 end
 
-command 'cd src/objc/cocoa; ruby gen_cocoa_wrapper.rb'
+curdir = Dir.pwd
+Dir.chdir('src/objc/cocoa')
+command 'ruby gen_cocoa_wrapper.rb'
+Dir.chdir(curdir)
