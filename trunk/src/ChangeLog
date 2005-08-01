@@ -3,6 +3,9 @@
 	* framework/post-config.rb:
 	chdir in ruby.
 
+	* framework/src/objc/cocoa/gen_cocoa_wrapper.rb:
+	remove rb_Xxxx.m when gen_cocoa_wrapper.rb fails.
+
 2005-07-31  kimura wataru <kimuraw@i.nifty.jp>
 
 	* tool/och_analyzer.rb, tool/och_analyzer3.rb:
