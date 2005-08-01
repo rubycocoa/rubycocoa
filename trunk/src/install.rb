@@ -819,6 +819,7 @@ class ToplevelInstaller < Installer
     [ 'config',   'saves your configurations' ],
     [ 'show',     'shows current configuration' ],
     [ 'setup',    'compiles extention or else' ],
+    [ 'test',     'tests framework' ],
     [ 'install',  'installs files' ],
     [ 'clean',    "does `make clean' for each extention" ]
   ]
@@ -1020,6 +1021,19 @@ class ToplevelInstaller < Installer
       end
       printf "%-10s %s\n", k, v
     end
+  end
+
+  #
+  # test
+  #
+
+  def exec_test
+    dive_into('tests') {
+      ENV['DYLD_FRAMEWORK_PATH'] = File.join('../framework', framework_obj_path)
+      ruby_cmd = File.join(
+	Config::CONFIG['bindir'], Config::CONFIG['RUBY_INSTALL_NAME'])
+      command %Q!"#{ruby_cmd}" -I../ext/rubycocoa -I../lib testall.rb!
+    }
   end
 
 end
