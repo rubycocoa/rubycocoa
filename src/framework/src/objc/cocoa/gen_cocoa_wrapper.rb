@@ -371,8 +371,15 @@ FRAMEWORKS.each_key do |framework|
       next
     end
   end
-  gen_skelton_top(framework)
-  headers[framework].each {|hpath| gen_skelton(hpath) }
-  gen_skelton_init(framework) 
+  begin
+    gen_skelton_top(framework)
+    headers[framework].each {|hpath| gen_skelton(hpath) }
+    gen_skelton_init(framework) 
+  rescue
+    print $!, "\n"
+    print $@.join("\n")
+    File.delete(fname)
+    exit 1
+  end
 end
 
