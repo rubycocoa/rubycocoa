@@ -1,3 +1,8 @@
+2005-08-01  kimura wataru <kimuraw@i.nifty.jp>
+
+	* framework/post-config.rb:
+	chdir in ruby.
+
 2005-07-31  kimura wataru <kimuraw@i.nifty.jp>
 
 	* tool/och_analyzer.rb, tool/och_analyzer3.rb:
