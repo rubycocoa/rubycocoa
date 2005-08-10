@@ -63,6 +63,16 @@ oc_err_new(id rcv, SEL sel, NSException* nsexcp)
   char buf[BUFSIZ];
   static VALUE klass = Qnil;
 
+  if ([[nsexcp name] hasPrefix: @"RBException_"]) {
+      // This is a wrapped Ruby exception
+      id rberr = [[nsexcp userInfo] objectForKey: @"$!"];
+      if (rberr) {
+          VALUE err = ocid_get_rbobj(rberr);
+          if (err != Qnil)
+              return err;
+      }
+  }
+  
   if (klass == Qnil) klass = _oc_exception_class ("OCException");
   pool = [[NSAutoreleasePool alloc] init];
   snprintf(buf, BUFSIZ, "%s#%s - %s - %s",
