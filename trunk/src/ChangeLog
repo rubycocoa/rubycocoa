@@ -1,3 +1,8 @@
+2005-08-10  kimura wataru <kimuraw@i.nifty.jp>
+
+	* framework/src/objc/RBObject.m, framework/src/objc/RBObject.m:
+	convert ruby exception to NSException. patch from Jonathan Paisley.
+	
 2005-08-01  kimura wataru <kimuraw@i.nifty.jp>
 
 	* framework/post-config.rb:

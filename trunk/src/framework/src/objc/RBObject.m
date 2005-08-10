@@ -228,15 +228,75 @@ static SEL ruby_method_sel(int argc)
   return f_success;
 }
 
+-(void)rbobjRaiseRubyException
+{
+  VALUE lasterr = rb_gv_get("$!");
+  RB_ID mtd = rb_intern("nsexception");
+  if (rb_respond_to(lasterr, mtd)) {
+      VALUE nso = rb_funcall(lasterr, mtd, 0);
+      NSException *exc = rbobj_get_ocid(nso);
+      [exc raise];
+      return; // not reached
+  }
+  
+  NSMutableDictionary *info = [NSMutableDictionary dictionary];
+  
+  id ocdata = rbobj_get_ocid(lasterr);
+  if (ocdata == nil) {
+      rbobj_to_nsobj(lasterr, &ocdata);
+  }
+  [info setObject: ocdata forKey: @"$!"];
+
+  VALUE klass = rb_class_path(CLASS_OF(lasterr));
+  NSString *rbclass = [NSString stringWithUTF8String:STR2CSTR(klass)];
+  
+  VALUE rbmessage = rb_obj_as_string(lasterr);
+  NSString *message = [NSString stringWithUTF8String:STR2CSTR(rbmessage)];
+  
+  NSMutableArray *backtraceArray = [NSMutableArray array];
+  VALUE ary = rb_funcall(ruby_errinfo, rb_intern("backtrace"), 0);
+  int c;
+  for (c=0; c<RARRAY(ary)->len; c++) {
+      const char *path = STR2CSTR(RARRAY(ary)->ptr[c]);
+      NSString *nspath = [NSString stringWithUTF8String:path];
+      [backtraceArray addObject: nspath];
+  }
+  
+  [info setObject: backtraceArray forKey: @"backtrace"];
+  
+  NSException* myException = [NSException
+      exceptionWithName:[@"RBException_" stringByAppendingString: rbclass]
+			 reason:message
+			 userInfo:info];
+  [myException raise];
+}
+
+static VALUE rbobject_protected_apply(VALUE a)
+{
+  VALUE *args = (VALUE*) a;
+  return rb_apply(args[0],(RB_ID)args[1],(VALUE)args[2]);
+}
+
 - (void)rbobjForwardInvocation: (NSInvocation *)an_inv
 {
   VALUE rb_args;
   VALUE rb_result;
   RB_ID mid;
+  VALUE args[3];
+  int err;
+
   DLOG1("rbobjForwardInvocation(%@)", an_inv);
   mid = rb_obj_sel_to_mid(m_rbobj, [an_inv selector]);
   rb_args = [self fetchForwardArgumentsOf: an_inv];
-  rb_result = rb_apply(m_rbobj, mid, rb_args);
+  args[0] = m_rbobj;
+  args[1] = mid;
+  args[2] = rb_args;
+  
+  rb_result = rb_protect(rbobject_protected_apply,(VALUE)args,&err);
+  if (err) {
+      [self rbobjRaiseRubyException];
+  }
+
   [self stuffForwardResult: rb_result to: an_inv];
   DLOG1("   --> rb_result=%s", STR2CSTR(rb_inspect(rb_result)));
 }
