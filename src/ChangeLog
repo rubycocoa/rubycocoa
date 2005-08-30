@@ -1,3 +1,8 @@
+2005-08-30  kimura wataru <kimuraw@i.nifty.jp>
+
+	* framework/src/objc/OverrideMixin.m:
+	suppress warning "cannot find method"
+	
 2005-08-10  kimura wataru <kimuraw@i.nifty.jp>
 
 	* framework/src/objc/RBObject.m, framework/src/objc/RBObject.m:
