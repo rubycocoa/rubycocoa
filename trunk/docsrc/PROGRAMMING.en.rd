@@ -93,8 +93,8 @@ The instance of (({OSX::ObjcID})) is the real owner of the Cocoa object which
 necessary to worry about memory management issues such as ownership in
 RubyCocoa.
 
-  str = OSX::NSObject.stringWithString "hello"
-  str = OSX::NSObject.alloc.initWithString "world"
+  str = OSX::NSString.stringWithString "hello"
+  str = OSX::NSString.alloc.initWithString "world"
 
 Although in Objective-C the two lines above differ as to whether ownership is
 generated or delegated, in RubyCocoa there is no need to be conscious of
