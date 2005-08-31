@@ -89,8 +89,8 @@ GCに掃除されるときに自動的になくなります。したがってRubyCocoaでは、オー
 ナーシップなどのメモリ管理を気にする必要はありません。また、通常
 OSX::ObjcIDというクラスの存在を意識する必要もありません。
 
-  str = OSX::NSObject.stringWithString "hello"
-  str = OSX::NSObject.alloc.initWithString "world"
+  str = OSX::NSString.stringWithString "hello"
+  str = OSX::NSString.alloc.initWithString "world"
 
 上記２行は、Objective-Cではオーナーシップを発生させるかさせないかとい
 う違いがありますが、オーナーシップを意識する必要のない RubyCocoa では
