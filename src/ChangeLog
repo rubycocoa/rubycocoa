@@ -3,6 +3,9 @@
 	* tool/och_analyzer3.rb:
 	support cpp-4.0.
 
+	* tool/och_analyzer.rb, tool/och_analyzer3.rb, framework/src/objc/cocoa/gen_cocoa_wrapper.rb:
+	suppress warning "Object#type is deprecated".
+
 2005-08-30  kimura wataru <kimuraw@i.nifty.jp>
 
 	* framework/src/objc/OverrideMixin.m:

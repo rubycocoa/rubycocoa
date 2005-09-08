@@ -102,7 +102,7 @@ end
 def gen_c_func_var_defs(finfo)
   ret = ""
   finfo.args.each_with_index do |ai,index|
-    ret.concat "  #{ai.type} ns_a#{index};\n"
+    ret.concat "  #{ai.rettype} ns_a#{index};\n"
   end
   if finfo.argc == -1 then
     ret.concat "  int va_first = #{finfo.args.size};\n"
@@ -192,7 +192,7 @@ def gen_c_func_body(info)
   if info.octype == :_C_VOID then
     tmpl.sub!( /%%ns_result_defs%%/, '' )
   else
-    tmpl.sub!( /%%ns_result_defs%%/, "  #{info.type} ns_result;\n" )
+    tmpl.sub!( /%%ns_result_defs%%/, "  #{info.rettype} ns_result;\n" )
   end
   tmpl.sub!( /%%var_defs%%/, gen_c_func_var_defs(info) )
   unless s = gen_c_func_var_sets(info) then
@@ -214,7 +214,7 @@ def gen_c_func_body_noarg(info)
       "  #{info.name}();\n" +
 	"  return Qnil;\n"
     else
-      "  #{info.type} ns_result = #{info.name}();\n" +
+      "  #{info.rettype} ns_result = #{info.name}();\n" +
 	"  return nsresult_to_rbresult(#{info.octype}, &ns_result, \"#{info.name}\", nil);\n"
     end
   else
@@ -261,13 +261,13 @@ end
 
 def reconfig_info(info)
   if CLASSES.find {|c|
-      /^(const\s+)?#{c}\s*\*(\s*(__)?const)?$/.match(info.type) } then
+      /^(const\s+)?#{c}\s*\*(\s*(__)?const)?$/.match(info.rettype) } then
     info.octype = :_C_ID
   end
   if info.is_a? OCHeaderAnalyzer::FuncInfo then
     info.args.each do |i|
       if CLASSES.find {|c|
-	  /^(const\s+)?#{c}\s*\*(\s*(__)?const)?$/.match(i.type) } then
+	  /^(const\s+)?#{c}\s*\*(\s*(__)?const)?$/.match(i.rettype) } then
 	i.octype = :_C_ID
       end
     end
