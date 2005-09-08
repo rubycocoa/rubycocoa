@@ -1,8 +1,13 @@
+2005-09-08  kimura wataru <kimuraw@i.nifty.jp>
+
+	* tool/och_analyzer3.rb:
+	support cpp-4.0.
+
 2005-08-30  kimura wataru <kimuraw@i.nifty.jp>
 
 	* framework/src/objc/OverrideMixin.m:
 	suppress warning "cannot find method"
-	
+
 2005-08-10  kimura wataru <kimuraw@i.nifty.jp>
 
 	* framework/src/objc/RBObject.m, framework/src/objc/RBObject.m:
