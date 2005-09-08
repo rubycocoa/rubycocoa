@@ -8,7 +8,7 @@
 #  the GNU Lesser General Public License version 2.
 #
 
-['/usr/bin/cpp3', '/usr/bin/cpp-3.3'].each do |cpp|
+['/usr/bin/cpp3', '/usr/bin/cpp-3.3', '/usr/bin/cpp-4.0'].each do |cpp|
   if test(?x, cpp) 
     CPP = cpp
     break
@@ -17,7 +17,11 @@ end
 unless defined? CPP
   raise "cpp not found"
 end
-CPPFLAGS = "-x objective-c -D__GNUC__ -D__APPLE_CPP__"
+if File.basename(CPP) =~ /\Acpp-4/
+  CPPFLAGS = "-x objective-c -D__APPLE_CPP__"
+else 
+  CPPFLAGS = "-x objective-c -D__GNUC__ -D__APPLE_CPP__"
+end
 
 class OCHeaderAnalyzer
 
