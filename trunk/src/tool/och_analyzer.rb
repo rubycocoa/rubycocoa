@@ -151,7 +151,7 @@ class OCHeaderAnalyzer
 	  ai = VarInfo.new('unknown', 'unknown', i, enum_types) if ai.nil?
 	  ai
 	}
-	args = [] if args.size == 1 && args[0].type == 'void'
+	args = [] if args.size == 1 && args[0].rettype == 'void'
 	FuncInfo.new(func, args, str, enum_types)
       end
     end
@@ -203,11 +203,11 @@ class OCHeaderAnalyzer
 
   class VarInfo
 
-    attr_reader :type, :name, :orig
+    attr_reader :rettype, :name, :orig
     attr_accessor :octype
 
     def initialize(type, name, orig, enum_types)
-      @type = type
+      @rettype = type
       @name = name
       @orig = orig
       t = type.gsub(/\b(__)?const\b/,'').strip
@@ -226,10 +226,10 @@ class OCHeaderAnalyzer
     attr_reader :args, :argc
 
     def initialize(func, args, orig, enum_types)
-      super(func.type, func.name, orig, enum_types)
+      super(func.rettype, func.name, orig, enum_types)
       @args = args
       @argc = @args.size
-      if @args[-1].type == '...' then
+      if @args[-1] && @args[-1].rettype == '...' then
 	@argc = -1
 	@args.pop
       end
@@ -243,9 +243,9 @@ class OCHeaderAnalyzer
   end
 
   class InformalProtocolEntry
-    attr_reader :orig, :type, :selector
+    attr_reader :orig, :rettype, :selector
     def initialize(orig, rettype, selector)
-      @type = rettype
+      @rettype = rettype
       @selector = selector
       @orig = orig
     end
