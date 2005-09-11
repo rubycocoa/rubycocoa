@@ -95,7 +95,6 @@ module OSX
       obj.is_a?(OSX::OCObjWrapper) &&
 	(m_name =~ /^alloc/ ||
 	 m_name =~ /^new/ ||
-	 m_name =~ /^retain/ ||
 	 m_name =~ /^copy/ ||
 	 m_name =~ /^mutableCopy/)
     end
