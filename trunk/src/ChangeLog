@@ -1,3 +1,8 @@
+2005-09-11  kimura wataru <kimuraw@i.nifty.jp>
+
+	* framework/src/ruby/osx/objc/oc_wrapper.rb:
+	keep ownership "retain" in ruby script.
+
 2005-09-08  kimura wataru <kimuraw@i.nifty.jp>
 
 	* tool/och_analyzer3.rb:
