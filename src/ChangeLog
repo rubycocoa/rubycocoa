@@ -1,3 +1,8 @@
+2005-09-15  kimura wataru <kimuraw@i.nifty.jp>
+
+	* framework/src/ruby/osx/objc/cocoa_macros.rb:
+	nkf of 1.8.3 works fine. we can use NKF.guess2.
+
 2005-09-11  kimura wataru <kimuraw@i.nifty.jp>
 
 	* framework/src/ruby/osx/objc/oc_wrapper.rb:

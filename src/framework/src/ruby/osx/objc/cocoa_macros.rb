@@ -65,7 +65,7 @@ module OSX
     end
 
     # NKF.guess fails on ruby-1.8.2
-    if NKF.respond_to? 'guess1'
+    if NKF.respond_to? 'guess1' && NKF::NKF_VERSION == "2.0.4"
       def NSString.guess_encoding(rbstr)
         NKF.guess1(rbstr)
       end
