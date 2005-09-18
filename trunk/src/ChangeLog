@@ -1,3 +1,8 @@
+2005-09-19  kimura wataru <kimuraw@i.nifty.jp>
+
+	* framework/src/ruby/osx/objc/cocoa_macros.rb:
+	fix: wrong code at 2005-09-15(error "`respond_to?': true is not a symbol (TypeError)")
+
 2005-09-15  kimura wataru <kimuraw@i.nifty.jp>
 
 	* framework/src/ruby/osx/objc/cocoa_macros.rb:
