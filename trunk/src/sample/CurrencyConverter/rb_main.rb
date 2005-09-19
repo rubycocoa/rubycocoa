@@ -1,4 +1,4 @@
-# $id: $
+# $Id$
 require 'osx/cocoa'
 
 def rb_main_init
