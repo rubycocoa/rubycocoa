@@ -106,6 +106,16 @@ Building may fail because of the nature of CVS. Some cvs commands such as
 with appropriate options.
 
 
+== DarwinPorts 
+
+((<DarwinPorts|URL:http://darwinports.opendarwin.org/>)) has a port 
+"rb-cocoa" for RubyCocoa(0.4.1). 
+
+The port requires DarwinPorts version 1.1. You can update your DarwinPorts 
+with following command:
+
+  $ sudo port -d selfupdate
+
 == PINEAPPLE RPM Package
 
 RPM format binary (0.2.x) exist on

@@ -109,6 +109,17 @@ Ruby 1.6.7 に合わせて構築しています。
 構築できないこともあります。
 
 
+== DarwinPorts
+
+((<DarwinPorts|URL:http://darwinports.opendarwin.org/>))では、"rb-cocoa"という
+名前でRubyCocoa(0.4.1)のportが提供されています。
+
+このportはDarwinPortsのバージョン1.1が必要です。次のコマンドでDarwinPortsを
+アップデートすることができます。
+
+  $ sudo port -d selfupdate
+
+
 == PINEAPPLE RPMパッケージ
 
 ((<Project PINEAPPLE(日本語)
