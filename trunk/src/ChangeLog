@@ -3,6 +3,9 @@
 	* framework/src/ruby/osx/objc/RBObject.h.in, framework/src/ruby/osx/objc/RBObject.m:
 	add method -isRBObject to NSProxy and RBObject.
 
+	* framework/src/objc/mdl_osxobjc.m:
+	use "isRBObject" to know receiver is instance of RBObject or not.
+
 2005-09-19  kimura wataru <kimuraw@i.nifty.jp>
 
 	* framework/src/ruby/osx/objc/cocoa_macros.rb:
