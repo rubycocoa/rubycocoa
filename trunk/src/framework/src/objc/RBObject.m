@@ -353,6 +353,11 @@ static VALUE rbobject_protected_apply(VALUE a)
   return ret;
 }
 
+- (BOOL)isRBOBject
+{
+  return YES;
+}
+
 - (void)forwardInvocation: (NSInvocation *)an_inv
 {
   DLOG1("forwardInvocation(%@)", an_inv);
@@ -387,6 +392,15 @@ static VALUE rbobject_protected_apply(VALUE a)
   ret = [self rbobjRespondsToSelector: a_sel];
   DLOG1("   --> %d", ret);
   return ret;
+}
+
+@end
+
+@implementation NSProxy (RubyCocoaEx)
+
+- (BOOL)isRBOBject
+{
+  return NO;
 }
 
 @end

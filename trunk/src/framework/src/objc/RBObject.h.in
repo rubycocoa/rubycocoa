@@ -26,5 +26,12 @@
 
 - (VALUE) __rbobj__;
 - (BOOL) isKindOfClass:(Class)aClass;
+- (BOOL) isRBObject;
+
+@end
+
+@interface NSProxy (RubyCocoaEx)
+
+- (BOOL) isRBObject;
 
 @end
