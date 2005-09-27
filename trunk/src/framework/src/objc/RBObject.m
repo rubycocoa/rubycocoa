@@ -353,7 +353,7 @@ static VALUE rbobject_protected_apply(VALUE a)
   return ret;
 }
 
-- (BOOL)isRBOBject
+- (BOOL)isRBObject
 {
   return YES;
 }
@@ -398,7 +398,7 @@ static VALUE rbobject_protected_apply(VALUE a)
 
 @implementation NSProxy (RubyCocoaEx)
 
-- (BOOL)isRBOBject
+- (BOOL)isRBObject
 {
   return NO;
 }
