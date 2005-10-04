@@ -183,6 +183,12 @@ module OSX
       kvc_writer(*args)
     end
 
+    def kvc_depends_on(keys, *dependencies)
+      dependencies.each do |dependentKey|
+        setKeys_triggerChangeNotificationsForDependentKey(keys.to_a, dependentKey)
+      end
+    end
+
     # Define accessors that send change notifications for an array.
     # The array instance variable must respond to the following methods:
     #
