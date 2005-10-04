@@ -1,3 +1,8 @@
+2005-10-04  kimura wataru <kimuraw@i.nifty.jp>
+
+	* framework/src/objc/OverrideMixin.m:
+	fix: sub-subclass of a Cocoa class in a ruby script leads a crash.
+
 2005-09-27  kimura wataru <kimuraw@i.nifty.jp>
 
 	* framework/src/ruby/osx/objc/RBObject.h.in, framework/src/ruby/osx/objc/RBObject.m:

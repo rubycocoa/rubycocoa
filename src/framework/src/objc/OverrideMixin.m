@@ -59,9 +59,17 @@ static SEL super_selector(SEL a_sel)
   return a_sel;
 }
 
-static IMP super_imp(id rcv, SEL a_sel)
+static IMP super_imp(id rcv, SEL a_sel, IMP origin_imp)
 {
-  return [[rcv superclass] instanceMethodForSelector: a_sel];
+  IMP ret = NULL;
+  Class klass = [rcv class];
+
+  while (klass = [klass superclass]) {
+    ret = [klass instanceMethodForSelector: a_sel];
+    if (ret && ret != origin_imp)
+      return ret;
+  }
+  return NULL;
 }
 
 static id slave_obj_new(id rcv)
@@ -177,7 +185,7 @@ static id imp_rbobj (id rcv, SEL method)
 static id imp_respondsToSelector (id rcv, SEL method, SEL arg0)
 {
   id ret;
-  IMP simp = super_imp(rcv, method);
+  IMP simp = super_imp(rcv, method, (IMP)imp_respondsToSelector);
   id slave = get_slave(rcv);
   ret = (*simp)(rcv, method, arg0);
   if (ret == NULL)
@@ -188,7 +196,7 @@ static id imp_respondsToSelector (id rcv, SEL method, SEL arg0)
 static id imp_methodSignatureForSelector (id rcv, SEL method, SEL arg0)
 {
   id ret;
-  IMP simp = super_imp(rcv, method);
+  IMP simp = super_imp(rcv, method, (IMP)imp_methodSignatureForSelector);
   id slave = get_slave(rcv);
   ret = (*simp)(rcv, method, arg0);
   if (ret == nil)
@@ -198,7 +206,7 @@ static id imp_methodSignatureForSelector (id rcv, SEL method, SEL arg0)
 
 static id imp_forwardInvocation (id rcv, SEL method, NSInvocation* arg0)
 {
-  IMP simp = super_imp(rcv, method);
+  IMP simp = super_imp(rcv, method, (IMP)imp_forwardInvocation);
   id slave = get_slave(rcv);
 
   if ([slave respondsToSelector: [arg0 selector]])
