@@ -1,3 +1,8 @@
+2005-10-15  kimura wataru <kimuraw@i.nifty.jp>
+
+	* framework/src/ruby/osx/coredata.rb, framework/src/ruby/osx/objc/coredata.rb:
+	add files to support CoreData(requires MacOS X 10.4 or later)
+
 2005-10-04  kimura wataru <kimuraw@i.nifty.jp>
 
 	* framework/src/objc/OverrideMixin.m:
