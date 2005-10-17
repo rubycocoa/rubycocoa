@@ -1,3 +1,8 @@
+2005-10-17  kimura wataru <kimuraw@i.nifty.jp>
+
+	* sample/CurrencyConverter/Converter.rb:
+	replace setKeys:triggerChangeNotificationsForDependentKey: to kvc_depends_on.
+
 2005-10-15  kimura wataru <kimuraw@i.nifty.jp>
 
 	* framework/src/ruby/osx/coredata.rb, framework/src/ruby/osx/objc/coredata.rb:
