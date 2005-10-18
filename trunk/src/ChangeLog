@@ -1,3 +1,8 @@
+2005-10-18  kimura wataru <kimuraw@i.nifty.jp>
+
+	* sample/RubySpotlight/:
+	add samle of CocoaBindings contributed by Norberto Ortigoza.
+
 2005-10-17  kimura wataru <kimuraw@i.nifty.jp>
 
 	* sample/CurrencyConverter/Converter.rb:
