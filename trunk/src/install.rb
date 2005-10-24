@@ -370,8 +370,6 @@ module FileOperations
       }
       File.write dest, str
       File.chmod mode, dest
-
-      File.open( objdir + '/InstalledFiles', 'a' ) {|f| f.puts dest }
     end
   end
 
@@ -731,7 +729,6 @@ class Installer
   def exec_clean
     exec_task_traverse 'clean'
     rm_f 'config.save'
-    rm_f 'InstalledFiles'
   end
 
   def clean_dir_bin( rel )
