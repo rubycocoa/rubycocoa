@@ -9,6 +9,9 @@
 	* template/ProjectBuilder/Application/Cocoa-Ruby Core Data Application/:
 	add template for CoreData.
 
+	* pre-install.rb:
+	install template "Cocoa-Ruby Core Data Application".
+
 2005-10-24  kimura wataru <kimuraw@i.nifty.jp>
 
 	* install.rb:
