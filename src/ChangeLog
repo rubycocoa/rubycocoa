@@ -3,6 +3,9 @@
 	* lib/src/ruby/osx/coredata.rb:
 	add files to support CoreData(requires MacOS X 10.4 or later)
 
+	* framework/RubyCocoa.pbproj/project.pbxproj.in:
+	packaging coredata.rb into framework.
+
 2005-10-24  kimura wataru <kimuraw@i.nifty.jp>
 
 	* install.rb:

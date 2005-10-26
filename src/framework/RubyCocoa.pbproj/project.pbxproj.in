@@ -419,6 +419,11 @@
 			path = foundation.rb;
 			refType = 4;
 		};
+		E84D81EE13ADA29603A81C6F = {
+			isa = PBXFileReference;
+			path = coredata.rb;
+			refType = 4;
+		};
 		E84D81EF03ADA29603A81C6F = {
 			fileRef = E84D81EB03ADA29603A81C6F;
 			isa = PBXBuildFile;
@@ -439,6 +444,12 @@
 		};
 		E84D81F203ADA29603A81C6F = {
 			fileRef = E84D81EE03ADA29603A81C6F;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		E84D81F203ADA29603A81C6F = {
+			fileRef = E84D81EE13ADA29603A81C6F;
 			isa = PBXBuildFile;
 			settings = {
 			};
@@ -795,6 +806,7 @@
 				E84D81EC03ADA29603A81C6F,
 				E84D81ED03ADA29603A81C6F,
 				E84D81EE03ADA29603A81C6F,
+				E84D81EE13ADA29603A81C6F,
 				E8AA467304D26DA70310F9A1,
 				E88C6E73035BB408031D1B90,
 			);
@@ -817,6 +829,7 @@
 				E88C6E7E035BB408031D1B90,
 				E88C6E7F035BB408031D1B90,
 				E88C6E80035BB408031D1B90,
+				E88C6E81035BB408031D1B90,
 				E8FD49D003D45B2603A81C6F,
 				E8AA467504D26DDD0310F9A1,
 			);
@@ -887,6 +900,11 @@
 		E88C6E80035BB408031D1B90 = {
 			isa = PBXFileReference;
 			path = oc_wrapper.rb;
+			refType = 4;
+		};
+		E88C6E81035BB408031D1B90 = {
+			isa = PBXFileReference;
+			path = coredata.rb;
 			refType = 4;
 		};
 		E88C6E85035BB408031D1B90 = {
@@ -961,6 +979,12 @@
 			settings = {
 			};
 		};
+		E88C6E92035BB408031D1B90 = {
+			fileRef = E88C6E81035BB408031D1B90;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
 		E8AA467304D26DA70310F9A1 = {
 			isa = PBXFileReference;
 			path = webkit.rb;
@@ -995,6 +1019,7 @@
 				E88C6E8F035BB408031D1B90,
 				E88C6E90035BB408031D1B90,
 				E88C6E91035BB408031D1B90,
+				E88C6E92035BB408031D1B90,
 				E8FD49D103D45B2603A81C6F,
 				E8AA467604D26DDD0310F9A1,
 			);
