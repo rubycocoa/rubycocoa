@@ -1,3 +1,8 @@
+2005-10-26  kimura wataru <kimuraw@i.nifty.jp>
+
+	* lib/src/ruby/osx/coredata.rb:
+	add files to support CoreData(requires MacOS X 10.4 or later)
+
 2005-10-24  kimura wataru <kimuraw@i.nifty.jp>
 
 	* install.rb:
