@@ -6,6 +6,9 @@
 	* framework/RubyCocoa.pbproj/project.pbxproj.in:
 	packaging coredata.rb into framework.
 
+	* template/ProjectBuilder/Application/Cocoa-Ruby Core Data Application/:
+	add template for CoreData.
+
 2005-10-24  kimura wataru <kimuraw@i.nifty.jp>
 
 	* install.rb:
