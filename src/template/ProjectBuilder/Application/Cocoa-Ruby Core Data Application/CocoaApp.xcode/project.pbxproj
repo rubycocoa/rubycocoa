@@ -425,7 +425,7 @@
 //A53
 //A54
 		A556B73D090E84D500F8C62D = {
-			fileEncoding = "-2147483647";
+			fileEncoding = 4;
 			isa = PBXFileReference;
 			lastKnownFileType = text.script.ruby;
 			path = «PROJECTNAME»AppDelegate.rb;
@@ -439,7 +439,7 @@
 			};
 		};
 		A556B741090E84DE00F8C62D = {
-			fileEncoding = "-2147483647";
+			fileEncoding = 4;
 			isa = PBXFileReference;
 			lastKnownFileType = text.script.ruby;
 			path = rb_main.rb;
