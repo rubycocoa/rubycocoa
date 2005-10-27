@@ -26,6 +26,9 @@ pbtmpldir = "template/ProjectBuilder"
     [ "#{pbtmpldir}/Application/Cocoa-Ruby Core Data Application",
       "#{extras_dir}/Project Templates/Application/Cocoa-Ruby Core Data Application" ],
 
+    [ "#{pbtmpldir}/Application/Cocoa-Ruby Core Data Document-based Application",
+      "#{extras_dir}/Project Templates/Application/Cocoa-Ruby Core Data Document-based Application" ],
+
   ].each do |srcdir, dstdir|
     if FileTest.exist?( dstdir ) then
       backupname = File.basename( dstdir )
