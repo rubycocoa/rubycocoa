@@ -1,3 +1,8 @@
+2005-10-27  kimura wataru <kimuraw@i.nifty.jp>
+
+	* template/ProjectBuilder/Application/Cocoa-Ruby Core Data Document-based Application/:
+	add template for CoreData.
+
 2005-10-26  kimura wataru <kimuraw@i.nifty.jp>
 
 	* lib/src/ruby/osx/coredata.rb:
