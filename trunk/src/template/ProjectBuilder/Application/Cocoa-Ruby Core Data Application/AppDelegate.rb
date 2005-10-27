@@ -36,7 +36,8 @@ class ÇPROJECTNAMEASIDENTIFIERÈAppDelegate < OSX::NSObject
     
     url = OSX::NSURL.fileURLWithPath(storeFolder.stringByAppendingPathComponent("ÇPROJECTNAMEASIDENTIFIERÈ.xml"))
     coordinator = OSX::NSPersistentStoreCoordinator.alloc.initWithManagedObjectModel(managedObjectModel)
-    if (coordinator.addPersistentStoreWithType(OSX.NSXMLStoreType, :configuration, nil, :URL, url, :options, nil, :error, error = nil))
+    # FIXME: cannot get errors
+    if (coordinator.addPersistentStoreWithType(OSX.NSXMLStoreType, :configuration, nil, :URL, url, :options, nil, :error, error = nil)) 
       @managedObjectContext = OSX::NSManagedObjectContext.alloc.init
       @managedObjectContext.setPersistentStoreCoordinator(coordinator)
     else
@@ -63,6 +64,7 @@ class ÇPROJECTNAMEASIDENTIFIERÈAppDelegate < OSX::NSObject
     context = managedObjectContext
     if context
       if context.commitEditing?
+        # FIXME: cannot get errors
         unless context.save?(error = nil)
           errorResult = OSX::NSApplication.sharedApplication.presentError?(error)
         
