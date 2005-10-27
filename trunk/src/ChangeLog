@@ -3,6 +3,9 @@
 	* template/ProjectBuilder/Application/Cocoa-Ruby Core Data Document-based Application/:
 	add template for CoreData.
 
+	* pre-install.rb:
+	install template "Cocoa-Ruby Core Data Document-based Application".
+
 2005-10-26  kimura wataru <kimuraw@i.nifty.jp>
 
 	* lib/src/ruby/osx/coredata.rb:
