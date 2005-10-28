@@ -1,6 +1,63 @@
 # -*-rd-*-
 = Changes
 
+== changes from 0.4.1 (0.4.2)
+
+=== new features
+
+: CocoaBindings support
+
+  on Mac OS X 10.3 or later, CocoaBindings is avalable for a subclass of 
+  Cocoa class defined in a ruby script.
+  see samples CurrencyConverter and RubySpotlight.
+
+: CoreData support
+
+  on Mac OS X 10.4, CoreData classes and constants are avalable with 
+  osx/coredata.rb.
+
+: ease to build test
+
+  after `ruby install.rb setup', test script runs with following command:
+
+    % ruby install.rb test
+
+=== bug fixes
+
+: a ruby object becomes an instance of OSX::OCObject
+
+  A ruby object becomes an instance of OSX::OCObject when the ruby object is 
+  passed from a Cocoa object.
+
+  for example:
+
+    obj = RubyClass.new
+    nsary = OSX::NSArray.arrayWithObjects(obj, nil)
+    nsary.objectAtIndex(0) # => a instance of OSX::OCObject(not RubyClass)
+
+: NSCharacterConversionException raises
+
+  itunes_albums.rb crashes with following error.
+
+    Uncaught exception: 
+    <NSCharacterConversionException> Conversion to encoding ...
+
+  new version of RubyCocoa converts a ruby string to NSString with encoding 
+  from $KCODE.
+  
+
+: a ruby script with sub-subclass of a Cocoa class crashes
+
+  for example:
+
+    class A < OSX::NSObject
+    end
+
+    class B < A
+    end
+
+    b = B.alloc.init # => crash
+
 == changes from 0.4.0 (0.4.1)
 
 : Fix LoadError on running ruby script

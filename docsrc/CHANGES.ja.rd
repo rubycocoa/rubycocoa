@@ -1,6 +1,66 @@
 # -*-rd-*-
 = 変更点
 
+== 0.4.1 からのおもな変更点 (0.4.2)
+
+=== 新しい機能
+
+: CocoaBindingsのサポート
+
+  Mac OS X 10.3 以降では、rubyスクリプト上で定義したCocoaクラスのサブクラスでも
+  Objective-Cで定義したクラスと同じように、CocoaBindingsを利用することができます。
+  詳しくは、サンプルのCurrencyConverterやRubySpotlightを見てください。
+
+: CoreDataのサポート
+
+  Mac OS X 10.4 では、osx/coredata.rbにより、CoreDataに関するクラスと定数が
+  利用できます。 
+
+: 構築時のテストが簡単に
+
+  `ruby install.rb setup'でビルドした後に、以下のコマンドでテストスクリプトを
+  実行することができます。
+
+    % ruby install.rb test
+
+=== バグ修正
+
+: rubyのオブジェクトがクラスOSX::OCObjWrapperになってしまう
+
+  Cocoaのオブジェクトにpure rubyのオブジェクトを渡すと、そのオブジェクトを
+  取り出したときにOSX::OCObjetクラスのオブジェクトになってしまいまいました。
+
+  たとえば次のような状況が発生していました。
+
+    obj = RubyClass.new
+    nsary = OSX::NSArray.arrayWithObjects(obj, nil)
+    nsary.objectAtIndex(0) # => RubyClassでなく、OSX::OCObjetクラスに
+
+
+: itunes_albums.rbがNSCharacterConversionExceptionが起きる
+
+  サンプルのitunes_albums.rbが、以下のエラーによりクラッシュしてしまうことが
+  ありました。
+
+    Uncaught exception: 
+    <NSCharacterConversionException> Conversion to encoding ...
+
+  新しいバージョンのRubyCocoaでは、$KCODEの値によりrubyの文字列とNSStringの
+  変換を行うようにしました。
+  
+
+: Cocoaクラスのサブクラスのサブクラスを定義するとクラッシュする
+
+  以下の例のようにクラッシュしてしまう問題を修正しました。
+
+    class A < OSX::NSObject
+    end
+
+    class B < A
+    end
+
+    b = B.alloc.init # => crash
+
 == 0.4.0 からのおもな変更点 (0.4.1)
 
 : rubyスクリプト実行時にLoadErrorが発生する
