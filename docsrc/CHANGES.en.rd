@@ -9,6 +9,7 @@
 
   on Mac OS X 10.3 or later, CocoaBindings is avalable for a subclass of 
   Cocoa class defined in a ruby script.
+
   see samples CurrencyConverter and RubySpotlight.
 
 : CoreData support
@@ -35,7 +36,7 @@
     nsary = OSX::NSArray.arrayWithObjects(obj, nil)
     nsary.objectAtIndex(0) # => a instance of OSX::OCObject(not RubyClass)
 
-: NSCharacterConversionException raises
+: itunes_albums.rb fails with NSCharacterConversionException
 
   itunes_albums.rb crashes with following error.
 
