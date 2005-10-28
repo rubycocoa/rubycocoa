@@ -9,6 +9,7 @@
 
   Mac OS X 10.3 以降では、rubyスクリプト上で定義したCocoaクラスのサブクラスでも
   Objective-Cで定義したクラスと同じように、CocoaBindingsを利用することができます。
+
   詳しくは、サンプルのCurrencyConverterやRubySpotlightを見てください。
 
 : CoreDataのサポート
@@ -25,7 +26,7 @@
 
 === バグ修正
 
-: rubyのオブジェクトがクラスOSX::OCObjWrapperになってしまう
+: rubyのオブジェクトがクラスOSX::OCObjectになってしまう
 
   Cocoaのオブジェクトにpure rubyのオブジェクトを渡すと、そのオブジェクトを
   取り出したときにOSX::OCObjetクラスのオブジェクトになってしまいまいました。
