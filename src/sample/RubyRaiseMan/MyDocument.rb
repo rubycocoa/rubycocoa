@@ -68,7 +68,7 @@ class MyDocument < OSX::NSDocument
   def tableView_setObjectValue_forTableColumn_row (tblView, obj, col, row)
     identifier = col.identifier
     person = @employees[row]
-    if obj.isKindOf?(NSDecimalNumber) then
+    if obj.isKindOfClass?(NSDecimalNumber) then
       obj = obj.to_f
     else
       obj = obj.to_s
