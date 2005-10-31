@@ -1,3 +1,8 @@
+2005-10-31  kimura wataru <kimuraw@i.nifty.jp>
+
+	* sample/RubyRaiseMan/MyDocument.rb:
+	suppress warning about method "isKindOf:".
+
 2005-10-27  kimura wataru <kimuraw@i.nifty.jp>
 
 	* template/ProjectBuilder/Application/Cocoa-Ruby Core Data Document-based Application/:
