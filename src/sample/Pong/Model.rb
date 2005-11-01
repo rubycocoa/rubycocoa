@@ -160,7 +160,7 @@ class BallMoving
 
   def snd_init
     require 'rbconfig'
-    if File.basename(Config::CONFIG['archdir'])[-3..-1].to_f >= 6.0 then
+    if `uname -r`.to_f >= 6.0 then
       @wall_snd = OSX::NSSound.soundNamed "Pop"
     else
       @wall_snd = OSX::NSSound.soundNamed "Bonk"
