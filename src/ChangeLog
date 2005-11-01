@@ -1,3 +1,8 @@
+2005-11-01  kimura wataru <kimuraw@i.nifty.jp>
+
+	* install.rb:
+	suppress error message about `xcodebuild -version' on panther.
+
 2005-10-31  kimura wataru <kimuraw@i.nifty.jp>
 
 	* sample/RubyRaiseMan/MyDocument.rb:
