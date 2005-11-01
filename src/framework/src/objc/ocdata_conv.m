@@ -749,8 +749,8 @@ static NSStringEncoding kcode_to_nsencoding(const char* kcode)
 id
 rbstr_to_ocstr(VALUE obj)
 {
-  return [[[NSString alloc] initWithBytes: RSTRING(obj)->ptr
-			    length: RSTRING(obj)->len
+  return [[[NSString alloc] initWithData:[NSData dataWithBytes:RSTRING(obj)->ptr
+			    			 length: RSTRING(obj)->len]
 			    encoding:KCODE_NSSTRENCODING] autorelease];
 }
 
