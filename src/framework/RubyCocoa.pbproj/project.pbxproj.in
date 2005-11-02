@@ -118,7 +118,7 @@
 				LIBRARY_SEARCH_PATHS = "%%%libruby_path_dirname%%%";
 				OBJROOT = "$SRCROOT/build";
 				OTHER_CFLAGS = "-fno-common";
-				OTHER_LDFLAGS = "-undefined suppress -flat_namespace -Wl,-x";
+				OTHER_LDFLAGS = "-undefined suppress -flat_namespace";
 				PREBINDING = NO;
 				PRODUCT_NAME = "%%%framework_name%%%";
 				SECTORDER_FLAGS = "";

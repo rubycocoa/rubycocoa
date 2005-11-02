@@ -6,6 +6,9 @@
 	* tests/tc_nsstring.rb:
 	fix test failure: nkf version 1 does not support UTF8.
 
+	* install.rb, framework/RubyCocoa.pbproj/project.pbxproj.in:
+	fix: on 10.2, build step fails with libtool error.
+
 2005-11-01  kimura wataru <kimuraw@i.nifty.jp>
 
 	* install.rb:
