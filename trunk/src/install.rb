@@ -626,6 +626,10 @@ class Installer
 
   def setup_dir_framework( relpath )
     command buildcommand
+    fwname = @config['framework-name']
+    obj_file = "#{fwname}.framework/Versions/Current/#{fwname}"
+    cmd = 'strip -x ' + File.join(framework_obj_path, obj_file)
+    command cmd
   end
 
   def buildcommand
