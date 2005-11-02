@@ -18,6 +18,11 @@ class TC_NSString < Test::Unit::TestCase
   def setup
     @teststr = "Hello World".freeze
     @eucstr = "オブジェクト指向スクリプト言語Ruby".toeuc.freeze
+    $KCODE = 'NONE'
+  end
+
+  def teardown
+    $KCODE = 'NONE'
   end
 
   def test_s_alloc
@@ -36,16 +41,19 @@ class TC_NSString < Test::Unit::TestCase
   end
 
   def test_stringWithRubyString_euc
+    $KCODE = 'EUC'
     nsstr = NSString.stringWithRubyString( @eucstr )
     assert_equal( @eucstr, nsstr.to_s.toeuc )
   end
 
   def test_stringWithRubyString_sjis
+    $KCODE = 'EUC'
     nsstr = NSString.stringWithRubyString( @eucstr.tosjis )
     assert_equal( @eucstr, nsstr.to_s.toeuc )
   end
 
   def test_stringWithRubyString_jis
+    $KCODE = 'EUC'
     nsstr = NSString.stringWithRubyString( @eucstr.tojis )
     assert_equal( @eucstr, nsstr.to_s.toeuc )
   end
