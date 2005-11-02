@@ -64,7 +64,7 @@ class TC_SubClass < Test::Unit::TestCase
   end
 
   # testunit-0.1.8 has "assert_raises" not "assert_raise"
-  unless respond_to? :assert_raise
+  unless method_defined? :assert_raise
     alias :assert_raise :assert_raises
   end
 
