@@ -63,4 +63,9 @@ class TC_SubClass < Test::Unit::TestCase
     assert_equal( 123, obj.unknownMethod('dummy') )
   end
 
+  # testunit-0.1.8 has "assert_raises" not "assert_raise"
+  unless respond_to? :assert_raise
+    alias :assert_raise :assert_raises
+  end
+
 end
