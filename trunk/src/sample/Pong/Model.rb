@@ -88,7 +88,7 @@ class BallMoving
 
   def ball_in_paddle?
     val = @ball.vpos
-    range = (@dv >= 0) ? val..(val+@dv) : (val+@dv)..val
+    range = (@dv >= 0) ? val.to_i..(val+@dv).to_i : (val+@dv).to_i..val.to_i
     r0 = @paddle.vpos
     r1 = r0 + @paddle.height
     return false unless range.find{|val| r0 <= val && val <= r1 }

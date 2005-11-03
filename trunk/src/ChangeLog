@@ -1,3 +1,8 @@
+2005-11-03  kimura wataru <kimuraw@i.nifty.jp>
+
+	* sample/Pong/Model.rb:
+	fix: Pong.app with ruby 1.8 stops when a ball bounds at top.
+
 2005-11-02  kimura wataru <kimuraw@i.nifty.jp>
 
 	* tests/tc_subclass.rb:
