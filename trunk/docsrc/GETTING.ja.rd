@@ -10,7 +10,7 @@ Ruby 1.6.8 に合わせて構築しています。
 
 ((<ファイル一覧|URL:http://sourceforge.net/project/showfiles.php?group_id=44114>)).
 の中から
-((<RubyCocoa-0.4.1-panther.dmg|URL:http://prdownloads.sourceforge.net/rubycocoa/RubyCocoa-0.4.1-panther.dmg?download>))
+((<RubyCocoa-0.4.2-panther.dmg|URL:http://prdownloads.sourceforge.net/rubycocoa/RubyCocoa-0.4.2-panther.dmg?download>))
 をダウンロードしてください。
 
 RubyCocoaとRubyAEOSA のライブラリ・サンプルコード・ドキュメント・
@@ -52,7 +52,7 @@ Ruby 1.8.2 に合わせて構築しています。
 
 ((<ファイル一覧|URL:http://sourceforge.net/project/showfiles.php?group_id=44114>)).
 の中から
-((<RubyCocoa-0.4.1-tiger.dmg|URL:http://prdownloads.sourceforge.net/rubycocoa/RubyCocoa-0.4.1-tiger.dmg?download>))
+((<RubyCocoa-0.4.2-tiger.dmg|URL:http://prdownloads.sourceforge.net/rubycocoa/RubyCocoa-0.4.2-tiger.dmg?download>))
 をダウンロードしてください。
 
 === for Mac OS X 10.2
@@ -62,29 +62,15 @@ Ruby 1.6.7 に合わせて構築しています。
 
 ((<ファイル一覧|URL:http://sourceforge.net/project/showfiles.php?group_id=44114>)).
 の中から
-((<RubyCocoa-0.4.1-jaguar.dmg|URL:http://prdownloads.sourceforge.net/rubycocoa/RubyCocoa-0.4.1-jaguar.dmg?download>))
+((<RubyCocoa-0.4.2-jaguar.dmg|URL:http://prdownloads.sourceforge.net/rubycocoa/RubyCocoa-0.4.2-jaguar.dmg?download>))
 をダウンロードしてください。
-
-バイナリパッケージにより以下のものがインストールされます。
-
-: /Library/Frameworks/RubyCocoa.framework
-
-: /usr/lib/ruby/site_ruby/1.6/osx/ の中
-
-: /usr/lib/ruby/site_ruby/1.6/powerpc-darwin6.0/rubycocoa.bundle
-
-: '/Developer/ProjectBuilder Extras/' の中
-
-: /Developer/Documentation/RubyCocoa
-
-: /Developer/Examples/RubyCocoa
 
 
 == ソース配付
 
 ((<ファイル一覧|URL:http://rubycocoa.sourceforge.net/files/>))
 の中から
-((<rubycocoa-0.4.1-xcode-2.1-patched.tgz|URL:http://prdownloads.sourceforge.net/rubycocoa/rubycocoa-0.4.1-xcode-2.1-patched.tgz?download>))
+((<rubycocoa-0.4.2.tgz|URL:http://prdownloads.sourceforge.net/rubycocoa/rubycocoa-0.4.2.tgz?download>))
 をダウンロードしてください。
 
 ((<「RubyCocoaをソースから構築・インストールする」|URL:build.ja.html>))
