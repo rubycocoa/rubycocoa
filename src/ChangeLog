@@ -8,10 +8,14 @@
 	NSManagedObjectModel.
 
 	* template/ProjectBuilder/Application/Cocoa-Ruby Core Data Document-based Application/MyDocument.rb:
+ChangeLog
 	call OSX::CoreData.define_wrapper at initializing a document.
 
 	* framework/src/ruby/osx/objc/oc_import.rb:
 	fix: kvc_writer and kvc_depends_on do not work correctly about "*args".
+
+	* template/ProjectBuilder/Application/Cocoa-Ruby Core Data Application/AppDelegate.rb
+	call OSX::CoreData.define_wrapper when an application is launched.
 
 2005-11-03  kimura wataru <kimuraw@i.nifty.jp>
 
