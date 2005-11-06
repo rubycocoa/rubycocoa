@@ -10,6 +10,9 @@
 	* template/ProjectBuilder/Application/Cocoa-Ruby Core Data Document-based Application/MyDocument.rb:
 	call OSX::CoreData.define_wrapper at initializing a document.
 
+	* framework/src/ruby/osx/objc/oc_import.rb:
+	fix: kvc_writer and kvc_depends_on do not work correctly about "*args".
+
 2005-11-03  kimura wataru <kimuraw@i.nifty.jp>
 
 	* sample/Pong/Model.rb:

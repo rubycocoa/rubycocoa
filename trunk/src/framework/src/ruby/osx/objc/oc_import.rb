@@ -163,7 +163,7 @@ module OSX
     end
 
     def kvc_writer(*args)
-      args.each do |key|
+      args.flatten.each do |key|
 	setter = key.to_s + '='
 	attr_writer(key) unless method_defined?(setter)
 	alias_method kvc_internal_setter(key), setter
@@ -184,7 +184,7 @@ module OSX
     end
 
     def kvc_depends_on(keys, *dependencies)
-      dependencies.each do |dependentKey|
+      dependencies.flatten.each do |dependentKey|
         setKeys_triggerChangeNotificationsForDependentKey(keys.to_a, dependentKey)
       end
     end
