@@ -188,6 +188,33 @@ module OSX
         setKeys_triggerChangeNotificationsForDependentKey(keys.to_a, dependentKey)
       end
     end
+ 
+    # define accesor for keys defined in Cocoa, 
+    # such as NSUserDefaultsController and NSManagedObject
+    def kvc_wrapper(*keys)
+      kvc_wrapper_reader(*keys)
+      kvc_wrapper_writer(*keys)
+    end
+
+    def kvc_wrapper_reader(*keys)
+      keys.flatten.each do |key|
+        class_eval <<-EOE_KVC_WRAPPER,__FILE__,__LINE__+1
+    	def #{key}
+  	  valueForKey("#{key}")
+	end
+  	EOE_KVC_WRAPPER
+      end
+    end
+
+    def kvc_wrapper_writer(*keys)
+      keys.flatten.each do |key|
+        class_eval <<-EOE_KVC_WRAPPER,__FILE__,__LINE__+1
+	def #{key}=(val)
+	  setValue_forKey(val, "#{key}")
+	end
+  	EOE_KVC_WRAPPER
+      end
+    end
 
     # Define accessors that send change notifications for an array.
     # The array instance variable must respond to the following methods:

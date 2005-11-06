@@ -1,3 +1,8 @@
+2005-11-06  kimura wataru <kimuraw@i.nifty.jp>
+
+	* framework/src/ruby/osx/objc/oc_import.rb:
+	add method kvc_wrapper.
+
 2005-11-03  kimura wataru <kimuraw@i.nifty.jp>
 
 	* sample/Pong/Model.rb:
