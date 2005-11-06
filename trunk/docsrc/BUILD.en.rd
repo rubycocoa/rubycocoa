@@ -206,7 +206,7 @@ As a result, these will be installed temporarily.
 
 == Development and testing environment
 
-* iBook G3/900/600MB
+* iBook G3/900/640MB
 * Mac OS X 10.4.2
   * XcodeTools 2.0/2.1
   * ruby-1.8.2 (pre-installed in Mac OS X 10.4)
