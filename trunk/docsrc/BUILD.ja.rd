@@ -1,7 +1,7 @@
 # -*-rd-*-
 = RubyCocoaをソースから構築・インストールする
 
-この文書ではRubyCocoa 0.4.1をソースから構築・インストールする方法について
+この文書ではRubyCocoa 0.4.2をソースから構築・インストールする方法について
 説明します。バイナリ配付をインストールして使う場合にはとくに読む必要はありません。
 
 構築・インストール作業は、Terminalアプリケーションなどからシェルコマンド
@@ -21,7 +21,7 @@
 あらかじめどこかにRubyCocoaのソースを展開しておいてください。
 
   $ cd {どこか}
-  $ tar zxf rubycocoa-0.4.1.tar.gz
+  $ tar zxf rubycocoa-0.4.2.tar.gz
 
 ((*注意*)) StuffItを使うとファイル名の長さの問題でRubyCocoaが正しく
 インストールされないのでtarコマンド(Mac OS X 10.2ではgnutarコマンド)を
@@ -39,7 +39,7 @@ RubyCocoaのベースとなるRubyの構築手順を説明します。
     * Ruby 1.6.8(Mac OS X 10.3)
     * Ruby 1.6.7(Mac OS X 10.2)
 
-RubyCocoa 0.4.1バイナリパッケージは、2番目の方法で作られたものです。
+RubyCocoa 0.4.2バイナリパッケージは、2番目の方法で作られたものです。
 ((<Fink|URL:http://fink.sf.net/>))などのパッケージを使ってRubyを
 インストールしている場合などは、それに合わせて読み変えてください。
 
@@ -54,9 +54,9 @@ Mac OS Xをインストールした時のオプション設定次第では、必要な
   /Library/Receipts/BSD.pkg/   /Library/Receipts/BSDSDK.pkg/
 
 
-=== ソースからインストールしたRuby 1.8.2
+=== ソースからインストールしたRuby 1.8.3
 
-Ruby 1.8.2のソースディレクトリに移動して、以下のように構築・インストール
+Ruby 1.8.3のソースディレクトリに移動して、以下のように構築・インストール
 します。オプションは必要に応じて変更してください。
 ((- CFLAGSに'-fno-common'オプションを指定しないと、RubyCocoa.framework
 がリンクできないようです -))
@@ -210,6 +210,10 @@ config'のオプションがあります。
 以下の環境で開発動作確認をしています。
 
 * iBook G3/900/640MB
+* Mac OS X 10.4.2
+  * XcodeTools 2.0/2.1
+  * ruby-1.8.2 (pre-installed in Mac OS X 10.4)
+  * ruby-1.8.3
 * Mac OS X 10.3.8
   * XcodeTools 1.5
   * ruby-1.6.8 (pre-installed in Mac OS X 10.3)

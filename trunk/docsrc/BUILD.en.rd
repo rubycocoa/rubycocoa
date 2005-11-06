@@ -1,7 +1,7 @@
 # -*-rd-*-
 = Building and Installing RubyCocoa from Source
 
-This document describes building and installing RubyCocoa 0.4.1 from
+This document describes building and installing RubyCocoa 0.4.2 from
 source. Skip this if you are going to install the binary distribution.
 
 Building and installation are done from a shell, using the Terminal
@@ -23,7 +23,7 @@ The following steps perform the build and installation.
 Extract RubyCocoa source from the '.tgz' file into a directory somewhere.
 
   $ cd {somewhere}
-  $ tar zxf rubycocoa-0.4.1.tar.gz # use "gnutar" command on Mac OS X 10.2
+  $ tar zxf rubycocoa-0.4.2.tar.gz # use "gnutar" command on Mac OS X 10.2
 
 ((*Caution!*)) Using StuffIt, building RubyCocoa will fail because of a file
 name length problem.
@@ -35,12 +35,12 @@ To build RubyCocoa, some C language header files and Ruby's libruby library are
 required. Here, the build procedure of Ruby which serves as a base of RubyCocoa
 in the case shown below at an example is explained.
 
-  * Ruby 1.8.2 installed from source
+  * Ruby 1.8.3 installed from source
   * Ruby included in Mac OS X
     * Ruby 1.6.8(Mac OS X 10.3)
     * Ruby 1.6.7(Mac OS X 10.2)
 
-RubyCocoa 0.4.1 binary distribution has been built with the 2nd way.
+RubyCocoa 0.4.2 binary distribution has been built with the 2nd way.
 When Ruby has been installed with a package utility such as
 ((<Fink|URL:http://fink.sf.net/>)), adapt these instructions accordingly.
 
@@ -55,9 +55,9 @@ the Mac OS X installer.
   /Library/Receipts/BSD.pkg/   /Library/Receipts/BSDSDK.pkg/
 
 
-=== Ruby 1.8.2 installed from source
+=== Ruby 1.8.3 installed from source
 
-It moves to the source directory of Ruby 1.8.2, and builds and installs
+It moves to the source directory of Ruby 1.8.3, and builds and installs
 as follows. Please change an option if needed.
 ((- RubyCocoa.framework cannot be linked without specifying the
 '-fno-common' option for CFLAGS. -))
@@ -205,14 +205,18 @@ As a result, these will be installed temporarily.
 == Development and testing environment
 
 * iBook G3/900/600MB
+* Mac OS X 10.4.2
+  * XcodeTools 2.0/2.1
+  * ruby-1.8.2 (pre-installed in Mac OS X 10.4)
+  * ruby-1.8.3
 * Mac OS X 10.3.8
   * XcodeTools 1.5
   * ruby-1.6.8 (pre-installed in Mac OS X 10.3)
-  * ruby-1.8.2
+  * ruby-1.8.3
 * Mac OS X 10.2.8
   * DevTools 10.2
   * ruby-1.6.7 (pre-installed in Mac OS X 10.2)
-  * ruby-1.8.2
+  * ruby-1.8.3
 
 
 == Have fun!
