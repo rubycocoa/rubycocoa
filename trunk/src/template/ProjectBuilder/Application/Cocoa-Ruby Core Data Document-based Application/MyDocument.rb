@@ -15,6 +15,8 @@ class MyDocument < OSX:: NSPersistentDocument
   ns_overrides 'windowNibName', 'windowControllerDidLoadNib:',
     'setManagedObjectContext:'
 
+  @@model_registered = false
+
   def windowNibName
     return "MyDocument"
   end
@@ -27,7 +29,10 @@ class MyDocument < OSX:: NSPersistentDocument
   # define accessors for properties of models
   def setManagedObjectContext(context)
     super_setManagedObjectContext(context)
-    OSX::CoreData.define_wrapper(managedObjectModel)
+    unless @@model_registered
+      OSX::CoreData.define_wrapper(managedObjectModel)
+      @@model_registered = true
+    end
   end
 
 end
