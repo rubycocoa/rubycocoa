@@ -9,7 +9,7 @@ RubyCocoa's binary distribution has been built for the Ruby 1.6.8 distributed
 with Mac OS X 10.3.
 
 Download
-((<RubyCocoa-0.4.1-panther.dmg|URL:http://prdownloads.sourceforge.net/rubycocoa/RubyCocoa-0.4.1-panther.dmg?download>))
+((<RubyCocoa-0.4.2-panther.dmg|URL:http://prdownloads.sourceforge.net/rubycocoa/RubyCocoa-0.4.2-panther.dmg?download>))
 from ((<file list|URL:http://sourceforge.net/project/showfiles.php?group_id=44114>)).
 
 It includes library, samples, templates for Project Builder, etc. for both
@@ -48,7 +48,7 @@ RubyCocoa's binary distribution has been built for the Ruby 1.8.2 distributed
 with Mac OS X 10.4.
 
 Download
-((<RubyCocoa-0.4.1-tiger.dmg|URL:http://prdownloads.sourceforge.net/rubycocoa/RubyCocoa-0.4.1-tiger.dmg?download>))
+((<RubyCocoa-0.4.2-tiger.dmg|URL:http://prdownloads.sourceforge.net/rubycocoa/RubyCocoa-0.4.2-tiger.dmg?download>))
 from ((<file list|URL:http://sourceforge.net/project/showfiles.php?group_id=44114>)).
 
 === for Mac OS X 10.2
@@ -57,27 +57,13 @@ RubyCocoa's binary distribution has been built for the Ruby 1.6.7 distributed
 with Mac OS X 10.2.
 
 Download
-((<RubyCocoa-0.4.1-jaguar.dmg|URL:http://prdownloads.sourceforge.net/rubycocoa/RubyCocoa-0.4.1-jaguar.dmg?download>))
+((<RubyCocoa-0.4.2-jaguar.dmg|URL:http://prdownloads.sourceforge.net/rubycocoa/RubyCocoa-0.4.2-jaguar.dmg?download>))
 from ((<file list|URL:http://sourceforge.net/project/showfiles.php?group_id=44114>)).
-
-This package installs  following items:
-
-: /Library/Frameworks/RubyCocoa.framework
-
-: inside of /usr/lib/ruby/site_ruby/1.6/osx/
-
-: /usr/lib/ruby/site_ruby/1.6/powerpc-darwin6.0/rubycocoa.bundle
-
-: inside of '/Developer/ProjectBuilder Extras/'
-
-: /Developer/Documentation/RubyCocoa
-
-: /Developer/Examples/RubyCocoa
 
 == Source Distribution
 
 Download
-((<rubycocoa-0.4.1-xcode-2.1-patched.tgz|URL:http://prdownloads.sourceforge.net/rubycocoa/rubycocoa-0.4.1-xcode-2.1-patched.tgz?download>))
+((<rubycocoa-0.4.2.tgz|URL:http://prdownloads.sourceforge.net/rubycocoa/rubycocoa-0.4.2.tgz?download>))
 from ((<file list|URL:http://sourceforge.net/project/showfiles.php?group_id=44114>)).
 
 To build and install RubyCocoa, refer to 
