@@ -124,6 +124,8 @@ required, specify option at the time of a config phase.
 
 ((<"Test::Unit"|URL:http://raa.ruby-lang.org/list.rhtml?name=testunit>)) 
 is required for unit tests.  This process is optional.
+(Test::Unit is not available on RAA. We uploaded a copy 
+((<testunit-0.1.8.tar.gz|URL:http://rubycocoa.sourceforge.net/files/testunit-0.1.8.tar.gz>)).)
 
 Ruby 1.8 includes Test::UNIT.
 

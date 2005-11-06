@@ -124,6 +124,9 @@ libruby.aのみをインストールします。
 単体テストには
 ((<"Test::Unit"|URL:http://raa.ruby-lang.org/list.rhtml?name=testunit>))
 が必要です。このプロセスは省略可能です。
+(Test::Unitは現在RAAから取得することができません。RubyCocoaプロジェクトで 
+((<testunit-0.1.8.tar.gz|URL:http://rubycocoa.sourceforge.net/files/testunit-0.1.8.tar.gz>))
+にコピーを用意しています。)
 
 Test::UnitはRuby 1.8では標準添付されています。
 
