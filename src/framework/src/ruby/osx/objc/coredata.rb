@@ -123,3 +123,33 @@ module OSX
   end
 
 end
+
+module OSX
+
+  module CoreData
+
+    # define wrappers from NSManagedObjectModel
+    def define_wrapper(model)
+      unless model.isKindOfClass? OSX::NSManagedObjectModel
+        raise RuntimeError, "invalid class: #{model.class}"
+      end
+
+      model.entities.to_a.each do |ent|
+	klassname = ent.managedObjectClassName.to_s
+        next if klassname == 'NSManagedObject'
+	next unless Object.const_defined?(klassname)
+
+	attrs = ent.attributesByName.allKeys.to_a.collect {|key| key.to_s}
+	rels = ent.relationshipsByName.allKeys.to_a.collect {|key| key.to_s}
+	klass = Object.const_get(klassname)
+	klass.instance_eval <<-EOE_AUTOWRAP,__FILE__,__LINE__+1
+	  kvc_wrapper attrs
+	  kvc_wrapper_reader rels
+	EOE_AUTOWRAP
+      end
+    end
+    module_function :define_wrapper
+
+  end
+
+end
