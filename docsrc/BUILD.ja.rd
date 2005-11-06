@@ -34,7 +34,7 @@ RubyCocoaを構築するためには、最低限librubyとRubyに付随するC言語の
 ヘッダーファイルが必要となります。ここでは次に示す場合を例に、
 RubyCocoaのベースとなるRubyの構築手順を説明します。
 
-  * ソースからインストールしたRuby 1.8.2
+  * ソースからインストールしたRuby 1.8.3
   * Mac OS X付属のRuby
     * Ruby 1.6.8(Mac OS X 10.3)
     * Ruby 1.6.7(Mac OS X 10.2)
@@ -220,11 +220,11 @@ config'のオプションがあります。
 * Mac OS X 10.3.8
   * XcodeTools 1.5
   * ruby-1.6.8 (pre-installed in Mac OS X 10.3)
-  * ruby-1.8.2
+  * ruby-1.8.3
 * Mac OS X 10.2.8
   * DevTools 10.2
   * ruby-1.6.7 (pre-installed in Mac OS X 10.2)
-  * ruby-1.8.2
+  * ruby-1.8.3
 
 == ではお楽しみください
 
