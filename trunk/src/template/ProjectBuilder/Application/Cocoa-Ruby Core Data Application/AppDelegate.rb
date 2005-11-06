@@ -17,6 +17,7 @@ class ÇPROJECTNAMEASIDENTIFIERÈAppDelegate < OSX::NSObject
     allBundles.addObjectsFromArray(OSX::NSBundle.allFrameworks)
     
     @managedObjectModel = OSX::NSManagedObjectModel.mergedModelFromBundles(allBundles.allObjects)
+    OSX::CoreData.define_wrapper(@manegedObjectModel)
     return @managedObjectModel
   end
   
