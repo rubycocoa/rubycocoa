@@ -197,7 +197,7 @@ module OSX
     end
 
     def kvc_wrapper_reader(*keys)
-      keys.flatten.each do |key|
+      keys.flatten.compact.each do |key|
         class_eval <<-EOE_KVC_WRAPPER,__FILE__,__LINE__+1
     	def #{key}
   	  valueForKey("#{key}")
@@ -207,7 +207,7 @@ module OSX
     end
 
     def kvc_wrapper_writer(*keys)
-      keys.flatten.each do |key|
+      keys.flatten.compact.each do |key|
         class_eval <<-EOE_KVC_WRAPPER,__FILE__,__LINE__+1
 	def #{key}=(val)
 	  setValue_forKey(val, "#{key}")

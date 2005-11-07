@@ -1,4 +1,9 @@
-2005-11-06  kimura wataru <kimuraw@i.nifty.jp>
+2005-11-07 kimura wataru <kimuraw@i.nifty.jp>
+
+	* framework/src/ruby/osx/objc/oc_import.rb:
+	fix: kvc_wrapper fails when nil is passed as a parameter.
+
+2005-11-06 kimura wataru <kimuraw@i.nifty.jp>
 
 	* framework/src/ruby/osx/objc/oc_import.rb:
 	add method kvc_wrapper.
@@ -8,7 +13,6 @@
 	NSManagedObjectModel.
 
 	* template/ProjectBuilder/Application/Cocoa-Ruby Core Data Document-based Application/MyDocument.rb:
-ChangeLog
 	call OSX::CoreData.define_wrapper at initializing a document.
 
 	* framework/src/ruby/osx/objc/oc_import.rb:
