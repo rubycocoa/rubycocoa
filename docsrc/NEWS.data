@@ -3,14 +3,16 @@ Subject-en: RubyCocoa 0.4.2 was released!
 Date: 2005-11-10
 UID: 20051110
 
-<p>RubyCocoa 0.4.2をリリースしました。CocoaBindins および CoreData に対応
+<p>RubyCocoa 0.4.2をリリースしました。CocoaBindings および CoreData に対応
 しています。
 詳しくは<a href="changes.ja.html">「変更点」</a>をご覧ください。</p>
 
 ..ja
 
-<p>RubyCocoa 0.4.2 was released! Now it support CocoaBindins and CoreData. See
+<p>RubyCocoa 0.4.2 was released! Now it support CocoaBindings and CoreData. See
 <a href="changes.en.html">"Changes"</a> for more detail.</p>
+
+..en
 
 Subject-ja: RubyCocoa 0.4.1をリリース！
 Subject-en: RubyCocoa 0.4.1 was released!
