@@ -42,7 +42,7 @@ RubyCocoa<font size='-1'> - A Ruby/Objective-C Bridge for Mac OS X with Cocoa</f
 <!-- body/main/contents -->
 <td class='body-contents' id='body-contents' valign='top'>
 <h1><a name='label-0' id='label-0'>Building and Installing RubyCocoa from Source</a></h1><!-- RDLabel: "Building and Installing RubyCocoa from Source" -->
-<p>This document describes building and installing RubyCocoa 0.4.1 from
+<p>This document describes building and installing RubyCocoa 0.4.2 from
 source. Skip this if you are going to install the binary distribution.</p>
 <p>Building and installation are done from a shell, using the Terminal
 application or another program that provides a shell prompt, such as GLterm.
@@ -59,7 +59,7 @@ examples. Please adjust the instructions accordingly when another shell (e.g.
 </ul>
 <p>Extract RubyCocoa source from the '.tgz' file into a directory somewhere.</p>
 <pre>$ cd {somewhere}
-$ tar zxf rubycocoa-0.4.1.tar.gz # use "gnutar" command on Mac OS X 10.2</pre>
+$ tar zxf rubycocoa-0.4.2.tar.gz # use "gnutar" command on Mac OS X 10.2</pre>
 <p><em>Caution!</em> Using StuffIt, building RubyCocoa will fail because of a file
 name length problem.</p>
 <h2><a name='label-2' id='label-2'>Build and Installation of Ruby</a></h2><!-- RDLabel: "Build and Installation of Ruby" -->
@@ -67,14 +67,14 @@ name length problem.</p>
 required. Here, the build procedure of Ruby which serves as a base of RubyCocoa
 in the case shown below at an example is explained.</p>
 <ul>
-<li>Ruby 1.8.2 installed from source</li>
+<li>Ruby 1.8.3 installed from source</li>
 <li>Ruby included in Mac OS X
 <ul>
 <li>Ruby 1.6.8(Mac OS X 10.3)</li>
 <li>Ruby 1.6.7(Mac OS X 10.2)</li>
 </ul></li>
 </ul>
-<p>RubyCocoa 0.4.1 binary distribution has been built with the 2nd way.
+<p>RubyCocoa 0.4.2 binary distribution has been built with the 2nd way.
 When Ruby has been installed with a package utility such as
 <a href='http://fink.sf.net/'>Fink</a>, adapt these instructions accordingly.</p>
 <h3><a name='label-3' id='label-3'>Check that the necessary Mac OS X packages are installed</a></h3><!-- RDLabel: "Check that the necessary Mac OS X packages are installed" -->
@@ -84,8 +84,8 @@ first check whether packages is installed, and if required, install it from
 the Mac OS X installer.</p>
 <pre>$ ls -dF /Library/Receipts/BSD*.pkg
 /Library/Receipts/BSD.pkg/   /Library/Receipts/BSDSDK.pkg/</pre>
-<h3><a name='label-4' id='label-4'>Ruby 1.8.2 installed from source</a></h3><!-- RDLabel: "Ruby 1.8.2 installed from source" -->
-<p>It moves to the source directory of Ruby 1.8.2, and builds and installs
+<h3><a name='label-4' id='label-4'>Ruby 1.8.3 installed from source</a></h3><!-- RDLabel: "Ruby 1.8.3 installed from source" -->
+<p>It moves to the source directory of Ruby 1.8.3, and builds and installs
 as follows. Please change an option if needed.
 <a href='#foottext-1' name='footmark-1' id='footmark-1'><sup><small>*1</small></sup></a></p>
 <pre>$ CFLAGS='-g -O2 -fno-common' ./configure
@@ -127,7 +127,9 @@ required, specify option at the time of a config phase.</p>
 <pre>$ cd {source}/tests
 $ DYLD_FRAMEWORK_PATH=../framework/build ruby -I../lib -I../ext/rubycocoa testall.rb</pre>
 <p><a href='http://raa.ruby-lang.org/list.rhtml?name=testunit'>Test::Unit</a> 
-is required for unit tests.  This process is optional.</p>
+is required for unit tests.  This process is optional.
+(Test::Unit is not available on RAA. We uploaded a copy 
+<a href='http://rubycocoa.sourceforge.net/files/testunit-0.1.8.tar.gz'>testunit-0.1.8.tar.gz</a>.)</p>
 <p>Ruby 1.8 includes Test::UNIT.</p>
 <h2><a name='label-11' id='label-11'>Installation of RubyCocoa</a></h2><!-- RDLabel: "Installation of RubyCocoa" -->
 <pre>$ sudo ruby install.rb install</pre>
@@ -207,18 +209,24 @@ $ sudo ruby install.rb install</pre>
 /tmp/build/Developer/Documentation/RubyCocoa</pre>
 <h2><a name='label-21' id='label-21'>Development and testing environment</a></h2><!-- RDLabel: "Development and testing environment" -->
 <ul>
-<li>iBook G3/900/600MB</li>
+<li>iBook G3/900/640MB</li>
+<li>Mac OS X 10.4.2
+<ul>
+<li>XcodeTools 2.0/2.1</li>
+<li>ruby-1.8.2 (pre-installed in Mac OS X 10.4)</li>
+<li>ruby-1.8.3</li>
+</ul></li>
 <li>Mac OS X 10.3.8
 <ul>
 <li>XcodeTools 1.5</li>
 <li>ruby-1.6.8 (pre-installed in Mac OS X 10.3)</li>
-<li>ruby-1.8.2</li>
+<li>ruby-1.8.3</li>
 </ul></li>
 <li>Mac OS X 10.2.8
 <ul>
 <li>DevTools 10.2</li>
 <li>ruby-1.6.7 (pre-installed in Mac OS X 10.2)</li>
-<li>ruby-1.8.2</li>
+<li>ruby-1.8.3</li>
 </ul></li>
 </ul>
 <h2><a name='label-22' id='label-22'>Have fun!</a></h2><!-- RDLabel: "Have fun!" -->
@@ -262,12 +270,14 @@ $ sudo ruby install.rb install</pre>
 <div id='sidebar-links'>
   <h2 class='body-sidebar'><a href='links.en.html'>Links</a></h2>
   <ul class='body-sidebar'>
-    <li><a href='http://www.fobj.com/rubycocoa/'>RubyCocoa</a></li>
+    <li><a href='http://rubycocoa.sourceforge.net/'>RubyCocoa</a></li>
     <li><a href='http://www.fobj.com/rubyaeosa/'>RubyAEOSA</a></li>
     <li><a href='http://www.freeml.com/info/rubycocoa@freeml.com'>Maling List (Japanese)</a></li>
     <li><a href='http://sourceforge.net/mail/?group_id=44114'>Maling list (English)</a></li>
     <li><a href='http://sourceforge.net/projects/rubycocoa/'>RubyCocoa Project</a></li>
-    <li><a href='http://mwave.sppd.ne.jp/diary/calc_app/calc_app1.html'>Tutorial (Japanese)</a></li>
+    <li><a href='http://rubycocoa.sourceforge.net/w.ja'>RubyCocoa Wiki (Japanese)</a></li>
+    <li><a href='http://rubycocoa.sourceforge.net/w.en'>RubyCocoa Wiki (English)</a></li>
+    <li><a href='http://www.mouseup.net/rubycocoa/calc_app1.html'>Tutorial (Japanese)</a></li>
   </ul>
 </div>
 
