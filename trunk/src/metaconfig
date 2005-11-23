@@ -39,6 +39,10 @@ add_path_config 'documentation', '/Developer/Documentation',
 add_config 'framework-name', 'name', 'RubyCocoa',
   'real name for RubyCocoa framework'
 
+# Xcode 2.2 moved ruby.h, but ruby command reports old path.
+unless File.exists? File.join(Config::CONFIG['archdir'], 'ruby.h')
+  Config::CONFIG['archdir'] = Config::CONFIG['archdir'].sub(/powerpc/, 'universal')
+end
 add_path_config 'ruby-header-dir', Config::CONFIG['archdir'],
   'path to the ruby header directory'
 

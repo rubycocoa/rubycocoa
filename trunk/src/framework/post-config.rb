@@ -5,8 +5,8 @@ GC.start
 # create osx_ruby.h and osx_intern.h
 # avoid `ID' and `T_DATA' confict headers between Cocoa and Ruby.
 new_filename_prefix = 'osx_'
-ruby_h = "#{Config::CONFIG['archdir']}/ruby.h"
-intern_h = "#{Config::CONFIG['archdir']}/intern.h"
+ruby_h = File.join(@config['ruby-header-dir'], 'ruby.h')
+intern_h = File.join(@config['ruby-header-dir'], 'intern.h')
 [ ruby_h, intern_h ].each do |src_path|
   dst_fname = new_filename_prefix + File.basename(src_path)
   dst_fname = "src/objc/" + dst_fname
