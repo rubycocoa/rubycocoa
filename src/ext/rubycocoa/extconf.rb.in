@@ -1,3 +1,9 @@
+require 'rbconfig'
+# Xcode 2.2 moved ruby.h 
+unless File.exists? File.join(Config::CONFIG['archdir'], 'ruby.h')
+  Config::CONFIG['archdir'] = Config::CONFIG['archdir'].sub(/powerpc/, 'universal')
+end
+
 require 'mkmf'
 
 def command(cmd)

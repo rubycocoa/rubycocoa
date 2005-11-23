@@ -1,3 +1,8 @@
+2005-11-23  kimura wataru <kimuraw@i.nifty.jp>
+
+	* metaconfig, ext/rubycocoa/extconf.rb.in, framework/post-config.rb
+	Xcode 2.2 moved ruby.h, but ruby command reports old path.
+
 2005-11-10  kimura wataru <kimuraw@i.nifty.jp>
 
 	* release 0.4.2 (release-0_4_2)
