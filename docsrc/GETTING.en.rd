@@ -95,7 +95,7 @@ with appropriate options.
 == DarwinPorts 
 
 ((<DarwinPorts|URL:http://darwinports.opendarwin.org/>)) has a port 
-"rb-cocoa" for RubyCocoa(0.4.1). 
+"rb-cocoa" for RubyCocoa(0.4.2). 
 
 The port requires DarwinPorts version 1.1. You can update your DarwinPorts 
 with following command:
