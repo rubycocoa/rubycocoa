@@ -98,7 +98,7 @@ Ruby 1.6.7 に合わせて構築しています。
 == DarwinPorts
 
 ((<DarwinPorts|URL:http://darwinports.opendarwin.org/>))では、"rb-cocoa"という
-名前でRubyCocoa(0.4.1)のportが提供されています。
+名前でRubyCocoa(0.4.2)のportが提供されています。
 
 このportをインストールするには、DarwinPortsのバージョン1.1が必要です。
 次のコマンドでDarwinPortsをアップデートすることができます。
