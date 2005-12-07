@@ -70,7 +70,7 @@ Ruby 1.6.7 に合わせて構築しています。
 
 ((<ファイル一覧|URL:http://rubycocoa.sourceforge.net/files/>))
 の中から
-((<rubycocoa-0.4.2.tgz|URL:http://prdownloads.sourceforge.net/rubycocoa/rubycocoa-0.4.2.tgz?download>))
+((<rubycocoa-0.4.2-xcode-2.2-patched.tgz|URL:http://prdownloads.sourceforge.net/rubycocoa/rubycocoa-0.4.2-xcode-2.2-patched.tgz?download>))
 をダウンロードしてください。
 
 ((<「RubyCocoaをソースから構築・インストールする」|URL:build.ja.html>))

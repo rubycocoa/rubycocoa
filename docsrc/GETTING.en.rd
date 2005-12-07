@@ -63,7 +63,7 @@ from ((<file list|URL:http://sourceforge.net/project/showfiles.php?group_id=4411
 == Source Distribution
 
 Download
-((<rubycocoa-0.4.2.tgz|URL:http://prdownloads.sourceforge.net/rubycocoa/rubycocoa-0.4.2.tgz?download>))
+((<rubycocoa-0.4.2-xcode-2.2-patched.tgz|URL:http://prdownloads.sourceforge.net/rubycocoa/rubycocoa-0.4.2-xcode-2.2-patched.tgz?download>))
 from ((<file list|URL:http://sourceforge.net/project/showfiles.php?group_id=44114>)).
 
 To build and install RubyCocoa, refer to 
