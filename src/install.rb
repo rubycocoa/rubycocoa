@@ -563,7 +563,7 @@ class Installer
 
   def extconf
     opt = @options['config-opt'].join(' ')
-    command "#{config('ruby-prog')} #{curr_srcdir}/extconf.rb #{opt}"
+    command "#{config('ruby-prog')} \"#{curr_srcdir}/extconf.rb\" #{opt}"
   end
 
   def config_dir_data( rel )
