@@ -343,11 +343,9 @@ static BOOL rbnum_to_nsnum(VALUE rbval, id* nsval)
 {
   BOOL result;
   VALUE rbstr = rb_obj_as_string(rbval);
-  id pool = [[NSAutoreleasePool alloc] init];
   id nsstr = [NSString stringWithUTF8String: STR2CSTR(rbstr)];
-  *nsval = [[NSDecimalNumber alloc] initWithString: nsstr];
+  *nsval = [NSDecimalNumber decimalNumberWithString: nsstr];
   result = [(*nsval) isKindOfClass: [NSDecimalNumber class]];
-  [pool release];
   return result;
 }
 

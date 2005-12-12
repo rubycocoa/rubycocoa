@@ -1,3 +1,8 @@
+2005-12-12  kimura wataru <kimuraw@i.nifty.jp>
+
+	* framework/src/objc/ocdata_conv.m:
+	fix: leaks at rbnum_to_nsnum().
+
 2005-12-08  kimura wataru <kimuraw@i.nifty.jp>
 
 	* install.rb:
