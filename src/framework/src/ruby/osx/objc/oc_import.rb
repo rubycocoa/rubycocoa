@@ -185,7 +185,7 @@ module OSX
 
     def kvc_depends_on(keys, *dependencies)
       dependencies.flatten.each do |dependentKey|
-        setKeys_triggerChangeNotificationsForDependentKey(keys.to_a, dependentKey)
+        setKeys_triggerChangeNotificationsForDependentKey(Array(keys), dependentKey)
       end
     end
  
