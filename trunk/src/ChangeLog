@@ -1,3 +1,9 @@
+2005-12-23  kimura wataru <kimuraw@i.nifty.jp>
+
+	* framework/src/ruby/osx/objc/oc_import.rb:
+	suppress warning "default `to_a' will be obsolete" when one Symbol 
+ 	passed to kvc_depends_on().
+
 2005-12-12  kimura wataru <kimuraw@i.nifty.jp>
 
 	* framework/src/objc/ocdata_conv.m:
