@@ -255,7 +255,7 @@ static id imp_c_allocWithZone(Class klass, SEL method, NSZone* zone)
 {
   id new_obj;
   id slave;
-  new_obj = class_createInstanceFromZone(klass, 0, zone);
+  new_obj = class_createInstanceFromZone(klass, 0, zone ? zone : NSDefaultMallocZone());
   slave = slave_obj_new(new_obj);
   set_slave(new_obj, slave);
   return new_obj;
