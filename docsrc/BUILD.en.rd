@@ -119,8 +119,7 @@ required, specify option at the time of a config phase.
 
 == Unit Test for RubyCocoa
 
-  $ cd {source}/tests
-  $ DYLD_FRAMEWORK_PATH=../framework/build ruby -I../lib -I../ext/rubycocoa testall.rb
+  $ ruby install.rb test
 
 ((<"Test::Unit"|URL:http://raa.ruby-lang.org/list.rhtml?name=testunit>)) 
 is required for unit tests.  This process is optional.

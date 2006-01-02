@@ -118,8 +118,7 @@ libruby.aのみをインストールします。
 
 == RubyCocoaの単体テスト
 
-  $ cd {ソース}/tests
-  $ DYLD_FRAMEWORK_PATH=../framework/build ruby -I../lib -I../ext/rubycocoa testall.rb
+  $ ruby install.rb test
 
 単体テストには
 ((<"Test::Unit"|URL:http://raa.ruby-lang.org/list.rhtml?name=testunit>))
