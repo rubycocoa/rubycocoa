@@ -3,6 +3,7 @@
 # $Id$
 #
 
+KCODE = 'e'
 require 'hako'
 require 'cocoa_hako'
 
