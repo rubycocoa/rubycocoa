@@ -107,7 +107,7 @@ class ChipLabel < OSX::NSTextField
 
   def initWithChip (chip)
     initWithFrame [0, 0, chip.w, chip.h]
-    name = chip.name.to_s.tosjis
+    name = chip.name.to_s
     setStringValue(name)
     setEditable(false)
     setBackgroundColor(ChipLabel.color_for(name))
