@@ -381,12 +381,12 @@ wrapper_to_s (VALUE rcv)
 static void
 _ary_push_objc_methods (VALUE ary, Class cls)
 {
-  void *iterator = NULL;
+  void* iterator = NULL;
   struct objc_method_list* list;
 
   while (list = class_nextMethodList(cls, &iterator)) {
     int i;
-    struct objc_method *methods = list->method_list;
+    struct objc_method* methods = list->method_list;
     
     for (i = 0; i < list->method_count; i++) {
       rb_ary_push (ary, rb_str_new2((const char*)(methods[i].method_name)));
