@@ -1,7 +1,10 @@
 2005-01-11  kimura wataru <kimuraw@i.nifty.jp>
 
 	* framework/src/objc/mdl_objwrapper.m:
-	fix: invoking Class#objc_methods crashes at _ary_push_objc_methods().
+	fix: invoking OSX::OCObjWrapper#objc_methods crashes.
+
+	* framework/src/objc/mdl_objwrapper.m:
+	fix: invoking OSX::OCObjWrapper#objc_method_type crashes.
 
 2005-01-03  kimura wataru <kimuraw@i.nifty.jp>
 

@@ -413,24 +413,12 @@ wrapper_objc_methods (VALUE rcv)
 static const char*
 _objc_method_type (Class cls, const char* name)
 {
-  struct objc_method_list** list;
-  int i, cnt;
-  struct objc_method* methods;
+  struct objc_method* method;
 
-  list = cls->methodLists;
-  while (*list && *list != (struct objc_method_list*)-1) {
-    cnt = (*list)->method_count;
-    methods = (*list)->method_list;
-    for (i = 0; i < cnt; i++) {
-      if (strcmp ((const char*)(methods[i].method_name), name) == 0) {
-	return methods[i].method_types;
-      }
-    }
-    list++;
-  }
-  if (cls->super_class)
-    return _objc_method_type (cls->super_class, name);
-  return NULL;
+  if (!sel_isMapped((SEL)name))
+    return NULL;
+  method = class_getInstanceMethod(cls, sel_registerName(name));
+  return method->method_types;
 }
 
 static VALUE
@@ -456,7 +444,7 @@ wrapper_objc_method_type (VALUE rcv, VALUE name)
   ary = rb_ary_new();
   oc_rcv = rbobj_get_ocid (rcv);
   name = _name_to_selstr (name);
-  str = _objc_method_type (oc_rcv, STR2CSTR(name));
+  str = _objc_method_type (oc_rcv->isa, STR2CSTR(name));
   if (str == NULL) return Qnil;
   return rb_str_new2(str);
 }
