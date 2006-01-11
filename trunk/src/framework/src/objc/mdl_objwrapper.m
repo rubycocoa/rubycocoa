@@ -381,19 +381,18 @@ wrapper_to_s (VALUE rcv)
 static void
 _ary_push_objc_methods (VALUE ary, Class cls)
 {
-  struct objc_method_list** list;
-  int i, cnt;
-  struct objc_method* methods;
+  void *iterator = NULL;
+  struct objc_method_list* list;
 
-  list = cls->methodLists;
-  while (*list && *list != (struct objc_method_list*)-1) {
-    cnt = (*list)->method_count;
-    methods = (*list)->method_list;
-    for (i = 0; i < cnt; i++) {
+  while (list = class_nextMethodList(cls, &iterator)) {
+    int i;
+    struct objc_method *methods = list->method_list;
+    
+    for (i = 0; i < list->method_count; i++) {
       rb_ary_push (ary, rb_str_new2((const char*)(methods[i].method_name)));
     }
-    list++;
   }
+
   if (cls->super_class)
     _ary_push_objc_methods (ary, cls->super_class);
   rb_funcall(ary, rb_intern("uniq!"), 0);
