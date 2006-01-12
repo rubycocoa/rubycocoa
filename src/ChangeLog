@@ -3,6 +3,9 @@
 	* install.rb:
 	suppress warning "Object#type is deprecated".
 
+	* framework/src/objc/mdl_objwrapper.m:
+	fix: objc_methods returns mixture value of class/instance methods.
+
 2005-01-11  kimura wataru <kimuraw@i.nifty.jp>
 
 	* framework/src/objc/mdl_objwrapper.m:
