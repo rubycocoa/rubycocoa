@@ -1,3 +1,8 @@
+2005-01-12  kimura wataru <kimuraw@i.nifty.jp>
+
+	* install.rb:
+	suppress warning "Object#type is deprecated".
+
 2005-01-11  kimura wataru <kimuraw@i.nifty.jp>
 
 	* framework/src/objc/mdl_objwrapper.m:
