@@ -393,7 +393,7 @@ _ary_push_objc_methods (VALUE ary, Class cls)
     }
   }
 
-  if (cls->super_class && (cls->info & cls->super_class->info & CLS_META))
+  if (cls->super_class && !((cls->info ^ cls->super_class->info) & CLS_META))
     _ary_push_objc_methods (ary, cls->super_class);
   rb_funcall(ary, rb_intern("uniq!"), 0);
 }
