@@ -1,3 +1,8 @@
+2005-01-14  kimura wataru <kimuraw@i.nifty.jp>
+
+	* framework/src/objc/mdl_objwrapper.m:
+	fix: objc_methods not lookup superclass when the receiver is a instance.
+
 2005-01-12  kimura wataru <kimuraw@i.nifty.jp>
 
 	* install.rb:
