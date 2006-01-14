@@ -379,7 +379,7 @@ wrapper_to_s (VALUE rcv)
 }
 
 static void
-_ary_push_objc_methods (VALUE ary, Class cls)
+_ary_push_objc_methods (VALUE ary, Class cls, int recur)
 {
   void* iterator = NULL;
   struct objc_method_list* list;
@@ -393,8 +393,8 @@ _ary_push_objc_methods (VALUE ary, Class cls)
     }
   }
 
-  if (cls->super_class && !((cls->info ^ cls->super_class->info) & CLS_META))
-    _ary_push_objc_methods (ary, cls->super_class);
+  if (recur && cls->super_class && !((cls->info ^ cls->super_class->info) & CLS_META))
+    _ary_push_objc_methods (ary, cls->super_class, recur);
   rb_funcall(ary, rb_intern("uniq!"), 0);
 }
 
@@ -406,7 +406,39 @@ wrapper_objc_methods (VALUE rcv)
 
   ary = rb_ary_new();
   oc_rcv = rbobj_get_ocid (rcv);
-  _ary_push_objc_methods (ary, oc_rcv->isa);
+  _ary_push_objc_methods (ary, oc_rcv->isa, 1);
+  return ary;
+}
+
+static VALUE
+wrapper_objc_instance_methods (int argc, VALUE* argv, VALUE rcv)
+{
+  VALUE ary;
+  id oc_rcv;
+  int recur;
+
+  recur = (argc == 0) ? 1 : RTEST(argv[0]);
+  ary = rb_ary_new();
+  oc_rcv = rbobj_get_ocid (rcv);
+  if (TYPE(rcv) != T_CLASS)
+    oc_rcv = oc_rcv->isa;
+  _ary_push_objc_methods (ary, oc_rcv, recur);
+  return ary;
+}
+
+static VALUE
+wrapper_objc_class_methods (int argc, VALUE* argv, VALUE rcv)
+{
+  VALUE ary;
+  id oc_rcv;
+  int recur;
+
+  recur = (argc == 0) ? 1 : RTEST(argv[0]);
+  ary = rb_ary_new();
+  oc_rcv = rbobj_get_ocid (rcv);
+  if (TYPE(rcv) != T_CLASS)
+    oc_rcv = oc_rcv->isa;
+  _ary_push_objc_methods (ary, oc_rcv->isa, recur);
   return ary;
 }
 
@@ -463,6 +495,8 @@ init_mdl_OCObjWrapper(VALUE outer)
   rb_define_method(_mObjWrapper, "to_s", wrapper_to_s, 0);
 
   rb_define_method(_mObjWrapper, "objc_methods", wrapper_objc_methods, 0);
+  rb_define_method(_mObjWrapper, "objc_instance_methods", wrapper_objc_instance_methods, -1);
+  rb_define_method(_mObjWrapper, "objc_class_methods", wrapper_objc_class_methods, -1);
   rb_define_method(_mObjWrapper, "objc_method_type", wrapper_objc_method_type, 1);
 
   return _mObjWrapper;
