@@ -2,16 +2,24 @@
 
 module RubyCocoaConfig
   eval File.open('VERSION'){|f|f.read}
+
+  module_function
+
+  def libruby_path
+    path = File.join(Config::CONFIG['libdir'], Config::CONFIG['LIBRUBY'])
+    unless File.exist?( path ) then
+      path = File.join(Config::CONFIG['archdir'], Config::CONFIG['LIBRUBY_A'])
+    end
+    # On Panther, /usr/lib/ruby reports wrong CONFIG
+    unless File.exist?( path ) then
+      path = File.join(Config::CONFIG['libdir'], 'libruby.dylib')
+    end
+    return path
+  end
+
 end
 
-libruby_path = File.join(Config::CONFIG['libdir'], Config::CONFIG['LIBRUBY'])
-unless File.exist?( libruby_path ) then
-  libruby_path = File.join(Config::CONFIG['archdir'], Config::CONFIG['LIBRUBY_A'])
-end
-# On Panther, /usr/lib/ruby reports wrong CONFIG
-unless File.exist?( libruby_path ) then
-  libruby_path = File.join(Config::CONFIG['libdir'], 'libruby.dylib')
-end
+### install destination ### 
 
 add_path_config 'install-root', '',
   'path to the root directory for Frameworks and "ProjectBuilder Extras"'
@@ -39,6 +47,8 @@ add_path_config 'documentation', '/Developer/Documentation',
 add_config 'framework-name', 'name', 'RubyCocoa',
   'real name for RubyCocoa framework'
 
+### build configuration ### 
+
 # Xcode 2.2 moved ruby.h, but ruby command reports old path.
 unless File.exists? File.join(Config::CONFIG['archdir'], 'ruby.h')
   Config::CONFIG['archdir'] = Config::CONFIG['archdir'].sub(/powerpc/, 'universal')
@@ -46,8 +56,10 @@ end
 add_path_config 'ruby-header-dir', Config::CONFIG['archdir'],
   'path to the ruby header directory'
 
-add_path_config 'libruby-path', libruby_path,
+add_path_config 'libruby-path', RubyCocoaConfig.libruby_path,
   'path to the libruby file'
+
+### versioning ### 
 
 add_config 'rubycocoa-version', 'name', 
   RubyCocoaConfig::VERSION + RubyCocoaConfig::STAGE,
