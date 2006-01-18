@@ -1,3 +1,8 @@
+2005-01-18  kimura wataru <kimuraw@i.nifty.jp>
+
+	* framework/src/objc/ocdata_conv.m:
+	suppress warning "may be used uninitialized" with gcc-4.0.
+
 2005-01-14  kimura wataru <kimuraw@i.nifty.jp>
 
 	* framework/src/objc/mdl_objwrapper.m:
