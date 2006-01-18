@@ -671,14 +671,14 @@ rbobj_to_ocdata(VALUE obj, int octype, void* ocdata)
     break;
 
   case _PRIV_C_PTR: {
-    void* cptr;
+    void* cptr = NULL;
     f_success = rbobj_to_objcptr(obj, &cptr);
     if (f_success) *(void**)ocdata = cptr;
     break;
   }
 
   case _PRIV_C_ID_PTR: {
-    id* idptr;
+    id* idptr = NULL;
     f_success = rbobj_to_idptr(obj, &idptr);
     if (f_success) *(id**)ocdata = idptr;
     break;
@@ -706,7 +706,7 @@ rbobj_to_ocdata(VALUE obj, int octype, void* ocdata)
   }
 
   case _PRIV_C_NSRANGE: {
-    NSRange nsval;
+    NSRange nsval = NSMakeRange(0, 0);
     f_success = rbobj_to_nsrange(obj, &nsval);
     if (f_success) *(NSRange*)ocdata = nsval;
     break;
