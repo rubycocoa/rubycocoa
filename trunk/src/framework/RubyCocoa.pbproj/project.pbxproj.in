@@ -117,8 +117,8 @@
 				INSTALL_PATH = "@executable_path/../Frameworks";
 				LIBRARY_SEARCH_PATHS = "%%%libruby_path_dirname%%%";
 				OBJROOT = "$SRCROOT/build";
-				OTHER_CFLAGS = "-fno-common";
-				OTHER_LDFLAGS = "-undefined suppress -flat_namespace";
+				OTHER_CFLAGS = "%%%other_cflags%%%";
+				OTHER_LDFLAGS = "%%%other_ldflags%%%";
 				PREBINDING = NO;
 				PRODUCT_NAME = "%%%framework_name%%%";
 				SECTORDER_FLAGS = "";

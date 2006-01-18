@@ -6,6 +6,9 @@
 	* metaconfig:
 	add RubyCocoaConfig.libruby_path
 
+	* pre-config.rb, ext/rubycocoa/extconf.rb.in, framework/RubyCocoa.pbproj/project.pbxproj.in:
+	apply environment CFLAGS and LDFLAGS
+
 2005-01-14  kimura wataru <kimuraw@i.nifty.jp>
 
 	* framework/src/objc/mdl_objwrapper.m:
