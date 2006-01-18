@@ -15,6 +15,9 @@ end
 $CFLAGS = '-F../../framework/%%%build_dir%%%'
 $LDFLAGS  = '-F../../framework/%%%build_dir%%% -framework %%%framework_name%%%'
 
+$CFLAGS << ' %%%other_cflags%%%'
+$LDFLAGS << ' %%%other_ldflags%%%'
+
 create_makefile('rubycocoa')
 command "mv -f Makefile Makefile.bak"
 command "sed -e 's/-no-cpp-precomp//' -e 's/-no-precomp//' Makefile.bak > Makefile"

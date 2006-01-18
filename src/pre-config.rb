@@ -23,6 +23,10 @@ config_ary = [
   [ :build_dir, framework_obj_path ],
 ]
 
+# build options from environment
+config_ary << [ :other_cflags, '-fno-common ' + ENV['CFLAGS'].to_s ]
+config_ary << [ :other_ldflags, '-undefined suppress -flat_namespace ' + ENV['LDFLAGS'].to_s ]
+
 target_files.each do |dst_name|
   src_name = dst_name + '.in'
   data = File.open(src_name) {|f| f.read }
