@@ -24,6 +24,19 @@ config_ary = [
 ]
 
 # build options from environment
+def ENV.merge(key, *value)
+  self[key] = [self[key], value].join(' ')
+end
+
+if ENV.has_key? 'SDKROOT' 
+  if /-isyslibroot/ =~ ENV['LDFLAGS'].to_s
+    $deferr.print 'warning: ignore $SDKROOT, $LDFLAGS contains "-isyslibroot"'
+  else
+    ENV.merge('CFLAGS', '-sysroot', ENV['SDKROOT'])
+    ENV.merge('LDFLAGS', '-syslibroot', ENV['SDKROOT'])
+  end
+end
+
 config_ary << [ :other_cflags, '-fno-common ' + ENV['CFLAGS'].to_s ]
 config_ary << [ :other_ldflags, '-undefined suppress -flat_namespace ' + ENV['LDFLAGS'].to_s ]
 
