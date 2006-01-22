@@ -23,22 +23,27 @@ config_ary = [
   [ :build_dir, framework_obj_path ],
 ]
 
-# build options from environment
-def ENV.merge(key, *value)
-  self[key] = [self[key], value].join(' ')
+# build options
+cflags = '-fno-common'
+ldflags = '-undefined suppress -flat_namespace'
+sdkroot = ''
+
+if @config['build-universal'] == 'yes'
+  cflags << ' -arch ppc -arch i386'
+  ldflags << ' -arch ppc -arch i386'
+
+  sdkroot = '/Developer/SDKs/MacOSX10.4u.sdk'
+  cflags << ' -isysroot ' << sdkroot
+  ldflags << ' -Wl,-syslibroot,' << sdkroot
+
+  # validation
+  raise "ERROR: SDK \"#{sdkroot}\" does not exist." unless File.exist?(sdkroot)
+  libruby_sdk = File.join(sdkroot, @config['libruby-path'])
+  raise "ERROR: library \"#{libruby_sdk}\" does not exists." unless File.exist?(libruby_sdk)
 end
 
-if ENV.has_key? 'SDKROOT' 
-  if /-isyslibroot/ =~ ENV['LDFLAGS'].to_s
-    $deferr.print 'warning: ignore $SDKROOT, $LDFLAGS contains "-isyslibroot"'
-  else
-    ENV.merge('CFLAGS', '-sysroot', ENV['SDKROOT'])
-    ENV.merge('LDFLAGS', '-syslibroot', ENV['SDKROOT'])
-  end
-end
-
-config_ary << [ :other_cflags, '-fno-common ' + ENV['CFLAGS'].to_s ]
-config_ary << [ :other_ldflags, '-undefined suppress -flat_namespace ' + ENV['LDFLAGS'].to_s ]
+config_ary << [ :other_cflags, cflags ]
+config_ary << [ :other_ldflags, ldflags ]
 
 target_files.each do |dst_name|
   src_name = dst_name + '.in'
