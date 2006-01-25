@@ -1,3 +1,8 @@
+2005-01-25  kimura wataru <kimuraw@i.nifty.jp>
+
+	* tests/tc_wrapper.rb
+	add test for module OCObjWrapper.
+
 2005-01-22  kimura wataru <kimuraw@i.nifty.jp>
 
 	* metaconfig:
