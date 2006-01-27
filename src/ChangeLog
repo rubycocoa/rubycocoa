@@ -1,3 +1,9 @@
+2005-01-27  kimura wataru <kimuraw@i.nifty.jp>
+
+	* metaconfig.rb:
+	- add RubyCocoa.system_version
+	- add config 'macosx-deployment-target'
+
 2005-01-25  kimura wataru <kimuraw@i.nifty.jp>
 
 	* tests/tc_wrapper.rb

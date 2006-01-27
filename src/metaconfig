@@ -17,6 +17,10 @@ module RubyCocoaConfig
     return path
   end
 
+  def system_version
+    `/usr/bin/defaults read /System/Library/CoreServices/SystemVersion ProductUserVisibleVersion`
+  end
+
 end
 
 ### install destination ### 
@@ -59,10 +63,14 @@ add_path_config 'ruby-header-dir', Config::CONFIG['archdir'],
 add_path_config 'libruby-path', RubyCocoaConfig.libruby_path,
   'path to the libruby file'
 
-if `/usr/bin/uname -r`.to_f >= 8.0
+if RubyCocoaConfig.system_version.to_f >= 10.4
   add_bool_config 'build-universal', false,
     'yes, build universal binary (requires Xcode 2.1 or later and SDK)'
 end
+
+add_config 'macosx-deployment-target', 'version', 
+  sprintf('%02.1f', RubyCocoaConfig.system_version.to_f),
+  'target Mac OS X version'
 
 ### versioning ### 
 
