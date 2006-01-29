@@ -1,3 +1,8 @@
+2005-01-29  kimura wataru <kimuraw@i.nifty.jp>
+
+	* package/:
+	tool for making binary package.
+
 2005-01-27  kimura wataru <kimuraw@i.nifty.jp>
 
 	* metaconfig.rb:
