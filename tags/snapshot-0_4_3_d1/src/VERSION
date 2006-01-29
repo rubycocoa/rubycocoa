@@ -1,0 +1,3 @@
+VERSION = "0.4.3"
+STAGE = "d1"
+RELEASE_DATE = "2006-01-29"
