@@ -6,6 +6,9 @@
 	* install.rb:
 	add task "package".
 
+	* package/post-package.rb:
+	set owner and group of install files.
+
 2005-01-27  kimura wataru <kimuraw@i.nifty.jp>
 
 	* metaconfig.rb:

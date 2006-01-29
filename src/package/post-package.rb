@@ -14,6 +14,8 @@ Dir.mkdir dmg_dir
 
 pkgmaker = '/Developer/Applications/Utilities/PackageMaker.app/Contents/MacOS/PackageMaker'
 
+command "sudo chown -R root:admin \"#{contents_dir}\""
+
 command %Q!"#{pkgmaker}" -build -v ! +
 	%Q!-p "#{File.join(dmg_dir, package_name)}.pkg" ! +
 	%Q!-f "#{contents_dir}" -r "#{resources_dir}" ! +
