@@ -1052,11 +1052,12 @@ class ToplevelInstaller < Installer
 
   def package_dir_package( rel )
     dive_into(rel) { run_hook 'pre-package' }
-    #exec_setup
+    exec_setup
     config_bak = @config.dup
     install_dest = File.expand_path File.join(@currdir, 'package/work/files')
     @config['install-root'] = install_dest
     @config['so-dir'] = File.join(install_dest, @config['so-dir'])
+    @config['rb-dir'] = File.join(install_dest, @config['rb-dir'])
     exec_install
     @config = config_bak
     dive_into(rel) { run_hook 'post-package' }

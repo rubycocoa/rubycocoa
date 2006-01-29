@@ -5,6 +5,7 @@ contents_dir = File.join(work_dir, 'files')
 resources_dir = File.join(work_dir, 'resources')
 
 package_name = "RubyCocoa-#{@config['rubycocoa-version']}-OSX#{@config['macosx-deployment-target']}"
+package_name = package_name.sub(/snapshot-/, '')
 if @config['build-universal'] == 'yes'
   package_name << 'universal'
 end

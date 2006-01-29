@@ -23,6 +23,7 @@ begin
   end
 
   puts "copy #{srcfile} to #{destfile}"
+  File.link srcfile, destfile
 
   exit 0
 rescue 
