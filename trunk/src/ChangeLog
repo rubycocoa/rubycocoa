@@ -9,6 +9,9 @@
 	* package/post-package.rb:
 	set owner and group of install files.
 
+	* VERSION:
+	set version to 0.4.3d1(snapshot).
+
 2005-01-27  kimura wataru <kimuraw@i.nifty.jp>
 
 	* metaconfig.rb:
