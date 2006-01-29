@@ -781,6 +781,7 @@ class Installer
   def traverse( task, rel, mid )
     return if File.basename(rel) == 'CVS'
     return if rel =~ /^framework\//
+    return unless respond_to? mid
     dive_into( rel ) {
         run_hook 'pre-' + task
         __send__ mid, rel.sub( %r_\A.*?(?:/|\z)_, '' )
@@ -825,6 +826,7 @@ class ToplevelInstaller < Installer
     [ 'setup',    'compiles extention or else' ],
     [ 'test',     'tests framework' ],
     [ 'install',  'installs files' ],
+    [ 'package',  'make binary package into a dmg' ],
     [ 'clean',    "does `make clean' for each extention" ]
   ]
 
@@ -1038,6 +1040,26 @@ class ToplevelInstaller < Installer
 	Config::CONFIG['bindir'], Config::CONFIG['RUBY_INSTALL_NAME'])
       command %Q!"#{ruby_cmd}" -I../ext/rubycocoa -I../lib testall.rb!
     }
+  end
+
+  #
+  # package
+  #
+
+  def exec_package
+    package_dir_package('package')
+  end
+
+  def package_dir_package( rel )
+    dive_into(rel) { run_hook 'pre-package' }
+    #exec_setup
+    config_bak = @config.dup
+    install_dest = File.expand_path File.join(@currdir, 'package/work/files')
+    @config['install-root'] = install_dest
+    @config['so-dir'] = File.join(install_dest, @config['so-dir'])
+    exec_install
+    @config = config_bak
+    dive_into(rel) { run_hook 'post-package' }
   end
 
 end
