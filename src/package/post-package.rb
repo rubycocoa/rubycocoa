@@ -15,14 +15,20 @@ pkgmaker = '/Developer/Applications/Utilities/PackageMaker.app/Contents/MacOS/Pa
 
 command "sudo chown -R root:admin \"#{contents_dir}\""
 
-command %Q!"#{pkgmaker}" -build -v ! +
+begin
+  str = %Q!"#{pkgmaker}" -build ! +
 	%Q!-p "#{File.join(dmg_dir, package_name)}.pkg" ! +
 	%Q!-f "#{contents_dir}" -r "#{resources_dir}" ! +
 	%Q!-i "#{File.join(work_dir, 'Info.plist')}" ! +
 	%Q!-d "#{File.join(work_dir, 'Description.plist')}" !
-
-# revert owner 
-command "sudo chown -R `/usr/bin/id -un` \"#{contents_dir}\""
+  system str
+  unless $?.to_i != 0 and $?.to_i != 1
+    raise RuntimeError, "'system #{str}' failed"
+  end
+ensure
+  # revert owner 
+  command "sudo chown -R `/usr/bin/id -un` \"#{contents_dir}\""
+end
 
 save_dir = Dir.pwd
 Dir.chdir dmg_dir
