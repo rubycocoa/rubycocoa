@@ -1,3 +1,8 @@
+2005-01-30  kimura wataru <kimuraw@i.nifty.jp>
+
+	* package/post-package.rb:
+	ensure revert owner when packagemaker fails.
+
 2005-01-29  kimura wataru <kimuraw@i.nifty.jp>
 
 	* package/:
