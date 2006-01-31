@@ -97,7 +97,7 @@ static id get_slave(id rcv)
  * ruby method handler
  **/
 
-static id handle_ruby_method(id rcv, SEL a_sel, ...)
+static id handle_ruby_method(void* stretptr, id rcv, SEL a_sel, ...)
 {
   id ret = nil;
   Method method;
@@ -153,6 +153,9 @@ static id handle_ruby_method(id rcv, SEL a_sel, ...)
     else if (retlen == sizeof(ret)) {
       [inv getReturnValue: &ret];
     }
+    else if (stretptr) {
+      [inv getReturnValue: stretptr];
+    }
     else {
       // should we raise an error here, because we can't handle the
       // return value properly?
@@ -164,6 +167,31 @@ static id handle_ruby_method(id rcv, SEL a_sel, ...)
 
   va_end(args);
   return ret;
+}
+
+static id handle_ruby_method_id(id rcv, SEL a_sel, ...)
+{
+  id ret = nil;
+  va_list args;
+  va_start(args, a_sel);
+  ret = handle_ruby_method(NULL, rcv, a_sel, args);
+  va_end(args);
+  return ret;
+}
+
+static void handle_ruby_method_stret(void* retptr, id rcv, SEL a_sel, ...)
+{
+  va_list args;
+  va_start(args, a_sel);
+  handle_ruby_method(retptr, rcv, a_sel, args);
+  va_end(args);
+}
+
+static IMP get_handler_ruby_method(const char* type)
+{
+  unsigned int size, align;
+  NSGetSizeAndAlignment(type, &size, &align);
+  return size > sizeof(id) ? handle_ruby_method_stret : handle_ruby_method_id;
 }
 
 /**
@@ -279,7 +307,7 @@ static id imp_c_addRubyMethod(Class klass, SEL method, SEL arg0)
     // override method
     mlp->method_list[0].method_name = me->method_name;
     mlp->method_list[0].method_types = strdup(me->method_types);
-    mlp->method_list[0].method_imp = handle_ruby_method;
+    mlp->method_list[0].method_imp = get_handler_ruby_method(me->method_types);
     mlp->method_count += 1;
 
     // super method
@@ -300,7 +328,7 @@ static id imp_c_addRubyMethod_withType(Class klass, SEL method, SEL arg0, const 
   // add method
   mlp->method_list[0].method_name = sel_registerName((const char*)arg0);
   mlp->method_list[0].method_types = strdup(type);
-  mlp->method_list[0].method_imp = handle_ruby_method;
+  mlp->method_list[0].method_imp = get_handler_ruby_method(type);
   mlp->method_count += 1;
 
   class_addMethods(klass, mlp);

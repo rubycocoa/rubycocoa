@@ -1,3 +1,9 @@
+2005-01-31  kimura wataru <kimuraw@i.nifty.jp>
+
+	* framework/src/objc/OverrideMixin.m:
+	fix: handle_ruby_method() crashes when size of return type is larger 
+	than size of id. (patch form Jonathan Paisley)
+
 2005-01-30  kimura wataru <kimuraw@i.nifty.jp>
 
 	* package/post-package.rb:
