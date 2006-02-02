@@ -31,6 +31,9 @@ module OSX
     def to_a
       [ @x, @y ]
     end
+    def ==(other)
+      @x == other.x and @y == other.y
+    end
   end
 
   class NSSize
@@ -43,6 +46,9 @@ module OSX
     end
     def to_a
       [ @width, @height ]
+    end
+    def ==(other)
+      @width == other.width and @height == other.height
     end
   end
 
@@ -68,6 +74,9 @@ module OSX
     def y() @origin.y end
     def width() @size.width end
     def height() @size.height end
+    def ==(other)
+      @origin == other.origin and @size == other.size
+    end
   end
 
   class NSRange
@@ -92,6 +101,9 @@ module OSX
     end
     def to_range
       Range.new(@location, @location + @length - 1)
+    end
+    def ==(other)
+      @location == other.location and @length == other.length
     end
   end
 
