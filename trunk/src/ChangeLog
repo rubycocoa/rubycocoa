@@ -6,6 +6,9 @@
 	* pre-cofig.rb:
 	add "-g" to CFLAGS.
 
+	* lib/osx/objc/oc_types.rb:
+	add NSPoint#==, NSSize#==, NSRect#==, NSRange#==
+
 2005-01-31  kimura wataru <kimuraw@i.nifty.jp>
 
 	* framework/src/objc/OverrideMixin.m:
