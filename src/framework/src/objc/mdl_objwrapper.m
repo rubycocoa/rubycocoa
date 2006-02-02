@@ -450,6 +450,8 @@ _objc_method_type (Class cls, const char* name)
   if (!sel_isMapped((SEL)name))
     return NULL;
   method = class_getInstanceMethod(cls, sel_registerName(name));
+  if (!method)
+    return NULL;
   return method->method_types;
 }
 
