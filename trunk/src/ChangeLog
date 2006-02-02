@@ -1,3 +1,8 @@
+2005-02-02  kimura wataru <kimuraw@i.nifty.jp>
+
+	* framework/src/objc/mdl_objwrapper.m:
+	fix: objc_method_type crashes when passed method does not exists.
+
 2005-01-31  kimura wataru <kimuraw@i.nifty.jp>
 
 	* framework/src/objc/OverrideMixin.m:
