@@ -24,7 +24,7 @@ config_ary = [
 ]
 
 # build options
-cflags = '-fno-common'
+cflags = '-fno-common -g'
 ldflags = '-undefined suppress -flat_namespace'
 sdkroot = ''
 
