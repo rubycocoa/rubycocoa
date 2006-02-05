@@ -1,4 +1,4 @@
-2005-02-05  kimura wataru <kimuraw@i.nifty.jp>
+2006-02-05  kimura wataru <kimuraw@i.nifty.jp>
 
 	* framework/src/objc/mdl_objwrapper.m:
 	add methods objc_class_method_type and objc_instance_method_type to
@@ -7,7 +7,7 @@
 	* tests/tc_wrapper.rb
 	add tests for objc_class_method_type and objc_instance_method_type.
 
-2005-02-02  kimura wataru <kimuraw@i.nifty.jp>
+2006-02-02  kimura wataru <kimuraw@i.nifty.jp>
 
 	* framework/src/objc/mdl_objwrapper.m:
 	fix: objc_method_type crashes when passed method does not exists.
@@ -18,18 +18,18 @@
 	* lib/osx/objc/oc_types.rb:
 	add NSPoint#==, NSSize#==, NSRect#==, NSRange#==
 
-2005-01-31  kimura wataru <kimuraw@i.nifty.jp>
+2006-01-31  kimura wataru <kimuraw@i.nifty.jp>
 
 	* framework/src/objc/OverrideMixin.m:
 	fix: handle_ruby_method() crashes when size of return type is larger 
 	than size of id. (patch form Jonathan Paisley)
 
-2005-01-30  kimura wataru <kimuraw@i.nifty.jp>
+2006-01-30  kimura wataru <kimuraw@i.nifty.jp>
 
 	* package/post-package.rb:
 	ensure revert owner when packagemaker fails.
 
-2005-01-29  kimura wataru <kimuraw@i.nifty.jp>
+2006-01-29  kimura wataru <kimuraw@i.nifty.jp>
 
 	* package/:
 	tool for making binary package.
@@ -43,18 +43,18 @@
 	* VERSION:
 	set version to 0.4.3d1(snapshot).
 
-2005-01-27  kimura wataru <kimuraw@i.nifty.jp>
+2006-01-27  kimura wataru <kimuraw@i.nifty.jp>
 
 	* metaconfig.rb:
 	- add RubyCocoa.system_version
 	- add config 'macosx-deployment-target'
 
-2005-01-25  kimura wataru <kimuraw@i.nifty.jp>
+2006-01-25  kimura wataru <kimuraw@i.nifty.jp>
 
 	* tests/tc_wrapper.rb
 	add test for module OCObjWrapper.
 
-2005-01-22  kimura wataru <kimuraw@i.nifty.jp>
+2006-01-22  kimura wataru <kimuraw@i.nifty.jp>
 
 	* metaconfig:
 	add config 'build-universal'
@@ -63,12 +63,12 @@
 	- support config 'build-universal'
 	- ignore environment SDKROOT, CFLAGS and LDFLAGS.
 
-2005-01-19  kimura wataru <kimuraw@i.nifty.jp>
+2006-01-19  kimura wataru <kimuraw@i.nifty.jp>
 
 	* pre-config.rb:
 	apply environment SDKROOT
 
-2005-01-18  kimura wataru <kimuraw@i.nifty.jp>
+2006-01-18  kimura wataru <kimuraw@i.nifty.jp>
 
 	* framework/src/objc/ocdata_conv.m:
 	suppress warning "may be used uninitialized" with gcc-4.0.
@@ -79,7 +79,7 @@
 	* pre-config.rb, ext/rubycocoa/extconf.rb.in, framework/RubyCocoa.pbproj/project.pbxproj.in:
 	apply environment CFLAGS and LDFLAGS
 
-2005-01-14  kimura wataru <kimuraw@i.nifty.jp>
+2006-01-14  kimura wataru <kimuraw@i.nifty.jp>
 
 	* framework/src/objc/mdl_objwrapper.m:
 	fix: objc_methods not lookup superclass when the receiver is a instance.
@@ -87,7 +87,7 @@
 	* framework/src/objc/mdl_objwrapper.m:
 	add methods objc_class_methods and objc_instance_methods to OSX::OCObjWrapper.
 
-2005-01-12  kimura wataru <kimuraw@i.nifty.jp>
+2006-01-12  kimura wataru <kimuraw@i.nifty.jp>
 
 	* install.rb:
 	suppress warning "Object#type is deprecated".
@@ -95,7 +95,7 @@
 	* framework/src/objc/mdl_objwrapper.m:
 	fix: objc_methods returns mixture value of class/instance methods.
 
-2005-01-11  kimura wataru <kimuraw@i.nifty.jp>
+2006-01-11  kimura wataru <kimuraw@i.nifty.jp>
 
 	* framework/src/objc/mdl_objwrapper.m:
 	fix: invoking OSX::OCObjWrapper#objc_methods crashes.
@@ -103,7 +103,7 @@
 	* framework/src/objc/mdl_objwrapper.m:
 	fix: invoking OSX::OCObjWrapper#objc_method_type crashes.
 
-2005-01-03  kimura wataru <kimuraw@i.nifty.jp>
+2006-01-03  kimura wataru <kimuraw@i.nifty.jp>
 
 	* sample/Hakoiri-Musume/cocoa_hako.rb, sample/Hakoiri-Musume/rb_main.rb:
 	fix: Hakoiri-Musume does not run with RubyCocoa 0.4.2.
