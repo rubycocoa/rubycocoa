@@ -471,12 +471,40 @@ _name_to_selstr (VALUE name)
 static VALUE
 wrapper_objc_method_type (VALUE rcv, VALUE name)
 {
-  VALUE ary;
   id oc_rcv;
   const char* str;
 
-  ary = rb_ary_new();
   oc_rcv = rbobj_get_ocid (rcv);
+  name = _name_to_selstr (name);
+  str = _objc_method_type (oc_rcv->isa, STR2CSTR(name));
+  if (str == NULL) return Qnil;
+  return rb_str_new2(str);
+}
+
+static VALUE
+wrapper_objc_instance_method_type (VALUE rcv, VALUE name)
+{
+  id oc_rcv;
+  const char* str;
+
+  oc_rcv = rbobj_get_ocid (rcv);
+  if (TYPE(rcv) != T_CLASS)
+    oc_rcv = oc_rcv->isa;
+  name = _name_to_selstr (name);
+  str = _objc_method_type (oc_rcv, STR2CSTR(name));
+  if (str == NULL) return Qnil;
+  return rb_str_new2(str);
+}
+
+static VALUE
+wrapper_objc_class_method_type (VALUE rcv, VALUE name)
+{
+  id oc_rcv;
+  const char* str;
+
+  oc_rcv = rbobj_get_ocid (rcv);
+  if (TYPE(rcv) != T_CLASS)
+    oc_rcv = oc_rcv->isa;
   name = _name_to_selstr (name);
   str = _objc_method_type (oc_rcv->isa, STR2CSTR(name));
   if (str == NULL) return Qnil;
@@ -500,6 +528,8 @@ init_mdl_OCObjWrapper(VALUE outer)
   rb_define_method(_mObjWrapper, "objc_instance_methods", wrapper_objc_instance_methods, -1);
   rb_define_method(_mObjWrapper, "objc_class_methods", wrapper_objc_class_methods, -1);
   rb_define_method(_mObjWrapper, "objc_method_type", wrapper_objc_method_type, 1);
+  rb_define_method(_mObjWrapper, "objc_instance_method_type", wrapper_objc_instance_method_type, 1);
+  rb_define_method(_mObjWrapper, "objc_class_method_type", wrapper_objc_class_method_type, 1);
 
   return _mObjWrapper;
 }
