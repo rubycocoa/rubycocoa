@@ -44,4 +44,18 @@ class TC_OCObjWrapper < Test::Unit::TestCase
     assert_equal((ary1 | ary2).size, ary1.size)
   end
 
+  def test_method_type
+    sel = 'getBytes:'
+    assert_equal(NSData.objc_instance_method_type(sel),
+		 @data.objc_method_type(sel))
+    assert_equal(NSData.objc_instance_method_type(sel),
+		 @data.objc_instance_method_type(sel))
+
+    sel = 'dataWithBytes:length:'
+    assert_equal(NSData.objc_class_method_type(sel),
+		 NSData.objc_method_type(sel))
+    assert_equal(NSData.objc_class_method_type(sel),
+		 @data.objc_class_method_type(sel))
+  end
+
 end
