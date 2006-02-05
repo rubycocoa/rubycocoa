@@ -123,11 +123,15 @@ suffix.
       Expression by the Ruby Float of the Objective-C object is
       returned.
 
---- OSX::OCObjWrapper#objc_methods
+--- OSX::OCObjWrapper#objc_methods(inherit=true)
+--- OSX::OCObjWrapper#objc_class_methods(inherit=true)
+--- OSX::OCObjWrapper#objc_instance_methods(inherit=true)
 
       return an array of Objective-C method names.
 
 --- OSX::OCObjWrapper#objc_method_type (name)
+--- OSX::OCObjWrapper#objc_class_method_type (name)
+--- OSX::OCObjWrapper#objc_instance_method_type (name)
 
       return a type of Objective-C method as string.
 
