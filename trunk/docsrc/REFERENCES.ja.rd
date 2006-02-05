@@ -113,11 +113,15 @@ Objective-Cのメソッドは真偽値を単なる数値(0なら偽、その他は真の意)で返
 
       操作対象のObjective-Cオブジェクトの実数値による表現を返します。
 
---- OSX::OCObjWrapper#objc_methods
+--- OSX::OCObjWrapper#objc_methods(inherit=true)
+--- OSX::OCObjWrapper#objc_class_methods(inherit=true)
+--- OSX::OCObjWrapper#objc_instance_methods(inherit=true)
 
       操作対象のObjective-Cオブジェクトのメソッド名の一覧を返します。
 
---- OSX::OCObjWrapper#objc_method_type
+--- OSX::OCObjWrapper#objc_method_type (name)
+--- OSX::OCObjWrapper#objc_class_method_type (name)
+--- OSX::OCObjWrapper#objc_instance_method_type (name)
 
       操作対象のObjective-Cオブジェクトのメソッドの型を返します。
 
