@@ -4,6 +4,9 @@
 	add methods objc_class_method_type and objc_instance_method_type to
 	OSX::OCObjWrapper.
 
+	* tests/tc_wrapper.rb
+	add tests for objc_class_method_type and objc_instance_method_type.
+
 2005-02-02  kimura wataru <kimuraw@i.nifty.jp>
 
 	* framework/src/objc/mdl_objwrapper.m:
