@@ -375,7 +375,7 @@ static VALUE rbobject_protected_apply(VALUE a)
 {
   NSMethodSignature* ret = nil;
   DLOG1("methodSignatureForSelector(%s)", a_sel);
-  if (*(char*)a_sel == NULL) return nil;
+  if (a_sel == NULL) return nil;
   ret = [DummyProtocolHandler instanceMethodSignatureForSelector: a_sel];
   if (ret == nil)
     ret = [self rbobjMethodSignatureForSheetSelector: a_sel];
