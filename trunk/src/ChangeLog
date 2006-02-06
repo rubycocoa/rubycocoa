@@ -3,6 +3,10 @@
 	* framework/src/objc/OverrideMixin.m:
 	suppress warning "pointer type mismatch" in get_handler_ruby_method()
 
+	* framework/src/objc/RBObject.m:
+	suppress warning "comparison between pointer and integer" in 
+	- [RBObject methodSignatureForSelector:]
+
 2006-02-05  kimura wataru <kimuraw@i.nifty.jp>
 
 	* framework/src/objc/mdl_objwrapper.m:
