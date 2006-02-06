@@ -190,8 +190,15 @@ static void handle_ruby_method_stret(void* retptr, id rcv, SEL a_sel, ...)
 static IMP get_handler_ruby_method(const char* type)
 {
   unsigned int size, align;
+  IMP ret;
   NSGetSizeAndAlignment(type, &size, &align);
-  return size > sizeof(id) ? handle_ruby_method_stret : handle_ruby_method_id;
+  if (size > sizeof(id)) {
+    ret = (IMP)handle_ruby_method_stret;
+  }
+  else {
+    ret = (IMP)handle_ruby_method_id;
+  }
+  return ret;
 }
 
 /**
