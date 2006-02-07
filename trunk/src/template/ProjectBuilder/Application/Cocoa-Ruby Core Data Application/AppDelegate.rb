@@ -86,4 +86,3 @@ class ÇPROJECTNAMEASIDENTIFIERÈAppDelegate < OSX::NSObject
   end
 
 end
-//0/dummy timestamp//
