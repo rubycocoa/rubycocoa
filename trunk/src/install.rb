@@ -1038,8 +1038,42 @@ class ToplevelInstaller < Installer
       ENV['DYLD_FRAMEWORK_PATH'] = File.join('../framework', framework_obj_path)
       ruby_cmd = File.join(
 	Config::CONFIG['bindir'], Config::CONFIG['RUBY_INSTALL_NAME'])
-      command %Q!"#{ruby_cmd}" -I../ext/rubycocoa -I../lib testall.rb!
+      test_loadlibs(ruby_cmd)
+      test_testcase(ruby_cmd)
     }
+  end
+
+  def test_testcase(ruby_cmd)
+    command %Q!"#{ruby_cmd}" -I../ext/rubycocoa -I../lib testall.rb!
+  end
+
+  # validate extension and framework on test task
+  def test_loadlibs(ruby_cmd)
+    ENV['DYLD_PRINT_LIBRARIES_POST_LAUNCH'] = '1'
+    begin
+      cmd = %Q!"#{ruby_cmd}" -I../ext/rubycocoa -I../lib ! +
+	    %Q!-e 'require "osx/cocoa"' !
+      require 'open3'
+      libs = Open3.popen3(cmd) do |stdin, stdout, stderr|
+	stdin.close
+	stderr.read
+      end
+      lib = libs.find {|lib| /rubycocoa.bundle$/ =~ lib}
+      if /..\/ext\/rubycocoa/ =~ lib
+        print "extention ok: #{lib}"
+      else
+        raise RuntimeError, "error: wrong extention was loaded: #{lib}"
+      end
+
+      lib = libs.find {|lib| /RubyCocoa$/ =~ lib}
+      if /..\/framework\/build/ =~ lib
+        print "framework ok: #{lib}"
+      else
+        raise RuntimeError, "error: wrong framework was loaded: #{lib}"
+      end
+    ensure
+      ENV.delete('DYLD_PRINT_LIBRARIES_POST_LAUNCH')
+    end
   end
 
   #
