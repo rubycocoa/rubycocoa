@@ -4,6 +4,9 @@
 	add to "test" task validation about rubycocoa.bundle and
 	RubyCocoa.framework 
 
+	* package/post-package.rb:
+	support package task on 10.3.
+
 2006-02-07  kimura wataru <kimuraw@i.nifty.jp>
 
 	* template/ProjectBuilder/Application/Cocoa-Ruby Core Data Application/AppDelegate.rb:
