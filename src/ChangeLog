@@ -1,3 +1,9 @@
+2006-02-08  kimura wataru <kimuraw@i.nifty.jp>
+
+	* install.rb:
+	add to "test" task validation about rubycocoa.bundle and
+	RubyCocoa.framework 
+
 2006-02-07  kimura wataru <kimuraw@i.nifty.jp>
 
 	* template/ProjectBuilder/Application/Cocoa-Ruby Core Data Application/AppDelegate.rb:
