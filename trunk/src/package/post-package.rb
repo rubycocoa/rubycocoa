@@ -1,6 +1,6 @@
 # $Id$
 
-work_dir = 'work'
+work_dir = File.expand_path('work')
 contents_dir = File.join(work_dir, 'files')
 resources_dir = File.join(work_dir, 'resources')
 
@@ -22,8 +22,9 @@ begin
 	%Q!-i "#{File.join(work_dir, 'Info.plist')}" ! +
 	%Q!-d "#{File.join(work_dir, 'Description.plist')}" !
   system str
-  unless $?.to_i != 0 and $?.to_i != 1
-    raise RuntimeError, "'system #{str}' failed"
+  stat = $?.to_i / 256 
+  if stat != 0 and stat != 1 # PackageMaker of 10.4 returns 1 (bug)
+    raise RuntimeError, "'system #{str}' failed(#{stat})"
   end
 ensure
   # revert owner 
