@@ -97,14 +97,13 @@ static id get_slave(id rcv)
  * ruby method handler
  **/
 
-static id handle_ruby_method(void* stretptr, id rcv, SEL a_sel, ...)
+static id handle_ruby_method(void* stretptr, id rcv, SEL a_sel, va_list args)
 {
   id ret = nil;
   Method method;
   unsigned  argc, i;
   NSMethodSignature* msig;
   NSInvocation* inv;
-  va_list args;
   unsigned retlen;
 
   // prepare
@@ -114,8 +113,6 @@ static id handle_ruby_method(void* stretptr, id rcv, SEL a_sel, ...)
   argc = method_getNumberOfArguments(method);
 
   // set argument
-  va_start(args, a_sel);
-
   for (i = 2; i < argc; i++) {
     unsigned int size;
     unsigned int align;
@@ -165,7 +162,6 @@ static id handle_ruby_method(void* stretptr, id rcv, SEL a_sel, ...)
     }
   }
 
-  va_end(args);
   return ret;
 }
 
