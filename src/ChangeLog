@@ -1,3 +1,8 @@
+2006-02-09  kimura wataru <kimuraw@i.nifty.jp>
+
+	* framework/src/objc/OverrideMixin.m:
+	fix: incorrectly handling args in handle_ruby_method().
+
 2006-02-08  kimura wataru <kimuraw@i.nifty.jp>
 
 	* install.rb:
