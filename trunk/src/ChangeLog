@@ -8,6 +8,9 @@
 	* framework/src/ruby/osx/objc/oc_import.rb:
 	extend OSX::OCClsWrapper at ns_import.
 
+	* tests/tc_wrapper.rb:
+	modify testcase for above change.
+
 2006-02-09  kimura wataru <kimuraw@i.nifty.jp>
 
 	* framework/src/objc/OverrideMixin.m:
