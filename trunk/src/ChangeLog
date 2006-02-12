@@ -1,3 +1,13 @@
+2006-02-12  kimura wataru <kimuraw@i.nifty.jp>
+
+	* framework/src/objc/mdl_objwrapper.m: 
+	- add module OSX::OCClsWrapper
+	- move objc_instance|class_methods, objc_instance|class_method_type to
+	  OSX::OCClsWrapper from OSX::OCObjWrapper.
+
+	* framework/src/ruby/osx/objc/oc_import.rb:
+	extend OSX::OCClsWrapper at ns_import.
+
 2006-02-09  kimura wataru <kimuraw@i.nifty.jp>
 
 	* framework/src/objc/OverrideMixin.m:
