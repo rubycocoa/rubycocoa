@@ -19,6 +19,7 @@
 #import <stdarg.h>
 
 static VALUE _mObjWrapper = Qnil;
+static VALUE _mClsWrapper = Qnil;
 
 #define DLOG0(f)          if (ruby_debug == Qtrue) _debug_log((f))
 #define DLOG1(f,a1)       if (ruby_debug == Qtrue) _debug_log((f),(a1))
@@ -420,8 +421,6 @@ wrapper_objc_instance_methods (int argc, VALUE* argv, VALUE rcv)
   recur = (argc == 0) ? 1 : RTEST(argv[0]);
   ary = rb_ary_new();
   oc_rcv = rbobj_get_ocid (rcv);
-  if (TYPE(rcv) != T_CLASS)
-    oc_rcv = oc_rcv->isa;
   _ary_push_objc_methods (ary, oc_rcv, recur);
   return ary;
 }
@@ -436,8 +435,6 @@ wrapper_objc_class_methods (int argc, VALUE* argv, VALUE rcv)
   recur = (argc == 0) ? 1 : RTEST(argv[0]);
   ary = rb_ary_new();
   oc_rcv = rbobj_get_ocid (rcv);
-  if (TYPE(rcv) != T_CLASS)
-    oc_rcv = oc_rcv->isa;
   _ary_push_objc_methods (ary, oc_rcv->isa, recur);
   return ary;
 }
@@ -488,8 +485,6 @@ wrapper_objc_instance_method_type (VALUE rcv, VALUE name)
   const char* str;
 
   oc_rcv = rbobj_get_ocid (rcv);
-  if (TYPE(rcv) != T_CLASS)
-    oc_rcv = oc_rcv->isa;
   name = _name_to_selstr (name);
   str = _objc_method_type (oc_rcv, STR2CSTR(name));
   if (str == NULL) return Qnil;
@@ -503,8 +498,6 @@ wrapper_objc_class_method_type (VALUE rcv, VALUE name)
   const char* str;
 
   oc_rcv = rbobj_get_ocid (rcv);
-  if (TYPE(rcv) != T_CLASS)
-    oc_rcv = oc_rcv->isa;
   name = _name_to_selstr (name);
   str = _objc_method_type (oc_rcv->isa, STR2CSTR(name));
   if (str == NULL) return Qnil;
@@ -525,11 +518,13 @@ init_mdl_OCObjWrapper(VALUE outer)
   rb_define_method(_mObjWrapper, "to_s", wrapper_to_s, 0);
 
   rb_define_method(_mObjWrapper, "objc_methods", wrapper_objc_methods, 0);
-  rb_define_method(_mObjWrapper, "objc_instance_methods", wrapper_objc_instance_methods, -1);
-  rb_define_method(_mObjWrapper, "objc_class_methods", wrapper_objc_class_methods, -1);
   rb_define_method(_mObjWrapper, "objc_method_type", wrapper_objc_method_type, 1);
-  rb_define_method(_mObjWrapper, "objc_instance_method_type", wrapper_objc_instance_method_type, 1);
-  rb_define_method(_mObjWrapper, "objc_class_method_type", wrapper_objc_class_method_type, 1);
 
-  return _mObjWrapper;
+  _mClsWrapper = rb_define_module_under(outer, "OCClsWrapper");
+  rb_define_method(_mClsWrapper, "objc_instance_methods", wrapper_objc_instance_methods, -1);
+  rb_define_method(_mClsWrapper, "objc_class_methods", wrapper_objc_class_methods, -1);
+  rb_define_method(_mClsWrapper, "objc_instance_method_type", wrapper_objc_instance_method_type, 1);
+  rb_define_method(_mClsWrapper, "objc_class_method_type", wrapper_objc_class_method_type, 1);
+
+  return Qnil;
 }

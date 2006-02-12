@@ -33,6 +33,7 @@ module OSX
     klass.class_eval <<-EOE_CLASS_NEW_FOR_OCCLASS,__FILE__,__LINE__+1
       include OCObjWrapper
       self.extend OCObjWrapper
+      self.extend OCClsWrapper
       self.extend NSBehaviorAttachment
       @ocid = #{occls.__ocid__}
     EOE_CLASS_NEW_FOR_OCCLASS
