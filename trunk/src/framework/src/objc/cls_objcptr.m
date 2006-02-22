@@ -20,7 +20,7 @@ struct _objcptr_data {
 };
 
 #define OBJCPTR_DATA_PTR(o) ((struct _objcptr_data*)(DATA_PTR(o)))
-#define CPTR_OF(o) ((void*)(OBJCPTR_DATA_PTR(o)->cptr))
+#define CPTR_OF(o) (OBJCPTR_DATA_PTR(o)->cptr)
 #define ALLOCATED_SIZE_OF(o) (OBJCPTR_DATA_PTR(o)->allocated_size)
 
 /** for debugging stuff **/
