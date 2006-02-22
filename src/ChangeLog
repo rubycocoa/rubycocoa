@@ -1,3 +1,8 @@
+2006-02-22  kimura wataru <kimuraw@i.nifty.jp>
+
+	* framework/src/objc/cls_objcptr.m:
+	suppress warning "target of assignment not really an lvalue"
+
 2006-02-13  kimura wataru <kimuraw@i.nifty.jp>
 
 	* template/ProjectBuilder/Application/Cocoa-Ruby Core Data Application/AppDelegate.rb:
