@@ -308,9 +308,12 @@ static id imp_c_addRubyMethod(Class klass, SEL method, SEL arg0)
   }
   else {
     // override method
+    IMP imp = get_handler_ruby_method(me->method_types);
+    if (me->method_imp == imp)
+      return nil;
     mlp->method_list[0].method_name = me->method_name;
     mlp->method_list[0].method_types = strdup(me->method_types);
-    mlp->method_list[0].method_imp = get_handler_ruby_method(me->method_types);
+    mlp->method_list[0].method_imp = imp;
     mlp->method_count += 1;
 
     // super method
