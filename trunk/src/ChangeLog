@@ -1,5 +1,10 @@
 2006-02-22  kimura wataru <kimuraw@i.nifty.jp>
 
+	* framework/src/objc/OverrideMixin.m
+	fix: exception on invoking super raises after ns_override twice.
+
+2006-02-22  kimura wataru <kimuraw@i.nifty.jp>
+
 	* framework/src/objc/cls_objcptr.m:
 	suppress warning "target of assignment not really an lvalue"
 
