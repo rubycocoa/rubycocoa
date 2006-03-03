@@ -22,6 +22,18 @@ class SubClassA < OSX::NSObject
 
 end
 
+###class ExceptionTest < OSX::NSObject
+system 'make' || raise(RuntimeError, "'make' failed")
+require 'objc_test.bundle'
+
+OSX.ns_import :Override
+
+class SubClassB < OSX::Override
+
+  def foo() return 123 end
+
+end
+
 class TC_SubClass < Test::Unit::TestCase
 
   def test_s_new
@@ -45,6 +57,12 @@ class TC_SubClass < Test::Unit::TestCase
     assert_equal( SubClassA::DESCRIPTION, obj.description )
     assert_equal( SubClassA.objc_instance_method_type('description'), 
 		  SubClassA.objc_instance_method_type('super:description') )
+    obj_b = SubClassB.alloc.init
+    assert_equal( 123, obj_b.foo )
+    assert_equal( 123, obj_b.oc_foo )
+    assert_equal( SubClassB.objc_instance_method_type('foo'), 
+		  SubClassB.objc_instance_method_type('super:foo') )
+    assert_equal( 321, obj_b.super_foo )
   end
 
   def test_outlet
