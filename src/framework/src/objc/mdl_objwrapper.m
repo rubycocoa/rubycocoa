@@ -444,8 +444,6 @@ _objc_method_type (Class cls, const char* name)
 {
   struct objc_method* method;
 
-  if (!sel_isMapped((SEL)name))
-    return NULL;
   method = class_getInstanceMethod(cls, sel_registerName(name));
   if (!method)
     return NULL;

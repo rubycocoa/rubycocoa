@@ -3,6 +3,9 @@
 	* tests/tc_subclass.rb:
 	add test of super_method.
 
+	* framework/src/objc/mdl_objwrapper.m: 
+	[fix]_objc_method_type() sometimes not correctly.
+
 2006-02-22  kimura wataru <kimuraw@i.nifty.jp>
 
 	* framework/src/objc/OverrideMixin.m:
