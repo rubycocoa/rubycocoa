@@ -22,6 +22,18 @@
 }
 @end
 
+@interface Override : NSObject
+{
+}
+@end
+
+@implementation Override
+-(int) foo
+{   
+  return 321;
+}
+@end
+
 void Init_objc_test(){
   // dummy initializer for ruby's `require'
 }

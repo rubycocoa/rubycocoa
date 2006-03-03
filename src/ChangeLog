@@ -1,10 +1,13 @@
 2006-03-03  kimura wataru <kimuraw@i.nifty.jp>
 
-	* tests/tc_subclass.rb:
-	add test of super_method.
+	* tests/tc_subclass.rb, tests/objc_test.m:
+	add test of about ns_override.
 
 	* framework/src/objc/mdl_objwrapper.m: 
-	[fix]_objc_method_type() sometimes not correctly.
+	fix: _objc_method_type() sometimes not correctly.
+
+	* framework/src/ruby/osx/objc/oc_import.rb:
+	new feature: automatic ns_overrde.
 
 2006-02-22  kimura wataru <kimuraw@i.nifty.jp>
 
