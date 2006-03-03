@@ -43,6 +43,8 @@ class TC_SubClass < Test::Unit::TestCase
   def test_override
     obj = SubClassA.alloc.init
     assert_equal( SubClassA::DESCRIPTION, obj.description )
+    assert_equal( SubClassA.objc_instance_method_type('description'), 
+		  SubClassA.objc_instance_method_type('super:description') )
   end
 
   def test_outlet
