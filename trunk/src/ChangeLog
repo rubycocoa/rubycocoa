@@ -9,7 +9,7 @@
 	* framework/src/ruby/osx/objc/oc_import.rb:
 	new feature: automatic ns_overrde.
 
-2006-02-22  kimura wataru <kimuraw@i.nifty.jp>
+2006-02-23  kimura wataru <kimuraw@i.nifty.jp>
 
 	* framework/src/objc/OverrideMixin.m:
 	fix: exception on invoking super raises after ns_override twice.
