@@ -202,18 +202,18 @@ add_attachments(VALUE rcv, id ocid)
 {
   VALUE attachment = Qnil;
 
-  NS_DURING  
-    if ([ocid isKindOfClass: [NSArray class]])
-      attachment = rb_osx_const("RCArrayAttachment");
+  // Don't call isKindOfClass on classes themselves
+  if (CLS_GETINFO(ocid->isa, CLS_META))
+      return;
+  
+  if ([ocid isKindOfClass: [NSArray class]])
+    attachment = rb_osx_const("RCArrayAttachment");
 
-    else if ([ocid isKindOfClass: [NSDictionary class]])
-      attachment = rb_osx_const("RCDictionaryAttachment");
+  else if ([ocid isKindOfClass: [NSDictionary class]])
+    attachment = rb_osx_const("RCDictionaryAttachment");
 
-    else if ([ocid isKindOfClass: [NSData class]])
-      attachment = rb_osx_const("RCDataAttachment");
-  NS_HANDLER
-    attachment = Qnil;
-  NS_ENDHANDLER
+  else if ([ocid isKindOfClass: [NSData class]])
+    attachment = rb_osx_const("RCDataAttachment");
 
   if (attachment != Qnil)
     rb_extend_object(rcv, attachment);
@@ -243,7 +243,7 @@ ocobj_s_new(id ocid)
   cls_name = [[ocid class] description];
   obj = rb_funcall(rb_cls_ocobj([cls_name UTF8String]), 
 		   rb_intern("new_with_ocid"), 1, OCID2NUM(ocid));
-  // add_attachments(obj, ocid);
+  add_attachments(obj, ocid);
   [pool release];
   return obj;
 }
