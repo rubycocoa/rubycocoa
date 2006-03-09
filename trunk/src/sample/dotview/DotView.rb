@@ -3,7 +3,6 @@ require 'osx/cocoa'
 class DotView < OSX::NSView
 
   ib_outlets   :colorWell, :sizeSlider
-  ib_overrides :drawRect_, :isOpaque, :mouseUp_
 
   def awakeFromNib
     @color = OSX::NSColor.redColor

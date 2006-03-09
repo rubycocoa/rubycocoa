@@ -4,7 +4,6 @@ require 'kconv'
 WIN_TITLE = "The Daughter In A Box"
 
 class BackView < OSX::NSView
-  ns_overrides 'drawRect:'
   def drawRect (rect)
     # Set the window background to transparent
     OSX::NSColor.clearColor.colorWithAlphaComponent(0.4).set
@@ -102,8 +101,6 @@ class CocoaHako < OSX::NSObject
 end
 
 class ChipLabel < OSX::NSTextField
-
-  ns_overrides 'mouseDragged:'
 
   def initWithChip (chip)
     initWithFrame [0, 0, chip.w, chip.h]

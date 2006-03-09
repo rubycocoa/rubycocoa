@@ -12,7 +12,6 @@ class MyView <  OSX::NSView
   include OSX
 
   attr_reader :color, :alpha
-  ns_overrides 'initWithFrame:', 'drawRect:'
 
   def initWithFrame (frame)
     super_initWithFrame(frame)

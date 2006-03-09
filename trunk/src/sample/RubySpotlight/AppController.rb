@@ -10,7 +10,6 @@ include OSX
 
 class AppController < NSObject
 
-  ns_overrides :init, :dealloc
   attr :spotlight
   ib_outlets :fileView, :mdItemController, :metaDataView
 

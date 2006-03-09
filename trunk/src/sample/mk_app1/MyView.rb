@@ -2,8 +2,6 @@ require 'osx/cocoa'
 
 class MyView < OSX::NSView
 
-  ib_overrides 'drawRect:'
-
   def awakeFromNib
     @color_name = 'blue'
   end
