@@ -13,7 +13,6 @@ class MyDocument < OSX::NSDocument
   include OSX
 
   ib_outlets :deleteButton, :tableView
-  ns_overrides :dealloc
 
   def initialize
     @employees = Array.new
@@ -92,9 +91,6 @@ class MyDocument < OSX::NSDocument
     @tableView.reloadData if @tableView
     @deleteButton.setEnabled(@employees.size > 0 && @tableView.selectedRow != -1) if @deleteButton
   end
-
-  ns_overrides 'windowNibName', 'windowControllerDidLoadNib:',
-    'dataRepresentationOfType:', 'loadDataRepresentation:ofType:'
 
   def windowNibName
     return "MyDocument"

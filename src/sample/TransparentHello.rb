@@ -5,11 +5,6 @@
 require 'osx/cocoa'
 
 class HelloView < OSX::NSView
-  #
-  # Tell RubyCocoa to setup Objective-C overrides
-  # for the NSView method drawRect:.
-  #
-  ns_overrides	:drawRect_
 
   #
   # When the Cocoa view system wants to draw a view,

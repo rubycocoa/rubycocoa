@@ -3,9 +3,6 @@ require 'osx/cocoa'
 
 class MyDocument < OSX::NSDocument
 
-  ns_overrides 'windowNibName', 'windowControllerDidLoadNib:',
-    'dataRepresentationOfType:', 'loadDataRepresentation:ofType:'
-
   def windowNibName
     # Override returning the nib file name of the document If you need
     # to use a subclass of NSWindowController or if your document

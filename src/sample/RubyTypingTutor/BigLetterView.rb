@@ -3,16 +3,6 @@ require 'osx/cocoa'
 class BigLetterView < OSX::NSView
   include OSX
 
-  ns_overrides 'initWithFrame:', 'drawRect:', 'keyDown:',
-    'acceptsFirstResponder', 'resignFirstResponder', 
-    'becomeFirstResponder',
-    'mouseDragged:',
-    'draggingEntered:',
-    'draggingExited:',
-    'prepareForDragOperation:',
-    'performDragOperation:',
-    'concludeDragOperation:'
-
   def draggingEntered (sender)
     log "draggingEntered:"
     if sender.draggingSource != self then

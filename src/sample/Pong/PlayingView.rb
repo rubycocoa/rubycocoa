@@ -2,8 +2,6 @@ require 'osx/cocoa'
 
 class PlayingView < OSX::NSView
 
-  ns_overrides :drawRect_, :mouseDragged_
-
   attr_reader :width, :height, :balls
   attr_writer :paddle
 

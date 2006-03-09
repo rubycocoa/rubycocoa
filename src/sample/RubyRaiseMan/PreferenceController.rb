@@ -16,7 +16,6 @@ class PreferenceController < OSX::NSWindowController
   BNRColorChanged = "BNRColorChanged".freeze
 
   ib_outlets :colorWell, :checkbox
-  ns_overrides :init, :windowDidLoad
 
   def init
     initWithWindowNibName "Preferences"

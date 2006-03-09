@@ -13,7 +13,6 @@ class Spotlight < NSObject
 
   attr :query, true
   attr :predicate, true
-  ns_override :dealloc
   
   def init
     @query = NSMetadataQuery.alloc.init
