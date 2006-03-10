@@ -68,10 +68,6 @@ module OSX
     # declare to override instance methods of super class which is
     # defined by Objective-C.
     def ns_overrides(*args)
-      # In Ruby 1.8 (after 2002.9.27), this method may be called more
-      # first than 'Class#inherited'.
-      ns_inherited()
-
       # insert specified selectors to Objective-C method table.
       args.each do |name|
 	name = name.to_s.gsub('_',':')
