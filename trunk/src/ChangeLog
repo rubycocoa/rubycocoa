@@ -1,3 +1,8 @@
+2006-03-13  kimura wataru <kimuraw@i.nifty.jp>
+
+	* framework/src/objc/mdl_osxobjc.m:
+	use objc_class->name to get class name of Objective-C class.
+
 2006-03-10  kimura wataru <kimuraw@i.nifty.jp>
 
 	* framework/src/ruby/osx/objc/oc_import.rb:
