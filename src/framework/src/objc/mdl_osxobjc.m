@@ -236,12 +236,13 @@ VALUE
 ocobj_s_new(id ocid)
 {
   VALUE obj;
-  id pool, cls_name;
+  id pool;
+  const char *cls_name;
 
   pool = [[NSAutoreleasePool alloc] init];
 
-  cls_name = [[ocid class] description];
-  obj = rb_funcall(rb_cls_ocobj([cls_name UTF8String]), 
+  cls_name = ([ocid class])->name;
+  obj = rb_funcall(rb_cls_ocobj(cls_name), 
 		   rb_intern("new_with_ocid"), 1, OCID2NUM(ocid));
   add_attachments(obj, ocid);
   [pool release];
