@@ -108,6 +108,12 @@ ocdata_size(int octype, const char* octype_str)
   case _C_ULNG:
     result = sizeof(long); break;
 
+#if HAVE_LONG_LONG
+  case _C_LLNG:
+  case _C_ULLNG:
+    result = sizeof(long long); break;
+#endif
+
   case _C_FLT:
     result = sizeof(float); break;
 
@@ -218,6 +224,14 @@ ocdata_to_rbobj(VALUE context_obj,
 
   case _C_ULNG:
     rbval = UINT2NUM(*(unsigned long*)ocdata); break;
+
+#if HAVE_LONG_LONG
+  case _C_LLNG:
+    rbval = LL2NUM(*(long long*)ocdata); break;
+
+  case _C_ULLNG:
+    rbval = ULL2NUM(*(unsigned long long*)ocdata); break;
+#endif
 
   case _C_FLT:
     rbval = rb_float_new((double)(*(float*)ocdata)); break;
@@ -656,6 +670,16 @@ rbobj_to_ocdata(VALUE obj, int octype, void* ocdata)
   case _C_ULNG:
     *(unsigned long*)ocdata = (unsigned long) NUM2ULONG(rb_Integer(obj));
     break;
+
+#if HAVE_LONG_LONG
+  case _C_LLNG:
+    *(long long*)ocdata = (long long) NUM2LL(rb_Integer(obj));
+    break;
+
+  case _C_ULLNG:
+    *(unsigned long long*)ocdata = (unsigned long long) NUM2ULL(rb_Integer(obj));
+    break;
+#endif
 
   case _C_FLT:
     *(float*)ocdata = (float) RFLOAT(rb_Float(obj))->value;

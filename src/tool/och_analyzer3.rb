@@ -183,6 +183,8 @@ class OCHeaderAnalyzer
     when 'int' then :_C_INT
     when /^unsigned\s+long(\s+int)?$/ then :_C_ULNG
     when /^long(\s+int)?$/ then :_C_LNG
+    when /^unsigned\s+long\s+long(\s+int)?$/ then :_C_ULLNG
+    when /^long\s+long(\s+int)?$/ then :_C_LLNG
     when 'float' then :_C_FLT
     when 'double' then :_C_DBL
     when /char\s*\*$/ then :_C_CHARPTR
