@@ -1,3 +1,10 @@
+2006-03-15  FUJIMOTO Hisa  <hisa@fobj.com>
+
+	* framework/src/objc/ocdata_conv.h, framework/src/objc/ocdata_conv.m, tool/och_analyzer.rb, tool/och_analyzer3.rb:
+	support for the "long long" type. (e.g. the return value of
+	NSURLResponse::expectedContentLength) (patch from Jakob Olesen,
+	thanks!)
+
 2006-03-13  kimura wataru <kimuraw@i.nifty.jp>
 
 	* framework/src/objc/mdl_osxobjc.m:

@@ -14,6 +14,20 @@
 #import <stdarg.h>
 #import "osx_ruby.h"
 
+#if HAVE_LONG_LONG
+/* long long is missing from objc-class.h */
+# ifndef _C_LLNG
+#  define _C_LLNG 'q'
+# endif
+# ifndef _C_ULLNG
+#  define _C_ULLNG 'Q'
+# endif
+/* NUM2ULL is missing from ruby.h */
+# ifndef NUM2ULL
+#  define NUM2ULL(x) (FIXNUM_P(x)?FIX2ULONG(x):rb_num2ull((VALUE)x))
+# endif
+#endif	/* HAVE_LONG_LONG */
+
 enum osxobjc_nsdata_type {
   _PRIV_C_BOOL = 1024,
   _PRIV_C_NSRECT,
