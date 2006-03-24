@@ -826,7 +826,6 @@
 				E88C6E7B035BB408031D1B90,
 				E88C6E7C035BB408031D1B90,
 				E88C6E7D035BB408031D1B90,
-				E88C6E7E035BB408031D1B90,
 				E88C6E7F035BB408031D1B90,
 				E88C6E80035BB408031D1B90,
 				E88C6E81035BB408031D1B90,
@@ -885,11 +884,6 @@
 		E88C6E7D035BB408031D1B90 = {
 			isa = PBXFileReference;
 			path = oc_import.rb;
-			refType = 4;
-		};
-		E88C6E7E035BB408031D1B90 = {
-			isa = PBXFileReference;
-			path = oc_object.rb;
 			refType = 4;
 		};
 		E88C6E7F035BB408031D1B90 = {
@@ -957,12 +951,6 @@
 		};
 		E88C6E8E035BB408031D1B90 = {
 			fileRef = E88C6E7D035BB408031D1B90;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
-		E88C6E8F035BB408031D1B90 = {
-			fileRef = E88C6E7E035BB408031D1B90;
 			isa = PBXBuildFile;
 			settings = {
 			};
