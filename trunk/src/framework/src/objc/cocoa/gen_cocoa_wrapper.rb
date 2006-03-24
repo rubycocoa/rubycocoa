@@ -248,6 +248,10 @@ def gen_def_rb_mod_func(info, argc = -1)
   ret
 end
 
+def gen_def_rb_mod_const(info)
+  ret = "  rb_define_const(mOSX, \"#{info.name}\", osx_#{info.name}(mOSX));\n"
+end
+
 def gen_def_enums(och)
   enums = och.enums
   return nil if enums.size == 0
@@ -282,8 +286,12 @@ def gen_def_consts(och)
   $notimpl_cnt = 0
   consts.each do |info|
     reconfig_info(info)
+    next unless info.name =~ /\A[A-Z]/ # ignore private constants
     ret_a.concat gen_def_c_func(info, 0)
     ret_b.concat gen_def_rb_mod_func(info, 0)
+    unless /\Aconst NS\w+CallBacks\z/ =~ info.rettype # NSHashTableCallBacks...
+      ret_b.concat gen_def_rb_mod_const(info) 
+    end
   end
   $stderr.print " : #{$notimpl_cnt}/#{consts.size} consts NG"
   $stderr.flush
@@ -349,6 +357,7 @@ def gen_skelton_init(framework)
   File.open(fname, "a") do |f|
     f.print "void init_#{framework}(VALUE mOSX)\n"
     f.print "{\n"
+    f.print "  rb_require(\"osx/objc/oc_types\");\n"
     f.print inits.join("\n")
     f.print "\n}\n"
   end

@@ -117,8 +117,8 @@ RBRubyCocoaInit()
   if (init_p) return 0;
 
   ruby_init();
-  initialize_mdl_osxobjc();	// initialize an objc part of rubycocoa
   load_path_unshift(framework_ruby_path()); // add a ruby part of rubycocoa to $LOAD_PATH
+  initialize_mdl_osxobjc();	// initialize an objc part of rubycocoa
   init_p = 1;
 
   return 1;
