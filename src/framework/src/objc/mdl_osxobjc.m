@@ -36,6 +36,20 @@ static VALUE init_module_OSX()
   return module;
 }
 
+static VALUE init_cls_OCObject(VALUE mOSX)
+{
+  VALUE kObjcID;
+  VALUE kOCObject;
+  VALUE mOCObjWrapper;
+
+  kObjcID = rb_const_get(mOSX, rb_intern("ObjcID"));
+  kOCObject = rb_define_class_under(mOSX, "OCObject", kObjcID);
+  mOCObjWrapper = rb_const_get(mOSX, rb_intern("OCObjWrapper"));
+  rb_include_module(kOCObject, mOCObjWrapper);
+
+  return kOCObject;
+}
+
 // def OSX.objc_proxy_class_new (kls, kls_name)
 // ex1.  OSX.objc_proxy_class_new (AA::BB::AppController, "AppController")
 static VALUE
@@ -300,6 +314,7 @@ void initialize_mdl_osxobjc()
   init_cls_ObjcPtr(mOSX);
   init_cls_ObjcID(mOSX);
   init_mdl_OCObjWrapper(mOSX);
+  init_cls_OCObject(mOSX);
 
   rb_define_module_function(mOSX, "objc_proxy_class_new", 
 			    osx_mf_objc_proxy_class_new, 2);
