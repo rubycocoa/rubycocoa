@@ -8,7 +8,7 @@
 #  the GNU Lesser General Public License version 2.
 #
 
-['/usr/bin/cpp3', '/usr/bin/cpp-3.3', '/usr/bin/cpp-4.0'].each do |cpp|
+['/usr/bin/cpp-4.0', '/usr/bin/cpp-3.3', '/usr/bin/cpp3'].each do |cpp|
   if test(?x, cpp) 
     CPP = cpp
     break
