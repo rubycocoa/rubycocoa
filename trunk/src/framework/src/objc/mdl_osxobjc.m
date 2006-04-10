@@ -151,6 +151,19 @@ thread_switcher_start()
   [RBThreadSwitcher start];
 }
 
+static VALUE
+osx_mf_init_cocoa(VALUE mdl)
+{
+  extern void init_cocoa(VALUE);
+  static int init_p = 0;
+  if (init_p) 
+    return Qfalse;
+  rb_require("osx/objc/oc_types");
+  init_cocoa(mdl);
+  init_p = 1;
+  return Qtrue;
+}
+
 /******************/
 
 static VALUE
@@ -308,7 +321,6 @@ ocid_get_rbobj (id ocid)
 void initialize_mdl_osxobjc()
 {
   VALUE mOSX;
-  extern void init_cocoa(VALUE);
 
   mOSX = init_module_OSX();
   init_cls_ObjcPtr(mOSX);
@@ -328,6 +340,8 @@ void initialize_mdl_osxobjc()
   rb_define_module_function(mOSX, "ruby_thread_switcher_stop",
 			    osx_mf_ruby_thread_switcher_stop, 0);
 
+  rb_define_module_function(mOSX, "init_cocoa",
+			    osx_mf_init_cocoa, 0);
   rb_define_module_function(mOSX, "ns_autorelease_pool",
 			    ns_autorelease_pool, 0);
 
@@ -338,6 +352,5 @@ void initialize_mdl_osxobjc()
 
   rb_define_module_function(mOSX, "objc_symbol_to_obj", osx_mf_objc_symbol_to_obj, 2);
 
- init_cocoa(mOSX);
- thread_switcher_start();
+  thread_switcher_start();
 }

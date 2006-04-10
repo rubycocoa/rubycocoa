@@ -12,6 +12,8 @@ require 'osx/objc/oc_wrapper'
 
 module OSX
 
+  init_cocoa # define OSX.NSClassFromString
+
   # create Ruby's class for Cocoa class,
   # then define Constant under module 'OSX'.
   def ns_import(sym)
