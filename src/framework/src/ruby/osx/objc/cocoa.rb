@@ -8,6 +8,7 @@
 #  the GNU Lesser General Public License version 2.
 #
 
+OSX.init_cocoa
 require 'osx/objc/foundation'
 require 'osx/objc/appkit'
 require 'osx/objc/cocoa_macros'

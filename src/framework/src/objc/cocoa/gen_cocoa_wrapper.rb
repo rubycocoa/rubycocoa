@@ -357,7 +357,6 @@ def gen_skelton_init(framework)
   File.open(fname, "a") do |f|
     f.print "void init_#{framework}(VALUE mOSX)\n"
     f.print "{\n"
-    f.print "  rb_require(\"osx/objc/oc_types\");\n"
     f.print inits.join("\n")
     f.print "\n}\n"
   end

@@ -1,3 +1,13 @@
+2006-04-10  kimura wataru <kimuraw@i.nifty.jp>
+
+	* framework/src/objc/mdl_osxobjc.m, framework/src/ruby/osx/objc/cocoa.rb, framework/src/ruby/osx/objc/oc_import.rb:
+	fix: after the change of 2006-03-24, any app cannot launch. there is a
+	problem in initialization process. definition step of cocoa functions
+	and constants is moved into osx/objc/cocoa.rb(OSX.init_cocoa).
+
+	* framework/src/objc/cocoa/gen_cocoa_wrapper.rb:
+	remove rb_require().
+
 2006-04-05  kimura wataru <kimuraw@i.nifty.jp>
 
 	* tool/och_analyzer3.rb:
