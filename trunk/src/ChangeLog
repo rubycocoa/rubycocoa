@@ -1,3 +1,8 @@
+2006-05-02  kimura wataru <kimuraw@i.nifty.jp>
+
+	* framework/src/ruby/osx/objc/cocoa_macros.rb:
+	add utility method: NSApplication.run_with_temp_app.
+
 2006-04-10  kimura wataru <kimuraw@i.nifty.jp>
 
 	* framework/src/objc/mdl_osxobjc.m, framework/src/ruby/osx/objc/cocoa.rb, framework/src/ruby/osx/objc/oc_import.rb:
