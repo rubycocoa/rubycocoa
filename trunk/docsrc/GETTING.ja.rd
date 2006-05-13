@@ -81,11 +81,11 @@ Ruby 1.6.7 に合わせて構築しています。
 
 ((<CVSサーバ|URL:http://sourceforge.net/cvs/?group_id=44114>))から最新
 の(あるいは最古の)ソースを入手したり、
-(((<CVSリポジトリを見る|URL:http://cvs.sourceforge.net/cgi-bin/viewcvs.cgi/rubycocoa/src/>))
+(((<CVSリポジトリを見る|URL:http://rubycocoa.cvs.sourceforge.net/rubycocoa/src/>))
 ことができます。シェルで
 
-  $ cvs -d:pserver:anonymous@cvs.sf.net:/cvsroot/rubycocoa login
-  $ cvs -z3 -d:pserver:anonymous@cvs.sf.net:/cvsroot/rubycocoa co \
+  $ cvs -d:pserver:anonymous@rubycocoa.cvs.sourceforge.net:/cvsroot/rubycocoa login
+  $ cvs -z3 -d:pserver:anonymous@rubycocoa.cvs.sourceforge.net:/cvsroot/rubycocoa co \
         -P -d rubycocoa src
   $ cd rubycocoa
   $ cvs update -d -P

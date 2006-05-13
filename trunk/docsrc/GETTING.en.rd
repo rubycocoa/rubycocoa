@@ -76,11 +76,11 @@ The latest (or the oldest) development source is available from the
 ((<CVS Server|URL:http://sourceforge.net/cvs/?group_id=44114>)).
 
 You can
-((<view the CVS Repository|URL:http://cvs.sourceforge.net/cgi-bin/viewcvs.cgi/rubycocoa/>))
+((<view the CVS Repository|URL:http://rubycocoa.cvs.sourceforge.net/rubycocoa/src/>))
 for RubyCocoa. On the shell command line, type this:
 
-  $ cvs -d:pserver:anonymous@cvs.sf.net:/cvsroot/rubycocoa login
-  $ cvs -z3 -d:pserver:anonymous@cvs.sf.net:/cvsroot/rubycocoa co \
+  $ cvs -d:pserver:anonymous@rubycocoa.cvs.sourceforge.net:/cvsroot/rubycocoa login
+  $ cvs -z3 -d:pserver:anonymous@rubycocoa.cvs.sourceforge.net:/cvsroot/rubycocoa co \
         -P -d rubycocoa src
   $ cd rubycocoa
   $ cvs update -d -P
