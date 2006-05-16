@@ -26,7 +26,7 @@ _objcid_data_free(struct _objcid_data* dp)
 {
   id pool = [[NSAutoreleasePool alloc] init];
   if (dp != NULL) {
-    if (dp->ocid != nil)
+    if (dp->ocid != nil && dp->initialized)
       [dp->ocid release];
     free(dp);
   }
@@ -39,6 +39,7 @@ _objcid_data_new()
   struct _objcid_data* dp;
   dp = malloc(sizeof(struct _objcid_data));
   dp->ocid = nil;
+  dp->initialized = NO;
   return dp;
 }
 
@@ -50,7 +51,6 @@ _objcid_initialize_for_new_with_ocid(int argc, VALUE* argv, VALUE rcv)
   rb_scan_args(argc, argv, "10", &arg_ocid);
   if (arg_ocid != Qnil) {
     id ocid = (id) NUM2UINT(arg_ocid);
-    [ocid retain];
     OBJCID_DATA_PTR(rcv)->ocid = ocid;
   }
 }
