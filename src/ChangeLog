@@ -1,3 +1,8 @@
+2006-05-16  kimura wataru <kimuraw@i.nifty.jp>
+
+	* tests/objc_test.m, tests/tc_retaincount.rb:
+	add tests for retainCount.
+
 2006-05-16  Laurent Sansonetti <lsansonetti@apple.com>
 
 	* framework/src/objc/cls_objcid.h, framework/src/objc/cls_objcid.m, framework/src/objc/mdl_objwrapper.m:
