@@ -119,7 +119,6 @@ ocm_perform(int argc, VALUE* argv, VALUE rcv, VALUE* result)
   const char* ret_type;
   int num_of_args;
   id args[2];
-  id pool;
   id oc_result = nil;
   id oc_msig;
   int i;
@@ -146,7 +145,6 @@ ocm_perform(int argc, VALUE* argv, VALUE rcv, VALUE* result)
   if (num_of_args > 2)
     return ocmsend_err_new (oc_rcv, oc_sel, "numberOfArguments is bigger than 2");
 
-  pool = [[NSAutoreleasePool alloc] init];
   oc_sel_str = NSStringFromSelector(oc_sel);
   DLOG2("ocm_perform (%@): ret_type=%s", oc_sel_str, ret_type);
 
@@ -159,7 +157,6 @@ ocm_perform(int argc, VALUE* argv, VALUE rcv, VALUE* result)
     args[i] = nil;
     if (i < argc) {
       if (!rbobj_to_nsobj(argv[i], &(args[i]))) {
-	[pool release];
 	return ocdataconv_err_new 
 	  (oc_rcv, oc_sel, "cannot convert the argument[%d] as '%s' to NSObject.", i, arg_type);
       }
@@ -199,7 +196,6 @@ ocm_perform(int argc, VALUE* argv, VALUE rcv, VALUE* result)
   else
     *result = ocid_to_rbobj(rcv, oc_result);
 
-  [pool release];
   return Qnil;
 }
 
@@ -211,7 +207,6 @@ ocm_invoke(int argc, VALUE* argv, VALUE rcv, VALUE* result)
   id oc_sel_str;
   const char* ret_type;
   int num_of_args;
-  id pool;
   id oc_msig;
   id oc_inv;
   int i;
@@ -233,7 +228,6 @@ ocm_invoke(int argc, VALUE* argv, VALUE rcv, VALUE* result)
   ret_type = [oc_msig methodReturnType];
   num_of_args = [oc_msig numberOfArguments] - 2;
 
-  pool = [[NSAutoreleasePool alloc] init];
   oc_sel_str = NSStringFromSelector(oc_sel);
   DLOG2("ocm_invoke (%@): ret_type=%s", oc_sel_str, ret_type);
 
@@ -253,7 +247,6 @@ ocm_invoke(int argc, VALUE* argv, VALUE rcv, VALUE* result)
       [oc_inv setArgument: ocdata atIndex: (i+2)];
     }
     else {
-      [pool release];
       return ocdataconv_err_new 
 	(oc_rcv, oc_sel, "cannot convert the argument #%d as '%s' to NS argument.", i, octype_str);
     }
@@ -291,7 +284,6 @@ ocm_invoke(int argc, VALUE* argv, VALUE rcv, VALUE* result)
     [oc_inv getReturnValue: result_data];
     f_conv_success = ocdata_to_rbobj(rcv, octype, result_data, result);
     if (!f_conv_success) {
-      [pool release];
       return ocdataconv_err_new 
 	(oc_rcv, oc_sel, "cannot convert the result as '%s' to Ruby Object.", ret_type);
     }
@@ -300,7 +292,6 @@ ocm_invoke(int argc, VALUE* argv, VALUE rcv, VALUE* result)
     *result = Qnil;
   }
 
-  [pool release];
   return Qnil;
 }
 
@@ -308,17 +299,42 @@ static VALUE
 ocm_send(int argc, VALUE* argv, VALUE rcv, VALUE* result)
 {
   VALUE exc;
-  if (argc < 1) return Qnil;
+  id pool;
+
+  if (argc < 1) 
+    return Qnil;
 
   DLOG0("ocm_send ...");
+
+  pool = [[NSAutoreleasePool alloc] init];
 
   exc = ocm_perform(argc, argv, rcv, result);
   if (exc != Qnil) {
     exc = ocm_invoke(argc, argv, rcv, result);
-    if (exc != Qnil) return exc;
+    if (exc != Qnil) {
+        [pool release];
+        return exc;
+    }
+  }
+
+  if (result != NULL
+      && *result != Qnil
+      && strcmp(TYPE(argv[0]) == T_SYMBOL ? rb_id2name(SYM2ID(argv[0])) : StringValueCStr(argv[0]), "alloc") != 0
+      && rb_obj_is_kind_of(*result, objid_s_class()) 
+      && !OBJCID_DATA_PTR(*result)->initialized) {
+  
+    [OBJCID_ID(*result) retain];
+    OBJCID_DATA_PTR(*result)->initialized = YES;
+  }
+  else if (rb_obj_is_kind_of(rcv, objid_s_class()) && !OBJCID_DATA_PTR(rcv)->initialized) {
+
+    [OBJCID_ID(rcv) retain];
+    OBJCID_DATA_PTR(rcv)->initialized = YES;
   }
 
   DLOG0("ocm_send done");
+
+  [pool release];
 
   return exc;
 }
@@ -338,7 +354,9 @@ wrapper_ocm_perform(int argc, VALUE* argv, VALUE rcv)
 {
   VALUE result;
   VALUE exc;
+  id pool = [[NSAutoreleasePool alloc] init];
   exc = ocm_perform(argc, argv, rcv, &result);
+  [pool release];
   if (exc != Qnil) rb_exc_raise (exc);
   return result;
 }
@@ -348,7 +366,9 @@ wrapper_ocm_invoke(int argc, VALUE* argv, VALUE rcv)
 {
   VALUE result;
   VALUE exc;
+  id pool = [[NSAutoreleasePool alloc] init];
   exc = ocm_invoke(argc, argv, rcv, &result);
+  [pool release];
   if (exc != Qnil) rb_exc_raise (exc);
   return result;
 }

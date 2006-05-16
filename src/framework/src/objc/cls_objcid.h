@@ -14,6 +14,7 @@
 
 struct _objcid_data {
   id  ocid;
+  BOOL initialized;
 };
 
 /** class methods **/
