@@ -23,7 +23,7 @@ Dir.mkdir resources_dir
 Dir.mkdir File.join(resources_dir, 'English.lproj')
 Dir.mkdir File.join(resources_dir, 'Japanese.lproj')
 
-File.link '../LGPL', File.join(resources_dir, 'License.txt')
+File.link '../COPYING', File.join(resources_dir, 'License.txt')
 File.link '../ReadMe.ascii.html', 
   File.join(resources_dir, 'English.lproj', 'ReadMe.html')
 File.link '../ReadMe.sjis.html', 

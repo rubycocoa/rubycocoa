@@ -1,11 +1,7 @@
 #
 #  $Id$
 #
-#  Copyright (c) 2001 FUJIMOTO Hisakuni <hisa@imasy.or.jp>
-#
-#  This program is free software.
-#  You can distribute/modify this program under the terms of
-#  the GNU Lesser General Public License version 2.
+#  Copyright (c) 2005-2006 FUJIMOTO Hisakuni
 #
 
 ['/usr/bin/cpp-4.0', '/usr/bin/cpp-3.3', '/usr/bin/cpp3'].each do |cpp|
