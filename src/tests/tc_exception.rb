@@ -1,9 +1,7 @@
 #
 #  $Id$
 #
-#  This program is free software.
-#  You can distribute/modify this program under the terms of
-#  the GNU Lesser General Public License version 2.
+#  Copyright (c) 2005 kimura wataru
 #
 
 require 'test/unit'

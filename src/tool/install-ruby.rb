@@ -34,7 +34,8 @@ SRCDIR = ARGV.shift
 CONF_OPTION = "--enable-shared --prefix=#{DSTDIR} --bindir=#{BINDIR} --mandir=#{MANDIR}"
 
 DOCS = [ 'COPYING', 'COPYING.ja', 'ChangeLog', 'GPL', 'LEGAL', 'LGPL',
-  'MANIFEST','README','README.EXT','README.EXT.ja','README.ja','ToDo']
+         'MANIFEST','README','README.EXT','README.EXT.ja','README.ja','ToDo',
+         'ReadMe.ascii.html', 'ReadMe.sjis.html' ]
 
 chdir SRCDIR
 command "./configure #{CONF_OPTION}"
