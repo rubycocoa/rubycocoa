@@ -24,7 +24,7 @@ config_ary = [
 ]
 
 # build options
-cflags = '-fno-common -g'
+cflags = '-fno-common -g -fobjc-exceptions'
 ldflags = '-undefined suppress -flat_namespace'
 sdkroot = ''
 

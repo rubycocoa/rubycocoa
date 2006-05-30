@@ -39,32 +39,29 @@ static void debug_log(const char* fmt,...)
 
 static RB_ID sel_to_mid(SEL a_sel)
 {
-  int i;
-  id pool;
-  NSString* selstr;
+  int i, length;
+  const char *selName;
   char mname[1024];
 
-  pool = [[NSAutoreleasePool alloc] init];
-  selstr = NSStringFromSelector(a_sel);
+  selName = sel_getName(a_sel);
   memset(mname, 0, sizeof(mname));
-  strncpy(mname, [selstr UTF8String], sizeof(mname) - 1);
+  strncpy(mname, selName, sizeof(mname) - 1);
 
   // selstr.sub(/:/,'_').sub(/^(.*)_$/, "\1")
-  for (i = 0; i < [selstr length]; i++)
+  length = strlen(selName);
+  for (i = 0; i < length; i++)
     if (mname[i] == ':') mname[i] = '_';
-  for (i = [selstr length] - 1; i >= 0; i--) {
+  for (i = length - 1; i >= 0; i--) {
     if (mname[i] != '_') break;
     mname[i] = '\0';
   }
-  [pool release];
 
   return rb_intern(mname);
 }
 
 static RB_ID sel_to_mid_as_setter(SEL a_sel)
 {
-  id pool = [[NSAutoreleasePool alloc] init];
-  VALUE str = rb_str_new2([NSStringFromSelector(a_sel) UTF8String]);
+  VALUE str = rb_str_new2(sel_getName(a_sel));
 
   // if str.sub!(/^set([A-Z][^:]*):$/, '\1=') then
   //   str = str[0].chr.downcase + str[1..-1]
@@ -77,7 +74,6 @@ static RB_ID sel_to_mid_as_setter(SEL a_sel)
     RSTRING(str)->ptr[0] = (char) c;
   }
 
-  [pool release];
   return rb_to_id(str);
 }
 
@@ -107,16 +103,15 @@ static int rb_obj_arity_of_method(VALUE rcv, SEL a_sel)
 
 static SEL ruby_method_sel(int argc)
 {
-  SEL result;
-  id pool = [[NSAutoreleasePool alloc] init];
-  NSString* s = [@"ruby_method_" stringByAppendingFormat: @"%d", argc];
+  char selName[1024];
+  int selNameLength;
   int i;
-  for (i = 0; i < argc; i++) {
-    s = [s stringByAppendingString: @":"];
-  }
-  result = NSSelectorFromString(s);
-  [pool release];
-  return result;
+  
+  selNameLength = snprintf(selName, sizeof selName, "ruby_method_%d", argc);
+  for (i = 0; i < argc; i++)
+    selName[selNameLength++] = ':';
+  selName[selNameLength] = '\0';
+  return sel_registerName(selName);
 }
 
 @implementation RBObject
@@ -155,11 +150,9 @@ static SEL ruby_method_sel(int argc)
   const char* name;
   int name_len, tail_len;
   NSMethodSignature* msig;
-  id pool;
 
   msig = nil;
-  pool = [[NSAutoreleasePool alloc] init];
-  name = [NSStringFromSelector(a_sel) UTF8String];
+  name = sel_getName(a_sel);
   name_len = strlen(name);
   tail_len = strlen(tail);
   if (name_len > tail_len) {
@@ -169,7 +162,6 @@ static SEL ruby_method_sel(int argc)
 	       instanceMethodSignatureForSelector: dummy_sel];
     }
   }
-  [pool release];
   return msig;
 }
 
@@ -300,12 +292,12 @@ static VALUE rbobject_protected_apply(VALUE a)
 // public class methods
 + RBObjectWithRubyScriptCString: (const char*) cstr
 {
-  return [[self alloc] initWithRubyScriptCString: cstr];
+  return [[[self alloc] initWithRubyScriptCString: cstr] autorelease];
 }
 
 + RBObjectWithRubyScriptString: (NSString*) str
 {
-  return [[self alloc] initWithRubyScriptString: str];
+  return [[[self alloc] initWithRubyScriptString: str] autorelease];
 }
 
 // public methods
@@ -315,6 +307,8 @@ static VALUE rbobject_protected_apply(VALUE a)
 - (void) dealloc
 {
   rb_gc_unregister_address (&m_rbobj);
+  NSLog(@"releasing %p", self);
+  rb_ivar_set(m_rbobj, rb_intern("__rbobj_ocid"), Qnil);
   [super dealloc];
 }
 
@@ -337,7 +331,7 @@ static VALUE rbobject_protected_apply(VALUE a)
 
 - (NSString*) _copyDescription
 {
-  return [[NSString alloc] initWithUTF8String: STR2CSTR(rb_inspect(m_rbobj))];
+  return [[[NSString alloc] initWithUTF8String: STR2CSTR(rb_inspect(m_rbobj))] autorelease];
 }
 
 - (BOOL)isKindOfClass: (Class)klass

@@ -13,6 +13,24 @@
 #import "mdl_osxobjc.h"
 #import <CoreFoundation/CFString.h> // CFStringEncoding
 
+static CFMutableDictionaryRef rb2ocCache;
+static pthread_mutex_t rb2ocCacheLock;
+
+void init_rb2oc_cache(void)
+{
+  rb2ocCache = CFDictionaryCreateMutable(kCFAllocatorDefault, 0, &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
+  pthread_mutex_init(&rb2ocCacheLock, NULL);
+}
+
+void remove_from_rb2oc_cache(id ocid)
+{
+  CFNumberRef key;
+
+  pthread_mutex_lock(&rb2ocCacheLock);
+  key = CFNumberCreate(kCFAllocatorDefault, kCFNumberLongLongType, &ocid);
+  CFDictionaryRemoveValue(rb2ocCache, key);
+  pthread_mutex_unlock(&rb2ocCacheLock);
+}
 
 static VALUE rbclass_nsrect()
 {
@@ -190,10 +208,7 @@ ocdata_to_rbobj(VALUE context_obj,
     break;
 
   case _C_SEL: {
-    id pool = [[NSAutoreleasePool alloc] init];
-    NSString* arg_str = NSStringFromSelector(*(SEL*)ocdata);
-    rbval = rb_str_new2([arg_str UTF8String]);
-    [pool release];
+    rbval = rb_str_new2(sel_getName(*(SEL*)ocdata));
     break;
   }
 
@@ -407,16 +422,28 @@ static BOOL rbobj_convert_to_nsobj(VALUE obj, id* nsobj)
 
 BOOL rbobj_to_nsobj(VALUE obj, id* nsobj)
 {
+  VALUE rbobj_ocid;
+
   if (obj == Qnil) {
     *nsobj = nil;
     return YES;
   }
 
-  *nsobj = rbobj_get_ocid(obj);
-  if (*nsobj != nil) return YES;
+  // Register converted Objective-C object in the Ruby one in an instance variable,
+  // so that we don't need to make conversions each time the Ruby object crosses the
+  // bridge.  Also this trick works for pure Ruby objects that do not respond to __ocid__.
 
-  if (rbobj_convert_to_nsobj(obj, nsobj))
+  rbobj_ocid = rb_ivar_get(obj, rb_intern("__rbobj_ocid"));
+  if (!NIL_P(rbobj_ocid)) {
+    *nsobj = (id)NUM2INT(rbobj_ocid);
     return YES;
+  }
+
+  *nsobj = rbobj_get_ocid(obj);
+  if (*nsobj != nil || rbobj_convert_to_nsobj(obj, nsobj)) {
+    rb_ivar_set(obj, rb_intern("__rbobj_ocid"), INT2NUM((long)*nsobj));
+    return YES;
+  }
 
   return NO;
 }
@@ -465,24 +492,38 @@ VALUE double_to_rbobj (double val)
 VALUE
 ocid_to_rbobj(VALUE context_obj, id ocid)
 {
-  VALUE result;
+  VALUE       result;
+  CFNumberRef key;
+  CFNumberRef value;
 
-  if (ocid == nil) return Qnil;
+  if (ocid == nil) 
+    return Qnil;
 
-  result = ocid_get_rbobj(ocid);
+  pthread_mutex_lock(&rb2ocCacheLock);
+  key = CFNumberCreate(kCFAllocatorDefault, kCFNumberLongLongType, &ocid);
+  value = CFDictionaryGetValue(rb2ocCache, key);
+  if (value == NULL || !CFNumberGetValue(value, kCFNumberLongLongType, &result)) {
+    result = ocid_get_rbobj(ocid);
 
-  if (result == Qnil) {
-    if (rbobj_get_ocid(context_obj) == ocid)
-      result = context_obj;
-    else
-      result = ocobj_s_new (ocid);
+    if (result == Qnil) {
+      if (rbobj_get_ocid(context_obj) == ocid)
+        result = context_obj;
+      else
+        result = ocobj_s_new (ocid);
+    }
+
+    value = CFNumberCreate(kCFAllocatorDefault, kCFNumberLongLongType, &result);
+    CFDictionarySetValue(rb2ocCache, key, value);
+    CFRelease(value);
   }
+  CFRelease(key);
+  pthread_mutex_unlock(&rb2ocCacheLock);
 
   return result;
 }
 
 
-id rbobj_to_nsselstr(VALUE obj)
+const char * rbobj_to_cselstr(VALUE obj)
 {
   int i;
   VALUE str = rb_obj_as_string(obj);
@@ -492,21 +533,17 @@ id rbobj_to_nsselstr(VALUE obj)
     if (RSTRING(str)->ptr[i] == '_')
       RSTRING(str)->ptr[i] = ':';
   }
-  return [NSString stringWithUTF8String: STR2CSTR(str)];
+  return STR2CSTR(str);
+}
+
+id rbobj_to_nsselstr(VALUE obj)
+{
+  return [NSString stringWithUTF8String:rbobj_to_cselstr(obj)];
 }
 
 SEL rbobj_to_nssel(VALUE obj)
 {
-  if (NIL_P(obj)) {
-    return NULL;
-  }
-  else {
-    id pool = [[NSAutoreleasePool alloc] init];
-    id nsstr = rbobj_to_nsselstr(obj);
-    SEL nssel = NSSelectorFromString(nsstr);
-    [pool release];
-    return nssel;
-  }
+  return NIL_P(obj) ? NULL : sel_registerName(rbobj_to_cselstr(obj));
 }
 
 static BOOL rbobj_to_objcptr(VALUE obj, void** cptr)

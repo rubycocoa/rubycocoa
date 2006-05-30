@@ -13,6 +13,7 @@
 #import <string.h>
 #import <stdlib.h>
 #import <stdarg.h>
+#import <objc/objc-runtime.h>
 
 static VALUE _mObjWrapper = Qnil;
 static VALUE _mClsWrapper = Qnil;
@@ -48,7 +49,7 @@ _oc_exception_new(VALUE exc, id rcv, SEL sel, const char *fmt, va_list args)
 {
   char buf_a[BUFSIZ];
   char buf_b[BUFSIZ];
-  snprintf(buf_a, BUFSIZ, "%s#%s - %s", rcv->isa->name, (char*)sel, fmt);
+  snprintf(buf_a, BUFSIZ, "%s#%s - %s", rcv == NULL ? "null class" : rcv->isa->name, (char*)sel, fmt);
   vsnprintf(buf_b, BUFSIZ, buf_a, args);
   return rb_exc_new2(exc, buf_b);
 }
@@ -106,135 +107,166 @@ ocmsend_err_new(id rcv, SEL sel, const char *fmt, ...)
   return ret;
 }
 
-static VALUE
-ocm_perform(int argc, VALUE* argv, VALUE rcv, VALUE* result)
+struct _ocm_send_context
 {
-  id oc_rcv = rbobj_get_ocid(rcv);
-  SEL oc_sel;
-  id oc_sel_str;
+  id                  rcv;
+  SEL                 selector;
+  NSMethodSignature * methodSignature;
+  unsigned            numberOfArguments;
+  const char *        methodReturnType;
+  const char **       argumentsTypes;
+};
+
+static struct _ocm_send_context *
+ocm_create_send_context(VALUE rcv, SEL selector)
+{
+  id oc_rcv;
+  NSMethodSignature *methodSignature;
+  struct _ocm_send_context * ctx;
+  unsigned i;
+
+  oc_rcv = rbobj_get_ocid(rcv);
+  if (oc_rcv == nil)
+      return NULL;
+
+  methodSignature = [oc_rcv methodSignatureForSelector:selector];
+  if (methodSignature == nil)
+      return NULL;
+
+  ctx = (struct _ocm_send_context *)malloc(sizeof(struct _ocm_send_context));
+  
+  ctx->rcv = oc_rcv;
+  ctx->selector = selector;
+  ctx->methodSignature = [methodSignature retain];
+  ctx->numberOfArguments = [methodSignature numberOfArguments] - 2;
+  ctx->methodReturnType = [methodSignature methodReturnType];
+  if (ctx->numberOfArguments == 0) {
+      ctx->argumentsTypes = NULL;
+  }
+  else {
+      ctx->argumentsTypes = (const char **)malloc(sizeof(const char) * ctx->numberOfArguments);
+      for (i = 0; i < ctx->numberOfArguments; i++)
+          ctx->argumentsTypes[i] = [methodSignature getArgumentTypeAtIndex:i+2];
+  }
+  
+  return ctx;
+}
+
+static void
+ocm_free_send_context(struct _ocm_send_context *ctx)
+{
+  [ctx->methodSignature release];
+  if (ctx->argumentsTypes != NULL)
+      free(ctx->argumentsTypes);
+  free(ctx);
+}
+
+static VALUE
+ocm_perform(int argc, VALUE* argv, VALUE rcv, VALUE* result, struct _ocm_send_context *ctx)
+{
   const char* ret_type;
-  int num_of_args;
-  id args[2];
   id oc_result = nil;
-  id oc_msig;
   int i;
   VALUE excp = Qnil;
+  marg_list *margs;
 
-  if (oc_rcv == nil) return ocmsend_err_new (nil, NULL, "receiver is nil.");
-
-  if ((argc < 1) || (argc > 3))
-    return ocmsend_err_new (oc_rcv, NULL, "require 0 to 2 arguments.");
-
-  oc_sel = rbobj_to_nssel(argv[0]);
-  argc--;
-  argv++;
-
-  oc_msig = [oc_rcv methodSignatureForSelector: oc_sel];
-  if (oc_msig == nil)
-    return ocmsend_err_new (oc_rcv, oc_sel, "methodSignature is nil.");
-
-  ret_type = [oc_msig methodReturnType];
+  ret_type = (ctx->methodReturnType);
   if (*ret_type != _C_ID && *ret_type != _C_CLASS)
-    return ocmsend_err_new (oc_rcv, oc_sel, "return type is not Object. (%s)", ret_type);
+    return Qfalse;
 
-  num_of_args = [oc_msig numberOfArguments] - 2;
-  if (num_of_args > 2)
-    return ocmsend_err_new (oc_rcv, oc_sel, "numberOfArguments is bigger than 2");
+  DLOG2("ocm_perform (%s): ret_type=%s", ctx->selector, ret_type);
 
-  oc_sel_str = NSStringFromSelector(oc_sel);
-  DLOG2("ocm_perform (%@): ret_type=%s", oc_sel_str, ret_type);
+  margs = NULL;
 
-  for (i = 0; i < num_of_args; i++) {
-    const char* arg_type = [oc_msig getArgumentTypeAtIndex: (i+2)];
-    DLOG2("    arg_type[%d]: %s", i, arg_type);
-    if (*arg_type != _C_ID && *arg_type != _C_CLASS)
-      return ocmsend_err_new
-	(oc_rcv, oc_sel, "argument[%d] type is not Object. (%s)", i, arg_type);
-    args[i] = nil;
-    if (i < argc) {
-      if (!rbobj_to_nsobj(argv[i], &(args[i]))) {
-	return ocdataconv_err_new 
-	  (oc_rcv, oc_sel, "cannot convert the argument[%d] as '%s' to NSObject.", i, arg_type);
-      }
+  if (ctx->numberOfArguments > 0) {
+    for (i = 0; i < ctx->numberOfArguments; i++) {
+      const char* arg_type;
+      
+      arg_type = ctx->argumentsTypes[i];
+      DLOG2("    arg_type[%d]: %s", i, arg_type);
+      if (*arg_type != _C_ID && *arg_type != _C_CLASS)
+        return Qfalse;
     }
+
+#if MAC_OS_X_VERSION_MAX_ALLOWED <= MAC_OS_X_VERSION_10_4
+    Method method;
+
+    method = class_getInstanceMethod(((struct objc_class *)ctx->rcv)->isa, ctx->selector);
+    if (method == NULL)
+      return Qfalse;
+
+    marg_malloc(margs, method);
+
+    for (i = 0; i < ctx->numberOfArguments; i++) {
+      id value;
+      const char *arg_type;
+      int offset;
+
+      arg_type = ctx->argumentsTypes[i];
+      
+      if (!rbobj_to_nsobj(argv[i], &value))
+        return ocdataconv_err_new(
+          ctx->rcv, ctx->selector, 
+          "cannot convert the argument[%d] as '%s' to NSObject.", 
+          i, arg_type);
+
+      offset = 0;
+      method_getArgumentInfo(method, i + 2, &arg_type, &offset);
+      marg_setValue(margs, offset, id, value);      
+    }
+#else
+# error port me to 10.5
+#endif
   }
 
-  DLOG3("    %@#performSelector (%@) num_of_args=%d...", oc_rcv, oc_sel_str, num_of_args);
+  DLOG3("    %@#performSelector (%s) num_of_args=%d...", ctx->rcv, ctx->selector, ctx->numberOfArguments);
 
-  NS_DURING  
-    switch (num_of_args) {
-    case 0:
-      oc_result = [oc_rcv performSelector: oc_sel];
-      break;
-    case 1:
-      oc_result = [oc_rcv performSelector: oc_sel withObject: args[0]];
-      break;
-    case 2:
-      oc_result = [oc_rcv performSelector: oc_sel withObject: args[0]
-			  withObject: args[1]];
-      break;
-    default:
-      oc_result = nil;
+  @try {  
+    if (ctx->numberOfArguments == 0) {
+      oc_result = objc_msgSend(ctx->rcv, ctx->selector);
     }
+    else {
+      oc_result = objc_msgSendv(ctx->rcv, ctx->selector, [ctx->methodSignature frameLength], margs);
+      marg_free(margs);
+    }
+  }
+  @catch (id exception) { 
+    DLOG2("    NSObject#performSelector (%s): raise %@",
+	  ctx->selector, exception);
+    excp = oc_err_new (ctx->rcv, ctx->selector, exception);
+  }
+  if (excp != Qnil)
+    return excp;
 
-  NS_HANDLER
-    DLOG2("    NSObject#performSelector (%@): raise %@",
-	  oc_sel_str, localException);
-    excp = oc_err_new (oc_rcv, oc_sel, localException);
+  DLOG1("    NSObject#performSelector (%s): done.", ctx->selector);
 
-  NS_ENDHANDLER
-  if (excp != Qnil) return excp;
-  
-  DLOG1("    NSObject#performSelector (%@): done.", oc_sel_str);
-
-  if (oc_result == oc_rcv)
+  if (oc_result == ctx->rcv)
     *result = rcv;
   else
     *result = ocid_to_rbobj(rcv, oc_result);
+
 
   return Qnil;
 }
 
 static VALUE
-ocm_invoke(int argc, VALUE* argv, VALUE rcv, VALUE* result)
+ocm_invoke(int argc, VALUE* argv, VALUE rcv, VALUE* result, struct _ocm_send_context *ctx)
 {
-  id oc_rcv = rbobj_get_ocid(rcv);
-  SEL oc_sel;
-  id oc_sel_str;
-  const char* ret_type;
-  int num_of_args;
-  id oc_msig;
   id oc_inv;
   int i;
   unsigned ret_len;
   VALUE excp = Qnil;
 
-  if (oc_rcv == nil) return ocmsend_err_new (nil, NULL, "receiver is nil.");
+  DLOG2("ocm_invoke (%s): ret_type=%s", ctx->selector, ctx->methodReturnType);
 
-  if (argc < 1) return ocmsend_err_new (oc_rcv, NULL, "argc is less than 1.");
-
-  oc_sel = rbobj_to_nssel(argv[0]);
-  argc--;
-  argv++;
-
-  oc_msig = [oc_rcv methodSignatureForSelector: oc_sel];
-  if (oc_msig == nil)
-    return ocmsend_err_new (oc_rcv, oc_sel, "methodSignature is nil.");
-
-  ret_type = [oc_msig methodReturnType];
-  num_of_args = [oc_msig numberOfArguments] - 2;
-
-  oc_sel_str = NSStringFromSelector(oc_sel);
-  DLOG2("ocm_invoke (%@): ret_type=%s", oc_sel_str, ret_type);
-
-  oc_inv = [NSInvocation invocationWithMethodSignature: oc_msig];
-  [oc_inv setTarget: oc_rcv];
-  [oc_inv setSelector: oc_sel];
+  oc_inv = [NSInvocation invocationWithMethodSignature: ctx->methodSignature];
+  [oc_inv setTarget: ctx->rcv];
+  [oc_inv setSelector: ctx->selector];
 
   // set arguments
-  for (i = 0; i < num_of_args; i++) {
+  for (i = 0; i < ctx->numberOfArguments; i++) {
     VALUE arg = (i < argc) ? argv[i] : Qnil;
-    const char* octype_str = [oc_msig getArgumentTypeAtIndex: (i+2)];
+    const char* octype_str = ctx->argumentsTypes[i];
     int octype = to_octype(octype_str);
     void* ocdata;
     DLOG2("    arg_type[%d]: %s", i, octype_str);
@@ -244,45 +276,44 @@ ocm_invoke(int argc, VALUE* argv, VALUE rcv, VALUE* result)
     }
     else {
       return ocdataconv_err_new 
-	(oc_rcv, oc_sel, "cannot convert the argument #%d as '%s' to NS argument.", i, octype_str);
+	(ctx->rcv, ctx->selector, "cannot convert the argument #%d as '%s' to NS argument.", i, octype_str);
     }
   }
 
-  DLOG1("    NSInvocation#invoke (%@) ...", oc_sel_str);
+  DLOG1("    NSInvocation#invoke (%s) ...", ctx->selector);
   NS_DURING
     [oc_inv invoke];
 
   NS_HANDLER
-    DLOG2("    NSInvocation#invoke (%@): raise %@", oc_sel_str, localException);
-    excp = oc_err_new (oc_rcv, oc_sel, localException);
+    DLOG2("    NSInvocation#invoke (%s): raise %@", ctx->selector, localException);
+    excp = oc_err_new (ctx->rcv, ctx->selector, localException);
 
   NS_ENDHANDLER
   if (excp != Qnil) return excp;
 
-  DLOG1("    NSInvocation#invoke (%@): done.", oc_sel_str);
+  DLOG1("    NSInvocation#invoke (%s): done.", ctx->selector);
 
   // get result as argument
-  for (i = 0; i < num_of_args; i++) {
+  for (i = 0; i < ctx->numberOfArguments; i++) {
     VALUE arg = argv[i];
     if (arg == Qnil) continue;
     if (rb_obj_is_kind_of(arg, objid_s_class()) != Qtrue) continue;
-    if (to_octype([oc_msig getArgumentTypeAtIndex: (i+2)]) != _PRIV_C_ID_PTR) continue;
+    if (to_octype(ctx->argumentsTypes[i]) != _PRIV_C_ID_PTR) continue;
     if (OBJCID_ID(arg))
       [OBJCID_ID(arg) retain];
   }
 
   // get result
-  ret_len = [oc_msig methodReturnLength];
+  ret_len = [ctx->methodSignature methodReturnLength];
   if (ret_len > 0) {
-    int octype = to_octype([oc_msig methodReturnType]);
+    int octype = to_octype(ctx->methodReturnType);
     BOOL f_conv_success;
     void* result_data = alloca(ret_len);
     [oc_inv getReturnValue: result_data];
     f_conv_success = ocdata_to_rbobj(rcv, octype, result_data, result);
-    if (!f_conv_success) {
+    if (!f_conv_success)
       return ocdataconv_err_new 
-	(oc_rcv, oc_sel, "cannot convert the result as '%s' to Ruby Object.", ret_type);
-    }
+	(ctx->rcv, ctx->selector, "cannot convert the result as '%s' to Ruby Object.", ctx->methodReturnType);
   }
   else {
     *result = Qnil;
@@ -295,42 +326,52 @@ static VALUE
 ocm_send(int argc, VALUE* argv, VALUE rcv, VALUE* result)
 {
   VALUE exc;
+  struct _ocm_send_context *ctx;
+  SEL sel;
   id pool;
 
-  if (argc < 1) 
-    return Qnil;
+  if (argc < 1) return Qnil;
 
   DLOG0("ocm_send ...");
 
+  sel = rbobj_to_nssel(argv[0]);
+  ctx = ocm_create_send_context(rcv, sel);
+  if (ctx == NULL)
+    return ocmsend_err_new (nil, sel, "invalid object/message.");
+
+  argc--;
+  argv++;
+
   pool = [[NSAutoreleasePool alloc] init];
 
-  exc = ocm_perform(argc, argv, rcv, result);
+  exc = ocm_perform(argc, argv, rcv, result, ctx);
   if (exc != Qnil) {
-    exc = ocm_invoke(argc, argv, rcv, result);
+    exc = ocm_invoke(argc, argv, rcv, result, ctx);
     if (exc != Qnil) {
-        [pool release];
-        return exc;
+      [pool release];
+      return exc;
     }
   }
 
+  // Retain if necessary the returned ObjC value unless it was generated by "alloc/new/copy/mutableCopy". 
   if (result != NULL
       && *result != Qnil
-      && strcmp(TYPE(argv[0]) == T_SYMBOL ? rb_id2name(SYM2ID(argv[0])) : StringValueCStr(argv[0]), "alloc") != 0
+      && strcmp((const char *)ctx->selector, "alloc") != 0
+      && strcmp((const char *)ctx->selector, "new") != 0
+      && strcmp((const char *)ctx->selector, "copy") != 0
+      && strcmp((const char *)ctx->selector, "mutableCopy") != 0
       && rb_obj_is_kind_of(*result, objid_s_class()) 
-      && !OBJCID_DATA_PTR(*result)->initialized) {
+      && !OBJCID_DATA_PTR(*result)->retained) {
   
     [OBJCID_ID(*result) retain];
-    OBJCID_DATA_PTR(*result)->initialized = YES;
-  }
-  else if (rb_obj_is_kind_of(rcv, objid_s_class()) && !OBJCID_DATA_PTR(rcv)->initialized) {
-
-    [OBJCID_ID(rcv) retain];
-    OBJCID_DATA_PTR(rcv)->initialized = YES;
-  }
-
-  DLOG0("ocm_send done");
+    OBJCID_DATA_PTR(*result)->retained = YES;
+   }
 
   [pool release];
+
+  ocm_free_send_context(ctx);
+
+  DLOG0("ocm_send done");
 
   return exc;
 }
@@ -346,36 +387,16 @@ wrapper_ocm_responds_p(VALUE rcv, VALUE sel)
 }
 
 static VALUE
-wrapper_ocm_perform(int argc, VALUE* argv, VALUE rcv)
-{
-  VALUE result;
-  VALUE exc;
-  id pool = [[NSAutoreleasePool alloc] init];
-  exc = ocm_perform(argc, argv, rcv, &result);
-  [pool release];
-  if (exc != Qnil) rb_exc_raise (exc);
-  return result;
-}
-
-static VALUE
-wrapper_ocm_invoke(int argc, VALUE* argv, VALUE rcv)
-{
-  VALUE result;
-  VALUE exc;
-  id pool = [[NSAutoreleasePool alloc] init];
-  exc = ocm_invoke(argc, argv, rcv, &result);
-  [pool release];
-  if (exc != Qnil) rb_exc_raise (exc);
-  return result;
-}
-
-static VALUE
 wrapper_ocm_send(int argc, VALUE* argv, VALUE rcv)
 {
   VALUE result;
   VALUE exc;
   exc = ocm_send(argc, argv, rcv, &result);
-  if (exc != Qnil) rb_exc_raise (exc);
+  if (exc != Qnil) {
+    if (exc == Qfalse)
+      exc = ocmsend_err_new (nil, NULL, "cannot forward message.");
+    rb_exc_raise (exc);
+  }
   return result;
 }
 
@@ -526,8 +547,6 @@ init_mdl_OCObjWrapper(VALUE outer)
   _mObjWrapper = rb_define_module_under(outer, "OCObjWrapper");
 
   rb_define_method(_mObjWrapper, "ocm_responds?", wrapper_ocm_responds_p, 1);
-  rb_define_method(_mObjWrapper, "ocm_perform", wrapper_ocm_perform, -1);
-  rb_define_method(_mObjWrapper, "ocm_invoke", wrapper_ocm_invoke, -1);
   rb_define_method(_mObjWrapper, "ocm_send", wrapper_ocm_send, -1);
   rb_define_method(_mObjWrapper, "to_s", wrapper_to_s, 0);
 

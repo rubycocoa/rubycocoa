@@ -63,15 +63,12 @@ osx_mf_objc_derived_class_new(VALUE mdl, VALUE kls, VALUE kls_name, VALUE super_
 {
   Class super_class;
   Class new_cls = nil;
-  id pool = [[NSAutoreleasePool alloc] init];
 
   kls_name = rb_obj_as_string(kls_name);
   super_name = rb_obj_as_string(super_name);
-  super_class = NSClassFromString([NSString 
-				    stringWithUTF8String: STR2CSTR(super_name)]);
+  super_class = objc_getClass(STR2CSTR(super_name));
   if (super_class)
     new_cls = RBObjcDerivedClassNew(kls, STR2CSTR(kls_name), super_class);
-  [pool release];
 
   if (new_cls)
     return ocobj_s_new(new_cls);
@@ -85,16 +82,13 @@ osx_mf_objc_derived_class_method_add(VALUE mdl, VALUE kls, VALUE method_name)
 {
   Class a_class;
   SEL a_sel;
-  id pool = [[NSAutoreleasePool alloc] init];
 
   method_name = rb_obj_as_string(method_name);
   a_class = RBObjcClassFromRubyClass (kls);
-  a_sel =
-    NSSelectorFromString([NSString stringWithCString: STR2CSTR(method_name)]);
+  a_sel = sel_registerName(STR2CSTR(method_name));
   if (a_class && a_sel) {
     [a_class addRubyMethod: a_sel];
   }
-  [pool release];
   return Qnil;
 }
 
