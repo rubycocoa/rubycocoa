@@ -307,7 +307,6 @@ static VALUE rbobject_protected_apply(VALUE a)
 - (void) dealloc
 {
   rb_gc_unregister_address (&m_rbobj);
-  NSLog(@"releasing %p", self);
   rb_ivar_set(m_rbobj, rb_intern("__rbobj_ocid"), Qnil);
   [super dealloc];
 }

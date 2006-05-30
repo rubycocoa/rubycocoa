@@ -13,14 +13,23 @@ module OSX
   # create Ruby's class for Cocoa class,
   # then define Constant under module 'OSX'.
   def ns_import(sym)
-    if not OSX.const_defined?(sym) then
+    @invalid_classes ||= []
+    if not OSX.const_defined?(sym) and not @invalid_classes.include?(sym) 
       const_name = sym.to_s
       sym_name = ":#{sym}"
-      OSX.module_eval <<-EOE_NS_IMPORT,__FILE__,__LINE__+1
-	clsobj = NSClassFromString(#{sym_name})
-	rbcls = class_new_for_occlass(clsobj)
-	#{const_name} = rbcls if rbcls
+      klass = OSX.module_eval <<-EOE_NS_IMPORT,__FILE__,__LINE__+1
+      if clsobj = NSClassFromString(#{sym_name})
+	    if rbcls = class_new_for_occlass(clsobj)
+	      #{const_name} = rbcls
+        end
+      end
       EOE_NS_IMPORT
+      if klass
+        return klass
+      else
+        @invalid_classes << sym
+        return nil
+      end
     end
   end
   module_function :ns_import

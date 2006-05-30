@@ -441,7 +441,8 @@ BOOL rbobj_to_nsobj(VALUE obj, id* nsobj)
 
   *nsobj = rbobj_get_ocid(obj);
   if (*nsobj != nil || rbobj_convert_to_nsobj(obj, nsobj)) {
-    rb_ivar_set(obj, rb_intern("__rbobj_ocid"), INT2NUM((long)*nsobj));
+    if (!OBJ_FROZEN(obj))
+      rb_ivar_set(obj, rb_intern("__rbobj_ocid"), INT2NUM((long)*nsobj));
     return YES;
   }
 

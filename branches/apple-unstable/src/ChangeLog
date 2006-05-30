@@ -1,12 +1,16 @@
 2006-05-30  Laurent Sansonetti <lsansonetti@apple.com>
 
+	* tests/tc_constants.rb:
+	removed duplicated test cases.
+
 	* framework/src/objc/RBObject.m, framework/src/objc/RBRuntime.m, framework/src/objc/mdl_objwrapper.m,
 	  framework/src/objc/ocdata_conv.h, framework/src/objc/ocdata_conv.m, framework/src/objc/cls_objcid.m:
 	make sure objects are not copied each time they cross the bridge (either from ObjC to Ruby and vice-versa).
 
 	* framework/src/ruby/osx/cocoa.rb, framework/src/ruby/osx/foundation.rb, framework/src/ruby/osx/appkit.rb,
 	  framework/src/ruby/osx/objc/cocoa.rb, framework/src/ruby/osx/objc/cocoa_macros.rb,
-	  framework/post-config.rb:
+	  framework/src/ruby/osx/objc/oc_import.rb, framework/post-config.rb, 
+	  framework/RubyCocoa.pbproj/project.pbxproj.in:
 	removed generated appkit.rb/foundation.rb files and ns_import classes at demand.
 
 	* framework/src/objc/mdl_objwrapper.m:

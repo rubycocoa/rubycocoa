@@ -817,11 +817,9 @@
 		E88C6E73035BB408031D1B90 = {
 			children = (
 				E88C6E74035BB408031D1B90,
-				E88C6E75035BB408031D1B90,
 				E88C6E76035BB408031D1B90,
 				E88C6E77035BB408031D1B90,
 				E88C6E78035BB408031D1B90,
-				E88C6E79035BB408031D1B90,
 				E88C6E7A035BB408031D1B90,
 				E88C6E7B035BB408031D1B90,
 				E88C6E7C035BB408031D1B90,
@@ -841,11 +839,6 @@
 			path = addressbook.rb;
 			refType = 4;
 		};
-		E88C6E75035BB408031D1B90 = {
-			isa = PBXFileReference;
-			path = appkit.rb;
-			refType = 4;
-		};
 		E88C6E76035BB408031D1B90 = {
 			isa = PBXFileReference;
 			path = application.rb;
@@ -859,11 +852,6 @@
 		E88C6E78035BB408031D1B90 = {
 			isa = PBXFileReference;
 			path = cocoa_macros.rb;
-			refType = 4;
-		};
-		E88C6E79035BB408031D1B90 = {
-			isa = PBXFileReference;
-			path = foundation.rb;
 			refType = 4;
 		};
 		E88C6E7A035BB408031D1B90 = {
@@ -921,12 +909,6 @@
 		};
 		E88C6E89035BB408031D1B90 = {
 			fileRef = E88C6E78035BB408031D1B90;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
-		E88C6E8A035BB408031D1B90 = {
-			fileRef = E88C6E79035BB408031D1B90;
 			isa = PBXBuildFile;
 			settings = {
 			};
@@ -996,10 +978,8 @@
 			files = (
 				E88C6E85035BB408031D1B90,
 				E88C6E87035BB408031D1B90,
-				E8DE2214036EA4380389A780,
 				E88C6E88035BB408031D1B90,
 				E88C6E89035BB408031D1B90,
-				E88C6E8A035BB408031D1B90,
 				E88C6E8B035BB408031D1B90,
 				E88C6E8C035BB408031D1B90,
 				E88C6E8D035BB408031D1B90,
@@ -1013,12 +993,6 @@
 			);
 			isa = PBXCopyFilesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
-		};
-		E8DE2214036EA4380389A780 = {
-			fileRef = E88C6E75035BB408031D1B90;
-			isa = PBXBuildFile;
-			settings = {
-			};
 		};
 		E8E03A17035D04E103E1EA43 = {
 			children = (
