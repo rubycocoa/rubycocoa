@@ -73,6 +73,28 @@
 
 @end
 
+@interface UniqObjC : NSObject
+@end
+
+@implementation UniqObjC
+
+- (void)start:(id)o
+{
+    [o retain];
+}
+
+- (id)pass:(id)o
+{
+    return o;
+}
+
+- (void)end:(id)o
+{
+    [o release];
+}
+
+@end
+
 void Init_objc_test(){
   // dummy initializer for ruby's `require'
 }

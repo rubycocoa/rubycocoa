@@ -12,23 +12,21 @@
 #import "RBObject.h"
 #import "mdl_osxobjc.h"
 #import <CoreFoundation/CFString.h> // CFStringEncoding
+#import "st.h"
 
-static CFMutableDictionaryRef rb2ocCache;
+static struct st_table *rb2ocCache;
 static pthread_mutex_t rb2ocCacheLock;
 
 void init_rb2oc_cache(void)
 {
-  rb2ocCache = CFDictionaryCreateMutable(kCFAllocatorDefault, 0, &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
+  rb2ocCache = st_init_numtable();
   pthread_mutex_init(&rb2ocCacheLock, NULL);
 }
 
 void remove_from_rb2oc_cache(id ocid)
 {
-  CFNumberRef key;
-
   pthread_mutex_lock(&rb2ocCacheLock);
-  key = CFNumberCreate(kCFAllocatorDefault, kCFNumberLongLongType, &ocid);
-  CFDictionaryRemoveValue(rb2ocCache, key);
+  st_delete(rb2ocCache, (st_data_t *)ocid, NULL);
   pthread_mutex_unlock(&rb2ocCacheLock);
 }
 
@@ -493,36 +491,22 @@ VALUE double_to_rbobj (double val)
 VALUE
 ocid_to_rbobj(VALUE context_obj, id ocid)
 {
-  VALUE       result;
-  CFNumberRef key;
-  CFNumberRef value;
+  VALUE result;
 
   if (ocid == nil) 
     return Qnil;
 
   pthread_mutex_lock(&rb2ocCacheLock);
-  key = CFNumberCreate(kCFAllocatorDefault, kCFNumberLongLongType, &ocid);
-  value = CFDictionaryGetValue(rb2ocCache, key);
-  if (value == NULL || !CFNumberGetValue(value, kCFNumberLongLongType, &result)) {
+  if (!st_lookup(rb2ocCache, (st_data_t)ocid, (st_data_t *)&result)) {
     result = ocid_get_rbobj(ocid);
-
-    if (result == Qnil) {
-      if (rbobj_get_ocid(context_obj) == ocid)
-        result = context_obj;
-      else
-        result = ocobj_s_new (ocid);
-    }
-
-    value = CFNumberCreate(kCFAllocatorDefault, kCFNumberLongLongType, &result);
-    CFDictionarySetValue(rb2ocCache, key, value);
-    CFRelease(value);
+    if (result == Qnil)
+      result = rbobj_get_ocid(context_obj) == ocid ? context_obj : ocobj_s_new(ocid);
+    st_insert(rb2ocCache, (st_data_t)ocid, (st_data_t)result);
   }
-  CFRelease(key);
   pthread_mutex_unlock(&rb2ocCacheLock);
 
   return result;
 }
-
 
 const char * rbobj_to_cselstr(VALUE obj)
 {

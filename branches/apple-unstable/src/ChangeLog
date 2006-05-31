@@ -1,3 +1,11 @@
+2006-05-31  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* framework/src/objc/ocdata_conv.m:
+	changed the Objective-C-to-Ruby internal cache from CFDictionary to Ruby's bundled st.h.
+
+	* tests/objc_test.m, tests/tc_uniqobj.rb:
+	added new tests to check that objects are not copied when they cross the bridge.
+
 2006-05-30  Laurent Sansonetti <lsansonetti@apple.com>
 
 	* tests/tc_constants.rb:
