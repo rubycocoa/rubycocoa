@@ -1,5 +1,8 @@
 2006-06-01  Laurent Sansonetti <lsansonetti@apple.com>
 
+	* framework/src/objc/RBObject.m, framework/src/objc/RBRuntime.h, framework/src/objc/mdl_objwrapper.m:
+	refactored the debug logging facility.
+
 	* framework/src/objc/RBObject.m, framework/src/objc/RBRuntime.m, framework/src/objc/ocdata_conv.h,
 	  framework/src/objc/ocdata_conv.m:
 	map Ruby-to-Objective-C object addresses in an internal cache instead of an instance variable in the

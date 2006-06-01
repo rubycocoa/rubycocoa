@@ -14,28 +14,12 @@
 #import <stdlib.h>
 #import <stdarg.h>
 #import <objc/objc-runtime.h>
+#import "RBRuntime.h" // for DLOG
 
 static VALUE _mObjWrapper = Qnil;
 static VALUE _mClsWrapper = Qnil;
 
-#define DLOG0(f)          if (ruby_debug == Qtrue) _debug_log((f))
-#define DLOG1(f,a1)       if (ruby_debug == Qtrue) _debug_log((f),(a1))
-#define DLOG2(f,a1,a2)    if (ruby_debug == Qtrue) _debug_log((f),(a1),(a2))
-#define DLOG3(f,a1,a2,a3) if (ruby_debug == Qtrue) _debug_log((f),(a1),(a2),(a3))
-
-static void
-_debug_log(const char* fmt,...)
-{
-  if (ruby_debug == Qtrue) {
-    id pool = [[NSAutoreleasePool alloc] init];
-    NSString* nsfmt = [NSString stringWithFormat: @"OBJWRP:%s", fmt];
-    va_list args;
-    va_start(args, fmt);
-    NSLogv(nsfmt, args);
-    va_end(args);
-    [pool release];
-  }
-}
+#define OBJWRP_LOG(fmt, args...) DLOG("OBJWRP", fmt, ##args)
 
 static VALUE
 _oc_exception_class(const char* name)
@@ -174,7 +158,7 @@ ocm_perform(int argc, VALUE* argv, VALUE rcv, VALUE* result, struct _ocm_send_co
   if (*ret_type != _C_ID && *ret_type != _C_CLASS)
     return Qfalse;
 
-  DLOG2("ocm_perform (%s): ret_type=%s", ctx->selector, ret_type);
+  OBJWRP_LOG("ocm_perform (%s): ret_type=%s", ctx->selector, ret_type);
 
   margs = NULL;
 
@@ -183,7 +167,7 @@ ocm_perform(int argc, VALUE* argv, VALUE rcv, VALUE* result, struct _ocm_send_co
       const char* arg_type;
       
       arg_type = ctx->argumentsTypes[i];
-      DLOG2("    arg_type[%d]: %s", i, arg_type);
+      OBJWRP_LOG("    arg_type[%d]: %s", i, arg_type);
       if (*arg_type != _C_ID && *arg_type != _C_CLASS)
         return Qfalse;
     }
@@ -219,7 +203,7 @@ ocm_perform(int argc, VALUE* argv, VALUE rcv, VALUE* result, struct _ocm_send_co
 #endif
   }
 
-  DLOG3("    %@#performSelector (%s) num_of_args=%d...", ctx->rcv, ctx->selector, ctx->numberOfArguments);
+  OBJWRP_LOG("    %@#objc_msgSend[v] (%s) num_of_args=%d...", ctx->rcv, ctx->selector, ctx->numberOfArguments);
 
   @try {  
     if (ctx->numberOfArguments == 0) {
@@ -231,14 +215,14 @@ ocm_perform(int argc, VALUE* argv, VALUE rcv, VALUE* result, struct _ocm_send_co
     }
   }
   @catch (id exception) { 
-    DLOG2("    NSObject#performSelector (%s): raise %@",
+    OBJWRP_LOG("    NSObject#objc_msgSend[v] (%s): raise %@",
 	  ctx->selector, exception);
     excp = oc_err_new (ctx->rcv, ctx->selector, exception);
   }
   if (excp != Qnil)
     return excp;
 
-  DLOG1("    NSObject#performSelector (%s): done.", ctx->selector);
+  OBJWRP_LOG("    NSObject#objc_msgSend[v] (%s): done.", ctx->selector);
 
   if (oc_result == ctx->rcv)
     *result = rcv;
@@ -257,7 +241,7 @@ ocm_invoke(int argc, VALUE* argv, VALUE rcv, VALUE* result, struct _ocm_send_con
   unsigned ret_len;
   VALUE excp = Qnil;
 
-  DLOG2("ocm_invoke (%s): ret_type=%s", ctx->selector, ctx->methodReturnType);
+  OBJWRP_LOG("ocm_invoke (%s): ret_type=%s", ctx->selector, ctx->methodReturnType);
 
   oc_inv = [NSInvocation invocationWithMethodSignature: ctx->methodSignature];
   [oc_inv setTarget: ctx->rcv];
@@ -269,7 +253,7 @@ ocm_invoke(int argc, VALUE* argv, VALUE rcv, VALUE* result, struct _ocm_send_con
     const char* octype_str = ctx->argumentsTypes[i];
     int octype = to_octype(octype_str);
     void* ocdata;
-    DLOG2("    arg_type[%d]: %s", i, octype_str);
+    OBJWRP_LOG("    arg_type[%d]: %s", i, octype_str);
     ocdata = OCDATA_ALLOCA(octype, octype_str);
     if (rbobj_to_ocdata(arg, octype, ocdata)) {
       [oc_inv setArgument: ocdata atIndex: (i+2)];
@@ -280,18 +264,18 @@ ocm_invoke(int argc, VALUE* argv, VALUE rcv, VALUE* result, struct _ocm_send_con
     }
   }
 
-  DLOG1("    NSInvocation#invoke (%s) ...", ctx->selector);
+  OBJWRP_LOG("    NSInvocation#invoke (%s) ...", ctx->selector);
   NS_DURING
     [oc_inv invoke];
 
   NS_HANDLER
-    DLOG2("    NSInvocation#invoke (%s): raise %@", ctx->selector, localException);
+    OBJWRP_LOG("    NSInvocation#invoke (%s): raise %@", ctx->selector, localException);
     excp = oc_err_new (ctx->rcv, ctx->selector, localException);
 
   NS_ENDHANDLER
   if (excp != Qnil) return excp;
 
-  DLOG1("    NSInvocation#invoke (%s): done.", ctx->selector);
+  OBJWRP_LOG("    NSInvocation#invoke (%s): done.", ctx->selector);
 
   // get result as argument
   for (i = 0; i < ctx->numberOfArguments; i++) {
@@ -332,7 +316,7 @@ ocm_send(int argc, VALUE* argv, VALUE rcv, VALUE* result)
 
   if (argc < 1) return Qnil;
 
-  DLOG0("ocm_send ...");
+  OBJWRP_LOG("ocm_send ...");
 
   sel = rbobj_to_nssel(argv[0]);
   ctx = ocm_create_send_context(rcv, sel);
@@ -371,7 +355,7 @@ ocm_send(int argc, VALUE* argv, VALUE rcv, VALUE* result)
 
   ocm_free_send_context(ctx);
 
-  DLOG0("ocm_send done");
+  OBJWRP_LOG("ocm_send done");
 
   return exc;
 }
