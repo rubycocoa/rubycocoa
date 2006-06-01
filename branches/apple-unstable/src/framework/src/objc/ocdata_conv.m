@@ -17,10 +17,19 @@
 static struct st_table *rb2ocCache;
 static pthread_mutex_t rb2ocCacheLock;
 
+static struct st_table *oc2rbCache;
+static pthread_mutex_t oc2rbCacheLock;
+
 void init_rb2oc_cache(void)
 {
   rb2ocCache = st_init_numtable();
   pthread_mutex_init(&rb2ocCacheLock, NULL);
+}
+
+void init_oc2rb_cache(void)
+{
+  oc2rbCache = st_init_numtable();
+  pthread_mutex_init(&oc2rbCacheLock, NULL);
 }
 
 void remove_from_rb2oc_cache(id ocid)
@@ -28,6 +37,13 @@ void remove_from_rb2oc_cache(id ocid)
   pthread_mutex_lock(&rb2ocCacheLock);
   st_delete(rb2ocCache, (st_data_t *)ocid, NULL);
   pthread_mutex_unlock(&rb2ocCacheLock);
+}
+
+void remove_from_oc2rb_cache(VALUE rbobj)
+{
+  pthread_mutex_lock(&oc2rbCacheLock);
+  st_delete(oc2rbCache, (st_data_t *)rbobj, NULL);
+  pthread_mutex_unlock(&oc2rbCacheLock);
 }
 
 static VALUE rbclass_nsrect()
@@ -420,31 +436,34 @@ static BOOL rbobj_convert_to_nsobj(VALUE obj, id* nsobj)
 
 BOOL rbobj_to_nsobj(VALUE obj, id* nsobj)
 {
-  VALUE rbobj_ocid;
+  BOOL  ok;
 
   if (obj == Qnil) {
     *nsobj = nil;
     return YES;
   }
 
-  // Register converted Objective-C object in the Ruby one in an instance variable,
-  // so that we don't need to make conversions each time the Ruby object crosses the
-  // bridge.  Also this trick works for pure Ruby objects that do not respond to __ocid__.
+  // Cache new Objective-C object addresses in an internal table to 
+  // avoid duplication.
+  // We are locking the access to the cache twice (lookup + insert) as
+  // rbobj_convert_to_nsobj is succeptible to call us again, to avoid
+  // a deadlock.
 
-  rbobj_ocid = rb_ivar_get(obj, rb_intern("__rbobj_ocid"));
-  if (!NIL_P(rbobj_ocid)) {
-    *nsobj = (id)NUM2INT(rbobj_ocid);
-    return YES;
+  pthread_mutex_lock(&oc2rbCacheLock);
+  ok = st_lookup(oc2rbCache, (st_data_t)obj, (st_data_t *)nsobj);
+  pthread_mutex_unlock(&oc2rbCacheLock);
+
+  if (!ok) {
+    *nsobj = rbobj_get_ocid(obj);
+    if (*nsobj != nil || rbobj_convert_to_nsobj(obj, nsobj)) {
+      pthread_mutex_lock(&oc2rbCacheLock);
+      st_insert(oc2rbCache, (st_data_t)obj, (st_data_t)*nsobj);
+      pthread_mutex_unlock(&oc2rbCacheLock);
+      ok = YES;
+    }
   }
 
-  *nsobj = rbobj_get_ocid(obj);
-  if (*nsobj != nil || rbobj_convert_to_nsobj(obj, nsobj)) {
-    if (!OBJ_FROZEN(obj))
-      rb_ivar_set(obj, rb_intern("__rbobj_ocid"), INT2NUM((long)*nsobj));
-    return YES;
-  }
-
-  return NO;
+  return ok;
 }
 
 BOOL rbobj_to_bool(VALUE obj)
@@ -495,6 +514,9 @@ ocid_to_rbobj(VALUE context_obj, id ocid)
 
   if (ocid == nil) 
     return Qnil;
+
+  // Cache new Ruby object addresses in an internal table to 
+  // avoid duplication.
 
   pthread_mutex_lock(&rb2ocCacheLock);
   if (!st_lookup(rb2ocCache, (st_data_t)ocid, (st_data_t *)&result)) {

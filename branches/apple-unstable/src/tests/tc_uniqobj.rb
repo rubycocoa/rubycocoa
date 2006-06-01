@@ -38,6 +38,17 @@ class TC_UniqObject < Test::Unit::TestCase
         bridged.end(rbobj)
     end
 
+    # Check that a pure frozen Ruby object is not copied each time it crosses the bridge.
+    def test_pure_frozen_rbobj_uniq
+        rbobj = PureUniqRubyObject.new.freeze
+        bridged = OSX::UniqObjC.alloc.init
+        bridged.start(rbobj)
+        2.times do
+            assert_equal(bridged.pass(rbobj), rbobj)
+        end
+        bridged.end(rbobj)
+    end
+
     # Check that a pure Objective-C object is not copied each time it crosses the bridge. 
     def test_ocobj_uniq
         o = OSX::UniqObjC.alloc.init
