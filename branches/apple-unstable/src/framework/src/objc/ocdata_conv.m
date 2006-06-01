@@ -445,6 +445,7 @@ BOOL rbobj_to_nsobj(VALUE obj, id* nsobj)
 
   // Cache new Objective-C object addresses in an internal table to 
   // avoid duplication.
+  //
   // We are locking the access to the cache twice (lookup + insert) as
   // rbobj_convert_to_nsobj is succeptible to call us again, to avoid
   // a deadlock.
@@ -456,9 +457,11 @@ BOOL rbobj_to_nsobj(VALUE obj, id* nsobj)
   if (!ok) {
     *nsobj = rbobj_get_ocid(obj);
     if (*nsobj != nil || rbobj_convert_to_nsobj(obj, nsobj)) {
-      pthread_mutex_lock(&oc2rbCacheLock);
-      st_insert(oc2rbCache, (st_data_t)obj, (st_data_t)*nsobj);
-      pthread_mutex_unlock(&oc2rbCacheLock);
+      if ([*nsobj isProxy] && [*nsobj isRBObject]) {
+        pthread_mutex_lock(&oc2rbCacheLock);
+        st_insert(oc2rbCache, (st_data_t)obj, (st_data_t)*nsobj);
+        pthread_mutex_unlock(&oc2rbCacheLock);
+      }
       ok = YES;
     }
   }
