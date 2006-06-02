@@ -14,8 +14,7 @@ class TC_RetainCount < Test::Unit::TestCase
   # retained by Ruby
   def test_rb_rbclass
     assert_equal(1, RBSubclass.alloc.retainCount, 'alloc')
-# FIXME 
-#    assert_equal(1, RBSubclass.allocWithZone(nil).retainCount, 'allocWithZone:')
+    assert_equal(1, RBSubclass.allocWithZone(nil).retainCount, 'allocWithZone:')
     assert_equal(1, RBSubclass.alloc.init.retainCount, 'alloc.init')
   end
 
