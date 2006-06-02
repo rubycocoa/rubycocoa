@@ -13,26 +13,28 @@ module OSX
   # create Ruby's class for Cocoa class,
   # then define Constant under module 'OSX'.
   def ns_import(sym)
-    @invalid_classes ||= []
-    if not OSX.const_defined?(sym) and not @invalid_classes.include?(sym) 
+    if not OSX.const_defined?(sym) 
       const_name = sym.to_s
       sym_name = ":#{sym}"
-      klass = OSX.module_eval <<-EOE_NS_IMPORT,__FILE__,__LINE__+1
+      OSX.module_eval <<-EOE_NS_IMPORT,__FILE__,__LINE__+1
       if clsobj = NSClassFromString(#{sym_name})
-	    if rbcls = class_new_for_occlass(clsobj)
-	      #{const_name} = rbcls
+        if rbcls = class_new_for_occlass(clsobj)
+          #{const_name} = rbcls
         end
       end
       EOE_NS_IMPORT
-      if klass
-        return klass
-      else
-        @invalid_classes << sym
-        return nil
-      end
     end
   end
   module_function :ns_import
+
+  # overwrite NSClassFromString to set up a flag while it's called (see mdl_osxobjc.m:rb_osx_const())
+  self.class_eval { class << self; alias_method :old_NSClassFromString, :NSClassFromString; end }
+  def self.NSClassFromString(*x)
+    @within_NSClassFromString = true
+    retval = old_NSClassFromString(*x)
+    @within_NSClassFromString = false    
+    return retval
+  end
 
   # create Ruby's class for Cocoa class
   def OSX.class_new_for_occlass(occls)

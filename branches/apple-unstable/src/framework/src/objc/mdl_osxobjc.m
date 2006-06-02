@@ -20,6 +20,9 @@
 
 #define OSX_MODULE_NAME "OSX"
 
+static VALUE _cOCObject = Qnil;
+static ID _within_NSClassFromString_ID;
+
 static VALUE init_module_OSX()
 {
   VALUE module;
@@ -157,13 +160,46 @@ osx_mf_init_cocoa(VALUE mdl)
 /******************/
 
 static VALUE
+wrapper_rb_osx_const (VALUE name)
+{
+  VALUE mOSX;
+  
+  mOSX = osx_s_module();
+  if (NIL_P(mOSX)) 
+    return Qnil;
+  
+  return rb_const_get(mOSX, rb_intern(StringValueCStr(name)));
+}
+
+static VALUE
 rb_osx_const (const char* name)
 {
-  VALUE constant = Qnil;
-  VALUE mOSX = osx_s_module();
-  if (!mOSX) return Qnil;
-  if (rb_const_defined(mOSX, rb_intern(name)))
-    constant = rb_const_get(mOSX, rb_intern(name));
+  VALUE mOSX;
+  VALUE constant;
+  VALUE old_ruby_debug;
+  
+  mOSX = osx_s_module();
+  if (NIL_P(mOSX)) 
+    return Qnil;
+
+  constant = Qnil;
+
+  if (rb_ivar_get(mOSX, _within_NSClassFromString_ID) == Qtrue) {
+    // We are called by NSClassFromString, just return the constant if it exists.
+    if (rb_const_defined(mOSX, rb_intern(name)))
+      constant = rb_const_get(mOSX, rb_intern(name));
+  }
+  else {
+    // Explicitely call const_get, this will make sure the constant is generated if it does not
+    // exist (through const_missing -> OSX::ns_import...).
+    // Disable warnings just between the const_get instruction, as it would raise too many false
+    // positives.
+    old_ruby_debug = ruby_debug;
+    ruby_debug = Qfalse;
+    constant = rb_rescue2(&wrapper_rb_osx_const, rb_str_new2(name), NULL, Qnil, rb_eNameError, NULL);  
+    ruby_debug = old_ruby_debug;
+  }
+
   return constant;
 }
 
@@ -171,7 +207,8 @@ static VALUE
 rb_cls_ocobj (const char* name)
 {
   VALUE cls = rb_osx_const(name);
-  if (cls == Qnil) cls = rb_osx_const("OCObject");
+  if (cls == Qnil) 
+    cls = _cOCObject;
   return cls;
 }
 
@@ -253,16 +290,11 @@ VALUE
 ocobj_s_new(id ocid)
 {
   VALUE obj;
-  id pool;
   const char *cls_name;
-
-  pool = [[NSAutoreleasePool alloc] init];
-
-  cls_name = ([ocid class])->name;
-  obj = rb_funcall(rb_cls_ocobj(cls_name), 
-		   rb_intern("new_with_ocid"), 1, OCID2NUM(ocid));
+  
+  cls_name = object_getClassName(ocid);
+  obj = rb_funcall(rb_cls_ocobj(cls_name), rb_intern("new_with_ocid"), 1, OCID2NUM(ocid));
   add_attachments(obj, ocid);
-  [pool release];
   return obj;
 }
 
@@ -291,17 +323,15 @@ ocid_get_rbobj (id ocid)
 {
   VALUE result = Qnil;
 
-  NS_DURING  
+  @try {  
     if ([ocid isProxy] && [ocid isRBObject])
       result = [ocid __rbobj__];
-
     else if ([ocid respondsToSelector: @selector(__rbobj__)])
       result = [ocid __rbobj__];
-
-  NS_HANDLER
+  } 
+  @catch (id exception) {
     result = Qnil;
-
-  NS_ENDHANDLER
+  }
 
   return result;
 }
@@ -316,7 +346,10 @@ void initialize_mdl_osxobjc()
   init_cls_ObjcPtr(mOSX);
   init_cls_ObjcID(mOSX);
   init_mdl_OCObjWrapper(mOSX);
-  init_cls_OCObject(mOSX);
+  _cOCObject = init_cls_OCObject(mOSX);
+
+  _within_NSClassFromString_ID = rb_intern("@within_NSClassFromString");
+  rb_ivar_set(mOSX, _within_NSClassFromString_ID, Qfalse);
 
   rb_define_module_function(mOSX, "objc_proxy_class_new", 
 			    osx_mf_objc_proxy_class_new, 2);

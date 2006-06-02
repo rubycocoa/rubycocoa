@@ -1,3 +1,12 @@
+2006-06-02  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* framework/src/objc/mdl_objwrapper.m, framework/src/objc/mdl_osxobjc.m, 
+	  framework/src/objc/ocdata_conv.m, framework/src/ruby/osx/objc/oc_import.rb:
+	added experimental support of pass-by-reference methods.
+
+	* tests/tc_passbyref.rb, tests/objc_test.m:
+	added a test to check the pass-by-reference methods support.
+
 2006-06-01  Laurent Sansonetti <lsansonetti@apple.com>
 
 	* framework/src/objc/RBObject.m, framework/src/objc/RBRuntime.h, framework/src/objc/mdl_objwrapper.m:

@@ -95,6 +95,50 @@
 
 @end
 
+@interface PassByRef : NSObject
+@end
+
+@implementation PassByRef
+
+- (BOOL)passByRefObject:(id *)obj
+{
+    if (obj != NULL) {
+        *obj = self;
+        return YES;
+    }
+    return NO;
+}
+
+- (BOOL)passByRefInteger:(int *)integer
+{
+    if (integer != NULL) {
+        *integer = 666;
+        return YES;
+    }
+    return NO;
+}
+
+- (BOOL)passByRefFloat:(float *)floating
+{
+    if (floating != NULL) {
+        *floating = 666.0;
+        return YES;
+    }
+    return NO;
+}
+
+- (void)passByRefVarious:(id *)object integer:(int *)integer floating:(float *)floating
+{
+    if (object != NULL)
+        *object = self;
+    if (integer != NULL)
+        *integer = 666;
+    if (floating != NULL)
+        *floating = 666.0;
+}
+
+@end
+
 void Init_objc_test(){
   // dummy initializer for ruby's `require'
 }
