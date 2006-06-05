@@ -14,17 +14,7 @@
 #import "RBClassUtils.h"
 #import "ocdata_conv.h"
 
-#if 0
-#  define LOG0(f)
-#  define LOG1(f,a0)
-#  define LOG2(f,a0,a1)
-#  define LOG3(f,a0,a1,a2)
-#else
-#  define LOG0(f)          NSLog((f))
-#  define LOG1(f,a0)       NSLog((f),(a0))
-#  define LOG2(f,a0,a1)    NSLog((f),(a0),(a1))
-#  define LOG3(f,a0,a1,a2) NSLog((f),(a0),(a1),(a2))
-#endif
+#define OVMIX_LOG(fmt, args...) DLOG("OVMIX", fmt, ##args)
 
 static void* alloc_from_default_zone(unsigned int size)
 {

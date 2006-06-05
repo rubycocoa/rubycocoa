@@ -1,3 +1,24 @@
+2006-06-05  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* framework/src/objc/OverrideMixin.m:
+	moved to the new debug logging facility (though it's not used yet in that file).
+
+	* framework/src/objc/mdl_objwrapper.m, framework/src/objc/mdl_osxobjc.m,
+	  framework/src/ruby/osx/objc/cocoa.rb, framework/src/ruby/osx/objc/oc_import.rb:
+	translate the real Objective-C class hierarchy when creating Ruby proxies classes,
+	so that for example OSX::NSString inherits from OSX::NSObject. Take into account
+	CoreFoundation toll-free bridged classes. Various small optimizations elsewhere. 
+
+	* framework/src/objc/ocdata_conv.m:
+	fixed a bug that caused all cached objects (both Ruby and ObjC) to never be removed
+	from the internal caches.
+
+	* tests/tc_passbyref.rb:
+	register the instance method on the NSString class and not NSCFString anymore. 
+
+	* tests/tc_subclass.rb:
+	added a test case to check for real Objective-C class hierarchy.
+
 2006-06-02  kimura wataru <kimuraw@i.nifty.jp>
 
 	* framework/src/objc/mdl_objwrapper.m, tests/tc_retaincount.rb:
