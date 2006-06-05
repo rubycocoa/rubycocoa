@@ -15,8 +15,6 @@
 #import <stdlib.h>
 #import "RBObject.h"
 
-unsigned int NSAutoreleasePoolCountForObject(id anObject);
-
 static VALUE _kObjcID = Qnil;
 
 static void
