@@ -291,7 +291,7 @@ ocobj_s_new(id ocid)
 {
   VALUE obj;
   const char *cls_name;
-  
+
   cls_name = object_getClassName(ocid);
   obj = rb_funcall(rb_cls_ocobj(cls_name), rb_intern("new_with_ocid"), 1, OCID2NUM(ocid));
   add_attachments(obj, ocid);

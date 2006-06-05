@@ -13,16 +13,19 @@ module OSX
   # create Ruby's class for Cocoa class,
   # then define Constant under module 'OSX'.
   def ns_import(sym)
-    if not OSX.const_defined?(sym) 
+    if not OSX.const_defined?(sym)
+      NSLog("importing #{sym}...") if $DEBUG
       const_name = sym.to_s
       sym_name = ":#{sym}"
-      OSX.module_eval <<-EOE_NS_IMPORT,__FILE__,__LINE__+1
+      klass = OSX.module_eval <<-EOE_NS_IMPORT,__FILE__,__LINE__+1
       if clsobj = NSClassFromString(#{sym_name})
         if rbcls = class_new_for_occlass(clsobj)
           #{const_name} = rbcls
         end
       end
       EOE_NS_IMPORT
+      NSLog("importing #{sym}... done (-> #{klass.ancestors.join(' -> ')})") if $DEBUG
+      return klass
     end
   end
   module_function :ns_import
@@ -38,15 +41,35 @@ module OSX
 
   # create Ruby's class for Cocoa class
   def OSX.class_new_for_occlass(occls)
-    klass = Class.new(OSX::ObjcID)
+    superclass = if md = /^NSCF(.+)$/.match(occls.to_s)
+      # Translate CoreFoundation toll-free bridged classes to Cocoa.
+       OSX.const_get("NS" + md[1])
+    else
+      # Get real superclass if possible.
+      occls_superclass = occls.oc_superclass
+      if occls_superclass.nil?
+        OSX::ObjcID
+      else
+        begin
+          OSX.const_get("#{occls_superclass}".to_sym) 
+        rescue NameError
+          OSX::ObjcID
+        end
+      end
+    end
+    klass = Class.new(superclass)
     klass.class_eval <<-EOE_CLASS_NEW_FOR_OCCLASS,__FILE__,__LINE__+1
-      include OCObjWrapper
-      self.extend OCClsWrapper
+      if superclass == OSX::ObjcID
+        include OCObjWrapper 
+        self.extend OCClsWrapper
+      end
       @ocid = #{occls.__ocid__}
     EOE_CLASS_NEW_FOR_OCCLASS
-    def klass.__ocid__() @ocid end
-    def klass.to_s() name end
-    def klass.inherited(subklass) subklass.ns_inherited() end
+    if superclass == OSX::ObjcID
+      def klass.__ocid__() @ocid end
+      def klass.to_s() name end
+      def klass.inherited(subklass) subklass.ns_inherited() end
+    end
     return klass
   end
 

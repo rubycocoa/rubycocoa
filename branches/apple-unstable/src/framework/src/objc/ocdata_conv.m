@@ -35,14 +35,14 @@ void init_oc2rb_cache(void)
 void remove_from_rb2oc_cache(id ocid)
 {
   pthread_mutex_lock(&rb2ocCacheLock);
-  st_delete(rb2ocCache, (st_data_t *)ocid, NULL);
+  st_delete(rb2ocCache, (st_data_t *)&ocid, NULL);
   pthread_mutex_unlock(&rb2ocCacheLock);
 }
 
 void remove_from_oc2rb_cache(VALUE rbobj)
 {
   pthread_mutex_lock(&oc2rbCacheLock);
-  st_delete(oc2rbCache, (st_data_t *)rbobj, NULL);
+  st_delete(oc2rbCache, (st_data_t *)&rbobj, NULL);
   pthread_mutex_unlock(&oc2rbCacheLock);
 }
 

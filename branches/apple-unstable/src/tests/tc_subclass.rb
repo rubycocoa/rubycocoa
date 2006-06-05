@@ -31,6 +31,12 @@ class SubClassB < OSX::Override
 
 end
 
+OSX.ns_import :NSView
+class OSX::NSView
+    def a_sample_method
+    end
+end
+
 class TC_SubClass < Test::Unit::TestCase
 
   def test_s_new
@@ -78,6 +84,20 @@ class TC_SubClass < Test::Unit::TestCase
       def unknownMethod(text) return 123 end
     EOS
     assert_equal( 123, obj.unknownMethod('dummy') )
+  end
+
+  def test_ancestors
+    # Basic ancestors.
+    assert(OSX::NSTableView.ancestors.include?(OSX::NSView))
+    
+    # CoreFoundation-bridged ancestors.
+    assert(OSX::NSCFString.ancestors.include?(OSX::NSString))
+    assert(OSX::NSCFDictionary.ancestors.include?(OSX::NSDictionary))
+   
+    # Method manually defined in an ancestor. 
+    tv = OSX::NSTableView.alloc.initWithFrame(OSX::NSRect::ZERO)
+    assert(tv.is_a?(OSX::NSView))
+    assert(tv.respond_to?(:a_sample_method))
   end
 
   # testunit-0.1.8 has "assert_raises" not "assert_raise"
