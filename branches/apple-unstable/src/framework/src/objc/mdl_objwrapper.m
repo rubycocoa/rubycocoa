@@ -293,10 +293,13 @@ ocm_perform(int argc, VALUE* argv, VALUE rcv, VALUE* result, struct _ocm_send_co
 
   OBJWRP_LOG("\tobjc_msgSend[v] (%s): done (retval -> %p).", ctx->selector, oc_result);
 
-  if (oc_result == ctx->rcv)
+  if (oc_result == ctx->rcv) {
     *result = rcv;
-  else
+  }
+  else {
     *result = ocid_to_rbobj(rcv, oc_result);
+    ocm_retain_result_if_necessary(*result, (const char *)ctx->selector);
+  }
 
   return Qnil;
 }
@@ -400,6 +403,8 @@ ocm_invoke(int argc, VALUE* argv, VALUE rcv, VALUE* result, struct _ocm_send_con
     OBJWRP_LOG("\tretval : %s", ctx->methodReturnType);
     if (!ocdata_to_rbobj(rcv, to_octype(ctx->methodReturnType), result_data, result))
       return ocdataconv_err_new(ctx->rcv, ctx->selector, "cannot convert the result as '%s' to Ruby Object.", ctx->methodReturnType);
+  
+    ocm_retain_result_if_necessary(*result, (const char *)ctx->selector);
   }
   else {
     *result = Qnil;
@@ -429,7 +434,8 @@ ocm_invoke(int argc, VALUE* argv, VALUE rcv, VALUE* result, struct _ocm_send_con
         OBJWRP_LOG("\tpass-by-ref[%d] : %s (%p)", narg, octype_str, ocdata);
         if (!ocdata_to_rbobj(Qnil, to_octype(octype_str), &ocdata, &rbval))
           return ocdataconv_err_new(ctx->rcv, ctx->selector, "cannot convert pass-by-ref argument #%d result as '%s' to Ruby Object.", narg, octype_str);
-      
+
+        ocm_retain_result_if_necessary(rbval, (const char *)ctx->selector);
         rb_ary_push(retval_ary, rbval);
       }
     }
@@ -469,9 +475,6 @@ ocm_send(int argc, VALUE* argv, VALUE rcv, VALUE* result)
       return exc;
     }
   }
-
-  if (result != NULL)
-    ocm_retain_result_if_necessary(*result, (const char *)sel);
 
   [pool release];
 
