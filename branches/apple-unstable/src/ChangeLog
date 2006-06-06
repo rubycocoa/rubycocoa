@@ -1,3 +1,13 @@
+2006-06-07  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* framework/src/ruby/osx/objc/oc_wrapper.rb:
+	added a new way to call Objective-C methods from Ruby, passing an inline Hash
+	after the first argument (e.g. #initWithScheme('http', :host => 'myhost', 
+	:path => 'mypath') similar to what Rails does.
+
+	* tests/tc_wrapper.rb:
+	added test cases to check inline Hash calling pattern.
+
 2006-06-06  Laurent Sansonetti <lsansonetti@apple.com>
 
 	* framework/src/objc/RBObject.m, framework/src/objc/cls_objcid.m,

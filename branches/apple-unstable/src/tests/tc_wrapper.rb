@@ -49,4 +49,12 @@ class TC_OCObjWrapper < Test::Unit::TestCase
 		 NSData.objc_method_type(sel))
   end
 
+  def test_message_args
+    url1 = NSURL.alloc.initWithScheme_host_path('http', 'localhost', '/foo') 
+    url2 = NSURL.alloc.initWithScheme('http', :host, 'localhost', :path, '/foo') 
+    url3 = NSURL.alloc.initWithScheme('http', :host => 'localhost', :path => '/foo')
+    assert_equal(1, url1.isEqual(url2)) 
+    assert_equal(1, url2.isEqual(url3)) 
+  end
+
 end
