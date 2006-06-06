@@ -284,7 +284,7 @@ static VALUE rbobject_protected_apply(VALUE a)
 
 - (void) dealloc
 {
-  remove_from_oc2rb_cache(m_rbobj);
+  remove_from_rb2oc_cache(m_rbobj);
   rb_gc_unregister_address (&m_rbobj);
   [super dealloc];
 }

@@ -23,7 +23,7 @@ _objcid_data_free(struct _objcid_data* dp)
   id pool = [[NSAutoreleasePool alloc] init];
   if (dp != NULL) {
     if (dp->ocid != nil) {
-      remove_from_rb2oc_cache(dp->ocid);
+      remove_from_oc2rb_cache(dp->ocid);
       if (dp->retained)
         [dp->ocid release];
     }

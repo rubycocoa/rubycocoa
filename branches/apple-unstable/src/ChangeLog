@@ -1,3 +1,11 @@
+2006-06-06  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* framework/src/objc/RBObject.m, framework/src/objc/cls_objcid.m,
+	  framework/src/objc/ocdata_conv.h, framework/src/objc/ocdata_conv.m:
+	renamed the objects mapping caches (oc2rb -> rb2oc and vice-versa), checkout
+	that the hash table is still empty for us before inserting the value to avoid
+	a possible race condition (thanks Jonathan Paisley).
+
 2006-06-05  Laurent Sansonetti <lsansonetti@apple.com>
 
 	* framework/src/objc/OverrideMixin.m:

@@ -60,5 +60,5 @@ BOOL  rbobj_to_ocdata (VALUE obj, int octype, void* ocdata);
 
 void init_rb2oc_cache(void);
 void init_oc2rb_cache(void);
-void remove_from_rb2oc_cache(id ocid);
-void remove_from_oc2rb_cache(VALUE rbobj);
+void remove_from_rb2oc_cache(VALUE rbobj);
+void remove_from_oc2rb_cache(id ocid);
