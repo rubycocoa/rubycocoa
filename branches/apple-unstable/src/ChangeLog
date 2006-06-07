@@ -1,5 +1,8 @@
 2006-06-07  Laurent Sansonetti <lsansonetti@apple.com>
 
+	* tc_subclass.rb:
+	added another test case to check correct ObjC hierarchy. 
+
 	* framework/src/objc/cls_objcid.m:
 	fixed inspection message of objects from classes that do not directly
 	inherit from OSX::ObjcID (reported by Jonathan Paisley).

@@ -93,7 +93,8 @@ class TC_SubClass < Test::Unit::TestCase
     # CoreFoundation-bridged ancestors.
     assert(OSX::NSCFString.ancestors.include?(OSX::NSString))
     assert(OSX::NSCFDictionary.ancestors.include?(OSX::NSDictionary))
-   
+    assert_kind_of(OSX::NSCFArray, OSX::NSArray.array)  
+ 
     # Method manually defined in an ancestor. 
     tv = OSX::NSTableView.alloc.initWithFrame(OSX::NSRect::ZERO)
     assert(tv.is_a?(OSX::NSView))
