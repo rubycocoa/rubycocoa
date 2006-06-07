@@ -101,9 +101,8 @@ objcid_inspect(VALUE rcv)
   id ocid = OBJCID_ID(rcv);
   id pool = [[NSAutoreleasePool alloc] init];
   const char* class_desc = [[[ocid class] description] UTF8String];
-  VALUE rbclass_name = rb_mod_name(CLASS_OF(rcv));
   snprintf(s, sizeof(s), "#<%s:0x%lx class='%s' id=%p>",
-	   STR2CSTR(rbclass_name),
+	   rb_class2name(CLASS_OF(rcv)),
 	   NUM2ULONG(rb_obj_id(rcv)), 
 	   class_desc, ocid);
   result = rb_str_new2(s);

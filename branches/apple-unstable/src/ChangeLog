@@ -1,5 +1,9 @@
 2006-06-07  Laurent Sansonetti <lsansonetti@apple.com>
 
+	* framework/src/objc/cls_objcid.m:
+	fixed inspection message of objects from classes that do not directly
+	inherit from OSX::ObjcID (reported by Jonathan Paisley).
+
 	* framework/src/ruby/osx/objc/oc_wrapper.rb:
 	added a new way to call Objective-C methods from Ruby, passing an inline Hash
 	after the first argument (e.g. #initWithScheme('http', :host => 'myhost', 
