@@ -5,6 +5,7 @@
 #
 
 require 'osx/objc/oc_wrapper'
+require 'rexml/document'
 
 module OSX
 
@@ -24,6 +25,14 @@ module OSX
         end
       end
       EOE_NS_IMPORT
+      if methods_hash = @bridge_support_signatures[const_name]
+        if methods = methods_hash[:class_methods]
+          methods.each { |a| klass.register_objc_passbyref_class_method(*a) }
+        end
+        if methods = methods_hash[:instance_methods]
+          methods.each { |a| klass.register_objc_passbyref_instance_method(*a) }
+        end
+      end
       NSLog("importing #{sym}... done (-> #{klass.ancestors.join(' -> ')})") if $DEBUG
       return klass
     end
@@ -71,6 +80,49 @@ module OSX
       def klass.inherited(subklass) subklass.ns_inherited() end
     end
     return klass
+  end
+  
+  def OSX.load_bridge_support_signatures
+    @bridge_support_signatures ||= {}
+    @bridge_support_signatures.clear
+    NSLog("loading bridge support signatures...") if $DEBUG
+    paths = ['/Developer/BridgeSupport']
+    paths.each do |dir|
+      Dir.glob(File.join(dir, "*.xml")).each do |xmlfile|
+        load_bridge_support_file(xmlfile)
+      end
+    end
+  end
+  
+  def OSX.load_bridge_support_file(path)
+    NSLog("loading bridge support file '#{path}'...") if $DEBUG
+    document = REXML::Document.new(File.open(path))
+    document.elements.each('/signatures/class') do |class_element|
+      unless name = class_element.attributes['name']
+        raise "Class element #{class_elememt} does not have a 'name' attribute."
+      end
+      @bridge_support_signatures[name] ||= {}
+      class_hash = @bridge_support_signatures[name]
+      [[:class_methods, class_element.elements['class_methods']],
+       [:instance_methods, class_element.elements['instance_methods']]].each do |key, methods_element|
+        next if methods_element.nil?
+        methods_element.elements.each('method') do |method_element|
+          unless selector = method_element.elements['selector']
+            raise "Method element #{method_element} does not have a 'signature' child."
+          end
+          passbyref_args = []
+          method_element.elements.each('by_reference_argument') { |arg| passbyref_args << arg.text.to_i }
+          if passbyref_args.empty?
+            raise "Method element #{method_element} does not have 'by_reference_argument' children."
+          end
+          class_hash[key] ||= []
+          class_hash[key] << [selector.text, *passbyref_args]
+        end
+      end
+      if class_hash.empty?
+        @bridge_support_signatures.delete(name)
+      end
+    end
   end
 
   module NSBehaviorAttachment

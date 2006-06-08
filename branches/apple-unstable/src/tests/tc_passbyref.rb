@@ -47,8 +47,8 @@ class TC_PassByRef < Test::Unit::TestCase
 
         # XXX
         # Temove me once we get the bridge metadata file. 
-        OSX::NSString.register_objc_passbyref_class_method('stringWithContentsOfFile:encoding:error:', 2)
-        OSX::NSString.register_objc_passbyref_instance_method('writeToFile:atomically:encoding:error:', 3)
+        #OSX::NSString.register_objc_passbyref_class_method('stringWithContentsOfFile:encoding:error:', 2)
+        #OSX::NSString.register_objc_passbyref_instance_method('writeToFile:atomically:encoding:error:', 3)
         # XXX
 
         # Passing nil for error should not return it. 

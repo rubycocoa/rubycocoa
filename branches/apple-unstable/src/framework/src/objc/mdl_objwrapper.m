@@ -649,7 +649,7 @@ wrapper_objc_class_method_type (VALUE rcv, VALUE name)
 }
 
 static void
-register_passbyref_method (VALUE hash, int argc, VALUE *argv)
+register_passbyref_method (VALUE hash, int argc, VALUE *argv, const *log_prefix)
 {
   VALUE selector;
   VALUE passbyref_args;
@@ -657,6 +657,10 @@ register_passbyref_method (VALUE hash, int argc, VALUE *argv)
   rb_scan_args(argc, argv, "1*", &selector, &passbyref_args);
   if (RARRAY(passbyref_args)->len == 0)
     rb_raise(rb_eArgError, "require at least one pass-by-ref argument number");
+  
+  Check_Type(selector, T_STRING);
+
+  OBJWRP_LOG("registered %s '%s' with %d pass-by-reference arguments", log_prefix, STR2CSTR(selector), RARRAY(passbyref_args)->len);
 
   rb_hash_aset(hash, selector, passbyref_args);  
 }
@@ -664,14 +668,14 @@ register_passbyref_method (VALUE hash, int argc, VALUE *argv)
 static VALUE
 wrapper_register_passbyref_imethod (int argc, VALUE *argv, VALUE rcv)
 {
-  register_passbyref_method(get_passbyref_imethods_hash(rcv), argc, argv);
+  register_passbyref_method(get_passbyref_imethods_hash(rcv), argc, argv, "instance method");
   return rcv;
 }
 
 static VALUE
 wrapper_register_passbyref_cmethod (int argc, VALUE *argv, VALUE rcv)
 {
-  register_passbyref_method(get_passbyref_cmethods_hash(rcv), argc, argv);
+  register_passbyref_method(get_passbyref_cmethods_hash(rcv), argc, argv, "class method");
   return rcv;
 }
 

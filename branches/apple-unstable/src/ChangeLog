@@ -1,3 +1,24 @@
+2006-06-08  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* framework/tool/generate_bridge_support.rb:
+	introduced the 'generate_bridge_support' script that generates XML metadata 
+	definition of a target framework. Currently it includes the list of methods
+	that have arguments to be passed-by-reference.
+
+	* metaconfig, framework/post-config.rb, M framework/pre-install.rb:
+	integrated the 'generate_bridge_support.rb' script into the build process,
+	that generates metadata files for Foundation/AppKit and installs them in
+	/Developer/BridgeSupport by default.
+
+	* framework/src/objc/mdl_objwrapper.m, framework/src/ruby/osx/objc/cocoa.rb, 
+	  framework/src/ruby/osx/objc/oc_import.rb:
+	read the metadata files at runtime and register the methods with pass-by-ref
+	arguments.    
+
+	* tests/tc_passbyref.rb:
+	when testing NSString's methods with pass-by-reference arguments, do not 
+	register manually the methods as they are now automatically handled. 
+
 2006-06-07  Laurent Sansonetti <lsansonetti@apple.com>
 
 	* tc_subclass.rb:

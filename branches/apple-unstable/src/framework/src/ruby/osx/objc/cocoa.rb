@@ -23,4 +23,6 @@ module OSX
   end
 end
 
+OSX.load_bridge_support_signatures
+
 require 'osx/objc/cocoa_macros'
