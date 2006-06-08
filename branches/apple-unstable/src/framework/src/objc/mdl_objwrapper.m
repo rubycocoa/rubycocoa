@@ -649,7 +649,7 @@ wrapper_objc_class_method_type (VALUE rcv, VALUE name)
 }
 
 static void
-register_passbyref_method (VALUE hash, int argc, VALUE *argv, const *log_prefix)
+register_passbyref_method (VALUE hash, int argc, VALUE *argv, const char *log_prefix)
 {
   VALUE selector;
   VALUE passbyref_args;
