@@ -55,16 +55,7 @@ module OSX
        OSX.const_get("NS" + md[1])
     else
       # Get real superclass if possible.
-      occls_superclass = occls.oc_superclass
-      if occls_superclass.nil?
-        OSX::ObjcID
-      else
-        begin
-          OSX.const_get("#{occls_superclass}".to_sym) 
-        rescue NameError
-          OSX::ObjcID
-        end
-      end
+      _objc_lookup_superclass(occls)
     end
     klass = Class.new(superclass)
     klass.class_eval <<-EOE_CLASS_NEW_FOR_OCCLASS,__FILE__,__LINE__+1
@@ -121,6 +112,25 @@ module OSX
       end
       if class_hash.empty?
         @bridge_support_signatures.delete(name)
+      end
+    end
+  end
+
+  def OSX._objc_lookup_superclass(occls)
+    occls_superclass = occls.oc_superclass
+    if occls_superclass.nil?
+      OSX::ObjcID
+    else
+      begin
+	OSX.const_get("#{occls_superclass}".to_sym) 
+      rescue NameError
+	# some ObjC internal class cannot become Ruby cosntant
+	# because of prefix '%' or '_'
+	if occls.__ocid__ != occls_superclass.__ocid__
+	  OSX._objc_lookup_superclass(occls_superclass)
+	else
+	  OSX::ObjcID # root class of ObjC
+	end
       end
     end
   end

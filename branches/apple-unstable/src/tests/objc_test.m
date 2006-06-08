@@ -139,6 +139,19 @@
 
 @end
 
+// tc_subclass.rb 
+@interface __SkipInternalClass : NSData
+@end
+@implementation __SkipInternalClass {
+}
+@end
+
+@interface SkipInternalClass : __SkipInternalClass
+@end
+@implementation SkipInternalClass {
+}
+@end
+
 void Init_objc_test(){
   // dummy initializer for ruby's `require'
 }

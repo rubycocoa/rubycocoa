@@ -101,6 +101,14 @@ class TC_SubClass < Test::Unit::TestCase
     assert(tv.respond_to?(:a_sample_method))
   end
 
+  OSX.ns_import :SkipInternalClass
+  def test_skip_internal_class
+    assert_equal(OSX::NSData, OSX::SkipInternalClass.superclass)
+    obj = OSX::SkipInternalClass.alloc.init
+    assert_kind_of(OSX::NSData, obj)
+    assert_kind_of(OSX::NSObject, obj)
+  end
+
   # testunit-0.1.8 has "assert_raises" not "assert_raise"
   unless method_defined? :assert_raise
     alias :assert_raise :assert_raises

@@ -1,3 +1,12 @@
+2006-06-08  kimura wataru <kimuraw@i.nifty.jp>
+
+	* framework/src/ruby/osx/objc/oc_import.rb:
+	skip internal classes (that starts with '_' or '%') when building the
+	proxies hierarchy.
+
+	* tests/objc_test.m, tests/tc_subclass.rb:
+	added tests to check that internal classes are skipped in the hierarchy.
+
 2006-06-08  Laurent Sansonetti <lsansonetti@apple.com>
 
 	* framework/tool/generate_bridge_support.rb:
