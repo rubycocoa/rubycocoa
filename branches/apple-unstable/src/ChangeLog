@@ -1,3 +1,14 @@
+2006-06-09  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* metaconfig, pre-config.rb, framework/src/objc/mdl_osxobjc.m,
+	  framework/src/ruby/osx/objc/oc_import.rb:
+	changed the destination of bridge support XML metadata files to
+	/Library/BridgeSupport. RubyCocoa also looks inside 
+	/System/Library/BridgeSupport and ~/Library/BridgeSupport. The parser
+	has been rewritten in C using libxml2. At build time we detect if libxml2
+	is available, if not (Jaguar) the parser is disabled. The old parser
+	based on REXML was terribly slow, and has been commented.
+
 2006-06-08  kimura wataru <kimuraw@i.nifty.jp>
 
 	* framework/src/ruby/osx/objc/oc_import.rb:

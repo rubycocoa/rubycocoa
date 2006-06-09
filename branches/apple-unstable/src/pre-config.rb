@@ -42,6 +42,13 @@ if @config['build-universal'] == 'yes'
   raise "ERROR: library \"#{libruby_sdk}\" does not exists." unless File.exist?(libruby_sdk)
 end
 
+if File.exists?('/usr/include/libxml2') and File.exists?('/usr/lib/libxml2.dylib')
+    cflags << ' -I/usr/include/libxml2 -DHAS_LIBXML2 '
+    ldflags << ' -lxml2 '
+else
+    puts "libxml2 is not available!"
+end
+
 config_ary << [ :other_cflags, cflags ]
 config_ary << [ :other_ldflags, ldflags ]
 

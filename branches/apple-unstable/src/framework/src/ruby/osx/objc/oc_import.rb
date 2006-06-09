@@ -5,7 +5,6 @@
 #
 
 require 'osx/objc/oc_wrapper'
-require 'rexml/document'
 
 module OSX
 
@@ -77,14 +76,19 @@ module OSX
     @bridge_support_signatures ||= {}
     @bridge_support_signatures.clear
     NSLog("loading bridge support signatures...") if $DEBUG
-    paths = ['/Developer/BridgeSupport']
-    paths.each do |dir|
+    ['/System/Library/BridgeSupport', 
+     '/Library/BridgeSupport', 
+     File.join(ENV['HOME'], 'Library', 'BridgeSupport')].each do |dir|
       Dir.glob(File.join(dir, "*.xml")).each do |xmlfile|
         load_bridge_support_file(xmlfile)
       end
     end
   end
   
+=begin
+  # This is a pure Ruby (and very slow) replacement for OSX.load_bridge_support_file 
+  # defined in mdl_osxobjc.m. The native version uses libxml2, this version is based on REXML. 
+  require 'rexml/document'
   def OSX.load_bridge_support_file(path)
     NSLog("loading bridge support file '#{path}'...") if $DEBUG
     document = REXML::Document.new(File.open(path))
@@ -115,6 +119,7 @@ module OSX
       end
     end
   end
+=end
 
   def OSX._objc_lookup_superclass(occls)
     occls_superclass = occls.oc_superclass
