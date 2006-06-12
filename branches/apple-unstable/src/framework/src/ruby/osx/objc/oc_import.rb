@@ -78,22 +78,24 @@ module OSX
   end
 
   def self.included(m)
-    if m.method_defined? :const_missing
-      m.module_eval <<-EOC
-	m.alias_method :_osx_const_missing_prev, :const_missing
-	def self.const_missing(c)
-	  begin
-	    OSX.const_missing(c)
-	  rescue NameError
-	    _osx_const_missing_prev(c)
-	  end
-	end
+    if m.respond_to? :const_missing
+      m.module_eval <<-EOC,__FILE__,__LINE__+1
+        class <<self
+          alias_method :_osx_const_missing_prev, :const_missing
+          def const_missing(c)
+            begin
+              OSX.const_missing(c)
+            rescue NameError
+              _osx_const_missing_prev(c)
+            end
+          end
+	    end
       EOC
     else
-      m.module_eval <<-EOC
-	def self.const_missing(c)
-	  OSX.const_missing(c)
-	end
+      m.module_eval <<-EOC,__FILE__,__LINE__+1
+        def self.const_missing(c)
+          OSX.const_missing(c)
+        end
       EOC
     end
   end
