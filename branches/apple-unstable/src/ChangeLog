@@ -1,3 +1,14 @@
+2006-06-12  kimura wataru <kimuraw@i.nifty.jp>
+
+	* framework/src/ruby/osx/objc/cocoa.rb,
+	  framework/src/ruby/osx/objc/oc_import.rb:
+	keep previous #const_missing method before overwriting it, moved some
+	code from cocoa.rb to oc_import.rb as it is tied to OSX::ns_import.
+
+	* framework/src/ruby/osx/objc/oc_attachments.rb,
+	  framework/src/objc/mdl_osxobjc.m:
+	add attachments to the right class in the hierarchy.
+
 2006-06-09  Laurent Sansonetti <lsansonetti@apple.com>
 
 	* metaconfig, pre-config.rb, framework/src/objc/mdl_osxobjc.m,

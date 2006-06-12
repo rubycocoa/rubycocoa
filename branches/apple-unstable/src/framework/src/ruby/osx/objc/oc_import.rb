@@ -72,6 +72,32 @@ module OSX
     return klass
   end
   
+  # Load classes lazily.
+  def self.const_missing(c)
+    (OSX::ns_import(c) or raise NameError, "uninitialized constant #{c}")
+  end
+
+  def self.included(m)
+    if m.method_defined? :const_missing
+      m.module_eval <<-EOC
+	m.alias_method :_osx_const_missing_prev, :const_missing
+	def self.const_missing(c)
+	  begin
+	    OSX.const_missing(c)
+	  rescue NameError
+	    _osx_const_missing_prev(c)
+	  end
+	end
+      EOC
+    else
+      m.module_eval <<-EOC
+	def self.const_missing(c)
+	  OSX.const_missing(c)
+	end
+      EOC
+    end
+  end
+
   def OSX.load_bridge_support_signatures
     @bridge_support_signatures ||= {}
     @bridge_support_signatures.clear
@@ -420,3 +446,5 @@ module OSX
   end
 
 end				# module OSX
+
+OSX.load_bridge_support_signatures

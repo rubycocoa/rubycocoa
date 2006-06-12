@@ -251,28 +251,6 @@ osx_mf_objc_symbol_to_obj(VALUE mdl, VALUE const_name, VALUE const_type)
   return result;
 }
 
-static void
-add_attachments(VALUE rcv, id ocid)
-{
-  VALUE attachment = Qnil;
-
-  // Don't call isKindOfClass on classes themselves
-  if (CLS_GETINFO(ocid->isa, CLS_META))
-      return;
-  
-  if ([ocid isKindOfClass: [NSArray class]])
-    attachment = rb_osx_const("RCArrayAttachment");
-
-  else if ([ocid isKindOfClass: [NSDictionary class]])
-    attachment = rb_osx_const("RCDictionaryAttachment");
-
-  else if ([ocid isKindOfClass: [NSData class]])
-    attachment = rb_osx_const("RCDataAttachment");
-
-  if (attachment != Qnil)
-    rb_extend_object(rcv, attachment);
-}
-
 /***/
 
 VALUE
@@ -294,7 +272,6 @@ ocobj_s_new(id ocid)
 
   cls_name = object_getClassName(ocid);
   obj = rb_funcall(rb_cls_ocobj(cls_name), rb_intern("new_with_ocid"), 1, OCID2NUM(ocid));
-  add_attachments(obj, ocid);
   return obj;
 }
 
