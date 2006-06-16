@@ -1,3 +1,13 @@
+2006-06-16  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* post-setup.rb, framework/post-config.rb:
+	generate the bridge support XML metadata files after the setup phase
+	as generate_bridge_support.rb now requires rubycocoa.
+
+	* framework/tool/generate_bridge_support.rb:
+	improved the pass-by-ref arguments detection support by doing 
+	Objective-C introspection lookups.
+
 2006-06-12  kimura wataru <kimuraw@i.nifty.jp>
 
 	* framework/src/ruby/osx/objc/cocoa.rb,

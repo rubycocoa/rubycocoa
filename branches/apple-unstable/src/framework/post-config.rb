@@ -1,9 +1,3 @@
-# generate bridge support metadata files for Foundation/AppKit
-command('mkdir -p bridge-support')
-['Foundation', 'AppKit'].each do |fname|
-  command("ruby tool/generate_bridge_support.rb #{fname} > ./bridge-support/#{fname}.xml")
-end
-
 # create osx_ruby.h and osx_intern.h
 # avoid `ID' and `T_DATA' confict headers between Cocoa and Ruby.
 new_filename_prefix = 'osx_'

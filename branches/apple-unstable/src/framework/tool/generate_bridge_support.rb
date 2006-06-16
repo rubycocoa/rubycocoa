@@ -1,6 +1,8 @@
+#!/usr/bin/env ruby
 # Copyright 2006 Laurent Sansonetti
 # Apple Computer Inc.
 
+require 'osx/cocoa'
 require 'rexml/document'
 
 class BridgeSupportGenerator
@@ -16,8 +18,7 @@ class BridgeSupportGenerator
         @interface_re = /^@interface\s+(\w+)/
         @end_re = /^@end/
         @arg_re = /^(\([^)]+\))?\s*(\w+)+$/
-        @ctype_ptrs = ['int*', 'BOOL*', 'float*', 'double*', 'unsignedint*']
-        @nsobj_ptr_re = /^NS[^*]+\*\*$/
+        @method_re = /(\w+)\s*\:\s*(\([^)]+\))?\s*\w+/
 
         @signatures = {}
     end
@@ -33,6 +34,7 @@ class BridgeSupportGenerator
 
             fpath = File.join(path, framework + '.framework')
             if File.exists?(fpath)
+                OSX::NSBundle.bundleWithPath(fpath).load
                 Dir.glob(File.join(fpath, 'Headers', '**.h')).each do |header|
                     parse_header(header)
                 end
@@ -53,7 +55,7 @@ class BridgeSupportGenerator
 	                current_interface = nil
 	            elsif current_interface and (line[0] == ?+ or line[0] == ?-)
                     mtype = line[0]
-                    args = line.scan(/(\w+)\s*\:\s*(\([^)]+\))?\s*\w+/)
+                    args = line.scan(@method_re)
                     next if args.size <= 1
                     selector = ""
                     passbyref_args_n = []
@@ -62,7 +64,7 @@ class BridgeSupportGenerator
                         selector << argname << ':'
                         next if argtype.nil?
                         argtype.delete!("() \t")
-                        if @ctype_ptrs.include?(argtype) or @nsobj_ptr_re.match(argtype)
+                        if passbyref?(argtype) 
                             passbyref_args_n << idx
                         end 
                     end
@@ -96,6 +98,24 @@ class BridgeSupportGenerator
     private
     #######
 
+    def passbyref?(argtype)
+        md = /^([^*]+)(\*+)$/.match(argtype)
+        return false if md.nil?
+        type, refkind = md[1], md[2]
+        return false if type.nil? or refkind.nil?
+        @objc_lookup_cache ||= {}
+        @skip_objc_lookup_types ||= ['Protocol']
+        cached = @objc_lookup_cache[argtype]
+        return cached unless cached.nil?
+        retval = if @skip_objc_lookup_types.include?(type) or OSX::NSClassFromString(type).nil?
+            refkind == '*'
+        else
+            refkind == '**'
+        end
+        @objc_lookup_cache[argtype] = retval
+        return retval 
+    end
+
     def add_method_elements(class_el, list, type)
         methods_el = class_el.add_element(type.to_s)
         list.each do |selector, passbyref_args_n|
@@ -115,6 +135,5 @@ end
 
 generator = BridgeSupportGenerator.new
 generator.parse_framework(ARGV.first)
-doc = generator.to_xml_document
-doc.write(STDOUT, 0)
+generator.to_xml_document.write(STDOUT, 0)
 puts ""
