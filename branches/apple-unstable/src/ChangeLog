@@ -1,3 +1,9 @@
+2006-06-21  kimura wataru <kimuraw@i.nifty.jp>
+
+	* framework/src/objc/mdl_objwrapper.m:
+	- raise an error for missing arguments in ocm_invoke().
+	- disable completion of nil arguments.
+
 2006-06-20  kimura wataru <kimuraw@i.nifty.jp>
 
 	* framework/src/ruby/osx/objc/oc_import.rb:

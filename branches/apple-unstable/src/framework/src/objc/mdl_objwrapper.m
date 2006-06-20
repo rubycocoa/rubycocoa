@@ -231,6 +231,10 @@ ocm_perform(int argc, VALUE* argv, VALUE rcv, VALUE* result, struct _ocm_send_co
 
   margs = NULL;
 
+  if (argc != ctx->numberOfArguments > 0) {
+    return Qfalse;
+  }
+
   if (ctx->numberOfArguments > 0) {
     for (i = 0; i < ctx->numberOfArguments; i++) {
       const char* arg_type;
@@ -333,6 +337,12 @@ ocm_invoke(int argc, VALUE* argv, VALUE rcv, VALUE* result, struct _ocm_send_con
       passbyref_args[i] = NULL;
   }
 
+  // verify numbers of arguments
+  int num_of_args = passbyref_args ? argc + RARRAY(passbyref_nargs)->len : argc;
+  if (ctx->numberOfArguments > num_of_args) {
+    return ocmsend_err_new (ctx->rcv, ctx->selector, "too few arguments: %d for %d (real: %d)", ctx->numberOfArguments, num_of_args, argc);
+  }
+
   // set arguments
   for (i = 0; i < ctx->numberOfArguments; i++) {
     VALUE   arg_idx_value;
@@ -354,7 +364,7 @@ ocm_invoke(int argc, VALUE* argv, VALUE rcv, VALUE* result, struct _ocm_send_con
       int           octype;
       void *        ocdata;
       
-      arg = (i < argc) ? argv[i] : Qnil;
+      arg =  argv[i];
       octype_str = ctx->argumentsTypes[i];
       octype = to_octype(octype_str);
       OBJWRP_LOG("\targ_type[%d] (%p) : %s", i, arg, octype_str);
