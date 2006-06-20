@@ -1,3 +1,9 @@
+2006-06-20  kimura wataru <kimuraw@i.nifty.jp>
+
+	* framework/src/ruby/osx/objc/oc_import.rb:
+	ignore leading underscore on searching selector to override in 
+	_ns_behavior_method_added(). 
+
 2006-06-16  Laurent Sansonetti <lsansonetti@apple.com>
 
 	* post-setup.rb, framework/post-config.rb:
