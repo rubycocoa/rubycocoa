@@ -340,7 +340,7 @@ ocm_invoke(int argc, VALUE* argv, VALUE rcv, VALUE* result, struct _ocm_send_con
   // verify numbers of arguments
   int num_of_args = passbyref_args ? argc + RARRAY(passbyref_nargs)->len : argc;
   if (ctx->numberOfArguments > num_of_args) {
-    return ocmsend_err_new (ctx->rcv, ctx->selector, "too few arguments: %d for %d (real: %d)", ctx->numberOfArguments, num_of_args, argc);
+    return ocmsend_err_new (ctx->rcv, ctx->selector, "too few arguments: %d for %d (real: %d)", num_of_args, ctx->numberOfArguments, argc);
   }
 
   // set arguments
