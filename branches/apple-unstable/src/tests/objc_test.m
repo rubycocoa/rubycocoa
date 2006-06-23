@@ -73,6 +73,7 @@
 
 @end
 
+// tc_uniqobj.rb
 @interface UniqObjC : NSObject
 @end
 
@@ -95,6 +96,7 @@
 
 @end
 
+// tc_passbyref.rb
 @interface PassByRef : NSObject
 @end
 
@@ -150,6 +152,24 @@
 @end
 @implementation SkipInternalClass {
 }
+@end
+
+@interface CallerClass : NSObject
+@end
+
+@interface NSObject (TcSubclassFoo)
+
+- (int)calledFoo:(id)arg;
+
+@end
+
+@implementation CallerClass
+
+- (id)callFoo:(id)receiver
+{
+    return [receiver calledFoo:nil];
+}
+
 @end
 
 void Init_objc_test(){

@@ -22,6 +22,7 @@
 
 static VALUE _cOCObject = Qnil;
 static ID _within_NSClassFromString_ID;
+ID _relaxed_syntax_ID;
 
 static VALUE init_module_OSX()
 {
@@ -501,6 +502,9 @@ void initialize_mdl_osxobjc()
 
   _within_NSClassFromString_ID = rb_intern("@within_NSClassFromString");
   rb_ivar_set(mOSX, _within_NSClassFromString_ID, Qfalse);
+
+  _relaxed_syntax_ID = rb_intern("@relaxed_syntax");
+  rb_ivar_set(mOSX, _relaxed_syntax_ID, Qtrue);
 
   rb_define_module_function(mOSX, "objc_proxy_class_new", 
 			    osx_mf_objc_proxy_class_new, 2);

@@ -37,6 +37,15 @@ class OSX::NSView
     end
 end
 
+class CalledClass < OSX::NSObject
+    def calledFoo(dummy)
+        'foo'
+    end
+    def calledFoo_(dummy)
+        'bar'
+    end
+end
+
 class TC_SubClass < Test::Unit::TestCase
 
   def test_s_new
@@ -84,6 +93,17 @@ class TC_SubClass < Test::Unit::TestCase
       def unknownMethod(text) return 123 end
     EOS
     assert_equal( 123, obj.unknownMethod('dummy') )
+  end
+
+  def test_objc_ruby_call
+    caller = OSX::CallerClass.alloc.init # <- ObjC
+    called = CalledClass.alloc.init # <- Ruby
+    saved_relaxed_syntax = OSX.relaxed_syntax
+    OSX.relaxed_syntax = true
+    assert_equal('foo', caller.callFoo(called).to_s)
+    OSX.relaxed_syntax = false
+    assert_equal('bar', caller.callFoo_(called).to_s)
+    OSX.relaxed_syntax = saved_relaxed_syntax
   end
 
   def test_ancestors

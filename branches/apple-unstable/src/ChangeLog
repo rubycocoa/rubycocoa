@@ -1,3 +1,14 @@
+2006-06-23  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* framework/src/objc/RBObject.m, framework/src/objc/mdl_osxobjc.m,
+	  framework/src/ruby/osx/objc/oc_wrapper.rb:
+	introduced the OSX.relaxed_syntax(=[true|false]) config. When false,
+	only the basic aaa_bbb_(..., ... ) syntax is allowed. When true, all
+	other syntaxes are allowed. 
+
+	* tests/objc_test.m, tests/tc_subclass.rb, tests/tc_wrapper.rb:
+	added test cases to check that OSX.relaxed_syntax does work.
+
 2006-06-21  kimura wataru <kimuraw@i.nifty.jp>
 
 	* framework/src/objc/mdl_objwrapper.m:

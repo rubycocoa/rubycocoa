@@ -15,6 +15,8 @@
 
 #define RBOBJ_LOG(fmt, args...) DLOG("RBOBJ", fmt, ##args)
 
+extern ID _relaxed_syntax_ID;
+
 static RB_ID sel_to_mid(SEL a_sel)
 {
   int i, length;
@@ -25,13 +27,17 @@ static RB_ID sel_to_mid(SEL a_sel)
   memset(mname, 0, sizeof(mname));
   strncpy(mname, selName, sizeof(mname) - 1);
 
-  // selstr.sub(/:/,'_').sub(/^(.*)_$/, "\1")
+  // selstr.sub(/:/,'_')
   length = strlen(selName);
   for (i = 0; i < length; i++)
     if (mname[i] == ':') mname[i] = '_';
-  for (i = length - 1; i >= 0; i--) {
-    if (mname[i] != '_') break;
-    mname[i] = '\0';
+
+  if (RTEST(rb_ivar_get(osx_s_module(), _relaxed_syntax_ID))) {    
+    // sub(/^(.*)_$/, "\1")
+    for (i = length - 1; i >= 0; i--) {
+      if (mname[i] != '_') break;
+      mname[i] = '\0';
+    }
   }
 
   return rb_intern(mname);
