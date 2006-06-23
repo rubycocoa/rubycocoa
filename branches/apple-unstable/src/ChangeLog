@@ -4,7 +4,7 @@
 	  framework/src/ruby/osx/objc/oc_wrapper.rb:
 	introduced the OSX.relaxed_syntax(=[true|false]) config. When false,
 	only the basic aaa_bbb_(..., ... ) syntax is allowed. When true, all
-	other syntaxes are allowed. 
+	other syntaxes are allowed. The config is true by default.
 
 	* tests/objc_test.m, tests/tc_subclass.rb, tests/tc_wrapper.rb:
 	added test cases to check that OSX.relaxed_syntax does work.
