@@ -1,3 +1,8 @@
+2006-06-28  kimura wataru <kimuraw@i.nifty.jp>
+
+	* install.rb:
+	fix: test of loading ext/framework for universal binary fails.
+
 2006-06-23  Laurent Sansonetti <lsansonetti@apple.com>
 
 	* framework/src/objc/RBObject.m, framework/src/objc/mdl_osxobjc.m,
