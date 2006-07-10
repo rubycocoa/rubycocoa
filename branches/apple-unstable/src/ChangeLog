@@ -1,5 +1,9 @@
 2006-07-10  Laurent Sansonetti <lsansonetti@apple.com>
 
+	* template/ProjectBuilder/Application/Cocoa-Ruby Core Data Application/Info.plist,
+	  template/ProjectBuilder/Application/Cocoa-Ruby Core Data Document-based Application/Info.plist:
+	fix bundle identifier to avoid collision with existing Xcode template.
+
 	* sample/RubyRaiseMan/English.lproj/Localizable.strings:
 	convert to UTF-16 (Unicode).
 
