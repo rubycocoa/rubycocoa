@@ -1,5 +1,11 @@
 2006-07-10  Laurent Sansonetti <lsansonetti@apple.com>
 
+	* sample/RubyRaiseMan/English.lproj/Localizable.strings:
+	convert to UTF-16 (Unicode).
+
+	* sample/dotview/Info.plist, sample/multinib/Info.plist:
+	add missing / fix malformed tags.
+
 	* framework/English.lproj/InfoPlist.strings:
 	fix malformed short version string.
 
