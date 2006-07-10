@@ -248,7 +248,7 @@ def gen_def_rb_mod_func(info, argc = -1)
 end
 
 def gen_def_rb_mod_const(info)
-  ret = "  rb_define_const(mOSX, \"#{info.name}\", osx_#{info.name}(mOSX));\n"
+  info.octype == :UNKNOWN ? "" : "  rb_define_const(mOSX, \"#{info.name}\", osx_#{info.name}(mOSX));\n"
 end
 
 def gen_def_enums(och)
