@@ -1,5 +1,8 @@
 2006-07-10  Laurent Sansonetti <lsansonetti@apple.com>
 
+	* framework/English.lproj/InfoPlist.strings:
+	fix malformed short version string.
+
 	* framework/src/objc/mdl_objwrapper.m:
 	do not #error on 10.5 (for the moment...).
 
