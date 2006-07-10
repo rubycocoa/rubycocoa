@@ -245,7 +245,8 @@ ocm_perform(int argc, VALUE* argv, VALUE rcv, VALUE* result, struct _ocm_send_co
         return Qfalse;
     }
 
-#if MAC_OS_X_VERSION_MAX_ALLOWED <= MAC_OS_X_VERSION_10_4
+#if MAC_OS_X_VERSION_MAX_ALLOWED > MAC_OS_X_VERSION_10_4
+# warning Port me to 10.5
     Method method;
 
     method = class_getInstanceMethod(((struct objc_class *)ctx->rcv)->isa, ctx->selector);
@@ -271,8 +272,6 @@ ocm_perform(int argc, VALUE* argv, VALUE rcv, VALUE* result, struct _ocm_send_co
       method_getArgumentInfo(method, i + 2, &arg_type, &offset);
       marg_setValue(margs, offset, id, value);      
     }
-#else
-# error port me to 10.5
 #endif
   }
 

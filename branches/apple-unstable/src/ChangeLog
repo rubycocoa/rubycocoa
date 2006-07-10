@@ -1,5 +1,8 @@
 2006-07-10  Laurent Sansonetti <lsansonetti@apple.com>
 
+	* framework/src/objc/mdl_objwrapper.m:
+	do not #error on 10.5 (for the moment...).
+
 	* post-setup.rb:
 	fix build by passing the path of the temporary framework build
 	directory to the dynamic loaded, when generating the bridge 
