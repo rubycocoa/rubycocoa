@@ -1,7 +1,8 @@
 2006-07-19  Laurent Sansonetti <lsansonetti@apple.com>
 
-    * sample/RubyRocks:
-    added RubyRocks sample (from Tim Burks, http://rubycocoa.com/ruby-rocks).
+	* sample/RubyRocks:
+	added RubyRocks sample (from Tim Burks, http://rubycocoa.com/ruby-rocks),
+	licensed under the same license as RubyCocoa.
 
 2006-07-11  Laurent Sansonetti <lsansonetti@apple.com>
 
