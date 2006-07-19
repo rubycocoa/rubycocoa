@@ -3,7 +3,7 @@
 #
 #  Created by Tim Burks on 2/18/06.
 #  Copyright (c) 2006 Neon Design Technology, Inc. Some rights reserved.
-#  This work is licensed under a Creative Commons Attribution-NonCommercial 2.5 license.
+#  This sample code is licensed the same license as RubyCocoa.
 #  Find more information about this file online at http://www.rubycocoa.com/ruby-rocks
 #
 NUMBER_OF_ROCKS = 10
