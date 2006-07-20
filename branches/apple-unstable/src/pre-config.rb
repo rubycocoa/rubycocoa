@@ -9,6 +9,10 @@ target_files = %w[
   framework/src/objc/RBSlaveObject.h
   framework/src/objc/RubyCocoa.h
   framework/src/objc/Version.h
+  template/ProjectBuilder/Application/Cocoa-Ruby\ Application/CocoaApp.pbproj/project.pbxproj
+  template/ProjectBuilder/Application/Cocoa-Ruby\ Core\ Data\ Application/CocoaApp.xcode/project.pbxproj
+  template/ProjectBuilder/Application/Cocoa-Ruby\ Core\ Data\ Document-based\ Application/CocoaDocApp.xcode/project.pbxproj
+  template/ProjectBuilder/Application/Cocoa-Ruby\ Document-based\ Application/CocoaDocApp.pbproj/project.pbxproj
 ]
 
 config_ary = [

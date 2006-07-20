@@ -7,6 +7,7 @@
 	added/fixed template descriptions.
 
 	* pre-config,
+	  pre-install,
 	  template/ProjectBuilder/Application/Cocoa-Ruby Application/CocoaApp.pbproj/project.pbxproj,
 	  template/ProjectBuilder/Application/Cocoa-Ruby Application/CocoaApp.pbproj/project.pbxproj.in,
 	  template/ProjectBuilder/Application/Cocoa-Ruby Core Data Application/CocoaApp.xcode/project.pbxproj,
@@ -17,7 +18,8 @@
 	  template/ProjectBuilder/Application/Cocoa-Ruby Document-based Application/CocoaDocApp.pbproj/project.pbxproj.in: 
 	- removed .pbxproj files ;
 	- added .pbxproj.in files using %%%frameworks%%% to point to the RubyCocoa.framework ;
-	- modified config phase to generate the .pbxproj files.
+	- modified config phase to generate the .pbxproj files ;
+	- do not install the .in files.
 
 2006-07-19  Laurent Sansonetti <lsansonetti@apple.com>
 
