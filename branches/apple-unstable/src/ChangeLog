@@ -1,5 +1,11 @@
 2006-07-20  Laurent Sansonetti <lsansonetti@apple.com>
 
+	* template/ProjectBuilder/Application/Cocoa-Ruby Application/CocoaApp.pbproj/TemplateInfo.plist,
+	  template/ProjectBuilder/Application/Cocoa-Ruby Core Data Application/CocoaApp.xcode/TemplateInfo.plist,
+	  template/ProjectBuilder/Application/Cocoa-Ruby Core Data Document-based Application/CocoaDocApp.xcode/TemplateInfo.plist,
+	  template/ProjectBuilder/Application/Cocoa-Ruby Document-based Application/CocoaDocApp.pbproj/TemplateInfo.plist:
+	added/fixed template descriptions.
+
 	* pre-config,
 	  template/ProjectBuilder/Application/Cocoa-Ruby Application/CocoaApp.pbproj/project.pbxproj,
 	  template/ProjectBuilder/Application/Cocoa-Ruby Application/CocoaApp.pbproj/project.pbxproj.in,
