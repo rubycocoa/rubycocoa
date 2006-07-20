@@ -55,7 +55,7 @@
 			isa = PBXFileReference;
 			lastKnownFileType = wrapper.framework;
 			name = RubyCocoa.framework;
-			path = /Library/Frameworks/RubyCocoa.framework;
+			path = %%%frameworks%%%/RubyCocoa.framework;
 			refType = 0;
 			sourceTree = "<absolute>";
 		};

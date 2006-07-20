@@ -348,7 +348,7 @@
 		E8F5E24E03AEB6EC03A81C6F = {
 			isa = PBXFrameworkReference;
 			name = RubyCocoa.framework;
-			path = /Library/Frameworks/RubyCocoa.framework;
+			path = %%%frameworks%%%/RubyCocoa.framework;
 			refType = 0;
 		};
 		E8F5E25703AEB6ED03A81C6F = {
