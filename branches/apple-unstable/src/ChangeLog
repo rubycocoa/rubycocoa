@@ -1,5 +1,9 @@
 2006-07-20  Laurent Sansonetti <lsansonetti@apple.com>
 
+	* sample/RubyRoundTransparentWindow:
+	added RubyRoundTransparentWindow sample (from Tim Burks, http://rubycocoa.com/the-rubification-of-rtw),
+	licensed under the MIT license.
+
 	* framework/src/objc/mdl_objwrapper.m:
 	fixed Tiger build.
 
