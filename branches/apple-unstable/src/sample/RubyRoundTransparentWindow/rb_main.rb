@@ -14,7 +14,6 @@ def rb_main_init
 end
 
 if $0 == __FILE__ then
-  $DEBUG = true
   rb_main_init
   OSX.NSApplicationMain(0, nil)
 end
