@@ -29,7 +29,9 @@ static VALUE rbobj_for(VALUE rbclass, id master)
 - initWithClass: (Class)occlass masterObject: master
 {
   VALUE rb_class = RBRubyClassFromObjcClass (occlass);
-  return [self initWithRubyClass: rb_class masterObject: master];
+  self = [self initWithRubyClass: rb_class masterObject: master];
+  oc_master = occlass;
+  return self;
 }
 
 ///////

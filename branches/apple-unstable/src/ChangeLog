@@ -1,3 +1,8 @@
+2006-07-21  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* framework/src/objc/RBObject.m, framework/src/objc/RBSlaveObject.m:
+	fixed ObjC -> Ruby messaging in recent Mac OS X builds. Starting the NSInvocation in OverrideMixin.m(handle_ruby_method) calls [RBObject methodSignatureForSelector] and uses the given method type to call [RBObject forwardInvocation].  As [RBObject methodSignatureForSelector] does not take into account the wrapped ObjC master object, it returns a DummyProtocolHandler signature which does not work for methods using something else than `id'. We fix this by storing the master class in the RBObject instance and uses it in [RBObject methodSignatureForSelector].
+
 2006-07-20  Laurent Sansonetti <lsansonetti@apple.com>
 
 	* sample/RubyRoundTransparentWindow:

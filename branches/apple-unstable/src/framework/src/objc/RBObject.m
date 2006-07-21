@@ -298,6 +298,7 @@ static VALUE rbobject_protected_apply(VALUE a)
 - initWithRubyObject: (VALUE)rbobj
 {
   m_rbobj = rbobj;
+  oc_master = nil;
   rb_gc_register_address (&m_rbobj);
   return self;
 }
@@ -349,7 +350,10 @@ static VALUE rbobject_protected_apply(VALUE a)
   NSMethodSignature* ret = nil;
   RBOBJ_LOG("methodSignatureForSelector(%s)", a_sel);
   if (a_sel == NULL) return nil;
-  ret = [DummyProtocolHandler instanceMethodSignatureForSelector: a_sel];
+  if (oc_master != nil) 
+    ret = [oc_master instanceMethodSignatureForSelector:a_sel];
+  if (ret == nil)
+    ret = [DummyProtocolHandler instanceMethodSignatureForSelector: a_sel];
   if (ret == nil)
     ret = [self rbobjMethodSignatureForSheetSelector: a_sel];
   if (ret == nil)
