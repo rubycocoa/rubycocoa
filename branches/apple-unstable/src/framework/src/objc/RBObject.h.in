@@ -11,6 +11,7 @@
 @interface RBObject : NSProxy
 {
   VALUE m_rbobj;
+  id oc_master;
 }
 
 + RBObjectWithRubyScriptCString: (const char*) cstr;
