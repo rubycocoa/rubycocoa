@@ -3,17 +3,12 @@
 
 target_files = %w[
   ext/rubycocoa/extconf.rb
-  ext/rubycocoa/rubycocoa.m
-  framework/RubyCocoa.pbproj/project.pbxproj
-  framework/src/objc/RBObject.h
-  framework/src/objc/RBSlaveObject.h
-  framework/src/objc/RubyCocoa.h
+  framework/GeneratedConfig.xcconfig
   framework/src/objc/Version.h
 ]
 
 config_ary = [
   [ :frameworks,      @config['frameworks'] ],
-  [ :framework_name,  @config['framework-name'] ],
   [ :ruby_header_dir, @config['ruby-header-dir'] ],
   [ :libruby_path,    @config['libruby-path'] ],
   [ :libruby_path_dirname,  File.dirname(@config['libruby-path']) ],
@@ -38,7 +33,8 @@ if @config['build-universal'] == 'yes'
 
   # validation
   raise "ERROR: SDK \"#{sdkroot}\" does not exist." unless File.exist?(sdkroot)
-  libruby_sdk = File.join(sdkroot, @config['libruby-path'])
+  #libruby_sdk = File.join(sdkroot, @config['libruby-path'])
+  libruby_sdk = @config['libruby-path']
   raise "ERROR: library \"#{libruby_sdk}\" does not exists." unless File.exist?(libruby_sdk)
 end
 

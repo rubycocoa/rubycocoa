@@ -5,7 +5,7 @@ backup_dir = '/tmp/rubycocoa_backup'
 
 # Install RubyCocoa.framework
 frameworks_dir = File.expand_path("#{install_root}#{@config['frameworks']}")
-framework_name = "#{@config['framework-name']}.framework"
+framework_name = "RubyCocoa.framework"
 framework_path = "#{frameworks_dir}/#{framework_name}"
 
 if FileTest.exist?( framework_path ) then

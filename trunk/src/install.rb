@@ -626,7 +626,7 @@ class Installer
 
   def setup_dir_framework( relpath )
     command buildcommand
-    fwname = @config['framework-name']
+    fwname = "RubyCocoa"
     obj_file = "#{fwname}.framework/Versions/Current/#{fwname}"
     cmd = 'strip -x ' + File.join(framework_obj_path, obj_file)
     command cmd
@@ -1058,14 +1058,14 @@ class ToplevelInstaller < Installer
 	stdin.close
 	stderr.read
       end
-      lib = libs.find {|lib| /rubycocoa.bundle$/ =~ lib}
+      lib = libs.find {|lib| /rubycocoa.bundle\b/ =~ lib}
       if /..\/ext\/rubycocoa/ =~ lib
         print "extention ok: #{lib}"
       else
         raise RuntimeError, "error: wrong extention was loaded: #{lib}"
       end
 
-      lib = libs.find {|lib| /RubyCocoa$/ =~ lib}
+      lib = libs.find {|lib| /RubyCocoa\b/ =~ lib}
       if /..\/framework\/build/ =~ lib
         print "framework ok: #{lib}"
       else
