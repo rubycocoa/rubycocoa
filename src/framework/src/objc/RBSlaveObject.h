@@ -1,12 +1,12 @@
 /** -*-objc-*-
  *
- *   $Id$
+ *   $Id: /branches/thread-schedule/framework/src/objc/RBSlaveObject.h.in 980 2006-05-29T01:18:25.000000Z hisa  $
  *
  *   Copyright (c) 2001 FUJIMOTO Hisakuni
  *
  **/
-#import <%%%framework_name%%%/RBObject.h>
-#import <%%%framework_name%%%/osx_ruby.h>
+#import <RubyCocoa/RBObject.h>
+#import <RubyCocoa/osx_ruby.h>
 
 @interface RBObject(RBSlaveObject)
 - initWithMasterObject: master;

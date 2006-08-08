@@ -1,5 +1,5 @@
 <%
-  framework = @config['framework-name']
+  framework = "RubyCocoa"
   version = @config['rubycocoa-version']
   version_short = version[0..4] # x.y.z
   system_version = @config['macosx-deployment-target']

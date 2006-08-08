@@ -48,9 +48,6 @@ add_path_config 'examples', '/Developer/Examples',
 add_path_config 'documentation', '/Developer/Documentation',
   'path to the directory for Documentation'
 
-add_config 'framework-name', 'name', 'RubyCocoa',
-  'real name for RubyCocoa framework'
-
 ### build configuration ### 
 
 # Xcode 2.2 moved ruby.h, but ruby command reports old path.
