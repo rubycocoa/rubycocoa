@@ -15,13 +15,6 @@
 #import <Foundation/NSPathUtilities.h>
 #import "mdl_osxobjc.h"
 
-#import <Foundation/NSThread.h>
-#include <objc/objc-runtime.h>
-#include <dlfcn.h>
-
-#import "st.h"
-
-
 #define RUBY_MAIN_NAME "rb_main.rb"
 
 static char* rb_main_path(const char* rb_main_name)
@@ -112,169 +105,6 @@ RBApplicationMain(const char* rb_main_name, int argc, const char* argv[])
   return 0;
 }
 
-#ifndef RUBY_THREADSWITCH_INIT
-typedef unsigned int rb_threadswitch_event_t;
-
-#define RUBY_THREADSWITCH_INIT 0x01
-#define RUBY_THREADSWITCH_FREE 0x02
-#define RUBY_THREADSWITCH_SAVE 0x04
-#define RUBY_THREADSWITCH_RESTORE 0x08
-
-typedef void (*rb_threadswitch_hook_func_t) _((rb_threadswitch_event_t,VALUE));
-
-#endif
-
-extern void *rb_add_threadswitch_hook(rb_threadswitch_hook_func_t func) __attribute__ ((weak_import));
-extern void rb_remove_threadswitch_hook(void *handle) __attribute__ ((weak_import));
-
-// Offsets into NSThread object of important instance vars
-static int rb_cocoa_NSThread_autoreleasePool;
-static int rb_cocoa_NSThread_excHandlers;
-static struct st_table *rb_cocoa_thread_state;
-
-#define NSTHREAD_autoreleasePool(t) (*(void**)( ((char*)t) + rb_cocoa_NSThread_autoreleasePool ))
-#define NSTHREAD_excHandlers(t) (*(void**)( ((char*)t) + rb_cocoa_NSThread_excHandlers ))
-
-struct rb_cocoa_thread_context
-{
-  void *excHandlers;
-  void *autoreleasePool;
-};
-
-static void* rb_cocoa_thread_init_context(VALUE rbthread)
-{
-  struct rb_cocoa_thread_context *ctx;
-  NSThread *thread = [NSThread currentThread];
-  
-  ctx = malloc(sizeof(*ctx));
-  ctx->excHandlers = nil;
-  ctx->autoreleasePool = nil;
-  
-  if (thread) {
-    if (rbthread == rb_thread_current()) {
-      ctx->excHandlers = NSTHREAD_excHandlers(thread);
-      ctx->autoreleasePool = NSTHREAD_autoreleasePool(thread);
-    } else {
-      // Create a new autorelease pool for when this thread gets switched in
-      void *save = NSTHREAD_autoreleasePool(thread);
-      NSTHREAD_autoreleasePool(thread) = nil;
-      //[[NSAutoreleasePool alloc] init]; // disabled for now
-      ctx->autoreleasePool = NSTHREAD_autoreleasePool(thread);
-      NSTHREAD_autoreleasePool(thread) = save;
-    }
-  }
-  
-  return ctx;
-}
-
-static void rb_cocoa_thread_free_context(struct rb_cocoa_thread_context *ctx)
-{
-    if (ctx)
-        free(ctx);
-}
-
-
-static void rb_cocoa_thread_restore_context(struct rb_cocoa_thread_context *ctx)
-{
-    NSThread *thread = [NSThread currentThread];
-    
-    if (ctx && thread) {
-        NSTHREAD_excHandlers(thread) = ctx->excHandlers;
-        NSTHREAD_autoreleasePool(thread) = ctx->autoreleasePool;
-    }
-}
-
-
-
-static void rb_cocoa_thread_save_context(struct rb_cocoa_thread_context *ctx)
-{
-    NSThread *thread = [NSThread currentThread];
-        
-    if (thread) {
-        ctx->excHandlers = NSTHREAD_excHandlers(thread);
-        ctx->autoreleasePool = NSTHREAD_autoreleasePool(thread);
-    }
-}
-
-
-static void rb_cocoa_thread_schedule_hook(rb_threadswitch_event_t event, VALUE thread)
-{
-    void *context;
-    
-    switch (event) {
-        case RUBY_THREADSWITCH_INIT:
-            context = rb_cocoa_thread_init_context(thread);
-            st_insert(rb_cocoa_thread_state, (st_data_t)thread, (st_data_t)context);
-            break;
-            
-        case RUBY_THREADSWITCH_FREE:
-            if (st_delete(rb_cocoa_thread_state, (st_data_t*)&thread, (st_data_t *)&context)) {
-            	rb_cocoa_thread_free_context((struct rb_cocoa_thread_context*) context);
-            }
-            break;
-        case RUBY_THREADSWITCH_SAVE:
-            if (!st_lookup(rb_cocoa_thread_state, (st_data_t)thread, (st_data_t *)&context)) {
-                context = rb_cocoa_thread_init_context(thread);
-                st_insert(rb_cocoa_thread_state, (st_data_t)thread, (st_data_t)context);
-            }
-            rb_cocoa_thread_save_context((struct rb_cocoa_thread_context*) context);
-            break;
-            
-        case RUBY_THREADSWITCH_RESTORE:
-            if (st_lookup(rb_cocoa_thread_state, (st_data_t)thread, (st_data_t *)&context)) {
-            	rb_cocoa_thread_restore_context((struct rb_cocoa_thread_context*) context);
-            }
-            break;
-    }
-}
-
-static void RBCocoaInstallRubyThreadSchedulerHooks()
-{
-  Class nsthread;
-  Ivar v;
-  
-  if (rb_add_threadswitch_hook==0) {
-    if (getenv("RBCOCOA_DEBUG")!=0) {
-      fprintf(stderr,"RBCocoaInstallRubyThreadSchedulerHooks: warning: rb_set_cocoa_thread_hooks not linked\n");
-    }
-    return;
-  }
-  
-  rb_cocoa_thread_state = st_init_numtable();
-  
-  nsthread = objc_lookUpClass("NSThread");
-  if (!nsthread) {
-    fprintf(stderr,"RBCocoaInstallRubyThreadSchedulerHooks: couldn't find NSThread class\n");
-    return;
-  }
-  
-  v = class_getInstanceVariable(nsthread, "autoreleasePool");
-  if (!v) {
-    fprintf(stderr,"RBCocoaInstallRubyThreadSchedulerHooks: couldn't find autoreleasePool ivar\n");
-    return;
-  }
-  
-  rb_cocoa_NSThread_autoreleasePool = v->ivar_offset;
-  
-  if (rb_cocoa_NSThread_autoreleasePool != 24) {
-    fprintf(stderr,"WARNING: RBCocoaInstallRubyThreadSchedulerHooks autoreleasePool not 24\n");
-  }
-  
-  v = class_getInstanceVariable(nsthread, "excHandlers");
-  if (!v) {
-    fprintf(stderr,"RBCocoaInstallRubyThreadSchedulerHooks: couldn't find excHandlers ivar\n");
-    return;
-  }
-  
-  rb_cocoa_NSThread_excHandlers = v->ivar_offset;
-  
-  if (rb_cocoa_NSThread_excHandlers != 20) {
-    fprintf(stderr,"WARNING: RBCocoaInstallRubyThreadSchedulerHooks autoreleasePool not 20\n");
-  }
-  
-  rb_add_threadswitch_hook(rb_cocoa_thread_schedule_hook);
-}
-
 int
 RBRubyCocoaInit()
 {
@@ -282,7 +112,6 @@ RBRubyCocoaInit()
 
   if (init_p) return 0;
 
-  RBCocoaInstallRubyThreadSchedulerHooks();
   ruby_init();
   load_path_unshift(framework_ruby_path()); // add a ruby part of rubycocoa to $LOAD_PATH
   initialize_mdl_osxobjc();	// initialize an objc part of rubycocoa
