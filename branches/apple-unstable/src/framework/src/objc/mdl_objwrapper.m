@@ -232,7 +232,7 @@ ocm_perform(int argc, VALUE* argv, VALUE rcv, VALUE* result, struct _ocm_send_co
 
   margs = NULL;
 
-  if (argc != ctx->numberOfArguments > 0) {
+  if (argc != ctx->numberOfArguments) {
     return Qfalse;
   }
 
@@ -339,7 +339,9 @@ ocm_invoke(int argc, VALUE* argv, VALUE rcv, VALUE* result, struct _ocm_send_con
   // verify numbers of arguments
   int num_of_args = passbyref_args ? argc + RARRAY(passbyref_nargs)->len : argc;
   if (ctx->numberOfArguments > num_of_args) {
-    return ocmsend_err_new (ctx->rcv, ctx->selector, "too few arguments: %d for %d (real: %d)", num_of_args, ctx->numberOfArguments, argc);
+    char buf[BUFSIZ];
+    snprintf(buf, BUFSIZ, "too few arguments: %d for %d (real: %d)", num_of_args, ctx->numberOfArguments, argc);
+    return rb_exc_new2 (rb_eArgError, buf);
   }
 
   // set arguments

@@ -74,4 +74,13 @@ class TC_OCObjWrapper < Test::Unit::TestCase
     OSX.relaxed_syntax = old_relaxed_syntax
   end
 
+  def test_missing_args
+    assert_raises ArgumentError do
+      NSURL.URLWithString_
+    end
+    assert_raises ArgumentError do
+      NSURL.URLWithString_relativeToURL_('http://localhost')
+    end
+  end
+
 end

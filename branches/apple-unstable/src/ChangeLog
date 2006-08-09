@@ -1,3 +1,12 @@
+2006-08-08  kimura wataru <kimuraw@i.nifty.jp>
+
+	* framework/src/objc/mdl_objwrapper.m:
+	- fix: ocm_perform() does not return Qfalse with missing argument(s)
+	- change exception class to ArgumentError for missing argument(s)
+
+	* test/tc_wrapper.rb
+	add tests for missing argument(s)
+
 2006-07-21  Laurent Sansonetti <lsansonetti@apple.com>
 
 	* framework/src/objc/RBObject.m, framework/src/objc/RBObject.h.in, 
