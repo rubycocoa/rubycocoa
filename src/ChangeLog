@@ -1,3 +1,8 @@
+2006-08-09 Jonathan Paisley <jp-www@dcs.gla.ac.uk>
+
+	* install.rb:
+	Ignore .svn directories during traversal.
+
 2006-08-08 Jonathan Paisley <jp-www@dcs.gla.ac.uk>
 
 	* ext/rubycocoa/extconf.rb.in, ext/rubycocoa/rubycocoa.m, ext/rubycocoa/rubycocoa.m.in, framework/pre-install.rb, framework/src/objc/RBRuntime.m, framework/src/objc/Version.h.in, framework/src/objc/RBObject.h, framework/src/objc/RBSlaveObject.h, framework/src/objc/RubyCocoa.h, framework/src/objc/RBObject.h.in, framework/src/objc/RBSlaveObject.h.in, framework/src/objc/RubyCocoa.h.in, framework/GeneratedConfig.xcconfig.in, framework/Info.plist, framework/RubyCocoa.xcodeproj, framework/RubyCocoa.xcodeproj/project.pbxproj, framework/RubyCocoa.pbproj, framework/RubyCocoa.pbproj/.cvsignore, framework/RubyCocoa.pbproj/project.pbxproj, framework/RubyCocoa.pbproj/project.pbxproj.in, pre-config.rb, install.rb, metaconfig, package/tmpl/Info.plist:
