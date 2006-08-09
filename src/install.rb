@@ -780,6 +780,7 @@ class Installer
 
   def traverse( task, rel, mid )
     return if File.basename(rel) == 'CVS'
+    return if File.basename(rel) == '.svn'
     return if rel =~ /^framework\//
     return unless respond_to? mid
     dive_into( rel ) {
