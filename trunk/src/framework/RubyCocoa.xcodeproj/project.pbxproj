@@ -28,10 +28,8 @@
 		FCDF927B0A87E09E0002AD01 /* coredata.rb in CopyFiles */ = {isa = PBXBuildFile; fileRef = E84D81EE13ADA29603A81C6F /* coredata.rb */; };
 		FCDF927D0A87E09E0002AD01 /* addressbook.rb in CopyFiles */ = {isa = PBXBuildFile; fileRef = E88C6E74035BB408031D1B90 /* addressbook.rb */; };
 		FCDF927E0A87E09E0002AD01 /* application.rb in CopyFiles */ = {isa = PBXBuildFile; fileRef = E88C6E76035BB408031D1B90 /* application.rb */; };
-		FCDF927F0A87E09E0002AD01 /* appkit.rb in CopyFiles */ = {isa = PBXBuildFile; fileRef = E88C6E75035BB408031D1B90 /* appkit.rb */; };
 		FCDF92800A87E09E0002AD01 /* cocoa.rb in CopyFiles */ = {isa = PBXBuildFile; fileRef = E88C6E77035BB408031D1B90 /* cocoa.rb */; };
 		FCDF92810A87E09E0002AD01 /* cocoa_macros.rb in CopyFiles */ = {isa = PBXBuildFile; fileRef = E88C6E78035BB408031D1B90 /* cocoa_macros.rb */; };
-		FCDF92820A87E09E0002AD01 /* foundation.rb in CopyFiles */ = {isa = PBXBuildFile; fileRef = E88C6E79035BB408031D1B90 /* foundation.rb */; };
 		FCDF92830A87E09E0002AD01 /* oc_all.rb in CopyFiles */ = {isa = PBXBuildFile; fileRef = E88C6E7A035BB408031D1B90 /* oc_all.rb */; };
 		FCDF92840A87E09E0002AD01 /* oc_attachments.rb in CopyFiles */ = {isa = PBXBuildFile; fileRef = E88C6E7B035BB408031D1B90 /* oc_attachments.rb */; };
 		FCDF92850A87E09E0002AD01 /* oc_exception.rb in CopyFiles */ = {isa = PBXBuildFile; fileRef = E88C6E7C035BB408031D1B90 /* oc_exception.rb */; };
@@ -81,10 +79,8 @@
 			files = (
 				FCDF927D0A87E09E0002AD01 /* addressbook.rb in CopyFiles */,
 				FCDF927E0A87E09E0002AD01 /* application.rb in CopyFiles */,
-				FCDF927F0A87E09E0002AD01 /* appkit.rb in CopyFiles */,
 				FCDF92800A87E09E0002AD01 /* cocoa.rb in CopyFiles */,
 				FCDF92810A87E09E0002AD01 /* cocoa_macros.rb in CopyFiles */,
-				FCDF92820A87E09E0002AD01 /* foundation.rb in CopyFiles */,
 				FCDF92830A87E09E0002AD01 /* oc_all.rb in CopyFiles */,
 				FCDF92840A87E09E0002AD01 /* oc_attachments.rb in CopyFiles */,
 				FCDF92850A87E09E0002AD01 /* oc_exception.rb in CopyFiles */,
@@ -141,11 +137,9 @@
 		E88C6E69035BB255031D1B90 /* DummyProtocolHandler.m.erb */ = {isa = PBXFileReference; lastKnownFileType = text; path = DummyProtocolHandler.m.erb; sourceTree = "<group>"; };
 		E88C6E6A035BB255031D1B90 /* gen_dummy_handler.rb */ = {isa = PBXFileReference; lastKnownFileType = text.script.ruby; path = gen_dummy_handler.rb; sourceTree = "<group>"; };
 		E88C6E74035BB408031D1B90 /* addressbook.rb */ = {isa = PBXFileReference; lastKnownFileType = text.script.ruby; path = addressbook.rb; sourceTree = "<group>"; };
-		E88C6E75035BB408031D1B90 /* appkit.rb */ = {isa = PBXFileReference; lastKnownFileType = text.script.ruby; path = appkit.rb; sourceTree = "<group>"; };
 		E88C6E76035BB408031D1B90 /* application.rb */ = {isa = PBXFileReference; lastKnownFileType = text.script.ruby; path = application.rb; sourceTree = "<group>"; };
 		E88C6E77035BB408031D1B90 /* cocoa.rb */ = {isa = PBXFileReference; lastKnownFileType = text.script.ruby; path = cocoa.rb; sourceTree = "<group>"; };
 		E88C6E78035BB408031D1B90 /* cocoa_macros.rb */ = {isa = PBXFileReference; lastKnownFileType = text.script.ruby; path = cocoa_macros.rb; sourceTree = "<group>"; };
-		E88C6E79035BB408031D1B90 /* foundation.rb */ = {isa = PBXFileReference; lastKnownFileType = text.script.ruby; path = foundation.rb; sourceTree = "<group>"; };
 		E88C6E7A035BB408031D1B90 /* oc_all.rb */ = {isa = PBXFileReference; lastKnownFileType = text.script.ruby; path = oc_all.rb; sourceTree = "<group>"; };
 		E88C6E7B035BB408031D1B90 /* oc_attachments.rb */ = {isa = PBXFileReference; lastKnownFileType = text.script.ruby; path = oc_attachments.rb; sourceTree = "<group>"; };
 		E88C6E7C035BB408031D1B90 /* oc_exception.rb */ = {isa = PBXFileReference; lastKnownFileType = text.script.ruby; path = oc_exception.rb; sourceTree = "<group>"; };
@@ -306,11 +300,9 @@
 			isa = PBXGroup;
 			children = (
 				E88C6E74035BB408031D1B90 /* addressbook.rb */,
-				E88C6E75035BB408031D1B90 /* appkit.rb */,
 				E88C6E76035BB408031D1B90 /* application.rb */,
 				E88C6E77035BB408031D1B90 /* cocoa.rb */,
 				E88C6E78035BB408031D1B90 /* cocoa_macros.rb */,
-				E88C6E79035BB408031D1B90 /* foundation.rb */,
 				E88C6E7A035BB408031D1B90 /* oc_all.rb */,
 				E88C6E7B035BB408031D1B90 /* oc_attachments.rb */,
 				E88C6E7C035BB408031D1B90 /* oc_exception.rb */,
@@ -389,10 +381,13 @@
 		0867D690FE84028FC02AAC07 /* Project object */ = {
 			isa = PBXProject;
 			buildConfigurationList = FCDF92590A87DF820002AD01 /* Build configuration list for PBXProject "RubyCocoa" */;
+			compatibilityVersion = "Xcode 2.4";
 			hasScannedForEncodings = 1;
 			mainGroup = 0867D691FE84028FC02AAC07 /* RubyCocoa */;
 			productRefGroup = 034768DFFF38A50411DB9C8B /* Products */;
 			projectDirPath = "";
+			projectRoot = "";
+			shouldCheckCompatibility = 1;
 			targets = (
 				FCDF92630A87E09E0002AD01 /* RubyCocoa */,
 			);
