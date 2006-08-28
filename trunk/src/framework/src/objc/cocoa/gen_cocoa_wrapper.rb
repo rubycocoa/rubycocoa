@@ -154,7 +154,7 @@ def gen_c_func_conv_call(octype, func_name)
   elsif octype == :_C_VOID then
     "Qnil"
   else
-    "nsresult_to_rbresult(#{octype}, &ns_result, \"#{func_name}\", pool)"
+    "nsresult_to_rbresult(#{octype}, (const void*)&ns_result, \"#{func_name}\", pool)"
   end
 end
 
@@ -165,11 +165,14 @@ FUNC_BODY_TMPL = <<'FUNC_BODY_TMPL_DEFINE'
   VALUE rb_result;
   id pool = [[NSAutoreleasePool alloc] init];
 %%var_set%%
-NS_DURING
+
+  @try {
 %%func_call%%
-NS_HANDLER
-  excp = oc_err_new ("%%func_name%%", localException);
-NS_ENDHANDLER
+  }
+  @catch (id exception) {
+    excp = oc_err_new ("%%func_name%%", exception);
+  }
+
   if (excp != Qnil) {
     [pool release];
     rb_exc_raise (excp);
@@ -245,7 +248,7 @@ def gen_def_rb_mod_func(info, argc = -1)
 end
 
 def gen_def_rb_mod_const(info)
-  ret = "  rb_define_const(mOSX, \"#{info.name}\", osx_#{info.name}(mOSX));\n"
+  info.octype == :UNKNOWN ? "" : "  rb_define_const(mOSX, \"#{info.name}\", osx_#{info.name}(mOSX));\n"
 end
 
 def gen_def_enums(och)

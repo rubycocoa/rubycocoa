@@ -12,7 +12,39 @@
 #import "RBObject.h"
 #import "mdl_osxobjc.h"
 #import <CoreFoundation/CFString.h> // CFStringEncoding
+#import "st.h"
 
+static struct st_table *rb2ocCache;
+static pthread_mutex_t rb2ocCacheLock;
+
+static struct st_table *oc2rbCache;
+static pthread_mutex_t oc2rbCacheLock;
+
+void init_rb2oc_cache(void)
+{
+  rb2ocCache = st_init_numtable();
+  pthread_mutex_init(&rb2ocCacheLock, NULL);
+}
+
+void init_oc2rb_cache(void)
+{
+  oc2rbCache = st_init_numtable();
+  pthread_mutex_init(&oc2rbCacheLock, NULL);
+}
+
+void remove_from_oc2rb_cache(id ocid)
+{
+  pthread_mutex_lock(&oc2rbCacheLock);
+  st_delete(oc2rbCache, (st_data_t *)&ocid, NULL);
+  pthread_mutex_unlock(&oc2rbCacheLock);
+}
+
+void remove_from_rb2oc_cache(VALUE rbobj)
+{
+  pthread_mutex_lock(&rb2ocCacheLock);
+  st_delete(rb2ocCache, (st_data_t *)&rbobj, NULL);
+  pthread_mutex_unlock(&rb2ocCacheLock);
+}
 
 static VALUE rbclass_nsrect()
 {
@@ -190,10 +222,7 @@ ocdata_to_rbobj(VALUE context_obj,
     break;
 
   case _C_SEL: {
-    id pool = [[NSAutoreleasePool alloc] init];
-    NSString* arg_str = NSStringFromSelector(*(SEL*)ocdata);
-    rbval = rb_str_new2([arg_str UTF8String]);
-    [pool release];
+    rbval = rb_str_new2(sel_getName(*(SEL*)ocdata));
     break;
   }
 
@@ -407,18 +436,39 @@ static BOOL rbobj_convert_to_nsobj(VALUE obj, id* nsobj)
 
 BOOL rbobj_to_nsobj(VALUE obj, id* nsobj)
 {
+  BOOL  ok;
+
   if (obj == Qnil) {
     *nsobj = nil;
     return YES;
   }
 
-  *nsobj = rbobj_get_ocid(obj);
-  if (*nsobj != nil) return YES;
+  // Cache new Objective-C object addresses in an internal table to 
+  // avoid duplication.
+  //
+  // We are locking the access to the cache twice (lookup + insert) as
+  // rbobj_convert_to_nsobj is succeptible to call us again, to avoid
+  // a deadlock.
 
-  if (rbobj_convert_to_nsobj(obj, nsobj))
-    return YES;
+  pthread_mutex_lock(&rb2ocCacheLock);
+  ok = st_lookup(rb2ocCache, (st_data_t)obj, (st_data_t *)nsobj);
+  pthread_mutex_unlock(&rb2ocCacheLock);
 
-  return NO;
+  if (!ok) {
+    *nsobj = rbobj_get_ocid(obj);
+    if (*nsobj != nil || rbobj_convert_to_nsobj(obj, nsobj)) {
+      if ([*nsobj isProxy] && [*nsobj isRBObject]) {
+        pthread_mutex_lock(&rb2ocCacheLock);
+        // Check out that the hash is still empty for us, to avoid a race condition.
+        if (!st_lookup(rb2ocCache, (st_data_t)obj, (st_data_t *)nsobj))
+          st_insert(rb2ocCache, (st_data_t)obj, (st_data_t)*nsobj);
+        pthread_mutex_unlock(&rb2ocCacheLock);
+      }
+      ok = YES;
+    }
+  }
+
+  return ok;
 }
 
 BOOL rbobj_to_bool(VALUE obj)
@@ -466,23 +516,37 @@ VALUE
 ocid_to_rbobj(VALUE context_obj, id ocid)
 {
   VALUE result;
+  BOOL  ok;
 
-  if (ocid == nil) return Qnil;
+  if (ocid == nil) 
+    return Qnil;
 
-  result = ocid_get_rbobj(ocid);
+  // Cache new Ruby object addresses in an internal table to 
+  // avoid duplication.
+  //
+  // We are locking the access to the cache twice (lookup + insert) as
+  // ocobj_s_new is succeptible to call us again, to avoid a deadlock.
 
-  if (result == Qnil) {
-    if (rbobj_get_ocid(context_obj) == ocid)
-      result = context_obj;
-    else
-      result = ocobj_s_new (ocid);
+  pthread_mutex_lock(&oc2rbCacheLock);
+  ok = st_lookup(oc2rbCache, (st_data_t)ocid, (st_data_t *)&result);
+  pthread_mutex_unlock(&oc2rbCacheLock);
+
+  if (!ok) {
+    result = ocid_get_rbobj(ocid);
+    if (result == Qnil)
+      result = rbobj_get_ocid(context_obj) == ocid ? context_obj : ocobj_s_new(ocid);
+
+    pthread_mutex_lock(&oc2rbCacheLock);
+    // Check out that the hash is still empty for us, to avoid a race condition.
+    if (!st_lookup(oc2rbCache, (st_data_t)ocid, (st_data_t *)&result))
+      st_insert(oc2rbCache, (st_data_t)ocid, (st_data_t)result);
+    pthread_mutex_unlock(&oc2rbCacheLock);
   }
 
   return result;
 }
 
-
-id rbobj_to_nsselstr(VALUE obj)
+const char * rbobj_to_cselstr(VALUE obj)
 {
   int i;
   VALUE str = rb_obj_as_string(obj);
@@ -492,21 +556,17 @@ id rbobj_to_nsselstr(VALUE obj)
     if (RSTRING(str)->ptr[i] == '_')
       RSTRING(str)->ptr[i] = ':';
   }
-  return [NSString stringWithUTF8String: STR2CSTR(str)];
+  return STR2CSTR(str);
+}
+
+id rbobj_to_nsselstr(VALUE obj)
+{
+  return [NSString stringWithUTF8String:rbobj_to_cselstr(obj)];
 }
 
 SEL rbobj_to_nssel(VALUE obj)
 {
-  if (NIL_P(obj)) {
-    return NULL;
-  }
-  else {
-    id pool = [[NSAutoreleasePool alloc] init];
-    id nsstr = rbobj_to_nsselstr(obj);
-    SEL nssel = NSSelectorFromString(nsstr);
-    [pool release];
-    return nssel;
-  }
+  return NIL_P(obj) ? NULL : sel_registerName(rbobj_to_cselstr(obj));
 }
 
 static BOOL rbobj_to_objcptr(VALUE obj, void** cptr)

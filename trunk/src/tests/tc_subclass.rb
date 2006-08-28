@@ -31,6 +31,21 @@ class SubClassB < OSX::Override
 
 end
 
+OSX.ns_import :NSView
+class OSX::NSView
+    def a_sample_method
+    end
+end
+
+class CalledClass < OSX::NSObject
+    def calledFoo(dummy)
+        'foo'
+    end
+    def calledFoo_(dummy)
+        'bar'
+    end
+end
+
 class TC_SubClass < Test::Unit::TestCase
 
   def test_s_new
@@ -78,6 +93,40 @@ class TC_SubClass < Test::Unit::TestCase
       def unknownMethod(text) return 123 end
     EOS
     assert_equal( 123, obj.unknownMethod('dummy') )
+  end
+
+  def test_objc_ruby_call
+    caller = OSX::CallerClass.alloc.init # <- ObjC
+    called = CalledClass.alloc.init # <- Ruby
+    saved_relaxed_syntax = OSX.relaxed_syntax
+    OSX.relaxed_syntax = true
+    assert_equal('foo', caller.callFoo(called).to_s)
+    OSX.relaxed_syntax = false
+    assert_equal('bar', caller.callFoo_(called).to_s)
+    OSX.relaxed_syntax = saved_relaxed_syntax
+  end
+
+  def test_ancestors
+    # Basic ancestors.
+    assert(OSX::NSTableView.ancestors.include?(OSX::NSView))
+    
+    # CoreFoundation-bridged ancestors.
+    assert(OSX::NSCFString.ancestors.include?(OSX::NSString))
+    assert(OSX::NSCFDictionary.ancestors.include?(OSX::NSDictionary))
+    assert_kind_of(OSX::NSCFArray, OSX::NSArray.array)  
+ 
+    # Method manually defined in an ancestor. 
+    tv = OSX::NSTableView.alloc.initWithFrame(OSX::NSRect::ZERO)
+    assert(tv.is_a?(OSX::NSView))
+    assert(tv.respond_to?(:a_sample_method))
+  end
+
+  OSX.ns_import :SkipInternalClass
+  def test_skip_internal_class
+    assert_equal(OSX::NSData, OSX::SkipInternalClass.superclass)
+    obj = OSX::SkipInternalClass.alloc.init
+    assert_kind_of(OSX::NSData, obj)
+    assert_kind_of(OSX::NSObject, obj)
   end
 
   # testunit-0.1.8 has "assert_raises" not "assert_raise"

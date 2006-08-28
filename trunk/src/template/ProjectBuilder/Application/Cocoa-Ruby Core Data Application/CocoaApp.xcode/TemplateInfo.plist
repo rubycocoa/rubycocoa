@@ -13,5 +13,5 @@
 		"English.lproj/MainMenu.nib/classes.nib",
 		"main.m",
 	);
-	Description = "This project builds a Core Data application.";
+	Description = "This project builds a Core Data application written in Ruby.";
 }

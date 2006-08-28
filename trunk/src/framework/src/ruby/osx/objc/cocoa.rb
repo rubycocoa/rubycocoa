@@ -5,6 +5,6 @@
 #
 
 OSX.init_cocoa
-require 'osx/objc/foundation'
-require 'osx/objc/appkit'
+
+require 'osx/objc/oc_all.rb'
 require 'osx/objc/cocoa_macros'

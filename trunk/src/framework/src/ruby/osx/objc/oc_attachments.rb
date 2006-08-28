@@ -38,6 +38,7 @@ module OSX
     end
 
   end				# module RCArrayAttachment
+  OSX::NSArray.class_eval 'include RCArrayAttachment'
 
 
   # attachment module for NSDictionary group
@@ -74,6 +75,7 @@ module OSX
     end
 
   end				# module RCDictionaryAttachment
+  OSX::NSDictionary.class_eval 'include RCDictionaryAttachment'
 
 
   # attachment module for NSData group
@@ -85,6 +87,7 @@ module OSX
     end
 
   end
+  OSX::NSData.class_eval 'include RCDataAttachment'
 
 
   # attachment module for NSImage group
@@ -95,5 +98,6 @@ module OSX
       unlockFocus
     end
   end
+  OSX::NSData.class_eval 'include RCImageAttachment'
 
 end

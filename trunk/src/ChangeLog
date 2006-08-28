@@ -1,3 +1,8 @@
+2006-08-16  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* sample/dotview/Info.plist, sample/RubyRocks, sample/RubyRocks/main.m, sample/RubyRocks/rubyrocks.xcodeproj, sample/RubyRocks/rubyrocks.xcodeproj/project.pbxproj, sample/RubyRocks/RubyRocks.rb, sample/RubyRocks/COPYRIGHT, sample/RubyRocks/rb_main.rb, sample/RubyRocks/English.lproj, sample/RubyRocks/English.lproj/InfoPlist.strings, sample/RubyRocks/English.lproj/Game.nib, sample/RubyRocks/English.lproj/Game.nib/objects.nib, sample/RubyRocks/English.lproj/Game.nib/info.nib, sample/RubyRocks/English.lproj/Game.nib/classes.nib, sample/RubyRocks/English.lproj/Game.nib/_Game_EOArchive_English.java, sample/RubyRocks/English.lproj/Game.nib/JavaCompiling.plist, sample/RubyRocks/English.lproj/MainMenu.nib, sample/RubyRocks/English.lproj/MainMenu.nib/objects.nib, sample/RubyRocks/English.lproj/MainMenu.nib/info.nib, sample/RubyRocks/English.lproj/MainMenu.nib/classes.nib, sample/RubyRocks/English.lproj/Credits.rtf, sample/multinib/Info.plist, sample/RubyRaiseMan/English.lproj/Localizable.strings, sample/RubyRoundTransparentWindow, sample/RubyRoundTransparentWindow/main.m, sample/RubyRoundTransparentWindow/pentagram.tif, sample/RubyRoundTransparentWindow/ReadMe.html, sample/RubyRoundTransparentWindow/circle.tif, sample/RubyRoundTransparentWindow/rb_main.rb, sample/RubyRoundTransparentWindow/README, sample/RubyRoundTransparentWindow/RoundTransparentWindow.xcodeproj, sample/RubyRoundTransparentWindow/RoundTransparentWindow.xcodeproj/project.pbxproj, sample/RubyRoundTransparentWindow/English.lproj, sample/RubyRoundTransparentWindow/English.lproj/InfoPlist.strings, sample/RubyRoundTransparentWindow/English.lproj/MainMenu.nib, sample/RubyRoundTransparentWindow/English.lproj/MainMenu.nib/objects.nib, sample/RubyRoundTransparentWindow/English.lproj/MainMenu.nib/info.nib, sample/RubyRoundTransparentWindow/English.lproj/MainMenu.nib/classes.nib, sample/RubyRoundTransparentWindow/English.lproj/MainMenu.nib/_MainMenu_EOArchive_English.java, sample/RubyRoundTransparentWindow/English.lproj/MainMenu.nib/JavaCompiling.plist, sample/RubyRoundTransparentWindow/RTW.rb, post-setup.rb, pre-config.rb, pre-install.rb, framework/src/ruby/osx/cocoa.rb, framework/src/ruby/osx/foundation.rb, framework/src/ruby/osx/appkit.rb, framework/src/ruby/osx/objc/oc_wrapper.rb, framework/src/ruby/osx/objc/cocoa.rb, framework/src/ruby/osx/objc/cocoa_macros.rb, framework/src/ruby/osx/objc/oc_import.rb, framework/src/ruby/osx/objc/oc_attachments.rb, framework/src/objc/OverrideMixin.m, framework/src/objc/RBSlaveObject.m, framework/src/objc/cls_objcid.h, framework/src/objc/cocoa/gen_cocoa_wrapper.rb, framework/src/objc/RBObject.m, framework/src/objc/cls_objcid.m, framework/src/objc/RBRuntime.h, framework/src/objc/mdl_osxobjc.m, framework/src/objc/RBRuntime.m, framework/src/objc/mdl_objwrapper.m, framework/src/objc/ocdata_conv.h, framework/src/objc/ocdata_conv.m, framework/post-config.rb, framework/pre-install.rb, framework/tool/generate_bridge_support.rb, ext/rubycocoa/rubycocoa.m, tests/tc_retaincount.rb, tests/tc_passbyref.rb, tests/tc_uniqobj.rb, tests/tc_constants.rb, tests/tc_subclass.rb, tests/objc_test.m, tests/tc_wrapper.rb, template/ProjectBuilder/Application/Cocoa-Ruby Document-based Application/CocoaDocApp.pbproj/TemplateInfo.plist, template/ProjectBuilder/Application/Cocoa-Ruby Document-based Application/CocoaDocApp.pbproj/project.pbxproj, template/ProjectBuilder/Application/Cocoa-Ruby Document-based Application/CocoaDocApp.pbproj/project.pbxproj.in, template/ProjectBuilder/Application/Cocoa-Ruby Core Data Document-based Application/Info.plist, template/ProjectBuilder/Application/Cocoa-Ruby Core Data Document-based Application/CocoaDocApp.xcode/TemplateInfo.plist, template/ProjectBuilder/Application/Cocoa-Ruby Core Data Document-based Application/CocoaDocApp.xcode/project.pbxproj, template/ProjectBuilder/Application/Cocoa-Ruby Core Data Document-based Application/CocoaDocApp.xcode/project.pbxproj.in, template/ProjectBuilder/Application/Cocoa-Ruby Application/CocoaApp.pbproj/TemplateInfo.plist, template/ProjectBuilder/Application/Cocoa-Ruby Application/CocoaApp.pbproj/project.pbxproj, template/ProjectBuilder/Application/Cocoa-Ruby Application/CocoaApp.pbproj/project.pbxproj.in, template/ProjectBuilder/Application/Cocoa-Ruby Core Data Application/Info.plist, template/ProjectBuilder/Application/Cocoa-Ruby Core Data Application/CocoaApp.xcode/TemplateInfo.plist, template/ProjectBuilder/Application/Cocoa-Ruby Core Data Application/CocoaApp.xcode/project.pbxproj, template/ProjectBuilder/Application/Cocoa-Ruby Core Data Application/CocoaApp.xcode/project.pbxproj.in, metaconfig:
+	Merged 'apple-unstable' branch.
+
 2006-08-09 Jonathan Paisley <jp-www@dcs.gla.ac.uk>
 
 	* install.rb:
@@ -9,6 +14,291 @@
 	Switch over to new Xcode project that is no longer auto generated.
 	Remove framework-name option.
 	Fix dyld loading check in install.rb to cope with ', cpu-sub-type: 0' style suffixes from universal builds.
+
+2006-08-08  kimura wataru <kimuraw@i.nifty.jp>
+
+	* framework/src/objc/mdl_objwrapper.m:
+	- fix: ocm_perform() does not return Qfalse with missing argument(s)
+	- change exception class to ArgumentError for missing argument(s)
+
+	* test/tc_wrapper.rb:
+	add tests for missing argument(s)
+
+2006-07-21  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* framework/src/objc/RBObject.m, framework/src/objc/RBObject.h.in, 
+	  framework/src/objc/RBSlaveObject.m:
+	fixed ObjC -> Ruby messaging in recent Mac OS X builds. Starting the NSInvocation in OverrideMixin.m(handle_ruby_method) calls [RBObject methodSignatureForSelector] and uses the given method type to call [RBObject forwardInvocation].  As [RBObject methodSignatureForSelector] does not take into account the wrapped ObjC master object, it returns a DummyProtocolHandler signature which does not work for methods using something else than `id'. We fix this by storing the master class in the RBObject instance and uses it in [RBObject methodSignatureForSelector].
+
+2006-07-20  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* sample/RubyRoundTransparentWindow:
+	added RubyRoundTransparentWindow sample (from Tim Burks, http://rubycocoa.com/the-rubification-of-rtw),
+	licensed under the MIT license.
+
+	* framework/src/objc/mdl_objwrapper.m:
+	fixed Tiger build.
+
+	* template/ProjectBuilder/Application/Cocoa-Ruby Application/CocoaApp.pbproj/TemplateInfo.plist,
+	  template/ProjectBuilder/Application/Cocoa-Ruby Core Data Application/CocoaApp.xcode/TemplateInfo.plist,
+	  template/ProjectBuilder/Application/Cocoa-Ruby Core Data Document-based Application/CocoaDocApp.xcode/TemplateInfo.plist,
+	  template/ProjectBuilder/Application/Cocoa-Ruby Document-based Application/CocoaDocApp.pbproj/TemplateInfo.plist:
+	added/fixed template descriptions.
+
+	* pre-config,
+	  pre-install,
+	  template/ProjectBuilder/Application/Cocoa-Ruby Application/CocoaApp.pbproj/project.pbxproj,
+	  template/ProjectBuilder/Application/Cocoa-Ruby Application/CocoaApp.pbproj/project.pbxproj.in,
+	  template/ProjectBuilder/Application/Cocoa-Ruby Core Data Application/CocoaApp.xcode/project.pbxproj,
+	  template/ProjectBuilder/Application/Cocoa-Ruby Core Data Application/CocoaApp.xcode/project.pbxproj.in,
+	  template/ProjectBuilder/Application/Cocoa-Ruby Core Data Document-based Application/CocoaDocApp.xcode/project.pbxproj,
+	  template/ProjectBuilder/Application/Cocoa-Ruby Core Data Document-based Application/CocoaDocApp.xcode/project.pbxproj.in,
+	  template/ProjectBuilder/Application/Cocoa-Ruby Document-based Application/CocoaDocApp.pbproj/project.pbxproj,
+	  template/ProjectBuilder/Application/Cocoa-Ruby Document-based Application/CocoaDocApp.pbproj/project.pbxproj.in: 
+	- removed .pbxproj files ;
+	- added .pbxproj.in files using %%%frameworks%%% to point to the RubyCocoa.framework ;
+	- modified config phase to generate the .pbxproj files ;
+	- do not install the .in files.
+
+2006-07-19  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* sample/RubyRocks:
+	added RubyRocks sample (from Tim Burks, http://rubycocoa.com/ruby-rocks),
+	licensed under the same license as RubyCocoa.
+
+2006-07-11  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* framework/RubyCocoa.pbproj/project.pbxproj.in:
+	added missing tag (CFBundleIdentifier).
+
+2006-07-10  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* template/ProjectBuilder/Application/Cocoa-Ruby Core Data Application/Info.plist,
+	  template/ProjectBuilder/Application/Cocoa-Ruby Core Data Document-based Application/Info.plist:
+	fix bundle identifier to avoid collision with existing Xcode template.
+
+	* sample/RubyRaiseMan/English.lproj/Localizable.strings:
+	convert to UTF-16 (Unicode).
+
+	* sample/dotview/Info.plist, sample/multinib/Info.plist:
+	add missing / fix malformed tags.
+
+	* framework/English.lproj/InfoPlist.strings:
+	fix malformed short version string.
+
+	* framework/src/objc/mdl_objwrapper.m:
+	do not #error on 10.5 (for the moment...).
+
+	* post-setup.rb:
+	fix build by passing the path of the temporary framework build
+	directory to the dynamic loaded, when generating the bridge 
+	support files.
+
+	* framework/src/objc/cocoa/gen_cocoa_wrapper.rb:
+	do not explicitely call constants with a not-implemented 
+	definition function. 
+
+2006-06-28  kimura wataru <kimuraw@i.nifty.jp>
+
+	* install.rb:
+	fix: test of loading ext/framework for universal binary fails.
+
+2006-06-23  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* framework/src/objc/RBObject.m, framework/src/objc/mdl_osxobjc.m,
+	  framework/src/ruby/osx/objc/oc_wrapper.rb:
+	introduced the OSX.relaxed_syntax(=[true|false]) config. When false,
+	only the basic aaa_bbb_(..., ... ) syntax is allowed. When true, all
+	other syntaxes are allowed. The config is true by default.
+
+	* tests/objc_test.m, tests/tc_subclass.rb, tests/tc_wrapper.rb:
+	added test cases to check that OSX.relaxed_syntax does work.
+
+2006-06-21  kimura wataru <kimuraw@i.nifty.jp>
+
+	* framework/src/objc/mdl_objwrapper.m:
+	- raise an error for missing arguments in ocm_invoke().
+	- disable completion of nil arguments.
+
+2006-06-20  kimura wataru <kimuraw@i.nifty.jp>
+
+	* framework/src/ruby/osx/objc/oc_import.rb:
+	ignore leading underscore on searching selector to override in 
+	_ns_behavior_method_added(). 
+
+2006-06-16  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* post-setup.rb, framework/post-config.rb:
+	generate the bridge support XML metadata files after the setup phase
+	as generate_bridge_support.rb now requires rubycocoa.
+
+	* framework/tool/generate_bridge_support.rb:
+	improved the pass-by-ref arguments detection support by doing 
+	Objective-C introspection lookups.
+
+2006-06-12  kimura wataru <kimuraw@i.nifty.jp>
+
+	* framework/src/ruby/osx/objc/cocoa.rb,
+	  framework/src/ruby/osx/objc/oc_import.rb:
+	keep previous #const_missing method before overwriting it, moved some
+	code from cocoa.rb to oc_import.rb as it is tied to OSX::ns_import.
+
+	* framework/src/ruby/osx/objc/oc_attachments.rb,
+	  framework/src/objc/mdl_osxobjc.m:
+	add attachments to the right class in the hierarchy.
+
+2006-06-09  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* metaconfig, pre-config.rb, framework/src/objc/mdl_osxobjc.m,
+	  framework/src/ruby/osx/objc/oc_import.rb:
+	changed the destination of bridge support XML metadata files to
+	/Library/BridgeSupport. RubyCocoa also looks inside 
+	/System/Library/BridgeSupport and ~/Library/BridgeSupport. The parser
+	has been rewritten in C using libxml2. At build time we detect if libxml2
+	is available, if not (Jaguar) the parser is disabled. The old parser
+	based on REXML was terribly slow, and has been commented.
+
+2006-06-08  kimura wataru <kimuraw@i.nifty.jp>
+
+	* framework/src/ruby/osx/objc/oc_import.rb:
+	skip internal classes (that starts with '_' or '%') when building the
+	proxies hierarchy.
+
+	* tests/objc_test.m, tests/tc_subclass.rb:
+	added tests to check that internal classes are skipped in the hierarchy.
+
+2006-06-08  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* framework/tool/generate_bridge_support.rb:
+	introduced the 'generate_bridge_support' script that generates XML metadata 
+	definition of a target framework. Currently it includes the list of methods
+	that have arguments to be passed-by-reference.
+
+	* metaconfig, framework/post-config.rb, framework/pre-install.rb:
+	integrated the 'generate_bridge_support.rb' script into the build process,
+	that generates metadata files for Foundation/AppKit and installs them in
+	/Developer/BridgeSupport by default.
+
+	* framework/src/objc/mdl_objwrapper.m, framework/src/ruby/osx/objc/cocoa.rb, 
+	  framework/src/ruby/osx/objc/oc_import.rb:
+	read the metadata files at runtime and register the methods with pass-by-ref
+	arguments.    
+
+	* tests/tc_passbyref.rb:
+	when testing NSString's methods with pass-by-reference arguments, do not 
+	register manually the methods as they are now automatically handled. 
+
+2006-06-07  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* tc_subclass.rb:
+	added another test case to check correct ObjC hierarchy. 
+
+	* framework/src/objc/cls_objcid.m:
+	fixed inspection message of objects from classes that do not directly
+	inherit from OSX::ObjcID (reported by Jonathan Paisley).
+
+	* framework/src/ruby/osx/objc/oc_wrapper.rb:
+	added a new way to call Objective-C methods from Ruby, passing an inline Hash
+	after the first argument (e.g. #initWithScheme('http', :host => 'myhost', 
+	:path => 'mypath') similar to what Rails does.
+
+	* tests/tc_wrapper.rb:
+	added test cases to check inline Hash calling pattern.
+
+2006-06-06  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* framework/src/objc/RBObject.m, framework/src/objc/cls_objcid.m,
+	  framework/src/objc/ocdata_conv.h, framework/src/objc/ocdata_conv.m:
+	renamed the objects mapping caches (oc2rb -> rb2oc and vice-versa), checkout
+	that the hash table is still empty for us before inserting the value to avoid
+	a possible race condition (thanks Jonathan Paisley).
+
+2006-06-05  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* framework/src/objc/OverrideMixin.m:
+	moved to the new debug logging facility (though it's not used yet in that file).
+
+	* framework/src/objc/mdl_objwrapper.m, framework/src/objc/mdl_osxobjc.m,
+	  framework/src/ruby/osx/objc/cocoa.rb, framework/src/ruby/osx/objc/oc_import.rb:
+	translate the real Objective-C class hierarchy when creating Ruby proxies classes,
+	so that for example OSX::NSString inherits from OSX::NSObject. Take into account
+	CoreFoundation toll-free bridged classes. Various small optimizations elsewhere. 
+
+	* framework/src/objc/ocdata_conv.m:
+	fixed a bug that caused all cached objects (both Ruby and ObjC) to never be removed
+	from the internal caches.
+
+	* tests/tc_passbyref.rb:
+	register the instance method on the NSString class and not NSCFString anymore. 
+
+	* tests/tc_subclass.rb:
+	added a test case to check for real Objective-C class hierarchy.
+
+2006-06-02  kimura wataru <kimuraw@i.nifty.jp>
+
+	* framework/src/objc/mdl_objwrapper.m, tests/tc_retaincount.rb:
+	fixed object retention bug from allocWithZone.
+
+2006-06-02  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* framework/src/objc/mdl_objwrapper.m, framework/src/objc/mdl_osxobjc.m, 
+	  framework/src/objc/ocdata_conv.m, framework/src/ruby/osx/objc/oc_import.rb:
+	added experimental support of pass-by-reference methods.
+
+	* tests/tc_passbyref.rb, tests/objc_test.m:
+	added a test to check the pass-by-reference methods support.
+
+2006-06-01  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* framework/src/objc/RBObject.m, framework/src/objc/RBRuntime.h, framework/src/objc/mdl_objwrapper.m:
+	refactored the debug logging facility.
+
+	* framework/src/objc/RBObject.m, framework/src/objc/RBRuntime.m, framework/src/objc/ocdata_conv.h,
+	  framework/src/objc/ocdata_conv.m:
+	map Ruby-to-Objective-C object addresses in an internal cache instead of an instance variable in the
+	new Ruby object, as this does not work in the object is frozen.
+
+	* tests/tc_uniqobj.rb:
+	added a test to check that frozen Ruby objects are unique when crossing the bridge.
+
+2006-05-31  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* framework/src/objc/ocdata_conv.m:
+	changed the Objective-C-to-Ruby internal cache from CFDictionary to Ruby's bundled st.h.
+
+	* tests/objc_test.m, tests/tc_uniqobj.rb:
+	added new tests to check that objects are not copied when they cross the bridge.
+
+2006-05-30  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* tests/tc_constants.rb:
+	removed duplicated test cases.
+
+	* framework/src/objc/RBObject.m, framework/src/objc/RBRuntime.m, framework/src/objc/mdl_objwrapper.m,
+	  framework/src/objc/ocdata_conv.h, framework/src/objc/ocdata_conv.m, framework/src/objc/cls_objcid.m:
+	make sure objects are not copied each time they cross the bridge (either from ObjC to Ruby and vice-versa).
+
+	* framework/src/ruby/osx/cocoa.rb, framework/src/ruby/osx/foundation.rb, framework/src/ruby/osx/appkit.rb,
+	  framework/src/ruby/osx/objc/cocoa.rb, framework/src/ruby/osx/objc/cocoa_macros.rb,
+	  framework/src/ruby/osx/objc/oc_import.rb, framework/post-config.rb, 
+	  framework/RubyCocoa.pbproj/project.pbxproj.in:
+	removed generated appkit.rb/foundation.rb files and ns_import classes at demand.
+
+	* framework/src/objc/mdl_objwrapper.m:
+	faster message forwarding, relying on objc_msgSend when possible.
+
+	* framework/src/objc/RBObject.m:
+	fixed memory leaks.
+
+	* framework/src/objc/mdl_osxobjc.m (osx_mf_objc_derived_class_new):
+	cheap ObjC class lookup.
+
+	* framework/src/objc/RBObject.m, framework/src/objc/mdl_osxobjc.m, framework/src/objc/mdl_objwrapper.m,
+	  framework/src/objc/ocdata_conv.h, framework/src/objc/ocdata_conv.m, framework/src/objc/OverrideMixin.m:
+	cheap selectors conversions.
+
+	* pre-config.rb, framework/src/objc/cocoa/gen_cocoa_wrapper.rb, framework/src/objc/mdl_objwrapper.m:
+	migrated NS_DURING/NS_HANDLER/... old macros to the newer @try/@catch syntax.
 
 2006-05-29  FUJIMOTO Hisa  <hisa@fobj.com>
 
@@ -23,7 +313,7 @@
 2006-05-16  Laurent Sansonetti <lsansonetti@apple.com>
 
 	* framework/src/objc/cls_objcid.h, framework/src/objc/cls_objcid.m, framework/src/objc/mdl_objwrapper.m:
-	delay the retention of ObjC objects to not violate the generic initialization pattern.
+	explicitely retain all ObjC objects that were not issued from alloc/new/copy/mutableCopy.
 
 2006-05-05  kimura wataru <kimuraw@i.nifty.jp>
 

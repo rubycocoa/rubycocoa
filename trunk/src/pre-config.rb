@@ -5,6 +5,10 @@ target_files = %w[
   ext/rubycocoa/extconf.rb
   framework/GeneratedConfig.xcconfig
   framework/src/objc/Version.h
+  template/ProjectBuilder/Application/Cocoa-Ruby\ Application/CocoaApp.pbproj/project.pbxproj
+  template/ProjectBuilder/Application/Cocoa-Ruby\ Core\ Data\ Application/CocoaApp.xcode/project.pbxproj
+  template/ProjectBuilder/Application/Cocoa-Ruby\ Core\ Data\ Document-based\ Application/CocoaDocApp.xcode/project.pbxproj
+  template/ProjectBuilder/Application/Cocoa-Ruby\ Document-based\ Application/CocoaDocApp.pbproj/project.pbxproj
 ]
 
 config_ary = [
@@ -19,7 +23,7 @@ config_ary = [
 ]
 
 # build options
-cflags = '-fno-common -g'
+cflags = '-fno-common -g -fobjc-exceptions'
 ldflags = '-undefined suppress -flat_namespace'
 sdkroot = ''
 
@@ -36,6 +40,13 @@ if @config['build-universal'] == 'yes'
   #libruby_sdk = File.join(sdkroot, @config['libruby-path'])
   libruby_sdk = @config['libruby-path']
   raise "ERROR: library \"#{libruby_sdk}\" does not exists." unless File.exist?(libruby_sdk)
+end
+
+if File.exists?('/usr/include/libxml2') and File.exists?('/usr/lib/libxml2.dylib')
+    cflags << ' -I/usr/include/libxml2 -DHAS_LIBXML2 '
+    ldflags << ' -lxml2 '
+else
+    puts "libxml2 is not available!"
 end
 
 config_ary << [ :other_cflags, cflags ]

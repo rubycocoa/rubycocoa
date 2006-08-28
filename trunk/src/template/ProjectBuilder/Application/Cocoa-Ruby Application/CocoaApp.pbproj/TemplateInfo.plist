@@ -4,4 +4,5 @@
 		"main.m",
 		"rb_main.rb"
 	);
+    Description = "This project builds a Cocoa-based application written in Ruby.";
 }

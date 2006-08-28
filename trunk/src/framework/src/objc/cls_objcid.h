@@ -10,7 +10,7 @@
 
 struct _objcid_data {
   id  ocid;
-  BOOL initialized;
+  BOOL retained;
 };
 
 /** class methods **/

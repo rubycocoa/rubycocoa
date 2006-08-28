@@ -22,8 +22,11 @@ _objcid_data_free(struct _objcid_data* dp)
 {
   id pool = [[NSAutoreleasePool alloc] init];
   if (dp != NULL) {
-    if (dp->ocid != nil && dp->initialized)
-      [dp->ocid release];
+    if (dp->ocid != nil) {
+      remove_from_oc2rb_cache(dp->ocid);
+      if (dp->retained)
+        [dp->ocid release];
+    }
     free(dp);
   }
   [pool release];
@@ -35,7 +38,7 @@ _objcid_data_new()
   struct _objcid_data* dp;
   dp = malloc(sizeof(struct _objcid_data));
   dp->ocid = nil;
-  dp->initialized = NO;
+  dp->retained = NO;
   return dp;
 }
 
@@ -43,11 +46,14 @@ static void
 _objcid_initialize_for_new_with_ocid(int argc, VALUE* argv, VALUE rcv)
 {
   VALUE arg_ocid;
-
+  
   rb_scan_args(argc, argv, "10", &arg_ocid);
   if (arg_ocid != Qnil) {
     id ocid = (id) NUM2UINT(arg_ocid);
     OBJCID_DATA_PTR(rcv)->ocid = ocid;
+    // The retention of the ObjC instance is delayed in ocm_send, to not
+    // violate the "init-must-follow-alloc" initialization pattern.
+    // Retaining here could message in the middle. 
   }
 }
 
@@ -95,9 +101,8 @@ objcid_inspect(VALUE rcv)
   id ocid = OBJCID_ID(rcv);
   id pool = [[NSAutoreleasePool alloc] init];
   const char* class_desc = [[[ocid class] description] UTF8String];
-  VALUE rbclass_name = rb_mod_name(CLASS_OF(rcv));
   snprintf(s, sizeof(s), "#<%s:0x%lx class='%s' id=%p>",
-	   STR2CSTR(rbclass_name),
+	   rb_class2name(CLASS_OF(rcv)),
 	   NUM2ULONG(rb_obj_id(rcv)), 
 	   class_desc, ocid);
   result = rb_str_new2(s);
