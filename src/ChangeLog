@@ -1,5 +1,11 @@
 2006-08-28  Laurent Sansonetti <lsansonetti@apple.com>
 
+	* framework/RubyCocoa.xcodeproj/project.pbxproj,
+	  framework/src/objc/RBObject.h:
+	Fix build, removing 'appkit.rb' and 'foundation.rb' from the build
+	and adding the 'oc_master' ivar to the RBObject object that was
+	removed by mistake by the Xcode config migration change.
+
 	* sample/dotview/Makefile, sample/multinib/Makefile, 
 	  sample/mk_app0/Makefile, sample/thread0/Makefile,
 	  sample/mk_app1/Makefile, sample/Hakoiri-Musume/Makefile,
