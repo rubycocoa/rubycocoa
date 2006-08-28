@@ -119,7 +119,7 @@ static SEL ruby_method_sel(int argc)
   int argc;
   RBOBJ_LOG("rbobjMethodSignatureForSelector(%s)", a_sel);
   argc = rb_obj_arity_of_method(m_rbobj, a_sel);
-  if (argc < 0) argc *= -1;
+  if (argc < 0) argc = -1 - argc;
   msig = [DummyProtocolHandler 
 	   instanceMethodSignatureForSelector: ruby_method_sel(argc)];
   RBOBJ_LOG("   --> %@", msig);
