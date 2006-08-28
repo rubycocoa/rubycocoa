@@ -428,7 +428,7 @@
 			fileEncoding = 4;
 			isa = PBXFileReference;
 			lastKnownFileType = text.script.ruby;
-			path = «PROJECTNAME»AppDelegate.rb;
+			path = "«PROJECTNAME»AppDelegate.rb";
 			refType = 4;
 			sourceTree = "<group>";
 		};
