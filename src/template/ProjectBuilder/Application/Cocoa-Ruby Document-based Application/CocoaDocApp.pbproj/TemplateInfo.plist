@@ -5,4 +5,5 @@
 		"rb_main.rb",
 		"main.m"
 	);
+    Description = "This project builds a Cocoa-based application written in Ruby that uses the NSDocument architecture.";
 }

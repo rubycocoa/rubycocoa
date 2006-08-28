@@ -38,6 +38,7 @@ pbtmpldir = "template/ProjectBuilder"
     end
     command "mkdir -p '#{File.dirname(dstdir)}'"
     command "cp -R '#{srcdir}' '#{dstdir}'"
+    command "find '#{dstdir}' -name '*.in' -print0 | xargs -0 rm"
   end
 end
 

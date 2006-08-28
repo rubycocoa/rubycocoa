@@ -14,6 +14,7 @@
 #import <Foundation/NSString.h>
 #import <Foundation/NSPathUtilities.h>
 #import "mdl_osxobjc.h"
+#import "ocdata_conv.h"
 
 #define RUBY_MAIN_NAME "rb_main.rb"
 
@@ -114,6 +115,8 @@ RBRubyCocoaInit()
 
   ruby_init();
   load_path_unshift(framework_ruby_path()); // add a ruby part of rubycocoa to $LOAD_PATH
+  init_rb2oc_cache(); // initialize the Ruby->ObjC internal cache
+  init_oc2rb_cache(); // initialize the ObjC->Ruby internal cache
   initialize_mdl_osxobjc();	// initialize an objc part of rubycocoa
   init_p = 1;
 

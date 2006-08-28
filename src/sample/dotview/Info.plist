@@ -4,8 +4,10 @@
 <dict>
 	<key>CFBundleExecutable</key>
 	<string>DotView</string>
+	<key>CFBundleName</key>
+	<string>DotView</string>
 	<key>CFBundleIdentifier</key>
-	<string>appdomain.SimpleApp</string>
+	<string>com.apple.DotView</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleSignature</key>
@@ -14,5 +16,9 @@
 	<string>MainMenu</string>
 	<key>NSPrincipalClass</key>
 	<string>NSApplication</string>
+	<key>CFBundleDevelopmentRegion</key>
+	<string>English</string>
+	<key>CFBundleShortVersionString</key>
+	<string>1.0.0</string>
 </dict>
 </plist>

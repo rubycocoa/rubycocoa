@@ -10,5 +10,5 @@
 		"rb_main.rb",
 		"main.m",
 	);
-	Description = "This project builds a Core Data application that uses Cocoa's NSDocument architecture.";
+	Description = "This project builds a Core Data application written in Ruby that uses the NSDocument architecture.";
 }

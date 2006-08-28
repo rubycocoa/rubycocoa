@@ -11,60 +11,41 @@
 #import "mdl_osxobjc.h"
 #import "ocdata_conv.h"
 #import "DummyProtocolHandler.h"
+#import "RBRuntime.h" // for DLOG
 
-#if 1
-#  define DLOG0(f)          if (ruby_debug == Qtrue) debug_log((f))
-#  define DLOG1(f,a1)       if (ruby_debug == Qtrue) debug_log((f),(a1))
-#  define DLOG2(f,a1,a2)    if (ruby_debug == Qtrue) debug_log((f),(a1),(a2))
-#  define DLOG3(f,a1,a2,a3) if (ruby_debug == Qtrue) debug_log((f),(a1),(a2),(a3))
-#else
-#  define DLOG0(f)          debug_log((f))
-#  define DLOG1(f,a1)       debug_log((f),(a1))
-#  define DLOG2(f,a1,a2)    debug_log((f),(a1),(a2))
-#  define DLOG3(f,a1,a2,a3) debug_log((f),(a1),(a2),(a3))
-#endif
+#define RBOBJ_LOG(fmt, args...) DLOG("RBOBJ", fmt, ##args)
 
-static void debug_log(const char* fmt,...)
-{
-  //  if (ruby_debug == Qtrue) {
-    id pool = [[NSAutoreleasePool alloc] init];
-    NSString* nsfmt = [NSString stringWithFormat: @"RBOBJ:%s", fmt];
-    va_list args;
-    va_start(args, fmt);
-    NSLogv(nsfmt, args);
-    va_end(args);
-    [pool release];
-    //  }
-}
+extern ID _relaxed_syntax_ID;
 
 static RB_ID sel_to_mid(SEL a_sel)
 {
-  int i;
-  id pool;
-  NSString* selstr;
+  int i, length;
+  const char *selName;
   char mname[1024];
 
-  pool = [[NSAutoreleasePool alloc] init];
-  selstr = NSStringFromSelector(a_sel);
+  selName = sel_getName(a_sel);
   memset(mname, 0, sizeof(mname));
-  strncpy(mname, [selstr UTF8String], sizeof(mname) - 1);
+  strncpy(mname, selName, sizeof(mname) - 1);
 
-  // selstr.sub(/:/,'_').sub(/^(.*)_$/, "\1")
-  for (i = 0; i < [selstr length]; i++)
+  // selstr.sub(/:/,'_')
+  length = strlen(selName);
+  for (i = 0; i < length; i++)
     if (mname[i] == ':') mname[i] = '_';
-  for (i = [selstr length] - 1; i >= 0; i--) {
-    if (mname[i] != '_') break;
-    mname[i] = '\0';
+
+  if (RTEST(rb_ivar_get(osx_s_module(), _relaxed_syntax_ID))) {    
+    // sub(/^(.*)_$/, "\1")
+    for (i = length - 1; i >= 0; i--) {
+      if (mname[i] != '_') break;
+      mname[i] = '\0';
+    }
   }
-  [pool release];
 
   return rb_intern(mname);
 }
 
 static RB_ID sel_to_mid_as_setter(SEL a_sel)
 {
-  id pool = [[NSAutoreleasePool alloc] init];
-  VALUE str = rb_str_new2([NSStringFromSelector(a_sel) UTF8String]);
+  VALUE str = rb_str_new2(sel_getName(a_sel));
 
   // if str.sub!(/^set([A-Z][^:]*):$/, '\1=') then
   //   str = str[0].chr.downcase + str[1..-1]
@@ -77,7 +58,6 @@ static RB_ID sel_to_mid_as_setter(SEL a_sel)
     RSTRING(str)->ptr[0] = (char) c;
   }
 
-  [pool release];
   return rb_to_id(str);
 }
 
@@ -107,16 +87,15 @@ static int rb_obj_arity_of_method(VALUE rcv, SEL a_sel)
 
 static SEL ruby_method_sel(int argc)
 {
-  SEL result;
-  id pool = [[NSAutoreleasePool alloc] init];
-  NSString* s = [@"ruby_method_" stringByAppendingFormat: @"%d", argc];
+  char selName[1024];
+  int selNameLength;
   int i;
-  for (i = 0; i < argc; i++) {
-    s = [s stringByAppendingString: @":"];
-  }
-  result = NSSelectorFromString(s);
-  [pool release];
-  return result;
+  
+  selNameLength = snprintf(selName, sizeof selName, "ruby_method_%d", argc);
+  for (i = 0; i < argc; i++)
+    selName[selNameLength++] = ':';
+  selName[selNameLength] = '\0';
+  return sel_registerName(selName);
 }
 
 @implementation RBObject
@@ -127,10 +106,10 @@ static SEL ruby_method_sel(int argc)
 {
   BOOL ret;
   RB_ID mid;
-  DLOG1("rbobjRespondsToSelector(%s)", a_sel);
+  RBOBJ_LOG("rbobjRespondsToSelector(%s)", a_sel);
   mid = rb_obj_sel_to_mid(m_rbobj, a_sel);
   ret = (rb_respond_to(m_rbobj, mid) != 0);
-  DLOG1("   --> %d", ret);
+  RBOBJ_LOG("   --> %d", ret);
   return ret;
 }
 
@@ -138,12 +117,12 @@ static SEL ruby_method_sel(int argc)
 {
   NSMethodSignature* msig;
   int argc;
-  DLOG1("rbobjMethodSignatureForSelector(%s)", a_sel);
+  RBOBJ_LOG("rbobjMethodSignatureForSelector(%s)", a_sel);
   argc = rb_obj_arity_of_method(m_rbobj, a_sel);
   if (argc < 0) argc *= -1;
   msig = [DummyProtocolHandler 
 	   instanceMethodSignatureForSelector: ruby_method_sel(argc)];
-  DLOG1("   --> %@", msig);
+  RBOBJ_LOG("   --> %@", msig);
   return msig;
 }
 
@@ -155,11 +134,9 @@ static SEL ruby_method_sel(int argc)
   const char* name;
   int name_len, tail_len;
   NSMethodSignature* msig;
-  id pool;
 
   msig = nil;
-  pool = [[NSAutoreleasePool alloc] init];
-  name = [NSStringFromSelector(a_sel) UTF8String];
+  name = sel_getName(a_sel);
   name_len = strlen(name);
   tail_len = strlen(tail);
   if (name_len > tail_len) {
@@ -169,7 +146,6 @@ static SEL ruby_method_sel(int argc)
 	       instanceMethodSignatureForSelector: dummy_sel];
     }
   }
-  [pool release];
   return msig;
 }
 
@@ -281,7 +257,7 @@ static VALUE rbobject_protected_apply(VALUE a)
   VALUE args[3];
   int err;
 
-  DLOG1("rbobjForwardInvocation(%@)", an_inv);
+  RBOBJ_LOG("rbobjForwardInvocation(%@)", an_inv);
   mid = rb_obj_sel_to_mid(m_rbobj, [an_inv selector]);
   rb_args = [self fetchForwardArgumentsOf: an_inv];
   args[0] = m_rbobj;
@@ -294,18 +270,18 @@ static VALUE rbobject_protected_apply(VALUE a)
   }
 
   [self stuffForwardResult: rb_result to: an_inv];
-  DLOG1("   --> rb_result=%s", STR2CSTR(rb_inspect(rb_result)));
+  RBOBJ_LOG("   --> rb_result=%s", STR2CSTR(rb_inspect(rb_result)));
 }
 
 // public class methods
 + RBObjectWithRubyScriptCString: (const char*) cstr
 {
-  return [[self alloc] initWithRubyScriptCString: cstr];
+  return [[[self alloc] initWithRubyScriptCString: cstr] autorelease];
 }
 
 + RBObjectWithRubyScriptString: (NSString*) str
 {
-  return [[self alloc] initWithRubyScriptString: str];
+  return [[[self alloc] initWithRubyScriptString: str] autorelease];
 }
 
 // public methods
@@ -314,6 +290,7 @@ static VALUE rbobject_protected_apply(VALUE a)
 
 - (void) dealloc
 {
+  remove_from_rb2oc_cache(m_rbobj);
   rb_gc_unregister_address (&m_rbobj);
   [super dealloc];
 }
@@ -321,6 +298,7 @@ static VALUE rbobject_protected_apply(VALUE a)
 - initWithRubyObject: (VALUE)rbobj
 {
   m_rbobj = rbobj;
+  oc_master = nil;
   rb_gc_register_address (&m_rbobj);
   return self;
 }
@@ -337,15 +315,15 @@ static VALUE rbobject_protected_apply(VALUE a)
 
 - (NSString*) _copyDescription
 {
-  return [[NSString alloc] initWithUTF8String: STR2CSTR(rb_inspect(m_rbobj))];
+  return [[[NSString alloc] initWithUTF8String: STR2CSTR(rb_inspect(m_rbobj))] autorelease];
 }
 
 - (BOOL)isKindOfClass: (Class)klass
 {
   BOOL ret;
-  DLOG1("isKindOfClass(%@)", NSStringFromClass(klass));
+  RBOBJ_LOG("isKindOfClass(%@)", NSStringFromClass(klass));
   ret = NO;
-  DLOG1("   --> %d", ret);
+  RBOBJ_LOG("   --> %d", ret);
   return ret;
 }
 
@@ -356,13 +334,13 @@ static VALUE rbobject_protected_apply(VALUE a)
 
 - (void)forwardInvocation: (NSInvocation *)an_inv
 {
-  DLOG1("forwardInvocation(%@)", an_inv);
+  RBOBJ_LOG("forwardInvocation(%@)", an_inv);
   if ([self rbobjRespondsToSelector: [an_inv selector]]) {
-    DLOG0("   -> forward to Ruby Object");
+    RBOBJ_LOG("   -> forward to Ruby Object");
     [self rbobjForwardInvocation: an_inv];
   }
   else {
-    DLOG0("   -> forward to super Objective-C Object");
+    RBOBJ_LOG("   -> forward to super Objective-C Object");
     [super forwardInvocation: an_inv];
   }
 }
@@ -370,23 +348,26 @@ static VALUE rbobject_protected_apply(VALUE a)
 - (NSMethodSignature*)methodSignatureForSelector: (SEL)a_sel
 {
   NSMethodSignature* ret = nil;
-  DLOG1("methodSignatureForSelector(%s)", a_sel);
+  RBOBJ_LOG("methodSignatureForSelector(%s)", a_sel);
   if (a_sel == NULL) return nil;
-  ret = [DummyProtocolHandler instanceMethodSignatureForSelector: a_sel];
+  if (oc_master != nil) 
+    ret = [oc_master instanceMethodSignatureForSelector:a_sel];
+  if (ret == nil)
+    ret = [DummyProtocolHandler instanceMethodSignatureForSelector: a_sel];
   if (ret == nil)
     ret = [self rbobjMethodSignatureForSheetSelector: a_sel];
   if (ret == nil)
     ret = [self rbobjMethodSignatureForSelector: a_sel];
-  DLOG1("   --> %@", ret);
+  RBOBJ_LOG("   --> %@", ret);
   return ret;
 }
 
 - (BOOL)respondsToSelector: (SEL)a_sel
 {
   BOOL ret;
-  DLOG1("respondsToSelector(%s)", a_sel);
+  RBOBJ_LOG("respondsToSelector(%s)", a_sel);
   ret = [self rbobjRespondsToSelector: a_sel];
-  DLOG1("   --> %d", ret);
+  RBOBJ_LOG("   --> %d", ret);
   return ret;
 }
 

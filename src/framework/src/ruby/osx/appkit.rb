@@ -4,4 +4,5 @@
 #  Copyright (c) 2001 FUJIMOTO Hisakuni
 #
 
-require 'osx/objc/appkit'
+# Kept for backward compatibility.
+require 'osx/cocoa'

@@ -14,19 +14,7 @@
 #import "RBClassUtils.h"
 #import "ocdata_conv.h"
 
-#define sel_to_s(a) NSStringFromSelector((a))
-
-#if 0
-#  define LOG0(f)
-#  define LOG1(f,a0)
-#  define LOG2(f,a0,a1)
-#  define LOG3(f,a0,a1,a2)
-#else
-#  define LOG0(f)          NSLog((f))
-#  define LOG1(f,a0)       NSLog((f),(a0))
-#  define LOG2(f,a0,a1)    NSLog((f),(a0),(a1))
-#  define LOG3(f,a0,a1,a2) NSLog((f),(a0),(a1),(a2))
-#endif
+#define OVMIX_LOG(fmt, args...) DLOG("OVMIX", fmt, ##args)
 
 static void* alloc_from_default_zone(unsigned int size)
 {
@@ -45,14 +33,10 @@ static struct objc_method_list* method_list_alloc(long cnt)
 
 static SEL super_selector(SEL a_sel)
 {
-  id pool;
-  NSString* str;
+  char selName[1024];
 
-  pool = [[NSAutoreleasePool alloc] init];
-  str = [@"super:" stringByAppendingString: NSStringFromSelector(a_sel)];
-  a_sel = NSSelectorFromString(str);
-  [pool release];
-  return a_sel;
+  snprintf (selName, sizeof selName, "super:%s", sel_getName(a_sel));
+  return sel_registerName(selName);
 }
 
 static IMP super_imp(id rcv, SEL a_sel, IMP origin_imp)
