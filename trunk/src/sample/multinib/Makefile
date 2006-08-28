@@ -21,7 +21,7 @@ $(TARGET): $(OBJS) $(RUBYSRCS) $(RUBYSRC_MAIN)
 	mkdir $(APPNAME).app/Contents/Resources
 	mv a.out $(APPNAME).app/Contents/MacOS/$(APPNAME)
 	cp -p Info.plist $(APPNAME).app/Contents/
-	echo -n "APPL????" > $(APPNAME).app/Contents/PkgInfo
+	printf "APPL????" > $(APPNAME).app/Contents/PkgInfo
 	cp -p $(RUBYSRC_MAIN) $(RUBYSRCS) $(APPNAME).app/Contents/Resources/
 	cp -R $(NIBDIR) $(APPNAME).app/Contents/Resources/
 
