@@ -1,5 +1,10 @@
 2006-08-28  Laurent Sansonetti <lsansonetti@apple.com>
 
+	* template/ProjectBuilder/Application/Cocoa-Ruby Core Data Application/CocoaApp.xcode/TemplateInfo.plist,
+	  template/ProjectBuilder/Application/Cocoa-Ruby Core Data Application/CocoaApp.xcode/project.pbxproj.in:
+	Fixed the template to accept a project name with space character(s)
+	in its name.
+
 	* framework/RubyCocoa.xcodeproj/project.pbxproj,
 	  framework/src/objc/RBObject.h:
 	Fix build, removing 'appkit.rb' and 'foundation.rb' from the build
