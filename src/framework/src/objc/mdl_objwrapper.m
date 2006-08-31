@@ -160,12 +160,16 @@ ocm_create_send_context(VALUE rcv, SEL selector)
   unsigned i;
 
   oc_rcv = rbobj_get_ocid(rcv);
-  if (oc_rcv == nil)
+  if (oc_rcv == nil) {
+      OBJWRP_LOG("Can't get ocid for %p", rcv);        
       return NULL;
+  }
 
   methodSignature = [oc_rcv methodSignatureForSelector:selector];
-  if (methodSignature == nil)
+  if (methodSignature == nil) {
+      OBJWRP_LOG("Can't get method signature for selector %s of receiver %p", selector, oc_rcv);        
       return NULL;
+  }
 
   ctx = (struct _ocm_send_context *)malloc(sizeof(struct _ocm_send_context));
   
@@ -324,7 +328,7 @@ ocm_invoke(int argc, VALUE* argv, VALUE rcv, VALUE* result, struct _ocm_send_con
   [oc_inv setTarget: ctx->rcv];
   [oc_inv setSelector: ctx->selector];
 
-  passbyref_nargs = argc == ctx->numberOfArguments ? Qnil : find_passbyref_nargs(rcv, rb_str_new2((const char *)ctx->selector));
+  passbyref_nargs = Qnil;//argc == ctx->numberOfArguments ? Qnil : find_passbyref_nargs(rcv, rb_str_new2((const char *)ctx->selector));
   
   if (NIL_P(passbyref_nargs)) {
     passbyref_arg = passbyref_args = NULL;

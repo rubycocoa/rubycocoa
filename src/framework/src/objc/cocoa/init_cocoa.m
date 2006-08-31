@@ -73,6 +73,6 @@ extern void init_Foundation(VALUE);
 
 void init_cocoa(VALUE mOSX)
 {
-  init_AppKit(mOSX);
-  init_Foundation(mOSX);
+  //init_AppKit(mOSX);
+  //init_Foundation(mOSX);
 }
