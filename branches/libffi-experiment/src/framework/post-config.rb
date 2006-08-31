@@ -16,7 +16,15 @@ intern_h = File.join(@config['ruby-header-dir'], 'intern.h')
   end
 end
 
-curdir = Dir.pwd
-Dir.chdir('src/objc/cocoa')
-command 'ruby gen_cocoa_wrapper.rb'
-Dir.chdir(curdir)
+# generate bridge support metadata files for Cocoa & its dependencies. 
+command('mkdir -p bridge-support')
+[['Foundation', '/System/Library/Frameworks/Foundation.framework'],
+ ['AppKit', '/System/Library/Frameworks/AppKit.framework'],
+ ['CoreGraphics', '/System/Library/Frameworks/ApplicationServices.framework/Frameworks/CoreGraphics.framework']].each do |framework, path|
+
+  out = "bridge-support/#{framework}.xml"
+  unless File.exists?(out)  
+    $stderr.puts "create #{out} ..."
+    command("ruby -I../tool tool/generate_bridge_support.rb -f #{path} > #{out}") 
+  end
+end

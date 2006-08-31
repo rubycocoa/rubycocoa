@@ -49,6 +49,14 @@ else
     puts "libxml2 is not available!"
 end
 
+# Add the libffi library to the build process.
+unless File.exists?('/usr/lib/libffi.a')
+    cflags << ' -I../misc/libffi/include ' 
+    ldflags << ' -L../misc/libffi '
+end
+cflags << ' -DMACOSX '
+ldflags << ' -lffi '
+
 config_ary << [ :other_cflags, cflags ]
 config_ary << [ :other_ldflags, ldflags ]
 

@@ -17,12 +17,13 @@
 #import "ocdata_conv.h"
 #import <mach-o/dyld.h>
 #import <string.h>
+#import "BridgeSupport.h"
 
 #define OSX_MODULE_NAME "OSX"
 
 static VALUE _cOCObject = Qnil;
-static ID _within_NSClassFromString_ID;
 ID _relaxed_syntax_ID;
+ID _during_import_ID;
 
 static VALUE init_module_OSX()
 {
@@ -178,16 +179,16 @@ rb_osx_const (const char* name)
   VALUE mOSX;
   VALUE constant;
   VALUE old_ruby_debug;
-  
+ 
   mOSX = osx_s_module();
   if (NIL_P(mOSX)) 
     return Qnil;
 
   constant = Qnil;
 
-  if (rb_ivar_get(mOSX, _within_NSClassFromString_ID) == Qtrue) {
-    // We are called by NSClassFromString, just return the constant if it exists.
-    if (rb_const_defined(mOSX, rb_intern(name)))
+  if (rb_ivar_get(mOSX, _during_import_ID) == Qtrue) {
+    // We are called within an import, just return the constant if it exists.
+    if (rb_const_defined(mOSX, rb_intern(name))) 
       constant = rb_const_get(mOSX, rb_intern(name));
   }
   else {
@@ -314,185 +315,11 @@ ocid_get_rbobj (id ocid)
   return result;
 }
 
-static ID _bridge_support_signatures_ID;
-
-#if HAS_LIBXML2
-#include <libxml/xmlreader.h>
-static BOOL
-next_node(xmlTextReaderPtr reader)
-{
-  int   retval;
-
-  retval = xmlTextReaderRead(reader);
-  if (retval == 0)
-    return NO;
-
-  if (retval < 0)
-    rb_raise(rb_eRuntimeError, "parsing error: %d", retval);
-
-  return YES;
-}
-
-static VALUE
-get_attribute_and_check(xmlTextReaderPtr reader, const char *name)
-{
-  xmlChar * attribute;
-  VALUE     value;
-  
-  attribute = xmlTextReaderGetAttribute(reader, (const xmlChar *)name);
-  if (attribute == NULL)
-    rb_raise(rb_eRuntimeError, "expected attribute `%s' for element `%s'", name, xmlTextReaderConstName(reader));
-
-  value = rb_str_new2((const char *)attribute);
-  xmlFree(attribute);
-
-  return value;
-}
-
-static VALUE
-get_value_and_check(xmlTextReaderPtr reader)
-{
-  const xmlChar * value;
-  
-  value = xmlTextReaderConstValue(reader);
-  if (value == NULL)
-    rb_raise(rb_eRuntimeError, "expected value for element `%s'", xmlTextReaderConstName(reader));
-
-  return rb_str_new2((const char *)value);
-}
-
-static inline void
-add_method_if_needed(VALUE signatures, VALUE class_name, VALUE methods_type, VALUE selector, VALUE passbyref_args_n)
-{
-  VALUE class_hash;
-  VALUE methods_type_ary;
-  VALUE value;
-  int i;
-
-  if (NIL_P(class_name) || NIL_P(methods_type) || NIL_P(selector) || NIL_P(passbyref_args_n) || RARRAY(passbyref_args_n)->len == 0)
-    return;
-  
-  class_hash = rb_hash_aref(signatures, class_name);
-  if (NIL_P(class_hash)) {
-    class_hash = rb_hash_new();
-    rb_hash_aset(signatures, class_name, class_hash);
-  }
-  
-  methods_type_ary = rb_hash_aref(class_hash, methods_type);
-  if (NIL_P(methods_type_ary)) {
-    methods_type_ary = rb_ary_new();
-    rb_hash_aset(class_hash, methods_type, methods_type_ary);
-  }
-  
-  value = rb_ary_new();
-  rb_ary_push(value, selector);
-  for (i = 0; i < RARRAY(passbyref_args_n)->len; i++)
-    rb_ary_push(value, RARRAY(passbyref_args_n)->ptr[i]);
-
-  rb_ary_push(methods_type_ary, value);
-  
-  rb_ary_clear(passbyref_args_n);
-}
-
-static VALUE
-osx_mf_load_bridge_support_file (VALUE rcv, VALUE path)
-{
-  const char *      cpath;
-  xmlTextReaderPtr  reader;
-  VALUE             signatures;
-  VALUE             current_class_name;
-  VALUE             current_methods_type;
-  VALUE             current_selector;
-  VALUE             current_passbyref_args_n;
-  
-  signatures = rb_ivar_get(rcv, _bridge_support_signatures_ID);
-  if (NIL_P(signatures))
-    rb_raise(rb_eRuntimeError, "internal bridge support signatures cache not available");
-
-  cpath = STR2CSTR(path);
-
-  DLOG(@"MDLOSX", "Loading bridge support file `%s'", cpath);
-  
-  reader = xmlNewTextReaderFilename(cpath);
-  if (reader == NULL)
-    rb_raise(rb_eRuntimeError, "cannot create XML text reader for file at path `%s'", cpath);
-
-  current_class_name = current_methods_type = current_selector = current_passbyref_args_n = Qnil;
-
-  while (YES) {
-    const char *name;
-    int node_type = -1;
-    BOOL eof;
-
-    do {
-      if ((eof = !next_node(reader)))
-        break;
-      
-      node_type = xmlTextReaderNodeType(reader);
-    }
-    while (node_type != 1 && node_type != 15);    
-    
-    if (eof)
-      break;
-
-#define next_value(reader)                      \
-  do {                                          \
-    if ((eof = !next_node(reader)))             \
-      break;                                    \
-  }                                             \
-  while (xmlTextReaderNodeType(reader) != 3)
-    
-    name = (const char *)xmlTextReaderConstName(reader);
-    
-    if (node_type == 1) {    
-      if (strcmp("class", name) == 0) {
-        current_class_name = get_attribute_and_check(reader, "name");
-      }
-      else if (strcmp("class_methods", name) == 0 || strcmp("instance_methods", name) == 0) {
-        current_methods_type = ID2SYM(rb_intern(name));
-      }
-      else if (strcmp("selector", name) == 0) {
-        next_value(reader);
-        if (eof)
-          break;
-        current_selector = get_value_and_check(reader);
-      }
-      else if (strcmp("by_reference_argument", name) == 0) {
-        next_value(reader);
-        if (eof)
-          break;
-        if (NIL_P(current_passbyref_args_n))
-          current_passbyref_args_n = rb_ary_new();
-        rb_ary_push(current_passbyref_args_n, rb_str_to_inum(get_value_and_check(reader), 10, Qfalse));
-      }
-    }
-    else if (node_type == 15) {
-      if (strcmp("method", name) == 0) {
-        add_method_if_needed(signatures, current_class_name, current_methods_type, current_selector, current_passbyref_args_n);      
-      }
-    }
-  }
-
-  xmlFreeTextReader(reader);
-
-  return rcv;
-}
-#else
-static VALUE
-osx_mf_load_bridge_support_file (VALUE rcv, VALUE path)
-{
-  rb_warn("libxml2 is not available, bridge support file `%s' cannot be read", STR2CSTR(path));
-  return rcv;
-}
-#endif
-
 /******************/
 
 void initialize_mdl_osxobjc()
 {
   VALUE mOSX;
-
-  _bridge_support_signatures_ID = rb_intern("@bridge_support_signatures");
 
   mOSX = init_module_OSX();
   init_cls_ObjcPtr(mOSX);
@@ -500,11 +327,11 @@ void initialize_mdl_osxobjc()
   init_mdl_OCObjWrapper(mOSX);
   _cOCObject = init_cls_OCObject(mOSX);
 
-  _within_NSClassFromString_ID = rb_intern("@within_NSClassFromString");
-  rb_ivar_set(mOSX, _within_NSClassFromString_ID, Qfalse);
-
   _relaxed_syntax_ID = rb_intern("@relaxed_syntax");
   rb_ivar_set(mOSX, _relaxed_syntax_ID, Qtrue);
+
+  _during_import_ID = rb_intern("@during_import");
+  rb_ivar_set(mOSX, _during_import_ID, Qfalse);
 
   rb_define_module_function(mOSX, "objc_proxy_class_new", 
 			    osx_mf_objc_proxy_class_new, 2);
@@ -522,8 +349,6 @@ void initialize_mdl_osxobjc()
 			    osx_mf_init_cocoa, 0);
   rb_define_module_function(mOSX, "ns_autorelease_pool",
 			    ns_autorelease_pool, 0);
-  rb_define_module_function(mOSX, "load_bridge_support_file",
-			    osx_mf_load_bridge_support_file, 1);
 
   rb_define_const(mOSX, "RUBYCOCOA_VERSION", 
 		  rb_obj_freeze(rb_str_new2(RUBYCOCOA_VERSION)));
@@ -531,6 +356,8 @@ void initialize_mdl_osxobjc()
 		  rb_obj_freeze(rb_str_new2(RUBYCOCOA_RELEASE_DATE)));
 
   rb_define_module_function(mOSX, "objc_symbol_to_obj", osx_mf_objc_symbol_to_obj, 2);
+
+  initialize_bridge_support(mOSX);
 
   thread_switcher_start();
 }

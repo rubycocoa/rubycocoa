@@ -48,6 +48,19 @@ class OCHeaderAnalyzer
     return @enum_types
   end
 
+  def typedefs
+    if @typedefs.nil?
+      @typedefs = {} 
+      re = /\btypedef\s+([\w\s]+)\s*;/m
+      @cpp_result.scan(re).each do |line|
+        t = line.first.split(/\s/)
+        # new type -> type 
+        @typedefs[t[-1]] = t[0..-2].join(' ')
+      end
+    end
+    return @typedefs
+  end
+
   def enums
     if @enums.nil? then
       re = /\benum\b.*\{([^}]*)\}/
@@ -207,7 +220,7 @@ class OCHeaderAnalyzer
 
   class VarInfo
 
-    attr_reader :rettype, :name, :orig
+    attr_reader :rettype, :stripped_rettype, :name, :orig
     attr_accessor :octype
 
     def initialize(type, name, orig, enum_types)
@@ -221,7 +234,8 @@ class OCHeaderAnalyzer
       t.strip!
       t = "int" if enum_types.include?(t)
       @octype = OCHeaderAnalyzer.octype_of(t)
-    end
+      @stripped_rettype = t
+   end
 
     def to_s
       @orig
@@ -238,14 +252,19 @@ class OCHeaderAnalyzer
       @args = args
       @argc = @args.size
       if @args[-1] && @args[-1].rettype == '...' then
-	@argc = -1
-	@args.pop
+	    @argc -= 1 
+        @variadic = true
+	    @args.pop
       end
       self
     end
 
     def to_s
       @orig
+    end
+
+    def variadic?
+      @variadic
     end
 
   end

@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4D0E85190AA49CF700C8E2FB /* BridgeSupport.h in Headers */ = {isa = PBXBuildFile; fileRef = 4D0E85170AA49CF700C8E2FB /* BridgeSupport.h */; };
+		4D0E851A0AA49CF700C8E2FB /* BridgeSupport.m in Sources */ = {isa = PBXBuildFile; fileRef = 4D0E85180AA49CF700C8E2FB /* BridgeSupport.m */; };
 		FCDF92650A87E09E0002AD01 /* cls_objcid.h in Headers */ = {isa = PBXBuildFile; fileRef = E88C6D58035BB1F5031D1B90 /* cls_objcid.h */; };
 		FCDF92660A87E09E0002AD01 /* cls_objcptr.h in Headers */ = {isa = PBXBuildFile; fileRef = E88C6D5A035BB1F5031D1B90 /* cls_objcptr.h */; };
 		FCDF92670A87E09E0002AD01 /* DummyProtocolHandler.h in Headers */ = {isa = PBXBuildFile; fileRef = E88C6D5C035BB1F5031D1B90 /* DummyProtocolHandler.h */; };
@@ -99,6 +101,8 @@
 		0867D69BFE84028FC02AAC07 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
 		0867D6A5FE840307C02AAC07 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
 		1058C7B1FEA5585E11CA2CBB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
+		4D0E85170AA49CF700C8E2FB /* BridgeSupport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BridgeSupport.h; sourceTree = "<group>"; };
+		4D0E85180AA49CF700C8E2FB /* BridgeSupport.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BridgeSupport.m; sourceTree = "<group>"; };
 		A5244F7D0595D2CE00FB7045 /* rb_AppKit.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = rb_AppKit.m; sourceTree = "<group>"; };
 		A5244F7E0595D2CE00FB7045 /* rb_Foundation.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = rb_Foundation.m; sourceTree = "<group>"; };
 		E813DE9B036CC9C1033794D5 /* RBSlaveObject.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RBSlaveObject.h; sourceTree = "<group>"; };
@@ -251,6 +255,8 @@
 				E88C6D5D035BB1F5031D1B90 /* DummyProtocolHandler.m */,
 				E88C6D63035BB1F5031D1B90 /* OverrideMixin.h */,
 				E88C6D64035BB1F5031D1B90 /* OverrideMixin.m */,
+				4D0E85170AA49CF700C8E2FB /* BridgeSupport.h */,
+				4D0E85180AA49CF700C8E2FB /* BridgeSupport.m */,
 				E88C6D6C035BB1F5031D1B90 /* RubyCocoa.h */,
 				E88C6D6D035BB1F5031D1B90 /* Version.h */,
 				E88C6E69035BB255031D1B90 /* DummyProtocolHandler.m.erb */,
@@ -347,6 +353,7 @@
 				FCDF92710A87E09E0002AD01 /* RBSlaveObject.h in Headers */,
 				FCDF92720A87E09E0002AD01 /* mdl_osxobjc.h in Headers */,
 				FCDF92730A87E09E0002AD01 /* RBClassUtils.h in Headers */,
+				4D0E85190AA49CF700C8E2FB /* BridgeSupport.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -434,6 +441,7 @@
 				FCDF92990A87E09E0002AD01 /* rb_Foundation.m in Sources */,
 				FCDF929A0A87E09E0002AD01 /* mdl_osxobjc.m in Sources */,
 				FCDF929B0A87E09E0002AD01 /* RBClassUtils.m in Sources */,
+				4D0E851A0AA49CF700C8E2FB /* BridgeSupport.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
