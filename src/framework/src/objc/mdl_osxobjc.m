@@ -23,7 +23,6 @@
 
 static VALUE _cOCObject = Qnil;
 ID _relaxed_syntax_ID;
-ID _during_import_ID;
 
 static VALUE init_module_OSX()
 {
@@ -178,7 +177,6 @@ rb_osx_const (const char* name)
 {
   VALUE mOSX;
   VALUE constant;
-  VALUE old_ruby_debug;
  
   mOSX = osx_s_module();
   if (NIL_P(mOSX)) 
@@ -186,14 +184,16 @@ rb_osx_const (const char* name)
 
   constant = Qnil;
 
-  if (rb_ivar_get(mOSX, _during_import_ID) == Qtrue) {
-    // We are called within an import, just return the constant if it exists.
+  if (current_function != NULL && strcmp(current_function->name, "NSClassFromString") == 0) {
+    // We are called within NSClassFromString, just return the constant if it exists.
+    // We don't want to trigger an import as it would cause an infinite loop.
     if (rb_const_defined(mOSX, rb_intern(name))) 
       constant = rb_const_get(mOSX, rb_intern(name));
   }
   else {
+    VALUE old_ruby_debug;
     // Explicitely call const_get, this will make sure the constant is generated if it does not
-    // exist (through const_missing -> OSX::ns_import...).
+    // exist (triggering const_missing -> OSX::ns_import...).
     // Disable warnings just between the const_get instruction, as it would raise too many false
     // positives.
     old_ruby_debug = ruby_debug;
@@ -330,9 +330,6 @@ void initialize_mdl_osxobjc()
   _relaxed_syntax_ID = rb_intern("@relaxed_syntax");
   rb_ivar_set(mOSX, _relaxed_syntax_ID, Qtrue);
 
-  _during_import_ID = rb_intern("@during_import");
-  rb_ivar_set(mOSX, _during_import_ID, Qfalse);
-
   rb_define_module_function(mOSX, "objc_proxy_class_new", 
 			    osx_mf_objc_proxy_class_new, 2);
   rb_define_module_function(mOSX, "objc_derived_class_new", 
@@ -357,7 +354,7 @@ void initialize_mdl_osxobjc()
 
   rb_define_module_function(mOSX, "objc_symbol_to_obj", osx_mf_objc_symbol_to_obj, 2);
 
-  initialize_bridge_support(mOSX);
-
   thread_switcher_start();
+  
+  initialize_bridge_support(mOSX);
 }

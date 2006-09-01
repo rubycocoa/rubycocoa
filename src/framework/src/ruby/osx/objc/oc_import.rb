@@ -24,9 +24,6 @@ module OSX
     return false
   end
 
-  # Define OSX.NSClassFromString
-  ['Foundation', 'AppKit'].each { |f| OSX.load_bridge_support_signatures(f) }
-
   # Load C constants/classes lazily.
   def self.const_missing(c)
     begin
@@ -59,23 +56,20 @@ module OSX
     end
   end
   
+  # Define OSX.NSClassFromString
+  ['Foundation', 'AppKit'].each { |f| OSX.load_bridge_support_signatures(f) }
+
   # create Ruby's class for Cocoa class,
   # then define Constant under module 'OSX'.
   def ns_import(sym)
     if not OSX.const_defined?(sym)
-      @during_import = true
       NSLog("importing #{sym}...") if $DEBUG
-      const_name = sym.to_s
-      sym_name = ":#{sym}"
-      klass = OSX.module_eval <<-EOE_NS_IMPORT,__FILE__,__LINE__+1
-      if clsobj = NSClassFromString(#{sym_name})
+      klass = if clsobj = NSClassFromString(sym)
         if rbcls = class_new_for_occlass(clsobj)
-          #{const_name} = rbcls
+          const_set(sym, rbcls)
         end
       end
-      EOE_NS_IMPORT
-      NSLog("importing #{sym}... done (-> #{klass.ancestors.join(' -> ')})") if $DEBUG
-      @during_import = false
+      NSLog("importing #{sym}... done (-> #{klass.ancestors.join(' -> ')})") if (klass and $DEBUG)
       return klass
     end
   end
@@ -85,9 +79,7 @@ module OSX
   CF_REGEX = /^NSCF(.+)$/
   def OSX.class_new_for_occlass(occls)
     cname = occls.to_s
-    superclass = if cname == 'NSObject'
-      OSX::ObjcID
-    elsif md = CF_REGEX.match(cname)
+    superclass = if md = CF_REGEX.match(cname)
       # Translate CoreFoundation toll-free bridged classes to Cocoa.
        OSX.const_get("NS" + md[1])
     else

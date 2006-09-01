@@ -20,8 +20,9 @@ end
 command('mkdir -p bridge-support')
 [['Foundation', '/System/Library/Frameworks/Foundation.framework'],
  ['AppKit', '/System/Library/Frameworks/AppKit.framework'],
- ['CoreGraphics', '/System/Library/Frameworks/ApplicationServices.framework/Frameworks/CoreGraphics.framework']].each do |framework, path|
-
+# FIXME: CoreGraphics does not process yet
+# ['CoreGraphics', '/System/Library/Frameworks/ApplicationServices.framework/Frameworks/CoreGraphics.framework']
+].each do |framework, path|
   out = "bridge-support/#{framework}.xml"
   unless File.exists?(out)  
     $stderr.puts "create #{out} ..."
