@@ -1,5 +1,9 @@
 2006-09-02  Laurent Sansonetti <lsansonetti@apple.com>
 
+	* pre-config.rb, framework/Info.plist, framework/src/objc/Version.h.in,
+	  metaconfig:
+	Fix again Info.plist malformations.
+
 	* ext/rubycocoa/rubycocoa.m:
 	Added back a file that was removed by mistake by the Xcode config
 	migration change.

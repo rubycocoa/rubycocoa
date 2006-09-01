@@ -4,12 +4,14 @@
 <dict>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>English</string>
+	<key>CFBundleName</key>
+	<string>RubyCocoa</string>
 	<key>CFBundleExecutable</key>
 	<string>RubyCocoa</string>
 	<key>CFBundleIconFile</key>
 	<string></string>
 	<key>CFBundleIdentifier</key>
-	<string></string>
+	<string>com.apple.rubycocoa</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundlePackageType</key>
@@ -17,7 +19,7 @@
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleShortVersionString</key>
-	<string>RubyCocoa RUBYCOCOA_VERSION_BARE</string>
+	<string>RUBYCOCOA_VERSION_SHORT</string>
 	<key>CFBundleGetInfoString</key>
 	<string>RubyCocoa RUBYCOCOA_VERSION_BARE Copyright (c) 2002 FUJIMOTO Hisakuni.</string>
 	<key>NSHumanReadableCopyright</key>
