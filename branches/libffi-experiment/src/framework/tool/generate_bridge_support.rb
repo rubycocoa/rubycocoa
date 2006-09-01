@@ -2,40 +2,7 @@ require `uname -r`.to_f >= 6.0 ? 'och_analyzer3.rb' : 'och_analyzer.rb'
 require 'rexml/document'
 require 'dl/import'
 require 'dl/struct'
-
-=begin
-class OCHeaderAnalyzer
-    def xml_elements
-        elements = []
-        constants.each do |const|
-            element = REXML::Element.new('constant')
-            element.add_attribute('name', const.name)
-            element.add_attribute('type', const.rettype)
-            elements << element
-        end
-        enums.each do |enum|
-            element = REXML::Element.new('enum')
-            element.add_attribute('name', enum)
-            elements << element
-        end
-        functions.each do |func|
-            element = REXML::Element.new('function')
-            element.add_attribute('name', func.name)
-            element.add_attribute('arguments_count', func.argc)
-            func.args.each { |a| element.add_element('argument').text = a.rettype }
-            element.add_element('return').text = func.rettype
-            elements << element
-        end
-        typedefs.each do |original, _alias|
-            element = REXML::Element.new('typedef')
-            element.add_attribute('original', original)
-            element.add_attribute('alias', _alias)
-            elements << element
-        end
-        elements
-    end
-end
-=end
+require 'fileutils'
 
 class BridgeSupportGenerator
     def initialize(args)
@@ -44,6 +11,7 @@ class BridgeSupportGenerator
         @out_io = STDOUT
         parse_args(args)
         scan_headers
+        collect_enums
         generate_xml
     end
 
@@ -67,13 +35,6 @@ class BridgeSupportGenerator
         end
     end
 
-    def resolve_typedef(type)
-        x = @resolved_typedef[type]
-        return x unless x.nil?
-       
-         
-    end
-
     def octype_of(varinfo)
         # detect ObjC classes
         if @objc 
@@ -94,9 +55,40 @@ class BridgeSupportGenerator
         end
 
         # detect boxed types -> TODO
-
 =end
         return varinfo.octype
+    end
+
+    ENUMS_BIN = '/tmp/enums'
+    ENUMS_SRC = ENUMS_BIN + '.m'
+    def collect_enums
+        if @import_directive.nil? or @compiler_flags.nil?
+            STDERR.puts "Can't generate enums for non-frameworks (yet)"
+            return
+        end
+        lines = @enums.map { |x| "printf(\"%s: %p\\n\", \"#{x}\", #{x});" }
+        file = <<EOF
+#{@import_directive}
+
+int main (void) 
+{
+    #{lines.join("\n    ")}
+    return 0;
+}
+EOF
+
+        FileUtils.rm_f([ENUMS_BIN, ENUMS_SRC])
+
+        File.open(ENUMS_SRC, 'w') { |io| io.write(file) }
+        unless system("gcc #{ENUMS_SRC} -o #{ENUMS_BIN} #{@compiler_flags}")
+            raise "Can't compile the enums file... aborting"
+        end
+       
+        @resolved_enums = {} 
+        `#{ENUMS_BIN}`.split("\n").each do |line|
+            name, value = line.split(':')
+            @resolved_enums[name.strip] = value.strip
+        end
     end
 
     def generate_xml
@@ -108,7 +100,11 @@ class BridgeSupportGenerator
             element.add_attribute('name', constant.name)
             element.add_attribute('type', octype_of(constant))
         end
-        @enums.each { |enum| root.add_element('enum').add_attribute('name', enum) }
+        @resolved_enums.each do |enum, value| 
+            element = root.add_element('enum')
+            element.add_attribute('name', enum) 
+            element.add_attribute('value', value) 
+        end
         @functions.each do |function|
             element = root.add_element('function')
             element.add_attribute('name', function.name)
@@ -158,13 +154,15 @@ class BridgeSupportGenerator
     def handle_framework(val)
         path = framework_path(val)                
         die "Can't find framework '#{val}'" if path.nil?
-        name = path.scan(/(\w+)\.framework$/)[0][0]
+        parent_path, name = path.scan(/^(.+)\/(\w+)\.framework$/)[0]
         headers = File.join(path, 'Headers')
         die "Can't locate framework headers at '#{headers}'" unless File.exists?(headers)
         @headers.concat(Dir.glob(File.join(headers, '**', '*.h')))
         libpath = File.join(path, name)
         die "Can't locate framework library at '#{libpath}'" unless File.exists?(libpath)
         OBJC.dlload(libpath)
+        @import_directive = "#import <#{name}/#{name}.h>"
+        @compiler_flags = "-F#{parent_path} -framework #{name}"
     end
  
     def framework_path(val)

@@ -25,11 +25,6 @@ class TC_Constants < Test::Unit::TestCase
      assert_equal 10, OSX::NSKeyDown
      assert_equal 10, NSKeyDown
    end
-
-   # Check that a function constant can be accessed directly
-   def test_function_constant
-     assert_equal "NSGlobalDomain", OSX.NSGlobalDomain.to_s
-   end
    
    # Check that a function constant works when accessed as a real
    # constant using ::. Then check that it has now become
