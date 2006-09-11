@@ -134,13 +134,94 @@ free_bs_function (struct bsFunction *func)
 
 extern struct FRAME *ruby_frame;
 
+static ffi_type ffi_type_nspoint;
+static ffi_type ffi_type_nssize;
+static ffi_type ffi_type_nsrect;
+static ffi_type ffi_type_nsrange;
+
+static void
+initialize_boxed_ffi_types (void)
+{
+  // TODO: we should not need this with boxed metadata types
+  ffi_type_nspoint.size = sizeof(NSPoint); 
+  ffi_type_nspoint.alignment = 0; 
+  ffi_type_nspoint.type = FFI_TYPE_STRUCT;
+  ffi_type_nspoint.elements = malloc(3 * sizeof(ffi_type*));
+  ffi_type_nspoint.elements[0] = &ffi_type_float;
+  ffi_type_nspoint.elements[1] = &ffi_type_float;
+  ffi_type_nspoint.elements[2] = NULL;
+
+  ffi_type_nssize.size = sizeof(NSSize);
+  ffi_type_nssize.alignment = 0;
+  ffi_type_nssize.type = FFI_TYPE_STRUCT;
+  ffi_type_nssize.elements = malloc(3 * sizeof(ffi_type*));
+  ffi_type_nssize.elements[0] = &ffi_type_float;
+  ffi_type_nssize.elements[1] = &ffi_type_float;
+  ffi_type_nssize.elements[2] = NULL;
+
+  ffi_type_nsrect.size = sizeof(NSRect);
+  ffi_type_nsrect.alignment = 0;
+  ffi_type_nsrect.type = FFI_TYPE_STRUCT;
+  ffi_type_nsrect.elements = malloc(3 * sizeof(ffi_type*));
+  ffi_type_nsrect.elements[0] = &ffi_type_nspoint;
+  ffi_type_nsrect.elements[1] = &ffi_type_nssize;
+  ffi_type_nsrect.elements[2] = NULL;
+  
+  ffi_type_nsrange.size = sizeof(NSRange);
+  ffi_type_nsrange.alignment = 0;
+  ffi_type_nsrange.type = FFI_TYPE_STRUCT;
+  ffi_type_nsrange.elements = malloc(3 * sizeof(ffi_type*));
+  ffi_type_nsrange.elements[0] = &ffi_type_uint;
+  ffi_type_nsrange.elements[1] = &ffi_type_uint;
+  ffi_type_nsrange.elements[2] = NULL;
+}
+
 static ffi_type *
 ffi_ret_type_for_octype (int octype)
 {
   switch (octype) {
     case _C_ID:
+    case _C_CLASS:
+    case _C_SEL:
       return &ffi_type_pointer;
+    case _C_BOOL:
+    case _PRIV_C_BOOL:
+    case _C_UCHR:
+      return &ffi_type_uchar;
+    case _C_CHR:
+      return &ffi_type_schar;
+    case _C_SHT:
+      return &ffi_type_sshort;
+    case _C_USHT:
+      return &ffi_type_ushort;
+    case _C_INT:
+      return &ffi_type_sint;
+    case _C_UINT:
+      return &ffi_type_uint;
+    case _C_LNG:
+    case _C_LNG_LNG:    /* XXX: not sure */
+      return &ffi_type_slong;
+    case _C_ULNG:
+    case _C_ULNG_LNG:   /* XXX: not sure */
+      return &ffi_type_ulong;
+    case _C_FLT:
+      return &ffi_type_float;
+    case _C_DBL:
+      return &ffi_type_double;
+
+    // TODO: we should not need this with boxed metadata types
+    case _PRIV_C_NSPOINT:
+      return &ffi_type_nspoint;
+    case _PRIV_C_NSSIZE:
+      return &ffi_type_nssize;
+    case _PRIV_C_NSRECT:
+      return &ffi_type_nsrect;
+    case _PRIV_C_NSRANGE:
+      return &ffi_type_nsrange;
   }
+
+  NSLog (@"XXX returning ffi type void for unrecognized octype %d", octype);
+
   return &ffi_type_void;
 }
 
@@ -154,11 +235,16 @@ bridge_support_dispatcher (int argc, VALUE *argv, VALUE self)
   VALUE rb_value;
   NSAutoreleasePool *pool;
   VALUE exception; 
+  ffi_cif cif;
+  void **values;
+  unsigned i;
 
   // lookup structure
   func_name = rb_id2name(ruby_frame->orig_func);
   if (!st_lookup(bsFunctions, (st_data_t)func_name, (st_data_t *)&func))
     rb_fatal("Unrecognized function '%s'", func_name);
+  if (func == NULL)
+    rb_fatal("Retrieved func structure is invalid");
   is_void = func->retval == _C_VOID;
 
   // check args count
@@ -171,7 +257,6 @@ bridge_support_dispatcher (int argc, VALUE *argv, VALUE self)
 
   // mark as current function 
   current_function = func;
- 
   DLOG("MDLOSX", "dispatching function '%s' argc=%d", func_name, func->argc);
 
   // lookup function symbol
@@ -184,80 +269,81 @@ bridge_support_dispatcher (int argc, VALUE *argv, VALUE self)
   retval = NULL;
   pool = [[NSAutoreleasePool alloc] init]; 
   exception = Qnil;
-
-  if (func->argc == 0) {
-    // easy, we can call it
-    @try {
-      if (is_void) {
-        ((void (*)(void))func->sym)();
-      }
-      else {
-        retval = ((void *(*)(void))func->sym)();
-      } 
-    }
-    @catch(id oc_exception) {
-      exception = oc_err_new(func->name, oc_exception);
-    } 
-  }
-  else if (func->argc > 0) {
-    // use libffi 
-    ffi_cif cif;
-    void **values;
-    unsigned i;
-    
-    // prepare arg values
-    values = (void **)malloc(sizeof(void *) * argc);
-    for (i = 0; i < argc; i++) {
-      void *val;
-
-      rbarg_to_nsarg(argv[i], i < func->argc ? func->argv[i] : _C_ID, &val, "", pool, i);  
-      DLOG("MDLOSX", "\tset arg #%d to value %p", i, val);
-      values[i] = &val;
-    }
-
-    // prepare arg types
-    if (func->ffi.arg_types == NULL || func->is_variadic) {
-      if (func->ffi.arg_types != NULL)
-        free(func->ffi.arg_types);
+  
+  // prepare arg types
+  if (func->ffi.arg_types == NULL || func->is_variadic) {
+    if (func->ffi.arg_types != NULL)
+      free(func->ffi.arg_types);
  
-      if (argc > 0) {
-        func->ffi.arg_types = (ffi_type **)malloc(sizeof(ffi_type *) * argc); 
-        if (func->ffi.arg_types == NULL)
-          rb_fatal("can't allocate memory");
-        for (i = 0; i < argc; i++) {
-          func->ffi.arg_types[i] = i < func->argc ? ffi_ret_type_for_octype(func->argv[i]) : &ffi_type_pointer;
-          DLOG("MDLOSX", "\tset arg #%d to type %p", i, func->ffi.arg_types[i]);
-        }
+    if (argc > 0) {
+      func->ffi.arg_types = (ffi_type **)malloc(sizeof(ffi_type *) * (argc + 1)); 
+      if (func->ffi.arg_types == NULL)
+        rb_fatal("can't allocate memory");
+      for (i = 0; i < argc; i++) {
+        func->ffi.arg_types[i] = i < func->argc ? ffi_ret_type_for_octype(func->argv[i]) : &ffi_type_pointer;
+        DLOG("MDLOSX", "\tset arg #%d to type %p", i, func->ffi.arg_types[i]);
       }
-      else {
-        func->ffi.arg_types = NULL;
-      }
+      func->ffi.arg_types[argc] = NULL;
     }
-  
-    // prepare ret type
-    if (func->ffi.ret_type == NULL) {
-      func->ffi.ret_type = ffi_ret_type_for_octype(func->retval);
-      DLOG("MDLOSX", "\tset return to type %p", func->ffi.ret_type);
+    else {
+      func->ffi.arg_types = NULL;
     }
-  
-    // prepare cif
-    if (ffi_prep_cif(&cif, FFI_DEFAULT_ABI, argc, func->ffi.ret_type, func->ffi.arg_types) != FFI_OK)
-      rb_fatal("Can't prepare the cif");
-
-    // call function
-    @try {
-      DLOG("MDLOSX", "\tFFI call function %p", func->sym);
-      ffi_call(&cif, FFI_FN(func->sym), (ffi_arg *)&retval, values);
-    }
-    @catch (id oc_exception) {
-      exception = oc_err_new(func->name, oc_exception);
-    }
-    free(values);
   }
+ 
+  // prepare arg values
+  if (argc > 0) {
+    values = (void **)malloc(sizeof(void *) * (argc + 1));
+    values[argc] = NULL;
+    for (i = 0; i < argc; i++) {
+      int octype;
+      ffi_type *ffi_type;
+  
+      octype = i < func->argc ? func->argv[i] : _C_ID;
+      ffi_type = func->ffi.arg_types[i];
+  
+      if (ffi_type->size > 0) {
+        DLOG("MSLOSX", "\tallocating %d bytes for arg #%d", ffi_type->size, i);
+        values[i] = (void *)malloc(ffi_type->size);
+        if (values[i] == NULL)
+          rb_fatal("Can't allocate memory");
+      } 
+      rbarg_to_nsarg(argv[i], octype, values[i], func->name, pool, i);  
+  
+      DLOG("MDLOSX", "\tset arg #%d to value %p", i, values[i]);
+    }
+  }
+  else {
+    values = NULL;
+  }
+
+  // prepare ret type
+  if (func->ffi.ret_type == NULL) {
+    func->ffi.ret_type = ffi_ret_type_for_octype(func->retval);
+    DLOG("MDLOSX", "\tset return to type %p", func->ffi.ret_type);
+  }
+  
+  // prepare cif
+  if (ffi_prep_cif(&cif, FFI_DEFAULT_ABI, argc, func->ffi.ret_type, func->ffi.arg_types) != FFI_OK)
+    rb_fatal("Can't prepare the cif");
+
+  // call function
+  @try {
+    DLOG("MDLOSX", "\tFFI call function %p", func->sym);
+    ffi_call(&cif, FFI_FN(func->sym), (ffi_arg *)&retval, values);
+  }
+  @catch (id oc_exception) {
+    DLOG("MDLOSX", "got objc exception '%@' -- forwarding...", oc_exception);
+    exception = oc_err_new(func->name, oc_exception);
+  }
+  
+  if (argc > 0) {
+    for (i = 0; i < argc; i++)
+      free(values[i]);
+    free(values);
+  } 
 
   // forward exception if needed
   if (!NIL_P(exception)) {
-    DLOG("MDLOSX", "got objc exception, forwarding...");
     [pool release];
     current_function = NULL;
     rb_exc_raise(exception);
@@ -269,7 +355,10 @@ bridge_support_dispatcher (int argc, VALUE *argv, VALUE self)
   }
   else {
     DLOG("MDLOSX", "\tresult: %p", retval);
-    rb_value = retval == NULL ? Qnil : nsresult_to_rbresult(func->retval, &retval, "", pool);
+    rb_value = nsresult_to_rbresult(func->retval, &retval, func->name, pool);
+    // retain the new ObjC object, that will be released once the Ruby object is collected
+    if (func->retval == _C_ID)
+      [(id)retval retain];
   }
 
   [pool release];
@@ -514,4 +603,6 @@ initialize_bridge_support (VALUE mOSX)
   
   rb_define_module_function(mOSX, "import_c_constant",
           osx_import_c_constant, 1);
+
+  initialize_boxed_ffi_types();
 }
