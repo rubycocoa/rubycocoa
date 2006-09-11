@@ -145,19 +145,6 @@ thread_switcher_start()
   [RBThreadSwitcher start];
 }
 
-static VALUE
-osx_mf_init_cocoa(VALUE mdl)
-{
-  extern void init_cocoa(VALUE);
-  static int init_p = 0;
-  if (init_p) 
-    return Qfalse;
-  rb_require("osx/objc/oc_types");
-  init_cocoa(mdl);
-  init_p = 1;
-  return Qtrue;
-}
-
 /******************/
 
 static VALUE
@@ -342,8 +329,6 @@ void initialize_mdl_osxobjc()
   rb_define_module_function(mOSX, "ruby_thread_switcher_stop",
 			    osx_mf_ruby_thread_switcher_stop, 0);
 
-  rb_define_module_function(mOSX, "init_cocoa",
-			    osx_mf_init_cocoa, 0);
   rb_define_module_function(mOSX, "ns_autorelease_pool",
 			    ns_autorelease_pool, 0);
 
