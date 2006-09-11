@@ -229,13 +229,16 @@ initialize_boxed_ffi_types (void)
   ffi_type_nsrange.elements[2] = NULL;
 }
 
-static ffi_type *
-ffi_ret_type_for_octype (int octype)
+ffi_type *
+ffi_type_for_octype (int octype)
 {
   switch (octype) {
     case _C_ID:
     case _C_CLASS:
     case _C_SEL:
+    case _C_CHARPTR:
+    case _PRIV_C_ID_PTR:
+    case _PRIV_C_PTR:
       return &ffi_type_pointer;
     case _C_BOOL:
     case _PRIV_C_BOOL:
@@ -271,6 +274,8 @@ ffi_ret_type_for_octype (int octype)
       return &ffi_type_nsrect;
     case _PRIV_C_NSRANGE:
       return &ffi_type_nsrange;
+    case _C_VOID:
+      return &ffi_type_void;  
   }
 
   NSLog (@"XXX returning ffi type void for unrecognized octype %d", octype);
@@ -333,7 +338,7 @@ bridge_support_dispatcher (int argc, VALUE *argv, VALUE self)
       if (func->ffi.arg_types == NULL)
         rb_fatal("can't allocate memory");
       for (i = 0; i < argc; i++) {
-        func->ffi.arg_types[i] = i < func->argc ? ffi_ret_type_for_octype(func->argv[i]) : &ffi_type_pointer;
+        func->ffi.arg_types[i] = i < func->argc ? ffi_type_for_octype(func->argv[i]) : &ffi_type_pointer;
         DLOG("MDLOSX", "\tset arg #%d to type %p", i, func->ffi.arg_types[i]);
       }
       func->ffi.arg_types[argc] = NULL;
@@ -371,7 +376,7 @@ bridge_support_dispatcher (int argc, VALUE *argv, VALUE self)
 
   // prepare ret type
   if (func->ffi.ret_type == NULL) {
-    func->ffi.ret_type = ffi_ret_type_for_octype(func->retval);
+    func->ffi.ret_type = ffi_type_for_octype(func->retval);
     DLOG("MDLOSX", "\tset return to type %p", func->ffi.ret_type);
   }
   

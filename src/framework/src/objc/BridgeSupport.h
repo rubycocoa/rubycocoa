@@ -44,5 +44,7 @@ struct bsFunction {
 };
 
 extern struct bsFunction *current_function;
+
+ffi_type *ffi_type_for_octype (int octype);
  
 void initialize_bridge_support (VALUE mOSX);
