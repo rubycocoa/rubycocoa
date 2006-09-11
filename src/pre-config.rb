@@ -51,8 +51,8 @@ end
 
 # Add the libffi library to the build process.
 unless File.exists?('/usr/lib/libffi.a')
-    cflags << ' -I../misc/libffi/include ' 
-    ldflags << ' -L../misc/libffi '
+    cflags << ' -I../../misc/libffi/include -I../misc/libffi/include ' 
+    ldflags << ' -L../../misc/libffi -L../misc/libffi '
 end
 cflags << ' -DMACOSX '
 ldflags << ' -lffi '
