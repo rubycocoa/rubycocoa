@@ -14,7 +14,10 @@
 #import <stdlib.h>
 #import <stdarg.h>
 #import <objc/objc-runtime.h>
+#import "BridgeSupport.h"
 #import "RBRuntime.h" // for DLOG
+
+#define USE_LIBFFI_FOR_OBJC_FWD 1
 
 static VALUE _mObjWrapper = Qnil;
 static VALUE _mClsWrapper = Qnil;
@@ -217,6 +220,115 @@ ocm_retain_result_if_necessary(VALUE result, const char *selector)
     OBJCID_DATA_PTR(result)->retained = YES; // We assume that the object is retained at that point.
   }
 }
+
+#if USE_LIBFFI_FOR_OBJC_FWD
+
+static VALUE
+ocm_ffi_dispatch(int argc, VALUE* argv, VALUE rcv, VALUE* result, struct _ocm_send_context *ctx)
+{
+  Method method;
+  ffi_cif cif;
+  ffi_type **arg_types;
+  void **arg_values;
+  ffi_type *ret_type;
+  unsigned i;
+  void *retval;
+  VALUE exception;
+
+  // check args count
+  if (ctx->numberOfArguments != argc)
+    rb_raise(rb_eArgError, "bad number of argument(s) (expected %d, got %d)", ctx->numberOfArguments, argc);
+
+  // prepare arg types / values
+  arg_types = (ffi_type **)malloc(sizeof(ffi_type *) * (argc + 3));
+  arg_values = (void **)malloc(sizeof(void *) * (argc + 3));
+  if (argc > 0) {
+    for (i = 0; i < argc; i++) {
+      VALUE arg;
+      const char *octype_str;
+      int octype;
+      void *ocdata;
+
+      arg = argv[i];
+      octype_str = ctx->argumentsTypes[i];
+      octype = to_octype(octype_str);
+      if (octype_str[0] == '^') // FIXME: add passbyref support
+         octype_str++;
+      OBJWRP_LOG("\targ_type[%d] (%p) : %s", i, arg, octype_str);
+      ocdata = OCDATA_ALLOCA(octype, octype_str);
+      if (rbobj_to_ocdata(arg, octype, ocdata)) {
+        arg_values[i + 2] = ocdata;
+      }
+      else {
+        free(arg_types);
+        free(arg_values);
+        return ocdataconv_err_new(ctx->rcv, ctx->selector, "cannot convert the argument #%d as '%s' to NS argument.", i, octype_str);
+      }
+
+      arg_types[i + 2] = ffi_type_for_octype(octype); 
+    }
+  }
+  arg_types[0] = &ffi_type_pointer;
+  arg_types[1] = &ffi_type_pointer;
+  arg_types[argc + 2] = NULL;
+  arg_values[0] = &ctx->rcv;
+  arg_values[1] = &ctx->selector;
+  arg_values[argc + 2] = NULL; 
+
+  // prepare ret type
+  ret_type = ffi_type_for_octype(to_octype(ctx->methodReturnType)); 
+
+  // prepare cif
+  if (ffi_prep_cif(&cif, FFI_DEFAULT_ABI, argc + 2, ret_type, arg_types) != FFI_OK)
+    rb_fatal("Can't prepare the cif");
+
+  // call function
+  exception = Qnil;
+  @try {
+    method = class_getInstanceMethod(((struct objc_class *)ctx->rcv)->isa, ctx->selector);
+    ffi_call(&cif, FFI_FN(method->method_imp), (ffi_arg *)&retval, arg_values);
+  }
+  @catch (id oc_exception) {
+    DLOG("MDLOSX", "got objc exception '%@' -- forwarding...", oc_exception);
+    exception = oc_err_new (ctx->rcv, ctx->selector, oc_exception);
+  }
+
+  // free stuff
+  free(arg_types);
+  free(arg_values);
+
+  // return exception if catched
+  if (!NIL_P(exception))
+    return exception;
+
+  // get result as argument
+  for (i = 0; i < ctx->numberOfArguments; i++) {
+    VALUE   arg;
+
+    arg = (i < argc) ? argv[i] : Qnil;
+    if (arg == Qnil) 
+      continue;
+    if (rb_obj_is_kind_of(arg, objid_s_class()) != Qtrue) 
+      continue;
+    if (to_octype(ctx->argumentsTypes[i]) != _PRIV_C_ID_PTR) 
+      continue;
+    ocm_retain_result_if_necessary(arg, (const char *)ctx->selector);
+  }
+
+  // get result
+  if (ret_type != &ffi_type_void) {
+    if (!ocdata_to_rbobj(rcv, to_octype(ctx->methodReturnType), &retval, result))
+      return ocdataconv_err_new(ctx->rcv, ctx->selector, "cannot convert the result as '%s' to Ruby Object.", ctx->methodReturnType);
+    ocm_retain_result_if_necessary(*result, (const char *)ctx->selector);
+  }
+  else {
+    *result = Qnil;
+  }
+
+  return Qnil; 
+}
+
+#else // !USE_LIBFFI_FOR_OBJC_FWD
 
 static VALUE
 ocm_perform(int argc, VALUE* argv, VALUE rcv, VALUE* result, struct _ocm_send_context *ctx)
@@ -461,6 +573,8 @@ ocm_invoke(int argc, VALUE* argv, VALUE rcv, VALUE* result, struct _ocm_send_con
   return Qnil;
 }
 
+#endif
+
 static VALUE
 ocm_send(int argc, VALUE* argv, VALUE rcv, VALUE* result)
 {
@@ -482,6 +596,9 @@ ocm_send(int argc, VALUE* argv, VALUE rcv, VALUE* result)
 
   pool = [[NSAutoreleasePool alloc] init];
 
+#if USE_LIBFFI_FOR_OBJC_FWD 
+  exc = ocm_ffi_dispatch(argc, argv, rcv, result, ctx);
+#else
   exc = ocm_perform(argc, argv, rcv, result, ctx);
   if (exc != Qnil) {
     exc = ocm_invoke(argc, argv, rcv, result, ctx);
@@ -490,6 +607,7 @@ ocm_send(int argc, VALUE* argv, VALUE rcv, VALUE* result)
       return exc;
     }
   }
+#endif
 
   [pool release];
 
