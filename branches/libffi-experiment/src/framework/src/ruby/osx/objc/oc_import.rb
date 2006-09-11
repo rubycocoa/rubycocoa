@@ -69,7 +69,7 @@ module OSX
           const_set(sym, rbcls)
         end
       end
-      NSLog("importing #{sym}... done (-> #{klass.ancestors.join(' -> ')})") if (klass and $DEBUG)
+      NSLog("importing #{sym}... done (#{klass.ancestors.join(' -> ')})") if (klass and $DEBUG)
       return klass
     end
   end
