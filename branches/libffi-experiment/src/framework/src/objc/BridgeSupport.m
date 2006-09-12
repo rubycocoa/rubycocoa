@@ -21,6 +21,7 @@
 
 static struct st_table *bsFunctions;   // function name -> struct bsFunction
 static struct st_table *bsConstants;   // constant name -> type
+static struct st_table *bsClasses;     // class name -> struct bsClass
 
 struct bsFunction *current_function = NULL;
 
@@ -433,6 +434,7 @@ osx_load_bridge_support_file (VALUE mOSX, VALUE path)
   const char *        cpath;
   xmlTextReaderPtr    reader;
   struct bsFunction * func;
+  struct bsClass *    klass;
   unsigned int        arg_index;
 
   cpath = STR2CSTR(path);
@@ -590,6 +592,65 @@ osx_load_bridge_support_file (VALUE mOSX, VALUE path)
           }
         }
       }
+      else if (strcmp("class", name) == 0) {
+        char *  class_name;
+        
+        class_name = get_attribute_and_check(reader, "name");
+      
+        if (st_lookup(bsClasses, (st_data_t)class_name, (st_data_t *)&klass)) {
+          free (class_name);
+        }
+        else {
+          klass = (struct bsClass *)malloc(sizeof(struct bsClass));
+          if (klass == NULL)
+            rb_fatal("can't allocate memory");
+          
+          klass->name = class_name;
+          klass->class_methods = st_init_strtable();
+          klass->instance_methods = st_init_strtable();
+          
+          st_insert(bsClasses, (st_data_t)class_name, (st_data_t)klass);
+        }
+      }
+      else if (strcmp("method", name) == 0) {
+        if (klass == NULL) {
+          DLOG("MDLOSX", "Method defined outside a class, skipping...");
+        }
+        else {
+          char * selector;
+          char * is_class_method;
+          BOOL   class_method;
+          struct st_table * methods_hash;
+ 
+          selector = get_attribute_and_check(reader, "selector");
+          is_class_method = get_attribute_and_check(reader, "class_method");
+          class_method = strcmp("true", is_class_method) == 0;
+          free(is_class_method);          
+
+          methods_hash = class_method ? klass->class_methods : klass->instance_methods;
+          if (st_lookup(methods_hash, (st_data_t)selector, NULL)) {
+            DLOG("MDLOSX", "Method %s already defined in class %s, skipping...", selector, klass->name);
+            free(selector);
+          }
+          else {
+            struct bsMethod * method;
+            char * is_predicate;
+           
+            method = (struct bsMethod *)malloc(sizeof(struct bsMethod));
+            if (method == NULL)
+              rb_fatal("can't allocate memory");
+ 
+            is_predicate = get_attribute(reader, "predicate"); 
+            method->is_predicate = is_predicate != NULL && strcmp("true", is_predicate) == 0;
+            free(is_predicate);
+
+            method->selector = selector;
+            method->is_class_method = class_method;
+
+            st_insert(methods_hash, (st_data_t)selector, (st_data_t)method);
+          }
+       }
+      }
     }
     else if (node_type == XML_READER_TYPE_END_ELEMENT) {
       if (strcmp("function", name) == 0) {
@@ -650,11 +711,30 @@ osx_import_c_constant (VALUE self, VALUE sym)
   return value;
 }
 
+struct bsMethod *
+find_bs_method(char *class_name, char *selector, BOOL is_class_method)
+{
+  struct bsClass *klass;
+  struct bsMethod *method;
+
+  if (class_name == NULL || selector == NULL)
+    return NULL;
+
+  if (!st_lookup(bsClasses, (st_data_t)class_name, (st_data_t *)&klass))
+    return NULL;
+
+  if (!st_lookup(is_class_method ? klass->class_methods : klass->instance_methods, (st_data_t)selector, (st_data_t *)&method))
+    return NULL;
+
+  return method;
+}
+
 void
 initialize_bridge_support (VALUE mOSX)
 {
   bsFunctions = st_init_strtable();
   bsConstants = st_init_strtable();
+  bsClasses = st_init_strtable();
 
   rb_define_module_function(mOSX, "load_bridge_support_file",
 			    osx_load_bridge_support_file, 1);

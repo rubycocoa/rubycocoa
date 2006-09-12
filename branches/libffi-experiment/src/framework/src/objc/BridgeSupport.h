@@ -43,8 +43,20 @@ struct bsFunction {
   } ffi;
 };
 
+struct bsClass {
+  char *              name;
+  struct st_table *   class_methods;
+  struct st_table *   instance_methods;
+};
+
+struct bsMethod {
+  char *  selector;
+  BOOL    is_class_method;
+  BOOL    is_predicate;
+};
+
 extern struct bsFunction *current_function;
 
 ffi_type *ffi_type_for_octype (int octype);
- 
+struct bsMethod *find_bs_method(char *class_name, char *selector, BOOL is_class_method);
 void initialize_bridge_support (VALUE mOSX);

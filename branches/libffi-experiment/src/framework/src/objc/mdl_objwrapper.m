@@ -317,7 +317,34 @@ ocm_ffi_dispatch(int argc, VALUE* argv, VALUE rcv, VALUE* result, struct _ocm_se
 
   // get result
   if (ret_type != &ffi_type_void) {
-    if (!ocdata_to_rbobj(rcv, to_octype(ctx->methodReturnType), &retval, result))
+    int octype;
+
+    octype  = to_octype(ctx->methodReturnType); 
+
+    // force boolean conversion if the method is described as a predicate in the bridge support metadata files.
+    if (octype != _C_BOOL && octype != _PRIV_C_BOOL) {
+      BOOL is_class_method;
+      id klass;
+
+      is_class_method = TYPE(rcv) == T_CLASS;
+      klass = is_class_method ? (struct objc_class *)ctx->rcv : ((struct objc_class *)ctx->rcv)->isa;
+
+      do {
+        struct bsMethod * bs_method;
+
+        bs_method = find_bs_method(((struct objc_class *)klass)->name, (char *)ctx->selector, is_class_method);
+        if (bs_method != NULL && bs_method->is_predicate) {
+          DLOG("MDLOSX", "\tdetected predicate, forcing boolean conversion of the return value");
+          octype = _PRIV_C_BOOL;
+          break;
+        }
+        
+        klass = ((struct objc_class *)klass)->super_class;
+      }
+      while (klass != NULL);
+    }
+
+    if (!ocdata_to_rbobj(rcv, octype, &retval, result))
       return ocdataconv_err_new(ctx->rcv, ctx->selector, "cannot convert the result as '%s' to Ruby Object.", ctx->methodReturnType);
     ocm_retain_result_if_necessary(*result, (const char *)ctx->selector);
   }
