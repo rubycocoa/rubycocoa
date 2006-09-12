@@ -43,16 +43,21 @@ if @config['build-universal'] == 'yes'
 end
 
 if File.exists?('/usr/include/libxml2') and File.exists?('/usr/lib/libxml2.dylib')
-    cflags << ' -I/usr/include/libxml2 -DHAS_LIBXML2 '
-    ldflags << ' -lxml2 '
+  cflags << ' -I/usr/include/libxml2 -DHAS_LIBXML2 '
+  ldflags << ' -lxml2 '
 else
-    puts "libxml2 is not available!"
+  puts "libxml2 is not available!"
 end
 
 # Add the libffi library to the build process.
 unless File.exists?('/usr/lib/libffi.a')
+  if File.exists?('/usr/local/lib/libffi.a') and File.exists?('/usr/local/include/libffi')
+    cflags << ' -I/usr/local/include/libffi '
+    ldflags << ' -L/usr/local/lib '
+  else
     cflags << ' -I../../misc/libffi/include -I../misc/libffi/include ' 
     ldflags << ' -L../../misc/libffi -L../misc/libffi '
+  end
 end
 cflags << ' -DMACOSX '
 ldflags << ' -lffi '
