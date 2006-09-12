@@ -598,7 +598,7 @@ osx_load_bridge_support_file (VALUE mOSX, VALUE path)
           free_bs_function(func);
         }
         else if (arg_index != func->argc) {
-          DLOG("MDLOSX", "Function '%s' has not enough args (expected %d, got %d), skipping...", func->name, func->argc, arg_index);
+          DLOG("MDLOSX", "Function '%s' doesn't have enough args (expected %d, got %d), skipping...", func->name, func->argc, arg_index);
           free_bs_function(func);
         }
         else {
