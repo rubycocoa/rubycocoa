@@ -712,7 +712,7 @@ osx_import_c_constant (VALUE self, VALUE sym)
 }
 
 struct bsMethod *
-find_bs_method(char *class_name, char *selector, BOOL is_class_method)
+find_bs_method(const char *class_name, const char *selector, BOOL is_class_method)
 {
   struct bsClass *klass;
   struct bsMethod *method;
