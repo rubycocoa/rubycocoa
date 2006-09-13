@@ -122,7 +122,7 @@ class OCHeaderAnalyzer
 
   def ocmethods
     if @ocmethods.nil?
-      interface_re = /^@interface\s+(\w+)/
+      interface_re = /^@(interface|protocol)\s+(\w+)/
       end_re = /^@end/
       body_re = /^[-+]\s*(\([^)]+\))?\s*([^:\s;]+)/
       args_re = /(\w+)\s*\:\s*(\([^)]+\))?\s*\w+/
@@ -131,7 +131,7 @@ class OCHeaderAnalyzer
       @cpp_result.each_line do |line|
         line.strip!
         if md = interface_re.match(line)
-          current_interface = md[1]
+          current_interface = md[2]
         elsif end_re.match(line)
           current_interface = nil
         elsif current_interface and (line[0] == ?+ or line[0] == ?-)
