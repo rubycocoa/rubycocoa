@@ -1,5 +1,8 @@
 2006-09-14  Laurent Sansonetti <lsansonetti@apple.com>
 
+	* sample/**/*.[pbproj|xcode]:
+	Upgraded old Xcode project files to recent format (.xcodeproj).
+
 	* pre-install.rb:
 	Fix the location of RubyCocoa.framework in the sample Xcode projects
 	once they are installed.
