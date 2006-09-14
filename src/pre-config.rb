@@ -51,8 +51,8 @@ end
 
 # Add the libffi library to the build process.
 unless File.exists?('/usr/lib/libffi.a')
-  if File.exists?('/usr/local/lib/libffi.a') and File.exists?('/usr/local/include/libffi')
-    cflags << ' -I/usr/local/include/libffi '
+  if File.exists?('/usr/local/lib/libffi.a') and File.exists?('/usr/local/include/ffi')
+    cflags << ' -I/usr/local/include/ffi '
     ldflags << ' -L/usr/local/lib '
   else
     cflags << ' -I../../misc/libffi/include -I../misc/libffi/include ' 
