@@ -8,11 +8,41 @@ require 'osx/objc/oc_wrapper'
 
 module OSX
 
-  SIGN_PATHS = ['/System/Library/BridgeSupport', 
-                '/Library/BridgeSupport', 
-                File.join(ENV['HOME'], 'Library', 'BridgeSupport')]
+  FRAMEWORK_PATHS = [
+    '/System/Library/Frameworks',
+    '/Library/Frameworks',
+    File.join(ENV['HOME'], 'Library', 'Frameworks')]
+
+  SIGN_PATHS = [
+    '/System/Library/BridgeSupport', 
+    '/Library/BridgeSupport', 
+    File.join(ENV['HOME'], 'Library', 'BridgeSupport')]
+
   def OSX.load_bridge_support_signatures(framework)
-    # TODO: search within the framework itself
+    # A path to a framework, let's search for BridgeSupport.xml inside the Resources folder.
+    if framework[0] == ?/
+      path = File.join(framework, 'Resources', 'BridgeSupport.xml')
+      if File.exists?(path)
+        load_bridge_support_file(path)
+        return true
+      end
+      framework = File.basename(framework, '.framework')
+    end
+    
+    # Let's try to localize the framework and see if it contains the metadata.
+    FRAMEWORK_PATHS.each do |dir|
+      path = File.join(dir, "#{framework}.framework")
+      if File.exists?(path)
+        path = File.join(path, 'Resources', 'BridgeSupport.xml')
+        if File.exists?(path)
+          load_bridge_support_file(path)
+          return true
+        end
+        break
+      end
+    end
+ 
+    # We can still look into the general metadata directories. 
     SIGN_PATHS.each do |dir|
       path = File.join(dir, "#{framework}.xml")
       if File.exists?(path)
@@ -20,6 +50,8 @@ module OSX
         return true
       end
     end
+
+    # Damnit!
     STDERR.puts "Can't find signatures file for #{framework}"
     return false
   end
