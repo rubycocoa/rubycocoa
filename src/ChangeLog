@@ -1,22 +1,3 @@
-2006-09-14  Laurent Sansonetti <lsansonetti@apple.com>
-
-	* sample/**/*.[pbproj|xcode]:
-	Upgraded old Xcode project files to recent format (.xcodeproj).
-
-	* pre-install.rb:
-	Fix the location of RubyCocoa.framework in the sample Xcode projects
-	once they are installed.
-
-2006-09-02  Laurent Sansonetti <lsansonetti@apple.com>
-
-	* pre-config.rb, framework/Info.plist, framework/src/objc/Version.h.in,
-	  metaconfig:
-	Fix again Info.plist malformations.
-
-	* ext/rubycocoa/rubycocoa.m:
-	Added back a file that was removed by mistake by the Xcode config
-	migration change.
-
 2006-08-28  Laurent Sansonetti <lsansonetti@apple.com>
 
 	* template/ProjectBuilder/Application/Cocoa-Ruby Core Data Application/CocoaApp.xcode/TemplateInfo.plist,

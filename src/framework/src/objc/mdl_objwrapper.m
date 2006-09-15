@@ -14,6 +14,7 @@
 #import <stdlib.h>
 #import <stdarg.h>
 #import <objc/objc-runtime.h>
+#import "BridgeSupport.h"
 #import "RBRuntime.h" // for DLOG
 
 static VALUE _mObjWrapper = Qnil;
@@ -93,54 +94,6 @@ ocmsend_err_new(id rcv, SEL sel, const char *fmt, ...)
   return ret;
 }
 
-static ID _passbyref_imethods_hash_ID;
-static ID _passbyref_cmethods_hash_ID;
-
-static VALUE
-get_passbyref_hash (VALUE rcv, ID hash_ID)
-{
-  VALUE hash;
-  
-  hash = rb_ivar_get(rcv, hash_ID);
-  if (NIL_P(hash)) {
-    hash = rb_hash_new();
-    rb_ivar_set(rcv, hash_ID, hash);
-  }
-
-  return hash;
-}
-
-#define get_passbyref_imethods_hash(rcv) (get_passbyref_hash(rcv, _passbyref_imethods_hash_ID))
-#define get_passbyref_cmethods_hash(rcv) (get_passbyref_hash(rcv, _passbyref_cmethods_hash_ID))
-
-static VALUE
-find_passbyref_nargs (VALUE rcv, VALUE selector)
-{
-  VALUE args;
-  ID    hash_ID;
-  
-  if (TYPE(rcv) == T_CLASS) {
-    hash_ID = _passbyref_cmethods_hash_ID;
-  }
-  else {
-    hash_ID = _passbyref_imethods_hash_ID;
-    rcv = CLASS_OF(rcv);
-  }
-
-  while (!NIL_P(rcv) && rb_obj_is_kind_of(rcv, _mObjWrapper) == Qtrue) {
-    VALUE   hash;
-
-    hash = get_passbyref_hash(rcv, hash_ID);
-    args = rb_hash_aref(hash, selector);
-    if (!NIL_P(args))
-      return args;
-    
-    rcv = RCLASS(rcv)->super;
-  }
-
-  return Qnil;
-}
-
 struct _ocm_send_context
 {
   id                  rcv;
@@ -160,12 +113,16 @@ ocm_create_send_context(VALUE rcv, SEL selector)
   unsigned i;
 
   oc_rcv = rbobj_get_ocid(rcv);
-  if (oc_rcv == nil)
+  if (oc_rcv == nil) {
+      OBJWRP_LOG("Can't get ocid for %p", rcv);        
       return NULL;
+  }
 
   methodSignature = [oc_rcv methodSignatureForSelector:selector];
-  if (methodSignature == nil)
+  if (methodSignature == nil) {
+      OBJWRP_LOG("Can't get method signature for selector %s of receiver %p", selector, oc_rcv);        
       return NULL;
+  }
 
   ctx = (struct _ocm_send_context *)malloc(sizeof(struct _ocm_send_context));
   
@@ -215,246 +172,200 @@ ocm_retain_result_if_necessary(VALUE result, const char *selector)
 }
 
 static VALUE
-ocm_perform(int argc, VALUE* argv, VALUE rcv, VALUE* result, struct _ocm_send_context *ctx)
+ocm_ffi_dispatch(int argc, VALUE* argv, VALUE rcv, VALUE* result, struct _ocm_send_context *ctx)
 {
-  const char* ret_type;
-  id oc_result = nil;
-  int i;
-  VALUE excp = Qnil;
-  marg_list *margs;
   Method method;
+  ffi_cif cif;
+  ffi_type **arg_types;
+  void **arg_values;
+  ffi_type *ret_type;
+  unsigned i;
+  unsigned pointers_args_count;
+  void *retval;
+  VALUE exception;
 
-  ret_type = (ctx->methodReturnType);
-  if (*ret_type != _C_ID && *ret_type != _C_CLASS)
-    return Qfalse;
-
-  OBJWRP_LOG("ocm_perform (%s): ret_type=%s", ctx->selector, ret_type);
-
-  margs = NULL;
-
-  if (argc != ctx->numberOfArguments) {
-    return Qfalse;
+  // check args count
+  pointers_args_count = 0;
+  if (ctx->numberOfArguments != argc) {
+    BOOL bad = YES;
+    if (argc < ctx->numberOfArguments) {
+      for (i = argc; i < ctx->numberOfArguments; i++) {
+        if (ctx->argumentsTypes[i][0] == '^')
+          pointers_args_count++;
+      }
+      if (pointers_args_count + argc == ctx->numberOfArguments)
+        bad = NO;
+    }
+    if (bad)
+      rb_raise(rb_eArgError, "bad number of argument(s) (expected %d, got %d)", ctx->numberOfArguments, argc);
   }
+
+  OBJWRP_LOG("ocm_ffi_dispatch (%s): args_count=%d ret_type=%s", ctx->selector, argc, ctx->methodReturnType);
+  
+  // prepare arg types / values
+  arg_types = (ffi_type **)malloc(sizeof(ffi_type *) * (ctx->numberOfArguments + 3));
+  arg_values = (void **)malloc(sizeof(void *) * (ctx->numberOfArguments + 3));
+  if (arg_types == NULL || arg_values == NULL)
+    rb_fatal("can't allocate memory");
+
+  arg_types[0] = &ffi_type_pointer;
+  arg_values[0] = &ctx->rcv;
+  arg_types[1] = &ffi_type_pointer;
+  arg_values[1] = &ctx->selector;
 
   if (ctx->numberOfArguments > 0) {
     for (i = 0; i < ctx->numberOfArguments; i++) {
-      const char* arg_type;
-      
-      arg_type = ctx->argumentsTypes[i];
-      OBJWRP_LOG("\targ_type[%d]: %s", i, arg_type);
-      if (*arg_type != _C_ID && *arg_type != _C_CLASS)
-        return Qfalse;
-    }
-
-#if MAC_OS_X_VERSION_MAX_ALLOWED > MAC_OS_X_VERSION_10_4
-# warning Port me to 10.5
-#endif
-
-    method = class_getInstanceMethod(((struct objc_class *)ctx->rcv)->isa, ctx->selector);
-    if (method == NULL)
-      return Qfalse;
-
-    marg_malloc(margs, method);
-
-    for (i = 0; i < ctx->numberOfArguments; i++) {
-      id value;
-      const char *arg_type;
-      int offset;
-
-      arg_type = ctx->argumentsTypes[i];
-     
-      if (!rbobj_to_nsobj(argv[i], &value))
-        return ocdataconv_err_new(
-          ctx->rcv, ctx->selector, 
-          "cannot convert the argument[%d] as '%s' to NSObject.", 
-          i, arg_type);
-
-      offset = 0;
-      method_getArgumentInfo(method, i + 2, &arg_type, &offset);
-      marg_setValue(margs, offset, id, value);      
-    }
-  }
-
-  OBJWRP_LOG("\tobjc_msgSend[v] (%s) num_of_args=%d...", ctx->selector, ctx->numberOfArguments);
-
-  @try {  
-    if (ctx->numberOfArguments == 0) {
-      oc_result = objc_msgSend(ctx->rcv, ctx->selector);
-    }
-    else {
-      oc_result = objc_msgSendv(ctx->rcv, ctx->selector, [ctx->methodSignature frameLength], margs);
-      marg_free(margs);
-    }
-  }
-  @catch (id exception) { 
-    OBJWRP_LOG("\tobjc_msgSend[v] (%s): raise %@",
-	  ctx->selector, exception);
-    excp = oc_err_new (ctx->rcv, ctx->selector, exception);
-  }
-  if (excp != Qnil)
-    return excp;
-
-  OBJWRP_LOG("\tobjc_msgSend[v] (%s): done (retval -> %p).", ctx->selector, oc_result);
-
-  if (oc_result == ctx->rcv) {
-    *result = rcv;
-  }
-  else {
-    *result = ocid_to_rbobj(rcv, oc_result);
-    ocm_retain_result_if_necessary(*result, (const char *)ctx->selector);
-  }
-
-  return Qnil;
-}
-
-static VALUE
-ocm_invoke(int argc, VALUE* argv, VALUE rcv, VALUE* result, struct _ocm_send_context *ctx)
-{
-  id        oc_inv;
-  int       i;
-  unsigned  ret_len;
-  VALUE     excp = Qnil;
-  VALUE     passbyref_nargs;
-  void **   passbyref_args;
-  void **   passbyref_arg;
-
-  OBJWRP_LOG("ocm_invoke (%s): args_count=%d ret_type=%s", ctx->selector, argc, ctx->methodReturnType);
-
-  oc_inv = [NSInvocation invocationWithMethodSignature: ctx->methodSignature];
-  [oc_inv setTarget: ctx->rcv];
-  [oc_inv setSelector: ctx->selector];
-
-  passbyref_nargs = argc == ctx->numberOfArguments ? Qnil : find_passbyref_nargs(rcv, rb_str_new2((const char *)ctx->selector));
-  
-  if (NIL_P(passbyref_nargs)) {
-    passbyref_arg = passbyref_args = NULL;
-  }
-  else {
-    OBJWRP_LOG("\tFound pass-by-ref signature for %s", ctx->selector);
-    passbyref_arg = passbyref_args = ALLOC_N(void *, RARRAY(passbyref_nargs)->len);
-    for (i = 0; i < RARRAY(passbyref_nargs)->len; i++)
-      passbyref_args[i] = NULL;
-  }
-
-  // verify numbers of arguments
-  int num_of_args = passbyref_args ? argc + RARRAY(passbyref_nargs)->len : argc;
-  if (ctx->numberOfArguments > num_of_args) {
-    char buf[BUFSIZ];
-    snprintf(buf, BUFSIZ, "too few arguments: %d for %d (real: %d)", num_of_args, ctx->numberOfArguments, argc);
-    return rb_exc_new2 (rb_eArgError, buf);
-  }
-
-  // set arguments
-  for (i = 0; i < ctx->numberOfArguments; i++) {
-    VALUE   arg_idx_value;
-    
-    arg_idx_value = INT2FIX(i);
-
-    // fill local pass-by-ref argument
-    if (i >= argc && passbyref_args != NULL && rb_ary_includes(passbyref_nargs, arg_idx_value)) {
-      id *  ocid;
-      
-      ocid = (id *)passbyref_arg++;
-      OBJWRP_LOG("\tpass_by_reference[%d]", i);
-      [oc_inv setArgument: &ocid atIndex: (i+2)];
-    }
-    // fill regular argument
-    else {
-      VALUE         arg;
-      const char *  octype_str;
-      int           octype;
-      void *        ocdata;
-      
-      arg =  argv[i];
-      octype_str = ctx->argumentsTypes[i];
-      octype = to_octype(octype_str);
-      OBJWRP_LOG("\targ_type[%d] (%p) : %s", i, arg, octype_str);
-      ocdata = OCDATA_ALLOCA(octype, octype_str);
-      if (rbobj_to_ocdata(arg, octype, ocdata)) {
-        [oc_inv setArgument: ocdata atIndex: (i+2)];
+      // omitted pointer
+      if (i >= argc) {
+        OBJWRP_LOG("\tomitted pointer[%d] (%p)", i, arg_values[i + 2]);
+        arg_values[i + 2] = &arg_values[i + 2];
+        arg_types[i + 2] = &ffi_type_pointer;
       }
+      // regular argument
       else {
-        return ocdataconv_err_new(ctx->rcv, ctx->selector, "cannot convert the argument #%d as '%s' to NS argument.", i, octype_str);
+        VALUE arg;
+        const char *octype_str;
+        int octype;
+        void *value;
+
+        arg = argv[i];
+        octype_str = ctx->argumentsTypes[i];
+        octype = to_octype(octype_str);
+        OBJWRP_LOG("\targ_type[%d] (%p) : %s", i, arg, octype_str);
+        value = OCDATA_ALLOCA(octype, octype_str);
+        if (!rbobj_to_ocdata(arg, octype, value)) {
+          exception = ocdataconv_err_new(ctx->rcv, ctx->selector, "cannot convert the argument #%d as '%s' to NS argument.", i, octype_str);
+          goto bails;
+        }
+  
+        arg_types[i + 2] = ffi_type_for_octype(octype); 
+        arg_values[i + 2] = value;
       }
     }
   }
+  arg_types[ctx->numberOfArguments + 2] = NULL;
+  arg_values[ctx->numberOfArguments + 2] = NULL; 
 
-  OBJWRP_LOG("\tNSInvocation#invoke (%s) ...", ctx->selector);
+  // prepare ret type
+  ret_type = ffi_type_for_octype(to_octype(ctx->methodReturnType)); 
+
+  // prepare cif
+  if (ffi_prep_cif(&cif, FFI_DEFAULT_ABI, ctx->numberOfArguments + 2, ret_type, arg_types) != FFI_OK)
+    rb_fatal("Can't prepare the cif");
+
+  // call function
+  exception = Qnil;
   @try {
-    [oc_inv invoke];
+    method = class_getInstanceMethod(((struct objc_class *)ctx->rcv)->isa, ctx->selector);
+    OBJWRP_LOG("\tffi_call ...");
+    ffi_call(&cif, FFI_FN(method->method_imp), (ffi_arg *)&retval, arg_values);
+    OBJWRP_LOG("\tffi_call done");
   }
-  @catch (id localException) {
-    OBJWRP_LOG("\tNSInvocation#invoke (%s): raise %@", ctx->selector, localException);
-    excp = oc_err_new (ctx->rcv, ctx->selector, localException);
+  @catch (id oc_exception) {
+    OBJWRP_LOG("got objc exception '%@' -- forwarding...", oc_exception);
+    exception = oc_err_new (ctx->rcv, ctx->selector, oc_exception);
   }
-  if (excp != Qnil) 
-    return excp;
 
-  OBJWRP_LOG("\tNSInvocation#invoke (%s): done.", ctx->selector);
+  // return exception if catched
+  if (!NIL_P(exception))
+    goto bails;
 
   // get result as argument
   for (i = 0; i < ctx->numberOfArguments; i++) {
     VALUE   arg;
-    
+
     arg = (i < argc) ? argv[i] : Qnil;
-    if (arg == Qnil) continue;
-    if (rb_obj_is_kind_of(arg, objid_s_class()) != Qtrue) continue;
-    if (to_octype(ctx->argumentsTypes[i]) != _PRIV_C_ID_PTR) continue;
-    if (OBJCID_ID(arg))
-      [OBJCID_ID(arg) retain];
+    if (arg == Qnil) 
+      continue;
+    if (rb_obj_is_kind_of(arg, objid_s_class()) != Qtrue) 
+      continue;
+    if (to_octype(ctx->argumentsTypes[i]) != _PRIV_C_ID_PTR) 
+      continue;
+    OBJWRP_LOG("\tgot passed-by-reference argument %d", i);
+    ocm_retain_result_if_necessary(arg, (const char *)ctx->selector);
   }
 
   // get result
-  ret_len = [ctx->methodSignature methodReturnLength];
-  if (ret_len > 0) {
-    void *  result_data;
-  
-    result_data = alloca(ret_len);
-    [oc_inv getReturnValue: result_data];
-    OBJWRP_LOG("\tretval : %s", ctx->methodReturnType);
-    if (!ocdata_to_rbobj(rcv, to_octype(ctx->methodReturnType), result_data, result))
-      return ocdataconv_err_new(ctx->rcv, ctx->selector, "cannot convert the result as '%s' to Ruby Object.", ctx->methodReturnType);
-  
+  if (ret_type != &ffi_type_void) {
+    int octype;
+
+    octype = to_octype(ctx->methodReturnType); 
+
+    // force boolean conversion if the method is described as a predicate in the bridge support metadata files.
+    if (octype != _C_BOOL && octype != _PRIV_C_BOOL) {
+      BOOL is_class_method;
+      id klass;
+
+      is_class_method = TYPE(rcv) == T_CLASS;
+      klass = is_class_method ? (struct objc_class *)ctx->rcv : ((struct objc_class *)ctx->rcv)->isa;
+
+      // read the metadata for each class in the hierarchy
+      do {
+        struct bsMethod * bs_method;
+
+        bs_method = find_bs_method(((struct objc_class *)klass)->name, (const char *)ctx->selector, is_class_method);
+        if (bs_method != NULL && bs_method->is_predicate) {
+          OBJWRP_LOG("\tdetected predicate, forcing boolean conversion of the return value");
+          octype = _PRIV_C_BOOL;
+          break;
+        }
+        
+        klass = ((struct objc_class *)klass)->super_class;
+      }
+      while (klass != NULL);
+    }
+
+    if (!ocdata_to_rbobj(rcv, octype, &retval, result)) {
+      exception = ocdataconv_err_new(ctx->rcv, ctx->selector, "cannot convert the result as '%s' to Ruby Object.", ctx->methodReturnType);
+      goto bails;
+    }
+    OBJWRP_LOG("\tgot return value (%p)", retval);
     ocm_retain_result_if_necessary(*result, (const char *)ctx->selector);
   }
   else {
     *result = Qnil;
   }
-  
-  // pack if necessary pass-by-ref arguments to the result
-  if (passbyref_args != NULL) {
+
+  // get omitted pointers result, and pack them with the result in an array
+  if (pointers_args_count > 0) {
     VALUE retval_ary;
 
-    retval_ary = rb_ary_new ();
-    if (ret_len > 0)  // don't test if *result is nil, as it may have been returned!
+    retval_ary = rb_ary_new();
+    if ([ctx->methodSignature methodReturnLength] > 0) // don't test if *result is nil, as nil may have been returned!
       rb_ary_push(retval_ary, *result);
 
-    for (i = 0; i < RARRAY(passbyref_nargs)->len; i++) {
-      void *  ocdata;
-      
-      ocdata = passbyref_args[i];
-      if (ocdata != NULL) {
-        int           narg;
+    for (i = ctx->numberOfArguments - pointers_args_count; i < ctx->numberOfArguments; i++) {
+      void *value;
+
+      value = arg_values[i + 2];  
+      if (value != NULL) {
         VALUE         rbval;
         const char *  octype_str;
 
-        narg = FIX2INT(RARRAY(passbyref_nargs)->ptr[i]);
-        octype_str = ctx->argumentsTypes[narg];
+        octype_str = ctx->argumentsTypes[i];
         if (octype_str[0] == '^')
           octype_str++;
-        OBJWRP_LOG("\tpass-by-ref[%d] : %s (%p)", narg, octype_str, ocdata);
-        if (!ocdata_to_rbobj(Qnil, to_octype(octype_str), &ocdata, &rbval))
-          return ocdataconv_err_new(ctx->rcv, ctx->selector, "cannot convert pass-by-ref argument #%d result as '%s' to Ruby Object.", narg, octype_str);
+        OBJWRP_LOG("\tgot omitted pointer[%d] : %s (%p)", i, octype_str, value);
+        if (!ocdata_to_rbobj(Qnil, to_octype(octype_str), &value, &rbval)) {
+          exception = ocdataconv_err_new(ctx->rcv, ctx->selector, "cannot convert pass-by-ref argument #%d result as '%s' to Ruby Object.", i, octype_str);
+          goto bails;
+        }
 
         ocm_retain_result_if_necessary(rbval, (const char *)ctx->selector);
         rb_ary_push(retval_ary, rbval);
       }
     }
-    
+
     *result = RARRAY(retval_ary)->len == 1 ? RARRAY(retval_ary)->ptr[0] : RARRAY(retval_ary)->len == 0 ? Qnil : retval_ary;
   }
 
-  return Qnil;
+  OBJWRP_LOG("ocm_ffi_dispatch done%s", NIL_P(exception) ? "" : " with exception");
+
+bails:
+  free(arg_types);
+  free(arg_values);
+
+  return exception; 
 }
 
 static VALUE
@@ -478,14 +389,7 @@ ocm_send(int argc, VALUE* argv, VALUE rcv, VALUE* result)
 
   pool = [[NSAutoreleasePool alloc] init];
 
-  exc = ocm_perform(argc, argv, rcv, result, ctx);
-  if (exc != Qnil) {
-    exc = ocm_invoke(argc, argv, rcv, result, ctx);
-    if (exc != Qnil) {
-      [pool release];
-      return exc;
-    }
-  }
+  exc = ocm_ffi_dispatch(argc, argv, rcv, result, ctx);
 
   [pool release];
 
@@ -659,37 +563,6 @@ wrapper_objc_class_method_type (VALUE rcv, VALUE name)
   return rb_str_new2(str);
 }
 
-static void
-register_passbyref_method (VALUE hash, int argc, VALUE *argv, const char *log_prefix)
-{
-  VALUE selector;
-  VALUE passbyref_args;
-  
-  rb_scan_args(argc, argv, "1*", &selector, &passbyref_args);
-  if (RARRAY(passbyref_args)->len == 0)
-    rb_raise(rb_eArgError, "require at least one pass-by-ref argument number");
-  
-  Check_Type(selector, T_STRING);
-
-  OBJWRP_LOG("registered %s '%s' with %d pass-by-reference arguments", log_prefix, STR2CSTR(selector), RARRAY(passbyref_args)->len);
-
-  rb_hash_aset(hash, selector, passbyref_args);  
-}
-
-static VALUE
-wrapper_register_passbyref_imethod (int argc, VALUE *argv, VALUE rcv)
-{
-  register_passbyref_method(get_passbyref_imethods_hash(rcv), argc, argv, "instance method");
-  return rcv;
-}
-
-static VALUE
-wrapper_register_passbyref_cmethod (int argc, VALUE *argv, VALUE rcv)
-{
-  register_passbyref_method(get_passbyref_cmethods_hash(rcv), argc, argv, "class method");
-  return rcv;
-}
-
 /*****************************************/
 
 VALUE
@@ -709,11 +582,6 @@ init_mdl_OCObjWrapper(VALUE outer)
   rb_define_method(_mClsWrapper, "objc_class_methods", wrapper_objc_class_methods, -1);
   rb_define_method(_mClsWrapper, "objc_instance_method_type", wrapper_objc_instance_method_type, 1);
   rb_define_method(_mClsWrapper, "objc_class_method_type", wrapper_objc_class_method_type, 1);
-  rb_define_method(_mClsWrapper, "register_objc_passbyref_instance_method", wrapper_register_passbyref_imethod, -1);
-  rb_define_method(_mClsWrapper, "register_objc_passbyref_class_method", wrapper_register_passbyref_cmethod, -1);
-
-  _passbyref_imethods_hash_ID = rb_intern("@__passbyref_imethods_hash__"); 
-  _passbyref_cmethods_hash_ID = rb_intern("@__passbyref_cmethods_hash__"); 
 
   return Qnil;
 }

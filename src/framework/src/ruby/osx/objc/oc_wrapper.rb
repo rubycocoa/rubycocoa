@@ -13,10 +13,8 @@ module OSX
   module OCObjWrapper
 
     def method_missing(mname, *args)
-      m_name, m_args, m_predicate = analyze_missing(mname, args)
+      m_name, m_args = analyze_missing(mname, args)
       ret = self.ocm_send(m_name, *m_args)
-      ret = (ret != 0) if m_predicate
-      ret
     end
 
     def ocnil?
@@ -63,9 +61,8 @@ module OSX
       # remove `oc_' prefix
       m_name.sub!(/^oc_/, '')
 
-      # is predicate ?
-      m_predicate = m_name.sub!(/\?$/,'')
-      # m_predicate = (/^is/ =~ m_name) unless m_predicate
+      # remove `?' suffix (to keep compatibility)
+      m_name.sub!(/\?$/, '')
 
       # check call style
       #   as Objective-C: [self aaa: a0 Bbb: a1 Ccc: a2]
@@ -117,7 +114,7 @@ module OSX
           m_name.sub!(/[^_:]$/, '\0_') if m_args.size > 0
         end
       end
-      [ m_name, m_args, m_predicate ]
+      [ m_name, m_args ]
     end
 
   end

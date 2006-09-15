@@ -8,73 +8,61 @@ require 'osx/objc/oc_wrapper'
 
 module OSX
 
-  init_cocoa # define OSX.NSClassFromString
+  FRAMEWORK_PATHS = [
+    '/System/Library/Frameworks',
+    '/Library/Frameworks',
+    File.join(ENV['HOME'], 'Library', 'Frameworks')]
 
-  # create Ruby's class for Cocoa class,
-  # then define Constant under module 'OSX'.
-  def ns_import(sym)
-    if not OSX.const_defined?(sym)
-      NSLog("importing #{sym}...") if $DEBUG
-      const_name = sym.to_s
-      sym_name = ":#{sym}"
-      klass = OSX.module_eval <<-EOE_NS_IMPORT,__FILE__,__LINE__+1
-      if clsobj = NSClassFromString(#{sym_name})
-        if rbcls = class_new_for_occlass(clsobj)
-          #{const_name} = rbcls
-        end
-      end
-      EOE_NS_IMPORT
-      if methods_hash = @bridge_support_signatures[const_name]
-        if methods = methods_hash[:class_methods]
-          methods.each { |a| klass.register_objc_passbyref_class_method(*a) }
-        end
-        if methods = methods_hash[:instance_methods]
-          methods.each { |a| klass.register_objc_passbyref_instance_method(*a) }
-        end
-      end
-      NSLog("importing #{sym}... done (-> #{klass.ancestors.join(' -> ')})") if $DEBUG
-      return klass
-    end
-  end
-  module_function :ns_import
+  SIGN_PATHS = [
+    '/System/Library/BridgeSupport', 
+    '/Library/BridgeSupport', 
+    File.join(ENV['HOME'], 'Library', 'BridgeSupport')]
 
-  # overwrite NSClassFromString to set up a flag while it's called (see mdl_osxobjc.m:rb_osx_const())
-  self.class_eval { class << self; alias_method :old_NSClassFromString, :NSClassFromString; end }
-  def self.NSClassFromString(*x)
-    @within_NSClassFromString = true
-    retval = old_NSClassFromString(*x)
-    @within_NSClassFromString = false    
-    return retval
+  def OSX.load_bridge_support_signatures(framework)
+    # A path to a framework, let's search for BridgeSupport.xml inside the Resources folder.
+    if framework[0] == ?/
+      path = File.join(framework, 'Resources', 'BridgeSupport.xml')
+      if File.exists?(path)
+        load_bridge_support_file(path)
+        return true
+      end
+      framework = File.basename(framework, '.framework')
+    end
+    
+    # Let's try to localize the framework and see if it contains the metadata.
+    FRAMEWORK_PATHS.each do |dir|
+      path = File.join(dir, "#{framework}.framework")
+      if File.exists?(path)
+        path = File.join(path, 'Resources', 'BridgeSupport.xml')
+        if File.exists?(path)
+          load_bridge_support_file(path)
+          return true
+        end
+        break
+      end
+    end
+ 
+    # We can still look into the general metadata directories. 
+    SIGN_PATHS.each do |dir|
+      path = File.join(dir, "#{framework}.xml")
+      if File.exists?(path)
+        load_bridge_support_file(path)
+        return true
+      end
+    end
+
+    # Damnit!
+    STDERR.puts "Can't find signatures file for #{framework}"
+    return false
   end
 
-  # create Ruby's class for Cocoa class
-  def OSX.class_new_for_occlass(occls)
-    superclass = if md = /^NSCF(.+)$/.match(occls.to_s)
-      # Translate CoreFoundation toll-free bridged classes to Cocoa.
-       OSX.const_get("NS" + md[1])
-    else
-      # Get real superclass if possible.
-      _objc_lookup_superclass(occls)
-    end
-    klass = Class.new(superclass)
-    klass.class_eval <<-EOE_CLASS_NEW_FOR_OCCLASS,__FILE__,__LINE__+1
-      if superclass == OSX::ObjcID
-        include OCObjWrapper 
-        self.extend OCClsWrapper
-      end
-      @ocid = #{occls.__ocid__}
-    EOE_CLASS_NEW_FOR_OCCLASS
-    if superclass == OSX::ObjcID
-      def klass.__ocid__() @ocid end
-      def klass.to_s() name end
-      def klass.inherited(subklass) subklass.ns_inherited() end
-    end
-    return klass
-  end
-  
-  # Load classes lazily.
+  # Load C constants/classes lazily.
   def self.const_missing(c)
-    (OSX::ns_import(c) or raise NameError, "uninitialized constant #{c}")
+    begin
+      OSX::import_c_constant(c)
+    rescue LoadError
+      (OSX::ns_import(c) or raise NameError, "uninitialized constant #{c}")
+    end
   end
 
   def self.included(m)
@@ -99,56 +87,53 @@ module OSX
       EOC
     end
   end
-
-  def OSX.load_bridge_support_signatures
-    @bridge_support_signatures ||= {}
-    @bridge_support_signatures.clear
-    NSLog("loading bridge support signatures...") if $DEBUG
-    ['/System/Library/BridgeSupport', 
-     '/Library/BridgeSupport', 
-     File.join(ENV['HOME'], 'Library', 'BridgeSupport')].each do |dir|
-      Dir.glob(File.join(dir, "*.xml")).each do |xmlfile|
-        load_bridge_support_file(xmlfile)
-      end
-    end
-  end
   
-=begin
-  # This is a pure Ruby (and very slow) replacement for OSX.load_bridge_support_file 
-  # defined in mdl_osxobjc.m. The native version uses libxml2, this version is based on REXML. 
-  require 'rexml/document'
-  def OSX.load_bridge_support_file(path)
-    NSLog("loading bridge support file '#{path}'...") if $DEBUG
-    document = REXML::Document.new(File.open(path))
-    document.elements.each('/signatures/class') do |class_element|
-      unless name = class_element.attributes['name']
-        raise "Class element #{class_elememt} does not have a 'name' attribute."
-      end
-      @bridge_support_signatures[name] ||= {}
-      class_hash = @bridge_support_signatures[name]
-      [[:class_methods, class_element.elements['class_methods']],
-       [:instance_methods, class_element.elements['instance_methods']]].each do |key, methods_element|
-        next if methods_element.nil?
-        methods_element.elements.each('method') do |method_element|
-          unless selector = method_element.elements['selector']
-            raise "Method element #{method_element} does not have a 'signature' child."
-          end
-          passbyref_args = []
-          method_element.elements.each('by_reference_argument') { |arg| passbyref_args << arg.text.to_i }
-          if passbyref_args.empty?
-            raise "Method element #{method_element} does not have 'by_reference_argument' children."
-          end
-          class_hash[key] ||= []
-          class_hash[key] << [selector.text, *passbyref_args]
+  # Define OSX.NSClassFromString
+  ['Foundation', 'AppKit'].each { |f| OSX.load_bridge_support_signatures(f) }
+
+  # create Ruby's class for Cocoa class,
+  # then define Constant under module 'OSX'.
+  def ns_import(sym)
+    if not OSX.const_defined?(sym)
+      NSLog("importing #{sym}...") if $DEBUG
+      klass = if clsobj = NSClassFromString(sym)
+        if rbcls = class_new_for_occlass(clsobj)
+          const_set(sym, rbcls)
         end
       end
-      if class_hash.empty?
-        @bridge_support_signatures.delete(name)
-      end
+      NSLog("importing #{sym}... done (#{klass.ancestors.join(' -> ')})") if (klass and $DEBUG)
+      return klass
     end
   end
-=end
+  module_function :ns_import
 
+  # create Ruby's class for Cocoa class
+  CF_REGEX = /^NSCF(.+)$/
+  def OSX.class_new_for_occlass(occls)
+    cname = occls.to_s
+    superclass = if md = CF_REGEX.match(cname)
+      # Translate CoreFoundation toll-free bridged classes to Cocoa.
+       OSX.const_get("NS" + md[1])
+    else
+      # Get real superclass if possible.
+      _objc_lookup_superclass(occls)
+    end
+    klass = Class.new(superclass)
+    klass.class_eval <<-EOE_CLASS_NEW_FOR_OCCLASS,__FILE__,__LINE__+1
+      if superclass == OSX::ObjcID
+        include OCObjWrapper 
+        self.extend OCClsWrapper
+      end
+      @ocid = #{occls.__ocid__}
+    EOE_CLASS_NEW_FOR_OCCLASS
+    if superclass == OSX::ObjcID
+      def klass.__ocid__() @ocid end
+      def klass.to_s() name end
+      def klass.inherited(subklass) subklass.ns_inherited() end
+    end
+    return klass
+  end
+  
   def OSX._objc_lookup_superclass(occls)
     occls_superclass = occls.oc_superclass
     if occls_superclass.nil?
@@ -448,5 +433,3 @@ module OSX
   end
 
 end				# module OSX
-
-OSX.load_bridge_support_signatures

@@ -78,10 +78,6 @@ add_config 'rubycocoa-version', 'name',
   RubyCocoaConfig::VERSION + RubyCocoaConfig::STAGE,
   'RubyCocoa version'
 
-add_config 'rubycocoa-version-short', 'name', 
-  RubyCocoaConfig::VERSION,
-  'RubyCocoa version short'
-
 add_config 'rubycocoa-release-date', 'name', 
   RubyCocoaConfig::RELEASE_DATE, 'RubyCocoa release date'
 
