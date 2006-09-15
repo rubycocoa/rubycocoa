@@ -44,10 +44,10 @@ end
 
 # Install Examples & Document
 [
-  [ 'sample', "#{install_root}#{@config['examples']}", 'g+w' ],
-  [ 'doc',    "#{install_root}#{@config['documentation']}", nil ],
+  [ 'sample', "#{install_root}#{@config['examples']}", 'g+w', true ],
+  [ 'doc',    "#{install_root}#{@config['documentation']}", nil, false ],
 
-].each do |srcdir, dstdir, chmod|
+].each do |srcdir, dstdir, chmod, fix_xcode_projects|
   if File.exist?( "#{dstdir}/RubyCocoa" ) then
     command "rm -rf '#{backup_dir}/#{srcdir}'"
     command "mkdir -p '#{backup_dir}'"
@@ -56,4 +56,19 @@ end
   command "mkdir -p '#{dstdir}'"
   command "cp -R '#{srcdir}' '#{dstdir}/RubyCocoa'"
   command "chmod -R #{chmod} '#{dstdir}/RubyCocoa'" if chmod
+
+  # Fix sample Xcode projects to point to the new location of frameworks
+  if fix_xcode_projects
+    default_framework_path = '/Library/Frameworks/RubyCocoa.framework'
+    target_framework_path = File.join(File.expand_path("#{install_root}#{@config['frameworks']}"), 'RubyCocoa.framework')
+    if ENV['DSTROOT']
+      target_framework_path.sub!(/^#{ENV['DSTROOT']}/, '')
+    end
+    Dir.glob("#{dstdir}/RubyCocoa/**/*.pbxproj") do |proj|
+      txt = File.read(proj)
+      if txt.gsub!(/#{default_framework_path}/, target_framework_path)
+        File.open(proj, 'w') { |io| io.write(txt) }
+      end
+    end
+  end
 end
