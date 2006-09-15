@@ -5,11 +5,9 @@ target_files = %w[
   ext/rubycocoa/extconf.rb
   framework/GeneratedConfig.xcconfig
   framework/src/objc/Version.h
-  template/ProjectBuilder/Application/Cocoa-Ruby\ Application/CocoaApp.pbproj/project.pbxproj
-  template/ProjectBuilder/Application/Cocoa-Ruby\ Core\ Data\ Application/CocoaApp.xcode/project.pbxproj
-  template/ProjectBuilder/Application/Cocoa-Ruby\ Core\ Data\ Document-based\ Application/CocoaDocApp.xcode/project.pbxproj
-  template/ProjectBuilder/Application/Cocoa-Ruby\ Document-based\ Application/CocoaDocApp.pbproj/project.pbxproj
 ]
+
+target_files.concat Dir.glob('template/ProjectBuilder/Application/**/*.pbxproj')
 
 config_ary = [
   [ :frameworks,      @config['frameworks'] ],
@@ -18,6 +16,7 @@ config_ary = [
   [ :libruby_path_dirname,  File.dirname(@config['libruby-path']) ],
   [ :libruby_path_basename, File.basename(@config['libruby-path']) ],
   [ :rubycocoa_version,      @config['rubycocoa-version'] ],
+  [ :rubycocoa_version_short,   @config['rubycocoa-version-short'] ],
   [ :rubycocoa_release_date, @config['rubycocoa-release-date'] ],
   [ :build_dir, framework_obj_path ],
 ]
