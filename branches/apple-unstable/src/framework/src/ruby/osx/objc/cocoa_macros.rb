@@ -25,7 +25,6 @@ module OSX
   module_function :NSLocalizedString
 
   # for NSData
-  ns_import :NSData
   class NSData
 
     def NSData.dataWithRubyString (str)
@@ -35,7 +34,6 @@ module OSX
   end
 
   # for NSMutableData
-  ns_import :NSMutableData
   class NSMutableData
 
     def NSMutableData.dataWithRubyString (str)
@@ -45,7 +43,6 @@ module OSX
   end
 
   # for NSString
-  ns_import :NSString
   class NSString
 
     def NSString.guess_nsencoding(rbstr)
@@ -77,7 +74,6 @@ module OSX
   end
 
   # for NSMutableString
-  ns_import :NSMutableString
   class NSMutableString
     def NSMutableString.stringWithRubyString (str)
       data = NSData.dataWithRubyString( str )
@@ -87,7 +83,6 @@ module OSX
   end
 
   # for NSApplication
-  ns_import :NSApplication
   class NSApplication 
     
     def NSApplication.run_with_temp_app(terminate = true, &proc)
