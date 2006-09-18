@@ -1,3 +1,8 @@
+2006-09-18  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* framework/src/objc/ocdata_conv.m:
+	Removed unnecessary pthread locks.
+
 2006-09-14  Laurent Sansonetti <lsansonetti@apple.com>
 
 	* sample/**/*.[pbproj|xcode]:
