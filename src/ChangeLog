@@ -1,3 +1,9 @@
+2006-09-19  kimura wataru <kimuraw@i.nifty.jp>
+
+	* framework/src/ruby/osx/objc/cocoa_macros.rb,
+	  framework/src/ruby/osx/objc/oc_import.rb:
+	fix "lazy import" with overriding Object.inherit.
+
 2006-09-18  kimura wataru <kimuraw@i.nifty.jp>
 
 	* pre-install.rb:
