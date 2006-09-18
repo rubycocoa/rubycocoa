@@ -4,6 +4,9 @@
 	remove .svn directories at installation of Xcode templates.
 	(fix: ".svn" appears in Xcode's "New File...")
 
+	* framework/RubyCocoa.xcodeproj/project.pbxproj:
+	enable to build with static libruby.
+
 2006-09-14  Laurent Sansonetti <lsansonetti@apple.com>
 
 	* sample/**/*.[pbproj|xcode]:
