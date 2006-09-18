@@ -24,8 +24,10 @@ command('mkdir -p bridge-support')
 # ['CoreGraphics', '/System/Library/Frameworks/ApplicationServices.framework/Frameworks/CoreGraphics.framework']
 ].each do |framework, path|
   out = "bridge-support/#{framework}.xml"
+  generator = '/usr/bin/gen_bridge_metadata'
+  generator = 'ruby tool/gen_bridge_metadata.rb' unless File.exists?(generator)
   unless File.exists?(out)  
     $stderr.puts "create #{out} ..."
-    command("ruby -I../tool tool/gen_bridge_metadata.rb -f #{path} > #{out}") 
+    command("#{generator} -f #{path} > #{out}") 
   end
 end

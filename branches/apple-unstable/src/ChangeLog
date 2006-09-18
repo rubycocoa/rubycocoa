@@ -3,7 +3,8 @@
 	* framework/post-config.rb,
 	  framework/tool/generate_bridge_support.rb,
 	  framework/tool/gen_bridge_metadata.rb:
-	generate_bridge_support -> gen_bridge_metadata.
+	generate_bridge_support -> gen_bridge_metadata. Use builtin 
+	gen_bridge_metadata tool if found.
 
 	* framework/src/objc/ocdata_conv.m:
 	Removed unnecessary pthread locks.
