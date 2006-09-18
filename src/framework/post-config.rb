@@ -26,6 +26,6 @@ command('mkdir -p bridge-support')
   out = "bridge-support/#{framework}.xml"
   unless File.exists?(out)  
     $stderr.puts "create #{out} ..."
-    command("ruby -I../tool tool/generate_bridge_support.rb -f #{path} > #{out}") 
+    command("ruby -I../tool tool/gen_bridge_metadata.rb -f #{path} > #{out}") 
   end
 end

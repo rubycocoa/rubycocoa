@@ -1,5 +1,10 @@
 2006-09-18  Laurent Sansonetti <lsansonetti@apple.com>
 
+	* framework/post-config.rb,
+	  framework/tool/generate_bridge_support.rb,
+	  framework/tool/gen_bridge_metadata.rb:
+	generate_bridge_support -> gen_bridge_metadata.
+
 	* framework/src/objc/ocdata_conv.m:
 	Removed unnecessary pthread locks.
 
