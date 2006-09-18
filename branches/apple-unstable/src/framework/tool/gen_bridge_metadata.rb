@@ -7,6 +7,7 @@ require 'rexml/document'
 require 'dl/import'
 require 'dl/struct'
 require 'fileutils'
+require 'optparse'
 
 class OCHeaderAnalyzer
   attr_reader :path, :cpp_result, :framework, :externname
@@ -337,14 +338,14 @@ class OCHeaderAnalyzer
 end
 
 class BridgeSupportGenerator
+    VERSION = '0.9.0'
+
     def initialize(args)
-        @headers = []
-        @objc = false
-        @out_io = STDOUT
         parse_args(args)
         scan_headers
         collect_enums
         generate_xml
+        @out_io.close unless @out_io == STDOUT
     end
 
     #######
@@ -394,10 +395,13 @@ class BridgeSupportGenerator
     ENUMS_BIN = '/tmp/enums'
     ENUMS_SRC = ENUMS_BIN + '.m'
     def collect_enums
+        @resolved_enums = {} 
+        
         if @import_directive.nil? or @compiler_flags.nil?
             STDERR.puts "Can't generate enums for non-frameworks (yet)"
             return
         end
+        
         lines = @enums.map { |x| "printf(\"%s: %p\\n\", \"#{x}\", #{x});" }
         file = <<EOF
 #{@import_directive}
@@ -416,7 +420,6 @@ EOF
             raise "Can't compile the enums file... aborting"
         end
        
-        @resolved_enums = {} 
         `#{ENUMS_BIN}`.split("\n").each do |line|
             name, value = line.split(':')
             @resolved_enums[name.strip] = value.strip
@@ -467,6 +470,7 @@ EOF
         @functions, @constants, @enums = [], [], []
         @typedefs, @ocmethods = {}, {}
         @headers.each do |path|
+            die "Given header file `#{path}' doesn't exist" unless File.exists?(path)
             analyzer = OCHeaderAnalyzer.new(path)
             @functions.concat(analyzer.functions)
             @typedefs.merge!(analyzer.typedefs) do |key, old, new|
@@ -482,18 +486,63 @@ EOF
         @resolved_typedefs = {}
     end
  
+    def usage
+        die "Usage: #{__FILE__} [-f <framework> | -h <headers...]>"
+    end
+
     def parse_args(args)
-        usage if args.empty?
-        case args.first
-        when '-f'
-            usage if args.length != 2
-            handle_framework(args[1])
-            @objc = true 
-        when '-h'
-            usage if args.length < 2
-            @headers.concat(args[1..-1])
-        else
-            usage 
+        @headers = []
+        @exceptions = []
+        @objc = false
+        @out_io = STDOUT
+        
+        OptionParser.new do |opts|
+            opts.banner = "Usage: #{__FILE__} [options] <headers...>\nSee -h for more help."
+            opts.separator ''
+            opts.separator 'Options:'
+
+            opts.on('-f', '--framework FRAMEWORK', 'Grep headers within the given framework') do |opt|
+                handle_framework(opt)
+                @objc = true
+            end
+
+            opts.on('-o', '--output OUTFILE', 'Redirect output to the given file') do |opt|
+                die 'Output file can\'t be specified more than once' if @out_io != STDOUT
+                @out_io = File.open(opt, 'w')
+            end
+
+            opts.on('-e', '--exception EXCPFILE', 'Consider the given exception file when generating the metadata') do |opt|
+                @exceptions << opt
+            end
+
+            opts.on('-h', '--help', 'Show this message') do
+                puts opts
+                exit
+            end
+
+            opts.on('-v', '--version', 'Show version') do
+                puts VERSION
+                exit
+            end
+
+            opts.separator ''
+            opts.separator 'Examples:'
+            opts.separator "    #{__FILE__} --framework Foundation -o Foundation.metadata"
+            opts.separator "    #{__FILE__} /path/to/my/library/headers/* > MyLibrary.metadata"
+
+            if args.empty?
+                die opts.banner
+            else
+                begin
+                    opts.parse!(args)
+                rescue => e
+                    die e.message, opts.banner
+                end
+                @headers.concat(args)
+                if @headers.empty?
+                    die "No headers given", opts.banner
+                end
+            end
         end
     end
    
@@ -523,11 +572,7 @@ EOF
         return nil
     end
 
-    def usage
-        die "Usage: #{__FILE__} [-f <framework> | -h <headers...]>"
-    end
-
-    def die(msg)
+    def die(*msg)
         STDERR.puts msg
         exit 1
     end

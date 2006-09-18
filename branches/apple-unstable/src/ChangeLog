@@ -1,10 +1,13 @@
 2006-09-18  Laurent Sansonetti <lsansonetti@apple.com>
 
-	* framework/post-config.rb,
+	* metaconfig, framework/post-config.rb, framework/pre-install.rb,
 	  framework/tool/generate_bridge_support.rb,
 	  framework/tool/gen_bridge_metadata.rb:
-	generate_bridge_support -> gen_bridge_metadata. Use builtin 
-	gen_bridge_metadata tool if found.
+	- generate_bridge_support -> gen_bridge_metadata. 
+	- Use builtin gen_bridge_metadata tool if found.
+	- Added a new build config variable, gen-bridge-metadata, to control
+	  the generation of metadata files (true by default).
+	- Improved the options parser of gen_bridge_metadata.
 
 	* framework/src/objc/ocdata_conv.m:
 	Removed unnecessary pthread locks.

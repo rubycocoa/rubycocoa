@@ -51,6 +51,9 @@ add_path_config 'documentation', '/Developer/Documentation',
 add_path_config 'bridge-support', '/Library/BridgeSupport',
   'path to the directory for BrigeSupport metadata files'
 
+add_bool_config 'gen-bridge-support', true,
+  'yes, generate bridge metadata files'
+
 ### build configuration ### 
 
 # Xcode 2.2 moved ruby.h, but ruby command reports old path.
