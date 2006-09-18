@@ -14,36 +14,49 @@
 #import <CoreFoundation/CFString.h> // CFStringEncoding
 #import "st.h"
 
-static struct st_table *rb2ocCache;
-static pthread_mutex_t rb2ocCacheLock;
+#define CACHE_LOCKING 0
 
+static struct st_table *rb2ocCache;
 static struct st_table *oc2rbCache;
+
+#if CACHE_LOCKING
+static pthread_mutex_t rb2ocCacheLock;
 static pthread_mutex_t oc2rbCacheLock;
+# define CACHE_LOCK(x)      (pthread_mutex_lock(x))
+# define CACHE_UNLOCK(x)    (pthread_mutex_unlock(x))
+#else
+# define CACHE_LOCK(x)
+# define CACHE_UNLOCK(x)
+#endif
 
 void init_rb2oc_cache(void)
 {
   rb2ocCache = st_init_numtable();
+#if CACHE_LOCKING
   pthread_mutex_init(&rb2ocCacheLock, NULL);
+#endif
 }
 
 void init_oc2rb_cache(void)
 {
   oc2rbCache = st_init_numtable();
+#if CACHE_LOCKING
   pthread_mutex_init(&oc2rbCacheLock, NULL);
+#endif
 }
 
 void remove_from_oc2rb_cache(id ocid)
 {
-  pthread_mutex_lock(&oc2rbCacheLock);
+  CACHE_LOCK(&oc2rbCacheLock);
   st_delete(oc2rbCache, (st_data_t *)&ocid, NULL);
-  pthread_mutex_unlock(&oc2rbCacheLock);
+  CACHE_UNLOCK(&oc2rbCacheLock);
 }
 
 void remove_from_rb2oc_cache(VALUE rbobj)
 {
-  pthread_mutex_lock(&rb2ocCacheLock);
+  CACHE_LOCK(&rb2ocCacheLock);
   st_delete(rb2ocCache, (st_data_t *)&rbobj, NULL);
-  pthread_mutex_unlock(&rb2ocCacheLock);
+  CACHE_UNLOCK(&rb2ocCacheLock);
 }
 
 static VALUE rbclass_nsrect()
@@ -450,19 +463,19 @@ BOOL rbobj_to_nsobj(VALUE obj, id* nsobj)
   // rbobj_convert_to_nsobj is succeptible to call us again, to avoid
   // a deadlock.
 
-  pthread_mutex_lock(&rb2ocCacheLock);
+  CACHE_LOCK(&rb2ocCacheLock);
   ok = st_lookup(rb2ocCache, (st_data_t)obj, (st_data_t *)nsobj);
-  pthread_mutex_unlock(&rb2ocCacheLock);
+  CACHE_UNLOCK(&rb2ocCacheLock);
 
   if (!ok) {
     *nsobj = rbobj_get_ocid(obj);
     if (*nsobj != nil || rbobj_convert_to_nsobj(obj, nsobj)) {
       if ([*nsobj isProxy] && [*nsobj isRBObject]) {
-        pthread_mutex_lock(&rb2ocCacheLock);
+        CACHE_LOCK(&rb2ocCacheLock);
         // Check out that the hash is still empty for us, to avoid a race condition.
         if (!st_lookup(rb2ocCache, (st_data_t)obj, (st_data_t *)nsobj))
           st_insert(rb2ocCache, (st_data_t)obj, (st_data_t)*nsobj);
-        pthread_mutex_unlock(&rb2ocCacheLock);
+        CACHE_UNLOCK(&rb2ocCacheLock);
       }
       ok = YES;
     }
@@ -527,20 +540,20 @@ ocid_to_rbobj(VALUE context_obj, id ocid)
   // We are locking the access to the cache twice (lookup + insert) as
   // ocobj_s_new is succeptible to call us again, to avoid a deadlock.
 
-  pthread_mutex_lock(&oc2rbCacheLock);
+  CACHE_LOCK(&oc2rbCacheLock);
   ok = st_lookup(oc2rbCache, (st_data_t)ocid, (st_data_t *)&result);
-  pthread_mutex_unlock(&oc2rbCacheLock);
+  CACHE_UNLOCK(&oc2rbCacheLock);
 
   if (!ok) {
     result = ocid_get_rbobj(ocid);
     if (result == Qnil)
       result = rbobj_get_ocid(context_obj) == ocid ? context_obj : ocobj_s_new(ocid);
 
-    pthread_mutex_lock(&oc2rbCacheLock);
+    CACHE_LOCK(&oc2rbCacheLock);
     // Check out that the hash is still empty for us, to avoid a race condition.
     if (!st_lookup(oc2rbCache, (st_data_t)ocid, (st_data_t *)&result))
       st_insert(oc2rbCache, (st_data_t)ocid, (st_data_t)result);
-    pthread_mutex_unlock(&oc2rbCacheLock);
+    CACHE_UNLOCK(&oc2rbCacheLock);
   }
 
   return result;
