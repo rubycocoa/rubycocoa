@@ -433,3 +433,33 @@ module OSX
   end
 
 end				# module OSX
+
+# The following code defines a new subclass of Object (Ruby's).
+# 
+#    module OSX 
+#      class NSCocoaClass end 
+#    end
+#
+# This Object.inherited() replaces the subclass of Object class by 
+# a Cocoa class from # OSX.ns_import.
+#
+class Object
+  class <<self
+    alias __before_osx_inherited inherited
+    def inherited(subklass)
+      klassname = subklass.name
+      if /\AOSX::/ =~ klassname && klassname.split(/::/).size == 2
+   nsklass = klassname.split(/::/)[1]
+   # remove Ruby's class
+   OSX.instance_eval { remove_const nsklass.intern }
+        begin
+     subklass = OSX.ns_import nsklass.intern
+   rescue NameError
+     # redefine subclass (looks not a Cocoa class)
+     OSX.const_set(nsklass, subklass)
+   end
+      end
+      __before_osx_inherited(subklass)
+    end
+  end
+end
