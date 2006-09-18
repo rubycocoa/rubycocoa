@@ -39,6 +39,7 @@ pbtmpldir = "template/ProjectBuilder"
     command "mkdir -p '#{File.dirname(dstdir)}'"
     command "cp -R '#{srcdir}' '#{dstdir}'"
     command "find '#{dstdir}' -name '*.in' -print0 | xargs -0 rm"
+    command "find '#{dstdir}' -name '.svn' -type d -print0 | xargs -0 rm -rf"
   end
 end
 
