@@ -1,7 +1,10 @@
 # Install the bridge support metadata files.
-bridge_support_dir = File.join("#{@config['install_root']}#{@config['bridge-support']}")
-command "mkdir -p #{bridge_support_dir}"
-command "cp bridge-support/*.xml #{bridge_support_dir}"
+metadata_files = Dir.glob('bridge-support/*.xml')
+unless metadata_files.empty?
+  bridge_support_dir = File.join("#{@config['install_root']}#{@config['bridge-support']}")
+  command "mkdir -p #{bridge_support_dir}"
+  command "cp bridge-support/*.xml #{bridge_support_dir}"
+end
 
 install_root = @config['install-root']
 

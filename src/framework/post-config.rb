@@ -17,17 +17,19 @@ intern_h = File.join(@config['ruby-header-dir'], 'intern.h')
 end
 
 # generate bridge support metadata files for Cocoa & its dependencies. 
-command('mkdir -p bridge-support')
-[['Foundation', '/System/Library/Frameworks/Foundation.framework'],
- ['AppKit', '/System/Library/Frameworks/AppKit.framework'],
-# FIXME: CoreGraphics does not process yet
-# ['CoreGraphics', '/System/Library/Frameworks/ApplicationServices.framework/Frameworks/CoreGraphics.framework']
-].each do |framework, path|
-  out = "bridge-support/#{framework}.xml"
-  generator = '/usr/bin/gen_bridge_metadata'
-  generator = 'ruby tool/gen_bridge_metadata.rb' unless File.exists?(generator)
-  unless File.exists?(out)  
-    $stderr.puts "create #{out} ..."
-    command("#{generator} -f #{path} > #{out}") 
+if @config['gen-bridge-support'] != 'no'
+  command('mkdir -p bridge-support')
+  [['Foundation', '/System/Library/Frameworks/Foundation.framework'],
+   ['AppKit', '/System/Library/Frameworks/AppKit.framework'],
+  # FIXME: CoreGraphics does not process yet
+  # ['CoreGraphics', '/System/Library/Frameworks/ApplicationServices.framework/Frameworks/CoreGraphics.framework']
+  ].each do |framework, path|
+    out = "bridge-support/#{framework}.xml"
+    generator = '/usr/bin/gen_bridge_metadata'
+    generator = 'ruby tool/gen_bridge_metadata.rb' unless File.exists?(generator)
+    unless File.exists?(out)  
+      $stderr.puts "create #{out} ..."
+      command("#{generator} -f #{path} > #{out}") 
+    end
   end
 end
