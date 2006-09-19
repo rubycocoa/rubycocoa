@@ -9,6 +9,22 @@ require 'dl/struct'
 require 'fileutils'
 require 'optparse'
 
+# We can't really use RubyCocoa at this point to call the ObjC
+# runtime, because foundation methods like NSClassFromString are
+# not available yet because Foundation's bridge support file has
+# not been generated yet. So let's directly load the objc library
+# and call objc_getClass by ourself. 
+module OBJC
+    extend DL::Importable
+
+    dlload "libobjc.dylib"
+    extern "void * objc_getClass(char *)"
+
+    def self.is_objc_class?(name)
+        objc_getClass(name) != nil
+    end
+end
+
 class OCHeaderAnalyzer
   attr_reader :path, :cpp_result, :framework, :externname
 
@@ -258,10 +274,38 @@ class OCHeaderAnalyzer
       t = "int" if enum_types.include?(t)
       @octype = OCHeaderAnalyzer.octype_of(t)
       @stripped_rettype = t
-   end
+    end
 
     def to_s
       @orig
+    end
+
+    def pointer?
+      if @pointer.nil?
+        @pointer = __pointer__?
+      end
+      return @pointer
+    end
+
+    private
+
+    def __pointer__?
+      rettype = @stripped_rettype.delete('() ')
+      md = /^([^*]+)(\*+)$/.match(rettype)
+      return false if md.nil?
+      type, refkind = md[1], md[2]
+      return false if type.nil? or refkind.nil?
+      @objc_lookup_cache ||= {}
+      @skip_objc_lookup_types ||= ['Protocol']
+      cached = @objc_lookup_cache[rettype]
+      return cached unless cached.nil?
+      retval = if @skip_objc_lookup_types.include?(type) or !OBJC.is_objc_class?(type)
+          refkind == '*'
+      else
+          refkind == '**'
+      end
+      @objc_lookup_cache[rettype] = retval
+      return retval
     end
   end
 
@@ -352,22 +396,6 @@ class BridgeSupportGenerator
     private
     #######
 
-    # We can't really use RubyCocoa at this point to call the ObjC
-    # runtime, because foundation methods like NSClassFromString are
-    # not available yet because Foundation's bridge support file has
-    # not been generated yet. So let's directly load the objc library
-    # and call objc_getClass by ourself. 
-    module OBJC
-        extend DL::Importable
-
-        dlload "libobjc.dylib"
-        extern "void * objc_getClass(char *)"
-
-        def self.is_objc_class?(name)
-            objc_getClass(name) != nil
-        end
-    end
-
     def octype_of(varinfo)
         # detect ObjC classes
         if @objc 
@@ -430,39 +458,70 @@ EOF
         document = REXML::Document.new
         document << REXML::XMLDecl.new
         root = document.add_element('signatures')
-        @constants.each do |constant| 
-            element = root.add_element('constant')
-            element.add_attribute('name', constant.name)
-            element.add_attribute('type', octype_of(constant))
-        end
-        @resolved_enums.each do |enum, value| 
-            element = root.add_element('enum')
-            element.add_attribute('name', enum) 
-            element.add_attribute('value', value) 
-        end
-        @functions.each do |function|
-            element = root.add_element('function')
-            element.add_attribute('name', function.name)
-            element.add_attribute('argc', function.argc)
-            element.add_attribute('variadic', true) if function.variadic?
-            function.args.each do |arg|
-                element.add_element('arg').add_attribute('type', octype_of(arg))
+
+        if @generate_exception_template
+            # Generate the exception template file.
+            @ocmethods.each do |class_name, methods|
+                method_elements = []
+                methods.each do |method|
+                    pointer_arg_indexes = []
+                    method.args.each_with_index do |arg, i|
+                        pointer_arg_indexes << i if arg.pointer?
+                    end
+                    next if pointer_arg_indexes.empty?
+                    
+                    element = REXML::Element.new('method')
+                    element.add_attribute('selector', method.selector)
+                    element.add_attribute('class_method', method.class_method?)
+                    pointer_arg_indexes.each do |i|
+                        arg_element = element.add_element('arg')
+                        arg_element.add_attribute('index', i)
+                        arg_element.add_attribute('type_modifier', 'out')
+                    end
+                    method_elements << element
+                end
+                next if method_elements.empty?
+                element = root.add_element('class')
+                element.add_attribute('name', class_name)
+                method_elements.each { |x| element.add_element(x) }
             end
-            element.add_element('return').add_attribute('type', octype_of(function))
-        end
-        @ocmethods.each do |class_name, methods|
-            # Describe predicate methods only (the rest is useless).
-            predicates = methods.select { |m| m.predicate? }
-            next if predicates.empty?
-            class_element = root.add_element('class')
-            class_element.add_attribute('name', class_name)           
-            predicates.each do |method| 
-                element = class_element.add_element('method')
-                element.add_attribute('selector', method.selector)
-                element.add_attribute('class_method', method.class_method?)
-                element.add_attribute('predicate', true)
+        else
+            # Generate the final metadata file.
+            @constants.each do |constant| 
+                element = root.add_element('constant')
+                element.add_attribute('name', constant.name)
+                element.add_attribute('type', octype_of(constant))
+            end
+            @resolved_enums.each do |enum, value| 
+                element = root.add_element('enum')
+                element.add_attribute('name', enum) 
+                element.add_attribute('value', value) 
+            end
+            @functions.each do |function|
+                element = root.add_element('function')
+                element.add_attribute('name', function.name)
+                element.add_attribute('argc', function.argc)
+                element.add_attribute('variadic', true) if function.variadic?
+                function.args.each do |arg|
+                    element.add_element('arg').add_attribute('type', octype_of(arg))
+                end
+                element.add_element('return').add_attribute('type', octype_of(function))
+            end
+            @ocmethods.each do |class_name, methods|
+                # Describe predicate methods only (the rest is useless).
+                predicates = methods.select { |m| m.predicate? }
+                next if predicates.empty?
+                class_element = root.add_element('class')
+                class_element.add_attribute('name', class_name)           
+                predicates.each do |method| 
+                    element = class_element.add_element('method')
+                    element.add_attribute('selector', method.selector)
+                    element.add_attribute('class_method', method.class_method?)
+                    element.add_attribute('predicate', true)
+                end
             end
         end
+
         document.write(@out_io, 0)
     end
 
@@ -486,16 +545,13 @@ EOF
         @resolved_typedefs = {}
     end
  
-    def usage
-        die "Usage: #{__FILE__} [-f <framework> | -h <headers...]>"
-    end
-
     def parse_args(args)
         @headers = []
-        @exceptions = []
+        @exception = []
         @objc = false
         @out_io = STDOUT
-        
+        @generate_exception_template = false       
+ 
         OptionParser.new do |opts|
             opts.banner = "Usage: #{__FILE__} [options] <headers...>\nSee -h for more help."
             opts.separator ''
@@ -506,13 +562,17 @@ EOF
                 @objc = true
             end
 
-            opts.on('-o', '--output OUTFILE', 'Redirect output to the given file') do |opt|
+            opts.on('-o', '--output OUTFILE', 'Redirect output to the given file (stdout by default)') do |opt|
                 die 'Output file can\'t be specified more than once' if @out_io != STDOUT
                 @out_io = File.open(opt, 'w')
             end
 
             opts.on('-e', '--exception EXCPFILE', 'Consider the given exception file when generating the metadata') do |opt|
                 @exceptions << opt
+            end
+
+            opts.on('-E', '--[no-]exception-generation', 'Generate the exception template for the given context (no by default)') do |opt|
+                @generate_exception_template = opt
             end
 
             opts.on('-h', '--help', 'Show this message') do
