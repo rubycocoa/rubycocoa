@@ -5,7 +5,7 @@ DEFAULT_FRAMEWORK_PATH = '/Library/Frameworks/RubyCocoa.framework'
 TARGET_FRAMEWORK_PATH = File.join(File.expand_path("#{install_root}#{@config['frameworks']}"), 'RubyCocoa.framework')
 TARGET_FRAMEWORK_PATH.sub!(/^#{ENV['DSTROOT']}/, '') if ENV['DSTROOT']
 def fix_xcode_projects_in_dir(dstdir)
-  Dir.glob("#{dstdir}/RubyCocoa/**/*.pbxproj") do |proj|
+  Dir.glob("#{dstdir}/**/*.pbxproj") do |proj|
     txt = File.read(proj)
     if txt.gsub!(/#{DEFAULT_FRAMEWORK_PATH}/, TARGET_FRAMEWORK_PATH)
       File.open(proj, 'w') { |io| io.write(txt) }
