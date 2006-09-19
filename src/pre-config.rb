@@ -7,7 +7,7 @@ target_files = %w[
   framework/src/objc/Version.h
 ]
 
-target_files.concat Dir.glob('template/ProjectBuilder/Application/**/*.pbxproj')
+target_files.concat Dir.glob('template/ProjectBuilder/Application/**/*.pbxproj.in').map { |x| x.sub(/\.in$/, '') }
 
 config_ary = [
   [ :frameworks,      @config['frameworks'] ],
