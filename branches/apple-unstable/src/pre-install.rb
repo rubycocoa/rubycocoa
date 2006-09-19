@@ -1,5 +1,18 @@
 install_root = @config['install-root']
 
+# Fix Xcode projects to point to the right location of RubyCocoa.framework 
+default_framework_path = '/Library/Frameworks/RubyCocoa.framework'
+target_framework_path = File.join(File.expand_path("#{install_root}#{@config['frameworks']}"), 'RubyCocoa.framework')
+target_framework_path.sub!(/^#{ENV['DSTROOT']}/, '') if ENV['DSTROOT']
+def fix_xcode_projects_in_dir(dstdir)
+  Dir.glob("#{dstdir}/RubyCocoa/**/*.pbxproj") do |proj|
+    txt = File.read(proj)
+    if txt.gsub!(/#{default_framework_path}/, target_framework_path)
+      File.open(proj, 'w') { |io| io.write(txt) }
+    end
+  end
+end
+
 # If required, backup files create here.
 backup_dir = '/tmp/rubycocoa_backup'
 
@@ -39,6 +52,8 @@ pbtmpldir = "template/ProjectBuilder"
     command "mkdir -p '#{File.dirname(dstdir)}'"
     command "cp -R '#{srcdir}' '#{dstdir}'"
     command "find '#{dstdir}' -name '*.in' -print0 | xargs -0 rm"
+  
+    fix_xcode_projects_in_dir(dstdir) 
   end
 end
 
@@ -57,18 +72,5 @@ end
   command "cp -R '#{srcdir}' '#{dstdir}/RubyCocoa'"
   command "chmod -R #{chmod} '#{dstdir}/RubyCocoa'" if chmod
 
-  # Fix sample Xcode projects to point to the new location of frameworks
-  if fix_xcode_projects
-    default_framework_path = '/Library/Frameworks/RubyCocoa.framework'
-    target_framework_path = File.join(File.expand_path("#{install_root}#{@config['frameworks']}"), 'RubyCocoa.framework')
-    if ENV['DSTROOT']
-      target_framework_path.sub!(/^#{ENV['DSTROOT']}/, '')
-    end
-    Dir.glob("#{dstdir}/RubyCocoa/**/*.pbxproj") do |proj|
-      txt = File.read(proj)
-      if txt.gsub!(/#{default_framework_path}/, target_framework_path)
-        File.open(proj, 'w') { |io| io.write(txt) }
-      end
-    end
-  end
+  fix_xcode_projects_in_dir(dstdir) if fix_xcode_projects
 end

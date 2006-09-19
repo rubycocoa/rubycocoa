@@ -1,7 +1,11 @@
 2006-09-19  Laurent Sansonetti <lsansonetti@apple.com>
 
-	* pre-config:
-	Fix project templates generation.
+	* template/ProjectBuilder/Application/**/.[pbproj|xcode]:
+	Upgraded old Xcode project files to recent format (.xcodeproj).
+
+	* pre-config, pre-install.rb:
+	Removed project templates generation, fix the location of
+	RubyCocoa.framework once they are installed.
 
 	* framework/tool/gen_bridge_metadata.rb:
 	Added option to generate exception template.
