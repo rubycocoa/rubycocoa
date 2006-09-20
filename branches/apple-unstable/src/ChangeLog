@@ -1,3 +1,12 @@
+2006-09-20  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* framework/src/objc/mdl_objwrapper.m,
+	  framework/src/objc/BridgeSupport.h,
+	  framework/src/objc/BridgeSupport.m,
+	  framework/tool/gen_bridge_metadata.rb,
+	  tests/tc_passbyref.rb:
+	Refactored the generated metadata format.
+
 2006-09-19  Laurent Sansonetti <lsansonetti@apple.com>
 
 	* sample/**/lrz.mode1v3:

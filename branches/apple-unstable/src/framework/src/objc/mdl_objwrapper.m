@@ -291,8 +291,9 @@ ocm_ffi_dispatch(int argc, VALUE* argv, VALUE rcv, VALUE* result, struct _ocm_se
 
     octype = to_octype(ctx->methodReturnType); 
 
-    // force boolean conversion if the method is described as a predicate in the bridge support metadata files.
-    if (octype != _C_BOOL && octype != _PRIV_C_BOOL) {
+    // we assume that every method returning 'char' is in fact meant to return a boolean value, unless
+    // specified in the metadata files as such.
+    if (octype == _C_CHR) {
       BOOL is_class_method;
       id klass;
 
@@ -300,13 +301,14 @@ ocm_ffi_dispatch(int argc, VALUE* argv, VALUE rcv, VALUE* result, struct _ocm_se
       klass = is_class_method ? (struct objc_class *)ctx->rcv : ((struct objc_class *)ctx->rcv)->isa;
 
       // read the metadata for each class in the hierarchy
+      octype = _PRIV_C_BOOL;
       do {
         struct bsMethod * bs_method;
 
         bs_method = find_bs_method(((struct objc_class *)klass)->name, (const char *)ctx->selector, is_class_method);
-        if (bs_method != NULL && bs_method->is_predicate) {
+        if (bs_method != NULL && bs_method->returns_char) {
           OBJWRP_LOG("\tdetected predicate, forcing boolean conversion of the return value");
-          octype = _PRIV_C_BOOL;
+          octype = _C_CHR;
           break;
         }
         
