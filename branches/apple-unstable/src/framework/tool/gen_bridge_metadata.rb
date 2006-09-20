@@ -475,7 +475,7 @@ EOF
                     
                     element = REXML::Element.new('method')
                     element.add_attribute('selector', method.selector)
-                    element.add_attribute('class_method', method.class_method?)
+                    element.add_attribute('class_method', true) if method.class_method?
                     pointer_arg_indexes.each do |i|
                         arg_element = element.add_element('arg')
                         arg_element.add_attribute('index', i)
