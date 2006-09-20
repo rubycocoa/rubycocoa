@@ -435,7 +435,9 @@ osx_load_bridge_support_file (VALUE mOSX, VALUE path)
   xmlTextReaderPtr    reader;
   struct bsFunction * func;
   struct bsClass *    klass;
-  unsigned int        arg_index;
+  unsigned int        i, arg_index;
+#define MAX_ARGS 128
+  int                 args[MAX_ARGS];
 
   cpath = STR2CSTR(path);
 
@@ -523,13 +525,7 @@ osx_load_bridge_support_file (VALUE mOSX, VALUE path)
           free (func_name);
         }
         else {
-          char *  func_argc;
           char *  is_variadic;
-          int     argc;
-
-          func_argc = get_attribute_and_check(reader, "argc");
-          argc = MAX(0, atoi(func_argc));
-          free(func_argc);
 
           func = (struct bsFunction *)calloc(1, sizeof(struct bsFunction));
           if (func == NULL)
@@ -545,15 +541,8 @@ osx_load_bridge_support_file (VALUE mOSX, VALUE path)
           }
 
           func->name = func_name;
-          func->argc = argc;
+          func->argc = -1;
           func->retval = -1;
-
-          if (argc > 0) {
-            func->argv = (int *)malloc(sizeof(int) * argc);
-            if (func->argv == NULL)
-              rb_fatal("can't allocate memory");
-            memset(func->argv, -1, argc);
-          }
 
           arg_index = 0;
         }
@@ -566,13 +555,11 @@ osx_load_bridge_support_file (VALUE mOSX, VALUE path)
         type = bridge_support_type_to_octype(arg_type);
         free (arg_type);
         
-        if (type != -1) {
-          if (arg_index + 1 > func->argc) {
-            DLOG("MDLOSX", "Function '%s' has too many args (expected: %d)", func->name, func->argc);
-          }
-          else {
-            func->argv[arg_index++] = type;
-          }
+        if (arg_index >= MAX_ARGS) {
+          DLOG("MDLOSX", "Maximum number of arguments reached (%d), skipping...", MAX_ARGS);
+        }
+        else {
+          args[arg_index++] = type;
         }
       }
       else if (strcmp("return", name) == 0) {
@@ -623,9 +610,14 @@ osx_load_bridge_support_file (VALUE mOSX, VALUE path)
           struct st_table * methods_hash;
  
           selector = get_attribute_and_check(reader, "selector");
-          is_class_method = get_attribute_and_check(reader, "class_method");
-          class_method = strcmp("true", is_class_method) == 0;
-          free(is_class_method);          
+          is_class_method = get_attribute(reader, "class_method");
+          if (is_class_method != NULL) {
+            class_method = strcmp("true", is_class_method) == 0;
+            free(is_class_method);          
+          }
+          else {
+            class_method = NO;
+          }
 
           methods_hash = class_method ? klass->class_methods : klass->instance_methods;
           if (st_lookup(methods_hash, (st_data_t)selector, NULL)) {
@@ -634,15 +626,15 @@ osx_load_bridge_support_file (VALUE mOSX, VALUE path)
           }
           else {
             struct bsMethod * method;
-            char * is_predicate;
+            char * returns_char;
            
             method = (struct bsMethod *)malloc(sizeof(struct bsMethod));
             if (method == NULL)
               rb_fatal("can't allocate memory");
  
-            is_predicate = get_attribute(reader, "predicate"); 
-            method->is_predicate = is_predicate != NULL && strcmp("true", is_predicate) == 0;
-            free(is_predicate);
+            returns_char = get_attribute(reader, "returns_char"); 
+            method->returns_char = returns_char != NULL && strcmp("true", returns_char) == 0;
+            free(returns_char);
 
             method->selector = selector;
             method->is_class_method = class_method;
@@ -658,13 +650,32 @@ osx_load_bridge_support_file (VALUE mOSX, VALUE path)
           DLOG("MDLOSX", "Function '%s' return type not defined, skipping...", func->name);
           free_bs_function(func);
         }
-        else if (arg_index != func->argc) {
-          DLOG("MDLOSX", "Function '%s' doesn't have enough args (expected %d, got %d), skipping...", func->name, func->argc, arg_index);
-          free_bs_function(func);
-        }
         else {
-          st_insert(bsFunctions, (st_data_t)func->name, (st_data_t)func);
-          rb_define_module_function(mOSX, func->name, bridge_support_dispatcher, -1);
+          BOOL all_args_ok;
+
+          func->argc = arg_index;
+          all_args_ok = YES;
+
+          for (i = 0; i < func->argc; i++) {
+            if (args[i] == -1) {
+              DLOG("MDLOSX", "Function '%s' argument #%d is not recognized, skipping...", func->name, i);
+              all_args_ok = NO;
+              break;
+            }
+          }
+
+          if (all_args_ok) {
+            func->argv = (int *)malloc(sizeof(int) * func->argc);
+            if (func->argv == NULL)
+              rb_fatal("can't allocate memory");
+            memcpy(func->argv, args, sizeof(int) * func->argc);
+
+            st_insert(bsFunctions, (st_data_t)func->name, (st_data_t)func);
+            rb_define_module_function(mOSX, func->name, bridge_support_dispatcher, -1);
+          } 
+          else {
+            free_bs_function(func);
+          }
         }
         
         func = NULL;

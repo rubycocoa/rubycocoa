@@ -5,7 +5,6 @@
 
 require 'rexml/document'
 require 'dl/import'
-require 'dl/struct'
 require 'fileutils'
 require 'optparse'
 
@@ -225,7 +224,7 @@ class OCHeaderAnalyzer
     when 'NSWindowDepth' then :_C_INT
     when 'NSComparisonResult' then :_C_INT
     when /^unsigned\s+char$/ then :_C_UCHR
-    when 'char' then '_C_CHR'
+    when 'char' then :_C_CHR
     when /^unsigned\s+short(\s+int)?$/ then :_C_USHT
     when /^short(\s+int)?$/ then :_C_SHT
     when /^unsigned\s+int$/ then :_C_UINT
@@ -334,6 +333,10 @@ class OCHeaderAnalyzer
 
     def predicate?
       octype == :_PRIV_C_BOOL
+    end
+
+    def returning_char?
+      octype == :_C_CHR
     end
   end
 
@@ -500,7 +503,6 @@ EOF
             @functions.each do |function|
                 element = root.add_element('function')
                 element.add_attribute('name', function.name)
-                element.add_attribute('argc', function.argc)
                 element.add_attribute('variadic', true) if function.variadic?
                 function.args.each do |arg|
                     element.add_element('arg').add_attribute('type', octype_of(arg))
@@ -508,16 +510,15 @@ EOF
                 element.add_element('return').add_attribute('type', octype_of(function))
             end
             @ocmethods.each do |class_name, methods|
-                # Describe predicate methods only (the rest is useless).
-                predicates = methods.select { |m| m.predicate? }
-                next if predicates.empty?
+                not_predicates = methods.select { |m| m.returning_char? }
+                next if not_predicates.empty?
                 class_element = root.add_element('class')
                 class_element.add_attribute('name', class_name)           
-                predicates.each do |method| 
+                not_predicates.each do |method| 
                     element = class_element.add_element('method')
                     element.add_attribute('selector', method.selector)
-                    element.add_attribute('class_method', method.class_method?)
-                    element.add_attribute('predicate', true)
+                    element.add_attribute('class_method', true) if method.class_method?
+                    element.add_attribute('returns_char', true)
                 end
             end
         end
@@ -528,7 +529,9 @@ EOF
     def scan_headers
         @functions, @constants, @enums = [], [], []
         @typedefs, @ocmethods = {}, {}
+        ignored_headers = @exceptions.map { |x| x.elements['/signatures/ignored_headers/header'].to_a }.flatten
         @headers.each do |path|
+            next if ignored_headers.any? { |x| /#{x}$/.match(path) }
             die "Given header file `#{path}' doesn't exist" unless File.exists?(path)
             analyzer = OCHeaderAnalyzer.new(path)
             @functions.concat(analyzer.functions)
@@ -547,7 +550,7 @@ EOF
  
     def parse_args(args)
         @headers = []
-        @exception = []
+        @exceptions = []
         @objc = false
         @out_io = STDOUT
         @generate_exception_template = false       
@@ -571,8 +574,8 @@ EOF
                 @exceptions << opt
             end
 
-            opts.on('-E', '--[no-]exception-generation', 'Generate the exception template for the given context (no by default)') do |opt|
-                @generate_exception_template = opt
+            opts.on('-F', '--format FORMAT', ['final-md', 'excp-templ-md'], {}, "Select metadata format ('final-md' (default), 'excp-templ-md')") do |opt|
+                @generate_exception_template = opt == 'excp-templ-md' 
             end
 
             opts.on('-h', '--help', 'Show this message') do
@@ -604,6 +607,8 @@ EOF
                 end
             end
         end
+
+        @exceptions.map! { |x| REXML::Document.new(File.read(x)) }
     end
    
     def handle_framework(val)

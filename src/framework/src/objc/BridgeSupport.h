@@ -52,7 +52,7 @@ struct bsClass {
 struct bsMethod {
   char *  selector;
   BOOL    is_class_method;
-  BOOL    is_predicate;
+  BOOL    returns_char;
 };
 
 extern struct bsFunction *current_function;

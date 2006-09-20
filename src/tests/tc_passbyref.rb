@@ -14,22 +14,22 @@ class TC_PassByRef < Test::Unit::TestCase
         bridged = OSX::PassByRef.alloc.init
         
         # Object.
-        assert_equal(0, bridged.passByRefObject(nil))
-        assert_equal([1, bridged], bridged.passByRefObject_)
+        assert_equal(false, bridged.passByRefObject(nil))
+        assert_equal([true, bridged], bridged.passByRefObject_)
     
         # Integer.
-        assert_equal(0, bridged.passByRefInteger(nil))
-        assert_equal([1, 666], bridged.passByRefInteger_)
+        assert_equal(false, bridged.passByRefInteger(nil))
+        assert_equal([true, 666], bridged.passByRefInteger_)
         
         # Float.
-        assert_equal(0, bridged.passByRefFloat(nil))
-        assert_equal([1, 666.0], bridged.passByRefFloat_)
+        assert_equal(false, bridged.passByRefFloat(nil))
+        assert_equal([true, 666.0], bridged.passByRefFloat_)
 
         # Various.
         assert_nil(bridged.passByRefVarious_integer_floating(nil, nil, nil))
-        #assert_equal([bridged, 666, 666.0], bridged.passByRefVarious_integer_floating_)
+        assert_equal([bridged, 666, 666.0], bridged.passByRefVarious_integer_floating_)
         assert_equal([666, 666.0], bridged.passByRefVarious_integer_floating_(nil))
-        #assert_equal([666.0], bridged.passByRefVarious_integer_floating_(nil, nil))
+        assert_equal(666.0, bridged.passByRefVarious_integer_floating_(nil, nil))
     end
 
     def test_passbyref_foundation
