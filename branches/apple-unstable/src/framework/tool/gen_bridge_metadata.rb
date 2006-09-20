@@ -504,10 +504,11 @@ EOF
                 element = root.add_element('function')
                 element.add_attribute('name', function.name)
                 element.add_attribute('variadic', true) if function.variadic?
+                rettype = octype_of(function)
+                element.add_attribute('returns', rettype) if rettype != :_C_VOID
                 function.args.each do |arg|
                     element.add_element('arg').add_attribute('type', octype_of(arg))
                 end
-                element.add_element('return').add_attribute('type', octype_of(function))
             end
             @ocmethods.each do |class_name, methods|
                 not_predicates = methods.select { |m| m.returning_char? }
