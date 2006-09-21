@@ -1,7 +1,9 @@
 2006-09-21  Laurent Sansonetti <lsansonetti@apple.com>
 
 	* framework/tool/gen_bridge_metadata.rb:
-	Added ability to merge the exceptions to the final metadata.
+	- added ability to merge the exceptions to the final metadata ;
+	- the arg element becomes function_arg and method_arg according
+	  to the parent element.
 
 2006-09-20  Laurent Sansonetti <lsansonetti@apple.com>
 
