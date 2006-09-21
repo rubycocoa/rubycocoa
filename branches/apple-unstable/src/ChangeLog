@@ -1,5 +1,12 @@
 2006-09-21  Laurent Sansonetti <lsansonetti@apple.com>
 
+	* framework/src/objc/BridgeSupport.h,
+	  framework/src/objc/BridgeSupport.m:
+	Added support to parse the exceptions metadata.
+
+	* tests/tc_booleans.rb:
+	Added a test case to check methods returning 'char'.
+
 	* framework/tool/gen_bridge_metadata.rb:
 	- added ability to merge the exceptions to the final metadata ;
 	- the arg element becomes function_arg and method_arg according
