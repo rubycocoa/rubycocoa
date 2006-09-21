@@ -49,10 +49,26 @@ struct bsClass {
   struct st_table *   instance_methods;
 };
 
+typedef enum {
+    bsTypeModifierIn,
+    bsTypeModifierOut,
+    bsTypeModifierInout
+} bsTypeModifier;
+
+struct bsMethodArg {
+  unsigned          index;
+  bsTypeModifier    type_modifier;
+  int               c_array_delimited_by_arg;   // -1 means not defined
+};
+
 struct bsMethod {
   char *  selector;
   BOOL    is_class_method;
   BOOL    returns_char;
+  BOOL    ignore;
+  char *  suggestion;   // only if ignore is true
+  int     argc;
+  struct bsMethodArg *argv;
 };
 
 extern struct bsFunction *current_function;

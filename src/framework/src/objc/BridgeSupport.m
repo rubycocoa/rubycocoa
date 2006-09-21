@@ -186,6 +186,17 @@ free_bs_function (struct bsFunction *func)
   free(func);
 }
 
+static void
+free_bs_method (struct bsMethod *method)
+{
+  free(method->selector);
+  if (method->suggestion != NULL)
+    free(method->suggestion);
+  if (method->argv != NULL)
+    free(method->argv);
+  free(method);
+}
+
 extern struct FRAME *ruby_frame;
 
 static ffi_type ffi_type_nspoint;
@@ -435,9 +446,11 @@ osx_load_bridge_support_file (VALUE mOSX, VALUE path)
   xmlTextReaderPtr    reader;
   struct bsFunction * func;
   struct bsClass *    klass;
-  unsigned int        i, arg_index;
+  struct bsMethod *   method;
+  unsigned int        i;
 #define MAX_ARGS 128
-  int                 args[MAX_ARGS];
+  int                 func_args[MAX_ARGS];
+  struct bsMethodArg  method_args[MAX_ARGS];
 
   cpath = STR2CSTR(path);
 
@@ -448,7 +461,8 @@ osx_load_bridge_support_file (VALUE mOSX, VALUE path)
     rb_raise(rb_eRuntimeError, "cannot create XML text reader for file at path `%s'", cpath);
 
   func = NULL;
-  arg_index = 0;
+  klass = NULL;
+  method = NULL;
 
   while (YES) {
     const char *name;
@@ -466,13 +480,19 @@ osx_load_bridge_support_file (VALUE mOSX, VALUE path)
     if (eof)
       break;
 
-#define next_value(reader)                      \
-  do {                                          \
-    if ((eof = !next_node(reader)))             \
-      break;                                    \
-  }                                             \
-  while (xmlTextReaderNodeType(reader) != 3)
-    
+#define SET_BOOL_ATTRIBUTE(att_name, dest, def_val)     \
+    do {                                                \
+        char *value = get_attribute(reader, att_name);  \
+        if (value != NULL) {                            \
+            dest = strcmp("true", value) == 0;          \
+            free(value);                                \
+        }                                               \
+        else {                                          \
+            dest = def_val;                             \
+        }                                               \
+    }                                                   \
+    while (0)
+
     name = (const char *)xmlTextReaderConstName(reader);
  
     if (node_type == XML_READER_TYPE_ELEMENT) {    
@@ -517,58 +537,51 @@ osx_load_bridge_support_file (VALUE mOSX, VALUE path)
       }
       else if (strcmp("function", name) == 0) {
         char *  func_name;
+        char *  return_type;
         
         func_name = get_attribute_and_check(reader, "name");
-      
-        if (st_lookup(bsFunctions, (st_data_t)func_name, NULL)) {
-          DLOG("MDLOSX", "Function '%s' already registered, skipping...", func_name);
-          free (func_name);
+        if (st_delete(bsFunctions, (st_data_t *)&func_name, (st_data_t *)&func)) {
+          DLOG("MDLOSX", "Re-defining function '%s'", func_name);
+          free_bs_function(func);
+        }
+
+        func = (struct bsFunction *)calloc(1, sizeof(struct bsFunction));
+        if (func == NULL)
+          rb_fatal("can't allocate memory");
+
+        st_insert(bsFunctions, (st_data_t)func_name, (st_data_t)func);
+        rb_define_module_function(mOSX, func_name, bridge_support_dispatcher, -1);
+
+        func->name = func_name;
+        SET_BOOL_ATTRIBUTE("variadic", func->is_variadic, NO);
+
+        return_type = get_attribute(reader, "returns");
+        if (return_type != NULL) {
+          func->retval = bridge_support_type_to_octype(return_type);
+          free(return_type);
         }
         else {
-          char *  is_variadic;
-          char *  return_type;
-        
-          func = (struct bsFunction *)calloc(1, sizeof(struct bsFunction));
-          if (func == NULL)
-            rb_fatal("can't allocate memory");
-
-          is_variadic = get_attribute(reader, "variadic");
-          if (is_variadic != NULL) {
-            func->is_variadic = atoi(is_variadic) == 1;
-            free(is_variadic);
-          }
-          else {
-            func->is_variadic = NO;
-          }
-
-          return_type = get_attribute(reader, "returns");
-          if (return_type != NULL) {
-            func->retval = bridge_support_type_to_octype(return_type);
-            free(return_type);
-          }
-          else {
-            func->retval = _C_VOID;
-          }
-
-          func->name = func_name;
-          func->argc = -1;
-
-          arg_index = 0;
+          func->retval = _C_VOID;
         }
+
+        func->argc = 0;
       }
-      else if (strcmp("arg", name) == 0) {
-        char *  arg_type;
-        int     type;
-        
-        arg_type = get_attribute_and_check(reader, "type");
-        type = bridge_support_type_to_octype(arg_type);
-        free (arg_type);
-        
-        if (arg_index >= MAX_ARGS) {
-          DLOG("MDLOSX", "Maximum number of arguments reached (%d), skipping...", MAX_ARGS);
+      else if (strcmp("function_arg", name) == 0) {
+        if (func == NULL) {
+          DLOG("MDLOSX", "Function argument defined outside a function, skipping...");
+        }
+        else if (func->argc >= MAX_ARGS) {
+          DLOG("MDLOSX", "Maximum number of arguments reached for function '%s' (%d), skipping...", func->name, MAX_ARGS);
         }
         else {
-          args[arg_index++] = type;
+          char *  arg_type;
+          int     type;
+        
+          arg_type = get_attribute_and_check(reader, "type");
+          type = bridge_support_type_to_octype(arg_type);
+          free (arg_type);
+        
+          func_args[func->argc++] = type;
         }
       }
       else if (strcmp("class", name) == 0) {
@@ -591,80 +604,130 @@ osx_load_bridge_support_file (VALUE mOSX, VALUE path)
           st_insert(bsClasses, (st_data_t)class_name, (st_data_t)klass);
         }
       }
+      else if (strcmp("method_arg", name) == 0) {
+        if (method == NULL) {
+          DLOG("MDLOSX", "Method argument defined outside a method, skipping...");
+        }
+        else if (method->argc >= MAX_ARGS) {
+          DLOG("MDLOSX", "Maximum number of arguments reached for method '%s' (%d), skipping...", method->selector, MAX_ARGS);
+        }
+        else {
+          char *  type_modifier;
+          char *  c_array_len_arg;
+          struct bsMethodArg * arg; 
+ 
+          arg = &method_args[method->argc++];
+
+          arg->index = atoi(get_attribute_and_check(reader, "index"));
+  
+          type_modifier = get_attribute_and_check(reader, "type_modifier");
+          if (strcmp(type_modifier, "in") == 0)
+            arg->type_modifier = bsTypeModifierIn;
+          else if (strcmp(type_modifier, "out") == 0)       
+            arg->type_modifier = bsTypeModifierOut;
+          else if (strcmp(type_modifier, "inout") == 0)   
+            arg->type_modifier = bsTypeModifierInout;
+          else {
+            DLOG("MDLOSX", "Given type modifier '%s' is invalid, default'ing to 'out'", type_modifier);
+            arg->type_modifier = bsTypeModifierOut;
+          }
+   
+          c_array_len_arg = get_attribute(reader, "c_array_delimited_by_arg");
+          if (c_array_len_arg != NULL) {
+            arg->c_array_delimited_by_arg = atoi(c_array_len_arg);
+            free(c_array_len_arg);
+          }
+          else {
+             arg->c_array_delimited_by_arg = -1;
+          }
+        }
+      }
       else if (strcmp("method", name) == 0) {
         if (klass == NULL) {
           DLOG("MDLOSX", "Method defined outside a class, skipping...");
         }
         else {
           char * selector;
-          char * is_class_method;
-          BOOL   class_method;
+          BOOL is_class_method;
           struct st_table * methods_hash;
- 
+
           selector = get_attribute_and_check(reader, "selector");
-          is_class_method = get_attribute(reader, "class_method");
-          if (is_class_method != NULL) {
-            class_method = strcmp("true", is_class_method) == 0;
-            free(is_class_method);          
-          }
-          else {
-            class_method = NO;
+          SET_BOOL_ATTRIBUTE("class_method", is_class_method, NO);
+
+          methods_hash = is_class_method ? klass->class_methods : klass->instance_methods;
+          if (st_delete(methods_hash, (st_data_t *)&selector, (st_data_t *)&method)) {
+            DLOG("MDLOSX", "Re-defining method '%s' in class '%s'", selector, klass->name);
+            free_bs_method(method);
           }
 
-          methods_hash = class_method ? klass->class_methods : klass->instance_methods;
-          if (st_lookup(methods_hash, (st_data_t)selector, NULL)) {
-            DLOG("MDLOSX", "Method %s already defined in class %s, skipping...", selector, klass->name);
-            free(selector);
-          }
-          else {
-            struct bsMethod * method;
-            char * returns_char;
-           
-            method = (struct bsMethod *)malloc(sizeof(struct bsMethod));
-            if (method == NULL)
-              rb_fatal("can't allocate memory");
- 
-            returns_char = get_attribute(reader, "returns_char"); 
-            method->returns_char = returns_char != NULL && strcmp("true", returns_char) == 0;
-            free(returns_char);
+          method = (struct bsMethod *)malloc(sizeof(struct bsMethod));
+          if (method == NULL)
+            rb_fatal("can't allocate memory");
 
-            method->selector = selector;
-            method->is_class_method = class_method;
+          st_insert(methods_hash, (st_data_t)selector, (st_data_t)method);
+          
+          method->selector = selector;
+          method->is_class_method = is_class_method;
 
-            st_insert(methods_hash, (st_data_t)selector, (st_data_t)method);
-          }
+          SET_BOOL_ATTRIBUTE("returns_char", method->returns_char, NO);
+          SET_BOOL_ATTRIBUTE("ignore", method->ignore, NO);
+
+          method->suggestion = method->ignore ? get_attribute(reader, "suggestion") : NULL;
+          method->argc = 0;
+          method->argv = NULL;
        }
       }
     }
     else if (node_type == XML_READER_TYPE_END_ELEMENT) {
       if (strcmp("function", name) == 0) {
         BOOL all_args_ok;
-
-        func->argc = arg_index;
+  
         all_args_ok = YES;
-
+  
         for (i = 0; i < func->argc; i++) {
-          if (args[i] == -1) {
+          if (func_args[i] == -1) {
             DLOG("MDLOSX", "Function '%s' argument #%d is not recognized, skipping...", func->name, i);
             all_args_ok = NO;
             break;
           }
         }
-
+  
         if (all_args_ok) {
-          func->argv = (int *)malloc(sizeof(int) * func->argc);
-          if (func->argv == NULL)
-            rb_fatal("can't allocate memory");
-          memcpy(func->argv, args, sizeof(int) * func->argc);
-
-          st_insert(bsFunctions, (st_data_t)func->name, (st_data_t)func);
-          rb_define_module_function(mOSX, func->name, bridge_support_dispatcher, -1);
+          if (func->argc > 0) {
+            size_t len;
+  
+            len = sizeof(int) * func->argc;
+  
+            func->argv = (int *)malloc(len);
+            if (func->argv == NULL)
+              rb_fatal("can't allocate memory");
+            memcpy(func->argv, func_args, len);
+          }  
         } 
         else {
+          rb_undef_method(mOSX, func->name);
+          st_delete(bsFunctions, (st_data_t *)&func->name, NULL);
           free_bs_function(func);
         }
-        
+
         func = NULL;
+      }
+      else if (strcmp("method", name) == 0) {
+        if (method->argc > 0) {
+          size_t len;
+    
+          len = sizeof(struct bsMethodArg) * method->argc;
+
+          method->argv = (struct bsMethodArg *)malloc(len);
+          if (method->argv == NULL)
+            rb_fatal("can't allocate memory");
+          memcpy(method->argv, method_args, len);
+        }
+
+        method = NULL;
+      }
+      else if (strcmp("class", name) == 0) {
+        klass = NULL;
       }
     }
   }
@@ -726,18 +789,99 @@ find_bs_method(const char *class_name, const char *selector, BOOL is_class_metho
   return method;
 }
 
+static int
+__inspect_bs_method(char *key, struct bsMethod *value, void *ctx)
+{
+  unsigned i;
+
+  printf("        %s\n", key);
+
+  if (value->returns_char)
+    printf("            returns char\n");
+
+  if (value->ignore) 
+    printf("            ignored (suggestion: '%s')\n", value->suggestion == NULL ? "n/a" : value->suggestion);
+
+  for (i = 0; i < value->argc; i++) {
+    struct bsMethodArg *arg;
+
+    arg = &value->argv[i];
+
+    printf("            arg #%d, type modifier '%s'", arg->index, arg->type_modifier == bsTypeModifierIn ? "in" : arg->type_modifier == bsTypeModifierOut ? "out" : "inout");
+    if (arg->c_array_delimited_by_arg != -1)
+      printf(", length is defined by arg #%d value", arg->c_array_delimited_by_arg);
+    printf("\n");
+  }
+
+  return ST_CONTINUE;
+}
+
+static int
+__inspect_bs_class(char *key, struct bsClass *value, void *ctx)
+{
+  printf("%s\n", key);
+  printf("    class methods:\n");
+  st_foreach(value->class_methods, __inspect_bs_method, 0); 
+  printf("    instance methods:\n");
+  st_foreach(value->instance_methods, __inspect_bs_method, 0); 
+
+  return ST_CONTINUE;
+}
+
+static int
+__inspect_bs_function(char *key, struct bsFunction *value, void *ctx)
+{
+  unsigned i;
+
+  printf("%s\n", key);
+
+  if (value->is_variadic)
+    printf("    variadic\n");
+
+  for (i = 0; i < value->argc; i++)
+    printf("    arg #%d type %d\n", i, value->argv[i]);
+
+  return ST_CONTINUE;
+}
+
+static int
+__inspect_bs_constant(char *key, int type, void *ctx)
+{
+  printf("%s type %d\n", key, type);
+  
+  return ST_CONTINUE;
+}
+
+static VALUE
+osx_inspect_metadata (VALUE self)
+{
+  printf("*** constants ***\n");
+  st_foreach(bsConstants, __inspect_bs_constant, 0);
+
+  printf("*** functions ***\n");
+  st_foreach(bsFunctions, __inspect_bs_function, 0);
+
+  printf("*** classes ***\n");   
+  st_foreach(bsClasses, __inspect_bs_class, 0);
+  
+  return self;
+}
+
 void
 initialize_bridge_support (VALUE mOSX)
 {
-  bsFunctions = st_init_strtable();
   bsConstants = st_init_strtable();
+  bsFunctions = st_init_strtable();
   bsClasses = st_init_strtable();
 
   rb_define_module_function(mOSX, "load_bridge_support_file",
-			    osx_load_bridge_support_file, 1);
+    osx_load_bridge_support_file, 1);
   
   rb_define_module_function(mOSX, "import_c_constant",
-          osx_import_c_constant, 1);
+    osx_import_c_constant, 1);
+
+  rb_define_module_function(mOSX, "__inspect_metadata__",
+    osx_inspect_metadata, 0);        
 
   initialize_boxed_ffi_types();
 }
