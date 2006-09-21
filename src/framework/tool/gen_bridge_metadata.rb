@@ -522,15 +522,51 @@ EOF
                     element.add_attribute('returns_char', true)
                 end
             end
+
+            # Merge with exceptions.
+            @exceptions.each { |x| merge_document_with_exceptions(document, x) }
         end
 
         document.write(@out_io, 0)
     end
 
+    def merge_document_with_exceptions(document, exception_document)
+        # Merge class/methods.
+        exception_document.elements.each('/signatures/class') do |class_element|
+            class_name = class_element.attributes['name']
+            orig_class_element = document.elements["/signatures/class[@name='#{class_name}']"]
+            if orig_class_element.nil?
+                # Class is not defined in the original document, we can append it with its methods.
+                document.root.add_element(class_element)
+            else
+                # Merge methods.
+                class_element.elements.each('method') do |element|
+                    selector = element.attributes['selector']
+                    orig_element = orig_class_element.elements["method[@selector='#{selector}']"]
+                    if orig_element.nil?
+                        # Method is not defined in the original document, we can append it.
+                        orig_class_element.add_element(element)
+                    else
+                        # Smart merge of attributes.  
+                        element.attributes.each do |name, value|
+                            orig_value = orig_element.attributes[name]
+                            if orig_value != value                        
+                                STDERR.puts "Warning: attribute '#{name}' of method '#{selector}' of class '#{class_name}' has a different value in the exception file -- using the latter value" unless orig_value.nil?
+                                orig_element.add_attribute(name, value)
+                            end
+                        end
+                        # We can just append the args, there is no possible conflict (yet)
+                        element.elements.each('arg') { |child| orig_element.add_element(child) }
+                    end
+                end
+            end
+        end
+    end
+
     def scan_headers
         @functions, @constants, @enums = [], [], []
         @typedefs, @ocmethods = {}, {}
-        ignored_headers = @exceptions.map { |x| x.elements['/signatures/ignored_headers/header'].to_a }.flatten
+        ignored_headers = @exceptions.map { |x| x.get_elements('/signatures/ignored_headers/header').map { |y| y.text } }.flatten
         @headers.each do |path|
             next if ignored_headers.any? { |x| /#{x}$/.match(path) }
             die "Given header file `#{path}' doesn't exist" unless File.exists?(path)
