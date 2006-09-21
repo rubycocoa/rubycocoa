@@ -477,7 +477,7 @@ EOF
                     element.add_attribute('selector', method.selector)
                     element.add_attribute('class_method', true) if method.class_method?
                     pointer_arg_indexes.each do |i|
-                        arg_element = element.add_element('arg')
+                        arg_element = element.add_element('method_arg')
                         arg_element.add_attribute('index', i)
                         arg_element.add_attribute('type_modifier', 'out')
                     end
@@ -507,7 +507,7 @@ EOF
                 rettype = octype_of(function)
                 element.add_attribute('returns', rettype) if rettype != :_C_VOID
                 function.args.each do |arg|
-                    element.add_element('arg').add_attribute('type', octype_of(arg))
+                    element.add_element('function_arg').add_attribute('type', octype_of(arg))
                 end
             end
             @ocmethods.each do |class_name, methods|
@@ -556,7 +556,7 @@ EOF
                             end
                         end
                         # We can just append the args, there is no possible conflict (yet)
-                        element.elements.each('arg') { |child| orig_element.add_element(child) }
+                        element.elements.each('method_arg') { |child| orig_element.add_element(child) }
                     end
                 end
             end
