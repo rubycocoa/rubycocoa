@@ -57,3 +57,33 @@ class TC_PassByRef < Test::Unit::TestCase
         assert_kind_of(OSX::NSError, val.last)
     end
 end
+
+# Add more tests that requires the exceptions files. Disable the tests on non-Leopard machines in the meantime the format is being worked on.
+if `sw_vers -productVersion`.strip.to_f >= 10.5
+  class TC_PassByRef < Test::Unit::TestCase
+    def test_in_c_array_id_foundation
+        o1, o2 = OSX::NSObject.alloc.init, OSX::NSObject.alloc.init
+        ary = OSX::NSArray.arrayWithObjects_count([o1, o2])
+        assert_equal(o1, ary.objectAtIndex(0))
+        assert_equal(o2, ary.objectAtIndex(1))
+    end
+
+    def test_in_c_array_byte_foundation
+        s = OSX::NSString.alloc.initWithBytes_length_encoding('foobar', OSX::NSASCIIStringEncoding)
+        assert_equal(s.to_s, 'foobar')
+    end
+
+    def test_out_c_array_byte_foundation
+        d = OSX::NSData.alloc.initWithBytes_length('foobar')
+        assert_raise { d.getBytes_length() }
+        assert_equal('foobar', d.getBytes_length(6))
+    end
+
+    def test_ignored_foundation
+        d = OSX::NSData.alloc.init
+        assert_raise { d.getBytes(nil) }
+        assert_raise { d.getBytes_range(nil, OSX::NSRange.new(0, 1)) }
+    end
+    # TODO: test NSCoder encode/decode methods
+  end
+end

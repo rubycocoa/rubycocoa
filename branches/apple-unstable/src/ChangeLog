@@ -1,3 +1,9 @@
+2006-09-22  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* tests/tc_passbyref.rb:
+	Added tests to check methods described by the exceptions 
+	metadata (10.5 only).
+
 2006-09-21  Laurent Sansonetti <lsansonetti@apple.com>
 
 	* framework/src/objc/BridgeSupport.h,
