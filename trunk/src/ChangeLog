@@ -1,3 +1,8 @@
+2006-09-23  kimura wataru <kimuraw@i.nifty.jp>
+
+	* pre-config.rb:
+	fix: .pbxproj was not generated in template/ProjectBuilder/Application/.
+
 2006-09-19  kimura wataru <kimuraw@i.nifty.jp>
 
 	* framework/src/ruby/osx/objc/cocoa_macros.rb,
