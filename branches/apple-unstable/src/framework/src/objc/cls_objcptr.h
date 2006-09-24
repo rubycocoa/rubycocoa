@@ -13,6 +13,7 @@ VALUE objcptr_s_new_with_cptr (void* cptr);
 
 /** instance methods **/
 void* objcptr_cptr (VALUE rcv);
+long objcptr_allocated_size(VALUE rcv);
 
 /** initial loading **/
 VALUE init_cls_ObjcPtr (VALUE outer);

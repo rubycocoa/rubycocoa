@@ -111,7 +111,7 @@ to_octype(const char* octype_str)
     }
   }
   else if (octype_str[0] == '^') {
-    if (strcmp(octype_str, "^@") == 0)
+    if (strcmp(octype_str, "^@") == 0 || strcmp(octype_str, "^r@") == 0)
       oct = _PRIV_C_ID_PTR;
     else
       oct = _PRIV_C_PTR;
@@ -602,7 +602,24 @@ static BOOL rbobj_to_objcptr(VALUE obj, void** cptr)
 static BOOL rbobj_to_idptr(VALUE obj, id** idptr)
 {
   if (TYPE(obj) == T_NIL) {
-    *idptr = NULL;
+    *idptr = nil;
+  }
+  else if (TYPE(obj) == T_ARRAY) {
+    if (RARRAY(obj)->len > 0) {
+      id *ary;
+      unsigned i;
+
+      ary = *idptr;
+      for (i = 0; i < RARRAY(obj)->len; i++) {
+        if (!rbobj_to_nsobj(RARRAY(obj)->ptr[i], &ary[i])) {
+          *idptr = nil;
+          return NO;
+        }
+      }
+    }
+    else {
+      *idptr = nil;
+    }
   }
   else if (rb_obj_is_kind_of(obj, objid_s_class()) == Qtrue) {
     id old_id = OBJCID_ID(obj);
@@ -771,9 +788,9 @@ rbobj_to_ocdata(VALUE obj, int octype, void* ocdata)
   }
 
   case _PRIV_C_ID_PTR: {
-    id* idptr = NULL;
-    f_success = rbobj_to_idptr(obj, &idptr);
-    if (f_success) *(id**)ocdata = idptr;
+    //id* idptr = NULL;
+    f_success = rbobj_to_idptr(obj, ocdata/*&idptr*/);
+    //if (f_success) *(id**)ocdata = idptr;
     break;
   }
 

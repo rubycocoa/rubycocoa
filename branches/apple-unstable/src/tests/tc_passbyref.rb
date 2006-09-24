@@ -68,6 +68,17 @@ if `sw_vers -productVersion`.strip.to_f >= 10.5
         assert_equal(o2, ary.objectAtIndex(1))
     end
 
+    def test_multiple_in_c_array_it_foundation
+        o1, o2 = OSX::NSObject.alloc.init, OSX::NSObject.alloc.init
+        o1, o2 = OSX::NSString.alloc.initWithString('o1'), OSX::NSString.alloc.initWithString('o2')
+        k1, k2 = OSX::NSString.alloc.initWithString('k1'), OSX::NSString.alloc.initWithString('k2')
+        dict = OSX::NSDictionary.dictionaryWithObjects_forKeys_count([o1, o2], [k1, k2])
+        assert_equal(o1, dict.objectForKey(k1))
+        assert_equal(o2, dict.objectForKey(k2))
+        # Both 'array' arguments must have the same length.
+        assert_raises(OSX::OCDataConvException) { OSX::NSDictionary.dictionaryWithObjects_forKeys_count([o1, o2], [k1]) }
+    end
+
     def test_in_c_array_byte_foundation
         s = OSX::NSString.alloc.initWithBytes_length_encoding('foobar', OSX::NSASCIIStringEncoding)
         assert_equal(s.to_s, 'foobar')
@@ -75,14 +86,15 @@ if `sw_vers -productVersion`.strip.to_f >= 10.5
 
     def test_out_c_array_byte_foundation
         d = OSX::NSData.alloc.initWithBytes_length('foobar')
-        assert_raise { d.getBytes_length() }
-        assert_equal('foobar', d.getBytes_length(6))
+        data = '      ' 
+        d.getBytes_length(data)
+        assert_equal(data, 'foobar')
     end
 
     def test_ignored_foundation
-        d = OSX::NSData.alloc.init
-        assert_raise { d.getBytes(nil) }
-        assert_raise { d.getBytes_range(nil, OSX::NSRange.new(0, 1)) }
+        d = OSX::NSData.alloc.initWithBytes_length('foobar')
+        assert_raises(RuntimeError) { d.getBytes(nil) }
+        assert_raises(RuntimeError) { d.getBytes_range(nil, OSX::NSRange.new(0, 1)) }
     end
     # TODO: test NSCoder encode/decode methods
   end

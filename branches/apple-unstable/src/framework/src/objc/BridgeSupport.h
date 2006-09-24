@@ -68,11 +68,14 @@ struct bsMethod {
   BOOL    ignore;
   char *  suggestion;   // only if ignore is true
   int     argc;
+#define MAX_ARGS 128
   struct bsMethodArg *argv;
 };
 
 extern struct bsFunction *current_function;
 
 ffi_type *ffi_type_for_octype (int octype);
-struct bsMethod *find_bs_method(const char *class_name, const char *selector, BOOL is_class_method);
+struct bsMethod *find_bs_method(id klass, const char *selector, BOOL is_class_method);
+struct bsMethodArg *find_bs_method_arg_by_index(struct bsMethod *method, unsigned index);
+struct bsMethodArg *find_bs_method_arg_by_c_array_len_arg_index(struct bsMethod *method, unsigned index);
 void initialize_bridge_support (VALUE mOSX);
