@@ -105,7 +105,7 @@ struct _ocm_send_context
 };
 
 static struct _ocm_send_context *
-ocm_create_send_context(VALUE rcv, SEL selector)
+ocm_create_send_context(VALUE rcv, SEL selector, char *error, size_t error_len)
 {
   id oc_rcv;
   NSMethodSignature *methodSignature;
@@ -114,14 +114,14 @@ ocm_create_send_context(VALUE rcv, SEL selector)
 
   oc_rcv = rbobj_get_ocid(rcv);
   if (oc_rcv == nil) {
-      OBJWRP_LOG("Can't get ocid for %p", rcv);        
-      return NULL;
+    snprintf(error, error_len, "Can't get Objective-C object in %s", RSTRING(rb_inspect(rcv))->ptr);
+    return NULL;
   }
 
   methodSignature = [oc_rcv methodSignatureForSelector:selector];
   if (methodSignature == nil) {
-      OBJWRP_LOG("Can't get method signature for selector %s of receiver %p", selector, oc_rcv);        
-      return NULL;
+    snprintf(error, error_len, "Can't get Objective-C method signature for selector '%s' of receiver %s", (char *) selector, RSTRING(rb_inspect(rcv))->ptr);
+    return NULL;
   }
 
   ctx = (struct _ocm_send_context *)malloc(sizeof(struct _ocm_send_context));
@@ -132,12 +132,12 @@ ocm_create_send_context(VALUE rcv, SEL selector)
   ctx->numberOfArguments = [methodSignature numberOfArguments] - 2;
   ctx->methodReturnType = [methodSignature methodReturnType];
   if (ctx->numberOfArguments == 0) {
-      ctx->argumentsTypes = NULL;
+    ctx->argumentsTypes = NULL;
   }
   else {
-      ctx->argumentsTypes = (const char **)malloc(sizeof(const char) * ctx->numberOfArguments);
-      for (i = 0; i < ctx->numberOfArguments; i++)
-          ctx->argumentsTypes[i] = [methodSignature getArgumentTypeAtIndex:i+2];
+    ctx->argumentsTypes = (const char **)malloc(sizeof(const char) * ctx->numberOfArguments);
+    for (i = 0; i < ctx->numberOfArguments; i++)
+      ctx->argumentsTypes[i] = [methodSignature getArgumentTypeAtIndex:i+2];
   }
   
   return ctx;
@@ -148,7 +148,7 @@ ocm_free_send_context(struct _ocm_send_context *ctx)
 {
   [ctx->methodSignature release];
   if (ctx->argumentsTypes != NULL)
-      free(ctx->argumentsTypes);
+    free(ctx->argumentsTypes);
   free(ctx);
 }
 
@@ -174,19 +174,81 @@ ocm_retain_result_if_necessary(VALUE result, const char *selector)
 static VALUE
 ocm_ffi_dispatch(int argc, VALUE* argv, VALUE rcv, VALUE* result, struct _ocm_send_context *ctx)
 {
+  BOOL is_class_method;
+  id klass;
+  struct bsMethod *bs_method;
   Method method;
   ffi_cif cif;
-  ffi_type **arg_types;
-  void **arg_values;
-  ffi_type *ret_type;
+  ffi_type ** arg_types;
+  void ** arg_values;
+  ffi_type * ret_type;
   unsigned i;
   unsigned pointers_args_count;
-  void *retval;
+  void * retval;
   VALUE exception;
 
-  // check args count
+  OBJWRP_LOG("ocm_ffi_dispatch (%s): args_count=%d ret_type=%s", ctx->selector, argc, ctx->methodReturnType);
+
+  is_class_method = TYPE(rcv) == T_CLASS;
+  klass = is_class_method ? (struct objc_class *) ctx->rcv : ((struct objc_class *) ctx->rcv)->isa;
+  bs_method = find_bs_method(klass, (const char *) ctx->selector, is_class_method);
+
+  //sanity check(arg count etc...)
   pointers_args_count = 0;
-  if (ctx->numberOfArguments != argc) {
+  if (bs_method != NULL) {
+    int expected;
+
+    OBJWRP_LOG("\tfound metadata description\n");
+
+    if (bs_method->ignore)
+      rb_raise(rb_eRuntimeError,
+        "Method '%s' is not supported (suggested alternative: '%s')",
+        ctx->selector,
+        bs_method->suggestion != NULL ? bs_method->suggestion : "n/a");
+
+    expected = ctx->numberOfArguments;
+
+    if (bs_method->argc > 0) {
+      int length_args[MAX_ARGS];
+      int length_args_count = 0;
+
+      for (i = 0; i < bs_method->argc; i++) {
+        struct bsMethodArg *arg;
+
+        arg = &bs_method->argv[i];
+        //The given argument is a C array with a length determined by the value of another argument, like:
+        //[NSArray + arrayWithObjects: length:]
+        // If 'in' or 'inout, the ' length ' argument is not necessary (but the ' array ' is).
+        // If 'out', the 'array' argument is not necessary(but the 'length' is).
+        if (arg->c_array_delimited_by_arg != -1) {
+          if (ctx->numberOfArguments == argc)
+            rb_warn("%s%c%s argument #%d is no longer necessary (will be ignored)", ((struct objc_class *) klass)->name, is_class_method ? '.' : '#', ctx->selector, arg->c_array_delimited_by_arg);
+
+          //Some methods may accept multiple 'array' 'in' arguments that refer to the same 'length' argument, like:
+          //[NSDictionary + dictionaryWithObjects: forKeys: count:]
+          if (arg->type_modifier == bsTypeModifierIn) {
+            unsigned j;
+            BOOL already;
+
+            for (j = 0, already = NO; j < length_args_count; j++) {
+              if (length_args[j] == arg->c_array_delimited_by_arg) {
+                already = YES;
+                break;
+              }
+            }
+            if (already)
+              continue;
+            length_args[length_args_count++] = arg->c_array_delimited_by_arg;
+          }
+          expected--;
+        }
+      }
+    }
+    //We don 't want to raise if the user sets the right number of arguments (the warning(s) above should be enough).
+    if (ctx->numberOfArguments != argc && expected != argc)
+      rb_raise(rb_eArgError, "bad number of argument(s) (expected %d, got %d)", expected, argc);
+  } 
+  else if (ctx->numberOfArguments != argc) {
     BOOL bad = YES;
     if (argc < ctx->numberOfArguments) {
       for (i = argc; i < ctx->numberOfArguments; i++) {
@@ -199,12 +261,9 @@ ocm_ffi_dispatch(int argc, VALUE* argv, VALUE rcv, VALUE* result, struct _ocm_se
     if (bad)
       rb_raise(rb_eArgError, "bad number of argument(s) (expected %d, got %d)", ctx->numberOfArguments, argc);
   }
-
-  OBJWRP_LOG("ocm_ffi_dispatch (%s): args_count=%d ret_type=%s", ctx->selector, argc, ctx->methodReturnType);
-  
-  // prepare arg types / values
-  arg_types = (ffi_type **)malloc(sizeof(ffi_type *) * (ctx->numberOfArguments + 3));
-  arg_values = (void **)malloc(sizeof(void *) * (ctx->numberOfArguments + 3));
+  //prepare arg types / values
+  arg_types = (ffi_type **) calloc(ctx->numberOfArguments + 3, sizeof(ffi_type *));
+  arg_values = (void **) calloc(ctx->numberOfArguments + 3, sizeof(void *));
   if (arg_types == NULL || arg_values == NULL)
     rb_fatal("can't allocate memory");
 
@@ -214,135 +273,174 @@ ocm_ffi_dispatch(int argc, VALUE* argv, VALUE rcv, VALUE* result, struct _ocm_se
   arg_values[1] = &ctx->selector;
 
   if (ctx->numberOfArguments > 0) {
+    unsigned skipped = 0;
     for (i = 0; i < ctx->numberOfArguments; i++) {
-      // omitted pointer
-      if (i >= argc) {
+      // C-array-length-like argument, which should be already defined
+      // (at the same time than the C-array-like argument)
+      if (find_bs_method_arg_by_c_array_len_arg_index(bs_method, i) != NULL) {
+        skipped++;
+      } 
+      //omitted pointer
+      else if (i - skipped >= argc) {
         OBJWRP_LOG("\tomitted pointer[%d] (%p)", i, arg_values[i + 2]);
         arg_values[i + 2] = &arg_values[i + 2];
         arg_types[i + 2] = &ffi_type_pointer;
       }
-      // regular argument
+      //regular argument
       else {
         VALUE arg;
         const char *octype_str;
         int octype;
         void *value;
+        struct bsMethodArg *bs_arg;
+        BOOL is_c_array;
+        int len;
 
-        arg = argv[i];
+        arg = argv[i - skipped];
         octype_str = ctx->argumentsTypes[i];
         octype = to_octype(octype_str);
-        OBJWRP_LOG("\targ_type[%d] (%p) : %s", i, arg, octype_str);
-        value = OCDATA_ALLOCA(octype, octype_str);
+        bs_arg = find_bs_method_arg_by_index(bs_method, i);
+        is_c_array = bs_arg != NULL && bs_arg->c_array_delimited_by_arg != -1;
+
+        if (is_c_array) {
+          int * prev_len;
+          const char * ptype;
+
+          ptype = octype_str;
+          if (*ptype == 'r')
+            ptype++;
+          if (*ptype != '^') {
+            exception = ocdataconv_err_new(ctx->rcv, ctx->selector, "internal error: argument #%d is not a defined as a pointer in the runtime or it is described as such in the metadata", i);
+            goto bails;
+          }
+          ptype++;
+
+          if (TYPE(arg) == T_STRING)
+            len = RSTRING(arg)->len;
+          else if (TYPE(arg) == T_ARRAY)
+            len = RARRAY(arg)->len;
+          else if (rb_obj_is_kind_of(arg, objcptr_s_class()))
+            len = objcptr_allocated_size(arg); 
+          else {
+            exception = ocdataconv_err_new(ctx->rcv, ctx->selector, "argument #%d is not a String/Array/ObjcPtr as it should be (but '%s').", i, rb_obj_classname(arg));
+            goto bails;
+          }
+
+          prev_len = arg_values[bs_arg->c_array_delimited_by_arg + 2];
+          if (prev_len != NULL && *prev_len != len) {
+            exception = ocdataconv_err_new(ctx->rcv, ctx->selector, "incorrect array length of argument #%d (expected %d, got %d)", i, *prev_len, len);
+            goto bails;
+          }
+          OBJWRP_LOG("\targ_type[%d] (%p) : %s (defined as a C array delimited by arg #%d in the metadata)", i, arg, octype_str, bs_arg->c_array_delimited_by_arg);
+          value = OCDATA_ALLOCA(octype, octype_str);
+          if (len > 0)
+            *(void **) value = alloca(ocdata_size(to_octype(ptype), ptype) * len);
+        } 
+        else {
+          OBJWRP_LOG("\targ_type[%d] (%p) : %s", i, arg, octype_str);
+          len = 0;
+          value = OCDATA_ALLOCA(octype, octype_str);
+        }
+
         if (!rbobj_to_ocdata(arg, octype, value)) {
           exception = ocdataconv_err_new(ctx->rcv, ctx->selector, "cannot convert the argument #%d as '%s' to NS argument.", i, octype_str);
           goto bails;
         }
-  
-        arg_types[i + 2] = ffi_type_for_octype(octype); 
+        arg_types[i + 2] = ffi_type_for_octype(octype);
         arg_values[i + 2] = value;
+
+        if (is_c_array) {
+          int * plen;
+
+          OBJWRP_LOG("\targ_type[%d] defined as the array length (%d)\n", bs_arg->c_array_delimited_by_arg, len);
+          plen = (int *) alloca(sizeof(int));
+          *plen = len;
+          arg_values[bs_arg->c_array_delimited_by_arg + 2] = plen;
+          arg_types[bs_arg->c_array_delimited_by_arg + 2] = &ffi_type_uint;
+        }
       }
     }
   }
   arg_types[ctx->numberOfArguments + 2] = NULL;
-  arg_values[ctx->numberOfArguments + 2] = NULL; 
+  arg_values[ctx->numberOfArguments + 2] = NULL;
 
-  // prepare ret type
-  ret_type = ffi_type_for_octype(to_octype(ctx->methodReturnType)); 
+  //prepare ret type
+  ret_type = ffi_type_for_octype(to_octype(ctx->methodReturnType));
 
-  // prepare cif
+  //prepare cif
   if (ffi_prep_cif(&cif, FFI_DEFAULT_ABI, ctx->numberOfArguments + 2, ret_type, arg_types) != FFI_OK)
     rb_fatal("Can't prepare the cif");
 
-  // call function
+  //call function
   exception = Qnil;
   @try {
-    method = class_getInstanceMethod(((struct objc_class *)ctx->rcv)->isa, ctx->selector);
+    method = class_getInstanceMethod(((struct objc_class *) ctx->rcv)->isa, ctx->selector);
     OBJWRP_LOG("\tffi_call ...");
-    ffi_call(&cif, FFI_FN(method->method_imp), (ffi_arg *)&retval, arg_values);
+    ffi_call(&cif, FFI_FN(method->method_imp), (ffi_arg *) & retval, arg_values);
     OBJWRP_LOG("\tffi_call done");
   }
-  @catch (id oc_exception) {
+  @catch(id oc_exception) {
     OBJWRP_LOG("got objc exception '%@' -- forwarding...", oc_exception);
-    exception = oc_err_new (ctx->rcv, ctx->selector, oc_exception);
+    exception = oc_err_new(ctx->rcv, ctx->selector, oc_exception);
   }
 
-  // return exception if catched
+  //return exception if catched
   if (!NIL_P(exception))
     goto bails;
 
-  // get result as argument
+  //get result as argument
   for (i = 0; i < ctx->numberOfArguments; i++) {
-    VALUE   arg;
+    VALUE arg;
 
     arg = (i < argc) ? argv[i] : Qnil;
-    if (arg == Qnil) 
+    if (arg == Qnil)
       continue;
-    if (rb_obj_is_kind_of(arg, objid_s_class()) != Qtrue) 
+    if (to_octype(ctx->argumentsTypes[i]) != _PRIV_C_ID_PTR)
       continue;
-    if (to_octype(ctx->argumentsTypes[i]) != _PRIV_C_ID_PTR) 
+    if (rb_obj_is_kind_of(arg, objid_s_class()) != Qtrue)
       continue;
     OBJWRP_LOG("\tgot passed-by-reference argument %d", i);
-    ocm_retain_result_if_necessary(arg, (const char *)ctx->selector);
+    ocm_retain_result_if_necessary(arg, (const char *) ctx->selector);
   }
 
-  // get result
+  //get result
   if (ret_type != &ffi_type_void) {
     int octype;
 
-    octype = to_octype(ctx->methodReturnType); 
+    octype = to_octype(ctx->methodReturnType);
 
-    // we assume that every method returning 'char' is in fact meant to return a boolean value, unless
+    //we assume that every method returning 'char' is in fact meant to return a boolean value, unless
     // specified in the metadata files as such.
-    if (octype == _C_CHR) {
-      BOOL is_class_method;
-      id klass;
-
-      is_class_method = TYPE(rcv) == T_CLASS;
-      klass = is_class_method ? (struct objc_class *)ctx->rcv : ((struct objc_class *)ctx->rcv)->isa;
-
-      // read the metadata for each class in the hierarchy
+    if (octype == _C_CHR && (bs_method == NULL || !bs_method->returns_char))
       octype = _PRIV_C_BOOL;
-      do {
-        struct bsMethod * bs_method;
-
-        bs_method = find_bs_method(((struct objc_class *)klass)->name, (const char *)ctx->selector, is_class_method);
-        if (bs_method != NULL && bs_method->returns_char) {
-          OBJWRP_LOG("\tdetected predicate, forcing boolean conversion of the return value");
-          octype = _C_CHR;
-          break;
-        }
-        
-        klass = ((struct objc_class *)klass)->super_class;
-      }
-      while (klass != NULL);
-    }
 
     if (!ocdata_to_rbobj(rcv, octype, &retval, result)) {
       exception = ocdataconv_err_new(ctx->rcv, ctx->selector, "cannot convert the result as '%s' to Ruby Object.", ctx->methodReturnType);
       goto bails;
     }
     OBJWRP_LOG("\tgot return value (%p)", retval);
-    ocm_retain_result_if_necessary(*result, (const char *)ctx->selector);
-  }
+    ocm_retain_result_if_necessary(*result, (const char *) ctx->selector);
+  } 
   else {
     *result = Qnil;
   }
 
-  // get omitted pointers result, and pack them with the result in an array
+  //get omitted pointers result, and pack them with the result in an array
   if (pointers_args_count > 0) {
     VALUE retval_ary;
 
     retval_ary = rb_ary_new();
-    if ([ctx->methodSignature methodReturnLength] > 0) // don't test if *result is nil, as nil may have been returned!
+    if ([ctx->methodSignature methodReturnLength] > 0)
+      //don 't test if *result is nil, as nil may have been returned!
       rb_ary_push(retval_ary, *result);
 
     for (i = ctx->numberOfArguments - pointers_args_count; i < ctx->numberOfArguments; i++) {
       void *value;
 
-      value = arg_values[i + 2];  
+      value = arg_values[i + 2];
       if (value != NULL) {
-        VALUE         rbval;
-        const char *  octype_str;
+        VALUE rbval;
+        const char *octype_str;
 
         octype_str = ctx->argumentsTypes[i];
         if (octype_str[0] == '^')
@@ -352,22 +450,20 @@ ocm_ffi_dispatch(int argc, VALUE* argv, VALUE rcv, VALUE* result, struct _ocm_se
           exception = ocdataconv_err_new(ctx->rcv, ctx->selector, "cannot convert pass-by-ref argument #%d result as '%s' to Ruby Object.", i, octype_str);
           goto bails;
         }
-
-        ocm_retain_result_if_necessary(rbval, (const char *)ctx->selector);
+        ocm_retain_result_if_necessary(rbval, (const char *) ctx->selector);
         rb_ary_push(retval_ary, rbval);
       }
     }
 
     *result = RARRAY(retval_ary)->len == 1 ? RARRAY(retval_ary)->ptr[0] : RARRAY(retval_ary)->len == 0 ? Qnil : retval_ary;
   }
-
   OBJWRP_LOG("ocm_ffi_dispatch done%s", NIL_P(exception) ? "" : " with exception");
 
 bails:
   free(arg_types);
   free(arg_values);
 
-  return exception; 
+  return exception;
 }
 
 static VALUE
@@ -377,14 +473,15 @@ ocm_send(int argc, VALUE* argv, VALUE rcv, VALUE* result)
   struct _ocm_send_context *ctx;
   SEL sel;
   id pool;
+  char error[256];
 
   if (argc < 1) return Qnil;
 
   sel = rbobj_to_nssel(argv[0]);
-  ctx = ocm_create_send_context(rcv, sel);
+  ctx = ocm_create_send_context(rcv, sel, error, sizeof error);
   OBJWRP_LOG("ocm_send (%s) ...", (const char *)sel);
   if (ctx == NULL)
-    return ocmsend_err_new (nil, sel, "invalid object/message.");
+    return ocmsend_err_new (rbobj_get_ocid(rcv), sel, error);
 
   argc--;
   argv++;

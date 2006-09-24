@@ -448,7 +448,6 @@ osx_load_bridge_support_file (VALUE mOSX, VALUE path)
   struct bsClass *    klass;
   struct bsMethod *   method;
   unsigned int        i;
-#define MAX_ARGS 128
   int                 func_args[MAX_ARGS];
   struct bsMethodArg  method_args[MAX_ARGS];
 
@@ -717,7 +716,6 @@ osx_load_bridge_support_file (VALUE mOSX, VALUE path)
           size_t len;
     
           len = sizeof(struct bsMethodArg) * method->argc;
-
           method->argv = (struct bsMethodArg *)malloc(len);
           if (method->argv == NULL)
             rb_fatal("can't allocate memory");
@@ -771,22 +769,69 @@ osx_import_c_constant (VALUE self, VALUE sym)
   return value;
 }
 
-struct bsMethod *
-find_bs_method(const char *class_name, const char *selector, BOOL is_class_method)
+static struct bsMethod *
+__find_bs_method(const char *class_name, const char *selector, BOOL is_class_method)
 {
-  struct bsClass *klass;
+  struct bsClass *bs_class;
   struct bsMethod *method;
 
-  if (class_name == NULL || selector == NULL)
+  if (!st_lookup(bsClasses, (st_data_t)class_name, (st_data_t *)&bs_class))
     return NULL;
 
-  if (!st_lookup(bsClasses, (st_data_t)class_name, (st_data_t *)&klass))
-    return NULL;
-
-  if (!st_lookup(is_class_method ? klass->class_methods : klass->instance_methods, (st_data_t)selector, (st_data_t *)&method))
+  if (!st_lookup(is_class_method ? bs_class->class_methods : bs_class->instance_methods, (st_data_t)selector, (st_data_t *)&method))
     return NULL;
 
   return method;
+}
+
+struct bsMethod *
+find_bs_method(id klass, const char *selector, BOOL is_class_method)
+{
+  if (klass == nil || selector == NULL)
+    return NULL;
+
+  do {
+    struct bsMethod *method;
+
+    method = __find_bs_method(((struct objc_class *)klass)->name, selector, is_class_method);
+    if (method != NULL)
+      return method;
+   
+    klass = ((struct objc_class *)klass)->super_class;
+  }
+  while (klass != NULL);
+
+  return NULL;
+}
+
+struct bsMethodArg *
+find_bs_method_arg_by_index(struct bsMethod *method, unsigned index)
+{
+  unsigned i;
+
+  if (method == NULL)
+    return NULL;
+
+  for (i = 0; i < method->argc; i++)
+    if (method->argv[i].index == index)
+      return &method->argv[i];  
+
+  return NULL;
+}
+
+struct bsMethodArg *
+find_bs_method_arg_by_c_array_len_arg_index(struct bsMethod *method, unsigned index)
+{
+  unsigned i;
+  
+  if (method == NULL)
+    return NULL;
+
+  for (i = 0; i < method->argc; i++)
+    if (method->argv[i].c_array_delimited_by_arg == index)
+      return &method->argv[i];  
+
+  return NULL;
 }
 
 static int

@@ -72,7 +72,7 @@ class TC_Attachments < Test::Unit::TestCase
   end
   
   def test_data
-    data = NSData.dataWithBytes_length("somedata",8)
+    data = NSData.dataWithBytes_length("somedata")
     assert_equal "somedata", data.rubyString
   end
 
