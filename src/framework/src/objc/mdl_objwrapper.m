@@ -221,25 +221,24 @@ ocm_ffi_dispatch(int argc, VALUE* argv, VALUE rcv, VALUE* result, struct _ocm_se
         // If 'in' or 'inout, the ' length ' argument is not necessary (but the ' array ' is).
         // If 'out', the 'array' argument is not necessary(but the 'length' is).
         if (arg->c_array_delimited_by_arg != -1) {
+          unsigned j;
+          BOOL already;
+          
           if (ctx->numberOfArguments == argc)
             rb_warn("%s%c%s argument #%d is no longer necessary (will be ignored)", ((struct objc_class *) klass)->name, is_class_method ? '.' : '#', ctx->selector, arg->c_array_delimited_by_arg);
 
           //Some methods may accept multiple 'array' 'in' arguments that refer to the same 'length' argument, like:
           //[NSDictionary + dictionaryWithObjects: forKeys: count:]
-          if (arg->type_modifier == bsTypeModifierIn) {
-            unsigned j;
-            BOOL already;
-
-            for (j = 0, already = NO; j < length_args_count; j++) {
-              if (length_args[j] == arg->c_array_delimited_by_arg) {
-                already = YES;
-                break;
-              }
+          for (j = 0, already = NO; j < length_args_count; j++) {
+            if (length_args[j] == arg->c_array_delimited_by_arg) {
+              already = YES;
+              break;
             }
-            if (already)
-              continue;
-            length_args[length_args_count++] = arg->c_array_delimited_by_arg;
           }
+          if (already)
+            continue;
+          
+          length_args[length_args_count++] = arg->c_array_delimited_by_arg;
           expected--;
         }
       }
