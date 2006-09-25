@@ -27,8 +27,7 @@ class AppDelegate <  NSObject
 
   def speak(str)
     script = NSAppleScript.alloc.initWithSource("say \"#{str}\"")
-    errinfo = OCObject.new
-    script.executeAndReturnError(errinfo)
+    script.executeAndReturnError(nil)
   end
 
 end

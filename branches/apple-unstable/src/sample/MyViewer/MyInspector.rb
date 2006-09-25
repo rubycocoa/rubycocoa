@@ -64,10 +64,10 @@ class MyInspector < OSX::NSObject
     panelSetting
     center = OSX::NSNotificationCenter.defaultCenter
     center.addObserver(self, :selector, "showMain:",
-		       :name, OSX.NSWindowDidBecomeMainNotification,
+		       :name, OSX::NSWindowDidBecomeMainNotification,
 		       :object, nil)
     center.addObserver(self, :selector, "windowClosed:",
-		       :name, OSX.NSWindowWillCloseNotification,
+		       :name, OSX::NSWindowWillCloseNotification,
 		       :object, nil)
     self
   end
@@ -97,11 +97,11 @@ class MyInspector < OSX::NSObject
   end
 
   def windowClosed (aNotification)
-    @text.setStringValue "" if OSX.NSApp.mainWindow == nil
+    @text.setStringValue "" if OSX::NSApp.mainWindow == nil
   end
 
   def shrink (sender)
-    obj = OSX.NSApp.mainWindow
+    obj = OSX::NSApp.mainWindow
     if obj then
       obj.delegate.shrink nil
       showInfo(obj)
@@ -109,7 +109,7 @@ class MyInspector < OSX::NSObject
   end
 
   def shrinkAll (sender)
-    obj = OSX.NSApp.mainWindow
+    obj = OSX::NSApp.mainWindow
     if obj then
       OSX::NSNotificationCenter.defaultCenter.
 	postNotificationName(ShrinkAllNotification, :object, self)
@@ -119,7 +119,7 @@ class MyInspector < OSX::NSObject
 
   def windowDidBecomeKey (aNotification)
     @isClosed = false
-    showInfo(OSX.NSApp.mainWindow)
+    showInfo(OSX::NSApp.mainWindow)
   end
 
   def windowShouldClose (sender)

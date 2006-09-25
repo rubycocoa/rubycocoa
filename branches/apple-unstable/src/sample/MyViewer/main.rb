@@ -7,5 +7,5 @@ if __FILE__ == $0 then
   app = OSX::NSApplication.sharedApplication
   app.setDelegate(controller)
   app.setMainMenu(controller.mainMenu)
-  OSX.NSApp.run
+  OSX::NSApp.run
 end
