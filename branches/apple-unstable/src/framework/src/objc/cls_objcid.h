@@ -11,6 +11,7 @@
 struct _objcid_data {
   id  ocid;
   BOOL retained;
+  BOOL can_be_released;
 };
 
 /** class methods **/
