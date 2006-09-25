@@ -25,10 +25,10 @@ class HelloView < OSX::NSView
     attributes = OSX::NSMutableDictionary.alloc.init
 
     attributes.setObject_forKey(	OSX::NSColor.redColor,
-				OSX.NSForegroundColorAttributeName )
+				OSX::NSForegroundColorAttributeName )
 
     attributes.setObject_forKey(	OSX::NSFont.boldSystemFontOfSize(48.0),
-				OSX.NSFontAttributeName )
+				OSX::NSFontAttributeName )
 
     string = OSX::NSString.alloc.initWithString( "Hello, Ruby Baby" )
 

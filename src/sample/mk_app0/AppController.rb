@@ -22,7 +22,7 @@ class AppController < OSX::NSObject
   end
 
   def quit
-    OSX.NSApp.stop(self)
+    OSX::NSApp.stop(self)
   end
 
 end

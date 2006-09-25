@@ -1,3 +1,23 @@
+2006-09-25  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* sample/TransparentHello.rb,
+	  sample/mk_app0/AppController.rb,
+	  sample/thread0/AppController.rb,
+	  sample/mk_app1/AppController.rb,
+	  sample/Hakoiri-Musume/cocoa_hako.rb,
+	  sample/Hakoiri-Musume/rb_main.rb,
+	  sample/Pong/AppCtrl.rb,
+	  sample/MyViewer/main.rb,
+	  sample/MyViewer/MyInspector.rb,
+	  sample/HelloWorld.rb:
+	Fixed usage of constants in samples (making sure they use the
+	OSX:: prefix instead of OSX.).
+
+	* lib/osx/foundation.rb,
+	  lib/osx/appkit.rb:
+	Fixed these files to include osx/objc/cocoa and not 
+	osx/objc/[foundation|appkit] that don't exist anymore. 
+
 2006-09-24  Laurent Sansonetti <lsansonetti@apple.com>
 
 	* framework/src/ruby/osx/objc/cocoa_macros.rb,
