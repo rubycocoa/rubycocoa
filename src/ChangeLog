@@ -1,3 +1,12 @@
+2006-09-26  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* framework/src/objc/mdl_objwrapper.m,
+	  framework/src/objc/cls_objcid.h,
+	  framework/src/objc/cls_objcid.m:
+	Do not release objects issued by 'alloc/allocWithZone:', as some
+	classes may always return the same singleton object (placeholder)
+	each time, and return the real new object with 'init'.
+
 2006-09-25  Laurent Sansonetti <lsansonetti@apple.com>
 
 	* sample/TransparentHello.rb,

@@ -14,6 +14,7 @@
 #import <string.h>
 #import <stdlib.h>
 #import "RBObject.h"
+#import "RBRuntime.h" // for DLOG
 
 static VALUE _kObjcID = Qnil;
 
@@ -24,8 +25,10 @@ _objcid_data_free(struct _objcid_data* dp)
   if (dp != NULL) {
     if (dp->ocid != nil) {
       remove_from_oc2rb_cache(dp->ocid);
-      if (dp->retained)
+      if (dp->retained && dp->can_be_released) {
+        DLOG("CLSOBJ", "releasing %p", dp->ocid);
         [dp->ocid release];
+      }
     }
     free(dp);
   }
@@ -39,6 +42,7 @@ _objcid_data_new()
   dp = malloc(sizeof(struct _objcid_data));
   dp->ocid = nil;
   dp->retained = NO;
+  dp->can_be_released = NO;
   return dp;
 }
 
@@ -51,6 +55,7 @@ _objcid_initialize_for_new_with_ocid(int argc, VALUE* argv, VALUE rcv)
   if (arg_ocid != Qnil) {
     id ocid = (id) NUM2UINT(arg_ocid);
     OBJCID_DATA_PTR(rcv)->ocid = ocid;
+    OBJCID_DATA_PTR(rcv)->retained = NO;
     // The retention of the ObjC instance is delayed in ocm_send, to not
     // violate the "init-must-follow-alloc" initialization pattern.
     // Retaining here could message in the middle. 
