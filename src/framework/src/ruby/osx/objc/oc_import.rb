@@ -108,16 +108,8 @@ module OSX
   module_function :ns_import
 
   # create Ruby's class for Cocoa class
-  CF_REGEX = /^NSCF(.+)$/
   def OSX.class_new_for_occlass(occls)
-    cname = occls.to_s
-    superclass = if md = CF_REGEX.match(cname)
-      # Translate CoreFoundation toll-free bridged classes to Cocoa.
-       OSX.const_get("NS" + md[1])
-    else
-      # Get real superclass if possible.
-      _objc_lookup_superclass(occls)
-    end
+    superclass = _objc_lookup_superclass(occls)
     klass = Class.new(superclass)
     klass.class_eval <<-EOE_CLASS_NEW_FOR_OCCLASS,__FILE__,__LINE__+1
       if superclass == OSX::ObjcID
