@@ -7,6 +7,7 @@ require 'rexml/document'
 require 'dl/import'
 require 'fileutils'
 require 'optparse'
+require 'tmpdir'
 
 # We can't really use RubyCocoa at this point to call the ObjC
 # runtime, because foundation methods like NSClassFromString are
@@ -111,29 +112,35 @@ class OCHeaderAnalyzer
   end
 
   def informal_protocols
-    re = /^\s*(@interface\s+(\w+)\s*\(\s*(\w+)\s*\))\s*$([^@]*)^\s*@end\s*$/m
-    re_type = /(-|\+)\s*\(\s*([^)]*)\s*\)/
-    @cpp_result.scan(re).map! { |m|
-      porig = m[0].strip
-      pbase = m[1]
-      pname = m[2]
-      entries = m[3].strip.split(';').map{|i| i.strip }
-      entries.map! {|i|
-        i.strip!
-        mm = re_type.match(i)
-        return_type = mm ? mm[2].strip : 'id'
-        selector = i.split(':').map do |ii|
-          /(\b\w+|\.{3})$/.match(ii.strip)[0]
-        end
-        selector = if selector.size <= 1
-          selector[0]
-        else
-          selector[0...-1].join(':')
-        end
-        InformalProtocolEntry.new(i, return_type, selector)
+    if @inf_protocols.nil?
+      re = /^\s*(@interface\s+(\w+)\s*\(\s*(\w+)\s*\))\s*$([^@]*)^\s*@end\s*$/m
+      arg_re = /(\b\w+|\.{3})$/
+      @inf_protocols = {}
+      @cpp_result.scan(re).each { |m|
+        porig = m[0].strip
+        pbase = m[1]
+        pname = m[2]
+        entries = m[3].strip.split(';').map{|i| i.strip }
+        entries.map! {|i|
+          i.strip!
+          next if i[0] != ?- and i[0] != ?+
+          selector = []
+          i.split(':').each do |ii|
+            mmm = arg_re.match(ii.strip)
+            next if mmm.nil?
+            selector << mmm[0]
+          end
+          selector = if selector.size <= 1
+            selector[0]
+          else
+            selector[0...-1].join(':') + ':'
+          end
+          InformalProtocolEntry.new(i, selector, i[0] == ?+)
+        }.compact!
+        (@inf_protocols[pbase] ||= []) << InformalProtocol.new(porig, pbase, pname, entries)
       }
-      InformalProtocol.new(porig, pbase, pname, entries)
-    }
+    end
+    return @inf_protocols
   end
 
   def ocmethods
@@ -355,16 +362,20 @@ class OCHeaderAnalyzer
   end
 
   class InformalProtocolEntry
-    attr_reader :orig, :rettype, :selector
+    attr_reader :orig, :selector
 
-    def initialize(orig, rettype, selector)
-      @rettype = rettype
-      @selector = selector
+    def initialize(orig, selector, is_class_method)
       @orig = orig
+      @selector = selector
+      @is_class_method = is_class_method
     end
 
     def to_s
       @orig
+    end
+
+    def class_method?
+      @is_class_method
     end
   end
 
@@ -391,6 +402,7 @@ class BridgeSupportGenerator
         parse_args(args)
         scan_headers
         collect_enums
+        collect_inf_protocols_encoding
         generate_xml
         @out_io.close unless @out_io == STDOUT
     end
@@ -423,37 +435,57 @@ class BridgeSupportGenerator
         return varinfo.octype
     end
 
-    ENUMS_BIN = '/tmp/enums'
-    ENUMS_SRC = ENUMS_BIN + '.m'
     def collect_enums
         @resolved_enums = {} 
-        
-        if @import_directive.nil? or @compiler_flags.nil?
-            STDERR.puts "Can't generate enums for non-frameworks (yet)"
-            return
-        end
-        
         lines = @enums.map { |x| "printf(\"%s: %p\\n\", \"#{x}\", #{x});" }
-        file = <<EOF
+        code = <<EOS
 #{@import_directive}
 
 int main (void) 
 {
-    #{lines.join("\n    ")}
+    #{lines.join("\n  ")}
     return 0;
 }
-EOF
-
-        FileUtils.rm_f([ENUMS_BIN, ENUMS_SRC])
-
-        File.open(ENUMS_SRC, 'w') { |io| io.write(file) }
-        unless system("gcc #{ENUMS_SRC} -o #{ENUMS_BIN} #{@compiler_flags}")
-            raise "Can't compile the enums file... aborting"
-        end
-       
-        `#{ENUMS_BIN}`.split("\n").each do |line|
+EOS
+        compile_and_execute_code(code).split("\n").each do |line|
             name, value = line.split(':')
             @resolved_enums[name.strip] = value.strip
+        end
+    end
+
+    def collect_inf_protocols_encoding
+        objc_impl_st = []
+        log_st = []
+        @resolved_inf_protocols_encoding = {}
+        @inf_protocols.each do |prot|
+            prot.entries.each do |entry|
+                objc_impl_st << "#{entry.orig}" + ' {}'
+                log_st << <<EOS
+printf("%s -> %s\\n", "#{entry.selector}", method_getDescription(#{entry.class_method? ? "class_getClassMethod" : "class_getInstanceMethod"}(klass, @selector(#{entry.selector})))->types); 
+EOS
+            end
+        end
+        code = <<EOS
+#{@import_directive}
+#import <objc/runtime.h>
+
+@interface MyClass
+@end
+
+@implementation MyClass
+#{objc_impl_st.join("\n")}
+@end
+
+int main (void) 
+{
+  Class klass = objc_getClass("MyClass");
+  #{log_st.join("\n  ")}
+  return 0;
+}
+EOS
+        compile_and_execute_code(code).split("\n").each do |line|
+            name, value = line.split('->')
+            @resolved_inf_protocols_encoding[name.strip] = value.strip
         end
     end
 
@@ -522,6 +554,15 @@ EOF
                     element.add_attribute('returns_char', true)
                 end
             end
+            @inf_protocols.each do |protocol|
+                prot_element = root.add_element('informal_protocol')
+                prot_element.add_attribute('name', protocol.name)
+                protocol.entries.each do |entry|
+                    element = prot_element.add_element('method')
+                    element.add_attribute('selector', entry.selector)
+                    element.add_attribute('encoding', @resolved_inf_protocols_encoding[entry.selector])
+                end
+            end
 
             # Merge with exceptions.
             @exceptions.each { |x| merge_document_with_exceptions(document, x) }
@@ -565,7 +606,7 @@ EOF
 
     def scan_headers
         @functions, @constants, @enums = [], [], []
-        @typedefs, @ocmethods = {}, {}
+        @typedefs, @ocmethods, @inf_protocols = {}, {}, [] 
         ignored_headers = @exceptions.map { |x| x.get_elements('/signatures/ignored_headers/header').map { |y| y.text } }.flatten
         @headers.each do |path|
             next if ignored_headers.any? { |x| /#{x}$/.match(path) }
@@ -578,9 +619,9 @@ EOF
             end
             @constants.concat(analyzer.constants)
             @enums.concat(analyzer.enums)
-            @ocmethods.merge!(analyzer.ocmethods) do |key, old, new|
-                old.concat(new)
-            end
+            @ocmethods.merge!(analyzer.ocmethods) { |key, old, new| old.concat(new) }
+            list = analyzer.informal_protocols['NSObject']
+            @inf_protocols.concat(list) unless list.nil? 
         end
         @resolved_typedefs = {}
     end
@@ -677,6 +718,43 @@ EOF
     def die(*msg)
         STDERR.puts msg
         exit 1
+    end
+    
+   def unique_tmp_path(base, extension='', dir=Dir.tmpdir)
+       i = 0
+       loop do
+         p = File.join(dir, "#{base}-#{i}-#{Process.pid}" + extension)
+         return p unless File.exists?(p)
+         i += 1
+       end
+    end
+
+    def compile_and_execute_code(code)
+        if @import_directive.nil? or @compiler_flags.nil?
+            STDERR.puts "Can't compile for non-frameworks targets (yet)"
+            return ''
+        end
+        
+        tmp_src = File.open(unique_tmp_path('src', '.m'), 'w')
+        tmp_src.puts code
+        tmp_src.close
+
+        tmp_bin_path = unique_tmp_path('bin')
+
+        line = "gcc #{tmp_src.path} -o #{tmp_bin_path} #{@compiler_flags}"
+        unless system(line)
+            raise "Can't compile C code... aborting\ncommand was: #{line}"
+        end
+
+        out = `#{tmp_bin_path}`
+        if out.empty?
+            raise "Can't execute compiled C code... aborting\nbinary is #{tmp_bin_path}"
+        end
+
+        File.unlink(tmp_src.path)
+        File.unlink(tmp_bin_path)
+
+        return out
     end
 end
 

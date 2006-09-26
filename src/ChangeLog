@@ -1,5 +1,8 @@
 2006-09-26  Laurent Sansonetti <lsansonetti@apple.com>
 
+	* framework/tool/gen_bridge_metadata.rb:
+	Added support to generate information regarding informal protocols.
+
 	* framework/src/objc/ocdata_conv.h:
 	Removed unnecessary macro introduced by mistake.
 
