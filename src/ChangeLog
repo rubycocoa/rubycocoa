@@ -1,5 +1,8 @@
 2006-09-26  Laurent Sansonetti <lsansonetti@apple.com>
 
+	* framework/src/objc/ocdata_conv.h:
+	Removed unnecessary macro introduced by mistake.
+
 	* framework/src/objc/mdl_objwrapper.m,
 	  framework/src/objc/cls_objcid.h,
 	  framework/src/objc/cls_objcid.m:

@@ -38,7 +38,6 @@ int     to_octype       (const char* oc_type_str);
 size_t  ocdata_size     (int octype, const char* octype_str);
 void*   ocdata_malloc   (int octype, const char* octype_str);
 #define OCDATA_ALLOCA(octype,s)     alloca(ocdata_size((octype),(s)))
-#define OCDATA_ALLOCA2(octype,s,l)  alloca(ocdata_size((octype),(s)) * (l))
 
 const char * rbobj_to_cselstr  (VALUE obj);
 id           rbobj_to_nsselstr (VALUE obj);
