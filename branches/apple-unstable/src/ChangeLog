@@ -1,5 +1,10 @@
 2006-09-26  Laurent Sansonetti <lsansonetti@apple.com>
 
+	* framework/src/ruby/osx/objc/oc_import.rb:
+	Don't automatically map NSCF* classes to their NS* equivalent, as
+	it brings problem with NSCFBoolean and it's not necessary anymore
+	as we have real class hierarchy.
+
 	* framework/tool/gen_bridge_metadata.rb:
 	Added support to generate information regarding informal protocols.
 
