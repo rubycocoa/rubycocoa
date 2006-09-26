@@ -700,7 +700,7 @@ EOS
         die "Can't locate framework library at '#{libpath}'" unless File.exists?(libpath)
         OBJC.dlload(libpath)
         @import_directive = "#import <#{name}/#{name}.h>"
-        @compiler_flags = "-F#{parent_path} -framework #{name}"
+        @compiler_flags = "-F#{parent_path} -framework #{name} -lobjc"
     end
  
     def framework_path(val)
