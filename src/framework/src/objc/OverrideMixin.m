@@ -13,8 +13,20 @@
 #import "RBRuntime.h"
 #import "RBClassUtils.h"
 #import "ocdata_conv.h"
+#import "BridgeSupport.h"
 
 #define OVMIX_LOG(fmt, args...) DLOG("OVMIX", fmt, ##args)
+
+/* On MacOS X, +signatureWithObjCTypes: is a method of NSMethodSignature,
+ * but that method is not present in the header files. We add the definition
+ * here to avoid warnings.
+ *
+ * XXX: We use an undocumented API, but we also don't have much choice: we
+ * must create the things and this is the only way to do it...
+ */
+@interface NSMethodSignature (WarningKiller)
++ (id) signatureWithObjCTypes:(const char*)types;
+@end
 
 static void* alloc_from_default_zone(unsigned int size)
 {
@@ -77,104 +89,116 @@ static id get_slave(id rcv)
  * ruby method handler
  **/
 
-static id handle_ruby_method(void* stretptr, id rcv, SEL a_sel, va_list args)
+/* Implemented in RBObject.m for now, still private. */
+VALUE rbobj_call_ruby(id rbobj, SEL selector, VALUE args);
+
+static void
+ovmix_ffi_closure(ffi_cif* cif, void* resp, void** args, void* userdata)
 {
-  id ret = nil;
-  Method method;
-  unsigned  argc, i;
-  NSMethodSignature* msig;
-  NSInvocation* inv;
-  unsigned retlen;
+  int retval_octype;
+  int *args_octypes;
+  VALUE rb_args;
+  unsigned i;
+  VALUE retval;
 
-  // prepare
-  msig = [rcv methodSignatureForSelector: a_sel];
-  inv = [NSInvocation invocationWithMethodSignature: msig];
-  method = class_getInstanceMethod([rcv class], a_sel);
-  argc = method_getNumberOfArguments(method);
+  OVMIX_LOG("ffi_closure cif %p nargs %d", cif, cif->nargs); 
 
-  // set argument
-  for (i = 2; i < argc; i++) {
-    unsigned int size;
-    unsigned int align;
-    const char* type;
-    int offset;
-	
-    method_getArgumentInfo(method, i, &type, &offset);
+  retval_octype = *(int *)userdata;
+  args_octypes = &((int *)userdata)[1];
+  rb_args = rb_ary_new2(cif->nargs - 2);
 
-    [inv setArgument: args atIndex: i];
+  for (i = 2; i < cif->nargs; i++) {
+    VALUE arg;
 
-    NSGetSizeAndAlignment( type, &size, &align );
-    args += align;
+    if (!ocdata_to_rbobj(Qnil, args_octypes[i - 2], args[i], &arg))
+      rb_raise(rb_eRuntimeError, "Can't convert Objective-C argument #%d to Ruby value", i);
+
+    OVMIX_LOG("\tconverted arg #%d to Ruby value %p", i, arg);
+
+    rb_ary_store(rb_args, i - 2, arg);
   }
 
-  // invoke
-  [inv setTarget: [rcv __slave__]];
-  [inv setSelector: a_sel];
-  [inv invoke];
+  OVMIX_LOG("\tcalling Ruby method...");
+  retval = rbobj_call_ruby(*(id *)args[0], *(SEL *)args[1], rb_args);
+  OVMIX_LOG("\tcalling Ruby method done, retval %p", retval);
 
-  // result
-  retlen = [msig methodReturnLength];
-  if ( retlen > 0) {
-    if (retlen < sizeof(ret)) {
-      void* data = alloca(retlen);
-      [inv getReturnValue: data];
-      if (retlen == sizeof(char))
-	ret = (id)(unsigned long)(*(unsigned char*)data);
-      else if (retlen == sizeof(short))
-	ret = (id)(unsigned long)(*(unsigned short*)data);
-      else
-	rb_raise( rb_eRuntimeError,
-		  "handle_ruby_method('%s'): can't handle the return value!",
-		  (char*)a_sel);
-    }
-    else if (retlen == sizeof(ret)) {
-      [inv getReturnValue: &ret];
-    }
-    else if (stretptr) {
-      [inv getReturnValue: stretptr];
-    }
-    else {
-      // should we raise an error here, because we can't handle the
-      // return value properly?
-      rb_raise( rb_eRuntimeError,
-		"handle_ruby_method('%s'): can't handle the return value!",
-		(char*)a_sel);
-    }
-  }
-
-  return ret;
+  if (!rbobj_to_ocdata(retval, retval_octype, resp))
+    rb_raise(rb_eRuntimeError, "Can't convert return Ruby value to Objective-C value");
 }
 
-static id handle_ruby_method_id(id rcv, SEL a_sel, ...)
+static IMP 
+ovmix_imp_for_type(const char* type)
 {
-  id ret = nil;
-  va_list args;
-  va_start(args, a_sel);
-  ret = handle_ruby_method(NULL, rcv, a_sel, args);
-  va_end(args);
-  return ret;
-}
+  const char *error;
+  NSMethodSignature *methodSignature;
+  unsigned i, argc;
+  ffi_type *rettype;
+  ffi_type **argtypes;
+  ffi_cif *cif;
+  ffi_closure *closure;
+  int *octypes;
 
-static void handle_ruby_method_stret(void* retptr, id rcv, SEL a_sel, ...)
-{
-  va_list args;
-  va_start(args, a_sel);
-  handle_ruby_method(retptr, rcv, a_sel, args);
-  va_end(args);
-}
+  error = NULL;
+  cif = NULL;
+  closure = NULL;
+  methodSignature = [NSMethodSignature signatureWithObjCTypes:type];
+  argc = [methodSignature numberOfArguments];
 
-static IMP get_handler_ruby_method(const char* type)
-{
-  unsigned int size, align;
-  IMP ret;
-  NSGetSizeAndAlignment(type, &size, &align);
-  if (size > sizeof(id)) {
-    ret = (IMP)handle_ruby_method_stret;
+  argtypes = (ffi_type **)malloc(sizeof(ffi_type *) * argc);
+  octypes = (int *)malloc(sizeof(int) * (argc - 1)); /* first int is retval octype, then arg octypes */
+  if (argtypes == NULL || octypes == NULL) {
+    error = "Can't allocate memory";
+    goto bails;
   }
-  else {
-    ret = (IMP)handle_ruby_method_id;
+
+  for (i = 0; i < argc; i++) {
+    const char *atype;
+    int octype;
+
+    atype = [methodSignature getArgumentTypeAtIndex:i];
+    octype = to_octype(atype);
+    if (i >= 2)
+      octypes[i - 1] = octype;
+    argtypes[i] = ffi_type_for_octype(octype);
   }
-  return ret;
+  octypes[0] = to_octype([methodSignature methodReturnType]);
+  rettype = ffi_type_for_octype(octypes[0]);
+
+  cif = (ffi_cif *)malloc(sizeof(ffi_cif));
+  if (cif == NULL) {
+    error = "Can't allocate memory";
+    goto bails;
+  }
+
+  if (ffi_prep_cif(cif, FFI_DEFAULT_ABI, argc, rettype, argtypes) != FFI_OK) {
+    error = "Can't prepare cif";
+    goto bails;
+  }
+
+  closure = (ffi_closure *)malloc(sizeof(ffi_closure));
+  if (closure == NULL) {
+    error = "Can't allocate memory";
+    goto bails;
+  }
+
+  if (ffi_prep_closure(closure, cif, ovmix_ffi_closure, octypes) != FFI_OK) {
+    error = "Can't prepare closure";
+    goto bails;
+  }
+
+  return (IMP)closure; 
+
+bails:
+  if (argtypes != NULL)
+    free(argtypes);
+  if (cif != NULL)
+    free(cif);
+  if (closure != NULL)
+    free(closure);
+  if (error != NULL)
+    rb_raise(rb_eRuntimeError, error);
+
+  return NULL; 
 }
 
 /**
@@ -288,7 +312,7 @@ static id imp_c_addRubyMethod(Class klass, SEL method, SEL arg0)
   }
   else {
     // override method
-    IMP imp = get_handler_ruby_method(me->method_types);
+    IMP imp = ovmix_imp_for_type(me->method_types);
     if (me->method_imp == imp)
       return nil;
     mlp->method_list[0].method_name = me->method_name;
@@ -314,10 +338,11 @@ static id imp_c_addRubyMethod_withType(Class klass, SEL method, SEL arg0, const 
   // add method
   mlp->method_list[0].method_name = sel_registerName((const char*)arg0);
   mlp->method_list[0].method_types = strdup(type);
-  mlp->method_list[0].method_imp = get_handler_ruby_method(type);
+  mlp->method_list[0].method_imp = ovmix_imp_for_type(type);
   mlp->method_count += 1;
 
   class_addMethods(klass, mlp);
+  OVMIX_LOG("Registered Ruby method by selector '%s' types '%s'", (char *)arg0, type);
   return nil;
 }
 
