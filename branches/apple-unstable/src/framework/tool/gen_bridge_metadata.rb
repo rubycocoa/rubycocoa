@@ -560,6 +560,7 @@ EOS
                 protocol.entries.each do |entry|
                     element = prot_element.add_element('method')
                     element.add_attribute('selector', entry.selector)
+                    element.add_attribute('class_method', true) if entry.class_method?
                     element.add_attribute('encoding', @resolved_inf_protocols_encoding[entry.selector])
                 end
             end
