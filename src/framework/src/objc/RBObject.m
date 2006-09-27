@@ -335,7 +335,7 @@ static VALUE rbobject_protected_apply(VALUE a)
     argc = rb_obj_arity_of_method(m_rbobj, a_sel);
     if (argc < 0) 
       argc = -1 - argc;
-    argc = MIN(sizeof(encoding) - 3, argc);    
+    argc = MIN(sizeof(encoding) - 4, argc);    
 
     strcpy(encoding, "@@:");
     p = &encoding[3];
