@@ -1,5 +1,8 @@
 2006-09-27  Laurent Sansonetti <lsansonetti@apple.com>
 
+	* (sample|template)/**/InfoPlist.strings:
+	Removed inappropriate CFBundleShortVersionString tags.
+
 	* framework/tool/gen_bridge_metadata.rb:
 	- Mention if informal protocol methods are class methods or not ;
 	- Link against Foundation by default, as we need it to resolve 
