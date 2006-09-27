@@ -111,7 +111,7 @@ ovmix_ffi_closure(ffi_cif* cif, void* resp, void** args, void* userdata)
     VALUE arg;
 
     if (!ocdata_to_rbobj(Qnil, args_octypes[i - 2], args[i], &arg))
-      rb_raise(rb_eRuntimeError, "Can't convert Objective-C argument #%d to Ruby value", i);
+      rb_raise(rb_eRuntimeError, "Can't convert Objective-C argument #%d of octype %d to Ruby value", i - 2, args_octypes[i - 2]);
 
     OVMIX_LOG("\tconverted arg #%d to Ruby value %p", i, arg);
 
@@ -122,8 +122,10 @@ ovmix_ffi_closure(ffi_cif* cif, void* resp, void** args, void* userdata)
   retval = rbobj_call_ruby(*(id *)args[0], *(SEL *)args[1], rb_args);
   OVMIX_LOG("\tcalling Ruby method done, retval %p", retval);
 
-  if (!rbobj_to_ocdata(retval, retval_octype, resp))
-    rb_raise(rb_eRuntimeError, "Can't convert return Ruby value to Objective-C value");
+  if (retval_octype != _C_VOID) {
+    if (!rbobj_to_ocdata(retval, retval_octype, resp))
+      rb_raise(rb_eRuntimeError, "Can't convert return Ruby value to Objective-C value of octype %d", retval_octype);
+  }
 }
 
 static IMP 

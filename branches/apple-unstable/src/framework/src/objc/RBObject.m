@@ -225,7 +225,7 @@ VALUE rbobj_call_ruby(id rbobj, SEL selector, VALUE args)
  
   RBOBJ_LOG("calling method %s on Ruby object %p with %d args", rb_id2name(mid), m_rbobj, RARRAY(args)->len);
  
-  rb_result = rb_protect(rbobject_protected_apply, stub_args, &err);
+  rb_result = rb_protect(rbobject_protected_apply, (VALUE)stub_args, &err);
   if (err) {
     RBOBJ_LOG("got Ruby exception, raising Objective-C exception");
     [rbobj rbobjRaiseRubyException];
