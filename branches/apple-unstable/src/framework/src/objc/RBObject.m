@@ -10,12 +10,23 @@
 #import "RBObject.h"
 #import "mdl_osxobjc.h"
 #import "ocdata_conv.h"
-#import "DummyProtocolHandler.h"
+#import "BridgeSupport.h"
 #import "RBRuntime.h" // for DLOG
 
 #define RBOBJ_LOG(fmt, args...) DLOG("RBOBJ", fmt, ##args)
 
 extern ID _relaxed_syntax_ID;
+
+/* On MacOS X, +signatureWithObjCTypes: is a method of NSMethodSignature,
+ * but that method is not present in the header files. We add the definition
+ * here to avoid warnings.
+ *
+ * XXX: We use an undocumented API, but we also don't have much choice: we
+ * must create the things and this is the only way to do it...
+ */
+@interface NSMethodSignature (WarningKiller)
++ (id) signatureWithObjCTypes:(const char*)types;
+@end
 
 static RB_ID sel_to_mid(SEL a_sel)
 {
@@ -71,7 +82,6 @@ static RB_ID rb_obj_sel_to_mid(VALUE rcv, SEL a_sel)
 
 static int rb_obj_arity_of_method(VALUE rcv, SEL a_sel)
 {
-  id pool = [[NSAutoreleasePool alloc] init];
   VALUE mstr;
   RB_ID mid;
   VALUE method;
@@ -81,21 +91,7 @@ static int rb_obj_arity_of_method(VALUE rcv, SEL a_sel)
   mstr = rb_str_new2(rb_id2name(mid)); // mstr = sel_to_rbobj (a_sel);
   method = rb_funcall(rcv, rb_intern("method"), 1, mstr);
   argc = rb_funcall(method, rb_intern("arity"), 0);
-  [pool release];
   return NUM2INT(argc);
-}
-
-static SEL ruby_method_sel(int argc)
-{
-  char selName[1024];
-  int selNameLength;
-  int i;
-  
-  selNameLength = snprintf(selName, sizeof selName, "ruby_method_%d", argc);
-  for (i = 0; i < argc; i++)
-    selName[selNameLength++] = ':';
-  selName[selNameLength] = '\0';
-  return sel_registerName(selName);
 }
 
 @implementation RBObject
@@ -111,42 +107,6 @@ static SEL ruby_method_sel(int argc)
   ret = (rb_respond_to(m_rbobj, mid) != 0);
   RBOBJ_LOG("   --> %d", ret);
   return ret;
-}
-
-- (NSMethodSignature*)rbobjMethodSignatureForSelector: (SEL)a_sel
-{
-  NSMethodSignature* msig;
-  int argc;
-  RBOBJ_LOG("rbobjMethodSignatureForSelector(%s)", a_sel);
-  argc = rb_obj_arity_of_method(m_rbobj, a_sel);
-  if (argc < 0) argc = -1 - argc;
-  msig = [DummyProtocolHandler 
-	   instanceMethodSignatureForSelector: ruby_method_sel(argc)];
-  RBOBJ_LOG("   --> %@", msig);
-  return msig;
-}
-
-- (NSMethodSignature*) rbobjMethodSignatureForSheetSelector: (SEL)a_sel
-{
-  const char* tail = ":returnCode:contextInfo:";
-  const SEL dummy_sel = @selector(sheetPanelDidEnd:returnCode:contextInfo:);
-
-  const char* name;
-  int name_len, tail_len;
-  NSMethodSignature* msig;
-
-  msig = nil;
-  name = sel_getName(a_sel);
-  name_len = strlen(name);
-  tail_len = strlen(tail);
-  if (name_len > tail_len) {
-    if (strcmp(name + name_len - tail_len, tail) == 0) {
-      // it's sheet panel selector
-      msig = [DummyProtocolHandler
-	       instanceMethodSignatureForSelector: dummy_sel];
-    }
-  }
-  return msig;
 }
 
 - (VALUE)fetchForwardArgumentsOf: (NSInvocation*)an_inv
@@ -349,15 +309,43 @@ static VALUE rbobject_protected_apply(VALUE a)
 {
   NSMethodSignature* ret = nil;
   RBOBJ_LOG("methodSignatureForSelector(%s)", a_sel);
-  if (a_sel == NULL) return nil;
-  if (oc_master != nil) 
+  if (a_sel == NULL) 
+    return nil;
+  // Try the master object.
+  if (oc_master != nil) { 
     ret = [oc_master instanceMethodSignatureForSelector:a_sel];
-  if (ret == nil)
-    ret = [DummyProtocolHandler instanceMethodSignatureForSelector: a_sel];
-  if (ret == nil)
-    ret = [self rbobjMethodSignatureForSheetSelector: a_sel];
-  if (ret == nil)
-    ret = [self rbobjMethodSignatureForSelector: a_sel];
+    if (ret != nil)
+      RBOBJ_LOG("\tgot method signature from the master object");
+  }
+  // Try the metadata.
+  if (ret == nil) {
+    struct bsInformalProtocolMethod *method;
+    
+    method = find_bs_informal_protocol_method((const char *)a_sel, NO);
+    if (method != NULL) {
+      ret = [NSMethodSignature signatureWithObjCTypes:method->encoding];
+      RBOBJ_LOG("\tgot method signature from metadata");
+    }
+  }
+  // Ensure a dummy method signature ('id' for everything).
+  if (ret == nil) {
+    int argc;
+    char encoding[128], *p;
+
+    argc = rb_obj_arity_of_method(m_rbobj, a_sel);
+    if (argc < 0) 
+      argc = -1 - argc;
+    argc = MIN(sizeof(encoding) - 3, argc);    
+
+    strcpy(encoding, "@@:");
+    p = &encoding[3];
+    while (argc-- > 0) {
+      *p++ = '@';
+    }
+    *p = '\0';
+    ret = [NSMethodSignature signatureWithObjCTypes:encoding];
+    RBOBJ_LOG("\tgenerated dummy method signature");
+  }
   RBOBJ_LOG("   --> %@", ret);
   return ret;
 }

@@ -72,10 +72,18 @@ struct bsMethod {
   struct bsMethodArg *argv;
 };
 
+struct bsInformalProtocolMethod {
+  char *  selector;
+  BOOL    is_class_method;
+  char *  encoding;
+  char *  protocol_name;
+};
+
 extern struct bsFunction *current_function;
 
 ffi_type *ffi_type_for_octype (int octype);
 struct bsMethod *find_bs_method(id klass, const char *selector, BOOL is_class_method);
 struct bsMethodArg *find_bs_method_arg_by_index(struct bsMethod *method, unsigned index);
 struct bsMethodArg *find_bs_method_arg_by_c_array_len_arg_index(struct bsMethod *method, unsigned index);
+struct bsInformalProtocolMethod *find_bs_informal_protocol_method(const char *selector, BOOL is_class_method);
 void initialize_bridge_support (VALUE mOSX);
