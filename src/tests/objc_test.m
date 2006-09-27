@@ -172,6 +172,54 @@
 
 @end
 
+@protocol Helper
+- (int) testInt:(int) i;
+- (short) testShort:(short) i;
+- (long) testLong:(long) i;
+- (float) testFloat:(float) f;
+- (double) testDouble:(double) d;
+@end
+
+@interface TestRig : NSObject { }
+- (void) run;
+@end
+
+@implementation TestRig
+
+- (void) run 
+{
+    Class helperClass = NSClassFromString(@"RigHelper");
+    id helper = [[helperClass alloc] init];
+
+    id name = [helper name];
+    if (![name isKindOfClass:[NSString class]] || ![name isEqualToString:@"helper"])
+      [NSException raise:@"TestRigError" format:@"assertion name failed, expected %@, got %@", @"helper", name];
+
+    int i = [helper testInt:2];
+    if (i != 2)
+      [NSException raise:@"TestRigError" format:@"assertion testInt: failed, expected %d, got %d", 2, i];
+
+    short s = [helper testShort:2];
+    if (s != 2)
+      [NSException raise:@"TestRigError" format:@"assertion testShort: failed, expected %hd, got %hd", 2, s];
+
+    long l = [helper testLong:2];
+    if (l != 2)
+      [NSException raise:@"TestRigError" format:@"assertion testLong: failed, expected %ld, got %ld", 2, l];
+
+    float f2 = 3.141592;
+    float f = [helper testFloat:f2];
+    if (f != f2)
+      [NSException raise:@"TestRigError" format:@"assertion testFloat: failed, expected %f, got %f", f2, f];
+
+    double d2 = 6666666.666;
+    double d = [helper testDouble:d2];
+    if (d != d2)
+      [NSException raise:@"TestRigError" format:@"assertion testDouble: failed, expected %lf, got %lf", d2, d];
+}
+
+@end
+
 void Init_objc_test(){
   // dummy initializer for ruby's `require'
 }

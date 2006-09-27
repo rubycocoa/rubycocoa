@@ -1,5 +1,9 @@
 2006-09-27  Laurent Sansonetti <lsansonetti@apple.com>
 
+	* tests/tc_ovmix.rb, tests/objc_test.m:
+	Added a test case to check #addRubyMethod_withType, based on
+	bug report #1535223.
+
 	* framework/src/objc/OverrideMixin.m,
 	  framework/src/objc/RBObject.m:
 	Use libffi closures as IMPs when marking pure Ruby methods
