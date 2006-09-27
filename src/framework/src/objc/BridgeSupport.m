@@ -22,6 +22,8 @@
 static struct st_table *bsFunctions;   // function name -> struct bsFunction
 static struct st_table *bsConstants;   // constant name -> type
 static struct st_table *bsClasses;     // class name -> struct bsClass
+static struct st_table *bsInformalProtocolClassMethods;         // selector -> struct bsInformalProtocolMethod
+static struct st_table *bsInformalProtocolInstanceMethods;      // selector -> struct bsInformalProtocolMethod
 
 struct bsFunction *current_function = NULL;
 
@@ -450,6 +452,7 @@ osx_load_bridge_support_file (VALUE mOSX, VALUE path)
   unsigned int        i;
   int                 func_args[MAX_ARGS];
   struct bsMethodArg  method_args[MAX_ARGS];
+  char *              protocol_name;
 
   cpath = STR2CSTR(path);
 
@@ -462,6 +465,7 @@ osx_load_bridge_support_file (VALUE mOSX, VALUE path)
   func = NULL;
   klass = NULL;
   method = NULL;
+  protocol_name = NULL;
 
   while (YES) {
     const char *name;
@@ -533,6 +537,9 @@ osx_load_bridge_support_file (VALUE mOSX, VALUE path)
 
         free (enum_name);
         free (enum_value);
+      }
+      else if (strcmp("informal_protocol", name) == 0) {
+        protocol_name = get_attribute_and_check(reader, "name");
       }
       else if (strcmp("function", name) == 0) {
         char *  func_name;
@@ -642,8 +649,36 @@ osx_load_bridge_support_file (VALUE mOSX, VALUE path)
         }
       }
       else if (strcmp("method", name) == 0) {
-        if (klass == NULL) {
-          DLOG("MDLOSX", "Method defined outside a class, skipping...");
+        if (protocol_name != NULL) {
+          char * selector;
+          BOOL   is_class_method;
+          struct st_table *hash;
+
+          selector = get_attribute_and_check(reader, "selector");
+          SET_BOOL_ATTRIBUTE("class_method", is_class_method, NO);
+          hash = is_class_method ? bsInformalProtocolClassMethods : bsInformalProtocolInstanceMethods;         
+
+          if (st_lookup(hash, (st_data_t)selector, NULL)) {
+            DLOG("MDLOSX", "Informal protocol method [NSObject %c%s] already defined, skipping...", is_class_method ? '+' : '-', selector);
+            free(selector);
+          }
+          else {
+            struct bsInformalProtocolMethod *informal_method;
+
+            informal_method = (struct bsInformalProtocolMethod *)malloc(sizeof(struct bsInformalProtocolMethod));
+            if (informal_method == NULL)
+              rb_fatal("can't allocate memory");
+
+            informal_method->selector = selector;
+            informal_method->is_class_method = is_class_method;
+            informal_method->encoding = get_attribute_and_check(reader, "encoding");
+            informal_method->protocol_name = protocol_name;
+
+            st_insert(hash, (st_data_t)selector, (st_data_t)informal_method);            
+          }
+        }
+        else if (klass == NULL) {
+          DLOG("MDLOSX", "Method defined outside a class or informal protocol, skipping...");
         }
         else {
           char * selector;
@@ -678,7 +713,10 @@ osx_load_bridge_support_file (VALUE mOSX, VALUE path)
       }
     }
     else if (node_type == XML_READER_TYPE_END_ELEMENT) {
-      if (strcmp("function", name) == 0) {
+      if (strcmp("informal_protocol", name) == 0) {
+        protocol_name = NULL;
+      } 
+      else if (strcmp("function", name) == 0) {
         BOOL all_args_ok;
   
         all_args_ok = YES;
@@ -834,6 +872,17 @@ find_bs_method_arg_by_c_array_len_arg_index(struct bsMethod *method, unsigned in
   return NULL;
 }
 
+struct bsInformalProtocolMethod *
+find_bs_informal_protocol_method(const char *selector, BOOL is_class_method)
+{
+  struct st_table *hash;
+  struct bsInformalProtocolMethod *method;
+
+  hash = is_class_method ? bsInformalProtocolClassMethods : bsInformalProtocolInstanceMethods;
+
+  return st_lookup(hash, (st_data_t)selector, (st_data_t *)&method) ? method : NULL;
+}
+
 static int
 __inspect_bs_method(char *key, struct bsMethod *value, void *ctx)
 {
@@ -918,6 +967,8 @@ initialize_bridge_support (VALUE mOSX)
   bsConstants = st_init_strtable();
   bsFunctions = st_init_strtable();
   bsClasses = st_init_strtable();
+  bsInformalProtocolClassMethods = st_init_strtable();
+  bsInformalProtocolInstanceMethods = st_init_strtable();
 
   rb_define_module_function(mOSX, "load_bridge_support_file",
     osx_load_bridge_support_file, 1);
