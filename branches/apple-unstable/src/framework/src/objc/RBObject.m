@@ -209,26 +209,40 @@ static VALUE rbobject_protected_apply(VALUE a)
   return rb_apply(args[0],(RB_ID)args[1],(VALUE)args[2]);
 }
 
+VALUE rbobj_call_ruby(id rbobj, SEL selector, VALUE args)
+{
+  VALUE m_rbobj;
+  RB_ID mid;
+  VALUE stub_args[3];
+  VALUE rb_result;
+  int err;
+
+  m_rbobj = [rbobj __rbobj__]; 
+  mid = rb_obj_sel_to_mid(m_rbobj, selector);
+  stub_args[0] = m_rbobj;
+  stub_args[1] = mid;
+  stub_args[2] = args;
+ 
+  RBOBJ_LOG("calling method %s on Ruby object %p with %d args", rb_id2name(mid), m_rbobj, RARRAY(args)->len);
+ 
+  rb_result = rb_protect(rbobject_protected_apply, stub_args, &err);
+  if (err) {
+    RBOBJ_LOG("got Ruby exception, raising Objective-C exception");
+    [rbobj rbobjRaiseRubyException];
+    return Qnil; /* to be sure */
+  }
+ 
+  return rb_result; 
+}
+
 - (void)rbobjForwardInvocation: (NSInvocation *)an_inv
 {
   VALUE rb_args;
   VALUE rb_result;
-  RB_ID mid;
-  VALUE args[3];
-  int err;
 
   RBOBJ_LOG("rbobjForwardInvocation(%@)", an_inv);
-  mid = rb_obj_sel_to_mid(m_rbobj, [an_inv selector]);
   rb_args = [self fetchForwardArgumentsOf: an_inv];
-  args[0] = m_rbobj;
-  args[1] = mid;
-  args[2] = rb_args;
-  
-  rb_result = rb_protect(rbobject_protected_apply,(VALUE)args,&err);
-  if (err) {
-      [self rbobjRaiseRubyException];
-  }
-
+  rb_result = rbobj_call_ruby(self, [an_inv selector], rb_args);
   [self stuffForwardResult: rb_result to: an_inv];
   RBOBJ_LOG("   --> rb_result=%s", STR2CSTR(rb_inspect(rb_result)));
 }

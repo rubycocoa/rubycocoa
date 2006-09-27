@@ -1,5 +1,11 @@
 2006-09-27  Laurent Sansonetti <lsansonetti@apple.com>
 
+	* framework/src/objc/OverrideMixin.m,
+	  framework/src/objc/RBObject.m:
+	Use libffi closures as IMPs when marking pure Ruby methods
+	as Objective-C methods (#addRubyMethod_withType), and directly
+	call the slave object when called.
+
 	* framework/RubyCocoa.xcodeproj/project.pbxproj,
 	  framework/src/objc/RBObject.m,
 	  framework/src/objc/DummyProtocolHandler.h,
