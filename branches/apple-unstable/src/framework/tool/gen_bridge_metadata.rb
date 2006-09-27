@@ -469,7 +469,7 @@ EOS
 #{@import_directive}
 #import <objc/runtime.h>
 
-@interface MyClass
+@interface MyClass : NSObject
 @end
 
 @implementation MyClass
