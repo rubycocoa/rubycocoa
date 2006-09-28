@@ -10,10 +10,7 @@
 require 'osx/cocoa'
 require 'osx/coredata'
 
-class MyDocument < OSX:: NSPersistentDocument
-
-  ns_overrides 'windowNibName', 'windowControllerDidLoadNib:',
-    'setManagedObjectContext:'
+class MyDocument < OSX::NSPersistentDocument
 
   @@model_registered = false
 

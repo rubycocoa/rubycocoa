@@ -10,8 +10,6 @@ require 'osx/cocoa'
 
 class ÇFILEBASENAMEASIDENTIFIERÈ <  OSX::NSView
 
-  ns_overrides 'initWithFrame:', 'drawRect:'
-
   def initWithFrame (frame)
     super_initWithFrame(frame)
     # Initialization code here.
