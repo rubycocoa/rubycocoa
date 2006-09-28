@@ -241,17 +241,17 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
-		4D82A17B0ABF750C0076129F /* Development */ = {
+		4D82A17B0ABF750C0076129F /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 			};
-			name = Development;
+			name = Debug;
 		};
-		4D82A17C0ABF750C0076129F /* Deployment */ = {
+		4D82A17C0ABF750C0076129F /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 			};
-			name = Deployment;
+			name = Release;
 		};
 		4D82A17D0ABF750C0076129F /* Default */ = {
 			isa = XCBuildConfiguration;
@@ -259,7 +259,7 @@
 			};
 			name = Default;
 		};
-		4D82A17F0ABF750C0076129F /* Development */ = {
+		4D82A17F0ABF750C0076129F /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				COPY_PHASE_STRIP = NO;
@@ -280,9 +280,9 @@
 				WRAPPER_EXTENSION = app;
 				ZERO_LINK = NO;
 			};
-			name = Development;
+			name = Debug;
 		};
-		4D82A1800ABF750C0076129F /* Deployment */ = {
+		4D82A1800ABF750C0076129F /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				COPY_PHASE_STRIP = YES;
@@ -301,7 +301,7 @@
 				WRAPPER_EXTENSION = app;
 				ZERO_LINK = NO;
 			};
-			name = Deployment;
+			name = Release;
 		};
 		4D82A1810ABF750C0076129F /* Default */ = {
 			isa = XCBuildConfiguration;
@@ -327,8 +327,8 @@
 		4D82A17A0ABF750C0076129F /* Build configuration list for PBXProject "CocoaDocApp" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				4D82A17B0ABF750C0076129F /* Development */,
-				4D82A17C0ABF750C0076129F /* Deployment */,
+				4D82A17B0ABF750C0076129F /* Debug */,
+				4D82A17C0ABF750C0076129F /* Release */,
 				4D82A17D0ABF750C0076129F /* Default */,
 			);
 			defaultConfigurationIsVisible = 0;
@@ -337,8 +337,8 @@
 		4D82A17E0ABF750C0076129F /* Build configuration list for PBXNativeTarget "«PROJECTNAME»" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				4D82A17F0ABF750C0076129F /* Development */,
-				4D82A1800ABF750C0076129F /* Deployment */,
+				4D82A17F0ABF750C0076129F /* Debug */,
+				4D82A1800ABF750C0076129F /* Release */,
 				4D82A1810ABF750C0076129F /* Default */,
 			);
 			defaultConfigurationIsVisible = 0;
