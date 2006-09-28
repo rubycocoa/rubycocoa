@@ -14,6 +14,7 @@
 #import "RBClassUtils.h"
 #import "ocdata_conv.h"
 #import "BridgeSupport.h"
+#import "st.h"
 
 #define OVMIX_LOG(fmt, args...) DLOG("OVMIX", fmt, ##args)
 
@@ -128,9 +129,14 @@ ovmix_ffi_closure(ffi_cif* cif, void* resp, void** args, void* userdata)
   }
 }
 
+static struct st_table *ffi_imp_closures;
+static pthread_mutex_t ffi_imp_closures_lock;
+
 static IMP 
 ovmix_imp_for_type(const char* type)
 {
+  BOOL ok;
+  IMP imp;
   const char *error;
   NSMethodSignature *methodSignature;
   unsigned i, argc;
@@ -139,6 +145,13 @@ ovmix_imp_for_type(const char* type)
   ffi_cif *cif;
   ffi_closure *closure;
   int *octypes;
+
+  pthread_mutex_lock(&ffi_imp_closures_lock);
+  imp = NULL;
+  ok = st_lookup(ffi_imp_closures, (st_data_t)type, (st_data_t *)&imp);
+  pthread_mutex_unlock(&ffi_imp_closures_lock); 
+  if (ok)
+    return imp;
 
   error = NULL;
   cif = NULL;
@@ -188,6 +201,17 @@ ovmix_imp_for_type(const char* type)
     goto bails;
   }
 
+  pthread_mutex_lock(&ffi_imp_closures_lock);
+  imp = NULL;
+  ok = st_lookup(ffi_imp_closures, (st_data_t)type, (st_data_t *)&imp);
+  if (!ok)
+    st_insert(ffi_imp_closures, (st_data_t)type, (st_data_t)closure);
+  pthread_mutex_unlock(&ffi_imp_closures_lock);
+  if (ok) {
+    error = NULL;   
+    goto bails;
+  }
+
   return (IMP)closure; 
 
 bails:
@@ -200,7 +224,7 @@ bails:
   if (error != NULL)
     rb_raise(rb_eRuntimeError, error);
 
-  return NULL; 
+  return imp; 
 }
 
 /**
@@ -315,8 +339,10 @@ static id imp_c_addRubyMethod(Class klass, SEL method, SEL arg0)
   else {
     // override method
     IMP imp = ovmix_imp_for_type(me->method_types);
-    if (me->method_imp == imp)
+    if (me->method_imp == imp) {
+      OVMIX_LOG("Already registered Ruby method by selector '%s' types '%s', skipping...", (char *)arg0, me->method_types);
       return nil;
+    }
     mlp->method_list[0].method_name = me->method_name;
     mlp->method_list[0].method_types = strdup(me->method_types);
     mlp->method_list[0].method_imp = imp;
@@ -330,6 +356,7 @@ static id imp_c_addRubyMethod(Class klass, SEL method, SEL arg0)
   }
 
   class_addMethods(klass, mlp);
+  OVMIX_LOG("Registered Ruby method by selector '%s' types '%s'", (char *)arg0, me->method_types);
   return nil;
 }
 
@@ -487,4 +514,10 @@ struct objc_method_list* override_mixin_class_method_list()
     }
   }
   return imp_c_mlp;
+}
+
+void init_ovmix(void)
+{   
+    ffi_imp_closures = st_init_strtable();
+    pthread_mutex_init(&ffi_imp_closures_lock, NULL);
 }
