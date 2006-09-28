@@ -1,5 +1,13 @@
 2006-09-28  Laurent Sansonetti <lsansonetti@apple.com>
 
+	* template/ProjectBuilder/Application/Cocoa-Ruby Core Data Application/CocoaApp.xcodeproj/TemplateInfo.plist,
+	* template/ProjectBuilder/Application/Cocoa-Ruby Core Data Application/AppDelegate.rb,
+	* template/ProjectBuilder/Application/Cocoa-Ruby Core Data Application/English.lproj/MainMenu.nib/keyedobjects.nib,
+	* template/ProjectBuilder/Application/Cocoa-Ruby Core Data Application/English.lproj/MainMenu.nib/classes.nib:
+	Fixed this template to accepts a project name that is not capitalized.
+	The project name was used as a Ruby class name, and if it was not 
+	capitalized it didn't run (as Ruby expects class names to be constants).
+
 	* framework/src/objc/OverrideMixin.m,
 	  framework/src/objc/RBRuntime.m,
 	  framework/src/objc/OverrideMixin.h:

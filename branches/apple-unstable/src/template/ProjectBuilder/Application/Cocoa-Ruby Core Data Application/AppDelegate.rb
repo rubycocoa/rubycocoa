@@ -7,7 +7,7 @@
 require 'osx/cocoa'
 require 'osx/coredata'
 
-class ÇPROJECTNAMEASIDENTIFIERÈAppDelegate < OSX::NSObject
+class AppDelegate < OSX::NSObject
   
   def managedObjectModel
     return @managedObjectModel if @managedObjectModel

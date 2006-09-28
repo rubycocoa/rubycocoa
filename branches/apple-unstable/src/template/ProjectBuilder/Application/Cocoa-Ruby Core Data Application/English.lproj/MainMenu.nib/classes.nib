@@ -3,7 +3,7 @@
         {CLASS = FirstResponder; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
         {
             ACTIONS = {saveAction = id; }; 
-            CLASS = ÇPROJECTNAMEASIDENTIFIERÈAppDelegate; 
+            CLASS = AppDelegate; 
             LANGUAGE = ObjC; 
             OUTLETS = {window = NSWindow; }; 
             SUPERCLASS = NSObject; 
