@@ -15,6 +15,7 @@
 #import <Foundation/NSPathUtilities.h>
 #import "mdl_osxobjc.h"
 #import "ocdata_conv.h"
+#import "OverrideMixin.h"
 
 #define RUBY_MAIN_NAME "rb_main.rb"
 
@@ -118,6 +119,7 @@ RBRubyCocoaInit()
   init_rb2oc_cache(); // initialize the Ruby->ObjC internal cache
   init_oc2rb_cache(); // initialize the ObjC->Ruby internal cache
   initialize_mdl_osxobjc();	// initialize an objc part of rubycocoa
+  init_ovmix();
   init_p = 1;
 
   return 1;

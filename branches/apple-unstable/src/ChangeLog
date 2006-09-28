@@ -1,5 +1,14 @@
 2006-09-28  Laurent Sansonetti <lsansonetti@apple.com>
 
+	* framework/src/objc/OverrideMixin.m,
+	  framework/src/objc/RBRuntime.m,
+	  framework/src/objc/OverrideMixin.h:
+	Make sure we don't generate multiple ffi closures for the same
+	method encoding type, to avoid infinite loops.
+
+	* tests/tc_subclass.rb:
+	Improved the ns_override test.
+
 	* template/**/*.project.pbxproj:
 	Renamed targets to be consistent with other templates,
 	s/Development/Debug and s/Deployment/Release.

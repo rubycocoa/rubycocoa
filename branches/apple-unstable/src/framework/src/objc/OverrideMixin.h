@@ -14,3 +14,5 @@ struct objc_ivar_list* override_mixin_ivar_list();
 struct objc_method_list* override_mixin_method_list();
 struct objc_method_list* override_mixin_class_method_list();
 
+void init_ovmix(void);
+
