@@ -2380,7 +2380,7 @@
 				<integer>170</integer>
 			</dict>
 		</dict>
-		<string>«PROJECTNAMEASIDENTIFIER»AppDelegate</string>
+		<string>AppDelegate</string>
 		<string>delegate</string>
 		<dict>
 			<key>$classes</key>

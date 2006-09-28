@@ -9,8 +9,6 @@
 		"ÇPROJECTNAMEÈAppDelegate.rb",
 		"Info.plist",
 		"English.lproj/InfoPlist.strings",
-		"English.lproj/MainMenu.nib/keyedobjects.nib",
-		"English.lproj/MainMenu.nib/classes.nib",
 		"main.m",
 	);
 	Description = "This project builds a Core Data application written in Ruby.";
