@@ -1,3 +1,9 @@
+2006-09-29  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* template/**/*.project.pbxproj:
+	Removed unnecessary Default target and set the Release target
+	as default.
+
 2006-09-28  Laurent Sansonetti <lsansonetti@apple.com>
 
 	* template/ProjectBuilder/File/Ruby NSView subclass.rb,

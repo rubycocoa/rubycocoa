@@ -240,12 +240,6 @@
 			};
 			name = Release;
 		};
-		4D7A7B5A0ABF745500C2D4C0 /* Default */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-			};
-			name = Default;
-		};
 		4D7A7B5C0ABF745500C2D4C0 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -298,27 +292,6 @@
 			};
 			name = Release;
 		};
-		4D7A7B5E0ABF745500C2D4C0 /* Default */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				FRAMEWORK_SEARCH_PATHS = "";
-				HEADER_SEARCH_PATHS = "";
-				INSTALL_PATH = "$(HOME)/Applications";
-				LIBRARY_SEARCH_PATHS = "";
-				OTHER_CFLAGS = "";
-				OTHER_LDFLAGS = "";
-				PREBINDING = NO;
-				PRODUCT_NAME = "«PROJECTNAME»";
-				SECTORDER_FLAGS = "";
-				WARNING_CFLAGS = (
-					"-Wmost",
-					"-Wno-four-char-constants",
-					"-Wno-unknown-pragmas",
-				);
-				WRAPPER_EXTENSION = app;
-			};
-			name = Default;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -327,20 +300,18 @@
 			buildConfigurations = (
 				4D7A7B580ABF745500C2D4C0 /* Debug */,
 				4D7A7B590ABF745500C2D4C0 /* Release */,
-				4D7A7B5A0ABF745500C2D4C0 /* Default */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Default;
+			defaultConfigurationName = Release;
 		};
 		4D7A7B5B0ABF745500C2D4C0 /* Build configuration list for PBXApplicationTarget "«PROJECTNAME»" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				4D7A7B5C0ABF745500C2D4C0 /* Debug */,
 				4D7A7B5D0ABF745500C2D4C0 /* Release */,
-				4D7A7B5E0ABF745500C2D4C0 /* Default */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Default;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

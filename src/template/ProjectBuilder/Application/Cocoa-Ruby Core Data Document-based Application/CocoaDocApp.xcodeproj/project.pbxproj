@@ -253,12 +253,6 @@
 			};
 			name = Release;
 		};
-		4D82A17D0ABF750C0076129F /* Default */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-			};
-			name = Default;
-		};
 		4D82A17F0ABF750C0076129F /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -303,24 +297,6 @@
 			};
 			name = Release;
 		};
-		4D82A1810ABF750C0076129F /* Default */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
-				GCC_MODEL_TUNING = G5;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "«PROJECTNAME»_Prefix.pch";
-				GCC_WARN_ABOUT_RETURN_TYPE = YES;
-				GCC_WARN_UNUSED_VARIABLE = YES;
-				INFOPLIST_FILE = Info.plist;
-				INSTALL_PATH = "$(HOME)/Applications";
-				PREBINDING = NO;
-				PRODUCT_NAME = "«PROJECTNAME»";
-				WRAPPER_EXTENSION = app;
-			};
-			name = Default;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -329,20 +305,18 @@
 			buildConfigurations = (
 				4D82A17B0ABF750C0076129F /* Debug */,
 				4D82A17C0ABF750C0076129F /* Release */,
-				4D82A17D0ABF750C0076129F /* Default */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Default;
+			defaultConfigurationName = Release;
 		};
 		4D82A17E0ABF750C0076129F /* Build configuration list for PBXNativeTarget "«PROJECTNAME»" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				4D82A17F0ABF750C0076129F /* Debug */,
 				4D82A1800ABF750C0076129F /* Release */,
-				4D82A1810ABF750C0076129F /* Default */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Default;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
