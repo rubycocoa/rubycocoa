@@ -1,3 +1,9 @@
+2006-09-30  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* template/ProjectBuilder/Application/Cocoa-Ruby Document-based Application/Info.plist,
+	  template/ProjectBuilder/Application/Cocoa-Ruby Application/Info.plist:
+	Added missing CFBundleIdentifier and CFBundleShortVersionString tags.
+
 2006-09-29  Laurent Sansonetti <lsansonetti@apple.com>
 
 	* template/**/*.project.pbxproj:
