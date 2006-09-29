@@ -1,5 +1,11 @@
 2006-09-29  Laurent Sansonetti <lsansonetti@apple.com>
 
+	* template/**/*.project.pbxproj:
+	- Removed unnecessary Default target and set the Release target
+	  as default ; 
+	- Removed unnecessary project/target build settings and added missing
+	  settings to conform with other recent Xcode templates.
+
 	* template/ProjectBuilder/Application/Cocoa-Ruby Document-based Application/Info.plist,
 	  template/ProjectBuilder/Application/Cocoa-Ruby Document-based Application/CocoaDocApp.xcodeproj/TemplateInfo.plist,
 	  template/ProjectBuilder/Application/Cocoa-Ruby Document-based Application/CocoaDocApp.xcodeproj/project.pbxproj,
@@ -7,10 +13,6 @@
 	  template/ProjectBuilder/Application/Cocoa-Ruby Application/CocoaApp.xcodeproj/project.pbxproj,
 	  template/ProjectBuilder/Application/Cocoa-Ruby Application/Info.plist:
 	Upgraded to use native targets.
-
-	* template/**/*.project.pbxproj:
-	Removed unnecessary Default target and set the Release target
-	as default.
 
 2006-09-28  Laurent Sansonetti <lsansonetti@apple.com>
 
