@@ -3,7 +3,8 @@
 		"English.lproj/InfoPlist.strings",
 		"MyDocument.rb",
 		"rb_main.rb",
-		"main.m"
+		"main.m",
+        "Info.plist"
 	);
     Description = "This project builds a Cocoa-based application written in Ruby that uses the NSDocument architecture.";
 }
