@@ -296,19 +296,20 @@ class OCHeaderAnalyzer
     private
 
     def __pointer__?
-      rettype = @stripped_rettype.delete('() ')
-      md = /^([^*]+)(\*+)$/.match(rettype)
-      return false if md.nil?
-      type, refkind = md[1], md[2]
-      return false if type.nil? or refkind.nil?
       @objc_lookup_cache ||= {}
       @skip_objc_lookup_types ||= ['Protocol']
       cached = @objc_lookup_cache[rettype]
       return cached unless cached.nil?
-      retval = if @skip_objc_lookup_types.include?(type) or !OBJC.is_objc_class?(type)
-          refkind == '*'
+      rettype = @stripped_rettype.delete('() ')
+      retval = if md = /^(.+)Array$/.match(rettype)
+        # XXX this should be improved
+        !OBJC.is_objc_class?(md[1])
+      elsif md = /^([^*]+)(\*+)$/.match(rettype)
+        type, refkind = md[1], md[2]
+        return false if type.nil? or refkind.nil?
+        refkind == (@skip_objc_lookup_types.include?(type) or !OBJC.is_objc_class?(type)) ? '*' : '**'
       else
-          refkind == '**'
+        false
       end
       @objc_lookup_cache[rettype] = retval
       return retval
@@ -401,8 +402,10 @@ class BridgeSupportGenerator
     def initialize(args)
         parse_args(args)
         scan_headers
-        collect_enums
-        collect_inf_protocols_encoding
+        unless @generate_exception_template
+          collect_enums
+          collect_inf_protocols_encoding
+        end
         generate_xml
         @out_io.close unless @out_io == STDOUT
     end

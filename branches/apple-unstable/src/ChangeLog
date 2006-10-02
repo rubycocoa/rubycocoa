@@ -1,3 +1,10 @@
+2006-10-02  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* framework/tool/gen_bridge_metadata.rb:
+	Better support of pointer-like argument detection (check for .+Array types
+	like NSPointArray etc...). Support could be better though by resolving the
+	typedefs.
+
 2006-09-30  Laurent Sansonetti <lsansonetti@apple.com>
 
 	* template/ProjectBuilder/Application/Cocoa-Ruby Document-based Application/Info.plist,
