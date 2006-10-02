@@ -397,7 +397,7 @@ class OCHeaderAnalyzer
 end
 
 class BridgeSupportGenerator
-    VERSION = '0.9.0'
+    VERSION = '0.9'
 
     def initialize(args)
         parse_args(args)
@@ -495,7 +495,9 @@ EOS
     def generate_xml
         document = REXML::Document.new
         document << REXML::XMLDecl.new
+        document << REXML::DocType.new(['signatures', 'SYSTEM', '"file://localhost/System/Library/DTDs/BridgeSupport.dtd"'])
         root = document.add_element('signatures')
+        root.add_attribute('version', VERSION)
 
         if @generate_exception_template
             # Generate the exception template file.
