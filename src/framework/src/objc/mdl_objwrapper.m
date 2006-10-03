@@ -189,6 +189,7 @@ ocm_ffi_dispatch(int argc, VALUE* argv, VALUE rcv, VALUE* result, struct _ocm_se
   ffi_type * ret_type;
   unsigned i;
   unsigned pointers_args_count;
+  unsigned c_ary_length_args_count;
   void * retval;
   VALUE exception;
 
@@ -199,10 +200,8 @@ ocm_ffi_dispatch(int argc, VALUE* argv, VALUE rcv, VALUE* result, struct _ocm_se
   OBJWRP_LOG("ocm_ffi_dispatch (%s%c%s): args_count=%d ret_type=%s", ((struct objc_class *) klass)->name, is_class_method ? '.' : '#', ctx->selector, argc, ctx->methodReturnType);
 
   // Sanity check (arg count etc...).
-  pointers_args_count = 0;
+  pointers_args_count = c_ary_length_args_count = 0;
   if (bs_method != NULL) {
-    int expected;
-
     OBJWRP_LOG("\tfound metadata description\n");
 
     if (bs_method->ignore)
@@ -210,8 +209,6 @@ ocm_ffi_dispatch(int argc, VALUE* argv, VALUE rcv, VALUE* result, struct _ocm_se
         "Method '%s' is not supported (suggested alternative: '%s')",
         ctx->selector,
         bs_method->suggestion != NULL ? bs_method->suggestion : "n/a");
-
-    expected = ctx->numberOfArguments;
 
     if (bs_method->argc > 0) {
       int length_args[MAX_ARGS];
@@ -223,19 +220,19 @@ ocm_ffi_dispatch(int argc, VALUE* argv, VALUE rcv, VALUE* result, struct _ocm_se
         arg = &bs_method->argv[i];
         // The given argument is a C array with a length determined by the value of another argument, like:
         //   [NSArray + arrayWithObjects: length:]
-        // If 'in' or 'inout, the ' length ' argument is not necessary (but the 'array' is).
-        // If 'out', the 'array' argument is not necessary(but the 'length' is).
-        if (arg->c_array_delimited_by_arg != -1) {
+        // If 'in' or 'inout, the 'length' argument is not necessary (but the 'array' is).
+        // If 'out', the 'array' argument is not necessary (but the 'length' is).
+        if (arg->c_ary_type == bsCArrayArgDelimitedByArg) {
           unsigned j;
           BOOL already;
           
           if (ctx->numberOfArguments == argc)
-            rb_warn("%s%c%s argument #%d is no longer necessary (will be ignored)", ((struct objc_class *) klass)->name, is_class_method ? '.' : '#', ctx->selector, arg->c_array_delimited_by_arg);
+            rb_warn("%s%c%s argument #%d is no longer necessary (will be ignored)", ((struct objc_class *) klass)->name, is_class_method ? '.' : '#', ctx->selector, arg->c_ary_type_value);
 
           // Some methods may accept multiple 'array' 'in' arguments that refer to the same 'length' argument, like:
           //   [NSDictionary + dictionaryWithObjects: forKeys: count:]
           for (j = 0, already = NO; j < length_args_count; j++) {
-            if (length_args[j] == arg->c_array_delimited_by_arg) {
+            if (length_args[j] == arg->c_ary_type_value) {
               already = YES;
               break;
             }
@@ -243,20 +240,21 @@ ocm_ffi_dispatch(int argc, VALUE* argv, VALUE rcv, VALUE* result, struct _ocm_se
           if (already)
             continue;
           
-          length_args[length_args_count++] = arg->c_array_delimited_by_arg;
-          expected--;
+          length_args[length_args_count++] = arg->c_ary_type_value;
+          c_ary_length_args_count++;
         }
       }
     }
-    // We don 't want to raise if the user sets the right number of arguments (the warning(s) above should be enough).
-    if (ctx->numberOfArguments != argc && expected != argc)
-      rb_raise(rb_eArgError, "bad number of argument(s) (expected %d, got %d)", expected, argc);
-  } 
-  else if (ctx->numberOfArguments != argc) {
+  }
+
+  if (ctx->numberOfArguments - c_ary_length_args_count != argc) {
     BOOL bad = YES;
-    if (argc < ctx->numberOfArguments) {
+    if (argc < ctx->numberOfArguments - c_ary_length_args_count) {
       for (i = argc; i < ctx->numberOfArguments; i++) {
-        if (ctx->argumentsTypes[i][0] == '^')
+        const char *type = ctx->argumentsTypes[i];
+        if (*type == 'r')
+            type++;
+        if (*type == '^')
           pointers_args_count++;
       }
       if (pointers_args_count + argc == ctx->numberOfArguments)
@@ -265,7 +263,8 @@ ocm_ffi_dispatch(int argc, VALUE* argv, VALUE rcv, VALUE* result, struct _ocm_se
     if (bad)
       rb_raise(rb_eArgError, "bad number of argument(s) (expected %d, got %d)", ctx->numberOfArguments, argc);
   }
-  
+  OBJWRP_LOG("\t%d ary length argument(s), %d omitted pointer(s)", c_ary_length_args_count, pointers_args_count);
+ 
   // Prepare arg types / values.
   arg_types = (ffi_type **) calloc(ctx->numberOfArguments + 3, sizeof(ffi_type *));
   arg_values = (void **) calloc(ctx->numberOfArguments + 3, sizeof(void *));
@@ -281,13 +280,15 @@ ocm_ffi_dispatch(int argc, VALUE* argv, VALUE rcv, VALUE* result, struct _ocm_se
     unsigned skipped = 0;
     for (i = 0; i < ctx->numberOfArguments; i++) {
       // C-array-length-like argument, which should be already defined
-      // (at the same time than the C-array-like argument).
-      if (find_bs_method_arg_by_c_array_len_arg_index(bs_method, i) != NULL) {
+      // (at the same time than the C-array-like argument), unless it's
+      // returned by reference.
+      if (find_bs_method_arg_by_c_array_len_arg_index(bs_method, i) != NULL
+          && ctx->argumentsTypes[i][0] != '^') {
         skipped++;
       } 
       // Omitted pointer.
       else if (i - skipped >= argc) {
-        OBJWRP_LOG("\tomitted pointer[%d] (%p)", i, arg_values[i + 2]);
+        OBJWRP_LOG("\tomitted pointer[%d]", i);
         arg_values[i + 2] = &arg_values[i + 2];
         arg_types[i + 2] = &ffi_type_pointer;
       }
@@ -305,11 +306,16 @@ ocm_ffi_dispatch(int argc, VALUE* argv, VALUE rcv, VALUE* result, struct _ocm_se
         octype_str = ctx->argumentsTypes[i];
         octype = to_octype(octype_str);
         bs_arg = find_bs_method_arg_by_index(bs_method, i);
-        is_c_array = bs_arg != NULL && bs_arg->c_array_delimited_by_arg != -1;
+
+        if (bs_arg != NULL && !bs_arg->null_accepted && NIL_P(arg)) {
+            exception = ocdataconv_err_new(ctx->rcv, ctx->selector, "argument #%d can't be nil", i);
+            goto bails;
+        }
+
+        is_c_array = bs_arg != NULL && bs_arg->c_ary_type != bsCArrayArgUndefined;
 
         // C-array-like argument.
         if (is_c_array) {
-          int * prev_len;
           const char * ptype;
 
           ptype = octype_str;
@@ -332,12 +338,23 @@ ocm_ffi_dispatch(int argc, VALUE* argv, VALUE rcv, VALUE* result, struct _ocm_se
             goto bails;
           }
 
-          prev_len = arg_values[bs_arg->c_array_delimited_by_arg + 2];
-          if (prev_len != NULL && *prev_len != len) {
-            exception = ocdataconv_err_new(ctx->rcv, ctx->selector, "incorrect array length of argument #%d (expected %d, got %d)", i, *prev_len, len);
-            goto bails;
+          if (bs_arg->c_ary_type == bsCArrayArgFixedLength) {
+            int expected_len = bs_arg->c_ary_type_value * ocdata_size(to_octype(ptype), ptype);
+            if (expected_len != len) { 
+              exception = ocdataconv_err_new(ctx->rcv, ctx->selector, "argument #%d has an invalid length (expected %d, got %d)", i, expected_len, len);
+              goto bails;
+            }
           }
-          OBJWRP_LOG("\targ_type[%d] (%p) : %s (defined as a C array delimited by arg #%d in the metadata)", i, arg, octype_str, bs_arg->c_array_delimited_by_arg);
+          else if (bs_arg->c_ary_type == bsCArrayArgDelimitedByArg) {
+            int * prev_len;
+          
+            prev_len = arg_values[bs_arg->c_ary_type_value + 2];
+            if (prev_len != NULL && *prev_len != len) {
+              exception = ocdataconv_err_new(ctx->rcv, ctx->selector, "incorrect array length of argument #%d (expected %d, got %d)", i, *prev_len, len);
+              goto bails;
+            }
+            OBJWRP_LOG("\targ_type[%d] (%p) : %s (defined as a C array delimited by arg #%d in the metadata)", i, arg, octype_str, bs_arg->c_ary_type_value);
+          }
           value = OCDATA_ALLOCA(octype, octype_str);
           if (len > 0)
             *(void **) value = alloca(ocdata_size(to_octype(ptype), ptype) * len);
@@ -355,14 +372,14 @@ ocm_ffi_dispatch(int argc, VALUE* argv, VALUE rcv, VALUE* result, struct _ocm_se
         arg_types[i + 2] = ffi_type_for_octype(octype);
         arg_values[i + 2] = value;
 
-        if (is_c_array) {
+        if (is_c_array && bs_arg->c_ary_type == bsCArrayArgDelimitedByArg) {
           int * plen;
 
-          OBJWRP_LOG("\targ_type[%d] defined as the array length (%d)\n", bs_arg->c_array_delimited_by_arg, len);
+          OBJWRP_LOG("\targ_type[%d] defined as the array length (%d)\n", bs_arg->c_ary_type_value, len);
           plen = (int *) alloca(sizeof(int));
           *plen = len;
-          arg_values[bs_arg->c_array_delimited_by_arg + 2] = plen;
-          arg_types[bs_arg->c_array_delimited_by_arg + 2] = &ffi_type_uint;
+          arg_values[bs_arg->c_ary_type_value + 2] = plen;
+          arg_types[bs_arg->c_ary_type_value + 2] = &ffi_type_uint;
         }
       }
     }
@@ -448,17 +465,55 @@ ocm_ffi_dispatch(int argc, VALUE* argv, VALUE rcv, VALUE* result, struct _ocm_se
       if (value != NULL) {
         VALUE rbval;
         const char *octype_str;
+        int octype;
+        struct bsMethodArg *bs_arg;
 
         octype_str = ctx->argumentsTypes[i];
         if (octype_str[0] == '^')
           octype_str++;
         OBJWRP_LOG("\tgot omitted pointer[%d] : %s (%p)", i, octype_str, value);
-        if (!ocdata_to_rbobj(Qnil, to_octype(octype_str), &value, &rbval)) {
-          exception = ocdataconv_err_new(ctx->rcv, ctx->selector, "cannot convert pass-by-ref argument #%d result as '%s' to Ruby Object.", i, octype_str);
-          goto bails;
+        octype = to_octype(octype_str);        
+        rbval = Qnil;
+
+        if (octype == _PRIV_C_PTR 
+            && bs_method != NULL
+            && (bs_arg = find_bs_method_arg_by_index(bs_method, i)) != NULL) {
+
+          switch (bs_arg->c_ary_type) {
+            case bsCArrayArgDelimitedByArg:
+              {
+                void *length_value = arg_values[bs_arg->c_ary_type_value + 2];
+                if (length_value != NULL) {
+                  rbval = rb_str_new((char *)value, (int)length_value * ocdata_size(octype, octype_str));
+                }
+                else {
+                  OBJWRP_LOG("\tarray length should have been returned by argument #%d, but it's NULL, defaulting on ObjCPtr", bs_arg->c_ary_type_value);
+                }
+              }
+              break;
+            case bsCArrayArgFixedLength:
+              rbval = rb_str_new((char *)value, bs_arg->c_ary_type_value);
+              break;
+            case bsCArrayArgDelimitedByNull:
+              rbval = rb_str_new2((char *)value);
+              break;
+            default:
+              // Do nothing.
+              break;
+          }
+        }
+
+        if (NIL_P(rbval)) {
+          if (!ocdata_to_rbobj(Qnil, to_octype(octype_str), &value, &rbval)) {
+            exception = ocdataconv_err_new(ctx->rcv, ctx->selector, "cannot convert pass-by-ref argument #%d result as '%s' to Ruby Object.", i, octype_str);
+            goto bails;
+          }
         }
         ocm_retain_result_if_necessary(rbval, ctx->selector);
         rb_ary_push(retval_ary, rbval);
+      }
+      else {
+        OBJWRP_LOG("\tomitted pointer[%d] is nil, skipping...", i);
       }
     }
 
