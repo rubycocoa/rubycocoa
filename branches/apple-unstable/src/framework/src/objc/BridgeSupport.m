@@ -132,6 +132,47 @@ get_value_and_check(xmlTextReaderPtr reader)
   return (char *)value;
 }
 
+static void
+get_c_ary_type_attribute(xmlTextReaderPtr reader, bsCArrayArgType *type, int *value)
+{
+  char *c_ary_type;
+
+  if ((c_ary_type = get_attribute(reader, "c_array_delimited_by_arg")) != NULL) {
+    *type = bsCArrayArgDelimitedByArg;
+    *value = atoi(c_ary_type);
+  }
+  else if ((c_ary_type = get_attribute(reader, "c_array_of_fixed_length")) != NULL) {
+    *type = bsCArrayArgFixedLength;
+    *value = atoi(c_ary_type);
+  }
+  else if ((c_ary_type = get_attribute(reader, "c_array_delimited_by_null")) != NULL
+           && strcmp(c_ary_type, "true") == 0) {
+    *type = bsCArrayArgDelimitedByNull;
+    *value = -1;
+  }
+  else {
+    *type = bsCArrayArgUndefined;
+    *value = -1;
+  }
+
+  if (c_ary_type != NULL)
+    free(c_ary_type);
+}
+
+static inline BOOL
+get_boolean_attribute(xmlTextReaderPtr reader, const char *name, BOOL default_value)
+{
+  char *value;
+  BOOL ret;
+
+  value = get_attribute(reader, name);
+  if (value == NULL)
+    return default_value;
+  ret = strcmp(value, "true") == 0;
+  free(value);
+  return ret;
+}
+
 static int
 bridge_support_type_to_octype (const char *type)
 {
@@ -467,6 +508,8 @@ osx_load_bridge_support_file (VALUE mOSX, VALUE path)
   method = NULL;
   protocol_name = NULL;
 
+#define ASSERT_ALLOC(x) do { if (x == NULL) rb_fatal("can't allocate memory"); } while (0)
+
   while (YES) {
     const char *name;
     int node_type = -1;
@@ -482,19 +525,6 @@ osx_load_bridge_support_file (VALUE mOSX, VALUE path)
     
     if (eof)
       break;
-
-#define SET_BOOL_ATTRIBUTE(att_name, dest, def_val)     \
-    do {                                                \
-        char *value = get_attribute(reader, att_name);  \
-        if (value != NULL) {                            \
-            dest = strcmp("true", value) == 0;          \
-            free(value);                                \
-        }                                               \
-        else {                                          \
-            dest = def_val;                             \
-        }                                               \
-    }                                                   \
-    while (0)
 
     name = (const char *)xmlTextReaderConstName(reader);
  
@@ -552,14 +582,13 @@ osx_load_bridge_support_file (VALUE mOSX, VALUE path)
         }
 
         func = (struct bsFunction *)calloc(1, sizeof(struct bsFunction));
-        if (func == NULL)
-          rb_fatal("can't allocate memory");
+        ASSERT_ALLOC(func);
 
         st_insert(bsFunctions, (st_data_t)func_name, (st_data_t)func);
         rb_define_module_function(mOSX, func_name, bridge_support_dispatcher, -1);
 
         func->name = func_name;
-        SET_BOOL_ATTRIBUTE("variadic", func->is_variadic, NO);
+        func->is_variadic = get_boolean_attribute(reader, "variadic", NO);
 
         return_type = get_attribute(reader, "returns");
         if (return_type != NULL) {
@@ -600,8 +629,7 @@ osx_load_bridge_support_file (VALUE mOSX, VALUE path)
         }
         else {
           klass = (struct bsClass *)malloc(sizeof(struct bsClass));
-          if (klass == NULL)
-            rb_fatal("can't allocate memory");
+          ASSERT_ALLOC(klass);
           
           klass->name = class_name;
           klass->class_methods = st_init_strtable();
@@ -619,7 +647,6 @@ osx_load_bridge_support_file (VALUE mOSX, VALUE path)
         }
         else {
           char *  type_modifier;
-          char *  c_array_len_arg;
           struct bsMethodArg * arg; 
  
           arg = &method_args[method->argc++];
@@ -637,14 +664,33 @@ osx_load_bridge_support_file (VALUE mOSX, VALUE path)
             DLOG("MDLOSX", "Given type modifier '%s' is invalid, default'ing to 'out'", type_modifier);
             arg->type_modifier = bsTypeModifierOut;
           }
-   
-          c_array_len_arg = get_attribute(reader, "c_array_delimited_by_arg");
-          if (c_array_len_arg != NULL) {
-            arg->c_array_delimited_by_arg = atoi(c_array_len_arg);
-            free(c_array_len_arg);
+  
+          arg->null_accepted = get_boolean_attribute(reader, "null_accepted", YES);
+          get_c_ary_type_attribute(reader, &arg->c_ary_type, &arg->c_ary_type_value); 
+        }
+      }
+      else if (strcmp("method_retval", name) == 0) {
+        if (method == NULL) {
+          DLOG("MDLOSX", "Method return value defined outside a method, skipping...");
+        }
+        else if (method->retval != NULL) {
+          DLOG("MDLOSX", "Method '%s' return value defined more than once, skipping...", method->selector);
+        }
+        else {
+          bsCArrayArgType type;
+          int value;
+
+          get_c_ary_type_attribute(reader, &type, &value);
+
+          if (type == bsCArrayArgUndefined) {
+            DLOG("MDLOSX", "Method return value defined without a C-array type attribute, skipping...");
           }
           else {
-             arg->c_array_delimited_by_arg = -1;
+            method->retval = (struct bsMethodRetval *)malloc(sizeof(struct bsMethodRetval));
+            ASSERT_ALLOC(method->retval);
+            
+            method->retval->c_ary_type = type;
+            method->retval->c_ary_type_value = value;
           }
         }
       }
@@ -655,7 +701,7 @@ osx_load_bridge_support_file (VALUE mOSX, VALUE path)
           struct st_table *hash;
 
           selector = get_attribute_and_check(reader, "selector");
-          SET_BOOL_ATTRIBUTE("class_method", is_class_method, NO);
+          is_class_method = get_boolean_attribute(reader, "class_method", NO);
           hash = is_class_method ? bsInformalProtocolClassMethods : bsInformalProtocolInstanceMethods;         
 
           if (st_lookup(hash, (st_data_t)selector, NULL)) {
@@ -666,8 +712,7 @@ osx_load_bridge_support_file (VALUE mOSX, VALUE path)
             struct bsInformalProtocolMethod *informal_method;
 
             informal_method = (struct bsInformalProtocolMethod *)malloc(sizeof(struct bsInformalProtocolMethod));
-            if (informal_method == NULL)
-              rb_fatal("can't allocate memory");
+            ASSERT_ALLOC(informal_method);
 
             informal_method->selector = selector;
             informal_method->is_class_method = is_class_method;
@@ -686,7 +731,7 @@ osx_load_bridge_support_file (VALUE mOSX, VALUE path)
           struct st_table * methods_hash;
 
           selector = get_attribute_and_check(reader, "selector");
-          SET_BOOL_ATTRIBUTE("class_method", is_class_method, NO);
+          is_class_method = get_boolean_attribute(reader, "class_method", NO);
 
           methods_hash = is_class_method ? klass->class_methods : klass->instance_methods;
           if (st_delete(methods_hash, (st_data_t *)&selector, (st_data_t *)&method)) {
@@ -695,20 +740,18 @@ osx_load_bridge_support_file (VALUE mOSX, VALUE path)
           }
 
           method = (struct bsMethod *)malloc(sizeof(struct bsMethod));
-          if (method == NULL)
-            rb_fatal("can't allocate memory");
+          ASSERT_ALLOC(method);
 
           st_insert(methods_hash, (st_data_t)selector, (st_data_t)method);
           
           method->selector = selector;
           method->is_class_method = is_class_method;
-
-          SET_BOOL_ATTRIBUTE("returns_char", method->returns_char, NO);
-          SET_BOOL_ATTRIBUTE("ignore", method->ignore, NO);
-
+          method->returns_char = get_boolean_attribute(reader, "returns_char", NO);
+          method->ignore = get_boolean_attribute(reader, "ignore", NO);
           method->suggestion = method->ignore ? get_attribute(reader, "suggestion") : NULL;
           method->argc = 0;
           method->argv = NULL;
+          method->retval = NULL;
        }
       }
     }
@@ -736,8 +779,7 @@ osx_load_bridge_support_file (VALUE mOSX, VALUE path)
             len = sizeof(int) * func->argc;
   
             func->argv = (int *)malloc(len);
-            if (func->argv == NULL)
-              rb_fatal("can't allocate memory");
+            ASSERT_ALLOC(func->argv);
             memcpy(func->argv, func_args, len);
           }  
         } 
@@ -755,8 +797,7 @@ osx_load_bridge_support_file (VALUE mOSX, VALUE path)
     
           len = sizeof(struct bsMethodArg) * method->argc;
           method->argv = (struct bsMethodArg *)malloc(len);
-          if (method->argv == NULL)
-            rb_fatal("can't allocate memory");
+          ASSERT_ALLOC(method->argv);
           memcpy(method->argv, method_args, len);
         }
 
@@ -866,7 +907,7 @@ find_bs_method_arg_by_c_array_len_arg_index(struct bsMethod *method, unsigned in
     return NULL;
 
   for (i = 0; i < method->argc; i++)
-    if (method->argv[i].c_array_delimited_by_arg == index)
+    if (method->argv[i].c_ary_type == bsCArrayArgDelimitedByArg && method->argv[i].c_ary_type_value == index)
       return &method->argv[i];  
 
   return NULL;
@@ -901,9 +942,20 @@ __inspect_bs_method(char *key, struct bsMethod *value, void *ctx)
 
     arg = &value->argv[i];
 
-    printf("            arg #%d, type modifier '%s'", arg->index, arg->type_modifier == bsTypeModifierIn ? "in" : arg->type_modifier == bsTypeModifierOut ? "out" : "inout");
-    if (arg->c_array_delimited_by_arg != -1)
-      printf(", length is defined by arg #%d value", arg->c_array_delimited_by_arg);
+    printf("            arg #%d, type modifier '%s'%s", arg->index, arg->type_modifier == bsTypeModifierIn ? "in" : arg->type_modifier == bsTypeModifierOut ? "out" : "inout", arg->null_accepted ? "" : ", NULL is not accepted");
+    switch (arg->c_ary_type) {
+      case bsCArrayArgUndefined:
+        break;
+      case bsCArrayArgDelimitedByArg:
+        printf(", length is defined by arg #%d value", arg->c_ary_type_value);
+        break;
+      case bsCArrayArgFixedLength:
+        printf(", length is fixed to %d", arg->c_ary_type_value);
+        break;
+      case bsCArrayArgDelimitedByNull:
+        printf(", must be NULL terminated");
+        break;
+    }
     printf("\n");
   }
 

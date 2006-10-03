@@ -590,6 +590,23 @@ static BOOL rbobj_to_objcptr(VALUE obj, void** cptr)
   else if (TYPE(obj) == T_STRING) {
     *cptr = RSTRING(obj)->ptr;
   }
+#if 0
+  // TODO
+  else if (TYPE(obj) == T_ARRAY) {
+    if (RARRAY(obj)->len > 0) {
+      void *ary;
+      unsigned i;
+
+      ary = *cptr;
+      for (i = 0; i < RARRAY(obj)->len; i++) {
+        rbobj_to_ocdata( )
+      }
+    }
+    else {
+      *cptr = NULL;
+    }
+  }
+#endif
   else if (rb_obj_is_kind_of(obj, objcptr_s_class()) == Qtrue) {
     *cptr = objcptr_cptr(obj);
   }
@@ -781,9 +798,9 @@ rbobj_to_ocdata(VALUE obj, int octype, void* ocdata)
     break;
 
   case _PRIV_C_PTR: {
-    void* cptr = NULL;
-    f_success = rbobj_to_objcptr(obj, &cptr);
-    if (f_success) *(void**)ocdata = cptr;
+    //void* cptr = NULL;
+    f_success = rbobj_to_objcptr(obj, ocdata/*&cptr*/);
+    //if (f_success) *(void**)ocdata = cptr;
     break;
   }
 

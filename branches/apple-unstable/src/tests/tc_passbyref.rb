@@ -61,14 +61,14 @@ end
 # Add more tests that requires the exceptions files. Disable the tests on non-Leopard machines in the meantime the format is being worked on.
 if `sw_vers -productVersion`.strip.to_f >= 10.5
   class TC_PassByRef < Test::Unit::TestCase
-    def test_in_c_array_id_foundation
+    def test_in_c_array_id
         o1, o2 = OSX::NSObject.alloc.init, OSX::NSObject.alloc.init
         ary = OSX::NSArray.arrayWithObjects_count([o1, o2])
         assert_equal(o1, ary.objectAtIndex(0))
         assert_equal(o2, ary.objectAtIndex(1))
     end
 
-    def test_multiple_in_c_array_it_foundation
+    def test_multiple_in_c_array_id
         o1, o2 = OSX::NSObject.alloc.init, OSX::NSObject.alloc.init
         o1, o2 = OSX::NSString.alloc.initWithString('o1'), OSX::NSString.alloc.initWithString('o2')
         k1, k2 = OSX::NSString.alloc.initWithString('k1'), OSX::NSString.alloc.initWithString('k2')
@@ -79,23 +79,61 @@ if `sw_vers -productVersion`.strip.to_f >= 10.5
         assert_raises(OSX::OCDataConvException) { OSX::NSDictionary.dictionaryWithObjects_forKeys_count([o1, o2], [k1]) }
     end
 
-    def test_in_c_array_byte_foundation
+    def test_in_c_array_byte
         s = OSX::NSString.alloc.initWithBytes_length_encoding('foobar', OSX::NSASCIIStringEncoding)
         assert_equal(s.to_s, 'foobar')
     end
 
-    def test_out_c_array_byte_foundation
+    def test_out_c_array_byte
         d = OSX::NSData.alloc.initWithBytes_length('foobar')
         data = '      ' 
         d.getBytes_length(data)
         assert_equal(data, 'foobar')
     end
 
-    def test_ignored_foundation
+    def test_ignored
         d = OSX::NSData.alloc.initWithBytes_length('foobar')
         assert_raises(RuntimeError) { d.getBytes(nil) }
         assert_raises(RuntimeError) { d.getBytes_range(nil, OSX::NSRange.new(0, 1)) }
     end
+
+    def test_null_accepted
+        button = OSX::NSButton.alloc.initWithFrame(OSX::NSZeroRect)
+        assert_raises(OSX::OCDataConvException) { button.getPeriodicDelay_interval_(nil, nil) }
+        assert_raises(OSX::OCDataConvException) { button.getPeriodicDelay_interval_(nil) }
+        ary = button.getPeriodicDelay_interval_()
+        assert_kind_of(Array, ary)
+        assert_equal(2, ary.size)
+    end
+
+    def test_in_c_array_fixed_length
+        font = OSX::NSFont.fontWithName_matrix('Helvetica', [1, 0, 0, 1, 0, 0].pack('f*'))
+        assert_kind_of(OSX::NSFont, font)
+        assert_raises(OSX::OCDataConvException) { OSX::NSFont.fontWithName_matrix('Helvetica', nil) } 
+        assert_raises(OSX::OCDataConvException) { OSX::NSFont.fontWithName_matrix('Helvetica', [].pack('f*')) } 
+        assert_raises(OSX::OCDataConvException) { OSX::NSFont.fontWithName_matrix('Helvetica', [1, 2, 3, 4, 5].pack('f*')) } 
+        assert_raises(OSX::OCDataConvException) { OSX::NSFont.fontWithName_matrix('Helvetica', [1, 2, 3, 4, 5, 6, 7].pack('f*')) } 
+        # TODO: should support direct Array of Float.
+    end
+
+    def test_out_c_array_length_pointer
+        ary = OSX::NSBitmapImageRep.getTIFFCompressionTypes_count_()
+        assert_kind_of(Array, ary)
+        assert_equal(2, ary.length)
+        assert_kind_of(String, ary.first)
+        assert_kind_of(Fixnum, ary.last)
+        types = ary.first.unpack('i*')
+        assert_equal(ary.last, types.length) 
+    end
+
+    # TODO:
+    #def test_null_terminated
+    #end
+
+    # TODO:
+    #def test_retval_array
+    #end
+
     # TODO: test NSCoder encode/decode methods
   end
 end

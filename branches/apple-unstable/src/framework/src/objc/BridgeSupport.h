@@ -55,10 +55,24 @@ typedef enum {
     bsTypeModifierInout
 } bsTypeModifier;
 
+typedef enum {
+    bsCArrayArgUndefined,
+    bsCArrayArgDelimitedByArg,
+    bsCArrayArgFixedLength,
+    bsCArrayArgDelimitedByNull
+} bsCArrayArgType;
+
 struct bsMethodArg {
   unsigned          index;
   bsTypeModifier    type_modifier;
-  int               c_array_delimited_by_arg;   // -1 means not defined
+  bsCArrayArgType   c_ary_type;
+  int               c_ary_type_value;  // not set if arg_type is bsCArrayArgUndefined
+  BOOL              null_accepted;
+};
+
+struct bsMethodRetval {
+  bsCArrayArgType   c_ary_type;
+  int               c_ary_type_value;  // not set if arg_type is bsCArrayArgUndefined
 };
 
 struct bsMethod {
@@ -69,7 +83,8 @@ struct bsMethod {
   char *  suggestion;   // only if ignore is true
   int     argc;
 #define MAX_ARGS 128
-  struct bsMethodArg *argv;
+  struct bsMethodArg *      argv;
+  struct bsMethodRetval *   retval; // can be NULL
 };
 
 struct bsInformalProtocolMethod {
