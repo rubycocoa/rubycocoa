@@ -83,7 +83,8 @@ Interface Builder.
 == LICENSE
 
 ((<GNU Lesser General Public License version 2. LGPL
-|URL:http://www.gnu.org/licenses/lgpl.html>))
+|URL:http://www.gnu.org/licenses/lgpl.html>)),
+or the Ruby License.
 
 
 == ACKNOWLEDGEMENT

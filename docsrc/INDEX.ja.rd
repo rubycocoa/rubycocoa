@@ -83,7 +83,7 @@ RubyスクリプトとInterface BuilderのNibファイルのみで書かれたRubyCocoa
 == ライセンス
 
 ((<GNU Lesser General Public License version 2. LGPL
-|URL:http://www.gnu.org/licenses/lgpl.html>))
+|URL:http://www.gnu.org/licenses/lgpl.html>)) またはRubyライセンス
 
 
 == 謝辞
