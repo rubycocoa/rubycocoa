@@ -77,31 +77,27 @@ Ruby 1.6.7 に合わせて構築しています。
 を参考に構築・インストールしてください。
 
 
-== CVSサーバから開発途上のソースを入手する
+== Subversionサーバから開発途上のソースを入手する
 
-((<CVSサーバ|URL:http://sourceforge.net/cvs/?group_id=44114>))から最新
+((<Subversionサーバ|URL:http://sourceforge.net/svn/?group_id=44114>))から最新
 の(あるいは最古の)ソースを入手したり、
-(((<CVSリポジトリを見る|URL:http://rubycocoa.cvs.sourceforge.net/rubycocoa/src/>))
+(((<Subversionリポジトリを見る|URL:http://svn.sourceforge.net/viewvc/rubycocoa/trunk/src/>))
 ことができます。シェルで
 
-  $ cvs -d:pserver:anonymous@rubycocoa.cvs.sourceforge.net:/cvsroot/rubycocoa login
-  $ cvs -z3 -d:pserver:anonymous@rubycocoa.cvs.sourceforge.net:/cvsroot/rubycocoa co \
-        -P -d rubycocoa src
-  $ cd rubycocoa
-  $ cvs update -d -P
+  $ svn co https://svn.sourceforge.net/svnroot/rubycocoa/trunk/src rubycocoa 
 
 と入力すると、'rubycocoa'というディレクトリにRubyCocoaのソース一式が
-ダウンロードされます。CVSの性質上、ダウンロードしたタイミングにより
+ダウンロードされます。Subversionの性質上、ダウンロードしたタイミングにより
 構築できないこともあります。
 
 
-== DarwinPorts
+== MacPorts (DarwinPorts)
 
-((<DarwinPorts|URL:http://darwinports.opendarwin.org/>))では、"rb-cocoa"という
+((<MacPorts|URL:http://www.macports.org/>))では、"rb-cocoa"という
 名前でRubyCocoa(0.4.2)のportが提供されています。
 
-このportをインストールするには、DarwinPortsのバージョン1.1が必要です。
-次のコマンドでDarwinPortsをアップデートすることができます。
+このportをインストールするには、MacPortsのバージョン1.1以降が必要です。
+次のコマンドでMacPortsをアップデートすることができます。
 
   $ sudo port -d selfupdate
 
