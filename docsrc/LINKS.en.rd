@@ -11,6 +11,9 @@
 
 == RubyCocoa
 
+: ((<RubyCocoa Resources (English)|URL:http://www.rubycocoa.com/>))
+  Documentation and examples for RubyCocoa written by Tim Burks.
+
 : ((<Let's make an application with RubyCocoa (Japanese)|URL:http://www.mouseup.net/rubycocoa/calc_app1.html>))
 
   Tutorial for RubyCocoa. It describes programming in RubyCocoa through making

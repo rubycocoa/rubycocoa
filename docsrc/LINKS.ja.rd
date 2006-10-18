@@ -11,6 +11,9 @@
 
 == RubyCocoa関連
 
+: ((<RubyCocoa Resources|URL:http://www.rubycocoa.com/>)) (英語)
+  RubyCocoa のチュートリアルや例。Tim Burksさんによる。
+
 : ((<RubyCocoaでアプリを作ろう|URL:http://www.mouseup.net/rubycocoa/calc_app1.html>))
 
   RubyCocoaのチュートリアル。簡単な電卓アプリケーションの作成を例題に
