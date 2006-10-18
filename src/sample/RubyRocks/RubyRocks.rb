@@ -28,22 +28,18 @@ class GameView < OSX::NSView
     @timer = OSX::NSTimer.scheduledTimerWithTimeInterval_target_selector_userInfo_repeats_(1.0/60.0, self, :tick, nil, true)    
   end
 
-  ns_overrides :drawRect_
   def drawRect(rect)
     @game.draw
   end
 
-  ns_overrides :acceptsFirstResponder
   def acceptsFirstResponder
     true
   end
 
-  ns_overrides :keyDown_
   def keyDown(event)
     @game.keyDown(event.keyCode)
   end
 
-  ns_overrides :keyUp_
   def keyUp(event)
     @game.keyUp(event.keyCode)
   end
@@ -57,7 +53,6 @@ end
 class Game < OSX::NSDocument
   attr_accessor :bounds
 
-  ns_overrides :windowNibName  
   def windowNibName
     return "Game" 
   end

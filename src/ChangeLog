@@ -1,3 +1,9 @@
+2006-10-18  kimura wataru <kimuraw@i.nifty.jp>
+
+	* sample/RubyRocks/RubyRocks.rb,
+	  sample/RubyRoundTransparentWindow/RTW.rb:
+	ns_overrides not needed.
+
 2006-09-23  kimura wataru <kimuraw@i.nifty.jp>
 
 	* pre-config.rb:
