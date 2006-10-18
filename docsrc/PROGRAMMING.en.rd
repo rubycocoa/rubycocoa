@@ -246,25 +246,6 @@ this way:
 
 == Overriding a method
 
-When overriding a method defined by the parent class, it is necessary to
-declare the override using (({ns_overrides})) (alias (({ib_overrides}))).
-
-  class MyCustomView < OSX::NSView
-
-    ns_overrides :drawRect_, 'mouseUp:'
-
-    def drawRect(frame)
-    end
-
-    ...
-  end
-
-In the argument of (({ns_overrides})) what expressed the message selector of
-Objective-C as the string or the symbol is given. However, the
-notation for omitting ":" and "_" of the end explained previously
-cannot be used. It is necessary to describe correctly according to the
-number of arguments.
-
 To invoke the superclass method in an overriding method, prefix the method name
 with "(({super_}))".
 
@@ -324,9 +305,9 @@ Please do not forget to return (({self})) from initialization methods.
 
 == Debugging a RubyCocoa application
 
-Currently (as of 2003-01-05), it is impossible for you to use a ruby
-debugger in ProjectBuilder, because a plug-in module for a RubyCocoa
-application doesn't exist.
+Currently (as of 2006-10-18), it is impossible for you to use a ruby
+debugger in Xcode, because a plug-in module for a RubyCocoa application 
+doesn't exist.
 
 But, you can debug with a debugger (e.g. debug.rb) by launching an
 application with appropriate options in the shell. If you like Emacs,

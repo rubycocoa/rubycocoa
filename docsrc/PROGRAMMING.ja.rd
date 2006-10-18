@@ -242,30 +242,10 @@ nibファイル中でクラスに設定したアウトレットは派生クラスの定義の中で
 
 == メソッドのオーバーライド
 
-親クラスで定義されているメソッドをオーバーライドする場合、ns_overrides
-(別名ib_overrides)を使ってオーバーライドしたことを宣言する必要がありま
-す。
-
-  class MyCustomView < OSX::NSView
-    ns_overrides :drawRect_, 'mouseUp:'
-
-    def drawRect(frame)
-    end
-
-    ...
-  end
-
-ns_overrides の引数には Objective-C のメッセージセレクタを文字列または
-シンボルで表現したものを与えます。ただし「メソッド名の決定方法とバリエー
-ション」で説明した末尾を省略する記法を使うことはできません。引数の数に
-合わせて正確に記述する必要があります。
-
 オーバーライドしているメソッドの定義の中でスーパークラスの同じメソッド
 を呼ぶ場合にはメソッド名に "super_" 接頭辞を付けて呼びます。
 
   class MyCustomView < OSX::NSView
-
-    ns_overrides :drawRect_
 
     def drawRect (frame)
       p frame
@@ -315,8 +295,8 @@ nibファイルからロードされるような場合には awakeFromNib メソッドで初期
 
 == RubyCocoaアプリケーションのデバッグ
 
-今のところ(2003-01-05)、RubyCocoaアプリケーションに対応する
-ProjectBuilderのプラグインモジュールが存在しないため、ProjectBuilder上
+今のところ(2006-10-10)、RubyCocoaアプリケーションに対応する
+Xcodeのプラグインモジュールが存在しないため、Xcode上
 でRubyのデバッガを使うことはできません。
 
 しかし、RubyCocoaアプリケーションをシェルなどからオプション付きで起動
