@@ -195,19 +195,6 @@ as a Cocoa object.
 
 === class methods of Cocoa inherited class
 
---- {COCOA_INHERITED_CLASS}.ns_overrides (...)
-
-      An override is declared for the method of a super class. This
-      declaration is needed when carrying out the override of the
-      method directly called from the world of Objective-C. As a
-      typical example, the override of ((|drawRect:|)) may be carried
-      out by the inherited class of NSView. To an argument, the method
-      names according to the basic rule are enumerated.
-
---- {COCOA_INHERITED_CLASS}.ib_overrides (...)
-
-      the alias of ((|ns_overrides|))
-
 --- {COCOA_INHERITED_CLASS}.ns_outlets (...)
 
       An outlet is declared. being actual ((|attr_writer|)) -- it is
@@ -220,8 +207,8 @@ as a Cocoa object.
 
 === instance method prefix "super_"
 
-For the method which is declared with ns_overrides, if you want to use
-the implementation of super class, use "super_" prefix.
+For the overrided method, if you want to use the implementation of super class,
+use "super_" prefix.
 
   ns_overrides :drawRect_
   def drawRect (frame)
