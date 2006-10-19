@@ -87,29 +87,26 @@ Interface Builder.
 or the Ruby License.
 
 
-== ACKNOWLEDGEMENT
+== History
 
-Special thanks to Chris Thomas, Luc "lucsky" Heinrich and S. Sawada.
-
-And thanks to:
-
-Gesse Gam, Hiroyuki Shimura, John Platte, kimura wataru, Masaki Yatsu,
-Masatoshi Seki, Michael Miller, Ogino Junya, Ralph Broom, Rich Kilmer,
-Shirai Kaoru, Tetsuhumi Takaishi, Tosh, Matthew Fero, Rod Schmidt,
-Jonathan Paisley, Norberto Ortigoza, Laurent Sansonetti, Tim Burks
+[2001(fall)] Fujimoto Hisa implemented a ruby extend module to wrap NSObject and NSClassFromString.
+[2001.10] integrated with InterfaceBuilder and ProjectBuilder.
+[2001.11] 1st RubyCocoa was released.
+[2002.2(about)] registered a project to SourceForge (((<URL:http://sourceforge.net/projects/rubycocoa>))). Chris Thomas joined the commiters.
+[2002.5] On ((<'Dr. Dobbs Journal, May 2002'|URL:http://www.ddj.com/articles/2002/0205/>)), the article about RubyCocoa "Examining RubyCocoa" by Chris Thomas.
+[2003] Kimura Wataru joined the commiters.
+[2006.2] Jonathan Paisley joined the commiters.
+[2006] RubyCocoa resource site ((<rubycocoa.com|URL:http://www.rubycocoa.com/>)) by Tim Burks.
+[2006.5] Laurent Sansonetti joined the commiters.
+[2006.8] Tim Burks joined the commiters.
+[2006.8] RubyCocoa will be included in Leopard at Apple WWDC.
 
 
 == Contact
 
-Feel free to send comments, icon designs, bug reports and patches for
-RubyCocoa. I want to ask kind native English speakers to correct my strange
-English errors. Thanks.
-
-An author looks for a job (an income source).  Is there a supporter
-(sponsor, investor, etc.) with interest in the development of RubyCocoa or
-other software?
-
-Contact ((<me|URL:mailto:contact.rubycocoa@fobj.com>)) freely please.
+* ((<URL:http://sourcefore.net/projects/rubycocoa/>)) (will be move to ((<URL:http://www.macosforge.org/>)))
+* RubyCocoa Project <hisa at sourceforge.net> (will be move to mac os forge account)
 
 
-FUJIMOTO, Hisakuni <hisa at fobj.com> $Date$
+
+$Date$
