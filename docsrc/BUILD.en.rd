@@ -121,6 +121,9 @@ old procedure.
   * 'Project Templates/Application/Cocoa-Ruby Document-based Application'
   * 'Project Templates/Application/Cocoa-Ruby Application'
 
+: /Library/BridgeSupport
+  * xml files about metadata of AppKit and Foundation.
+
 : /Developer/Documentation/RubyCocoa
   HTML Documentation
 
