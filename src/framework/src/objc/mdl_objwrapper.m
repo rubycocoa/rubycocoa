@@ -557,14 +557,16 @@ _ary_push_objc_methods (VALUE ary, Class cls, int recur)
 }
 
 static VALUE
-wrapper_objc_methods (VALUE rcv)
+wrapper_objc_methods (int argc, VALUE* argv, VALUE rcv)
 {
   VALUE ary;
   id oc_rcv;
+  int recur;
 
+  recur = (argc == 0) ? 1 : RTEST(argv[0]);
   ary = rb_ary_new();
   oc_rcv = rbobj_get_ocid (rcv);
-  _ary_push_objc_methods (ary, oc_rcv->isa, 1);
+  _ary_push_objc_methods (ary, oc_rcv->isa, recur);
   return ary;
 }
 
@@ -701,7 +703,7 @@ init_mdl_OCObjWrapper(VALUE outer)
   rb_define_method(_mObjWrapper, "ocm_send", wrapper_ocm_send, -1);
   rb_define_method(_mObjWrapper, "to_s", wrapper_to_s, 0);
 
-  rb_define_method(_mObjWrapper, "objc_methods", wrapper_objc_methods, 0);
+  rb_define_method(_mObjWrapper, "objc_methods", wrapper_objc_methods, -1);
   rb_define_method(_mObjWrapper, "objc_method_type", wrapper_objc_method_type, 1);
 
   _mClsWrapper = rb_define_module_under(outer, "OCClsWrapper");
