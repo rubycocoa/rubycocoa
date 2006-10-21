@@ -1,6 +1,65 @@
 # -*-rd-*-
 = 変更点
 
+== changes from 0.4.3d1 (0.4.3d2)
+
+=== 新しい機能
+
+: ns_overridesが不要に
+
+    class MyView < OSX::NSView
+
+      def drawRect(rect)
+        super_drawRect(rect)
+        # your code
+      end
+
+    end
+
+上記のコードは、ns_overridesを書くことなしにdrawRectメソッドをオーバーライド
+しています。プログラマーはns_overridesをいっさい書く必要はありません。
+
+: 定数形式でのCocoaの定数が利用できるように
+
+RubyCocoaでは、多くのCocoaの定数がOSXモジュールの関数として提供されています。
+これらをRubyの定数であるかように書けるようになりました。
+
+    % irb 
+    irb> require 'osx/cocoa'
+    irb> include OSX
+    irb> NSKeyValueChangeKindKey.to_s
+    => "kind"
+
+: attachmentモジュール
+
+RCArrayAttachment, RCDictionaryAttachment, RCDataAttachment および 
+RCImageAttachment のattachmentモジュールが有効になりました。
+Cocoaのクラスに便利な機能を追加します。
+
+    % irb
+    irb> require 'osx/cocoa'
+    irb> ary = OSX::NSArray.arrayWithArray(["a", "b", "c"])
+    => #<OSX::NSCFArray:0x8215fe class='NSCFArray' id=0x1161220>
+    irb> ary.objectAtIndex(2).to_s
+    => "c"
+    irb> ary[2].to_s # CocoaのNSArrayをRubyのArrayのように使える
+    => "c"
+
+=== バグ修正
+
+* メソッド呼び出し時にクラッシュする問題を修正
+* いくつかのメモリーリークを修正
+* プロジェクトテンプレート "Cocoa-Ruby Core Data Application" がうまく動かない問題を修正
+
+== 0.4.2 からのおもな変更点 (0.4.3d1)
+
+=== 新しい機能
+
+: ユニバーサルバイナリ
+
+新しいconfigオプション "--build-universal" (値: yes/no) が導入されました。
+このオプションを yes にすると、ユニバーサルバイナリのRubyCocoaを構築できます。
+
 == 0.4.1 からのおもな変更点 (0.4.2)
 
 === 新しい機能
