@@ -7,6 +7,9 @@
 	objc_methods(false) returns methods defined in the reciever class.
 	(default: true)
 
+	* ReadMe.ascii.html, ReadMe.sjis.html:
+	update description about installed contents.
+
 2006-10-18  kimura wataru <kimuraw@i.nifty.jp>
 
 	* sample/RubyRocks/RubyRocks.rb,
