@@ -1,6 +1,70 @@
 # -*-rd-*-
 = Changes
 
+== changes from 0.4.3d2 (0.5.0)
+
+: LICENSE CHANGED
+
+  RubyCocoa distributed under the Ruby License or GNU Lesser General 
+  Public License version 2.1.
+
+=== new features
+
+: Cocoa classes autoload
+
+autoload Objective-C classes when the classes are needed.
+
+    bundle = OSX::NSBundle.bundleWithPath('/Library/Frameworks/My.framework')
+    bundle.load
+    obj = MyClass.alloc.init # MyClass is defined in My.framework
+
+: same class hierarchy in Ruby
+
+Cocoa classes have same class hierarchy in Ruby.
+
+Before, all of Cocoa classes are subclass of OSX::ObjcID. For example,
+add a method to NSView in Ruby code, but the method is unavailable in 
+NSTextView.
+
+: pass-by-reference
+
+in Objective-C:
+
+   NSError *err;
+   str = [NSString stringWithContentsOfFile:path 
+   		   encoding:NSASCIIStringEncoding error:&err];
+   if (err)
+     NSLog(@"error: %@", err);
+
+in RubyCocoa:
+
+    str, err = OSX::NSString.stringWithContentsOfFile_encoding_error(
+	path, OSX::NSASCIIStringEncoding)
+    p err if err
+    # => #<OSX::NSError:0x82d728 class='NSError' id=0x1140420>
+
+=== new samples
+
+: RubyRocks
+
+  new sample from Tim Burks, http://rubycocoa.com/ruby-rocks
+
+: RubyRubyRoundTransparentWindow
+
+  new sample from Tim Burks, http://rubycocoa.com/the-rubification-of-rtw
+
+=== bug fixes
+
+: a warning message about subclass of NSView initializing
+
+The following message appears on console, when subclass of NSView 
+is defined in a ruby script.
+
+    NSView not correctly initialized. Did you forget to call super?
+
+: crash at invoking Ruby's variadic methods from Objective-C
+
+
 == changes from 0.4.3d1 (0.4.3d2)
 
 === new features
@@ -46,9 +110,9 @@ and RCImageAttachment are provides convenience to some Cocoa classes.
 
 === bug fixes
 
-* fix incorrect method handling
-* fix memory leaks
-* project template "Cocoa-Ruby Core Data Application" was broken
+: fix incorrect method handling
+: fix memory leaks
+: project template "Cocoa-Ruby Core Data Application" was broken
 
 == changes from 0.4.2 (0.4.3d1)
 

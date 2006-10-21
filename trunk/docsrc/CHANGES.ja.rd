@@ -1,7 +1,71 @@
 # -*-rd-*-
 = 変更点
 
-== changes from 0.4.3d1 (0.4.3d2)
+== 0.4.3d2 からのおもな変更点 (0.5.0)
+
+: ライセンス変更
+
+  RubyライセンスまたはGNU Lesser General Public License version 2.1の
+  デュアルライセンスに
+
+=== 新しい機能
+
+: Cocoaクラスの自動ロード
+
+Objective-Cのクラスが必要なときに自動的に定義されます。
+
+    bundle = OSX::NSBundle.bundleWithPath('/Library/Frameworks/My.framework')
+    bundle.load
+    obj = MyClass.alloc.init # MyClass は My.framework 内で定義されている
+
+: Rubyでのクラス階層がCocoaと同じに
+
+Rubyでのクラス階層がCocoaと同じになりました。
+
+以前はCocoaのすべてのクラスはOSX::ObjcIDクラスのサブクラスでした。
+たとえば、NSViewクラスに新しいメソッドを追加したとき、そのメソッドは
+NSTextViewでは利用できませんでした。
+
+: pass-by-reference
+
+Objective-Cでの以下のようなコードは
+
+   NSError *err;
+   str = [NSString stringWithContentsOfFile:path 
+   		   encoding:NSASCIIStringEncoding error:&err];
+   if (err)
+     NSLog(@"error: %@", err);
+
+RubyCocoaでは次のように書くことができます。
+
+    str, err = OSX::NSString.stringWithContentsOfFile_encoding_error(
+	path, OSX::NSASCIIStringEncoding)
+    p err if err
+    # => #<OSX::NSError:0x82d728 class='NSError' id=0x1140420>
+
+=== 新しいサンプル
+
+: RubyRocks
+
+  Tim Burks さんによる http://rubycocoa.com/ruby-rocks を追加しました。
+
+: RubyRubyRoundTransparentWindow
+
+  Tim Burks さんによる http://rubycocoa.com/the-rubification-of-rtw
+  を追加しました。
+
+=== バグ修正
+
+: NSViewのサブクラスの初期化時に警告が出力される
+
+Ruby内で定義したNSViewのサブクラスが初期化されるときに、以下のメッセージが
+コンソールに出力されてしまう問題を修正しました。
+
+    NSView not correctly initialized. Did you forget to call super?
+
+: Objective-CからRubyの可変引数を持つメソッドを呼び出すとクラッシュ
+
+== 0.4.3d1 からのおもな変更点 (0.4.3d2)
 
 === 新しい機能
 
