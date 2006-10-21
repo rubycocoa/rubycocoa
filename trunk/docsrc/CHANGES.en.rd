@@ -1,6 +1,64 @@
 # -*-rd-*-
 = Changes
 
+== changes from 0.4.3d1 (0.4.3d2)
+
+=== new features
+
+: automatic ns_overrides 
+
+    class MyView < OSX::NSView
+
+      def drawRect(rect)
+        super_drawRect(rect)
+        # your code
+      end
+
+    end
+
+This code overrides the method "drawRect" without "ns_overrides".
+Programmers need not write "ns_overrides" at all.
+
+: enable constant-style constants
+
+Almost of Cocoa constants are provided as functions of OSX module.
+But we can write the functions as constants.
+
+    % irb 
+    irb> require 'osx/cocoa'
+    irb> include OSX
+    irb> NSKeyValueChangeKindKey.to_s
+    "kind"
+
+: enable attachment module
+
+Attachment modules RCArrayAttachment, RCDictionaryAttachment, RCDataAttachment
+and RCImageAttachment are provides convenience to some Cocoa classes.
+
+    % irb
+    irb> require 'osx/cocoa'
+    irb> ary = OSX::NSArray.arrayWithArray(["a", "b", "c"])
+    => #<OSX::NSCFArray:0x8215fe class='NSCFArray' id=0x1161220>
+    irb> ary.objectAtIndex(2).to_s
+    => "c"
+    irb> ary[2].to_s # like Ruby's Array
+    => "c"
+
+=== bug fixes
+
+* fix incorrect method handling
+* fix memory leaks
+* project template "Cocoa-Ruby Core Data Application" was broken
+
+== changes from 0.4.2 (0.4.3d1)
+
+=== new features
+
+: universal binary
+
+new config option "--build-universal" (yes/no)  enables to build universal 
+binary RubyCocoa when the value of the option is "yes".
+
 == changes from 0.4.1 (0.4.2)
 
 === new features
