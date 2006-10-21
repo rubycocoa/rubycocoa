@@ -12,7 +12,7 @@
 
 : Cocoa classes autoload
 
-autoload Objective-C classes when the classes are needed.
+  autoload Objective-C classes when the classes are needed.
 
     bundle = OSX::NSBundle.bundleWithPath('/Library/Frameworks/My.framework')
     bundle.load
@@ -20,26 +20,26 @@ autoload Objective-C classes when the classes are needed.
 
 : same class hierarchy in Ruby
 
-Cocoa classes have same class hierarchy in Ruby.
+  Cocoa classes have same class hierarchy in Ruby.
 
-Before, all of Cocoa classes are subclass of OSX::ObjcID. For example,
-add a method to NSView in Ruby code, but the method is unavailable in 
-NSTextView.
+  Before, all of Cocoa classes are subclass of OSX::ObjcID. For example,
+  add a method to NSView in Ruby code, but the method is unavailable in 
+  NSTextView.
 
 : pass-by-reference
 
-in Objective-C:
+  in Objective-C:
 
-   NSError *err;
-   str = [NSString stringWithContentsOfFile:path 
-   		   encoding:NSASCIIStringEncoding error:&err];
-   if (err)
-     NSLog(@"error: %@", err);
+    NSError *err;
+    str = [NSString stringWithContentsOfFile:path 
+                    encoding:NSASCIIStringEncoding error:&err];
+    if (err)
+      NSLog(@"error: %@", err);
 
-in RubyCocoa:
+  in RubyCocoa:
 
     str, err = OSX::NSString.stringWithContentsOfFile_encoding_error(
-	path, OSX::NSASCIIStringEncoding)
+        path, OSX::NSASCIIStringEncoding)
     p err if err
     # => #<OSX::NSError:0x82d728 class='NSError' id=0x1140420>
 
@@ -57,19 +57,21 @@ in RubyCocoa:
 
 : a warning message about subclass of NSView initializing
 
-The following message appears on console, when subclass of NSView 
-is defined in a ruby script.
+  The following message appears on console, when subclass of NSView 
+  is defined in a ruby script.
 
     NSView not correctly initialized. Did you forget to call super?
 
 : crash at invoking Ruby's variadic methods from Objective-C
-
 
 == changes from 0.4.3d1 (0.4.3d2)
 
 === new features
 
 : automatic ns_overrides 
+
+  The following code overrides the method "drawRect" without "ns_overrides".
+  Programmers need not write "ns_overrides" at all.
 
     class MyView < OSX::NSView
 
@@ -80,13 +82,10 @@ is defined in a ruby script.
 
     end
 
-This code overrides the method "drawRect" without "ns_overrides".
-Programmers need not write "ns_overrides" at all.
-
 : enable constant-style constants
 
-Almost of Cocoa constants are provided as functions of OSX module.
-But we can write the functions as constants.
+  Almost of Cocoa constants are provided as functions of OSX module.
+  But we can write the functions as constants.
 
     % irb 
     irb> require 'osx/cocoa'
@@ -96,8 +95,8 @@ But we can write the functions as constants.
 
 : enable attachment module
 
-Attachment modules RCArrayAttachment, RCDictionaryAttachment, RCDataAttachment
-and RCImageAttachment are provides convenience to some Cocoa classes.
+  Attachment modules RCArrayAttachment, RCDictionaryAttachment, RCDataAttachment
+  and RCImageAttachment are provides convenience to some Cocoa classes.
 
     % irb
     irb> require 'osx/cocoa'
@@ -120,8 +119,8 @@ and RCImageAttachment are provides convenience to some Cocoa classes.
 
 : universal binary
 
-new config option "--build-universal" (yes/no)  enables to build universal 
-binary RubyCocoa when the value of the option is "yes".
+  new config option "--build-universal" (yes/no)  enables to build universal 
+  binary RubyCocoa when the value of the option is "yes".
 
 == changes from 0.4.1 (0.4.2)
 
