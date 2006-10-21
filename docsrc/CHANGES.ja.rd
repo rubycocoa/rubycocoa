@@ -12,7 +12,7 @@
 
 : Cocoaクラスの自動ロード
 
-Objective-Cのクラスが必要なときに自動的に定義されます。
+  Objective-Cのクラスが必要なときに自動的に定義されます。
 
     bundle = OSX::NSBundle.bundleWithPath('/Library/Frameworks/My.framework')
     bundle.load
@@ -20,26 +20,26 @@ Objective-Cのクラスが必要なときに自動的に定義されます。
 
 : Rubyでのクラス階層がCocoaと同じに
 
-Rubyでのクラス階層がCocoaと同じになりました。
+  Rubyでのクラス階層がCocoaと同じになりました。
 
-以前はCocoaのすべてのクラスはOSX::ObjcIDクラスのサブクラスでした。
-たとえば、NSViewクラスに新しいメソッドを追加したとき、そのメソッドは
-NSTextViewでは利用できませんでした。
+  以前はCocoaのすべてのクラスはOSX::ObjcIDクラスのサブクラスでした。
+  たとえば、NSViewクラスに新しいメソッドを追加したとき、そのメソッドは
+  NSTextViewでは利用できませんでした。
 
 : pass-by-reference
 
-Objective-Cでの以下のようなコードは
+  Objective-Cでの以下のようなコードは
 
    NSError *err;
    str = [NSString stringWithContentsOfFile:path 
-   		   encoding:NSASCIIStringEncoding error:&err];
+                   encoding:NSASCIIStringEncoding error:&err];
    if (err)
      NSLog(@"error: %@", err);
 
-RubyCocoaでは次のように書くことができます。
+  RubyCocoaでは次のように書くことができます。
 
     str, err = OSX::NSString.stringWithContentsOfFile_encoding_error(
-	path, OSX::NSASCIIStringEncoding)
+         path, OSX::NSASCIIStringEncoding)
     p err if err
     # => #<OSX::NSError:0x82d728 class='NSError' id=0x1140420>
 
@@ -58,8 +58,8 @@ RubyCocoaでは次のように書くことができます。
 
 : NSViewのサブクラスの初期化時に警告が出力される
 
-Ruby内で定義したNSViewのサブクラスが初期化されるときに、以下のメッセージが
-コンソールに出力されてしまう問題を修正しました。
+  Ruby内で定義したNSViewのサブクラスが初期化されるときに、以下のメッセージが
+  コンソールに出力されてしまう問題を修正しました。
 
     NSView not correctly initialized. Did you forget to call super?
 
@@ -71,22 +71,23 @@ Ruby内で定義したNSViewのサブクラスが初期化されるときに、以下のメッセージが
 
 : ns_overridesが不要に
 
-    class MyView < OSX::NSView
+  以下のコードは、ns_overridesを書くことなしにdrawRectメソッドをオーバーライド
+  しています。プログラマーはns_overridesをいっさい書く必要はありません。
 
+    class MyView < OSX::NSView
+       
       def drawRect(rect)
         super_drawRect(rect)
         # your code
       end
-
+       
     end
 
-上記のコードは、ns_overridesを書くことなしにdrawRectメソッドをオーバーライド
-しています。プログラマーはns_overridesをいっさい書く必要はありません。
 
 : 定数形式でのCocoaの定数が利用できるように
 
-RubyCocoaでは、多くのCocoaの定数がOSXモジュールの関数として提供されています。
-これらをRubyの定数であるかように書けるようになりました。
+  RubyCocoaでは、多くのCocoaの定数がOSXモジュールの関数として提供されています。
+  これらをRubyの定数であるかように書けるようになりました。
 
     % irb 
     irb> require 'osx/cocoa'
@@ -96,9 +97,9 @@ RubyCocoaでは、多くのCocoaの定数がOSXモジュールの関数として提供されています。
 
 : attachmentモジュール
 
-RCArrayAttachment, RCDictionaryAttachment, RCDataAttachment および 
-RCImageAttachment のattachmentモジュールが有効になりました。
-Cocoaのクラスに便利な機能を追加します。
+  RCArrayAttachment, RCDictionaryAttachment, RCDataAttachment および 
+  RCImageAttachment のattachmentモジュールが有効になりました。
+  Cocoaのクラスに便利な機能を追加します。
 
     % irb
     irb> require 'osx/cocoa'
@@ -121,8 +122,8 @@ Cocoaのクラスに便利な機能を追加します。
 
 : ユニバーサルバイナリ
 
-新しいconfigオプション "--build-universal" (値: yes/no) が導入されました。
-このオプションを yes にすると、ユニバーサルバイナリのRubyCocoaを構築できます。
+  新しいconfigオプション "--build-universal" (値: yes/no) が導入されました。
+  このオプションを yes にすると、ユニバーサルバイナリのRubyCocoaを構築できます。
 
 == 0.4.1 からのおもな変更点 (0.4.2)
 
