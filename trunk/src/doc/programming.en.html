@@ -217,22 +217,6 @@ this way:</p>
 end</pre>
 <p><code>ns_outlets</code> also has an alias called <code>ib_outlets</code>.</p>
 <h2><a name='label-15' id='label-15'>Overriding a method</a></h2><!-- RDLabel: "Overriding a method" -->
-<p>When overriding a method defined by the parent class, it is necessary to
-declare the override using <code>ns_overrides</code> (alias <code>ib_overrides</code>).</p>
-<pre>class MyCustomView &lt; OSX::NSView
-
-  ns_overrides :drawRect_, 'mouseUp:'
-
-  def drawRect(frame)
-  end
-
-  ...
-end</pre>
-<p>In the argument of <code>ns_overrides</code> what expressed the message selector of
-Objective-C as the string or the symbol is given. However, the
-notation for omitting ":" and "_" of the end explained previously
-cannot be used. It is necessary to describe correctly according to the
-number of arguments.</p>
 <p>To invoke the superclass method in an overriding method, prefix the method name
 with "<code>super_</code>".</p>
 <pre>class MyCustomView &lt; OSX::NSView
@@ -275,9 +259,9 @@ these cases?</p>
 It is probably a good idea to write to a method with a prefix.</p>
 <p>Please do not forget to return <code>self</code> from initialization methods.</p>
 <h2><a name='label-18' id='label-18'>Debugging a RubyCocoa application</a></h2><!-- RDLabel: "Debugging a RubyCocoa application" -->
-<p>Currently (as of 2003-01-05), it is impossible for you to use a ruby
-debugger in ProjectBuilder, because a plug-in module for a RubyCocoa
-application doesn't exist.</p>
+<p>Currently (as of 2006-10-18), it is impossible for you to use a ruby
+debugger in Xcode, because a plug-in module for a RubyCocoa application 
+doesn't exist.</p>
 <p>But, you can debug with a debugger (e.g. debug.rb) by launching an
 application with appropriate options in the shell. If you like Emacs,
 you can also use a <code>rubydb</code> command which is contained in a ruby

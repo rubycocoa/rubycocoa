@@ -105,28 +105,24 @@ Ruby 1.6.7 に合わせて構築しています。</p>
 <h2><a name='label-12' id='label-12'>ソース配付</a></h2><!-- RDLabel: "ソース配付" -->
 <p><a href='http://rubycocoa.sourceforge.net/files/'>ファイル一覧</a>
 の中から
-<a href='http://prdownloads.sourceforge.net/rubycocoa/rubycocoa-0.4.2.tgz?download'>rubycocoa-0.4.2.tgz</a>
+<a href='http://prdownloads.sourceforge.net/rubycocoa/rubycocoa-0.4.2-xcode-2.2-patched.tgz?download'>rubycocoa-0.4.2-xcode-2.2-patched.tgz</a>
 をダウンロードしてください。</p>
 <p><a href='build.ja.html'>「RubyCocoaをソースから構築・インストールする」</a>
 を参考に構築・インストールしてください。</p>
-<h2><a name='label-13' id='label-13'>CVSサーバから開発途上のソースを入手する</a></h2><!-- RDLabel: "CVSサーバから開発途上のソースを入手する" -->
-<p><a href='http://sourceforge.net/cvs/?group_id=44114'>CVSサーバ</a>から最新
+<h2><a name='label-13' id='label-13'>Subversionサーバから開発途上のソースを入手する</a></h2><!-- RDLabel: "Subversionサーバから開発途上のソースを入手する" -->
+<p><a href='http://sourceforge.net/svn/?group_id=44114'>Subversionサーバ</a>から最新
 の(あるいは最古の)ソースを入手したり、
-(<a href='http://cvs.sourceforge.net/cgi-bin/viewcvs.cgi/rubycocoa/src/'>CVSリポジトリを見る</a>
+(<a href='http://svn.sourceforge.net/viewvc/rubycocoa/trunk/src/'>Subversionリポジトリを見る</a>
 ことができます。シェルで</p>
-<pre>$ cvs -d:pserver:anonymous@cvs.sf.net:/cvsroot/rubycocoa login
-$ cvs -z3 -d:pserver:anonymous@cvs.sf.net:/cvsroot/rubycocoa co \
-      -P -d rubycocoa src
-$ cd rubycocoa
-$ cvs update -d -P</pre>
+<pre>$ svn co https://svn.sourceforge.net/svnroot/rubycocoa/trunk/src rubycocoa </pre>
 <p>と入力すると、'rubycocoa'というディレクトリにRubyCocoaのソース一式が
-ダウンロードされます。CVSの性質上、ダウンロードしたタイミングにより
+ダウンロードされます。Subversionの性質上、ダウンロードしたタイミングにより
 構築できないこともあります。</p>
-<h2><a name='label-14' id='label-14'>DarwinPorts</a></h2><!-- RDLabel: "DarwinPorts" -->
-<p><a href='http://darwinports.opendarwin.org/'>DarwinPorts</a>では、"rb-cocoa"という
-名前でRubyCocoa(0.4.1)のportが提供されています。</p>
-<p>このportをインストールするには、DarwinPortsのバージョン1.1が必要です。
-次のコマンドでDarwinPortsをアップデートすることができます。</p>
+<h2><a name='label-14' id='label-14'>MacPorts (DarwinPorts)</a></h2><!-- RDLabel: "MacPorts (DarwinPorts)" -->
+<p><a href='http://www.macports.org/'>MacPorts</a>では、"rb-cocoa"という
+名前でRubyCocoa(0.4.2)のportが提供されています。</p>
+<p>このportをインストールするには、MacPortsのバージョン1.1以降が必要です。
+次のコマンドでMacPortsをアップデートすることができます。</p>
 <pre>$ sudo port -d selfupdate</pre>
 <h2><a name='label-15' id='label-15'>PINEAPPLE RPMパッケージ</a></h2><!-- RDLabel: "PINEAPPLE RPMパッケージ" -->
 <p><a href='http://sacral.c.u-tokyo.ac.jp/~hasimoto/Pineapple/'>Project PINEAPPLE(日本語)
