@@ -119,7 +119,7 @@ Test::UnitはRuby 1.8では標準添付されています。
   * 'Project Templates/Application/Cocoa-Ruby Application'
 
 : /Library/BridgeSupport
-  * AppKitとFoundationに関するメタデータXMLファイル
+  AppKitとFoundationに関するメタデータXMLファイル
 
 : /Developer/Documentation/RubyCocoa
   ドキュメント (HTML)
