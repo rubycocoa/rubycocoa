@@ -125,168 +125,161 @@ rcv.doSomething (a, :with, b, :with, c)   # バリエーション(2)</pre>
 <dt><a name='label-15' id='label-15'><code>OSX::OCObjWrapper#to_f</code></a></dt><!-- RDLabel: "OSX::OCObjWrapper#to_f" -->
 <dd>
 操作対象のObjective-Cオブジェクトの実数値による表現を返します。</dd>
-<dt><a name='label-16' id='label-16'><code>OSX::OCObjWrapper#objc_methods</code></a></dt><!-- RDLabel: "OSX::OCObjWrapper#objc_methods" -->
+<dt><a name='label-16' id='label-16'><code>OSX::OCObjWrapper#objc_methods(<var>inherit</var>=<var>true</var>)</code></a></dt><!-- RDLabel: "OSX::OCObjWrapper#objc_methods" -->
+<dt><a name='label-17' id='label-17'><code>OSX::OCObjWrapper#objc_class_methods(<var>inherit</var>=<var>true</var>)</code></a></dt><!-- RDLabel: "OSX::OCObjWrapper#objc_class_methods" -->
+<dt><a name='label-18' id='label-18'><code>OSX::OCObjWrapper#objc_instance_methods(<var>inherit</var>=<var>true</var>)</code></a></dt><!-- RDLabel: "OSX::OCObjWrapper#objc_instance_methods" -->
 <dd>
 操作対象のObjective-Cオブジェクトのメソッド名の一覧を返します。</dd>
-<dt><a name='label-17' id='label-17'><code>OSX::OCObjWrapper#objc_method_type</code></a></dt><!-- RDLabel: "OSX::OCObjWrapper#objc_method_type" -->
+<dt><a name='label-19' id='label-19'><code>OSX::OCObjWrapper#objc_method_type (<var>name</var>)</code></a></dt><!-- RDLabel: "OSX::OCObjWrapper#objc_method_type" -->
+<dt><a name='label-20' id='label-20'><code>OSX::OCObjWrapper#objc_class_method_type (<var>name</var>)</code></a></dt><!-- RDLabel: "OSX::OCObjWrapper#objc_class_method_type" -->
+<dt><a name='label-21' id='label-21'><code>OSX::OCObjWrapper#objc_instance_method_type (<var>name</var>)</code></a></dt><!-- RDLabel: "OSX::OCObjWrapper#objc_instance_method_type" -->
 <dd>
 操作対象のObjective-Cオブジェクトのメソッドの型を返します。</dd>
-<dt><a name='label-18' id='label-18'><code>OSX::OCObjWrapper#ocm_responds? (<var>name</var>)</code></a></dt><!-- RDLabel: "OSX::OCObjWrapper#ocm_responds?" -->
+<dt><a name='label-22' id='label-22'><code>OSX::OCObjWrapper#ocm_responds? (<var>name</var>)</code></a></dt><!-- RDLabel: "OSX::OCObjWrapper#ocm_responds?" -->
 <dd>
 操作対象のObjective-Cオブジェクトが、引数<var>name</var>で指定された
 メソッドに応答可能かどうかを示す真偽値を返します。<var>name</var>はメッ
 セージセレクタそのものか基本ルールに従ったものでなければなりませ
 ん。通常、このメソッドを使う必要はありません。</dd>
-<dt><a name='label-19' id='label-19'><code>OSX::OCObjWrapper#ocm_send (<var>name</var> ...)</code></a></dt><!-- RDLabel: "OSX::OCObjWrapper#ocm_send" -->
+<dt><a name='label-23' id='label-23'><code>OSX::OCObjWrapper#ocm_send (<var>name</var> ...)</code></a></dt><!-- RDLabel: "OSX::OCObjWrapper#ocm_send" -->
 <dd>
 操作対象のObjective-Cオブジェクトに対して、引数<var>name</var>で指定
 されたメソッドを残りの引数とともに送信します。<var>name</var>はメッセー
 ジセレクタそのものか基本ルールに従ったものでなければなりません。
 通常、このメソッドを使う必要はありません。</dd>
 </dl>
-<h2><a name='label-20' id='label-20'>OSX::OCObjectクラス</a></h2><!-- RDLabel: "OSX::OCObjectクラス" -->
+<h2><a name='label-24' id='label-24'>OSX::OCObjectクラス</a></h2><!-- RDLabel: "OSX::OCObjectクラス" -->
 <p>汎用のObjective-Cオブジェクトラッパー。OSXモジュール以下に定義されてい
 るどのCocoaクラスにも属さないObjective-Cオブジェクトは、このクラスのイ
 ンスタンスとして生成されます。通常、このクラスのインスタンスを明示的に
 生成したり、派生クラスを定義する必要はありません。</p>
-<h3><a name='label-21' id='label-21'>スーパークラス</a></h3><!-- RDLabel: "スーパークラス" -->
+<h3><a name='label-25' id='label-25'>スーパークラス</a></h3><!-- RDLabel: "スーパークラス" -->
 <p><a href='#label-1'>OSX::ObjcIDクラス</a></p>
-<h3><a name='label-22' id='label-22'>インクルードしているモジュール</a></h3><!-- RDLabel: "インクルードしているモジュール" -->
+<h3><a name='label-26' id='label-26'>インクルードしているモジュール</a></h3><!-- RDLabel: "インクルードしているモジュール" -->
 <p><a href='#label-6'>OSX::OCObjWrapperモジュール</a></p>
-<h2><a name='label-23' id='label-23'>Cocoaクラス</a></h2><!-- RDLabel: "Cocoaクラス" -->
+<h2><a name='label-27' id='label-27'>Cocoaクラス</a></h2><!-- RDLabel: "Cocoaクラス" -->
 <p><var>NSObject, NSString, NSApplication</var>など全てのCocoaクラスは、
 <var>OSX::NSObject, OSX::NSString, OSX::NSApplication</var> のようにOSXモ
 ジュールに属するRubyのクラスとして定義されています。</p>
 <p>Cocoaクラス自体にもCocoaオブジェクトとして<!-- Reference, RDLabel "OSX::OCObjWrapperモジュー
 ル" doesn't exist --><em class='label-not-found'>OSX::OCObjWrapperモジュー
 ル</em><!-- Reference end -->が装着されています。</p>
-<h3><a name='label-24' id='label-24'>インクルードしているモジュール</a></h3><!-- RDLabel: "インクルードしているモジュール" -->
+<h3><a name='label-28' id='label-28'>インクルードしているモジュール</a></h3><!-- RDLabel: "インクルードしているモジュール" -->
 <p><a href='#label-6'>OSX::OCObjWrapperモジュール</a></p>
-<h3><a name='label-25' id='label-25'>装着しているモジュール</a></h3><!-- RDLabel: "装着しているモジュール" -->
+<h3><a name='label-29' id='label-29'>装着しているモジュール</a></h3><!-- RDLabel: "装着しているモジュール" -->
 <p><a href='#label-6'>OSX::OCObjWrapperモジュール</a></p>
-<h3><a name='label-26' id='label-26'>Cocoaクラスのクラスメソッド</a></h3><!-- RDLabel: "Cocoaクラスのクラスメソッド" -->
+<h3><a name='label-30' id='label-30'>Cocoaクラスのクラスメソッド</a></h3><!-- RDLabel: "Cocoaクラスのクラスメソッド" -->
 <dl>
-<dt><a name='label-27' id='label-27'><code>Cocoaクラス.__ocid__</code></a></dt><!-- RDLabel: "Cocoaクラス.__ocid__" -->
+<dt><a name='label-31' id='label-31'><code>Cocoaクラス.__ocid__</code></a></dt><!-- RDLabel: "Cocoaクラス.__ocid__" -->
 <dd>
 Cocoaクラスオブジェクトのidの値を整数で返します。</dd>
 </dl>
-<h2><a name='label-28' id='label-28'>Cocoa派生クラス</a></h2><!-- RDLabel: "Cocoa派生クラス" -->
+<h2><a name='label-32' id='label-32'>Cocoa派生クラス</a></h2><!-- RDLabel: "Cocoa派生クラス" -->
 <p>Cocoaクラスの派生クラス。</p>
-<h3><a name='label-29' id='label-29'>Cocoa派生クラスのクラスメソッド</a></h3><!-- RDLabel: "Cocoa派生クラスのクラスメソッド" -->
+<h3><a name='label-33' id='label-33'>Cocoa派生クラスのクラスメソッド</a></h3><!-- RDLabel: "Cocoa派生クラスのクラスメソッド" -->
 <dl>
-<dt><a name='label-30' id='label-30'><code>Cocoa派生クラス.ns_overrides (...)</code></a></dt><!-- RDLabel: "Cocoa派生クラス.ns_overrides" -->
-<dd>
-スーパークラスのメソッドをオーバーライドを宣言します。
-Objective-Cの世界から直接呼ばれるメソッドをオーバーライドすると
-きには、この宣言が必要になります。典型的な例としては、NSViewの派
-生クラスで<var>drawRect:</var>をオーバーライドする場合などがあげられ
-ます。引数には基本ルールに従ったメソッド名を列挙します。</dd>
-<dt><a name='label-31' id='label-31'><code>Cocoa派生クラス.ib_overrides (...)</code></a></dt><!-- RDLabel: "Cocoa派生クラス.ib_overrides" -->
-<dd>
-ns_overrides の別名</dd>
-<dt><a name='label-32' id='label-32'><code>Cocoa派生クラス.ns_outlets (...)</code></a></dt><!-- RDLabel: "Cocoa派生クラス.ns_outlets" -->
+<dt><a name='label-34' id='label-34'><code>Cocoa派生クラス.ns_outlets (...)</code></a></dt><!-- RDLabel: "Cocoa派生クラス.ns_outlets" -->
 <dd>
 アウトレットを宣言します。実際には<var>attr_writer</var>を呼んでいる
 だけです。</dd>
-<dt><a name='label-33' id='label-33'><code>Cocoa派生クラス.ib_outlets (...)</code></a></dt><!-- RDLabel: "Cocoa派生クラス.ib_outlets" -->
+<dt><a name='label-35' id='label-35'><code>Cocoa派生クラス.ib_outlets (...)</code></a></dt><!-- RDLabel: "Cocoa派生クラス.ib_outlets" -->
 <dd>
 ns_outlets の別名</dd>
 </dl>
-<h3><a name='label-34' id='label-34'>インスタンスメソッド接頭辞 "super_"</a></h3><!-- RDLabel: "インスタンスメソッド接頭辞 "super_"" -->
-<p>ns_overridesでオーバーライドを宣言したメソッドに関して、スーパークラス
-での実装を使いたい場合には "super_" を付けたメソッド名で呼び出すことが
-できます。</p>
+<h3><a name='label-36' id='label-36'>インスタンスメソッド接頭辞 "super_"</a></h3><!-- RDLabel: "インスタンスメソッド接頭辞 "super_"" -->
+<p>オーバーライドしたメソッドに関して、スーパークラスでの実装を使いたい場合には 
+"super_" を付けたメソッド名で呼び出すことができます。</p>
 <pre>def drawRect (frame)
   super_drawRect (frame)   # invoke SuperClass#drawRect
 end</pre>
-<h2><a name='label-35' id='label-35'>OSX::OCExceptionクラス</a></h2><!-- RDLabel: "OSX::OCExceptionクラス" -->
+<h2><a name='label-37' id='label-37'>OSX::OCExceptionクラス</a></h2><!-- RDLabel: "OSX::OCExceptionクラス" -->
 <p>Objective-Cの世界で、Objective-Cオブジェクトへのメソッド呼び出しによっ
 て例外<var>NSException</var>が発生した場合、このクラスの例外が発生します。</p>
-<h3><a name='label-36' id='label-36'>OSX::OCExceptionクラスのインスタンスメソッド</a></h3><!-- RDLabel: "OSX::OCExceptionクラスのインスタンスメソッド" -->
+<h3><a name='label-38' id='label-38'>OSX::OCExceptionクラスのインスタンスメソッド</a></h3><!-- RDLabel: "OSX::OCExceptionクラスのインスタンスメソッド" -->
 <dl>
-<dt><a name='label-37' id='label-37'><code>OSX::OCException#name</code></a></dt><!-- RDLabel: "OSX::OCException#name" -->
+<dt><a name='label-39' id='label-39'><code>OSX::OCException#name</code></a></dt><!-- RDLabel: "OSX::OCException#name" -->
 <dd>
 例外名(NSException#name)を返します。</dd>
-<dt><a name='label-38' id='label-38'><code>OSX::OCException#reason</code></a></dt><!-- RDLabel: "OSX::OCException#reason" -->
+<dt><a name='label-40' id='label-40'><code>OSX::OCException#reason</code></a></dt><!-- RDLabel: "OSX::OCException#reason" -->
 <dd>
 例外の理由文字列(NSException#reason)を返します。</dd>
-<dt><a name='label-39' id='label-39'><code>OSX::OCException#userInfo</code></a></dt><!-- RDLabel: "OSX::OCException#userInfo" -->
+<dt><a name='label-41' id='label-41'><code>OSX::OCException#userInfo</code></a></dt><!-- RDLabel: "OSX::OCException#userInfo" -->
 <dd>
 ユーザ情報(NSException#userInfo)を返します。</dd>
-<dt><a name='label-40' id='label-40'><code>OSX::OCException#nsexception</code></a></dt><!-- RDLabel: "OSX::OCException#nsexception" -->
+<dt><a name='label-42' id='label-42'><code>OSX::OCException#nsexception</code></a></dt><!-- RDLabel: "OSX::OCException#nsexception" -->
 <dd>
 NSExceptionを返します。</dd>
 </dl>
-<h2><a name='label-41' id='label-41'>OSX::NSPointクラス</a></h2><!-- RDLabel: "OSX::NSPointクラス" -->
+<h2><a name='label-43' id='label-43'>OSX::NSPointクラス</a></h2><!-- RDLabel: "OSX::NSPointクラス" -->
 <p>Foundationフレームワークで定義されているデータ型<var>NSPoint</var>をRuby世
 界で扱うためのクラスです。</p>
-<h3><a name='label-42' id='label-42'>OSX::NSPointクラスのクラスメソッド</a></h3><!-- RDLabel: "OSX::NSPointクラスのクラスメソッド" -->
+<h3><a name='label-44' id='label-44'>OSX::NSPointクラスのクラスメソッド</a></h3><!-- RDLabel: "OSX::NSPointクラスのクラスメソッド" -->
 <dl>
-<dt><a name='label-43' id='label-43'><code>OSX::NSPoint.new(<var>x</var>,<var>y</var>)</code></a></dt><!-- RDLabel: "OSX::NSPoint.new" -->
+<dt><a name='label-45' id='label-45'><code>OSX::NSPoint.new(<var>x</var>,<var>y</var>)</code></a></dt><!-- RDLabel: "OSX::NSPoint.new" -->
 </dl>
-<h3><a name='label-44' id='label-44'>OSX::NSPointクラスのインスタンスメソッド</a></h3><!-- RDLabel: "OSX::NSPointクラスのインスタンスメソッド" -->
+<h3><a name='label-46' id='label-46'>OSX::NSPointクラスのインスタンスメソッド</a></h3><!-- RDLabel: "OSX::NSPointクラスのインスタンスメソッド" -->
 <dl>
-<dt><a name='label-45' id='label-45'><code>OSX::NSPoint#x</code></a></dt><!-- RDLabel: "OSX::NSPoint#x" -->
-<dt><a name='label-46' id='label-46'><code>OSX::NSPoint#y</code></a></dt><!-- RDLabel: "OSX::NSPoint#y" -->
-<dt><a name='label-47' id='label-47'><code>OSX::NSPoint#x= (<var>val</var>)</code></a></dt><!-- RDLabel: "OSX::NSPoint#x=" -->
-<dt><a name='label-48' id='label-48'><code>OSX::NSPoint#y= (<var>val</var>)</code></a></dt><!-- RDLabel: "OSX::NSPoint#y=" -->
-<dt><a name='label-49' id='label-49'><code>OSX::NSPoint#to_a</code></a></dt><!-- RDLabel: "OSX::NSPoint#to_a" -->
+<dt><a name='label-47' id='label-47'><code>OSX::NSPoint#x</code></a></dt><!-- RDLabel: "OSX::NSPoint#x" -->
+<dt><a name='label-48' id='label-48'><code>OSX::NSPoint#y</code></a></dt><!-- RDLabel: "OSX::NSPoint#y" -->
+<dt><a name='label-49' id='label-49'><code>OSX::NSPoint#x= (<var>val</var>)</code></a></dt><!-- RDLabel: "OSX::NSPoint#x=" -->
+<dt><a name='label-50' id='label-50'><code>OSX::NSPoint#y= (<var>val</var>)</code></a></dt><!-- RDLabel: "OSX::NSPoint#y=" -->
+<dt><a name='label-51' id='label-51'><code>OSX::NSPoint#to_a</code></a></dt><!-- RDLabel: "OSX::NSPoint#to_a" -->
 <dd>
 配列<var>[x, y]</var>を返します。</dd>
 </dl>
-<h2><a name='label-50' id='label-50'>OSX::NSSizeクラス</a></h2><!-- RDLabel: "OSX::NSSizeクラス" -->
+<h2><a name='label-52' id='label-52'>OSX::NSSizeクラス</a></h2><!-- RDLabel: "OSX::NSSizeクラス" -->
 <p>Foundationフレームワークで定義されているデータ型<var>NSSize</var>をRuby世界
 で扱うためのクラスです。</p>
-<h3><a name='label-51' id='label-51'>OSX::NSSizeクラスのクラスメソッド</a></h3><!-- RDLabel: "OSX::NSSizeクラスのクラスメソッド" -->
+<h3><a name='label-53' id='label-53'>OSX::NSSizeクラスのクラスメソッド</a></h3><!-- RDLabel: "OSX::NSSizeクラスのクラスメソッド" -->
 <dl>
-<dt><a name='label-52' id='label-52'><code>OSX::NSSize.new(<var>width</var>, <var>height</var>)</code></a></dt><!-- RDLabel: "OSX::NSSize.new" -->
+<dt><a name='label-54' id='label-54'><code>OSX::NSSize.new(<var>width</var>, <var>height</var>)</code></a></dt><!-- RDLabel: "OSX::NSSize.new" -->
 </dl>
-<h3><a name='label-53' id='label-53'>OSX::NSSizeクラスのインスタンスメソッド</a></h3><!-- RDLabel: "OSX::NSSizeクラスのインスタンスメソッド" -->
+<h3><a name='label-55' id='label-55'>OSX::NSSizeクラスのインスタンスメソッド</a></h3><!-- RDLabel: "OSX::NSSizeクラスのインスタンスメソッド" -->
 <dl>
-<dt><a name='label-54' id='label-54'><code>OSX::NSSize#width</code></a></dt><!-- RDLabel: "OSX::NSSize#width" -->
-<dt><a name='label-55' id='label-55'><code>OSX::NSSize#height</code></a></dt><!-- RDLabel: "OSX::NSSize#height" -->
-<dt><a name='label-56' id='label-56'><code>OSX::NSSize#width= (<var>val</var>)</code></a></dt><!-- RDLabel: "OSX::NSSize#width=" -->
-<dt><a name='label-57' id='label-57'><code>OSX::NSSize#height= (<var>val</var>)</code></a></dt><!-- RDLabel: "OSX::NSSize#height=" -->
-<dt><a name='label-58' id='label-58'><code>OSX::NSSize#to_a</code></a></dt><!-- RDLabel: "OSX::NSSize#to_a" -->
+<dt><a name='label-56' id='label-56'><code>OSX::NSSize#width</code></a></dt><!-- RDLabel: "OSX::NSSize#width" -->
+<dt><a name='label-57' id='label-57'><code>OSX::NSSize#height</code></a></dt><!-- RDLabel: "OSX::NSSize#height" -->
+<dt><a name='label-58' id='label-58'><code>OSX::NSSize#width= (<var>val</var>)</code></a></dt><!-- RDLabel: "OSX::NSSize#width=" -->
+<dt><a name='label-59' id='label-59'><code>OSX::NSSize#height= (<var>val</var>)</code></a></dt><!-- RDLabel: "OSX::NSSize#height=" -->
+<dt><a name='label-60' id='label-60'><code>OSX::NSSize#to_a</code></a></dt><!-- RDLabel: "OSX::NSSize#to_a" -->
 <dd>
 配列<var>[width, height]</var>を返します。</dd>
 </dl>
-<h2><a name='label-59' id='label-59'>OSX::NSRectクラス</a></h2><!-- RDLabel: "OSX::NSRectクラス" -->
+<h2><a name='label-61' id='label-61'>OSX::NSRectクラス</a></h2><!-- RDLabel: "OSX::NSRectクラス" -->
 <p>Foundationフレームワークで定義されているデータ型<var>NSRect</var>をRuby世界
 で扱うためのクラスです。</p>
-<h3><a name='label-60' id='label-60'>OSX::NSRectクラスのクラスメソッド</a></h3><!-- RDLabel: "OSX::NSRectクラスのクラスメソッド" -->
+<h3><a name='label-62' id='label-62'>OSX::NSRectクラスのクラスメソッド</a></h3><!-- RDLabel: "OSX::NSRectクラスのクラスメソッド" -->
 <dl>
-<dt><a name='label-61' id='label-61'><code>OSX::NSRect.new(<var>origin</var>, <var>size</var>)</code></a></dt><!-- RDLabel: "OSX::NSRect.new" -->
-<dt><a name='label-62' id='label-62'><code>OSX::NSRect.new(<var>x</var>, <var>y</var>, <var>width</var>, <var>height</var>)</code></a></dt><!-- RDLabel: "OSX::NSRect.new" -->
+<dt><a name='label-63' id='label-63'><code>OSX::NSRect.new(<var>origin</var>, <var>size</var>)</code></a></dt><!-- RDLabel: "OSX::NSRect.new" -->
+<dt><a name='label-64' id='label-64'><code>OSX::NSRect.new(<var>x</var>, <var>y</var>, <var>width</var>, <var>height</var>)</code></a></dt><!-- RDLabel: "OSX::NSRect.new" -->
 </dl>
-<h3><a name='label-63' id='label-63'>OSX::NSRectクラスのインスタンスメソッド</a></h3><!-- RDLabel: "OSX::NSRectクラスのインスタンスメソッド" -->
+<h3><a name='label-65' id='label-65'>OSX::NSRectクラスのインスタンスメソッド</a></h3><!-- RDLabel: "OSX::NSRectクラスのインスタンスメソッド" -->
 <dl>
-<dt><a name='label-64' id='label-64'><code>OSX::NSRect#origin</code></a></dt><!-- RDLabel: "OSX::NSRect#origin" -->
-<dt><a name='label-65' id='label-65'><code>OSX::NSRect#size</code></a></dt><!-- RDLabel: "OSX::NSRect#size" -->
-<dt><a name='label-66' id='label-66'><code>OSX::NSRect#origin= (<var>val</var>)</code></a></dt><!-- RDLabel: "OSX::NSRect#origin=" -->
-<dt><a name='label-67' id='label-67'><code>OSX::NSRect#size= (<var>val</var>)</code></a></dt><!-- RDLabel: "OSX::NSRect#size=" -->
-<dt><a name='label-68' id='label-68'><code>OSX::NSRect#to_a</code></a></dt><!-- RDLabel: "OSX::NSRect#to_a" -->
+<dt><a name='label-66' id='label-66'><code>OSX::NSRect#origin</code></a></dt><!-- RDLabel: "OSX::NSRect#origin" -->
+<dt><a name='label-67' id='label-67'><code>OSX::NSRect#size</code></a></dt><!-- RDLabel: "OSX::NSRect#size" -->
+<dt><a name='label-68' id='label-68'><code>OSX::NSRect#origin= (<var>val</var>)</code></a></dt><!-- RDLabel: "OSX::NSRect#origin=" -->
+<dt><a name='label-69' id='label-69'><code>OSX::NSRect#size= (<var>val</var>)</code></a></dt><!-- RDLabel: "OSX::NSRect#size=" -->
+<dt><a name='label-70' id='label-70'><code>OSX::NSRect#to_a</code></a></dt><!-- RDLabel: "OSX::NSRect#to_a" -->
 <dd>
 配列<var>[[x, y], [width, height]]</var>を返します。</dd>
 </dl>
-<h2><a name='label-69' id='label-69'>OSX::NSRangeクラス</a></h2><!-- RDLabel: "OSX::NSRangeクラス" -->
+<h2><a name='label-71' id='label-71'>OSX::NSRangeクラス</a></h2><!-- RDLabel: "OSX::NSRangeクラス" -->
 <p>Foundationフレームワークで定義されているデータ型<var>NSRange</var>をRuby世
 界で扱うためのクラスです。</p>
-<h3><a name='label-70' id='label-70'>OSX::NSRangeクラスのクラスメソッド</a></h3><!-- RDLabel: "OSX::NSRangeクラスのクラスメソッド" -->
+<h3><a name='label-72' id='label-72'>OSX::NSRangeクラスのクラスメソッド</a></h3><!-- RDLabel: "OSX::NSRangeクラスのクラスメソッド" -->
 <dl>
-<dt><a name='label-71' id='label-71'><code>OSX::NSRange.new(<var>range</var>)</code></a></dt><!-- RDLabel: "OSX::NSRange.new" -->
-<dt><a name='label-72' id='label-72'><code>OSX::NSRange.new(<var>location</var>, <var>length</var>)</code></a></dt><!-- RDLabel: "OSX::NSRange.new" -->
+<dt><a name='label-73' id='label-73'><code>OSX::NSRange.new(<var>range</var>)</code></a></dt><!-- RDLabel: "OSX::NSRange.new" -->
+<dt><a name='label-74' id='label-74'><code>OSX::NSRange.new(<var>location</var>, <var>length</var>)</code></a></dt><!-- RDLabel: "OSX::NSRange.new" -->
 </dl>
-<h3><a name='label-73' id='label-73'>OSX::NSRangeクラスのインスタンスメソッド</a></h3><!-- RDLabel: "OSX::NSRangeクラスのインスタンスメソッド" -->
+<h3><a name='label-75' id='label-75'>OSX::NSRangeクラスのインスタンスメソッド</a></h3><!-- RDLabel: "OSX::NSRangeクラスのインスタンスメソッド" -->
 <dl>
-<dt><a name='label-74' id='label-74'><code>OSX::NSRect#location</code></a></dt><!-- RDLabel: "OSX::NSRect#location" -->
-<dt><a name='label-75' id='label-75'><code>OSX::NSRect#length</code></a></dt><!-- RDLabel: "OSX::NSRect#length" -->
-<dt><a name='label-76' id='label-76'><code>OSX::NSRect#location= (<var>val</var>)</code></a></dt><!-- RDLabel: "OSX::NSRect#location=" -->
-<dt><a name='label-77' id='label-77'><code>OSX::NSRect#length= (<var>val</var>)</code></a></dt><!-- RDLabel: "OSX::NSRect#length=" -->
-<dt><a name='label-78' id='label-78'><code>OSX::NSRect#to_a</code></a></dt><!-- RDLabel: "OSX::NSRect#to_a" -->
+<dt><a name='label-76' id='label-76'><code>OSX::NSRect#location</code></a></dt><!-- RDLabel: "OSX::NSRect#location" -->
+<dt><a name='label-77' id='label-77'><code>OSX::NSRect#length</code></a></dt><!-- RDLabel: "OSX::NSRect#length" -->
+<dt><a name='label-78' id='label-78'><code>OSX::NSRect#location= (<var>val</var>)</code></a></dt><!-- RDLabel: "OSX::NSRect#location=" -->
+<dt><a name='label-79' id='label-79'><code>OSX::NSRect#length= (<var>val</var>)</code></a></dt><!-- RDLabel: "OSX::NSRect#length=" -->
+<dt><a name='label-80' id='label-80'><code>OSX::NSRect#to_a</code></a></dt><!-- RDLabel: "OSX::NSRect#to_a" -->
 <dd>
 <var>[ location, length ]</var>を返します。</dd>
-<dt><a name='label-79' id='label-79'><code>OSX::NSRect#to_range</code></a></dt><!-- RDLabel: "OSX::NSRect#to_range" -->
+<dt><a name='label-81' id='label-81'><code>OSX::NSRect#to_range</code></a></dt><!-- RDLabel: "OSX::NSRect#to_range" -->
 <dd>
 RubyのRangeオブジェクトを返します。</dd>
 </dl>

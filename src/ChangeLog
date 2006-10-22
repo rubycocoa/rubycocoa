@@ -4,6 +4,14 @@
 	  template/ProjectBuilder/Application/Cocoa-Ruby Document-based Application/:
 	convert Xcode native project file (pbproj -> xcodeproj).
 
+	* doc/build.en.html, doc/build.ja.html, doc/changelog.html, 
+	  doc/changes.en.html, doc/changes.ja.html, doc/getting.en.html, 
+	  doc/getting.ja.html, doc/index.en.html, doc/index.ja.html, 
+	  doc/links.en.html, doc/links.ja.html, doc/programming.en.html, 
+	  doc/programming.ja.html, doc/references.en.html, doc/references.ja.html,
+	  doc/trysamples.en.html, doc/trysamples.ja.html:
+	update documents.
+
 2006-10-21  kimura wataru <kimuraw@i.nifty.jp>
 
 	* lib/osx/appkit.rb, lib/osx/foundation.rb:
