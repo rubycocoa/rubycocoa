@@ -12,6 +12,9 @@
 	  doc/trysamples.en.html, doc/trysamples.ja.html:
 	update documents.
 
+	* framework/pre-install.rb:
+	fix: config install-root does not affect location of BridgeSupport.
+
 2006-10-21  kimura wataru <kimuraw@i.nifty.jp>
 
 	* lib/osx/appkit.rb, lib/osx/foundation.rb:
