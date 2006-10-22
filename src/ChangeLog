@@ -1,3 +1,9 @@
+2006-10-22  kimura wataru <kimuraw@i.nifty.jp>
+
+	* template/ProjectBuilder/Application/Cocoa-Ruby Application/,
+	  template/ProjectBuilder/Application/Cocoa-Ruby Document-based Application/:
+	convert Xcode native project file (pbproj -> xcodeproj).
+
 2006-10-21  kimura wataru <kimuraw@i.nifty.jp>
 
 	* lib/osx/appkit.rb, lib/osx/foundation.rb:
