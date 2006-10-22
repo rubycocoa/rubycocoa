@@ -27,6 +27,9 @@
 	* ReadMe.ascii.html, ReadMe.sjis.html:
 	update description about installed contents.
 
+	* VERSION:
+	set version to 0.5.0-preview.
+
 2006-10-18  kimura wataru <kimuraw@i.nifty.jp>
 
 	* sample/RubyRocks/RubyRocks.rb,
