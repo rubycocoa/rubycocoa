@@ -1,4 +1,4 @@
 VERSION = "0.5.0"
 STAGE = "preview"
-SVN_REVISION = "$REVISION$"
+SVN_REVISION = "$Revision$".gsub(/\$Revision:\s*(\d+)\s*\$/, $~[1])
 RELEASE_DATE = "2006-10-22"
