@@ -15,9 +15,10 @@ config_ary = [
   [ :libruby_path,    @config['libruby-path'] ],
   [ :libruby_path_dirname,  File.dirname(@config['libruby-path']) ],
   [ :libruby_path_basename, File.basename(@config['libruby-path']) ],
-  [ :rubycocoa_version,      @config['rubycocoa-version'] ],
-  [ :rubycocoa_version_short,   @config['rubycocoa-version-short'] ],
-  [ :rubycocoa_release_date, @config['rubycocoa-release-date'] ],
+  [ :rubycocoa_version,       @config['rubycocoa-version'] ],
+  [ :rubycocoa_version_short, @config['rubycocoa-version-short'] ],
+  [ :rubycocoa_release_date,  @config['rubycocoa-release-date'] ],
+  [ :rubycocoa_svn_release,   @config['rubycocoa-svn-release'] ],
   [ :build_dir, framework_obj_path ],
 ]
 
