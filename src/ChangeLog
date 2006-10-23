@@ -1,7 +1,9 @@
-2006-10-23  Fujimoto Hisa  <hisa@fobj.com>
+2006-10-23  kimura wataru <kimuraw@i.nifty.jp>
 
-	* VERSION, pre-config.rb, framework/src/objc/Version.h.in, framework/src/objc/mdl_osxobjc.m, metaconfig:
-	add a constant OSX::SVN_REVISION
+	* framework/src/ruby/osx/objc/coredata.rb,
+	  sample/RubyRaiseMan/PreferenceController.rb,
+	  sample/RubySpotlight/AppController.rb, sample/fontnames.rb:
+	NSArray#to_a.each convert NSArray#each (RCArrayAttachment).
 
 2006-10-22  kimura wataru <kimuraw@i.nifty.jp>
 

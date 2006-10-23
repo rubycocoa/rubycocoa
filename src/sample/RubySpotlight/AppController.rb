@@ -30,8 +30,8 @@ class AppController < NSObject
 
   def refresh_metaDataView
     info = NSMutableString.stringWithCapacity(150);
-    @mdItemController.selectedObjects.to_a.each do |item| 
-      item.attributes.to_a.each do |attr_name|
+    @mdItemController.selectedObjects.each do |item| 
+      item.attributes.each do |attr_name|
         info.appendString(attr_name)
         info.appendString(" = ")
         info.appendString(item.valueForAttribute(attr_name).description)

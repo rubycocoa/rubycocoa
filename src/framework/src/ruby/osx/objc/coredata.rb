@@ -131,13 +131,13 @@ module OSX
         raise RuntimeError, "invalid class: #{model.class}"
       end
 
-      model.entities.to_a.each do |ent|
+      model.entities.each do |ent|
 	klassname = ent.managedObjectClassName.to_s
         next if klassname == 'NSManagedObject'
 	next unless Object.const_defined?(klassname)
 
-	attrs = ent.attributesByName.allKeys.to_a.collect {|key| key.to_s}
-	rels = ent.relationshipsByName.allKeys.to_a.collect {|key| key.to_s}
+	attrs = ent.attributesByName.allKeys.collect {|key| key.to_s}
+	rels = ent.relationshipsByName.allKeys.collect {|key| key.to_s}
 	klass = Object.const_get(klassname)
 	klass.instance_eval <<-EOE_AUTOWRAP,__FILE__,__LINE__+1
 	  kvc_wrapper attrs
