@@ -46,7 +46,7 @@ class PreferenceController < OSX::NSWindowController
   def resetToDefault (sender)
     defaults = NSUserDefaults.standardUserDefaults
     keys = defaults.dictionaryRepresentation.allKeys
-    keys.to_a.each {|key| defaults.removeObjectForKey(key) }
+    keys.each {|key| defaults.removeObjectForKey(key) }
     reload_user_defaults
   end
 
