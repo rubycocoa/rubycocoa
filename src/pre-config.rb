@@ -25,22 +25,22 @@ config_ary = [
 # build options
 cflags = '-fno-common -g -fobjc-exceptions'
 ldflags = '-undefined suppress -flat_namespace'
+
 sdkroot = ''
-
+arch = '$NATIVE_ARCH'
 if @config['build-universal'] == 'yes'
-  cflags << ' -arch ppc -arch i386'
-  ldflags << ' -arch ppc -arch i386'
-
+  arch = 'ppc i386'
   sdkroot = '/Developer/SDKs/MacOSX10.4u.sdk'
-  cflags << ' -isysroot ' << sdkroot
-  ldflags << ' -Wl,-syslibroot,' << sdkroot
 
   # validation
   raise "ERROR: SDK \"#{sdkroot}\" does not exist." unless File.exist?(sdkroot)
   #libruby_sdk = File.join(sdkroot, @config['libruby-path'])
   libruby_sdk = @config['libruby-path']
   raise "ERROR: library \"#{libruby_sdk}\" does not exists." unless File.exist?(libruby_sdk)
+else
 end
+config_ary << [ :archs, arch ]
+config_ary << [ :sdkroot, sdkroot ]
 
 if File.exists?('/usr/include/libxml2') and File.exists?('/usr/lib/libxml2.dylib')
     cflags << ' -I/usr/include/libxml2 -DHAS_LIBXML2 '
