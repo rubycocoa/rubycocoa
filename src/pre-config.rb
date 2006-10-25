@@ -52,6 +52,12 @@ end
 config_ary << [ :other_cflags, cflags ]
 config_ary << [ :other_ldflags, ldflags ]
 
+if /\.a\Z/ =~ @config['libruby-path'] 
+  config_ary << [ :generate_master_object_file, 'YES' ]
+else
+  config_ary << [ :generate_master_object_file, 'NO' ]
+end
+
 target_files.each do |dst_name|
   src_name = dst_name + '.in'
   data = File.open(src_name) {|f| f.read }

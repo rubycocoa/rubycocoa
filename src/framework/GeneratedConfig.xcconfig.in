@@ -5,4 +5,5 @@ LIBRARY_SEARCH_PATHS = %%%libruby_path_dirname%%%
 OTHER_LDFLAGS = %%%other_ldflags%%% %%%libruby_path%%%
 OTHER_CFLAGS = %%%other_cflags%%%
 MACOSX_DEPLOYMENT_TARGET = 10.3
+GENERATE_MASTER_OBJECT_FILE = %%%generate_master_object_file%%%;
 
