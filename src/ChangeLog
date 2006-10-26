@@ -1,3 +1,11 @@
+2006-10-26  kimura wataru <kimuraw@i.nifty.jp>
+
+	* ext/rubycocoa/extconf.rb.in:
+	including and linking SDK at building universal binary.
+
+	* VERSION:
+	0.5.0-preview5
+
 2006-10-26  Fujimoto Hisa  <hisa@fobj.com>
 
 	* pre-config.rb, ext/rubycocoa/extconf.rb.in:

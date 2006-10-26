@@ -22,6 +22,9 @@ $LDFLAGS << ' %%%other_ldflags%%%'
 if '%%%build_universal%%%' == 'yes' then
   $CFLAGS  << ' -arch ppc -arch i386'
   $LDFLAGS << ' -arch ppc -arch i386'
+  sdkroot = '/Developer/SDKs/MacOSX10.4u.sdk'
+  $CFLAGS  << " -isysroot #{sdkroot}"
+  $LDFLAGS << " -Wl,-syslibroot,#{sdkroot}"
 end
 
 create_makefile('rubycocoa')
