@@ -1,7 +1,7 @@
 # -*-rd-*-
 = Building and Installing RubyCocoa from Source
 
-This document describes building and installing RubyCocoa 0.4.2 from
+This document describes building and installing RubyCocoa 0.5.0 from
 source. Skip this if you are going to install the binary distribution.
 
 Building and installation are done from a shell, using the Terminal
@@ -23,7 +23,7 @@ The following steps perform the build and installation.
 Extract RubyCocoa source from the '.tgz' file into a directory somewhere.
 
   $ cd {somewhere}
-  $ tar zxf rubycocoa-0.4.2.tar.gz
+  $ tar zxf rubycocoa-0.5.0.tar.gz
 
 ((*Caution!*)) Using StuffIt, building RubyCocoa will fail because of a file
 name length problem.
@@ -39,7 +39,7 @@ in the case shown below at an example is explained.
   * Ruby included in Mac OS X
     * Ruby 1.8.2(Mac OS X 10.4)
 
-RubyCocoa 0.4.2 binary distribution has been built with the 2nd way.
+RubyCocoa 0.5.0 binary distribution has been built with the 2nd way.
 When Ruby has been installed with a package utility such as
 ((<Fink|URL:http://fink.sf.net/>)), adapt these instructions accordingly.
 
@@ -170,8 +170,11 @@ As a result, these will be installed temporarily.
 
 == Development and testing environment
 
-* PowerBook G4/1.67/1GB
-* Mac OS X 10.4.8 (ppc)
+* Hardware
+  * PowerBook G4/1.67/1GB
+  * MacBook
+* Software
+  * Mac OS X 10.4.8 (ppc, intel)
   * XcodeTools 2.4
   * ruby-1.8.2 (pre-installed in Mac OS X 10.4)
   * ruby-1.8.5

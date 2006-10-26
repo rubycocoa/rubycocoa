@@ -1,7 +1,7 @@
 # -*-rd-*-
 = RubyCocoaをソースから構築・インストールする
 
-この文書ではRubyCocoa 0.4.2をソースから構築・インストールする方法について
+この文書ではRubyCocoa 0.5.0をソースから構築・インストールする方法について
 説明します。バイナリ配付をインストールして使う場合にはとくに読む必要はありません。
 
 構築・インストール作業は、Terminalアプリケーションなどからシェルコマンド
@@ -21,7 +21,7 @@
 あらかじめどこかにRubyCocoaのソースを展開しておいてください。
 
   $ cd {どこか}
-  $ tar zxf rubycocoa-0.4.2.tar.gz
+  $ tar zxf rubycocoa-0.5.0.tar.gz
 
 ((*注意*)) StuffItを使うとファイル名の長さの問題でRubyCocoaが正しく
 インストールされないのでtarコマンドを使ってください。
@@ -37,7 +37,7 @@ RubyCocoaのベースとなるRubyの構築手順を説明します。
   * Mac OS X付属のRuby
     * Ruby 1.8.2(Mac OS X 10.4)
 
-RubyCocoa 0.4.2バイナリパッケージは、2番目の方法で作られたものです。
+RubyCocoa 0.5.0バイナリパッケージは、2番目の方法で作られたものです。
 ((<Fink|URL:http://fink.sf.net/>))などのパッケージを使ってRubyを
 インストールしている場合などは、それに合わせて読み変えてください。
 
@@ -172,8 +172,11 @@ config'のオプションがあります。
 
 以下の環境で開発動作確認をしています。
 
-* PowerBook G4/1.67/640MB
-* Mac OS X 10.4.8 (ppc)
+* ハードウェア
+  * PowerBook G4/1.67/640MB
+  * MacBook
+* ソフトウェア
+  * Mac OS X 10.4.8 (ppc)
   * XcodeTools 2.4
   * ruby-1.8.2 (pre-installed in Mac OS X 10.4)
   * ruby-1.8.5
