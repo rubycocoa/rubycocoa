@@ -18,6 +18,12 @@ $LDFLAGS  = '-F../../framework/%%%build_dir%%% -framework RubyCocoa'
 $CFLAGS << ' %%%other_cflags%%%'
 $LDFLAGS << ' %%%other_ldflags%%%'
 
+# check build as universal binary
+if '%%%build_universal%%%' == 'yes' then
+  $CFLAGS  << ' -arch ppc -arch i386'
+  $LDFLAGS << ' -arch ppc -arch i386'
+end
+
 create_makefile('rubycocoa')
 command "mv -f Makefile Makefile.bak"
 command "sed -e 's/-no-cpp-precomp//' -e 's/-no-precomp//' Makefile.bak > Makefile"
