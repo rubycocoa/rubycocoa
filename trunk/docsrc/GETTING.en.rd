@@ -3,17 +3,17 @@
 
 == Binary Distribution
 
-=== for Mac OS X 10.3
+=== for Mac OS X 10.4
 
-RubyCocoa's binary distribution has been built for the Ruby 1.6.8 distributed
-with Mac OS X 10.3.
+RubyCocoa's binary distribution has been built for the Ruby 1.8.2 distributed
+with Mac OS X 10.4.
 
 Download
-((<RubyCocoa-0.4.2-panther.dmg|URL:http://prdownloads.sourceforge.net/rubycocoa/RubyCocoa-0.4.2-panther.dmg?download>))
+((<RubyCocoa-0.5.0-OSX10.4universal.dmg|URL:http://prdownloads.sourceforge.net/rubycocoa/RubyCocoa-0.5.0-OSX10.4universal.dmg?download>))
 from ((<file list|URL:http://sourceforge.net/project/showfiles.php?group_id=44114>)).
 
-It includes library, samples, templates for Project Builder, etc. for both
-RubyCocoa and RubyAEOSA. Everything necessary for execution and development is
+It includes library, samples, templates for Project Builder, etc. for 
+RubyCocoa. Everything necessary for execution and development is
 included in an easy-to-install '.pkg' package file.
 
 A successful installation of the binary package will add the following items:
@@ -21,17 +21,17 @@ A successful installation of the binary package will add the following items:
 : /Library/Frameworks/RubyCocoa.framework
   RubyCocoa framework (core)
 
-: inside of /usr/lib/ruby/site_ruby/1.6/osx/
+: inside of /usr/lib/ruby/site_ruby/1.8/osx/
   RubyCocoa library (stub)
 
-: /usr/lib/ruby/site_ruby/1.6/powerpc-darwin7.0/rubycocoa.bundle
+: /usr/lib/ruby/site_ruby/1.8/[powerpc|i386]-darwin8.0/rubycocoa.bundle
   RubyCocoa extended library (stub)
 
 : inside of '/Library/Application Support/Apple/Developer Tools'
   Some templates for Xcode
 
-: inside of '/Developer/ProjectBuilder Extras/'
-  Some templates for ProjectBuilder
+: BridgeSupport metadata (xml)
+  '/Library/BridgeSupport/'
 
 : /Developer/Documentation/RubyCocoa
   HTML documentation
@@ -42,28 +42,10 @@ A successful installation of the binary package will add the following items:
 After installation, try the samples that are written in Ruby. Refer
 to ((<'Try RubyCocoa Samples'|URL:trysamples.en.html>)).
 
-=== for Mac OS X 10.4
-
-RubyCocoa's binary distribution has been built for the Ruby 1.8.2 distributed
-with Mac OS X 10.4.
-
-Download
-((<RubyCocoa-0.4.2-tiger.dmg|URL:http://prdownloads.sourceforge.net/rubycocoa/RubyCocoa-0.4.2-tiger.dmg?download>))
-from ((<file list|URL:http://sourceforge.net/project/showfiles.php?group_id=44114>)).
-
-=== for Mac OS X 10.2
-
-RubyCocoa's binary distribution has been built for the Ruby 1.6.7 distributed
-with Mac OS X 10.2.
-
-Download
-((<RubyCocoa-0.4.2-jaguar.dmg|URL:http://prdownloads.sourceforge.net/rubycocoa/RubyCocoa-0.4.2-jaguar.dmg?download>))
-from ((<file list|URL:http://sourceforge.net/project/showfiles.php?group_id=44114>)).
-
 == Source Distribution
 
 Download
-((<rubycocoa-0.4.2-xcode-2.2-patched.tgz|URL:http://prdownloads.sourceforge.net/rubycocoa/rubycocoa-0.4.2-xcode-2.2-patched.tgz?download>))
+((<rubycocoa-0.5.0.tgz|URL:http://prdownloads.sourceforge.net/rubycocoa/rubycocoa-0.5.0.tgz?download>))
 from ((<file list|URL:http://sourceforge.net/project/showfiles.php?group_id=44114>)).
 
 To build and install RubyCocoa, refer to 

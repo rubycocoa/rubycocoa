@@ -3,18 +3,18 @@
 
 == バイナリ配付
 
-=== for Mac OS X 10.3
+=== for Mac OS X 10.4
 
-バイナリ配付に含まれているRubyCocoaは、Mac OS X 10.3に付属する
-Ruby 1.6.8 に合わせて構築しています。
+バイナリ配付に含まれているRubyCocoaは、Mac OS X 10.4に付属する
+Ruby 1.8.2 に合わせて構築しています。
 
 ((<ファイル一覧|URL:http://sourceforge.net/project/showfiles.php?group_id=44114>)).
 の中から
-((<RubyCocoa-0.4.2-panther.dmg|URL:http://prdownloads.sourceforge.net/rubycocoa/RubyCocoa-0.4.2-panther.dmg?download>))
+((<RubyCocoa-0.5.0-OSX10.4universal.dmg|URL:http://prdownloads.sourceforge.net/rubycocoa/RubyCocoa-0.5.0-OSX10.4universal.dmg?download>))
 をダウンロードしてください。
 
-RubyCocoaとRubyAEOSA のライブラリ・サンプルコード・ドキュメント・
-ProjectBuilderテンプレートなどが含まれています。実行・開発に必要な
+RubyCocoaのライブラリ・サンプルコード・ドキュメント・
+Xcodeテンプレートなどが含まれています。実行・開発に必要な
 ライブラリ類は'.pkg'形式のパッケージになっていて、簡単にインストール
 できます。
 
@@ -23,17 +23,17 @@ ProjectBuilderテンプレートなどが含まれています。実行・開発に必要な
 : /Library/Frameworks/RubyCocoa.framework
   RubyCocoaフレームワーク (本体)
 
-: /usr/lib/ruby/site_ruby/1.6/osx/ の中
+: /usr/lib/ruby/site_ruby/1.8/osx/ の中
   RubyCocoaライブラリ (stub)
 
-: /usr/lib/ruby/site_ruby/1.6/powerpc-darwin7.0/rubycocoa.bundle
+: /usr/lib/ruby/site_ruby/1.8/[powerpc|i386]-darwin8.0/rubycocoa.bundle
   RubyCocoa拡張ライブラリ (stub)
 
 : '/Library/Application Support/Apple/Developer Tools' の中
   Xcodeのテンプレート
 
-: '/Developer/ProjectBuilder Extras/' の中
-  ProjectBuilderのテンプレート
+: '/Library/BridgeSupport/'
+  ブリッジ機能サポート用のメタデータ (xml)
 
 : /Developer/Documentation/RubyCocoa
   ドキュメント (HTML)
@@ -45,32 +45,11 @@ ProjectBuilderテンプレートなどが含まれています。実行・開発に必要な
 |URL:trysamples.ja.html>)) を参考にRubyCocoaで書かれたサンプルプログラ
 ムを動かしてみるとよいでしょう。
 
-=== for Mac OS X 10.4
-
-バイナリ配付に含まれているRubyCocoaは、Mac OS X 10.4に付属する
-Ruby 1.8.2 に合わせて構築しています。
-
-((<ファイル一覧|URL:http://sourceforge.net/project/showfiles.php?group_id=44114>)).
-の中から
-((<RubyCocoa-0.4.2-tiger.dmg|URL:http://prdownloads.sourceforge.net/rubycocoa/RubyCocoa-0.4.2-tiger.dmg?download>))
-をダウンロードしてください。
-
-=== for Mac OS X 10.2
-
-バイナリ配付に含まれているRubyCocoaは、Mac OS X 10.2に付属する
-Ruby 1.6.7 に合わせて構築しています。
-
-((<ファイル一覧|URL:http://sourceforge.net/project/showfiles.php?group_id=44114>)).
-の中から
-((<RubyCocoa-0.4.2-jaguar.dmg|URL:http://prdownloads.sourceforge.net/rubycocoa/RubyCocoa-0.4.2-jaguar.dmg?download>))
-をダウンロードしてください。
-
-
 == ソース配付
 
 ((<ファイル一覧|URL:http://rubycocoa.sourceforge.net/files/>))
 の中から
-((<rubycocoa-0.4.2-xcode-2.2-patched.tgz|URL:http://prdownloads.sourceforge.net/rubycocoa/rubycocoa-0.4.2-xcode-2.2-patched.tgz?download>))
+((<rubycocoa-0.5.0.tgz|URL:http://prdownloads.sourceforge.net/rubycocoa/rubycocoa-0.5.0.tgz?download>))
 をダウンロードしてください。
 
 ((<「RubyCocoaをソースから構築・インストールする」|URL:build.ja.html>))
