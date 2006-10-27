@@ -88,3 +88,5 @@ add_config 'rubycocoa-version-short', 'name',
 add_config 'rubycocoa-release-date', 'name', 
   RubyCocoaConfig::RELEASE_DATE, 'RubyCocoa release date'
 
+add_config 'rubycocoa-svn-revision', 'name', 
+  RubyCocoaConfig::SVN_REVISION, 'RubyCocoa subversion revision number'
