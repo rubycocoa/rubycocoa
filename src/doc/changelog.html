@@ -2,11 +2,82 @@
 <head><title>RubyCocoa - ChangeLog</title></head>
 <body>
 <pre>
+2006-10-28  kimura wataru 
+
+	* doc/build.en.html, doc/build.ja.html, doc/changelog.html,
+	  doc/getting.en.html, doc/getting.ja.html, doc/index.en.html,
+	  doc/index.ja.html, doc/news.en.html, doc/news.ja.html:
+	update documents for releas-0.5.0.
+
+	* VERSION:
+	0.5.0
+
+2006-10-26  kimura wataru 
+
+	* ext/rubycocoa/extconf.rb.in:
+	including and linking SDK at building universal binary.
+
+	* VERSION:
+	0.5.0-preview5
+
+2006-10-26  Fujimoto Hisa  
+
+	* pre-config.rb, ext/rubycocoa/extconf.rb.in:
+	rubycocoa.bundle (stub extend module) build as universal binary
+
+	* VERSION:
+	0.5.0-preview4
+
+2006-10-25  kimura wataru 
+	* framework/GeneratedConfig.xcconfig.in, 
+	  framework/RubyCocoa.xcodeproj/project.pbxproj, pre-config.rb:
+	set GENERATE_MASTER_OBJECT_FILE to "YES" with only libruby.a.
+
+	* VERSION:
+	set version to 0.5.0-preview2.
+
+	* framework/GeneratedConfig.xcconfig.in, pre-config.rb:
+ 	use ARCHS and SDKROOT of Xcode settings for building universal
+	binary, not CFLAGS and LDFLAGS.
+
+	* VERSION:
+	set version to 0.5.0-preview3.
+
+2006-10-23  kimura wataru 
+
+	* framework/src/ruby/osx/objc/coredata.rb,
+	  sample/RubyRaiseMan/PreferenceController.rb,
+	  sample/RubySpotlight/AppController.rb, sample/fontnames.rb:
+	NSArray#to_a.each convert NSArray#each (RCArrayAttachment).
+
+2006-10-23  kimura wataru 
+
+	* framework/src/ruby/osx/objc/coredata.rb,
+	  sample/RubyRaiseMan/PreferenceController.rb,
+	  sample/RubySpotlight/AppController.rb, sample/fontnames.rb:
+	NSArray#to_a.each convert NSArray#each (RCArrayAttachment).
+
+2006-10-23  Fujimoto Hisa  
+
+	* VERSION, pre-config.rb, framework/src/objc/Version.h.in, framework/src/objc/mdl_osxobjc.m, metaconfig:
+	add a constant OSX::SVN_REVISION
+
 2006-10-22  kimura wataru 
 
 	* template/ProjectBuilder/Application/Cocoa-Ruby Application/,
 	  template/ProjectBuilder/Application/Cocoa-Ruby Document-based Application/:
 	convert Xcode native project file (pbproj -> xcodeproj).
+
+	* doc/build.en.html, doc/build.ja.html, doc/changelog.html, 
+	  doc/changes.en.html, doc/changes.ja.html, doc/getting.en.html, 
+	  doc/getting.ja.html, doc/index.en.html, doc/index.ja.html, 
+	  doc/links.en.html, doc/links.ja.html, doc/programming.en.html, 
+	  doc/programming.ja.html, doc/references.en.html, doc/references.ja.html,
+	  doc/trysamples.en.html, doc/trysamples.ja.html:
+	update documents.
+
+	* framework/pre-install.rb:
+	fix: config install-root does not affect location of BridgeSupport.
 
 2006-10-21  kimura wataru 
 
@@ -19,6 +90,9 @@
 
 	* ReadMe.ascii.html, ReadMe.sjis.html:
 	update description about installed contents.
+
+	* VERSION:
+	set version to 0.5.0-preview.
 
 2006-10-18  kimura wataru 
 
