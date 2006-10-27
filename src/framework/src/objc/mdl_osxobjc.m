@@ -336,6 +336,8 @@ void initialize_mdl_osxobjc()
 		  rb_obj_freeze(rb_str_new2(RUBYCOCOA_VERSION)));
   rb_define_const(mOSX, "RUBYCOCOA_RELEASE_DATE", 
 		  rb_obj_freeze(rb_str_new2(RUBYCOCOA_RELEASE_DATE)));
+  rb_define_const(mOSX, "RUBYCOCOA_SVN_REVISION", 
+		  rb_obj_freeze(rb_str_new2(RUBYCOCOA_SVN_REVISION)));
 
   rb_define_module_function(mOSX, "objc_symbol_to_obj", osx_mf_objc_symbol_to_obj, 2);
 
