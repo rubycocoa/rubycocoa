@@ -195,7 +195,7 @@ ocm_ffi_dispatch(int argc, VALUE* argv, VALUE rcv, VALUE* result, struct _ocm_se
 
   is_class_method = TYPE(rcv) == T_CLASS;
   klass = is_class_method ? (struct objc_class *) ctx->rcv : ((struct objc_class *) ctx->rcv)->isa;
-  bs_method = find_bs_method(klass, (const char *) ctx->selector, is_class_method);
+  bs_method = ctx->numberOfArguments > 0 ? find_bs_method(klass, (const char *) ctx->selector, is_class_method) : NULL;
 
   OBJWRP_LOG("ocm_ffi_dispatch (%s%c%s): args_count=%d ret_type=%s", ((struct objc_class *) klass)->name, is_class_method ? '.' : '#', ctx->selector, argc, ctx->methodReturnType);
 
@@ -264,6 +264,37 @@ ocm_ffi_dispatch(int argc, VALUE* argv, VALUE rcv, VALUE* result, struct _ocm_se
       rb_raise(rb_eArgError, "bad number of argument(s) (expected %d, got %d)", ctx->numberOfArguments, argc);
   }
   OBJWRP_LOG("\t%d ary length argument(s), %d omitted pointer(s)", c_ary_length_args_count, pointers_args_count);
+
+  // Easy case: a method returning ID (or nothing) _and_ without argument.
+  // We don't need libffi here, we can just call it (faster).
+  if (ctx->numberOfArguments == 0 && (*ctx->methodReturnType == _C_VOID || *ctx->methodReturnType == _C_ID)) {
+    id val;
+
+    method = class_getInstanceMethod(((struct objc_class *) ctx->rcv)->isa, ctx->selector);
+    exception = Qnil;
+    @try {
+      OBJWRP_LOG("\tdirect call easy method %s types %s imp %p", (const char *)method->method_name, method->method_types, method->method_imp);
+      val = (*method->method_imp)(ctx->rcv, ctx->selector);
+    }
+    @catch (id oc_exception) {
+      OBJWRP_LOG("got objc exception '%@' -- forwarding...", oc_exception);
+      exception = oc_err_new(ctx->rcv, ctx->selector, oc_exception);
+    }
+
+    // Return exception if catched.
+    if (!NIL_P(exception))
+      return exception;
+
+    if (*ctx->methodReturnType == _C_ID) {
+      if (!ocdata_to_rbobj(rcv, _C_ID, &val, result))
+        return ocdataconv_err_new(ctx->rcv, ctx->selector, "cannot convert the result as '%s' to Ruby Object.", ctx->methodReturnType);
+      ocm_retain_result_if_necessary(*result, ctx->selector);
+    }
+    else {
+      *result = Qnil;
+    }
+    return Qnil;
+  }
  
   // Prepare arg types / values.
   arg_types = (ffi_type **) calloc(ctx->numberOfArguments + 3, sizeof(ffi_type *));
@@ -282,7 +313,8 @@ ocm_ffi_dispatch(int argc, VALUE* argv, VALUE rcv, VALUE* result, struct _ocm_se
       // C-array-length-like argument, which should be already defined
       // (at the same time than the C-array-like argument), unless it's
       // returned by reference.
-      if (find_bs_method_arg_by_c_array_len_arg_index(bs_method, i) != NULL
+      if (bs_method != NULL
+          && find_bs_method_arg_by_c_array_len_arg_index(bs_method, i) != NULL
           && ctx->argumentsTypes[i][0] != '^') {
         skipped++;
       } 
@@ -305,7 +337,7 @@ ocm_ffi_dispatch(int argc, VALUE* argv, VALUE rcv, VALUE* result, struct _ocm_se
         arg = argv[i - skipped];
         octype_str = ctx->argumentsTypes[i];
         octype = to_octype(octype_str);
-        bs_arg = find_bs_method_arg_by_index(bs_method, i);
+        bs_arg = bs_method != NULL ? find_bs_method_arg_by_index(bs_method, i) : NULL;
 
         if (bs_arg != NULL && !bs_arg->null_accepted && NIL_P(arg)) {
             exception = ocdataconv_err_new(ctx->rcv, ctx->selector, "argument #%d can't be nil", i);
@@ -402,7 +434,7 @@ ocm_ffi_dispatch(int argc, VALUE* argv, VALUE rcv, VALUE* result, struct _ocm_se
     ffi_call(&cif, FFI_FN(method->method_imp), (ffi_arg *) &retval, arg_values);
     OBJWRP_LOG("\tffi_call done");
   }
-  @catch(id oc_exception) {
+  @catch (id oc_exception) {
     OBJWRP_LOG("got objc exception '%@' -- forwarding...", oc_exception);
     exception = oc_err_new(ctx->rcv, ctx->selector, oc_exception);
   }
@@ -435,8 +467,14 @@ ocm_ffi_dispatch(int argc, VALUE* argv, VALUE rcv, VALUE* result, struct _ocm_se
 
     // We assume that every method returning 'char' is in fact meant to return a boolean value, unless
     // specified in the metadata files as such.
-    if (octype == _C_CHR && (bs_method == NULL || !bs_method->returns_char))
-      octype = _PRIV_C_BOOL;
+    if (octype == _C_CHR) {
+      if (bs_method == NULL)
+        bs_method = find_bs_method(klass, (const char *) ctx->selector, is_class_method);
+      if (bs_method == NULL || !bs_method->returns_char) {
+        OBJWRP_LOG("\tmethod is a predicate, forcing result as a boolean value");
+        octype = _PRIV_C_BOOL;
+      }
+    }
 
     if (!ocdata_to_rbobj(rcv, octype, &retval, result)) {
       exception = ocdataconv_err_new(ctx->rcv, ctx->selector, "cannot convert the result as '%s' to Ruby Object.", ctx->methodReturnType);
