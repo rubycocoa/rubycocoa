@@ -14,7 +14,7 @@
 #import <dlfcn.h>
 #import <st.h>
 #import <env.h>
-#import <objc/runtime.h>
+#import <objc/objc-class.h>
 #import "ocdata_conv.h"
 #import "ffi.h"
 #import "RBRuntime.h" // for DLOG
@@ -187,25 +187,37 @@ bridge_support_type_to_octype (const char *type)
   if (strcmp(type, "_C_UINT") == 0) return _C_UINT;
   if (strcmp(type, "_C_LNG") == 0) return _C_LNG;
   if (strcmp(type, "_C_ULNG") == 0) return _C_ULNG;
+#if defined(_C_LNG_LNG)
   if (strcmp(type, "_C_LNG_LNG") == 0) return _C_LNG_LNG;
+#endif
+#if defined(_C_ULNG_LNG)
   if (strcmp(type, "_C_ULNG_LNG") == 0) return _C_ULNG_LNG;
+#endif
   if (strcmp(type, "_C_FLT") == 0) return _C_FLT;
   if (strcmp(type, "_C_DBL") == 0) return _C_DBL;
   if (strcmp(type, "_C_BFLD") == 0) return _C_BFLD;
+#if defined(_C_BOOL)
   if (strcmp(type, "_C_BOOL") == 0) return _C_BOOL;
+#endif
   if (strcmp(type, "_C_VOID") == 0) return _C_VOID;
   if (strcmp(type, "_C_UNDEF") == 0) return _C_UNDEF;
   if (strcmp(type, "_C_PTR") == 0) return _C_PTR;
   if (strcmp(type, "_C_CHARPTR") == 0) return _C_CHARPTR;
+#if defined(_C_ATOM)
   if (strcmp(type, "_C_ATOM") == 0) return _C_ATOM;
+#endif
   if (strcmp(type, "_C_ARY_B") == 0) return _C_ARY_B;
   if (strcmp(type, "_C_ARY_E") == 0) return _C_ARY_E;
   if (strcmp(type, "_C_UNION_B") == 0) return _C_UNION_B;
   if (strcmp(type, "_C_UNION_E") == 0) return _C_UNION_E;
   if (strcmp(type, "_C_STRUCT_B") == 0) return _C_STRUCT_B;
   if (strcmp(type, "_C_STRUCT_E") == 0) return _C_STRUCT_E;
+#if defined(_C_VECTOR)
   if (strcmp(type, "_C_VECTOR") == 0) return _C_VECTOR;
+#endif
+#if defined(_C_CONST)
   if (strcmp(type, "_C_CONST") == 0) return _C_CONST;
+#endif
 
   if (strcmp(type, "_PRIV_C_BOOL") == 0) return _PRIV_C_BOOL;
   if (strcmp(type, "_PRIV_C_NSRECT") == 0) return _PRIV_C_NSRECT;
@@ -295,7 +307,9 @@ ffi_type_for_octype (int octype)
     case _PRIV_C_ID_PTR:
     case _PRIV_C_PTR:
       return &ffi_type_pointer;
+#if defined(_C_BOOL)
     case _C_BOOL:
+#endif
     case _PRIV_C_BOOL:
     case _C_UCHR:
       return &ffi_type_uchar;
@@ -310,10 +324,14 @@ ffi_type_for_octype (int octype)
     case _C_UINT:
       return &ffi_type_uint;
     case _C_LNG:
+#if defined(_LNG_LNG)
     case _C_LNG_LNG:    /* XXX: not sure */
+#endif
       return &ffi_type_slong;
     case _C_ULNG:
+#if defined(_ULNG_LNG)
     case _C_ULNG_LNG:   /* XXX: not sure */
+#endif
       return &ffi_type_ulong;
     case _C_FLT:
       return &ffi_type_float;
@@ -468,7 +486,7 @@ bridge_support_dispatcher (int argc, VALUE *argv, VALUE self)
   }
   else {
     DLOG("MDLOSX", "\tresult: %p", retval);
-    rb_value = nsresult_to_rbresult(func->retval, &retval, func->name, pool);
+    rb_value = nsresult_to_rbresult(func->retval, (const void *)&retval, func->name, pool);
     // retain the new ObjC object, that will be released once the Ruby object is collected
     if (func->retval == _C_ID)
       [(id)retval retain];

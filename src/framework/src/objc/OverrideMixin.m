@@ -7,6 +7,7 @@
  **/
 #import <Cocoa/Cocoa.h>
 #import <stdarg.h>
+#import <pthread.h>
 #import "OverrideMixin.h"
 #import "RBObject.h"
 #import "RBSlaveObject.h"

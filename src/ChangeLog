@@ -1,3 +1,10 @@
+2006-10-27  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* framework/src/objc/OverrideMixin.m,
+	  framework/src/objc/BridgeSupport.m,
+	  framework/tool/gen_bridge_metadata.rb:
+	Make sure the branch builds on all versions of Mac OS X.
+
 2006-10-03  Laurent Sansonetti <lsansonetti@apple.com>
 
 	* framework/src/objc/BridgeSupport.h,
