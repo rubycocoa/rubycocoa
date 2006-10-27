@@ -20,11 +20,11 @@ $LDFLAGS << ' %%%other_ldflags%%%'
 
 # check build as universal binary
 if '%%%build_universal%%%' == 'yes' then
-  $CFLAGS  << ' -arch ppc -arch i386'
-  $LDFLAGS << ' -arch ppc -arch i386'
+  # the value of sdkroot is depended on 10.4u.sdk, It should be more
+  # independent way for future (e.g Leopard).
   sdkroot = '/Developer/SDKs/MacOSX10.4u.sdk'
-  $CFLAGS  << " -isysroot #{sdkroot}"
-  $LDFLAGS << " -Wl,-syslibroot,#{sdkroot}"
+  $CFLAGS  << " -arch ppc -arch i386 -isysroot #{sdkroot}"
+  $LDFLAGS << " -arch ppc -arch i386 -Wl,-syslibroot,#{sdkroot}"
 end
 
 create_makefile('rubycocoa')
