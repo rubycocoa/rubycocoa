@@ -1,3 +1,18 @@
+Subject-ja: RubyCocoa 0.5.0をリリース！
+Subject-en: RubyCocoa 0.5.0 was released!
+Date: 2006-10-28
+UID: 20061028
+
+<p>RubyCocoa 0.5.0をリリースしました。このリリースから、RubyライセンスとLGPLのデュアルライセンスに変更されました。
+詳しくは<a href="changes.ja.html">「変更点」</a>をご覧ください。</p>
+
+..ja
+
+<p>RubyCocoa 0.5.0 was released! License of RubyCocoa was Changed. RubyCocoa is distributed under a dual license: the Ruby license or the GPL. See
+<a href="changes.en.html">"Changes"</a> for more detail.</p>
+
+..en
+
 Subject-ja: RubyCocoa 0.4.2をリリース！
 Subject-en: RubyCocoa 0.4.2 was released!
 Date: 2005-11-10
