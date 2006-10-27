@@ -456,6 +456,7 @@ EOS
         end
     end
 
+    TIGER_OR_BELOW = `sw_vers -productVersion`.strip.to_f <= 10.4
     def collect_inf_protocols_encoding
         objc_impl_st = []
         log_st = []
@@ -463,14 +464,20 @@ EOS
         @inf_protocols.each do |prot|
             prot.entries.each do |entry|
                 objc_impl_st << "#{entry.orig}" + ' {}'
-                log_st << <<EOS
+                log_st << if TIGER_OR_BELOW
+                    <<EOS
+printf("%s -> %s\\n", "#{entry.selector}", #{entry.class_method? ? "class_getClassMethod" : "class_getInstanceMethod"}(klass, @selector(#{entry.selector}))->method_types); 
+EOS
+                else
+                    <<EOS
 printf("%s -> %s\\n", "#{entry.selector}", method_getDescription(#{entry.class_method? ? "class_getClassMethod" : "class_getInstanceMethod"}(klass, @selector(#{entry.selector})))->types); 
 EOS
+                end
             end
         end
         code = <<EOS
 #{@import_directive}
-#import <objc/runtime.h>
+#import <objc/objc-class.h>
 
 @interface MyClass : NSObject
 @end
