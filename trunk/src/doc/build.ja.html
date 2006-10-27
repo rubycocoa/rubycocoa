@@ -42,7 +42,7 @@ RubyCocoa<font size='-1'> - A Ruby/Objective-C Bridge for Mac OS X with Cocoa</f
 <!-- body/main/contents -->
 <td class='body-contents' id='body-contents' valign='top'>
 <h1><a name='label-0' id='label-0'>RubyCocoaをソースから構築・インストールする</a></h1><!-- RDLabel: "RubyCocoaをソースから構築・インストールする" -->
-<p>この文書ではRubyCocoa 0.4.2をソースから構築・インストールする方法について
+<p>この文書ではRubyCocoa 0.5.0をソースから構築・インストールする方法について
 説明します。バイナリ配付をインストールして使う場合にはとくに読む必要はありません。</p>
 <p>構築・インストール作業は、Terminalアプリケーションなどからシェルコマンド
 を入力して行います。シェルコマンド入力例にはbashを想定して記述しています。
@@ -57,7 +57,7 @@ RubyCocoa<font size='-1'> - A Ruby/Objective-C Bridge for Mac OS X with Cocoa</f
 </ul>
 <p>あらかじめどこかにRubyCocoaのソースを展開しておいてください。</p>
 <pre>$ cd {どこか}
-$ tar zxf rubycocoa-0.4.2.tar.gz</pre>
+$ tar zxf rubycocoa-0.5.0.tar.gz</pre>
 <p><em>注意</em> StuffItを使うとファイル名の長さの問題でRubyCocoaが正しく
 インストールされないのでtarコマンドを使ってください。</p>
 <h2><a name='label-2' id='label-2'>Rubyの構築・インストール</a></h2><!-- RDLabel: "Rubyの構築・インストール" -->
@@ -71,7 +71,7 @@ RubyCocoaのベースとなるRubyの構築手順を説明します。</p>
 <li>Ruby 1.8.2(Mac OS X 10.4)</li>
 </ul></li>
 </ul>
-<p>RubyCocoa 0.4.2バイナリパッケージは、2番目の方法で作られたものです。
+<p>RubyCocoa 0.5.0バイナリパッケージは、2番目の方法で作られたものです。
 <a href='http://fink.sf.net/'>Fink</a>などのパッケージを使ってRubyを
 インストールしている場合などは、それに合わせて読み変えてください。</p>
 <h3><a name='label-3' id='label-3'>インストールされているMac OS Xパッケージの確認</a></h3><!-- RDLabel: "インストールされているMac OS Xパッケージの確認" -->
@@ -184,9 +184,14 @@ $ sudo ruby install.rb install</pre>
 <h2><a name='label-18' id='label-18'>開発動作確認環境</a></h2><!-- RDLabel: "開発動作確認環境" -->
 <p>以下の環境で開発動作確認をしています。</p>
 <ul>
-<li>PowerBook G4/1.67/640MB</li>
-<li>Mac OS X 10.4.8 (ppc)
+<li>ハードウェア
 <ul>
+<li>PowerBook G4/1.67/640MB</li>
+<li>MacBook</li>
+</ul></li>
+<li>ソフトウェア
+<ul>
+<li>Mac OS X 10.4.8 (ppc)</li>
 <li>XcodeTools 2.4</li>
 <li>ruby-1.8.2 (pre-installed in Mac OS X 10.4)</li>
 <li>ruby-1.8.5</li>

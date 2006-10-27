@@ -42,7 +42,7 @@ RubyCocoa<font size='-1'> - A Ruby/Objective-C Bridge for Mac OS X with Cocoa</f
 <!-- body/main/contents -->
 <td class='body-contents' id='body-contents' valign='top'>
 <h1><a name='label-0' id='label-0'>Building and Installing RubyCocoa from Source</a></h1><!-- RDLabel: "Building and Installing RubyCocoa from Source" -->
-<p>This document describes building and installing RubyCocoa 0.4.2 from
+<p>This document describes building and installing RubyCocoa 0.5.0 from
 source. Skip this if you are going to install the binary distribution.</p>
 <p>Building and installation are done from a shell, using the Terminal
 application or another program that provides a shell prompt, such as GLterm.
@@ -59,7 +59,7 @@ examples. Please adjust the instructions accordingly when another shell (e.g.
 </ul>
 <p>Extract RubyCocoa source from the '.tgz' file into a directory somewhere.</p>
 <pre>$ cd {somewhere}
-$ tar zxf rubycocoa-0.4.2.tar.gz</pre>
+$ tar zxf rubycocoa-0.5.0.tar.gz</pre>
 <p><em>Caution!</em> Using StuffIt, building RubyCocoa will fail because of a file
 name length problem.</p>
 <h2><a name='label-2' id='label-2'>Build and Installation of Ruby</a></h2><!-- RDLabel: "Build and Installation of Ruby" -->
@@ -73,7 +73,7 @@ in the case shown below at an example is explained.</p>
 <li>Ruby 1.8.2(Mac OS X 10.4)</li>
 </ul></li>
 </ul>
-<p>RubyCocoa 0.4.2 binary distribution has been built with the 2nd way.
+<p>RubyCocoa 0.5.0 binary distribution has been built with the 2nd way.
 When Ruby has been installed with a package utility such as
 <a href='http://fink.sf.net/'>Fink</a>, adapt these instructions accordingly.</p>
 <h3><a name='label-3' id='label-3'>Check that the necessary Mac OS X packages are installed</a></h3><!-- RDLabel: "Check that the necessary Mac OS X packages are installed" -->
@@ -182,9 +182,14 @@ $ sudo ruby install.rb install</pre>
 /tmp/build/Developer/Documentation/RubyCocoa</pre>
 <h2><a name='label-18' id='label-18'>Development and testing environment</a></h2><!-- RDLabel: "Development and testing environment" -->
 <ul>
-<li>PowerBook G4/1.67/1GB</li>
-<li>Mac OS X 10.4.8 (ppc)
+<li>Hardware
 <ul>
+<li>PowerBook G4/1.67/1GB</li>
+<li>MacBook</li>
+</ul></li>
+<li>Software
+<ul>
+<li>Mac OS X 10.4.8 (ppc, intel)</li>
 <li>XcodeTools 2.4</li>
 <li>ruby-1.8.2 (pre-installed in Mac OS X 10.4)</li>
 <li>ruby-1.8.5</li>
