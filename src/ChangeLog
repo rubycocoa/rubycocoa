@@ -1,5 +1,11 @@
 2006-10-27  Laurent Sansonetti <lsansonetti@apple.com>
 
+	* framework/src/objc/mdl_objwrapper.m:
+	Direct call to easy methods.
+
+	* template/ProjectBuilder/File/*:
+	Fixed harcoded copyright date (2001) to ?DATE?.
+
 	* framework/src/objc/OverrideMixin.m,
 	  framework/src/objc/BridgeSupport.m,
 	  framework/tool/gen_bridge_metadata.rb:
