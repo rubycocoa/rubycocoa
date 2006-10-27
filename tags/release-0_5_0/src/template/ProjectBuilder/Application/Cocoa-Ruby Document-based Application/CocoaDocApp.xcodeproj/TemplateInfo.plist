@@ -1,0 +1,14 @@
+{
+	FilesToRename = {
+		"CocoaDocApp_Prefix.pch" = "ÇPROJECTNAMEÈ_Prefix.pch";
+	};
+	FilesToMacroExpand = (
+		"ÇPROJECTNAMEÈ_Prefix.pch",
+		"Info.plist",
+		"English.lproj/InfoPlist.strings",
+		"MyDocument.h",
+		"MyDocument.m",
+		"main.m",
+	);
+	Description = "This project builds a Cocoa-based application written in Objective-C that uses the NSDocument architecture.";
+}
