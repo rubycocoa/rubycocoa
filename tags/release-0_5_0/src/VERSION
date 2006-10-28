@@ -1,6 +1,0 @@
-VERSION = "0.5.0"
-STAGE = ""
-SVN_REVISION = if ma = /\$Revision:\s*(\d+)\s*\$/.match("$Revision$") 
-                 then ma[1]
-                 else "unknown" end
-RELEASE_DATE = "2006-10-28"
