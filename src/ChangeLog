@@ -1,3 +1,13 @@
+2006-10-28  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* framework/src/objc/RBObject.m:
+	Transform [RBObject -rbobjRaiseRubyException] to a
+	C function, as the receiver of rbobj_call_ruby() may
+	not be a RBObject instance (since the move to libffi).
+
+	* sample/simpleapp/AppController.rb:
+	Fixed NSApp() -> NSApp. 
+
 2006-10-28  Fujimoto Hisa  <hisa@fobj.com>
 
 	* VERSION, pre-config.rb, framework/src/objc/Version.h.in, framework/src/objc/mdl_osxobjc.m, metaconfig:
