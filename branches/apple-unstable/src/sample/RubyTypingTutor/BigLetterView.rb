@@ -7,7 +7,7 @@ class BigLetterView < OSX::NSView
     log "draggingEntered:"
     if sender.draggingSource != self then
       pb = sender.draggingPasteboard
-      if pb.availableTypeFromArray [NSStringPboardType()] then
+      if pb.availableTypeFromArray [NSStringPboardType] then
 	@highlighted = true
 	setNeedsDisplay true
 	return NSDragOperationCopy
@@ -50,7 +50,7 @@ class BigLetterView < OSX::NSView
     @bold = false
     @italic = false
     @fmgr = NSFontManager.sharedFontManager
-    registerForDraggedTypes [NSStringPboardType()]
+    registerForDraggedTypes [NSStringPboardType]
     @highlighted = false
     self
   end
@@ -73,15 +73,15 @@ class BigLetterView < OSX::NSView
     sorig.x = r.origin.x + (r.size.width - ssize.width) / 2
     sorig.y = r.origin.y + (r.size.height - ssize.height) / 2
 
-    font = @attributes.objectForKey(NSFontAttributeName())
+    font = @attributes.objectForKey(NSFontAttributeName)
 
     mask = @bold ? NSBoldFontMask : NSUnboldFontMask
     font = @fmgr.convertFont(font, :toHaveTrait, mask)
-    @attributes.setObject_forKey(font, NSFontAttributeName())
+    @attributes.setObject_forKey(font, NSFontAttributeName)
 
     mask = @italic ? NSItalicFontMask : NSUnitalicFontMask
     font = @fmgr.convertFont(font, :toHaveTrait, mask)
-    @attributes.setObject_forKey(font, NSFontAttributeName())
+    @attributes.setObject_forKey(font, NSFontAttributeName)
 
     @string.drawAtPoint(sorig, :withAttributes, @attributes)
   end
@@ -129,13 +129,13 @@ class BigLetterView < OSX::NSView
     @attributes = NSMutableDictionary.alloc.init
     @attributes.
       setObject_forKey(NSFont.fontWithName_size("Helvetica", 75),
-		       NSFontAttributeName())
+		       NSFontAttributeName)
     @attributes.
       setObject_forKey(NSSingleUnderlineStyle,
-		       NSUnderlineStyleAttributeName())
+		       NSUnderlineStyleAttributeName)
     @attributes.
       setObject_forKey(NSColor.redColor,
-		       NSForegroundColorAttributeName())
+		       NSForegroundColorAttributeName)
   end
 
   def savePDF (sender)
@@ -168,20 +168,20 @@ class BigLetterView < OSX::NSView
   end
 
   def writePDFToPasteboard (pb)
-    types = [NSPDFPboardType()]
+    types = [NSPDFPboardType]
     pb.addTypes_owner(types, self)
     pb.setData_forType(dataWithPDFInsideRect(bounds), types[0])
   end
   
   def writeStringToPasteboard (pb)
-    types = [NSStringPboardType()]
+    types = [NSStringPboardType]
     pb.declareTypes_owner(types, self)
     pb.setString_forType(@string, types[0])
   end
   
   def readStringFromPasteboard (pb)
-    if pb.availableTypeFromArray? [NSStringPboardType()] then
-      value = pb.stringForType(NSStringPboardType())
+    if pb.availableTypeFromArray? [NSStringPboardType] then
+      value = pb.stringForType(NSStringPboardType)
       value = value.to_s[0].chr if value.length > 1
       setString(value)
       return true
@@ -210,13 +210,12 @@ class BigLetterView < OSX::NSView
   end
 
   def mouseDragged (event)
-    # Create the image that will be dragged
-    an_image = NSImage.alloc.init
-
-    # create a rect in which you will draw the letter in the image
+    # create the image that will be dragged and
+    # a rect in which you will draw the letter in the image
     s = @string.sizeWithAttributes(@attributes)
+    return if s.width == 0
+    an_image = NSImage.alloc.initWithSize(s)
     image_bounds = NSRect.new([0,0],s)
-    an_image.setSize(s)
 
     # draw the letter on the image
     an_image.lockFocus
@@ -231,7 +230,7 @@ class BigLetterView < OSX::NSView
     p.y = p.y - s.height / 2
 
     # get the pasteboard
-    pb = NSPasteboard.pasteboardWithName(NSDragPboard())
+    pb = NSPasteboard.pasteboardWithName(NSDragPboard)
 
     # put the string on the pasteboard
     writeStringToPasteboard(pb)
