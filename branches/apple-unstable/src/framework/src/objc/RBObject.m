@@ -160,7 +160,8 @@ static int rb_obj_arity_of_method(VALUE rcv, SEL a_sel)
   return f_success;
 }
 
--(void)rbobjRaiseRubyException
+static void 
+rbobjRaiseRubyException (void)
 {
   VALUE lasterr = rb_gv_get("$!");
   RB_ID mtd = rb_intern("nsexception");
@@ -228,7 +229,7 @@ VALUE rbobj_call_ruby(id rbobj, SEL selector, VALUE args)
   rb_result = rb_protect(rbobject_protected_apply, (VALUE)stub_args, &err);
   if (err) {
     RBOBJ_LOG("got Ruby exception, raising Objective-C exception");
-    [rbobj rbobjRaiseRubyException];
+    rbobjRaiseRubyException();
     return Qnil; /* to be sure */
   }
  
