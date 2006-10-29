@@ -7,6 +7,7 @@ require 'objc_test.bundle'
 OSX.ns_import :RetainCount
 
 class RBSubclass < OSX::NSObject
+  attr_accessor :passed
 end
 
 class TC_RetainCount < Test::Unit::TestCase
@@ -37,5 +38,14 @@ class TC_RetainCount < Test::Unit::TestCase
     assert_equal(2, OSX::RetainCount.rbObject.retainCount, 'Ruby object')
   end
 
+  # argument from Objctive-C
+  def test_arg_from_objc
+    rcv = RBSubclass.alloc.init
+    OSX::RetainCount.setAnOcObjToReceiver_forKey(rcv, :passed)
+    assert_equal(2, rcv.passed.retainCount)
+    rcv.passed = nil
+    OSX::RetainCount.setAnRBObjToReceiver_forKey(rcv, :passed)
+    assert_equal(2, rcv.passed.retainCount)
+  end
 end
 

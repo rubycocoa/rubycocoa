@@ -167,6 +167,12 @@ static SEL ruby_method_sel(int argc)
       arg_val = Qnil;
     }
     rb_ary_store(args, i, arg_val);
+    // Retain if the argument is not initialized for Ruby 
+    // see ocm_retain_result_if_necessary() in mdl_objwrapper.m
+    if (!NIL_P(arg_val) && octype == _C_ID && !OBJCID_DATA_PTR(arg_val)->retained) {
+      [OBJCID_ID(arg_val) retain];
+      OBJCID_DATA_PTR(arg_val)->retained = YES;
+    }
   }
   return args;
 }

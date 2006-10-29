@@ -1,3 +1,10 @@
+2006-10-29  kimura wataru <kimuraw@i.nifty.jp>
+	* framework/src/objc/RBObject.m,
+	  tests/objc_test.m, tests/tc_retaincount.rb:
+	-[RBObject fetchForwardArgumentsOf] retain objc object when the 
+	object was passed from ObjC to Ruby.
+	(same process as ocm_retain_result_if_necessary() in mdl_objwrapper.m)
+
 2006-10-28  kimura wataru <kimuraw@i.nifty.jp>
 
 	* doc/build.en.html, doc/build.ja.html, doc/changelog.html,

@@ -71,6 +71,16 @@
   return [[NSClassFromString(@"RBSubclass") alloc] init];
 }
 
++(id) setAnOcObjToReceiver:(id)rcv forKey:(NSString *)key
+{
+  [rcv setValue:[self ocObject] forKey:key];
+}
+
++(id) setAnRBObjToReceiver:(id)rcv forKey:(NSString *)key
+{
+  [rcv setValue:[self rbObject] forKey:key];
+}
+
 @end
 
 // tc_uniqobj.rb
