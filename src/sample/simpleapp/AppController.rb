@@ -21,7 +21,7 @@ class AppController < OSX::NSObject
   end
 
   def aboutApp (sender)
-    NSApp.orderFrontStandardAboutPanelWithOptions("Copyright" => "RubyCocoa #{RUBYCOCOA_VERSION}",
+    NSApp().orderFrontStandardAboutPanelWithOptions("Copyright" => "RubyCocoa #{RUBYCOCOA_VERSION}",
 						    "ApplicationVersion" => "Ruby #{VERSION}")
   end
 
