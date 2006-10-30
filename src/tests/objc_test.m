@@ -173,6 +173,7 @@
 @end
 
 @protocol Helper
+- (char) testChar:(char) i;
 - (int) testInt:(int) i;
 - (short) testShort:(short) i;
 - (long) testLong:(long) i;
@@ -194,6 +195,10 @@
     id name = [helper name];
     if (![name isKindOfClass:[NSString class]] || ![name isEqualToString:@"helper"])
       [NSException raise:@"TestRigError" format:@"assertion name failed, expected %@, got %@", @"helper", name];
+
+    char c = [helper testChar:2];
+    if (c != 2)
+      [NSException raise:@"TestRigError" format:@"assertion testChar: failed, expected %d, got %d", 2, c];
 
     int i = [helper testInt:2];
     if (i != 2)
