@@ -1,3 +1,11 @@
+2006-10-30  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* tests/tc_booleans.rb,
+	  tests/tc_ovmix.rb,
+	  tests/tc_types.rb,
+	  tests/objc_test.m:
+	Improved tests to check type conversion.
+
 2006-10-28  Laurent Sansonetti <lsansonetti@apple.com>
 
 	* sample/RubyTypingTutor/BigLetterView.rb:

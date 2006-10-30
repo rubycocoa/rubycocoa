@@ -14,6 +14,11 @@ class RigHelper < OSX::NSObject
     "helper"
   end
 
+  addRubyMethod_withType("testChar:", "c@:c")
+  def testChar(c)
+    c
+  end
+
   addRubyMethod_withType("testInt:", "i@:i")
   def testInt(i)
     i
