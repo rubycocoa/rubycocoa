@@ -234,7 +234,7 @@ osx_mf_objc_symbol_to_obj(VALUE mdl, VALUE const_name, VALUE const_type)
     rb_raise(rb_eRuntimeError, "address of '%s' is NULL.", STR2CSTR(const_name));
 
   octype = to_octype(STR2CSTR(const_type));
-  if (!ocdata_to_rbobj(Qnil, octype, addr, &result))
+  if (!ocdata_to_rbobj(Qnil, octype, addr, &result, NO))
     rb_raise(rb_eRuntimeError, "cannot convert to rbobj for type '%s'.", STR2CSTR(const_type));
 
   return result;

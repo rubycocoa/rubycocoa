@@ -67,7 +67,7 @@ oc_err_new (const char* fname, NSException* nsexcp)
 void
 rbarg_to_nsarg(VALUE rbarg, int octype, void* nsarg, const char* fname, id pool, int index)
 {
-  if (!rbobj_to_ocdata(rbarg, octype, nsarg)) {
+  if (!rbobj_to_ocdata(rbarg, octype, nsarg, YES)) {
     if (pool) [pool release];
     rb_raise(_ocdataconv_err_class(), "%s - arg #%d cannot convert to nsobj.", fname, index);
   }
@@ -77,7 +77,7 @@ VALUE
 nsresult_to_rbresult(int octype, const void* nsresult, const char* fname, id pool)
 {
   VALUE rbresult;
-  if (!ocdata_to_rbobj(Qnil, octype, nsresult, &rbresult)) {
+  if (!ocdata_to_rbobj(Qnil, octype, nsresult, &rbresult, YES)) {
     if (pool) [pool release];
     rb_raise(_ocdataconv_err_class(), "%s - result cannot convert to rbobj.", fname);
   }
@@ -397,7 +397,6 @@ bridge_support_dispatcher (int argc, VALUE *argv, VALUE self)
       rb_fatal("Can't locate function symbol '%s' : %s", func->name, dlerror());
   }
 
-  retval = NULL;
   pool = [[NSAutoreleasePool alloc] init]; 
   exception = Qnil;
   
@@ -447,11 +446,15 @@ bridge_support_dispatcher (int argc, VALUE *argv, VALUE self)
     values = NULL;
   }
 
-  // prepare ret type
+  // prepare ret type/value
   if (func->ffi.ret_type == NULL) {
     func->ffi.ret_type = ffi_type_for_octype(func->retval);
     DLOG("MDLOSX", "\tset return to type %p", func->ffi.ret_type);
   }
+  if (is_void)
+    retval = alloca(ocdata_size(func->retval, ""));
+  else
+    retval = NULL;
   
   // prepare cif
   if (ffi_prep_cif(&cif, FFI_DEFAULT_ABI, argc, func->ffi.ret_type, func->ffi.arg_types) != FFI_OK)
@@ -862,6 +865,8 @@ osx_import_c_constant (VALUE self, VALUE sym)
   value = nsresult_to_rbresult(octype, cvalue, "", nil);
   
   rb_define_const(self, name, value);
+
+  DLOG("MDLOSX", "Imported C constant `%s' with value %p", name, value);
   
   return value;
 }
