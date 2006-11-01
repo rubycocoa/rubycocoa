@@ -71,6 +71,11 @@
   return [[NSClassFromString(@"RBSubclass") alloc] init];
 }
 
++(id) ocObjectFromPlaceholder
+{
+  return [[NSMutableString alloc] init];
+}
+
 +(id) setAnOcObjToReceiver:(id)rcv forKey:(NSString *)key
 {
   [rcv setValue:[self ocObject] forKey:key];

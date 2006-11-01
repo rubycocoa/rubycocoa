@@ -196,13 +196,19 @@ ocm_free_send_context(struct _ocm_send_context *ctx)
 }
 
 static void
-ocm_retain_result_if_necessary(VALUE result, const char *selector)
+ocm_retain_result_if_necessary(VALUE rcv, VALUE result, const char *selector)
 {
-  // Retain if necessary the returned ObjC value unless it was generated 
-  // by "alloc/allocWithZone/new/copy/mutableCopy". 
-  if (!NIL_P(result) && rb_obj_is_kind_of(result, objid_s_class()) == Qtrue) {
-    if (!OBJCID_DATA_PTR(result)->retained
-        && strcmp(selector, "alloc") != 0
+  if (!NIL_P(result) && rb_obj_is_kind_of(result, objid_s_class()) == Qtrue
+      && !OBJCID_DATA_PTR(result)->retained) {
+    // return value generated with a placeholder, placeholder object 
+    // must not be released.
+    if (strncmp(selector, "init", 4) == 0
+        && OBJCID_ID(rcv) != OBJCID_ID(result)
+        && OBJCID_DATA_PTR(rcv)->retained) {
+      OBJCID_DATA_PTR(rcv)->retained = NO; 
+    // Retain if necessary the returned ObjC value unless it was generated 
+    // by "alloc/allocWithZone/new/copy/mutableCopy". 
+    } else if (strcmp(selector, "alloc") != 0
         && strcmp(selector, "allocWithZone:") != 0
         && strcmp(selector, "new") != 0
         && strcmp(selector, "copy") != 0
@@ -301,7 +307,7 @@ ocm_perform(int argc, VALUE* argv, VALUE rcv, VALUE* result, struct _ocm_send_co
   }
   else {
     *result = ocid_to_rbobj(rcv, oc_result);
-    ocm_retain_result_if_necessary(*result, (const char *)ctx->selector);
+    ocm_retain_result_if_necessary(rcv, *result, (const char *)ctx->selector);
   }
 
   return Qnil;
@@ -415,7 +421,7 @@ ocm_invoke(int argc, VALUE* argv, VALUE rcv, VALUE* result, struct _ocm_send_con
     if (!ocdata_to_rbobj(rcv, to_octype(ctx->methodReturnType), result_data, result))
       return ocdataconv_err_new(ctx->rcv, ctx->selector, "cannot convert the result as '%s' to Ruby Object.", ctx->methodReturnType);
   
-    ocm_retain_result_if_necessary(*result, (const char *)ctx->selector);
+    ocm_retain_result_if_necessary(rcv, *result, (const char *)ctx->selector);
   }
   else {
     *result = Qnil;
@@ -446,7 +452,7 @@ ocm_invoke(int argc, VALUE* argv, VALUE rcv, VALUE* result, struct _ocm_send_con
         if (!ocdata_to_rbobj(Qnil, to_octype(octype_str), &ocdata, &rbval))
           return ocdataconv_err_new(ctx->rcv, ctx->selector, "cannot convert pass-by-ref argument #%d result as '%s' to Ruby Object.", narg, octype_str);
 
-        ocm_retain_result_if_necessary(rbval, (const char *)ctx->selector);
+        ocm_retain_result_if_necessary(rcv, rbval, (const char *)ctx->selector);
         rb_ary_push(retval_ary, rbval);
       }
     }
