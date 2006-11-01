@@ -1,5 +1,11 @@
 2006-11-01  Laurent Sansonetti <lsansonetti@apple.com>
 
+	* sample/RubyRoundTransparentWindow/pentagram.tif,
+	  sample/RubyRoundTransparentWindow/pentagon.tif,
+	  sample/RubyRoundTransparentWindow/RoundTransparentWindow.xcodeproj/project.pbxproj,
+	  sample/RubyRoundTransparentWindow/RTW.rb:
+	Renamed pentagram.tif to pentagon.tif.
+
 	* framework/src/objc/OverrideMixin.m,
 	  framework/src/objc/BridgeSupport.m,
 	  framework/src/objc/RBObject.m,
