@@ -76,7 +76,7 @@
 /* End PBXApplicationTarget section */
 
 /* Begin PBXBuildFile section */
-		016AEBDA00065A0911CB1529 /* pentagram.tif in Resources */ = {isa = PBXBuildFile; fileRef = 016AEBD900065A0911CB1529 /* pentagram.tif */; };
+		016AEBDA00065A0911CB1529 /* pentagon.tif in Resources */ = {isa = PBXBuildFile; fileRef = 016AEBD900065A0911CB1529 /* pentagon.tif */; };
 		025E71590062A3557F000001 /* ReadMe.html in Resources */ = {isa = PBXBuildFile; fileRef = 025E71580062A3557F000001 /* ReadMe.html */; };
 		04C2D0EBFFA109D011CB1529 /* circle.tif in Resources */ = {isa = PBXBuildFile; fileRef = 04C2D0EAFFA109D011CB1529 /* circle.tif */; };
 		080E96DCFE201CFB7F000001 /* MainMenu.nib in Resources */ = {isa = PBXBuildFile; fileRef = 29B97318FDCFA39411CA2CEA /* MainMenu.nib */; };
@@ -115,7 +115,7 @@
 /* End PBXBuildStyle section */
 
 /* Begin PBXFileReference section */
-		016AEBD900065A0911CB1529 /* pentagram.tif */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = pentagram.tif; sourceTree = "<group>"; };
+		016AEBD900065A0911CB1529 /* pentagon.tif */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = pentagon.tif; sourceTree = "<group>"; };
 		025E71580062A3557F000001 /* ReadMe.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = ReadMe.html; sourceTree = "<group>"; };
 		04C2D0EAFFA109D011CB1529 /* circle.tif */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = circle.tif; sourceTree = "<group>"; };
 		1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
@@ -214,7 +214,7 @@
 			children = (
 				025E71580062A3557F000001 /* ReadMe.html */,
 				04C2D0EAFFA109D011CB1529 /* circle.tif */,
-				016AEBD900065A0911CB1529 /* pentagram.tif */,
+				016AEBD900065A0911CB1529 /* pentagon.tif */,
 				29B97318FDCFA39411CA2CEA /* MainMenu.nib */,
 			);
 			name = Resources;
@@ -268,7 +268,7 @@
 			files = (
 				080E96DCFE201CFB7F000001 /* MainMenu.nib in Resources */,
 				04C2D0EBFFA109D011CB1529 /* circle.tif in Resources */,
-				016AEBDA00065A0911CB1529 /* pentagram.tif in Resources */,
+				016AEBDA00065A0911CB1529 /* pentagon.tif in Resources */,
 				025E71590062A3557F000001 /* ReadMe.html in Resources */,
 				22FD725809B4BE6200E1BEFD /* rb_main.rb in Resources */,
 				22FD727409B4BF5100E1BEFD /* RTW.rb in Resources */,

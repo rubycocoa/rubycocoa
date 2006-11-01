@@ -63,7 +63,7 @@ end
 class CustomView < OSX::NSView
     def awakeFromNib
 	@circleImage = OSX::NSImage.imageNamed "circle"
-	@pentaImage = OSX::NSImage.imageNamed "pentagram"
+	@pentaImage = OSX::NSImage.imageNamed "pentagon"
 	setNeedsDisplay(true)
     end
         
