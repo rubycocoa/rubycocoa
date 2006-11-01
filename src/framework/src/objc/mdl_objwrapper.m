@@ -187,6 +187,7 @@ ocm_ffi_dispatch(int argc, VALUE* argv, VALUE rcv, VALUE* result, struct _ocm_se
   ffi_type ** arg_types;
   void ** arg_values;
   ffi_type * ret_type;
+  int ret_octype;
   unsigned i;
   unsigned pointers_args_count;
   unsigned c_ary_length_args_count;
@@ -286,7 +287,7 @@ ocm_ffi_dispatch(int argc, VALUE* argv, VALUE rcv, VALUE* result, struct _ocm_se
       return exception;
 
     if (*ctx->methodReturnType == _C_ID) {
-      if (!ocdata_to_rbobj(rcv, _C_ID, &val, result))
+      if (!ocdata_to_rbobj(rcv, _C_ID, &val, result, NO))
         return ocdataconv_err_new(ctx->rcv, ctx->selector, "cannot convert the result as '%s' to Ruby Object.", ctx->methodReturnType);
       ocm_retain_result_if_necessary(*result, ctx->selector);
     }
@@ -397,7 +398,7 @@ ocm_ffi_dispatch(int argc, VALUE* argv, VALUE rcv, VALUE* result, struct _ocm_se
           value = OCDATA_ALLOCA(octype, octype_str);
         }
 
-        if (!rbobj_to_ocdata(arg, octype, value)) {
+        if (!rbobj_to_ocdata(arg, octype, value, NO)) {
           exception = ocdataconv_err_new(ctx->rcv, ctx->selector, "cannot convert the argument #%d as '%s' to NS argument.", i, octype_str);
           goto bails;
         }
@@ -419,8 +420,11 @@ ocm_ffi_dispatch(int argc, VALUE* argv, VALUE rcv, VALUE* result, struct _ocm_se
   arg_types[ctx->numberOfArguments + 2] = NULL;
   arg_values[ctx->numberOfArguments + 2] = NULL;
 
-  // Prepare ret type.
-  ret_type = ffi_type_for_octype(to_octype(ctx->methodReturnType));
+  // Prepare return type/val.
+  ret_octype = to_octype(ctx->methodReturnType);
+  ret_type = ffi_type_for_octype(ret_octype);
+  if (ret_octype != _C_VOID)
+    retval = alloca(ocdata_size(ret_octype, ctx->methodReturnType));
 
   // Prepare cif.
   if (ffi_prep_cif(&cif, FFI_DEFAULT_ABI, ctx->numberOfArguments + 2, ret_type, arg_types) != FFI_OK)
@@ -431,7 +435,7 @@ ocm_ffi_dispatch(int argc, VALUE* argv, VALUE rcv, VALUE* result, struct _ocm_se
   @try {
     method = class_getInstanceMethod(((struct objc_class *) ctx->rcv)->isa, ctx->selector);
     OBJWRP_LOG("\tffi_call method %s types %s imp %p", (const char *)method->method_name, method->method_types, method->method_imp);
-    ffi_call(&cif, FFI_FN(method->method_imp), (ffi_arg *) &retval, arg_values);
+    ffi_call(&cif, FFI_FN(method->method_imp), (ffi_arg *)&retval, arg_values);
     OBJWRP_LOG("\tffi_call done");
   }
   @catch (id oc_exception) {
@@ -459,24 +463,21 @@ ocm_ffi_dispatch(int argc, VALUE* argv, VALUE rcv, VALUE* result, struct _ocm_se
   }
 
   // Get result
-  if (ret_type != &ffi_type_void) {
-    int octype;
-
-    octype = to_octype(ctx->methodReturnType);
+  if (ret_octype != _C_VOID) {
     OBJWRP_LOG("\tgetting return value (%p of type '%s')", retval, ctx->methodReturnType);
 
     // We assume that every method returning 'char' is in fact meant to return a boolean value, unless
     // specified in the metadata files as such.
-    if (octype == _C_CHR) {
+    if (ret_octype == _C_CHR) {
       if (bs_method == NULL)
         bs_method = find_bs_method(klass, (const char *) ctx->selector, is_class_method);
       if (bs_method == NULL || !bs_method->returns_char) {
         OBJWRP_LOG("\tmethod is a predicate, forcing result as a boolean value");
-        octype = _PRIV_C_BOOL;
+        ret_octype = _PRIV_C_BOOL;
       }
     }
 
-    if (!ocdata_to_rbobj(rcv, octype, &retval, result)) {
+    if (!ocdata_to_rbobj(rcv, ret_octype, &retval, result, YES)) {
       exception = ocdataconv_err_new(ctx->rcv, ctx->selector, "cannot convert the result as '%s' to Ruby Object.", ctx->methodReturnType);
       goto bails;
     }
@@ -542,7 +543,7 @@ ocm_ffi_dispatch(int argc, VALUE* argv, VALUE rcv, VALUE* result, struct _ocm_se
         }
 
         if (NIL_P(rbval)) {
-          if (!ocdata_to_rbobj(Qnil, to_octype(octype_str), &value, &rbval)) {
+          if (!ocdata_to_rbobj(Qnil, to_octype(octype_str), &value, &rbval, YES)) {
             exception = ocdataconv_err_new(ctx->rcv, ctx->selector, "cannot convert pass-by-ref argument #%d result as '%s' to Ruby Object.", i, octype_str);
             goto bails;
           }

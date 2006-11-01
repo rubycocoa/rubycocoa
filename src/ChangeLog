@@ -1,3 +1,16 @@
+2006-11-01  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* framework/src/objc/OverrideMixin.m,
+	  framework/src/objc/BridgeSupport.m,
+	  framework/src/objc/RBObject.m,
+	  framework/src/objc/mdl_osxobjc.m,
+	  framework/src/objc/mdl_objwrapper.m,
+	  framework/src/objc/ocdata_conv.h,
+	  framework/src/objc/ocdata_conv.m:
+	- fixed small integers (char, uchar, short, ushort, ...)
+	  libffi conversion from/to Ruby on PPC ;
+	- fixed allocation of ffi_call result value.
+
 2006-10-30  Laurent Sansonetti <lsansonetti@apple.com>
 
 	* tests/tc_booleans.rb,

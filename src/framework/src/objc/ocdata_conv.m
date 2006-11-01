@@ -168,6 +168,9 @@ ocdata_size(int octype, const char* octype_str)
   case _C_VOID:
     result = 0; break;
 
+  case _PRIV_C_BOOL:
+    result = sizeof(BOOL); break;    
+
   case _PRIV_C_NSRECT:
     result = sizeof(NSRect); break;
     
@@ -196,11 +199,18 @@ ocdata_size(int octype, const char* octype_str)
   case _C_STRUCT_E:
 
   default: {
-    unsigned int size, align;
-    NSGetSizeAndAlignment(octype_str, &size, &align);
-    result = size; break;
+    if (octype_str == NULL) {
+      result = 0;
+    }
+    else {
+      unsigned int size, align;
+      NSGetSizeAndAlignment(octype_str, &size, &align);
+      result = size;
+    }
+    break;
   }
   }
+if (result == 0 && octype != _C_VOID) printf("warning! size of octype %d is 0\n", octype);
   return result;
 }
 
@@ -214,10 +224,19 @@ ocdata_malloc(int octype, const char* octype_str)
 
 BOOL
 ocdata_to_rbobj(VALUE context_obj,
-		int octype, const void* ocdata, VALUE* result)
+		int octype, const void* ocdata, VALUE* result, BOOL from_libffi)
 {
   BOOL f_success = YES;
   VALUE rbval = Qnil;
+
+#if BYTE_ORDER == BIG_ENDIAN
+  // libffi casts all types as a void pointer, which is problematic on PPC for types sized less than a void pointer (char, uchar, short, ushort, ...), as we have to shift the bytes to get the real value.
+  if (from_libffi) {
+    int delta = sizeof(void *) - ocdata_size(octype, NULL);
+    if (delta > 0)
+      ocdata += delta; 
+  }
+#endif
 
   switch (octype) {
 
@@ -234,10 +253,9 @@ ocdata_to_rbobj(VALUE context_obj,
     rbval = bool_to_rbobj(*(BOOL*)ocdata);
     break;
 
-  case _C_SEL: {
+  case _C_SEL:
     rbval = rb_str_new2(sel_getName(*(SEL*)ocdata));
     break;
-  }
 
   case _C_CHR:
     rbval = INT2NUM(*(char*)ocdata); break;
@@ -497,7 +515,7 @@ VALUE bool_to_rbobj (BOOL val)
 VALUE sel_to_rbobj (SEL val)
 {
   VALUE rbobj;
-  if (ocdata_to_rbobj(Qnil, _C_SEL, &val, &rbobj)) {
+  if (ocdata_to_rbobj(Qnil, _C_SEL, &val, &rbobj, NO)) {
     rbobj = rb_obj_as_string(rbobj);
     // str.tr!(':','_')
     rb_funcall(rbobj, rb_intern("tr!"), 2, rb_str_new2(":"), rb_str_new2("_"));
@@ -717,9 +735,18 @@ static BOOL rbobj_to_nsrect(VALUE obj, NSRect* result)
 }
 
 BOOL
-rbobj_to_ocdata(VALUE obj, int octype, void* ocdata)
+rbobj_to_ocdata(VALUE obj, int octype, void* ocdata, BOOL to_libffi)
 {
   BOOL f_success = YES;
+
+#if BYTE_ORDER == BIG_ENDIAN
+  // libffi casts all types as a void pointer, which is problematic on PPC for types sized less than a void pointer (char, uchar, short, ushort, ...), as we have to shift the bytes to get the real value.
+  if (to_libffi) {
+    int delta = sizeof(void *) - ocdata_size(octype, NULL);
+    if (delta > 0)
+      ocdata += delta; 
+  }
+#endif
 
   if (TYPE(obj) == T_TRUE) {
     obj = INT2NUM(1);

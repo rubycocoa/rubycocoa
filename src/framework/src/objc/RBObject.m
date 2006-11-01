@@ -122,7 +122,7 @@ static int rb_obj_arity_of_method(VALUE rcv, SEL a_sel)
     void* ocdata = OCDATA_ALLOCA(octype, octstr);
     BOOL f_conv_success;
     [an_inv getArgument: ocdata atIndex: (i+2)];
-    f_conv_success = ocdata_to_rbobj(Qnil, octype, ocdata, &arg_val);
+    f_conv_success = ocdata_to_rbobj(Qnil, octype, ocdata, &arg_val, NO);
     if (f_conv_success == NO) {
       arg_val = Qnil;
     }
@@ -154,7 +154,7 @@ static int rb_obj_arity_of_method(VALUE rcv, SEL a_sel)
   }
   else {
     void* ocdata = OCDATA_ALLOCA(octype, octype_str);
-    f_success = rbobj_to_ocdata (result, octype, ocdata);
+    f_success = rbobj_to_ocdata (result, octype, ocdata, NO);
     if (f_success) [an_inv setReturnValue: ocdata];
   }
   return f_success;

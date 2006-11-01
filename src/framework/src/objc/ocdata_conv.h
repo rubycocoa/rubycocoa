@@ -55,8 +55,8 @@ VALUE   ocid_to_rbobj (VALUE context_obj, id ocid);
 VALUE  ocstr_to_rbstr (id ocstr);
 
 BOOL  ocdata_to_rbobj (VALUE context_obj,
-		       int octype, const void* ocdata, VALUE* result);
-BOOL  rbobj_to_ocdata (VALUE obj, int octype, void* ocdata);
+		       int octype, const void* ocdata, VALUE* result, BOOL from_libffi);
+BOOL  rbobj_to_ocdata (VALUE obj, int octype, void* ocdata, BOOL to_libffi);
 
 void init_rb2oc_cache(void);
 void init_oc2rb_cache(void);
