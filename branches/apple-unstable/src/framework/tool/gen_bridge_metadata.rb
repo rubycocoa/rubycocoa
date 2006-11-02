@@ -712,7 +712,9 @@ EOS
         libpath = File.join(path, name)
         die "Can't locate framework library at '#{libpath}'" unless File.exists?(libpath)
         OBJC.dlload(libpath)
-        @import_directive = "#import <#{name}/#{name}.h>"
+        # We can't just "#import <x/x.h>" as the main Framework header might not include _all_ headers.
+        # So we are tricking this by importing the main header first, then all headers.
+        @import_directive = @headers.map { |x| "#import <#{name}/#{File.basename(x)}>" }.insert(0, "#import <#{name}/#{name}.h>").join("\n")
         @compiler_flags = "-F#{parent_path} -framework #{name} -framework Foundation"
     end
  
