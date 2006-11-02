@@ -39,7 +39,6 @@
 		FCDF92880A87E09E0002AD01 /* oc_wrapper.rb in CopyFiles */ = {isa = PBXBuildFile; fileRef = E88C6E80035BB408031D1B90 /* oc_wrapper.rb */; };
 		FCDF92890A87E09E0002AD01 /* coredata.rb in CopyFiles */ = {isa = PBXBuildFile; fileRef = E88C6E81035BB408031D1B90 /* coredata.rb */; };
 		FCDF928A0A87E09E0002AD01 /* ruby_addition.rb in CopyFiles */ = {isa = PBXBuildFile; fileRef = E8FD49D003D45B2603A81C6F /* ruby_addition.rb */; };
-		FCDF928B0A87E09E0002AD01 /* webkit.rb in CopyFiles */ = {isa = PBXBuildFile; fileRef = E8AA467504D26DDD0310F9A1 /* webkit.rb */; };
 		FCDF928D0A87E09E0002AD01 /* cls_objcid.m in Sources */ = {isa = PBXBuildFile; fileRef = E88C6D59035BB1F5031D1B90 /* cls_objcid.m */; };
 		FCDF928E0A87E09E0002AD01 /* cls_objcptr.m in Sources */ = {isa = PBXBuildFile; fileRef = E88C6D5B035BB1F5031D1B90 /* cls_objcptr.m */; };
 		FCDF92900A87E09E0002AD01 /* mdl_objwrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = E88C6D5E035BB1F5031D1B90 /* mdl_objwrapper.m */; };
@@ -86,7 +85,6 @@
 				FCDF92880A87E09E0002AD01 /* oc_wrapper.rb in CopyFiles */,
 				FCDF92890A87E09E0002AD01 /* coredata.rb in CopyFiles */,
 				FCDF928A0A87E09E0002AD01 /* ruby_addition.rb in CopyFiles */,
-				FCDF928B0A87E09E0002AD01 /* webkit.rb in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -137,8 +135,6 @@
 		E88C6E7F035BB408031D1B90 /* oc_types.rb */ = {isa = PBXFileReference; lastKnownFileType = text.script.ruby; path = oc_types.rb; sourceTree = "<group>"; };
 		E88C6E80035BB408031D1B90 /* oc_wrapper.rb */ = {isa = PBXFileReference; lastKnownFileType = text.script.ruby; path = oc_wrapper.rb; sourceTree = "<group>"; };
 		E88C6E81035BB408031D1B90 /* coredata.rb */ = {isa = PBXFileReference; lastKnownFileType = text.script.ruby; path = coredata.rb; sourceTree = "<group>"; };
-		E8AA467304D26DA70310F9A1 /* webkit.rb */ = {isa = PBXFileReference; lastKnownFileType = text.script.ruby; path = webkit.rb; sourceTree = "<group>"; };
-		E8AA467504D26DDD0310F9A1 /* webkit.rb */ = {isa = PBXFileReference; lastKnownFileType = text.script.ruby; path = webkit.rb; sourceTree = "<group>"; };
 		E8FA5ED5035BB5A5035CBD51 /* osx_intern.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = osx_intern.h; sourceTree = "<group>"; };
 		E8FA5ED6035BB5A5035CBD51 /* osx_ruby.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = osx_ruby.h; sourceTree = "<group>"; };
 		E8FD49D003D45B2603A81C6F /* ruby_addition.rb */ = {isa = PBXFileReference; lastKnownFileType = text.script.ruby; path = ruby_addition.rb; sourceTree = "<group>"; };
@@ -265,7 +261,6 @@
 				E84D81ED03ADA29603A81C6F /* cocoa.rb */,
 				E84D81EE03ADA29603A81C6F /* foundation.rb */,
 				E84D81EE13ADA29603A81C6F /* coredata.rb */,
-				E8AA467304D26DA70310F9A1 /* webkit.rb */,
 				E88C6E73035BB408031D1B90 /* objc */,
 			);
 			path = osx;
@@ -286,7 +281,6 @@
 				E88C6E80035BB408031D1B90 /* oc_wrapper.rb */,
 				E88C6E81035BB408031D1B90 /* coredata.rb */,
 				E8FD49D003D45B2603A81C6F /* ruby_addition.rb */,
-				E8AA467504D26DDD0310F9A1 /* webkit.rb */,
 			);
 			path = objc;
 			sourceTree = "<group>";

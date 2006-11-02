@@ -1,7 +1,11 @@
 2006-11-02  Laurent Sansonetti <lsansonetti@apple.com>
 
-	* framework/post-config.rb:
-	Generate metadata files for WebKit.
+	* framework/post-config.rb,
+	  framework/RubyCocoa.xcodeproj/project.pbxproj,
+	  framework/src/ruby/osx/webkit.rb,
+	  framework/src/ruby/osx/objc/webkit.rb:
+	- Generate metadata files for WebKit.
+	- Removed previous handwritten webkit.rb files.
 
 	* framework/tool/gen_bridge_metadata.rb:
 	Import all headers when compiling intermediate C files.
