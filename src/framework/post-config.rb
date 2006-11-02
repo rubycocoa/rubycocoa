@@ -21,6 +21,7 @@ if @config['gen-bridge-support'] != 'no'
   command('mkdir -p bridge-support')
   [['Foundation', '/System/Library/Frameworks/Foundation.framework'],
    ['AppKit', '/System/Library/Frameworks/AppKit.framework'],
+   ['WebKit', '/System/Library/Frameworks/WebKit.framework'],
   # FIXME: CoreGraphics does not process yet
   # ['CoreGraphics', '/System/Library/Frameworks/ApplicationServices.framework/Frameworks/CoreGraphics.framework']
   ].each do |framework, path|

@@ -1,5 +1,11 @@
 2006-11-02  Laurent Sansonetti <lsansonetti@apple.com>
 
+	* framework/post-config.rb:
+	Generate metadata files for WebKit.
+
+	* framework/tool/gen_bridge_metadata.rb:
+	Import all headers when compiling intermediate C files.
+
 	* framework/src/objc/mdl_objwrapper.m:
 	Fixed memory leak.
 
