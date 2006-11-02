@@ -153,11 +153,13 @@ ocm_free_send_context(struct _ocm_send_context *ctx)
 }
 
 static void
-ocm_retain_result_if_necessary(VALUE result, SEL selector)
+ocm_retain_result_if_necessary (VALUE rcv, VALUE result, SEL selector)
 {
   // Retain if necessary the returned ObjC value unless it was generated 
   // by "alloc/allocWithZone/new/copy/mutableCopy". 
+  // Some classes may always return a static dummy object (placeholder) for every [-alloc], so we shouldn't release the return value of these messages.
   if (!NIL_P(result) && rb_obj_is_kind_of(result, objid_s_class()) == Qtrue) {
+
     if (!OBJCID_DATA_PTR(result)->retained
         && selector != @selector(alloc)
         && selector != @selector(allocWithZone:)
@@ -165,11 +167,16 @@ ocm_retain_result_if_necessary(VALUE result, SEL selector)
         && selector != @selector(copy)
         && selector != @selector(mutableCopy)) {
 
-      OBJWRP_LOG("\tretaining %p", OBJCID_ID(result));  
-      [OBJCID_ID(result) retain];
+      if (NIL_P(rcv)
+          || strncmp((const char *)selector, "init", 4) != 0
+          || OBJCID_ID(rcv) == OBJCID_ID(result)
+          || !OBJCID_DATA_PTR(rcv)->retained) { 
+
+        OBJWRP_LOG("\tretaining %p", OBJCID_ID(result));  
+        [OBJCID_ID(result) retain];
+      }
     }
-    // We assume that the object is retained at that point. Some classes may always return a static dummy
-    // object (placeholder) for every [-alloc], so we shouldn't release the return value of these messages.
+    // We assume that the object is retained at that point.
     OBJCID_DATA_PTR(result)->retained = YES; 
     if (selector != @selector(alloc) && selector != @selector(allocWithZone:))
       OBJCID_DATA_PTR(result)->can_be_released = YES;
@@ -289,7 +296,7 @@ ocm_ffi_dispatch(int argc, VALUE* argv, VALUE rcv, VALUE* result, struct _ocm_se
     if (*ctx->methodReturnType == _C_ID) {
       if (!ocdata_to_rbobj(rcv, _C_ID, &val, result, NO))
         return ocdataconv_err_new(ctx->rcv, ctx->selector, "cannot convert the result as '%s' to Ruby Object.", ctx->methodReturnType);
-      ocm_retain_result_if_necessary(*result, ctx->selector);
+      ocm_retain_result_if_necessary(rcv, *result, ctx->selector);
     }
     else {
       *result = Qnil;
@@ -459,7 +466,7 @@ ocm_ffi_dispatch(int argc, VALUE* argv, VALUE rcv, VALUE* result, struct _ocm_se
     if (rb_obj_is_kind_of(arg, objid_s_class()) != Qtrue)
       continue;
     OBJWRP_LOG("\tgot passed-by-reference argument %d", i);
-    ocm_retain_result_if_necessary(arg, ctx->selector);
+    ocm_retain_result_if_necessary(Qnil, arg, ctx->selector);
   }
 
   // Get result
@@ -482,7 +489,7 @@ ocm_ffi_dispatch(int argc, VALUE* argv, VALUE rcv, VALUE* result, struct _ocm_se
       goto bails;
     }
     OBJWRP_LOG("\tgot return value (%p of type '%s')", retval, ctx->methodReturnType);
-    ocm_retain_result_if_necessary(*result, ctx->selector);
+    ocm_retain_result_if_necessary(rcv, *result, ctx->selector);
   } 
   else {
     *result = Qnil;
@@ -548,7 +555,7 @@ ocm_ffi_dispatch(int argc, VALUE* argv, VALUE rcv, VALUE* result, struct _ocm_se
             goto bails;
           }
         }
-        ocm_retain_result_if_necessary(rbval, ctx->selector);
+        ocm_retain_result_if_necessary(Qnil, rbval, ctx->selector);
         rb_ary_push(retval_ary, rbval);
       }
       else {

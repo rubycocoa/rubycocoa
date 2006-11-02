@@ -1,5 +1,12 @@
 2006-11-02  Laurent Sansonetti <lsansonetti@apple.com>
 
+	* framework/src/objc/mdl_objwrapper.m,
+	  tests/tc_retaincount.rb,
+	  tests/objc_test.m:
+	- Fixed leak of ObjC objects from placeholder-like classes ; 
+	- Added a new test case to test the fix.
+	Investigation and solution by Kimura Wataru. 
+
 	* framework/post-config.rb,
 	  framework/RubyCocoa.xcodeproj/project.pbxproj,
 	  framework/src/ruby/osx/webkit.rb,
