@@ -1,3 +1,8 @@
+2006-11-02  kimura wataru <kimuraw@i.nifty.jp>
+
+	* framework/src/ruby/osx/objc/oc_import.rb:
+	fix: automatic override incorrectly with methods contains "_".
+
 2006-11-01  kimura wataru <kimuraw@i.nifty.jp>
 
 	* framework/src/objc/mdl_objwrapper.m:

@@ -217,7 +217,7 @@ module OSX
     alias_method :ib_outlets, :ns_outlets
 
     def _ns_behavior_method_added(sym)
-      sel = sym.to_s.gsub(/[^(A_*)]_/, ':')
+      sel = sym.to_s.gsub(/[^(A_*)]\(_\)/, ':')
       sel << ':' if instance_method(sym).arity > 0 and /[^:]\z/ =~ sel
       return unless _ns_enable_override?(sel)
       ns_override sel
