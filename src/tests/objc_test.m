@@ -51,6 +51,11 @@
   return retainCount;
 }
 
++(id) ocObjectFromPlaceholder
+{
+  return [[NSMutableString alloc] init];
+}
+
 +(int) rbInitCount
 {
   int retainCount;

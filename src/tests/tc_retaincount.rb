@@ -37,5 +37,12 @@ class TC_RetainCount < Test::Unit::TestCase
     assert_equal(2, OSX::RetainCount.rbObject.retainCount, 'Ruby object')
   end
 
+  # placeholder
+  def test_placeholder
+    assert_equal(1, OSX::NSMutableString.alloc.init.retainCount,
+      'placeholder in ruby') 
+    assert_equal(2, OSX::RetainCount.ocObjectFromPlaceholder.retainCount,
+      'placeholder in Objc') 
+  end
 end
 
