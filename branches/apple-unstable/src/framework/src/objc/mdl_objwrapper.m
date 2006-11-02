@@ -576,26 +576,30 @@ ocm_send(int argc, VALUE* argv, VALUE rcv, VALUE* result)
   id pool;
   char error[256];
 
-  if (argc < 1) return Qnil;
-
-  sel = rbobj_to_nssel(argv[0]);
-  ctx = ocm_create_send_context(rcv, sel, error, sizeof error);
-  OBJWRP_LOG("ocm_send (%s) ...", (const char *)sel);
-  if (ctx == NULL)
-    return ocmsend_err_new (rbobj_get_ocid(rcv), sel, error);
-
-  argc--;
-  argv++;
+  if (argc < 1) 
+    return Qnil;
 
   pool = [[NSAutoreleasePool alloc] init];
+  
+  sel = rbobj_to_nssel(argv[0]);
+  exc = Qnil;
+  ctx = ocm_create_send_context(rcv, sel, error, sizeof error);
+  
+  OBJWRP_LOG("ocm_send (%s) ...", (const char *)sel);
+  if (ctx == NULL) {
+    exc = ocmsend_err_new (rbobj_get_ocid(rcv), sel, error);
+  }
+  else {
+    argc--;
+    argv++;
 
-  exc = ocm_ffi_dispatch(argc, argv, rcv, result, ctx);
+    exc = ocm_ffi_dispatch(argc, argv, rcv, result, ctx);
+    ocm_free_send_context(ctx);
+  }
 
   [pool release];
 
-  ocm_free_send_context(ctx);
-
-  OBJWRP_LOG("ocm_send (%s) done", (const char *)sel);
+  OBJWRP_LOG("ocm_send (%s) done%s", (const char *)sel, NIL_P(exc) ? "" : " with exception");
 
   return exc;
 }

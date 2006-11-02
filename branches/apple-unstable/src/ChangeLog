@@ -1,3 +1,8 @@
+2006-11-02  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* framework/src/objc/mdl_objwrapper.m:
+	Fixed memory leak.
+
 2006-11-02  kimura wataru <kimuraw@i.nifty.jp>
 
 	* framework/src/ruby/osx/objc/oc_import.rb:
