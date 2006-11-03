@@ -13,6 +13,11 @@ class TC_Attachments < Test::Unit::TestCase
   def setup
     @a = NSMutableArray.arrayWithArray(["a","b","c"])
     @d = NSMutableDictionary.dictionaryWithDictionary({"a"=>1,"b"=>2})
+
+    # Initialise the connection to the window server so images are happy
+    NSApplication.sharedApplication
+
+    @i = NSImage.alloc.initWithSize([100,100])
   end
 
   def test_array_kind_of
@@ -75,5 +80,17 @@ class TC_Attachments < Test::Unit::TestCase
     data = NSData.dataWithBytes_length("somedata",8)
     assert_equal "somedata", data.rubyString
   end
-
+  
+  def test_image_focus
+    assert_kind_of RCImageAttachment, @i
+    assert_respond_to @i, :focus
+    success = false
+    @i.focus do
+      success = true
+    end
+    assert success, "Focus block did not run"
+    
+    # Doesn't seem to be a way to test that lockFocus/unlockFocus have been called,
+    # so it's not possible to test the begin/ensure block in 'focus'.
+  end
 end

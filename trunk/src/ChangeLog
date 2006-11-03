@@ -1,3 +1,10 @@
+2006-11-03  Jonathan Paisley <jp-www@dcs.gla.ac.uk>
+
+	* framework/src/ruby/osx/objc/oc_attachments.rb, 
+	  tests/tc_attachments.rb:
+	fix: Copy/paste error from NSData to NSImage. Add
+	test case for RCImageAttachment.
+	
 2006-11-03  kimura wataru <kimuraw@i.nifty.jp>
 
 	* sample/MyViewer/WinCtrl.rb:

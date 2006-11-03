@@ -94,10 +94,13 @@ module OSX
   module RCImageAttachment
     def focus
       lockFocus
-      yield
-      unlockFocus
+      begin
+        yield
+      ensure
+        unlockFocus
+      end
     end
   end
-  OSX::NSData.class_eval 'include RCImageAttachment'
+  OSX::NSImage.class_eval 'include RCImageAttachment'
 
 end
