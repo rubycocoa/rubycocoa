@@ -5,8 +5,6 @@ class WinCtrl < OSX::NSObject
 
   ImageSizeMIN = 32
 
-  private
-
   @@wincount = 0		# static int wincount = 0;
   
   def windowSetUp(image)
@@ -31,6 +29,7 @@ class WinCtrl < OSX::NSObject
     imageview.setImageScaling true
     @window.setContentView(imageview)
   end
+  private :windowSetUp
 
   def initWithPath (path)
     @filename = nil		# NSString *filename;
@@ -41,12 +40,12 @@ class WinCtrl < OSX::NSObject
     @docImage = OSX::NSImage.alloc.initWithContentsOfFile(path)
     return nil if @docImage == nil
     @filename = path
-    self.windowSetUp @docImage
+    windowSetUp @docImage
     @mag = 1.0
     OSX::NSNotificationCenter.defaultCenter.
       addObserver(self,
 		  :selector, 'shrink:',
-		  :name, OSX::ShrinkAllNotification,
+		  :name, ShrinkAllNotification,
 		  :object, nil)
     @window.setTitleWithRepresentedFilename @filename
     @window.setDelegate(self)
