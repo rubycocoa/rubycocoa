@@ -1,6 +1,7 @@
 VERSION = "0.9.0"
 STAGE = "apple-unstable"
-SVN_REVISION = if ma = /\$Revision:\s*(\d+)\s*\$/.match("$Revision$") 
-                 then ma[1]
-                 else "unknown" end
 RELEASE_DATE = "2006-10-28"
+SVN_REVISION = proc {
+	         vers = `svnversion`
+                 $?.success? ? vers.strip : 'unknown'
+               }.call
