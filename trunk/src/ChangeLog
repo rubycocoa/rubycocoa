@@ -1,3 +1,8 @@
+2006-11-05  kimura wataru <kimuraw@i.nifty.jp>
+
+	* VERSION:
+	0.5.0-preview6
+
 2006-11-03  Jonathan Paisley <jp-www@dcs.gla.ac.uk>
 
 	* framework/src/ruby/osx/objc/oc_attachments.rb, 
