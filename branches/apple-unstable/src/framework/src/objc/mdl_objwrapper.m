@@ -96,19 +96,19 @@ ocmsend_err_new(id rcv, SEL sel, const char *fmt, ...)
 
 struct _ocm_send_context
 {
-  id                  rcv;
-  SEL                 selector;
-  NSMethodSignature * methodSignature;
-  unsigned            numberOfArguments;
-  const char *        methodReturnType;
-  const char **       argumentsTypes;
+  id        rcv;
+  SEL       selector;
+  Method    method;
+  unsigned  numberOfArguments;
+  char *    methodReturnType;
+  char **   argumentsTypes;
 };
 
 static struct _ocm_send_context *
 ocm_create_send_context(VALUE rcv, SEL selector, char *error, size_t error_len)
 {
   id oc_rcv;
-  NSMethodSignature *methodSignature;
+  Method method;
   struct _ocm_send_context * ctx;
   unsigned i;
 
@@ -118,8 +118,8 @@ ocm_create_send_context(VALUE rcv, SEL selector, char *error, size_t error_len)
     return NULL;
   }
 
-  methodSignature = [oc_rcv methodSignatureForSelector:selector];
-  if (methodSignature == nil) {
+  method = class_getInstanceMethod(((struct objc_class *) oc_rcv)->isa, selector); 
+  if (method == NULL) {
     snprintf(error, error_len, "Can't get Objective-C method signature for selector '%s' of receiver %s", (char *) selector, RSTRING(rb_inspect(rcv))->ptr);
     return NULL;
   }
@@ -128,27 +128,53 @@ ocm_create_send_context(VALUE rcv, SEL selector, char *error, size_t error_len)
   
   ctx->rcv = oc_rcv;
   ctx->selector = selector;
-  ctx->methodSignature = [methodSignature retain];
-  ctx->numberOfArguments = [methodSignature numberOfArguments] - 2;
-  ctx->methodReturnType = [methodSignature methodReturnType];
+  ctx->method = method;
+
+#if MAC_OS_X_VERSION_MAX_ALLOWED <= MAC_OS_X_VERSION_10_4
+  {
+    NSMethodSignature *methodSignature;
+
+    methodSignature = [oc_rcv methodSignatureForSelector:selector];
+
+    ctx->numberOfArguments = [methodSignature numberOfArguments] - 2;
+    ctx->methodReturnType = strdup([methodSignature methodReturnType]);
+  
+    if (ctx->numberOfArguments == 0) {
+      ctx->argumentsTypes = NULL;
+    }
+    else {
+      ctx->argumentsTypes = (char **)malloc(sizeof(char) * ctx->numberOfArguments);
+      for (i = 0; i < ctx->numberOfArguments; i++)
+        ctx->argumentsTypes[i] = strdup([methodSignature getArgumentTypeAtIndex:i + 2]);
+    }
+  }
+#else
+  ctx->numberOfArguments = MAX(0, method_getNumberOfArguments(method) - 2);
+  ctx->methodReturnType = method_copyReturnType(method);
+
   if (ctx->numberOfArguments == 0) {
     ctx->argumentsTypes = NULL;
   }
   else {
-    ctx->argumentsTypes = (const char **)malloc(sizeof(const char) * ctx->numberOfArguments);
+    ctx->argumentsTypes = (char **)malloc(sizeof(char) * ctx->numberOfArguments);
     for (i = 0; i < ctx->numberOfArguments; i++)
-      ctx->argumentsTypes[i] = [methodSignature getArgumentTypeAtIndex:i+2];
+      ctx->argumentsTypes[i] = method_copyArgumentType(method, i + 2);
   }
-  
+#endif
+ 
   return ctx;
 }
 
 static void
 ocm_free_send_context(struct _ocm_send_context *ctx)
 {
-  [ctx->methodSignature release];
-  if (ctx->argumentsTypes != NULL)
+  free(ctx->methodReturnType);
+  if (ctx->argumentsTypes != NULL) {
+    unsigned i;
+    for (i = 0; i < ctx->numberOfArguments; i++)
+      free(ctx->argumentsTypes[i]);
     free(ctx->argumentsTypes);
+  }
   free(ctx);
 }
 
@@ -184,12 +210,50 @@ ocm_retain_result_if_necessary (VALUE rcv, VALUE result, SEL selector)
 }
 
 static VALUE
+ocm_easy_dispatch(int argc, VALUE* argv, VALUE rcv, VALUE* result, struct _ocm_send_context *ctx)
+{
+  // Easy case: a method returning ID (or nothing) _and_ without argument.
+  // We don't need libffi here, we can just call it (faster).
+  if (ctx->numberOfArguments == 0 
+      && (*ctx->methodReturnType == _C_VOID || *ctx->methodReturnType == _C_ID)) {
+
+    VALUE   exception;
+    id      val;
+
+    exception = Qnil;
+    @try {
+      OBJWRP_LOG("\tdirect call easy method %s types %s imp %p", (const char *)ctx->method->method_name, ctx->method->method_types, ctx->method->method_imp);
+      val = (*ctx->method->method_imp)(ctx->rcv, ctx->selector);
+    }
+    @catch (id oc_exception) {
+      OBJWRP_LOG("got objc exception '%@' -- forwarding...", oc_exception);
+      exception = oc_err_new(ctx->rcv, ctx->selector, oc_exception);
+    }
+
+    // Return exception if catched.
+    if (!NIL_P(exception))
+      return exception;
+
+    if (*ctx->methodReturnType == _C_ID) {
+      if (!ocdata_to_rbobj(rcv, _C_ID, &val, result, NO))
+        return ocdataconv_err_new(ctx->rcv, ctx->selector, "cannot convert the result as '%s' to Ruby Object.", ctx->methodReturnType);
+      ocm_retain_result_if_necessary(rcv, *result, ctx->selector);
+    }
+    else {
+      *result = Qnil;
+    }
+    return Qnil;
+  }
+ 
+  return Qfalse;
+}
+
+static VALUE
 ocm_ffi_dispatch(int argc, VALUE* argv, VALUE rcv, VALUE* result, struct _ocm_send_context *ctx)
 {
   BOOL is_class_method;
   id klass;
   struct bsMethod *bs_method;
-  Method method;
   ffi_cif cif;
   ffi_type ** arg_types;
   void ** arg_values;
@@ -273,37 +337,6 @@ ocm_ffi_dispatch(int argc, VALUE* argv, VALUE rcv, VALUE* result, struct _ocm_se
   }
   OBJWRP_LOG("\t%d ary length argument(s), %d omitted pointer(s)", c_ary_length_args_count, pointers_args_count);
 
-  // Easy case: a method returning ID (or nothing) _and_ without argument.
-  // We don't need libffi here, we can just call it (faster).
-  if (ctx->numberOfArguments == 0 && (*ctx->methodReturnType == _C_VOID || *ctx->methodReturnType == _C_ID)) {
-    id val;
-
-    method = class_getInstanceMethod(((struct objc_class *) ctx->rcv)->isa, ctx->selector);
-    exception = Qnil;
-    @try {
-      OBJWRP_LOG("\tdirect call easy method %s types %s imp %p", (const char *)method->method_name, method->method_types, method->method_imp);
-      val = (*method->method_imp)(ctx->rcv, ctx->selector);
-    }
-    @catch (id oc_exception) {
-      OBJWRP_LOG("got objc exception '%@' -- forwarding...", oc_exception);
-      exception = oc_err_new(ctx->rcv, ctx->selector, oc_exception);
-    }
-
-    // Return exception if catched.
-    if (!NIL_P(exception))
-      return exception;
-
-    if (*ctx->methodReturnType == _C_ID) {
-      if (!ocdata_to_rbobj(rcv, _C_ID, &val, result, NO))
-        return ocdataconv_err_new(ctx->rcv, ctx->selector, "cannot convert the result as '%s' to Ruby Object.", ctx->methodReturnType);
-      ocm_retain_result_if_necessary(rcv, *result, ctx->selector);
-    }
-    else {
-      *result = Qnil;
-    }
-    return Qnil;
-  }
- 
   // Prepare arg types / values.
   arg_types = (ffi_type **) calloc(ctx->numberOfArguments + 3, sizeof(ffi_type *));
   arg_values = (void **) calloc(ctx->numberOfArguments + 3, sizeof(void *));
@@ -440,9 +473,8 @@ ocm_ffi_dispatch(int argc, VALUE* argv, VALUE rcv, VALUE* result, struct _ocm_se
   // Call function.
   exception = Qnil;
   @try {
-    method = class_getInstanceMethod(((struct objc_class *) ctx->rcv)->isa, ctx->selector);
-    OBJWRP_LOG("\tffi_call method %s types %s imp %p", (const char *)method->method_name, method->method_types, method->method_imp);
-    ffi_call(&cif, FFI_FN(method->method_imp), (ffi_arg *)&retval, arg_values);
+    OBJWRP_LOG("\tffi_call method %s types %s imp %p", (const char *)ctx->method->method_name, ctx->method->method_types, ctx->method->method_imp);
+    ffi_call(&cif, FFI_FN(ctx->method->method_imp), (ffi_arg *)&retval, arg_values);
     OBJWRP_LOG("\tffi_call done");
   }
   @catch (id oc_exception) {
@@ -500,9 +532,10 @@ ocm_ffi_dispatch(int argc, VALUE* argv, VALUE rcv, VALUE* result, struct _ocm_se
     VALUE retval_ary;
 
     retval_ary = rb_ary_new();
-    if ([ctx->methodSignature methodReturnLength] > 0)
+    if (ret_octype != _C_VOID) { 
       // Don't test if *result is nil, as nil may have been returned!
       rb_ary_push(retval_ary, *result);
+    }
 
     for (i = ctx->numberOfArguments - pointers_args_count; i < ctx->numberOfArguments; i++) {
       void *value;
@@ -587,7 +620,7 @@ ocm_send(int argc, VALUE* argv, VALUE rcv, VALUE* result)
     return Qnil;
 
   pool = [[NSAutoreleasePool alloc] init];
-  
+
   sel = rbobj_to_nssel(argv[0]);
   exc = Qnil;
   ctx = ocm_create_send_context(rcv, sel, error, sizeof error);
@@ -600,7 +633,9 @@ ocm_send(int argc, VALUE* argv, VALUE rcv, VALUE* result)
     argc--;
     argv++;
 
-    exc = ocm_ffi_dispatch(argc, argv, rcv, result, ctx);
+    exc = ocm_easy_dispatch(argc, argv, rcv, result, ctx);
+    if (!NIL_P(exc))
+      exc = ocm_ffi_dispatch(argc, argv, rcv, result, ctx);
     ocm_free_send_context(ctx);
   }
 

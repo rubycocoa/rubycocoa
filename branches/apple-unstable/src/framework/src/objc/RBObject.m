@@ -17,17 +17,6 @@
 
 extern ID _relaxed_syntax_ID;
 
-/* On MacOS X, +signatureWithObjCTypes: is a method of NSMethodSignature,
- * but that method is not present in the header files. We add the definition
- * here to avoid warnings.
- *
- * XXX: We use an undocumented API, but we also don't have much choice: we
- * must create the things and this is the only way to do it...
- */
-@interface NSMethodSignature (WarningKiller)
-+ (id) signatureWithObjCTypes:(const char*)types;
-@end
-
 static RB_ID sel_to_mid(SEL a_sel)
 {
   int i, length;
