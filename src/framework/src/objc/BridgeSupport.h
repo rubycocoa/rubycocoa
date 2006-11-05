@@ -102,3 +102,14 @@ struct bsMethodArg *find_bs_method_arg_by_index(struct bsMethod *method, unsigne
 struct bsMethodArg *find_bs_method_arg_by_c_array_len_arg_index(struct bsMethod *method, unsigned index);
 struct bsInformalProtocolMethod *find_bs_informal_protocol_method(const char *selector, BOOL is_class_method);
 void initialize_bridge_support (VALUE mOSX);
+
+/* On MacOS X, +signatureWithObjCTypes: is a method of NSMethodSignature,
+ * but that method is not present in the header files. We add the definition
+ * here to avoid warnings.
+ *
+ * XXX: We use an undocumented API, but we also don't have much choice: we
+ * must create the things and this is the only way to do it...
+ */
+@interface NSMethodSignature (WarningKiller)
++ (id) signatureWithObjCTypes:(const char*)types;
+@end

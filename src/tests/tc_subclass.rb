@@ -87,7 +87,7 @@ class TC_SubClass < Test::Unit::TestCase
 
   def test_addmethod
     obj = SubClassA.alloc.init
-    assert_raise( NameError ) { obj.unknownMethod('dummy') }
+    assert_raise( OSX::OCMessageSendException ) { obj.unknownMethod('dummy') }
     SubClassA.module_eval <<-EOS
       addRubyMethod_withType('unknownMethod:', 'i4@8@12' )
       def unknownMethod(text) return 123 end

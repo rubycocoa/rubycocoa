@@ -19,17 +19,6 @@
 
 #define OVMIX_LOG(fmt, args...) DLOG("OVMIX", fmt, ##args)
 
-/* On MacOS X, +signatureWithObjCTypes: is a method of NSMethodSignature,
- * but that method is not present in the header files. We add the definition
- * here to avoid warnings.
- *
- * XXX: We use an undocumented API, but we also don't have much choice: we
- * must create the things and this is the only way to do it...
- */
-@interface NSMethodSignature (WarningKiller)
-+ (id) signatureWithObjCTypes:(const char*)types;
-@end
-
 static void* alloc_from_default_zone(unsigned int size)
 {
   return NSZoneMalloc(NSDefaultMallocZone(), size);
@@ -146,6 +135,7 @@ ovmix_imp_for_type(const char* type)
   ffi_cif *cif;
   ffi_closure *closure;
   int *octypes;
+  id pool;
 
   pthread_mutex_lock(&ffi_imp_closures_lock);
   imp = NULL;
@@ -157,6 +147,7 @@ ovmix_imp_for_type(const char* type)
   error = NULL;
   cif = NULL;
   closure = NULL;
+  pool = [[NSAutoreleasePool alloc] init];
   methodSignature = [NSMethodSignature signatureWithObjCTypes:type];
   argc = [methodSignature numberOfArguments];
 
@@ -212,8 +203,9 @@ ovmix_imp_for_type(const char* type)
     error = NULL;   
     goto bails;
   }
-
-  return (IMP)closure; 
+  
+  imp = (IMP)closure;
+  goto done;
 
 bails:
   if (argtypes != NULL)
@@ -224,6 +216,9 @@ bails:
     free(closure);
   if (error != NULL)
     rb_raise(rb_eRuntimeError, error);
+
+done:
+  [pool release];
 
   return imp; 
 }

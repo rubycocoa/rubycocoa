@@ -1,3 +1,17 @@
+2006-11-05  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* framework/src/objc/mdl_objwrapper.m,
+	  framework/src/objc/BridgeSupport.h,
+	  framework/src/objc/RBObject.m,
+	  tests/tc_subclass.rb:
+	- Some refactoring in the ocm dispatch methods. Made the usage of 
+	  NSMethodDescription optional when possible ;
+	- Updated test case ;
+	- Moved a warning killer ObjC interface to BridgeSupport.h.
+
+	* framework/src/objc/OverrideMixin.m:
+	Fixed another memory leak.
+
 2006-11-02  Laurent Sansonetti <lsansonetti@apple.com>
 
 	* framework/src/objc/mdl_objwrapper.m,
