@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		511C87640AF79C9C00519160 /* qtkit.rb in CopyFiles */ = {isa = PBXBuildFile; fileRef = 511C87630AF79C9C00519160 /* qtkit.rb */; };
 		FCDF92650A87E09E0002AD01 /* cls_objcid.h in Headers */ = {isa = PBXBuildFile; fileRef = E88C6D58035BB1F5031D1B90 /* cls_objcid.h */; };
 		FCDF92660A87E09E0002AD01 /* cls_objcptr.h in Headers */ = {isa = PBXBuildFile; fileRef = E88C6D5A035BB1F5031D1B90 /* cls_objcptr.h */; };
 		FCDF92670A87E09E0002AD01 /* DummyProtocolHandler.h in Headers */ = {isa = PBXBuildFile; fileRef = E88C6D5C035BB1F5031D1B90 /* DummyProtocolHandler.h */; };
@@ -77,6 +78,7 @@
 			dstPath = ruby/osx/objc;
 			dstSubfolderSpec = 7;
 			files = (
+				511C87640AF79C9C00519160 /* qtkit.rb in CopyFiles */,
 				FCDF927D0A87E09E0002AD01 /* addressbook.rb in CopyFiles */,
 				FCDF927E0A87E09E0002AD01 /* application.rb in CopyFiles */,
 				FCDF92800A87E09E0002AD01 /* cocoa.rb in CopyFiles */,
@@ -99,6 +101,7 @@
 		0867D69BFE84028FC02AAC07 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
 		0867D6A5FE840307C02AAC07 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
 		1058C7B1FEA5585E11CA2CBB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
+		511C87630AF79C9C00519160 /* qtkit.rb */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.script.ruby; path = qtkit.rb; sourceTree = "<group>"; };
 		A5244F7D0595D2CE00FB7045 /* rb_AppKit.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = rb_AppKit.m; sourceTree = "<group>"; };
 		A5244F7E0595D2CE00FB7045 /* rb_Foundation.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = rb_Foundation.m; sourceTree = "<group>"; };
 		E813DE9B036CC9C1033794D5 /* RBSlaveObject.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RBSlaveObject.h; sourceTree = "<group>"; };
@@ -299,6 +302,7 @@
 		E88C6E73035BB408031D1B90 /* objc */ = {
 			isa = PBXGroup;
 			children = (
+				511C87630AF79C9C00519160 /* qtkit.rb */,
 				E88C6E74035BB408031D1B90 /* addressbook.rb */,
 				E88C6E76035BB408031D1B90 /* application.rb */,
 				E88C6E77035BB408031D1B90 /* cocoa.rb */,
@@ -385,7 +389,6 @@
 			mainGroup = 0867D691FE84028FC02AAC07 /* RubyCocoa */;
 			productRefGroup = 034768DFFF38A50411DB9C8B /* Products */;
 			projectDirPath = "";
-			projectRoot = "";
 			targets = (
 				FCDF92630A87E09E0002AD01 /* RubyCocoa */,
 			);

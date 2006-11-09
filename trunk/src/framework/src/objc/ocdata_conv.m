@@ -13,6 +13,7 @@
 #import "mdl_osxobjc.h"
 #import <CoreFoundation/CFString.h> // CFStringEncoding
 #import "st.h"
+#import <QTKit/QTKit.h>
 
 static struct st_table *rb2ocCache;
 static pthread_mutex_t rb2ocCacheLock;
@@ -74,6 +75,20 @@ static VALUE rbclass_nsrange()
   return rb_const_get(mOSX, rb_intern("NSRange"));
 }
 
+static VALUE rbclass_qttimerange()
+{
+  VALUE mOSX = osx_s_module();
+  if (!mOSX) return Qnil;
+  return rb_const_get(mOSX, rb_intern("QTTimeRange"));
+}
+
+static VALUE rbclass_qttime()
+{
+  VALUE mOSX = osx_s_module();
+  if (!mOSX) return Qnil;
+  return rb_const_get(mOSX, rb_intern("QTTime"));
+}
+
 int
 to_octype(const char* octype_str)
 {
@@ -97,6 +112,17 @@ to_octype(const char* octype_str)
       oct = _PRIV_C_NSRANGE;
     }
   }
+  // {?={?=qll}{?=qll}}
+  else if (octype_str[0] == '{' && octype_str[1] == '?' && octype_str[2] == '=' && octype_str[3] == '{') {
+	if (strcmp(octype_str, @encode(QTTimeRange)) == 0)
+	  oct = _PRIV_C_QTTIMERANGE;
+  }
+  // {?=qll}
+  else if (octype_str[0] == '{' && octype_str[1] == '?' && octype_str[2] == '=' && octype_str[3] == 'q') {
+	if (strcmp(octype_str, @encode(QTTime)) == 0)
+      oct = _PRIV_C_QTTIME;
+  }
+  
   else if (octype_str[0] == '^') {
     if (strcmp(octype_str, "^@") == 0)
       oct = _PRIV_C_ID_PTR;
@@ -316,7 +342,34 @@ ocdata_to_rbobj(VALUE context_obj,
       f_success = NO;
     break;
   }
+  
+  case _PRIV_C_QTTIMERANGE: {
+    QTTimeRange* qttrp = (QTTimeRange*)ocdata;
+    VALUE klass = rbclass_qttimerange();
+    if (klass != Qnil)
+      rbval = rb_funcall(klass, rb_intern("new"), 6,
+       UINT2NUM(qttrp->time.timeValue),
+	   UINT2NUM(qttrp->time.timeScale),
+	   UINT2NUM(qttrp->time.flags),
+	   UINT2NUM(qttrp->duration.timeValue),
+	   UINT2NUM(qttrp->duration.timeScale),
+	   UINT2NUM(qttrp->duration.flags));
+    else
+      f_success = NO;
+    break;
+  }
 
+  case _PRIV_C_QTTIME: {
+    QTTime* qttp = (QTTime*)ocdata;
+    VALUE klass = rbclass_qttime();
+    if (klass != Qnil)
+      rbval = rb_funcall(klass, rb_intern("new"), 3,
+       UINT2NUM(qttp->timeValue), UINT2NUM(qttp->timeScale), UINT2NUM(qttp->flags));
+    else
+      f_success = NO;
+    break;
+  }
+  
   case _C_BFLD:
   case _C_VOID:
   case _C_UNDEF:
@@ -669,6 +722,35 @@ static BOOL rbobj_to_nsrect(VALUE obj, NSRect* result)
   return YES;
 }
 
+static BOOL rbobj_to_qttimerange(VALUE obj, QTTimeRange* result)
+{
+  if (TYPE(obj) != T_ARRAY)
+    obj = rb_funcall(obj, rb_intern("to_a"), 0);
+  if (RARRAY(obj)->len == 6) {
+	  result->time.timeValue = (long long) NUM2UINT(rb_ary_entry(obj, 0));
+	  result->time.timeScale = (long) NUM2UINT(rb_ary_entry(obj, 1));
+	  result->time.flags = (long) NUM2UINT(rb_ary_entry(obj, 2));
+	  result->duration.timeValue = (long long) NUM2UINT(rb_ary_entry(obj, 3));
+	  result->duration.timeScale = (long) NUM2UINT(rb_ary_entry(obj, 4));
+	  result->duration.flags = (long) NUM2UINT(rb_ary_entry(obj, 5));
+  }
+  else {
+    return NO;
+  }
+  return YES;
+}
+
+static BOOL rbobj_to_qttime(VALUE obj, QTTime* result)
+{
+  if (TYPE(obj) != T_ARRAY)
+    obj = rb_funcall(obj, rb_intern("to_a"), 0);
+  if (RARRAY(obj)->len != 3) return NO;
+	  result->timeValue = (long long) NUM2UINT(rb_ary_entry(obj, 0));
+	  result->timeScale = (long) NUM2UINT(rb_ary_entry(obj, 1));
+	  result->flags = (long) NUM2UINT(rb_ary_entry(obj, 2));
+	  return YES;
+}
+
 BOOL
 rbobj_to_ocdata(VALUE obj, int octype, void* ocdata)
 {
@@ -791,7 +873,21 @@ rbobj_to_ocdata(VALUE obj, int octype, void* ocdata)
     if (f_success) *(NSRange*)ocdata = nsval;
     break;
   }
+  
+  case _PRIV_C_QTTIMERANGE: {
+    QTTimeRange nsval = QTMakeTimeRange(QTMakeTime(0, 0), QTMakeTime(0, 0));
+    f_success = rbobj_to_qttimerange(obj, &nsval);
+    if (f_success) *(QTTimeRange*)ocdata = nsval;
+    break;
+  }
 
+  case _PRIV_C_QTTIME: {
+    QTTime nsval = QTMakeTime(0, 0);
+    f_success = rbobj_to_qttime(obj, &nsval);
+    if (f_success) *(QTTime*)ocdata = nsval;
+    break;
+  }
+  
   case _C_BFLD:
   case _C_VOID:
   case _C_UNDEF:
