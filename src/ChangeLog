@@ -1,3 +1,13 @@
+2006-11-09  kimura wataru <kimuraw@i.nifty.jp>
+
+	* framework/RubyCocoa.xcodeproj/project.pbxproj,
+	  framework/src/ruby/osx/objc/qtkit.rb framework/src/ruby/osx/qtkit.rb,
+	  lib/osx/qtkit.rb:
+	add support of QTKit.(patch from Eloy Duran)
+
+	* framework/src/objc/ocdata_conv.h, framework/src/objc/ocdata_conv.m:
+	add conversions for QTKit structures.(patch from Eloy Duran)
+
 2006-11-05  kimura wataru <kimuraw@i.nifty.jp>
 
 	* VERSION:
