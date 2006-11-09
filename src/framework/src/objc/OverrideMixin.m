@@ -92,11 +92,11 @@ ovmix_ffi_closure(ffi_cif* cif, void* resp, void** args, void* userdata)
   unsigned i;
   VALUE retval;
 
-  OVMIX_LOG("ffi_closure cif %p nargs %d", cif, cif->nargs); 
-
   retval_octype = *(int *)userdata;
   args_octypes = &((int *)userdata)[1];
   rb_args = rb_ary_new2(cif->nargs - 2);
+
+  OVMIX_LOG("ffi_closure cif %p nargs %d sel '%s'", cif, cif->nargs, *(SEL *)args[1]); 
 
   for (i = 2; i < cif->nargs; i++) {
     VALUE arg;
@@ -123,19 +123,19 @@ static struct st_table *ffi_imp_closures;
 static pthread_mutex_t ffi_imp_closures_lock;
 
 static IMP 
-ovmix_imp_for_type(const char* type)
+ovmix_imp_for_type(const char *type)
 {
   BOOL ok;
   IMP imp;
   const char *error;
-  NSMethodSignature *methodSignature;
   unsigned i, argc;
-  ffi_type *rettype;
-  ffi_type **argtypes;
+  char *retval_type;
+  char **arg_types;
+  ffi_type *retval_ffi_type;
+  ffi_type **arg_ffi_types;
   ffi_cif *cif;
   ffi_closure *closure;
   int *octypes;
-  id pool;
 
   pthread_mutex_lock(&ffi_imp_closures_lock);
   imp = NULL;
@@ -147,29 +147,25 @@ ovmix_imp_for_type(const char* type)
   error = NULL;
   cif = NULL;
   closure = NULL;
-  pool = [[NSAutoreleasePool alloc] init];
-  methodSignature = [NSMethodSignature signatureWithObjCTypes:type];
-  argc = [methodSignature numberOfArguments];
 
-  argtypes = (ffi_type **)malloc(sizeof(ffi_type *) * argc);
+  decode_method_encoding(type, &argc, &retval_type, &arg_types, NO);
+
+  arg_ffi_types = (ffi_type **)malloc(sizeof(ffi_type *) * argc);
   octypes = (int *)malloc(sizeof(int) * (argc - 1)); /* first int is retval octype, then arg octypes */
-  if (argtypes == NULL || octypes == NULL) {
+  if (arg_ffi_types == NULL || octypes == NULL) {
     error = "Can't allocate memory";
     goto bails;
   }
 
   for (i = 0; i < argc; i++) {
-    const char *atype;
     int octype;
-
-    atype = [methodSignature getArgumentTypeAtIndex:i];
-    octype = to_octype(atype);
+    octype = to_octype(arg_types[i]);
     if (i >= 2)
       octypes[i - 1] = octype;
-    argtypes[i] = ffi_type_for_octype(octype);
+    arg_ffi_types[i] = ffi_type_for_octype(octype);
   }
-  octypes[0] = to_octype([methodSignature methodReturnType]);
-  rettype = ffi_type_for_octype(octypes[0]);
+  octypes[0] = to_octype(retval_type);
+  retval_ffi_type = ffi_type_for_octype(octypes[0]);
 
   cif = (ffi_cif *)malloc(sizeof(ffi_cif));
   if (cif == NULL) {
@@ -177,7 +173,7 @@ ovmix_imp_for_type(const char* type)
     goto bails;
   }
 
-  if (ffi_prep_cif(cif, FFI_DEFAULT_ABI, argc, rettype, argtypes) != FFI_OK) {
+  if (ffi_prep_cif(cif, FFI_DEFAULT_ABI, argc, retval_ffi_type, arg_ffi_types) != FFI_OK) {
     error = "Can't prepare cif";
     goto bails;
   }
@@ -208,8 +204,8 @@ ovmix_imp_for_type(const char* type)
   goto done;
 
 bails:
-  if (argtypes != NULL)
-    free(argtypes);
+  if (arg_ffi_types != NULL)
+    free(arg_ffi_types);
   if (cif != NULL)
     free(cif);
   if (closure != NULL)
@@ -218,7 +214,8 @@ bails:
     rb_raise(rb_eRuntimeError, error);
 
 done:
-  [pool release];
+  free(arg_types);
+  free(retval_type);
 
   return imp; 
 }
