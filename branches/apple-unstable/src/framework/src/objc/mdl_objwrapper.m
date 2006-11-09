@@ -109,8 +109,7 @@ ocm_create_send_context(VALUE rcv, SEL selector, char *error, size_t error_len)
 {
   id oc_rcv;
   Method method;
-  struct _ocm_send_context * ctx;
-  unsigned i;
+  struct _ocm_send_context *ctx;
 
   oc_rcv = rbobj_get_ocid(rcv);
   if (oc_rcv == nil) {
@@ -130,37 +129,7 @@ ocm_create_send_context(VALUE rcv, SEL selector, char *error, size_t error_len)
   ctx->selector = selector;
   ctx->method = method;
 
-#if MAC_OS_X_VERSION_MAX_ALLOWED <= MAC_OS_X_VERSION_10_4
-  {
-    NSMethodSignature *methodSignature;
-
-    methodSignature = [oc_rcv methodSignatureForSelector:selector];
-
-    ctx->numberOfArguments = [methodSignature numberOfArguments] - 2;
-    ctx->methodReturnType = strdup([methodSignature methodReturnType]);
-  
-    if (ctx->numberOfArguments == 0) {
-      ctx->argumentsTypes = NULL;
-    }
-    else {
-      ctx->argumentsTypes = (char **)malloc(sizeof(char) * ctx->numberOfArguments);
-      for (i = 0; i < ctx->numberOfArguments; i++)
-        ctx->argumentsTypes[i] = strdup([methodSignature getArgumentTypeAtIndex:i + 2]);
-    }
-  }
-#else
-  ctx->numberOfArguments = MAX(0, method_getNumberOfArguments(method) - 2);
-  ctx->methodReturnType = method_copyReturnType(method);
-
-  if (ctx->numberOfArguments == 0) {
-    ctx->argumentsTypes = NULL;
-  }
-  else {
-    ctx->argumentsTypes = (char **)malloc(sizeof(char) * ctx->numberOfArguments);
-    for (i = 0; i < ctx->numberOfArguments; i++)
-      ctx->argumentsTypes[i] = method_copyArgumentType(method, i + 2);
-  }
-#endif
+  decode_method_encoding(method->method_types, &ctx->numberOfArguments, &ctx->methodReturnType, &ctx->argumentsTypes, YES);
  
   return ctx;
 }
@@ -185,7 +154,6 @@ ocm_retain_result_if_necessary (VALUE rcv, VALUE result, SEL selector)
   // by "alloc/allocWithZone/new/copy/mutableCopy". 
   // Some classes may always return a static dummy object (placeholder) for every [-alloc], so we shouldn't release the return value of these messages.
   if (!NIL_P(result) && rb_obj_is_kind_of(result, objid_s_class()) == Qtrue) {
-
     if (!OBJCID_DATA_PTR(result)->retained
         && selector != @selector(alloc)
         && selector != @selector(allocWithZone:)
@@ -474,7 +442,7 @@ ocm_ffi_dispatch(int argc, VALUE* argv, VALUE rcv, VALUE* result, struct _ocm_se
   exception = Qnil;
   @try {
     OBJWRP_LOG("\tffi_call method %s types %s imp %p", (const char *)ctx->method->method_name, ctx->method->method_types, ctx->method->method_imp);
-    ffi_call(&cif, FFI_FN(ctx->method->method_imp), (ffi_arg *)&retval, arg_values);
+    ffi_call(&cif, FFI_FN(ctx->method->method_imp), (ffi_arg *)retval, arg_values);
     OBJWRP_LOG("\tffi_call done");
   }
   @catch (id oc_exception) {
@@ -516,7 +484,7 @@ ocm_ffi_dispatch(int argc, VALUE* argv, VALUE rcv, VALUE* result, struct _ocm_se
       }
     }
 
-    if (!ocdata_to_rbobj(rcv, ret_octype, &retval, result, YES)) {
+    if (!ocdata_to_rbobj(rcv, ret_octype, retval, result, YES)) {
       exception = ocdataconv_err_new(ctx->rcv, ctx->selector, "cannot convert the result as '%s' to Ruby Object.", ctx->methodReturnType);
       goto bails;
     }

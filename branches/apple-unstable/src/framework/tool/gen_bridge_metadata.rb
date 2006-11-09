@@ -107,6 +107,11 @@ class OCHeaderAnalyzer
       @functions = externs.map{ |i|
         function?(i)
       }.compact
+=begin
+      # Append inline functions. Disabled for now, as there is currently no way to support inline functions at the bridge side. 
+      inline_funcs = @cpp_result.scan(/^static\s+__inline__\s+(__attribute__\(\(always_inline\)\)\s+)?([^{]*).*$/).map { |m| function?(m[1].strip) }.compact
+      @functions.concat(inline_funcs)
+=end
     end
     @functions
   end
@@ -217,34 +222,32 @@ class OCHeaderAnalyzer
     end
   end
 
+  class << self; attr_accessor :struct_names; end
+
   def OCHeaderAnalyzer.octype_of(str)
-    case str.strip
+    case x = str.strip
     when 'id' then :_C_ID
-    when 'Class' then :_C_ID
+    when 'Class' then :_C_CLASS
     when 'void' then :_C_VOID
     when 'SEL'  then :_C_SEL
     when 'BOOL' then :_PRIV_C_BOOL
-    when 'NSRect' then :_PRIV_C_NSRECT
-    when 'NSPoint' then :_PRIV_C_NSPOINT
-    when 'NSSize' then :_PRIV_C_NSSIZE
-    when 'NSRange' then :_PRIV_C_NSRANGE
     when 'NSWindowDepth' then :_C_INT
     when 'NSComparisonResult' then :_C_INT
     when /^unsigned\s+char$/ then :_C_UCHR
     when 'char' then :_C_CHR
     when /^unsigned\s+short(\s+int)?$/ then :_C_USHT
     when /^short(\s+int)?$/ then :_C_SHT
-    when /^unsigned\s+int$/ then :_C_UINT
-    when /^unsigned$/ then :_C_UINT
-    when 'int' then :_C_INT
+    when /^unsigned$/, /^unsigned\s+int$/, 'NSUInteger' then :_C_UINT
+    when 'int', 'NSInteger' then :_C_INT
+    when 'long' then :_C_LNG
     when /^unsigned\s+long(\s+int)?$/ then :_C_ULNG
     when /^unsigned\s+long\s+long(\s+int)?$/ then :_C_ULLNG
     when /^long\s+long(\s+int)?$/ then :_C_LLNG
-    when 'float' then :_C_FLT
+    when 'float', 'CGFloat' then :_C_FLT
     when 'double' then :_C_DBL
     when /char\s*\*$/ then :_C_CHARPTR
     when /\*$/ then :_PRIV_C_PTR
-    else :UNKNOWN
+    else @struct_names.include?(x) ? "_PRIV_C_STRUCT_#{x}".intern : :UNKNOWN
     end
   end
 
@@ -404,6 +407,7 @@ class BridgeSupportGenerator
         scan_headers
         unless @generate_exception_template
           collect_enums
+          collect_structs_encoding
           collect_inf_protocols_encoding
         end
         generate_xml
@@ -453,6 +457,40 @@ EOS
         compile_and_execute_code(code).split("\n").each do |line|
             name, value = line.split(':')
             @resolved_enums[name.strip] = value.strip
+        end
+    end
+
+    def collect_structs_encoding
+        @resolved_structs = {}
+        ivar_st = []
+        log_st = []
+        lines = @structs.each do |name|
+            ivar_st << "#{name} a#{name};"
+            log_st << "printf(\"%s: %s: %ld\\n\", \"#{name}\", class_getInstanceVariable(klass, \"a#{name}\")->ivar_type, sizeof(#{name}));"
+        end
+        code = <<EOS
+#{@import_directive}
+#import <objc/objc-class.h>
+
+@interface MyClass : NSObject
+{
+#{ivar_st.join("\n")}
+}
+@end
+
+@implementation MyClass
+@end
+
+int main (void) 
+{
+  Class klass = objc_getClass("MyClass");
+  #{log_st.join("\n")}
+  return 0;
+}
+EOS
+        compile_and_execute_code(code).split("\n").each do |line|
+            name, value, size = line.split(':')
+            @resolved_structs[name.strip] = [value.strip, size.strip]
         end
     end
 
@@ -534,6 +572,13 @@ EOS
             end
         else
             # Generate the final metadata file.
+            @resolved_structs.each do |name, ary|
+                encoding, size = ary
+                element = root.add_element('struct')
+                element.add_attribute('name', name)
+                element.add_attribute('size', size)
+                element.add_attribute('encoding', encoding)
+            end
             @constants.each do |constant| 
                 element = root.add_element('constant')
                 element.add_attribute('name', constant.name)
@@ -620,9 +665,8 @@ EOS
     def scan_headers
         @functions, @constants, @enums = [], [], []
         @typedefs, @ocmethods, @inf_protocols = {}, {}, [] 
-        ignored_headers = @exceptions.map { |x| x.get_elements('/signatures/ignored_headers/header').map { |y| y.text } }.flatten
+        OCHeaderAnalyzer.struct_names = @structs
         @headers.each do |path|
-            next if ignored_headers.any? { |x| /#{x}$/.match(path) }
             die "Given header file `#{path}' doesn't exist" unless File.exists?(path)
             analyzer = OCHeaderAnalyzer.new(path)
             @functions.concat(analyzer.functions)
@@ -647,7 +691,7 @@ EOS
         @generate_exception_template = false       
  
         OptionParser.new do |opts|
-            opts.banner = "Usage: #{__FILE__} [options] <headers...>\nSee -h for more help."
+            opts.banner = "Usage: #{File.basename(__FILE__)} [options] <headers...>\nSee -h or gen_bridge_metadata(1) for more help."
             opts.separator ''
             opts.separator 'Options:'
 
@@ -699,7 +743,18 @@ EOS
             end
         end
 
+        # Open exceptions, ignore mentionned headers.
         @exceptions.map! { |x| REXML::Document.new(File.read(x)) }
+        @exceptions.each do |doc|
+            doc.get_elements('/signatures/ignored_headers/header').each do |element|
+                path = element.text
+                path_re = /#{path}/
+                @headers.delete_if { |x| path_re.match(x) }
+                @import_directive.gsub!(/#import.+#{path}>/, '')
+            end
+        end
+        # Keep the list of structs.
+        @structs = @exceptions.map { |doc| doc.get_elements('/signatures/struct').map { |x| x.attributes['name'] } }.flatten
     end
    
     def handle_framework(val)
@@ -762,7 +817,7 @@ EOS
         end
 
         out = `#{tmp_bin_path}`
-        if out.empty?
+        unless $?.success?
             raise "Can't execute compiled C code... aborting\nbinary is #{tmp_bin_path}"
         end
 

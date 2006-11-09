@@ -26,10 +26,6 @@
 
 enum osxobjc_nsdata_type {
   _PRIV_C_BOOL = 1024,
-  _PRIV_C_NSRECT,
-  _PRIV_C_NSPOINT,
-  _PRIV_C_NSSIZE,
-  _PRIV_C_NSRANGE,
   _PRIV_C_PTR,
   _PRIV_C_ID_PTR,
 };
@@ -62,3 +58,5 @@ void init_rb2oc_cache(void);
 void init_oc2rb_cache(void);
 void remove_from_rb2oc_cache(VALUE rbobj);
 void remove_from_oc2rb_cache(id ocid);
+
+void decode_method_encoding(const char *encoding, unsigned *argc, char **retval_type, char ***arg_types, BOOL strip_first_two_args);

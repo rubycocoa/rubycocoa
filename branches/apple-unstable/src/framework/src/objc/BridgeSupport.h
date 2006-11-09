@@ -94,9 +94,32 @@ struct bsInformalProtocolMethod {
   char *  protocol_name;
 };
 
+#define BS_STRUCT_OCTYPE_THRESHOLD  1300
+
+struct bsStructField {
+  char *    name;
+  char *    encoding;
+};
+
+struct bsStruct {
+  char *        name;
+  size_t        size;
+  int           octype;
+  char *        encoding;   // real encoding, without field names decoration
+  ffi_type *    ffi_type;
+  VALUE         klass;
+  struct bsStructField *fields;
+  int           field_count;
+};
+
 extern struct bsFunction *current_function;
 
 ffi_type *ffi_type_for_octype (int octype);
+struct bsStruct *find_bs_struct_by_encoding (const char *encoding);
+struct bsStruct *find_bs_struct_by_octype (const int octype);
+struct bsStruct *find_bs_struct_by_name (const char *name);
+VALUE rb_bs_struct_new_from_ocdata(struct bsStruct *bs_struct, void *ocdata);
+void *rb_bs_struct_get_data(VALUE obj, int octype, int *size);
 struct bsMethod *find_bs_method(id klass, const char *selector, BOOL is_class_method);
 struct bsMethodArg *find_bs_method_arg_by_index(struct bsMethod *method, unsigned index);
 struct bsMethodArg *find_bs_method_arg_by_c_array_len_arg_index(struct bsMethod *method, unsigned index);

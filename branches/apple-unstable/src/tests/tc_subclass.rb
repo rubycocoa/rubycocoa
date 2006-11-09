@@ -116,7 +116,7 @@ class TC_SubClass < Test::Unit::TestCase
     assert_kind_of(OSX::NSCFArray, OSX::NSArray.array)  
  
     # Method manually defined in an ancestor. 
-    tv = OSX::NSTableView.alloc.initWithFrame(OSX::NSRect::ZERO)
+    tv = OSX::NSTableView.alloc.initWithFrame(OSX::NSZeroRect)
     assert(tv.is_a?(OSX::NSView))
     assert(tv.respond_to?(:a_sample_method))
   end

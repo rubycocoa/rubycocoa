@@ -13,6 +13,7 @@
 #import "mdl_osxobjc.h"
 #import <CoreFoundation/CFString.h> // CFStringEncoding
 #import "st.h"
+#import "BridgeSupport.h"
 
 #define CACHE_LOCKING 0
 
@@ -59,57 +60,25 @@ void remove_from_rb2oc_cache(VALUE rbobj)
   CACHE_UNLOCK(&rb2ocCacheLock);
 }
 
-static VALUE rbclass_nsrect()
-{
-  VALUE mOSX = osx_s_module();
-  if (!mOSX) return Qnil;
-  return rb_const_get(mOSX, rb_intern("NSRect"));
-}
-
-static VALUE rbclass_nspoint()
-{
-  VALUE mOSX = osx_s_module();
-  if (!mOSX) return Qnil;
-  return rb_const_get(mOSX, rb_intern("NSPoint"));
-}
-
-static VALUE rbclass_nssize()
-{
-  VALUE mOSX = osx_s_module();
-  if (!mOSX) return Qnil;
-  return rb_const_get(mOSX, rb_intern("NSSize"));
-}
-
-static VALUE rbclass_nsrange()
-{
-  VALUE mOSX = osx_s_module();
-  if (!mOSX) return Qnil;
-  return rb_const_get(mOSX, rb_intern("NSRange"));
-}
-
 int
 to_octype(const char* octype_str)
 {
   int oct;
 
-  /* avoid first character 'r' which is const meaning */
-  if (octype_str[0] == 'r') octype_str++;
+  // Avoid first character 'r' which means const.
+  if (octype_str[0] == 'r') 
+    octype_str++;
   oct = *octype_str;
 
+  // Handle structures.
   if (octype_str[0] == '{' && octype_str[1] == '_') {
-    if (strcmp(octype_str, @encode(NSRect)) == 0) {
-      oct = _PRIV_C_NSRECT;
-    }
-    else if (strcmp(octype_str, @encode(NSPoint)) == 0) {
-      oct = _PRIV_C_NSPOINT;
-    }
-    else if (strcmp(octype_str, @encode(NSSize)) == 0) {
-      oct = _PRIV_C_NSSIZE;
-    }
-    else if (strcmp(octype_str, @encode(NSRange)) == 0) {
-      oct = _PRIV_C_NSRANGE;
-    }
+    struct bsStruct *bs_struct;
+
+    bs_struct = find_bs_struct_by_encoding(octype_str);
+    if (bs_struct != NULL)
+      oct = bs_struct->octype;
   }
+  // Pointers.
   else if (octype_str[0] == '^') {
     if (strcmp(octype_str, "^@") == 0 || strcmp(octype_str, "^r@") == 0)
       oct = _PRIV_C_ID_PTR;
@@ -171,18 +140,6 @@ ocdata_size(int octype, const char* octype_str)
   case _PRIV_C_BOOL:
     result = sizeof(BOOL); break;    
 
-  case _PRIV_C_NSRECT:
-    result = sizeof(NSRect); break;
-    
-  case _PRIV_C_NSPOINT:
-    result = sizeof(NSPoint); break;
-
-  case _PRIV_C_NSSIZE:
-    result = sizeof(NSSize); break;
-
-  case _PRIV_C_NSRANGE:
-    result = sizeof(NSRange); break;
-
   case _PRIV_C_PTR:
     result = sizeof(void*); break;
 
@@ -199,10 +156,14 @@ ocdata_size(int octype, const char* octype_str)
   case _C_STRUCT_E:
 
   default: {
-    if (octype_str == NULL) {
-      result = 0;
+    if (octype > BS_STRUCT_OCTYPE_THRESHOLD) {
+      struct bsStruct *bs_struct;
+
+      bs_struct = find_bs_struct_by_octype(octype);
+      if (bs_struct != NULL)
+        result = bs_struct->size;
     }
-    else {
+    if (result == 0 && octype_str != NULL) {
       unsigned int size, align;
       NSGetSizeAndAlignment(octype_str, &size, &align);
       result = size;
@@ -210,7 +171,6 @@ ocdata_size(int octype, const char* octype_str)
     break;
   }
   }
-if (result == 0 && octype != _C_VOID) printf("warning! size of octype %d is 0\n", octype);
   return result;
 }
 
@@ -299,55 +259,6 @@ ocdata_to_rbobj(VALUE context_obj,
   case _C_CHARPTR:
     rbval = rb_str_new2(*(char**)ocdata); break;
 
-  case _PRIV_C_NSRECT: {
-    NSRect* vp = (NSRect*)ocdata;
-    VALUE klass = rbclass_nsrect();
-    if (klass != Qnil)
-      rbval = rb_funcall(klass, rb_intern("new"), 4,
-			 rb_float_new((double)vp->origin.x),
-			 rb_float_new((double)vp->origin.y),
-			 rb_float_new((double)vp->size.width),
-			 rb_float_new((double)vp->size.height));
-    else
-      f_success = NO;
-    break;
-  }
-
-  case _PRIV_C_NSPOINT: {
-    NSPoint* vp = (NSPoint*)ocdata;
-    VALUE klass = rbclass_nspoint();
-    if (klass != Qnil)
-      rbval = rb_funcall(klass, rb_intern("new"), 2,
-			 rb_float_new((double)vp->x),
-			 rb_float_new((double)vp->y));
-    else
-      f_success = NO;
-    break;
-  }
-
-  case _PRIV_C_NSSIZE: {
-    NSSize* vp = (NSSize*)ocdata;
-    VALUE klass = rbclass_nssize();
-    if (klass != Qnil)
-      rbval = rb_funcall(klass, rb_intern("new"), 2,
-			 rb_float_new((double)vp->width),
-			 rb_float_new((double)vp->height));
-    else
-      f_success = NO;
-    break;
-  }
-
-  case _PRIV_C_NSRANGE: {
-    NSRange* rp = (NSRange*)ocdata;
-    VALUE klass = rbclass_nsrange();
-    if (klass != Qnil)
-      rbval = rb_funcall(klass, rb_intern("new"), 2, 
-			 UINT2NUM(rp->location), UINT2NUM(rp->length));
-    else
-      f_success = NO;
-    break;
-  }
-
   case _C_BFLD:
   case _C_VOID:
   case _C_UNDEF:
@@ -360,8 +271,23 @@ ocdata_to_rbobj(VALUE context_obj,
   case _C_STRUCT_E:
 
   default:
-    f_success = NO;
-    rbval = Qnil;
+    if (octype > BS_STRUCT_OCTYPE_THRESHOLD) {
+      struct bsStruct *bs_struct;
+
+      bs_struct = find_bs_struct_by_octype(octype);
+      if (bs_struct != NULL) {
+        f_success = YES;
+        rbval = rb_bs_struct_new_from_ocdata(bs_struct, (void *)ocdata);
+      }
+      else {
+        f_success = NO;
+        rbval = Qnil;
+      }
+    }
+    else {
+      f_success = NO;
+      rbval = Qnil;
+    }
     break;
   }
 
@@ -668,72 +594,6 @@ static BOOL rbobj_to_idptr(VALUE obj, id** idptr)
   return YES;
 }
 
-static BOOL rbobj_to_nspoint(VALUE obj, NSPoint* result)
-{
-  if (TYPE(obj) != T_ARRAY)
-    obj = rb_funcall(obj, rb_intern("to_a"), 0);
-  if (RARRAY(obj)->len != 2) return NO;
-  result->x = (float) RFLOAT(rb_Float(rb_ary_entry(obj, 0)))->value;
-  result->y = (float) RFLOAT(rb_Float(rb_ary_entry(obj, 1)))->value;
-  return YES;
-}
-
-static BOOL rbobj_to_nssize(VALUE obj, NSSize* result)
-{
-  if (TYPE(obj) != T_ARRAY)
-    obj = rb_funcall(obj, rb_intern("to_a"), 0);
-  if (RARRAY(obj)->len != 2) return NO;
-  result->width = (float) RFLOAT(rb_Float(rb_ary_entry(obj, 0)))->value;
-  result->height = (float) RFLOAT(rb_Float(rb_ary_entry(obj, 1)))->value;
-  return YES;
-}
-
-static BOOL rbobj_to_nsrange(VALUE obj, NSRange* result)
-{
-  unsigned long first, last;
-  int exclude_end_p;
-  if (rb_respond_to(obj, rb_intern("to_range")))
-    obj = rb_funcall(obj, rb_intern("to_range"), 0);
-  if (rb_obj_is_kind_of(obj, rb_cRange)) {
-    first = NUM2UINT(rb_funcall(obj, rb_intern("first"), 0));
-    last = NUM2UINT(rb_funcall(obj, rb_intern("last"), 0));
-	exclude_end_p = (rb_funcall(obj, rb_intern("exclude_end?"), 0) == Qtrue);
-    result->location = first;
-    result->length = (last - first + (exclude_end_p ? 0 : 1));
-  }
-  else {
-    if (TYPE(obj) != T_ARRAY)
-      obj = rb_funcall(obj, rb_intern("to_a"), 0);
-    rb_funcall(obj, rb_intern("flatten!"), 0);
-    if (RARRAY(obj)->len != 2) return NO;
-    result->location = NUM2UINT(rb_ary_entry(obj, 0));
-    result->length = NUM2UINT(rb_ary_entry(obj, 1));
-  }
-  return YES;
-}
-
-static BOOL rbobj_to_nsrect(VALUE obj, NSRect* result)
-{
-  if (TYPE(obj) != T_ARRAY)
-    obj = rb_funcall(obj, rb_intern("to_a"), 0);
-  if (RARRAY(obj)->len == 2) {
-    VALUE rb_orig = rb_ary_entry(obj, 0);
-    VALUE rb_size = rb_ary_entry(obj, 1);
-    if (!rbobj_to_nspoint(rb_orig, &(result->origin))) return NO;
-    if (!rbobj_to_nssize(rb_size, &(result->size))) return NO;
-  }
-  else if (RARRAY(obj)->len == 4) {
-    result->origin.x = (float) RFLOAT(rb_Float(rb_ary_entry(obj, 0)))->value;
-    result->origin.y = (float) RFLOAT(rb_Float(rb_ary_entry(obj, 1)))->value;
-    result->size.width = (float) RFLOAT(rb_Float(rb_ary_entry(obj, 2)))->value;
-    result->size.height = (float) RFLOAT(rb_Float(rb_ary_entry(obj, 3)))->value;
-  }
-  else {
-    return NO;
-  }
-  return YES;
-}
-
 BOOL
 rbobj_to_ocdata(VALUE obj, int octype, void* ocdata, BOOL to_libffi)
 {
@@ -838,34 +698,6 @@ rbobj_to_ocdata(VALUE obj, int octype, void* ocdata, BOOL to_libffi)
     break;
   }
 
-  case _PRIV_C_NSRECT: {
-    NSRect nsval;
-    f_success = rbobj_to_nsrect(obj, &nsval);
-    if (f_success) *(NSRect*)ocdata = nsval;
-    break;
-  }
-
-  case _PRIV_C_NSPOINT: {
-    NSPoint nsval;
-    f_success = rbobj_to_nspoint(obj, &nsval);
-    if (f_success) *(NSPoint*)ocdata = nsval;
-    break;
-  }
-
-  case _PRIV_C_NSSIZE: {
-    NSSize nsval;
-    f_success = rbobj_to_nssize(obj, &nsval);
-    if (f_success) *(NSSize*)ocdata = nsval;
-    break;
-  }
-
-  case _PRIV_C_NSRANGE: {
-    NSRange nsval = NSMakeRange(0, 0);
-    f_success = rbobj_to_nsrange(obj, &nsval);
-    if (f_success) *(NSRange*)ocdata = nsval;
-    break;
-  }
-
   case _C_BFLD:
   case _C_VOID:
   case _C_UNDEF:
@@ -877,9 +709,18 @@ rbobj_to_ocdata(VALUE obj, int octype, void* ocdata, BOOL to_libffi)
   case _C_STRUCT_E:
 
   default:
-    f_success = NO;
-    break;
+    if (octype > BS_STRUCT_OCTYPE_THRESHOLD) {
+      void *data;
+      int size;
 
+      data = rb_bs_struct_get_data(obj, octype, &size);
+      f_success = data != NULL;
+      if (f_success)
+        memcpy(ocdata, data, size);
+    }
+    else
+      f_success = NO;
+    break;
   }
 
   return f_success;
@@ -912,4 +753,57 @@ ocstr_to_rbstr(id ocstr)
   NSData * data = [(NSString *)ocstr dataUsingEncoding:KCODE_NSSTRENCODING
 				     allowLossyConversion:YES];
   return rb_str_new ([data bytes], [data length]);
+}
+
+// 10.4 or lower, use NSMethodSignature.
+// Otherwise, use the Objective-C runtime API, which is faster and more reliable with structures encoding.
+void
+decode_method_encoding(const char *encoding, unsigned *argc, char **retval_type, char ***arg_types, BOOL strip_first_two_args)
+{
+  unsigned i;
+  unsigned l_argc;
+  char *l_retval_type;
+  char **l_arg_types;
+
+#if MAC_OS_X_VERSION_MAX_ALLOWED <= MAC_OS_X_VERSION_10_4
+  NSMethodSignature *methodSignature;
+  NSAutoreleasePool *pool;
+
+  pool = [[NSAutoreleasePool alloc] init];
+  methodSignature = [NSMethodSignature signatureWithObjCTypes:encoding];
+  l_argc = [methodSignature numberOfArguments];
+  if (strip_first_two_args)
+    l_argc -= 2;
+  l_retval_type = strdup([methodSignature methodReturnType]);
+  if (l_argc > 0) {
+    l_arg_types = (char **)malloc(sizeof(char *) * l_argc);
+    for (i = 0; i < l_argc; i++)
+      l_arg_types[i] = strdup([methodSignature getArgumentTypeAtIndex:i + (strip_first_two_args ? 2 : 0)]);
+  }
+  else {
+    l_arg_types = NULL;
+  }
+  [pool release];
+#else
+  // There is no public API to parse encoding, but we can make a fake method.
+  struct objc_method method;
+  method.method_types = (char *)encoding;
+
+  l_argc = method_getNumberOfArguments(&method);
+  if (strip_first_two_args)
+    l_argc -= 2;
+  l_retval_type = method_copyReturnType(&method);
+  if (l_argc > 0) {
+    l_arg_types = (char **)malloc(sizeof(char *) * l_argc);
+    for (i = 0; i < l_argc; i++)
+      l_arg_types[i] = method_copyArgumentType(&method, i + (strip_first_two_args ? 2 : 0));
+  }
+  else {
+    l_arg_types = NULL;
+  }
+#endif
+
+  *argc = l_argc;
+  *retval_type = l_retval_type;
+  *arg_types = l_arg_types;
 }
