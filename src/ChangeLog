@@ -1,5 +1,10 @@
 2006-11-10  Laurent Sansonetti <lsansonetti@apple.com>
 
+	* framework/src/ruby/osx/objc/oc_import.rb:
+	Adjust the frameworks and bridge support signatures paths regardless if 
+	the HOME environment variable is set or not. A RubyCocoa program might not 
+	define HOME in its environment (for example, if launchd'ed).
+
 	* framework/src/ruby/osx/objc/oc_types.rb,
 	  framework/src/ruby/osx/objc/oc_all.rb,
 	  framework/src/objc/OverrideMixin.m,

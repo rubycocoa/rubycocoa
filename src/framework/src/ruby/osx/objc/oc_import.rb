@@ -10,13 +10,18 @@ module OSX
 
   FRAMEWORK_PATHS = [
     '/System/Library/Frameworks',
-    '/Library/Frameworks',
-    File.join(ENV['HOME'], 'Library', 'Frameworks')]
+    '/Library/Frameworks'
+  ]
 
   SIGN_PATHS = [
     '/System/Library/BridgeSupport', 
-    '/Library/BridgeSupport', 
-    File.join(ENV['HOME'], 'Library', 'BridgeSupport')]
+    '/Library/BridgeSupport'
+  ]
+
+  if path = ENV['HOME']
+    FRAMEWORK_PATHS << File.join(ENV['HOME'], 'Library', 'Frameworks')
+    SIGN_PATHS << File.join(ENV['HOME'], 'Library', 'BridgeSupport')
+  end
 
   def OSX.load_bridge_support_signatures(framework)
     # A path to a framework, let's search for BridgeSupport.xml inside the Resources folder.
