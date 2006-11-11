@@ -5,7 +5,7 @@
 require 'osx/cocoa'
 
 class String
-  QTTIME_STRING = '(\d+)(:)(\d+)(:)(\d+)(:)(\d+)(.)(\d+)(\/)(\d+)'
+  QTTIME_STRING = '(\d+)(:)(\d+)(:)(\d+)(:)(\d+)(\.)(\d+)(\/)(\d+)'
   
   def to_qttime
     # This method implements (QTTime.h): QTKIT_EXTERN QTTime QTTimeFromString(NSString* string)

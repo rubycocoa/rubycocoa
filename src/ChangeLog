@@ -1,3 +1,16 @@
+2006-11-11  Jonathan Paisley <jp-www@dcs.gla.ac.uk>
+
+	* framework/RubyCocoa.xcodeproj/project.pbxproj, 
+	  framework/src/ruby/osx/objc/qtkit.rb,
+	  framework/src/ruby/osx/qtkit.rb,
+	  pre-config.rb, tests/tc_qtkit.rb:
+	Include QTKit.framework in the project.
+	Add missing osx/qtkit.rb from Copy Files build phase.
+	Remove '-undefined suppress' from LDFLAGS, since this
+	hid the error about missing QTMakeTimeRange and QTMakeTime.
+	Hopefully it is not needed.
+	Add rudimentary tests for the qtkit additions (incomplete).
+	
 2006-11-09  kimura wataru <kimuraw@i.nifty.jp>
 
 	* framework/RubyCocoa.xcodeproj/project.pbxproj,
