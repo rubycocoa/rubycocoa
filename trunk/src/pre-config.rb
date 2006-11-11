@@ -25,7 +25,7 @@ config_ary = [
 
 # build options
 cflags = '-fno-common -g -fobjc-exceptions'
-ldflags = '-undefined suppress -flat_namespace'
+ldflags = '-flat_namespace'
 
 sdkroot = ''
 arch = '$NATIVE_ARCH'
