@@ -9,6 +9,7 @@
 #import <Foundation/NSException.h>
 #import <Foundation/NSString.h>
 #import "osx_ruby.h"
+#import "cls_objcid.h"
 #import "ocdata_conv.h"
 
 static VALUE
@@ -64,6 +65,11 @@ nsresult_to_rbresult(int octype, const void* nsresult, const char* fname, id poo
   if (!ocdata_to_rbobj(Qnil, octype, nsresult, &rbresult)) {
     if (pool) [pool release];
     rb_raise(_ocdataconv_err_class(), "%s - result cannot convert to rbobj.", fname);
+  }
+  if (!NIL_P(rbresult) && rb_obj_is_kind_of(rbresult, objid_s_class()) == Qtrue
+      && !OBJCID_DATA_PTR(rbresult)->retained) {
+    [OBJCID_ID(rbresult) retain];
+    OBJCID_DATA_PTR(rbresult)->retained = YES;
   }
   return rbresult;
 }
