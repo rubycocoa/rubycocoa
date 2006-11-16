@@ -1,3 +1,14 @@
+2006-11-17  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* framework/src/objc/BridgeSupport.m,
+	  framework/tool/gen_bridge_metadata.rb:
+	- Now using real encoding types instead of C level constants (_C_*) in the
+	  metadata files ;
+	- Added support to grab #define numeric constants ;
+	- Added support to grab several constants defined in the same expression 
+	  line (for example: `extern int foo, bar;') ;
+	- Quick refactoring of the metadata generator.
+
 2006-11-16  Laurent Sansonetti <lsansonetti@apple.com>
 
 	* framework/src/ruby/osx/objc/oc_import.rb:
