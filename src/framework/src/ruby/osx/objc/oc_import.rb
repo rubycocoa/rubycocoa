@@ -23,6 +23,22 @@ module OSX
     SIGN_PATHS << File.join(ENV['HOME'], 'Library', 'BridgeSupport')
   end
 
+  def OSX.require_framework(framework)
+    if framework[0] == ?/
+      OSX::NSBundle.bundleWithPath(framework).load
+      load_bridge_support_signatures(framework)
+    else
+      FRAMEWORK_PATHS.each do |dir|
+        path = File.join(dir, "#{framework}.framework")
+        if File.exists?(path)
+          OSX::NSBundle.bundleWithPath(path).load
+          return load_bridge_support_signatures(framework)
+        end
+      end
+      return false
+    end
+  end
+
   def OSX.load_bridge_support_signatures(framework)
     # A path to a framework, let's search for BridgeSupport.xml inside the Resources folder.
     if framework[0] == ?/

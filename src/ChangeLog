@@ -1,3 +1,9 @@
+2006-11-16  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* framework/src/ruby/osx/objc/oc_import.rb:
+	Added OSX.require_framework convenience method to load a given framework
+	and its bridge support signature files at the same time.
+
 2006-11-10  Laurent Sansonetti <lsansonetti@apple.com>
 
 	* framework/src/ruby/osx/objc/oc_import.rb:
