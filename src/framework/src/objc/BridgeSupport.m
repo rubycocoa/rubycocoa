@@ -186,67 +186,6 @@ get_boolean_attribute(xmlTextReaderPtr reader, const char *name, BOOL default_va
   return ret;
 }
 
-static int
-bridge_support_type_to_octype (const char *type)
-{
-  if (strcmp(type, "_C_ID") == 0) return _C_ID;
-  if (strcmp(type, "_C_CLASS") == 0) return _C_CLASS;
-  if (strcmp(type, "_C_SEL") == 0) return _C_SEL;
-  if (strcmp(type, "_C_CHR") == 0) return _C_CHR;
-  if (strcmp(type, "_C_UCHR") == 0) return _C_UCHR;
-  if (strcmp(type, "_C_SHT") == 0) return _C_SHT;
-  if (strcmp(type, "_C_USHT") == 0) return _C_USHT;
-  if (strcmp(type, "_C_INT") == 0) return _C_INT;
-  if (strcmp(type, "_C_UINT") == 0) return _C_UINT;
-  if (strcmp(type, "_C_LNG") == 0) return _C_LNG;
-  if (strcmp(type, "_C_ULNG") == 0) return _C_ULNG;
-#if defined(_C_LNG_LNG)
-  if (strcmp(type, "_C_LNG_LNG") == 0) return _C_LNG_LNG;
-#endif
-#if defined(_C_ULNG_LNG)
-  if (strcmp(type, "_C_ULNG_LNG") == 0) return _C_ULNG_LNG;
-#endif
-  if (strcmp(type, "_C_FLT") == 0) return _C_FLT;
-  if (strcmp(type, "_C_DBL") == 0) return _C_DBL;
-  if (strcmp(type, "_C_BFLD") == 0) return _C_BFLD;
-#if defined(_C_BOOL)
-  if (strcmp(type, "_C_BOOL") == 0) return _C_BOOL;
-#endif
-  if (strcmp(type, "_C_VOID") == 0) return _C_VOID;
-  if (strcmp(type, "_C_UNDEF") == 0) return _C_UNDEF;
-  if (strcmp(type, "_C_PTR") == 0) return _C_PTR;
-  if (strcmp(type, "_C_CHARPTR") == 0) return _C_CHARPTR;
-  if (strcmp(type, "_PRIV_C_BOOL") == 0) return _PRIV_C_BOOL;
-  if (strncmp(type, "_PRIV_C_STRUCT_", 15) == 0) {
-    struct bsStruct *bs_struct;
-
-    bs_struct = find_bs_struct_by_name(type + 15);
-    if (bs_struct == NULL) {
-      DLOG("MDLOSX", "Can't localize bridge support structure named '%s' for type '%s'", type + 15, type);
-      return -1;
-    }
-    return bs_struct->octype;
-  } 
-  if (strcmp(type, "_PRIV_C_PTR") == 0) return _PRIV_C_PTR;
-  if (strcmp(type, "_PRIV_C_ID_PTR") == 0) return _PRIV_C_ID_PTR;
-#if defined(_C_ATOM)
-  if (strcmp(type, "_C_ATOM") == 0) return _C_ATOM;
-#endif
-  if (strcmp(type, "_C_ARY_B") == 0) return _C_ARY_B;
-  if (strcmp(type, "_C_ARY_E") == 0) return _C_ARY_E;
-  if (strcmp(type, "_C_UNION_B") == 0) return _C_UNION_B;
-  if (strcmp(type, "_C_UNION_E") == 0) return _C_UNION_E;
-  if (strcmp(type, "_C_STRUCT_B") == 0) return _C_STRUCT_B;
-  if (strcmp(type, "_C_STRUCT_E") == 0) return _C_STRUCT_E;
-#if defined(_C_VECTOR)
-  if (strcmp(type, "_C_VECTOR") == 0) return _C_VECTOR;
-#endif
-
-  DLOG("MDLOSX", "Unrecognized type '%s'", type);
-
-  return -1;
-}
-
 static void
 free_bs_function (struct bsFunction *func)
 {
@@ -1026,7 +965,7 @@ osx_load_bridge_support_file (VALUE mOSX, VALUE path)
           int     type;
 
           const_type = get_attribute_and_check(reader, "type");
-          type = bridge_support_type_to_octype(const_type);
+          type = to_octype(const_type);
           free (const_type);
           
           if (type == -1) {
@@ -1106,7 +1045,7 @@ osx_load_bridge_support_file (VALUE mOSX, VALUE path)
 
         return_type = get_attribute(reader, "returns");
         if (return_type != NULL) {
-          func->retval = bridge_support_type_to_octype(return_type);
+          func->retval = to_octype(return_type);
           free(return_type);
         }
         else {
@@ -1127,7 +1066,7 @@ osx_load_bridge_support_file (VALUE mOSX, VALUE path)
           int     type;
         
           arg_type = get_attribute_and_check(reader, "type");
-          type = bridge_support_type_to_octype(arg_type);
+          type = to_octype(arg_type);
           free (arg_type);
         
           func_args[func->argc++] = type;
