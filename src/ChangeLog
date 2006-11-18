@@ -1,3 +1,11 @@
+2006-11-18  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* framework/src/objc/BridgeSupportLexer.h,
+	  framework/src/objc/BridgeSupport.m,
+	  framework/src/objc/BridgeSupport.gperf:
+	Now using a gperf-generated hash function when parsing XML elements for
+	the bridge support files, instead of a succession of costly strcmp() calls.
+
 2006-11-17  Laurent Sansonetti <lsansonetti@apple.com>
 
 	* framework/src/objc/BridgeSupport.m,

@@ -19,6 +19,7 @@
 #import "ffi.h"
 #import "RBRuntime.h" // for DLOG
 #import "cls_objcid.h"
+#import "BridgeSupportLexer.h"
 
 static VALUE cOSXBoxed;
 static ID ivarEncodingID;
@@ -934,8 +935,10 @@ osx_load_bridge_support_file (VALUE mOSX, VALUE path)
 
   while (YES) {
     const char *name;
+    unsigned int namelen;
     int node_type = -1;
     BOOL eof;
+    struct bs_xml_atom *atom;
 
     do {
       if ((eof = !next_node(reader)))
@@ -949,9 +952,14 @@ osx_load_bridge_support_file (VALUE mOSX, VALUE path)
       break;
 
     name = (const char *)xmlTextReaderConstName(reader);
- 
-    if (node_type == XML_READER_TYPE_ELEMENT) {    
-      if (strcmp("constant", name) == 0) {
+    namelen = strlen(name); 
+
+    if (node_type == XML_READER_TYPE_ELEMENT) {
+      atom = bs_xml_element(name, namelen);
+      if (atom == NULL)
+        continue;
+      switch (atom->val) {
+      case BS_XML_CONSTANT: { 
         char *  const_name;
         
         const_name = get_attribute_and_check(reader, "name");
@@ -976,7 +984,9 @@ osx_load_bridge_support_file (VALUE mOSX, VALUE path)
           }
         }
       }
-      else if (strcmp("enum", name) == 0) {
+      break;
+
+      case BS_XML_ENUM: { 
         char *  enum_name;
         char *  enum_value;        
         VALUE   value;
@@ -990,7 +1000,9 @@ osx_load_bridge_support_file (VALUE mOSX, VALUE path)
         free (enum_name);
         free (enum_value);
       }
-      else if (strcmp("struct", name) == 0) {
+      break;
+
+      case BS_XML_STRUCT: {
         char *  struct_decorated_encoding;
 
         struct_decorated_encoding = get_attribute_and_check(reader, "encoding");
@@ -1021,10 +1033,14 @@ osx_load_bridge_support_file (VALUE mOSX, VALUE path)
           free(struct_size);
         }
       }
-      else if (strcmp("informal_protocol", name) == 0) {
+      break;
+
+      case BS_XML_INFORMAL_PROTOCOL: {
         protocol_name = get_attribute_and_check(reader, "name");
       }
-      else if (strcmp("function", name) == 0) {
+      break;
+
+      case BS_XML_FUNCTION: {
         char *  func_name;
         char *  return_type;
         
@@ -1054,7 +1070,9 @@ osx_load_bridge_support_file (VALUE mOSX, VALUE path)
 
         func->argc = 0;
       }
-      else if (strcmp("function_arg", name) == 0) {
+      break;
+
+      case BS_XML_FUNCTION_ARG: {
         if (func == NULL) {
           DLOG("MDLOSX", "Function argument defined outside a function, skipping...");
         }
@@ -1072,7 +1090,9 @@ osx_load_bridge_support_file (VALUE mOSX, VALUE path)
           func_args[func->argc++] = type;
         }
       }
-      else if (strcmp("class", name) == 0) {
+      break;
+
+      case BS_XML_CLASS: {
         char *  class_name;
         
         class_name = get_attribute_and_check(reader, "name");
@@ -1091,7 +1111,9 @@ osx_load_bridge_support_file (VALUE mOSX, VALUE path)
           st_insert(bsClasses, (st_data_t)class_name, (st_data_t)klass);
         }
       }
-      else if (strcmp("method_arg", name) == 0) {
+      break;
+
+      case BS_XML_METHOD_ARG: {
         if (method == NULL) {
           DLOG("MDLOSX", "Method argument defined outside a method, skipping...");
         }
@@ -1122,7 +1144,9 @@ osx_load_bridge_support_file (VALUE mOSX, VALUE path)
           get_c_ary_type_attribute(reader, &arg->c_ary_type, &arg->c_ary_type_value); 
         }
       }
-      else if (strcmp("method_retval", name) == 0) {
+      break;
+
+      case BS_XML_METHOD_RETVAL: {
         if (method == NULL) {
           DLOG("MDLOSX", "Method return value defined outside a method, skipping...");
         }
@@ -1147,7 +1171,9 @@ osx_load_bridge_support_file (VALUE mOSX, VALUE path)
           }
         }
       }
-      else if (strcmp("method", name) == 0) {
+      break;
+
+      case BS_XML_METHOD: {
         if (protocol_name != NULL) {
           char * selector;
           BOOL   is_class_method;
@@ -1205,14 +1231,24 @@ osx_load_bridge_support_file (VALUE mOSX, VALUE path)
           method->argc = 0;
           method->argv = NULL;
           method->retval = NULL;
-       }
+        }
       }
+      break;
+
+      default: break; // Do nothing.
+      } // End of switch. 
     }
     else if (node_type == XML_READER_TYPE_END_ELEMENT) {
-      if (strcmp("informal_protocol", name) == 0) {
+      atom = bs_xml_element(name, namelen);
+      if (atom == NULL)
+        continue;
+      switch (atom->val) {
+      case BS_XML_INFORMAL_PROTOCOL: {
         protocol_name = NULL;
-      } 
-      else if (strcmp("function", name) == 0) {
+      }
+      break;
+
+      case BS_XML_FUNCTION: { 
         BOOL all_args_ok;
   
         all_args_ok = YES;
@@ -1244,7 +1280,9 @@ osx_load_bridge_support_file (VALUE mOSX, VALUE path)
 
         func = NULL;
       }
-      else if (strcmp("method", name) == 0) {
+      break;
+
+      case BS_XML_METHOD: {
         if (method->argc > 0) {
           size_t len;
     
@@ -1256,9 +1294,15 @@ osx_load_bridge_support_file (VALUE mOSX, VALUE path)
 
         method = NULL;
       }
-      else if (strcmp("class", name) == 0) {
+      break;
+
+      case BS_XML_CLASS: {
         klass = NULL;
       }
+      break;
+
+      default: break; // Do nothing.
+      } // End of switch.
     }
   }
 
