@@ -24,19 +24,26 @@ module OSX
   end
 
   def OSX.require_framework(framework)
-    if framework[0] == ?/
-      OSX::NSBundle.bundleWithPath(framework).load
-      load_bridge_support_signatures(framework)
+    bundle, path = if framework[0] == ?/
+      [OSX::NSBundle.bundleWithPath(framework), framework]
     else
-      FRAMEWORK_PATHS.each do |dir|
-        path = File.join(dir, "#{framework}.framework")
-        if File.exists?(path)
-          OSX::NSBundle.bundleWithPath(path).load
-          return load_bridge_support_signatures(framework)
-        end
-      end
-      return false
+      FRAMEWORK_PATHS.map { |dir| 
+        File.join(dir, "#{framework}.framework") 
+      }.select { |path|
+        File.exists?(path)
+      }.map { |path|
+        [OSX::NSBundle.bundleWithPath(path), path]
+      }.flatten
     end
+
+    unless bundle.nil?
+      return false if bundle.isLoaded
+      if bundle.load
+        load_bridge_support_signatures(framework)
+        return true
+      end
+    end
+    raise LoadError, "Can't locate framework '#{framework}'"
   end
 
   def OSX.load_bridge_support_signatures(framework)
@@ -73,7 +80,7 @@ module OSX
     end
 
     # Damnit!
-    STDERR.puts "Can't find signatures file for #{framework}"
+    STDERR.puts "Can't find signatures file for #{framework}" if $VERBOSE
     return false
   end
 

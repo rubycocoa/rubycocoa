@@ -1,3 +1,10 @@
+2006-11-19  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* framework/src/ruby/osx/objc/oc_import.rb,
+	  framework/src/objc/BridgeSupport.m:
+	- Better OSX.require_framework method ;
+	- Do not create enum constants if already defined.
+
 2006-11-18  Laurent Sansonetti <lsansonetti@apple.com>
 
 	* framework/src/objc/BridgeSupportLexer.h,
