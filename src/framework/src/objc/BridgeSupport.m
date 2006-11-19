@@ -988,17 +988,23 @@ osx_load_bridge_support_file (VALUE mOSX, VALUE path)
 
       case BS_XML_ENUM: { 
         char *  enum_name;
-        char *  enum_value;        
-        VALUE   value;
 
         enum_name = get_attribute_and_check(reader, "name");
-        enum_value = get_attribute_and_check(reader, "value");
+        if (rb_const_defined(mOSX, rb_intern(enum_name))) {
+          DLOG("MDLOSX", "Enum '%s' already registered, skipping...", enum_name);
+        }
+        else {
+          char *  enum_value;        
+          VALUE   value;
 
-        value = rb_cstr_to_inum(enum_value, 16, 1);
-        rb_define_const(mOSX, enum_name, value);
+          enum_value = get_attribute_and_check(reader, "value");
 
+          value = rb_cstr_to_inum(enum_value, 16, 1);
+          rb_define_const(mOSX, enum_name, value);
+
+          free (enum_value);
+        }
         free (enum_name);
-        free (enum_value);
       }
       break;
 
