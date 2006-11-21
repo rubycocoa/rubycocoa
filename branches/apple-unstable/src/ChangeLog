@@ -1,3 +1,9 @@
+2006-11-21  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* framework/src/objc/BridgeSupport.m,
+	  framework/tool/gen_bridge_metadata.rb:
+	Better metadata enum value formats (thanks to Ronald Oussoren).
+
 2006-11-19  Laurent Sansonetti <lsansonetti@apple.com>
 
 	* framework/src/ruby/osx/objc/oc_import.rb,

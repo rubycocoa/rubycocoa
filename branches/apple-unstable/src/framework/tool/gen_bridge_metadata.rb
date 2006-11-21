@@ -325,7 +325,7 @@ class BridgeSupportGenerator
 
   def collect_enums
     @resolved_enums ||= {} 
-    lines = @enums.map { |x| "printf(\"%s: %p\\n\", \"#{x}\", #{x});" }
+    lines = @enums.map { |x| "printf(\"%s: %u\\n\", \"#{x}\", #{x});" }
     code = <<EOS
 #{@import_directive}
 
@@ -347,21 +347,45 @@ EOS
 #{@import_directive}
 #import <objc/objc-class.h>
 
-static int 
-is_numeric (const char *str)
+/* Tiger compat */
+#ifndef _C_ULNG_LNG
+#define _C_ULNG_LNG 'Q'
+#endif
+
+#ifndef _C_LNG_LNG
+#define _C_LNG_LNG 'q'
+#endif
+
+static const char * 
+printf_format (const char *str)
 {
-  return str != NULL && strlen(str) == 1 && (*str == _C_INT || *str == _C_UINT || *str == _C_SHT || *str == _C_USHT || *str == _C_FLT || *str == _C_DBL || *str == _C_LNG || *str == _C_ULNG || *str == _C_CHR || *str == _C_UCHR || *str == _C_LNG_LNG || *str == _C_ULNG_LNG);
+  if (str == NULL || strlen(str) != 1)
+    return NULL;
+  switch (*str) {
+    case _C_SHT: return "%s: %hd\\n";
+    case _C_USHT: return "%s: %hu\\n";
+    case _C_INT: return "%s: %d\\n";
+    case _C_UINT: return "%s: %u\\n";
+    case _C_LNG: return "%s: %ld\\n";
+    case _C_ULNG: return "%s: %lu\\n";
+    case _C_LNG_LNG: return "%s: %lld\\n";
+    case _C_ULNG_LNG: return "%s: %llu\\n";
+    case _C_FLT: return "%s: %f\\n";
+    case _C_DBL: return "%s: %lf\\n";
+  }
+  return NULL;
 }
 
 int main (void) 
 {
+    char *fmt;
     PRINTF_LINE_HERE 
     return 0;
 }
 EOS
     @defines.each do |name, value|
       next if name.strip[0] == ?_
-      line = "if (is_numeric(@encode(__typeof__(#{value})))) printf(\"%s: %p\\n\", \"#{name}\", #{value});"
+      line = "if ((fmt = printf_format(@encode(__typeof__(#{value})))) != NULL) printf(fmt, \"#{name}\", #{value});"
       begin
         name, value = compile_and_execute_code(code.sub(/PRINTF_LINE_HERE/, line)).split(':')
         @resolved_enums[name.strip] = value.strip
