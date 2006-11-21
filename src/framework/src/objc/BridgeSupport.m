@@ -998,8 +998,9 @@ osx_load_bridge_support_file (VALUE mOSX, VALUE path)
           VALUE   value;
 
           enum_value = get_attribute_and_check(reader, "value");
-
-          value = rb_cstr_to_inum(enum_value, 16, 1);
+          value = strchr(enum_value, '.') != NULL
+            ? rb_float_new(rb_cstr_to_dbl(enum_value, 1))
+            : rb_cstr_to_inum(enum_value, 10, 1); 
           rb_define_const(mOSX, enum_name, value);
 
           free (enum_value);
