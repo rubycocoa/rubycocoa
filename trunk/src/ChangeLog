@@ -3,6 +3,9 @@
 	* framework/GeneratedConfig.xcconfig.in, pre-config.rb:
 	fix LDFLAGS for libruby, ppc mac cannot build universal binary.
 
+	* VERSION:
+	0.5.0-preview7
+
 2006-11-16  kimura wataru <kimuraw@i.nifty.jp>
 
 	* framework/src/objc/cocoa/init_cocoa.m:
