@@ -54,8 +54,12 @@ config_ary << [ :other_cflags, cflags ]
 config_ary << [ :other_ldflags, ldflags ]
 
 if /\.a\Z/ =~ @config['libruby-path'] 
+  # libruby-static.a: static library
+  config_ary << [ :libruby_ldflags, @config['libruby-path']  ]
   config_ary << [ :generate_master_object_file, 'YES' ]
 else
+  # libruby.dylib: dynamic library
+  config_ary << [ :libruby_ldflags, '-lruby'  ]
   config_ary << [ :generate_master_object_file, 'NO' ]
 end
 
