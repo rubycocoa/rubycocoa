@@ -104,4 +104,14 @@ class TC_Types < Test::Unit::TestCase
         assert_equal(42, range.location)
         assert_equal(43, range.length)
     end
+
+    def test_bool_nsnumber
+        d = OSX::NSMutableDictionary.alloc.init
+        d.setValue_forKey(true, 'true')
+        d.setValue_forKey(false, 'false')
+        d.setValue_forKey(123, '123')
+        assert_kind_of(OSX::NSCFBoolean, d.objectForKey('true'))
+        assert_kind_of(OSX::NSCFBoolean, d.objectForKey('false'))
+        assert_kind_of(OSX::NSDecimalNumber, d.objectForKey('123'))
+    end
 end

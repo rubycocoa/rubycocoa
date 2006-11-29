@@ -335,6 +335,12 @@ static BOOL rbhash_to_nsdic(VALUE rbhash, id* nsdic)
   return YES;
 }
 
+static BOOL rbbool_to_nsnum(VALUE rbval, id* nsval)
+{
+  *nsval = [NSNumber numberWithBool:RTEST(rbval)];
+  return YES;
+}
+
 static BOOL rbnum_to_nsnum(VALUE rbval, id* nsval)
 {
   BOOL result;
@@ -369,7 +375,11 @@ static BOOL rbobj_convert_to_nsobj(VALUE obj, id* nsobj)
 
   case T_HASH:
     return  rbhash_to_nsdic(obj, nsobj);
-    
+
+  case T_TRUE:
+  case T_FALSE:
+    return rbbool_to_nsnum(obj, nsobj);     
+
   case T_FIXNUM:
   case T_BIGNUM:
   case T_FLOAT:
@@ -381,8 +391,6 @@ static BOOL rbobj_convert_to_nsobj(VALUE obj, id* nsobj)
   case T_REGEXP:
   case T_STRUCT:
   case T_FILE:
-  case T_TRUE:
-  case T_FALSE:
   case RB_T_DATA:
   default:
     *nsobj = [[[RBObject alloc] initWithRubyObject: obj] autorelease];
@@ -608,11 +616,14 @@ rbobj_to_ocdata(VALUE obj, int octype, void* ocdata, BOOL to_libffi)
   }
 #endif
 
-  if (TYPE(obj) == T_TRUE) {
-    obj = INT2NUM(1);
-  }
-  else if (TYPE(obj) == T_FALSE) {
-    obj = INT2NUM(0);
+  // Make sure we convert booleans to NSNumber booleans.
+  if (octype != _C_ID) {
+    if (TYPE(obj) == T_TRUE) {
+      obj = INT2NUM(1);
+    }
+    else if (TYPE(obj) == T_FALSE) {
+      obj = INT2NUM(0);
+    }
   }
 
   switch (octype) {

@@ -1,3 +1,9 @@
+2006-11-29  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* framework/src/objc/ocdata_conv.m,
+	  tests/tc_types.rb:
+	Make sure Ruby booleans are converted to real NSNumber booleans.
+
 2006-11-21  Laurent Sansonetti <lsansonetti@apple.com>
 
 	* framework/src/objc/BridgeSupport.m,
