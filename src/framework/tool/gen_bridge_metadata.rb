@@ -724,16 +724,22 @@ EOS
     path = framework_path(val)                
     die "Can't find framework '#{val}'" if path.nil?
     parent_path, name = path.scan(/^(.+)\/(\w+)\.framework$/)[0]
-    headers = File.join(path, 'Headers')
-    die "Can't locate framework headers at '#{headers}'" unless File.exists?(headers)
-    @headers.concat(Dir.glob(File.join(headers, '**', '*.h')))
+    headers_path = File.join(path, 'Headers')
+    die "Can't locate framework headers at '#{headers}'" unless File.exists?(headers_path)
+    headers = Dir.glob(File.join(headers_path, '**', '*.h'))
     libpath = File.join(path, name)
     die "Can't locate framework library at '#{libpath}'" unless File.exists?(libpath)
     OBJC.dlload(libpath)
     # We can't just "#import <x/x.h>" as the main Framework header might not include _all_ headers.
     # So we are tricking this by importing the main header first, then all headers.
-    @import_directive = @headers.map { |x| "#import <#{name}/#{File.basename(x)}>" }.insert(0, "#import <#{name}/#{name}.h>").join("\n")
+    header_basenames = headers.map { |x| File.basename(x) }
+    if idx = header_basenames.index("#{name}.h")
+      header_basenames.delete_at(idx)
+      header_basenames.unshift("#{name}.h")
+    end
+    @import_directive = header_basenames.map { |x| "#import <#{name}/#{File.basename(x)}>" }.join("\n")
     @compiler_flags = "-F#{parent_path} -framework #{name} -framework Foundation"
+    @headers.concat(headers)
   end
  
   def framework_path(val)
