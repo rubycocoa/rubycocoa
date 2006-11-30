@@ -1,3 +1,8 @@
+2006-11-30  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* framework/tool/gen_bridge_metadata.rb:
+	Fix template generator (thanks to Ronald Oussoren).
+
 2006-11-29  Laurent Sansonetti <lsansonetti@apple.com>
 
 	* framework/src/objc/ocdata_conv.m,
