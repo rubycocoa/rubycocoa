@@ -1,8 +1,11 @@
 2006-11-30  Laurent Sansonetti <lsansonetti@apple.com>
 
 	* framework/tool/gen_bridge_metadata.rb:
-	- Fix template generator (thanks to Ronald Oussoren) ;
-	- Properly deal with methods defined in more than one line.
+	- Fix template generator ;
+	- Properly deal with methods defined in more than one line ;
+	- Properly deal with frameworks that don't have a central header, such as 
+	  Message.framework.
+	Thanks to Ronald Oussoren.
 
 2006-11-29  Laurent Sansonetti <lsansonetti@apple.com>
 
