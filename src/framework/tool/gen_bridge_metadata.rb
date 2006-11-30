@@ -232,8 +232,8 @@ class OCHeaderAnalyzer
         !OBJC.is_objc_class?(md[1])
       elsif md = /^([^*]+)(\*+)$/.match(rettype)
         type, refkind = md[1], md[2]
-        return false if type.nil? or refkind.nil?
-        refkind == (@skip_objc_lookup_types.include?(type) or !OBJC.is_objc_class?(type)) ? '*' : '**'
+        return false if (type.nil? or refkind.nil?)
+        refkind == ((@skip_objc_lookup_types.include?(type) or !OBJC.is_objc_class?(type)) ? '*' : '**')
       else
         false
       end
