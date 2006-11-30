@@ -103,10 +103,12 @@ class OCHeaderAnalyzer
       interface_re = /^@(interface|protocol)\s+(\w+)/
       end_re = /^@end/
       body_re = /^[-+]\s*(\([^)]+\))?\s*([^:\s;]+)/
-      args_re = /(\w+)\s*\:\s*(\([^)]+\))?\s*\w+/
+      args_re = /(\w+)\s*\:\s*(\([^)]+\))?\s*[^\s]+/m
       current_interface = nil
-      @ocmethods = {} 
+      @ocmethods = {}
+      i = 0
       @cpp_result.each_line do |line|
+        size = line.size
         line.strip!
         if md = interface_re.match(line)
           current_interface = md[2]
@@ -114,12 +116,15 @@ class OCHeaderAnalyzer
           current_interface = nil
         elsif current_interface and (line[0] == ?+ or line[0] == ?-)
           mtype = line[0]
-          body_md = body_re.match(line)
+          data = @cpp_result[i..-1]
+          body_md = body_re.match(data)
+          next if body_md.nil?
           rettype = body_md[1] ? body_md[1].delete('()') : 'id'
           retval = VarInfo.new(rettype, '', '')
           args = []
           selector = ''
-          line.scan(args_re).each do |ary|
+          data = data[0..data.index(';')]
+          data.scan(args_re).each do |ary|
             argname, argtype = ary
             selector << argname << ':'
             if argtype
@@ -129,6 +134,7 @@ class OCHeaderAnalyzer
           selector = body_md[2] if selector.empty? 
           (@ocmethods[current_interface] ||= []) << MethodInfo.new(retval, selector, line[0] == ?+, args, line)
         end
+        i += size
       end
     end
     return @ocmethods
