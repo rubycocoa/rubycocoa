@@ -1,5 +1,8 @@
 2006-11-30  Laurent Sansonetti <lsansonetti@apple.com>
 
+	* framework/src/objc/BridgeSupport.m:
+	Make sure constants names from metadata are capitalized before used.
+
 	* framework/tool/gen_bridge_metadata.rb:
 	- Fix template generator ;
 	- Properly deal with methods defined in more than one line ;
