@@ -38,6 +38,13 @@ struct bsFunction *current_function = NULL;
 #define ASSERT_ALLOC(x) do { if (x == NULL) rb_fatal("can't allocate memory"); } while (0)
 #define MAX_ENCODE_LEN 1024
 
+#define CAPITALIZE(x)         \
+  do {                        \
+    if (islower(x[0]))        \
+      x[0] = toupper(x[0]);   \
+  }                           \
+  while (0)
+
 // struct proxies octype constants, each proxy has a unique octype, starting at a given threshold. 
 static int bs_struct_octype_idx = BS_STRUCT_OCTYPE_THRESHOLD + 1;
 
@@ -130,6 +137,9 @@ get_attribute_and_check(xmlTextReaderPtr reader, const char *name)
   attribute = get_attribute(reader, name); 
   if (attribute == NULL)
     rb_raise(rb_eRuntimeError, "expected attribute `%s' for element `%s'", name, xmlTextReaderConstName(reader));
+
+  if (strlen(name) == 0)
+    rb_raise(rb_eRuntimeError, "empty attribute `%s' for element `%s'", name, xmlTextReaderConstName(reader));
 
   return attribute;
 }
@@ -963,6 +973,7 @@ osx_load_bridge_support_file (VALUE mOSX, VALUE path)
         char *  const_name;
         
         const_name = get_attribute_and_check(reader, "name");
+        CAPITALIZE(const_name);
 
         if (st_lookup(bsConstants, (st_data_t)const_name, NULL)) {
           DLOG("MDLOSX", "Constant '%s' already registered, skipping...", const_name);
@@ -1001,6 +1012,7 @@ osx_load_bridge_support_file (VALUE mOSX, VALUE path)
           value = strchr(enum_value, '.') != NULL
             ? rb_float_new(rb_cstr_to_dbl(enum_value, 1))
             : rb_cstr_to_inum(enum_value, 10, 1); 
+          CAPITALIZE(enum_name);
           rb_define_const(mOSX, enum_name, value);
 
           free (enum_value);
