@@ -56,7 +56,7 @@ class TC_OCObjWrapper < Test::Unit::TestCase
     url2 = NSURL.alloc.initWithScheme_host_path('http', 'localhost', '/foo') 
     assert_equal(true, url1.isEqual(url2)) 
     # No need to check for symbol/value/... and inline Hash syntaxes, as they are deprecated.
-    # However we should check that an exception is raised (as if relaxted_syntax as false) for
+    # However we should check that an exception is raised (as if relaxed_syntax was false) for
     # the 1.0.0 release.
     OSX.relaxed_syntax = false 
     url5 = NSURL.alloc.initWithScheme_host_path_('http', 'localhost', '/foo') 
