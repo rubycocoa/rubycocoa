@@ -22,9 +22,7 @@ class ExceptionTest < OSX::RBExceptionTestBase
   end
 
   def ns_raise
-    @exception = OSX::NSException.exceptionWithName("ns_raise_name",
-                                           :reason,"ns_raise_reason",
-                                           :userInfo,nil)
+    @exception = OSX::NSException.exceptionWithName_reason_userInfo("ns_raise_name", "ns_raise_reason", nil)
     @exception.raise
   end
 

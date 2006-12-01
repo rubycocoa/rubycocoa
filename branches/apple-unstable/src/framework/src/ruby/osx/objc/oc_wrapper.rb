@@ -67,8 +67,9 @@ module OSX
       # check call style
       #   as Objective-C: [self aaa: a0 Bbb: a1 Ccc: a2]
       #   as Ruby:   self.aaa_Bbb_Ccc_ (a0, a1, a2)
-      # check relaxed call styles (only if OSX.relaxed_syntax == true)
+      # only if OSX.relaxed_syntax == true, check missing final underscore
       #   as Ruby:   self.aaa_Bbb_Ccc (a0, a1, a2)
+      # other syntaxes are now deprecated
       #   as Ruby:   self.aaa (a0, :Bbb, a1, :Ccc, a2)
       #   as Ruby:   self.aaa (a0, :Bbb => a1, :Ccc => a2)
       if OSX.relaxed_syntax
@@ -97,6 +98,7 @@ module OSX
           end
           m_name = "#{mname}_"
           m_args = args
+          STDERR.puts "#{caller[1]}: inline Hash dispatch syntax is deprecated and its use is discouraged, please use '#{m_name}' instead."
         elsif (m_args.size >= 3) && ((m_args.size % 2) == 1) && (not m_name.include?('_')) then
           # Parse the symbol-value-symbol-value-... case.
           mname = m_name.dup
@@ -109,6 +111,7 @@ module OSX
             end
           end
           m_name = "#{mname}_"
+          STDERR.puts "#{caller[1]}: symbol-value-... dispatch syntax is deprecated and its use is discouraged, please use '#{m_name}' instead."
           m_args = args
         else
           m_name.sub!(/[^_:]$/, '\0_') if m_args.size > 0
