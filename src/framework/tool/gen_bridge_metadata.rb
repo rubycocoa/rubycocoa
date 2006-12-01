@@ -44,13 +44,18 @@ class OCHeaderAnalyzer
     @enums ||= @cpp_result.scan(re).map { |m|
       m[0].split(',').map { |i|
         i.split('=')[0].strip
-      }.delete_if { |i| i == "" }
+      }.delete_if { |i| i.empty? or i[0] == ?# }
     }.flatten.uniq
   end
 
   def defines
     re = /#define\s+([^\s]+)\s+([^\s]+)\s*$/
     @defines ||= File.read(@path).scan(re)
+  end
+
+  def struct_names
+    re = /typedef\s+struct\s*\w*\s*((\w+)|\{([^{}]*(\{[^}]+\})?)*\}\s*([^\s]+))\s*;/ # Ouch... 
+    @struct_names ||= @cpp_result.scan(re).map { |m| m.compact[-1] }.flatten
   end
 
   def externs
@@ -510,6 +515,9 @@ EOS
 
     if @generate_exception_template
       # Generate the exception template file.
+      @struct_names.each do |struct_name|
+        root.add_element('struct').add_attribute('name', struct_name)
+      end
       @ocmethods.each do |class_name, methods|
         method_elements = []
         methods.each do |method|
@@ -631,6 +639,7 @@ EOS
     @constants = [] 
     @enums = [] 
     @defines = []
+    @struct_names = []
     @inf_protocols = [] 
     @ocmethods = {}
     @headers.each do |path|
@@ -640,10 +649,12 @@ EOS
       @constants.concat(analyzer.constants)
       @enums.concat(analyzer.enums)
       @defines.concat(analyzer.defines)
+      @struct_names.concat(analyzer.struct_names)
       @ocmethods.merge!(analyzer.ocmethods) { |key, old, new| old.concat(new) }
       list = analyzer.informal_protocols['NSObject']
       @inf_protocols.concat(list) unless list.nil? 
     end
+    @struct_names.uniq!
   end
  
   def parse_args(args)
@@ -676,6 +687,10 @@ EOS
         @generate_exception_template = opt == 'excp-templ-md' 
       end
 
+      opts.on('-c', '--compiler-flags FLAGS', 'Specify custom compiler flags (by default, "-F... -framework ...")') do |flags|
+        @compiler_flags = flags
+      end
+
       opts.on('-h', '--help', 'Show this message') do
         puts opts
         exit
@@ -706,6 +721,11 @@ EOS
       end
     end
 
+    # Link against Foundation by default.
+    if @compiler_flags and @import_directive 
+      @import_directive.insert(0, "#import <Foundation/Foundation.h>\n")
+      @compiler_flags << ' -framework Foundation '
+    end
     # Open exceptions, ignore mentionned headers.
     @exceptions.map! { |x| REXML::Document.new(File.read(x)) }
     @exceptions.each do |doc|
@@ -738,7 +758,7 @@ EOS
       header_basenames.unshift("#{name}.h")
     end
     @import_directive = header_basenames.map { |x| "#import <#{name}/#{File.basename(x)}>" }.join("\n")
-    @compiler_flags = "-F#{parent_path} -framework #{name} -framework Foundation"
+    @compiler_flags ||= "-F#{parent_path} -framework #{name}"
     @headers.concat(headers)
   end
  

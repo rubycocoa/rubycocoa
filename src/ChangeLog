@@ -1,5 +1,11 @@
 2006-12-01  Laurent Sansonetti <lsansonetti@apple.com>
 
+	* framework/tool/gen_bridge_metadata.rb:
+	- Added the possibility to specify the compiler flags instead of using the
+	  default one (necessary to wrap CoreGraphics) ;
+	- Templates now contain the list of C structures found in the given headers ;
+	- Misc fixes.
+
 	* framework/src/ruby/osx/objc/oc_wrapper.rb,
 	  tests/tc_exception.rb,
 	  tests/tc_wrapper.rb:
