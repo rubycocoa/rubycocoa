@@ -1,3 +1,12 @@
+2006-12-01  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* framework/src/ruby/osx/objc/oc_wrapper.rb,
+	  tests/tc_exception.rb,
+	  tests/tc_wrapper.rb:
+	Deprecated symbol/value/... and inline Hash dispatching syntaxes. A warning
+	is now printed when those syntaxes are used, but it will be replaced by an
+	exception for the final 1.0.0 release.
+
 2006-11-30  Laurent Sansonetti <lsansonetti@apple.com>
 
 	* framework/src/objc/BridgeSupport.m:
