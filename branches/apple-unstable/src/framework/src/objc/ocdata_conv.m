@@ -71,7 +71,7 @@ to_octype(const char* octype_str)
   oct = *octype_str;
 
   // Handle structures.
-  if (octype_str[0] == '{' && octype_str[1] == '_') {
+  if (octype_str[0] == '{') {
     struct bsStruct *bs_struct;
 
     bs_struct = find_bs_struct_by_encoding(octype_str);

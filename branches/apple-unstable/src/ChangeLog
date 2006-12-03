@@ -1,5 +1,9 @@
 2006-12-03  Laurent Sansonetti <lsansonetti@apple.com>
 
+	* framework/src/objc/ocdata_conv.m (to_octype):
+	Don't check if the second char is '_' to handle structures, as it's not 
+	mandatory at all.
+
 	* framework/src/ruby/osx/objc/oc_import.rb:
 	Don't try to do the Object::inherited class replacement for classes that
 	inherit from OSX::Boxed (e.g. C structures proxies).
