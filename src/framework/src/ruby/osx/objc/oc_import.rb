@@ -468,7 +468,7 @@ class Object
     alias __before_osx_inherited inherited
     def inherited(subklass)
       klassname = subklass.name
-      if /\AOSX::/ =~ klassname && klassname.split(/::/).size == 2
+      if /\AOSX::/ =~ klassname && klassname.split(/::/).size == 2 && subklass.superclass != OSX::Boxed
    nsklass = klassname.split(/::/)[1]
    # remove Ruby's class
    OSX.instance_eval { remove_const nsklass.intern }
