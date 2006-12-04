@@ -433,9 +433,13 @@ EOS
     @resolved_structs ||= {}
     ivar_st = []
     log_st = []
-    lines = @structs.each do |name|
-      ivar_st << "#{name} a#{name};"
-      log_st << "printf(\"%s: %s: %ld\\n\", \"#{name}\", class_getInstanceVariable(klass, \"a#{name}\")->ivar_type, sizeof(#{name}));"
+    @structs.each do |name, is_opaque|
+      if is_opaque
+        log_st << "printf(\"%s: %s\\n\", \"#{name}\", @encode(#{name}));"
+      else
+        ivar_st << "#{name} a#{name};"
+        log_st << "printf(\"%s: %s\\n\", \"#{name}\", class_getInstanceVariable(klass, \"a#{name}\")->ivar_type);"
+      end
     end
     code = <<EOS
 #{@import_directive}
@@ -458,8 +462,8 @@ int main (void)
 }
 EOS
     compile_and_execute_code(code).split("\n").each do |line|
-      name, value, size = line.split(':')
-      @resolved_structs[name.strip] = [value.strip, size.strip]
+      name, value = line.split(':')
+      @resolved_structs[name.strip] = value.strip
     end
   end
 
@@ -544,11 +548,9 @@ EOS
       end
     else
       # Generate the final metadata file.
-      @resolved_structs.each do |name, ary|
-        encoding, size = ary
+      @resolved_structs.each do |name, encoding|
         element = root.add_element('struct')
         element.add_attribute('name', name)
-        element.add_attribute('size', size)
         element.add_attribute('encoding', encoding)
       end
       @constants.each do |constant| 
@@ -683,8 +685,9 @@ EOS
         @exceptions << opt
       end
 
-      opts.on('-F', '--format FORMAT', ['final-md', 'excp-templ-md'], {}, "Select metadata format ('final-md' (default), 'excp-templ-md')") do |opt|
-        @generate_exception_template = opt == 'excp-templ-md' 
+      formats = ['final', 'exception-template']
+      opts.on('-F', '--format FORMAT', formats, {}, "Select metadata format ('#{formats.first}' (default), '#{formats.last}')") do |opt|
+        @generate_exception_template = opt == formats.last 
       end
 
       opts.on('-c', '--compiler-flags FLAGS', 'Specify custom compiler flags (by default, "-F... -framework ...")') do |flags|
@@ -737,7 +740,11 @@ EOS
       end
     end
     # Keep the list of structs.
-    @structs = @exceptions.map { |doc| doc.get_elements('/signatures/struct').map { |x| x.attributes['name'] } }.flatten
+    @structs = @exceptions.map do |doc| 
+      doc.get_elements('/signatures/struct').map do |elem|
+        [elem.attributes['name'], elem.attributes['opaque'] == 'true']
+      end
+    end.first
   end
   
   def handle_framework(val)
