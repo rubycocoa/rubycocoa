@@ -58,6 +58,11 @@ class OCHeaderAnalyzer
     @struct_names ||= @cpp_result.scan(re).map { |m| m.compact[-1] }.flatten
   end
 
+  def cftype_names
+    re = /typedef\s+(const\s+)?struct\s*\w+\s*\*\s*([^\s]+Ref)\s*;/
+    @cftype_names ||= @cpp_result.scan(re).map { |m| m.compact[-1] }.flatten
+  end
+
   def externs
     re = /^#{@externname}\s+\b(.*);.*$/
     @externs ||= @cpp_result.scan(re).map { |m| m[0].strip }
@@ -411,6 +416,7 @@ EOS
 
   def collect_types_encoding
     @types_encoding ||= {}
+    @resolved_cftypes ||= [] 
     lines = OCHeaderAnalyzer::ALL_STRIPPED_TYPES.uniq.map do |type|
       "printf(\"%s: %s\\n\", \"#{type}\", @encode(#{type}));"
     end
@@ -425,8 +431,14 @@ int main (void)
 EOS
     compile_and_execute_code(code).split("\n").each do |line|
       name, value = line.split(':')
-      @types_encoding[name.strip] = value.strip
+      name.strip!
+      value.strip!
+      if /Ref$/.match(name) and /^\^\{/.match(value)
+        @resolved_cftypes << value
+      end
+      @types_encoding[name] = value
     end
+    @resolved_cftypes.uniq!
   end
 
   def collect_structs_encoding
@@ -553,6 +565,10 @@ EOS
         element.add_attribute('name', name)
         element.add_attribute('encoding', encoding)
       end
+      @resolved_cftypes.each do |encoding|
+        element = root.add_element('cftype')
+        element.add_attribute('encoding', encoding)
+      end
       @constants.each do |constant| 
         element = root.add_element('constant')
         element.add_attribute('name', constant.name)
@@ -642,6 +658,7 @@ EOS
     @enums = [] 
     @defines = []
     @struct_names = []
+    @cftype_names = []
     @inf_protocols = [] 
     @ocmethods = {}
     @headers.each do |path|
@@ -652,6 +669,7 @@ EOS
       @enums.concat(analyzer.enums)
       @defines.concat(analyzer.defines)
       @struct_names.concat(analyzer.struct_names)
+      @cftype_names.concat(analyzer.cftype_names)
       @ocmethods.merge!(analyzer.ocmethods) { |key, old, new| old.concat(new) }
       list = analyzer.informal_protocols['NSObject']
       @inf_protocols.concat(list) unless list.nil? 
@@ -745,6 +763,7 @@ EOS
         [elem.attributes['name'], elem.attributes['opaque'] == 'true']
       end
     end.first
+    @structs ||= []
   end
   
   def handle_framework(val)

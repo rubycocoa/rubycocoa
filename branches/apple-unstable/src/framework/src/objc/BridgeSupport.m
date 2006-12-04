@@ -27,6 +27,7 @@ static ID ivarEncodingID;
 static struct st_table *bsStructs;     // struct encoding -> struct bsStruct
 static struct st_table *bsStructs2;    // struct octype -> struct bsStruct
 static struct st_table *bsStructs3;    // struct name -> struct bsStruct
+static struct st_table *bsCFTypes;     // encoding -> struct bsCFType
 static struct st_table *bsFunctions;   // function name -> struct bsFunction
 static struct st_table *bsConstants;   // constant name -> type
 static struct st_table *bsClasses;     // class name -> struct bsClass
@@ -42,6 +43,13 @@ struct bsFunction *current_function = NULL;
   do {                        \
     if (islower(x[0]))        \
       x[0] = toupper(x[0]);   \
+  }                           \
+  while (0)
+
+#define DECAPITALIZE(x)       \
+  do {                        \
+    if (isupper(x[0]))        \
+      x[0] = tolower(x[0]);   \
   }                           \
   while (0)
 
@@ -997,7 +1005,6 @@ osx_load_bridge_support_file (VALUE mOSX, VALUE path)
         char *  const_name;
         
         const_name = get_attribute_and_check(reader, "name");
-        CAPITALIZE(const_name);
 
         if (st_lookup(bsConstants, (st_data_t)const_name, NULL)) {
           DLOG("MDLOSX", "Constant '%s' already registered, skipping...", const_name);
@@ -1075,6 +1082,25 @@ osx_load_bridge_support_file (VALUE mOSX, VALUE path)
       }
       break;
 
+      case BS_XML_CFTYPE: {
+        char *typeid_encoding;
+
+        typeid_encoding = get_attribute_and_check(reader, "encoding");
+        if (st_lookup(bsCFTypes, (st_data_t)typeid_encoding, NULL)) {
+          DLOG("MDLOSX", "CFType with encoding '%s' already defined -- skipping...", typeid_encoding);
+          free(typeid_encoding);
+        }
+        else {
+          struct bsCFType *bs_cf_type;
+
+          bs_cf_type = (struct bsCFType *)malloc(sizeof(struct bsCFType));
+          ASSERT_ALLOC(bs_cf_type);
+
+          st_insert(bsCFTypes, (st_data_t)typeid_encoding, (st_data_t)bs_cf_type); 
+        }
+      }
+      break;
+
       case BS_XML_INFORMAL_PROTOCOL: {
         protocol_name = get_attribute_and_check(reader, "name");
       }
@@ -1101,7 +1127,7 @@ osx_load_bridge_support_file (VALUE mOSX, VALUE path)
 
         return_type = get_attribute(reader, "returns");
         if (return_type != NULL) {
-          func->retval = to_octype(return_type);
+          func->retval = find_bs_cf_type(return_type) ? _C_ID : to_octype(return_type);
           free(return_type);
         }
         else {
@@ -1124,7 +1150,7 @@ osx_load_bridge_support_file (VALUE mOSX, VALUE path)
           int     type;
         
           arg_type = get_attribute_and_check(reader, "type");
-          type = to_octype(arg_type);
+          type = find_bs_cf_type(arg_type) ? _C_ID : to_octype(arg_type);
           free (arg_type);
         
           func_args[func->argc++] = type;
@@ -1366,23 +1392,36 @@ static VALUE
 osx_import_c_constant (VALUE self, VALUE sym)
 {
   const char *  name;
+  char *        real_name;
   int           octype;
   void *        cvalue;
   VALUE         value;
   
   name = rb_id2name(SYM2ID(sym));
-  if (!st_lookup(bsConstants, (st_data_t)name, (st_data_t *)&octype))
-    rb_raise(rb_eLoadError, "C constant '%s' not found", name);
+  real_name = (char *)name;
+  if (!st_lookup(bsConstants, (st_data_t)name, (st_data_t *)&octype)) {
+    // Decapitalize the string and try again.
+    real_name = strdup(name);
+    DECAPITALIZE(real_name);
+    if (!st_lookup(bsConstants, (st_data_t)real_name, (st_data_t *)&octype)) {
+      free(real_name);
+      rb_raise(rb_eLoadError, "C constant '%s' not found", name);
+    }
+  }
 
-  cvalue = dlsym(RTLD_DEFAULT, name);
-  if (cvalue == NULL)
-    rb_fatal("Can't locate constant symbol '%s' : %s", name, dlerror());
+  cvalue = dlsym(RTLD_DEFAULT, real_name);
+  value = Qnil;
+  if (cvalue != NULL) {
+    value = nsresult_to_rbresult(octype, cvalue, "", nil);
+    rb_define_const(self, name, value);
+    DLOG("MDLOSX", "Imported C constant `%s' with value %p", name, value);
+  }
 
-  value = nsresult_to_rbresult(octype, cvalue, "", nil);
+  if (name != real_name)
+    free(real_name);
   
-  rb_define_const(self, name, value);
-
-  DLOG("MDLOSX", "Imported C constant `%s' with value %p", name, value);
+  if (cvalue == NULL)
+    rb_bug("Can't locate constant symbol '%s' : %s", name, dlerror());
   
   return value;
 }
@@ -1418,6 +1457,17 @@ find_bs_struct_by_name (const char *name)
     return NULL;
 
   return bs_struct;
+}
+
+struct bsCFType *
+find_bs_cf_type(const char *encoding)
+{
+  struct bsCFType *type_id;
+
+  if (!st_lookup(bsCFTypes, (st_data_t)encoding, (st_data_t *)&type_id))
+    return NULL;
+
+  return type_id;
 }
 
 static struct bsMethod *
@@ -1595,6 +1645,7 @@ initialize_bridge_support (VALUE mOSX)
   bsStructs = st_init_strtable();
   bsStructs2 = st_init_numtable();
   bsStructs3 = st_init_strtable();
+  bsCFTypes = st_init_strtable();
   bsConstants = st_init_strtable();
   bsFunctions = st_init_strtable();
   bsClasses = st_init_strtable();
