@@ -70,8 +70,12 @@ to_octype(const char* octype_str)
     octype_str++;
   oct = *octype_str;
 
-  // Handle structures.
-  if (octype_str[0] == '{') {
+  // Type IDs.
+  if (find_bs_cf_type(octype_str)) {
+    oct = _C_ID;
+  }
+  // Structures.
+  else if (octype_str[0] == '{') {
     struct bsStruct *bs_struct;
 
     bs_struct = find_bs_struct_by_encoding(octype_str);

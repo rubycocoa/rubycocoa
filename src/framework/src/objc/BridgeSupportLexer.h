@@ -32,12 +32,12 @@
 #line 1 "BridgeSupport.gperf"
 struct bs_xml_atom { char *name; int val; };
 
-#define TOTAL_KEYWORDS 10
+#define TOTAL_KEYWORDS 11
 #define MIN_WORD_LENGTH 4
 #define MAX_WORD_LENGTH 17
 #define MIN_HASH_VALUE 4
-#define MAX_HASH_VALUE 18
-/* maximum key range = 15, duplicates = 0 */
+#define MAX_HASH_VALUE 22
+/* maximum key range = 19, duplicates = 0 */
 
 #ifdef __GNUC__
 __inline
@@ -51,32 +51,32 @@ hash (register const char *str, register unsigned int len)
 {
   static unsigned char asso_values[] =
     {
-      19, 19, 19, 19, 19, 19, 19, 19, 19, 19,
-      19, 19, 19, 19, 19, 19, 19, 19, 19, 19,
-      19, 19, 19, 19, 19, 19, 19, 19, 19, 19,
-      19, 19, 19, 19, 19, 19, 19, 19, 19, 19,
-      19, 19, 19, 19, 19, 19, 19, 19, 19, 19,
-      19, 19, 19, 19, 19, 19, 19, 19, 19, 19,
-      19, 19, 19, 19, 19, 19, 19, 19, 19, 19,
-      19, 19, 19, 19, 19, 19, 19, 19, 19, 19,
-      19, 19, 19, 19, 19, 19, 19, 19, 19, 19,
-      19, 19, 19, 19, 19, 19, 19, 19, 19, 10,
-      19,  0,  0, 19, 19,  0, 19, 19, 19,  0,
-      19, 19, 19, 19, 19,  5, 19, 19, 19, 19,
-      19, 19, 19, 19, 19, 19, 19, 19, 19, 19,
-      19, 19, 19, 19, 19, 19, 19, 19, 19, 19,
-      19, 19, 19, 19, 19, 19, 19, 19, 19, 19,
-      19, 19, 19, 19, 19, 19, 19, 19, 19, 19,
-      19, 19, 19, 19, 19, 19, 19, 19, 19, 19,
-      19, 19, 19, 19, 19, 19, 19, 19, 19, 19,
-      19, 19, 19, 19, 19, 19, 19, 19, 19, 19,
-      19, 19, 19, 19, 19, 19, 19, 19, 19, 19,
-      19, 19, 19, 19, 19, 19, 19, 19, 19, 19,
-      19, 19, 19, 19, 19, 19, 19, 19, 19, 19,
-      19, 19, 19, 19, 19, 19, 19, 19, 19, 19,
-      19, 19, 19, 19, 19, 19, 19, 19, 19, 19,
-      19, 19, 19, 19, 19, 19, 19, 19, 19, 19,
-      19, 19, 19, 19, 19, 19
+      23, 23, 23, 23, 23, 23, 23, 23, 23, 23,
+      23, 23, 23, 23, 23, 23, 23, 23, 23, 23,
+      23, 23, 23, 23, 23, 23, 23, 23, 23, 23,
+      23, 23, 23, 23, 23, 23, 23, 23, 23, 23,
+      23, 23, 23, 23, 23, 23, 23, 23, 23, 23,
+      23, 23, 23, 23, 23, 23, 23, 23, 23, 23,
+      23, 23, 23, 23, 23, 23, 23, 23, 23, 23,
+      23, 23, 23, 23, 23, 23, 23, 23, 23, 23,
+      23, 23, 23, 23, 23, 23, 23, 23, 23, 23,
+      23, 23, 23, 23, 23, 23, 23, 23, 23,  0,
+      23,  0,  5, 23, 23,  5, 23, 23, 23,  5,
+      23, 23, 23, 23, 23, 10, 23, 23, 23, 23,
+      23, 23, 23, 23, 23, 23, 23, 23, 23, 23,
+      23, 23, 23, 23, 23, 23, 23, 23, 23, 23,
+      23, 23, 23, 23, 23, 23, 23, 23, 23, 23,
+      23, 23, 23, 23, 23, 23, 23, 23, 23, 23,
+      23, 23, 23, 23, 23, 23, 23, 23, 23, 23,
+      23, 23, 23, 23, 23, 23, 23, 23, 23, 23,
+      23, 23, 23, 23, 23, 23, 23, 23, 23, 23,
+      23, 23, 23, 23, 23, 23, 23, 23, 23, 23,
+      23, 23, 23, 23, 23, 23, 23, 23, 23, 23,
+      23, 23, 23, 23, 23, 23, 23, 23, 23, 23,
+      23, 23, 23, 23, 23, 23, 23, 23, 23, 23,
+      23, 23, 23, 23, 23, 23, 23, 23, 23, 23,
+      23, 23, 23, 23, 23, 23, 23, 23, 23, 23,
+      23, 23, 23, 23, 23, 23
     };
   return len + asso_values[(unsigned char)str[0]];
 }
@@ -91,6 +91,12 @@ bs_xml_element (register const char *str, register unsigned int len)
     {
 #line 4 "BridgeSupport.gperf"
       {"enum", 2 },
+#line 9 "BridgeSupport.gperf"
+      {"class", 7},
+#line 13 "BridgeSupport.gperf"
+      {"cftype", 11},
+#line 3 "BridgeSupport.gperf"
+      {"constant", 1},
 #line 12 "BridgeSupport.gperf"
       {"method", 10},
 #line 7 "BridgeSupport.gperf"
@@ -103,12 +109,8 @@ bs_xml_element (register const char *str, register unsigned int len)
       {"function_arg", 6},
 #line 11 "BridgeSupport.gperf"
       {"method_retval", 9},
-#line 9 "BridgeSupport.gperf"
-      {"class", 7},
 #line 6 "BridgeSupport.gperf"
-      {"informal_protocol", 4},
-#line 3 "BridgeSupport.gperf"
-      {"constant", 1}
+      {"informal_protocol", 4}
     };
 
   if (len <= MAX_WORD_LENGTH && len >= MIN_WORD_LENGTH)
@@ -124,25 +126,25 @@ bs_xml_element (register const char *str, register unsigned int len)
               case 0:
                 resword = &wordlist[0];
                 goto compare;
-              case 2:
+              case 1:
                 resword = &wordlist[1];
                 goto compare;
-              case 4:
+              case 2:
                 resword = &wordlist[2];
                 goto compare;
-              case 6:
+              case 4:
                 resword = &wordlist[3];
                 goto compare;
               case 7:
                 resword = &wordlist[4];
                 goto compare;
-              case 8:
+              case 9:
                 resword = &wordlist[5];
                 goto compare;
-              case 9:
+              case 11:
                 resword = &wordlist[6];
                 goto compare;
-              case 11:
+              case 12:
                 resword = &wordlist[7];
                 goto compare;
               case 13:
@@ -150,6 +152,9 @@ bs_xml_element (register const char *str, register unsigned int len)
                 goto compare;
               case 14:
                 resword = &wordlist[9];
+                goto compare;
+              case 18:
+                resword = &wordlist[10];
                 goto compare;
             }
           return 0;
@@ -164,7 +169,7 @@ bs_xml_element (register const char *str, register unsigned int len)
     }
   return 0;
 }
-#line 13 "BridgeSupport.gperf"
+#line 14 "BridgeSupport.gperf"
 
 #define BS_XML_CONSTANT           1
 #define BS_XML_ENUM               2
@@ -176,3 +181,4 @@ bs_xml_element (register const char *str, register unsigned int len)
 #define BS_XML_METHOD_ARG         8
 #define BS_XML_METHOD_RETVAL      9
 #define BS_XML_METHOD             10
+#define BS_XML_CFTYPE             11
