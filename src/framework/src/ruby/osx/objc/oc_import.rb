@@ -78,6 +78,7 @@ module OSX
   end
 
   def self.included(m)
+    return if m.respond_to? :_osx_const_missing_prev
     if m.respond_to? :const_missing
       m.module_eval <<-EOC,__FILE__,__LINE__+1
         class <<self
@@ -89,7 +90,7 @@ module OSX
               _osx_const_missing_prev(c)
             end
           end
-	    end
+	end
       EOC
     else
       m.module_eval <<-EOC,__FILE__,__LINE__+1
