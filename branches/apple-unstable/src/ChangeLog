@@ -1,3 +1,8 @@
+2006-12-04  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* framework/src/objc/OverrideMixin.m:
+	Fixed a leak.
+
 2006-12-03  Laurent Sansonetti <lsansonetti@apple.com>
 
 	* framework/src/objc/ocdata_conv.m (to_octype):
