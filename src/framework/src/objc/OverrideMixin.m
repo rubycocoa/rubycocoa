@@ -318,38 +318,37 @@ static id imp_c_allocWithZone(Class klass, SEL method, NSZone* zone)
 static id imp_c_addRubyMethod(Class klass, SEL method, SEL arg0)
 {
   Method me;
-  struct objc_method_list* mlp = method_list_alloc(2);
+  struct objc_method_list* mlp;
+  IMP imp;
 
   me = class_getInstanceMethod(klass, arg0);
 
   // warn if trying to override a method that isn't a member of the specified class
-  if(me == NULL) {
-    rb_raise( rb_eRuntimeError, 
-	      "could not add '%s' to class '%s': "
-	      "Objective-C cannot find it in the superclass",
-	      (char *) arg0, klass->name );
+  if(me == NULL)
+    rb_raise(rb_eRuntimeError, "could not add '%s' to class '%s': Objective-C cannot find it in the superclass", (char *)arg0, klass->name);
+    
+  // override method
+  imp = ovmix_imp_for_type(me->method_types);
+  if (me->method_imp == imp) {
+    OVMIX_LOG("Already registered Ruby method by selector '%s' types '%s', skipping...", (char *)arg0, me->method_types);
+    return nil;
   }
-  else {
-    // override method
-    IMP imp = ovmix_imp_for_type(me->method_types);
-    if (me->method_imp == imp) {
-      OVMIX_LOG("Already registered Ruby method by selector '%s' types '%s', skipping...", (char *)arg0, me->method_types);
-      return nil;
-    }
-    mlp->method_list[0].method_name = me->method_name;
-    mlp->method_list[0].method_types = strdup(me->method_types);
-    mlp->method_list[0].method_imp = imp;
-    mlp->method_count += 1;
+  
+  mlp = method_list_alloc(2);
+  mlp->method_list[0].method_name = me->method_name;
+  mlp->method_list[0].method_types = strdup(me->method_types);
+  mlp->method_list[0].method_imp = imp;
+  mlp->method_count += 1;
 
-    // super method
-    mlp->method_list[1].method_name = super_selector(me->method_name);
-    mlp->method_list[1].method_types = strdup(me->method_types);
-    mlp->method_list[1].method_imp = me->method_imp;
-    mlp->method_count += 1;
-  }
-
+  // super method
+  mlp->method_list[1].method_name = super_selector(me->method_name);
+  mlp->method_list[1].method_types = strdup(me->method_types);
+  mlp->method_list[1].method_imp = me->method_imp;
+  mlp->method_count += 1;
+  
   class_addMethods(klass, mlp);
   OVMIX_LOG("Registered Ruby method by selector '%s' types '%s'", (char *)arg0, me->method_types);
+
   return nil;
 }
 
