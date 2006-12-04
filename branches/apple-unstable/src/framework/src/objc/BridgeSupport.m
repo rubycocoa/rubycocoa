@@ -370,6 +370,44 @@ bs_struct_for_klass (VALUE klass)
   return find_bs_struct_by_encoding(StringValuePtr(encoding));
 }
 
+static size_t 
+bs_struct_size(struct bsStruct *bs_struct)
+{
+  if (bs_struct->size == 0) {
+    unsigned i;
+    size_t size;
+  
+    for (i = 0, size = 0; i < bs_struct->field_count; i++)
+      size += ocdata_size(to_octype(bs_struct->fields[i].encoding),
+                          bs_struct->fields[i].encoding);           
+
+    bs_struct->size = size; 
+  }
+  return bs_struct->size;
+}
+
+static ffi_type *
+bs_struct_ffi_type(struct bsStruct *bs_struct)
+{
+  if (bs_struct->ffi_type == NULL) {
+    unsigned i;
+
+    bs_struct->ffi_type = (ffi_type *)malloc(sizeof(ffi_type));
+    ASSERT_ALLOC(bs_struct->ffi_type);
+  
+    bs_struct->ffi_type->size = bs_struct_size(bs_struct);
+    bs_struct->ffi_type->alignment = 0;
+    bs_struct->ffi_type->type = FFI_TYPE_STRUCT;
+    bs_struct->ffi_type->elements = malloc(bs_struct->field_count * sizeof(ffi_type *));
+    ASSERT_ALLOC(bs_struct->ffi_type->elements);
+    for (i = 0; i < bs_struct->field_count; i++)
+      bs_struct->ffi_type->elements[i] = ffi_type_for_octype(to_octype(bs_struct->fields[i].encoding)); 
+    bs_struct->ffi_type->elements[bs_struct->field_count] = NULL;
+  }
+
+  return bs_struct->ffi_type;
+}
+
 static VALUE
 rb_bs_struct_new (int argc, VALUE *argv, VALUE rcv)
 {
@@ -392,7 +430,11 @@ rb_bs_struct_new (int argc, VALUE *argv, VALUE rcv)
 
   if (argc > 0 && argc != bs_struct->field_count)
     rb_raise(rb_eArgError, "wrong number of arguments (%d for %d)", argc, bs_struct->field_count);
- 
+
+  bs_struct_size(bs_struct);
+  if (bs_struct->size == 0)
+    rb_raise(rb_eRuntimeError, "can't instantiate struct '%s' of 0 size", bs_struct->name);
+
   data = (void *)calloc(1, bs_struct->size);
   ASSERT_ALLOC(data);
 
@@ -416,6 +458,10 @@ VALUE
 rb_bs_struct_new_from_ocdata(struct bsStruct *bs_struct, void *ocdata)
 {
   void *data;
+
+  bs_struct_size(bs_struct);
+  if (bs_struct->size == 0)
+    rb_raise(rb_eRuntimeError, "can't instantiate struct '%s' of 0 size", bs_struct->name);
 
   data = (void *)malloc(bs_struct->size);
   ASSERT_ALLOC(data);
@@ -472,7 +518,7 @@ rb_bs_struct_get_data(VALUE obj, int octype, int *size)
   }
   Data_Get_Struct(obj, void, data);
 
-  *size = bs_struct->size;
+  *size = bs_struct_size(bs_struct);
 
   return data;
 }
@@ -636,7 +682,7 @@ rb_bs_struct_is_equal (VALUE rcv, VALUE other)
 }
 
 static struct bsStruct *
-handle_bs_struct (VALUE mOSX, char *name, char *decorated_encoding, size_t size)
+handle_bs_struct (VALUE mOSX, char *name, char *decorated_encoding)
 {
   char encoding[MAX_ENCODE_LEN];
   struct bsStructField fields[128];
@@ -670,39 +716,17 @@ handle_bs_struct (VALUE mOSX, char *name, char *decorated_encoding, size_t size)
   ASSERT_ALLOC(bs_struct);
   
   bs_struct->name = name;
-  bs_struct->size = size;
+  bs_struct->size = 0; // lazy determined
   bs_struct->encoding = strdup(encoding);
   bs_struct->klass = klass;
   bs_struct->octype = bs_struct_octype_idx++;
-  bs_struct->ffi_type = NULL; // lazy defined
+  bs_struct->ffi_type = NULL; // lazy determined
   bs_struct->fields = (struct bsStructField *)malloc(sizeof(struct bsStructField) * field_count);
   ASSERT_ALLOC(bs_struct->fields);
   memcpy(bs_struct->fields, fields, sizeof(struct bsStructField) * field_count); 
   bs_struct->field_count = field_count;
 
   return bs_struct;
-}
-
-static ffi_type *
-bs_struct_ffi_type(struct bsStruct *bs_struct)
-{
-  if (bs_struct->ffi_type == NULL) {
-    unsigned i;
-
-    bs_struct->ffi_type = (ffi_type *)malloc(sizeof(ffi_type));
-    ASSERT_ALLOC(bs_struct->ffi_type);
-  
-    bs_struct->ffi_type->size = bs_struct->size; 
-    bs_struct->ffi_type->alignment = 0;
-    bs_struct->ffi_type->type = FFI_TYPE_STRUCT;
-    bs_struct->ffi_type->elements = malloc(bs_struct->field_count * sizeof(ffi_type *));
-    ASSERT_ALLOC(bs_struct->ffi_type->elements);
-    for (i = 0; i < bs_struct->field_count; i++)
-      bs_struct->ffi_type->elements[i] = ffi_type_for_octype(to_octype(bs_struct->fields[i].encoding)); 
-    bs_struct->ffi_type->elements[bs_struct->field_count] = NULL;
-  }
-
-  return bs_struct->ffi_type;
 }
 
 ffi_type *
@@ -1032,13 +1056,11 @@ osx_load_bridge_support_file (VALUE mOSX, VALUE path)
         }
         else {
           char *            struct_name;
-          char *            struct_size;
           struct bsStruct * bs_struct;
 
           struct_name = get_attribute_and_check(reader, "name");
-          struct_size = get_attribute_and_check(reader, "size");
 
-          bs_struct = handle_bs_struct(mOSX, struct_name, struct_decorated_encoding, atol(struct_size));
+          bs_struct = handle_bs_struct(mOSX, struct_name, struct_decorated_encoding);
           if (bs_struct == NULL) {
             DLOG("MDLOSX", "Can't handle structure '%s' -- skipping...", struct_decorated_encoding);
           }
@@ -1049,7 +1071,6 @@ osx_load_bridge_support_file (VALUE mOSX, VALUE path)
           }
 
           free(struct_decorated_encoding);
-          free(struct_size);
         }
       }
       break;
