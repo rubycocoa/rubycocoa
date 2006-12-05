@@ -569,6 +569,15 @@ static BOOL rbobj_to_objcptr(VALUE obj, void** cptr)
   else if (rb_obj_is_kind_of(obj, objcptr_s_class()) == Qtrue) {
     *cptr = objcptr_cptr(obj);
   }
+  else if (rb_obj_is_kind_of(obj, objboxed_s_class()) == Qtrue) {
+    struct bsStruct *bs_struct;
+
+    bs_struct = bs_struct_for_klass(CLASS_OF(obj));
+    if (bs_struct == NULL)
+      return NO;
+
+    *cptr = rb_bs_struct_get_data(obj, bs_struct->octype, NULL);
+  } 
   else {
     return NO;
   }
