@@ -35,6 +35,8 @@ struct bsFunction {
   int     argc;
   int *   argv;
   int     retval;
+  BOOL    retval_should_be_retained;
+  BOOL    returns_char;
   void *  sym;
   BOOL    is_variadic;
   struct {

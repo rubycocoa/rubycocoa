@@ -563,6 +563,9 @@ static BOOL rbobj_to_objcptr(VALUE obj, void** cptr)
     }
   }
 #endif
+  else if (rb_obj_is_kind_of(obj, objid_s_class()) == Qtrue) {
+    *cptr = OBJCID_ID(obj);
+  }
   else if (rb_obj_is_kind_of(obj, objcptr_s_class()) == Qtrue) {
     *cptr = objcptr_cptr(obj);
   }

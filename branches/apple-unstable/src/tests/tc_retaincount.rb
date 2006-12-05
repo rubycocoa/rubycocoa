@@ -44,5 +44,19 @@ class TC_RetainCount < Test::Unit::TestCase
     assert_equal(2, OSX::RetainCount.ocObjectFromPlaceholder.retainCount,
       'placeholder in Objc') 
   end
+
+  # CF types
+  def test_cf_types
+    # /Create/ -> already retained by CF
+    url = OSX::CFURLCreateWithString(OSX::KCFAllocatorDefault, "http://www.google.com", nil)
+    assert_equal(1, url.retainCount)
+    # /Copy/ -> already retained by CF
+    # XXX copy methods return objects with a strange (very big) retain count
+    #url2 = OSX::CFURLCopyAbsoluteURL(url) 
+    #assert_equal(1, url2.retainCount)
+    # Other -> not retained by CF, retained by RubyCocoa
+    str = OSX::CFURLGetString(url)
+    assert_equal(2, str.retainCount)
+  end
 end
 
