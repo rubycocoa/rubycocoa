@@ -721,7 +721,8 @@ EOS
       end
 
       opts.on('-c', '--compiler-flags FLAGS', 'Specify custom compiler flags (by default, "-F... -framework ...")') do |flags|
-        @compiler_flags = flags
+        @compiler_flags ||= ''
+        @compiler_flags << ' ' + flags + ' '
       end
 
       opts.on('-h', '--help', 'Show this message') do
@@ -861,6 +862,7 @@ EOS
 end
 
 if f = ENV['GBM_FLAGS']
-  ARGV << f
+  args = f.scan(/((\"[^"]+\")|[^\s]+)/).map { |x| x[0].delete('"') }
+  ARGV.unshift(*args)
 end
 BridgeSupportGenerator.new(ARGV)
