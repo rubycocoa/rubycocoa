@@ -860,4 +860,7 @@ EOS
   end
 end
 
+if f = ENV['GBM_FLAGS']
+  ARGV << f
+end
 BridgeSupportGenerator.new(ARGV)
