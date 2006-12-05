@@ -127,10 +127,12 @@ struct bsStruct *find_bs_struct_by_name(const char *name);
 struct bsCFType *find_bs_cf_type(const char *encoding);
 VALUE rb_bs_struct_new_from_ocdata(struct bsStruct *bs_struct, void *ocdata);
 void *rb_bs_struct_get_data(VALUE obj, int octype, int *size);
+struct bsStruct *bs_struct_for_klass (VALUE klass);
 struct bsMethod *find_bs_method(id klass, const char *selector, BOOL is_class_method);
 struct bsMethodArg *find_bs_method_arg_by_index(struct bsMethod *method, unsigned index);
 struct bsMethodArg *find_bs_method_arg_by_c_array_len_arg_index(struct bsMethod *method, unsigned index);
 struct bsInformalProtocolMethod *find_bs_informal_protocol_method(const char *selector, BOOL is_class_method);
+VALUE objboxed_s_class(void);
 void initialize_bridge_support(VALUE mOSX);
 
 /* On MacOS X, +signatureWithObjCTypes: is a method of NSMethodSignature,

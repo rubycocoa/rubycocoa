@@ -24,6 +24,11 @@
 static VALUE cOSXBoxed;
 static ID ivarEncodingID;
 
+VALUE objboxed_s_class(void)
+{
+  return cOSXBoxed;
+}
+
 static struct st_table *bsStructs;     // struct encoding -> struct bsStruct
 static struct st_table *bsStructs2;    // struct octype -> struct bsStruct
 static struct st_table *bsStructs3;    // struct name -> struct bsStruct
@@ -363,7 +368,7 @@ bails:
   return NO;
 }
 
-static struct bsStruct *
+struct bsStruct *
 bs_struct_for_klass (VALUE klass)
 {
   VALUE encoding;
@@ -526,7 +531,8 @@ rb_bs_struct_get_data(VALUE obj, int octype, int *size)
   }
   Data_Get_Struct(obj, void, data);
 
-  *size = bs_struct_size(bs_struct);
+  if (size != NULL)
+    *size = bs_struct_size(bs_struct);
 
   return data;
 }
