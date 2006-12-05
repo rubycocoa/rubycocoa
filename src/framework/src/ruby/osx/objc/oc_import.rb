@@ -116,8 +116,8 @@ module OSX
     end
   end
   
-  # Define OSX.NSClassFromString
-  ['Foundation', 'AppKit'].each { |f| OSX.load_bridge_support_signatures(f) }
+  # Load the foundation frameworks. 
+  ['CoreFoundation', 'Foundation', 'AppKit'].each { |f| OSX.load_bridge_support_signatures(f) }
 
   # create Ruby's class for Cocoa class,
   # then define Constant under module 'OSX'.

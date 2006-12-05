@@ -932,12 +932,26 @@ bridge_support_dispatcher (int argc, VALUE *argv, VALUE self)
     rb_value = self;
   }
   else {
+    int retval_type;
+
     DLOG("MDLOSX", "\tresult: %p", retval);
-    rb_value = nsresult_to_rbresult(func->retval, (const void *)retval, func->name, pool);
+    if ((func->retval == _C_CHR || func->retval == _C_UCHR) && !func->returns_char) {
+      DLOG("MDLOSX", "\tmethod is a predicate, forcing result as a boolean value");
+      retval_type = _PRIV_C_BOOL;
+    }
+    else {
+      retval_type = func->retval;
+    }
+
+    rb_value = nsresult_to_rbresult(retval_type, (const void *)retval, func->name, pool);
     // retain the new ObjC object, that will be released once the Ruby object is collected
-    if (func->retval == _C_ID && !OBJCID_DATA_PTR(rb_value)->retained) {
-      [OBJCID_ID(rb_value) retain];
+    if (func->retval == _C_ID) {
+      if (func->retval_should_be_retained && !OBJCID_DATA_PTR(rb_value)->retained) {
+        DLOG("MDLOSX", "\tretaining objc value");
+        [OBJCID_ID(rb_value) retain];
+      }
       OBJCID_DATA_PTR(rb_value)->retained = YES;
+      OBJCID_DATA_PTR(rb_value)->can_be_released = YES;
     }
   }
 
@@ -1124,10 +1138,12 @@ osx_load_bridge_support_file (VALUE mOSX, VALUE path)
 
         func->name = func_name;
         func->is_variadic = get_boolean_attribute(reader, "variadic", NO);
+        func->returns_char = get_boolean_attribute(reader, "returns_char", NO);
 
         return_type = get_attribute(reader, "returns");
         if (return_type != NULL) {
           func->retval = find_bs_cf_type(return_type) ? _C_ID : to_octype(return_type);
+          func->retval_should_be_retained = func->retval == _C_ID ? !get_boolean_attribute(reader, "retval_retained", NO) : YES;
           free(return_type);
         }
         else {

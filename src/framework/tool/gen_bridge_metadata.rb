@@ -584,13 +584,22 @@ EOS
         element.add_attribute('name', function.name)
         element.add_attribute('variadic', true) if function.variadic?
         rettype = encoding_of(function)
-        element.add_attribute('returns', rettype) if rettype != 'v' 
+        if rettype != 'v' 
+          element.add_attribute('returns', rettype) 
+          element.add_attribute('returns_char', true) \
+            if ((rettype == 'c' and !function.stripped_rettype == 'BOOL') \
+                or (rettype == 'C' and !function.stripped_rettype == 'Boolean')) 
+          element.add_attribute('retval_retained', true) \
+            if @cftype_names.include?(function.stripped_rettype) \
+            and /(Create|Copy)/.match(function.name)
+        end
         function.args.each do |arg|
           element.add_element('function_arg').add_attribute('type', encoding_of(arg))
         end
       end
       @ocmethods.each do |class_name, methods|
-        not_predicates = methods.select { |m| encoding_of(m) == 'c' } - methods.select { |m| m.stripped_rettype == 'BOOL' }
+        not_predicates = methods.select { |m| encoding_of(m) == 'c' } \
+          - methods.select { |m| m.stripped_rettype == 'BOOL' }
         next if not_predicates.empty?
         class_element = root.add_element('class')
         class_element.add_attribute('name', class_name)           
