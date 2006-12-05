@@ -404,7 +404,7 @@ EOS
       next if name.strip[0] == ?_
       line = "if ((fmt = printf_format(@encode(__typeof__(#{value})))) != NULL) printf(fmt, \"#{name}\", #{value});"
       begin
-        name, value = compile_and_execute_code(code.sub(/PRINTF_LINE_HERE/, line)).split(':')
+        name, value = compile_and_execute_code(code.sub(/PRINTF_LINE_HERE/, line), true).split(':')
         @resolved_enums[name.strip] = value.strip
       rescue
       end
@@ -824,7 +824,7 @@ EOS
     end
   end
 
-  def compile_and_execute_code(code)
+  def compile_and_execute_code(code, cleanup_when_fail=false)
     if @import_directive.nil? or @compiler_flags.nil?
       STDERR.puts "Can't compile for non-frameworks targets (yet)"
       return ''
@@ -841,6 +841,7 @@ EOS
     unless system(line)
       msg = "Can't compile C code... aborting\ncommand was: #{line}\n\n#{File.read(tmp_log_path)}"
       File.unlink(tmp_log_path)
+      File.unlink(tmp_src.path) if cleanup_when_fail
       raise msg
     end
 

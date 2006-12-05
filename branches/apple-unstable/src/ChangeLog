@@ -1,8 +1,10 @@
 2006-12-05  Laurent Sansonetti <lsansonetti@apple.com>
 
 	* framework/tool/gen_bridge_metadata.rb:
-	Fixed the parsing of C functions with unamed arguments (ex: 
-	"int foo(int, float);").
+	- Fixed the parsing of C functions with unamed arguments (ex: 
+	  "int foo(int, float);") ;
+	- Make sure we clean the generated source files when trying to get the
+	  encoding of numeric #define constants.
 
 	* framework/src/ruby/osx/objc/oc_import.rb,
 	  framework/src/objc/BridgeSupport.h,
