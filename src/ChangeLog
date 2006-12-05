@@ -4,7 +4,8 @@
 	- Fixed the parsing of C functions with unamed arguments (ex: 
 	  "int foo(int, float);") ;
 	- Make sure we clean the generated source files when trying to get the
-	  encoding of numeric #define constants.
+	  encoding of numeric #define constants ;
+	- Ignore compiler attribute directives at the end of structures.
 
 	* framework/src/ruby/osx/objc/oc_import.rb,
 	  framework/src/objc/BridgeSupport.h,

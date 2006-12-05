@@ -54,8 +54,12 @@ class OCHeaderAnalyzer
   end
 
   def struct_names
-    re = /typedef\s+struct\s*\w*\s*((\w+)|\{([^{}]*(\{[^}]+\})?)*\}\s*([^\s]+))\s*;/ # Ouch... 
-    @struct_names ||= @cpp_result.scan(re).map { |m| m.compact[-1] }.flatten
+    re = /typedef\s+struct\s*\w*\s*((\w+)|\{([^{}]*(\{[^}]+\})?)*\}\s*([^\s]+))\s*(__attribute__\(.+\))?\s*;/ # Ouch... 
+    @struct_names ||= @cpp_result.scan(re).map { |m| 
+      a = m.compact
+      a.pop if /^__attribute__/.match(a.last)
+      a.last
+    }.flatten
   end
 
   def cftype_names
@@ -434,9 +438,7 @@ EOS
       name, value = line.split(':')
       name.strip!
       value.strip!
-      if /Ref$/.match(name) and /^\^\{/.match(value)
-        @resolved_cftypes << value
-      end
+      @resolved_cftypes << value if @cftype_names.include?(name)
       @types_encoding[name] = value
     end
     @resolved_cftypes.uniq!
