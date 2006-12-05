@@ -159,7 +159,7 @@ class OCHeaderAnalyzer
     if str == '...'
       VarInfo.new('...', '...', str)
     else
-      str += "dummy" if str[-1].chr == '*'
+      str << " dummy" if str[-1].chr == '*' or str.index(' ').nil?
       tokens = multi ? str.split(',') : [str]
       part = tokens.first
       re = /^([^()]*)\b(\w+)\b\s*(\[[^\]]*\])*$/
@@ -227,6 +227,7 @@ class OCHeaderAnalyzer
       t.gsub!(/\b(in|out|inout|oneway|const)\b/, '')
       t.delete!('()')
       t.strip!
+      raise 'empty type' if t.empty?
       @stripped_rettype = t
       ALL_STRIPPED_TYPES << t if t != '...'
     end
@@ -712,7 +713,7 @@ EOS
         @exceptions << opt
       end
 
-      formats = ['final', 'exception-template']
+      formats = ['final', 'exceptions-template']
       opts.on('-F', '--format FORMAT', formats, {}, "Select metadata format ('#{formats.first}' (default), '#{formats.last}')") do |opt|
         @generate_exception_template = opt == formats.last 
       end
