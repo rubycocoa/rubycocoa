@@ -4,6 +4,11 @@
 	- exported svn revison from $Revision: 1403 $ keyword.
 	- 0.5.0.
 
+	* doc/build.en.html, doc/build.ja.html, doc/changelog.html,
+	  doc/getting.en.html, doc/getting.ja.html, doc/index.en.html,
+	  doc/index.ja.html, doc/news.en.html, doc/news.ja.html:
+	update documents for releas-0.5.0.
+
 2006-12-04  kimura wataru <kimuraw@i.nifty.jp>
 
 	* framework/src/ruby/osx/objc/oc_import.rb:
