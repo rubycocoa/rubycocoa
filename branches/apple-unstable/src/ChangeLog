@@ -1,3 +1,16 @@
+2006-12-06  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* framework/tool/gen_bridge_metadata.rb:
+	Another iteration on the CFType support, fixed 2 parsing bugs.
+
+	* framework/src/objc/BridgeSupport.h,
+	  framework/src/objc/BridgeSupport.m,
+	  framework/src/objc/ocdata_conv.m:
+	Added support of passing struct pointers.
+
+	* sample/circle.rb:
+	Added new CoreGraphics sample.
+
 2006-12-05  Laurent Sansonetti <lsansonetti@apple.com>
 
 	* framework/tool/gen_bridge_metadata.rb:
