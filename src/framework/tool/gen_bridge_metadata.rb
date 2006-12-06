@@ -89,10 +89,10 @@ class OCHeaderAnalyzer
         porig = m[0].strip
         pbase = m[1]
         pname = m[2]
-        entries = m[3].strip.split(';').map{|i| i.strip }
+        entries = m[3].strip.split(';').map {|i| i.strip.sub(/^\#[^\n]+\n/, '') }
         entries.map! {|i|
-          i.strip!
           next if i[0] != ?- and i[0] != ?+
+          i.gsub!(/\n/, ' ')
           selector = []
           i.split(':').each do |ii|
             mmm = arg_re.match(ii.strip)
@@ -333,6 +333,7 @@ class BridgeSupportGenerator
       collect_enums
       collect_numeric_defines
       collect_types_encoding
+      collect_cftypes_info
       collect_structs_encoding
       collect_inf_protocols_encoding
     end
@@ -419,9 +420,41 @@ EOS
     @types_encoding[varinfo.stripped_rettype]
   end
 
+  def collect_cftypes_info
+    @resolved_cftypes ||= {}
+    lines = @cftypes.map do |ary|
+      name, gettypeid_func = ary
+      if gettypeid_func
+        "ref = _CFRuntimeCreateInstance(NULL, #{gettypeid_func}(), 0, NULL); printf(\"%s: %s: %s: %d\\n\", \"#{name}\", @encode(#{name}), ref != NULL ? object_getClassName((id)ref) : \"\", #{gettypeid_func}());"
+      else
+        "printf(\"%s: %s: %s: %d\\n\", \"#{name}\", @encode(#{name}), \"\", -1);"
+      end
+    end
+    code = <<EOS
+#{@import_directive}
+#import <objc/objc-class.h>
+
+CFTypeRef _CFRuntimeCreateInstance(CFAllocatorRef allocator, CFTypeID typeID, CFIndex extraBytes, unsigned char *category);
+
+int main (void) 
+{
+    CFTypeRef ref;
+    #{lines.join("\n  ")}
+    return 0;
+}
+EOS
+    compile_and_execute_code(code).split("\n").each do |line|
+      name, encoding, tollfree, typeid = line.split(':')
+      tollfree.strip!
+      tollfree = nil if tollfree.empty? or tollfree == 'NSCFType'
+      typeid.strip!
+      typeid = nil if typeid == '-1'
+      @resolved_cftypes[name.strip] = [encoding.strip, tollfree, typeid]
+    end
+  end
+
   def collect_types_encoding
     @types_encoding ||= {}
-    @resolved_cftypes ||= [] 
     lines = OCHeaderAnalyzer::ALL_STRIPPED_TYPES.uniq.map do |type|
       "printf(\"%s: %s\\n\", \"#{type}\", @encode(#{type}));"
     end
@@ -436,12 +469,8 @@ int main (void)
 EOS
     compile_and_execute_code(code).split("\n").each do |line|
       name, value = line.split(':')
-      name.strip!
-      value.strip!
-      @resolved_cftypes << value if @cftype_names.include?(name)
-      @types_encoding[name] = value
+      @types_encoding[name.strip] = value.strip
     end
-    @resolved_cftypes.uniq!
   end
 
   def collect_structs_encoding
@@ -534,6 +563,16 @@ EOS
 
     if @generate_exception_template
       # Generate the exception template file.
+      @cftype_names.sort.each do |name|
+        element = root.add_element('cftype')
+        element.add_attribute('name', name) 
+        gettypeid_func = name.sub(/Ref$/, '') + 'GetTypeID'
+        ok = @functions.find { |x| x.name == gettypeid_func }
+        if !ok and gettypeid_func.sub!(/Mutable/, '')
+          ok = @functions.find { |x| x.name == gettypeid_func }
+        end
+        element.add_attribute('gettypeid_func', ok ? gettypeid_func : '?')
+      end
       @struct_names.each do |struct_name|
         root.add_element('struct').add_attribute('name', struct_name)
       end
@@ -568,9 +607,13 @@ EOS
         element.add_attribute('name', name)
         element.add_attribute('encoding', encoding)
       end
-      @resolved_cftypes.each do |encoding|
+      @resolved_cftypes.each do |name, ary|
+        encoding, tollfree, typeid = ary
         element = root.add_element('cftype')
+        element.add_attribute('name', name) 
         element.add_attribute('encoding', encoding)
+        element.add_attribute('typeid', typeid) if typeid 
+        element.add_attribute('tollfree', tollfree) if tollfree 
       end
       @constants.each do |constant| 
         element = root.add_element('constant')
@@ -593,7 +636,7 @@ EOS
             if ((rettype == 'c' and !function.stripped_rettype == 'BOOL') \
                 or (rettype == 'C' and !function.stripped_rettype == 'Boolean')) 
           element.add_attribute('retval_retained', true) \
-            if @cftype_names.include?(function.stripped_rettype) \
+            if @resolved_cftypes.has_key?(function.stripped_rettype) \
             and /(Create|Copy)/.match(function.name)
         end
         function.args.each do |arg|
@@ -677,16 +720,20 @@ EOS
       die "Given header file `#{path}' doesn't exist" unless File.exists?(path)
       analyzer = OCHeaderAnalyzer.new(path)
       @functions.concat(analyzer.functions)
-      @constants.concat(analyzer.constants)
-      @enums.concat(analyzer.enums)
-      @defines.concat(analyzer.defines)
-      @struct_names.concat(analyzer.struct_names)
-      @cftype_names.concat(analyzer.cftype_names)
+      if @generate_exception_template
+        @struct_names.concat(analyzer.struct_names)
+        @cftype_names.concat(analyzer.cftype_names)
+      else
+        @constants.concat(analyzer.constants)
+        @enums.concat(analyzer.enums)
+        @defines.concat(analyzer.defines)
+        list = analyzer.informal_protocols['NSObject']
+        @inf_protocols.concat(list) unless list.nil? 
+      end
       @ocmethods.merge!(analyzer.ocmethods) { |key, old, new| old.concat(new) }
-      list = analyzer.informal_protocols['NSObject']
-      @inf_protocols.concat(list) unless list.nil? 
     end
     @struct_names.uniq!
+    @cftype_names.uniq!
   end
  
   def parse_args(args)
@@ -777,6 +824,13 @@ EOS
       end
     end.first
     @structs ||= []
+    # Keep the list of CFTypes.
+    @cftypes = @exceptions.map do |doc|
+      doc.get_elements('/signatures/cftype').map do |elem|
+        [elem.attributes['name'], elem.attributes['gettypeid_func']]
+      end
+    end.first
+    @cftypes ||= []
   end
   
   def handle_framework(val)
