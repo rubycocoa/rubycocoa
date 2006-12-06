@@ -2,6 +2,85 @@
 <head><title>RubyCocoa - ChangeLog</title></head>
 <body>
 <pre>
+2006-12-04  kimura wataru 
+
+	* framework/src/ruby/osx/objc/oc_import.rb:
+	suppress override OSX.const_missing.
+
+2006-11-23  kimura wataru 
+
+	* framework/GeneratedConfig.xcconfig.in, pre-config.rb:
+	fix LDFLAGS for libruby, ppc mac cannot build universal binary.
+
+	* VERSION:
+	0.5.0-preview7
+
+2006-11-16  kimura wataru 
+
+	* framework/src/objc/cocoa/init_cocoa.m:
+	fix: missing retain for result of Cocoa functions.
+
+2006-11-11  Jonathan Paisley 
+
+	* framework/RubyCocoa.xcodeproj/project.pbxproj, 
+	  framework/src/ruby/osx/objc/qtkit.rb,
+	  framework/src/ruby/osx/qtkit.rb,
+	  pre-config.rb, tests/tc_qtkit.rb:
+	Include QTKit.framework in the project.
+	Add missing osx/qtkit.rb from Copy Files build phase.
+	Remove '-undefined suppress' from LDFLAGS, since this
+	hid the error about missing QTMakeTimeRange and QTMakeTime.
+	Hopefully it is not needed.
+	Add rudimentary tests for the qtkit additions (incomplete).
+	
+2006-11-09  kimura wataru 
+
+	* framework/RubyCocoa.xcodeproj/project.pbxproj,
+	  framework/src/ruby/osx/objc/qtkit.rb framework/src/ruby/osx/qtkit.rb,
+	  lib/osx/qtkit.rb:
+	add support of QTKit.(patch from Eloy Duran)
+
+	* framework/src/objc/ocdata_conv.h, framework/src/objc/ocdata_conv.m:
+	add conversions for QTKit structures.(patch from Eloy Duran)
+
+2006-11-05  kimura wataru 
+
+	* VERSION:
+	0.5.0-preview6
+
+2006-11-03  Jonathan Paisley 
+
+	* framework/src/ruby/osx/objc/oc_attachments.rb, 
+	  tests/tc_attachments.rb:
+	fix: Copy/paste error from NSData to NSImage. Add
+	test case for RCImageAttachment.
+	
+2006-11-03  kimura wataru 
+
+	* sample/MyViewer/WinCtrl.rb:
+	fix: MyViewer.app cannot open files.
+
+2006-11-02  kimura wataru 
+
+	* framework/src/ruby/osx/objc/oc_import.rb:
+	fix: automatic override incorrectly with methods contains "_".
+
+2006-11-01  kimura wataru 
+
+	* framework/src/objc/mdl_objwrapper.m:
+	fix: release placeholder objects by ruby GC.
+	
+	* tests/objc_test.m, tests/tc_retaincount.rb:
+	add test for placeholder objects.
+
+2006-10-29  kimura wataru 
+
+	* framework/src/objc/RBObject.m,
+	  tests/objc_test.m, tests/tc_retaincount.rb:
+	-[RBObject fetchForwardArgumentsOf] retain objc object when the 
+	object was passed from ObjC to Ruby.
+	(same process as ocm_retain_result_if_necessary() in mdl_objwrapper.m)
+
 2006-10-28  kimura wataru 
 
 	* doc/build.en.html, doc/build.ja.html, doc/changelog.html,
@@ -10,7 +89,7 @@
 	update documents for releas-0.5.0.
 
 	* VERSION:
-	0.5.0
+	(this change was reverted from some troubles) 0.5.0
 
 2006-10-26  kimura wataru 
 
