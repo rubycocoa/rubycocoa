@@ -258,8 +258,18 @@ ocobj_s_new(id ocid)
 {
   VALUE obj;
   const char *cls_name;
-
+  
   cls_name = object_getClassName(ocid);
+
+  // Try to determine from the metadata if a given NSCFType object cannot be promoted to a better class.
+  if (strcmp(cls_name, "NSCFType") == 0) {
+    struct bsCFType *bs_cf_type;
+    
+    bs_cf_type = find_bs_cf_type_by_type_id(CFGetTypeID((CFTypeRef)ocid));
+    if (bs_cf_type != NULL)
+      cls_name = bs_cf_type->bridged_class_name;
+  }
+
   obj = rb_funcall(rb_cls_ocobj(cls_name), rb_intern("new_with_ocid"), 1, OCID2NUM(ocid));
   return obj;
 }

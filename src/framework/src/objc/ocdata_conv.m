@@ -71,7 +71,7 @@ to_octype(const char* octype_str)
   oct = *octype_str;
 
   // Type IDs.
-  if (find_bs_cf_type(octype_str)) {
+  if (find_bs_cf_type_by_encoding(octype_str) != NULL) {
     oct = _C_ID;
   }
   // Structures.
