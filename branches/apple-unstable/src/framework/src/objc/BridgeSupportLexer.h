@@ -32,7 +32,7 @@
 #line 1 "BridgeSupport.gperf"
 struct bs_xml_atom { char *name; int val; };
 
-#define TOTAL_KEYWORDS 11
+#define TOTAL_KEYWORDS 12
 #define MIN_WORD_LENGTH 4
 #define MAX_WORD_LENGTH 17
 #define MIN_HASH_VALUE 4
@@ -62,7 +62,7 @@ hash (register const char *str, register unsigned int len)
       23, 23, 23, 23, 23, 23, 23, 23, 23, 23,
       23, 23, 23, 23, 23, 23, 23, 23, 23,  0,
       23,  0,  5, 23, 23,  5, 23, 23, 23,  5,
-      23, 23, 23, 23, 23, 10, 23, 23, 23, 23,
+      23, 15, 23, 23, 23, 10, 23, 23, 23, 23,
       23, 23, 23, 23, 23, 23, 23, 23, 23, 23,
       23, 23, 23, 23, 23, 23, 23, 23, 23, 23,
       23, 23, 23, 23, 23, 23, 23, 23, 23, 23,
@@ -109,6 +109,8 @@ bs_xml_element (register const char *str, register unsigned int len)
       {"function_arg", 6},
 #line 11 "BridgeSupport.gperf"
       {"method_retval", 9},
+#line 14 "BridgeSupport.gperf"
+      {"opaque", 12},
 #line 6 "BridgeSupport.gperf"
       {"informal_protocol", 4}
     };
@@ -153,8 +155,11 @@ bs_xml_element (register const char *str, register unsigned int len)
               case 14:
                 resword = &wordlist[9];
                 goto compare;
-              case 18:
+              case 17:
                 resword = &wordlist[10];
+                goto compare;
+              case 18:
+                resword = &wordlist[11];
                 goto compare;
             }
           return 0;
@@ -169,7 +174,7 @@ bs_xml_element (register const char *str, register unsigned int len)
     }
   return 0;
 }
-#line 14 "BridgeSupport.gperf"
+#line 15 "BridgeSupport.gperf"
 
 #define BS_XML_CONSTANT           1
 #define BS_XML_ENUM               2
@@ -182,3 +187,4 @@ bs_xml_element (register const char *str, register unsigned int len)
 #define BS_XML_METHOD_RETVAL      9
 #define BS_XML_METHOD             10
 #define BS_XML_CFTYPE             11
+#define BS_XML_OPAQUE             12

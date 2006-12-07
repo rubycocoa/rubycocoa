@@ -64,23 +64,20 @@ int
 to_octype(const char* octype_str)
 {
   int oct;
+  struct bsBoxed *bs_boxed;
 
   // Avoid first character 'r' which means const.
   if (octype_str[0] == 'r') 
     octype_str++;
   oct = *octype_str;
 
-  // Type IDs.
-  if (find_bs_cf_type_by_encoding(octype_str) != NULL) {
-    oct = _C_ID;
-  }
   // Structures.
-  else if (octype_str[0] == '{') {
-    struct bsStruct *bs_struct;
-
-    bs_struct = find_bs_struct_by_encoding(octype_str);
-    if (bs_struct != NULL)
-      oct = bs_struct->octype;
+  if ((bs_boxed = find_bs_boxed_by_encoding(octype_str)) != NULL) {
+    oct = bs_boxed->octype;
+  }
+  // Type IDs.
+  else if (find_bs_cf_type_by_encoding(octype_str) != NULL) {
+    oct = _C_ID;
   }
   // Pointers.
   else if (octype_str[0] == '^') {
@@ -160,12 +157,12 @@ ocdata_size(int octype, const char* octype_str)
   case _C_STRUCT_E:
 
   default: {
-    if (octype > BS_STRUCT_OCTYPE_THRESHOLD) {
-      struct bsStruct *bs_struct;
+    if (octype > BS_BOXED_OCTYPE_THRESHOLD) {
+      struct bsBoxed *bs_boxed;
 
-      bs_struct = find_bs_struct_by_octype(octype);
-      if (bs_struct != NULL)
-        result = bs_struct->size;
+      bs_boxed = find_bs_boxed_by_octype(octype);
+      if (bs_boxed != NULL)
+        result = bs_boxed->size;
     }
     if (result == 0 && octype_str != NULL) {
       unsigned int size, align;
@@ -275,13 +272,13 @@ ocdata_to_rbobj(VALUE context_obj,
   case _C_STRUCT_E:
 
   default:
-    if (octype > BS_STRUCT_OCTYPE_THRESHOLD) {
-      struct bsStruct *bs_struct;
+    if (octype > BS_BOXED_OCTYPE_THRESHOLD) {
+      struct bsBoxed *bs_boxed;
 
-      bs_struct = find_bs_struct_by_octype(octype);
-      if (bs_struct != NULL) {
+      bs_boxed = find_bs_boxed_by_octype(octype);
+      if (bs_boxed != NULL) {
         f_success = YES;
-        rbval = rb_bs_struct_new_from_ocdata(bs_struct, (void *)ocdata);
+        rbval = rb_bs_boxed_new_from_ocdata(bs_boxed, (void *)ocdata);
       }
       else {
         f_success = NO;
@@ -570,13 +567,13 @@ static BOOL rbobj_to_objcptr(VALUE obj, void** cptr)
     *cptr = objcptr_cptr(obj);
   }
   else if (rb_obj_is_kind_of(obj, objboxed_s_class()) == Qtrue) {
-    struct bsStruct *bs_struct;
+    struct bsBoxed *bs_boxed;
 
-    bs_struct = bs_struct_for_klass(CLASS_OF(obj));
-    if (bs_struct == NULL)
+    bs_boxed = find_bs_boxed_for_klass(CLASS_OF(obj));
+    if (bs_boxed == NULL)
       return NO;
 
-    *cptr = rb_bs_struct_get_data(obj, bs_struct->octype, NULL);
+    *cptr = rb_bs_boxed_get_data(obj, bs_boxed->octype, NULL);
   } 
   else {
     return NO;
@@ -736,11 +733,11 @@ rbobj_to_ocdata(VALUE obj, int octype, void* ocdata, BOOL to_libffi)
   case _C_STRUCT_E:
 
   default:
-    if (octype > BS_STRUCT_OCTYPE_THRESHOLD) {
+    if (octype > BS_BOXED_OCTYPE_THRESHOLD) {
       void *data;
       int size;
 
-      data = rb_bs_struct_get_data(obj, octype, &size);
+      data = rb_bs_boxed_get_data(obj, octype, &size);
       f_success = data != NULL;
       if (f_success)
         memcpy(ocdata, data, size);
