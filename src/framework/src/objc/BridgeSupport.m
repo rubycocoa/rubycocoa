@@ -31,9 +31,8 @@ VALUE objboxed_s_class(void)
   return cOSXBoxed;
 }
 
-static struct st_table *bsStructs;     // struct encoding -> struct bsStruct
-static struct st_table *bsStructs2;    // struct octype -> struct bsStruct
-static struct st_table *bsStructs3;    // struct name -> struct bsStruct
+static struct st_table *bsBoxed;       // boxed encoding -> struct bsBoxed
+static struct st_table *bsBoxed2;      // boxed octype -> struct bsBoxed
 static struct st_table *bsCFTypes;     // encoding -> struct bsCFType
 static struct st_table *bsCFTypes2;    // CFTypeID -> struct bsCFType
 static struct st_table *bsFunctions;   // function name -> struct bsFunction
@@ -62,7 +61,7 @@ struct bsFunction *current_function = NULL;
   while (0)
 
 // struct proxies octype constants, each proxy has a unique octype, starting at a given threshold. 
-static int bs_struct_octype_idx = BS_STRUCT_OCTYPE_THRESHOLD + 1;
+static int bs_boxed_octype_idx = BS_BOXED_OCTYPE_THRESHOLD + 1;
 
 static VALUE
 _ocdataconv_err_class()
@@ -371,8 +370,8 @@ bails:
   return NO;
 }
 
-struct bsStruct *
-bs_struct_for_klass (VALUE klass)
+struct bsBoxed *
+find_bs_boxed_for_klass (VALUE klass)
 {
   VALUE encoding;
 
@@ -383,19 +382,19 @@ bs_struct_for_klass (VALUE klass)
   if (TYPE(encoding) != T_STRING)
     return NULL;
 
-  return find_bs_struct_by_encoding(StringValuePtr(encoding));
+  return find_bs_boxed_by_encoding(StringValuePtr(encoding));
 }
 
 static size_t 
-bs_struct_size(struct bsStruct *bs_struct)
+bs_struct_size(struct bsBoxed *bs_struct)
 {
   if (bs_struct->size == 0) {
     unsigned i;
     size_t size;
   
-    for (i = 0, size = 0; i < bs_struct->field_count; i++)
-      size += ocdata_size(to_octype(bs_struct->fields[i].encoding),
-                          bs_struct->fields[i].encoding);           
+    for (i = 0, size = 0; i < bs_struct->opt.s.field_count; i++)
+      size += ocdata_size(to_octype(bs_struct->opt.s.fields[i].encoding),
+                          bs_struct->opt.s.fields[i].encoding);           
 
     bs_struct->size = size; 
   }
@@ -403,39 +402,60 @@ bs_struct_size(struct bsStruct *bs_struct)
 }
 
 static ffi_type *
-bs_struct_ffi_type(struct bsStruct *bs_struct)
+bs_boxed_ffi_type(struct bsBoxed *bs_boxed)
 {
-  if (bs_struct->ffi_type == NULL) {
-    unsigned i;
+  if (bs_boxed->ffi_type == NULL) {
+    if (bs_boxed->type == bsBoxedStructType) {
+      unsigned i;
 
-    bs_struct->ffi_type = (ffi_type *)malloc(sizeof(ffi_type));
-    ASSERT_ALLOC(bs_struct->ffi_type);
+      bs_boxed->ffi_type = (ffi_type *)malloc(sizeof(ffi_type));
+      ASSERT_ALLOC(bs_boxed->ffi_type);
   
-    bs_struct->ffi_type->size = bs_struct_size(bs_struct);
-    bs_struct->ffi_type->alignment = 0;
-    bs_struct->ffi_type->type = FFI_TYPE_STRUCT;
-    bs_struct->ffi_type->elements = malloc(bs_struct->field_count * sizeof(ffi_type *));
-    ASSERT_ALLOC(bs_struct->ffi_type->elements);
-    for (i = 0; i < bs_struct->field_count; i++)
-      bs_struct->ffi_type->elements[i] = ffi_type_for_octype(to_octype(bs_struct->fields[i].encoding)); 
-    bs_struct->ffi_type->elements[bs_struct->field_count] = NULL;
+      bs_boxed->ffi_type->size = bs_struct_size(bs_boxed);
+      bs_boxed->ffi_type->alignment = 0;
+      bs_boxed->ffi_type->type = FFI_TYPE_STRUCT;
+      bs_boxed->ffi_type->elements = malloc(bs_boxed->opt.s.field_count * sizeof(ffi_type *));
+      ASSERT_ALLOC(bs_boxed->ffi_type->elements);
+      for (i = 0; i < bs_boxed->opt.s.field_count; i++) {
+        int octype;
+
+        octype = to_octype(bs_boxed->opt.s.fields[i].encoding);
+        bs_boxed->ffi_type->elements[i] = ffi_type_for_octype(octype);
+      }
+      bs_boxed->ffi_type->elements[bs_boxed->opt.s.field_count] = NULL;
+    }
+    else if (bs_boxed->type == bsBoxedOpaqueType) {
+      // FIXME we assume that boxed types are pointers, but maybe we should analyze the encoding.
+      bs_boxed->ffi_type = &ffi_type_pointer;
+    }
   }
 
-  return bs_struct->ffi_type;
+  return bs_boxed->ffi_type;
+}
+
+static inline struct bsBoxed *
+rb_bs_struct_get_bs_struct (VALUE rcv)
+{
+  struct bsBoxed *bs_struct;
+
+  bs_struct = find_bs_boxed_for_klass(rcv);
+  if (bs_struct == NULL) 
+    rb_bug("Can't get bridge support structure for the given klass %p", rcv);
+  if (bs_struct->type != bsBoxedStructType)
+    rb_bug("Invalid bridge support boxed structure type %d", bs_struct->type);
+
+  return bs_struct;
 }
 
 static VALUE
 rb_bs_struct_new (int argc, VALUE *argv, VALUE rcv)
 {
-  struct bsStruct *bs_struct;
+  struct bsBoxed *bs_struct;
   void *data;
   unsigned i;
   unsigned pos;
 
-  bs_struct = bs_struct_for_klass(rcv);
-  if (bs_struct == NULL) 
-    rb_raise(rb_eRuntimeError, "Can't get bridge support structure for the given klass %p", rcv);
-
+  bs_struct = rb_bs_struct_get_bs_struct(rcv);
 #if 0
   // Probably not necessary.
   if (argc == 1 && TYPE(argv[0]) == T_ARRAY) {
@@ -444,8 +464,8 @@ rb_bs_struct_new (int argc, VALUE *argv, VALUE rcv)
   }
 #endif
 
-  if (argc > 0 && argc != bs_struct->field_count)
-    rb_raise(rb_eArgError, "wrong number of arguments (%d for %d)", argc, bs_struct->field_count);
+  if (argc > 0 && argc != bs_struct->opt.s.field_count)
+    rb_raise(rb_eArgError, "wrong number of arguments (%d for %d)", argc, bs_struct->opt.s.field_count);
 
   bs_struct_size(bs_struct);
   if (bs_struct->size == 0)
@@ -455,15 +475,15 @@ rb_bs_struct_new (int argc, VALUE *argv, VALUE rcv)
   ASSERT_ALLOC(data);
 
   if (argc > 0) {
-    for (i = 0, pos = 0; i < bs_struct->field_count; i++) {
+    for (i = 0, pos = 0; i < bs_struct->opt.s.field_count; i++) {
       int field_octype;
 
-      field_octype = to_octype(bs_struct->fields[i].encoding);
+      field_octype = to_octype(bs_struct->opt.s.fields[i].encoding);
 
       if (!rbobj_to_ocdata(argv[i], field_octype, data + pos, NO))
         rb_raise(rb_eArgError, "Cannot convert arg #%d of type %d to Objective-C", i, field_octype);
 
-      pos += ocdata_size(field_octype, bs_struct->fields[i].encoding);
+      pos += ocdata_size(field_octype, bs_struct->opt.s.fields[i].encoding);
     }
   }
   
@@ -471,35 +491,28 @@ rb_bs_struct_new (int argc, VALUE *argv, VALUE rcv)
 }
 
 VALUE 
-rb_bs_struct_new_from_ocdata(struct bsStruct *bs_struct, void *ocdata)
+rb_bs_boxed_new_from_ocdata (struct bsBoxed *bs_boxed, void *ocdata)
 {
   void *data;
+ 
+  if (bs_boxed->type == bsBoxedStructType)
+    bs_struct_size(bs_boxed);
+  if (bs_boxed->size == 0)
+    rb_raise(rb_eRuntimeError, "can't instantiate boxed '%s' of 0 size", bs_boxed->name);
 
-  bs_struct_size(bs_struct);
-  if (bs_struct->size == 0)
-    rb_raise(rb_eRuntimeError, "can't instantiate struct '%s' of 0 size", bs_struct->name);
-
-  data = (void *)malloc(bs_struct->size);
+  data = (void *)malloc(bs_boxed->size);
   ASSERT_ALLOC(data);
-  memcpy(data, ocdata, bs_struct->size);
+  memcpy(data, ocdata, bs_boxed->size);
 
-  return Data_Wrap_Struct(bs_struct->klass, NULL, free, data);
+  return Data_Wrap_Struct(bs_boxed->klass, NULL, free, data);
 }
 
-void *
-rb_bs_struct_get_data(VALUE obj, int octype, int *size)
+static void *
+rb_bs_boxed_struct_get_data(VALUE obj, struct bsBoxed *bs_boxed, int *size)
 {
-  struct bsStruct *bs_struct;
-  void *data;
-  unsigned i;
-
-  if (NIL_P(obj))
-    return NULL;
-
-  bs_struct = find_bs_struct_by_octype(octype);
-  if (bs_struct == NULL)
-    return NULL;
-
+  void *  data;
+  int     i;
+  
   // Given Ruby object is not a OSX::Boxed type, let's just pass it to the upstream initializer.
   // This is to keep backward compatibility.
   if (rb_obj_is_kind_of(obj, cOSXBoxed) != Qtrue) {
@@ -509,7 +522,7 @@ rb_bs_struct_get_data(VALUE obj, int octype, int *size)
       rb_ary_push(ary, obj);
       obj = ary;
     }
-    obj = rb_funcall2(bs_struct->klass, rb_intern("new"), RARRAY(obj)->len, RARRAY(obj)->ptr);
+    obj = rb_funcall2(bs_boxed->klass, rb_intern("new"), RARRAY(obj)->len, RARRAY(obj)->ptr);
   }
 
   if (NIL_P(obj) || rb_obj_is_kind_of(obj, cOSXBoxed) != Qtrue)
@@ -518,24 +531,70 @@ rb_bs_struct_get_data(VALUE obj, int octype, int *size)
   // Resync the ivars if necessary.
   // This is required as some fields may nest another structure, which
   // could have been modified as a copy in the Ruby world.
-  for (i = 0; i < bs_struct->field_count; i++) {
+  for (i = 0; i < bs_boxed->opt.s.field_count; i++) {
     char buf[128];
     ID ivar_id;
 
-    snprintf(buf, sizeof buf, "@%s", bs_struct->fields[i].name);
+    snprintf(buf, sizeof buf, "@%s", bs_boxed->opt.s.fields[i].name);
     ivar_id = rb_intern(buf);
     if (rb_ivar_defined(obj, ivar_id) == Qtrue) {
       VALUE val;
 
       val = rb_ivar_get(obj, ivar_id);
-      snprintf(buf, sizeof buf, "%s=", bs_struct->fields[i].name);
+      snprintf(buf, sizeof buf, "%s=", bs_boxed->opt.s.fields[i].name);
       rb_funcall(obj, rb_intern(buf), 1, val);
     } 
   }
   Data_Get_Struct(obj, void, data);
 
   if (size != NULL)
-    *size = bs_struct_size(bs_struct);
+    *size = bs_struct_size(bs_boxed);
+
+  return data;
+}
+
+static void *
+rb_bs_boxed_opaque_get_data(VALUE obj, struct bsBoxed *bs_boxed, int *size)
+{
+  void *data;
+  
+  if (rb_obj_is_kind_of(obj, cOSXBoxed) != Qtrue)
+    return NULL;
+  
+  Data_Get_Struct(obj, void, data);
+
+  if (size != NULL)
+    *size = bs_boxed->size;
+
+  return data;
+}
+
+void *
+rb_bs_boxed_get_data(VALUE obj, int octype, int *size)
+{
+  struct bsBoxed *bs_boxed;
+  void *data;
+
+  if (NIL_P(obj))
+    return NULL;
+
+  bs_boxed = find_bs_boxed_by_octype(octype);
+  if (bs_boxed == NULL)
+    return NULL;
+
+  switch (bs_boxed->type) {
+    case bsBoxedStructType:
+      data = rb_bs_boxed_struct_get_data(obj, bs_boxed, size);
+      break;
+    
+    case bsBoxedOpaqueType:
+      data = rb_bs_boxed_opaque_get_data(obj, bs_boxed, size);
+      break;
+
+    default:
+      rb_bug("invalid bridge support boxed structure type %d", bs_boxed->type);
+      data = NULL;
+  }
 
   return data;
 }
@@ -543,7 +602,7 @@ rb_bs_struct_get_data(VALUE obj, int octype, int *size)
 static void *
 rb_bs_struct_get_field_data(VALUE rcv, int *field_octype_out)
 {
-  struct bsStruct *bs_struct;
+  struct bsBoxed *bs_struct;
   char *field;
   unsigned field_len;
   unsigned i;
@@ -552,12 +611,9 @@ rb_bs_struct_get_field_data(VALUE rcv, int *field_octype_out)
   void *data;
 
   *field_octype_out = -1;
+  bs_struct = rb_bs_struct_get_bs_struct(CLASS_OF(rcv));
 
-  bs_struct = bs_struct_for_klass(CLASS_OF(rcv));
-  if (bs_struct == NULL)
-    rb_raise(rb_eRuntimeError, "Can't get bridge support structure for the given klass %p", CLASS_OF(rcv));
-
-  if (bs_struct->field_count == 0)
+  if (bs_struct->opt.s.field_count == 0)
     rb_raise(rb_eRuntimeError, "Bridge support structure %p doesn't have any field", bs_struct);
 
   field = rb_id2name(ruby_frame->orig_func);
@@ -570,20 +626,20 @@ rb_bs_struct_get_field_data(VALUE rcv, int *field_octype_out)
     rb_raise(rb_eRuntimeError, "Given structure %p has null data", rcv);
 
   for (i = 0, data = NULL, offset = 0; 
-       i < bs_struct->field_count; 
+       i < bs_struct->opt.s.field_count; 
        i++) {
      
     int field_octype;
 
-    field_octype = to_octype(bs_struct->fields[i].encoding);
+    field_octype = to_octype(bs_struct->opt.s.fields[i].encoding);
     
-    if (strncmp(bs_struct->fields[i].name, field, field_len) == 0) {
+    if (strncmp(bs_struct->opt.s.fields[i].name, field, field_len) == 0) {
       *field_octype_out = field_octype;
       data = struct_data + offset;
       break;
     }
 
-    offset += ocdata_size(field_octype, bs_struct->fields[i].encoding); 
+    offset += ocdata_size(field_octype, bs_struct->opt.s.fields[i].encoding); 
   }
 
   if (data == NULL)
@@ -647,20 +703,17 @@ rb_bs_struct_set (VALUE rcv, VALUE val)
 static VALUE
 rb_bs_struct_to_a (VALUE rcv)
 {
-  struct bsStruct *bs_struct;
+  struct bsBoxed *bs_struct;
   unsigned i;
   VALUE ary;
 
-  bs_struct = bs_struct_for_klass(CLASS_OF(rcv));
-  if (bs_struct == NULL)
-    rb_raise(rb_eRuntimeError, "Can't get bridge support structure for the given klass %p", CLASS_OF(rcv));
-
+  bs_struct = rb_bs_struct_get_bs_struct(CLASS_OF(rcv));
   ary = rb_ary_new();
 
-  for (i = 0; i < bs_struct->field_count; i++) {
+  for (i = 0; i < bs_struct->opt.s.field_count; i++) {
     VALUE obj;
 
-    obj = rb_funcall(rcv, rb_intern(bs_struct->fields[i].name), 0, NULL);
+    obj = rb_funcall(rcv, rb_intern(bs_struct->opt.s.fields[i].name), 0, NULL);
     rb_ary_push(ary, obj);
   }
 
@@ -670,7 +723,7 @@ rb_bs_struct_to_a (VALUE rcv)
 static VALUE
 rb_bs_struct_is_equal (VALUE rcv, VALUE other)
 {
-  struct bsStruct *bs_struct;
+  struct bsBoxed *bs_struct;
   unsigned i;
 
   if (rcv == other)
@@ -679,15 +732,13 @@ rb_bs_struct_is_equal (VALUE rcv, VALUE other)
   if (rb_obj_is_kind_of(other, CLASS_OF(rcv)) == Qfalse)
     return Qfalse;
 
-  bs_struct = bs_struct_for_klass(CLASS_OF(rcv));
-  if (bs_struct == NULL)
-    rb_raise(rb_eRuntimeError, "Can't get bridge support structure for the given klass %p", CLASS_OF(rcv));
+  bs_struct = rb_bs_struct_get_bs_struct(CLASS_OF(rcv));
 
-  for (i = 0; i < bs_struct->field_count; i++) {
+  for (i = 0; i < bs_struct->opt.s.field_count; i++) {
     VALUE lval, rval;
     ID msg;
 
-    msg = rb_intern(bs_struct->fields[i].name);
+    msg = rb_intern(bs_struct->opt.s.fields[i].name);
     lval = rb_funcall(rcv, msg, 0, NULL);
     rval = rb_funcall(other, msg, 0, NULL);
     
@@ -698,15 +749,46 @@ rb_bs_struct_is_equal (VALUE rcv, VALUE other)
   return Qtrue;
 }
 
-static struct bsStruct *
-handle_bs_struct (VALUE mOSX, char *name, char *decorated_encoding)
+static VALUE
+rb_define_bs_boxed_class (VALUE mOSX, const char *name, const char *encoding)
+{
+  VALUE klass;
+
+  // FIXME make sure we don't define the same class twice!
+  klass = rb_define_class_under(mOSX, name, cOSXBoxed);
+  rb_ivar_set(klass, ivarEncodingID, rb_str_new2(encoding)); 
+  
+  return klass;
+}
+
+static struct bsBoxed *
+init_bs_boxed (bsBoxedType type, const char *name, const char *encoding, VALUE klass)
+{
+  struct bsBoxed *bs_boxed;
+
+  bs_boxed = (struct bsBoxed *)malloc(sizeof(struct bsBoxed)); 
+  ASSERT_ALLOC(bs_boxed);
+
+  bs_boxed->type = type; 
+  bs_boxed->name = (char *)name;
+  bs_boxed->size = 0; // lazy determined
+  bs_boxed->encoding = strdup(encoding);
+  bs_boxed->klass = klass;
+  bs_boxed->octype = bs_boxed_octype_idx++;
+  bs_boxed->ffi_type = NULL; // lazy determined
+
+  return bs_boxed;
+}
+
+static struct bsBoxed *
+init_bs_boxed_struct (VALUE mOSX, const char *name, const char *decorated_encoding)
 {
   char encoding[MAX_ENCODE_LEN];
   struct bsStructField fields[128];
   int field_count;
   VALUE klass;
   unsigned i;
-  struct bsStruct *bs_struct;
+  struct bsBoxed *bs_boxed;
 
   // Undecorate the encoding and its fields.
   if (!undecorate_encoding(decorated_encoding, encoding, MAX_ENCODE_LEN, fields, 128, &field_count)) {
@@ -715,8 +797,9 @@ handle_bs_struct (VALUE mOSX, char *name, char *decorated_encoding)
   }
 
   // Define proxy class.
-  klass = rb_define_class_under(mOSX, name, cOSXBoxed);
-  rb_ivar_set(klass, ivarEncodingID, rb_str_new2(encoding)); 
+  klass = rb_define_bs_boxed_class(mOSX, name, encoding);
+  if (NIL_P(klass))
+    return NULL;
   for (i = 0; i < field_count; i++) {
     char setter[128];
 
@@ -728,22 +811,31 @@ handle_bs_struct (VALUE mOSX, char *name, char *decorated_encoding)
   rb_define_method(klass, "==", rb_bs_struct_is_equal, 1);
   rb_define_method(klass, "to_a", rb_bs_struct_to_a, 0);
 
-  // Allocate and return bs_struct entry.
-  bs_struct = (struct bsStruct *)malloc(sizeof(struct bsStruct)); 
-  ASSERT_ALLOC(bs_struct);
-  
-  bs_struct->name = name;
-  bs_struct->size = 0; // lazy determined
-  bs_struct->encoding = strdup(encoding);
-  bs_struct->klass = klass;
-  bs_struct->octype = bs_struct_octype_idx++;
-  bs_struct->ffi_type = NULL; // lazy determined
-  bs_struct->fields = (struct bsStructField *)malloc(sizeof(struct bsStructField) * field_count);
-  ASSERT_ALLOC(bs_struct->fields);
-  memcpy(bs_struct->fields, fields, sizeof(struct bsStructField) * field_count); 
-  bs_struct->field_count = field_count;
+  // Allocate and return bs_boxed entry.
+  bs_boxed = init_bs_boxed(bsBoxedStructType, name, encoding, klass);
+  bs_boxed->opt.s.fields = (struct bsStructField *)malloc(sizeof(struct bsStructField) * field_count);
+  ASSERT_ALLOC(bs_boxed->opt.s.fields);
+  memcpy(bs_boxed->opt.s.fields, fields, sizeof(struct bsStructField) * field_count); 
+  bs_boxed->opt.s.field_count = field_count;
 
-  return bs_struct;
+  return bs_boxed;
+}
+
+static struct bsBoxed *
+init_bs_boxed_opaque (VALUE mOSX, const char *name, const char *encoding)
+{
+  VALUE klass;
+  struct bsBoxed *bs_boxed;
+  
+  klass = rb_define_bs_boxed_class(mOSX, name, encoding);
+  if (NIL_P(klass))
+    return NULL;
+
+  bs_boxed = init_bs_boxed(bsBoxedOpaqueType, name, encoding, klass);
+  if (bs_boxed != NULL)
+    bs_boxed->size = sizeof(void *);
+
+  return bs_boxed;
 }
 
 static Class
@@ -809,12 +901,12 @@ ffi_type_for_octype (int octype)
       return &ffi_type_void;  
 
     default:
-      if (octype > BS_STRUCT_OCTYPE_THRESHOLD) {
-        struct bsStruct *bs_struct;
+      if (octype > BS_BOXED_OCTYPE_THRESHOLD) {
+        struct bsBoxed *bs_boxed;
 
-        bs_struct = find_bs_struct_by_octype(octype);
-        if (bs_struct != NULL)
-          return bs_struct_ffi_type(bs_struct);
+        bs_boxed = find_bs_boxed_by_octype(octype);
+        if (bs_boxed != NULL)
+          return bs_boxed_ffi_type(bs_boxed);
       }
       break;
   }
@@ -1094,32 +1186,49 @@ osx_load_bridge_support_file (VALUE mOSX, VALUE path)
       break;
 
       case BS_XML_STRUCT: {
-        char *  struct_decorated_encoding;
+        char *           struct_decorated_encoding;
+        char *           struct_name;
+        struct bsBoxed * bs_boxed;
 
         struct_decorated_encoding = get_attribute_and_check(reader, "encoding");
+        struct_name = get_attribute_and_check(reader, "name");
 
-        if (st_lookup(bsStructs, (st_data_t)struct_decorated_encoding, NULL)) {
-          DLOG("MDLOSX", "Structure '%s' already defined -- skipping...", struct_decorated_encoding);
-          free(struct_decorated_encoding);
+        bs_boxed = init_bs_boxed_struct(mOSX, struct_name, struct_decorated_encoding);
+        if (bs_boxed == NULL) {
+          DLOG("MDLOSX", "Can't init structure '%s' -- skipping...", struct_decorated_encoding);
         }
         else {
-          char *            struct_name;
-          struct bsStruct * bs_struct;
+          st_insert(bsBoxed, (st_data_t)bs_boxed->encoding, (st_data_t)bs_boxed);
+          st_insert(bsBoxed2, (st_data_t)bs_boxed->octype, (st_data_t)bs_boxed);
+        }
 
-          struct_name = get_attribute_and_check(reader, "name");
+        free(struct_decorated_encoding);
+      }
+      break;
 
-          bs_struct = handle_bs_struct(mOSX, struct_name, struct_decorated_encoding);
-          if (bs_struct == NULL) {
-            DLOG("MDLOSX", "Can't handle structure '%s' -- skipping...", struct_decorated_encoding);
+      case BS_XML_OPAQUE: {
+        char *  opaque_encoding;
+
+        opaque_encoding = get_attribute_and_check(reader, "encoding");
+        if (st_lookup(bsBoxed, (st_data_t)opaque_encoding, NULL)) {
+          DLOG("MDLOSX", "Opaque type with encoding '%s' already defined -- skipping...", opaque_encoding);
+          free(opaque_encoding);
+        }
+        else {
+          char *            opaque_name;
+          struct bsBoxed *  bs_boxed;
+  
+          opaque_name = get_attribute_and_check(reader, "name");
+
+          bs_boxed = init_bs_boxed_opaque(mOSX, opaque_name, opaque_encoding);
+          if (bs_boxed == NULL) {
+            DLOG("MDLOSX", "Can't init opaque '%s' -- skipping...", opaque_encoding);
           }
           else {
-            st_insert(bsStructs, (st_data_t)bs_struct->encoding, (st_data_t)bs_struct);
-            st_insert(bsStructs2, (st_data_t)bs_struct->octype, (st_data_t)bs_struct);
-            st_insert(bsStructs3, (st_data_t)bs_struct->name, (st_data_t)bs_struct);
+            st_insert(bsBoxed, (st_data_t)bs_boxed->encoding, (st_data_t)bs_boxed);
+            st_insert(bsBoxed2, (st_data_t)bs_boxed->octype, (st_data_t)bs_boxed);
           }
-
-          free(struct_decorated_encoding);
-        }
+        }      
       }
       break;
 
@@ -1501,37 +1610,26 @@ osx_import_c_constant (VALUE self, VALUE sym)
   return value;
 }
 
-struct bsStruct *
-find_bs_struct_by_encoding (const char *encoding)
+struct bsBoxed *
+find_bs_boxed_by_encoding (const char *encoding)
 {
-  struct bsStruct *bs_struct;
+  struct bsBoxed *bs_boxed;
 
-  if (!st_lookup(bsStructs, (st_data_t)encoding, (st_data_t *)&bs_struct))
+  if (!st_lookup(bsBoxed, (st_data_t)encoding, (st_data_t *)&bs_boxed))
     return NULL;
 
-  return bs_struct;
+  return bs_boxed;
 }
 
-struct bsStruct *
-find_bs_struct_by_octype (const int octype)
+struct bsBoxed *
+find_bs_boxed_by_octype (const int octype)
 {
-  struct bsStruct *bs_struct;
+  struct bsBoxed *bs_boxed;
 
-  if (!st_lookup(bsStructs2, (st_data_t)octype, (st_data_t *)&bs_struct))
+  if (!st_lookup(bsBoxed2, (st_data_t)octype, (st_data_t *)&bs_boxed))
     return NULL;
 
-  return bs_struct;
-}
-
-struct bsStruct *
-find_bs_struct_by_name (const char *name) 
-{
-  struct bsStruct *bs_struct;
-
-  if (!st_lookup(bsStructs3, (st_data_t)name, (st_data_t *)&bs_struct))
-    return NULL;
-
-  return bs_struct;
+  return bs_boxed;
 }
 
 struct bsCFType *
@@ -1728,9 +1826,8 @@ initialize_bridge_support (VALUE mOSX)
 
   ivarEncodingID = rb_intern("@__encoding__");
 
-  bsStructs = st_init_strtable();
-  bsStructs2 = st_init_numtable();
-  bsStructs3 = st_init_strtable();
+  bsBoxed = st_init_strtable();
+  bsBoxed2 = st_init_numtable();
   bsCFTypes = st_init_strtable();
   bsCFTypes2 = st_init_numtable();
   bsConstants = st_init_strtable();

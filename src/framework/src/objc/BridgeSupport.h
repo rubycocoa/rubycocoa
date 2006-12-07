@@ -96,7 +96,7 @@ struct bsInformalProtocolMethod {
   char *  protocol_name;
 };
 
-#define BS_STRUCT_OCTYPE_THRESHOLD  1300
+#define BS_BOXED_OCTYPE_THRESHOLD  1300
 
 struct bsStructField {
   char *    name;
@@ -104,14 +104,31 @@ struct bsStructField {
 };
 
 struct bsStruct {
+  struct bsStructField *fields;
+  int field_count;
+};
+
+struct bsOpaque {
+  // Nothing there yet.
+};
+
+typedef enum {
+    bsBoxedStructType,
+    bsBoxedOpaqueType
+} bsBoxedType;
+
+struct bsBoxed {
+  bsBoxedType   type;
   char *        name;
+  char *        encoding;
   size_t        size;
   int           octype;
-  char *        encoding;   // real encoding, without field names decoration
   ffi_type *    ffi_type;
   VALUE         klass;
-  struct bsStructField *fields;
-  int           field_count;
+  union {
+    struct bsStruct s;
+    struct bsOpaque o;
+  } opt;
 };
 
 struct bsCFType {
@@ -124,19 +141,23 @@ struct bsCFType {
 extern struct bsFunction *current_function;
 
 ffi_type *ffi_type_for_octype(int octype);
-struct bsStruct *find_bs_struct_by_encoding(const char *encoding);
-struct bsStruct *find_bs_struct_by_octype(const int octype);
-struct bsStruct *find_bs_struct_by_name(const char *name);
+
+VALUE objboxed_s_class(void);
+struct bsBoxed *find_bs_boxed_by_encoding(const char *encoding);
+struct bsBoxed *find_bs_boxed_by_octype(const int octype);
+struct bsBoxed *find_bs_boxed_for_klass (VALUE klass);
+VALUE rb_bs_boxed_new_from_ocdata(struct bsBoxed *bs_boxed, void *ocdata);
+void *rb_bs_boxed_get_data(VALUE obj, int octype, int *size);
+
 struct bsCFType *find_bs_cf_type_by_encoding(const char *encoding);
 struct bsCFType *find_bs_cf_type_by_type_id(CFTypeID type_id);
-VALUE rb_bs_struct_new_from_ocdata(struct bsStruct *bs_struct, void *ocdata);
-void *rb_bs_struct_get_data(VALUE obj, int octype, int *size);
-struct bsStruct *bs_struct_for_klass (VALUE klass);
+
 struct bsMethod *find_bs_method(id klass, const char *selector, BOOL is_class_method);
 struct bsMethodArg *find_bs_method_arg_by_index(struct bsMethod *method, unsigned index);
 struct bsMethodArg *find_bs_method_arg_by_c_array_len_arg_index(struct bsMethod *method, unsigned index);
+
 struct bsInformalProtocolMethod *find_bs_informal_protocol_method(const char *selector, BOOL is_class_method);
-VALUE objboxed_s_class(void);
+
 void initialize_bridge_support(VALUE mOSX);
 
 /* On MacOS X, +signatureWithObjCTypes: is a method of NSMethodSignature,

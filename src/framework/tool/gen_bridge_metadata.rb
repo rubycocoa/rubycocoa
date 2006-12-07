@@ -615,6 +615,13 @@ EOS
         element.add_attribute('typeid', typeid) if typeid 
         element.add_attribute('tollfree', tollfree) if tollfree 
       end
+      @opaques.each do |name|
+        encoding = @types_encoding[name]
+        raise "encoding of opaque type #{name} not resolved" if encoding.nil?
+        element = root.add_element('opaque')
+        element.add_attribute('name', name) 
+        element.add_attribute('encoding', encoding) 
+      end
       @constants.each do |constant| 
         element = root.add_element('constant')
         element.add_attribute('name', constant.name)
@@ -817,20 +824,21 @@ EOS
         @import_directive.gsub!(/#import.+#{path}>/, '')
       end
     end
-    # Keep the list of structs.
-    @structs = @exceptions.map do |doc| 
-      doc.get_elements('/signatures/struct').map do |elem|
-        [elem.attributes['name'], elem.attributes['opaque'] == 'true']
+    # Keep the list of structs, CFTypes and boxed.
+    @structs = []
+    @cftypes = []
+    @opaques = []
+    @exceptions.each do |doc| 
+      doc.get_elements('/signatures/struct').each do |elem|
+        @structs << [elem.attributes['name'], elem.attributes['opaque'] == 'true']
       end
-    end.first
-    @structs ||= []
-    # Keep the list of CFTypes.
-    @cftypes = @exceptions.map do |doc|
       doc.get_elements('/signatures/cftype').map do |elem|
-        [elem.attributes['name'], elem.attributes['gettypeid_func']]
+        @cftypes << [elem.attributes['name'], elem.attributes['gettypeid_func']]
       end
-    end.first
-    @cftypes ||= []
+      doc.get_elements('/signatures/opaque').map do |elem|
+        @opaques << elem.attributes['name']
+      end
+    end
   end
   
   def handle_framework(val)

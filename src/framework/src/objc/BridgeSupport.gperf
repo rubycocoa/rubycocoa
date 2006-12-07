@@ -11,6 +11,7 @@ method_arg, 8
 method_retval, 9
 method, 10
 cftype, 11
+opaque, 12
 %%
 #define BS_XML_CONSTANT           1
 #define BS_XML_ENUM               2
@@ -23,3 +24,4 @@ cftype, 11
 #define BS_XML_METHOD_RETVAL      9
 #define BS_XML_METHOD             10
 #define BS_XML_CFTYPE             11
+#define BS_XML_OPAQUE             12
