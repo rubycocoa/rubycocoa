@@ -15,11 +15,13 @@
 #import <st.h>
 #import <env.h>
 #import <objc/objc-class.h>
+#import <objc/objc-runtime.h>
 #import "ocdata_conv.h"
 #import "ffi.h"
 #import "RBRuntime.h" // for DLOG
 #import "cls_objcid.h"
 #import "BridgeSupportLexer.h"
+#import "RBClassUtils.h"
 
 static VALUE cOSXBoxed;
 static ID ivarEncodingID;
@@ -753,7 +755,8 @@ bs_cf_type_create_proxy(const char *name)
   if (superclass == NULL)
     rb_bug("can't locate ObjC class NSCFType");
 #if MAC_OS_X_VERSION_MAX_ALLOWED <= MAC_OS_X_VERSION_10_4
-#error implement me
+  klass = objc_class_alloc(name, superclass);
+  objc_addClass(klass);
 #else
   klass = objc_allocateClassPair(superclass, name, 0);
   objc_registerClassPair(klass); 

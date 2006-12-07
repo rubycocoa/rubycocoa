@@ -1,0 +1,46 @@
+<?xml version='1.0'?>
+<!DOCTYPE signatures SYSTEM "file://localhost/System/Library/DTDs/BridgeSupport.dtd">
+<signatures version='0.9'>
+  <cftype name='CGColorRef' gettypeid_func='CGColorGetTypeID'/>
+  <cftype name='CGColorSpaceRef' gettypeid_func='CGColorSpaceGetTypeID'/>
+  <cftype name='CGContextRef' gettypeid_func='CGContextGetTypeID'/>
+  <cftype name='CGDataConsumerRef' gettypeid_func='CGDataConsumerGetTypeID'/>
+  <cftype name='CGDataProviderRef' gettypeid_func='CGDataProviderGetTypeID'/>
+  <cftype name='CGDirectPaletteRef'/>
+  <cftype name='CGDisplayConfigRef'/>
+  <cftype name='CGEventRef' gettypeid_func='CGEventGetTypeID'/>
+  <cftype name='CGEventSourceRef' gettypeid_func='CGEventSourceGetTypeID'/>
+  <cftype name='CGFontRef' gettypeid_func='CGFontGetTypeID'/>
+  <cftype name='CGFunctionRef' gettypeid_func='CGFunctionGetTypeID'/>
+  <cftype name='CGImageRef' gettypeid_func='CGImageGetTypeID'/>
+  <cftype name='CGLayerRef' gettypeid_func='CGLayerGetTypeID'/>
+  <cftype name='CGMutablePathRef' gettypeid_func='CGPathGetTypeID'/>
+  <cftype name='CGPDFArrayRef'/>
+  <cftype name='CGPDFContentStreamRef'/>
+  <cftype name='CGPDFDictionaryRef'/>
+  <cftype name='CGPDFDocumentRef' gettypeid_func='CGPDFDocumentGetTypeID'/>
+  <cftype name='CGPDFOperatorTableRef'/>
+  <cftype name='CGPDFPageRef' gettypeid_func='CGPDFPageGetTypeID'/>
+  <cftype name='CGPDFScannerRef'/>
+  <cftype name='CGPDFStreamRef'/>
+  <cftype name='CGPDFStringRef'/>
+  <cftype name='CGPSConverterRef' gettypeid_func='CGPSConverterGetTypeID'/>
+  <cftype name='CGPathRef' gettypeid_func='CGPathGetTypeID'/>
+  <cftype name='CGPatternRef' gettypeid_func='CGPatternGetTypeID'/>
+  <cftype name='CGShadingRef' gettypeid_func='CGShadingGetTypeID'/>
+  <struct name='CGAffineTransform'/>
+  <struct name='CGDataConsumerCallbacks'/>
+  <struct name='CGDataProviderCallbacks'/>
+  <struct name='CGDataProviderDirectAccessCallbacks'/>
+  <struct name='CGDeviceColor'/>
+  <struct name='CGDeviceByteColor'/>
+  <struct name='CGEventTapInformation'/>
+  <struct name='CGFunctionCallbacks'/>
+  <struct name='CGPoint'/>
+  <struct name='CGSize'/>
+  <struct name='CGRect'/>
+  <struct name='CGPathElement'/>
+  <struct name='CGPatternCallbacks'/>
+  <struct name='CGPSConverterCallbacks'/>
+  <struct name='CGScreenUpdateMoveDelta'/>
+</signatures>
