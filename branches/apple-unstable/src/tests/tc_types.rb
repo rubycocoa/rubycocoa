@@ -135,4 +135,8 @@ class TC_Types < Test::Unit::TestCase
     assert_kind_of(OSX::NSURL, url)
     assert_equal(url.path, OSX::CFURLCopyPath(url))
   end
+
+  def test_cftype_proxies
+    assert_kind_of(OSX::CFRunLoopRef, OSX::CFRunLoopGetCurrent())
+  end
 end

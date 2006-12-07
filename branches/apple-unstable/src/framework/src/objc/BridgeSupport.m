@@ -33,6 +33,7 @@ static struct st_table *bsStructs;     // struct encoding -> struct bsStruct
 static struct st_table *bsStructs2;    // struct octype -> struct bsStruct
 static struct st_table *bsStructs3;    // struct name -> struct bsStruct
 static struct st_table *bsCFTypes;     // encoding -> struct bsCFType
+static struct st_table *bsCFTypes2;    // CFTypeID -> struct bsCFType
 static struct st_table *bsFunctions;   // function name -> struct bsFunction
 static struct st_table *bsConstants;   // constant name -> type
 static struct st_table *bsClasses;     // class name -> struct bsClass
@@ -743,6 +744,23 @@ handle_bs_struct (VALUE mOSX, char *name, char *decorated_encoding)
   return bs_struct;
 }
 
+static Class
+bs_cf_type_create_proxy(const char *name)
+{
+  Class klass, superclass;
+
+  superclass = objc_getClass("NSCFType");
+  if (superclass == NULL)
+    rb_bug("can't locate ObjC class NSCFType");
+#if MAC_OS_X_VERSION_MAX_ALLOWED <= MAC_OS_X_VERSION_10_4
+#error implement me
+#else
+  klass = objc_allocateClassPair(superclass, name, 0);
+  objc_registerClassPair(klass); 
+#endif
+  return klass;
+}
+
 ffi_type *
 ffi_type_for_octype (int octype)
 {
@@ -1112,11 +1130,43 @@ osx_load_bridge_support_file (VALUE mOSX, VALUE path)
         }
         else {
           struct bsCFType *bs_cf_type;
+          char *type_id;
+          char *toll_free;
 
           bs_cf_type = (struct bsCFType *)malloc(sizeof(struct bsCFType));
           ASSERT_ALLOC(bs_cf_type);
 
-          st_insert(bsCFTypes, (st_data_t)typeid_encoding, (st_data_t)bs_cf_type); 
+          bs_cf_type->name = get_attribute_and_check(reader, "name");
+          bs_cf_type->encoding = typeid_encoding;
+          
+          type_id = get_attribute(reader, "typeid");
+          if (type_id != NULL) {
+            bs_cf_type->type_id = atoi(type_id);
+            free(type_id);
+          }
+          else {
+            bs_cf_type->type_id = 0; /* not a type */
+          }
+
+          bs_cf_type->bridged_class_name = NULL; 
+          toll_free = get_attribute(reader, "tollfree");
+          if (toll_free != NULL) {
+            if (objc_getClass(toll_free) != nil) {
+              bs_cf_type->bridged_class_name = toll_free;
+            }
+            else {
+              DLOG("MDLOSX", "Given CFType toll-free class '%s' doesn't exist -- creating a proxy...", toll_free);
+              free(toll_free);
+            }
+          }
+          if (bs_cf_type->bridged_class_name == NULL) {
+            bs_cf_type_create_proxy(bs_cf_type->name);
+            bs_cf_type->bridged_class_name = bs_cf_type->name;
+          }
+ 
+          st_insert(bsCFTypes, (st_data_t)typeid_encoding, (st_data_t)bs_cf_type);
+          if (bs_cf_type->type_id > 0) 
+            st_insert(bsCFTypes2, (st_data_t)bs_cf_type->type_id, (st_data_t)bs_cf_type);
         }
       }
       break;
@@ -1148,7 +1198,7 @@ osx_load_bridge_support_file (VALUE mOSX, VALUE path)
 
         return_type = get_attribute(reader, "returns");
         if (return_type != NULL) {
-          func->retval = find_bs_cf_type(return_type) ? _C_ID : to_octype(return_type);
+          func->retval = to_octype(return_type);
           func->retval_should_be_retained = func->retval == _C_ID ? !get_boolean_attribute(reader, "retval_retained", NO) : YES;
           free(return_type);
         }
@@ -1172,7 +1222,7 @@ osx_load_bridge_support_file (VALUE mOSX, VALUE path)
           int     type;
         
           arg_type = get_attribute_and_check(reader, "type");
-          type = find_bs_cf_type(arg_type) ? _C_ID : to_octype(arg_type);
+          type = to_octype(arg_type);
           free (arg_type);
         
           func_args[func->argc++] = type;
@@ -1482,14 +1532,25 @@ find_bs_struct_by_name (const char *name)
 }
 
 struct bsCFType *
-find_bs_cf_type(const char *encoding)
+find_bs_cf_type_by_encoding(const char *encoding)
 {
-  struct bsCFType *type_id;
+  struct bsCFType *cf_type;
 
-  if (!st_lookup(bsCFTypes, (st_data_t)encoding, (st_data_t *)&type_id))
+  if (!st_lookup(bsCFTypes, (st_data_t)encoding, (st_data_t *)&cf_type))
     return NULL;
 
-  return type_id;
+  return cf_type;
+}
+
+struct bsCFType *
+find_bs_cf_type_by_type_id(CFTypeID typeid)
+{
+  struct bsCFType *cf_type;
+
+  if (!st_lookup(bsCFTypes2, (st_data_t)typeid, (st_data_t *)&cf_type))
+    return NULL;
+
+  return cf_type;
 }
 
 static struct bsMethod *
@@ -1668,6 +1729,7 @@ initialize_bridge_support (VALUE mOSX)
   bsStructs2 = st_init_numtable();
   bsStructs3 = st_init_strtable();
   bsCFTypes = st_init_strtable();
+  bsCFTypes2 = st_init_numtable();
   bsConstants = st_init_strtable();
   bsFunctions = st_init_strtable();
   bsClasses = st_init_strtable();

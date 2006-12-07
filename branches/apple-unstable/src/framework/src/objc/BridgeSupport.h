@@ -115,7 +115,10 @@ struct bsStruct {
 };
 
 struct bsCFType {
-  // empty for now
+  char *    name;
+  char *    encoding;
+  char *    bridged_class_name;
+  CFTypeID  type_id;
 };
 
 extern struct bsFunction *current_function;
@@ -124,7 +127,8 @@ ffi_type *ffi_type_for_octype(int octype);
 struct bsStruct *find_bs_struct_by_encoding(const char *encoding);
 struct bsStruct *find_bs_struct_by_octype(const int octype);
 struct bsStruct *find_bs_struct_by_name(const char *name);
-struct bsCFType *find_bs_cf_type(const char *encoding);
+struct bsCFType *find_bs_cf_type_by_encoding(const char *encoding);
+struct bsCFType *find_bs_cf_type_by_type_id(CFTypeID type_id);
 VALUE rb_bs_struct_new_from_ocdata(struct bsStruct *bs_struct, void *ocdata);
 void *rb_bs_struct_get_data(VALUE obj, int octype, int *size);
 struct bsStruct *bs_struct_for_klass (VALUE klass);
