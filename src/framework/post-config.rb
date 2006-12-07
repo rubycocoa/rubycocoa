@@ -19,18 +19,24 @@ end
 # generate bridge support metadata files for Cocoa & its dependencies. 
 if @config['gen-bridge-support'] != 'no'
   command('mkdir -p bridge-support')
-  [['Foundation', '/System/Library/Frameworks/Foundation.framework'],
-   ['AppKit', '/System/Library/Frameworks/AppKit.framework'],
-   ['WebKit', '/System/Library/Frameworks/WebKit.framework'],
-  # FIXME: CoreGraphics does not process yet
-  # ['CoreGraphics', '/System/Library/Frameworks/ApplicationServices.framework/Frameworks/CoreGraphics.framework']
-  ].each do |framework, path|
+  [['/System/Library/Frameworks/CoreFoundation.framework', nil],
+   ['/System/Library/Frameworks/Foundation.framework', nil],
+   ['/System/Library/Frameworks/AppKit.framework', nil],
+   ['/System/Library/Frameworks/WebKit.framework', nil],
+   ['/System/Library/Frameworks/ApplicationServices.framework/Frameworks/CoreGraphics.framework', '-c "-framework ApplicationServices" -c -F/System/Library/Frameworks/ApplicationServices.framework/Frameworks'],
+  ].each do |path, special_flags|
+    framework = File.basename(path, '.framework')
     out = "bridge-support/#{framework}.xml"
-    generator = '/usr/bin/gen_bridge_metadata'
-    generator = 'ruby tool/gen_bridge_metadata.rb' unless File.exists?(generator)
-    unless File.exists?(out)  
+    if !File.exists?(out) or File.size(out) == 0
+      generator = '/usr/bin/gen_bridge_metadata'
+      generator = 'ruby tool/gen_bridge_metadata.rb' unless File.exists?(generator)
+      generator << " #{special_flags}" if special_flags
+      generator << " -f #{path}"
+      exceptions = "bridge-support-exceptions/#{framework}.xml"
+      generator << " -e #{exceptions}" if File.exists?(exceptions)
+      generator << " -o #{out}"
       $stderr.puts "create #{out} ..."
-      command("#{generator} -f #{path} > #{out}") 
+      command(generator) 
     end
   end
 end

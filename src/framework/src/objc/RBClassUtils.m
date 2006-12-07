@@ -34,7 +34,7 @@ static struct objc_method_list** method_list_alloc(int cnt)
   return mlp;
 }
 
-static Class objc_class_alloc(const char* name, Class super_class)
+Class objc_class_alloc(const char* name, Class super_class)
 {
   Class c = alloc_from_default_zone(sizeof(struct objc_class));
   Class isa = alloc_from_default_zone(sizeof(struct objc_class));
