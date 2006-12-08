@@ -77,7 +77,18 @@ class OCHeaderAnalyzer
   end
 
   def functions
-    @functions ||= externs.map { |i| function?(i) }.compact
+    skip_inline_re = /(static)?\s__inline__[^{;]+(;|\{([^{}]*(\{[^}]+\})?)*\})\s*/
+    func_re = /((.*\s*extern\s*)?([\w\s\*]+)\s*\((.*)\)\s*);/
+    @functions ||= @cpp_result.gsub(skip_inline_re, '').scan(func_re).map do |m|
+      orig, base, args = m[0], m[2], m[3]
+      func = constant?(base)
+      if func
+        args = args.strip.split(',').map { |i| constant?(i) }
+        next if args.any? { |x| x.nil? }
+        args = [] if args.size == 1 and args[0].rettype == 'void'
+        FuncInfo.new(func, args, orig)
+      end
+    end.compact
   end
 
   def informal_protocols
@@ -160,10 +171,11 @@ class OCHeaderAnalyzer
 
   def constant?(str, multi=false)
     str.strip!
+    return nil if str.empty?
     if str == '...'
       VarInfo.new('...', '...', str)
-    else
-      str << " dummy" if str[-1].chr == '*' or str.index(' ').nil?
+    elsif str[0..6] != 'typedef'
+      str << " dummy" if str[-1].chr == '*' or str.index(/\s/).nil?
       tokens = multi ? str.split(',') : [str]
       part = tokens.first
       re = /^([^()]*)\b(\w+)\b\s*(\[[^\]]*\])*$/
@@ -178,23 +190,6 @@ class OCHeaderAnalyzer
         else
           var
         end
-      end
-    end
-  end
-
-  def function?(str)
-    str.strip!
-    re = /^(.*)\((.*)\)$/
-    m = re.match(str.strip)
-    if m
-      func = constant?(m[1])
-      if func
-        args = m[2].split(',').map{|i|
-          ai = constant?(i)
-          ai ? ai : VarInfo.new('unknown', 'unknown', i) 
-        }
-        args = [] if args.size == 1 && args[0].rettype == 'void'
-        FuncInfo.new(func, args, str)
       end
     end
   end
@@ -215,8 +210,6 @@ class OCHeaderAnalyzer
     return result
   end
 
-  ALL_STRIPPED_TYPES = []
-
   class VarInfo
     attr_reader :rettype, :stripped_rettype, :name, :orig
     attr_accessor :octype
@@ -233,7 +226,6 @@ class OCHeaderAnalyzer
       t.strip!
       raise 'empty type' if t.empty?
       @stripped_rettype = t
-      ALL_STRIPPED_TYPES << t if t != '...'
     end
 
     def pointer?
@@ -330,9 +322,9 @@ class BridgeSupportGenerator
     parse_args(args)
     scan_headers
     unless @generate_exception_template
+      collect_types_encoding
       collect_enums
       collect_numeric_defines
-      collect_types_encoding
       collect_cftypes_info
       collect_structs_encoding
       collect_inf_protocols_encoding
@@ -420,6 +412,12 @@ EOS
     @types_encoding[varinfo.stripped_rettype]
   end
 
+  def returns_char?(varinfo)
+    ['BOOL', 'Boolean'].any? do |x| 
+      @types_encoding[x] == encoding_of(varinfo) and x != varinfo.stripped_rettype
+    end
+  end
+
   def collect_cftypes_info
     @resolved_cftypes ||= {}
     lines = @cftypes.map do |ary|
@@ -455,7 +453,15 @@ EOS
 
   def collect_types_encoding
     @types_encoding ||= {}
-    lines = OCHeaderAnalyzer::ALL_STRIPPED_TYPES.uniq.map do |type|
+    all_types = @functions.map { |x| 
+      [x.stripped_rettype, *x.args.map { |y| y.stripped_rettype }] 
+    }.flatten 
+    all_types |= @constants.map { |x| x.stripped_rettype }
+    all_types |= @ocmethods.map { |c, m| 
+      m.map { |x| x.stripped_rettype } 
+    }.flatten
+    
+    lines = all_types.map do |type|
       "printf(\"%s: %s\\n\", \"#{type}\", @encode(#{type}));"
     end
     code = <<EOS
@@ -629,19 +635,17 @@ EOS
       end
       @resolved_enums.each do |enum, value| 
         element = root.add_element('enum')
-        element.add_attribute('name', enum) 
-        element.add_attribute('value', value) 
+        element.add_attribute('name', enum)
+        element.add_attribute('value', value)
       end
       @functions.each do |function|
         element = root.add_element('function')
         element.add_attribute('name', function.name)
         element.add_attribute('variadic', true) if function.variadic?
         rettype = encoding_of(function)
-        if rettype != 'v' 
+        if rettype != 'v'
+          element.add_attribute('predicate', false) if returns_char?(function) 
           element.add_attribute('returns', rettype) 
-          element.add_attribute('returns_char', true) \
-            if ((rettype == 'c' and !function.stripped_rettype == 'BOOL') \
-                or (rettype == 'C' and !function.stripped_rettype == 'Boolean')) 
           element.add_attribute('retval_retained', true) \
             if @resolved_cftypes.has_key?(function.stripped_rettype) \
             and /(Create|Copy)/.match(function.name)
@@ -651,8 +655,7 @@ EOS
         end
       end
       @ocmethods.each do |class_name, methods|
-        not_predicates = methods.select { |m| encoding_of(m) == 'c' } \
-          - methods.select { |m| m.stripped_rettype == 'BOOL' }
+        not_predicates = methods.select { |m| returns_char?(m) } 
         next if not_predicates.empty?
         class_element = root.add_element('class')
         class_element.add_attribute('name', class_name)           
@@ -660,7 +663,7 @@ EOS
           element = class_element.add_element('method')
           element.add_attribute('selector', method.selector)
           element.add_attribute('class_method', true) if method.class_method?
-          element.add_attribute('returns_char', true)
+          element.add_attribute('predicate', false)
         end
       end
       @inf_protocols.each do |protocol|

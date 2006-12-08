@@ -36,7 +36,7 @@ struct bsFunction {
   int *   argv;
   int     retval;
   BOOL    retval_should_be_retained;
-  BOOL    returns_char;
+  BOOL    predicate;
   void *  sym;
   BOOL    is_variadic;
   struct {
@@ -80,7 +80,7 @@ struct bsMethodRetval {
 struct bsMethod {
   char *  selector;
   BOOL    is_class_method;
-  BOOL    returns_char;
+  BOOL    predicate;
   BOOL    ignore;
   char *  suggestion;   // only if ignore is true
   int     argc;
