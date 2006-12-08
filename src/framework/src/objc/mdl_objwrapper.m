@@ -475,10 +475,10 @@ ocm_ffi_dispatch(int argc, VALUE* argv, VALUE rcv, VALUE* result, struct _ocm_se
 
     // We assume that every method returning 'char' is in fact meant to return a boolean value, unless
     // specified in the metadata files as such.
-    if (ret_octype == _C_CHR) {
+    if (ret_octype == _C_CHR || ret_octype == _C_UCHR) {
       if (bs_method == NULL)
         bs_method = find_bs_method(klass, (const char *) ctx->selector, is_class_method);
-      if (bs_method == NULL || !bs_method->returns_char) {
+      if (bs_method == NULL || bs_method->predicate) {
         OBJWRP_LOG("\tmethod is a predicate, forcing result as a boolean value");
         ret_octype = _PRIV_C_BOOL;
       }

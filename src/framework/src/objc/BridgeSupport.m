@@ -41,6 +41,8 @@ static struct st_table *bsClasses;     // class name -> struct bsClass
 static struct st_table *bsInformalProtocolClassMethods;         // selector -> struct bsInformalProtocolMethod
 static struct st_table *bsInformalProtocolInstanceMethods;      // selector -> struct bsInformalProtocolMethod
 
+static struct st_table *bsBoxedInstances;   // cache for boxed instances 
+
 struct bsFunction *current_function = NULL;
 
 #define ASSERT_ALLOC(x) do { if (x == NULL) rb_fatal("can't allocate memory"); } while (0)
@@ -490,21 +492,41 @@ rb_bs_struct_new (int argc, VALUE *argv, VALUE rcv)
   return Data_Wrap_Struct(rcv, NULL, free, data);
 }
 
+static void
+rb_bs_boxed_opaque_free (void *ptr)
+{
+  printf("removing from table...\n");
+  st_delete(bsBoxedInstances, (st_data_t *)&ptr, NULL);
+}
+
 VALUE 
 rb_bs_boxed_new_from_ocdata (struct bsBoxed *bs_boxed, void *ocdata)
 {
-  void *data;
+  VALUE obj;
  
-  if (bs_boxed->type == bsBoxedStructType)
-    bs_struct_size(bs_boxed);
-  if (bs_boxed->size == 0)
-    rb_raise(rb_eRuntimeError, "can't instantiate boxed '%s' of 0 size", bs_boxed->name);
+  if (NO) { // TODO bs_boxed->type == bsBoxedOpaqueType && bs_boxed_ffi_type(bs_boxed) == &ffi_type_pointer && ocdata != NULL) {
+    if (st_lookup(bsBoxedInstances, (st_data_t) *(void **)ocdata, (st_data_t *)&obj))
+      return obj; 
+  
+    obj = Data_Wrap_Struct(bs_boxed->klass, NULL, rb_bs_boxed_opaque_free, ocdata);
+    st_insert(bsBoxedInstances, (st_data_t) *(void **)ocdata, (st_data_t)obj);
+  }
+  else {
+    void *data;
+    
+    if (bs_boxed->type == bsBoxedStructType)
+      bs_struct_size(bs_boxed);
+    if (bs_boxed->size == 0)
+      rb_raise(rb_eRuntimeError, "can't instantiate boxed '%s' of 0 size", bs_boxed->name);
 
-  data = (void *)malloc(bs_boxed->size);
-  ASSERT_ALLOC(data);
-  memcpy(data, ocdata, bs_boxed->size);
+    data = (void *)malloc(bs_boxed->size);
+    ASSERT_ALLOC(data);
+    memcpy(data, ocdata, bs_boxed->size);
+  
+    obj = Data_Wrap_Struct(bs_boxed->klass, NULL, free, data);
+  }
 
-  return Data_Wrap_Struct(bs_boxed->klass, NULL, free, data);
+  return obj;
 }
 
 static void *
@@ -1071,7 +1093,7 @@ bridge_support_dispatcher (int argc, VALUE *argv, VALUE self)
     int retval_type;
 
     DLOG("MDLOSX", "\tresult: %p", retval);
-    if ((func->retval == _C_CHR || func->retval == _C_UCHR) && !func->returns_char) {
+    if ((func->retval == _C_CHR || func->retval == _C_UCHR) && func->predicate) {
       DLOG("MDLOSX", "\tmethod is a predicate, forcing result as a boolean value");
       retval_type = _PRIV_C_BOOL;
     }
@@ -1323,7 +1345,7 @@ osx_load_bridge_support_file (VALUE mOSX, VALUE path)
 
         func->name = func_name;
         func->is_variadic = get_boolean_attribute(reader, "variadic", NO);
-        func->returns_char = get_boolean_attribute(reader, "returns_char", NO);
+        func->predicate = get_boolean_attribute(reader, "predicate", YES);
 
         return_type = get_attribute(reader, "returns");
         if (return_type != NULL) {
@@ -1492,7 +1514,7 @@ osx_load_bridge_support_file (VALUE mOSX, VALUE path)
           
           method->selector = selector;
           method->is_class_method = is_class_method;
-          method->returns_char = get_boolean_attribute(reader, "returns_char", NO);
+          method->predicate = get_boolean_attribute(reader, "predicate", YES);
           method->ignore = get_boolean_attribute(reader, "ignore", NO);
           method->suggestion = method->ignore ? get_attribute(reader, "suggestion") : NULL;
           method->argc = 0;
@@ -1754,8 +1776,8 @@ __inspect_bs_method(char *key, struct bsMethod *value, void *ctx)
 
   printf("        %s\n", key);
 
-  if (value->returns_char)
-    printf("            returns char\n");
+  if (!value->predicate)
+    printf("            not predicate\n");
 
   if (value->ignore) 
     printf("            ignored (suggestion: '%s')\n", value->suggestion == NULL ? "n/a" : value->suggestion);
@@ -1845,6 +1867,7 @@ initialize_bridge_support (VALUE mOSX)
 
   bsBoxed = st_init_strtable();
   bsBoxed2 = st_init_numtable();
+  bsBoxedInstances = st_init_numtable();
   bsCFTypes = st_init_strtable();
   bsCFTypes2 = st_init_numtable();
   bsConstants = st_init_strtable();
