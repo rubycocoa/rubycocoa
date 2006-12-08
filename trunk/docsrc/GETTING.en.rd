@@ -58,10 +58,10 @@ The latest (or the oldest) development source is available from the
 ((<Subversion Server|URL:http://sourceforge.net/svn/?group_id=44114>)).
 
 You can
-((<view the Subversion Repository|URL:http://svn.sourceforge.net/viewvc/rubycocoa/trunk/src/>))
+((<view the Subversion Repository|URL:http://rubycocoa.svn.sourceforge.net/viewvc/rubycocoa/trunk/src/>))
 for RubyCocoa. On the shell command line, type this:
 
-  $ svn co https://svn.sourceforge.net/svnroot/rubycocoa/trunk/src rubycocoa 
+  $ svn co https://rubycocoa.svn.sourceforge.net/svnroot/rubycocoa/trunk/src rubycocoa 
 
 All of the source for RubyCocoa is downloaded into a directory named 'rubycocoa'.
 

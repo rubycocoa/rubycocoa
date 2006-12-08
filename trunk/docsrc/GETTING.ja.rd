@@ -60,10 +60,10 @@ Xcodeテンプレートなどが含まれています。実行・開発に必要な
 
 ((<Subversionサーバ|URL:http://sourceforge.net/svn/?group_id=44114>))から最新
 の(あるいは最古の)ソースを入手したり、
-(((<Subversionリポジトリを見る|URL:http://svn.sourceforge.net/viewvc/rubycocoa/trunk/src/>))
+(((<Subversionリポジトリを見る|URL:http://rubycocoa.svn.sourceforge.net/viewvc/rubycocoa/trunk/src/>))
 ことができます。シェルで
 
-  $ svn co https://svn.sourceforge.net/svnroot/rubycocoa/trunk/src rubycocoa 
+  $ svn co https://rubycocoa.svn.sourceforge.net/svnroot/rubycocoa/trunk/src rubycocoa 
 
 と入力すると、'rubycocoa'というディレクトリにRubyCocoaのソース一式が
 ダウンロードされます。Subversionの性質上、ダウンロードしたタイミングにより
