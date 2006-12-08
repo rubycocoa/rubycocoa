@@ -11,7 +11,7 @@
   <struct name='NSRect'/>
   <struct name='NSRange'/>
   <struct name='NSAffineTransformStruct'/>
-  <struct name='NSZone' opaque='true'/>
+  <opaque name='NSZone *'/>
   <class name='NSAppleEventDescriptor'>
     <method class_method='true' selector='descriptorWithDescriptorType:bytes:length:'>
       <method_arg index='1' type_modifier='in' c_array_delimited_by_arg='2'/>

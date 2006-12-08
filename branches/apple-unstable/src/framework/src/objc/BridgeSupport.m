@@ -508,11 +508,16 @@ rb_bs_boxed_new_from_ocdata (struct bsBoxed *bs_boxed, void *ocdata)
 }
 
 static void *
-rb_bs_boxed_struct_get_data(VALUE obj, struct bsBoxed *bs_boxed, int *size)
+rb_bs_boxed_struct_get_data(VALUE obj, struct bsBoxed *bs_boxed, size_t *size, BOOL *success)
 {
   void *  data;
   int     i;
-  
+ 
+  *success = NO;
+ 
+  if (NIL_P(obj))
+    return NULL;
+
   // Given Ruby object is not a OSX::Boxed type, let's just pass it to the upstream initializer.
   // This is to keep backward compatibility.
   if (rb_obj_is_kind_of(obj, cOSXBoxed) != Qtrue) {
@@ -525,7 +530,7 @@ rb_bs_boxed_struct_get_data(VALUE obj, struct bsBoxed *bs_boxed, int *size)
     obj = rb_funcall2(bs_boxed->klass, rb_intern("new"), RARRAY(obj)->len, RARRAY(obj)->ptr);
   }
 
-  if (NIL_P(obj) || rb_obj_is_kind_of(obj, cOSXBoxed) != Qtrue)
+  if (rb_obj_is_kind_of(obj, cOSXBoxed) != Qtrue)
     return NULL;
 
   // Resync the ivars if necessary.
@@ -547,54 +552,66 @@ rb_bs_boxed_struct_get_data(VALUE obj, struct bsBoxed *bs_boxed, int *size)
   }
   Data_Get_Struct(obj, void, data);
 
-  if (size != NULL)
-    *size = bs_struct_size(bs_boxed);
+  *size = bs_struct_size(bs_boxed);
+  *success = YES;
 
   return data;
 }
 
 static void *
-rb_bs_boxed_opaque_get_data(VALUE obj, struct bsBoxed *bs_boxed, int *size)
+rb_bs_boxed_opaque_get_data(VALUE obj, struct bsBoxed *bs_boxed, size_t *size, BOOL *success)
 {
   void *data;
-  
-  if (rb_obj_is_kind_of(obj, cOSXBoxed) != Qtrue)
-    return NULL;
-  
-  Data_Get_Struct(obj, void, data);
 
-  if (size != NULL)
-    *size = bs_boxed->size;
+  if (NIL_P(obj) && bs_boxed_ffi_type(bs_boxed) == &ffi_type_pointer) {
+    data = NULL;
+  }
+  else if (rb_obj_is_kind_of(obj, cOSXBoxed) == Qtrue) {
+    Data_Get_Struct(obj, void, data);
+  }
+  else {
+    *success = NO;
+    return NULL;
+  }
+
+  *size = bs_boxed->size;
+  *success = YES;
 
   return data;
 }
 
 void *
-rb_bs_boxed_get_data(VALUE obj, int octype, int *size)
+rb_bs_boxed_get_data(VALUE obj, int octype, size_t *psize, BOOL *psuccess)
 {
   struct bsBoxed *bs_boxed;
   void *data;
+  size_t size;
+  BOOL success;
 
-  if (NIL_P(obj))
-    return NULL;
+  size = 0;
+  data = NULL;
+  success = NO;  
 
   bs_boxed = find_bs_boxed_by_octype(octype);
-  if (bs_boxed == NULL)
-    return NULL;
-
-  switch (bs_boxed->type) {
-    case bsBoxedStructType:
-      data = rb_bs_boxed_struct_get_data(obj, bs_boxed, size);
-      break;
-    
-    case bsBoxedOpaqueType:
-      data = rb_bs_boxed_opaque_get_data(obj, bs_boxed, size);
-      break;
-
-    default:
-      rb_bug("invalid bridge support boxed structure type %d", bs_boxed->type);
-      data = NULL;
+  if (bs_boxed != NULL) {
+    switch (bs_boxed->type) {
+      case bsBoxedStructType:
+        data = rb_bs_boxed_struct_get_data(obj, bs_boxed, &size, &success);
+        break;
+      
+      case bsBoxedOpaqueType:
+        data = rb_bs_boxed_opaque_get_data(obj, bs_boxed, &size, &success);
+        break;
+  
+      default:
+        rb_bug("invalid bridge support boxed structure type %d", bs_boxed->type);
+    }
   }
+
+  if (psuccess != NULL)
+    *psuccess = success;
+  if (psize != NULL)
+    *psize = size;
 
   return data;
 }

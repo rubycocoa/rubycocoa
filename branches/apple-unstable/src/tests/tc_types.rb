@@ -139,4 +139,11 @@ class TC_Types < Test::Unit::TestCase
   def test_cftype_proxies
     assert_kind_of(OSX::CFRunLoopRef, OSX::CFRunLoopGetCurrent())
   end
+
+  def test_opaque_boxed
+    z = OSX::NSDefaultMallocZone()
+    assert_kind_of(OSX::NSZone, z)
+    assert_kind_of(OSX::Boxed, z)
+    assert_kind_of(OSX::NSString, OSX::NSZoneName(z))
+  end
 end
