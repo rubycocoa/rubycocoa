@@ -568,12 +568,17 @@ static BOOL rbobj_to_objcptr(VALUE obj, void** cptr)
   }
   else if (rb_obj_is_kind_of(obj, objboxed_s_class()) == Qtrue) {
     struct bsBoxed *bs_boxed;
+    void *data;
+    BOOL ok;
 
     bs_boxed = find_bs_boxed_for_klass(CLASS_OF(obj));
     if (bs_boxed == NULL)
       return NO;
 
-    *cptr = rb_bs_boxed_get_data(obj, bs_boxed->octype, NULL);
+    data = rb_bs_boxed_get_data(obj, bs_boxed->octype, NULL, &ok);
+    if (!ok)
+      return NO;
+    *cptr = data;
   } 
   else {
     return NO;
@@ -735,12 +740,15 @@ rbobj_to_ocdata(VALUE obj, int octype, void* ocdata, BOOL to_libffi)
   default:
     if (octype > BS_BOXED_OCTYPE_THRESHOLD) {
       void *data;
-      int size;
+      size_t size;
 
-      data = rb_bs_boxed_get_data(obj, octype, &size);
-      f_success = data != NULL;
-      if (f_success)
-        memcpy(ocdata, data, size);
+      data = rb_bs_boxed_get_data(obj, octype, &size, &f_success);
+      if (f_success) {
+        if (data == NULL)
+          *(void **)ocdata = NULL;
+        else
+          memcpy(ocdata, data, size);
+      }
     }
     else
       f_success = NO;

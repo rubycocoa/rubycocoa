@@ -619,7 +619,7 @@ EOS
         encoding = @types_encoding[name]
         raise "encoding of opaque type #{name} not resolved" if encoding.nil?
         element = root.add_element('opaque')
-        element.add_attribute('name', name) 
+        element.add_attribute('name', name.sub(/\s*\*+$/, '')) 
         element.add_attribute('encoding', encoding) 
       end
       @constants.each do |constant| 

@@ -147,7 +147,7 @@ struct bsBoxed *find_bs_boxed_by_encoding(const char *encoding);
 struct bsBoxed *find_bs_boxed_by_octype(const int octype);
 struct bsBoxed *find_bs_boxed_for_klass (VALUE klass);
 VALUE rb_bs_boxed_new_from_ocdata(struct bsBoxed *bs_boxed, void *ocdata);
-void *rb_bs_boxed_get_data(VALUE obj, int octype, int *size);
+void *rb_bs_boxed_get_data(VALUE obj, int octype, size_t *size, BOOL *success);
 
 struct bsCFType *find_bs_cf_type_by_encoding(const char *encoding);
 struct bsCFType *find_bs_cf_type_by_type_id(CFTypeID type_id);
