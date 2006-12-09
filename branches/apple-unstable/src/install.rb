@@ -762,7 +762,7 @@ class Installer
     command 'rm -f src/objc/cocoa/rb_Foundation.m'
     command 'rm -rf bridge-support'
     dive_into( '../misc/libffi' ) {
-      command config('make-prog') + ' -f Makefile.rubyccoa clean'
+      command config('make-prog') + ' -f Makefile.rubycocoa clean'
     }
   end
 
@@ -1041,6 +1041,7 @@ class ToplevelInstaller < Installer
   def exec_test
     dive_into('tests') {
       ENV['DYLD_FRAMEWORK_PATH'] = File.join('../framework', framework_obj_path)
+      ENV['BRIDGE_SUPPORT_PATH'] = '../framework/bridge-support'
       ruby_cmd = File.join(
 	Config::CONFIG['bindir'], Config::CONFIG['RUBY_INSTALL_NAME'])
       test_loadlibs(ruby_cmd)

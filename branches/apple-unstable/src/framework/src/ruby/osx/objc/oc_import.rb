@@ -18,6 +18,13 @@ module OSX
     '/Library/BridgeSupport'
   ]
 
+  PRE_SIGN_PATHS = 
+    if path = ENV['BRIDGE_SUPPORT_PATH']
+      path.split(':')
+    else
+      []
+    end
+
   if path = ENV['HOME']
     FRAMEWORK_PATHS << File.join(ENV['HOME'], 'Library', 'Frameworks')
     SIGN_PATHS << File.join(ENV['HOME'], 'Library', 'BridgeSupport')
@@ -47,6 +54,16 @@ module OSX
   end
 
   def OSX.load_bridge_support_signatures(framework)
+    # First, look into the pre paths.  
+    framework_name = framework[0] == ?/ ? File.basename(framework, '.framework') : framework
+    PRE_SIGN_PATHS.each do |dir|
+      path = File.join(dir, framework_name + '.xml')
+      if File.exists?(path)
+        load_bridge_support_file(path)
+        return true
+      end
+    end
+
     # A path to a framework, let's search for BridgeSupport.xml inside the Resources folder.
     if framework[0] == ?/
       path = File.join(framework, 'Resources', 'BridgeSupport.xml')
@@ -54,7 +71,7 @@ module OSX
         load_bridge_support_file(path)
         return true
       end
-      framework = File.basename(framework, '.framework')
+      framework = framework_name
     end
     
     # Let's try to localize the framework and see if it contains the metadata.
