@@ -1,5 +1,11 @@
 2006-12-09  Laurent Sansonetti <lsansonetti@apple.com>
 
+	* framework/src/ruby/osx/objc/oc_import.rb,
+	  install.rb:
+	Introduced an environment variable BRIDGE_SUPPORT_PATH that can be used to
+	point RubyCocoa to one or more paths where bridge support metadata files
+	should be looked for in priority. Set the variable for the test phase.
+
 	* framework/src/objc/BridgeSupport.m:
 	Removed some dead code.
 
