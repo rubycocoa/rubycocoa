@@ -73,7 +73,7 @@ Xcodeテンプレートなどが含まれています。実行・開発に必要な
 == MacPorts (DarwinPorts)
 
 ((<MacPorts|URL:http://www.macports.org/>))では、"rb-cocoa"という
-名前でRubyCocoa(0.4.2)のportが提供されています。
+名前でRubyCocoa(0.4.3d2)のportが提供されています。
 
 このportをインストールするには、MacPortsのバージョン1.1以降が必要です。
 次のコマンドでMacPortsをアップデートすることができます。
