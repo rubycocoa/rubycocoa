@@ -73,7 +73,7 @@ options.
 == MacPorts (DarwinPorts)
 
 ((<MacPorts|URL:http://http://www.macports.org//>)) has a port 
-"rb-cocoa" for RubyCocoa(0.4.2). 
+"rb-cocoa" for RubyCocoa(0.4.3d2). 
 
 The port requires MacPorts version 1.1 or later. You can update your 
 MacPorts with following command:
