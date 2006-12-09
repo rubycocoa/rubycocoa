@@ -49,7 +49,7 @@ Xcodeテンプレートなどが含まれています。実行・開発に必要な
 
 ((<ファイル一覧|URL:http://rubycocoa.sourceforge.net/files/>))
 の中から
-((<rubycocoa-0.5.0.tgz|URL:http://prdownloads.sourceforge.net/rubycocoa/rubycocoa-0.5.0.tgz?download>))
+((<rubycocoa-0.5.0.1.tgz|URL:http://prdownloads.sourceforge.net/rubycocoa/rubycocoa-0.5.0.1.tgz?download>))
 をダウンロードしてください。
 
 ((<「RubyCocoaをソースから構築・インストールする」|URL:build.ja.html>))
