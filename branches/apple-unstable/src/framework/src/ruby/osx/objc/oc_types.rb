@@ -14,7 +14,6 @@ class OSX::NSRect
   class << self
     alias_method :orig_new, :new
     def new(*args)
-      args.flatten!
       origin, size = case args.size
       when 0
         [[0, 0], [0, 0]]
@@ -41,7 +40,6 @@ class OSX::NSRange
   class << self
     alias_method :orig_new, :new
     def new(*args)
-      args.flatten!
       location, length = case args.size
       when 0
         [0, 0]
