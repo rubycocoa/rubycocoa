@@ -196,13 +196,16 @@ class OCHeaderAnalyzer
 
   def OCHeaderAnalyzer.do_cpp(path)
     f_on = false
-    result = `#{CPP} #{CPPFLAGS} #{path}`.map {|s|
-      s.sub( /\/\/.*$/, "" )
-    }.select { |s|
-      next if /^\s*$/ =~ s
+    result = `#{CPP} #{CPPFLAGS} #{path}`.select { |s|
+      # First pass to only grab non-empty lines and the pre-processed lines
+      # only from the target header (and not the entire pre-processing result).
+      next if s.strip.empty? 
       m = %r{^#\s*\d+\s+".*/(\w+\.h)"}.match(s)
       f_on = (m[1] == File.basename(path)) if m
       f_on
+    }.select { |s|
+      # Second pass to ignore all pro-processor comments that were left.
+      /^#/.match(s) == nil
     }.join
     if $?.to_i != 0
       raise "#{CPP} returned #{$?.to_int/256} exit status"
