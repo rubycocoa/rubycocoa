@@ -1,5 +1,9 @@
 2006-12-10  Laurent Sansonetti <lsansonetti@apple.com>
 
+	* framework/src/ruby/osx/objc/oc_types.rb:
+	Do not flatten the args as it breaks API compatibility with the previous
+	stable release.
+
 	* framework/tool/gen_bridge_metadata.rb:
 	Ignore all comments left by the pre-processor after the pre-processing phase.
 
