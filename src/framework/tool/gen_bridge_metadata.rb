@@ -78,17 +78,22 @@ class OCHeaderAnalyzer
 
   def functions
     skip_inline_re = /(static)?\s__inline__[^{;]+(;|\{([^{}]*(\{[^}]+\})?)*\})\s*/
-    func_re = /((.*\s*extern\s*)?([\w\s\*]+)\s*\((.*)\)\s*);/
+    func_re = /(^([\w\s\*]+)\s*\((.*)\)\s*);$/
+#puts @cpp_result.gsub(skip_inline_re, '')
+#exit
     @functions ||= @cpp_result.gsub(skip_inline_re, '').scan(func_re).map do |m|
-      orig, base, args = m[0], m[2], m[3]
+      orig, base, args = m
+      base.sub!(/^.*extern\s+/, '')
       func = constant?(base)
       if func
         args = args.strip.split(',').map { |i| constant?(i) }
         next if args.any? { |x| x.nil? }
         args = [] if args.size == 1 and args[0].rettype == 'void'
+#puts base, '---' 
         FuncInfo.new(func, args, orig)
       end
     end.compact
+#exit
   end
 
   def informal_protocols
@@ -174,13 +179,14 @@ class OCHeaderAnalyzer
     return nil if str.empty?
     if str == '...'
       VarInfo.new('...', '...', str)
-    elsif str[0..6] != 'typedef'
+    else
       str << " dummy" if str[-1].chr == '*' or str.index(/\s/).nil?
       tokens = multi ? str.split(',') : [str]
       part = tokens.first
       re = /^([^()]*)\b(\w+)\b\s*(\[[^\]]*\])*$/
       m = re.match(part)
       if m
+        return nil if m[1].split(/\s+/).any? { |x| ['end', 'typedef'].include?(x) }
         m = m.to_a[1..-1].compact.map { |i| i.strip }
         m[0] += m[2] if m.size == 3
         m[0] = 'void' if m[1] == 'void'
