@@ -79,8 +79,6 @@ class OCHeaderAnalyzer
   def functions
     skip_inline_re = /(static)?\s__inline__[^{;]+(;|\{([^{}]*(\{[^}]+\})?)*\})\s*/
     func_re = /(^([\w\s\*]+)\s*\((.*)\)\s*);$/
-#puts @cpp_result.gsub(skip_inline_re, '')
-#exit
     @functions ||= @cpp_result.gsub(skip_inline_re, '').scan(func_re).map do |m|
       orig, base, args = m
       base.sub!(/^.*extern\s+/, '')
@@ -89,11 +87,9 @@ class OCHeaderAnalyzer
         args = args.strip.split(',').map { |i| constant?(i) }
         next if args.any? { |x| x.nil? }
         args = [] if args.size == 1 and args[0].rettype == 'void'
-#puts base, '---' 
         FuncInfo.new(func, args, orig)
       end
     end.compact
-#exit
   end
 
   def informal_protocols
