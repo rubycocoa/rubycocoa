@@ -38,5 +38,9 @@ if @config['gen-bridge-support'] != 'no'
       $stderr.puts "create #{out} ..."
       command(generator) 
     end
+    # Uncomment this to launch the verification tool on each metadata file.
+    # Warning: this can take some time, and there are several false positives.
+    #$stderr.puts "verify #{out} ..."
+    #system("ruby tool/verify_bridge_metadata.rb #{out} #{File.join(path, 'Headers')}")
   end
 end

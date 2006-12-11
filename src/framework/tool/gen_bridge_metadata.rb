@@ -34,15 +34,10 @@ class OCHeaderAnalyzer
     @externname = "extern"
   end
 
-  def enum_types
-    re = /\btypedef\s+enum\s*\w*\s*\{[^\}]*\}\s*(\w+)\s*;/m
-    @enum_types ||= @cpp_result.scan(re).flatten
-  end
-
   def enums
-    re = /\benum\b.*\{([^}]*)\}/
+    re = /\benum\b\s*(\w+\s+)?\{([^}]*)\}/
     @enums ||= @cpp_result.scan(re).map { |m|
-      m[0].split(',').map { |i|
+      m[1].split(',').map { |i|
         i.split('=')[0].strip
       }.delete_if { |i| i.empty? or i[0] == ?# }
     }.flatten.uniq
@@ -237,6 +232,10 @@ class OCHeaderAnalyzer
       @pointer ||= __pointer__?
     end
 
+    def <=>(x)
+      self.name <=> x.name
+    end
+
     private
 
     def __pointer__?
@@ -306,6 +305,10 @@ class OCHeaderAnalyzer
     def class_method?
       @is_class_method
     end
+
+    def <=>(x)
+      self.selector <=> x.selector
+    end
   end
 
   class InformalProtocol
@@ -316,6 +319,10 @@ class OCHeaderAnalyzer
       @base = base
       @name = name
       @entries = entries
+    end
+
+    def <=>(x)
+      self.name <=> x.name
     end
   end
 end
@@ -613,12 +620,12 @@ EOS
       end
     else
       # Generate the final metadata file.
-      @resolved_structs.each do |name, encoding|
+      @resolved_structs.sort { |x, y| x[0] <=> y[0] }.each do |name, encoding|
         element = root.add_element('struct')
         element.add_attribute('name', name)
         element.add_attribute('encoding', encoding)
       end
-      @resolved_cftypes.each do |name, ary|
+      @resolved_cftypes.sort { |x, y| x[0] <=> y[0] }.each do |name, ary|
         encoding, tollfree, typeid = ary
         element = root.add_element('cftype')
         element.add_attribute('name', name) 
@@ -626,24 +633,24 @@ EOS
         element.add_attribute('typeid', typeid) if typeid 
         element.add_attribute('tollfree', tollfree) if tollfree 
       end
-      @opaques.each do |name|
+      @opaques.sort.each do |name|
         encoding = @types_encoding[name]
         raise "encoding of opaque type #{name} not resolved" if encoding.nil?
         element = root.add_element('opaque')
         element.add_attribute('name', name.sub(/\s*\*+$/, '')) 
         element.add_attribute('encoding', encoding) 
       end
-      @constants.each do |constant| 
+      @constants.sort.each do |constant| 
         element = root.add_element('constant')
         element.add_attribute('name', constant.name)
         element.add_attribute('type', encoding_of(constant))
       end
-      @resolved_enums.each do |enum, value| 
+      @resolved_enums.sort { |x, y| x[0] <=> y[0] }.each do |enum, value| 
         element = root.add_element('enum')
         element.add_attribute('name', enum)
         element.add_attribute('value', value)
       end
-      @functions.each do |function|
+      @functions.sort.each do |function|
         element = root.add_element('function')
         element.add_attribute('name', function.name)
         element.add_attribute('variadic', true) if function.variadic?
@@ -659,22 +666,22 @@ EOS
           element.add_element('function_arg').add_attribute('type', encoding_of(arg))
         end
       end
-      @ocmethods.each do |class_name, methods|
+      @ocmethods.sort { |x, y| x[0] <=> y[0] }.each do |class_name, methods|
         not_predicates = methods.select { |m| returns_char?(m) } 
         next if not_predicates.empty?
         class_element = root.add_element('class')
         class_element.add_attribute('name', class_name)           
-        not_predicates.each do |method| 
+        not_predicates.sort.each do |method| 
           element = class_element.add_element('method')
           element.add_attribute('selector', method.selector)
           element.add_attribute('class_method', true) if method.class_method?
           element.add_attribute('predicate', false)
         end
       end
-      @inf_protocols.each do |protocol|
+      @inf_protocols.sort.each do |protocol|
         prot_element = root.add_element('informal_protocol')
         prot_element.add_attribute('name', protocol.name)
-        protocol.entries.each do |entry|
+        protocol.entries.sort.each do |entry|
           element = prot_element.add_element('method')
           element.add_attribute('selector', entry.selector)
           element.add_attribute('class_method', true) if entry.class_method?
