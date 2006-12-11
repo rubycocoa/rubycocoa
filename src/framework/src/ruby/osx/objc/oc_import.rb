@@ -30,9 +30,21 @@ module OSX
     SIGN_PATHS << File.join(ENV['HOME'], 'Library', 'BridgeSupport')
   end
 
+  # A name-to-path cache for the frameworks we support.
+  QUICK_FRAMEWORKS = {
+    'CoreFoundation' => '/System/Library/Frameworks/CoreFoundation.framework',
+    'Foundation' => '/System/Library/Frameworks/Foundation.framework',
+    'AppKit' => '/System/Library/Frameworks/AppKit.framework',
+    'WebKit' => '/System/Library/Frameworks/WebKit.framework',
+    'CoreGraphics' => '/System/Library/Frameworks/ApplicationServices.framework/Frameworks/CoreGraphics.framework',
+    'PDFKit' => '/System/Library/Frameworks/Quartz.framework/Frameworks/PDFKit.framework'
+  }
+
   def OSX.require_framework(framework)
     bundle, path = if framework[0] == ?/
       [OSX::NSBundle.bundleWithPath(framework), framework]
+    elsif path = QUICK_FRAMEWORKS[framework]
+      [OSX::NSBundle.bundleWithPath(path), path]
     else
       FRAMEWORK_PATHS.map { |dir| 
         File.join(dir, "#{framework}.framework") 
