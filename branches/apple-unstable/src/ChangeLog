@@ -1,5 +1,10 @@
 2006-12-11  Laurent Sansonetti <lsansonetti@apple.com>
 
+	* framework/post-config.rb,
+	  sample/RubyPDFKitViewer:
+	Added support for PDFKit. Added a new sample code, basically a Ruby port of
+	/Developer/Examples/Quartz/PDFKit/PDFKitViewer.
+
 	* framework/src/ruby/osx/objc/oc_import.rb:
 	- Added a default framework-name-to-path cache for quick/easy 
 	  #require_framework operations ;
