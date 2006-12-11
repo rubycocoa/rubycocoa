@@ -1,5 +1,9 @@
 2006-12-11  Laurent Sansonetti <lsansonetti@apple.com>
 
+	* framework/src/ruby/osx/objc/oc_import.rb:
+	Added a default framework-name-to-path cache for quick/easy require_framework
+	operations.
+
 	* framework/tool/gen_bridge_metadata.rb:
 	- Wrap more enums ;
 	- Removed dead code ;
