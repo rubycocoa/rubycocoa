@@ -58,7 +58,7 @@ module OSX
     unless bundle.nil?
       return false if bundle.isLoaded
       if bundle.load
-        load_bridge_support_signatures(framework)
+        load_bridge_support_signatures(path)
         return true
       end
     end
