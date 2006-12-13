@@ -411,7 +411,7 @@ bs_boxed_ffi_type(struct bsBoxed *bs_boxed)
       bs_boxed->ffi_type = (ffi_type *)malloc(sizeof(ffi_type));
       ASSERT_ALLOC(bs_boxed->ffi_type);
   
-      bs_boxed->ffi_type->size = bs_struct_size(bs_boxed);
+      bs_boxed->ffi_type->size = 0; // IMPORTANT: we need to leave this to 0 and not set the real size
       bs_boxed->ffi_type->alignment = 0;
       bs_boxed->ffi_type->type = FFI_TYPE_STRUCT;
       bs_boxed->ffi_type->elements = malloc(bs_boxed->opt.s.field_count * sizeof(ffi_type *));
@@ -934,7 +934,7 @@ ffi_type_for_octype (int octype)
 }
 
 static VALUE
-bridge_support_dispatcher (int argc, VALUE *argv, VALUE self)
+bridge_support_dispatcher (int argc, VALUE *argv, VALUE rcv)
 {
   char *func_name;
   struct bsFunction *func;
@@ -972,6 +972,7 @@ bridge_support_dispatcher (int argc, VALUE *argv, VALUE self)
     func->sym = dlsym(RTLD_DEFAULT, func_name);
     if (func->sym == NULL)
       rb_fatal("Can't locate function symbol '%s' : %s", func->name, dlerror());
+    DLOG("MDLOSX", "\tsymbol is %p", func->sym);
   }
 
   pool = [[NSAutoreleasePool alloc] init]; 
@@ -999,23 +1000,27 @@ bridge_support_dispatcher (int argc, VALUE *argv, VALUE self)
  
   // prepare arg values
   if (argc > 0) {
-    values = (void **)malloc(sizeof(void *) * (argc + 1));
+    values = (void **)alloca(sizeof(void *) * (argc + 1));
     values[argc] = NULL;
     for (i = 0; i < argc; i++) {
       int octype;
       ffi_type *ffi_type;
-  
+      size_t size;
+ 
       octype = i < func->argc ? func->argv[i] : _C_ID;
       ffi_type = func->ffi.arg_types[i];
-  
-      if (ffi_type->size > 0) {
-        DLOG("MSLOSX", "\tallocating %d bytes for arg #%d", ffi_type->size, i);
-        values[i] = (void *)malloc(ffi_type->size);
+
+      size = ocdata_size(octype, "");
+ 
+      if (size > 0) {
+        DLOG("MSLOSX", "\tallocating %d bytes for arg #%d", size, i);
+        values[i] = (void *)alloca(size);
         if (values[i] == NULL)
           rb_fatal("Can't allocate memory");
-      } 
+      }
+
       rbarg_to_nsarg(argv[i], octype, values[i], func->name, pool, i);  
-  
+ 
       DLOG("MDLOSX", "\tset arg #%d to value %p", i, values[i]);
     }
   }
@@ -1031,6 +1036,8 @@ bridge_support_dispatcher (int argc, VALUE *argv, VALUE self)
   if (!is_void) {
     size_t len = ocdata_size(func->retval, ""); 
     DLOG("MDLOSX", "\tallocating %d bytes for storing the result of type %d", len, func->retval);
+    if (len == 0)
+      rb_bug("ocdata_size(%s) is 0", func->retval);
     retval = alloca(len);
   }
   else
@@ -1049,12 +1056,6 @@ bridge_support_dispatcher (int argc, VALUE *argv, VALUE self)
     DLOG("MDLOSX", "got objc exception '%@' -- forwarding...", oc_exception);
     exception = oc_err_new(func->name, oc_exception);
   }
-  
-  if (argc > 0) {
-    for (i = 0; i < argc; i++)
-      free(values[i]);
-    free(values);
-  } 
 
   // forward exception if needed
   if (!NIL_P(exception)) {
@@ -1065,7 +1066,7 @@ bridge_support_dispatcher (int argc, VALUE *argv, VALUE self)
   }
 
   if (is_void) {
-    rb_value = self;
+    rb_value = rcv;
   }
   else {
     DLOG("MDLOSX", "\tresult: %p", retval);
