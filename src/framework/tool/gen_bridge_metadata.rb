@@ -90,7 +90,8 @@ class OCHeaderAnalyzer
   def informal_protocols
     if @inf_protocols.nil?
       re = /^\s*(@interface\s+(\w+)\s*\(\s*(\w+)\s*\))\s*$([^@]*)^\s*@end\s*$/m
-      arg_re = /(\b\w+|\.{3})$/
+      base_re = /(\b\w+)$/
+      arg_re = /(\s\w+|\.{3})$/
       @inf_protocols = {}
       @cpp_result.scan(re).each { |m|
         porig = m[0].strip
@@ -101,10 +102,10 @@ class OCHeaderAnalyzer
           next if i[0] != ?- and i[0] != ?+
           i.gsub!(/\n/, ' ')
           selector = []
-          i.split(':').each do |ii|
-            mmm = arg_re.match(ii.strip)
-            next if mmm.nil?
-            selector << mmm[0]
+          i.split(':').each_with_index do |ii, n|
+            re = n == 0 ? base_re : arg_re
+            mmm = re.match(ii.strip)
+            selector << (mmm ? mmm[0].strip : '')
           end
           selector = if selector.size <= 1
             selector[0]
