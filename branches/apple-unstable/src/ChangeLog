@@ -1,5 +1,8 @@
 2006-12-13  Laurent Sansonetti <lsansonetti@apple.com>
 
+	* framework/tool/gen_bridge_metadata.rb:
+	Fix order of (function|method)_(retval|arg) elements. 
+
 	* template/ProjectBuilder/File/*:
 	Fix the ?YEAR? macros in the trailing comment.
 
