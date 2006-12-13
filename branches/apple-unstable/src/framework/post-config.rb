@@ -25,6 +25,7 @@ if @config['gen-bridge-support'] != 'no'
    ['/System/Library/Frameworks/WebKit.framework', nil],
    ['/System/Library/Frameworks/ApplicationServices.framework/Frameworks/CoreGraphics.framework', '-c "-framework ApplicationServices" -c -F/System/Library/Frameworks/ApplicationServices.framework/Frameworks'],
    ['/System/Library/Frameworks/Quartz.framework/Frameworks/PDFKit.framework', nil],
+   ['/System/Library/Frameworks/QuartzCore.framework', nil],
   ].each do |path, special_flags|
     framework = File.basename(path, '.framework')
     out = "bridge-support/#{framework}.xml"
