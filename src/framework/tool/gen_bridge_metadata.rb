@@ -651,6 +651,9 @@ EOS
         element = root.add_element('function')
         element.add_attribute('name', function.name)
         element.add_attribute('variadic', true) if function.variadic?
+        function.args.each do |arg|
+          element.add_element('function_arg').add_attribute('type', encoding_of(arg))
+        end
         rettype = encoding_of(function)
         if rettype != 'v'
           retval_element = element.add_element('function_retval')
@@ -659,9 +662,6 @@ EOS
           retval_element.add_attribute('already_retained', true) \
             if @resolved_cftypes.has_key?(function.stripped_rettype) \
             and /(Create|Copy)/.match(function.name)
-        end
-        function.args.each do |arg|
-          element.add_element('function_arg').add_attribute('type', encoding_of(arg))
         end
       end
       @ocmethods.sort { |x, y| x[0] <=> y[0] }.each do |class_name, methods|
@@ -740,8 +740,11 @@ EOS
                 orig_element.add_attribute(name, value)
               end
             end
-            # We can just append the args, there is no possible conflict (yet)
+            # We can just append the retval/args, FIXME we need to solve potential conflicts
+            retval_element = orig_element.elements['method_retval']
+            orig_element.delete_element(retval_element) if retval_element
             element.elements.each('method_arg') { |child| orig_element.add_element(child) }
+            orig_element.add_element(retval_element) if retval_element
           end
         end
       end
