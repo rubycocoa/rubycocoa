@@ -3,7 +3,7 @@
 #  ÇPROJECTNAMEÈ
 #
 #  Created by ÇFULLUSERNAMEÈ on ÇDATEÈ.
-#  Copyright (c) ?YEAR? ÇORGANIZATIONNAMEÈ. All rights reserved.
+#  Copyright (c) ÇYEARÈ ÇORGANIZATIONNAMEÈ. All rights reserved.
 #
 
 require 'osx/cocoa'
