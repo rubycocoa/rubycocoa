@@ -1,10 +1,11 @@
 2006-12-13  Laurent Sansonetti <lsansonetti@apple.com>
 
 	* framework/post-config.rb,
-	  sample/RubyCIExposureSample:
-	Added support for the QuartzCore framework (CoreImage + CoreVideo). Added a 
-	new sample code, RubyCIExposureSample, a Ruby port of 
-	/Developer/Examples/Quartz/Core Image/CIExposureSample.
+	  sample/RubyCIExposureSample,
+    sample/RubyCITransitionSelectorSample:
+	Added support for the QuartzCore framework (CoreImage + CoreVideo). Added some 
+	new sample code, RubyCIExposureSample and RubyCITransitionSelectorSample, ports
+	of /Developer/Examples/Quartz/Core Image/* original Objective-C samples.
 
 	* framework/src/objc/BridgeSupport.m:
 	Fix an important bug in the structure libffi handling, plus some minor bugs in
