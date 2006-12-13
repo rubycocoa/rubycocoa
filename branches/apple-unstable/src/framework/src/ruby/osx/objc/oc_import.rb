@@ -145,8 +145,9 @@ module OSX
     end
   end
   
-  # Load the foundation frameworks. 
-  ['CoreFoundation', 'Foundation', 'AppKit'].each { |f| OSX.load_bridge_support_signatures(f) }
+  # Load the foundation frameworks.
+  OSX.load_bridge_support_signatures('CoreFoundation')
+  OSX.load_bridge_support_signatures('Foundation')
 
   # create Ruby's class for Cocoa class,
   # then define Constant under module 'OSX'.
@@ -512,3 +513,8 @@ class Object
     end
   end
 end
+
+# Load the high-level frameworks.
+OSX.require_framework('CoreGraphics')
+OSX.load_bridge_support_signatures('AppKit')
+

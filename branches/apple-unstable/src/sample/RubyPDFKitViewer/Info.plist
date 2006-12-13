@@ -33,7 +33,7 @@
 	<key>CFBundleIconFile</key>
 	<string>pdfkitviewer.icns</string>
 	<key>CFBundleIdentifier</key>
-	<string>com.apple.quartz.examples.PDFKitViewer</string>
+	<string>com.apple.rubycocoa.examples.PDFKitViewer</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundlePackageType</key>

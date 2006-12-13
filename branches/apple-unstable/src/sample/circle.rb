@@ -1,7 +1,6 @@
 # Create a new PDF file and draw a red circle in it, using Core Graphics.
 
 require 'osx/cocoa'
-OSX.require_framework '/System/Library/Frameworks/ApplicationServices.framework/Frameworks/CoreGraphics.framework'
 include OSX
 
 path = "circle.pdf"

@@ -36,7 +36,6 @@ struct bsFunction {
   int *   argv;
   int     retval;
   BOOL    retval_should_be_retained;
-  BOOL    predicate;
   void *  sym;
   BOOL    is_variadic;
   struct {
@@ -70,17 +69,18 @@ struct bsMethodArg {
   bsCArrayArgType   c_ary_type;
   int               c_ary_type_value;  // not set if arg_type is bsCArrayArgUndefined
   BOOL              null_accepted;
+  int               octype;
 };
 
 struct bsMethodRetval {
   bsCArrayArgType   c_ary_type;
   int               c_ary_type_value;  // not set if arg_type is bsCArrayArgUndefined
+  int               octype;
 };
 
 struct bsMethod {
   char *  selector;
   BOOL    is_class_method;
-  BOOL    predicate;
   BOOL    ignore;
   char *  suggestion;   // only if ignore is true
   int     argc;

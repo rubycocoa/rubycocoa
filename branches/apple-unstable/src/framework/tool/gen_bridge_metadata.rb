@@ -424,20 +424,18 @@ EOS
     @types_encoding[varinfo.stripped_rettype]
   end
 
-  def returns_char?(varinfo)
-    ['BOOL', 'Boolean'].any? do |x| 
-      @types_encoding[x] == encoding_of(varinfo) and x != varinfo.stripped_rettype
-    end
+  def returns_bool?(varinfo)
+    ['BOOL', 'Boolean'].any? { |x| x == varinfo.stripped_rettype }
   end
 
   def collect_cftypes_info
     @resolved_cftypes ||= {}
-    lines = @cftypes.map do |ary|
-      name, gettypeid_func = ary
-      if gettypeid_func
-        "ref = _CFRuntimeCreateInstance(NULL, #{gettypeid_func}(), 0, NULL); printf(\"%s: %s: %s: %d\\n\", \"#{name}\", @encode(#{name}), ref != NULL ? object_getClassName((id)ref) : \"\", #{gettypeid_func}());"
+    lines = []
+    @cftypes.each do |name, gettypeid_func|
+      lines << if gettypeid_func
+        "ref = _CFRuntimeCreateInstance(NULL, #{gettypeid_func}(), 0, NULL); printf(\"%s: %s: %s\\n\", \"#{name}\", @encode(#{name}), ref != NULL ? object_getClassName((id)ref) : \"\");"
       else
-        "printf(\"%s: %s: %s: %d\\n\", \"#{name}\", @encode(#{name}), \"\", -1);"
+        "printf(\"%s: %s: %s\\n\", \"#{name}\", @encode(#{name}), \"\");"
       end
     end
     code = <<EOS
@@ -454,12 +452,10 @@ int main (void)
 }
 EOS
     compile_and_execute_code(code).split("\n").each do |line|
-      name, encoding, tollfree, typeid = line.split(':')
+      name, encoding, tollfree = line.split(':')
       tollfree.strip!
       tollfree = nil if tollfree.empty? or tollfree == 'NSCFType'
-      typeid.strip!
-      typeid = nil if typeid == '-1'
-      @resolved_cftypes[name.strip] = [encoding.strip, tollfree, typeid]
+      @resolved_cftypes[name.strip] = [encoding.strip, tollfree, @cftypes[name.strip]]
     end
   end
 
@@ -472,6 +468,7 @@ EOS
     all_types |= @ocmethods.map { |c, m| 
       m.map { |x| x.stripped_rettype } 
     }.flatten
+    all_types |= @method_exception_types
     
     lines = all_types.map do |type|
       "printf(\"%s: %s\\n\", \"#{type}\", @encode(#{type}));"
@@ -626,11 +623,11 @@ EOS
         element.add_attribute('encoding', encoding)
       end
       @resolved_cftypes.sort { |x, y| x[0] <=> y[0] }.each do |name, ary|
-        encoding, tollfree, typeid = ary
+        encoding, tollfree, gettypeid_func = ary
         element = root.add_element('cftype')
         element.add_attribute('name', name) 
         element.add_attribute('encoding', encoding)
-        element.add_attribute('typeid', typeid) if typeid 
+        element.add_attribute('gettypeid_func', gettypeid_func) if gettypeid_func 
         element.add_attribute('tollfree', tollfree) if tollfree 
       end
       @opaques.sort.each do |name|
@@ -656,9 +653,10 @@ EOS
         element.add_attribute('variadic', true) if function.variadic?
         rettype = encoding_of(function)
         if rettype != 'v'
-          element.add_attribute('predicate', false) if returns_char?(function) 
-          element.add_attribute('returns', rettype) 
-          element.add_attribute('retval_retained', true) \
+          retval_element = element.add_element('function_retval')
+          rettype = 'B' if returns_bool?(function) 
+          retval_element.add_attribute('type', rettype) 
+          retval_element.add_attribute('already_retained', true) \
             if @resolved_cftypes.has_key?(function.stripped_rettype) \
             and /(Create|Copy)/.match(function.name)
         end
@@ -667,15 +665,15 @@ EOS
         end
       end
       @ocmethods.sort { |x, y| x[0] <=> y[0] }.each do |class_name, methods|
-        not_predicates = methods.select { |m| returns_char?(m) } 
-        next if not_predicates.empty?
+        predicates = methods.select { |m| returns_bool?(m) } 
+        next if predicates.empty?
         class_element = root.add_element('class')
         class_element.add_attribute('name', class_name)           
-        not_predicates.sort.each do |method| 
+        predicates.sort.each do |method| 
           element = class_element.add_element('method')
           element.add_attribute('selector', method.selector)
           element.add_attribute('class_method', true) if method.class_method?
-          element.add_attribute('predicate', false)
+          element.add_element('method_retval').add_attribute('type', 'B')
         end
       end
       @inf_protocols.sort.each do |protocol|
@@ -700,6 +698,27 @@ EOS
     # Merge class/methods.
     exception_document.elements.each('/signatures/class') do |class_element|
       class_name = class_element.attributes['name']
+      # First replace the type attributes by the real encoding.
+      class_element.elements.each('method') do |element|
+        retval_element = element.elements['method_retval']
+        if retval_element
+          type_name = retval_element.attributes['type']
+          if type_name
+            type = @types_encoding[type_name]
+            raise "encoding of method return type #{class_element.attributes['selector']} not resolved" if type.nil?
+            retval_element.add_attribute('type', type)
+          end
+        end
+        element.elements.each('method_arg') do |arg_element|
+          type_name = arg_element.attributes['type']
+          if type_name
+            type = @types_encoding[type_name]
+            raise "encoding of method arg type #{class_element.attributes['selector']} not resolved" if type.nil?
+            arg_element.add_attribute('type', type)
+          end
+        end
+      end
+      # Do the merging.
       orig_class_element = document.elements["/signatures/class[@name='#{class_name}']"]
       if orig_class_element.nil?
         # Class is not defined in the original document, we can append it with its methods.
@@ -839,19 +858,31 @@ EOS
         @import_directive.gsub!(/#import.+#{path}>/, '')
       end
     end
-    # Keep the list of structs, CFTypes and boxed.
+    # Keep the list of structs, CFTypes, boxed and methods return/args types.
     @structs = []
-    @cftypes = []
+    @cftypes = {} 
     @opaques = []
+    @method_exception_types = []
     @exceptions.each do |doc| 
       doc.get_elements('/signatures/struct').each do |elem|
         @structs << [elem.attributes['name'], elem.attributes['opaque'] == 'true']
       end
       doc.get_elements('/signatures/cftype').map do |elem|
-        @cftypes << [elem.attributes['name'], elem.attributes['gettypeid_func']]
+        @cftypes[elem.attributes['name']] = elem.attributes['gettypeid_func']
       end
       doc.get_elements('/signatures/opaque').map do |elem|
         @opaques << elem.attributes['name']
+      end
+      doc.get_elements('/signatures/class/method').map do |elem|
+        retval_elem = elem.elements['method_retval']
+        if retval_elem
+          type = retval_elem.attributes['type']
+          @method_exception_types << type if type
+        end
+        elem.elements.each('method_arg') do |arg_elem|
+          type = arg_elem.attributes['type']
+          @method_exception_types << type if type
+        end
       end
     end
   end
