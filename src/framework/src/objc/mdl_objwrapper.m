@@ -473,15 +473,11 @@ ocm_ffi_dispatch(int argc, VALUE* argv, VALUE rcv, VALUE* result, struct _ocm_se
   if (ret_octype != _C_VOID) {
     OBJWRP_LOG("\tgetting return value (%p of type '%s')", retval, ctx->methodReturnType);
 
-    // We assume that every method returning 'char' is in fact meant to return a boolean value, unless
-    // specified in the metadata files as such.
-    if (ret_octype == _C_CHR || ret_octype == _C_UCHR) {
-      if (bs_method == NULL)
-        bs_method = find_bs_method(klass, (const char *) ctx->selector, is_class_method);
-      if (bs_method == NULL || bs_method->predicate) {
-        OBJWRP_LOG("\tmethod is a predicate, forcing result as a boolean value");
-        ret_octype = _PRIV_C_BOOL;
-      }
+    if (bs_method == NULL)
+      bs_method = find_bs_method(klass, (const char *) ctx->selector, is_class_method);
+    if (bs_method != NULL && bs_method->retval != NULL && bs_method->retval->octype != -1) {
+      OBJWRP_LOG("\tcoercing result from octype %d to octype %d", ret_octype, bs_method->retval->octype);
+      ret_octype = bs_method->retval->octype;
     }
 
     if (!ocdata_to_rbobj(rcv, ret_octype, retval, result, YES)) {

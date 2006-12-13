@@ -25,15 +25,15 @@
 			<key>CFBundleTypeRole</key>
 			<string>Viewer</string>
 			<key>NSDocumentClass</key>
-			<string>MyPDFDocument</string>
+			<string>MyDocument</string>
 		</dict>
 	</array>
 	<key>CFBundleExecutable</key>
-	<string>PDFKitViewer</string>
+	<string>CGPDFViewer</string>
 	<key>CFBundleIconFile</key>
-	<string>pdfkitviewer.icns</string>
+	<string></string>
 	<key>CFBundleIdentifier</key>
-	<string>com.apple.rubycocoa.examples.PDFKitViewer</string>
+	<string>com.apple.rubycocoa.examples.CGPDFViewer</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundlePackageType</key>
@@ -41,7 +41,7 @@
 	<key>CFBundleShortVersionString</key>
 	<string>1.1</string>
 	<key>CFBundleSignature</key>
-	<string>pdfV</string>
+	<string>????</string>
 	<key>CFBundleVersion</key>
 	<string>1.0</string>
 	<key>NSMainNibFile</key>

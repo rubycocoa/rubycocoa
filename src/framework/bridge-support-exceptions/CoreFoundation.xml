@@ -18,15 +18,6 @@
   <cftype name='CFLocaleRef' gettypeid_func='CFLocaleGetTypeID'/>
   <cftype name='CFMachPortRef' gettypeid_func='CFMachPortGetTypeID'/>
   <cftype name='CFMessagePortRef' gettypeid_func='CFMessagePortGetTypeID'/>
-  <cftype name='CFMutableArrayRef' gettypeid_func='CFArrayGetTypeID'/>
-  <cftype name='CFMutableAttributedStringRef' gettypeid_func='CFAttributedStringGetTypeID'/>
-  <cftype name='CFMutableBagRef' gettypeid_func='CFBagGetTypeID'/>
-  <cftype name='CFMutableBitVectorRef' gettypeid_func='CFBitVectorGetTypeID'/>
-  <cftype name='CFMutableCharacterSetRef' gettypeid_func='CFCharacterSetGetTypeID'/>
-  <cftype name='CFMutableDataRef' gettypeid_func='CFDataGetTypeID'/>
-  <cftype name='CFMutableDictionaryRef' gettypeid_func='CFDictionaryGetTypeID'/>
-  <cftype name='CFMutableSetRef' gettypeid_func='CFSetGetTypeID'/>
-  <cftype name='CFMutableStringRef' gettypeid_func='CFStringGetTypeID'/>
   <cftype name='CFNotificationCenterRef' gettypeid_func='CFNotificationCenterGetTypeID'/>
   <cftype name='CFNullRef' gettypeid_func='CFNullGetTypeID'/>
   <cftype name='CFNumberFormatterRef' gettypeid_func='CFNumberFormatterGetTypeID'/>

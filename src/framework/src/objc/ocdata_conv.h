@@ -24,6 +24,10 @@
 # endif
 #endif	/* HAVE_LONG_LONG */
 
+#if !defined(_C_BOOL)
+# define _C_BOOL 'B'
+#endif
+
 enum osxobjc_nsdata_type {
   _PRIV_C_BOOL = 1024,
   _PRIV_C_PTR,

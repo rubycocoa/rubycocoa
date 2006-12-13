@@ -139,6 +139,9 @@ ocdata_size(int octype, const char* octype_str)
     result = 0; break;
 
   case _PRIV_C_BOOL:
+#if defined(_C_BOOL)
+  case _C_BOOL:
+#endif
     result = sizeof(BOOL); break;    
 
   case _PRIV_C_PTR:
@@ -211,6 +214,9 @@ ocdata_to_rbobj(VALUE context_obj,
     break;
 
   case _PRIV_C_BOOL:
+#if defined(_C_BOOL)
+  case _C_BOOL:
+#endif
     rbval = bool_to_rbobj(*(BOOL*)ocdata);
     break;
 
@@ -659,6 +665,10 @@ rbobj_to_ocdata(VALUE obj, int octype, void* ocdata, BOOL to_libffi)
     break;
 
   case _C_CHR:
+  case _PRIV_C_BOOL:
+#if defined(_C_BOOL)
+  case _C_BOOL:
+#endif
     *(char*)ocdata = (char) NUM2INT(rb_Integer(obj));
     break;
 

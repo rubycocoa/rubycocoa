@@ -105,7 +105,7 @@ rbarg_to_nsarg(VALUE rbarg, int octype, void* nsarg, const char* fname, id pool,
 {
   if (!rbobj_to_ocdata(rbarg, octype, nsarg, YES)) {
     if (pool) [pool release];
-    rb_raise(_ocdataconv_err_class(), "%s - arg #%d cannot convert to nsobj.", fname, index);
+    rb_raise(_ocdataconv_err_class(), "%s - can't convert arg #%d to Objective-C", fname, index);
   }
 }
 
@@ -115,7 +115,7 @@ nsresult_to_rbresult(int octype, const void* nsresult, const char* fname, id poo
   VALUE rbresult;
   if (!ocdata_to_rbobj(Qnil, octype, nsresult, &rbresult, YES)) {
     if (pool) [pool release];
-    rb_raise(_ocdataconv_err_class(), "%s - result cannot convert to rbobj.", fname);
+    rb_raise(_ocdataconv_err_class(), "%s - can't convert Objective-C result to Ruby.", fname);
   }
   return rbresult;
 }
@@ -1068,18 +1068,9 @@ bridge_support_dispatcher (int argc, VALUE *argv, VALUE self)
     rb_value = self;
   }
   else {
-    int retval_type;
-
     DLOG("MDLOSX", "\tresult: %p", retval);
-    if ((func->retval == _C_CHR || func->retval == _C_UCHR) && func->predicate) {
-      DLOG("MDLOSX", "\tmethod is a predicate, forcing result as a boolean value");
-      retval_type = _PRIV_C_BOOL;
-    }
-    else {
-      retval_type = func->retval;
-    }
 
-    rb_value = nsresult_to_rbresult(retval_type, (const void *)retval, func->name, pool);
+    rb_value = nsresult_to_rbresult(func->retval, (const void *)retval, func->name, pool);
     // retain the new ObjC object, that will be released once the Ruby object is collected
     if (func->retval == _C_ID) {
       if (func->retval_should_be_retained && !OBJCID_DATA_PTR(rb_value)->retained) {
@@ -1259,7 +1250,7 @@ osx_load_bridge_support_file (VALUE mOSX, VALUE path)
         }
         else {
           struct bsCFType *bs_cf_type;
-          char *type_id;
+          char *gettypeid_func;
           char *toll_free;
 
           bs_cf_type = (struct bsCFType *)malloc(sizeof(struct bsCFType));
@@ -1268,10 +1259,21 @@ osx_load_bridge_support_file (VALUE mOSX, VALUE path)
           bs_cf_type->name = get_attribute_and_check(reader, "name");
           bs_cf_type->encoding = typeid_encoding;
           
-          type_id = get_attribute(reader, "typeid");
-          if (type_id != NULL) {
-            bs_cf_type->type_id = atoi(type_id);
-            free(type_id);
+          gettypeid_func = get_attribute(reader, "gettypeid_func");
+          if (gettypeid_func != NULL) {
+            void *sym;
+
+            sym = dlsym(RTLD_DEFAULT, gettypeid_func);
+            if (sym == NULL) {
+              DLOG("MDLOSX", "Cannot locate GetTypeID function '%s' for given CFType '%s' -- ignoring it...", gettypeid_func, bs_cf_type->name);
+              bs_cf_type->type_id = 0; /* not a type */
+            }
+            else {
+              int (*cb)(void) = sym;
+              bs_cf_type->type_id = (*cb)();
+            }
+
+            free(gettypeid_func);
           }
           else {
             bs_cf_type->type_id = 0; /* not a type */
@@ -1307,7 +1309,6 @@ osx_load_bridge_support_file (VALUE mOSX, VALUE path)
 
       case BS_XML_FUNCTION: {
         char *  func_name;
-        char *  return_type;
         
         func_name = get_attribute_and_check(reader, "name");
         if (st_delete(bsFunctions, (st_data_t *)&func_name, (st_data_t *)&func)) {
@@ -1323,19 +1324,27 @@ osx_load_bridge_support_file (VALUE mOSX, VALUE path)
 
         func->name = func_name;
         func->is_variadic = get_boolean_attribute(reader, "variadic", NO);
-        func->predicate = get_boolean_attribute(reader, "predicate", YES);
+        func->retval = _C_VOID;
+        func->retval_should_be_retained = NO;
+        func->argc = 0;
+      }
+      break;
 
-        return_type = get_attribute(reader, "returns");
-        if (return_type != NULL) {
-          func->retval = to_octype(return_type);
-          func->retval_should_be_retained = func->retval == _C_ID ? !get_boolean_attribute(reader, "retval_retained", NO) : YES;
-          free(return_type);
+      case BS_XML_FUNCTION_RETVAL: {
+        if (func == NULL) {
+          DLOG("MDLOSX", "Function return value defined outside a function, skipping...");
         }
         else {
-          func->retval = _C_VOID;
-        }
+          char *  return_type;
 
-        func->argc = 0;
+          return_type = get_attribute(reader, "type");
+          if (return_type != NULL) {
+            func->retval = to_octype(return_type);
+            func->retval_should_be_retained = func->retval == _C_ID 
+              ? !get_boolean_attribute(reader, "already_retained", NO) : YES;
+            free(return_type);
+          }
+        } 
       }
       break;
 
@@ -1390,25 +1399,41 @@ osx_load_bridge_support_file (VALUE mOSX, VALUE path)
         else {
           char *  type_modifier;
           struct bsMethodArg * arg; 
+          char *  type;
  
           arg = &method_args[method->argc++];
 
           arg->index = atoi(get_attribute_and_check(reader, "index"));
   
-          type_modifier = get_attribute_and_check(reader, "type_modifier");
-          if (strcmp(type_modifier, "in") == 0)
-            arg->type_modifier = bsTypeModifierIn;
-          else if (strcmp(type_modifier, "out") == 0)       
-            arg->type_modifier = bsTypeModifierOut;
-          else if (strcmp(type_modifier, "inout") == 0)   
-            arg->type_modifier = bsTypeModifierInout;
-          else {
-            DLOG("MDLOSX", "Given type modifier '%s' is invalid, default'ing to 'out'", type_modifier);
-            arg->type_modifier = bsTypeModifierOut;
+          type_modifier = get_attribute(reader, "type_modifier");
+          if (type_modifier != NULL) {
+            if (strcmp(type_modifier, "in") == 0)
+              arg->type_modifier = bsTypeModifierIn;
+            else if (strcmp(type_modifier, "out") == 0)       
+              arg->type_modifier = bsTypeModifierOut;
+            else if (strcmp(type_modifier, "inout") == 0)   
+              arg->type_modifier = bsTypeModifierInout;
+            else {
+              DLOG("MDLOSX", "Given type modifier '%s' is invalid, default'ing to 'out'", type_modifier);
+              arg->type_modifier = bsTypeModifierOut;
+            }
+            free(type_modifier);
           }
-  
+          else {
+            arg->type_modifier = bsTypeModifierOut;
+          } 
+ 
           arg->null_accepted = get_boolean_attribute(reader, "null_accepted", YES);
           get_c_ary_type_attribute(reader, &arg->c_ary_type, &arg->c_ary_type_value); 
+
+          type = get_attribute(reader, "type");
+          if (type != NULL) {
+            arg->octype = to_octype(type);
+            free(type);
+          }
+          else {
+            arg->octype = -1;
+          }          
         }
       }
       break;
@@ -1423,18 +1448,23 @@ osx_load_bridge_support_file (VALUE mOSX, VALUE path)
         else {
           bsCArrayArgType type;
           int value;
+          char *return_type;
 
           get_c_ary_type_attribute(reader, &type, &value);
 
-          if (type == bsCArrayArgUndefined) {
-            DLOG("MDLOSX", "Method return value defined without a C-array type attribute, skipping...");
+          method->retval = (struct bsMethodRetval *)malloc(sizeof(struct bsMethodRetval));
+          ASSERT_ALLOC(method->retval);
+          
+          method->retval->c_ary_type = type;
+          method->retval->c_ary_type_value = value;
+          
+          return_type = get_attribute(reader, "type");
+          if (return_type != NULL) {
+            method->retval->octype = to_octype(return_type);
+            free(return_type);
           }
           else {
-            method->retval = (struct bsMethodRetval *)malloc(sizeof(struct bsMethodRetval));
-            ASSERT_ALLOC(method->retval);
-            
-            method->retval->c_ary_type = type;
-            method->retval->c_ary_type_value = value;
+            method->retval->octype = -1;
           }
         }
       }
@@ -1449,7 +1479,6 @@ osx_load_bridge_support_file (VALUE mOSX, VALUE path)
           selector = get_attribute_and_check(reader, "selector");
           is_class_method = get_boolean_attribute(reader, "class_method", NO);
           hash = is_class_method ? bsInformalProtocolClassMethods : bsInformalProtocolInstanceMethods;         
-
           if (st_lookup(hash, (st_data_t)selector, NULL)) {
             DLOG("MDLOSX", "Informal protocol method [NSObject %c%s] already defined, skipping...", is_class_method ? '+' : '-', selector);
             free(selector);
@@ -1489,10 +1518,9 @@ osx_load_bridge_support_file (VALUE mOSX, VALUE path)
           ASSERT_ALLOC(method);
 
           st_insert(methods_hash, (st_data_t)selector, (st_data_t)method);
-          
+
           method->selector = selector;
           method->is_class_method = is_class_method;
-          method->predicate = get_boolean_attribute(reader, "predicate", YES);
           method->ignore = get_boolean_attribute(reader, "ignore", NO);
           method->suggestion = method->ignore ? get_attribute(reader, "suggestion") : NULL;
           method->argc = 0;
@@ -1753,9 +1781,6 @@ __inspect_bs_method(char *key, struct bsMethod *value, void *ctx)
   unsigned i;
 
   printf("        %s\n", key);
-
-  if (!value->predicate)
-    printf("            not predicate\n");
 
   if (value->ignore) 
     printf("            ignored (suggestion: '%s')\n", value->suggestion == NULL ? "n/a" : value->suggestion);

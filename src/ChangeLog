@@ -1,3 +1,44 @@
+2006-12-13  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* sample/RubyCGPDFViewer:
+	New sample code, a Ruby port of /Developer/Examples/Quartz/PDF/CGPDFViewer,
+	a pure CoreGraphics-based PDF viewer.
+
+	* framework/post-config.rb:
+	Re-generate the bridge support files if the generator is younger than the
+	files.
+
+	* framework/bridge-support-exceptions/AppKit.xml,
+	  framework/bridge-support-exceptions/CoreFoundation.xml,
+	  framework/src/ruby/osx/objc/oc_import.rb,
+	  framework/src/objc/BridgeSupportLexer.h,
+	  framework/src/objc/BridgeSupport.h,
+	  framework/src/objc/BridgeSupport.m,
+	  framework/src/objc/BridgeSupport.gperf,
+	  framework/src/objc/mdl_objwrapper.m,
+	  framework/src/objc/ocdata_conv.h,
+	  framework/src/objc/ocdata_conv.m,
+	  framework/tool/gen_bridge_metadata.rb,
+	  tests/tc_passbyref.rb:
+	- Removed the predicate attribute and now explicitely mark functions/methods
+	  returning boolean types with the _C_BOOL encoding ;
+	- Replaced cftype's typeid attribute by gettypeid_func, we can't rely on
+	  hardcoded TypeID because their value isn't fixed (e.g. it depends on the
+	  order the frameworks are loaded) ;
+	- Removed duplicate cftype elements in the exceptions ;
+	- Introduced a function_retval sub-element to store information about the
+	  return value of functions, and moved the returns attribute there ;
+	- Exceptions can now document methods where the return or argument values
+	  should be coerced to a certain type (e.g. NSGraphicsContext#graphicsPort
+	  should return a CGContextRef and not a void *).
+ 
+	* sample/RubyPDFKitViewer/Info.plist:
+	Changed the bundle identifier to avoid conflicts with the original
+	Objective-C project.
+
+	* sample/circle.rb:
+	Not necessary to require CoreGraphics anymore, as it's pre-loaded.
+
 2006-12-11  Laurent Sansonetti <lsansonetti@apple.com>
 
 	* framework/post-config.rb,

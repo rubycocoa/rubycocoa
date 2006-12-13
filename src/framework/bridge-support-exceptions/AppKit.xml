@@ -99,8 +99,13 @@
     <method selector='initWithColorSyncProfile:' ignore='true' suggestion='Use other initializers.'/>
   </class>
   <class name='NSGraphicsContext'>
-    <method class_method='true' selector='graphicsContextWithGraphicsPort:flipped:' ignore='true' suggestion='Use other initializers.'/>
+    <method class_method='true' selector='graphicsContextWithGraphicsPort:flipped:'>
+      <method_arg index='0' type='CGContextRef'/>
+    </method>
     <method selector='setFocusStack:' ignore='true'/>
+    <method selector='graphicsPort'>
+      <method_retval type='CGContextRef'/>
+    </method>
   </class>
   <class name='NSApplication'>
     <method selector='beginSheet:modalForWindow:modalDelegate:didEndSelector:contextInfo:'>
