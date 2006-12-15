@@ -17,6 +17,7 @@ intern_h = File.join(@config['ruby-header-dir'], 'intern.h')
 end
 
 # generate bridge support metadata files for Cocoa & its dependencies. 
+TIGER_OR_LOWER = `uname -r`.strip.to_f < 9.0
 if @config['gen-bridge-support'] != 'no'
   command('mkdir -p bridge-support')
   [['/System/Library/Frameworks/CoreFoundation.framework', nil],
@@ -27,6 +28,7 @@ if @config['gen-bridge-support'] != 'no'
    ['/System/Library/Frameworks/Quartz.framework/Frameworks/PDFKit.framework', nil],
    ['/System/Library/Frameworks/QuartzCore.framework', nil],
    ['/System/Library/Frameworks/OpenGL.framework', nil],
+   ['/System/Library/Frameworks/QTKit.framework', TIGER_OR_LOWER ? '' : '-c -DQT_BUILDING_ON_LEOPARD_OR_LATER -c "-framework QTKit"'],
   ].each do |path, special_flags|
     framework = File.basename(path, '.framework')
     out = "bridge-support/#{framework}.xml"
