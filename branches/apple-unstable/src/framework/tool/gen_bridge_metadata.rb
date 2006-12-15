@@ -803,6 +803,13 @@ EOS
     end
     @struct_names.uniq!
     @cftype_names.uniq!
+    all_inf_protocol_signatures = @inf_protocols.map { |p| p.entries.map { |e| e.selector } }.flatten
+    @inf_protocols.each do |protocol|
+      protocol.entries.delete_if do |entry|
+        s = entry.selector
+        all_inf_protocol_signatures.select { |s2| s2 == s }.length > 1
+      end
+    end
   end
  
   def parse_args(args)
