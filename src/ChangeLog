@@ -1,3 +1,12 @@
+2006-12-16  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* sample/RubyRoundTransparentWindow/English.lproj/MainMenu.nib/JavaCompiling.plist,
+	  sample/RubyRocks/English.lproj/Game.nib/JavaCompiling.plist:
+	Removed unnecessary files.
+
+	* sample/RubyQTKitSimpleDocument/Info.plist:
+	Added missing CFBundleShortVersionString tag.
+
 2006-12-15  Laurent Sansonetti <lsansonetti@apple.com>
 
 	* sample/RubyQTKitSimpleDocument:
