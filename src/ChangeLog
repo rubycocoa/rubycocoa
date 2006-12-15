@@ -8,7 +8,8 @@
 	Make sure we don't describe the same informal protocol signature more than 
 	once.
 
-	* framework/post-config.rb:
+	* framework/post-config.rb,
+	  framework/bridge-support-exceptions/QTKit.xml:
 	Added support for QTKit.framework.
 
 	* sample/dotview/Info.plist,
