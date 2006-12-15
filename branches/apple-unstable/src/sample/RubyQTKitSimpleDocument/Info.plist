@@ -43,5 +43,7 @@
 	<string>MainMenu</string>
 	<key>NSPrincipalClass</key>
 	<string>NSApplication</string>
+  <key>CFBundleShortVersionString</key>
+  <string>1.1</string>
 </dict>
 </plist>
