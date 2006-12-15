@@ -169,8 +169,6 @@
   </class>
   <class name='NSOpenGLContext'>
     <method selector='setOffScreen:width:height:rowbytes:' ignore='true'/>
-    <method selector='setValues:forParameter:' ignore='true'/>
-    <method selector='getValues:forParameter:' ignore='true'/>
   </class>
   <class name='NSMovie'>
     <method selector='initWithMovie:' ignore='true' suggestion='Use other initializers.'/>
