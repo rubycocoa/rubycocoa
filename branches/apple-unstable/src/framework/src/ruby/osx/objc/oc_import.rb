@@ -30,14 +30,11 @@ module OSX
     SIGN_PATHS << File.join(ENV['HOME'], 'Library', 'BridgeSupport')
   end
 
-  # A name-to-path cache for the frameworks we support.
+  # A name-to-path cache for the frameworks we support that are buried into umbrella frameworks.
   QUICK_FRAMEWORKS = {
-    'CoreFoundation' => '/System/Library/Frameworks/CoreFoundation.framework',
-    'Foundation' => '/System/Library/Frameworks/Foundation.framework',
-    'AppKit' => '/System/Library/Frameworks/AppKit.framework',
-    'WebKit' => '/System/Library/Frameworks/WebKit.framework',
     'CoreGraphics' => '/System/Library/Frameworks/ApplicationServices.framework/Frameworks/CoreGraphics.framework',
-    'PDFKit' => '/System/Library/Frameworks/Quartz.framework/Frameworks/PDFKit.framework'
+    'PDFKit' => '/System/Library/Frameworks/Quartz.framework/Frameworks/PDFKit.framework',
+    'ImageKit' => '/System/Library/Frameworks/Quartz.framework/Frameworks/ImageKit.framework'
   }
 
   def OSX.require_framework(framework)
@@ -46,13 +43,14 @@ module OSX
     elsif path = QUICK_FRAMEWORKS[framework]
       [OSX::NSBundle.bundleWithPath(path), path]
     else
-      FRAMEWORK_PATHS.map { |dir| 
+      path = FRAMEWORK_PATHS.map { |dir| 
         File.join(dir, "#{framework}.framework") 
-      }.select { |path|
-        File.exists?(path)
-      }.map { |path|
+      }.find { |path| 
+        File.exists?(path) 
+      }
+      if path
         [OSX::NSBundle.bundleWithPath(path), path]
-      }.flatten
+      end
     end
 
     unless bundle.nil?

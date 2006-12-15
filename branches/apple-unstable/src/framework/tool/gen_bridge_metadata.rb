@@ -45,7 +45,7 @@ class OCHeaderAnalyzer
 
   def defines
     re = /#define\s+([^\s]+)\s+([^\s]+)\s*$/
-    @defines ||= File.read(@path).scan(re)
+    @defines ||= File.read(@path).scan(re).select { |m| !m[0].include?('(') and m[1] != '\\' }
   end
 
   def struct_names
@@ -237,6 +237,14 @@ class OCHeaderAnalyzer
       self.name <=> x.name
     end
 
+    def hash
+      @name.hash
+    end
+
+    def eql?(o)
+      @name == o.name
+    end
+
     private
 
     def __pointer__?
@@ -410,13 +418,28 @@ int main (void)
     return 0;
 }
 EOS
+    pure_numeric_lines = []
+    numeric_re = /\)?\s*(0x[\da-fA-F]+|[\d\.]+)\s*\)*\s*$/
     @defines.each do |name, value|
+      name.strip!
+      value.strip!
       next if name.strip[0] == ?_
+      next if @ignored_defines_regexps.any? { |re| re.match(name) }
       line = "if ((fmt = printf_format(@encode(__typeof__(#{value})))) != NULL) printf(fmt, \"#{name}\", #{value});"
-      begin
-        name, value = compile_and_execute_code(code.sub(/PRINTF_LINE_HERE/, line), true).split(':')
+      if numeric_re.match(value)
+        pure_numeric_lines << line
+      else
+        begin
+          name, value = compile_and_execute_code(code.sub(/PRINTF_LINE_HERE/, line), true).split(':')
+          @resolved_enums[name.strip] = value.strip
+        rescue
+        end
+      end
+    end
+    unless pure_numeric_lines.empty?
+      compile_and_execute_code(code.sub(/PRINTF_LINE_HERE/, pure_numeric_lines.join("\n"))).each do |line|
+        name, value = line.split(':')
         @resolved_enums[name.strip] = value.strip
-      rescue
       end
     end
   end
@@ -470,7 +493,8 @@ EOS
       m.map { |x| x.stripped_rettype } 
     }.flatten
     all_types |= @method_exception_types
-    
+    all_types |= @opaques
+ 
     lines = all_types.map do |type|
       "printf(\"%s: %s\\n\", \"#{type}\", @encode(#{type}));"
     end
@@ -633,7 +657,7 @@ EOS
       end
       @opaques.sort.each do |name|
         encoding = @types_encoding[name]
-        raise "encoding of opaque type #{name} not resolved" if encoding.nil?
+        raise "encoding of opaque type '#{name}' not resolved" if encoding.nil?
         element = root.add_element('opaque')
         element.add_attribute('name', name.sub(/\s*\*+$/, '')) 
         element.add_attribute('encoding', encoding) 
@@ -648,7 +672,7 @@ EOS
         element.add_attribute('name', enum)
         element.add_attribute('value', value)
       end
-      @functions.sort.each do |function|
+      @functions.uniq.sort.each do |function|
         element = root.add_element('function')
         element.add_attribute('name', function.name)
         element.add_attribute('variadic', true) if function.variadic?
@@ -706,7 +730,7 @@ EOS
           type_name = retval_element.attributes['type']
           if type_name
             type = @types_encoding[type_name]
-            raise "encoding of method return type #{class_element.attributes['selector']} not resolved" if type.nil?
+            raise "encoding of method return type '#{class_element.attributes['selector']}' not resolved" if type.nil?
             retval_element.add_attribute('type', type)
           end
         end
@@ -714,7 +738,7 @@ EOS
           type_name = arg_element.attributes['type']
           if type_name
             type = @types_encoding[type_name]
-            raise "encoding of method arg type #{class_element.attributes['selector']} not resolved" if type.nil?
+            raise "encoding of method arg type '#{class_element.attributes['selector']}' not resolved" if type.nil?
             arg_element.add_attribute('type', type)
           end
         end
@@ -853,6 +877,12 @@ EOS
       @compiler_flags << ' -framework Foundation '
     end
     # Open exceptions, ignore mentionned headers.
+    # Keep the list of structs, CFTypes, boxed and methods return/args types.
+    @ignored_defines_regexps = []
+    @structs = []
+    @cftypes = {} 
+    @opaques = []
+    @method_exception_types = []
     @exceptions.map! { |x| REXML::Document.new(File.read(x)) }
     @exceptions.each do |doc|
       doc.get_elements('/signatures/ignored_headers/header').each do |element|
@@ -861,13 +891,9 @@ EOS
         @headers.delete_if { |x| path_re.match(x) }
         @import_directive.gsub!(/#import.+#{path}>/, '')
       end
-    end
-    # Keep the list of structs, CFTypes, boxed and methods return/args types.
-    @structs = []
-    @cftypes = {} 
-    @opaques = []
-    @method_exception_types = []
-    @exceptions.each do |doc| 
+      doc.get_elements('/signatures/ignored_defines/regex').each do |element|
+        @ignored_defines_regexps << Regexp.new(element.text.strip)
+      end
       doc.get_elements('/signatures/struct').each do |elem|
         @structs << [elem.attributes['name'], elem.attributes['opaque'] == 'true']
       end
