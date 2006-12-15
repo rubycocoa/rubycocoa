@@ -71,7 +71,6 @@ class SampleCIView < NSOpenGLView
   end
 
   def viewBoundsDidChange(bounds)
-    p 'foo'
     # For subclasses.
   end
   addRubyMethod_withType('viewBoundsDidChange:', '@:@')
