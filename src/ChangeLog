@@ -1,5 +1,9 @@
 2006-12-15  Laurent Sansonetti <lsansonetti@apple.com>
 
+	* framework/tool/gen_bridge_metadata.rb:
+	Make sure we don't describe the same informal protocol signature more than 
+	once.
+
 	* framework/post-config.rb:
 	Added support for QTKit.framework.
 
