@@ -1,5 +1,9 @@
 2006-12-15  Laurent Sansonetti <lsansonetti@apple.com>
 
+	* sample/dotview/Info.plist,
+	  sample/multinib/Info.plist:
+	Change the bundle identifier from com.apple.* to com.apple.rubycocoa.*.
+
 	 * sample/RubyCIBevelSample,
 	   sample/SampleCIView.rb:
 	New sample code (Ruby port of CIBevelSample) that uses CoreImage and OpenGL.
