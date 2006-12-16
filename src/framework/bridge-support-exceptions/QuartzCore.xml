@@ -9,9 +9,6 @@
   <struct name='CVSMPTETime'/>
   <struct name='CVTime'/>
   <struct name='CVTimeStamp'/>
-  <struct name='CVPlanarComponentInfo'/>
-  <struct name='CVPlanarPixelBufferInfo'/>
-  <struct name='CVPlanarPixelBufferInfo_YCbCrPlanar'/>
   <struct name='CVFillExtendedPixelsCallBackData'/>
   <class name='CIContext'>
     <method selector='render:toBitmap:rowBytes:bounds:format:colorSpace:'>
