@@ -1,5 +1,8 @@
 2006-12-18  Laurent Sansonetti <lsansonetti@apple.com>
 
+	* tests/tc_types.rb:
+	Fixed test case comparing NSZeroRect (for PPC).
+
 	* sample/RubyCocoaGL:
 	Added new sample code (port of CocoaGL).
 

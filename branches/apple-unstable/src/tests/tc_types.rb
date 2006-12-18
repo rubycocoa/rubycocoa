@@ -59,7 +59,7 @@ class TC_Types < Test::Unit::TestCase
     assert_equal(0, rect.origin.y)
     assert_equal(0, rect.size.width)
     assert_equal(0, rect.size.height)
-    assert_equal(OSX::NSZeroRect, rect)
+    assert_equal(OSX::NSZeroRect.to_a.flatten.map { |x| x.to_i }, rect.to_a.flatten.map { |x| x.to_i })
     rect = OSX::NSRect.new(OSX::NSPoint.new(1, 2), OSX::NSSize.new(3, 4))
     assert_equal(1, rect.origin.x)
     assert_equal(2, rect.origin.y)
