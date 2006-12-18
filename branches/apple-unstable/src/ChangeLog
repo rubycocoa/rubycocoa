@@ -1,3 +1,8 @@
+2006-12-18  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* sample/RubyCocoaGL:
+	Added new sample code (port of CocoaGL).
+
 2006-12-16  Laurent Sansonetti <lsansonetti@apple.com>
 
 	* framework/bridge-support-exceptions/QuartzCore.xml:
