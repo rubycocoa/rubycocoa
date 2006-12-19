@@ -904,12 +904,12 @@ ffi_type_for_octype (int octype)
 #if defined(_LNG_LNG)
     case _C_LNG_LNG:    /* XXX: not sure */
 #endif
-      return &ffi_type_slong;
+      return sizeof(int) == sizeof(long) ? &ffi_type_sint : &ffi_type_slong;
     case _C_ULNG:
 #if defined(_ULNG_LNG)
     case _C_ULNG_LNG:   /* XXX: not sure */
 #endif
-      return &ffi_type_ulong;
+      return sizeof(unsigned int) == sizeof(unsigned long) ? &ffi_type_uint : &ffi_type_ulong;
     case _C_FLT:
       return &ffi_type_float;
     case _C_DBL:
