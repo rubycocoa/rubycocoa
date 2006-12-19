@@ -399,7 +399,8 @@ ocm_ffi_dispatch(int argc, VALUE* argv, VALUE rcv, VALUE* result, struct _ocm_se
           value = OCDATA_ALLOCA(octype, octype_str);
           if (len > 0)
             *(void **) value = alloca(ocdata_size(to_octype(ptype), ptype) * len);
-        } 
+        }
+        // Regular argument. 
         else {
           OBJWRP_LOG("\targ_type[%d] (%p) : %s", i, arg, octype_str);
           len = 0;
