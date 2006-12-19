@@ -103,7 +103,7 @@ oc_err_new (const char* fname, NSException* nsexcp)
 void
 rbarg_to_nsarg(VALUE rbarg, int octype, void* nsarg, const char* fname, id pool, int index)
 {
-  if (!rbobj_to_ocdata(rbarg, octype, nsarg, YES)) {
+  if (!rbobj_to_ocdata(rbarg, octype, nsarg, NO)) {
     if (pool) [pool release];
     rb_raise(_ocdataconv_err_class(), "%s - can't convert arg #%d to Objective-C", fname, index);
   }
@@ -901,15 +901,17 @@ ffi_type_for_octype (int octype)
     case _C_UINT:
       return &ffi_type_uint;
     case _C_LNG:
-#if defined(_LNG_LNG)
-    case _C_LNG_LNG:    /* XXX: not sure */
-#endif
       return sizeof(int) == sizeof(long) ? &ffi_type_sint : &ffi_type_slong;
-    case _C_ULNG:
-#if defined(_ULNG_LNG)
-    case _C_ULNG_LNG:   /* XXX: not sure */
+#if defined(_LNG_LNG)
+    case _C_LNG_LNG: 
+      return &ffi_type_sint64;
 #endif
+    case _C_ULNG:
       return sizeof(unsigned int) == sizeof(unsigned long) ? &ffi_type_uint : &ffi_type_ulong;
+#if defined(_ULNG_LNG)
+    case _C_ULNG_LNG: 
+      return &ffi_type_uint64;
+#endif
     case _C_FLT:
       return &ffi_type_float;
     case _C_DBL:
@@ -989,7 +991,7 @@ bridge_support_dispatcher (int argc, VALUE *argv, VALUE rcv)
         rb_fatal("can't allocate memory");
       for (i = 0; i < argc; i++) {
         func->ffi.arg_types[i] = i < func->argc ? ffi_type_for_octype(func->argv[i]) : &ffi_type_pointer;
-        DLOG("MDLOSX", "\tset arg #%d to type %p", i, func->ffi.arg_types[i]);
+        DLOG("MDLOSX", "\tset arg #%d to type '%c' %p", i, func->argv[i], func->ffi.arg_types[i]);
       }
       func->ffi.arg_types[argc] = NULL;
     }
@@ -1009,18 +1011,17 @@ bridge_support_dispatcher (int argc, VALUE *argv, VALUE rcv)
  
       octype = i < func->argc ? func->argv[i] : _C_ID;
       ffi_type = func->ffi.arg_types[i];
-
       size = ocdata_size(octype, "");
  
       if (size > 0) {
-        DLOG("MSLOSX", "\tallocating %d bytes for arg #%d", size, i);
+        DLOG("MSLOSX", "\tallocating %d bytes for arg #%d of type '%c'", size, i, octype);
         values[i] = (void *)alloca(size);
         if (values[i] == NULL)
           rb_fatal("Can't allocate memory");
       }
 
       rbarg_to_nsarg(argv[i], octype, values[i], func->name, pool, i);  
- 
+
       DLOG("MDLOSX", "\tset arg #%d to value %p", i, values[i]);
     }
   }
@@ -1039,6 +1040,8 @@ bridge_support_dispatcher (int argc, VALUE *argv, VALUE rcv)
     if (len == 0)
       rb_bug("ocdata_size(%s) is 0", func->retval);
     retval = alloca(len);
+    if (retval == NULL)
+      rb_fatal("Can't allocate memory");
   }
   else
     retval = NULL;

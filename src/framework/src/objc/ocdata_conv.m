@@ -664,16 +664,16 @@ rbobj_to_ocdata(VALUE obj, int octype, void* ocdata, BOOL to_libffi)
     *(SEL*)ocdata = rbobj_to_nssel(obj);
     break;
 
-  case _C_CHR:
+  case _C_UCHR:
   case _PRIV_C_BOOL:
 #if defined(_C_BOOL)
   case _C_BOOL:
 #endif
-    *(char*)ocdata = (char) NUM2INT(rb_Integer(obj));
+    *(unsigned char*)ocdata = (unsigned char) NUM2UINT(rb_Integer(obj));
     break;
 
-  case _C_UCHR:
-    *(unsigned char*)ocdata = (unsigned char) NUM2UINT(rb_Integer(obj));
+  case _C_CHR:
+    *(char*)ocdata = (char) NUM2INT(rb_Integer(obj));
     break;
 
   case _C_SHT:
