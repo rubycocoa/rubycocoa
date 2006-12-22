@@ -111,6 +111,11 @@ class TC_Types < Test::Unit::TestCase
     assert_equal(43, range.length)
   end
 
+  def test_cg_affine_transform
+    ary = [1.0, 2.0, 3.0, 4.0, 5.0, 6.0]
+    assert_equal(OSX::CGAffineTransformMake(*ary).to_a, ary)
+  end
+
   def test_bool_nsnumber
     d = OSX::NSMutableDictionary.alloc.init
     d.setValue_forKey(true, 'true')
