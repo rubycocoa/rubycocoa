@@ -26,7 +26,7 @@ class CIMicroPaintView < SampleCIView
   end
 
   def brushSize=(brushSize)
-    if brushSize.is_a?(NSNumber)
+    if brushSize.respondsToSelector?('floatValue')
       @brushSize = brushSize.floatValue
     else
       @brushSize = brushSize
