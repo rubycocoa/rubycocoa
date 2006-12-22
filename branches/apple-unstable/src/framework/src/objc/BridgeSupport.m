@@ -385,10 +385,10 @@ find_bs_boxed_for_klass (VALUE klass)
   return find_bs_boxed_by_encoding(StringValuePtr(encoding));
 }
 
-static size_t 
-bs_struct_size(struct bsBoxed *bs_struct)
+size_t 
+bs_boxed_size(struct bsBoxed *bs_struct)
 {
-  if (bs_struct->size == 0) {
+  if (bs_struct->size == 0 && bs_struct->type == bsBoxedStructType) {
     unsigned i;
     size_t size;
   
@@ -467,7 +467,7 @@ rb_bs_struct_new (int argc, VALUE *argv, VALUE rcv)
   if (argc > 0 && argc != bs_struct->opt.s.field_count)
     rb_raise(rb_eArgError, "wrong number of arguments (%d for %d)", argc, bs_struct->opt.s.field_count);
 
-  bs_struct_size(bs_struct);
+  bs_boxed_size(bs_struct);
   if (bs_struct->size == 0)
     rb_raise(rb_eRuntimeError, "can't instantiate struct '%s' of 0 size", bs_struct->name);
 
@@ -496,7 +496,7 @@ rb_bs_boxed_new_from_ocdata (struct bsBoxed *bs_boxed, void *ocdata)
   void *data;
     
   if (bs_boxed->type == bsBoxedStructType)
-    bs_struct_size(bs_boxed);
+    bs_boxed_size(bs_boxed);
   if (bs_boxed->size == 0)
     rb_raise(rb_eRuntimeError, "can't instantiate boxed '%s' of size 0", bs_boxed->name);
 
@@ -552,7 +552,7 @@ rb_bs_boxed_struct_get_data(VALUE obj, struct bsBoxed *bs_boxed, size_t *size, B
   }
   Data_Get_Struct(obj, void, data);
 
-  *size = bs_struct_size(bs_boxed);
+  *size = bs_boxed_size(bs_boxed);
   *success = YES;
 
   return data;

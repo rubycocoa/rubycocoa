@@ -165,7 +165,7 @@ ocdata_size(int octype, const char* octype_str)
 
       bs_boxed = find_bs_boxed_by_octype(octype);
       if (bs_boxed != NULL)
-        result = bs_boxed->size;
+        result = bs_boxed_size(bs_boxed);
     }
     if (result == 0 && octype_str != NULL) {
       unsigned int size, align;
