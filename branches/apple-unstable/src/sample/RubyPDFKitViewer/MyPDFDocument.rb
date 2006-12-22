@@ -22,10 +22,10 @@ class MyPDFDocument < NSDocument
   def windowNibName
     'MyPDFDocument'
   end
-
+  
   def windowControllerDidLoadNib(controller)  
     # Super.
-    super_windowControllerDidLoadNib(self)
+    super_windowControllerDidLoadNib(controller)
 
     # Load PDF.
     if self.fileName
@@ -63,13 +63,6 @@ class MyPDFDocument < NSDocument
     
     # Open drawer.
     @drawer.open
-	
-    # Size the window.
-    windowSize = @pdfView.rowSizeForPage(@pdfView.currentPage)
-    if (@pdfView.displayMode & 0x01) == 0x01 and doc.pageCount > 1
-      windowSize.width += NSScroller.scrollerWidth
-    end
-    controller.window.setContentSize(windowSize)
   end   
     
   def dataRepresentationOfType(type)
@@ -86,7 +79,8 @@ class MyPDFDocument < NSDocument
 
   def takeDestinationFromOutline(sender)
     # Get the destination associated with the search result list.  Tell the PDFView to go there.
-    @pdfView.goToDestination(sender.itemAtRow(sender.selectedRow).destination)
+    item = sender.itemAtRow(sender.selectedRow)
+    @pdfView.goToDestination(item.destination) if item
   end
 
   def displaySinglePage(sender)
@@ -206,7 +200,7 @@ class MyPDFDocument < NSDocument
 
   def outlineView_child_ofItem(outlineView, index, item)
     if item
-      item.childAtIndex
+      item.childAtIndex(index)
     else
       @outline ? @outline.childAtIndex(index) : nil
     end
