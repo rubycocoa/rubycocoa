@@ -37,7 +37,7 @@ class MainController < NSObject
 
   # Retrieve the PDF View of the main window.
   def currentPDFView
-    NSApp.mainWindow.windowControler.document.pdfView
+    NSApp.mainWindow.windowController.document.pdfView
   end
 
   # Disable inappropriate menu items.
