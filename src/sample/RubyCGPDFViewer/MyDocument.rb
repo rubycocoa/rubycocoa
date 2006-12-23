@@ -7,7 +7,7 @@
 #
 
 class MyDocument < NSDocument
-
+  attr_reader :pdfView
   ib_outlets :pdfView, :window
 
   # String constants for the toolbar.
