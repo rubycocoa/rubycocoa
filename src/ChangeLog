@@ -1,5 +1,10 @@
 2006-12-23  Laurent Sansonetti <lsansonetti@apple.com>
 
+	* framework/src/ruby/osx/objc/oc_wrapper.rb:
+	Make sure constants can still be retrieved via OSX.TheConstantName, but print
+	a warning stating that this syntax is deprecated and that its use is 
+	discouraged.
+
 	* sample/RubyCGPDFViewer/MyDocument.rb:
 	Fixed a runtime error, thanks to Eloy Duran.
 

@@ -8,13 +8,26 @@ module OSX
 
   class << self
     attr_accessor :relaxed_syntax
+
+    # Backward compatibility check; get C constants
+    def method_missing(mname, *args)
+      if args.length == 0
+        begin
+          ret = const_get(mname)
+          STDERR.puts "#{caller[0]}: syntax 'OSX.#{mname}' to get the constant is deprecated and its use is discouraged, please use 'OSX::#{mname}' instead."
+          return ret
+        rescue
+        end
+      end
+      raise NameError, "undefined method `#{mname}' for OSX:Module"
+    end
   end
 
   module OCObjWrapper
 
     def method_missing(mname, *args)
       m_name, m_args = analyze_missing(mname, args)
-      ret = self.ocm_send(m_name, *m_args)
+      self.ocm_send(m_name, *m_args)
     end
 
     def ocnil?
