@@ -1,3 +1,14 @@
+2006-12-25  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* framework/RubyCocoa.xcodeproj/project.pbxproj,
+	  framework/src/ruby/osx/webkit.rb,
+	  framework/src/ruby/osx/qtkit.rb,
+	  lib/osx/webkit.rb,
+	  lib/osx/qtkit.rb:
+	Added osx/webkit and osx/qtkit files to preserve API compatibility with the 
+	stable branch, that warn the user of their deprecation and to the appropriate
+	OSX.require_framework call.
+
 2006-12-25  Fujimoto Hisa  <hisa@fobj.com>
 
 	* sample/RubyMiniBrowser:
