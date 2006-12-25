@@ -7,7 +7,7 @@ module OSX
       margs = []
       args.each_with_index do |val, index|
         if index % 2 == 0 then
-          mname << val << ':'
+          mname << val.to_s << ':'
         else
           margs << val
         end
