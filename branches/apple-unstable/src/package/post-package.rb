@@ -36,7 +36,7 @@ Dir.chdir dmg_dir
 resources = File.join(package_name + '.pkg', 'Contents', 'Resources')
 File.symlink(File.join(resources, 'License.txt'), 'License.txt')
 File.symlink(File.join(resources, 'English.lproj', 'ReadMe.html'), 'ReadMe.html')
-File.symlink(File.join(resources, 'Japanese.lproj', 'ReadMe.html'), 'ReadMe.ja.html')
+#File.symlink(File.join(resources, 'Japanese.lproj', 'ReadMe.html'), 'ReadMe.ja.html')
 Dir.chdir save_dir
 
 command %Q!/usr/bin/hdiutil create ! +

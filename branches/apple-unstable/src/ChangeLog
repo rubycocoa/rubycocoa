@@ -1,3 +1,15 @@
+2006-12-26  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* VERSION,
+	  ReadMe.ascii.html,
+	  package/post-package.rb,
+	  package/pre-package.rb,
+	  package/tmpl/Info.plist,
+	  framework/pre-install.rb,
+	  ReadMe.html,
+	  ReadMe.sjis.html:
+	Preparation for the first release.
+
 2006-12-25  Laurent Sansonetti <lsansonetti@apple.com>
 
 	* framework/RubyCocoa.xcodeproj/project.pbxproj,
