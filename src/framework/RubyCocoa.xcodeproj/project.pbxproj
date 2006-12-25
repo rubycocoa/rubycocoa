@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		4D0E85190AA49CF700C8E2FB /* BridgeSupport.h in Headers */ = {isa = PBXBuildFile; fileRef = 4D0E85170AA49CF700C8E2FB /* BridgeSupport.h */; };
 		4D0E851A0AA49CF700C8E2FB /* BridgeSupport.m in Sources */ = {isa = PBXBuildFile; fileRef = 4D0E85180AA49CF700C8E2FB /* BridgeSupport.m */; };
+		4D100E510B40292100DEC855 /* webkit.rb in Resources */ = {isa = PBXBuildFile; fileRef = 4D100E500B40292100DEC855 /* webkit.rb */; };
+		4D100E5B0B402A8400DEC855 /* qtkit.rb in Resources */ = {isa = PBXBuildFile; fileRef = 4D100E5A0B402A8400DEC855 /* qtkit.rb */; };
 		FCDF92650A87E09E0002AD01 /* cls_objcid.h in Headers */ = {isa = PBXBuildFile; fileRef = E88C6D58035BB1F5031D1B90 /* cls_objcid.h */; };
 		FCDF92660A87E09E0002AD01 /* cls_objcptr.h in Headers */ = {isa = PBXBuildFile; fileRef = E88C6D5A035BB1F5031D1B90 /* cls_objcptr.h */; };
 		FCDF92680A87E09E0002AD01 /* ocdata_conv.h in Headers */ = {isa = PBXBuildFile; fileRef = E88C6D5F035BB1F5031D1B90 /* ocdata_conv.h */; };
@@ -96,6 +98,8 @@
 		1058C7B1FEA5585E11CA2CBB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
 		4D0E85170AA49CF700C8E2FB /* BridgeSupport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BridgeSupport.h; sourceTree = "<group>"; };
 		4D0E85180AA49CF700C8E2FB /* BridgeSupport.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BridgeSupport.m; sourceTree = "<group>"; };
+		4D100E500B40292100DEC855 /* webkit.rb */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.script.ruby; path = webkit.rb; sourceTree = "<group>"; };
+		4D100E5A0B402A8400DEC855 /* qtkit.rb */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.script.ruby; path = qtkit.rb; sourceTree = "<group>"; };
 		E813DE9B036CC9C1033794D5 /* RBSlaveObject.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RBSlaveObject.h; sourceTree = "<group>"; };
 		E813DE9D036D122F033794D5 /* mdl_osxobjc.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = mdl_osxobjc.h; sourceTree = "<group>"; };
 		E813DE9E036D122F033794D5 /* mdl_osxobjc.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = mdl_osxobjc.m; sourceTree = "<group>"; };
@@ -261,6 +265,8 @@
 				E84D81ED03ADA29603A81C6F /* cocoa.rb */,
 				E84D81EE03ADA29603A81C6F /* foundation.rb */,
 				E84D81EE13ADA29603A81C6F /* coredata.rb */,
+				4D100E500B40292100DEC855 /* webkit.rb */,
+				4D100E5A0B402A8400DEC855 /* qtkit.rb */,
 				E88C6E73035BB408031D1B90 /* objc */,
 			);
 			path = osx;
@@ -368,6 +374,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4D100E510B40292100DEC855 /* webkit.rb in Resources */,
+				4D100E5B0B402A8400DEC855 /* qtkit.rb in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
