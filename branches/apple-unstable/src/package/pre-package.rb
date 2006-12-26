@@ -30,7 +30,7 @@ File.link '../ReadMe.html',
 #File.link '../ReadMe.ja.html', 
 #  File.join(resources_dir, 'Japanese.lproj', 'ReadMe.html')
 
-#File.link('tmpl/background.gif', File.join(resources_dir, 'background.gif'))
+File.link('tmpl/background.gif', File.join(resources_dir, 'background.gif'))
 
 if @config['build-universal'] == 'yes'
   postflight = File.join(resources_dir, 'postflight')
