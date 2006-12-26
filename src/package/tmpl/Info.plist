@@ -73,5 +73,7 @@
 	</array>
     <key>IFPkgFlagBackgroundScaling</key>
     <string>none</string>
+    <key>IFPkgFlagBackgroundAlignment</key>
+    <string>bottomleft</string>
 </dict>
 </plist>
