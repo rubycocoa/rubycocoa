@@ -92,10 +92,10 @@ class MyDocument < OSX::NSDocument
 
   # Updates the resource status and error messages
   def updateResourceStatus
-    stat = if @resourceFailedCount then
+    stat = if @resourceFailedCount > 0 then
              format( "Loaded %d of %d, %d resource errors", 
                      @resourceCompletedCount,
-                     @resourceCount.to_i - @resourceFailedCount.to_i,
+                     @resourceCount - @resourceFailedCount,
                      @resourceFailedCount )
            else
              format( "Loaded %d of %d",
@@ -108,13 +108,13 @@ class MyDocument < OSX::NSDocument
   # Accessor methods for instance variables
 
   def docTitle; @docTitle end
-  def setDocTitle(s)  @docTitle = s end
+  def setDocTitle(s)  @docTitle = s.to_s end
 
   def frameStatus; @frameStatus end
-  def setFrameStatus(s)  @frameStatus = s end
+  def setFrameStatus(s)  @frameStatus = s.to_s end
 
   def resourceStatus; @resourceStatus end
-  def setResourceStatus(s)  @resourceStatus = s end
+  def setResourceStatus(s)  @resourceStatus = s.to_s end
 
   def url; @url end
   def setURL(s)  @url = s end
