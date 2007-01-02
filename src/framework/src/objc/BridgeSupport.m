@@ -794,6 +794,8 @@ init_bs_boxed (bsBoxedType type, const char *name, const char *encoding, VALUE k
   bs_boxed->octype = bs_boxed_octype_idx++;
   bs_boxed->ffi_type = NULL; // lazy determined
 
+  DLOG("MDLOSX", "Imported boxed type of name `%s' and type %d", name, bs_boxed->octype);
+
   return bs_boxed;
 }
 
@@ -902,13 +904,13 @@ ffi_type_for_octype (int octype)
       return &ffi_type_uint;
     case _C_LNG:
       return sizeof(int) == sizeof(long) ? &ffi_type_sint : &ffi_type_slong;
-#if defined(_LNG_LNG)
+#if defined(_C_LNG_LNG)
     case _C_LNG_LNG: 
       return &ffi_type_sint64;
 #endif
     case _C_ULNG:
       return sizeof(unsigned int) == sizeof(unsigned long) ? &ffi_type_uint : &ffi_type_ulong;
-#if defined(_ULNG_LNG)
+#if defined(_C_ULNG_LNG)
     case _C_ULNG_LNG: 
       return &ffi_type_uint64;
 #endif
@@ -1645,6 +1647,7 @@ osx_import_c_constant (VALUE self, VALUE sym)
   cvalue = dlsym(RTLD_DEFAULT, real_name);
   value = Qnil;
   if (cvalue != NULL) {
+    DLOG("MDLOSX", "Importing C constant `%s' of type %d", name, octype);
     value = nsresult_to_rbresult(octype, cvalue, "", nil);
     rb_define_const(self, name, value);
     DLOG("MDLOSX", "Imported C constant `%s' with value %p", name, value);

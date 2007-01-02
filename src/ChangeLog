@@ -1,5 +1,8 @@
 2007-01-02  Laurent Sansonetti <lsansonetti@apple.com>
 
+	* framework/src/objc/BridgeSupport.m:
+	Fixed support for long long types. Added some logs.
+
 	* framework/src/ruby/osx/objc/oc_import.rb,
 	  tests/tc_ovmix.rb,
 	  tests/objc_test.m:
