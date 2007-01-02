@@ -25,6 +25,22 @@ module OSX
 
   module OCObjWrapper
 
+    # A convenience method to dispatch a message to ObjC as symbol/value/...
+    # For example, [myObj doSomething:arg1 withObject:arg2] would translate as:
+    #   myObj.objc_send(:doSomething, arg1, :withObject, arg2)
+    def objc_send(*args)
+      mname = ""
+      margs = []
+      args.each_with_index do |val, index|
+        if index % 2 == 0 then
+          mname << val.to_s << ':'
+        else
+          margs << val
+        end
+      end
+      return self.ocm_send(mname, *margs)
+    end
+
     def method_missing(mname, *args)
       m_name, m_args = analyze_missing(mname, args)
       self.ocm_send(m_name, *m_args)
@@ -111,7 +127,7 @@ module OSX
           end
           m_name = "#{mname}_"
           m_args = args
-          STDERR.puts "#{caller[1]}: inline Hash dispatch syntax is deprecated and its use is discouraged, please use '#{m_name}' instead."
+          STDERR.puts "#{caller[1]}: inline Hash dispatch syntax is deprecated and its use is discouraged, please use '#{m_name}(...)' or 'objc_send(...)' instead."
         elsif (m_args.size >= 3) && ((m_args.size % 2) == 1) && (not m_name.include?('_')) then
           # Parse the symbol-value-symbol-value-... case.
           mname = m_name.dup
@@ -124,7 +140,7 @@ module OSX
             end
           end
           m_name = "#{mname}_"
-          STDERR.puts "#{caller[1]}: symbol-value-... dispatch syntax is deprecated and its use is discouraged, please use '#{m_name}' instead."
+          STDERR.puts "#{caller[1]}: symbol-value-... dispatch syntax is deprecated and its use is discouraged, please use '#{m_name}(...)' or 'objc_send(...)' instead."
           m_args = args
         else
           m_name.sub!(/[^_:]$/, '\0_') if m_args.size > 0

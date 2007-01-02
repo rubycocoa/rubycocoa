@@ -2,18 +2,6 @@ require 'osx/cocoa'
 
 module OSX
   module OCObjWrapper
-    def objc_send(*args)
-      mname = ""
-      margs = []
-      args.each_with_index do |val, index|
-        if index % 2 == 0 then
-          mname << val.to_s << ':'
-        else
-          margs << val
-        end
-      end
-      return self.ocm_send(mname, *margs)
-    end
     alias _  objc_send
   end
 end
