@@ -98,18 +98,23 @@ struct _ocm_send_context
 {
   id        rcv;
   SEL       selector;
-  Method    method;
+  IMP       imp;
   unsigned  numberOfArguments;
   char *    methodReturnType;
   char **   argumentsTypes;
 };
 
+id _objc_msgForward(id self, SEL sel, ...);
+
 static struct _ocm_send_context *
 ocm_create_send_context(VALUE rcv, SEL selector, char *error, size_t error_len)
 {
   id oc_rcv;
+  Class klass;
   Method method;
+  IMP imp;
   struct _ocm_send_context *ctx;
+  NSMethodSignature *methodSignature;
 
   oc_rcv = rbobj_get_ocid(rcv);
   if (oc_rcv == nil) {
@@ -117,19 +122,31 @@ ocm_create_send_context(VALUE rcv, SEL selector, char *error, size_t error_len)
     return NULL;
   }
 
-  method = class_getInstanceMethod(((struct objc_class *) oc_rcv)->isa, selector); 
+  klass = ((struct objc_class *) oc_rcv)->isa;
+  method = class_getInstanceMethod(klass, selector); 
   if (method == NULL) {
-    snprintf(error, error_len, "Can't get Objective-C method signature for selector '%s' of receiver %s", (char *) selector, RSTRING(rb_inspect(rcv))->ptr);
-    return NULL;
+    // If we can't get the method signature via the ObjC runtime, let's try the NSObject API,
+    // as the target class may override the invocation dispatching methods (as NSUndoManager).
+    methodSignature = [oc_rcv methodSignatureForSelector:selector];
+    if (methodSignature == nil) {
+      snprintf(error, error_len, "Can't get Objective-C method signature for selector '%s' of receiver %s", (char *) selector, RSTRING(rb_inspect(rcv))->ptr);
+      return NULL;
+    }
+    // Let's use the regular message dispatcher.
+    imp = objc_msgSend;
+  }
+  else {
+    methodSignature = nil;
+    imp = method->method_imp;
   }
 
   ctx = (struct _ocm_send_context *)malloc(sizeof(struct _ocm_send_context));
   
   ctx->rcv = oc_rcv;
   ctx->selector = selector;
-  ctx->method = method;
-
-  decode_method_encoding(method->method_types, &ctx->numberOfArguments, &ctx->methodReturnType, &ctx->argumentsTypes, YES);
+  ctx->imp = imp;
+  
+  decode_method_encoding(method != NULL ? method->method_types : NULL, methodSignature, &ctx->numberOfArguments, &ctx->methodReturnType, &ctx->argumentsTypes, YES);
  
   return ctx;
 }
@@ -190,8 +207,8 @@ ocm_easy_dispatch(int argc, VALUE* argv, VALUE rcv, VALUE* result, struct _ocm_s
 
     exception = Qnil;
     @try {
-      OBJWRP_LOG("\tdirect call easy method %s types %s imp %p", (const char *)ctx->method->method_name, ctx->method->method_types, ctx->method->method_imp);
-      val = (*ctx->method->method_imp)(ctx->rcv, ctx->selector);
+      OBJWRP_LOG("\tdirect call easy method %s imp %p", (const char *)ctx->selector, ctx->imp);
+      val = (*ctx->imp)(ctx->rcv, ctx->selector);
     }
     @catch (id oc_exception) {
       OBJWRP_LOG("got objc exception '%@' -- forwarding...", oc_exception);
@@ -349,8 +366,8 @@ ocm_ffi_dispatch(int argc, VALUE* argv, VALUE rcv, VALUE* result, struct _ocm_se
         bs_arg = bs_method != NULL ? find_bs_method_arg_by_index(bs_method, i) : NULL;
 
         if (bs_arg != NULL && !bs_arg->null_accepted && NIL_P(arg)) {
-            exception = ocdataconv_err_new(ctx->rcv, ctx->selector, "argument #%d can't be nil", i);
-            goto bails;
+          exception = ocdataconv_err_new(ctx->rcv, ctx->selector, "argument #%d can't be nil", i);
+          goto bails;
         }
 
         is_c_array = bs_arg != NULL && bs_arg->c_ary_type != bsCArrayArgUndefined;
@@ -442,8 +459,8 @@ ocm_ffi_dispatch(int argc, VALUE* argv, VALUE rcv, VALUE* result, struct _ocm_se
   // Call function.
   exception = Qnil;
   @try {
-    OBJWRP_LOG("\tffi_call method %s types %s imp %p", (const char *)ctx->method->method_name, ctx->method->method_types, ctx->method->method_imp);
-    ffi_call(&cif, FFI_FN(ctx->method->method_imp), (ffi_arg *)retval, arg_values);
+    OBJWRP_LOG("\tffi_call method '%s' imp %p", (const char *)ctx->selector, ctx->imp);
+    ffi_call(&cif, FFI_FN(ctx->imp), (ffi_arg *)retval, arg_values);
     OBJWRP_LOG("\tffi_call done");
   }
   @catch (id oc_exception) {

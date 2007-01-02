@@ -45,6 +45,13 @@ class CalledClass < OSX::NSObject
     end
 end
 
+class UndoSlave < OSX::NSObject
+    def addFoo(o)
+        o.addObject('foo')
+    end
+    addRubyMethod_withType('foo:', 'v@:@')
+end
+
 class TC_SubClass < Test::Unit::TestCase
 
   def test_s_new
@@ -132,6 +139,27 @@ class TC_SubClass < Test::Unit::TestCase
   # testunit-0.1.8 has "assert_raises" not "assert_raise"
   unless method_defined? :assert_raise
     alias :assert_raise :assert_raises
+  end
+
+  def test_undo1
+    ary = OSX::NSMutableArray.arrayWithObject('foo')
+    undo = OSX::NSUndoManager.alloc.init
+    undo.prepareWithInvocationTarget(ary)
+    undo.removeLastObject
+    assert_equal(1, ary.count)
+    undo.undo
+    assert_equal(0, ary.count)
+  end
+
+  def test_undo2
+    slave = UndoSlave.alloc.init 
+    ary = OSX::NSMutableArray.alloc.init
+    undo = OSX::NSUndoManager.alloc.init
+    undo.prepareWithInvocationTarget(slave)
+    undo.addFoo(ary)
+    assert_equal(0, ary.count)
+    undo.undo
+    assert_equal(1, ary.count)
   end
 
 end

@@ -797,55 +797,65 @@ ocstr_to_rbstr(id ocstr)
   return rb_str_new ([data bytes], [data length]);
 }
 
+static void
+__decode_method_encoding_with_method_signature(NSMethodSignature *methodSignature, unsigned *argc, char **retval_type, char ***arg_types, BOOL strip_first_two_args)
+{
+  *argc = [methodSignature numberOfArguments];
+  if (strip_first_two_args)
+    *argc -= 2;
+  *retval_type = strdup([methodSignature methodReturnType]);
+  if (*argc > 0) {
+    unsigned i;
+    char **l_arg_types;
+    l_arg_types = (char **)malloc(sizeof(char *) * *argc);
+    for (i = 0; i < *argc; i++)
+      l_arg_types[i] = strdup([methodSignature getArgumentTypeAtIndex:i + (strip_first_two_args ? 2 : 0)]);
+    *arg_types = l_arg_types;
+  }
+  else {
+    *arg_types = NULL;
+  }
+}
+
 // 10.4 or lower, use NSMethodSignature.
 // Otherwise, use the Objective-C runtime API, which is faster and more reliable with structures encoding.
 void
-decode_method_encoding(const char *encoding, unsigned *argc, char **retval_type, char ***arg_types, BOOL strip_first_two_args)
+decode_method_encoding(const char *encoding, NSMethodSignature *methodSignature, unsigned *argc, char **retval_type, char ***arg_types, BOOL strip_first_two_args)
 {
-  unsigned i;
-  unsigned l_argc;
-  char *l_retval_type;
-  char **l_arg_types;
-
+  assert(encoding != NULL || methodSignature != nil);
+  if (encoding == NULL) {
+    __decode_method_encoding_with_method_signature(methodSignature, argc, retval_type, arg_types, strip_first_two_args);   
+  }
+  else {
 #if MAC_OS_X_VERSION_MAX_ALLOWED <= MAC_OS_X_VERSION_10_4
-  NSMethodSignature *methodSignature;
-  NSAutoreleasePool *pool;
-
-  pool = [[NSAutoreleasePool alloc] init];
-  methodSignature = [NSMethodSignature signatureWithObjCTypes:encoding];
-  l_argc = [methodSignature numberOfArguments];
-  if (strip_first_two_args)
-    l_argc -= 2;
-  l_retval_type = strdup([methodSignature methodReturnType]);
-  if (l_argc > 0) {
-    l_arg_types = (char **)malloc(sizeof(char *) * l_argc);
-    for (i = 0; i < l_argc; i++)
-      l_arg_types[i] = strdup([methodSignature getArgumentTypeAtIndex:i + (strip_first_two_args ? 2 : 0)]);
-  }
-  else {
-    l_arg_types = NULL;
-  }
-  [pool release];
+    NSAutoreleasePool *pool;
+  
+    pool = [[NSAutoreleasePool alloc] init];
+    methodSignature = [NSMethodSignature signatureWithObjCTypes:encoding];
+    __decode_method_encoding_with_method_signature(methodSignature, argc, retval_type, arg_types, strip_first_two_args);   
+    [pool release];
 #else
-  // There is no public API to parse encoding, but we can make a fake method.
-  struct objc_method method;
-  method.method_types = (char *)encoding;
+    // There is no public API to parse encoding, but we can make a fake method.
+    struct objc_method method;
+    unsigned i;
 
-  l_argc = method_getNumberOfArguments(&method);
-  if (strip_first_two_args)
-    l_argc -= 2;
-  l_retval_type = method_copyReturnType(&method);
-  if (l_argc > 0) {
-    l_arg_types = (char **)malloc(sizeof(char *) * l_argc);
-    for (i = 0; i < l_argc; i++)
-      l_arg_types[i] = method_copyArgumentType(&method, i + (strip_first_two_args ? 2 : 0));
-  }
-  else {
-    l_arg_types = NULL;
-  }
+    method.method_types = (char *)encoding;
+
+    *argc = method_getNumberOfArguments(&method);
+    if (strip_first_two_args)
+      *argc -= 2;
+    *retval_type = method_copyReturnType(&method);
+    if (*argc > 0) {
+      char **l_arg_types;
+      
+      l_arg_types = (char **)malloc(sizeof(char *) * (*argc));
+      for (i = 0; i < *argc; i++)
+        l_arg_types[i] = method_copyArgumentType(&method, i + (strip_first_two_args ? 2 : 0));
+      *arg_types = l_arg_types;
+    }
+    else {
+      *arg_types = NULL;
+    }
 #endif
-
-  *argc = l_argc;
-  *retval_type = l_retval_type;
-  *arg_types = l_arg_types;
+  }
 }

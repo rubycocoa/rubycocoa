@@ -1,5 +1,15 @@
 2007-01-02  Laurent Sansonetti <lsansonetti@apple.com>
 
+	* framework/src/objc/OverrideMixin.m,
+	  framework/src/objc/RBObject.m,
+	  framework/src/objc/mdl_objwrapper.m,
+	  framework/src/objc/ocdata_conv.h,
+	  framework/src/objc/ocdata_conv.m,
+	  tests/tc_subclass.rb:
+	Fixed a regression introduced by the new FFI support, when messages could not
+	be properly forwarded to Objective-C objects that are overriding the default
+	message dispatching mechanism (like NSUndoManager). Added test cases.
+
 	* framework/src/ruby/osx/objc/oc_import.rb:
 	Message NSBundle#oc_load as #load may have been overriden by the active 
 	record library (thanks Chris McGrath).

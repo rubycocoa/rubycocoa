@@ -69,7 +69,7 @@ static RB_ID rb_obj_sel_to_mid(VALUE rcv, SEL a_sel)
   return mid;
 }
 
-static int rb_obj_arity_of_method(VALUE rcv, SEL a_sel)
+static int rb_obj_arity_of_method(VALUE rcv, SEL a_sel, BOOL *ok)
 {
   VALUE mstr;
   RB_ID mid;
@@ -77,8 +77,13 @@ static int rb_obj_arity_of_method(VALUE rcv, SEL a_sel)
   VALUE argc;
 
   mid = rb_obj_sel_to_mid(rcv, a_sel);
+  if (rb_respond_to(rcv, mid) == 0) {
+    *ok = NO;
+    return 0;
+  }
   mstr = rb_str_new2(rb_id2name(mid)); // mstr = sel_to_rbobj (a_sel);
   method = rb_funcall(rcv, rb_intern("method"), 1, mstr);
+  *ok = YES;
   argc = rb_funcall(method, rb_intern("arity"), 0);
   return NUM2INT(argc);
 }
@@ -334,21 +339,25 @@ VALUE rbobj_call_ruby(id rbobj, SEL selector, VALUE args)
   // Ensure a dummy method signature ('id' for everything).
   if (ret == nil) {
     int argc;
-    char encoding[128], *p;
+    BOOL ok;
 
-    argc = rb_obj_arity_of_method(m_rbobj, a_sel);
-    if (argc < 0) 
-      argc = -1 - argc;
-    argc = MIN(sizeof(encoding) - 4, argc);    
-
-    strcpy(encoding, "@@:");
-    p = &encoding[3];
-    while (argc-- > 0) {
-      *p++ = '@';
+    argc = rb_obj_arity_of_method(m_rbobj, a_sel, &ok);
+    if (ok) {
+      char encoding[128], *p;
+      
+      if (argc < 0) 
+        argc = -1 - argc;
+      argc = MIN(sizeof(encoding) - 4, argc);    
+  
+      strcpy(encoding, "@@:");
+      p = &encoding[3];
+      while (argc-- > 0) {
+        *p++ = '@';
+      }
+      *p = '\0';
+      ret = [NSMethodSignature signatureWithObjCTypes:encoding];
+      RBOBJ_LOG("\tgenerated dummy method signature");
     }
-    *p = '\0';
-    ret = [NSMethodSignature signatureWithObjCTypes:encoding];
-    RBOBJ_LOG("\tgenerated dummy method signature");
   }
   RBOBJ_LOG("   --> %@", ret);
   return ret;
