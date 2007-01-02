@@ -230,6 +230,18 @@
 
 @end
 
+@interface TestRBObject : NSObject
+@end
+
+@implementation TestRBObject
+
+- (long)addressOfObject:(id)obj
+{
+  return (long)obj;
+}
+
+@end
+
 void Init_objc_test(){
   // dummy initializer for ruby's `require'
 }

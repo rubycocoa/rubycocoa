@@ -52,6 +52,8 @@ class UndoSlave < OSX::NSObject
     addRubyMethod_withType('foo:', 'v@:@')
 end
 
+class SimpleClass; end
+
 class TC_SubClass < Test::Unit::TestCase
 
   def test_s_new
@@ -160,6 +162,17 @@ class TC_SubClass < Test::Unit::TestCase
     assert_equal(0, ary.count)
     undo.undo
     assert_equal(1, ary.count)
+  end
+
+  def test_rbobject
+    test = OSX::TestRBObject.alloc.init
+    o = SimpleClass.new    
+    n = test.addressOfObject(o)
+    assert_equal(n, test.addressOfObject(o))
+    GC.start
+    assert_equal(n, test.addressOfObject(o))
+    o = SimpleClass.new
+    assert(n != test.addressOfObject(o))
   end
 
 end

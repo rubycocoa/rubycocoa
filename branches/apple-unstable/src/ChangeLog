@@ -1,5 +1,13 @@
 2007-01-02  Laurent Sansonetti <lsansonetti@apple.com>
 
+	* framework/src/objc/RBObject.h,
+	  framework/src/objc/RBObject.m,
+	  framework/src/objc/ocdata_conv.m,
+	  tests/tc_subclass.rb,
+	  tests/objc_test.m:
+	Make sure RBObject proxies are not released until the proxied Ruby object is
+	garbage-collected. Added a test case.
+
 	* framework/src/objc/OverrideMixin.m,
 	  framework/src/objc/RBObject.m,
 	  framework/src/objc/mdl_objwrapper.m,

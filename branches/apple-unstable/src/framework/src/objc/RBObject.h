@@ -17,7 +17,12 @@
 + RBObjectWithRubyScriptCString: (const char*) cstr;
 + RBObjectWithRubyScriptString: (NSString*) str;
 
-- initWithRubyObject: (VALUE) rbobj;
+/* Caller is responsible to retain rbobj AND release the RBObject before rbobj dies. */
+- initWithRubyObject: (VALUE) rbobj; 
+
+/* If flag is true, the RBObject will be automatically autoreleased before rbobj dies. */
+- initWithRubyObject: (VALUE) rbobj autoreleaseWhenRubyObjectDies:(BOOL)flag;
+
 - initWithRubyScriptCString: (const char*) cstr;
 - initWithRubyScriptString: (NSString*) str;
 

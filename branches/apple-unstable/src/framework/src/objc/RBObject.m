@@ -259,17 +259,40 @@ VALUE rbobj_call_ruby(id rbobj, SEL selector, VALUE args)
 
 - (void) dealloc
 {
+  printf("deallocating RBObject %p\n", self);
   remove_from_rb2oc_cache(m_rbobj);
-  rb_gc_unregister_address (&m_rbobj);
+  //rb_gc_unregister_address (&m_rbobj);
   [super dealloc];
+}
+
+- (void)__autorelease__
+{
+  [self autorelease];
+}
+
+static void
+register_finalizer(id ocid, VALUE rbobj)
+{
+  VALUE mObjSpace;
+  VALUE block;
+
+  mObjSpace = rb_const_get(rb_mKernel, rb_intern("ObjectSpace"));
+  block = rb_eval_string("proc { |ocid| ocid.__autorelease__ }");
+  rb_funcall(mObjSpace, rb_intern("define_finalizer"), 2, rbobj, block);
+} 
+
+- initWithRubyObject: (VALUE) rbobj autoreleaseWhenRubyObjectDies:(BOOL)flag
+{
+  m_rbobj = rbobj;
+  oc_master = nil;
+  register_finalizer(self, rbobj);
+  //rb_gc_register_address (&m_rbobj);
+  return self;
 }
 
 - initWithRubyObject: (VALUE)rbobj
 {
-  m_rbobj = rbobj;
-  oc_master = nil;
-  rb_gc_register_address (&m_rbobj);
-  return self;
+  return [self initWithRubyObject:rbobj autoreleaseWhenRubyObjectDies:NO];
 }
 
 - initWithRubyScriptCString: (const char*) cstr
