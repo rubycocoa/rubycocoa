@@ -1,5 +1,13 @@
 2007-01-02  Laurent Sansonetti <lsansonetti@apple.com>
 
+	* framework/src/ruby/osx/objc/oc_wrapper.rb,
+	  tests/tc_wrapper.rb:
+	Introduced OCObjWrapper#objc_send, a convenience facility to send messages
+	using a symbol/value/... syntax (thanks to Hisa-san). Added a test case. 
+
+	* sample/RubyMiniBrowser/rb_main.rb:
+	Removed the OCObjWrapper#objc_send definition.
+
 	* framework/src/objc/RBObject.h,
 	  framework/src/objc/RBObject.m,
 	  framework/src/objc/ocdata_conv.m,

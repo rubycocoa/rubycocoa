@@ -55,6 +55,8 @@ class TC_OCObjWrapper < Test::Unit::TestCase
     url1 = NSURL.alloc.initWithScheme_host_path_('http', 'localhost', '/foo') 
     url2 = NSURL.alloc.initWithScheme_host_path('http', 'localhost', '/foo') 
     assert_equal(true, url1.isEqual(url2)) 
+    url3 = NSURL.alloc.objc_send(:initWithScheme, 'http', :host, 'localhost', :path, '/foo')
+    assert_equal(true, url1.isEqual(url3))
     # No need to check for symbol/value/... and inline Hash syntaxes, as they are deprecated.
     # However we should check that an exception is raised (as if relaxed_syntax was false) for
     # the 1.0.0 release.
