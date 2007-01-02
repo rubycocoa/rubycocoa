@@ -1,5 +1,14 @@
 2007-01-02  Laurent Sansonetti <lsansonetti@apple.com>
 
+	* framework/src/ruby/osx/objc/oc_import.rb,
+	  tests/tc_ovmix.rb,
+	  tests/objc_test.m:
+	Introduced OSX::NSBehaviorAttachment#objc_export, a convenience facility to 
+	export Ruby methods to the Objective-C runtime (a shortcut to 
+	addRubyMethod_withType). First argument is the Ruby name of the method, and
+	second is an array of C types (ex: %w{void int} for a '(void)(int)' function).
+	Added a test case.
+
 	* framework/src/ruby/osx/objc/oc_wrapper.rb,
 	  tests/tc_wrapper.rb:
 	Introduced OCObjWrapper#objc_send, a convenience facility to send messages
