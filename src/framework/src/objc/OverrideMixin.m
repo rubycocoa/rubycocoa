@@ -148,7 +148,7 @@ ovmix_imp_for_type(const char *type)
   cif = NULL;
   closure = NULL;
 
-  decode_method_encoding(type, &argc, &retval_type, &arg_types, NO);
+  decode_method_encoding(type, nil, &argc, &retval_type, &arg_types, NO);
 
   arg_ffi_types = (ffi_type **)malloc(sizeof(ffi_type *) * argc);
   octypes = (int *)malloc(sizeof(int) * (argc - 1)); /* first int is retval octype, then arg octypes */

@@ -63,4 +63,5 @@ void init_oc2rb_cache(void);
 void remove_from_rb2oc_cache(VALUE rbobj);
 void remove_from_oc2rb_cache(id ocid);
 
-void decode_method_encoding(const char *encoding, unsigned *argc, char **retval_type, char ***arg_types, BOOL strip_first_two_args);
+@class NSMethodSignature;
+void decode_method_encoding(const char *encoding, NSMethodSignature *methodSignature, unsigned *argc, char **retval_type, char ***arg_types, BOOL strip_first_two_args);
