@@ -45,9 +45,31 @@ class RigHelper < OSX::NSObject
   end
 end
 
-class TC_PassByRef < Test::Unit::TestCase
-    def test_rig
-        testrig = OSX::TestRig.alloc.init
-        testrig.run    
-    end
+class ObjcExportHelper < OSX::NSObject
+  def foo1
+    's'
+  end
+  objc_export :foo1, %w{id}
+
+  def foo2(integer)
+    integer + 2
+  end
+  objc_export :foo2, %w{int int}
+
+  def foo3_obj(ary, obj)
+    ary.addObject(obj)
+  end
+  objc_export :foo3, %w{void id id}
+end
+
+class TC_OVMIX < Test::Unit::TestCase
+  def test_rig
+    testrig = OSX::TestRig.alloc.init
+    testrig.run    
+  end
+
+  def test_objc_export
+    testoe = OSX::TestObjcExport.alloc.init
+    testoe.run
+  end
 end

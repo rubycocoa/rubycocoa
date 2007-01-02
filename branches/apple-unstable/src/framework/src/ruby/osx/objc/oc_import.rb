@@ -264,6 +264,43 @@ module OSX
       end
     end
 
+    def objc_export(name, types)
+      typefmt = _types_to_typefmt(types)
+      name = name.to_s
+      name = name[0].chr << name[1..-1].gsub(/_/, ':')
+      name << ':' if name[-1] != ?: and types.length > 1 
+      self.addRubyMethod_withType(name, typefmt)
+    end
+
+    # TODO: support more types such as pointers, structures, unions...
+    OCTYPES = {
+      :id      => '@',
+      :class   => '#',
+      :char    => 'c',
+      :uchar   => 'C',
+      :short   => 's',
+      :ushort  => 'S',
+      :int     => 'i',
+      :uint    => 'I',
+      :long    => 'l',
+      :ulong   => 'L',
+      :float   => 'f',
+      :double  => 'd',
+      :bool    => 'B',
+      :void    => 'v'
+    }
+    def _types_to_typefmt(types)
+      raise ArgumentError, "Array expected (got #{types.klass} instead)" unless types.is_a?(Array)
+      raise ArgumentError, "Given types array should have at least an element" unless types.size > 0
+      octypes = types.map do |type|
+        type = type.strip.intern unless type.is_a?(Symbol)
+        octype = OCTYPES[type]
+        raise "Invalid type (got '#{type}', expected one of : #{OCTYPES.keys.join(', ')})" if octype.nil?
+        octype
+      end
+      octypes[0] + '@:' + octypes[1..-1].join
+    end
+
   end				# module OSX::NSBehaviorAttachment
 
   module NSKVCAccessorUtil

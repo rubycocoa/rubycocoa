@@ -184,10 +184,40 @@
 - (long) testLong:(long) i;
 - (float) testFloat:(float) f;
 - (double) testDouble:(double) d;
+- (id)foo1;
+- (int)foo2:(int)i;
+- (void)foo3:(id)ary obj:(id)obj;
 @end
 
 @interface TestRig : NSObject { }
 - (void) run;
+@end
+
+@interface TestObjcExport : NSObject
+@end
+
+@implementation TestObjcExport
+
+- (void) run
+{
+    Class helperClass = NSClassFromString(@"ObjcExportHelper");
+    id helper = [[helperClass alloc] init];
+
+    id s = [helper foo1];
+    if (![s isKindOfClass:[NSString class]] || ![s isEqualToString:@"s"])
+      [NSException raise:@"TestObjCExportError" format:@"assertion foo1 failed, expected %@, got %@", @"s", s];
+
+    int i = [helper foo2:40];
+    if (i != 42)
+      [NSException raise:@"TestObjCExportError" format:@"assertion foo2 failed, expected %d, got %d", 42, i];
+
+    id ary = [NSMutableArray array];
+    id o = [[NSObject alloc] init];
+    [helper foo3:ary obj:o];
+    if ([ary count] != 1 || [ary objectAtIndex:0] != o)
+      [NSException raise:@"TestObjCExportError" format:@"assertion foo3 failed, object %@ is not in array %@", o, ary];
+}
+
 @end
 
 @implementation TestRig
