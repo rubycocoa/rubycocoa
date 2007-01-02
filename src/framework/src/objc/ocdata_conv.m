@@ -400,7 +400,7 @@ static BOOL rbobj_convert_to_nsobj(VALUE obj, id* nsobj)
   case T_FILE:
   case RB_T_DATA:
   default:
-    *nsobj = [[[RBObject alloc] initWithRubyObject: obj] autorelease];
+    *nsobj = [[RBObject alloc] initWithRubyObject: obj autoreleaseWhenRubyObjectDies: YES];
     return YES;
   }
   return YES;
