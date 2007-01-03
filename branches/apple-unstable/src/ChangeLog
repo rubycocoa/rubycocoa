@@ -1,5 +1,9 @@
 2007-01-03  Laurent Sansonetti <lsansonetti@apple.com>
 
+	* framework/src/objc/OverrideMixin.m:
+	Fixed a memory bug when KVC values, making sure the Objective-C values are not
+	autoreleased while they are still used in Ruby.
+
 	* framework/src/objc/ocdata_conv.h,
 	  framework/src/objc/ocdata_conv.m,
 	  tests/tc_ovmix.rb,
