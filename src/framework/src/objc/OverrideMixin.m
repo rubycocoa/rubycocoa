@@ -285,9 +285,19 @@ static id imp_valueForUndefinedKey (id rcv, SEL method, NSString* key)
 static void imp_setValue_forUndefinedKey (id rcv, SEL method, id value, NSString* key)
 {
   id slave = get_slave(rcv);
+  id dict;
 
-  if ([slave respondsToSelector: @selector(rbSetValue:forKey:)])
+  /* In order to avoid ObjC values to be autorelease'd while they are still proxied in the
+     Ruby world, we keep them in an internal hash. */
+  if (object_getInstanceVariable(rcv, "__rb_kvc_dict__", (void *)&dict) == NULL) {
+    dict = [[NSMutableDictionary alloc] init];
+    object_setInstanceVariable(rcv, "__rb_kvc_dict__", dict);
+  }
+
+  if ([slave respondsToSelector: @selector(rbSetValue:forKey:)]) {
     [slave performSelector: @selector(rbSetValue:forKey:) withObject: value withObject: key];
+    [dict setObject:value forKey:key];
+  }
   else
     [rcv performSelector: super_selector(method) withObject: value withObject: key];
 }
