@@ -1,5 +1,8 @@
 2007-01-03  Laurent Sansonetti <lsansonetti@apple.com>
 
+	* sample/RubyCocoaGL/English.lproj/InfoPlist.strings:
+	Removed the short version string tag that is inappropriate there.
+
 	* sample/RubyMiniBrowser/Info.plist:
 	Dump the short version string and uniquify the bundle identifier.
 
