@@ -120,9 +120,11 @@ ocdata_size(int octype, const char* octype_str)
     result = sizeof(long); break;
 
 #if HAVE_LONG_LONG
-  case _C_LLNG:
-  case _C_ULLNG:
+  case _C_LNG_LNG:
     result = sizeof(long long); break;
+
+  case _C_ULNG_LNG:
+    result = sizeof(unsigned long long); break;
 #endif
 
   case _C_FLT:
@@ -249,10 +251,10 @@ ocdata_to_rbobj(VALUE context_obj,
     rbval = UINT2NUM(*(unsigned long*)ocdata); break;
 
 #if HAVE_LONG_LONG
-  case _C_LLNG:
+  case _C_LNG_LNG:
     rbval = LL2NUM(*(long long*)ocdata); break;
 
-  case _C_ULLNG:
+  case _C_ULNG_LNG:
     rbval = ULL2NUM(*(unsigned long long*)ocdata); break;
 #endif
 
@@ -701,11 +703,11 @@ rbobj_to_ocdata(VALUE obj, int octype, void* ocdata, BOOL to_libffi)
     break;
 
 #if HAVE_LONG_LONG
-  case _C_LLNG:
+  case _C_LNG_LNG:
     *(long long*)ocdata = (long long) NUM2LL(rb_Integer(obj));
     break;
 
-  case _C_ULLNG:
+  case _C_ULNG_LNG:
     *(unsigned long long*)ocdata = (unsigned long long) NUM2ULL(rb_Integer(obj));
     break;
 #endif

@@ -184,6 +184,7 @@
 - (long) testLong:(long) i;
 - (float) testFloat:(float) f;
 - (double) testDouble:(double) d;
+- (long long)testLongLong:(long long)ll;
 - (id)foo1;
 - (int)foo2:(int)i;
 - (void)foo3:(id)ary obj:(id)obj;
@@ -256,6 +257,11 @@
     double d = [helper testDouble:d2];
     if (d != d2)
       [NSException raise:@"TestRigError" format:@"assertion testDouble: failed, expected %lf, got %lf", d2, d];
+
+    long long ll2 = 1000000000;
+    long long ll = [helper testLongLong:ll2];
+    if (ll != ll2)
+      [NSException raise:@"TestRigError" format:@"assertion testLongLong: failed, expected %lld, got %lld", ll2, ll];
 }
 
 @end

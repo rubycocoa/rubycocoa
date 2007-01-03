@@ -43,6 +43,11 @@ class RigHelper < OSX::NSObject
   def testDouble(d)
     d
   end
+
+  addRubyMethod_withType("testLongLong:", "q@:q")
+  def testLongLong(ll)
+    ll
+  end
 end
 
 class ObjcExportHelper < OSX::NSObject
