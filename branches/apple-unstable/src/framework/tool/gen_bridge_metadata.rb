@@ -360,12 +360,13 @@ class BridgeSupportGenerator
 
   def collect_enums
     @resolved_enums ||= {} 
-    lines = @enums.map { |x| "printf(\"%s: %u\\n\", \"#{x}\", #{x});" }
+    lines = @enums.map { |x| "printf(#{x} < 0 ? \"%s: %d\\n\" : \"%s: %u\\n\", \"#{x}\", #{x});" }
     code = <<EOS
 #{@import_directive}
 
 int main (void) 
 {
+    char *fmt;
     #{lines.join("\n  ")}
     return 0;
 }
