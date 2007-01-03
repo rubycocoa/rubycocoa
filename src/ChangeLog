@@ -1,5 +1,13 @@
 2007-01-03  Laurent Sansonetti <lsansonetti@apple.com>
 
+	* sample/RubyPathDemo:
+	Added new sample code, a Ruby port of /Developer/Examples/Quartz/PathDemo.
+
+	* framework/src/objc/RBObject.h,
+	  framework/src/objc/RBObject.m:
+	Better fix for the problem with RBObject wrapping a pure Ruby object that
+	was autoreleased.
+
 	* framework/src/ruby/osx/objc/oc_import.rb,
 	  tests/tc_ovmix.rb,
 	  tests/objc_test.m:

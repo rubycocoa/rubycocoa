@@ -11,6 +11,7 @@
 @interface RBObject : NSProxy
 {
   VALUE m_rbobj;
+  unsigned m_rbobj_retained;
   id oc_master;
 }
 
