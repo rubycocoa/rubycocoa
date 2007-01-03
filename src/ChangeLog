@@ -1,5 +1,8 @@
 2007-01-03  Laurent Sansonetti <lsansonetti@apple.com>
 
+	* framework/tool/gen_bridge_metadata.rb:
+	Properly format enums with signed values.
+
 	* framework/src/objc/OverrideMixin.m:
 	Fixed a memory bug when KVC values, making sure the Objective-C values are not
 	autoreleased while they are still used in Ruby.
