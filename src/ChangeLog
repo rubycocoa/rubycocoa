@@ -1,3 +1,12 @@
+2007-01-03  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* framework/src/objc/ocdata_conv.h,
+	  framework/src/objc/ocdata_conv.m,
+	  tests/tc_ovmix.rb,
+	  tests/objc_test.m:
+	Defines the official long long runtime constants if necessary. Added a test 
+	case to be sure long long types are properly bridged.
+
 2007-01-02  Laurent Sansonetti <lsansonetti@apple.com>
 
 	* framework/src/objc/BridgeSupport.m:

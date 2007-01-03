@@ -11,12 +11,20 @@
 #import "osx_ruby.h"
 
 #if HAVE_LONG_LONG
-/* long long is missing from objc-class.h */
+/* long long is missing from objc-class.h
+   _C_LLNG and _C_ULLNG are kept for historical reasons, but the official 
+   constants are _C_LNG_LNG and _C_ULNG_LNG */
 # ifndef _C_LLNG
 #  define _C_LLNG 'q'
 # endif
+# ifndef _C_LNG_LNG
+#  define _C_LNG_LNG 'q'
+# endif
 # ifndef _C_ULLNG
 #  define _C_ULLNG 'Q'
+# endif
+# ifndef _C_ULNG_LNG
+#  define _C_ULNG_LNG 'Q'
 # endif
 /* NUM2ULL is missing from ruby.h */
 # ifndef NUM2ULL
