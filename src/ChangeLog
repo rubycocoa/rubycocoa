@@ -1,5 +1,8 @@
 2007-01-03  Laurent Sansonetti <lsansonetti@apple.com>
 
+	* sample/RubyMiniBrowser/Info.plist:
+	Dump the short version string and uniquify the bundle identifier.
+
 	* template/PureEmptyApp.app/*,
 	  template/EmptyApp.app/*:
 	Removed unnecessary empty apps.
