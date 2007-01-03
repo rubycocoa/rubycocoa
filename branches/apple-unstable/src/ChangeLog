@@ -1,5 +1,9 @@
 2007-01-03  Laurent Sansonetti <lsansonetti@apple.com>
 
+	* template/PureEmptyApp.app/*,
+	  template/EmptyApp.app/*:
+	Removed unnecessary empty apps.
+
 	* framework/tool/gen_bridge_metadata.rb:
 	Properly format enums with signed values.
 
