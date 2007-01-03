@@ -293,10 +293,14 @@ module OSX
       raise ArgumentError, "Array expected (got #{types.klass} instead)" unless types.is_a?(Array)
       raise ArgumentError, "Given types array should have at least an element" unless types.size > 0
       octypes = types.map do |type|
-        type = type.strip.intern unless type.is_a?(Symbol)
-        octype = OCTYPES[type]
-        raise "Invalid type (got '#{type}', expected one of : #{OCTYPES.keys.join(', ')})" if octype.nil?
-        octype
+        if type.is_a?(Class) and type.ancestors.include?(OSX::Boxed)
+          type.instance_variable_get :@__encoding__
+        else
+          type = type.strip.intern unless type.is_a?(Symbol)
+          octype = OCTYPES[type]
+          raise "Invalid type (got '#{type}', expected one of : #{OCTYPES.keys.join(', ')}, or a boxed class)" if octype.nil?
+          octype
+        end
       end
       octypes[0] + '@:' + octypes[1..-1].join
     end
