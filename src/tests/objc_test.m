@@ -188,6 +188,7 @@
 - (id)foo1;
 - (int)foo2:(int)i;
 - (void)foo3:(id)ary obj:(id)obj;
+- (NSRect)foo4:(NSPoint)point size:(NSSize)size;
 @end
 
 @interface TestRig : NSObject { }
@@ -217,6 +218,10 @@
     [helper foo3:ary obj:o];
     if ([ary count] != 1 || [ary objectAtIndex:0] != o)
       [NSException raise:@"TestObjCExportError" format:@"assertion foo3 failed, object %@ is not in array %@", o, ary];
+
+    NSRect r = [helper foo4:NSMakePoint(1, 2) size:NSMakeSize(3, 4)];
+    if (r.origin.x != 1 || r.origin.y != 2 || r.size.width != 3 || r.size.height != 4)
+      [NSException raise:@"TestObjCExportError" format:@"assertion foo4 failed, expected %@, got %@", NSStringFromRect(NSMakeRect(1, 2, 3, 4)), NSStringFromRect(r)];
 }
 
 @end

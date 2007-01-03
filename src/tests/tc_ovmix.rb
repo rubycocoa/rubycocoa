@@ -65,6 +65,11 @@ class ObjcExportHelper < OSX::NSObject
     ary.addObject(obj)
   end
   objc_export :foo3, %w{void id id}
+
+  def foo4_size(point, size)
+    OSX::NSRect.new(point, size)
+  end
+  objc_export :foo4_size, [OSX::NSRect, OSX::NSPoint, OSX::NSSize]
 end
 
 class TC_OVMIX < Test::Unit::TestCase

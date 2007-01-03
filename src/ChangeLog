@@ -1,5 +1,11 @@
 2007-01-03  Laurent Sansonetti <lsansonetti@apple.com>
 
+	* framework/src/ruby/osx/objc/oc_import.rb,
+	  tests/tc_ovmix.rb,
+	  tests/objc_test.m:
+	Added the possibility to use boxed classes when giving the method type to
+	OSX.objc_export. Added a test case.
+
 	* sample/RubyCocoaGL/English.lproj/InfoPlist.strings:
 	Removed the short version string tag that is inappropriate there.
 
