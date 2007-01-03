@@ -259,15 +259,33 @@ VALUE rbobj_call_ruby(id rbobj, SEL selector, VALUE args)
 
 - (void) dealloc
 {
-  printf("deallocating RBObject %p\n", self);
   remove_from_rb2oc_cache(m_rbobj);
-  //rb_gc_unregister_address (&m_rbobj);
+  if (m_rbobj_retained == -1)
+    rb_gc_unregister_address (&m_rbobj);
   [super dealloc];
 }
 
-- (void)__autorelease__
+- (void)__die__
 {
-  [self autorelease];
+  [self release];
+}
+
+- (void)retain
+{
+  [super retain];
+  if (m_rbobj_retained == 1) {
+    rb_gc_register_address (&m_rbobj);
+    m_rbobj_retained = 0;
+  } 
+}
+
+- (void)release
+{
+  [super release];
+  if (m_rbobj_retained != -1 && [self retainCount] == 1) {
+    rb_gc_unregister_address (&m_rbobj);
+    m_rbobj_retained = 0;
+  }
 }
 
 static void
@@ -277,7 +295,7 @@ register_finalizer(id ocid, VALUE rbobj)
   VALUE block;
 
   mObjSpace = rb_const_get(rb_mKernel, rb_intern("ObjectSpace"));
-  block = rb_eval_string("proc { |ocid| ocid.__autorelease__ }");
+  block = rb_eval_string("proc { |ocid| puts 'finalizer!!!'; ocid.__die__ }");
   rb_funcall(mObjSpace, rb_intern("define_finalizer"), 2, rbobj, block);
 } 
 
@@ -285,8 +303,14 @@ register_finalizer(id ocid, VALUE rbobj)
 {
   m_rbobj = rbobj;
   oc_master = nil;
-  register_finalizer(self, rbobj);
-  //rb_gc_register_address (&m_rbobj);
+  if (flag) {
+    m_rbobj_retained = 0;
+    register_finalizer(self, rbobj);
+  }
+  else {
+    m_rbobj_retained = -1;
+    rb_gc_register_address(&m_rbobj);
+  }
   return self;
 }
 
@@ -380,6 +404,9 @@ register_finalizer(id ocid, VALUE rbobj)
       *p = '\0';
       ret = [NSMethodSignature signatureWithObjCTypes:encoding];
       RBOBJ_LOG("\tgenerated dummy method signature");
+    }
+    else {
+      RBOBJ_LOG("\tcan't generate a dummy method signature because receiver %s doesn't respond to the selector", STR2CSTR(rb_inspect(m_rbobj)));
     }
   }
   RBOBJ_LOG("   --> %@", ret);
