@@ -35,7 +35,7 @@ if @config['gen-bridge-support'] != 'no'
     framework = File.basename(path, '.framework')
     out = "bridge-support/#{framework}.xml"
     if !File.exists?(out) or File.size(out) == 0 or File.mtime('tool/gen_bridge_metadata.rb') > File.mtime(out)
-      generator = 'ruby tool/gen_bridge_metadata.rb' 
+      generator = "#{@config['ruby-prog']} tool/gen_bridge_metadata.rb"
       generator << " #{special_flags}" if special_flags
       generator << " -f #{path}"
       exceptions = "bridge-support-exceptions/#{framework}.xml"
@@ -47,6 +47,6 @@ if @config['gen-bridge-support'] != 'no'
     # Uncomment this to launch the verification tool on each metadata file.
     # Warning: this can take some time, and there are several false positives.
     #$stderr.puts "verify #{out} ..."
-    #system("ruby tool/verify_bridge_metadata.rb #{out} #{File.join(path, 'Headers')}")
+    #system("#{@config['ruby-prog']} tool/verify_bridge_metadata.rb #{out} #{File.join(path, 'Headers')}")
   end
 end

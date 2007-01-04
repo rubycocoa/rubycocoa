@@ -1,6 +1,8 @@
 # create a real project.pbxproj file by applying libruby
 # configuration.
 
+require 'rbconfig'
+
 target_files = %w[
   ext/rubycocoa/extconf.rb
   framework/GeneratedConfig.xcconfig
@@ -46,6 +48,8 @@ if File.exists?('/usr/include/libxml2') and File.exists?('/usr/lib/libxml2.dylib
 else
   puts "libxml2 is not available!"
 end
+
+raise 'ERROR: ruby must be built as a shared library' if Config::CONFIG["ENABLE_SHARED"] != 'yes'
 
 # Add the libffi library to the build process.
 unless File.exists?('/usr/lib/libffi.a')
