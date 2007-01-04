@@ -4,6 +4,7 @@
 	  framework/post-config.rb:
 	- Fail the config phase if Ruby wasn't built as a shared library ;
 	- Use the right Ruby binary to launch the metadata generator.
+	Thanks to Vincent Isambart.
 
 2007-01-04  Fujimoto Hisa  <hisa@fobj.com>
 
