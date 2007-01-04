@@ -13,7 +13,7 @@ module OSX
     def each
       iter = self.objectEnumerator
       while obj = iter.nextObject do
-	yield(obj)
+        yield(obj)
       end
       self
     end
@@ -37,7 +37,7 @@ module OSX
       self.addObject(obj)
     end
 
-  end				# module RCArrayAttachment
+  end                           # module RCArrayAttachment
   OSX::NSArray.class_eval 'include RCArrayAttachment'
 
 
@@ -48,7 +48,7 @@ module OSX
     def each
       iter = self.keyEnumerator
       while key = iter.nextObject do
-	yield(key, self.objectForKey(key))
+        yield(key, self.objectForKey(key))
       end
       self
     end
@@ -74,7 +74,7 @@ module OSX
       obj
     end
 
-  end				# module RCDictionaryAttachment
+  end                           # module RCDictionaryAttachment
   OSX::NSDictionary.class_eval 'include RCDictionaryAttachment'
 
 
@@ -102,5 +102,19 @@ module OSX
     end
   end
   OSX::NSImage.class_eval 'include RCImageAttachment'
+
+  # attachment module for NSIndexSet group
+  module RCIndexSetAttachment
+    def to_a
+      result = []
+      index = self.firstIndex
+      until index == OSX::NSNotFound
+        result << index
+        index = self.indexGreaterThanIndex(index)
+      end
+      return result
+    end
+  end
+  OSX::NSIndexSet.class_eval 'include RCIndexSetAttachment'
 
 end
