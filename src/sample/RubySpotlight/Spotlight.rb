@@ -21,10 +21,10 @@ class Spotlight < NSObject
   
   def search
     begin
-      predicateToRun = NSPredicate.predicateWithFormat(@predicate, nil)
+      predicateToRun = NSPredicate.predicateWithFormat(@predicate)
     rescue OCException
       p "FIX IT: I haven't find a way to check if the predicate's format is valid"
-      predicateToRun = NSPredicate.predicateWithFormat("kMDItemDisplayName == ''", nil)
+      predicateToRun = NSPredicate.predicateWithFormat("kMDItemDisplayName == ''")
     end
       @query.setPredicate(predicateToRun)
       @query.startQuery()
@@ -36,16 +36,16 @@ class Spotlight < NSObject
   
   def register_for_notification(aDelegate, methodName)
     @query.setDelegate(aDelegate)
-    NSNotificationCenter.defaultCenter.addObserver(aDelegate,
+    NSNotificationCenter.defaultCenter.objc_send :addObserver, aDelegate,
            :selector, methodName,
            :name, :NSMetadataQueryDidFinishGatheringNotification, 
-           :object, @query);
+           :object, @query
   end
   
   def remove_delegate (aDelegate)
-    NSNotificationCenter.defaultCenter.removeObserver(aDelegate,
+    NSNotificationCenter.defaultCenter.objc_send :removeObserver, aDelegate,
                   :name, :NSMetadataQueryDidFinishGatheringNotification,
-                  :object, nil);
+                  :object, nil
   end
   
   def dealloc
