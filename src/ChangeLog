@@ -1,5 +1,9 @@
 2007-01-04  Laurent Sansonetti <lsansonetti@apple.com>
 
+	* framework/bridge-support-exceptions/AddressBook.xml,
+	  framework/bridge-support-exceptions/InstantMessage.xml:
+	Added exceptions for AddressBook and InstantMessage frameworks.
+
 	* sample/RubyMiniBrowser/MiniBrowser.xcodeproj/project.pbxproj:
 	Built the project for the native arch. Thanks to Vincent Isambart.
 
