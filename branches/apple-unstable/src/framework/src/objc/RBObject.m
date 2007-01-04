@@ -295,7 +295,7 @@ register_finalizer(id ocid, VALUE rbobj)
   VALUE block;
 
   mObjSpace = rb_const_get(rb_mKernel, rb_intern("ObjectSpace"));
-  block = rb_eval_string("proc { |ocid| puts 'finalizer!!!'; ocid.__die__ }");
+  block = rb_eval_string("proc { |ocid| ocid.__die__ }");
   rb_funcall(mObjSpace, rb_intern("define_finalizer"), 2, rbobj, block);
 } 
 
