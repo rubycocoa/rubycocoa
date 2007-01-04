@@ -7,7 +7,7 @@
 #
 
 if __FILE__ == $0
-  puts "This script is just a class that cannot be used directoy. Please use the RubyCIMicroPaint example that uses it."
+  puts "This script is just a class that cannot be used directly. Please use the RubyCIMicroPaint or RubyCIBevelSample examples that use it."
   exit 1
 end
 

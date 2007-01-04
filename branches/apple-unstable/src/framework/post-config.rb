@@ -29,6 +29,8 @@ if @config['gen-bridge-support'] != 'no'
    ['/System/Library/Frameworks/QuartzCore.framework', nil],
    ['/System/Library/Frameworks/OpenGL.framework', nil],
    ['/System/Library/Frameworks/QTKit.framework', TIGER_OR_LOWER ? '' : '-c -DQT_BUILDING_ON_LEOPARD_OR_LATER -c "-framework QTKit"'],
+   ['/System/Library/Frameworks/AddressBook.framework', nil],
+   ['/System/Library/Frameworks/InstantMessage.framework', nil],
   ].each do |path, special_flags|
     framework = File.basename(path, '.framework')
     out = "bridge-support/#{framework}.xml"
