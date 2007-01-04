@@ -1,3 +1,11 @@
+2007-01-04  Fujimoto Hisa  <hisa@fobj.com>
+
+	* framework/src/ruby/osx/objc/oc_attachments.rb:
+	adds a to_a method to a NSIndexSet, thanks to Eloy Duran.
+
+	* tests/tc_attachments.rb:
+	adds a test for NSIndexSet#to_a
+
 2007-01-04  Laurent Sansonetti <lsansonetti@apple.com>
 
 	* sample/RubyQTKitSimpleDocument/QTKitPlayer.xcodeproj/project.pbxproj:
