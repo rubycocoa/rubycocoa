@@ -38,7 +38,7 @@ class PeopleDataSource < NSObject
         status = dict.objectForKey(IMPersonStatusKey)
         next if status.nil?
         thisStatus = status.intValue
-        if IMComparePersonStatus(bestStatus, thisStatus) != NSOrderedAscending
+        if thisStatus > bestStatus
           bestStatus = thisStatus 
         end
       end
@@ -80,7 +80,12 @@ class PeopleDataSource < NSObject
   def tableView_objectValueForTableColumn_row(tableView, tableColumn, row)
     case tableColumn.identifier.to_s
       when 'image'
-        NSImage.imageNamed(IMService.imageNameForStatus(@imPersonStatus[row]))
+        case @imPersonStatus[row]
+          when IMPersonStatusAvailable, IMPersonStatusIdle
+            NSImage.imageNamed('online')
+          when IMPersonStatusAway
+            NSImage.imageNamed('offline')
+        end
       when 'name'
         @abPeople[row].displayName
     end

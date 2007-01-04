@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4D5047870B4C866E00BF7338 /* offline.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 4D5047850B4C866E00BF7338 /* offline.tiff */; };
+		4D5047880B4C866E00BF7338 /* online.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 4D5047860B4C866E00BF7338 /* online.tiff */; };
 		4D93747E0B4C6E38003BFA13 /* rb_main.rb in Resources */ = {isa = PBXBuildFile; fileRef = 4D93747D0B4C6E38003BFA13 /* rb_main.rb */; };
 		4D93751F0B4C6E65003BFA13 /* RubyCocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4D93751E0B4C6E65003BFA13 /* RubyCocoa.framework */; };
 		4D9375350B4C70CC003BFA13 /* PeopleDataSource.rb in Resources */ = {isa = PBXBuildFile; fileRef = 4D9375340B4C70CC003BFA13 /* PeopleDataSource.rb */; };
@@ -19,6 +21,23 @@
 		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXBuildStyle section */
+		4D5047590B4C833800BF7338 /* Development */ = {
+			isa = PBXBuildStyle;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+			};
+			name = Development;
+		};
+		4D50475A0B4C833800BF7338 /* Deployment */ = {
+			isa = PBXBuildStyle;
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+			};
+			name = Deployment;
+		};
+/* End PBXBuildStyle section */
+
 /* Begin PBXFileReference section */
 		089C165DFE840E0CC02AAC07 /* English */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
@@ -27,6 +46,8 @@
 		29B97319FDCFA39411CA2CEA /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/MainMenu.nib; sourceTree = "<group>"; };
 		29B97324FDCFA39411CA2CEA /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
 		29B97325FDCFA39411CA2CEA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
+		4D5047850B4C866E00BF7338 /* offline.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = offline.tiff; sourceTree = "<group>"; };
+		4D5047860B4C866E00BF7338 /* online.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = online.tiff; sourceTree = "<group>"; };
 		4D93747D0B4C6E38003BFA13 /* rb_main.rb */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.script.ruby; path = rb_main.rb; sourceTree = "<group>"; };
 		4D93751E0B4C6E65003BFA13 /* RubyCocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RubyCocoa.framework; path = /System/Library/Frameworks/RubyCocoa.framework; sourceTree = "<absolute>"; };
 		4D9375340B4C70CC003BFA13 /* PeopleDataSource.rb */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.ruby; path = PeopleDataSource.rb; sourceTree = "<group>"; };
@@ -112,6 +133,8 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				4D5047850B4C866E00BF7338 /* offline.tiff */,
+				4D5047860B4C866E00BF7338 /* online.tiff */,
 				8D1107310486CEB800E47090 /* Info.plist */,
 				089C165CFE840E0CC02AAC07 /* InfoPlist.strings */,
 				29B97318FDCFA39411CA2CEA /* MainMenu.nib */,
@@ -155,12 +178,15 @@
 		29B97313FDCFA39411CA2CEA /* Project object */ = {
 			isa = PBXProject;
 			buildConfigurationList = C01FCF4E08A954540054247B /* Build configuration list for PBXProject "ABPresence" */;
-			compatibilityVersion = "Xcode 3.0";
+			buildSettings = {
+			};
+			buildStyles = (
+				4D5047590B4C833800BF7338 /* Development */,
+				4D50475A0B4C833800BF7338 /* Deployment */,
+			);
 			hasScannedForEncodings = 1;
 			mainGroup = 29B97314FDCFA39411CA2CEA /* ABPresence */;
 			projectDirPath = "";
-			projectRoot = "";
-			shouldCheckCompatibility = 1;
 			targets = (
 				8D1107260486CEB800E47090 /* ABPresence */,
 			);
@@ -179,6 +205,8 @@
 				4D9375350B4C70CC003BFA13 /* PeopleDataSource.rb in Resources */,
 				4D9375610B4C7596003BFA13 /* ABPersonDisplayName.rb in Resources */,
 				4D9375630B4C76E4003BFA13 /* ServiceWatcher.rb in Resources */,
+				4D5047870B4C866E00BF7338 /* offline.tiff in Resources */,
+				4D5047880B4C866E00BF7338 /* online.tiff in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -235,10 +263,7 @@
 		C01FCF4C08A954540054247B /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = (
-					ppc,
-					i386,
-				);
+				ARCHS = "$(NATIVE_ARCH)";
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
 				GCC_MODEL_TUNING = G5;
@@ -259,7 +284,6 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				PREBINDING = NO;
-				SDKROOT = /Developer/SDKs/MacOSX10.5.sdk;
 			};
 			name = Debug;
 		};
@@ -273,7 +297,6 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				PREBINDING = NO;
-				SDKROOT = /Developer/SDKs/MacOSX10.5.sdk;
 			};
 			name = Release;
 		};
