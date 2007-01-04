@@ -1,5 +1,8 @@
 2007-01-04  Laurent Sansonetti <lsansonetti@apple.com>
 
+	* sample/RubyMiniBrowser/MiniBrowser.xcodeproj/project.pbxproj:
+	Built the project for the native arch. Thanks to Vincent Isambart.
+
 	* sample/RubySpotlight/Spotlight.rb,
 	  sample/RubySpotlight/AppController.rb:
 	- Fixed usage of NSPredicate to not raise a runtime exception ;
