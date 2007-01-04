@@ -1,5 +1,8 @@
 2007-01-04  Laurent Sansonetti <lsansonetti@apple.com>
 
+	* sample/RubyQTKitSimpleDocument/QTKitPlayer.xcodeproj/project.pbxproj:
+	Fixed the project to use the current Mac OS X SDK.
+
 	* sample/RubyPathDemo/PathDemo.xcodeproj/project.pbxproj:
 	Fixed MainMenu.nib link.
 
