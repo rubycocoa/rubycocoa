@@ -96,7 +96,6 @@ class PeopleDataSource < NSObject
   # Posted from ServiceWatcher
   # The object of this notification is an ABPerson who's status has changed
   def addressBookPersonStatusChanged(notification)
-    p 'addressBookPersonStatusChanged'
     rebuildStatusInformationForPerson(notification.object)
   end
 
@@ -104,7 +103,6 @@ class PeopleDataSource < NSObject
   # We could look in the notification to catch differential updates, but for now
   # this is fine.
   def abDatabaseChangedExternallyNotification(notification)
-    p 'abDatabaseChangedExternallyNotification'
     reloadABPeople
   end
 
