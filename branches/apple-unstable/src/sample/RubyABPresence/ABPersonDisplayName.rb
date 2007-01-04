@@ -33,7 +33,7 @@ class ABPerson
         "#{firstName} #{lastName}"
       end
     elsif hasLastName
-      lastname
+      lastName
     else
       firstName
     end
