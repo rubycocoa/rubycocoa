@@ -22,10 +22,10 @@ class AppController < NSObject
   def awakeFromNib
     @metaDataView.setBackgroundColor(NSColor.lightGrayColor)
     @spotlight.register_for_notification(self, "updateSearching:")
-    NSNotificationCenter.defaultCenter.addObserver(self,
+    NSNotificationCenter.defaultCenter.objc_send :addObserver, self,
            :selector, "updateSearching:",
            :name, :NSTableViewSelectionDidChangeNotification, 
-           :object, @fileView);
+           :object, @fileView
   end
 
   def refresh_metaDataView

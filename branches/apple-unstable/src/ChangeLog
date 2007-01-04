@@ -1,5 +1,11 @@
 2007-01-04  Laurent Sansonetti <lsansonetti@apple.com>
 
+	* sample/RubySpotlight/Spotlight.rb,
+	  sample/RubySpotlight/AppController.rb:
+	- Fixed usage of NSPredicate to not raise a runtime exception ;
+	- Ported deprecated code to new syntax.
+	Thanks to Vincent Isambart.
+
 	* pre-config.rb,
 	  framework/post-config.rb:
 	- Fail the config phase if Ruby wasn't built as a shared library ;
