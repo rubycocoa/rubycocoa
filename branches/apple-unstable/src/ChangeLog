@@ -1,5 +1,8 @@
 2007-01-04  Laurent Sansonetti <lsansonetti@apple.com>
 
+	* sample/RubyPathDemo/PathDemo.xcodeproj/project.pbxproj:
+	Fixed MainMenu.nib link.
+
 	* sample/RubyABPresence:
 	Added new sample code, a Ruby port of the ADC ABPresence program.
 
