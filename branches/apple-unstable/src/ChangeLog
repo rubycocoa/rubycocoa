@@ -5,6 +5,9 @@
 
 2007-01-05  Laurent Sansonetti <lsansonetti@apple.com>
 
+	* sample/buildall.rb:
+	Added new script, that builds all samples in a directory of your choice.
+
 	* framework/src/ruby/osx/objc/oc_import.rb,
 	  framework/src/objc/OverrideMixin.m,
 	  framework/src/objc/RBObject.m,
