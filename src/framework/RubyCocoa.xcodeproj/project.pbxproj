@@ -39,7 +39,6 @@
 		FCDF92860A87E09E0002AD01 /* oc_import.rb in CopyFiles */ = {isa = PBXBuildFile; fileRef = E88C6E7D035BB408031D1B90 /* oc_import.rb */; };
 		FCDF92870A87E09E0002AD01 /* oc_types.rb in CopyFiles */ = {isa = PBXBuildFile; fileRef = E88C6E7F035BB408031D1B90 /* oc_types.rb */; };
 		FCDF92880A87E09E0002AD01 /* oc_wrapper.rb in CopyFiles */ = {isa = PBXBuildFile; fileRef = E88C6E80035BB408031D1B90 /* oc_wrapper.rb */; };
-		FCDF92890A87E09E0002AD01 /* coredata.rb in CopyFiles */ = {isa = PBXBuildFile; fileRef = E88C6E81035BB408031D1B90 /* coredata.rb */; };
 		FCDF928A0A87E09E0002AD01 /* ruby_addition.rb in CopyFiles */ = {isa = PBXBuildFile; fileRef = E8FD49D003D45B2603A81C6F /* ruby_addition.rb */; };
 		FCDF928D0A87E09E0002AD01 /* cls_objcid.m in Sources */ = {isa = PBXBuildFile; fileRef = E88C6D59035BB1F5031D1B90 /* cls_objcid.m */; };
 		FCDF928E0A87E09E0002AD01 /* cls_objcptr.m in Sources */ = {isa = PBXBuildFile; fileRef = E88C6D5B035BB1F5031D1B90 /* cls_objcptr.m */; };
@@ -85,7 +84,6 @@
 				FCDF92860A87E09E0002AD01 /* oc_import.rb in CopyFiles */,
 				FCDF92870A87E09E0002AD01 /* oc_types.rb in CopyFiles */,
 				FCDF92880A87E09E0002AD01 /* oc_wrapper.rb in CopyFiles */,
-				FCDF92890A87E09E0002AD01 /* coredata.rb in CopyFiles */,
 				FCDF928A0A87E09E0002AD01 /* ruby_addition.rb in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -138,7 +136,6 @@
 		E88C6E7D035BB408031D1B90 /* oc_import.rb */ = {isa = PBXFileReference; lastKnownFileType = text.script.ruby; path = oc_import.rb; sourceTree = "<group>"; };
 		E88C6E7F035BB408031D1B90 /* oc_types.rb */ = {isa = PBXFileReference; lastKnownFileType = text.script.ruby; path = oc_types.rb; sourceTree = "<group>"; };
 		E88C6E80035BB408031D1B90 /* oc_wrapper.rb */ = {isa = PBXFileReference; lastKnownFileType = text.script.ruby; path = oc_wrapper.rb; sourceTree = "<group>"; };
-		E88C6E81035BB408031D1B90 /* coredata.rb */ = {isa = PBXFileReference; lastKnownFileType = text.script.ruby; path = coredata.rb; sourceTree = "<group>"; };
 		E8FA5ED5035BB5A5035CBD51 /* osx_intern.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = osx_intern.h; sourceTree = "<group>"; };
 		E8FA5ED6035BB5A5035CBD51 /* osx_ruby.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = osx_ruby.h; sourceTree = "<group>"; };
 		E8FD49D003D45B2603A81C6F /* ruby_addition.rb */ = {isa = PBXFileReference; lastKnownFileType = text.script.ruby; path = ruby_addition.rb; sourceTree = "<group>"; };
@@ -285,7 +282,6 @@
 				E88C6E7D035BB408031D1B90 /* oc_import.rb */,
 				E88C6E7F035BB408031D1B90 /* oc_types.rb */,
 				E88C6E80035BB408031D1B90 /* oc_wrapper.rb */,
-				E88C6E81035BB408031D1B90 /* coredata.rb */,
 				E8FD49D003D45B2603A81C6F /* ruby_addition.rb */,
 			);
 			path = objc;

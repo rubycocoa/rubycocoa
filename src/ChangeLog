@@ -1,3 +1,14 @@
+2007-01-05  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* framework/RubyCocoa.xcodeproj/project.pbxproj,
+	  framework/src/ruby/osx/coredata.rb,
+	  framework/src/ruby/osx/objc/coredata.rb,
+	  framework/src/ruby/osx/objc/cocoa_macros.rb,
+	  framework/post-config.rb,
+	  lib/osx/coredata.rb:
+	Migrated the old CoreData support to the new BridgeSupport metadata
+	mechanism. Deprecated osx/coredata.
+
 2007-01-04  Laurent Sansonetti <lsansonetti@apple.com>
 
 	* framework/src/objc/RBObject.m:

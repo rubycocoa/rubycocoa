@@ -23,6 +23,7 @@ if @config['gen-bridge-support'] != 'no'
   [['/System/Library/Frameworks/CoreFoundation.framework', nil],
    ['/System/Library/Frameworks/Foundation.framework', nil],
    ['/System/Library/Frameworks/AppKit.framework', nil],
+   ['/System/Library/Frameworks/CoreData.framework', nil],
    ['/System/Library/Frameworks/WebKit.framework', nil],
    ['/System/Library/Frameworks/ApplicationServices.framework/Frameworks/CoreGraphics.framework', '-c "-framework ApplicationServices" -c -F/System/Library/Frameworks/ApplicationServices.framework/Frameworks'],
    ['/System/Library/Frameworks/Quartz.framework/Frameworks/PDFKit.framework', nil],
