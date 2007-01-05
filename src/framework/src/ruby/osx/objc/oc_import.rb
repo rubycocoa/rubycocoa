@@ -535,11 +535,13 @@ end				# module OSX
 class Object
   class <<self
     def _real_class_and_mod(klass)
-      klassname = klass.name
-      if Object.included_modules.include?(OSX)
-        [klassname, Object]
-      elsif klassname[0..4] == 'OSX::' and (tokens = klassname.split(/::/)).size == 2 and klass.superclass != OSX::Boxed
-        [tokens[1], OSX]
+      unless klass.ancestors.include?(OSX::Boxed)
+        klassname = klass.name
+        if Object.included_modules.include?(OSX)
+          [klassname, Object]
+        elsif klassname[0..4] == 'OSX::' and (tokens = klassname.split(/::/)).size == 2 and klass.superclass != OSX::Boxed
+          [tokens[1], OSX]
+        end
       end
     end
 
