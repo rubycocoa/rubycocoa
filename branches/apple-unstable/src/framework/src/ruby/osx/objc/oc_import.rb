@@ -561,14 +561,16 @@ class Object
 
     alias __before_method_added method_added
     def method_added(sym)
-      nsklassname, mod = _real_class_and_mod(self)
-      if nsklassname
-        begin 
-          nsklass = OSX.const_get(nsklassname)
-          method = instance_method(sym)
-          klass = self
-          nsklass.module_eval { define_method(sym) { |*a| (@proxy ||= klass.new).send(sym, *a) } } 
-        rescue NameError
+      if self != Object
+        nsklassname, mod = _real_class_and_mod(self)
+        if nsklassname
+          begin 
+            nsklass = OSX.const_get(nsklassname)
+            method = instance_method(sym)
+            klass = self
+            nsklass.module_eval { define_method(sym) { |*a| (@proxy ||= klass.new).send(sym, *a) } } 
+          rescue NameError
+          end
         end
       end
       __before_method_added(sym)
