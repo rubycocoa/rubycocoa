@@ -8,7 +8,7 @@
 
 
 require 'osx/cocoa'
-require 'osx/coredata'
+OSX.require_framework 'CoreData'
 
 class MyDocument < OSX::NSPersistentDocument
 
