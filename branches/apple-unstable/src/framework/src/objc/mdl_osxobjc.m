@@ -79,20 +79,29 @@ osx_mf_objc_derived_class_new(VALUE mdl, VALUE kls, VALUE kls_name, VALUE super_
   return Qnil;
 }
 
-// def OSX.objc_derived_class_method_add (kls, method_name)
-// ex1.  OSX.objc_derived_class_method_add (AA::BB::CustomView, "drawRect:")
+// def OSX.objc_class_method_add (kls, method_name)
+// ex1.  OSX.objc_class_method_add (AA::BB::CustomView, "drawRect:")
 static VALUE
-osx_mf_objc_derived_class_method_add(VALUE mdl, VALUE kls, VALUE method_name)
+osx_mf_objc_class_method_add(VALUE mdl, VALUE kls, VALUE method_name)
 {
   Class a_class;
   SEL a_sel;
+  char *kls_name;
 
   method_name = rb_obj_as_string(method_name);
-  a_class = RBObjcClassFromRubyClass (kls);
   a_sel = sel_registerName(STR2CSTR(method_name));
-  if (a_class && a_sel) {
-    [a_class addRubyMethod: a_sel];
+  if (a_sel == NULL)
+    return Qnil;
+  kls_name = rb_class2name(kls);
+  if (strncmp(kls_name, "OSX::", 5) == 0 && (a_class = objc_lookUpClass(kls_name + 5)) != NULL) {
+    // override in the current class
   }
+  else {
+    // override in the super class 
+    a_class = RBObjcClassFromRubyClass (kls);
+  }
+  if (a_class != NULL)
+    [a_class addRubyMethod:a_sel];
   return Qnil;
 }
 
@@ -331,8 +340,8 @@ void initialize_mdl_osxobjc()
 			    osx_mf_objc_proxy_class_new, 2);
   rb_define_module_function(mOSX, "objc_derived_class_new", 
 			    osx_mf_objc_derived_class_new, 3);
-  rb_define_module_function(mOSX, "objc_derived_class_method_add",
-			    osx_mf_objc_derived_class_method_add, 2);
+  rb_define_module_function(mOSX, "objc_class_method_add",
+			    osx_mf_objc_class_method_add, 2);
 
   rb_define_module_function(mOSX, "ruby_thread_switcher_start",
 			    osx_mf_ruby_thread_switcher_start, -1);

@@ -5,6 +5,7 @@
 
 require 'test/unit'
 require 'osx/cocoa'
+require 'rbconfig'
 
 system 'make' || raise(RuntimeError, "'make' failed")
 require 'objc_test.bundle'
@@ -72,6 +73,19 @@ class ObjcExportHelper < OSX::NSObject
   objc_export :foo4_size, [OSX::NSRect, OSX::NSPoint, OSX::NSSize]
 end
 
+class OSX::DirectOverride
+  def overrideMe
+    'foo'
+  end
+end
+
+class OSX::NSObject
+  def mySuperMethod
+    'foo'
+  end
+  objc_export :mySuperMethod, ['id']
+end
+
 class TC_OVMIX < Test::Unit::TestCase
   def test_rig
     testrig = OSX::TestRig.alloc.init
@@ -81,5 +95,17 @@ class TC_OVMIX < Test::Unit::TestCase
   def test_objc_export
     testoe = OSX::TestObjcExport.alloc.init
     testoe.run
+  end
+
+  def test_direct_override
+    assert(OSX::DirectOverride.ancestors.include?(OSX::NSObject))
+    o = OSX::DirectOverride.alloc.init
+    assert_kind_of(OSX::NSString, o.performSelector('overrideMe'))
+  end
+
+  def test_super_method
+    o = OSX::NSString.stringWithCString('blah')
+    assert_equal('foo', o.mySuperMethod.to_s)
+    assert_equal('foo', o.performSelector('mySuperMethod').to_s)
   end
 end

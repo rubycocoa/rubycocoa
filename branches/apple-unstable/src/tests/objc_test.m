@@ -283,6 +283,18 @@
 
 @end
 
+@interface DirectOverride : NSObject
+@end
+
+@implementation DirectOverride
+
+- (id)overrideMe
+{
+  return nil;
+}
+
+@end
+
 void Init_objc_test(){
   // dummy initializer for ruby's `require'
 }

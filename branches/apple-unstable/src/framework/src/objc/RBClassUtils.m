@@ -90,7 +90,6 @@ static void install_class_method_list(Class c)
   class_addMethods((c->isa), override_mixin_class_method_list());
 }
 
-
 /**
  * Dictionary for Ruby class from  Objective-C class name
  **/
@@ -188,9 +187,10 @@ Class RBObjcDerivedClassNew(VALUE kls, const char* name, Class super_class)
 
   // init class methods
   install_class_method_list(c);
-
+  
   // add class to runtime system
   objc_addClass(c);
   class_map_dic_add (name, kls);
   return c;
 }
+

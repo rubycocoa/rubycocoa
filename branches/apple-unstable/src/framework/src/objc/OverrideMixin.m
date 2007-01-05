@@ -436,13 +436,30 @@ static struct objc_method imp_methods[] = {
 
 
 /**
+ *  class method for pure Objective-C classes
+ **/
+static const char* imp_c_pure_method_names[] = {
+  "addRubyMethod:",
+  "addRubyMethod:withType:",
+};
+
+static struct objc_method imp_c_pure_methods[] = {
+  { NULL,
+    "@4@4:8:12",
+    (IMP)imp_c_addRubyMethod
+  },
+  { NULL,
+    "@4@4:8:12*16",
+    (IMP)imp_c_addRubyMethod_withType
+  }
+};
+
+/**
  *  class methods
  **/
 static const char* imp_c_method_names[] = {
   "alloc",
-  "allocWithZone:",
-  "addRubyMethod:",
-  "addRubyMethod:withType:",
+  "allocWithZone:"
 };
 
 static struct objc_method imp_c_methods[] = {
@@ -453,14 +470,6 @@ static struct objc_method imp_c_methods[] = {
   { NULL,
     "@8@4:8^{_NSZone=}12",
     (IMP)imp_c_allocWithZone
-  },
-  { NULL,
-    "@4@4:8:12",
-    (IMP)imp_c_addRubyMethod
-  },
-  { NULL,
-    "@4@4:8:12*16",
-    (IMP)imp_c_addRubyMethod_withType
   }
 };
 
@@ -518,8 +527,25 @@ struct objc_method_list* override_mixin_class_method_list()
   return imp_c_mlp;
 }
 
+static struct objc_method_list* override_mixin_class_pure_method_list()
+{
+  static struct objc_method_list* imp_c_pure_mlp = NULL;
+  if (imp_c_pure_mlp == NULL) {
+    int i;
+    long cnt = sizeof(imp_c_pure_methods) / sizeof(struct objc_method);
+    imp_c_pure_mlp = method_list_alloc(cnt);
+    for (i = 0; i < cnt; i++) {
+      imp_c_pure_mlp->method_list[i]  = imp_c_pure_methods[i];
+      imp_c_pure_mlp->method_list[i].method_name = sel_getUid(imp_c_pure_method_names[i]);
+      imp_c_pure_mlp->method_count += 1;
+    }
+  }
+  return imp_c_pure_mlp;
+}
+
 void init_ovmix(void)
 {   
-    ffi_imp_closures = st_init_strtable();
-    pthread_mutex_init(&ffi_imp_closures_lock, NULL);
+  ffi_imp_closures = st_init_strtable();
+  pthread_mutex_init(&ffi_imp_closures_lock, NULL);
+  class_addMethods(objc_lookUpClass("NSObject"), override_mixin_class_pure_method_list()); 
 }
