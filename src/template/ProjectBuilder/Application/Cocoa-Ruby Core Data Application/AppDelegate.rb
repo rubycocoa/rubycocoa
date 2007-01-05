@@ -5,7 +5,7 @@
 #  Copyright ÇORGANIZATIONNAMEÈ ÇYEARÈ . All rights reserved.
 
 require 'osx/cocoa'
-require 'osx/coredata'
+OSX.require_framework 'CoreData'
 
 class AppDelegate < OSX::NSObject
   
@@ -31,14 +31,15 @@ class AppDelegate < OSX::NSObject
     
     fileManager = OSX::NSFileManager.defaultManager
     storeFolder = applicationSupportFolder
-    unless fileManager.fileExistsAtPath?(storeFolder, :isDirectory, nil)
-      fileManager.createDirectoryAtPath(storeFolder, :attributes, nil)
+    unless fileManager.fileExistsAtPath_isDirectory?(storeFolder, nil)
+      fileManager.createDirectoryAtPath_attributes(storeFolder, nil)
     end
     
     url = OSX::NSURL.fileURLWithPath(storeFolder.stringByAppendingPathComponent("ÇPROJECTNAMEASIDENTIFIERÈ.xml"))
     coordinator = OSX::NSPersistentStoreCoordinator.alloc.initWithManagedObjectModel(managedObjectModel)
     # FIXME: cannot get errors
-    if (coordinator.addPersistentStoreWithType(OSX.NSXMLStoreType, :configuration, nil, :URL, url, :options, nil, :error, error = nil)) 
+    error = OSX::OCObject.new
+    if coordinator.addPersistentStoreWithType_configuration_URL_options_error(OSX::NSXMLStoreType, nil, url, nil, error) then
       @managedObjectContext = OSX::NSManagedObjectContext.alloc.init
       @managedObjectContext.setPersistentStoreCoordinator(coordinator)
     else
@@ -66,7 +67,8 @@ class AppDelegate < OSX::NSObject
     if context
       if context.commitEditing?
         # FIXME: cannot get errors
-        unless context.save?(error = nil)
+        error = OSX::OCObject.new
+        unless context.save?(error)
           errorResult = OSX::NSApplication.sharedApplication.presentError?(error)
         
           if errorResult
