@@ -188,15 +188,15 @@ module OSX
       OSX::ObjcID
     else
       begin
-	OSX.const_get("#{occls_superclass}".to_sym) 
-      rescue NameError
-	# some ObjC internal class cannot become Ruby cosntant
-	# because of prefix '%' or '_'
-	if occls.__ocid__ != occls_superclass.__ocid__
-	  OSX._objc_lookup_superclass(occls_superclass)
-	else
-	  OSX::ObjcID # root class of ObjC
-	end
+        OSX.const_get("#{occls_superclass}".to_sym) 
+        rescue NameError
+        # some ObjC internal class cannot become Ruby constant
+        # because of prefix '%' or '_'
+        if occls.__ocid__ != occls_superclass.__ocid__
+          OSX._objc_lookup_superclass(occls_superclass)
+        else
+          OSX::ObjcID # root class of ObjC
+        end
       end
     end
   end
@@ -230,8 +230,8 @@ module OSX
     def ns_overrides(*args)
       # insert specified selectors to Objective-C method table.
       args.each do |name|
-	name = name.to_s.gsub('_',':')
-	OSX.objc_derived_class_method_add(self, name)
+	      name = name.to_s.gsub('_',':')
+	      OSX.objc_class_method_add(self, name)
       end
     end
 
@@ -534,21 +534,44 @@ end				# module OSX
 #
 class Object
   class <<self
+    def _real_class_and_mod(klass)
+      klassname = klass.name
+      if Object.included_modules.include?(OSX)
+        [klassname, Object]
+      elsif klassname[0..4] == 'OSX::' and (tokens = klassname.split(/::/)).size == 2 and klass.superclass != OSX::Boxed
+        [tokens[1], OSX]
+      end
+    end
+
     alias __before_osx_inherited inherited
     def inherited(subklass)
-      klassname = subklass.name
-      if /\AOSX::/ =~ klassname && klassname.split(/::/).size == 2 && subklass.superclass != OSX::Boxed
-   nsklass = klassname.split(/::/)[1]
-   # remove Ruby's class
-   OSX.instance_eval { remove_const nsklass.intern }
+      nsklassname, mod = _real_class_and_mod(subklass) 
+      if nsklassname
+        # remove Ruby's class
+        mod.instance_eval { remove_const nsklassname.intern }
         begin
-     subklass = OSX.ns_import nsklass.intern
-   rescue NameError
-     # redefine subclass (looks not a Cocoa class)
-     OSX.const_set(nsklass, subklass)
-   end
+          subklass = OSX.ns_import nsklassname.intern
+        rescue NameError
+          # redefine subclass (looks not a Cocoa class)
+          mod.const_set(nsklassname, subklass)
+        end
       end
       __before_osx_inherited(subklass)
+    end
+
+    alias __before_method_added method_added
+    def method_added(sym)
+      nsklassname, mod = _real_class_and_mod(self)
+      if nsklassname
+        begin 
+          nsklass = OSX.const_get(nsklassname)
+          method = instance_method(sym)
+          klass = self
+          nsklass.module_eval { define_method(sym) { |*a| (@proxy ||= klass.new).send(sym, *a) } } 
+        rescue NameError
+        end
+      end
+      __before_method_added(sym)
     end
   end
 end

@@ -487,6 +487,19 @@ VALUE double_to_rbobj (double val)
 }
 
 VALUE
+ocid_to_rbobj_cache_only(id ocid)
+{
+  VALUE result;
+  BOOL  ok;
+
+  CACHE_LOCK(&oc2rbCacheLock);
+  ok = st_lookup(oc2rbCache, (st_data_t)ocid, (st_data_t *)&result);
+  CACHE_UNLOCK(&oc2rbCacheLock);
+
+  return ok ? result : Qnil;
+}
+
+VALUE
 ocid_to_rbobj(VALUE context_obj, id ocid)
 {
   VALUE result;

@@ -212,7 +212,13 @@ VALUE rbobj_call_ruby(id rbobj, SEL selector, VALUE args)
   VALUE rb_result;
   int err;
 
-  m_rbobj = [rbobj __rbobj__]; 
+  if ([rbobj respondsToSelector:@selector(__rbobj__)]) {
+    m_rbobj = [rbobj __rbobj__]; 
+  }
+  else {
+    // Not an RBObject class, try to get the value from the cache. 
+    m_rbobj = ocid_to_rbobj_cache_only(rbobj);
+  }
   mid = rb_obj_sel_to_mid(m_rbobj, selector);
   stub_args[0] = m_rbobj;
   stub_args[1] = mid;
@@ -416,6 +422,8 @@ register_finalizer(id ocid, VALUE rbobj)
 - (BOOL)respondsToSelector: (SEL)a_sel
 {
   BOOL ret;
+  if (a_sel == @selector(__rbobj__))
+    return YES;
   RBOBJ_LOG("respondsToSelector(%s)", a_sel);
   ret = [self rbobjRespondsToSelector: a_sel];
   RBOBJ_LOG("   --> %d", ret);

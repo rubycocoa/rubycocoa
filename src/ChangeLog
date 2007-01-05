@@ -5,6 +5,21 @@
 
 2007-01-05  Laurent Sansonetti <lsansonetti@apple.com>
 
+	* framework/src/ruby/osx/objc/oc_import.rb,
+	  framework/src/objc/OverrideMixin.m,
+	  framework/src/objc/RBObject.m,
+	  framework/src/objc/mdl_osxobjc.m,
+	  framework/src/objc/RBClassUtils.m,
+	  framework/src/objc/ocdata_conv.h,
+	  framework/src/objc/ocdata_conv.m,
+	  tests/tc_ovmix.rb,
+	  tests/objc_test.m:
+	- Fixed direct import of Objective-C classes when the OSX module is
+	  included in Object ;
+	- Added the possibility to add or override any method directly in a
+	  given Objective-C class from Ruby (before it was only possible in a
+	  subclass). Added some test cases.
+
 	* framework/RubyCocoa.xcodeproj/project.pbxproj,
 	  framework/src/ruby/osx/coredata.rb,
 	  framework/src/ruby/osx/objc/coredata.rb,
