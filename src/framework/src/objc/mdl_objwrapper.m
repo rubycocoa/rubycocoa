@@ -220,7 +220,7 @@ ocm_easy_dispatch(int argc, VALUE* argv, VALUE rcv, VALUE* result, struct _ocm_s
       return exception;
 
     if (*ctx->methodReturnType == _C_ID) {
-      if (!ocdata_to_rbobj(rcv, _C_ID, &val, result, NO))
+      if (!ocdata_to_rbobj(rcv, _C_ID, (const void *)&val, result, NO))
         return ocdataconv_err_new(ctx->rcv, ctx->selector, "cannot convert the result as '%s' to Ruby Object.", ctx->methodReturnType);
       ocm_retain_result_if_necessary(rcv, *result, ctx->selector);
     }

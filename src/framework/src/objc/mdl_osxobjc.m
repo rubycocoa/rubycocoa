@@ -18,6 +18,7 @@
 #import <mach-o/dyld.h>
 #import <string.h>
 #import "BridgeSupport.h"
+#import <objc/objc-runtime.h>
 
 #define OSX_MODULE_NAME "OSX"
 

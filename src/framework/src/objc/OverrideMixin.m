@@ -16,6 +16,7 @@
 #import "ocdata_conv.h"
 #import "BridgeSupport.h"
 #import "st.h"
+#import <objc/objc-runtime.h>
 
 #define OVMIX_LOG(fmt, args...) DLOG("OVMIX", fmt, ##args)
 

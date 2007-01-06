@@ -1,5 +1,14 @@
 2007-01-06  Laurent Sansonetti <lsansonetti@apple.com>
 
+	* framework/src/objc/OverrideMixin.m,
+	  framework/src/objc/mdl_osxobjc.m,
+	  framework/src/objc/mdl_objwrapper.m,
+	  tests/objc_test.m:
+	Eliminates compiler warnings.
+
+    * framework/src/ruby/osx/objc/oc_import.rb:
+    Properly append missing ':' to the selector if type format string was used.
+
 	* sample/RubyStickies/Sticky.rb:
 	Fixed a crash when closing a sticky.
 

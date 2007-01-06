@@ -172,7 +172,7 @@
 
 - (id)callFoo:(id)receiver
 {
-    return [receiver calledFoo:nil];
+    return (id)[receiver calledFoo:nil];
 }
 
 @end
