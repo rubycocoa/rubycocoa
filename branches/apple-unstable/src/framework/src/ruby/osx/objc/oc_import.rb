@@ -268,11 +268,11 @@ module OSX
       typefmt = _types_to_typefmt(types)
       name = name.to_s
       name = name[0].chr << name[1..-1].gsub(/_/, ':')
-      name << ':' if name[-1] != ?: and types.length > 1 
+      name << ':' if name[-1] != ?: and typefmt[-1] != ?:
       self.addRubyMethod_withType(name, typefmt)
     end
 
-    # TODO: support more types such as pointers, structures, unions...
+    # TODO: support more types such as pointers...
     OCTYPES = {
       :id      => '@',
       :class   => '#',
@@ -290,7 +290,7 @@ module OSX
       :void    => 'v'
     }
     def _types_to_typefmt(types)
-      return types if types.is_a?(String)
+      return types.strip if types.is_a?(String)
       raise ArgumentError, "Array or String (as type format) expected (got #{types.klass} instead)" unless types.is_a?(Array)
       raise ArgumentError, "Given types array should have at least an element" unless types.size > 0
       octypes = types.map do |type|
