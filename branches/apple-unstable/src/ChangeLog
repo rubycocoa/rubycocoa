@@ -1,5 +1,10 @@
 2007-01-06  Laurent Sansonetti <lsansonetti@apple.com>
 
+	* sample/Hakoiri-Musume/rb_main.rb,
+	  sample/speak.rb,
+	  package/tmpl/postflight-universal.rb:
+	Fixed sheband lines to use /usr/bin/env ruby. Thanks to Jean-Pierre.
+
 	* framework/src/objc/OverrideMixin.m,
 	  framework/src/objc/mdl_osxobjc.m,
 	  framework/src/objc/mdl_objwrapper.m,

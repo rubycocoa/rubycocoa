@@ -1,4 +1,4 @@
-#!/usr/bin/ruby
+#!/usr/bin/env ruby
 # $Id$
 # install extlib "rubycocoa.bundle"
 
