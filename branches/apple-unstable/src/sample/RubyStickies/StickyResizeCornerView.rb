@@ -17,23 +17,20 @@ class StickyResizeCornerView <  NSView
 
   def acceptsFirstMouse(theEvent); true; end
 
-=begin
-  # FIXME this doesn't work!
   def mouseDragged(theEvent)
-    f = frame
+    f = window.frame
     w, h = f.size.width, f.size.height
     newWidth = w + theEvent.deltaX
     newHeight = h + theEvent.deltaY
     minSize = window.minSize
-    if newHeight >= minSize.height
+    if newHeight >= minSize.height then
       f.size.height = newHeight
       f.origin.y -= theEvent.deltaY    
     end
-    if newWidth >= minSize.width
+    if newWidth >= minSize.width then
       f.size.width = newWidth
     end
     window.setFrame_display(f, true)
   end
-=end
 
 end
