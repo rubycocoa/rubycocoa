@@ -1,3 +1,9 @@
+2007-01-06  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* sample/RubyStickies:
+	Added new sample code, a Ruby port of /Developer/Examples/CoreData/Stickies.
+	Not functional yet (see the FIXME comments).
+
 2007-01-05  Fujimoto Hisa  <hisa@fobj.com>
 
 	* template/ProjectBuilder/Application/Cocoa-Ruby\ Core\ Data\ Document-based\ Application/MyDocument.rb, template/ProjectBuilder/Application/Cocoa-Ruby\ Core\ Data\ Application/AppDelegate.rb:
