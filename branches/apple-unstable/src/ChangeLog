@@ -6,8 +6,8 @@
 	  tests/objc_test.m:
 	Eliminates compiler warnings.
 
-    * framework/src/ruby/osx/objc/oc_import.rb:
-    Properly append missing ':' to the selector if type format string was used.
+	* framework/src/ruby/osx/objc/oc_import.rb:
+	Properly append missing ':' to the selector if type format string was used.
 
 	* sample/RubyStickies/Sticky.rb:
 	Fixed a crash when closing a sticky.
