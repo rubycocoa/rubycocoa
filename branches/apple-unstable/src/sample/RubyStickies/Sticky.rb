@@ -37,7 +37,9 @@ class Sticky < NSManagedObject
   def observeValueForKeyPath_ofObject_change_context(keyPath, object, change, context)
     # If the value of a sticky's frame changes in the managed object, we update the window to match
     return unless keyPath.to_s == WINDOW_FRAME_KEY
-    newFrame = NSRectFromString(change.objectForKey(NSKeyValueChangeNewKey))
+    val = change.objectForKey(NSKeyValueChangeNewKey)
+    return unless val.is_a?(NSString)
+    newFrame = NSRectFromString(val)
     # Don't setFrame if the frame hasn't changed; this prevents infinite recursion
     if @stickyWindow.frame != newFrame
       @stickyWindow.setFrame_display(newFrame, true)
