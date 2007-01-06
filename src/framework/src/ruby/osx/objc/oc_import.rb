@@ -290,7 +290,8 @@ module OSX
       :void    => 'v'
     }
     def _types_to_typefmt(types)
-      raise ArgumentError, "Array expected (got #{types.klass} instead)" unless types.is_a?(Array)
+      return types if types.is_a?(String)
+      raise ArgumentError, "Array or String (as type format) expected (got #{types.klass} instead)" unless types.is_a?(Array)
       raise ArgumentError, "Given types array should have at least an element" unless types.size > 0
       octypes = types.map do |type|
         if type.is_a?(Class) and type.ancestors.include?(OSX::Boxed)
