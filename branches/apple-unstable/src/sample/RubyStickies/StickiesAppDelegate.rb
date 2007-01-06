@@ -21,7 +21,6 @@ class StickiesAppDelegate < NSObject#< StickiesAppDelegateBase #NSObject
   end
   
   def loadAllStickies
-    # FIXME @stickiesController is always empty!
     # Fault each sticky in the array controller and call it's setup function
     @stickiesController.arrangedObjects.to_a.each { |x| x.setupSticky }
   end

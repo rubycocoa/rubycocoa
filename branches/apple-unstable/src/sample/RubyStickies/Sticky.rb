@@ -22,7 +22,9 @@ class Sticky < NSManagedObject
     raise "IBOutlets were not set correctly in Sticky.nib" if @stickyWindow.nil? or @contents.nil?
     
     @stickyWindow.setDelegate(self)
-    @stickyWindow.setFrame_display(valueForKey(WINDOW_FRAME_KEY), true)
+    @stickyWindow.
+      objc_send :setFrame, NSRectFromString(valueForKey(WINDOW_FRAME_KEY)),
+                :display,  true
     @stickyWindow.makeKeyAndOrderFront(self)
     
     # Register for KVO on the sticky's frame rect so that the window will redraw if we change the frame
