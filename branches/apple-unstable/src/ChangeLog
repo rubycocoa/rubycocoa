@@ -5,6 +5,9 @@
 	  sample/RubyStickies/StickyResizeCornerView.rb:
 	fixed the FIXME comments bugs.
 
+	* framework/src/ruby/osx/objc/oc_import.rb:
+	allow a type format string as a second argument of objc_export.
+
 2007-01-06  Laurent Sansonetti <lsansonetti@apple.com>
 
 	* sample/RubyStickies:
