@@ -106,6 +106,15 @@ OSX::NSURL.alloc.initWithScheme('http', :host, 'www.apple.com', :path, '/macosx'
 OSX::NSURL.alloc.initWithScheme_host_path('http', 'www.apple.com', '/macosx')      # GOOD
 </pre>
 
+	<p>As the alternative of the change, you may use <tt>objc_send</tt> method(appear from the release 0.9.1).</p>
+
+
+<pre>
+OSX::NSURL.alloc.objc_send( :initWithScheme, 'http',
+                            :host,           'www.apple.com',
+                            :path,           '/macosx' )
+</pre>
+
 	<p>RubyCocoa now maps C constants as real Ruby constants of the <span class="caps">OSX</span> module, while before it was mapping them as Ruby methods. Trying to retrieve a constant by calling a method of the <span class="caps">OSX</span> module has been deprecated. A warning will now be printed each time you are using this syntax, and in the final release an exception will be thrown.</p>
 
 
