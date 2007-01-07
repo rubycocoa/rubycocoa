@@ -1,0 +1,62 @@
+body {
+    margin-left: 2em;
+    width: 800px;
+    font-family: "Lucida Grande", "Trebuchet MS";
+    font-size: 13px;
+}
+
+h1 {
+    margin: 40px;
+    text-align: center;
+    text-shadow: #bbb 3px 3px 3px;
+}
+
+A:link { 
+    color: rgb(34,98,245);
+    text-decoration: none;
+}
+
+A:active { 
+    color: rgb(34,98,245);
+    text-decoration: none;
+}
+
+A:visited { 
+    color: rgb(34,98,245);
+    text-decoration: none;
+}
+
+A:hover { 
+    color: rgb(34,98,245);
+    text-decoration: underline;
+}
+
+pre {
+    padding: 5px 10px 5px 10px;
+    margin: 10px 0px;
+    background: #eee;
+    color: #000;
+    font-family: "Courier";
+    font-size: 12px;
+}
+
+/* Syntax highlighting 
+pre .normal {}
+pre .comment { color: #000099; font-style: italic; }
+pre .keyword { color: #A00; font-weight: bold; }
+pre .method { color: #077; }
+pre .class { color: #074; }
+pre .module { color: #050; }
+pre .punct { color: #447; font-weight: bold; }
+pre .symbol { color: #099; }
+pre .string { color: #944; background: #FFE; }
+pre .char { color: #F07; }
+pre .ident { color: #004; }
+pre .constant { color: #07F; }
+pre .regex { color: #B66; background: #FEF; }
+pre .number { color: #F99; }
+pre .attribute { color: #5bb; }
+pre .global { color: #7FB; }
+pre .expr { color: #227; }
+pre .escape { color: #277; }
+*/

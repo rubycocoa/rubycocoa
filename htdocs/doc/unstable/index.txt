@@ -1,0 +1,85 @@
+h1. RubyCocoa 1.0 Sneak Preview
+
+This web page describes the current status of the RubyCocoa unstable branch, which aims to become the code base of the future 1.0 release. 
+
+For the moment, even we are still heavily working on it, the new code base is mostly functional and sometimes even more reliable than the stable release. So you are graciously invited to test it and report any problem you would find.
+
+h2. Getting Started 
+
+The latest pre-release available is 0.9.0. Please check out either the <a href="http://rubycocoa.sf.net/files/RubyCocoa-0.9.0-OSX10.4universal.dmg">binary installer</a> or the <a href="http://rubycocoa.sf.net/files/rubycocoa-0.9.0.tgz">source tarball</a>.
+
+If you downloaded the source tarball, you need to build the project manually:
+
+<pre>
+$ cd rubycocoa-unstable
+$ ruby install.rb config
+$ ruby install.rb setup
+$ sudo ruby install.rb install
+</pre>
+
+You can retrieve the latest version of the source tree via SVN:
+
+<pre>
+$ svn co https://rubycocoa.svn.sourceforge.net/svnroot/rubycocoa/branches/apple-unstable/src rubycocoa-unstable
+</pre>
+
+Once RubyCocoa will be installed you will find sample projects in <tt>/Developer/Examples/RubyCocoa</tt>. 
+
+h2. What's New 
+
+The unstable branch contains lots of fixes and improvements. Let's describe the most important changes.
+
+h3. Libffi Integration
+
+<a href="http://sources.redhat.com/libffi/">Libffi</a> support has been added to RubyCocoa. FFI stands for Foreign Function Interface. It is a C library, part of the GCC project, that can call any arbitrary C function, packing the parameters and retrieving the return value in a processor and variable-type agnostic way.
+
+RubyCocoa is using it in several places when messages are dispatched within the 2 worlds, for instance when you call a C function from Ruby or message an Objective-C object from Ruby, but also when a custom Ruby object crosses the bridge and is messaged by Objective-C. 
+
+The usage of Libffi in RubyCocoa brings reliability and enhances the performances. RubyCocoa no longer uses <tt>NSInvocation</tt> anymore.
+
+h3. BridgeSupport Metadata
+
+Thanks to the dynamic nature of Objective-C, most of the information that needs to be bridged can be retrieved at runtime, such as the classes and their methods. However, in Objective-C there is C, which isn't as dynamic. There is no way to introspect at runtime the pure C data like functions and constants.
+
+RubyCocoa used to handle the C bits of frameworks by parsing the headers and generating some static code at build time. But this became hard to maintain as you have to rebuild the bridge to support a new framework. Thus the idea to modify Rubycocoa to be metadata-driven. Instead of generating static code, we generate metadata files and RubyCocoa interprets them at runtime.
+
+We have a metadata generator that is ran at build time to produce metadata information for a set of default frameworks. The metadata format is XML. We generate a file per framework. Metadata describes C functions, enumerations, constants, structures but also opaque and CoreFoundation-based types, and Objective-C informal protocol methods. The metadata also provides a better description of methods returning a boolean value and accepting pointer-like arguments.
+
+RubyCocoa loads the files at runtime, after that a framework has been loaded. It tries to interpret the contents in a lazy way, for example localizing the symbols only on demand. The metadata generator is installed as <tt>/usr/bin/gen_bridge_metadata</tt> and is aimed to be used outside to support more frameworks. The metadata files are installed in <tt>/Library/BridgeSupport</tt>.
+
+h3. More Frameworks Support
+
+Thanks to the new metadata mechanism we are now able to bridge frameworks more easily than previously. In addition to Foundation, AppKit and WebKit, the unstable branch also provides support for CoreFoundation, CoreGraphics, PDFKit, QuartzCore (CoreImage and CoreVideo), OpenGL and QTKit. We are adding more support progressively. 
+
+Sample code using these frameworks is available in <tt>/Developer/Examples/RubyCocoa</tt>.
+
+h3. Syntax Changes
+
+RubyCocoa allows you to omit the final underscore character when dispatching a message from Ruby to Objective-C. This is still supported, though this is no longer permitted if the <tt>OSX.relaxed_syntax</tt> variable is set to <tt>false</tt> (which is set to <tt>true</tt> by default). 
+
+<pre>
+p OSX.relaxed_syntax                # returns true
+OSX::Array.arrayWithObject('foo')   # OK
+OSX.relaxed_syntax = false
+OSX::Array.arrayWithObject('foo')   # Exception! 
+OSX::Array.arrayWithObject_('foo')  # OK
+</pre> 
+
+When sending messages from Ruby to Objective-C, the <i>symbol / value...</i> syntax has been deprecated. A warning will now be printed each time you are using this syntax, and in the final release an exception will be thrown. 
+
+<pre>
+OSX::NSURL.alloc.initWithScheme('http', :host, 'www.apple.com', :path, '/macosx')  # BAD
+OSX::NSURL.alloc.initWithScheme_host_path('http', 'www.apple.com', '/macosx')      # GOOD
+</pre>
+
+RubyCocoa now maps C constants as real Ruby constants of the OSX module, while before it was mapping them as Ruby methods. Trying to retrieve a constant by calling a method of the OSX module has been deprecated. A warning will now be printed each time you are using this syntax, and in the final release an exception will be thrown.
+
+<pre>
+OSX.NSApp    # BAD
+OSX.NSApp()  # BAD
+OSX::NSApp   # GOOD
+</pre>
+
+h2. Support
+
+For the moment please send your feedback to the <a href="http://lists.sourceforge.jp/mailman/listinfo/rubycocoa-devel">rubycocoa-devel</a> mailing list, in the meantime we put in place a dedicated bug tracker.
