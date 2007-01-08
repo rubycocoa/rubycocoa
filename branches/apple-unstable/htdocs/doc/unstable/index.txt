@@ -29,7 +29,7 @@ Once RubyCocoa will be installed you will find sample projects in <tt>/Developer
 <pre>
 $ cd /Developer/Examples/RubyCocoa
 $ mkdir All
-$ ruby buildall All
+$ ruby buildall.rb All
 $ open All
 </pre> 
 
