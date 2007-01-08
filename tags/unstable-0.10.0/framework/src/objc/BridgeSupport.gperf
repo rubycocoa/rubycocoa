@@ -1,0 +1,29 @@
+struct bs_xml_atom { char *name; int val; }
+%%
+constant, 1
+enum, 2 
+struct, 3 
+informal_protocol, 4
+function, 5
+function_arg, 6
+function_retval, 7
+class, 8
+method_arg, 9
+method_retval, 10
+method, 11
+cftype, 12
+opaque, 13
+%%
+#define BS_XML_CONSTANT           1
+#define BS_XML_ENUM               2
+#define BS_XML_STRUCT             3
+#define BS_XML_INFORMAL_PROTOCOL  4
+#define BS_XML_FUNCTION           5
+#define BS_XML_FUNCTION_ARG       6
+#define BS_XML_FUNCTION_RETVAL    7
+#define BS_XML_CLASS              8
+#define BS_XML_METHOD_ARG         9
+#define BS_XML_METHOD_RETVAL      10
+#define BS_XML_METHOD             11
+#define BS_XML_CFTYPE             12
+#define BS_XML_OPAQUE             13
