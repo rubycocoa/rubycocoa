@@ -19,7 +19,7 @@
 	<h2>Getting Started</h2>
 
 
-	<p>最新の pre-release は、0.9.0 です。<a href="http://rubycocoa.sf.net/files/RubyCocoa-0.9.0-OSX10.4universal.dmg">バイナリのインストーラ</a>と<a href="http://rubycocoa.sf.net/files/rubycocoa-0.9.0.tgz">ソースコード</a>の両方が用意されています。</p>
+	<p>最新の pre-release は、0.10.0 です。<a href="http://rubycocoa.sf.net/files/RubyCocoa-0.10.0-OSX10.4universal.dmg">バイナリのインストーラ</a>と<a href="http://rubycocoa.sf.net/files/rubycocoa-0.10.0.tgz">ソースコード</a>の両方が用意されています。</p>
 
 
 	<p>ソースコードをダウンロードした場合は、自分で RubyCocoa をビルドする必要があります。</p>
@@ -36,11 +36,19 @@ $ sudo ruby install.rb install
 
 
 <pre>
-$ svn co https://rubycocoa.svn.sourceforge.net/svnroot/rubycocoa/branches/apple-unstable/src rubycocoa-unstable
+$ svn co https://rubycocoa.svn.sourceforge.net/svnroot/rubycocoa/branches/apple-unstable/src \
+    rubycocoa-unstable
 </pre>
 
-	<p>RubyCocoa をインストールすると、<tt>/Developer/Examples/RubyCocoa</tt> でサンプルスクリプトやプロジェクトを見つけることができます。</p>
+	<p>RubyCocoa をインストールすると、<tt>/Developer/Examples/RubyCocoa</tt> でサンプルスクリプトやプロジェクトを見つけることができます。buildall.rbを使って全てのサンプルアプリケーションをまとめてビルドすることができます:</p>
 
+
+<pre>
+$ cd /Developer/Examples/RubyCocoa
+$ mkdir All
+$ ruby buildall.rb All
+$ open All
+</pre> 
 
 	<h2>What&#8217;s New</h2>
 
@@ -78,11 +86,10 @@ $ svn co https://rubycocoa.svn.sourceforge.net/svnroot/rubycocoa/branches/apple-
 	<h3>More Frameworks Support</h3>
 
 
-	<p>新しいメタデータ機構のおかげで、以前よりも簡単にフレームワークのブリッジを提供することができるようになりました。今までの Foundation, AppKit と WebKit に加えて、unstable ブランチでは CoreFoundation, CoreGraphics, PDFKit, QuartzCore (CoreImage と CoreVideo), OpenGL, QTKit をサポートしています。今後もさらなるフレームワークのサポートを進めていきます。
-<tt>/Developer/Examples/RubyCocoa</tt>で、これらのフレームワークを使用したサンプルを見ることができます。</p>
+	<p>新しいメタデータ機構のおかげで、以前よりも簡単にフレームワークのブリッジを提供することができるようになりました。今までの Foundation, AppKit と WebKit に加えて、unstable ブランチでは CoreFoundation, CoreGraphics, PDFKit, QuartzCore (CoreImage と CoreVideo), OpenGL, QTKit, AddressBook and InstantMessage をサポートしています。また、CoreData は、 BridgeSupport による metadata ベースで置き換えられています。<tt>/Developer/Examples/RubyCocoa</tt>で、これらのフレームワークを使用したサンプルを見ることができます。</p>
 
 
-	<h3>Syntax Changes</h3>
+	<h3><span class="caps">API</span> Changes</h3>
 
 
 	<p>RubyCocoa では、Objective-C のメッセージを Ruby で扱う際に、最後のアンダースコアを省略することができました。これは現在ではサポートされていますが、 <tt><span class="caps">OSX</span>.relaxed_syntax</tt>(初期値は <tt>true</tt>) の値が <tt>false</tt> のときには許可されない記法となります。</p>
@@ -108,9 +115,9 @@ OSX::NSURL.alloc.initWithScheme_host_path('http', 'www.apple.com', '/macosx')   
 
 
 <pre>
-OSX::NSURL.alloc.objc_send( :initWithScheme, 'http',
-                            :host,           'www.apple.com',
-                            :path,           '/macosx' )
+OSX::NSURL.alloc.objc_send(:initWithScheme, 'http',
+                           :host,           'www.apple.com',
+                           :path,           '/macosx')
 </pre>
 
 	<p>RubyCocoa では、C の定数を Ruby の <span class="caps">OSX</span> モジュールの定数であるかのように扱うことができます。以前のバージョン(訳注:0.4.2まで)では、OSX モジュールのメソッドのようになっていました。OSX モジュールのメソッド形式での定数アクセスは、今後廃止されます。現在では、メソッド呼び出しの都度警告が出力され、最終リリースでは例外が発生するようになります。</p>
@@ -120,6 +127,65 @@ OSX::NSURL.alloc.objc_send( :initWithScheme, 'http',
 OSX.NSApp    # BAD
 OSX.NSApp()  # BAD
 OSX::NSApp   # GOOD
+</pre>
+
+	<p><tt>addRubyMethod_withType</tt>のことを聞いたことがあるかもしれません。これは、Rubyプログラムで定義したメソッドをObjective-Cランタイムに登録するためのメソッドです。このメソッドは、登録するRubyのメソッドを Objective-C のセレクタで指定するなど、Objective-Cプログラマ向けに書かれたものとなっています。Rubyに親しんでいるプログラマのための代替として、<tt>objc_export</tt>が追加されました。これは、Objective-Cランタイムに対して、Rubyで書いたメソッドの型(引数と戻り値)を宣言する意味合いを持っています(かなり意訳):</p>
+
+
+<pre>
+class MyClass : NSObject
+  # A method returning an 'id'.
+  def something
+    'something'
+  end
+  objc_export :something, %w{id}
+
+  # 2つ の int を引数にとり、その和を int で返す関数
+  def sum_with(x, y)
+    x + y
+  end
+  objc_export :sum_with, %w{int int int}
+
+  # NSPoint と NSSize を引数にとり、NSRect を返す関数
+  def makeRectWithPoint_size(point, size)
+    NSRect.new(point, size)
+  end
+  objc_export :makeRectWithPoint_size, [NSRect, NSPoint, NSSize]
+end
+</pre>
+
+	<h3>More Runtime Power</h3>
+
+
+	<p>Objective-Cベースの任意のクラス(OSX::NSobjectなど)について、Objective-Cにおけるカテゴリのように、Objective-Cのインスタンスメソッドの再定義・追加が可能になっています。これは、以前のバージョンではサブクラスに対してのみ可能でした。</p>
+
+
+	<p>以下は新しいメソッドを追加する例です:</p>
+
+
+<pre>
+class NSObject
+  def myMethod
+    # Do something
+    'foo'
+  end
+  objc_export :myMethod, ['id']
+end
+
+# Now, all NSObject-based objects in the Objective-C runtime will respond to [-myMethod]. 
+</pre>
+
+	<p>次は、既存の Objective-Cメソッドを再定義する例です:</p>
+
+
+<pre>
+class NSString
+  def length
+    42
+  end
+end
+
+# Now, all NSString objects will have a length of 42. Don't try this at home kids!
 </pre>
 
 	<h2>Support</h2>
