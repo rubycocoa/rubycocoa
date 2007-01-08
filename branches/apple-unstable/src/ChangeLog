@@ -1,5 +1,8 @@
 2007-01-08  Laurent Sansonetti <lsansonetti@apple.com>
 
+	* VERSION:
+	Prepared for 0.10.0.
+
 	* sample/*:
 	- Renamed some samples directories to match the same naming convention.
 	- Removed deprecated samples and SimpleApp.app binary ;
