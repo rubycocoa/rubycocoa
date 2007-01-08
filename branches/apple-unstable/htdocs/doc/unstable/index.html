@@ -19,7 +19,7 @@
 	<h2>Getting Started</h2>
 
 
-	<p>The latest pre-release available is 0.9.0. Please check out either the <a href="http://rubycocoa.sf.net/files/RubyCocoa-0.9.0-OSX10.4universal.dmg">binary installer</a> or the <a href="http://rubycocoa.sf.net/files/rubycocoa-0.9.0.tgz">source tarball</a>.</p>
+	<p>The latest pre-release available is 0.10.0. Please check out either the <a href="http://rubycocoa.sf.net/files/RubyCocoa-0.10.0-OSX10.4universal.dmg">binary installer</a> or the <a href="http://rubycocoa.sf.net/files/rubycocoa-0.10.0.tgz">source tarball</a>.</p>
 
 
 	<p>If you downloaded the source tarball, you need to build the project manually:</p>
@@ -36,11 +36,19 @@ $ sudo ruby install.rb install
 
 
 <pre>
-$ svn co https://rubycocoa.svn.sourceforge.net/svnroot/rubycocoa/branches/apple-unstable/src rubycocoa-unstable
+$ svn co https://rubycocoa.svn.sourceforge.net/svnroot/rubycocoa/branches/apple-unstable/src \
+    rubycocoa-unstable
 </pre>
 
-	<p>Once RubyCocoa will be installed you will find sample projects in <tt>/Developer/Examples/RubyCocoa</tt>.</p>
+	<p>Once RubyCocoa will be installed you will find sample projects in <tt>/Developer/Examples/RubyCocoa</tt>. There is a convenient script that builds all the samples for you:</p>
 
+
+<pre>
+$ cd /Developer/Examples/RubyCocoa
+$ mkdir All
+$ ruby buildall All
+$ open All
+</pre> 
 
 	<h2>What&#8217;s New</h2>
 
@@ -78,13 +86,13 @@ $ svn co https://rubycocoa.svn.sourceforge.net/svnroot/rubycocoa/branches/apple-
 	<h3>More Frameworks Support</h3>
 
 
-	<p>Thanks to the new metadata mechanism we are now able to bridge frameworks more easily than previously. In addition to Foundation, AppKit and WebKit, the unstable branch also provides support for CoreFoundation, CoreGraphics, PDFKit, QuartzCore (CoreImage and CoreVideo), OpenGL and QTKit. We are adding more support progressively.</p>
+	<p>Thanks to the new metadata mechanism we are now able to bridge frameworks more easily than previously. In addition to Foundation, AppKit and WebKit, the unstable branch also provides support for CoreFoundation, CoreGraphics, PDFKit, QuartzCore (CoreImage and CoreVideo), OpenGL, QTKit, AddressBook and InstantMessage. The previous support of CoreData has been ported to be metadata-driven. We are adding more support progressively.</p>
 
 
 	<p>Sample code using these frameworks is available in <tt>/Developer/Examples/RubyCocoa</tt>.</p>
 
 
-	<h3>Syntax Changes</h3>
+	<h3><span class="caps">API</span> Changes</h3>
 
 
 	<p>RubyCocoa allows you to omit the final underscore character when dispatching a message from Ruby to Objective-C. This is still supported, though this is no longer permitted if the <tt><span class="caps">OSX</span>.relaxed_syntax</tt> variable is set to <tt>false</tt> (which is set to <tt>true</tt> by default).</p>
@@ -106,13 +114,13 @@ OSX::NSURL.alloc.initWithScheme('http', :host, 'www.apple.com', :path, '/macosx'
 OSX::NSURL.alloc.initWithScheme_host_path('http', 'www.apple.com', '/macosx')      # GOOD
 </pre>
 
-	<p>As the alternative of the change, you may use <tt>objc_send</tt> method(appear from the release 0.9.1).</p>
+	<p>As an alternative, we introduced a new method, <tt>objc_send</tt>:</p>
 
 
 <pre>
-OSX::NSURL.alloc.objc_send( :initWithScheme, 'http',
-                            :host,           'www.apple.com',
-                            :path,           '/macosx' )
+OSX::NSURL.alloc.objc_send(:initWithScheme, 'http',
+                           :host,           'www.apple.com',
+                           :path,           '/macosx')
 </pre>
 
 	<p>RubyCocoa now maps C constants as real Ruby constants of the <span class="caps">OSX</span> module, while before it was mapping them as Ruby methods. Trying to retrieve a constant by calling a method of the <span class="caps">OSX</span> module has been deprecated. A warning will now be printed each time you are using this syntax, and in the final release an exception will be thrown.</p>
@@ -122,6 +130,65 @@ OSX::NSURL.alloc.objc_send( :initWithScheme, 'http',
 OSX.NSApp    # BAD
 OSX.NSApp()  # BAD
 OSX::NSApp   # GOOD
+</pre>
+
+	<p>You may perhaps know about <tt>addRubyMethod_withType</tt>. This method lets you register a Ruby method into the Objective-C runtime. However, you need to pass to this method its Objective-C name (as a <i>selector</i>) as well as its Objective-C encoding, which may not be very easy to determine if you are not an experimented Objective-C programmer (only a few know the Objective-C runtime constants by heart). As an alternative, we introduced <tt>objc_export</tt> which has a more friendly interface:</p>
+
+
+<pre>
+class MyClass : NSObject
+  # A method returning an 'id'.
+  def something
+    'something'
+  end
+  objc_export :something, %w{id}
+
+  # A method accepting 2 integers and returning the sum of them.
+  def sum_with(x, y)
+    x + y
+  end
+  objc_export :sum_with, %w{int int int}
+
+  # A method accepting an NSPoint and NSSize, and returning an NSRect.
+  def makeRectWithPoint_size(point, size)
+    NSRect.new(point, size)
+  end
+  objc_export :makeRectWithPoint_size, [NSRect, NSPoint, NSSize]
+end
+</pre>
+
+	<h3>More Runtime Power</h3>
+
+
+	<p>It is now possible to add or override Objective-C methods directly to a given class, as you would do in Objective-C using a category. In previous versions of RubyCocoa this was only possible in subclasses.</p>
+
+
+	<p>An example demonstrating the injection of a new method:</p>
+
+
+<pre>
+class NSObject
+  def myMethod
+    # Do something
+    'foo'
+  end
+  objc_export :myMethod, ['id']
+end
+
+# Now, all NSObject-based objects in the Objective-C runtime will respond to [-myMethod]. 
+</pre>
+
+	<p>And another one overriding an existing method:</p>
+
+
+<pre>
+class NSString
+  def length
+    42
+  end
+end
+
+# Now, all NSString objects will have a length of 42. Don't try this at home kids!
 </pre>
 
 	<h2>Support</h2>
