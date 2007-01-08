@@ -1,5 +1,9 @@
 2007-01-08  Laurent Sansonetti <lsansonetti@apple.com>
 
+	* sample/Scripts,
+	  sample/*.rb:
+	Created sub-directory and moved all one-file .rb scripts there.
+
 	* sample/RubyMailDemo:
 	New sample code, a Ruby port of Scott Stevenson's MailDemo example.
 
