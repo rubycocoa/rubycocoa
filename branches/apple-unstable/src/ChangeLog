@@ -1,11 +1,10 @@
 2007-01-08  Laurent Sansonetti <lsansonetti@apple.com>
 
-	* sample/Ruby*:
-	Removed Ruby prefix from samples directories.
-
-	* sample/Scripts,
-	  sample/*.rb:
-	Created sub-directory and moved all one-file .rb scripts there.
+	* sample/*:
+	- Renamed some samples directories to match the same naming convention.
+	- Removed deprecated samples and SimpleApp.app binary ;
+	- Removed Ruby prefix from samples directories ;
+	- Created Scripts sub-directory and moved all one-file .rb scripts there.
 
 	* sample/RubyMailDemo:
 	New sample code, a Ruby port of Scott Stevenson's MailDemo example.
