@@ -1,3 +1,9 @@
+2007-01-08  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* framework/src/ruby/osx/objc/oc_import.rb:
+	Make sure #ns_import and #require_framework can be called when the OSX module
+	is mixed in the top-level object.
+
 === RubyCocoa 0.10.0 ===
 
 2007-01-08  Fujimoto Hisa  <hisa@fobj.com>

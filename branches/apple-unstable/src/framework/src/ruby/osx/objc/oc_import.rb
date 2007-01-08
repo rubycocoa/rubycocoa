@@ -37,7 +37,7 @@ module OSX
     'ImageKit' => '/System/Library/Frameworks/Quartz.framework/Frameworks/ImageKit.framework'
   }
 
-  def OSX.require_framework(framework)
+  def require_framework(framework)
     bundle, path = if framework[0] == ?/
       [OSX::NSBundle.bundleWithPath(framework), framework]
     elsif path = QUICK_FRAMEWORKS[framework]
@@ -62,8 +62,9 @@ module OSX
     end
     raise LoadError, "Can't locate framework '#{framework}'"
   end
+  module_function :require_framework
 
-  def OSX.load_bridge_support_signatures(framework)
+  def load_bridge_support_signatures(framework)
     # First, look into the pre paths.  
     framework_name = framework[0] == ?/ ? File.basename(framework, '.framework') : framework
     PRE_SIGN_PATHS.each do |dir|
@@ -110,6 +111,7 @@ module OSX
     STDERR.puts "Can't find signatures file for #{framework}" if $VERBOSE
     return false
   end
+  module_function :load_bridge_support_signatures
 
   # Load C constants/classes lazily.
   def self.const_missing(c)
@@ -154,7 +156,7 @@ module OSX
       NSLog("importing #{sym}...") if $DEBUG
       klass = if clsobj = NSClassFromString(sym)
         if rbcls = class_new_for_occlass(clsobj)
-          const_set(sym, rbcls)
+          OSX.const_set(sym, rbcls)
         end
       end
       NSLog("importing #{sym}... done (#{klass.ancestors.join(' -> ')})") if (klass and $DEBUG)
@@ -164,7 +166,7 @@ module OSX
   module_function :ns_import
 
   # create Ruby's class for Cocoa class
-  def OSX.class_new_for_occlass(occls)
+  def class_new_for_occlass(occls)
     superclass = _objc_lookup_superclass(occls)
     klass = Class.new(superclass)
     klass.class_eval <<-EOE_CLASS_NEW_FOR_OCCLASS,__FILE__,__LINE__+1
@@ -181,8 +183,9 @@ module OSX
     end
     return klass
   end
-  
-  def OSX._objc_lookup_superclass(occls)
+  module_function :class_new_for_occlass 
+ 
+  def _objc_lookup_superclass(occls)
     occls_superclass = occls.oc_superclass
     if occls_superclass.nil?
       OSX::ObjcID
@@ -200,6 +203,7 @@ module OSX
       end
     end
   end
+  module_function :_objc_lookup_superclass
 
   module NSBehaviorAttachment
 
