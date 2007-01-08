@@ -45,7 +45,7 @@ h3. Libffi Integration
 
 RubyCocoa is using it in several places when messages are dispatched within the 2 worlds, for instance when you call a C function from Ruby or message an Objective-C object from Ruby, but also when a custom Ruby object crosses the bridge and is messaged by Objective-C. 
 
-The usage of Libffi in RubyCocoa brings reliability and enhances the performances. RubyCocoa no longer uses <tt>NSInvocation</tt> anymore.
+The usage of Libffi in RubyCocoa brings reliability and enhances the performance. RubyCocoa no longer uses <tt>NSInvocation</tt> anymore.
 
 h3. BridgeSupport Metadata
 
@@ -98,7 +98,7 @@ OSX.NSApp()  # BAD
 OSX::NSApp   # GOOD
 </pre>
 
-You may perhaps know about <tt>addRubyMethod_withType</tt>. This method lets you register a Ruby method into the Objective-C runtime. However, you need to pass to this method its Objective-C name (as a <i>selector</i>) as well as its Objective-C encoding, which may not be very easy to determine if you are not an experimented Objective-C programmer (only a few know the Objective-C runtime constants by heart). As an alternative, we introduced <tt>objc_export</tt> which has a more friendly interface:
+You may perhaps know about <tt>addRubyMethod_withType</tt>. This method lets you register a Ruby method into the Objective-C runtime. However, you need to pass to this method its Objective-C name (as a <i>selector</i>) as well as its Objective-C encoding, which may not be very easy to determine if you are not an experienced Objective-C programmer (only a few know the Objective-C runtime constants by heart). As an alternative, we introduced <tt>objc_export</tt> which has a more friendly interface:
 
 <pre>
 class MyClass : NSObject
