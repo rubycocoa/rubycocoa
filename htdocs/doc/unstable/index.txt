@@ -1,5 +1,7 @@
 h1. RubyCocoa 1.0 Sneak Preview
 
+This page is available in <a href="index-ja.html">Japanese</a>. 
+
 This web page describes the current status of the RubyCocoa unstable branch, which aims to become the code base of the future 1.0 release. 
 
 For the moment, even we are still heavily working on it, the new code base is mostly functional and sometimes even more reliable than the stable release. So you are graciously invited to test it and report any problem you would find.
