@@ -22,13 +22,13 @@ erb('tmpl/Description.plist', File.join(work_dir, 'Description.plist'), binding)
 # Resources
 Dir.mkdir resources_dir
 Dir.mkdir File.join(resources_dir, 'English.lproj')
-#Dir.mkdir File.join(resources_dir, 'Japanese.lproj')
+Dir.mkdir File.join(resources_dir, 'Japanese.lproj')
 
 File.link '../COPYING', File.join(resources_dir, 'License.txt')
 File.link '../ReadMe.html', 
-  File.join(resources_dir, 'English.lproj', 'ReadMe.html')
-#File.link '../ReadMe.ja.html', 
-#  File.join(resources_dir, 'Japanese.lproj', 'ReadMe.html')
+          File.join(resources_dir, 'English.lproj', 'ReadMe.html')
+File.link '../ReadMe.ja.html', 
+          File.join(resources_dir, 'Japanese.lproj', 'ReadMe.html')
 
 File.link('tmpl/background.gif', File.join(resources_dir, 'background.gif'))
 
