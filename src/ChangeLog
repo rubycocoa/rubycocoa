@@ -1,5 +1,8 @@
 2007-01-08  Laurent Sansonetti <lsansonetti@apple.com>
 
+	* sample/Ruby*:
+	Removed Ruby prefix from samples directories.
+
 	* sample/Scripts,
 	  sample/*.rb:
 	Created sub-directory and moved all one-file .rb scripts there.
