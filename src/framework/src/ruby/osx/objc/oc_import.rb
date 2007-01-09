@@ -580,9 +580,12 @@ class Object
             raise NameError unless nsklass.ancestors.include?(OSX::NSObject)
             method = self.instance_method(sym)
             OSX.__rebind_umethod__(nsklass, method)
-            nsklass.module_eval { define_method(sym, method) } 
-          rescue NameError => e
-            p e
+            if RUBY_VERSION >= "1.8.5"
+              nsklass.module_eval { define_method(sym, method) }
+            else
+              nsklass.module_eval { define_method(sym) { method.bind(self).call }  } 
+            end
+          rescue NameError
           end
         end
       end
