@@ -22,11 +22,10 @@ typedef struct Rect {
 	Size  s;
 } Rect;
 
-int doit(Rect r, Rect r2)
+int doit(int o, char* s, Point p, Rect r, int last)
 {
-	printf("CALLED WITH {{%f %f} {%f %f}} {{%f %f} {%f %f}}\n",
-		r.o.x, r.o.y, r.s.h, r.s.w,
-		r2.o.x, r2.o.y, r2.s.h, r2.s.w);
+	printf("CALLED WITH %d %s {%f %f} {{%f %f} {%f %f}} %d\n",
+		o, s, p.x, p.y, r.o.x, r.o.y, r.s.h, r.s.w, last);
 	return 42;
 }
 
@@ -38,10 +37,8 @@ int main(void)
 	ffi_type rect_type;
 	ffi_cif cif;
 	ffi_type* arglist[6];
-	void **values;
-  int ret;
-
-  values = (void **)alloca(sizeof(void *) * 6);
+	void* values[6];
+	int r;
 
 	/*
 	 *  First set up FFI types for the 3 struct types
@@ -74,9 +71,18 @@ int main(void)
 	/*
 	 * Create a CIF
 	 */
-	arglist[0] = &rect_type;
-	arglist[1] = &rect_type;
-	arglist[2] = NULL;
+	arglist[0] = &ffi_type_sint;
+	arglist[1] = &ffi_type_pointer;
+	arglist[2] = &point_type;
+	arglist[3] = &rect_type;
+	arglist[4] = &ffi_type_sint;
+	arglist[5] = NULL;
+
+	r = ffi_prep_cif(&cif, FFI_DEFAULT_ABI,
+			5, &ffi_type_sint, arglist);
+	if (r != FFI_OK) {
+		abort();
+	}
 
 
 	/* And call the function through the CIF */
@@ -84,28 +90,20 @@ int main(void)
 	{
 	Point p = { 1.0, 2.0 };
 	Rect  r = { { 9.0, 10.0}, { -1.0, -2.0 } };
-	Rect  r2 = { { 9.0, 10.0}, { -1.0, -2.0 } };
 	int   o = 0;
 	int   l = 42;
 	char* m = "myMethod";
 	ffi_arg result;
 
-  Point *pp = (Point *)alloca(sizeof(Point));
-  memcpy(pp, &p, sizeof(Point));
-  Rect *pr = (Rect *)alloca(sizeof(Rect));
-  memcpy(pr, &r, sizeof(Rect));
-  Rect *pr2 = (Rect *)alloca(sizeof(Rect));
-  memcpy(pr2, &r2, sizeof(Rect));
+	values[0] = &o;
+	values[1] = &m;
+	values[2] = &p;
+	values[3] = &r;
+	values[4] = &l;
+	values[5] = NULL;
 
-	values[0] = pr;
-	values[1] = pr2;
-	values[3] = NULL;
-
-	ret = ffi_prep_cif(&cif, FFI_DEFAULT_ABI,
-			2, &ffi_type_sint, arglist);
-	if (ret != FFI_OK) {
-		abort();
-	}
+	printf("CALLING WITH %d %s {%f %f} {{%f %f} {%f %f}} %d\n",
+		o, m, p.x, p.y, r.o.x, r.o.y, r.s.h, r.s.w, l);
 
 	ffi_call(&cif, FFI_FN(doit), &result, values);
 
