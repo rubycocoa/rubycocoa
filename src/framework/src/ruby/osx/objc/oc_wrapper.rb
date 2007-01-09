@@ -38,6 +38,7 @@ module OSX
           margs << val
         end
       end
+      mname.chomp!(':') if args.size == 1
       return self.ocm_send(mname, *margs)
     end
 
