@@ -1,0 +1,36 @@
+<?xml version='1.0'?>
+<!DOCTYPE signatures SYSTEM "file://localhost/System/Library/DTDs/BridgeSupport.dtd">
+<signatures version='0.9'>
+  <cftype name='CVBufferRef'/> <!-- no gettypeid func yet (4768767) --> 
+  <cftype name='CVDisplayLinkRef' gettypeid_func='CVDisplayLinkGetTypeID'/>
+  <cftype name='CVOpenGLBufferPoolRef' gettypeid_func='CVOpenGLBufferPoolGetTypeID'/>
+  <cftype name='CVOpenGLTextureCacheRef' gettypeid_func='CVOpenGLTextureCacheGetTypeID'/>
+  <cftype name='CVPixelBufferPoolRef' gettypeid_func='CVPixelBufferPoolGetTypeID'/>
+  <struct name='CVSMPTETime'/>
+  <struct name='CVTime'/>
+  <struct name='CVTimeStamp'/>
+  <struct name='CVFillExtendedPixelsCallBackData'/>
+  <class name='CIContext'>
+    <method selector='render:toBitmap:rowBytes:bounds:format:colorSpace:'>
+      <method_arg index='1' type_modifier='in'/>
+    </method>
+  </class>
+  <class name='NSObject'>
+    <method selector='provideImageData:bytesPerRow:origin:size:userInfo:'>
+      <method_arg index='0' type_modifier='in'/>
+    </method>
+  </class>
+  <class name='CIPlugInRegistration'>
+    <method selector='load:'>
+      <method_arg index='0' type_modifier='in'/>
+    </method>
+  </class>
+  <class name='CIVector'>
+    <method class_method='true' selector='vectorWithValues:count:'>
+      <method_arg index='0' type_modifier='in' c_array_delimited_by_arg='1'/>
+    </method>
+    <method selector='initWithValues:count:'>
+      <method_arg index='0' type_modifier='in' c_array_delimited_by_arg='1'/>
+    </method>
+  </class>
+</signatures>
