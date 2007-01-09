@@ -1,3 +1,8 @@
+2007-01-09  Fujimoto Hisa  <hisa@fobj.com>
+
+	* framework/tool/gen_bridge_metadata.rb:
+	fix an error message when the header file path not found.
+
 2007-01-09  Laurent Sansonetti <lsansonetti@apple.com>
 
 	* framework/src/ruby/osx/objc/oc_import.rb:
