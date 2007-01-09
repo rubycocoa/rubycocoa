@@ -75,6 +75,15 @@ class TC_OCObjWrapper < Test::Unit::TestCase
     OSX.relaxed_syntax = old_relaxed_syntax
   end
 
+  def test_objc_send
+    # Some additional tests for objc_send.
+    assert_raises ArgumentError do 
+      OSX::NSObject.alloc.objc_send
+    end 
+    assert_nothing_raised { OSX::NSObject.alloc.objc_send :init }
+    assert_nothing_raised { OSX::NSArray.arrayWithObject(1).objc_send(:objectAtIndex, 0) }
+  end
+
   def test_missing_args
     assert_raises ArgumentError do
       NSURL.URLWithString_

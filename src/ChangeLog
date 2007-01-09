@@ -5,6 +5,11 @@
 
 2007-01-09  Laurent Sansonetti <lsansonetti@apple.com>
 
+	* framework/src/ruby/osx/objc/oc_wrapper.rb,
+	  tests/tc_wrapper.rb:
+	Raise an ArgumentError when trying to call #objc_send without arguments.
+	Added some test cases.
+
 	* framework/src/ruby/osx/objc/oc_import.rb:
 	Fixed a Ruby 1.8.2-only bug introduced by latest fix.
 

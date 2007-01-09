@@ -29,6 +29,7 @@ module OSX
     # For example, [myObj doSomething:arg1 withObject:arg2] would translate as:
     #   myObj.objc_send(:doSomething, arg1, :withObject, arg2)
     def objc_send(*args)
+      raise ArgumentError, "wrong number of arguments (#{args.length} for at least 1)" if args.empty?
       mname = ""
       margs = []
       args.each_with_index do |val, index|
