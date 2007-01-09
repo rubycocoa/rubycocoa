@@ -6,7 +6,7 @@ h1. RubyCocoa 1.0 Sneak Preview
 
 h2. Getting Started 
 
-最新の pre-release は、0.10.0 です。<a href="http://rubycocoa.sf.net/files/RubyCocoa-0.10.0-OSX10.4universal.dmg">バイナリのインストーラ</a>と<a href="http://rubycocoa.sf.net/files/rubycocoa-0.10.0.tgz">ソースコード</a>の両方が用意されています。
+最新の pre-release は、0.10.1 です。<a href="http://rubycocoa.sf.net/files/RubyCocoa-0.10.1-OSX10.4universal.dmg">バイナリのインストーラ</a>と<a href="http://rubycocoa.sf.net/files/rubycocoa-0.10.1.tgz">ソースコード</a>の両方が用意されています。
 
 ソースコードをダウンロードした場合は、自分で RubyCocoa をビルドする必要があります。
 
@@ -79,7 +79,7 @@ OSX::NSURL.alloc.initWithScheme('http', :host, 'www.apple.com', :path, '/macosx'
 OSX::NSURL.alloc.initWithScheme_host_path('http', 'www.apple.com', '/macosx')      # GOOD
 </pre>
 
-この変更に対する代替として、objc_sendメソッドが追加になりました(0.9.1以降)。
+この変更に対する代替として、objc_sendメソッドが追加になりました(0.10.0以降)。
 
 <pre>
 OSX::NSURL.alloc.objc_send(:initWithScheme, 'http',
