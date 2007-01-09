@@ -930,7 +930,7 @@ EOS
     die "Can't find framework '#{val}'" if path.nil?
     parent_path, name = path.scan(/^(.+)\/(\w+)\.framework$/)[0]
     headers_path = File.join(path, 'Headers')
-    die "Can't locate framework headers at '#{headers}'" unless File.exists?(headers_path)
+    die "Can't locate framework headers at '#{headers_path}'" unless File.exists?(headers_path)
     headers = Dir.glob(File.join(headers_path, '**', '*.h'))
     libpath = File.join(path, name)
     die "Can't locate framework library at '#{libpath}'" unless File.exists?(libpath)
