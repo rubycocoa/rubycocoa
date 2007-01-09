@@ -1,3 +1,11 @@
+2007-01-10  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* sample/MailDemo/English.lproj/InfoPlist.strings:
+	Removed inappropriate CFBundleShortVersionString tag.
+
+	* sample/ABPresence/Info.plist:
+	Added missing CFBundleShortVersionString tag.
+
 === RubyCocoa 0.10.1 ===
 
 2007-01-09  Fujimoto Hisa  <hisa@fobj.com>
