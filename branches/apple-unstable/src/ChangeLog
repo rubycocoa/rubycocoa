@@ -1,5 +1,10 @@
 2007-01-09  Laurent Sansonetti <lsansonetti@apple.com>
 
+	* framework/src/ruby/osx/objc/oc_import.rb,
+	  framework/src/objc/mdl_osxobjc.m:
+	Fixed a bug when overriding methods in a class that has not been imported yet,
+	by making sure the methods will be executed under the right scope.
+
 	* framework/src/ruby/osx/objc/oc_wrapper.rb:
 	Fixed a bug when using #objc_send to reach a method without argument.
 

@@ -578,10 +578,11 @@ class Object
           begin
             nsklass = OSX.const_get(nsklassname)
             raise NameError unless nsklass.ancestors.include?(OSX::NSObject)
-            method = instance_method(sym)
-            klass = self
-            nsklass.module_eval { define_method(sym) { |*a| (@proxy ||= klass.new).send(sym, *a) } } 
-          rescue NameError
+            method = self.instance_method(sym)
+            OSX.__rebind_umethod__(nsklass, method)
+            nsklass.module_eval { define_method(sym, method) } 
+          rescue NameError => e
+            p e
           end
         end
       end

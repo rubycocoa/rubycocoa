@@ -322,6 +322,24 @@ ocid_get_rbobj (id ocid)
   return result;
 }
 
+// FIXME: this is a silly hack.
+
+struct RB_METHOD {
+  VALUE klass, rklass;
+  // ...
+};
+
+static VALUE
+osx_mf_rebind_umethod(VALUE rcv, VALUE klass, VALUE umethod)
+{
+  struct RB_METHOD *data;
+
+  Data_Get_Struct(umethod, struct RB_METHOD, data);
+  data->rklass = klass;
+  
+  return Qnil;
+}
+
 /******************/
 
 void initialize_mdl_osxobjc()
@@ -361,6 +379,8 @@ void initialize_mdl_osxobjc()
 
   rb_define_module_function(mOSX, "objc_symbol_to_obj", osx_mf_objc_symbol_to_obj, 2);
 
+  rb_define_module_function(mOSX, "__rebind_umethod__", osx_mf_rebind_umethod, 2);
+  
   thread_switcher_start();
   
   initialize_bridge_support(mOSX);
