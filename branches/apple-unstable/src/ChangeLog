@@ -3,8 +3,9 @@
 	* sample/MailDemo/English.lproj/InfoPlist.strings:
 	Removed inappropriate CFBundleShortVersionString tag.
 
-	* sample/ABPresence/Info.plist:
-	Added missing CFBundleShortVersionString tag.
+	* sample/ABPresence/Info.plist,
+	  sample/MailDemo/Info.plist:
+	Added missing CFBundleShortVersionString tags.
 
 === RubyCocoa 0.10.1 ===
 
