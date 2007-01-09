@@ -542,10 +542,12 @@ class Object
     def _real_class_and_mod(klass)
       unless klass.ancestors.include?(OSX::Boxed)
         klassname = klass.name
-        if Object.included_modules.include?(OSX)
-          [klassname, Object]
-        elsif klassname[0..4] == 'OSX::' and (tokens = klassname.split(/::/)).size == 2 and klass.superclass != OSX::Boxed
-          [tokens[1], OSX]
+        unless klassname.empty?
+          if Object.included_modules.include?(OSX) and /::/.match(klassname).nil?
+            [klassname, Object]
+          elsif klassname[0..4] == 'OSX::' and (tokens = klassname.split(/::/)).size == 2 and klass.superclass != OSX::Boxed
+            [tokens[1], OSX]
+          end
         end
       end
     end
@@ -557,7 +559,9 @@ class Object
         # remove Ruby's class
         mod.instance_eval { remove_const nsklassname.intern }
         begin
-          subklass = OSX.ns_import nsklassname.intern
+          klass = OSX.ns_import nsklassname.intern
+          raise NameError if klass.nil?
+          subklass = klass
         rescue NameError
           # redefine subclass (looks not a Cocoa class)
           mod.const_set(nsklassname, subklass)
@@ -571,8 +575,9 @@ class Object
       if self != Object
         nsklassname, mod = _real_class_and_mod(self)
         if nsklassname
-          begin 
+          begin
             nsklass = OSX.const_get(nsklassname)
+            raise NameError unless nsklass.ancestors.include?(OSX::NSObject)
             method = instance_method(sym)
             klass = self
             nsklass.module_eval { define_method(sym) { |*a| (@proxy ||= klass.new).send(sym, *a) } } 
