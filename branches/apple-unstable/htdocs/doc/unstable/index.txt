@@ -8,7 +8,7 @@ For the moment, even we are still heavily working on it, the new code base is mo
 
 h2. Getting Started 
 
-The latest pre-release available is 0.10.1. Please check out either the <a href="http://rubycocoa.sf.net/files/RubyCocoa-0.10.1-OSX10.4universal.dmg">binary installer</a> or the <a href="http://rubycocoa.sf.net/files/rubycocoa-0.10.1.tgz">source tarball</a>.
+The latest pre-release available is 0.10.1. Please check out either the binary installer or the source tarball from <a href="http://sourceforge.net/project/showfiles.php?group_id=44114">the download page</a>.
 
 If you downloaded the source tarball, you need to build the project manually:
 
