@@ -1,3 +1,8 @@
+2007-01-10  Eloy Duran <eloy.de.enige@gmail.com>
+
+  * tests/tc_qtkit.rb:
+  Added an updated version of the qtkit test case from Jonathan Paisley.
+
 2007-01-10  Laurent Sansonetti <lsansonetti@apple.com>
 
 	* sample/MailDemo/English.lproj/InfoPlist.strings:
