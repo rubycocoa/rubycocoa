@@ -1,7 +1,20 @@
+2007-01-10  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* framework/bridge-support-exceptions/*.xml,
+	  framework/src/objc/BridgeSupportLexer.h,
+	  framework/src/objc/BridgeSupport.h,
+	  framework/src/objc/gen_dummy_handler.rb,
+	  framework/src/objc/BridgeSupport.m,
+	  framework/src/objc/BridgeSupport.gperf,
+	  framework/src/objc/mdl_objwrapper.m,
+	  framework/tool/gen_bridge_metadata.rb:
+	First refactoring pass: merged the method_[arg|retval] and func_[arg|retval]
+	elements. Removed some dead code.
+
 2007-01-10  Eloy Duran <eloy.de.enige@gmail.com>
 
-  * tests/tc_qtkit.rb:
-  Added an updated version of the qtkit test case from Jonathan Paisley.
+	* tests/tc_qtkit.rb:
+	Added an updated version of the qtkit test case from Jonathan Paisley.
 
 2007-01-10  Laurent Sansonetti <lsansonetti@apple.com>
 

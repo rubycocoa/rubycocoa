@@ -630,7 +630,7 @@ EOS
           element.add_attribute('selector', method.selector)
           element.add_attribute('class_method', true) if method.class_method?
           pointer_arg_indexes.each do |i|
-            arg_element = element.add_element('method_arg')
+            arg_element = element.add_element('arg')
             arg_element.add_attribute('index', i)
             arg_element.add_attribute('type_modifier', 'out')
           end
@@ -678,11 +678,11 @@ EOS
         element.add_attribute('name', function.name)
         element.add_attribute('variadic', true) if function.variadic?
         function.args.each do |arg|
-          element.add_element('function_arg').add_attribute('type', encoding_of(arg))
+          element.add_element('arg').add_attribute('type', encoding_of(arg))
         end
         rettype = encoding_of(function)
         if rettype != 'v'
-          retval_element = element.add_element('function_retval')
+          retval_element = element.add_element('retval')
           rettype = 'B' if returns_bool?(function) 
           retval_element.add_attribute('type', rettype) 
           retval_element.add_attribute('already_retained', true) \
@@ -699,7 +699,7 @@ EOS
           element = class_element.add_element('method')
           element.add_attribute('selector', method.selector)
           element.add_attribute('class_method', true) if method.class_method?
-          element.add_element('method_retval').add_attribute('type', 'B')
+          element.add_element('retval').add_attribute('type', 'B')
         end
       end
       @inf_protocols.sort.each do |protocol|
@@ -726,7 +726,7 @@ EOS
       class_name = class_element.attributes['name']
       # First replace the type attributes by the real encoding.
       class_element.elements.each('method') do |element|
-        retval_element = element.elements['method_retval']
+        retval_element = element.elements['retval']
         if retval_element
           type_name = retval_element.attributes['type']
           if type_name
@@ -735,7 +735,7 @@ EOS
             retval_element.add_attribute('type', type)
           end
         end
-        element.elements.each('method_arg') do |arg_element|
+        element.elements.each('arg') do |arg_element|
           type_name = arg_element.attributes['type']
           if type_name
             type = @types_encoding[type_name]
@@ -767,9 +767,9 @@ EOS
               end
             end
             # We can just append the retval/args, FIXME we need to solve potential conflicts
-            retval_element = orig_element.elements['method_retval']
+            retval_element = orig_element.elements['retval']
             orig_element.delete_element(retval_element) if retval_element
-            element.elements.each('method_arg') { |child| orig_element.add_element(child) }
+            element.elements.each('arg') { |child| orig_element.add_element(child) }
             orig_element.add_element(retval_element) if retval_element
           end
         end
@@ -912,12 +912,12 @@ EOS
         @opaques << elem.attributes['name']
       end
       doc.get_elements('/signatures/class/method').map do |elem|
-        retval_elem = elem.elements['method_retval']
+        retval_elem = elem.elements['retval']
         if retval_elem
           type = retval_elem.attributes['type']
           @method_exception_types << type if type
         end
-        elem.elements.each('method_arg') do |arg_elem|
+        elem.elements.each('arg') do |arg_elem|
           type = arg_elem.attributes['type']
           @method_exception_types << type if type
         end

@@ -272,7 +272,7 @@ ocm_ffi_dispatch(int argc, VALUE* argv, VALUE rcv, VALUE* result, struct _ocm_se
       int length_args_count = 0;
 
       for (i = 0; i < bs_method->argc; i++) {
-        struct bsMethodArg *arg;
+        struct bsArg *arg;
 
         arg = &bs_method->argv[i];
         // The given argument is a C array with a length determined by the value of another argument, like:
@@ -356,7 +356,7 @@ ocm_ffi_dispatch(int argc, VALUE* argv, VALUE rcv, VALUE* result, struct _ocm_se
         const char *octype_str;
         int octype;
         void *value;
-        struct bsMethodArg *bs_arg;
+        struct bsArg *bs_arg;
         BOOL is_c_array;
         int len;
 
@@ -527,7 +527,7 @@ ocm_ffi_dispatch(int argc, VALUE* argv, VALUE rcv, VALUE* result, struct _ocm_se
         VALUE rbval;
         const char *octype_str;
         int octype;
-        struct bsMethodArg *bs_arg;
+        struct bsArg *bs_arg;
 
         octype_str = ctx->argumentsTypes[i];
         if (octype_str[0] == '^')

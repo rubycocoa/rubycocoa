@@ -957,7 +957,7 @@ bridge_support_dispatcher (int argc, VALUE *argv, VALUE rcv)
     rb_fatal("Unrecognized function '%s'", func_name);
   if (func == NULL)
     rb_fatal("Retrieved func structure is invalid");
-  is_void = func->retval == _C_VOID;
+  is_void = func->retval->octype == _C_VOID;
 
   // check args count
   if (argc < func->argc) {
@@ -992,8 +992,8 @@ bridge_support_dispatcher (int argc, VALUE *argv, VALUE rcv)
       if (func->ffi.arg_types == NULL)
         rb_fatal("can't allocate memory");
       for (i = 0; i < argc; i++) {
-        func->ffi.arg_types[i] = i < func->argc ? ffi_type_for_octype(func->argv[i]) : &ffi_type_pointer;
-        DLOG("MDLOSX", "\tset arg #%d to type '%c' %p", i, func->argv[i], func->ffi.arg_types[i]);
+        func->ffi.arg_types[i] = i < func->argc ? ffi_type_for_octype(func->argv[i].octype) : &ffi_type_pointer;
+        DLOG("MDLOSX", "\tset arg #%d to type '%c' %p", i, func->argv[i].octype, func->ffi.arg_types[i]);
       }
       func->ffi.arg_types[argc] = NULL;
     }
@@ -1011,7 +1011,7 @@ bridge_support_dispatcher (int argc, VALUE *argv, VALUE rcv)
       ffi_type *ffi_type;
       size_t size;
  
-      octype = i < func->argc ? func->argv[i] : _C_ID;
+      octype = i < func->argc ? func->argv[i].octype : _C_ID;
       ffi_type = func->ffi.arg_types[i];
       size = ocdata_size(octype, "");
  
@@ -1033,14 +1033,14 @@ bridge_support_dispatcher (int argc, VALUE *argv, VALUE rcv)
 
   // prepare ret type/value
   if (func->ffi.ret_type == NULL) {
-    func->ffi.ret_type = ffi_type_for_octype(func->retval);
+    func->ffi.ret_type = ffi_type_for_octype(func->retval->octype);
     DLOG("MDLOSX", "\tset return to type %p", func->ffi.ret_type);
   }
   if (!is_void) {
-    size_t len = ocdata_size(func->retval, ""); 
-    DLOG("MDLOSX", "\tallocating %d bytes for storing the result of type %d", len, func->retval);
+    size_t len = ocdata_size(func->retval->octype, ""); 
+    DLOG("MDLOSX", "\tallocating %d bytes for storing the result of type %d", len, func->retval->octype);
     if (len == 0)
-      rb_bug("ocdata_size(%s) is 0", func->retval);
+      rb_bug("ocdata_size(%s) is 0", func->retval->octype);
     retval = alloca(len);
     if (retval == NULL)
       rb_fatal("Can't allocate memory");
@@ -1076,10 +1076,10 @@ bridge_support_dispatcher (int argc, VALUE *argv, VALUE rcv)
   else {
     DLOG("MDLOSX", "\tresult: %p", retval);
 
-    rb_value = nsresult_to_rbresult(func->retval, (const void *)retval, func->name, pool);
+    rb_value = nsresult_to_rbresult(func->retval->octype, (const void *)retval, func->name, pool);
     // retain the new ObjC object, that will be released once the Ruby object is collected
-    if (func->retval == _C_ID) {
-      if (func->retval_should_be_retained && !OBJCID_DATA_PTR(rb_value)->retained) {
+    if (func->retval->octype == _C_ID) {
+      if (func->retval->should_be_retained && !OBJCID_DATA_PTR(rb_value)->retained) {
         DLOG("MDLOSX", "\tretaining objc value");
         [OBJCID_ID(rb_value) retain];
       }
@@ -1096,6 +1096,8 @@ bridge_support_dispatcher (int argc, VALUE *argv, VALUE rcv)
   return rb_value;
 }
 
+static struct bsRetval default_func_retval = { bsCArrayArgUndefined, -1, _C_VOID, NO };  
+
 static VALUE
 osx_load_bridge_support_file (VALUE mOSX, VALUE path)
 {
@@ -1105,8 +1107,7 @@ osx_load_bridge_support_file (VALUE mOSX, VALUE path)
   struct bsClass *    klass;
   struct bsMethod *   method;
   unsigned int        i;
-  int                 func_args[MAX_ARGS];
-  struct bsMethodArg  method_args[MAX_ARGS];
+  struct bsArg        args[MAX_ARGS];
   char *              protocol_name;
 
   cpath = STR2CSTR(path);
@@ -1330,47 +1331,9 @@ osx_load_bridge_support_file (VALUE mOSX, VALUE path)
 
         func->name = func_name;
         func->is_variadic = get_boolean_attribute(reader, "variadic", NO);
-        func->retval = _C_VOID;
-        func->retval_should_be_retained = NO;
         func->argc = 0;
-      }
-      break;
-
-      case BS_XML_FUNCTION_RETVAL: {
-        if (func == NULL) {
-          DLOG("MDLOSX", "Function return value defined outside a function, skipping...");
-        }
-        else {
-          char *  return_type;
-
-          return_type = get_attribute(reader, "type");
-          if (return_type != NULL) {
-            func->retval = to_octype(return_type);
-            func->retval_should_be_retained = func->retval == _C_ID 
-              ? !get_boolean_attribute(reader, "already_retained", NO) : YES;
-            free(return_type);
-          }
-        } 
-      }
-      break;
-
-      case BS_XML_FUNCTION_ARG: {
-        if (func == NULL) {
-          DLOG("MDLOSX", "Function argument defined outside a function, skipping...");
-        }
-        else if (func->argc >= MAX_ARGS) {
-          DLOG("MDLOSX", "Maximum number of arguments reached for function '%s' (%d), skipping...", func->name, MAX_ARGS);
-        }
-        else {
-          char *  arg_type;
-          int     type;
-        
-          arg_type = get_attribute_and_check(reader, "type");
-          type = to_octype(arg_type);
-          free (arg_type);
-        
-          func_args[func->argc++] = type;
-        }
+        func->argv = NULL;
+        func->retval = NULL;
       }
       break;
 
@@ -1395,82 +1358,120 @@ osx_load_bridge_support_file (VALUE mOSX, VALUE path)
       }
       break;
 
-      case BS_XML_METHOD_ARG: {
-        if (method == NULL) {
-          DLOG("MDLOSX", "Method argument defined outside a method, skipping...");
+      case BS_XML_ARG: {
+        if (func != NULL) {
+          if (func->argc >= MAX_ARGS) {
+            DLOG("MDLOSX", "Maximum number of arguments reached for function '%s' (%d), skipping...", func->name, MAX_ARGS);
+          }
+          else {
+
+          }
         }
-        else if (method->argc >= MAX_ARGS) {
-          DLOG("MDLOSX", "Maximum number of arguments reached for method '%s' (%d), skipping...", method->selector, MAX_ARGS);
+        if (func != NULL || method != NULL) {
+          int * argc;
+
+          argc = func != NULL ? &func->argc : &method->argc;
+
+          if (*argc >= MAX_ARGS) {
+            if (func != NULL)
+              DLOG("MDLOSX", "Maximum number of arguments reached for function '%s' (%d), skipping...", func->name, MAX_ARGS);
+            else
+              DLOG("MDLOSX", "Maximum number of arguments reached for method '%s' (%d), skipping...", method->selector, MAX_ARGS);
+          } 
+          else {
+            char *  type_modifier;
+            struct bsArg * arg; 
+            char *  type;
+   
+            arg = &args[(*argc)++];
+ 
+            arg->index = method != NULL ? atoi(get_attribute_and_check(reader, "index")) : -1;
+    
+            type_modifier = get_attribute(reader, "type_modifier");
+            if (type_modifier != NULL) {
+              if (strcmp(type_modifier, "in") == 0)
+                arg->type_modifier = bsTypeModifierIn;
+              else if (strcmp(type_modifier, "out") == 0)       
+                arg->type_modifier = bsTypeModifierOut;
+              else if (strcmp(type_modifier, "inout") == 0)   
+                arg->type_modifier = bsTypeModifierInout;
+              else {
+                DLOG("MDLOSX", "Given type modifier '%s' is invalid, default'ing to 'out'", type_modifier);
+                arg->type_modifier = bsTypeModifierOut;
+              }
+              free(type_modifier);
+            }
+            else {
+              arg->type_modifier = bsTypeModifierOut;
+            } 
+   
+            arg->null_accepted = get_boolean_attribute(reader, "null_accepted", YES);
+            get_c_ary_type_attribute(reader, &arg->c_ary_type, &arg->c_ary_type_value); 
+  
+            type = get_attribute(reader, "type");
+            if (type != NULL) {
+              arg->octype = to_octype(type);
+              free(type);
+            }
+            else {
+              arg->octype = -1;
+            }          
+          }
         }
         else {
-          char *  type_modifier;
-          struct bsMethodArg * arg; 
-          char *  type;
- 
-          arg = &method_args[method->argc++];
-
-          arg->index = atoi(get_attribute_and_check(reader, "index"));
-  
-          type_modifier = get_attribute(reader, "type_modifier");
-          if (type_modifier != NULL) {
-            if (strcmp(type_modifier, "in") == 0)
-              arg->type_modifier = bsTypeModifierIn;
-            else if (strcmp(type_modifier, "out") == 0)       
-              arg->type_modifier = bsTypeModifierOut;
-            else if (strcmp(type_modifier, "inout") == 0)   
-              arg->type_modifier = bsTypeModifierInout;
-            else {
-              DLOG("MDLOSX", "Given type modifier '%s' is invalid, default'ing to 'out'", type_modifier);
-              arg->type_modifier = bsTypeModifierOut;
-            }
-            free(type_modifier);
-          }
-          else {
-            arg->type_modifier = bsTypeModifierOut;
-          } 
- 
-          arg->null_accepted = get_boolean_attribute(reader, "null_accepted", YES);
-          get_c_ary_type_attribute(reader, &arg->c_ary_type, &arg->c_ary_type_value); 
-
-          type = get_attribute(reader, "type");
-          if (type != NULL) {
-            arg->octype = to_octype(type);
-            free(type);
-          }
-          else {
-            arg->octype = -1;
-          }          
+          DLOG("MDLOSX", "Argument defined outside of a function/method, skipping...");
         }
       }
       break;
 
-      case BS_XML_METHOD_RETVAL: {
-        if (method == NULL) {
-          DLOG("MDLOSX", "Method return value defined outside a method, skipping...");
-        }
-        else if (method->retval != NULL) {
-          DLOG("MDLOSX", "Method '%s' return value defined more than once, skipping...", method->selector);
-        }
-        else {
-          bsCArrayArgType type;
-          int value;
-          char *return_type;
-
-          get_c_ary_type_attribute(reader, &type, &value);
-
-          method->retval = (struct bsMethodRetval *)malloc(sizeof(struct bsMethodRetval));
-          ASSERT_ALLOC(method->retval);
-          
-          method->retval->c_ary_type = type;
-          method->retval->c_ary_type_value = value;
-          
-          return_type = get_attribute(reader, "type");
-          if (return_type != NULL) {
-            method->retval->octype = to_octype(return_type);
-            free(return_type);
+      case BS_XML_RETVAL: {
+        //if (method == NULL) {
+        //  DLOG("MDLOSX", "Method return value defined outside a method, skipping...");
+        //}
+        if (func != NULL || method != NULL) {
+          if (func != NULL && func->retval != NULL) {
+            DLOG("MDLOSX", "Function '%s' return value defined more than once, skipping...", func->name);
+          }
+          else if (method != NULL && method->retval != NULL) {
+            DLOG("MDLOSX", "Method '%s' return value defined more than once, skipping...", method->selector);
           }
           else {
-            method->retval->octype = -1;
+            bsCArrayArgType type;
+            int value;
+            char *return_type;
+            struct bsRetval *retval;  
+
+            get_c_ary_type_attribute(reader, &type, &value);
+  
+            retval = (struct bsRetval *)malloc(sizeof(struct bsRetval));
+            ASSERT_ALLOC(retval);
+            
+            retval->c_ary_type = type;
+            retval->c_ary_type_value = value;
+            
+            return_type = get_attribute(reader, "type");
+            if (return_type != NULL) {
+              retval->octype = to_octype(return_type);
+              free(return_type);
+            }
+            else {
+              retval->octype = -1;
+            }
+
+            if (func != NULL) {
+              if (retval->octype != -1) {
+                retval->should_be_retained = retval->octype == _C_ID
+                  ? !get_boolean_attribute(reader, "already_retained", NO) : YES;
+                func->retval = retval;
+              }
+              else {
+                DLOG("MDLOSX", "Function '%s' return value defined without type, using default return type...", func->name);
+                free(retval);
+              }
+            }
+            else {
+              method->retval = retval;
+            }
           }
         }
       }
@@ -1555,7 +1556,7 @@ osx_load_bridge_support_file (VALUE mOSX, VALUE path)
         all_args_ok = YES;
   
         for (i = 0; i < func->argc; i++) {
-          if (func_args[i] == -1) {
+          if (args[i].octype == -1) {
             DLOG("MDLOSX", "Function '%s' argument #%d is not recognized, skipping...", func->name, i);
             all_args_ok = NO;
             break;
@@ -1565,13 +1566,14 @@ osx_load_bridge_support_file (VALUE mOSX, VALUE path)
         if (all_args_ok) {
           if (func->argc > 0) {
             size_t len;
-  
-            len = sizeof(int) * func->argc;
-  
-            func->argv = (int *)malloc(len);
+    
+            len = sizeof(struct bsArg) * func->argc;
+            func->argv = (struct bsArg *)malloc(len);
             ASSERT_ALLOC(func->argv);
-            memcpy(func->argv, func_args, len);
-          }  
+            memcpy(func->argv, args, len);
+          }
+          if (func->retval == NULL)
+            func->retval = &default_func_retval;
         } 
         else {
           rb_undef_method(mOSX, func->name);
@@ -1587,10 +1589,10 @@ osx_load_bridge_support_file (VALUE mOSX, VALUE path)
         if (method->argc > 0) {
           size_t len;
     
-          len = sizeof(struct bsMethodArg) * method->argc;
-          method->argv = (struct bsMethodArg *)malloc(len);
+          len = sizeof(struct bsArg) * method->argc;
+          method->argv = (struct bsArg *)malloc(len);
           ASSERT_ALLOC(method->argv);
-          memcpy(method->argv, method_args, len);
+          memcpy(method->argv, args, len);
         }
 
         method = NULL;
@@ -1741,7 +1743,7 @@ find_bs_method(id klass, const char *selector, BOOL is_class_method)
   return NULL;
 }
 
-struct bsMethodArg *
+struct bsArg *
 find_bs_method_arg_by_index(struct bsMethod *method, unsigned index)
 {
   unsigned i;
@@ -1756,7 +1758,7 @@ find_bs_method_arg_by_index(struct bsMethod *method, unsigned index)
   return NULL;
 }
 
-struct bsMethodArg *
+struct bsArg *
 find_bs_method_arg_by_c_array_len_arg_index(struct bsMethod *method, unsigned index)
 {
   unsigned i;
@@ -1793,7 +1795,7 @@ __inspect_bs_method(char *key, struct bsMethod *value, void *ctx)
     printf("            ignored (suggestion: '%s')\n", value->suggestion == NULL ? "n/a" : value->suggestion);
 
   for (i = 0; i < value->argc; i++) {
-    struct bsMethodArg *arg;
+    struct bsArg *arg;
 
     arg = &value->argv[i];
 
@@ -1840,7 +1842,7 @@ __inspect_bs_function(char *key, struct bsFunction *value, void *ctx)
     printf("    variadic\n");
 
   for (i = 0; i < value->argc; i++)
-    printf("    arg #%d type %d\n", i, value->argv[i]);
+    printf("    arg #%d type %d\n", i, value->argv[i].octype);
 
   return ST_CONTINUE;
 }
