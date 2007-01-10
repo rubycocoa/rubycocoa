@@ -1333,7 +1333,7 @@ osx_load_bridge_support_file (VALUE mOSX, VALUE path)
         func->is_variadic = get_boolean_attribute(reader, "variadic", NO);
         func->argc = 0;
         func->argv = NULL;
-        func->retval = NULL;
+        func->retval = &default_func_retval;
       }
       break;
 
@@ -1425,11 +1425,8 @@ osx_load_bridge_support_file (VALUE mOSX, VALUE path)
       break;
 
       case BS_XML_RETVAL: {
-        //if (method == NULL) {
-        //  DLOG("MDLOSX", "Method return value defined outside a method, skipping...");
-        //}
         if (func != NULL || method != NULL) {
-          if (func != NULL && func->retval != NULL) {
+          if (func != NULL && func->retval != NULL && func->retval != &default_func_retval) {
             DLOG("MDLOSX", "Function '%s' return value defined more than once, skipping...", func->name);
           }
           else if (method != NULL && method->retval != NULL) {
@@ -1473,6 +1470,9 @@ osx_load_bridge_support_file (VALUE mOSX, VALUE path)
               method->retval = retval;
             }
           }
+        }
+        else {
+          DLOG("MDLOSX", "Return value defined outside a function/method, skipping...");
         }
       }
       break;
