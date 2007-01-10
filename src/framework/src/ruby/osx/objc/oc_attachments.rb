@@ -89,20 +89,6 @@ module OSX
   end
   OSX::NSData.class_eval 'include RCDataAttachment'
 
-
-  # attachment module for NSImage group
-  module RCImageAttachment
-    def focus
-      lockFocus
-      begin
-        yield
-      ensure
-        unlockFocus
-      end
-    end
-  end
-  OSX::NSImage.class_eval 'include RCImageAttachment'
-
   # attachment module for NSIndexSet group
   module RCIndexSetAttachment
     def to_a
