@@ -3,22 +3,22 @@
 <signatures version='0.9'>
   <class name='WebHistory'>
     <method selector='loadFromURL:error:'>
-      <method_arg index='1' type_modifier='out'/>
+      <arg index='1' type_modifier='out'/>
     </method>
     <method selector='saveToURL:error:'>
-      <method_arg index='1' type_modifier='out'/>
+      <arg index='1' type_modifier='out'/>
     </method>
   </class>
   <class name='NSObject'>
     <method selector='webPlugInCallJava:isStatic:returnType:method:arguments:callingURL:exceptionDescription:'>
-      <method_arg index='4' type_modifier='out'/>
-      <method_arg index='6' type_modifier='out'/>
+      <arg index='4' type_modifier='out'/>
+      <arg index='6' type_modifier='out'/>
     </method>
     <method class_method='true' selector='webScriptNameForKey:'>
-      <method_arg index='0' type_modifier='out'/>
+      <arg index='0' type_modifier='out'/>
     </method>
     <method class_method='true' selector='isKeyExcludedFromWebScript:'>
-      <method_arg index='0' type_modifier='out'/>
+      <arg index='0' type_modifier='out'/>
     </method>
   </class>
 </signatures>

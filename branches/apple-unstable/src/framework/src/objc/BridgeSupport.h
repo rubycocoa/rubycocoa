@@ -30,26 +30,6 @@
 
 #import "ffi.h"
 
-struct bsFunction {
-  char *  name;
-  int     argc;
-  int *   argv;
-  int     retval;
-  BOOL    retval_should_be_retained;
-  void *  sym;
-  BOOL    is_variadic;
-  struct {
-    ffi_type ** arg_types;
-    ffi_type *  ret_type;
-  } ffi;
-};
-
-struct bsClass {
-  char *              name;
-  struct st_table *   class_methods;
-  struct st_table *   instance_methods;
-};
-
 typedef enum {
     bsTypeModifierIn,
     bsTypeModifierOut,
@@ -63,7 +43,9 @@ typedef enum {
     bsCArrayArgDelimitedByNull
 } bsCArrayArgType;
 
-struct bsMethodArg {
+#define MAX_ARGS 128
+
+struct bsArg {
   unsigned          index;
   bsTypeModifier    type_modifier;
   bsCArrayArgType   c_ary_type;
@@ -72,10 +54,30 @@ struct bsMethodArg {
   int               octype;
 };
 
-struct bsMethodRetval {
+struct bsRetval {
   bsCArrayArgType   c_ary_type;
   int               c_ary_type_value;  // not set if arg_type is bsCArrayArgUndefined
   int               octype;
+  BOOL              should_be_retained;
+};
+
+struct bsFunction {
+  char *            name;
+  int               argc;
+  struct bsArg *    argv;
+  struct bsRetval * retval;
+  void *            sym;
+  BOOL              is_variadic;
+  struct {
+    ffi_type ** arg_types;
+    ffi_type *  ret_type;
+  } ffi;
+};
+
+struct bsClass {
+  char *              name;
+  struct st_table *   class_methods;
+  struct st_table *   instance_methods;
 };
 
 struct bsMethod {
@@ -84,9 +86,8 @@ struct bsMethod {
   BOOL    ignore;
   char *  suggestion;   // only if ignore is true
   int     argc;
-#define MAX_ARGS 128
-  struct bsMethodArg *      argv;
-  struct bsMethodRetval *   retval; // can be NULL
+  struct bsArg *    argv;
+  struct bsRetval * retval; // can be NULL
 };
 
 struct bsInformalProtocolMethod {
@@ -154,8 +155,8 @@ struct bsCFType *find_bs_cf_type_by_encoding(const char *encoding);
 struct bsCFType *find_bs_cf_type_by_type_id(CFTypeID type_id);
 
 struct bsMethod *find_bs_method(id klass, const char *selector, BOOL is_class_method);
-struct bsMethodArg *find_bs_method_arg_by_index(struct bsMethod *method, unsigned index);
-struct bsMethodArg *find_bs_method_arg_by_c_array_len_arg_index(struct bsMethod *method, unsigned index);
+struct bsArg *find_bs_method_arg_by_index(struct bsMethod *method, unsigned index);
+struct bsArg *find_bs_method_arg_by_c_array_len_arg_index(struct bsMethod *method, unsigned index);
 
 struct bsInformalProtocolMethod *find_bs_informal_protocol_method(const char *selector, BOOL is_class_method);
 

@@ -12,7 +12,7 @@
   <struct name='ABActionCallbacks'/>
   <class name='ABIdentityPicker'>
     <method selector='beginSheetModalForWindow:modalDelegate:didEndSelector:contextInfo:'>
-      <method_arg index='3' type_modifier='in'/>
+      <arg index='3' type_modifier='in'/>
     </method>
   </class>
 </signatures>
