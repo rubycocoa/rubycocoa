@@ -37,8 +37,8 @@ module OSX
     'ImageKit' => '/System/Library/Frameworks/Quartz.framework/Frameworks/ImageKit.framework'
   }
 
-  def require_framework(framework)
-    bundle, path = if framework[0] == ?/
+  def _bundle_path_for_framework(framework)
+    if framework[0] == ?/
       [OSX::NSBundle.bundleWithPath(framework), framework]
     elsif path = QUICK_FRAMEWORKS[framework]
       [OSX::NSBundle.bundleWithPath(path), path]
@@ -52,7 +52,11 @@ module OSX
         [OSX::NSBundle.bundleWithPath(path), path]
       end
     end
+  end
+  module_function :_bundle_path_for_framework
 
+  def require_framework(framework)
+    bundle, path = _bundle_path_for_framework(framework)
     unless bundle.nil?
       return false if bundle.isLoaded
       if bundle.oc_load
@@ -63,6 +67,23 @@ module OSX
     raise LoadError, "Can't locate framework '#{framework}'"
   end
   module_function :require_framework
+
+  def framework_loaded?(framework)
+    bundle, path = _bundle_path_for_framework(framework)
+    unless bundle.nil?
+      loaded = bundle.isLoaded
+      unless loaded
+        # CoreFoundation/Foundation are linked at built-time.
+        id = bundle.bundleIdentifier
+        loaded = (id.isEqualToString('com.apple.CoreFoundation') or 
+                  id.isEqualToString('com.apple.Foundation'))
+      end
+      loaded
+    else
+      raise ArgumentError, "Can't locate framework '#{framework}'"
+    end
+  end
+  module_function :framework_loaded?
 
   def load_bridge_support_signatures(framework)
     # First, look into the pre paths.  
@@ -593,8 +614,4 @@ class Object
     end
   end
 end
-
-# Load the high-level frameworks.
-OSX.require_framework('CoreGraphics')
-OSX.load_bridge_support_signatures('AppKit')
 

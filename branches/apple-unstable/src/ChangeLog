@@ -1,5 +1,31 @@
 2007-01-10  Laurent Sansonetti <lsansonetti@apple.com>
 
+	* framework/RubyCocoa.xcodeproj/project.pbxproj,
+	  framework/src/ruby/osx/addressbook.rb,
+	  framework/src/ruby/osx/foundation.rb,
+	  framework/src/ruby/osx/objc/cocoa.rb,
+	  framework/src/ruby/osx/objc/oc_types.rb,
+	  framework/src/ruby/osx/objc/cocoa_macros.rb,
+	  framework/src/ruby/osx/objc/oc_import.rb,
+	  framework/src/ruby/osx/objc/ruby_addition.rb,
+	  framework/src/ruby/osx/objc/oc_attachments.rb,
+	  framework/src/ruby/osx/objc/oc_types_appkit.rb,
+	  framework/src/ruby/osx/objc/cocoa_macros_appkit.rb,
+	  framework/src/ruby/osx/objc/addressbook.rb,
+	  framework/src/ruby/osx/objc/oc_attachments_appkit.rb,
+	  tests/tc_bs.rb,
+	  lib/osx/addressbook.rb,
+	  lib/osx/cocoa.rb,
+	  lib/osx/foundation.rb,
+	  lib/osx/appkit.rb:
+	- Now RubyCocoa.framework doesn't link against AppKit anymore. Using osx/cocoa
+	  will load AppKit and CoreGraphics dynamically. Using osx/foundation just 
+	  link against CoreFoundation and Foundation ;
+	- Deprecated the osx/addressbook script (now that AddressBook is supported by 
+	  a BridgeSupport metadata file) ;
+	- Added new API, OSX.framework_loaded?, to know if a given framework has been
+	  loaded or not. Added test cases.
+
 	* framework/bridge-support-exceptions/*.xml,
 	  framework/src/objc/BridgeSupportLexer.h,
 	  framework/src/objc/BridgeSupport.h,
