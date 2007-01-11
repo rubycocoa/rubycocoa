@@ -1,3 +1,11 @@
+2007-01-11  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* framework/src/objc/BridgeSupport.m,
+	  framework/tool/gen_bridge_metadata.rb,
+	  tests/tc_types.rb:
+	Properly describe enumerations with a FourCharCode type value. Added a new
+	test case.
+
 2007-01-10  Laurent Sansonetti <lsansonetti@apple.com>
 
 	* framework/RubyCocoa.xcodeproj/project.pbxproj,

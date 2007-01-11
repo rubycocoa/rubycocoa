@@ -151,4 +151,9 @@ class TC_Types < Test::Unit::TestCase
     assert_kind_of(OSX::Boxed, z)
     assert_kind_of(OSX::NSString, OSX::NSZoneName(z))
   end
+
+  def test_four_char_code_enums
+    OSX.require_framework('AddressBook')
+    assert_equal(1633841264, OSX::KEventClassABPeoplePicker)
+  end
 end
