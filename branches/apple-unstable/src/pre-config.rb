@@ -42,7 +42,7 @@ if @config['build-universal'] == 'yes'
   raise "ERROR: library \"#{libruby_sdk}\" does not exists." unless File.exist?(libruby_sdk)
 end
 
-if File.exists?('/usr/include/libxml2') and File.exists?('/usr/lib/libxml2.dylib')
+if File.exist?('/usr/include/libxml2') and File.exist?('/usr/lib/libxml2.dylib')
   cflags << ' -I/usr/include/libxml2 -DHAS_LIBXML2 '
   ldflags << ' -lxml2 '
 else
@@ -52,8 +52,8 @@ end
 raise 'ERROR: ruby must be built as a shared library' if Config::CONFIG["ENABLE_SHARED"] != 'yes'
 
 # Add the libffi library to the build process.
-unless File.exists?('/usr/lib/libffi.a')
-  if File.exists?('/usr/local/lib/libffi.a') and File.exists?('/usr/local/include/ffi')
+unless File.exist?('/usr/lib/libffi.a')
+  if File.exist?('/usr/local/lib/libffi.a') and File.exist?('/usr/local/include/ffi')
     cflags << ' -I/usr/local/include/ffi '
     ldflags << ' -L/usr/local/lib '
   else

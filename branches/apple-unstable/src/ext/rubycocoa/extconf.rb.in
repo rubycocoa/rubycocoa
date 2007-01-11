@@ -1,6 +1,6 @@
 require 'rbconfig'
 # Xcode 2.2 moved ruby.h 
-unless File.exists? File.join(Config::CONFIG['archdir'], 'ruby.h')
+unless File.exist? File.join(Config::CONFIG['archdir'], 'ruby.h')
   Config::CONFIG['archdir'] = Config::CONFIG['archdir'].sub(/powerpc/, 'universal')
 end
 

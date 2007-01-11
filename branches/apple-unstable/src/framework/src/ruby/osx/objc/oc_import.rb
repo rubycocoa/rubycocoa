@@ -46,7 +46,7 @@ module OSX
       path = FRAMEWORK_PATHS.map { |dir| 
         File.join(dir, "#{framework}.framework") 
       }.find { |path| 
-        File.exists?(path) 
+        File.exist?(path) 
       }
       if path
         [OSX::NSBundle.bundleWithPath(path), path]
@@ -90,7 +90,7 @@ module OSX
     framework_name = framework[0] == ?/ ? File.basename(framework, '.framework') : framework
     PRE_SIGN_PATHS.each do |dir|
       path = File.join(dir, framework_name + '.xml')
-      if File.exists?(path)
+      if File.exist?(path)
         load_bridge_support_file(path)
         return true
       end
@@ -99,7 +99,7 @@ module OSX
     # A path to a framework, let's search for BridgeSupport.xml inside the Resources folder.
     if framework[0] == ?/
       path = File.join(framework, 'Resources', 'BridgeSupport.xml')
-      if File.exists?(path)
+      if File.exist?(path)
         load_bridge_support_file(path)
         return true
       end
@@ -109,9 +109,9 @@ module OSX
     # Let's try to localize the framework and see if it contains the metadata.
     FRAMEWORK_PATHS.each do |dir|
       path = File.join(dir, "#{framework}.framework")
-      if File.exists?(path)
+      if File.exist?(path)
         path = File.join(path, 'Resources', 'BridgeSupport.xml')
-        if File.exists?(path)
+        if File.exist?(path)
           load_bridge_support_file(path)
           return true
         end
@@ -122,7 +122,7 @@ module OSX
     # We can still look into the general metadata directories. 
     SIGN_PATHS.each do |dir|
       path = File.join(dir, "#{framework}.xml")
-      if File.exists?(path)
+      if File.exist?(path)
         load_bridge_support_file(path)
         return true
       end

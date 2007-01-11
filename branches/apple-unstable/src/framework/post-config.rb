@@ -35,12 +35,12 @@ if @config['gen-bridge-support'] != 'no'
   ].each do |path, special_flags|
     framework = File.basename(path, '.framework')
     out = "bridge-support/#{framework}.xml"
-    if !File.exists?(out) or File.size(out) == 0 or File.mtime('tool/gen_bridge_metadata.rb') > File.mtime(out)
+    if !File.exist?(out) or File.size(out) == 0 or File.mtime('tool/gen_bridge_metadata.rb') > File.mtime(out)
       generator = "#{@config['ruby-prog']} tool/gen_bridge_metadata.rb"
       generator << " #{special_flags}" if special_flags
       generator << " -f #{path}"
       exceptions = "bridge-support-exceptions/#{framework}.xml"
-      generator << " -e #{exceptions}" if File.exists?(exceptions)
+      generator << " -e #{exceptions}" if File.exist?(exceptions)
       generator << " -o #{out}"
       $stderr.puts "create #{out} ..."
       command(generator) 

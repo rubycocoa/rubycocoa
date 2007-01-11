@@ -30,12 +30,12 @@ headerdoc.strip!
 # Checking args.
 die "Usage: #{__FILE__} <metadata-file> <header-path>" if ARGV.length < 2
 md_path, header_paths = ARGV.first, ARGV[1..-1]
-die "Given metadata path '#{md_path}' doesn't exist." unless File.exists?(md_path)
-header_paths.each { |p| die "Given header path '#{p}' doesn't exist." unless File.exists?(p) }
+die "Given metadata path '#{md_path}' doesn't exist." unless File.exist?(md_path)
+header_paths.each { |p| die "Given header path '#{p}' doesn't exist." unless File.exist?(p) }
 
 # Creating the temporary headerdoc output directory.
 tmp_out_dir = File.join(Dir.tmpdir, 'headerdoc-out')
-if File.exists?(tmp_out_dir)
+if File.exist?(tmp_out_dir)
   FileUtils.rm_rf(tmp_out_dir)
 end
 FileUtils.mkdir_p(tmp_out_dir)
