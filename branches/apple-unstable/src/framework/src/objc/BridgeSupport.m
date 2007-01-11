@@ -1184,31 +1184,16 @@ osx_load_bridge_support_file (VALUE mOSX, VALUE path)
           DLOG("MDLOSX", "Enum '%s' already registered, skipping...", enum_name);
         }
         else {
-          char *  enum_type;
           char *  enum_value;        
           VALUE   value;
 
-          value = Qnil;
           enum_value = get_attribute_and_check(reader, "value");
-          enum_type = get_attribute(reader, "type");
-          if (enum_type != NULL) {
-            if (strcmp(enum_type, "FourCharCode") == 0) {
-              if (strlen(enum_value) != 4) {
-                DLOG("MDLOSX", "Enum '%s' has an invalid FourCharCode value '%s', ignoring...", enum_name, enum_value);
-              }
-              else {
-                FourCharCode code = 
-                  ((enum_value[0] << 24) | enum_value[1] << 16 | enum_value[2] << 8 | enum_value[3]);
-                value = INT2NUM(code);
-              }
-            }
-            else {
-              DLOG("MDLOSX", "Enum '%s' has an unknown type '%s', ignoring...", enum_name, enum_type);
-            }
-            free(enum_type);
+          if (strlen(enum_value) == 6 && enum_value[0] == '\'' && enum_value[5] == '\'') {
+            FourCharCode code = 
+              ((enum_value[1] << 24) | enum_value[2] << 16 | enum_value[3] << 8 | enum_value[4]);
+            value = INT2NUM(code);
           }
-
-          if (NIL_P(value)) {
+          else {
             value = strchr(enum_value, '.') != NULL
               ? rb_float_new(rb_cstr_to_dbl(enum_value, 1))
               : rb_cstr_to_inum(enum_value, 10, 1); 

@@ -295,6 +295,20 @@
 
 @end
 
+#import <AddressBook/ABPeoplePickerC.h>
+
+@interface TestFourCharCode : NSObject
+@end
+
+@implementation TestFourCharCode
+
++ (int)kEventClassABPeoplePickerValue
+{
+  return kEventClassABPeoplePicker;
+}
+
+@end
+
 void Init_objc_test(){
   // dummy initializer for ruby's `require'
 }

@@ -365,11 +365,10 @@ class BridgeSupportGenerator
 
   def collect_enums
     @resolved_enums ||= {} 
-    @resolved_4cc_enums = {}
     lines = []
     @enums.each do |name, val|
-      if md = /^'(....)'$/.match(val)
-        @resolved_4cc_enums[name] = md[1]
+      if /^'....'$/.match(val)
+        @resolved_enums[name] = val
       else 
         lines << "printf(#{name} < 0 ? \"%s: %d\\n\" : \"%s: %u\\n\", \"#{name}\", #{name});" 
       end
@@ -686,12 +685,6 @@ EOS
         element.add_attribute('name', enum)
         element.add_attribute('value', value)
       end
-      @resolved_4cc_enums.sort { |x, y| x[0] <=> y[0] }.each do |enum, value|
-        element = root.add_element('enum')
-        element.add_attribute('name', enum)
-        element.add_attribute('value', value)
-        element.add_attribute('type', 'FourCharCode')
-      end 
       @functions.uniq.sort.each do |function|
         element = root.add_element('function')
         element.add_attribute('name', function.name)

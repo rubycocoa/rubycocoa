@@ -5,6 +5,9 @@
 require 'test/unit'
 require 'osx/cocoa'
 
+system 'make' || raise(RuntimeError, "'make' failed")
+require 'objc_test.bundle'
+
 class TC_Types < Test::Unit::TestCase
 
   def test_auto_boolean_conversion_objc
@@ -155,5 +158,6 @@ class TC_Types < Test::Unit::TestCase
   def test_four_char_code_enums
     OSX.require_framework('AddressBook')
     assert_equal(1633841264, OSX::KEventClassABPeoplePicker)
+    assert_equal(OSX::TestFourCharCode.kEventClassABPeoplePickerValue, OSX::KEventClassABPeoplePicker)
   end
 end
