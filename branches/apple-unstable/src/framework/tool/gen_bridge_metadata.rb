@@ -36,11 +36,16 @@ class OCHeaderAnalyzer
 
   def enums
     re = /\benum\b\s*(\w+\s+)?\{([^}]*)\}/
-    @enums ||= @cpp_result.scan(re).map { |m|
-      m[1].split(',').map { |i|
-        i.split('=')[0].strip
-      }.delete_if { |i| i.empty? or i[0] == ?# }
-    }.flatten.uniq
+    if @enums.nil?
+      @enums = {}
+      @cpp_result.scan(re).each do |m|
+        m[1].split(',').map do |i|
+          name, val = i.split('=', 2).map { |x| x.strip }
+          @enums[name] = val unless name.empty? or name[0] == ?#
+        end
+      end
+    end
+    @enums
   end
 
   def defines
@@ -360,7 +365,15 @@ class BridgeSupportGenerator
 
   def collect_enums
     @resolved_enums ||= {} 
-    lines = @enums.map { |x| "printf(#{x} < 0 ? \"%s: %d\\n\" : \"%s: %u\\n\", \"#{x}\", #{x});" }
+    @resolved_4cc_enums = {}
+    lines = []
+    @enums.each do |name, val|
+      if md = /^'(....)'$/.match(val)
+        @resolved_4cc_enums[name] = md[1]
+      else 
+        lines << "printf(#{name} < 0 ? \"%s: %d\\n\" : \"%s: %u\\n\", \"#{name}\", #{name});" 
+      end
+    end
     code = <<EOS
 #{@import_directive}
 
@@ -673,6 +686,12 @@ EOS
         element.add_attribute('name', enum)
         element.add_attribute('value', value)
       end
+      @resolved_4cc_enums.sort { |x, y| x[0] <=> y[0] }.each do |enum, value|
+        element = root.add_element('enum')
+        element.add_attribute('name', enum)
+        element.add_attribute('value', value)
+        element.add_attribute('type', 'FourCharCode')
+      end 
       @functions.uniq.sort.each do |function|
         element = root.add_element('function')
         element.add_attribute('name', function.name)
@@ -780,7 +799,7 @@ EOS
   def scan_headers
     @functions = [] 
     @constants = [] 
-    @enums = [] 
+    @enums = {}
     @defines = []
     @struct_names = []
     @cftype_names = []
@@ -795,7 +814,7 @@ EOS
         @cftype_names.concat(analyzer.cftype_names)
       else
         @constants.concat(analyzer.constants)
-        @enums.concat(analyzer.enums)
+        @enums.merge!(analyzer.enums)
         @defines.concat(analyzer.defines)
         list = analyzer.informal_protocols['NSObject']
         @inf_protocols.concat(list) unless list.nil? 
