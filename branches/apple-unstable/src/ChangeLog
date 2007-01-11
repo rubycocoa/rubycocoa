@@ -1,3 +1,8 @@
+2007-01-12  Fujimoto Hisa  <hisa@fobj.com>
+
+	* ext/rubycocoa/extconf.rb.in, framework/post-config.rb, framework/src/ruby/osx/objc/oc_import.rb, framework/tool/gen_bridge_metadata.rb, framework/tool/verify_bridge_metadata.rb, metaconfig, pre-config.rb, pre-setup.rb, sample/buildall.rb:
+	File.exists? will be obsoleted for Ruby 1.9, so replace it as File.exist?
+
 2007-01-11  Laurent Sansonetti <lsansonetti@apple.com>
 
 	* framework/src/objc/BridgeSupport.h,
