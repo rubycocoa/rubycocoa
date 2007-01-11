@@ -23,7 +23,7 @@ end
 class OCHeaderAnalyzer
   attr_reader :path, :cpp_result
 
-  CPP = ['/usr/bin/cpp-4.0', '/usr/bin/cpp-3.3', '/usr/bin/cpp3'].find { |x| File.exists?(x) }
+  CPP = ['/usr/bin/cpp-4.0', '/usr/bin/cpp-3.3', '/usr/bin/cpp3'].find { |x| File.exist?(x) }
   raise "cpp not found" if CPP.nil?
   CPPFLAGS = "-x objective-c -D__APPLE_CPP__"
   CPPFLAGS << "-D__GNUC__" unless /\Acpp-4/.match(File.basename(CPP))
@@ -799,7 +799,7 @@ EOS
     @inf_protocols = [] 
     @ocmethods = {}
     @headers.each do |path|
-      die "Given header file `#{path}' doesn't exist" unless File.exists?(path)
+      die "Given header file `#{path}' doesn't exist" unless File.exist?(path)
       analyzer = OCHeaderAnalyzer.new(path)
       @functions.concat(analyzer.functions)
       if @generate_exception_template
@@ -942,10 +942,10 @@ EOS
     die "Can't find framework '#{val}'" if path.nil?
     parent_path, name = path.scan(/^(.+)\/(\w+)\.framework$/)[0]
     headers_path = File.join(path, 'Headers')
-    die "Can't locate framework headers at '#{headers_path}'" unless File.exists?(headers_path)
+    die "Can't locate framework headers at '#{headers_path}'" unless File.exist?(headers_path)
     headers = Dir.glob(File.join(headers_path, '**', '*.h'))
     libpath = File.join(path, name)
-    die "Can't locate framework library at '#{libpath}'" unless File.exists?(libpath)
+    die "Can't locate framework library at '#{libpath}'" unless File.exist?(libpath)
     OBJC.dlload(libpath)
     # We can't just "#import <x/x.h>" as the main Framework header might not include _all_ headers.
     # So we are tricking this by importing the main header first, then all headers.
@@ -960,13 +960,13 @@ EOS
   end
  
   def framework_path(val)
-    return val if File.exists?(val)
+    return val if File.exist?(val)
     val += '.framework' unless /\.framework$/.match(val)
     ['/System/Library/Frameworks',
      '/Library/Frameworks',
      File.join(ENV['USER']), 'Library', 'Frameworks'].each do |dir|
       path = File.join(dir, val)
-      return path if File.exists?(path)
+      return path if File.exist?(path)
     end
     return nil
   end
@@ -980,7 +980,7 @@ EOS
     i = 0
     loop do
       p = File.join(dir, "#{base}-#{i}-#{Process.pid}" + extension)
-      return p unless File.exists?(p)
+      return p unless File.exist?(p)
       i += 1
     end
   end

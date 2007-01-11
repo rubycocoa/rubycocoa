@@ -11,7 +11,7 @@ if ARGV.size != 1
 end
 
 out_dir = ARGV.first
-if !File.exists?(out_dir) or !File.directory?(out_dir)
+if !File.exist?(out_dir) or !File.directory?(out_dir)
   die "Given #{out_dir} doesn't exist or is not a directory"
 end
 
