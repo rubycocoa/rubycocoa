@@ -28,6 +28,10 @@
 # undef PACKAGE_VERSION
 #endif
 
+#if defined(WORDS_BIGENDIAN)
+# undef WORDS_BIGENDIAN
+#endif
+
 #import "ffi.h"
 
 typedef enum {

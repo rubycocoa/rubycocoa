@@ -1,5 +1,14 @@
 2007-01-11  Laurent Sansonetti <lsansonetti@apple.com>
 
+	* framework/src/objc/BridgeSupport.h,
+	  framework/src/objc/BridgeSupport.m,
+	  framework/tool/gen_bridge_metadata.rb,
+	  tests/tc_types.rb,
+	  tests/objc_test.m,
+	  tests/Makefile:
+	Better FourCharCode description, added a new test case, removed build warnings
+	on PPC.
+
 	* framework/src/objc/BridgeSupport.m,
 	  framework/tool/gen_bridge_metadata.rb,
 	  tests/tc_types.rb:
