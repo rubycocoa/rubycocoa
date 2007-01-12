@@ -42,7 +42,7 @@ class TC_QTKit < Test::Unit::TestCase
   def test_qtkit_qttime_passing
     movie = QTMovie.movie
     qtt = QTTimeFromString("01:02:03:05.007/1000")
-    p movie.setCurrentTime(qtt)
+    movie.setCurrentTime(qtt)
   end
 
 end

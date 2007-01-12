@@ -4,6 +4,54 @@
     <header>NSSpellServer.h</header>
     <header>NSSimpleHorizontalTypesetter.h</header>
   </ignored_headers>
+  <function name='NSConvertGlyphsToPackedGlyphs'>
+    <arg index='0' type_modifier='in' c_array_delimited_by_arg='1'/>
+    <arg index='3' type_modifier='in' c_array_delimited_by_arg='1'/>
+  </function>
+  <function name='NSRectFillList'>
+    <arg index='0' type_modifier='in' c_array_delimited_by_arg='1'/>
+  </function>
+  <function name='NSRectFillListWithGrays'>
+    <arg index='0' type_modifier='in' c_array_delimited_by_arg='2'/>
+    <arg index='1' type_modifier='in' c_array_delimited_by_arg='2'/>
+  </function>
+  <function name='NSRectFillListWithColors'>
+    <arg index='0' type_modifier='in' c_array_delimited_by_arg='2'/>
+    <arg index='1' type_modifier='in' c_array_delimited_by_arg='2'/>
+  </function>
+  <function name='NSRectFillListUsingOperation'>
+    <arg index='0' type_modifier='in' c_array_delimited_by_arg='1'/>
+  </function>
+  <function name='NSRectFillListWithColorsUsingOperation'>
+    <arg index='0' type_modifier='in' c_array_delimited_by_arg='2'/>
+    <arg index='1' type_modifier='in' c_array_delimited_by_arg='2'/>
+  </function>
+  <function name='NSRectClipList'>
+    <arg index='0' type_modifier='in' c_array_delimited_by_arg='1'/>
+  </function>
+  <function name='NSDrawTiledRects'>
+    <arg index='2' type_modifier='in' c_array_delimited_by_arg='4'/>
+    <arg index='3' type_modifier='in' c_array_delimited_by_arg='4'/>
+  </function>
+  <function name='NSCountWindows'>
+    <arg index='0' type_modifier='out' null_accepted='false'/>
+  </function>
+  <function name='NSWindowList'>
+    <arg index='1' type_modifier='out' c_array_delimited_by_arg='0'/>
+  </function>
+  <function name='NSCountWindowsForContext'>
+    <arg index='1' type_modifier='out' null_accepted='false'/>
+  </function>
+  <function name='NSWindowListForContext'>
+    <arg index='2' type_modifier='out' c_array_delimited_by_arg='1'/>
+  </function>
+  <function name='NSDrawColorTiledRects'>
+    <arg index='2' type_modifier='in' c_array_delimited_by_arg='4'/>
+    <arg index='3' type_modifier='in' c_array_delimited_by_arg='4'/>
+  </function>
+  <function name='NSShowAnimationEffect'>
+    <arg index='5' type_modifier='in'/>
+  </function>
   <class name='NSPrintPanel'>
     <method selector='beginSheetWithPrintInfo:modalForWindow:delegate:didEndSelector:contextInfo:'>
       <arg index='4' type_modifier='in'/>

@@ -76,7 +76,7 @@ if `sw_vers -productVersion`.strip.to_f >= 10.5
         assert_equal(o1, dict.objectForKey(k1))
         assert_equal(o2, dict.objectForKey(k2))
         # Both 'array' arguments must have the same length.
-        assert_raises(OSX::OCDataConvException) { OSX::NSDictionary.dictionaryWithObjects_forKeys_count([o1, o2], [k1]) }
+        assert_raises(ArgumentError) { OSX::NSDictionary.dictionaryWithObjects_forKeys_count([o1, o2], [k1]) }
     end
 
     def test_in_c_array_byte
@@ -99,8 +99,8 @@ if `sw_vers -productVersion`.strip.to_f >= 10.5
 
     def test_null_accepted
         button = OSX::NSButton.alloc.initWithFrame(OSX::NSZeroRect)
-        assert_raises(OSX::OCDataConvException) { button.getPeriodicDelay_interval_(nil, nil) }
-        assert_raises(OSX::OCDataConvException) { button.getPeriodicDelay_interval_(nil) }
+        assert_raises(ArgumentError) { button.getPeriodicDelay_interval_(nil, nil) }
+        assert_raises(ArgumentError) { button.getPeriodicDelay_interval_(nil) }
         ary = button.getPeriodicDelay_interval_()
         assert_kind_of(Array, ary)
         assert_equal(2, ary.size)
@@ -109,10 +109,10 @@ if `sw_vers -productVersion`.strip.to_f >= 10.5
     def test_in_c_array_fixed_length
         font = OSX::NSFont.fontWithName_matrix('Helvetica', [1, 0, 0, 1, 0, 0].pack('f*'))
         assert_kind_of(OSX::NSFont, font)
-        assert_raises(OSX::OCDataConvException) { OSX::NSFont.fontWithName_matrix('Helvetica', nil) } 
-        assert_raises(OSX::OCDataConvException) { OSX::NSFont.fontWithName_matrix('Helvetica', [].pack('f*')) } 
-        assert_raises(OSX::OCDataConvException) { OSX::NSFont.fontWithName_matrix('Helvetica', [1, 2, 3, 4, 5].pack('f*')) } 
-        assert_raises(OSX::OCDataConvException) { OSX::NSFont.fontWithName_matrix('Helvetica', [1, 2, 3, 4, 5, 6, 7].pack('f*')) } 
+        assert_raises(ArgumentError) { OSX::NSFont.fontWithName_matrix('Helvetica', nil) } 
+        assert_raises(ArgumentError) { OSX::NSFont.fontWithName_matrix('Helvetica', [].pack('f*')) } 
+        assert_raises(ArgumentError) { OSX::NSFont.fontWithName_matrix('Helvetica', [1, 2, 3, 4, 5].pack('f*')) } 
+        assert_raises(ArgumentError) { OSX::NSFont.fontWithName_matrix('Helvetica', [1, 2, 3, 4, 5, 6, 7].pack('f*')) } 
         # TODO: should support direct Array of Float.
     end
 

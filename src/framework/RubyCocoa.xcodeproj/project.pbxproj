@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4D0942F20B5833CA001986D6 /* ocexception.h in Headers */ = {isa = PBXBuildFile; fileRef = 4D0942F00B5833CA001986D6 /* ocexception.h */; };
+		4D0942F30B5833CA001986D6 /* ocexception.m in Sources */ = {isa = PBXBuildFile; fileRef = 4D0942F10B5833CA001986D6 /* ocexception.m */; };
+		4D09437F0B584304001986D6 /* libffi.h in Headers */ = {isa = PBXBuildFile; fileRef = 4D09437D0B584304001986D6 /* libffi.h */; };
+		4D0943800B584304001986D6 /* libffi.m in Sources */ = {isa = PBXBuildFile; fileRef = 4D09437E0B584304001986D6 /* libffi.m */; };
 		4D0E85190AA49CF700C8E2FB /* BridgeSupport.h in Headers */ = {isa = PBXBuildFile; fileRef = 4D0E85170AA49CF700C8E2FB /* BridgeSupport.h */; };
 		4D0E851A0AA49CF700C8E2FB /* BridgeSupport.m in Sources */ = {isa = PBXBuildFile; fileRef = 4D0E85180AA49CF700C8E2FB /* BridgeSupport.m */; };
 		4D100E510B40292100DEC855 /* webkit.rb in CopyFiles */ = {isa = PBXBuildFile; fileRef = 4D100E500B40292100DEC855 /* webkit.rb */; };
@@ -100,6 +104,10 @@
 
 /* Begin PBXFileReference section */
 		0867D69BFE84028FC02AAC07 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
+		4D0942F00B5833CA001986D6 /* ocexception.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ocexception.h; sourceTree = "<group>"; };
+		4D0942F10B5833CA001986D6 /* ocexception.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ocexception.m; sourceTree = "<group>"; };
+		4D09437D0B584304001986D6 /* libffi.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = libffi.h; sourceTree = "<group>"; };
+		4D09437E0B584304001986D6 /* libffi.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = libffi.m; sourceTree = "<group>"; };
 		4D0E85170AA49CF700C8E2FB /* BridgeSupport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BridgeSupport.h; sourceTree = "<group>"; };
 		4D0E85180AA49CF700C8E2FB /* BridgeSupport.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BridgeSupport.m; sourceTree = "<group>"; };
 		4D100E500B40292100DEC855 /* webkit.rb */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.script.ruby; path = webkit.rb; sourceTree = "<group>"; };
@@ -220,6 +228,8 @@
 				E88C6D59035BB1F5031D1B90 /* cls_objcid.m */,
 				E88C6D5A035BB1F5031D1B90 /* cls_objcptr.h */,
 				E88C6D5B035BB1F5031D1B90 /* cls_objcptr.m */,
+				4D0942F00B5833CA001986D6 /* ocexception.h */,
+				4D0942F10B5833CA001986D6 /* ocexception.m */,
 				E88C6D5E035BB1F5031D1B90 /* mdl_objwrapper.m */,
 				E88C6D5F035BB1F5031D1B90 /* ocdata_conv.h */,
 				E88C6D60035BB1F5031D1B90 /* ocdata_conv.m */,
@@ -235,6 +245,8 @@
 				E88C6D6B035BB1F5031D1B90 /* RBThreadSwitcher.m */,
 				E88C6D63035BB1F5031D1B90 /* OverrideMixin.h */,
 				E88C6D64035BB1F5031D1B90 /* OverrideMixin.m */,
+				4D09437D0B584304001986D6 /* libffi.h */,
+				4D09437E0B584304001986D6 /* libffi.m */,
 				4D0E85170AA49CF700C8E2FB /* BridgeSupport.h */,
 				4D0E85180AA49CF700C8E2FB /* BridgeSupport.m */,
 				E88C6D6C035BB1F5031D1B90 /* RubyCocoa.h */,
@@ -320,6 +332,8 @@
 				FCDF92720A87E09E0002AD01 /* mdl_osxobjc.h in Headers */,
 				FCDF92730A87E09E0002AD01 /* RBClassUtils.h in Headers */,
 				4D0E85190AA49CF700C8E2FB /* BridgeSupport.h in Headers */,
+				4D0942F20B5833CA001986D6 /* ocexception.h in Headers */,
+				4D09437F0B584304001986D6 /* libffi.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -404,6 +418,8 @@
 				FCDF929A0A87E09E0002AD01 /* mdl_osxobjc.m in Sources */,
 				FCDF929B0A87E09E0002AD01 /* RBClassUtils.m in Sources */,
 				4D0E851A0AA49CF700C8E2FB /* BridgeSupport.m in Sources */,
+				4D0942F30B5833CA001986D6 /* ocexception.m in Sources */,
+				4D0943800B584304001986D6 /* libffi.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

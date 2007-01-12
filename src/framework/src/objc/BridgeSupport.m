@@ -22,6 +22,8 @@
 #import "cls_objcid.h"
 #import "BridgeSupportLexer.h"
 #import "RBClassUtils.h"
+#import "mdl_osxobjc.h"
+#import "ocexception.h"
 
 static VALUE cOSXBoxed;
 static ID ivarEncodingID;
@@ -43,7 +45,6 @@ static struct st_table *bsInformalProtocolInstanceMethods;      // selector -> s
 
 struct bsFunction *current_function = NULL;
 
-#define ASSERT_ALLOC(x) do { if (x == NULL) rb_fatal("can't allocate memory"); } while (0)
 #define MAX_ENCODE_LEN 1024
 
 #define CAPITALIZE(x)         \
@@ -62,63 +63,6 @@ struct bsFunction *current_function = NULL;
 
 // struct proxies octype constants, each proxy has a unique octype, starting at a given threshold. 
 static int bs_boxed_octype_idx = BS_BOXED_OCTYPE_THRESHOLD + 1;
-
-static VALUE
-_ocdataconv_err_class()
-{
-  static VALUE exc = Qnil;
-  if (exc == Qnil) {
-    VALUE mosx = rb_const_get(rb_cObject, rb_intern("OSX"));
-    exc = rb_const_get(mosx, rb_intern("OCDataConvException"));
-  }
-  return exc;
-}
-
-static VALUE
-_oc_err_class()
-{
-  static VALUE exc = Qnil;
-  if (exc == Qnil) {
-    VALUE mosx = rb_const_get(rb_cObject, rb_intern("OSX"));
-    exc = rb_const_get(mosx, rb_intern("OCException"));
-  }
-  return exc;
-}
-
-VALUE
-oc_err_new (const char* fname, NSException* nsexcp)
-{
-  id pool = [[NSAutoreleasePool alloc] init];
-  VALUE exc = _oc_err_class();
-  char buf[BUFSIZ];
-  VALUE result;
-
-  snprintf(buf, BUFSIZ, "%s - %s - %s", fname,
-       [[nsexcp name] cString], [[nsexcp reason] cString]);
-  result = rb_funcall(exc, rb_intern("new"), 2, ocid_to_rbobj(Qnil, nsexcp), rb_str_new2(buf));
-  [pool release];
-  return result;
-}
-
-void
-rbarg_to_nsarg(VALUE rbarg, int octype, void* nsarg, const char* fname, id pool, int index)
-{
-  if (!rbobj_to_ocdata(rbarg, octype, nsarg, NO)) {
-    if (pool) [pool release];
-    rb_raise(_ocdataconv_err_class(), "%s - can't convert arg #%d to Objective-C", fname, index);
-  }
-}
-
-VALUE
-nsresult_to_rbresult(int octype, const void* nsresult, const char* fname, id pool)
-{
-  VALUE rbresult;
-  if (!ocdata_to_rbobj(Qnil, octype, nsresult, &rbresult, YES)) {
-    if (pool) [pool release];
-    rb_raise(_ocdataconv_err_class(), "%s - can't convert Objective-C result to Ruby.", fname);
-  }
-  return rbresult;
-}
 
 #if HAS_LIBXML2
 #include <libxml/xmlreader.h>
@@ -399,38 +343,6 @@ bs_boxed_size(struct bsBoxed *bs_struct)
     bs_struct->size = size; 
   }
   return bs_struct->size;
-}
-
-static ffi_type *
-bs_boxed_ffi_type(struct bsBoxed *bs_boxed)
-{
-  if (bs_boxed->ffi_type == NULL) {
-    if (bs_boxed->type == bsBoxedStructType) {
-      unsigned i;
-
-      bs_boxed->ffi_type = (ffi_type *)malloc(sizeof(ffi_type));
-      ASSERT_ALLOC(bs_boxed->ffi_type);
-  
-      bs_boxed->ffi_type->size = 0; // IMPORTANT: we need to leave this to 0 and not set the real size
-      bs_boxed->ffi_type->alignment = 0;
-      bs_boxed->ffi_type->type = FFI_TYPE_STRUCT;
-      bs_boxed->ffi_type->elements = malloc(bs_boxed->opt.s.field_count * sizeof(ffi_type *));
-      ASSERT_ALLOC(bs_boxed->ffi_type->elements);
-      for (i = 0; i < bs_boxed->opt.s.field_count; i++) {
-        int octype;
-
-        octype = to_octype(bs_boxed->opt.s.fields[i].encoding);
-        bs_boxed->ffi_type->elements[i] = ffi_type_for_octype(octype);
-      }
-      bs_boxed->ffi_type->elements[bs_boxed->opt.s.field_count] = NULL;
-    }
-    else if (bs_boxed->type == bsBoxedOpaqueType) {
-      // FIXME we assume that boxed types are pointers, but maybe we should analyze the encoding.
-      bs_boxed->ffi_type = &ffi_type_pointer;
-    }
-  }
-
-  return bs_boxed->ffi_type;
 }
 
 static inline struct bsBoxed *
@@ -875,66 +787,20 @@ bs_cf_type_create_proxy(const char *name)
   return klass;
 }
 
-ffi_type *
-ffi_type_for_octype (int octype)
+static void
+func_dispatch_retain_if_necessary(VALUE arg, BOOL is_retval, void *ctx)
 {
-  switch (octype) {
-    case _C_ID:
-    case _C_CLASS:
-    case _C_SEL:
-    case _C_CHARPTR:
-    case _PRIV_C_ID_PTR:
-    case _PRIV_C_PTR:
-      return &ffi_type_pointer;
-#if defined(_C_BOOL)
-    case _C_BOOL:
-#endif
-    case _PRIV_C_BOOL:
-    case _C_UCHR:
-      return &ffi_type_uchar;
-    case _C_CHR:
-      return &ffi_type_schar;
-    case _C_SHT:
-      return &ffi_type_sshort;
-    case _C_USHT:
-      return &ffi_type_ushort;
-    case _C_INT:
-      return &ffi_type_sint;
-    case _C_UINT:
-      return &ffi_type_uint;
-    case _C_LNG:
-      return sizeof(int) == sizeof(long) ? &ffi_type_sint : &ffi_type_slong;
-#if defined(_C_LNG_LNG)
-    case _C_LNG_LNG: 
-      return &ffi_type_sint64;
-#endif
-    case _C_ULNG:
-      return sizeof(unsigned int) == sizeof(unsigned long) ? &ffi_type_uint : &ffi_type_ulong;
-#if defined(_C_ULNG_LNG)
-    case _C_ULNG_LNG: 
-      return &ffi_type_uint64;
-#endif
-    case _C_FLT:
-      return &ffi_type_float;
-    case _C_DBL:
-      return &ffi_type_double;
-    case _C_VOID:
-      return &ffi_type_void;  
+  struct bsFunction *func = (struct bsFunction *)ctx;
 
-    default:
-      if (octype > BS_BOXED_OCTYPE_THRESHOLD) {
-        struct bsBoxed *bs_boxed;
-
-        bs_boxed = find_bs_boxed_by_octype(octype);
-        if (bs_boxed != NULL)
-          return bs_boxed_ffi_type(bs_boxed);
-      }
-      break;
+  // retain the new ObjC object, that will be released once the Ruby object is collected
+  if (func->retval->octype == _C_ID) {
+    if (func->retval->should_be_retained && !OBJCID_DATA_PTR(arg)->retained) {
+      DLOG("MDLOSX", "\tretaining objc value");
+      [OBJCID_ID(arg) retain];
+    }
+    OBJCID_DATA_PTR(arg)->retained = YES;
+    OBJCID_DATA_PTR(arg)->can_be_released = YES;
   }
-
-  NSLog (@"XXX returning ffi type void for unrecognized octype %d", octype);
-
-  return &ffi_type_void;
 }
 
 static VALUE
@@ -942,14 +808,11 @@ bridge_support_dispatcher (int argc, VALUE *argv, VALUE rcv)
 {
   char *func_name;
   struct bsFunction *func;
-  BOOL is_void;
-  void *retval;
-  VALUE rb_value;
+  ffi_type **arg_types;
+  void **arg_values;
+  VALUE exception;
+  VALUE result;
   NSAutoreleasePool *pool;
-  VALUE exception; 
-  ffi_cif cif;
-  void **values;
-  unsigned i;
 
   // lookup structure
   func_name = rb_id2name(ruby_frame->orig_func);
@@ -957,143 +820,55 @@ bridge_support_dispatcher (int argc, VALUE *argv, VALUE rcv)
     rb_fatal("Unrecognized function '%s'", func_name);
   if (func == NULL)
     rb_fatal("Retrieved func structure is invalid");
-  is_void = func->retval->octype == _C_VOID;
 
-  // check args count
-  if (argc < func->argc) {
-    rb_raise(rb_eArgError, "Not enough arguments (expected %s%d, given %d)", func->is_variadic ? "at least " : "", func->argc, argc);
-  }
-  else if (argc > func->argc && !func->is_variadic) {
-    rb_raise(rb_eArgError, "Too much arguments (expected %d, given %d)", func->argc, argc);
-  } 
-
-  // mark as current function 
-  current_function = func;
-  DLOG("MDLOSX", "dispatching function '%s' argc=%d", func_name, func->argc);
+  DLOG("MDLOSX", "dispatching function '%s'", func_name);
 
   // lookup function symbol
   if (func->sym == NULL) {
     func->sym = dlsym(RTLD_DEFAULT, func_name);
     if (func->sym == NULL)
       rb_fatal("Can't locate function symbol '%s' : %s", func->name, dlerror());
-    DLOG("MDLOSX", "\tsymbol is %p", func->sym);
   }
 
-  pool = [[NSAutoreleasePool alloc] init]; 
-  exception = Qnil;
-  
-  // prepare arg types
-  if (func->ffi.arg_types == NULL || func->is_variadic) {
-    if (func->ffi.arg_types != NULL)
-      free(func->ffi.arg_types);
- 
-    if (argc > 0) {
-      func->ffi.arg_types = (ffi_type **)malloc(sizeof(ffi_type *) * (argc + 1)); 
-      if (func->ffi.arg_types == NULL)
-        rb_fatal("can't allocate memory");
-      for (i = 0; i < argc; i++) {
-        func->ffi.arg_types[i] = i < func->argc ? ffi_type_for_octype(func->argv[i].octype) : &ffi_type_pointer;
-        DLOG("MDLOSX", "\tset arg #%d to type '%c' %p", i, func->argv[i].octype, func->ffi.arg_types[i]);
-      }
-      func->ffi.arg_types[argc] = NULL;
-    }
-    else {
-      func->ffi.arg_types = NULL;
-    }
-  }
- 
-  // prepare arg values
-  if (argc > 0) {
-    values = (void **)alloca(sizeof(void *) * (argc + 1));
-    values[argc] = NULL;
-    for (i = 0; i < argc; i++) {
-      int octype;
-      ffi_type *ffi_type;
-      size_t size;
- 
-      octype = i < func->argc ? func->argv[i].octype : _C_ID;
-      ffi_type = func->ffi.arg_types[i];
-      size = ocdata_size(octype, "");
- 
-      if (size > 0) {
-        DLOG("MSLOSX", "\tallocating %d bytes for arg #%d of type '%c'", size, i, octype);
-        values[i] = (void *)alloca(size);
-        if (values[i] == NULL)
-          rb_fatal("Can't allocate memory");
-      }
+  // allocate arg types/values
+  arg_types = (ffi_type **) alloca((func->argc + 1) * sizeof(ffi_type *));
+  arg_values = (void **) alloca((func->argc + 1) * sizeof(void *));
+  if (arg_types == NULL || arg_values == NULL)
+    rb_fatal("can't allocate memory");
 
-      rbarg_to_nsarg(argv[i], octype, values[i], func->name, pool, i);  
+  memset(arg_types, 0, (func->argc + 1) * sizeof(ffi_type *));
+  memset(arg_values, 0, (func->argc + 1) * sizeof(void *));
 
-      DLOG("MDLOSX", "\tset arg #%d to value %p", i, values[i]);
-    }
-  }
-  else {
-    values = NULL;
-  }
+  pool = [[NSAutoreleasePool alloc] init];
 
-  // prepare ret type/value
-  if (func->ffi.ret_type == NULL) {
-    func->ffi.ret_type = ffi_type_for_octype(func->retval->octype);
-    DLOG("MDLOSX", "\tset return to type %p", func->ffi.ret_type);
-  }
-  if (!is_void) {
-    size_t len = ocdata_size(func->retval->octype, ""); 
-    DLOG("MDLOSX", "\tallocating %d bytes for storing the result of type %d", len, func->retval->octype);
-    if (len == 0)
-      rb_bug("ocdata_size(%s) is 0", func->retval->octype);
-    retval = alloca(len);
-    if (retval == NULL)
-      rb_fatal("Can't allocate memory");
-  }
-  else
-    retval = NULL;
-  
-  // prepare cif
-  if (ffi_prep_cif(&cif, FFI_DEFAULT_ABI, argc, func->ffi.ret_type, func->ffi.arg_types) != FFI_OK)
-    rb_fatal("Can't prepare the cif");
+  current_function = func;
 
-  // call function
-  @try {
-    DLOG("MDLOSX", "\tFFI call function %p", func->sym);
-    ffi_call(&cif, FFI_FN(func->sym), (ffi_arg *)retval, values);
-  }
-  @catch (id oc_exception) {
-    DLOG("MDLOSX", "got objc exception '%@' -- forwarding...", oc_exception);
-    exception = oc_err_new(func->name, oc_exception);
-  }
+  // and dispatch!
+  exception = rb_ffi_dispatch(
+    (struct bsCallEntry *)func, 
+    NULL, 
+    func->argc, 
+    argc, 
+    0, 
+    argv, 
+    arg_types, 
+    arg_values, 
+    func->retval->octype, 
+    func->sym, 
+    func_dispatch_retain_if_necessary, 
+    (void *)func, 
+    &result);
 
-  // forward exception if needed
-  if (!NIL_P(exception)) {
-    [pool release];
-    current_function = NULL;
-    rb_exc_raise(exception);
-    return Qnil;
-  }
-
-  if (is_void) {
-    rb_value = rcv;
-  }
-  else {
-    DLOG("MDLOSX", "\tresult: %p", retval);
-
-    rb_value = nsresult_to_rbresult(func->retval->octype, (const void *)retval, func->name, pool);
-    // retain the new ObjC object, that will be released once the Ruby object is collected
-    if (func->retval->octype == _C_ID) {
-      if (func->retval->should_be_retained && !OBJCID_DATA_PTR(rb_value)->retained) {
-        DLOG("MDLOSX", "\tretaining objc value");
-        [OBJCID_ID(rb_value) retain];
-      }
-      OBJCID_DATA_PTR(rb_value)->retained = YES;
-      OBJCID_DATA_PTR(rb_value)->can_be_released = YES;
-    }
-  }
-
-  [pool release];
   current_function = NULL;
 
-  DLOG("MDLOSX", "dispatch succeeded");
+  [pool release];
 
-  return rb_value;
+  if (!NIL_P(exception))
+    rb_exc_raise(exception);
+
+  DLOG("MDLOSX", "dispatching function '%s' done", func_name);
+
+  return result;
 }
 
 static struct bsRetval default_func_retval = { bsCArrayArgUndefined, -1, _C_VOID, NO };  
@@ -1366,14 +1141,6 @@ osx_load_bridge_support_file (VALUE mOSX, VALUE path)
       break;
 
       case BS_XML_ARG: {
-        if (func != NULL) {
-          if (func->argc >= MAX_ARGS) {
-            DLOG("MDLOSX", "Maximum number of arguments reached for function '%s' (%d), skipping...", func->name, MAX_ARGS);
-          }
-          else {
-
-          }
-        }
         if (func != NULL || method != NULL) {
           int * argc;
 
@@ -1388,7 +1155,6 @@ osx_load_bridge_support_file (VALUE mOSX, VALUE path)
           else {
             char *  type_modifier;
             struct bsArg * arg; 
-            char *  type;
    
             arg = &args[(*argc)++];
  
@@ -1415,14 +1181,7 @@ osx_load_bridge_support_file (VALUE mOSX, VALUE path)
             arg->null_accepted = get_boolean_attribute(reader, "null_accepted", YES);
             get_c_ary_type_attribute(reader, &arg->c_ary_type, &arg->c_ary_type_value); 
   
-            type = get_attribute(reader, "type");
-            if (type != NULL) {
-              arg->octype = to_octype(type);
-              free(type);
-            }
-            else {
-              arg->octype = -1;
-            }          
+            arg->octypestr = get_attribute(reader, "type");
           }
         }
         else {
@@ -1563,8 +1322,8 @@ osx_load_bridge_support_file (VALUE mOSX, VALUE path)
         all_args_ok = YES;
   
         for (i = 0; i < func->argc; i++) {
-          if (args[i].octype == -1) {
-            DLOG("MDLOSX", "Function '%s' argument #%d is not recognized, skipping...", func->name, i);
+          if (args[i].octypestr == NULL) {
+            DLOG("MDLOSX", "Function '%s' argument #%d type has not been provided, skipping...", func->name, i);
             all_args_ok = NO;
             break;
           }
@@ -1657,7 +1416,8 @@ osx_import_c_constant (VALUE self, VALUE sym)
   value = Qnil;
   if (cvalue != NULL) {
     DLOG("MDLOSX", "Importing C constant `%s' of type %d", name, octype);
-    value = nsresult_to_rbresult(octype, cvalue, "", nil);
+    if (!ocdata_to_rbobj(Qnil, octype, cvalue, &value, NO))
+      rb_raise(ocdataconv_err_class(), "Cannot convert the Objective-C constant '%s' as '%c' to Ruby", name, (char)octype);    
     rb_define_const(self, name, value);
     DLOG("MDLOSX", "Imported C constant `%s' with value %p", name, value);
   }
@@ -1751,31 +1511,34 @@ find_bs_method(id klass, const char *selector, BOOL is_class_method)
 }
 
 struct bsArg *
-find_bs_method_arg_by_index(struct bsMethod *method, unsigned index)
+find_bs_arg_by_index(struct bsCallEntry *entry, unsigned index, unsigned argc)
 {
   unsigned i;
 
-  if (method == NULL)
+  if (entry == NULL)
     return NULL;
 
-  for (i = 0; i < method->argc; i++)
-    if (method->argv[i].index == index)
-      return &method->argv[i];  
+  if (argc == entry->argc)
+    return &entry->argv[index];
+
+  for (i = 0; i < entry->argc; i++)
+    if (entry->argv[i].index == index)
+      return &entry->argv[i];  
 
   return NULL;
 }
 
 struct bsArg *
-find_bs_method_arg_by_c_array_len_arg_index(struct bsMethod *method, unsigned index)
+find_bs_arg_by_c_array_len_arg_index(struct bsCallEntry *entry, unsigned index)
 {
   unsigned i;
   
-  if (method == NULL)
+  if (entry == NULL)
     return NULL;
 
-  for (i = 0; i < method->argc; i++)
-    if (method->argv[i].c_ary_type == bsCArrayArgDelimitedByArg && method->argv[i].c_ary_type_value == index)
-      return &method->argv[i];  
+  for (i = 0; i < entry->argc; i++)
+    if (entry->argv[i].c_ary_type == bsCArrayArgDelimitedByArg && entry->argv[i].c_ary_type_value == index)
+      return &entry->argv[i];  
 
   return NULL;
 }
@@ -1789,92 +1552,6 @@ find_bs_informal_protocol_method(const char *selector, BOOL is_class_method)
   hash = is_class_method ? bsInformalProtocolClassMethods : bsInformalProtocolInstanceMethods;
 
   return st_lookup(hash, (st_data_t)selector, (st_data_t *)&method) ? method : NULL;
-}
-
-static int
-__inspect_bs_method(char *key, struct bsMethod *value, void *ctx)
-{
-  unsigned i;
-
-  printf("        %s\n", key);
-
-  if (value->ignore) 
-    printf("            ignored (suggestion: '%s')\n", value->suggestion == NULL ? "n/a" : value->suggestion);
-
-  for (i = 0; i < value->argc; i++) {
-    struct bsArg *arg;
-
-    arg = &value->argv[i];
-
-    printf("            arg #%d, type modifier '%s'%s", arg->index, arg->type_modifier == bsTypeModifierIn ? "in" : arg->type_modifier == bsTypeModifierOut ? "out" : "inout", arg->null_accepted ? "" : ", NULL is not accepted");
-    switch (arg->c_ary_type) {
-      case bsCArrayArgUndefined:
-        break;
-      case bsCArrayArgDelimitedByArg:
-        printf(", length is defined by arg #%d value", arg->c_ary_type_value);
-        break;
-      case bsCArrayArgFixedLength:
-        printf(", length is fixed to %d", arg->c_ary_type_value);
-        break;
-      case bsCArrayArgDelimitedByNull:
-        printf(", must be NULL terminated");
-        break;
-    }
-    printf("\n");
-  }
-
-  return ST_CONTINUE;
-}
-
-static int
-__inspect_bs_class(char *key, struct bsClass *value, void *ctx)
-{
-  printf("%s\n", key);
-  printf("    class methods:\n");
-  st_foreach(value->class_methods, __inspect_bs_method, 0); 
-  printf("    instance methods:\n");
-  st_foreach(value->instance_methods, __inspect_bs_method, 0); 
-
-  return ST_CONTINUE;
-}
-
-static int
-__inspect_bs_function(char *key, struct bsFunction *value, void *ctx)
-{
-  unsigned i;
-
-  printf("%s\n", key);
-
-  if (value->is_variadic)
-    printf("    variadic\n");
-
-  for (i = 0; i < value->argc; i++)
-    printf("    arg #%d type %d\n", i, value->argv[i].octype);
-
-  return ST_CONTINUE;
-}
-
-static int
-__inspect_bs_constant(char *key, int type, void *ctx)
-{
-  printf("%s type %d\n", key, type);
-  
-  return ST_CONTINUE;
-}
-
-static VALUE
-osx_inspect_metadata (VALUE self)
-{
-  printf("*** constants ***\n");
-  st_foreach(bsConstants, __inspect_bs_constant, 0);
-
-  printf("*** functions ***\n");
-  st_foreach(bsFunctions, __inspect_bs_function, 0);
-
-  printf("*** classes ***\n");   
-  st_foreach(bsClasses, __inspect_bs_class, 0);
-  
-  return self;
 }
 
 void
@@ -1899,7 +1576,4 @@ initialize_bridge_support (VALUE mOSX)
   
   rb_define_module_function(mOSX, "import_c_constant",
     osx_import_c_constant, 1);
-
-  rb_define_module_function(mOSX, "__inspect_metadata__",
-    osx_inspect_metadata, 0);        
 }

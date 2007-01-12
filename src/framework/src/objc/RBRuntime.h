@@ -6,6 +6,8 @@
  *
  **/
 
+#define ASSERT_ALLOC(x) do { if (x == NULL) rb_fatal("can't allocate memory"); } while (0)
+
 #define DLOG(mod, fmt, args...)                           \
   do {                                                    \
     if (ruby_debug == Qtrue) {                            \

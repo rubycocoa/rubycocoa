@@ -268,7 +268,7 @@ ocobj_s_new(id ocid)
 {
   VALUE obj;
   const char *cls_name;
-  
+
   cls_name = object_getClassName(ocid);
 
   // Try to determine from the metadata if a given NSCFType object cannot be promoted to a better class.

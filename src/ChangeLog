@@ -1,3 +1,30 @@
+2007-01-13  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* framework/tool/gen_bridge_metadata.rb,
+	  framework/bridge-support-exceptions/AppKit.xml:
+	Improved the exceptions template to now mention functions pointer-like 
+	arguments. Added functions pointer-like metadata for AppKit.
+
+	* framework/RubyCocoa.xcodeproj/project.pbxproj,
+	  framework/src/ruby/osx/objc/oc_import.rb,
+	  framework/src/objc/libffi.h,
+	  framework/src/objc/RBObject.m,
+	  framework/src/objc/libffi.m,
+	  framework/src/objc/RBRuntime.h,
+	  framework/src/objc/mdl_osxobjc.m,
+	  framework/src/objc/mdl_objwrapper.m,
+	  framework/src/objc/ocexception.h,
+	  framework/src/objc/ocdata_conv.m,
+	  framework/src/objc/ocexception.m,
+	  framework/src/objc/BridgeSupport.h,
+	  framework/src/objc/BridgeSupport.m:
+	- Added support for functions pointer-like arguments to the bridge ;
+	- Major refactoring of the libffi dispatching code. 
+
+	* tests/tc_qtkit.rb,
+	  tests/tc_passbyref.rb:
+	Updated tests, removed debug log. 
+
 2007-01-12  Fujimoto Hisa  <hisa@fobj.com>
 
 	* ext/rubycocoa/extconf.rb.in, framework/post-config.rb, framework/src/ruby/osx/objc/oc_import.rb, framework/tool/gen_bridge_metadata.rb, framework/tool/verify_bridge_metadata.rb, metaconfig, pre-config.rb, pre-setup.rb, sample/buildall.rb:
