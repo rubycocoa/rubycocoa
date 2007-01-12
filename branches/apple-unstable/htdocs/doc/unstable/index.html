@@ -89,14 +89,25 @@ $ open All
 	<h3>More Frameworks Support</h3>
 
 
-	<p>Thanks to the new metadata mechanism we are now able to bridge frameworks more easily than previously. In addition to Foundation, AppKit and WebKit, the unstable branch also provides support for CoreFoundation, CoreGraphics, PDFKit, QuartzCore (CoreImage and CoreVideo), OpenGL, QTKit, AddressBook and InstantMessage. The previous support of CoreData has been ported to be metadata-driven. We are adding more support progressively.</p>
+	<p>Thanks to the new metadata mechanism we are now able to bridge frameworks more easily than previously. In addition to Foundation, AppKit and WebKit, the unstable branch also provides support for CoreFoundation, CoreGraphics, PDFKit, QuartzCore (CoreImage and CoreVideo), OpenGL, QTKit and InstantMessage. The previous support of AddressBook and CoreData has been ported to be metadata-driven. We are adding more support progressively.</p>
 
 
 	<p>Sample code using these frameworks is available in <tt>/Developer/Examples/RubyCocoa</tt>.</p>
 
 
+	<p>Regarding AddressBook and CoreData, the Ruby scripts (respectively <tt>osx/addressbook</tt> and <tt>osx/coredata</tt>) have been deprecated. A warning will be printed when these scripts are required, and in the final release they will disappear. The new way to load a framework is to use the <tt>require_framework</tt> API, which is documented in the following section.</p>
+
+
 	<h3><span class="caps">API</span> Changes</h3>
 
+
+	<p>A new method to load frameworks, <tt>require_framework</tt>, has been introduced. Its usage is pretty straightforward. Note that you can also give the full path of a framework (in case it is not in one of the default frameworks directories).</p>
+
+
+<pre>
+OSX.require_framework 'CoreData'
+OSX.require_framework '/Path/To/MyFramework.framework'
+</pre>
 
 	<p>RubyCocoa allows you to omit the final underscore character when dispatching a message from Ruby to Objective-C. This is still supported, though this is no longer permitted if the <tt><span class="caps">OSX</span>.relaxed_syntax</tt> variable is set to <tt>false</tt> (which is set to <tt>true</tt> by default).</p>
 

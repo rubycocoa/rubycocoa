@@ -86,11 +86,25 @@ $ open All
 	<h3>More Frameworks Support</h3>
 
 
-	<p>新しいメタデータ機構のおかげで、以前よりも簡単にフレームワークのブリッジを提供することができるようになりました。今までの Foundation, AppKit と WebKit に加えて、unstable ブランチでは CoreFoundation, CoreGraphics, PDFKit, QuartzCore (CoreImage と CoreVideo), OpenGL, QTKit, AddressBook and InstantMessage をサポートしています。また、CoreData は、 BridgeSupport による metadata ベースで置き換えられています。<tt>/Developer/Examples/RubyCocoa</tt>で、これらのフレームワークを使用したサンプルを見ることができます。</p>
+	<p>新しいメタデータ機構のおかげで、以前よりも簡単にフレームワークのブリッジを提供することができるようになりました。今までの Foundation, AppKit と WebKit に加えて、unstable ブランチでは CoreFoundation, CoreGraphics, PDFKit, QuartzCore (CoreImage と CoreVideo), OpenGL, QTKit, InstantMessage をサポートしています。また、CoreDataおよびAddressBookは、 BridgeSupport による metadata ベースで置き換えられています。</p>
+
+
+	<p><tt>/Developer/Examples/RubyCocoa</tt>で、これらのフレームワークを使用したサンプルを見ることができます。</p>
+
+
+	<p>AddressBookとCoreDataをロードするためのライブラリ <tt>osx/addressbook</tt> と <tt>osx/coredata</tt> は削除されます(現在は警告メッセージを表示)。フレームワークをロードするための新しいAPI <tt>require_framework</tt> (詳細については以下のセクションを参照のこと)を使ってロードするようにしてください。</p>
 
 
 	<h3><span class="caps">API</span> Changes</h3>
 
+
+	<p>フレームワークをロードするための新しいAPI <tt>require_framework</tt> が加わりました。使い方は簡単で、引数にフレームワーク名を与えるだけです。デフォルトのフレームワークパスに含まれていないフレームワークに関しては、フルパスを指定することによりロードすることができます。</p>
+
+
+<pre>
+OSX.require_framework 'CoreData'
+OSX.require_framework '/Path/To/MyFramework.framework'
+</pre>
 
 	<p>RubyCocoa では、Objective-C のメッセージを Ruby で扱う際に、最後のアンダースコアを省略することができました。これは現在ではサポートされていますが、 <tt><span class="caps">OSX</span>.relaxed_syntax</tt>(初期値は <tt>true</tt>) の値が <tt>false</tt> のときには許可されない記法となります。</p>
 
