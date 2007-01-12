@@ -7,32 +7,7 @@
  *
  */
 
-/* Ruby and FFI use both autoconf, and some variables collide. */
-#if defined(PACKAGE_BUGREPORT)
-# undef PACKAGE_BUGREPORT
-#endif
-
-#if defined(PACKAGE_NAME) 
-# undef PACKAGE_NAME
-#endif
-
-#if defined(PACKAGE_STRING)
-# undef PACKAGE_STRING
-#endif
-
-#if defined(PACKAGE_TARNAME)
-# undef PACKAGE_TARNAME
-#endif
-
-#if defined(PACKAGE_VERSION)
-# undef PACKAGE_VERSION
-#endif
-
-#if defined(WORDS_BIGENDIAN)
-# undef WORDS_BIGENDIAN
-#endif
-
-#import "ffi.h"
+#import "libffi.h"
 
 typedef enum {
     bsTypeModifierIn,
@@ -55,7 +30,7 @@ struct bsArg {
   bsCArrayArgType   c_ary_type;
   int               c_ary_type_value;  // not set if arg_type is bsCArrayArgUndefined
   BOOL              null_accepted;
-  int               octype;
+  char *            octypestr;
 };
 
 struct bsRetval {
@@ -65,17 +40,19 @@ struct bsRetval {
   BOOL              should_be_retained;
 };
 
-struct bsFunction {
-  char *            name;
+struct bsCallEntry {
   int               argc;
   struct bsArg *    argv;
   struct bsRetval * retval;
+};
+
+struct bsFunction {
+  int               argc;
+  struct bsArg *    argv;
+  struct bsRetval * retval;
+  char *            name;
   void *            sym;
   BOOL              is_variadic;
-  struct {
-    ffi_type ** arg_types;
-    ffi_type *  ret_type;
-  } ffi;
 };
 
 struct bsClass {
@@ -85,13 +62,13 @@ struct bsClass {
 };
 
 struct bsMethod {
-  char *  selector;
-  BOOL    is_class_method;
-  BOOL    ignore;
-  char *  suggestion;   // only if ignore is true
-  int     argc;
+  int               argc;
   struct bsArg *    argv;
   struct bsRetval * retval; // can be NULL
+  char *            selector;
+  BOOL              is_class_method;
+  BOOL              ignore;
+  char *            suggestion;   // only if ignore is true
 };
 
 struct bsInformalProtocolMethod {
@@ -145,8 +122,6 @@ struct bsCFType {
 
 extern struct bsFunction *current_function;
 
-ffi_type *ffi_type_for_octype(int octype);
-
 VALUE objboxed_s_class(void);
 struct bsBoxed *find_bs_boxed_by_encoding(const char *encoding);
 struct bsBoxed *find_bs_boxed_by_octype(const int octype);
@@ -159,20 +134,9 @@ struct bsCFType *find_bs_cf_type_by_encoding(const char *encoding);
 struct bsCFType *find_bs_cf_type_by_type_id(CFTypeID type_id);
 
 struct bsMethod *find_bs_method(id klass, const char *selector, BOOL is_class_method);
-struct bsArg *find_bs_method_arg_by_index(struct bsMethod *method, unsigned index);
-struct bsArg *find_bs_method_arg_by_c_array_len_arg_index(struct bsMethod *method, unsigned index);
+struct bsArg *find_bs_arg_by_index(struct bsCallEntry *entry, unsigned index, unsigned argc);
+struct bsArg *find_bs_arg_by_c_array_len_arg_index(struct bsCallEntry *entry, unsigned index);
 
 struct bsInformalProtocolMethod *find_bs_informal_protocol_method(const char *selector, BOOL is_class_method);
 
 void initialize_bridge_support(VALUE mOSX);
-
-/* On MacOS X, +signatureWithObjCTypes: is a method of NSMethodSignature,
- * but that method is not present in the header files. We add the definition
- * here to avoid warnings.
- *
- * XXX: We use an undocumented API, but we also don't have much choice: we
- * must create the things and this is the only way to do it...
- */
-@interface NSMethodSignature (WarningKiller)
-+ (id) signatureWithObjCTypes:(const char*)types;
-@end

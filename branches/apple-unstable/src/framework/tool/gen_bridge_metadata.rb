@@ -629,6 +629,21 @@ EOS
       @struct_names.each do |struct_name|
         root.add_element('struct').add_attribute('name', struct_name)
       end
+      @functions.each do |function|
+        pointer_arg_indexes = []
+        function.args.each_with_index do |arg, i| 
+          pointer_arg_indexes << i if arg.pointer?
+        end
+        next if pointer_arg_indexes.empty?
+
+        element = root.add_element('function')
+        element.add_attribute('name', function.name)
+        pointer_arg_indexes.each do |i|
+          arg_element = element.add_element('arg')
+          arg_element.add_attribute('index', i)
+          arg_element.add_attribute('type_modifier', 'out')
+        end
+      end
       @ocmethods.each do |class_name, methods|
         method_elements = []
         methods.each do |method|
@@ -733,6 +748,24 @@ EOS
   end
 
   def merge_document_with_exceptions(document, exception_document)
+    # Merge functions.
+    exception_document.elements.each('/signatures/function') do |func_element|
+     func_name = func_element.attributes['name']
+      # Do the merging.
+      orig_func_element = document.elements["/signatures/function[@name='#{func_name}']"]
+      raise "Function '#{func_name}' is described in an exception file but it has not been discovered by the final generator" if orig_func_element.nil?
+      orig_func_args = orig_func_element.get_elements('arg')
+      func_element.elements.each('arg') do |arg_element|
+        idx = arg_element.attributes['index'].to_i
+        orig_arg_element = orig_func_args[idx]
+        raise "Function '#{func_name}' is described with more arguments than it should" if orig_arg_element.nil?
+        # Append attributes (except 'index').
+        arg_element.attributes.each do |name, value|
+          next if name == 'index'
+          orig_arg_element.add_attribute(name, value)
+        end
+      end 
+    end
     # Merge class/methods.
     exception_document.elements.each('/signatures/class') do |class_element|
       class_name = class_element.attributes['name']
