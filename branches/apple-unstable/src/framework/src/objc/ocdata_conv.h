@@ -36,6 +36,10 @@
 # define _C_BOOL 'B'
 #endif
 
+#if !defined(_C_CONST)
+# define _C_CONST 'v'
+#endif
+
 enum osxobjc_nsdata_type {
   _PRIV_C_BOOL = 1024,
   _PRIV_C_PTR,
