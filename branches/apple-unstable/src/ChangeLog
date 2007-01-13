@@ -1,3 +1,10 @@
+2007-01-14  Fujimoto Hisa  <hisa@fobj.com>
+
+	* framework/src/ruby/osx/objc/oc_wrapper.rb:
+	assume an explicit predicate if a received message has `?' suffix
+	and returned value is a integer when OSX.relaxed_syntax.  For
+	using a unsupported framework without metadata quickly.
+
 2007-01-13  Laurent Sansonetti <lsansonetti@apple.com>
 
 	* framework/tool/gen_bridge_metadata.rb,

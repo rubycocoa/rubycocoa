@@ -44,8 +44,13 @@ module OSX
     end
 
     def method_missing(mname, *args)
-      m_name, m_args = analyze_missing(mname, args)
-      self.ocm_send(m_name, *m_args)
+      m_name, m_args, as_predicate = analyze_missing(mname, args)
+      result = self.ocm_send(m_name, *m_args)
+      if as_predicate && result.is_a?(Integer) then
+        result != 0
+      else
+        result
+      end
     end
 
     def ocnil?
@@ -93,7 +98,8 @@ module OSX
       m_name.sub!(/^oc_/, '')
 
       # remove `?' suffix (to keep compatibility)
-      m_name.sub!(/\?$/, '')
+      # explicit predicate if `?' suffix with OSX.relaxed_syntax
+      as_predicate = (m_name.sub!(/\?$/, '') && OSX.relaxed_syntax) ? true : false
 
       # check call style
       #   as Objective-C: [self aaa: a0 Bbb: a1 Ccc: a2]
@@ -148,7 +154,7 @@ module OSX
           m_name.sub!(/[^_:]$/, '\0_') if m_args.size > 0
         end
       end
-      [ m_name, m_args ]
+      return [ m_name, m_args, as_predicate ]
     end
 
   end
