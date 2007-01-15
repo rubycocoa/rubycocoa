@@ -1,5 +1,10 @@
 2007-01-15  Laurent Sansonetti <lsansonetti@apple.com>
 
+	* sample/Spotlight/English.lproj/MainMenu.nib/info.nib,
+	  sample/Spotlight/English.lproj/MainMenu.nib/keyedobjects.nib:
+	Fixed the UI elements resizable flags and set the text views as not 
+	editable.
+
 	* framework/bridge-support-exceptions/Foundation.xml,
 	  framework/src/objc/libffi.h,
 	  framework/src/objc/libffi.m,
