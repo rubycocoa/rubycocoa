@@ -16,6 +16,9 @@
 
 2007-01-15  Laurent Sansonetti <lsansonetti@apple.com>
 
+	* framework/tool/gen_bridge_metadata.rb:
+	Discover functions that return ObjC objects that conform to a certain protocol.
+
 	* framework/bridge-support-exceptions/Foundation.xml:
 	Updated to describe functions with pointer-like arguments.
 
