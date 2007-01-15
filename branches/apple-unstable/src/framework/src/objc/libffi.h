@@ -38,7 +38,7 @@
 struct bsBoxed;
 struct bsCallEntry;
 
-ffi_type *ffi_type_for_octype(int octype);
+ffi_type *ffi_type_for_octype(int octype, char *octypestr);
 ffi_type *bs_boxed_ffi_type(struct bsBoxed *bs_boxed);
 
 VALUE rb_ffi_dispatch(

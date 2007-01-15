@@ -160,6 +160,44 @@ ocdata_size(int octype, const char* octype_str)
     result = sizeof(id*); break;
 
   case _C_BFLD:
+    if (octype_str != NULL) {
+      char *type;
+      long lng;
+
+      type = (char *)octype_str;
+      lng  = strtol(type, &type, 10);
+
+      // while next type is a bit field
+      while (*type == _C_BFLD) {
+        long next_lng;
+
+        // skip over _C_BFLD
+        type++;
+
+        // get next bit field length
+        next_lng = strtol(type, &type, 10);
+
+        // if spans next word then align to next word
+        if ((lng & ~31) != ((lng + next_lng) & ~31))
+          lng = (lng + 31) & ~31;
+
+        // increment running length
+        lng += next_lng;
+
+#if 0 
+          // skip over next stuff
+          p = strchr(type, _C_BFLD);
+          if (p == NULL) {
+            strcat(buf, type);
+            break;
+          }
+          type = p;
+#endif
+      }
+      result = (lng + 7) / 8;
+    }
+    break;
+
   case _C_UNDEF:
   case _C_ARY_B:
   case _C_ARY_E:
@@ -177,8 +215,8 @@ ocdata_size(int octype, const char* octype_str)
         result = bs_boxed_size(bs_boxed);
     }
     if (result == 0 && octype_str != NULL) {
-      unsigned int size, align;
-      NSGetSizeAndAlignment(octype_str, &size, &align);
+      unsigned int size;
+      NSGetSizeAndAlignment(octype_str, &size, NULL);
       result = size;
     }
     break;

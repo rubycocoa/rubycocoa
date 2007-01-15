@@ -163,10 +163,10 @@ ovmix_imp_for_type(const char *type)
     octype = to_octype(arg_types[i]);
     if (i >= 2)
       octypes[i - 1] = octype;
-    arg_ffi_types[i] = ffi_type_for_octype(octype);
+    arg_ffi_types[i] = ffi_type_for_octype(octype, arg_types[i]);
   }
   octypes[0] = to_octype(retval_type);
-  retval_ffi_type = ffi_type_for_octype(octypes[0]);
+  retval_ffi_type = ffi_type_for_octype(octypes[0], retval_type);
 
   cif = (ffi_cif *)malloc(sizeof(ffi_cif));
   if (cif == NULL) {

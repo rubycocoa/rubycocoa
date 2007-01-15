@@ -531,12 +531,8 @@ EOS
     ivar_st = []
     log_st = []
     @structs.each do |name, is_opaque|
-      if is_opaque
-        log_st << "printf(\"%s: %s\\n\", \"#{name}\", @encode(#{name}));"
-      else
-        ivar_st << "#{name} a#{name};"
-        log_st << "printf(\"%s: %s\\n\", \"#{name}\", class_getInstanceVariable(klass, \"a#{name}\")->ivar_type);"
-      end
+      ivar_st << "#{name} a#{name};"
+      log_st << "printf(\"%s: %s\\n\", \"#{name}\", class_getInstanceVariable(klass, \"a#{name}\")->ivar_type);"
     end
     code = <<EOS
 #{@import_directive}
@@ -674,6 +670,7 @@ EOS
         element = root.add_element('struct')
         element.add_attribute('name', name)
         element.add_attribute('encoding', encoding)
+        element.add_attribute('opaque', true) if @structs[name]
       end
       @resolved_cftypes.sort { |x, y| x[0] <=> y[0] }.each do |name, ary|
         encoding, tollfree, gettypeid_func = ary
@@ -932,7 +929,7 @@ EOS
     # Open exceptions, ignore mentionned headers.
     # Keep the list of structs, CFTypes, boxed and methods return/args types.
     @ignored_defines_regexps = []
-    @structs = []
+    @structs = {} 
     @cftypes = {} 
     @opaques = []
     @method_exception_types = []
@@ -948,7 +945,7 @@ EOS
         @ignored_defines_regexps << Regexp.new(element.text.strip)
       end
       doc.get_elements('/signatures/struct').each do |elem|
-        @structs << [elem.attributes['name'], elem.attributes['opaque'] == 'true']
+        @structs[elem.attributes['name']] = elem.attributes['opaque'] == 'true'
       end
       doc.get_elements('/signatures/cftype').map do |elem|
         @cftypes[elem.attributes['name']] = elem.attributes['gettypeid_func']
