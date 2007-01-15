@@ -1,3 +1,14 @@
+2007-01-15  Eloy Duran <eloy.de.enige@gmail.com>
+
+	* framework/tool/gen_bridge_doc.rb,
+	  framework/tool/gen_bridge_doc/lib/cocoa_ref.rb
+	  framework/tool/gen_bridge_doc/rdocify_framework.rb
+	Added the first support for Apple HTML Reference Docs to RDoc generation.
+	At this moment gen_bridge_doc.rb will only try to parse the AppKit framework.
+	By default it will not generate any rdoc files for reference files caused errors during parsing.
+	Once all errors for AppKit have been resolved other frameworks will gradually be added,
+	until we're on par with the supported frameworks in BridgeSupport.
+
 2007-01-15  Laurent Sansonetti <lsansonetti@apple.com>
 
 	* sample/Spotlight/English.lproj/MainMenu.nib/info.nib,
