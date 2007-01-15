@@ -11,6 +11,7 @@
   <struct name='NSRect'/>
   <struct name='NSRange'/>
   <struct name='NSAffineTransformStruct'/>
+  <struct name='NSDecimal' opaque='true'/>
   <opaque name='NSZone *'/>
   <class name='NSAppleEventDescriptor'>
     <method class_method='true' selector='descriptorWithDescriptorType:bytes:length:'>

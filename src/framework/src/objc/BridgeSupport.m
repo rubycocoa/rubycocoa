@@ -256,9 +256,10 @@ undecorate_encoding(const char *src, char *dest, size_t dest_len, struct bsStruc
         else {
           // Easy case, just match another field delimiter, or the end
           // of the encoding.
-          if (c == '"' || c == '}')
+          if (c == '"' || c == '}') {
             i--;
             ok = YES;
+          } 
         }
       }
 
@@ -333,9 +334,9 @@ size_t
 bs_boxed_size(struct bsBoxed *bs_struct)
 {
   if (bs_struct->size == 0 && bs_struct->type == bsBoxedStructType) {
+    long size;
     unsigned i;
-    size_t size;
-  
+ 
     for (i = 0, size = 0; i < bs_struct->opt.s.field_count; i++)
       size += ocdata_size(to_octype(bs_struct->opt.s.fields[i].encoding),
                           bs_struct->opt.s.fields[i].encoding);           
@@ -712,7 +713,7 @@ init_bs_boxed (bsBoxedType type, const char *name, const char *encoding, VALUE k
 }
 
 static struct bsBoxed *
-init_bs_boxed_struct (VALUE mOSX, const char *name, const char *decorated_encoding)
+init_bs_boxed_struct (VALUE mOSX, const char *name, const char *decorated_encoding, BOOL is_opaque)
 {
   char encoding[MAX_ENCODE_LEN];
   struct bsStructField fields[128];
@@ -731,16 +732,18 @@ init_bs_boxed_struct (VALUE mOSX, const char *name, const char *decorated_encodi
   klass = rb_define_bs_boxed_class(mOSX, name, encoding);
   if (NIL_P(klass))
     return NULL;
-  for (i = 0; i < field_count; i++) {
-    char setter[128];
+  if (!is_opaque) {
+    for (i = 0; i < field_count; i++) {
+      char setter[128];
 
-    snprintf(setter, sizeof setter, "%s=", fields[i].name);
-    rb_define_method(klass, fields[i].name, rb_bs_struct_get, 0);
-    rb_define_method(klass, setter, rb_bs_struct_set, 1);
+      snprintf(setter, sizeof setter, "%s=", fields[i].name);
+      rb_define_method(klass, fields[i].name, rb_bs_struct_get, 0);
+      rb_define_method(klass, setter, rb_bs_struct_set, 1);
+    }
+    rb_define_method(klass, "to_a", rb_bs_struct_to_a, 0);
   }
   rb_define_singleton_method(klass, "new", rb_bs_struct_new, -1);
   rb_define_method(klass, "==", rb_bs_struct_is_equal, 1);
-  rb_define_method(klass, "to_a", rb_bs_struct_to_a, 0);
 
   // Allocate and return bs_boxed entry.
   bs_boxed = init_bs_boxed(bsBoxedStructType, name, encoding, klass);
@@ -985,12 +988,22 @@ osx_load_bridge_support_file (VALUE mOSX, VALUE path)
       case BS_XML_STRUCT: {
         char *           struct_decorated_encoding;
         char *           struct_name;
+        char *           is_opaque_s;
+        BOOL             is_opaque;
         struct bsBoxed * bs_boxed;
 
         struct_decorated_encoding = get_attribute_and_check(reader, "encoding");
         struct_name = get_attribute_and_check(reader, "name");
+        is_opaque_s = get_attribute(reader, "opaque");
+        if (is_opaque_s != NULL) {
+          is_opaque = strcmp(is_opaque_s, "true") == 0;
+          free(is_opaque_s);
+        }
+        else {
+          is_opaque = NO;
+        }
 
-        bs_boxed = init_bs_boxed_struct(mOSX, struct_name, struct_decorated_encoding);
+        bs_boxed = init_bs_boxed_struct(mOSX, struct_name, struct_decorated_encoding, is_opaque);
         if (bs_boxed == NULL) {
           DLOG("MDLOSX", "Can't init structure '%s' -- skipping...", struct_decorated_encoding);
         }

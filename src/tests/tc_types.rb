@@ -160,4 +160,24 @@ class TC_Types < Test::Unit::TestCase
     assert_equal(1633841264, OSX::KEventClassABPeoplePicker)
     assert_equal(OSX::TestFourCharCode.kEventClassABPeoplePickerValue, OSX::KEventClassABPeoplePicker)
   end
+
+  def test_nsdecimal
+    zero = OSX::NSDecimalNumber.zero
+    assert_equal('0', OSX::NSDecimalString(zero.decimalValue, nil).to_s)
+    one = OSX::NSDecimalNumber.one
+    assert_equal('1', OSX::NSDecimalString(one.decimalValue, nil).to_s)
+    one2 = OSX::NSDecimalNumber.decimalNumberWithDecimal(one.decimalValue)
+    assert_equal(OSX::NSOrderedSame, one.compare(one2))
+    two = one.decimalNumberByAdding(one)
+    assert_equal(2, two.doubleValue)
+    four = two.decimalNumberByMultiplyingBy(two)
+    assert_equal(4, four.doubleValue)
+    still_four = four.decimalNumberByDividingBy(one)
+    assert_equal(4, still_four.doubleValue)
+    four_pow_four = four.decimalNumberByRaisingToPower(4)
+    assert_equal(256, four_pow_four.doubleValue)
+    fifty_six = OSX::NSDecimalNumber.decimalNumberWithString('56')
+    two_hundred = four_pow_four.decimalNumberBySubtracting(fifty_six)
+    assert_equal(200, two_hundred.doubleValue)
+  end
 end

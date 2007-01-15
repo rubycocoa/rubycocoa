@@ -14,6 +14,7 @@
 #import "cls_objcid.h"
 #import "cls_objcptr.h"
 #import "RBRuntime.h" // for DLOG
+#import <st.h>
 
 #define FFI_LOG(fmt, args...) DLOG("LIBFFI", fmt, ##args)
 
@@ -33,10 +34,10 @@ bs_boxed_ffi_type(struct bsBoxed *bs_boxed)
       bs_boxed->ffi_type->elements = malloc(bs_boxed->opt.s.field_count * sizeof(ffi_type *));
       ASSERT_ALLOC(bs_boxed->ffi_type->elements);
       for (i = 0; i < bs_boxed->opt.s.field_count; i++) {
-        int octype;
+        char *octypestr;
 
-        octype = to_octype(bs_boxed->opt.s.fields[i].encoding);
-        bs_boxed->ffi_type->elements[i] = ffi_type_for_octype(octype);
+        octypestr = bs_boxed->opt.s.fields[i].encoding;
+        bs_boxed->ffi_type->elements[i] = ffi_type_for_octype(to_octype(octypestr), octypestr);
       }
       bs_boxed->ffi_type->elements[bs_boxed->opt.s.field_count] = NULL;
     }
@@ -49,8 +50,40 @@ bs_boxed_ffi_type(struct bsBoxed *bs_boxed)
   return bs_boxed->ffi_type;
 }
 
+static struct st_table *ary_ffi_types = NULL;
+
+static ffi_type *
+fake_ary_ffi_type (unsigned bytes)
+{
+  ffi_type *type;
+  unsigned i;
+
+  assert(bytes > 0);
+
+  if (ary_ffi_types == NULL)
+    ary_ffi_types = st_init_numtable();
+
+  if (st_lookup(ary_ffi_types, (st_data_t)bytes, (st_data_t *)&type))
+    return type;
+
+  type = (ffi_type *)malloc(sizeof(ffi_type));
+  ASSERT_ALLOC(type);
+
+  type->size = bytes; 
+  type->alignment = 0;
+  type->type = FFI_TYPE_STRUCT;
+  type->elements = malloc(bytes * sizeof(ffi_type *));
+  ASSERT_ALLOC(type->elements);
+  for (i = 0; i < bytes; i++)
+    type->elements[i] = &ffi_type_uchar;
+
+  st_insert(ary_ffi_types, (st_data_t)bytes, (st_data_t)type);
+
+  return type;
+}
+
 ffi_type *
-ffi_type_for_octype (int octype)
+ffi_type_for_octype (int octype, char *octypestr)
 {
   switch (octype) {
     case _C_ID:
@@ -94,7 +127,33 @@ ffi_type_for_octype (int octype)
       return &ffi_type_double;
     case _C_VOID:
       return &ffi_type_void;  
+    case _C_BFLD:
+      {
+        unsigned int size;
 
+        size = ocdata_size(octype, octypestr);
+        if (size > 0) {
+          if (size == 1)
+            return &ffi_type_uchar;
+          else if (size == 2)
+            return &ffi_type_ushort;
+          else if (size <= 4)
+            return &ffi_type_uint; 
+          else
+            return fake_ary_ffi_type(size);
+        }
+      }
+      break;
+    case _C_ARY_B:
+      {
+        unsigned int size;
+
+        NSGetSizeAndAlignment(octypestr, &size, NULL);
+
+        if (size > 0)  
+          return fake_ary_ffi_type(size);
+      }
+      break;
     default:
       if (octype > BS_BOXED_OCTYPE_THRESHOLD) {
         struct bsBoxed *bs_boxed;
@@ -274,7 +333,7 @@ rb_ffi_dispatch (
       if (!rbobj_to_ocdata(arg, octype, value, NO))
         return rb_err_new(ocdataconv_err_class(), "Cannot convert the argument #%d as '%s' to Objective-C", i, octype_str); 
       
-      arg_types[i + argc_delta] = ffi_type_for_octype(octype);
+      arg_types[i + argc_delta] = ffi_type_for_octype(octype, "");
       arg_values[i + argc_delta] = value;
 
       if (is_c_array && bs_arg->c_ary_type == bsCArrayArgDelimitedByArg) {
@@ -290,7 +349,8 @@ rb_ffi_dispatch (
   }
 
   // Prepare return type/val.
-  ret_type = ffi_type_for_octype(ret_octype);
+  FFI_LOG("retval (%p) : %d", retval, ret_octype);
+  ret_type = ffi_type_for_octype(ret_octype, "");
   if (ret_octype != _C_VOID) {
     size_t ret_len = ocdata_size(ret_octype, "");
     FFI_LOG("allocated %ld bytes for the result", ret_len);
