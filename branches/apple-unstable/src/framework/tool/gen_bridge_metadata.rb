@@ -997,7 +997,7 @@ EOS
     val += '.framework' unless /\.framework$/.match(val)
     ['/System/Library/Frameworks',
      '/Library/Frameworks',
-     File.join(ENV['USER']), 'Library', 'Frameworks'].each do |dir|
+     "/Users/#{ENV['USER']}/Library/Frameworks"].each do |dir|
       path = File.join(dir, val)
       return path if File.exist?(path)
     end
