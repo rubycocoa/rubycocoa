@@ -8,7 +8,7 @@ require 'test/unit'
 require 'osx/cocoa'
 
 ###class ExceptionTest < OSX::NSObject
-system 'make' || raise(RuntimeError, "'make' failed")
+system 'make -s' || raise(RuntimeError, "'make' failed")
 require 'objc_test.bundle'
 
 OSX.ns_import "RBExceptionTestBase" # at end of RBObject.m

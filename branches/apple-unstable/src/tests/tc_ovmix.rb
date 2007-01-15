@@ -7,7 +7,7 @@ require 'test/unit'
 require 'osx/cocoa'
 require 'rbconfig'
 
-system 'make' || raise(RuntimeError, "'make' failed")
+system 'make -s' || raise(RuntimeError, "'make' failed")
 require 'objc_test.bundle'
 
 class RigHelper < OSX::NSObject
