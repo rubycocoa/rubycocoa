@@ -1,3 +1,9 @@
+2007-01-15  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* tests/*.rb:
+	- Run make silently ;
+	- Do not print the test case names unless $VERBOSE is true.
+
 2007-01-15  Fujimoto Hisa  <hisa@fobj.com>
 
 	* framework/tool/gen_bridge_metadata.rb:

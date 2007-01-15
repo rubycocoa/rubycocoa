@@ -1,7 +1,7 @@
 require 'test/unit'
 require 'osx/cocoa'
 
-system 'make' || raise(RuntimeError, "'make' failed")
+system 'make -s' || raise(RuntimeError, "'make' failed")
 require 'objc_test.bundle'
 
 OSX.ns_import :RetainCount
