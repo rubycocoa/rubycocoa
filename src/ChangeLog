@@ -1,5 +1,10 @@
 2007-01-15  Eloy Duran <eloy.de.enige@gmail.com>
 
+	* framework/tool/gen_bridge_doc.rb:
+	Updated this script so that it also accepts the verbose and force flags: -v, -f
+	
+2007-01-15  Eloy Duran <eloy.de.enige@gmail.com>
+
 	* framework/tool/gen_bridge_doc.rb,
 	  framework/tool/gen_bridge_doc/lib/cocoa_ref.rb,
 	  framework/tool/gen_bridge_doc/rdocify_framework.rb:
