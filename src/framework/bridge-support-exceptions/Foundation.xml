@@ -13,6 +13,164 @@
   <struct name='NSAffineTransformStruct'/>
   <struct name='NSDecimal' opaque='true'/>
   <opaque name='NSZone *'/>
+  <function name='NSDecimalCopy'>
+    <arg index='0' type_modifier='in'/>
+    <arg index='1' type_modifier='in'/>
+  </function>
+  <function name='NSDecimalCompact'>
+    <arg index='0' type_modifier='in'/>
+  </function>
+  <function name='NSDecimalCompare'>
+    <arg index='0' type_modifier='in'/>
+    <arg index='1' type_modifier='in'/>
+  </function>
+  <function name='NSDecimalRound'>
+    <arg index='0' type_modifier='in'/>
+    <arg index='1' type_modifier='in'/>
+  </function>
+  <function name='NSDecimalNormalize'>
+    <arg index='0' type_modifier='in'/>
+    <arg index='1' type_modifier='in'/>
+  </function>
+  <function name='NSDecimalAdd'>
+    <arg index='0' type_modifier='in'/>
+    <arg index='1' type_modifier='in'/>
+    <arg index='2' type_modifier='in'/>
+  </function>
+  <function name='NSDecimalSubtract'>
+    <arg index='0' type_modifier='in'/>
+    <arg index='1' type_modifier='in'/>
+    <arg index='2' type_modifier='in'/>
+  </function>
+  <function name='NSDecimalMultiply'>
+    <arg index='0' type_modifier='in'/>
+    <arg index='1' type_modifier='in'/>
+    <arg index='2' type_modifier='in'/>
+  </function>
+  <function name='NSDecimalDivide'>
+    <arg index='0' type_modifier='in'/>
+    <arg index='1' type_modifier='in'/>
+    <arg index='2' type_modifier='in'/>
+  </function>
+  <function name='NSDecimalPower'>
+    <arg index='0' type_modifier='in'/>
+    <arg index='1' type_modifier='in'/>
+  </function>
+  <function name='NSDecimalMultiplyByPowerOf10'>
+    <arg index='0' type_modifier='in'/>
+    <arg index='1' type_modifier='in'/>
+  </function>
+  <function name='NSDecimalString'>
+    <arg index='0' type_modifier='in'/>
+  </function>
+  <function name='NSSetUncaughtExceptionHandler'>
+    <arg index='0' type_modifier='in'/>
+  </function>
+  <function name='NSCopyHashTableWithZone'>
+    <arg index='1' type_modifier='in'/>
+  </function>
+  <function name='NSHashGet'>
+    <arg index='1' type_modifier='in'/>
+  </function>
+  <function name='NSHashInsert'>
+    <arg index='1' type_modifier='in'/>
+  </function>
+  <function name='NSHashInsertKnownAbsent'>
+    <arg index='1' type_modifier='in'/>
+  </function>
+  <function name='NSHashInsertIfAbsent'>
+    <arg index='1' type_modifier='in'/>
+  </function>
+  <function name='NSHashRemove'>
+    <arg index='1' type_modifier='in'/>
+  </function>
+  <function name='NSNextHashEnumeratorItem'>
+    <arg index='0' type_modifier='in'/>
+  </function>
+  <function name='NSEndHashTableEnumeration'>
+    <arg index='0' type_modifier='in'/>
+  </function>
+  <function name='NSCreateHashTableWithZone'>
+    <arg index='2' type_modifier='in'/>
+  </function>
+  <function name='NSCopyMapTableWithZone'>
+    <arg index='1' type_modifier='in'/>
+  </function>
+  <function name='NSMapMember'>
+    <arg index='1' type_modifier='in'/>
+  </function>
+  <function name='NSMapGet'>
+    <arg index='1' type_modifier='in'/>
+  </function>
+  <function name='NSMapInsert'>
+    <arg index='1' type_modifier='in'/>
+    <arg index='2' type_modifier='in'/>
+  </function>
+  <function name='NSMapInsertKnownAbsent'>
+    <arg index='1' type_modifier='in'/>
+    <arg index='2' type_modifier='in'/>
+  </function>
+  <function name='NSMapInsertIfAbsent'>
+    <arg index='1' type_modifier='in'/>
+    <arg index='2' type_modifier='in'/>
+  </function>
+  <function name='NSMapRemove'>
+    <arg index='1' type_modifier='in'/>
+  </function>
+  <function name='NSNextMapEnumeratorPair'>
+    <arg index='0' type_modifier='in'/>
+  </function>
+  <function name='NSEndMapTableEnumeration'>
+    <arg index='0' type_modifier='in'/>
+  </function>
+  <function name='NSCreateMapTableWithZone'>
+    <arg index='3' type_modifier='in'/>
+  </function>
+  <function name='NSAllocateObject'>
+    <arg index='2' type_modifier='in'/>
+  </function>
+  <function name='NSCopyObject'>
+    <arg index='2' type_modifier='in'/>
+  </function>
+  <function name='NSShouldRetainWithZone'>
+    <arg index='1' type_modifier='in'/>
+  </function>
+  <function name='NSRecycleZone'>
+    <arg index='0' type_modifier='in'/>
+  </function>
+  <function name='NSSetZoneName'>
+    <arg index='0' type_modifier='in'/>
+  </function>
+  <function name='NSZoneName'>
+    <arg index='0' type_modifier='in'/>
+  </function>
+  <function name='NSZoneFromPointer'>
+    <arg index='0' type_modifier='in'/>
+  </function>
+  <function name='NSZoneMalloc'>
+    <arg index='0' type_modifier='in'/>
+  </function>
+  <function name='NSZoneCalloc'>
+    <arg index='0' type_modifier='in'/>
+  </function>
+  <function name='NSZoneRealloc'>
+    <arg index='0' type_modifier='in'/>
+    <arg index='1' type_modifier='in'/>
+  </function>
+  <function name='NSZoneFree'>
+    <arg index='0' type_modifier='in'/>
+    <arg index='1' type_modifier='in'/>
+  </function>
+  <function name='NSReallocateCollectable'>
+    <arg index='0' type_modifier='in'/>
+  </function>
+  <function name='NSDeallocateMemoryPages'>
+    <arg index='0' type_modifier='in'/>
+  </function>
+  <function name='NSCopyMemoryPages'>
+    <arg index='0' type_modifier='in'/>
+    <arg index='1' type_modifier='in'/>
+  </function>
   <class name='NSAppleEventDescriptor'>
     <method class_method='true' selector='descriptorWithDescriptorType:bytes:length:'>
       <arg index='1' type_modifier='in' c_array_delimited_by_arg='2'/>
