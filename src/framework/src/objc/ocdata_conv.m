@@ -14,8 +14,11 @@
 #import <CoreFoundation/CFString.h> // CFStringEncoding
 #import "st.h"
 #import "BridgeSupport.h"
+#import "RBRuntime.h" // for DLOG
 
 #define CACHE_LOCKING 0
+
+#define DATACONV_LOG(fmt, args...) DLOG("DATACNV", fmt, ##args)
 
 static struct st_table *rb2ocCache;
 static struct st_table *oc2rbCache;
@@ -877,45 +880,130 @@ __decode_method_encoding_with_method_signature(NSMethodSignature *methodSignatur
   }
 }
 
+static inline const char *
+__iterate_until(const char *type, char end)
+{
+  char begin;
+  unsigned nested;
+
+  begin = *type;
+  nested = 0;
+
+  do {
+    type++;
+    if (*type == begin) {
+      nested++;
+    }
+    else if (*type == end) {
+      if (nested == 0)
+        return type;
+      nested--;
+    }
+  }
+  while (YES);
+
+  return NULL;
+}
+
+static inline const char *
+__skip_modifiers(const char *type)
+{
+  while (YES) {
+    switch (*type) {
+      case _C_CONST:
+      case _C_PTR:
+      case 'O': // bycopy
+      case 'n': // in
+      case 'o': // out
+      case 'N': // inout
+      case 'V': // oneway
+        type++;
+        break;      
+
+      default:
+        return type;
+    }
+  }
+  return NULL;
+}
+
+static const char *
+__get_first_encoding(const char *type, char *buf, size_t buf_len)
+{
+  const char *orig_type;
+  const char *p;
+
+  orig_type = type;
+
+  type = __skip_modifiers(type);
+
+  switch (*type) {
+    case '\0':
+      return NULL;
+    case _C_ARY_B:
+      type = __iterate_until(type, _C_ARY_E);
+      break;
+    case _C_STRUCT_B:
+      type = __iterate_until(type, _C_STRUCT_E);
+      break;
+    case _C_UNION_B:
+      type = __iterate_until(type, _C_UNION_E);
+      break;
+  }
+
+  type++;
+  p = type;
+  while (*p >= '0' && *p <= '9') { p++; }
+
+  if (buf != NULL) {
+    size_t len = MIN(buf_len, (long)(type - orig_type));
+    strncpy(buf, orig_type, len);
+    buf[len] = '\0';
+  }
+
+  return p;
+}
+
 // 10.4 or lower, use NSMethodSignature.
 // Otherwise, use the Objective-C runtime API, which is faster and more reliable with structures encoding.
 void
 decode_method_encoding(const char *encoding, NSMethodSignature *methodSignature, unsigned *argc, char **retval_type, char ***arg_types, BOOL strip_first_two_args)
 {
   assert(encoding != NULL || methodSignature != nil);
+
   if (encoding == NULL) {
+    DATACONV_LOG("decoding method encoding using method signature %p", methodSignature);
     __decode_method_encoding_with_method_signature(methodSignature, argc, retval_type, arg_types, strip_first_two_args);   
   }
   else {
-#if MAC_OS_X_VERSION_MAX_ALLOWED <= MAC_OS_X_VERSION_10_4
-    NSAutoreleasePool *pool;
-  
-    pool = [[NSAutoreleasePool alloc] init];
-    methodSignature = [NSMethodSignature signatureWithObjCTypes:encoding];
-    __decode_method_encoding_with_method_signature(methodSignature, argc, retval_type, arg_types, strip_first_two_args);   
-    [pool release];
-#else
-    // There is no public API to parse encoding, but we can make a fake method.
-    struct objc_method method;
-    unsigned i;
+    char buf[128];
 
-    method.method_types = (char *)encoding;
-
-    *argc = method_getNumberOfArguments(&method);
-    if (strip_first_two_args)
-      *argc -= 2;
-    *retval_type = method_copyReturnType(&method);
+    DATACONV_LOG("decoding method encoding '%s' manually", encoding);
+    encoding = __get_first_encoding(encoding, buf, sizeof buf);
+    DATACONV_LOG("retval -> %s", buf);
+    *retval_type = strdup(buf);
+    if (strip_first_two_args) {
+      DATACONV_LOG("skipping first two args");
+      encoding = __get_first_encoding(encoding, NULL, 0);    
+      encoding = __get_first_encoding(encoding, NULL, 0);    
+    }
+    *argc = 0;
+    // Do a first pass to know the argc 
+    if (encoding != NULL) {
+      const char *p = encoding;
+      while ((p = __get_first_encoding(p, NULL, 0)) != NULL) { (*argc)++; }
+    }
+    DATACONV_LOG("argc -> %d", *argc);
     if (*argc > 0) {
-      char **l_arg_types;
-      
-      l_arg_types = (char **)malloc(sizeof(char *) * (*argc));
-      for (i = 0; i < *argc; i++)
-        l_arg_types[i] = method_copyArgumentType(&method, i + (strip_first_two_args ? 2 : 0));
-      *arg_types = l_arg_types;
+      unsigned i;
+      char **p;
+      i = 0;
+      p = (char **)malloc(sizeof(char *) * (*argc));
+      while ((encoding = __get_first_encoding(encoding, buf, sizeof buf)) != NULL) {
+        DATACONV_LOG("arg[%d] -> %s\n", i, buf);
+        p[i++] = strdup(buf);
+      }
+      *arg_types = p;
     }
-    else {
-      *arg_types = NULL;
-    }
-#endif
   }
 }

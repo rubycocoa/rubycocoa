@@ -1,5 +1,10 @@
 2007-01-16  Laurent Sansonetti <lsansonetti@apple.com>
 
+	* framework/src/objc/RBObject.m,
+	  framework/src/objc/ocdata_conv.m,
+	  framework/src/objc/OverrideMixin.m:
+	Now manually decoding methods Objective-C encoding.
+
 	* tests/tc_bs.rb:
 	Fixed test to spawn Ruby command lines to use the source root RubyCocoa.
 
