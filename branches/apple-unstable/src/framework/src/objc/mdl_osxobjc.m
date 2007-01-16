@@ -83,7 +83,7 @@ osx_mf_objc_derived_class_new(VALUE mdl, VALUE kls, VALUE kls_name, VALUE super_
 // def OSX.objc_class_method_add (kls, method_name)
 // ex1.  OSX.objc_class_method_add (AA::BB::CustomView, "drawRect:")
 static VALUE
-osx_mf_objc_class_method_add(VALUE mdl, VALUE kls, VALUE method_name)
+osx_mf_objc_class_method_add(VALUE mdl, VALUE kls, VALUE method_name, VALUE class_method)
 {
   Class a_class;
   SEL a_sel;
@@ -102,7 +102,7 @@ osx_mf_objc_class_method_add(VALUE mdl, VALUE kls, VALUE method_name)
     a_class = RBObjcClassFromRubyClass (kls);
   }
   if (a_class != NULL)
-    [a_class addRubyMethod:a_sel];
+    [RTEST(class_method) ? a_class->isa : a_class addRubyMethod:a_sel];
   return Qnil;
 }
 
@@ -360,7 +360,7 @@ void initialize_mdl_osxobjc()
   rb_define_module_function(mOSX, "objc_derived_class_new", 
 			    osx_mf_objc_derived_class_new, 3);
   rb_define_module_function(mOSX, "objc_class_method_add",
-			    osx_mf_objc_class_method_add, 2);
+			    osx_mf_objc_class_method_add, 3);
 
   rb_define_module_function(mOSX, "ruby_thread_switcher_start",
 			    osx_mf_ruby_thread_switcher_start, -1);

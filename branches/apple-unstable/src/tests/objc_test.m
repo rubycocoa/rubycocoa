@@ -28,6 +28,10 @@
 @end
 
 @implementation Override
++(int) foo
+{
+  return 321;
+}
 -(int) foo
 {   
   return 321;
@@ -287,6 +291,11 @@
 @end
 
 @implementation DirectOverride
+
++ (id)overrideMe
+{
+  return nil;
+}
 
 - (id)overrideMe
 {

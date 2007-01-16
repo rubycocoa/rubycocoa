@@ -12,6 +12,7 @@
 #import "ocdata_conv.h"
 #import "BridgeSupport.h"
 #import "RBRuntime.h" // for DLOG
+#import "OverrideMixin.h"
 
 #define RBOBJ_LOG(fmt, args...) DLOG("RBOBJ", fmt, ##args)
 
@@ -219,7 +220,10 @@ VALUE rbobj_call_ruby(id rbobj, SEL selector, VALUE args)
   VALUE rb_result;
   int err;
 
-  if ([rbobj respondsToSelector:@selector(__rbobj__)]) {
+  if ([rbobj respondsToSelector:@selector(__rbclass__)]) {
+    m_rbobj = [rbobj __rbclass__]; 
+  }
+  else if ([rbobj respondsToSelector:@selector(__rbobj__)]) {
     m_rbobj = [rbobj __rbobj__]; 
   }
   else {

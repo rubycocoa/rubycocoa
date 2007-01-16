@@ -26,6 +26,7 @@ OSX.ns_import :Override
 
 class SubClassB < OSX::Override
 
+  def self.foo() return 123 end
   def foo() return 123 end
 
 end
@@ -84,6 +85,8 @@ class TC_SubClass < Test::Unit::TestCase
     assert_equal( SubClassB.objc_instance_method_type('foo'), 
 		  SubClassB.objc_instance_method_type('super:foo') )
     assert_equal( 321, obj_b.super_foo )
+    assert_equal( 123, obj_b.class.foo )
+    assert_equal( 123, obj_b.class.oc_foo )
   end
 
   def test_outlet
