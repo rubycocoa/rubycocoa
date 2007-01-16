@@ -1,5 +1,8 @@
 2007-01-16  Laurent Sansonetti <lsansonetti@apple.com>
 
+	* framework/src/objc/ocdata_conv.h:
+	Fixed definition of _C_CONST for old platforms.
+
 	* framework/src/objc/RBObject.m,
 	  framework/src/objc/ocdata_conv.m,
 	  framework/src/objc/OverrideMixin.m:
