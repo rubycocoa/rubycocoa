@@ -73,7 +73,7 @@ class MyController < NSObject
 
   def addMailbox(sender)
     # create and add new mailbox
-    mailbox = MailBox.alloc.init
+    mailbox = Mailbox.alloc.init
     @mailboxes.addObject(mailbox)
     
     # reload table and select new item

@@ -6,6 +6,11 @@
 
 2007-01-16  Laurent Sansonetti <lsansonetti@apple.com>
 
+	* sample/MailDemo:
+	- Renamed MailBox to Mailbox ;
+	- Removed a debug statement in the main file.
+	Thanks to Jean-Pierre.
+
 	* framework/src/ruby/osx/objc/oc_import.rb:
 	Fixed ns_overrides that was broken by previous commit.
 
