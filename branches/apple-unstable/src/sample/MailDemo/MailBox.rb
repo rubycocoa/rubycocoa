@@ -1,12 +1,12 @@
 #
-#  MailBox.rb
+#  Mailbox.rb
 #  MailDemo
 #
 #  Created by Laurent Sansonetti on 1/8/07.
 #  Copyright (c) 2007 Apple Computer. All rights reserved.
 #
 
-class MailBox < NSObject
+class Mailbox < NSObject
 
   kvc_accessor :properties, :emails
 
