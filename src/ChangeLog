@@ -1,3 +1,9 @@
+2007-01-16  Eloy Duran <eloy.de.enige@gmail.com>
+
+	* framework/tool/gen_bridge_doc/lib/cocoa_ref.rb,
+	  framework/tool/gen_bridge_doc/rdocify_framework.rb:
+	fixes for Appkit rdoc generator, went up from 107/50 to 140/17 success ratio.
+
 2007-01-16  Laurent Sansonetti <lsansonetti@apple.com>
 
 	* framework/src/ruby/osx/objc/oc_import.rb:

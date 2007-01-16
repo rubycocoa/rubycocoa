@@ -5,8 +5,21 @@ require 'rubygems'
 require 'hpricot'
 
 class String
+  
+  def unescape_chars
+    self.gsub(/&lt;/, "<")
+  end
+  
   def strip_tags
     self.gsub(/<\/?[^>]*>/, "")
+  end
+  
+  def clean_objc
+    self.clean_special_chars.strip_tags.unescape_chars.strip_tags
+  end
+  
+  def clean_special_chars
+    self.gsub(/ /, ' ')
   end
   
   def guess_rb_type
@@ -251,7 +264,8 @@ module CocoaRef
       names_and_values = []
       elm_index = elm_index.next
       elements.each do |elm|
-        if elm.is_a?(Hpricot::Elem) and elm.name == 'a'
+        # 16-01-2007: Added a extra comparison to exclude NSString links.
+        if elm.is_a?(Hpricot::Elem) and elm.name == 'a' and not elm.inner_html == 'NSString'
           names_and_values.push({:name => elm.inner_html, :value => ''})
         elsif elm.is_a?(Hpricot::Text) and elm.to_s.include?('=')
           parsed_value = elm.to_s.scan(/([\s=]+)([\(\-\w\d\)]+)/).flatten
@@ -423,7 +437,7 @@ module CocoaRef
       str += "  # Availability:: #{@availability.rdocify}\n" unless @availability.empty?
       str += "  # See also::     #{@see_also.rdocify}\n"     unless @see_also.empty?
       str += "  def #{'self.' if @type == :class_method}#{self.to_rb_def}\n"
-      str += "    # #{@definition.strip_tags}\n"
+      str += "    # #{@definition.strip_tags.clean_special_chars}\n"
       str += "    #\n"
     
       # objc_send_style = self.to_objc_send
@@ -456,7 +470,7 @@ module CocoaRef
     end
   
     def to_rb_def
-      #puts @definition.strip_tags
+      #puts @definition.clean_objc
     
       parsed_method_name = @name.split(':')
       #p parsed_method_name
@@ -468,7 +482,6 @@ module CocoaRef
         str = "#{parsed_method_name.join('_')}"
       end
     
-      #if str == '()' or str[0..1] == '_(' or str[0..2] == '__('
       if str =~ /^[_(]+/
         error_str  = "[WARNING] A empty string was returned as the method definition for:\n"
         error_str += "          #{@name}\n"
@@ -482,7 +495,7 @@ module CocoaRef
     def parse
       parsed_method_name = @name.split(':')
     
-      regexp = "([-+\\s]+\\()([\\w\\s&;>]+)([\\s\\*\\)]+)"
+      regexp = "([-+\\s]+\\()([\\w\\s]+)([\\s\\*\\)]+)"
       method_def_parts = []
       parsed_method_name.length.times do
         method_def_parts.push "(\\w+)(:\\()([\\w\\s]+)([\\(\\w,\\s\\*\\)\\[\\d\\]]+\\)\\)|[\\s\\*\\)\\[\\d\\]]+)(\\w+)"
@@ -490,16 +503,19 @@ module CocoaRef
       regexp += method_def_parts.join("(\\s)")
       #puts regexp
   
-      parsed_method_def = @definition.strip_tags.scan(Regexp.new(regexp)).flatten
+      parsed_method_def = @definition.clean_objc.scan(Regexp.new(regexp)).flatten
       #p parsed_method_def
   
       method_def_parts = []
       parsed_method_name.length.times do |i|
-        method_def_parts.push({
-          :name => parsed_method_def[(i * 6) + 3],
-          :type => parsed_method_def[(i * 6) + 5],
-          :arg  => parsed_method_def[(i * 6) + 7]
-        })
+        method_def_part = {}
+        md_name = parsed_method_def[(i * 6) + 3]
+        method_def_part[:name] = md_name.strip unless md_name.nil?
+        md_type = parsed_method_def[(i * 6) + 5]
+        method_def_part[:type] = md_type.strip unless md_type.nil?
+        md_arg = parsed_method_def[(i * 6) + 7]
+        method_def_part[:arg]  = md_arg.strip unless md_arg.nil?
+        method_def_parts.push(method_def_part)
       end
       #p method_def_parts
       return method_def_parts
@@ -516,25 +532,25 @@ module CocoaRef
   
     def to_rdoc
       str  = ''
-      unless @description.nil?
-        str += "  # Description:: #{@description.rdocify}\n"  unless @description.empty?
+      unless @description.nil? or @description.empty?
+        str += "  # Description:: #{@description.rdocify}\n"
       else
-        error_str = "[WARNING] A `nil` object was encountered as the description for constant #{@name}\n"
-        @log.add(error_str)
+        puts "[WARNING] A `nil` or empty object was encountered as the description for constant #{@name}" if $COCOA_REF_DEBUG
+        str += "  # Description:: No description was available/found.\n"
       end
     
-      unless @availability.nil?
-        str += "  # Availability:: #{@availability.rdocify}\n" unless @availability.empty?
+      unless @availability.nil? or @availability.empty?
+        str += "  # Availability:: #{@availability.rdocify}\n"
       else
-        error_str = "[WARNING] A `nil` object was encountered as the availability for constant #{@name}\n"
-        @log.add(error_str)
+        puts "[WARNING] A `nil` or empty object was encountered as the availability for constant #{@name}" if $COCOA_REF_DEBUG
+        str += "  # Availability:: No availability was available/found.\n"
       end
     
-      unless @value.nil?
-        str += "  #{@name} = #{@value.empty? ? "''" : @value}\n\n"
+      unless @value.nil? or @value.empty?
+        str += "  #{@name} = #{@value}\n\n"
       else
-        error_str = "[WARNING] A `nil` object was encountered as the value for constant: #{@name}\n"
-        @log.add(error_str)
+        puts "[WARNING] A `nil` or empty object, or just a Notification, was encountered as the value for constant: #{@name}" if $COCOA_REF_DEBUG
+        str += "  #{@name} = '#{@name}'\n\n"
       end
       return str
     end
