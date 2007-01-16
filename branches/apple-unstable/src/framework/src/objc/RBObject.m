@@ -220,11 +220,11 @@ VALUE rbobj_call_ruby(id rbobj, SEL selector, VALUE args)
   VALUE rb_result;
   int err;
 
-  if ([rbobj respondsToSelector:@selector(__rbclass__)]) {
-    m_rbobj = [rbobj __rbclass__]; 
-  }
-  else if ([rbobj respondsToSelector:@selector(__rbobj__)]) {
+  if ([rbobj respondsToSelector:@selector(__rbobj__)]) {
     m_rbobj = [rbobj __rbobj__]; 
+  }
+  else if ([rbobj respondsToSelector:@selector(__rbclass__)]) {
+    m_rbobj = [rbobj __rbclass__]; 
   }
   else {
     // Not an RBObject class, try to get the value from the cache. 
