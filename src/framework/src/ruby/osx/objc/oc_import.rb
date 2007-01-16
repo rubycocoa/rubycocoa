@@ -274,19 +274,16 @@ module OSX
     alias_method :ib_outlet,  :ns_outlets
     alias_method :ib_outlets, :ns_outlets
 
-    def _ns_behavior_method_added(sym)
+    def _ns_behavior_method_added(sym, class_method)
       sel = sym.to_s.gsub(/([^_])_/, '\1:')
-      sel << ':' if instance_method(sym).arity > 0 and /[^:]\z/ =~ sel
-      return unless _ns_enable_override?(sel)
-      ns_override sel
+      m = class_method ? method(sym) : instance_method(sym)
+      sel << ':' if m.arity > 0 and /[^:]\z/ =~ sel
+      return unless _ns_enable_override?(sel, class_method)
+      OSX.objc_class_method_add(self, sel, class_method)
     end
 
-    def _ns_enable_override?(sel)
-      if ns_inherited? && self.objc_instance_method_type(sel)
-        true
-      else
-        false
-      end
+    def _ns_enable_override?(sel, class_method)
+      ns_inherited? and (class_method ? self.objc_method_type(sel) : self.objc_instance_method_type(sel))
     end
 
     def objc_export(name, types)
@@ -540,8 +537,12 @@ module OSX
     include NSBehaviorAttachment
     include NSKVCBehaviorAttachment
 
+    def singleton_method_added(sym)
+      _ns_behavior_method_added(sym, true)
+    end 
+ 
     def method_added(sym)
-      _ns_behavior_method_added(sym)
+      _ns_behavior_method_added(sym, false)
       _kvc_behavior_method_added(sym)
     end
 
@@ -573,7 +574,7 @@ class Object
       end
     end
 
-    alias __before_osx_inherited inherited
+    alias _before_osx_inherited inherited
     def inherited(subklass)
       nsklassname, mod = _real_class_and_mod(subklass) 
       if nsklassname
@@ -588,29 +589,55 @@ class Object
           mod.const_set(nsklassname, subklass)
         end
       end
-      __before_osx_inherited(subklass)
+      _before_osx_inherited(subklass)
     end
 
-    alias __before_method_added method_added
-    def method_added(sym)
+    def _register_method(sym, class_method)
       if self != Object
         nsklassname, mod = _real_class_and_mod(self)
         if nsklassname
           begin
             nsklass = OSX.const_get(nsklassname)
             raise NameError unless nsklass.ancestors.include?(OSX::NSObject)
-            method = self.instance_method(sym)
-            OSX.__rebind_umethod__(nsklass, method)
-            if RUBY_VERSION >= "1.8.5"
-              nsklass.module_eval { define_method(sym, method) }
+            if class_method
+              method = self.method(sym).unbind
+              OSX.__rebind_umethod__(nsklass.class, method)
+              nsklass.module_eval do 
+                (class << self; self; end).instance_eval do 
+                  if RUBY_VERSION >= "1.8.5"
+                    define_method(sym, method)
+                  else
+                    define_method(sym) { method.bind(self).call }
+                  end
+                end
+              end
             else
-              nsklass.module_eval { define_method(sym) { method.bind(self).call }  } 
+              method = self.instance_method(sym)
+              OSX.__rebind_umethod__(nsklass, method)
+              nsklass.module_eval do
+                if RUBY_VERSION >= "1.8.5"
+                  define_method(sym, method)
+                else
+                  define_method(sym) { method.bind(self).call }
+                end
+              end
             end
           rescue NameError
           end
         end
       end
-      __before_method_added(sym)
+    end
+
+    alias _before_method_added method_added
+    def method_added(sym)
+      _register_method(sym, false)
+      _before_method_added(sym)
+    end
+
+    alias _before_singleton_method_added singleton_method_added
+    def singleton_method_added(sym)
+      _register_method(sym, true)
+      _before_singleton_method_added(sym)
     end
   end
 end

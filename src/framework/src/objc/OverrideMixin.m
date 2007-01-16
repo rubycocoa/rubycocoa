@@ -17,6 +17,7 @@
 #import "BridgeSupport.h"
 #import "st.h"
 #import <objc/objc-runtime.h>
+#import "mdl_osxobjc.h"
 
 #define OVMIX_LOG(fmt, args...) DLOG("OVMIX", fmt, ##args)
 
@@ -105,14 +106,14 @@ ovmix_ffi_closure(ffi_cif* cif, void* resp, void** args, void* userdata)
     if (!ocdata_to_rbobj(Qnil, args_octypes[i - 2], args[i], &arg, NO))
       rb_raise(rb_eRuntimeError, "Can't convert Objective-C argument #%d of octype %d to Ruby value", i - 2, args_octypes[i - 2]);
 
-    OVMIX_LOG("\tconverted arg #%d to Ruby value %p", i, arg);
+    OVMIX_LOG("converted arg #%d to Ruby value %p", i, arg);
 
     rb_ary_store(rb_args, i - 2, arg);
   }
 
-  OVMIX_LOG("\tcalling Ruby method...");
+  OVMIX_LOG("calling Ruby method...");
   retval = rbobj_call_ruby(*(id *)args[0], *(SEL *)args[1], rb_args);
-  OVMIX_LOG("\tcalling Ruby method done, retval %p", retval);
+  OVMIX_LOG("calling Ruby method done, retval %p", retval);
 
   if (retval_octype != _C_VOID) {
     if (!rbobj_to_ocdata(retval, retval_octype, resp, YES))
@@ -335,7 +336,7 @@ static id imp_c_addRubyMethod(Class klass, SEL method, SEL arg0)
   me = class_getInstanceMethod(klass, arg0);
 
   // warn if trying to override a method that isn't a member of the specified class
-  if(me == NULL)
+  if (me == NULL)
     rb_raise(rb_eRuntimeError, "could not add '%s' to class '%s': Objective-C cannot find it in the superclass", (char *)arg0, klass->name);
     
   // override method
@@ -377,8 +378,6 @@ static id imp_c_addRubyMethod_withType(Class klass, SEL method, SEL arg0, const 
   OVMIX_LOG("Registered Ruby method by selector '%s' types '%s'", (char *)arg0, type);
   return nil;
 }
-
-
 
 static struct objc_ivar imp_ivars[] = {
   {				// struct objc_ivar {
@@ -441,7 +440,7 @@ static struct objc_method imp_methods[] = {
  **/
 static const char* imp_c_pure_method_names[] = {
   "addRubyMethod:",
-  "addRubyMethod:withType:",
+  "addRubyMethod:withType:"
 };
 
 static struct objc_method imp_c_pure_methods[] = {
@@ -550,3 +549,12 @@ void init_ovmix(void)
   pthread_mutex_init(&ffi_imp_closures_lock, NULL);
   class_addMethods(objc_lookUpClass("NSObject"), override_mixin_class_pure_method_list()); 
 }
+
+@implementation NSObject (__rbobj__)
+
++ (VALUE)__rbclass__
+{
+  return rb_const_get(osx_s_module(), rb_intern(class_getName(self))); 
+}
+
+@end
