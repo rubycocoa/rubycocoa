@@ -37,7 +37,7 @@
 #endif
 
 #if !defined(_C_CONST)
-# define _C_CONST 'v'
+# define _C_CONST 'r'
 #endif
 
 enum osxobjc_nsdata_type {
