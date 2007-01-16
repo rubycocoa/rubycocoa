@@ -554,7 +554,8 @@ void init_ovmix(void)
 
 + (VALUE)__rbclass__
 {
-  return rb_const_get(osx_s_module(), rb_intern(class_getName(self))); 
+  return rb_const_get(osx_s_module(), rb_intern(((struct objc_class *)self)->name))
+; 
 }
 
 @end
