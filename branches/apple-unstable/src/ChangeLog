@@ -1,5 +1,8 @@
 2007-01-16  Laurent Sansonetti <lsansonetti@apple.com>
 
+	* tests/tc_bs.rb:
+	Fixed test to spawn Ruby command lines to use the source root RubyCocoa.
+
 	* framework/src/ruby/osx/objc/oc_import.rb,
 	  framework/src/objc/RBObject.m,
 	  framework/src/objc/mdl_osxobjc.m,

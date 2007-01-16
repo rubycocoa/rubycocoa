@@ -33,7 +33,7 @@ class TC_BridgeSupport < Test::Unit::TestCase
   end
 
   def __spawn_line(line)
-    res = `#{@ruby_path} -e \"#{line}\"`
+    res = `RUBYLIB=../lib DYLD_FRAMEWORK_PATH=../framework/build/Default #{@ruby_path} -e \"#{line}\"`
     raise "Can't spawn Ruby line: '#{line}'" unless $?.success?
     return res.strip
   end
