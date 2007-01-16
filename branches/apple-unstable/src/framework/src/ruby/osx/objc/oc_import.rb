@@ -256,7 +256,7 @@ module OSX
       # insert specified selectors to Objective-C method table.
       args.each do |name|
 	      name = name.to_s.gsub('_',':')
-	      OSX.objc_class_method_add(self, name)
+	      OSX.objc_class_method_add(self, name, false)
       end
     end
 
