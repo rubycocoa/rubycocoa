@@ -106,7 +106,7 @@ OSX.NSApp()  # BAD
 OSX::NSApp   # GOOD
 </pre>
 
-<tt>addRubyMethod_withType</tt>のことを聞いたことがあるかもしれません。これは、Rubyプログラムで定義したメソッドをObjective-Cランタイムに登録するためのメソッドです。このメソッドは、登録するRubyのメソッドを Objective-C のセレクタで指定するなど、Objective-Cプログラマ向けに書かれたものとなっています。Rubyに親しんでいるプログラマのための代替として、<tt>objc_export</tt>が追加されました。これは、Objective-Cランタイムに対して、Rubyで書いたメソッドの型(引数と戻り値)を宣言する意味合いを持っています(かなり意訳):
+<tt>addRubyMethod_withType</tt>のことを聞いたことがあるかもしれません。これは、Rubyプログラムで定義したメソッドをObjective-Cランタイムに登録するためのメソッドです。このメソッドは、登録するRubyのメソッドを Objective-C のセレクタで指定するなど、Objective-Cプログラマ向けに書かれたものとなっています。Rubyに親しんでいるプログラマのための代替として、<tt>objc_export</tt>(<tt>objc_method</tt>に変更予定 - 2007.1.17)が追加されました。これは、Objective-Cランタイムに対して、Rubyで書いたメソッドの型(引数と戻り値)を宣言する意味合いを持っています(かなり意訳):
 
 <pre>
 class MyClass : NSObject
