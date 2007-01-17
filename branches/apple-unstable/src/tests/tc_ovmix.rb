@@ -55,22 +55,22 @@ class ObjcExportHelper < OSX::NSObject
   def foo1
     's'
   end
-  objc_export :foo1, %w{id}
+  objc_method :foo1, %w{id}
 
   def foo2(integer)
     integer + 2
   end
-  objc_export :foo2, %w{int int}
+  objc_method :foo2, %w{int int}
 
   def foo3_obj(ary, obj)
     ary.addObject(obj)
   end
-  objc_export :foo3, %w{void id id}
+  objc_method :foo3, %w{void id id}
 
   def foo4_size(point, size)
     OSX::NSRect.new(point, size)
   end
-  objc_export :foo4_size, [OSX::NSRect, OSX::NSPoint, OSX::NSSize]
+  objc_method :foo4_size, [OSX::NSRect, OSX::NSPoint, OSX::NSSize]
 end
 
 class OSX::DirectOverride
@@ -86,7 +86,7 @@ class OSX::NSObject
   def mySuperMethod
     'foo'
   end
-  objc_export :mySuperMethod, ['id']
+  objc_method :mySuperMethod, ['id']
 end
 
 class TC_OVMIX < Test::Unit::TestCase
@@ -95,7 +95,7 @@ class TC_OVMIX < Test::Unit::TestCase
     testrig.run    
   end
 
-  def test_objc_export
+  def test_objc_method
     testoe = OSX::TestObjcExport.alloc.init
     testoe.run
   end

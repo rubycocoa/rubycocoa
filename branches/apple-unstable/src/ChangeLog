@@ -1,7 +1,11 @@
 2007-01-17  Fujimoto Hisa  <hisa@fobj.com>
 
+	* framework/src/ruby/osx/objc/oc_import.rb:
+	replaced the name of objc_export with objc_method. objc_export
+	will be deprecated. it works yet with warning message.
+
 	* sample/Scripts/TransparentHello.rb, sample/Scripts/sndplay3.rb:
-	replace deprecated symbol/value/... syntax to suppress warning.
+	replaced deprecated symbol/value/... syntax to suppress warning.
 
 2007-01-17  Eloy Duran <eloy.de.enige@gmail.com>
 

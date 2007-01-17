@@ -286,12 +286,17 @@ module OSX
       ns_inherited? and (class_method ? self.objc_method_type(sel) : self.objc_instance_method_type(sel))
     end
 
-    def objc_export(name, types)
+    def objc_method(name, types)
       typefmt = _types_to_typefmt(types)
       name = name.to_s
       name = name[0].chr << name[1..-1].gsub(/_/, ':')
       name << ':' if name[-1] != ?: and typefmt[-1] != ?:
       self.addRubyMethod_withType(name, typefmt)
+    end
+
+    def objc_export(name, types)
+      $stderr.puts "objc_export will be deprecated. please use objc_method instead."
+      objc_method(name, types)
     end
 
     # TODO: support more types such as pointers...
