@@ -324,6 +324,19 @@ module CocoaRef
       return [constants, last_good_index + 1]
     end
     
+    def get_notification_def(index)
+      notification_def = CocoaRef::NotificationDef.new
+      notification_def.name         = self.get_name_for_method(index)
+      notification_def.description,  new_index = self.get_description_for_method(index)
+      notification_def.definition,   new_index = self.get_definition_for_method(new_index)
+      notification_def.parameters,   new_index = self.get_parameters_for_method(new_index)
+      notification_def.return_value, new_index = self.get_return_value_for_method(new_index)
+      notification_def.discussion,   new_index = self.get_discussion_for_method(new_index)
+      notification_def.availability, new_index = self.get_availability_for_method(new_index)
+      notification_def.see_also,     new_index = self.get_see_also_for_method(new_index)
+      return notification_def
+    end
+    
     def find_next_tag(tag, css_class, start_from = 0)
       found = false
       index = start_from
@@ -353,10 +366,10 @@ module CocoaRef
   end
   
   class ClassDef
-    attr_accessor :description, :name, :method_defs, :constant_defs
+    attr_accessor :description, :name, :method_defs, :constant_defs, :notification_defs
     
     def initialize
-      @description, @name, @method_defs, @constant_defs = [], '', [], []
+      @description, @name, @method_defs, @constant_defs, @notification_defs = [], '', [], [], []
     end
     
     def errors?
@@ -401,6 +414,17 @@ module CocoaRef
       str += "class OSX::#{@name}\n"
       @constant_defs.each {|c| str += c.to_rdoc }
       @method_defs.each {|m| str += m.to_rdoc }
+      
+      unless @notification_defs.empty?
+        str += "  # ------------------------\n"
+        str += "  # :section: Notifications\n"
+        str += "  #\n"
+        str += "  # This section contains the notifications posted by the #{@name} class\n"
+        str += "  #\n"
+        str += "  # ------------------------\n"
+        @notification_defs.each {|n| str += n.to_rdoc }
+      end
+      
       str += "end\n"
       return str
     end
@@ -556,6 +580,28 @@ module CocoaRef
     end
   end
 
+  class NotificationDef < MethodDef
+    def to_rdoc
+      str  = "\n"
+      unless @description.nil? or @description.empty?
+        str += "  # Description:: #{@description.rdocify}\n"
+      else
+        puts "[WARNING] A `nil` or empty object was encountered as the description for notification #{@name}" if $COCOA_REF_DEBUG
+        str += "  # Description:: No description was available/found.\n"
+      end
+    
+      unless @availability.nil? or @availability.empty?
+        str += "  # Availability:: #{@availability.rdocify}\n"
+      else
+        puts "[WARNING] A `nil` or empty object was encountered as the availability for notification #{@name}" if $COCOA_REF_DEBUG
+        str += "  # Availability:: No availability was available/found.\n"
+      end
+    
+      str += "  #{@name} = ''\n"
+      return str
+    end
+  end
+  
   class Parser
     attr_reader :class_def
     
@@ -574,12 +620,9 @@ module CocoaRef
       busy_with = ''
       index = 0
       @hpricot.elements.each do |element|
-        # Get the class name
         if element.fits_the_description?('h1', 'Class Reference')
           class_def.name = element.inner_html.strip_tags.split(' ').first
         end
-        
-        # Get the class description
         if element.fits_the_description?('h2', 'Class Description')
           class_def.description = @hpricot.get_the_text(index + 1).first
         end
@@ -587,15 +630,13 @@ module CocoaRef
         if element.fits_the_description?('h2', 'Class Methods')
           busy_with = 'Class Methods'
         end
-
         if busy_with == 'Class Methods' and @hpricot.start_of_method_def?(index)
           class_def.method_defs.push @hpricot.get_method_def(index, :class_method)
         end
-
+        
         if element.fits_the_description?('h2', 'Instance Methods')
           busy_with = 'Instance Methods'
         end
-
         if busy_with == 'Instance Methods' and @hpricot.start_of_method_def?(index)
           class_def.method_defs.push @hpricot.get_method_def(index, :instance_method)
         end
@@ -603,15 +644,14 @@ module CocoaRef
         if element.fits_the_description?('h2', 'Notifications')
           busy_with = 'Notifications'
         end
-
         if busy_with == 'Notifications' and @hpricot.start_of_method_def?(index)
-          #p elements.get_method_def(index, :instance_method)
+          puts 'notification'
+          class_def.notification_defs.push @hpricot.get_notification_def(index)
         end
 
         if element.fits_the_description?('h2', 'Constants')
           busy_with = 'Constants'
         end
-
         if busy_with == 'Constants' and @hpricot.start_of_method_def?(index)
           constants = @hpricot.get_constant_defs(index)
           class_def.constant_defs.concat(constants) unless constants.nil?
