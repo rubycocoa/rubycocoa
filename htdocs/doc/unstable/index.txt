@@ -107,7 +107,7 @@ OSX.NSApp()  # BAD
 OSX::NSApp   # GOOD
 </pre>
 
-You may perhaps know about <tt>addRubyMethod_withType</tt>. This method lets you register a Ruby method into the Objective-C runtime. However, you need to pass to this method its Objective-C name (as a <i>selector</i>) as well as its Objective-C encoding, which may not be very easy to determine if you are not an experienced Objective-C programmer (only a few know the Objective-C runtime constants by heart). As an alternative, we introduced <tt>objc_export</tt> which has a more friendly interface:
+You may perhaps know about <tt>addRubyMethod_withType</tt>. This method lets you register a Ruby method into the Objective-C runtime. However, you need to pass to this method its Objective-C name (as a <i>selector</i>) as well as its Objective-C encoding, which may not be very easy to determine if you are not an experienced Objective-C programmer (only a few know the Objective-C runtime constants by heart). As an alternative, we introduced <tt>objc_export</tt> (will be replaced with <tt>objc_method</tt> - 2007.1.17) which has a more friendly interface:
 
 <pre>
 class MyClass : NSObject
