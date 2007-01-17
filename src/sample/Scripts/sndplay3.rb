@@ -16,7 +16,8 @@ thr = nil
 
 snd_files.each do |path|
   thr = Thread.start do
-    snd = OSX::NSSound.alloc.initWithContentsOfFile(path,:byReference,true)
+    snd = OSX::NSSound.alloc.
+      initWithContentsOfFile_byReference(path, true)
     snd.play
     sleep 1 while snd.isPlaying?
   end
