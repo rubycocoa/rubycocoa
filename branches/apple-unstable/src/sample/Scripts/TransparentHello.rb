@@ -59,10 +59,11 @@ if __FILE__ == $0
   application = OSX::NSApplication.sharedApplication
 
   # Create the window
-  window = OSX::NSWindow.alloc.initWithContentRect([0, 0, 450, 200],
-						   :styleMask,	OSX::NSBorderlessWindowMask,
-						   :backing,	OSX::NSBackingStoreBuffered,
-						   :defer,		0)
+  window = OSX::NSWindow.alloc.
+    objc_send(:initWithContentRect, [0, 0, 450, 200],
+						            :styleMask, OSX::NSBorderlessWindowMask,
+						              :backing, OSX::NSBackingStoreBuffered,
+						                :defer, 0)
   # Allow the window to be partially transparent
   window.setOpaque(0)
 
@@ -70,7 +71,6 @@ if __FILE__ == $0
   view = HelloView.alloc.initWithFrame([0, 0, 450, 200])
   window.setContentView(view)
 
-  #
   # Place the window near the top of the screen.
   # (Screen coordinates in Cocoa are always PostScript
   # coordinates, which start from the bottom of the screen
