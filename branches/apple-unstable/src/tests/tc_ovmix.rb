@@ -74,7 +74,7 @@ class ObjcExportHelper < OSX::NSObject
 end
 
 class OSX::DirectOverride
-  def self.overrideMe
+  def self.classOverrideMe
     'bar'
   end
   def overrideMe
@@ -83,6 +83,10 @@ class OSX::DirectOverride
 end
 
 class OSX::NSObject
+  def self.mySuperClassMethod
+    'bar'
+  end
+  objc_class_method :mySuperClassMethod, ['id']
   def mySuperMethod
     'foo'
   end
@@ -104,12 +108,14 @@ class TC_OVMIX < Test::Unit::TestCase
     assert(OSX::DirectOverride.ancestors.include?(OSX::NSObject))
     o = OSX::DirectOverride.alloc.init
     assert_kind_of(OSX::NSString, o.performSelector('overrideMe'))
-    assert_kind_of(OSX::NSString, OSX::DirectOverride.performSelector('overrideMe'))
+    assert_kind_of(OSX::NSString, OSX::DirectOverride.performSelector('classOverrideMe'))
   end
 
   def test_super_method
     o = OSX::NSString.stringWithCString('blah')
     assert_equal('foo', o.mySuperMethod.to_s)
     assert_equal('foo', o.performSelector('mySuperMethod').to_s)
+    assert_equal('bar', OSX::NSString.mySuperClassMethod.to_s)
+    assert_equal('bar', OSX::NSString.performSelector('mySuperClassMethod').to_s)
   end
 end
