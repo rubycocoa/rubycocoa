@@ -952,7 +952,7 @@ EOS
       doc.get_elements('/signatures/cftype').map do |elem|
         @cftypes[elem.attributes['name']] = [
           elem.attributes['gettypeid_func'], 
-          elem.attributes['ignore_tollfree'] == true
+          elem.attributes['ignore_tollfree'] == 'true'
         ]
       end
       doc.get_elements('/signatures/opaque').map do |elem|
