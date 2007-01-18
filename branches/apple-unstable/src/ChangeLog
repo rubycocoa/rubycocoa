@@ -6,7 +6,8 @@
 2007-01-18  Laurent Sansonetti <lsansonetti@apple.com>
 
 	* framework/tool/gen_bridge_metadata.rb:
-	Discover more functions.
+	- Discover more functions ;
+	- Added the possibility to ignore tollfree bridged CF classes detection.
 
 	* framework/src/ruby/osx/objc/oc_import.rb:
 	Deprecated ns_overrides.
