@@ -129,7 +129,7 @@ module OSX
     end
 
     # Damnit!
-    STDERR.puts "Can't find signatures file for #{framework}" if $VERBOSE
+    $stderr.puts "Can't find signatures file for #{framework}" if $VERBOSE
     return false
   end
   module_function :load_bridge_support_signatures
