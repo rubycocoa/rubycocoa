@@ -468,8 +468,8 @@ EOS
   def collect_cftypes_info
     @resolved_cftypes ||= {}
     lines = []
-    @cftypes.each do |name, gettypeid_func|
-      lines << if gettypeid_func
+    @cftypes.each do |name, gettypeid_func, ignore_tollfree|
+      lines << if gettypeid_func and ignore_tollfree
         "ref = _CFRuntimeCreateInstance(NULL, #{gettypeid_func}(), 0, NULL); printf(\"%s: %s: %s\\n\", \"#{name}\", @encode(#{name}), ref != NULL ? object_getClassName((id)ref) : \"\");"
       else
         "printf(\"%s: %s: %s\\n\", \"#{name}\", @encode(#{name}), \"\");"
@@ -948,7 +948,10 @@ EOS
         @structs[elem.attributes['name']] = elem.attributes['opaque'] == 'true'
       end
       doc.get_elements('/signatures/cftype').map do |elem|
-        @cftypes[elem.attributes['name']] = elem.attributes['gettypeid_func']
+        @cftypes[elem.attributes['name']] = [
+          elem.attributes['gettypeid_func'], 
+          elem.attributes['ignore_tollfree'] == true
+        ]
       end
       doc.get_elements('/signatures/opaque').map do |elem|
         @opaques << elem.attributes['name']
