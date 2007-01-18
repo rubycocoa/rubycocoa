@@ -5,6 +5,9 @@
 
 2007-01-18  Laurent Sansonetti <lsansonetti@apple.com>
 
+	* framework/tool/gen_bridge_metadata.rb:
+	Discover more functions.
+
 	* framework/src/ruby/osx/objc/oc_import.rb:
 	Deprecated ns_overrides.
 
