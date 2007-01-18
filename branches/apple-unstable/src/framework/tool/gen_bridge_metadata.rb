@@ -78,7 +78,7 @@ class OCHeaderAnalyzer
 
   def functions
     skip_inline_re = /(static)?\s__inline__[^{;]+(;|\{([^{}]*(\{[^}]+\})?)*\})\s*/
-    func_re = /(^([\w\s\*<>]+)\s*\((.*)\)\s*);$/
+    func_re = /(^([\w\s\*<>]+)\s*\(([^)]*)\)\s*);/
     @functions ||= @cpp_result.gsub(skip_inline_re, '').scan(func_re).map do |m|
       orig, base, args = m
       base.sub!(/^.*extern\s+/, '')
