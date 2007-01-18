@@ -292,7 +292,7 @@
 
 @implementation DirectOverride
 
-+ (id)overrideMe
++ (id)classOverrideMe
 {
   return nil;
 }

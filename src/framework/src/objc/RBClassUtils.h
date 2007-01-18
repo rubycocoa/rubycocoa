@@ -21,4 +21,5 @@ Class objc_class_alloc(const char* name, Class super_class);
 - __slave__;
 - (VALUE) __rbobj__;
 + addRubyMethod: (SEL)a_sel;
++ addRubyMethod: (SEL)a_sel withType:(const char *)typefmt;
 @end

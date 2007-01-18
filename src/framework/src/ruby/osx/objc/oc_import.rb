@@ -256,7 +256,7 @@ module OSX
       # insert specified selectors to Objective-C method table.
       args.each do |name|
 	      name = name.to_s.gsub('_',':')
-	      OSX.objc_class_method_add(self, name, false)
+	      OSX.objc_class_method_add(self, name, false, nil)
       end
     end
 
@@ -279,19 +279,27 @@ module OSX
       m = class_method ? method(sym) : instance_method(sym)
       sel << ':' if m.arity > 0 and /[^:]\z/ =~ sel
       return unless _ns_enable_override?(sel, class_method)
-      OSX.objc_class_method_add(self, sel, class_method)
+      OSX.objc_class_method_add(self, sel, class_method, nil)
     end
 
     def _ns_enable_override?(sel, class_method)
       ns_inherited? and (class_method ? self.objc_method_type(sel) : self.objc_instance_method_type(sel))
     end
 
-    def objc_method(name, types)
+    def _objc_export(name, types, class_method)
       typefmt = _types_to_typefmt(types)
       name = name.to_s
       name = name[0].chr << name[1..-1].gsub(/_/, ':')
       name << ':' if name[-1] != ?: and typefmt[-1] != ?:
-      self.addRubyMethod_withType(name, typefmt)
+      OSX.objc_class_method_add(self, name, class_method, typefmt)
+    end
+
+    def objc_method(name, types)
+      _objc_export(name, types, false)
+    end
+
+    def objc_class_method(name, types)
+      _objc_export(name, types, true)
     end
 
     def objc_export(name, types)

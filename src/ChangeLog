@@ -1,5 +1,12 @@
 2007-01-18  Laurent Sansonetti <lsansonetti@apple.com>
 
+	* framework/src/ruby/osx/objc/oc_import.rb,
+	  framework/src/objc/mdl_osxobjc.m,
+	  framework/src/objc/RBClassUtils.h,
+	  tests/tc_ovmix.rb,
+	  tests/objc_test.m:
+	Added objc_class_method + test cases.
+
 	* pre-install.rb,
 	  template/ProjectBuilder/File/Ruby test case class.rb,
 	  template/ProjectBuilder/Target,
