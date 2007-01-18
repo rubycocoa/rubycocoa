@@ -438,6 +438,7 @@ EOS
       value.strip!
       next if name.strip[0] == ?_
       next if @ignored_defines_regexps.any? { |re| re.match(name) }
+      next if value[0] == ?"
       line = "if ((fmt = printf_format(@encode(__typeof__(#{value})))) != NULL) printf(fmt, \"#{name}\", #{value});"
       if numeric_re.match(value)
         pure_numeric_lines << line
@@ -468,8 +469,9 @@ EOS
   def collect_cftypes_info
     @resolved_cftypes ||= {}
     lines = []
-    @cftypes.each do |name, gettypeid_func, ignore_tollfree|
-      lines << if gettypeid_func and ignore_tollfree
+    @cftypes.each do |name, ary|
+      gettypeid_func, ignore_tollfree = ary
+      lines << if gettypeid_func and !ignore_tollfree
         "ref = _CFRuntimeCreateInstance(NULL, #{gettypeid_func}(), 0, NULL); printf(\"%s: %s: %s\\n\", \"#{name}\", @encode(#{name}), ref != NULL ? object_getClassName((id)ref) : \"\");"
       else
         "printf(\"%s: %s: %s\\n\", \"#{name}\", @encode(#{name}), \"\");"
@@ -492,7 +494,7 @@ EOS
       name, encoding, tollfree = line.split(':')
       tollfree.strip!
       tollfree = nil if tollfree.empty? or tollfree == 'NSCFType'
-      @resolved_cftypes[name.strip] = [encoding.strip, tollfree, @cftypes[name.strip]]
+      @resolved_cftypes[name.strip] = [encoding.strip, tollfree, @cftypes[name.strip].first]
     end
   end
 

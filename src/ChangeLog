@@ -7,7 +7,8 @@
 
 	* framework/tool/gen_bridge_metadata.rb:
 	- Discover more functions ;
-	- Added the possibility to ignore tollfree bridged CF classes detection.
+	- Added the possibility to ignore tollfree bridged CF classes detection ;
+	- Faster numeric #define lookup.
 
 	* framework/src/ruby/osx/objc/oc_import.rb:
 	Deprecated ns_overrides.
