@@ -253,11 +253,7 @@ module OSX
     # declare to override instance methods of super class which is
     # defined by Objective-C.
     def ns_overrides(*args)
-      # insert specified selectors to Objective-C method table.
-      args.each do |name|
-	      name = name.to_s.gsub('_',':')
-	      OSX.objc_class_method_add(self, name, false, nil)
-      end
+      $stderr.puts "ns_overrides is no longer necessary, should not be called anymore and will be removed in a next release. Please update your code to not use it."
     end
 
     # declare write-only attribute accessors which are named IBOutlet
