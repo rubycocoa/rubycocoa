@@ -30,6 +30,9 @@ pbtmpldir = "template/ProjectBuilder"
     [ "#{pbtmpldir}/File",
       "#{extras_dir}/File Templates/Ruby" ],
 
+    [ "#{pbtmpldir}/Target",
+      "#{extras_dir}/Target Templates/Ruby" ],
+
     [ "#{pbtmpldir}/Application/Cocoa-Ruby Application",
       "#{extras_dir}/Project Templates/Application/Cocoa-Ruby Application" ],
 
