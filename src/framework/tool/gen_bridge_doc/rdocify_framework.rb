@@ -12,9 +12,12 @@ def get_reference_files(framework_path)
   Dir.entries(classes_dir).each do |f|
     class_path = File.join(classes_dir, f)
     if File.directory?(class_path) and not f == '.' and not f == '..'
-      ref_path = File.join(class_path, 'Reference/reference.html')
-      if File.exists?(ref_path)
-        reference_files.push({:name => File.basename(class_path), :path => ref_path})
+      ref_dir_path = File.join(class_path, 'Reference/')
+      Dir.entries(ref_dir_path).each do |rf|
+        if File.extname(rf) == '.html'
+          ref_path = File.join(ref_dir_path, rf)
+          reference_files.push({:name => File.basename(class_path), :path => ref_path})
+        end
       end
     end
   end

@@ -35,9 +35,13 @@ unless ARGV[0].nil?
       other_args = []
     end
     
-    SUPPORTED_FRAMEWORKS = ['/Developer/ADC Reference Library/documentation/Cocoa/Reference/ApplicationKit/']
-    #SUPPORTED_FRAMEWORKS = ['/Developer/ADC Reference Library/documentation/Cocoa/Reference/Foundation/']
-    
+    SUPPORTED_FRAMEWORKS = ['/Developer/ADC Reference Library/documentation/Cocoa/Reference/ApplicationKit/',
+                            '/Developer/ADC Reference Library/documentation/Cocoa/Reference/Foundation/',
+                            '/Developer/ADC Reference Library/documentation/Cocoa/Reference/WebKit/',
+                            '/Developer/ADC Reference Library/documentation/Cocoa/Reference/CoreDataFramework/',
+                            '/Developer/ADC Reference Library/documentation/QuickTime/Reference/QTKitFramework/']
+    #SUPPORTED_FRAMEWORKS = ['/Developer/ADC Reference Library/documentation/UserExperience/Reference/AddressBook/']
+
     start_time = Time.now
 
     # Parse the rdoc for each supported framework

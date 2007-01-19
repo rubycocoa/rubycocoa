@@ -1,3 +1,19 @@
+2007-01-19  Eloy Duran <eloy.de.enige@gmail.com>
+
+	* framework/tool/gen_bridge_doc/lib/cocoa_ref.rb,
+	  framework/tool/gen_bridge_doc/lib/Foundation/NSDate.rb,
+	  framework/tool/gen_bridge_doc/lib/Foundation/NSDateFormatter.rb,
+	  framework/tool/gen_bridge_doc/lib/Foundation/NSPortCoder.rb,
+	  framework/tool/gen_bridge_doc/rdocify_framework.rb,
+	  framework/tool/gen_bridge_doc.rb:
+	- Enhanced reference html file finder method ;
+	- Added support for deprecated classes ;
+	- Added override modules for Foundation: NSDate.rb, NSDateFormatter.rb, NSPortCoder.rb ;
+	- Added rdoc for: Foundation ;
+	- Added rdoc for: WebKit ;
+	- Added rdoc for: CoreData ;
+	- Added rdoc for: QTKit
+
 2007-01-19  Laurent Sansonetti <lsansonetti@apple.com>
 
 	* framework/src/objc/BridgeSupport.m:
