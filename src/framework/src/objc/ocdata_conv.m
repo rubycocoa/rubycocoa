@@ -408,6 +408,13 @@ static BOOL rbnum_to_nsnum(VALUE rbval, id* nsval)
   return result;
 }
 
+static void
+__slave_nsobj_free(void *p)
+{
+  DATACONV_LOG("releasing RBObject %p", p);
+  [(id)p release];
+}
+
 static BOOL rbobj_convert_to_nsobj(VALUE obj, id* nsobj)
 {
   
@@ -450,7 +457,19 @@ static BOOL rbobj_convert_to_nsobj(VALUE obj, id* nsobj)
   case T_FILE:
   case RB_T_DATA:
   default:
-    *nsobj = [[RBObject alloc] initWithRubyObject: obj autoreleaseWhenRubyObjectDies: YES];
+    *nsobj = [[RBObject alloc] initWithRubyObject:obj];
+    if (!OBJ_FROZEN(obj)) {
+      // Let's embed the ObjC object in a custom Ruby object that will 
+      // autorelease the ObjC object when collected by the Ruby GC, and
+      // put the Ruby object as an instance variable.
+      VALUE slave_nsobj;
+      slave_nsobj = Data_Wrap_Struct(rb_cData, NULL, __slave_nsobj_free, *nsobj);   
+      rb_ivar_set(obj, rb_intern("@__slave_nsobj__"), slave_nsobj);
+    }
+    else {
+      // Ruby object is frozen, so we can't do much now.
+      [*nsobj autorelease];
+    }
     return YES;
   }
   return YES;
