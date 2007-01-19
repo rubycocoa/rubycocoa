@@ -18,8 +18,8 @@ module OSX
 	begin
 	  @proc.call
 	rescue Exception => err
-	  $stderr.puts "#{err.message} (#{err.class})"  
-	  $stderr.puts err.backtrace.join("\n    ")
+	  warn "#{err.message} (#{err.class})\n"
+	  warn err.backtrace.join("\n    ")
 	ensure
 	  OSX::NSApplication.sharedApplication.terminate(self) if @terminate
 	end

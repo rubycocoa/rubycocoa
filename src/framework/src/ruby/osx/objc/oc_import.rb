@@ -129,7 +129,7 @@ module OSX
     end
 
     # Damnit!
-    $stderr.puts "Can't find signatures file for #{framework}" if $VERBOSE
+    warn "Can't find signatures file for #{framework}" if $VERBOSE
     return false
   end
   module_function :load_bridge_support_signatures
@@ -253,7 +253,7 @@ module OSX
     # declare to override instance methods of super class which is
     # defined by Objective-C.
     def ns_overrides(*args)
-      $stderr.puts "ns_overrides is no longer necessary, should not be called anymore and will be removed in a next release. Please update your code to not use it."
+      warn "ns_overrides is no longer necessary, should not be called anymore and will be removed in a next release. Please update your code to not use it."
     end
 
     # declare write-only attribute accessors which are named IBOutlet
@@ -299,7 +299,7 @@ module OSX
     end
 
     def objc_export(name, types)
-      $stderr.puts "objc_export will be deprecated. please use objc_method instead."
+      warn "objc_export will be deprecated. please use objc_method instead."
       objc_method(name, types)
     end
 

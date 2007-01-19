@@ -1,3 +1,10 @@
+2007-01-19  Fujimoto Hisa  <hisa@fobj.com>
+
+	* framework/src/ruby/osx/objc/oc_import.rb, 
+	  framework/src/ruby/osx/objc/cocoa_macros_appkit.rb,
+	  framework/src/ruby/osx/objc/oc_wrapper.rb:
+	using the warn as better way instead of sending a message to $stderr.
+
 2007-01-19  Eloy Duran <eloy.de.enige@gmail.com>
 
 	* framework/tool/gen_bridge_doc/lib/cocoa_ref.rb,
