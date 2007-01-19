@@ -1,24 +1,24 @@
 <?xml version='1.0'?>
 <!DOCTYPE signatures SYSTEM "file://localhost/System/Library/DTDs/BridgeSupport.dtd">
 <signatures version='0.9'>
-  <cftype name='CGColorRef' gettypeid_func='CGColorGetTypeID'/>
-  <cftype name='CGColorSpaceRef' gettypeid_func='CGColorSpaceGetTypeID'/>
-  <cftype name='CGContextRef' gettypeid_func='CGContextGetTypeID'/>
-  <cftype name='CGDataConsumerRef' gettypeid_func='CGDataConsumerGetTypeID'/>
-  <cftype name='CGDataProviderRef' gettypeid_func='CGDataProviderGetTypeID'/>
-  <cftype name='CGEventRef' gettypeid_func='CGEventGetTypeID'/>
-  <cftype name='CGEventSourceRef' gettypeid_func='CGEventSourceGetTypeID'/>
-  <cftype name='CGFontRef' gettypeid_func='CGFontGetTypeID'/>
-  <cftype name='CGFunctionRef' gettypeid_func='CGFunctionGetTypeID'/>
-  <cftype name='CGImageRef' gettypeid_func='CGImageGetTypeID'/>
-  <cftype name='CGLayerRef' gettypeid_func='CGLayerGetTypeID'/>
-  <cftype name='CGMutablePathRef' gettypeid_func='CGPathGetTypeID'/>
-  <cftype name='CGPDFDocumentRef' gettypeid_func='CGPDFDocumentGetTypeID'/>
-  <cftype name='CGPDFPageRef' gettypeid_func='CGPDFPageGetTypeID'/>
-  <cftype name='CGPSConverterRef' gettypeid_func='CGPSConverterGetTypeID'/>
-  <cftype name='CGPathRef' gettypeid_func='CGPathGetTypeID'/>
-  <cftype name='CGPatternRef' gettypeid_func='CGPatternGetTypeID'/>
-  <cftype name='CGShadingRef' gettypeid_func='CGShadingGetTypeID'/>
+  <cftype name='CGColorRef' gettypeid_func='CGColorGetTypeID' ignore_tollfree='true'/>
+  <cftype name='CGColorSpaceRef' gettypeid_func='CGColorSpaceGetTypeID' ignore_tollfree='true'/>
+  <cftype name='CGContextRef' gettypeid_func='CGContextGetTypeID' ignore_tollfree='true'/>
+  <cftype name='CGDataConsumerRef' gettypeid_func='CGDataConsumerGetTypeID' ignore_tollfree='true'/>
+  <cftype name='CGDataProviderRef' gettypeid_func='CGDataProviderGetTypeID' ignore_tollfree='true'/>
+  <cftype name='CGEventRef' gettypeid_func='CGEventGetTypeID' ignore_tollfree='true'/>
+  <cftype name='CGEventSourceRef' gettypeid_func='CGEventSourceGetTypeID' ignore_tollfree='true'/>
+  <cftype name='CGFontRef' gettypeid_func='CGFontGetTypeID' ignore_tollfree='true'/>
+  <cftype name='CGFunctionRef' gettypeid_func='CGFunctionGetTypeID' ignore_tollfree='true'/>
+  <cftype name='CGImageRef' gettypeid_func='CGImageGetTypeID' ignore_tollfree='true'/>
+  <cftype name='CGLayerRef' gettypeid_func='CGLayerGetTypeID' ignore_tollfree='true'/>
+  <cftype name='CGMutablePathRef' gettypeid_func='CGPathGetTypeID' ignore_tollfree='true'/>
+  <cftype name='CGPDFDocumentRef' gettypeid_func='CGPDFDocumentGetTypeID' ignore_tollfree='true'/>
+  <cftype name='CGPDFPageRef' gettypeid_func='CGPDFPageGetTypeID' ignore_tollfree='true'/>
+  <cftype name='CGPSConverterRef' gettypeid_func='CGPSConverterGetTypeID' ignore_tollfree='true'/>
+  <cftype name='CGPathRef' gettypeid_func='CGPathGetTypeID' ignore_tollfree='true'/>
+  <cftype name='CGPatternRef' gettypeid_func='CGPatternGetTypeID' ignore_tollfree='true'/>
+  <cftype name='CGShadingRef' gettypeid_func='CGShadingGetTypeID' ignore_tollfree='true'/>
   <opaque name='CGDirectPaletteRef'/>
   <opaque name='CGDisplayConfigRef'/>
   <opaque name='CGPDFOperatorTableRef'/>
