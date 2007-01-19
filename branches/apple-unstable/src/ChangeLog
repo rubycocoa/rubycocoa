@@ -1,3 +1,8 @@
+2007-01-19  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* framework/src/objc/BridgeSupport.m:
+	Fixed the messaging of functions with variadic parameters.
+
 2007-01-19  Fujimoto Hisa  <hisa@fobj.com>
 
 	* framework/src/ruby/osx/objc/oc_import.rb, 

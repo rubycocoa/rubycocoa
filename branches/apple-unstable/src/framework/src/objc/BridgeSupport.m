@@ -811,8 +811,10 @@ bridge_support_dispatcher (int argc, VALUE *argv, VALUE rcv)
 {
   char *func_name;
   struct bsFunction *func;
+  int expected_argc;
   ffi_type **arg_types;
   void **arg_values;
+  char **arg_octypesstr;
   VALUE exception;
   VALUE result;
   NSAutoreleasePool *pool;
@@ -834,13 +836,28 @@ bridge_support_dispatcher (int argc, VALUE *argv, VALUE rcv)
   }
 
   // allocate arg types/values
-  arg_types = (ffi_type **) alloca((func->argc + 1) * sizeof(ffi_type *));
-  arg_values = (void **) alloca((func->argc + 1) * sizeof(void *));
+  expected_argc = func->is_variadic && argc > func->argc ? argc : func->argc;
+  arg_types = (ffi_type **) alloca((expected_argc + 1) * sizeof(ffi_type *));
+  arg_values = (void **) alloca((expected_argc + 1) * sizeof(void *));
   if (arg_types == NULL || arg_values == NULL)
     rb_fatal("can't allocate memory");
 
-  memset(arg_types, 0, (func->argc + 1) * sizeof(ffi_type *));
-  memset(arg_values, 0, (func->argc + 1) * sizeof(void *));
+  memset(arg_types, 0, (expected_argc + 1) * sizeof(ffi_type *));
+  memset(arg_values, 0, (expected_argc + 1) * sizeof(void *));
+
+  if (func->is_variadic && argc > func->argc) {
+    unsigned i;
+
+    DLOG("MDLOSX", "function is variadic, %d min argc, %d additional argc", func->argc, argc - func->argc);
+    arg_octypesstr = (char **)alloca((expected_argc + 1) * sizeof(char *));
+    for (i = 0; i < func->argc; i++)
+      arg_octypesstr[i] = func->argv[i].octypestr;
+    for (i = func->argc; i < argc; i++)
+      arg_octypesstr[i] = "@"; // _C_ID;
+  }
+  else {
+    arg_octypesstr = NULL;
+  } 
 
   pool = [[NSAutoreleasePool alloc] init];
 
@@ -849,8 +866,8 @@ bridge_support_dispatcher (int argc, VALUE *argv, VALUE rcv)
   // and dispatch!
   exception = rb_ffi_dispatch(
     (struct bsCallEntry *)func, 
-    NULL, 
-    func->argc, 
+    arg_octypesstr, 
+    expected_argc,
     argc, 
     0, 
     argv, 
