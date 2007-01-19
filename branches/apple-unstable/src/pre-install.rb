@@ -77,3 +77,11 @@ end
 
   fix_xcode_projects_in_dir(dstdir) if fix_xcode_projects
 end
+if File.exist?('framework/bridge-doc')
+  # Frameworks HTML documentation 
+  dstdir = "#{install_root}#{@config['documentation']}/RubyCocoa/Frameworks"
+  command "cp -R 'framework/bridge-doc/html' '#{dstdir}'"
+  # frameworks RI documentation
+  dstdir = "#{install_root}#{Config::CONFIG['datadir']}/ri/#{Config::CONFIG['ruby_version']}/RubyCocoaFrameworks"
+  command "cp -R 'framework/bridge-doc/ri' '#{dstdir}'"
+end
