@@ -16,6 +16,14 @@
 
 2007-01-19  Laurent Sansonetti <lsansonetti@apple.com>
 
+	* pre-install.rb,
+	  framework/pre-doc.rb,
+	  framework/tool/gen_bridge_doc.rb,
+	  install.rb:
+	- Modified the RDoc generator to generate RI files as well as HTML files ;
+	- Added a new install.rb task, 'doc', that starts the RDoc generator ;
+	- Modified the install phase to install the RI and HTML files in the right places.
+
 	* framework/bridge-support-exceptions/CoreGraphics.xml:
 	Don't try to lookup tollfree-bridged CF classes as it may raise some allocation errors.
 

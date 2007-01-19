@@ -50,7 +50,9 @@ unless ARGV[0].nil?
     end
 
     # Create the rdoc files
-    system "rdoc gen_bridge_doc/output/"
+    system "mkdir doc"
+    system "rdoc gen_bridge_doc/output -o doc/html"
+    system "rdoc --ri gen_bridge_doc/output -o doc/ri"
 
     puts ""
     puts "Total Cocoa Reference to RDoc processing time: #{Time.now - start_time} seconds"
@@ -59,7 +61,9 @@ unless ARGV[0].nil?
     system "rm -r gen_bridge_doc/output"
   else
     show_options
+    exit 1
   end
 else
   show_options
+  exit 1
 end

@@ -830,6 +830,7 @@ class ToplevelInstaller < Installer
     [ 'show',     'shows current configuration' ],
     [ 'setup',    'compiles extention or else' ],
     [ 'test',     'tests framework' ],
+    [ 'doc',      'generate documentation' ],
     [ 'install',  'installs files' ],
     [ 'package',  'make binary package into a dmg' ],
     [ 'clean',    "does `make clean' for each extention" ]
@@ -1080,6 +1081,15 @@ class ToplevelInstaller < Installer
     ensure
       ENV.delete('DYLD_PRINT_LIBRARIES_POST_LAUNCH')
     end
+  end
+
+  # doc
+
+  def exec_doc
+    dive_into('framework') { 
+      run_hook 'pre-doc.rb'
+      run_hook 'post-doc.rb' 
+    }
   end
 
   #
