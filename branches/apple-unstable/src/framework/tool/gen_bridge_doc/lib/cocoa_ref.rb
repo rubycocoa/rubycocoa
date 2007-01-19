@@ -454,7 +454,7 @@ module CocoaRef
     def to_s
       str  = "METHOD:\n#{@name}\n"
       str += "TYPE:\n#{@type.to_s}\n"
-      str += "DEFINITION:\n#{@definition.strip_tags}\n"
+      str += "DEFINITION:\n#{self.definition.strip_tags}\n"
       str += "DESCRIPTION:\n#{@description.strip_tags}\n"
       str += "PARAMETERS:\n#{@parameters.strip_tags}\n"
       str += "RETURN VALUE:\n#{@return_value.strip_tags}\n"
@@ -473,7 +473,7 @@ module CocoaRef
       str += "  # Availability:: #{@availability.rdocify}\n" unless @availability.empty?
       str += "  # See also::     #{@see_also.rdocify}\n"     unless @see_also.empty?
       str += "  def #{'self.' if @type == :class_method}#{self.to_rb_def}\n"
-      str += "    # #{@definition.gsub(/\n/, ' ').strip_tags.clean_special_chars}\n"
+      str += "    # #{self.definition.gsub(/\n/, ' ').strip_tags.clean_special_chars}\n"
       str += "    #\n"
     
       # objc_send_style = self.to_objc_send
@@ -520,6 +520,10 @@ module CocoaRef
       return alt_result
     end
     
+    def definition
+      self.override_result(@definition, :new_definition)
+    end
+    
     def regexp_start
       self.override_result("([-+\\s]+\\()([\\w\\s]+)([\\s\\*\\)]+)", :new_regexp_start)
     end
@@ -547,10 +551,10 @@ module CocoaRef
       end
       regexp += method_def_parts.join("(\\s+)")
       #puts regexp
-  
-      parsed_method_def = @definition.clean_objc.scan(Regexp.new(regexp)).flatten
+
+      parsed_method_def = self.definition.clean_objc.scan(Regexp.new(regexp)).flatten
       #p parsed_method_def
-  
+
       method_def_parts = []
       parsed_method_name.length.times do |i|
         method_def_part = {}
@@ -574,7 +578,7 @@ module CocoaRef
       parsed_method_name = @name.split(':')
       #p parsed_method_name
     
-      if @definition.strip_tags.include?(':') and not @definition.strip_tags[-2...-1] == ':'
+      if self.definition.strip_tags.include?(':') and not self.definition.strip_tags[-2...-1] == ':'
         method_def_parts = self.parse
         str = "#{method_def_parts.collect {|m| m[:name]}.join('_')}(#{method_def_parts.collect {|m| m[:arg] }.join(', ')})"
       else
@@ -658,7 +662,7 @@ module CocoaRef
       @class_def = parse_reference(file)
       
       # Check if there is a overrides file in the override_dir for the given class
-      include_file = File.join(File.dirname(File.expand_path(__FILE__)), @override_dir, @class_def.output_filename)
+      include_file = File.join(File.dirname(File.expand_path(__FILE__)), @override_dir, @class_def.output_filename)      
       if File.exist?(include_file)
         # If it exists, require it and extend the methods to use the overrides
         require include_file
@@ -682,6 +686,9 @@ module CocoaRef
           class_def.name = element.inner_html.strip_tags.split(' ').first
         elsif element.fits_the_description?('h1', 'Additions Reference')
           class_def.type = :additions
+          class_def.name = element.inner_html.strip_tags.split(' ').first
+        elsif element.fits_the_description?('h1', 'Deprecation Reference')
+          class_def.type = :class
           class_def.name = element.inner_html.strip_tags.split(' ').first
         end
         if element.fits_the_description?('h2', 'Class Description')
