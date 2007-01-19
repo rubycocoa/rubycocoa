@@ -16,6 +16,9 @@
 
 2007-01-19  Laurent Sansonetti <lsansonetti@apple.com>
 
+	* framework/bridge-support-exceptions/CoreGraphics.xml:
+	Don't try to lookup tollfree-bridged CF classes as it may raise some allocation errors.
+
 	* framework/src/ruby/osx/objc/oc_import.rb:
 	Make sure builtin frameworks can't be required twice.
 
