@@ -16,6 +16,11 @@
 
 2007-01-19  Laurent Sansonetti <lsansonetti@apple.com>
 
+	* framework/src/objc/RBObject.h,
+	  framework/src/objc/RBObject.m,
+	  framework/src/objc/ocdata_conv.m:
+	Better RBObject retention mechanism.
+
 	* framework/src/objc/BridgeSupport.m:
 	Fixed the messaging of functions with variadic parameters.
 
