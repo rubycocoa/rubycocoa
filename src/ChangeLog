@@ -1,3 +1,15 @@
+2007-01-19  Eloy Duran <eloy.de.enige@gmail.com>
+
+	* framework/tool/gen_bridge_doc/lib/cocoa_ref.rb,
+	  framework/tool/gen_bridge_doc/lib/ApplicationKit/NSTableColumn.rb,
+	  framework/tool/gen_bridge_doc/lib/ApplicationKit/NSFont.rb,
+	  framework/tool/gen_bridge_doc/rdocify_framework.rb,
+	  framework/tool/gen_bridge_doc.rb:
+	- Added support for class additions, they are translated to modules ;
+	- Added support for parsing override modules ;
+	- Added some override modules: NSTableColumn.rb & NSFont.rb
+	  Which makes AppKit parse & generate completely!
+
 2007-01-18  Fujimoto Hisa  <hisa@fobj.com>
 
 	* framework/src/ruby/osx/objc/oc_import.rb, framework/src/ruby/osx/objc/oc_wrapper.rb:

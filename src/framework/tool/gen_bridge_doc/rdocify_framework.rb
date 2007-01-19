@@ -69,10 +69,10 @@ success = 0
 errors = 0
 reference_files.each do |ref|
   puts "Processing reference file: #{ref[:name]}"
-  cocoa_ref_parser = CocoaRef::Parser.new(ref[:path])
+  cocoa_ref_parser = CocoaRef::Parser.new(ref[:path], File.basename(framework_path))
   if not cocoa_ref_parser.errors? or output_files_with_errors
     success = success.next
-    puts "      Writing output file: #{cocoa_ref_parser.class_def.name}.rb"
+    puts "      Writing output file: #{cocoa_ref_parser.class_def.output_filename}"
     cocoa_ref_parser.to_rb_file(output_dir)
   else
     errors = errors.next

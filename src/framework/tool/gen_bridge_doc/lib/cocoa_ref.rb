@@ -178,19 +178,6 @@ module CocoaRef
       return ['', index]
     end
     
-    # def get_h5_section_for_method(index, search)
-    #   elm_index = find_next_tag('h5', 'tight', index)
-    #   unless elm_index.nil?
-    #     elm = @elements[elm_index]
-    #     if elm.inner_html == search
-    #       str, new_index = get_the_text(elm_index + 1)
-    #       return [str, new_index]
-    #     end
-    #   end
-    #   return ['', index]
-    # end
-    #
-    
     # When passed the index of a paragraph,
     # this method will try to retrieve the paragraph and any subsequent paragraphs.
     # It also returns the index of the last found paragraph.
@@ -250,9 +237,9 @@ module CocoaRef
           constant_defs.push constant_def
         end
       else
-        error_str  = "[WARNING] A `nil` value was detected in the constants section...\n"
-        error_str += "          It might be a bug, please cross check the original reference with the output.\n"
-        @log.add(error_str)
+        warning_str  = "[WARNING] A `nil` value was detected in the constants section...\n"
+        warning_str += "          It might be a bug, please cross check the original reference with the output.\n"
+        puts warning_str if $COCOA_REF_DEBUG
       end
       
       return constant_defs
@@ -260,15 +247,21 @@ module CocoaRef
     
     def get_names_and_values_for_constants(index)
       elm_index = find_next_tag('pre', '', index)
-      elements = @elements[elm_index].children
+      children = @elements[elm_index].children
       names_and_values = []
       elm_index = elm_index.next
-      elements.each do |elm|
+      children_index = 0
+      children.each do |elm|
         # 16-01-2007: Added a extra comparison to exclude NSString links.
         if elm.is_a?(Hpricot::Elem) and elm.name == 'a' and not elm.inner_html == 'NSString'
           names_and_values.push({:name => elm.inner_html, :value => ''})
+          
+          # This is a check for constant names that are not the children of a <a> tag
+        elsif elm.is_a?(Hpricot::Comment) and elm.to_s == '<!--a-->'
+          names_and_values.push({:name => children[children_index + 1].to_s, :value => ''})
+          
         elsif elm.is_a?(Hpricot::Text) and elm.to_s.include?('=')
-          parsed_value = elm.to_s.scan(/([\s=]+)([\(\-\w\d\)]+)/).flatten
+          parsed_value = elm.to_s.gsub(/&lt;/, '<').scan(/([\s=]+)([\(\-\w\d\)<>\s]+)/).flatten
           unless names_and_values.last.nil? or names_and_values.last.empty?
             names_and_values.last[:value] = parsed_value[1]
           else
@@ -278,6 +271,7 @@ module CocoaRef
             @log.add(error_str)
           end
         end
+        children_index = children_index.next
         elm_index = elm_index.next
       end
       return [names_and_values, index + 1]
@@ -366,10 +360,10 @@ module CocoaRef
   end
   
   class ClassDef
-    attr_accessor :description, :name, :method_defs, :constant_defs, :notification_defs
+    attr_accessor :description, :name, :type, :method_defs, :constant_defs, :notification_defs
     
     def initialize
-      @description, @name, @method_defs, @constant_defs, @notification_defs = [], '', [], [], []
+      @description, @name, @type, @method_defs, @constant_defs, @notification_defs = [], '', '', [], [], []
     end
     
     def errors?
@@ -396,6 +390,14 @@ module CocoaRef
       return (errors_in_methods or errors_in_contstants)
     end
     
+    def output_filename
+      if @type == :class
+        return "#{@name}.rb"
+      elsif @type == :additions
+        return "#{@name}Additions.rb"
+      end
+    end
+    
     def parse_description
       arr = @description.collect {|paragraph| paragraph.rdocify}
       return arr
@@ -405,13 +407,23 @@ module CocoaRef
     end
     def to_rdoc
       str = ''
-    
+      
+      if @type == :additions
+        str += "# This module is automatically mixed-in in the #{@name} class.\n"
+        str += "#\n"
+      end
+      
       self.parse_description.each do |paragraph|
         str += "# #{paragraph}\n"
         str += "#\n"
       end
-    
-      str += "class OSX::#{@name}\n"
+      
+      if @type == :class
+        str += "class OSX::#{@name}\n"
+      elsif @type == :additions
+        str += "module OSX::#{@name}Additions\n"
+      end
+      
       @constant_defs.each {|c| str += c.to_rdoc }
       @method_defs.each {|m| str += m.to_rdoc }
       
@@ -461,7 +473,7 @@ module CocoaRef
       str += "  # Availability:: #{@availability.rdocify}\n" unless @availability.empty?
       str += "  # See also::     #{@see_also.rdocify}\n"     unless @see_also.empty?
       str += "  def #{'self.' if @type == :class_method}#{self.to_rb_def}\n"
-      str += "    # #{@definition.strip_tags.clean_special_chars}\n"
+      str += "    # #{@definition.gsub(/\n/, ' ').strip_tags.clean_special_chars}\n"
       str += "    #\n"
     
       # objc_send_style = self.to_objc_send
@@ -492,7 +504,70 @@ module CocoaRef
       end
       return objc_send_style
     end
+    
+    # This method checks if a override method (var method) exists.
+    # If so it calls it with the optional args array.
+    # If it doesn't exist it returns the default alt_result.
+    def override_result(alt_result, method, args = [])
+      if self.respond_to? method
+        if args.empty?
+          override_result = self.send(method)
+        else
+          override_result = self.send(method, *args)
+        end
+        return override_result unless override_result.nil?
+      end
+      return alt_result
+    end
+    
+    def regexp_start
+      self.override_result("([-+\\s]+\\()([\\w\\s]+)([\\s\\*\\)]+)", :new_regexp_start)
+    end
+    def regexp_repeater
+      self.override_result("(\\w+)(:\\()([\\w\\s]+)([\\(\\w,\\s\\*\\)\\[\\d\\]]+\\)\\)|[\\s\\*\\)\\[\\d\\]]+)(\\w+)", :new_regexp_repeater)
+    end
+    
+    def regexp_result_name(res, part)
+      self.override_result(res[(part * 6) + 3], :new_regexp_result_name, [res, part])
+    end
+    def regexp_result_type(res, part)
+      self.override_result(res[(part * 6) + 5], :new_regexp_result_type, [res, part])
+    end
+    def regexp_result_arg(res, part)
+      self.override_result(res[(part * 6) + 7], :new_regexp_result_arg, [res, part])
+    end
+    
+    def parse
+      parsed_method_name = @name.split(':')
+    
+      regexp = regexp_start
+      method_def_parts = []
+      parsed_method_name.length.times do
+        method_def_parts.push regexp_repeater
+      end
+      regexp += method_def_parts.join("(\\s+)")
+      #puts regexp
   
+      parsed_method_def = @definition.clean_objc.scan(Regexp.new(regexp)).flatten
+      #p parsed_method_def
+  
+      method_def_parts = []
+      parsed_method_name.length.times do |i|
+        method_def_part = {}
+        md_name = regexp_result_name(parsed_method_def, i)
+        method_def_part[:name] = md_name.strip unless md_name.nil?
+        
+        md_type = regexp_result_type(parsed_method_def, i)
+        method_def_part[:type] = md_type.strip unless md_type.nil?
+        
+        md_arg = regexp_result_arg(parsed_method_def, i)
+        method_def_part[:arg]  = md_arg.strip unless md_arg.nil?
+        method_def_parts.push(method_def_part)
+      end
+      #p method_def_parts
+      return method_def_parts
+    end
+    
     def to_rb_def
       #puts @definition.clean_objc
     
@@ -514,35 +589,6 @@ module CocoaRef
       else
         return str
       end
-    end
-  
-    def parse
-      parsed_method_name = @name.split(':')
-    
-      regexp = "([-+\\s]+\\()([\\w\\s]+)([\\s\\*\\)]+)"
-      method_def_parts = []
-      parsed_method_name.length.times do
-        method_def_parts.push "(\\w+)(:\\()([\\w\\s]+)([\\(\\w,\\s\\*\\)\\[\\d\\]]+\\)\\)|[\\s\\*\\)\\[\\d\\]]+)(\\w+)"
-      end
-      regexp += method_def_parts.join("(\\s)")
-      #puts regexp
-  
-      parsed_method_def = @definition.clean_objc.scan(Regexp.new(regexp)).flatten
-      #p parsed_method_def
-  
-      method_def_parts = []
-      parsed_method_name.length.times do |i|
-        method_def_part = {}
-        md_name = parsed_method_def[(i * 6) + 3]
-        method_def_part[:name] = md_name.strip unless md_name.nil?
-        md_type = parsed_method_def[(i * 6) + 5]
-        method_def_part[:type] = md_type.strip unless md_type.nil?
-        md_arg = parsed_method_def[(i * 6) + 7]
-        method_def_part[:arg]  = md_arg.strip unless md_arg.nil?
-        method_def_parts.push(method_def_part)
-      end
-      #p method_def_parts
-      return method_def_parts
     end
   end
 
@@ -605,10 +651,21 @@ module CocoaRef
   class Parser
     attr_reader :class_def
     
-    def initialize(file)
+    def initialize(file, override_dir = '')
+      @override_dir = override_dir
       @log = CocoaRef::Log.new
       @hpricot = CocoaRef::HpricotProxy.new(file)
       @class_def = parse_reference(file)
+      
+      # Check if there is a overrides file in the override_dir for the given class
+      include_file = File.join(File.dirname(File.expand_path(__FILE__)), @override_dir, @class_def.output_filename)
+      if File.exist?(include_file)
+        # If it exists, require it and extend the methods to use the overrides
+        require include_file
+        @class_def.method_defs.each do |m|
+          m.instance_eval "self.send :extend, #{@class_def.name}"
+        end
+      end
     end
     
     def errors?
@@ -620,7 +677,11 @@ module CocoaRef
       busy_with = ''
       index = 0
       @hpricot.elements.each do |element|
-        if element.fits_the_description?('h1', 'Class Reference')
+        if element.fits_the_description?('h1', 'Class Reference') or element.fits_the_description?('h1', 'Class Objective-C Reference')
+          class_def.type = :class
+          class_def.name = element.inner_html.strip_tags.split(' ').first
+        elsif element.fits_the_description?('h1', 'Additions Reference')
+          class_def.type = :additions
           class_def.name = element.inner_html.strip_tags.split(' ').first
         end
         if element.fits_the_description?('h2', 'Class Description')
@@ -645,7 +706,6 @@ module CocoaRef
           busy_with = 'Notifications'
         end
         if busy_with == 'Notifications' and @hpricot.start_of_method_def?(index)
-          puts 'notification'
           class_def.notification_defs.push @hpricot.get_notification_def(index)
         end
 
@@ -678,7 +738,7 @@ module CocoaRef
     end
     
     def to_rb_file(dir)
-      file = File.join(dir, "#{@class_def.name}.rb")
+      file = File.join(dir, @class_def.output_filename)
       File.open(file, 'w') {|f| f.write @class_def.to_rdoc}
     end
     

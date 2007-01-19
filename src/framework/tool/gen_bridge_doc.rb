@@ -36,7 +36,8 @@ unless ARGV[0].nil?
     end
     
     SUPPORTED_FRAMEWORKS = ['/Developer/ADC Reference Library/documentation/Cocoa/Reference/ApplicationKit/']
-
+    #SUPPORTED_FRAMEWORKS = ['/Developer/ADC Reference Library/documentation/Cocoa/Reference/Foundation/']
+    
     start_time = Time.now
 
     # Parse the rdoc for each supported framework
