@@ -14,7 +14,7 @@ module OSX
       if args.length == 0
         begin
           ret = const_get(mname)
-          $stderr.puts "#{caller[0]}: syntax 'OSX.#{mname}' to get the constant is deprecated and its use is discouraged, please use 'OSX::#{mname}' instead."
+          warn "#{caller[0]}: syntax 'OSX.#{mname}' to get the constant is deprecated and its use is discouraged, please use 'OSX::#{mname}' instead."
           return ret
         rescue
         end
@@ -135,7 +135,7 @@ module OSX
           end
           m_name = "#{mname}_"
           m_args = args
-          $stderr.puts "#{caller[1]}: inline Hash dispatch syntax is deprecated and its use is discouraged, please use '#{m_name}(...)' or 'objc_send(...)' instead."
+          warn "#{caller[1]}: inline Hash dispatch syntax is deprecated and its use is discouraged, please use '#{m_name}(...)' or 'objc_send(...)' instead."
         elsif (m_args.size >= 3) && ((m_args.size % 2) == 1) && (not m_name.include?('_')) then
           # Parse the symbol-value-symbol-value-... case.
           mname = m_name.dup
@@ -148,7 +148,7 @@ module OSX
             end
           end
           m_name = "#{mname}_"
-          $stderr.puts "#{caller[1]}: symbol-value-... dispatch syntax is deprecated and its use is discouraged, please use '#{m_name}(...)' or 'objc_send(...)' instead."
+          warn "#{caller[1]}: symbol-value-... dispatch syntax is deprecated and its use is discouraged, please use '#{m_name}(...)' or 'objc_send(...)' instead."
           m_args = args
         else
           m_name.sub!(/[^_:]$/, '\0_') if m_args.size > 0
