@@ -16,6 +16,9 @@
 
 2007-01-19  Laurent Sansonetti <lsansonetti@apple.com>
 
+	* framework/src/ruby/osx/objc/oc_import.rb:
+	Make sure builtin frameworks can't be required twice.
+
 	* framework/src/objc/RBObject.h,
 	  framework/src/objc/RBObject.m,
 	  framework/src/objc/ocdata_conv.m:

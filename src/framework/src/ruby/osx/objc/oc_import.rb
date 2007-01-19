@@ -56,6 +56,7 @@ module OSX
   module_function :_bundle_path_for_framework
 
   def require_framework(framework)
+    return false if framework_loaded?(framework)
     bundle, path = _bundle_path_for_framework(framework)
     unless bundle.nil?
       return false if bundle.isLoaded
