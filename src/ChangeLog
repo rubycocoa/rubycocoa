@@ -1,3 +1,9 @@
+2007-01-20  Fujimoto Hisa  <hisa@fobj.com>
+
+	* tests/tc_bs.rb:
+	Fixed test to spawn Ruby command lines to add option for seeking
+	library path for ../lib and ../ext/rubycocoa.
+
 2007-01-19  Eloy Duran <eloy.de.enige@gmail.com>
 
 	* framework/tool/gen_bridge_doc/lib/cocoa_ref.rb,
