@@ -82,6 +82,9 @@ if File.exist?('framework/bridge-doc')
   dstdir = "#{install_root}#{@config['documentation']}/RubyCocoa/Frameworks"
   command "cp -R 'framework/bridge-doc/html' '#{dstdir}'"
   # frameworks RI documentation
-  dstdir = "#{install_root}#{Config::CONFIG['datadir']}/ri/#{Config::CONFIG['ruby_version']}/RubyCocoaFrameworks"
-  command "cp -R 'framework/bridge-doc/ri' '#{dstdir}'"
+  # FIXME: this doesn't seem to be the right place
+  #basedstdir = "#{@config['install-prefix']}#{Config::CONFIG['datadir']}/ri/#{Config::CONFIG['ruby_version']}"
+  #command "mkdir -p '#{basedstdir}'"
+  #dstdir = "#{basedstdir}/RubyCocoaFrameworks"
+  #command "cp -R 'framework/bridge-doc/ri' '#{dstdir}'"
 end

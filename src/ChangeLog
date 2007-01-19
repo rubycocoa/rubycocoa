@@ -22,7 +22,7 @@
 	  install.rb:
 	- Modified the RDoc generator to generate RI files as well as HTML files ;
 	- Added a new install.rb task, 'doc', that starts the RDoc generator ;
-	- Modified the install phase to install the RI and HTML files in the right places.
+	- Modified the install phase to install the HTML files in the right place. RI files still uninstalled.
 
 	* framework/bridge-support-exceptions/CoreGraphics.xml:
 	Don't try to lookup tollfree-bridged CF classes as it may raise some allocation errors.
