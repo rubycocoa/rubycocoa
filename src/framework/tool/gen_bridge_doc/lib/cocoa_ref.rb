@@ -6,6 +6,10 @@ require 'hpricot'
 
 class String
   
+  def to_rb_def
+    self.strip_tags.clean_up.gsub(/\(\w+\)/, '').strip.split(':').join('_')
+  end
+  
   def unescape_chars
     self.gsub(/&lt;/, "<")
   end
@@ -210,7 +214,20 @@ module CocoaRef
     end
     
     def get_see_also_for_method(index)
-      get_h5_section_for_method(index, 'See Also')
+      #get_h5_section_for_method(index, 'See Also')
+      elm_index = find_next_tag('h5', 'tight', index)
+      unless elm_index.nil?
+        elm = @elements[elm_index]
+        if elm.inner_html == 'See Also'
+          children = @elements[elm_index + 1].children
+          see_also_items = []
+          children.each do |c|
+            see_also_items.push(c.inner_html) if c.is_a?(Hpricot::Elem)
+          end
+          return [see_also_items, elm_index + 2]
+        end
+      end
+      return [[], index]
     end
     
     def get_methodlike_constant_def(index)
@@ -447,7 +464,7 @@ module CocoaRef
     attr_reader :log
     
     def initialize
-      @type, @name, @description, @definition, @parameters, @return_value, @discussion, @availability, @see_also = '', '', '', '', '', '', '', '', ''
+      @type, @name, @description, @definition, @parameters, @return_value, @discussion, @availability, @see_also = '', '', '', '', '', '', '', '', []
       @log = CocoaRef::Log.new
     end
     
@@ -471,7 +488,13 @@ module CocoaRef
       str += "  # Discussion::   #{@discussion.rdocify}\n"   unless @discussion.empty?
       str += "  # Return value:: #{@return_value.rdocify}\n" unless @return_value.empty?
       str += "  # Availability:: #{@availability.rdocify}\n" unless @availability.empty?
-      str += "  # See also::     #{@see_also.rdocify}\n"     unless @see_also.empty?
+      unless @see_also.empty?
+        str += "  # See also::     "
+        @see_also.each do |s|
+          str += "<tt>#{s.to_rb_def}</tt> "
+        end
+        str += "\n"
+      end
       str += "  def #{'self.' if @type == :class_method}#{self.to_rb_def}\n"
       str += "    # #{self.definition.gsub(/\n/, ' ').strip_tags.clean_special_chars}\n"
       str += "    #\n"

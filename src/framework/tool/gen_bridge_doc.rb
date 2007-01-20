@@ -41,7 +41,7 @@ unless ARGV[0].nil?
                             '/Developer/ADC Reference Library/documentation/Cocoa/Reference/CoreDataFramework/',
                             '/Developer/ADC Reference Library/documentation/QuickTime/Reference/QTKitFramework/']
     #SUPPORTED_FRAMEWORKS = ['/Developer/ADC Reference Library/documentation/UserExperience/Reference/AddressBook/']
-
+    #SUPPORTED_FRAMEWORKS = ['/Developer/ADC Reference Library/documentation/Cocoa/Reference/ApplicationKit/']
     start_time = Time.now
 
     # Parse the rdoc for each supported framework
@@ -51,6 +51,7 @@ unless ARGV[0].nil?
 
     # Create the rdoc files
     system "mkdir doc"
+    #system "rdoc  --line-numbers --inline-source --template gen_bridge_doc/allison/allison.rb gen_bridge_doc/output -o doc/html"
     system "rdoc gen_bridge_doc/output -o doc/html"
     system "rdoc --ri gen_bridge_doc/output -o doc/ri"
 
