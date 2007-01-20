@@ -1,14 +1,22 @@
-{
-	FilesToRename = {
-		"CocoaApp_Prefix.pch" = "ÇPROJECTNAMEÈ_Prefix.pch";
-	};
-	FilesToMacroExpand = (
-		"ÇPROJECTNAMEÈ_Prefix.pch",
-		"Info.plist",
-		"English.lproj/InfoPlist.strings",
-		"MyDocument.rb",
-		"rb_main.rb",
-		"main.m",
-	);
-	Description = "This project builds a Core Data application written in Ruby that uses the NSDocument architecture.";
-}
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>Description</key>
+	<string>This project builds a Core Data application written in Ruby that uses the NSDocument architecture.</string>
+	<key>FilesToMacroExpand</key>
+	<array>
+		<string>Â«PROJECTNAMEÂ»_Prefix.pch</string>
+		<string>Info.plist</string>
+		<string>English.lproj/InfoPlist.strings</string>
+		<string>MyDocument.rb</string>
+		<string>rb_main.rb</string>
+		<string>main.m</string>
+	</array>
+	<key>FilesToRename</key>
+	<dict>
+		<key>CocoaApp_Prefix.pch</key>
+		<string>Â«PROJECTNAMEÂ»_Prefix.pch</string>
+	</dict>
+</dict>
+</plist>
