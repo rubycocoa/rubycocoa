@@ -1,5 +1,9 @@
 2007-01-20  Fujimoto Hisa  <hisa@fobj.com>
 
+	* framework/src/objc/RBRuntime.m:
+	fixed memory leak for calling RBApplicationMain more than
+	once. (thanks Kouhei Sutou for suggestion)
+
 	* tests/tc_bs.rb:
 	Fixed test to spawn Ruby command lines to add option for seeking
 	library path for ../lib and ../ext/rubycocoa.
