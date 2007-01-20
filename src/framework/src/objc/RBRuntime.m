@@ -94,8 +94,12 @@ prepare_argv(int argc, const char* argv[], const char* rb_main_name, const char*
 int
 RBApplicationMain(const char* rb_main_name, int argc, const char* argv[])
 {
+  static int done_p = 0;
   int ruby_argc;
   const char** ruby_argv;
+
+  if (done_p) return 0;
+  done_p = 1;
 
   ruby_argc = prepare_argv(argc, argv, rb_main_name, &ruby_argv);
 
