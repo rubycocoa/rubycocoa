@@ -1,3 +1,9 @@
+2007-01-20  Eloy Duran <eloy.de.enige@gmail.com>
+
+	* pre-install.rb:
+	Modified the install phase to install the RI files
+	in the right place. (thanks to Norberto Ortigoza)
+
 2007-01-20  Fujimoto Hisa  <hisa@fobj.com>
 
 	* framework/src/objc/RBRuntime.m:
