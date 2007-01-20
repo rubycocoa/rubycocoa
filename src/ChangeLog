@@ -1,3 +1,8 @@
+2007-01-20  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* template/**/TemplateInfo.plist:
+	Converted encoding to UTF-8 and format to XML (from old OpenStep format).
+
 2007-01-20  Eloy Duran <eloy.de.enige@gmail.com>
 
 	* pre-install.rb:
