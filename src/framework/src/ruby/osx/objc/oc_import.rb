@@ -214,7 +214,7 @@ module OSX
     else
       begin
         OSX.const_get("#{occls_superclass}".to_sym) 
-        rescue NameError
+      rescue NameError
         # some ObjC internal class cannot become Ruby constant
         # because of prefix '%' or '_'
         if occls.__ocid__ != occls_superclass.__ocid__
