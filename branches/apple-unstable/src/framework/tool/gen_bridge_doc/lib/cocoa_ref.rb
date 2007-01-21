@@ -516,21 +516,27 @@ module CocoaRef
     
       return str
     end
-  
+    
+    def string_spacer(length)
+      spacer = ''
+      length.times{ spacer += ' '}
+      return spacer
+    end
+    
     def to_objc_method(class_name)
       method_def_parts = self.parse
       return nil if method_def_parts.nil?
       return nil if method_def_parts.length == 1 and method_def_parts.first.empty?
       
-      # longest_name = 0
-      # method_def_parts.each do |m|
-      #   longest_name = m[:name].length if m[:name].length > longest_name
-      # end
+      longest_name = ''
+      method_def_parts.each do |m|
+        longest_name = m[:name] if m[:name].length > longest_name.length
+      end
       
       objc_method_style = []
       index = 0
       method_def_parts.each do |m|          
-        str = "#{m[:name] unless m[:name].nil?}, #{m[:arg] unless m[:arg].nil?}"
+        str = "#{m[:name] unless m[:name].nil?}, #{string_spacer(longest_name.length - m[:name].length) unless m[:name] == longest_name}#{m[:arg] unless m[:arg].nil?}"
         if index.zero?
           objc_method_style.push "#{class_name + '.alloc.' if @type == :class_method}objc_method(:#{str}#{(index == method_def_parts.length - 1) ? ')' : ','}"
         elsif index == method_def_parts.length - 1
