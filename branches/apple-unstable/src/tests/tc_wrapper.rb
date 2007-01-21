@@ -93,4 +93,9 @@ class TC_OCObjWrapper < Test::Unit::TestCase
     end
   end
 
+  def test_proxy_ancestors
+    assert(!OSX::NSProxy.ancestors.include?(OSX::NSObject))
+    assert(!OSX::NSProtocolChecker.ancestors.include?(OSX::NSObject))
+  end
+
 end
