@@ -1,3 +1,9 @@
+2007-01-22  Eloy Duran <eloy.de.enige@gmail.com>
+
+	* framework/tool/gen_bridge_doc/lib/cocoa_ref.rb:
+	Modified the way the objc_method style code is layout,
+	they are now nicely aligned.
+
 2007-01-21  Eloy Duran <eloy.de.enige@gmail.com>
 
 	* pre-install.rb,
