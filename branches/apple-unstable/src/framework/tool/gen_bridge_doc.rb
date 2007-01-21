@@ -66,10 +66,14 @@ unless ARGV[0].nil?
     #SUPPORTED_FRAMEWORKS = ['/Developer/ADC Reference Library/documentation/UserExperience/Reference/AddressBook/']
     #SUPPORTED_FRAMEWORKS = ['/Developer/ADC Reference Library/documentation/Cocoa/Reference/ApplicationKit/']
     start_time = Time.now
-
+    
+    # Setup the env
+    ENV['DYLD_FRAMEWORK_PATH'] = File.expand_path('../build/Default')
+    ENV['BRIDGE_SUPPORT_PATH'] = File.expand_path('../bridge-support')
+    
     # Parse the rdoc for each supported framework
     SUPPORTED_FRAMEWORKS.each do |f|
-      system "#{Config::CONFIG["bindir"]}/ruby gen_bridge_doc/rdocify_framework.rb #{options.join(' ')} '#{f}' #{output_dir}/ruby"
+      system "#{Config::CONFIG["bindir"]}/ruby -I../../ext/rubycocoa -I../../lib gen_bridge_doc/rdocify_framework.rb #{options.join(' ')} '#{f}' #{output_dir}/ruby"
     end
 
     # Create the rdoc files
