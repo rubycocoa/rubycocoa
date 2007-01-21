@@ -209,8 +209,10 @@ module OSX
  
   def _objc_lookup_superclass(occls)
     occls_superclass = occls.oc_superclass
-    if occls_superclass.nil?
+    if occls_superclass.nil? or occls_superclass.__ocid__ == occls.__ocid__ 
       OSX::ObjcID
+    elsif occls_superclass.is_a?(OSX::NSProxy) 
+      OSX::NSProxy
     else
       begin
         OSX.const_get("#{occls_superclass}".to_sym) 

@@ -238,8 +238,6 @@ wrapper_to_s (VALUE rcv)
   id pool;
 
   oc_rcv = rbobj_get_ocid(rcv);
-  if (oc_rcv == [NSProxy class])
-    return rb_str_new2("NSProxy");
   pool = [[NSAutoreleasePool alloc] init];
   if ([oc_rcv isKindOfClass: [NSString class]] == NO)
     oc_rcv = [oc_rcv description];
