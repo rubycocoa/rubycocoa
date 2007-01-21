@@ -5,7 +5,7 @@
 
 def show_options
   puts "Usage:"
-  puts "  #{__FILE__} build|clean [extra options]"
+  puts "  #{__FILE__} build|clean [options] <output dir>"
   puts ""
   puts "Options:"
   puts "  build  Create the RDoc documentation for the supported frameworks"
@@ -18,8 +18,12 @@ def show_options
   puts "  -v Verbose output."
   puts "  -f Force the output files to be written even if there were errors during parsing."
   puts ''
+  puts "Output Dir:"
+  puts "  If a optional output dir is specified,"
+  puts "  the documentation will be copied to that location once done."
+  puts ""
   puts "Examples:"
-  puts "  #{__FILE__} build"
+  puts "  #{__FILE__} build ~/documentation"
   puts "  #{__FILE__} build -v -f"
   puts "  #{__FILE__} clean"
   puts ''
@@ -28,11 +32,31 @@ end
 unless ARGV[0].nil?
   case ARGV[0]
   when 'build'
+    options = []
+    output_dir = ''
+    
     # Check if there are any other args
     if ARGV.length > 1
-      other_args = ARGV[1..-1]
+      ARGV[1..-1].each do |arg|
+        case arg
+        when '-v'
+          options.push '-v'
+        when '-f'
+          options.push '-f'
+        else
+          output_dir = arg
+        end
+      end
+    end
+    
+    # Get a reference to the output dir and create it if necessary
+    unless output_dir.empty?
+      output_dir = File.expand_path(output_dir)
+      unless File.exist?(output_dir)
+        system "mkdir -p #{output_dir}"
+      end
     else
-      other_args = []
+      output_dir = File.join(File.expand_path(__FILE__), 'doc/')
     end
     
     SUPPORTED_FRAMEWORKS = ['/Developer/ADC Reference Library/documentation/Cocoa/Reference/ApplicationKit/',
@@ -46,15 +70,15 @@ unless ARGV[0].nil?
 
     # Parse the rdoc for each supported framework
     SUPPORTED_FRAMEWORKS.each do |f|
-      system "ruby gen_bridge_doc/rdocify_framework.rb #{other_args.join(' ')} '#{f}'"
+      system "ruby gen_bridge_doc/rdocify_framework.rb #{options.join(' ')} '#{f}'"
     end
 
     # Create the rdoc files
-    system "mkdir doc"
+    system "mkdir -p #{output_dir}"
     #system "rdoc  --line-numbers --inline-source --template gen_bridge_doc/allison/allison.rb gen_bridge_doc/output -o doc/html"
-    system "rdoc gen_bridge_doc/output -o doc/html"
-    system "rdoc --ri gen_bridge_doc/output -o doc/ri"
-
+    system "rdoc gen_bridge_doc/output -o #{output_dir}/html"
+    system "rdoc --ri gen_bridge_doc/output -o #{output_dir}/ri"
+    
     puts ""
     puts "Total Cocoa Reference to RDoc processing time: #{Time.now - start_time} seconds"
   when 'clean'

@@ -88,5 +88,5 @@ if File.exist?('framework/bridge-doc')
   unless File.exist?(basedstdir)
     command "mkdir -p '#{basedstdir}'"
   end
-  command "cp -R 'framework/bridge-doc/ri/doc/ri/OSX' '#{basedstdir}'"
+  command "cp -R 'framework/bridge-doc/OSX' '#{basedstdir}'"
 end

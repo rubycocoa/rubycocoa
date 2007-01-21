@@ -1,4 +1,4 @@
-module NSPortCoder
+module NSPortCoderOverrides
   def new_regexp_start
     return "([-+\\s]+)" if @name == 'portCoderWithReceivePort:sendPort:components:'
   end

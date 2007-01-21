@@ -1,4 +1,4 @@
-module NSTableColumn
+module NSTableColumnOverrides
   def new_regexp_repeater
     return "(\\w+)(:)(\\w+)" if @name == 'initWithIdentifier:'
   end
