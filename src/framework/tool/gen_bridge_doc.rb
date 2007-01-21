@@ -3,6 +3,8 @@
 # Created by Eloy Duran
 # Copyright (c) 2007 Eloy Duran, SuperAlloy
 
+require 'rbconfig'
+
 def show_options
   puts "Usage:"
   puts "  #{__FILE__} build [options] <output dir>"
@@ -67,7 +69,7 @@ unless ARGV[0].nil?
 
     # Parse the rdoc for each supported framework
     SUPPORTED_FRAMEWORKS.each do |f|
-      system "ruby gen_bridge_doc/rdocify_framework.rb #{options.join(' ')} '#{f}' #{output_dir}/ruby"
+      system "#{Config::CONFIG["bindir"]}/ruby gen_bridge_doc/rdocify_framework.rb #{options.join(' ')} '#{f}' #{output_dir}/ruby"
     end
 
     # Create the rdoc files
