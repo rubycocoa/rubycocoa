@@ -1,3 +1,19 @@
+2007-01-21  Eloy Duran <eloy.de.enige@gmail.com>
+
+	* pre-install.rb:
+	Fixed a bug in the path to the RI files.
+	
+	* framework/tool/gen_bridge_doc/lib/cocoa_ref.rb,
+	  framework/tool/gen_bridge_doc/lib/Foundation/NSDate.rb,
+	  framework/tool/gen_bridge_doc/lib/Foundation/NSDateFormatter.rb,
+	  framework/tool/gen_bridge_doc/lib/Foundation/NSPortCoder.rb,
+	  framework/tool/gen_bridge_doc/lib/ApplicationKit/NSTableColumn.rb,
+	  framework/tool/gen_bridge_doc/lib/ApplicationKit/NSFont.rb,
+	  framework/tool/gen_bridge_doc.rb:
+	- Added inheritance support ;
+	- Added objc_method style definitions to the source view (click on the method itself for a popup) ;
+	- Modified gen_bridge_doc.rb to accept a output path.
+
 2007-01-20  Laurent Sansonetti <lsansonetti@apple.com>
 
 	* template/**/TemplateInfo.plist:

@@ -1,4 +1,4 @@
-module NSFont
+module NSFontOverrides
   def new_regexp_start
     return "([-+\\s]+\\()" if @name == 'getAdvancements:forPackedGlyphs:length:'
   end

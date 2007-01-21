@@ -1,4 +1,4 @@
-module NSDate
+module NSDateOverrides
   def new_regexp_start
     return "([-+\\s]+)" if @name.include? 'dateWithNaturalLanguageString:'
   end

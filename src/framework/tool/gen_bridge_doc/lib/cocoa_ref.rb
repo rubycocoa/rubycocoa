@@ -3,6 +3,7 @@
 
 require 'rubygems'
 require 'hpricot'
+require 'osx/cocoa'
 
 class String
   
@@ -436,13 +437,13 @@ module CocoaRef
       end
       
       if @type == :class
-        str += "class OSX::#{@name}\n"
+        str += "class OSX::#{@name} < #{OSX.const_get(@name).superclass}\n"
       elsif @type == :additions
         str += "module OSX::#{@name}Additions\n"
       end
       
       @constant_defs.each {|c| str += c.to_rdoc }
-      @method_defs.each {|m| str += m.to_rdoc }
+      @method_defs.each {|m| str += m.to_rdoc(@name) }
       
       unless @notification_defs.empty?
         str += "  # ------------------------\n"
@@ -481,7 +482,7 @@ module CocoaRef
       return str
     end
   
-    def to_rdoc
+    def to_rdoc(class_name)
       str  = ''
       str += "  # Parameters::   #{@parameters.rdocify}\n"   unless @parameters.empty?
       str += "  # Description::  #{@description.rdocify}\n"  unless @description.empty?
@@ -491,7 +492,7 @@ module CocoaRef
       unless @see_also.empty?
         str += "  # See also::     "
         @see_also.each do |s|
-          str += "<tt>#{s.to_rb_def}</tt> "
+          str += "<tt>#{s.to_rb_def}</tt> " unless s.empty?
         end
         str += "\n"
       end
@@ -499,33 +500,47 @@ module CocoaRef
       str += "    # #{self.definition.gsub(/\n/, ' ').strip_tags.clean_special_chars}\n"
       str += "    #\n"
     
-      # objc_send_style = self.to_objc_send
-      # p objc_send_style
-      # unless objc_send_style.nil?
-      #   objc_send_style.each do |line|
-      #     str += "    # #{line}\n"
-      #   end
-      # end
+      objc_method_style = self.to_objc_method(class_name)
+      unless objc_method_style.nil?
+        str += "    # This is an alternative way of calling this method:\n"
+        objc_method_style.each do |line|
+          str += "    #{line}\n"
+        end
+      end
     
       str += "  end\n\n"
     
       return str
     end
   
-    def to_objc_send
+    def to_objc_method(class_name)
       method_def_parts = self.parse
       return nil if method_def_parts.nil?
-    
-      objc_send_style = []
+      return nil if method_def_parts.length == 1 and method_def_parts.first.empty?
+      
+      # longest_name = 0
+      # method_def_parts.each do |m|
+      #   longest_name = m[:name].length if m[:name].length > longest_name
+      # end
+      
+      objc_method_style = []
       index = 0
-      method_def_parts.each do |m|
+      method_def_parts.each do |m|          
+        str = "#{m[:name] unless m[:name].nil?}, #{m[:arg] unless m[:arg].nil?}"
         if index.zero?
-          objc_send_style.push "objc_send(:#{m[:name][index]}, #{m[:arg][index]},"
+          objc_method_style.push "#{class_name + '.alloc.' if @type == :class_method}objc_method(:#{str}#{(index == method_def_parts.length - 1) ? ')' : ','}"
+        elsif index == method_def_parts.length - 1
+          spacer = ''
+          (class_name.length + 7).times{ spacer += ' '} if @type == :class_method
+          objc_method_style.push "#{spacer}            :#{str})"
         else
-          objc_send_style.push "          :#{m[:name][index]}, #{m[:arg][index]},"
+          spacer = ''
+          (class_name.length + 7).times{ spacer += ' '} if @type == :class_method
+          objc_method_style.push "#{spacer}            :#{str},"
         end
+        index = index.next
       end
-      return objc_send_style
+      return objc_method_style
     end
     
     # This method checks if a override method (var method) exists.
@@ -678,19 +693,22 @@ module CocoaRef
   class Parser
     attr_reader :class_def
     
-    def initialize(file, override_dir = '')
-      @override_dir = override_dir
+    def initialize(file, framework = '')
       @log = CocoaRef::Log.new
       @hpricot = CocoaRef::HpricotProxy.new(file)
       @class_def = parse_reference(file)
       
+      unless framework == 'ApplicationKit' or framework == 'Foundation' or framework.empty?
+        OSX.require_framework framework
+      end
+      
       # Check if there is a overrides file in the override_dir for the given class
-      include_file = File.join(File.dirname(File.expand_path(__FILE__)), @override_dir, @class_def.output_filename)      
+      include_file = File.join(File.dirname(File.expand_path(__FILE__)), framework, @class_def.output_filename)      
       if File.exist?(include_file)
         # If it exists, require it and extend the methods to use the overrides
         require include_file
         @class_def.method_defs.each do |m|
-          m.instance_eval "self.send :extend, #{@class_def.name}"
+          m.instance_eval "self.send :extend, #{@class_def.name}Overrides"
         end
       end
     end
