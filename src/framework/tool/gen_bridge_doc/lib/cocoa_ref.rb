@@ -437,9 +437,7 @@ module CocoaRef
       end
       
       if @type == :class
-        if @name == 'NSDistantObject' or @name == 'NSProtocolChecker'
-          str += "class OSX::#{@name} < NSProxy\n"
-        elsif @name == 'NSProxy' or @name == 'NSObject'
+        if @name == 'NSObject'
           str += "class OSX::#{@name}\n"
         else
           str += "class OSX::#{@name} < #{OSX.const_get(@name).superclass}\n"

@@ -1,3 +1,12 @@
+2007-01-21  Eloy Duran <eloy.de.enige@gmail.com>
+
+	* pre-install.rb,
+	  framework/tool/gen_bridge_doc/lib/cocoa_ref.rb,
+	  framework/tool/gen_bridge_doc.rb:
+	- The RDoc generator now uses the framework in the build dir ;
+	- Workarounds for bug, that was fixed in the last rev, removed ;
+	- Check added for the individual html and ri dirs before trying to install them.
+
 2007-01-21  Laurent Sansonetti <lsansonetti@apple.com>
 
 	* framework/src/ruby/osx/objc/oc_import.rb,
