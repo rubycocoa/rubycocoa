@@ -388,7 +388,7 @@ module CocoaRef
       errors_in_methods = false
       @method_defs.each do |m|
         # First call the to_rdoc method, because it might contain errors
-        m.to_rdoc
+        m.to_rdoc(@name)
         if m.log.errors?
           errors_in_methods = true
           break
@@ -437,7 +437,13 @@ module CocoaRef
       end
       
       if @type == :class
-        str += "class OSX::#{@name} < #{OSX.const_get(@name).superclass}\n"
+        if @name == 'NSDistantObject' or @name == 'NSProtocolChecker'
+          str += "class OSX::#{@name} < NSProxy\n"
+        elsif @name == 'NSProxy' or @name == 'NSObject'
+          str += "class OSX::#{@name}\n"
+        else
+          str += "class OSX::#{@name} < #{OSX.const_get(@name).superclass}\n"
+        end
       elsif @type == :additions
         str += "module OSX::#{@name}Additions\n"
       end
@@ -699,7 +705,7 @@ module CocoaRef
       @class_def = parse_reference(file)
       
       unless framework == 'ApplicationKit' or framework == 'Foundation' or framework.empty?
-        OSX.require_framework framework
+        OSX.require_framework framework.gsub(/Framework/, '')
       end
       
       # Check if there is a overrides file in the override_dir for the given class
