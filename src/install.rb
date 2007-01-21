@@ -761,6 +761,7 @@ class Installer
     command 'rm -f src/objc/cocoa/rb_AppKit.m'
     command 'rm -f src/objc/cocoa/rb_Foundation.m'
     command 'rm -rf bridge-support'
+    command 'rm -rf bridge-doc'
     dive_into( '../misc/libffi' ) {
       command config('make-prog') + ' -f Makefile.rubycocoa clean'
     }

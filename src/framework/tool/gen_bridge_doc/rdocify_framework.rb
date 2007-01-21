@@ -27,6 +27,7 @@ end
 $COCOA_REF_DEBUG = false
 output_files_with_errors = false
 framework_path = ''
+output_dir = ''
 
 unless ARGV.empty?
   ARGV.each do |arg|
@@ -36,19 +37,23 @@ unless ARGV.empty?
     when '-v'
       $COCOA_REF_DEBUG = true
     else
-      framework_path = arg
+      if framework_path.empty?
+        framework_path = arg
+      else
+        output_dir = arg
+      end
     end
   end
 else
   puts "Usage:"
-  puts "  #{__FILE__} [options] path/to/the/framework"
+  puts "  #{__FILE__} [options] path/to/the/framework <output dir>"
   puts ""
   puts "Options:"
   puts "  -v Verbose output."
   puts "  -f Force the output files to be written even if there were errors during parsing."
   puts ""
   puts "Example:"
-  puts "  #{__FILE__} /Developer/ADC Reference Library/documentation/Cocoa/Reference/ApplicationKit/"
+  puts "  #{__FILE__} /Developer/ADC Reference Library/documentation/Cocoa/Reference/ApplicationKit/ output/"
   puts "  #{__FILE__} -v /Developer/ADC Reference Library/documentation/Cocoa/Reference/ApplicationKit/"
   puts "  #{__FILE__} -v -f /Developer/ADC Reference Library/documentation/Cocoa/Reference/ApplicationKit/"
   puts ""
@@ -62,10 +67,14 @@ puts ""
 
 reference_files = get_reference_files(framework_path)
 
-output_dir = File.join(script_dir, 'output/')
+unless output_dir.empty?
+  output_dir = File.expand_path(output_dir)
+else
+  output_dir = File.join(script_dir, 'output/')
+end
 
 if not File.exists?(output_dir)
-  Dir.mkdir(output_dir)
+  system "mkdir -p #{output_dir}"
 end
 
 success = 0

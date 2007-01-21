@@ -1,5 +1,18 @@
 2007-01-21  Eloy Duran <eloy.de.enige@gmail.com>
 
+	* pre-install.rb,
+	  framework/pre-doc.rb,
+	  framework/tool/gen_bridge_doc/lib/cocoa_ref.rb,
+	  framework/tool/gen_bridge_doc/rdocify_framework.rb,
+	  framework/tool/gen_bridge_doc.rb,
+	  install.rb:
+	- Modified rdocify_framework.rb to accept a optional output dir ;
+	- The install.rb doc phase now creates all the output files in framework/bridge-doc ;
+	- The install.rb clean phase now also removes the framework/bridge-doc dir ;
+	- Added workarounds for a bug where trying to get the superclass of a subclass of NSProxy results in a trap.
+
+2007-01-21  Eloy Duran <eloy.de.enige@gmail.com>
+
 	* pre-install.rb:
 	Fixed a bug in the path to the RI files.
 	
