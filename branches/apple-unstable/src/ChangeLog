@@ -1,5 +1,11 @@
 2007-01-21  Eloy Duran <eloy.de.enige@gmail.com>
 
+	* framework/tool/gen_bridge_doc.rb:
+	fixed a bug where gen_bridge_doc.rb would call rdocify_framework.rb
+	with the ruby interpreter in the user env instead of the one that's used to call gen_bridge_doc.rb.
+
+2007-01-21  Eloy Duran <eloy.de.enige@gmail.com>
+
 	* pre-install.rb,
 	  framework/pre-doc.rb,
 	  framework/tool/gen_bridge_doc/lib/cocoa_ref.rb,
