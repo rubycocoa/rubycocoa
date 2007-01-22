@@ -576,7 +576,7 @@ class Object
     def _real_class_and_mod(klass)
       unless klass.ancestors.include?(OSX::Boxed)
         klassname = klass.name
-        unless klassname.empty?
+        unless klassname.nil? || klassname.empty?
           if Object.included_modules.include?(OSX) and /::/.match(klassname).nil?
             [klassname, Object]
           elsif klassname[0..4] == 'OSX::' and (tokens = klassname.split(/::/)).size == 2 and klass.superclass != OSX::Boxed

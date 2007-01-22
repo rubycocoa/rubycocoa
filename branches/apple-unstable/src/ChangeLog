@@ -1,3 +1,8 @@
+2007-01-22  Chris Mcgrath <c_r_mcgrath@yahoo.co.uk>
+
+	* framework/src/ruby/osx/objc/oc_import.rb:
+	Fixed a bug in the direct override code.
+
 2007-01-22  Eloy Duran <eloy.de.enige@gmail.com>
 
 	* framework/tool/gen_bridge_doc/lib/cocoa_ref.rb:
