@@ -1,5 +1,8 @@
 2007-01-22  Laurent Sansonetti <lsansonetti@apple.com>
 
+	* sample/PathDemo:
+	Partial printing support (work in progress, still not functional).
+
 	* framework/src/objc/RBObject.h,
 	  framework/src/objc/RBObject.m,
 	  framework/src/objc/ocdata_conv.m,

@@ -15,6 +15,7 @@ class PathDemoController < NSObject
     ['Rectangles', 'Circles', 'Bezier Paths', 'Circle Clipping'].each do |title|
       @popup.addItemWithTitle(title)
     end
+	@demoView.bouh
   end
 
   def runAgain(sender)
@@ -24,6 +25,13 @@ class PathDemoController < NSObject
   def select(sender)
     @demoView.demoNumber = @popup.indexOfSelectedItem
     @demoView.setNeedsDisplay(true)
+  end
+
+  def print(sender)
+    info = NSPrintInfo.sharedPrintInfo
+	printOp = NSPrintOperation.printOperationWithView_printInfo(@demoView, info)
+    printOp.setShowPanels(true)
+	printOp.runOperation
   end
 
   def applicationShouldTerminateAfterLastWindowClosed(application)
