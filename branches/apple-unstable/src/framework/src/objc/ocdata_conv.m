@@ -40,6 +40,10 @@ static pthread_mutex_t oc2rbCacheLock;
 @end
 #endif
 
+@interface RBObject (Private)
+- (id)_initWithRubyObject: (VALUE)rbobj retains: (BOOL) flag;
+@end
+
 void init_rb2oc_cache(void)
 {
   rb2ocCache = st_init_numtable();
@@ -457,8 +461,8 @@ static BOOL rbobj_convert_to_nsobj(VALUE obj, id* nsobj)
   case T_FILE:
   case RB_T_DATA:
   default:
-    *nsobj = [[RBObject alloc] initWithRubyObject:obj];
     if (!OBJ_FROZEN(obj)) {
+      *nsobj = [[RBObject alloc] _initWithRubyObject:obj retains:YES];
       // Let's embed the ObjC object in a custom Ruby object that will 
       // autorelease the ObjC object when collected by the Ruby GC, and
       // put the Ruby object as an instance variable.
@@ -468,7 +472,7 @@ static BOOL rbobj_convert_to_nsobj(VALUE obj, id* nsobj)
     }
     else {
       // Ruby object is frozen, so we can't do much now.
-      [*nsobj autorelease];
+      *nsobj = [[[RBObject alloc] initWithRubyObject:obj] autorelease];
     }
     return YES;
   }

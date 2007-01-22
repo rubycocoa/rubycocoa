@@ -276,15 +276,28 @@ VALUE rbobj_call_ruby(id rbobj, SEL selector, VALUE args)
 
 - (void) dealloc
 {
+  RBOBJ_LOG("deallocating RBObject %p", self);
   remove_from_rb2oc_cache(m_rbobj);
+  if (m_rbobj_retained) {
+    RBOBJ_LOG("releasing Ruby object %p", m_rbobj);
+    rb_gc_unregister_address(&m_rbobj);
+  }
   [super dealloc];
+}
+
+- _initWithRubyObject: (VALUE)rbobj retains: (BOOL) flag
+{
+  m_rbobj = rbobj;
+  m_rbobj_retained = flag;
+  oc_master = nil;
+  if (flag)
+    rb_gc_register_address(&m_rbobj);
+  return self;
 }
 
 - initWithRubyObject: (VALUE)rbobj
 {
-  m_rbobj = rbobj;
-  oc_master = nil;
-  return self;
+  return [self _initWithRubyObject: rbobj retains: YES];
 }
 
 - initWithRubyScriptCString: (const char*) cstr
