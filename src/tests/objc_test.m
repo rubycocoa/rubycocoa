@@ -36,6 +36,10 @@
 {   
   return 321;
 }
+- (NSRect) giveRect
+{
+  return NSZeroRect;
+}
 @end
 
 @interface RetainCount : NSObject
@@ -208,6 +212,8 @@
 {
     Class helperClass = NSClassFromString(@"ObjcExportHelper");
     id helper = [[helperClass alloc] init];
+    NSRect r;
+    int foo;
 
     id s = [helper foo1];
     if (![s isKindOfClass:[NSString class]] || ![s isEqualToString:@"s"])
@@ -223,9 +229,12 @@
     if ([ary count] != 1 || [ary objectAtIndex:0] != o)
       [NSException raise:@"TestObjCExportError" format:@"assertion foo3 failed, object %@ is not in array %@", o, ary];
 
-    NSRect r = [helper foo4:NSMakePoint(1, 2) size:NSMakeSize(3, 4)];
+    foo = 42;
+    r = [helper foo4:NSMakePoint(1, 2) size:NSMakeSize(3, 4)];
     if (r.origin.x != 1 || r.origin.y != 2 || r.size.width != 3 || r.size.height != 4)
       [NSException raise:@"TestObjCExportError" format:@"assertion foo4 failed, expected %@, got %@", NSStringFromRect(NSMakeRect(1, 2, 3, 4)), NSStringFromRect(r)];
+    if (foo != 42)
+      [NSException raise:@"TestObjCExportError" format:@"memory overflow"];
 }
 
 @end

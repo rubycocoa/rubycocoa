@@ -11,15 +11,14 @@
 @interface RBObject : NSProxy
 {
   VALUE m_rbobj;
+  BOOL m_rbobj_retained;
   id oc_master;
 }
 
 + RBObjectWithRubyScriptCString: (const char*) cstr;
 + RBObjectWithRubyScriptString: (NSString*) str;
 
-/* Caller is responsible to retain rbobj AND release the RBObject before rbobj dies. */
 - initWithRubyObject: (VALUE) rbobj; 
-
 - initWithRubyScriptCString: (const char*) cstr;
 - initWithRubyScriptString: (NSString*) str;
 

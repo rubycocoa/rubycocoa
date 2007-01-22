@@ -29,6 +29,10 @@ class SubClassB < OSX::Override
   def self.foo() return 123 end
   def foo() return 123 end
 
+  def giveRect
+    OSX::NSRect.new(1,2,3,4)
+  end
+
 end
 
 OSX.ns_import :NSView
@@ -87,6 +91,8 @@ class TC_SubClass < Test::Unit::TestCase
     assert_equal( 321, obj_b.super_foo )
     assert_equal( 123, obj_b.class.foo )
     assert_equal( 123, obj_b.class.oc_foo )
+    assert_equal( OSX::NSRect.new(1,2,3,4), obj_b.giveRect )
+    assert_equal( OSX::NSRect.new(1,2,3,4), obj_b.oc_giveRect )
   end
 
   def test_outlet

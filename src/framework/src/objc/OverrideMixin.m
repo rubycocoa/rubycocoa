@@ -152,8 +152,8 @@ ovmix_imp_for_type(const char *type)
 
   decode_method_encoding(type, nil, &argc, &retval_type, &arg_types, NO);
 
-  arg_ffi_types = (ffi_type **)malloc(sizeof(ffi_type *) * argc);
-  octypes = (int *)malloc(sizeof(int) * (argc - 1)); /* first int is retval octype, then arg octypes */
+  arg_ffi_types = (ffi_type **)malloc(sizeof(ffi_type *) * (argc + 1));
+  octypes = (int *)malloc(sizeof(int) * (argc + 1)); /* first int is retval octype, then arg octypes */
   if (arg_ffi_types == NULL || octypes == NULL) {
     error = "Can't allocate memory";
     goto bails;
@@ -168,6 +168,7 @@ ovmix_imp_for_type(const char *type)
   }
   octypes[0] = to_octype(retval_type);
   retval_ffi_type = ffi_type_for_octype(octypes[0], retval_type);
+  arg_ffi_types[argc] = NULL;
 
   cif = (ffi_cif *)malloc(sizeof(ffi_cif));
   if (cif == NULL) {

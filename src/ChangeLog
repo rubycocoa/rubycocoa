@@ -1,3 +1,13 @@
+2007-01-22  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* framework/src/objc/RBObject.h,
+	  framework/src/objc/RBObject.m,
+	  framework/src/objc/ocdata_conv.m,
+	  framework/src/objc/OverrideMixin.m,
+	  tests/tc_subclass.rb,
+	  tests/objc_test.m:
+	Partial fix for the Cocoa printing bug.
+
 2007-01-22  Fujimoto Hisa  <hisa@fobj.com>
 
 	* framework/pre-doc.rb,
