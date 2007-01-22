@@ -74,8 +74,11 @@ class String
     str = str.gsub(/TWOPEN/, '<tt>').gsub(/TWCLOSE/, '</tt>')
     str = str.gsub(/&#8211;|&#xA0;/, '')
     str = str.gsub(/“/, '<em>').gsub(/”/, '</em>')
-    str = str.gsub(/–/, '-')
+    str = str.gsub(/–/, '-').gsub(/—/, '-')
     str = str.gsub(/’/, "'")
+    str = str.gsub(/ /, ' ')
+    str = str.gsub(/…/, '...')
+    
     str = str.strip
     return str
   end
