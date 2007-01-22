@@ -6,6 +6,19 @@
 script_dir = File.dirname(File.expand_path(__FILE__))
 require "#{script_dir}/lib/cocoa_ref"
 
+def command( str )
+  $stderr.puts str
+  system str or raise RuntimeError, "'system #{str}' failed"
+end
+
+def ruby( str )
+  command "#{Config::CONFIG["bindir"]}/ruby #{str}"
+end
+
+def rdoc( str )
+  command "#{Config::CONFIG["bindir"]}/rdoc #{str}"
+end
+
 def get_reference_files(framework_path)
   classes_dir = File.join(framework_path, 'Classes/')
   reference_files = []
@@ -74,7 +87,7 @@ else
 end
 
 if not File.exists?(output_dir)
-  system "mkdir -p #{output_dir}"
+  command "mkdir -p #{output_dir}"
 end
 
 success = 0

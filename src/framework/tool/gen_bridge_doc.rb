@@ -28,6 +28,19 @@ def show_options
   puts ''
 end
 
+def command( str )
+  $stderr.puts str
+  system str or raise RuntimeError, "'system #{str}' failed"
+end
+
+def ruby( str )
+  command "#{Config::CONFIG["bindir"]}/ruby #{str}"
+end
+
+def rdoc( str )
+  command "#{Config::CONFIG["bindir"]}/rdoc #{str}"
+end
+
 unless ARGV[0].nil?
   case ARGV[0]
   when 'build'
@@ -52,7 +65,7 @@ unless ARGV[0].nil?
     unless output_dir.empty?
       output_dir = File.expand_path(output_dir)
       unless File.exist?(output_dir)
-        system "mkdir -p #{output_dir}"
+        command "mkdir -p #{output_dir}"
       end
     else
       output_dir = File.join(File.expand_path(__FILE__), '../doc/')
@@ -73,13 +86,13 @@ unless ARGV[0].nil?
     
     # Parse the rdoc for each supported framework
     SUPPORTED_FRAMEWORKS.each do |f|
-      system "#{Config::CONFIG["bindir"]}/ruby -I../../ext/rubycocoa -I../../lib gen_bridge_doc/rdocify_framework.rb #{options.join(' ')} '#{f}' #{output_dir}/ruby"
+      ruby "-I../../ext/rubycocoa -I../../lib gen_bridge_doc/rdocify_framework.rb #{options.join(' ')} '#{f}' #{output_dir}/ruby"
     end
 
     # Create the rdoc files
     #system "rdoc  --line-numbers --inline-source --template gen_bridge_doc/allison/allison.rb gen_bridge_doc/output -o doc/html"
-    system "rdoc #{output_dir}/ruby -o #{output_dir}/html"
-    system "rdoc --ri #{output_dir}/ruby -o #{output_dir}/ri"
+    rdoc "#{output_dir}/ruby -o #{output_dir}/html"
+    rdoc "--ri #{output_dir}/ruby -o #{output_dir}/ri"
     
     puts ""
     puts "Total Cocoa Reference to RDoc processing time: #{Time.now - start_time} seconds"
