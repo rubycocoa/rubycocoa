@@ -2,8 +2,13 @@
 # Copyright (c) 2007 Eloy Duran, SuperAlloy
 
 require "#{File.dirname(File.expand_path(__FILE__))}/clean_up"
-require 'rubygems'
-require 'hpricot'
+
+begin
+  require 'hpricot'
+rescue LoadError
+  require 'rubygems'
+  require 'hpricot'
+end
 require 'osx/cocoa'
 
 class String
