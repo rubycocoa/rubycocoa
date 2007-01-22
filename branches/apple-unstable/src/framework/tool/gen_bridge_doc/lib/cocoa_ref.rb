@@ -1,86 +1,22 @@
 # Created by Eloy Duran
 # Copyright (c) 2007 Eloy Duran, SuperAlloy
 
+require "#{File.dirname(File.expand_path(__FILE__))}/clean_up"
 require 'rubygems'
 require 'hpricot'
 require 'osx/cocoa'
 
 class String
-  
   def to_rb_def
     self.strip_tags.clean_up.gsub(/\(\w+\)/, '').strip.split(':').join('_')
-  end
-  
-  def unescape_chars
-    self.gsub(/&lt;/, "<")
-  end
-  
-  def strip_tags
-    self.gsub(/<\/?[^>]*>/, "")
   end
   
   def clean_objc
     self.clean_special_chars.strip_tags.unescape_chars.strip_tags
   end
   
-  def clean_special_chars
-    self.gsub(/ /, ' ')
-  end
-  
-  def guess_rb_type
-    case self
-    when 'NSString'
-      return 'str'
-    when 'NSArray'
-      return 'array'
-    else
-      return self
-    end
-  end
-  
   def rdocify
     self.convert_types.convert_tags.clean_up
-  end
-  
-  def convert_types
-    str = self
-    
-    # Replace the objc BOOL style with the ruby style
-    str = str.gsub(/YES/, 'true')
-    str = str.gsub(/NO/, 'false')
-    
-    return str
-  end
-  
-  def convert_tags
-    str = self
-    
-    # Convert code elements
-    str = str.gsub(/<code>/, 'TWOPEN').gsub(/<\/code>/, 'TWCLOSE')
-    
-    # Convert italic style from the parameters section
-    str = str.gsub(/<dt><i>/, '_')
-    str = str.gsub(/<\/i><\/dt>/, '_ ')
-    
-    # Convert italic style
-    str = str.gsub(/<i>/, '_')
-    return str
-  end
-  
-  def clean_up
-    str = self
-    str = str.gsub(/\n/, ' ')
-    str = str.strip_tags
-    str = str.gsub(/TWOPEN/, '<tt>').gsub(/TWCLOSE/, '</tt>')
-    str = str.gsub(/&#8211;|&#xA0;/, '')
-    str = str.gsub(/“/, '<em>').gsub(/”/, '</em>')
-    str = str.gsub(/–/, '-').gsub(/—/, '-')
-    str = str.gsub(/’/, "'")
-    str = str.gsub(/ /, ' ')
-    str = str.gsub(/…/, '...')
-    
-    str = str.strip
-    return str
   end
 end
 

@@ -1,3 +1,10 @@
+2007-01-22  Eloy Duran <eloy.de.enige@gmail.com>
+
+	* framework/tool/gen_bridge_doc/lib/cocoa_ref.rb,
+	  framework/tool/gen_bridge_doc/lib/clean_up.rb:
+	Extracted the string clean up methods into a separate file,
+	this to make it easier for others to add the appropriate clean up code.
+
 2007-01-22  Chris Mcgrath <c_r_mcgrath@yahoo.co.uk>
 
 	* framework/src/ruby/osx/objc/oc_import.rb:
