@@ -14,7 +14,7 @@ class NSRect
   end
 end
 
-class DemoView < NSView
+class DemoView < MyView
 
   attr_accessor :demoNumber
 
@@ -40,6 +40,18 @@ class DemoView < NSView
     else
       NSLog("Invalid demo number #{@demoNumber}")
     end
+  end
+
+=begin
+  def knowsPageRange(range)
+	puts "knowsPageRange #{range}"
+	true
+  end
+=end
+
+  def rectForPage(page)
+	puts "rectForPage #{page}"
+    bounds
   end
 
   private
