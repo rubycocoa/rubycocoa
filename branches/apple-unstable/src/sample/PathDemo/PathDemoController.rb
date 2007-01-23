@@ -15,7 +15,6 @@ class PathDemoController < NSObject
     ['Rectangles', 'Circles', 'Bezier Paths', 'Circle Clipping'].each do |title|
       @popup.addItemWithTitle(title)
     end
-	@demoView.bouh
   end
 
   def runAgain(sender)
