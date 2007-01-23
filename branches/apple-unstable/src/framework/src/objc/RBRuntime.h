@@ -25,5 +25,6 @@
   while (0)
 
 int RBApplicationMain(const char* rb_main_name, int argc, const char* argv[]);
+int RBBundleInit(const char *rb_main_name, const char *class_name);
 
 int RBRubyCocoaInit();
