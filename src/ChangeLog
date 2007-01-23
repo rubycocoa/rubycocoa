@@ -1,3 +1,12 @@
+2007-01-23  Fujimoto Hisa  <hisa@fobj.com>
+
+	* framework/src/objc/RBRuntime.h, framework/src/objc/RBRuntime.m:
+	Added RBBundleInit new (tentative) API to develop a
+	Bundle. This is a fairly experimental implementation currently.
+	Refactored some static functions for filepath management. It
+	should refactor more later about malloc/free issue. (thanks to
+	Kouhei Sutou for RBBundleInit)
+
 2007-01-22  Laurent Sansonetti <lsansonetti@apple.com>
 
 	* sample/PathDemo:

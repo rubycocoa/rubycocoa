@@ -19,44 +19,65 @@
 
 #define RUBY_MAIN_NAME "rb_main.rb"
 
-static char* rb_main_path(const char* rb_main_name)
+/*
+  syntax: POOL_DO(the_pool) { ... } END_POOL(the_pool);
+*/
+#define POOL_DO(POOL)   id POOL = [[NSAutoreleasePool alloc] init];
+#define END_POOL(POOL)  [(POOL) release];
+
+/* this function should be called from inside a NSAutoreleasePool */
+static NSBundle* bundle_for(const char* class_name)
+{
+  if (class_name != NULL) {
+    NSString* str = [NSString stringWithUTF8String: class_name];
+    return [NSBundle bundleForClass: NSClassFromString(str)];
+  }
+  else {
+    return [NSBundle mainBundle];
+  }
+}
+
+static char* resource_item_path_for(const char* item_name, const char* class_name)
 {
   char* result;
-  id path;
-  id pool = [[NSAutoreleasePool alloc] init];
-  NSBundle* bundle = [NSBundle mainBundle];
-  if (rb_main_name == NULL) rb_main_name = RUBY_MAIN_NAME;
-  path = [NSString stringWithUTF8String: rb_main_name];
-  result = strdup([[bundle pathForResource: path ofType: nil] fileSystemRepresentation]);
-  [pool release];
+  POOL_DO(pool) {
+    NSBundle* bundle = bundle_for(class_name);
+    NSString* path = [NSString stringWithUTF8String: item_name];
+    path = [bundle pathForResource: path ofType: nil];
+    result = strdup([path fileSystemRepresentation]);
+  } END_POOL(pool);
+  return result;
+}
+
+static char* resource_item_path(const char* item_name)
+{
+  return resource_item_path_for(item_name, NULL);
+}
+
+static char* rb_main_path(const char* main_name)
+{
+  return resource_item_path(main_name);
+}
+
+static char* resource_path_for(const char *class_name)
+{
+  char* result;
+  POOL_DO(pool) {
+    NSBundle* bundle = bundle_for(class_name);
+    NSString* path = [bundle resourcePath];
+    result = strdup([path fileSystemRepresentation]);
+  } END_POOL(pool);
   return result;
 }
 
 static char* resource_path()
 {
-  NSString* str;
-  char* result;
-  id pool = [[NSAutoreleasePool alloc] init];
-  NSBundle* bundle = [NSBundle mainBundle];
-  str = [bundle resourcePath];
-  result = strdup([str fileSystemRepresentation]);
-  [pool release];
-  return result;
+  return resource_path_for(NULL);
 }
 
 static char* framework_ruby_path()
 {
-  NSString* str;
-  char* result;
-  const char* dirname = "/ruby";
-  id pool = [[NSAutoreleasePool alloc] init];
-  NSBundle* bundle = [NSBundle bundleForClass: [RBObject class]];
-  str = [bundle resourcePath];
-  result = (char*) malloc (strlen([str fileSystemRepresentation]) + strlen(dirname) + 1);
-  strcpy (result, [str fileSystemRepresentation]);
-  strcat (result, dirname);
-  [pool release];
-  return result;
+  return resource_item_path_for("ruby", "RBObject");
 }
 
 static void load_path_unshift(const char* path)
@@ -92,6 +113,24 @@ prepare_argv(int argc, const char* argv[], const char* rb_main_name, const char*
 }
 
 int
+RBRubyCocoaInit()
+{
+  static int init_p = 0;
+
+  if (init_p) return 0;
+
+  ruby_init();
+  load_path_unshift(framework_ruby_path()); // add a ruby part of rubycocoa to $LOAD_PATH
+  init_rb2oc_cache(); // initialize the Ruby->ObjC internal cache
+  init_oc2rb_cache(); // initialize the ObjC->Ruby internal cache
+  initialize_mdl_osxobjc();	// initialize an objc part of rubycocoa
+  init_ovmix();
+  init_p = 1;
+
+  return 1;
+}
+
+int
 RBApplicationMain(const char* rb_main_name, int argc, const char* argv[])
 {
   static int done_p = 0;
@@ -112,19 +151,21 @@ RBApplicationMain(const char* rb_main_name, int argc, const char* argv[])
 }
 
 int
-RBRubyCocoaInit()
+RBBundleInit(const char *rb_main_name, const char *class_name)
 {
-  static int init_p = 0;
+  extern void Init_stack(VALUE*);
+  static int done_p = 0;
+  VALUE stack_start;
 
-  if (init_p) return 0;
+  if (done_p) return 0;
+  done_p = 1;
 
   ruby_init();
-  load_path_unshift(framework_ruby_path()); // add a ruby part of rubycocoa to $LOAD_PATH
-  init_rb2oc_cache(); // initialize the Ruby->ObjC internal cache
-  init_oc2rb_cache(); // initialize the ObjC->Ruby internal cache
-  initialize_mdl_osxobjc();	// initialize an objc part of rubycocoa
-  init_ovmix();
-  init_p = 1;
+  Init_stack(&stack_start);
+  ruby_init_loadpath();
+  RBRubyCocoaInit();
+  load_path_unshift(resource_path_for(class_name));
+  rb_funcall(Qnil, rb_intern("require"), 1, rb_str_new2(rb_main_name));
 
   return 1;
 }
