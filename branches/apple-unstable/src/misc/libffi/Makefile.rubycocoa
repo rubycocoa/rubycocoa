@@ -2,11 +2,12 @@ OBJS = src/types.o src/prep_cif.o src/x86/ffi_darwin.o src/x86/darwin.o src/powe
 
 LIB = libffi.a
 
-CFLAGS = -I./include -DMACOSX -arch ppc -arch i386
+CFLAGS = -O3 -I./include -DMACOSX -arch ppc -arch i386
 
 all: $(LIB)
 
 $(LIB): $(OBJS) 
+	rm -rf $(LIB)
 	ar -cq $(LIB) $(OBJS)
 	ranlib $(LIB)
 

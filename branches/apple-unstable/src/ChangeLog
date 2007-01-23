@@ -1,3 +1,12 @@
+2007-01-23  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* misc/libffi/Makefile.rubycocoa,
+	  framework/RubyCocoa.xcodeproj/project.pbxproj:
+	Build everything with -O3. This is to make sure the FFI-generated
+	closures are callable from the generated objc_msgSent_stret calls
+	by GCC. Otherwise closures return C structure may cause memory
+	corruption. Thanks a lot to Ronald Oussoren!
+
 2007-01-23  Fujimoto Hisa  <hisa@fobj.com>
 
 	* framework/src/objc/RBRuntime.h, framework/src/objc/RBRuntime.m:
