@@ -120,11 +120,10 @@ static int rb_obj_arity_of_method(VALUE rcv, SEL a_sel, BOOL *ok)
   for (i = 0; i < arg_cnt; i++) {
     VALUE arg_val;
     const char* octstr = [msig getArgumentTypeAtIndex: (i+2)];
-    int octype = to_octype(octstr);
-    void* ocdata = OCDATA_ALLOCA(octype, octstr);
+    void* ocdata = OCDATA_ALLOCA(octstr);
     BOOL f_conv_success;
     [an_inv getArgument: ocdata atIndex: (i+2)];
-    f_conv_success = ocdata_to_rbobj(Qnil, octype, ocdata, &arg_val, NO);
+    f_conv_success = ocdata_to_rbobj(Qnil, octstr, ocdata, &arg_val, NO);
     if (f_conv_success == NO) {
       arg_val = Qnil;
     }
@@ -136,27 +135,26 @@ static int rb_obj_arity_of_method(VALUE rcv, SEL a_sel, BOOL *ok)
 - (BOOL)stuffForwardResult: (VALUE)result to: (NSInvocation*)an_inv
 {
   NSMethodSignature* msig = [an_inv methodSignature];
-  const char* octype_str = [msig methodReturnType];
-  int octype = to_octype(octype_str);
+  const char* octype_str = encoding_skip_modifiers([msig methodReturnType]);
   BOOL f_success;
 
-  if (octype == _C_VOID) {
+  if (*octype_str == _C_VOID) {
     f_success = true;
   }
-  else if ((octype == _C_ID) || (octype == _C_CLASS)) {
+  else if ((*octype_str == _C_ID) || (*octype_str == _C_CLASS)) {
     id ocdata = rbobj_get_ocid(result);
     if (ocdata == nil) {
       if (result == m_rbobj)
-	ocdata = self;
+        ocdata = self;
       else
-	rbobj_to_nsobj(result, &ocdata);
+        rbobj_to_nsobj(result, &ocdata);
     }
     [an_inv setReturnValue: &ocdata];
     f_success = YES;
   }
   else {
-    void* ocdata = OCDATA_ALLOCA(octype, octype_str);
-    f_success = rbobj_to_ocdata (result, octype, ocdata, NO);
+    void* ocdata = OCDATA_ALLOCA(octype_str);
+    f_success = rbobj_to_ocdata (result, octype_str, ocdata, NO);
     if (f_success) [an_inv setReturnValue: ocdata];
   }
   return f_success;

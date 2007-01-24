@@ -36,7 +36,7 @@ struct bsArg {
 struct bsRetval {
   bsCArrayArgType   c_ary_type;
   int               c_ary_type_value;  // not set if arg_type is bsCArrayArgUndefined
-  int               octype;
+  char *            octypestr;
   BOOL              should_be_retained;
 };
 
@@ -104,7 +104,6 @@ struct bsBoxed {
   char *        name;
   char *        encoding;
   size_t        size;
-  int           octype;
   ffi_type *    ffi_type;
   VALUE         klass;
   union {
@@ -124,10 +123,10 @@ extern struct bsFunction *current_function;
 
 VALUE objboxed_s_class(void);
 struct bsBoxed *find_bs_boxed_by_encoding(const char *encoding);
-struct bsBoxed *find_bs_boxed_by_octype(const int octype);
 struct bsBoxed *find_bs_boxed_for_klass (VALUE klass);
 VALUE rb_bs_boxed_new_from_ocdata(struct bsBoxed *bs_boxed, void *ocdata);
-void *rb_bs_boxed_get_data(VALUE obj, int octype, size_t *size, BOOL *success);
+VALUE rb_bs_boxed_ptr_new_from_ocdata(struct bsBoxed *bs_boxed, void *ocdata);
+void *rb_bs_boxed_get_data(VALUE obj, const char *encoding, size_t *size, BOOL *success);
 size_t bs_boxed_size(struct bsBoxed *bs_struct);
 
 struct bsCFType *find_bs_cf_type_by_encoding(const char *encoding);

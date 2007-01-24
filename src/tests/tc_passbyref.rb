@@ -56,11 +56,7 @@ class TC_PassByRef < Test::Unit::TestCase
         assert_equal(false, val.first)
         assert_kind_of(OSX::NSError, val.last)
     end
-end
-
-# Add more tests that requires the exceptions files. Disable the tests on non-Leopard machines in the meantime the format is being worked on.
-if `sw_vers -productVersion`.strip.to_f >= 10.5
-  class TC_PassByRef < Test::Unit::TestCase
+    
     def test_in_c_array_id
         o1, o2 = OSX::NSObject.alloc.init, OSX::NSObject.alloc.init
         ary = OSX::NSArray.arrayWithObjects_count([o1, o2])
@@ -98,12 +94,9 @@ if `sw_vers -productVersion`.strip.to_f >= 10.5
     end
 
     def test_null_accepted
-        button = OSX::NSButton.alloc.initWithFrame(OSX::NSZeroRect)
-        assert_raises(ArgumentError) { button.getPeriodicDelay_interval_(nil, nil) }
-        assert_raises(ArgumentError) { button.getPeriodicDelay_interval_(nil) }
-        ary = button.getPeriodicDelay_interval_()
-        assert_kind_of(Array, ary)
-        assert_equal(2, ary.size)
+        assert_raises(ArgumentError) { OSX::NSCountWindows(nil) }
+        r = OSX::NSCountWindows()
+        assert_kind_of(Fixnum, r)
     end
 
     def test_in_c_array_fixed_length
@@ -135,5 +128,4 @@ if `sw_vers -productVersion`.strip.to_f >= 10.5
     #end
 
     # TODO: test NSCoder encode/decode methods
-  end
 end

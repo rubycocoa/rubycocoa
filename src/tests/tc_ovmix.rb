@@ -71,6 +71,20 @@ class ObjcExportHelper < OSX::NSObject
     OSX::NSRect.new(point, size)
   end
   objc_method :foo4_size, [OSX::NSRect, OSX::NSPoint, OSX::NSSize]
+
+  def foo5(rectPtr)
+    rectPtr.origin.x *= 10
+    rectPtr.origin.y *= 10
+    rectPtr.size.width *= 10
+    rectPtr.size.height *= 10
+  end
+  addRubyMethod_withType("foo5:", "v@:^#{OSX::NSRect.encoding}")
+end
+
+class TestStret < OSX::ObjcTestStret
+  def overrideMe(x)
+    OSX::NSRect.new(x,x,x,x)
+  end
 end
 
 class OSX::DirectOverride

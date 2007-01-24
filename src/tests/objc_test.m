@@ -197,6 +197,7 @@
 - (int)foo2:(int)i;
 - (void)foo3:(id)ary obj:(id)obj;
 - (NSRect)foo4:(NSPoint)point size:(NSSize)size;
+- (void)foo5:(NSRect *)rectPtr;
 @end
 
 @interface TestRig : NSObject { }
@@ -235,6 +236,11 @@
       [NSException raise:@"TestObjCExportError" format:@"assertion foo4 failed, expected %@, got %@", NSStringFromRect(NSMakeRect(1, 2, 3, 4)), NSStringFromRect(r)];
     if (foo != 42)
       [NSException raise:@"TestObjCExportError" format:@"memory overflow"];
+
+    r = NSMakeRect(1,2,3,4);
+    [helper foo5:&r];
+    if (r.origin.x != 10 || r.origin.y != 20 || r.size.width != 30 || r.size.height != 40) 
+      [NSException raise:@"TestObjCExportError" format:@"assertion foo5 failed, expected %@, got %@", NSStringFromRect(NSMakeRect(10, 20, 30, 40)), NSStringFromRect(r)];
 }
 
 @end
@@ -323,6 +329,36 @@
 + (int)kEventClassABPeoplePickerValue
 {
   return kEventClassABPeoplePicker;
+}
+
+@end
+
+@interface ObjcTestStret : NSObject
+@end
+
+@protocol StretHelper
+- (NSRect)overrideMe:(int)x;
+@end
+
+@implementation ObjcTestStret
+
++ (void)run
+{
+  Class helperClass = NSClassFromString(@"TestStret");
+  id helper = [[helperClass alloc] init];
+  NSRect rect;
+  int foo = 42;
+
+  rect = [helper overrideMe:50];
+  if (!NSEqualRects(rect, NSMakeRect(50, 50, 50, 50))) 
+    [NSException raise:@"TestObjCExportError" format:@"assertion overrideMe failed, got %@", NSStringFromRect(rect)];
+  if (foo != 42)
+    [NSException raise:@"TestObjCExportError" format:@"memory overflow"];
+}
+
+- (NSRect)overrideMe:(int)x
+{
+  return NSZeroRect;
 }
 
 @end

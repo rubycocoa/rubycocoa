@@ -88,14 +88,14 @@ VALUE rbobj_call_ruby(id rbobj, SEL selector, VALUE args);
 static void
 ovmix_ffi_closure(ffi_cif* cif, void* resp, void** args, void* userdata)
 {
-  int retval_octype;
-  int *args_octypes;
+  char *retval_octype;
+  char **args_octypes;
   VALUE rb_args;
   unsigned i;
   VALUE retval;
 
-  retval_octype = *(int *)userdata;
-  args_octypes = &((int *)userdata)[1];
+  retval_octype = *(char **)userdata;
+  args_octypes = ((char **)userdata) + 1;
   rb_args = rb_ary_new2(cif->nargs - 2);
 
   OVMIX_LOG("ffi_closure cif %p nargs %d sel '%s'", cif, cif->nargs, *(SEL *)args[1]); 
@@ -104,7 +104,7 @@ ovmix_ffi_closure(ffi_cif* cif, void* resp, void** args, void* userdata)
     VALUE arg;
 
     if (!ocdata_to_rbobj(Qnil, args_octypes[i - 2], args[i], &arg, NO))
-      rb_raise(rb_eRuntimeError, "Can't convert Objective-C argument #%d of octype %d to Ruby value", i - 2, args_octypes[i - 2]);
+      rb_raise(rb_eRuntimeError, "Can't convert Objective-C argument #%d of octype '%s' to Ruby value", i - 2, args_octypes[i - 2]);
 
     OVMIX_LOG("converted arg #%d to Ruby value %p", i - 2, arg);
 
@@ -115,9 +115,18 @@ ovmix_ffi_closure(ffi_cif* cif, void* resp, void** args, void* userdata)
   retval = rbobj_call_ruby(*(id *)args[0], *(SEL *)args[1], rb_args);
   OVMIX_LOG("calling Ruby method done, retval %p", retval);
 
-  if (retval_octype != _C_VOID) {
+  // Make sure to sync boxed pointer ivars.
+  for (i = 2; i < cif->nargs; i++) {
+    struct bsBoxed *bs_boxed;
+    if (is_boxed_ptr(args_octypes[i - 2], &bs_boxed)) {
+      VALUE arg = RARRAY(rb_args)->ptr[i - 2];
+      rb_bs_boxed_get_data(arg, bs_boxed->encoding, NULL, NULL);
+    }
+  }
+
+  if (*encoding_skip_modifiers(retval_octype) != _C_VOID) {
     if (!rbobj_to_ocdata(retval, retval_octype, resp, YES))
-      rb_raise(rb_eRuntimeError, "Can't convert return Ruby value to Objective-C value of octype %d", retval_octype);
+      rb_raise(rb_eRuntimeError, "Can't convert return Ruby value to Objective-C value of octype '%s'", retval_octype);
   }
 }
 
@@ -137,7 +146,7 @@ ovmix_imp_for_type(const char *type)
   ffi_type **arg_ffi_types;
   ffi_cif *cif;
   ffi_closure *closure;
-  int *octypes;
+  char **octypes;
 
   pthread_mutex_lock(&ffi_imp_closures_lock);
   imp = NULL;
@@ -153,21 +162,19 @@ ovmix_imp_for_type(const char *type)
   decode_method_encoding(type, nil, &argc, &retval_type, &arg_types, NO);
 
   arg_ffi_types = (ffi_type **)malloc(sizeof(ffi_type *) * (argc + 1));
-  octypes = (int *)malloc(sizeof(int) * (argc + 1)); /* first int is retval octype, then arg octypes */
+  octypes = (char **)malloc(sizeof(char *) * (argc + 1)); /* first int is retval octype, then arg octypes */
   if (arg_ffi_types == NULL || octypes == NULL) {
     error = "Can't allocate memory";
     goto bails;
   }
 
   for (i = 0; i < argc; i++) {
-    int octype;
-    octype = to_octype(arg_types[i]);
     if (i >= 2)
-      octypes[i - 1] = octype;
-    arg_ffi_types[i] = ffi_type_for_octype(octype, arg_types[i]);
+      octypes[i - 1] = arg_types[i];
+    arg_ffi_types[i] = ffi_type_for_octype(arg_types[i]);
   }
-  octypes[0] = to_octype(retval_type);
-  retval_ffi_type = ffi_type_for_octype(octypes[0], retval_type);
+  octypes[0] = retval_type;
+  retval_ffi_type = ffi_type_for_octype(retval_type);
   arg_ffi_types[argc] = NULL;
 
   cif = (ffi_cif *)malloc(sizeof(ffi_cif));
@@ -213,13 +220,14 @@ bails:
     free(cif);
   if (closure != NULL)
     free(closure);
+  if (arg_types != NULL)
+    free(arg_types);
+  if (retval_type != NULL)
+    free(retval_type);
   if (error != NULL)
     rb_raise(rb_eRuntimeError, error);
 
 done:
-  free(arg_types);
-  free(retval_type);
-
   return imp; 
 }
 

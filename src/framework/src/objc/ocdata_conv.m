@@ -74,289 +74,252 @@ void remove_from_rb2oc_cache(VALUE rbobj)
   CACHE_UNLOCK(&rb2ocCacheLock);
 }
 
-int
-to_octype(const char* octype_str)
+size_t
+ocdata_size(const char* octype_str)
 {
-  int oct;
+  size_t result;
   struct bsBoxed *bs_boxed;
 
-  // Avoid first character 'r' which means const.
-  if (octype_str[0] == 'r') 
-    octype_str++;
-  oct = *octype_str;
+  if (*octype_str == _C_CONST)
+    octype_str++;  
 
-  // Structures.
-  if ((bs_boxed = find_bs_boxed_by_encoding(octype_str)) != NULL) {
-    oct = bs_boxed->octype;
-  }
-  // Type IDs.
-  else if (find_bs_cf_type_by_encoding(octype_str) != NULL) {
-    oct = _C_ID;
-  }
-  // Pointers.
-  else if (octype_str[0] == '^') {
-    if (strcmp(octype_str, "^@") == 0 || strcmp(octype_str, "^r@") == 0)
-      oct = _PRIV_C_ID_PTR;
-    else
-      oct = _PRIV_C_PTR;
-  }
+  bs_boxed = find_bs_boxed_by_encoding(octype_str);
+  if (bs_boxed != NULL)
+    return bs_boxed_size(bs_boxed);
 
-  return oct;
-}
+  if (find_bs_cf_type_by_encoding(octype_str) != NULL)
+    octype_str = "@";
 
-size_t
-ocdata_size(int octype, const char* octype_str)
-{
-  size_t result = 0;
-  switch (octype) {
+  result = 0;
 
-  case _C_ID:
-  case _C_CLASS:
-    result = sizeof(id); break;
+  switch (*octype_str) {
+    case _C_ID:
+    case _C_CLASS:
+      result = sizeof(id); 
+      break;
 
-  case _C_SEL:
-    result = sizeof(SEL); break;
+    case _C_SEL:
+      result = sizeof(SEL); 
+      break;
 
-  case _C_CHR:
-  case _C_UCHR:
-    result = sizeof(char); break;
+    case _C_CHR:
+    case _C_UCHR:
+      result = sizeof(char); 
+      break;
 
-  case _C_SHT:
-  case _C_USHT:
-    result = sizeof(short); break;
+    case _C_SHT:
+    case _C_USHT:
+      result = sizeof(short); 
+      break;
 
-  case _C_INT:
-  case _C_UINT:
-    result = sizeof(int); break;
+    case _C_INT:
+    case _C_UINT:
+      result = sizeof(int); 
+      break;
 
-  case _C_LNG:
-  case _C_ULNG:
-    result = sizeof(long); break;
+    case _C_LNG:
+    case _C_ULNG:
+      result = sizeof(long); 
+      break;
 
 #if HAVE_LONG_LONG
-  case _C_LNG_LNG:
-    result = sizeof(long long); break;
+    case _C_LNG_LNG:
+      result = sizeof(long long); 
+      break;
 
-  case _C_ULNG_LNG:
-    result = sizeof(unsigned long long); break;
+    case _C_ULNG_LNG:
+      result = sizeof(unsigned long long); 
+      break;
 #endif
 
-  case _C_FLT:
-    result = sizeof(float); break;
+    case _C_FLT:
+      result = sizeof(float); 
+      break;
 
-  case _C_DBL:
-    result = sizeof(double); break;
+    case _C_DBL:
+      result = sizeof(double); 
+      break;
 
-    // case _C_PTR:
-  case _C_CHARPTR:
-    result = sizeof(char*); break;
+    case _C_CHARPTR:
+      result = sizeof(char*); 
+      break;
 
-  case _C_VOID:
-    result = 0; break;
+    case _C_VOID:
+      result = 0; 
+      break;
 
-  case _PRIV_C_BOOL:
-#if defined(_C_BOOL)
-  case _C_BOOL:
-#endif
-    result = sizeof(BOOL); break;    
+    case _C_BOOL:
+      result = sizeof(BOOL); 
+      break; 
 
-  case _PRIV_C_PTR:
-    result = sizeof(void*); break;
+    case _C_PTR:
+      result = sizeof(void*); 
+      break;
 
-  case _PRIV_C_ID_PTR:
-    result = sizeof(id*); break;
-
-  case _C_BFLD:
-    if (octype_str != NULL) {
-      char *type;
-      long lng;
-
-      type = (char *)octype_str;
-      lng  = strtol(type, &type, 10);
-
-      // while next type is a bit field
-      while (*type == _C_BFLD) {
-        long next_lng;
-
-        // skip over _C_BFLD
-        type++;
-
-        // get next bit field length
-        next_lng = strtol(type, &type, 10);
-
-        // if spans next word then align to next word
-        if ((lng & ~31) != ((lng + next_lng) & ~31))
-          lng = (lng + 31) & ~31;
-
-        // increment running length
-        lng += next_lng;
-
-#if 0 
-          // skip over next stuff
-          p = strchr(type, _C_BFLD);
-          if (p == NULL) {
-            strcat(buf, type);
-            break;
-          }
-          type = p;
-#endif
+    case _C_BFLD:
+      if (octype_str != NULL) {
+        char *type;
+        long lng;
+  
+        type = (char *)octype_str;
+        lng  = strtol(type, &type, 10);
+  
+        // while next type is a bit field
+        while (*type == _C_BFLD) {
+          long next_lng;
+  
+          // skip over _C_BFLD
+          type++;
+  
+          // get next bit field length
+          next_lng = strtol(type, &type, 10);
+  
+          // if spans next word then align to next word
+          if ((lng & ~31) != ((lng + next_lng) & ~31))
+            lng = (lng + 31) & ~31;
+  
+          // increment running length
+          lng += next_lng;
+        }
+        result = (lng + 7) / 8;
       }
-      result = (lng + 7) / 8;
-    }
-    break;
+      break;
 
-  case _C_UNDEF:
-  case _C_ARY_B:
-  case _C_ARY_E:
-  case _C_UNION_B:
-  case _C_UNION_E:
-  case _C_STRUCT_B:
-  case _C_STRUCT_E:
-
-  default: {
-    if (octype > BS_BOXED_OCTYPE_THRESHOLD) {
-      struct bsBoxed *bs_boxed;
-
-      bs_boxed = find_bs_boxed_by_octype(octype);
-      if (bs_boxed != NULL)
-        result = bs_boxed_size(bs_boxed);
-    }
-    if (result == 0 && octype_str != NULL) {
-      unsigned int size;
-      NSGetSizeAndAlignment(octype_str, &size, NULL);
-      result = size;
-    }
-    break;
+    default:
+      NSGetSizeAndAlignment(octype_str, (unsigned int *)&result, NULL);
+      break;
   }
-  }
+
   return result;
 }
 
-void*
-ocdata_malloc(int octype, const char* octype_str)
+void *
+ocdata_malloc(const char* octype_str)
 {
-  size_t s = ocdata_size(octype, octype_str);
+  size_t s = ocdata_size(octype_str);
   if (s == 0) return NULL;
   return malloc(s);
 }
 
 BOOL
-ocdata_to_rbobj(VALUE context_obj,
-		int octype, const void* ocdata, VALUE* result, BOOL from_libffi)
+ocdata_to_rbobj (VALUE context_obj, const char *octype_str, const void *ocdata, VALUE *result, BOOL from_libffi)
 {
   BOOL f_success = YES;
   VALUE rbval = Qnil;
+  struct bsBoxed *bs_boxed;
 
 #if BYTE_ORDER == BIG_ENDIAN
   // libffi casts all types as a void pointer, which is problematic on PPC for types sized less than a void pointer (char, uchar, short, ushort, ...), as we have to shift the bytes to get the real value.
   if (from_libffi) {
-    int delta = sizeof(void *) - ocdata_size(octype, NULL);
+    int delta = sizeof(void *) - ocdata_size(octype_str);
     if (delta > 0)
       ocdata += delta; 
   }
 #endif
 
-  switch (octype) {
+  if (*octype_str == _C_CONST)
+    octype_str++;
 
-  case _C_ID:
-  case _C_CLASS:
-    rbval = ocid_to_rbobj(context_obj, *(id*)ocdata);
-    break;
+  bs_boxed = find_bs_boxed_by_encoding(octype_str);
+  if (bs_boxed != NULL) {
+    *result = rb_bs_boxed_new_from_ocdata(bs_boxed, (void *)ocdata);
+    return YES;
+  }
+  
+  if (find_bs_cf_type_by_encoding(octype_str) != NULL)
+    octype_str = "@";
 
-  case _PRIV_C_PTR:
-    rbval = objcptr_s_new_with_cptr (*(void**)ocdata);
-    break;
+  switch (*octype_str) {
+    case _C_ID:
+    case _C_CLASS:
+      rbval = ocid_to_rbobj(context_obj, *(id*)ocdata);
+      break;
 
-  case _PRIV_C_BOOL:
-#if defined(_C_BOOL)
-  case _C_BOOL:
-#endif
-    rbval = bool_to_rbobj(*(BOOL*)ocdata);
-    break;
-
-  case _C_SEL:
-    rbval = rb_str_new2(sel_getName(*(SEL*)ocdata));
-    break;
-
-  case _C_CHR:
-    rbval = INT2NUM(*(char*)ocdata); break;
-
-  case _C_UCHR:
-    rbval = UINT2NUM(*(unsigned char*)ocdata); break;
-
-  case _C_SHT:
-    rbval = INT2NUM(*(short*)ocdata); break;
-
-  case _C_USHT:
-    rbval = UINT2NUM(*(unsigned short*)ocdata); break;
-
-  case _C_INT:
-    rbval = INT2NUM(*(int*)ocdata); break;
-
-  case _C_UINT:
-    rbval = UINT2NUM(*(unsigned int*)ocdata); break;
-
-  case _C_LNG:
-    rbval = INT2NUM(*(long*)ocdata); break;
-
-  case _C_ULNG:
-    rbval = UINT2NUM(*(unsigned long*)ocdata); break;
-
-#if HAVE_LONG_LONG
-  case _C_LNG_LNG:
-    rbval = LL2NUM(*(long long*)ocdata); break;
-
-  case _C_ULNG_LNG:
-    rbval = ULL2NUM(*(unsigned long long*)ocdata); break;
-#endif
-
-  case _C_FLT:
-    rbval = rb_float_new((double)(*(float*)ocdata)); break;
-
-  case _C_DBL:
-    rbval = rb_float_new(*(double*)ocdata); break;
-
-    // case _C_PTR:
-  case _C_CHARPTR:
-    rbval = rb_str_new2(*(char**)ocdata); break;
-
-  case _C_BFLD:
-  case _C_VOID:
-  case _C_UNDEF:
-    
-  case _C_ARY_B:
-  case _C_ARY_E:
-  case _C_UNION_B:
-  case _C_UNION_E:
-  case _C_STRUCT_B:
-  case _C_STRUCT_E:
-
-  default:
-    if (octype > BS_BOXED_OCTYPE_THRESHOLD) {
-      struct bsBoxed *bs_boxed;
-
-      bs_boxed = find_bs_boxed_by_octype(octype);
-      if (bs_boxed != NULL) {
-        f_success = YES;
-        rbval = rb_bs_boxed_new_from_ocdata(bs_boxed, (void *)ocdata);
+    case _C_PTR:
+      if (is_boxed_ptr(octype_str, &bs_boxed)) {
+        rbval = rb_bs_boxed_ptr_new_from_ocdata(bs_boxed, *(void **)ocdata);
       }
       else {
-        f_success = NO;
-        rbval = Qnil;
+        rbval = objcptr_s_new_with_cptr (*(void**)ocdata);
       }
-    }
-    else {
+       break;
+
+    case _C_BOOL:
+      rbval = bool_to_rbobj(*(BOOL*)ocdata);
+      break;
+
+    case _C_SEL:
+      rbval = rb_str_new2(sel_getName(*(SEL*)ocdata));
+      break;
+
+    case _C_CHR:
+      rbval = INT2NUM(*(char*)ocdata); 
+      break;
+
+    case _C_UCHR:
+      rbval = UINT2NUM(*(unsigned char*)ocdata); 
+      break;
+
+    case _C_SHT:
+      rbval = INT2NUM(*(short*)ocdata); 
+      break;
+
+    case _C_USHT:
+      rbval = UINT2NUM(*(unsigned short*)ocdata); 
+      break;
+
+    case _C_INT:
+      rbval = INT2NUM(*(int*)ocdata); 
+      break;
+
+    case _C_UINT:
+      rbval = UINT2NUM(*(unsigned int*)ocdata);
+      break;
+
+    case _C_LNG:
+      rbval = INT2NUM(*(long*)ocdata); 
+      break;
+
+    case _C_ULNG:
+      rbval = UINT2NUM(*(unsigned long*)ocdata); 
+      break;
+
+#if HAVE_LONG_LONG
+    case _C_LNG_LNG:
+      rbval = LL2NUM(*(long long*)ocdata); 
+      break;
+
+    case _C_ULNG_LNG:
+      rbval = ULL2NUM(*(unsigned long long*)ocdata); 
+      break;
+#endif
+
+    case _C_FLT:
+      rbval = rb_float_new((double)(*(float*)ocdata)); 
+      break;
+
+    case _C_DBL:
+      rbval = rb_float_new(*(double*)ocdata); 
+      break;
+
+    case _C_CHARPTR:
+      rbval = rb_str_new2(*(char**)ocdata); 
+      break;
+  
+    default:
       f_success = NO;
       rbval = Qnil;
-    }
-    break;
-  }
+      break;
+	}
 
-  if (f_success) *result = rbval;
+  if (f_success) 
+    *result = rbval;
+
   return f_success;
 }
 
-static BOOL rbary_to_nsary(VALUE rbary, id* nsary)
+static BOOL 
+rbary_to_nsary (VALUE rbary, id* nsary)
 {
   long i;
   long len = RARRAY(rbary)->len;
@@ -371,7 +334,11 @@ static BOOL rbary_to_nsary(VALUE rbary, id* nsary)
   return YES;
 }
 
-static BOOL rbhash_to_nsdic(VALUE rbhash, id* nsdic)
+// FIXME: we should use the CoreFoundation API for x_to_y functions
+// (should be faster than Foundation)
+
+static BOOL 
+rbhash_to_nsdic (VALUE rbhash, id* nsdic)
 {
   VALUE ary_keys;
   VALUE* keys;
@@ -396,13 +363,15 @@ static BOOL rbhash_to_nsdic(VALUE rbhash, id* nsdic)
   return YES;
 }
 
-static BOOL rbbool_to_nsnum(VALUE rbval, id* nsval)
+static BOOL 
+rbbool_to_nsnum (VALUE rbval, id* nsval)
 {
   *nsval = [NSNumber numberWithBool:RTEST(rbval)];
   return YES;
 }
 
-static BOOL rbnum_to_nsnum(VALUE rbval, id* nsval)
+static BOOL 
+rbnum_to_nsnum (VALUE rbval, id* nsval)
 {
   BOOL result;
   VALUE rbstr = rb_obj_as_string(rbval);
@@ -413,73 +382,66 @@ static BOOL rbnum_to_nsnum(VALUE rbval, id* nsval)
 }
 
 static void
-__slave_nsobj_free(void *p)
+__slave_nsobj_free (void *p)
 {
   DATACONV_LOG("releasing RBObject %p", p);
   [(id)p release];
 }
 
-static BOOL rbobj_convert_to_nsobj(VALUE obj, id* nsobj)
+static BOOL 
+rbobj_convert_to_nsobj (VALUE obj, id* nsobj)
 {
-  
   switch (TYPE(obj)) {
+    case T_NIL:
+      *nsobj = nil;
+      return YES;
 
-  case T_NIL:
-    *nsobj = nil;
-    return YES;
+    case T_STRING:
+      obj = rb_obj_as_string(obj);
+      *nsobj = rbstr_to_ocstr(obj);
+      return YES;
 
-  case T_STRING:
-    obj = rb_obj_as_string(obj);
-    *nsobj = rbstr_to_ocstr(obj);
-    return YES;
+    case T_SYMBOL:
+      obj = rb_obj_as_string(obj);
+      *nsobj = [NSString stringWithUTF8String: RSTRING(obj)->ptr];
+      return YES;
 
-  case T_SYMBOL:
-    obj = rb_obj_as_string(obj);
-    *nsobj = [NSString stringWithUTF8String: RSTRING(obj)->ptr];
-    return YES;
+    case T_ARRAY:
+      return rbary_to_nsary(obj, nsobj);
 
-  case T_ARRAY:
-    return rbary_to_nsary(obj, nsobj);
+    case T_HASH:
+      return rbhash_to_nsdic(obj, nsobj);
 
-  case T_HASH:
-    return  rbhash_to_nsdic(obj, nsobj);
+    case T_TRUE:
+    case T_FALSE:
+      return rbbool_to_nsnum(obj, nsobj);     
 
-  case T_TRUE:
-  case T_FALSE:
-    return rbbool_to_nsnum(obj, nsobj);     
+    case T_FIXNUM:
+    case T_BIGNUM:
+    case T_FLOAT:
+      return rbnum_to_nsnum(obj, nsobj);
 
-  case T_FIXNUM:
-  case T_BIGNUM:
-  case T_FLOAT:
-    return rbnum_to_nsnum(obj, nsobj);
-
-  case T_OBJECT:
-  case T_CLASS:
-  case T_MODULE:
-  case T_REGEXP:
-  case T_STRUCT:
-  case T_FILE:
-  case RB_T_DATA:
-  default:
-    if (!OBJ_FROZEN(obj)) {
-      *nsobj = [[RBObject alloc] _initWithRubyObject:obj retains:YES];
-      // Let's embed the ObjC object in a custom Ruby object that will 
-      // autorelease the ObjC object when collected by the Ruby GC, and
-      // put the Ruby object as an instance variable.
-      VALUE slave_nsobj;
-      slave_nsobj = Data_Wrap_Struct(rb_cData, NULL, __slave_nsobj_free, *nsobj);   
-      rb_ivar_set(obj, rb_intern("@__slave_nsobj__"), slave_nsobj);
-    }
-    else {
-      // Ruby object is frozen, so we can't do much now.
-      *nsobj = [[[RBObject alloc] initWithRubyObject:obj] autorelease];
-    }
-    return YES;
+    default:
+      if (!OBJ_FROZEN(obj)) {
+        *nsobj = [[RBObject alloc] _initWithRubyObject:obj retains:YES];
+        // Let's embed the ObjC object in a custom Ruby object that will 
+        // autorelease the ObjC object when collected by the Ruby GC, and
+        // put the Ruby object as an instance variable.
+        VALUE slave_nsobj;
+        slave_nsobj = Data_Wrap_Struct(rb_cData, NULL, __slave_nsobj_free, *nsobj);   
+        rb_ivar_set(obj, rb_intern("@__slave_nsobj__"), slave_nsobj);
+      }
+      else {
+        // Ruby object is frozen, so we can't do much now.
+        *nsobj = [[[RBObject alloc] initWithRubyObject:obj] autorelease];
+      }
+      return YES;
   }
   return YES;
 }
 
-BOOL rbobj_to_nsobj(VALUE obj, id* nsobj)
+BOOL 
+rbobj_to_nsobj (VALUE obj, id* nsobj)
 {
   BOOL  ok;
 
@@ -516,20 +478,26 @@ BOOL rbobj_to_nsobj(VALUE obj, id* nsobj)
   return ok;
 }
 
-BOOL rbobj_to_bool(VALUE obj)
+BOOL 
+rbobj_to_bool (VALUE obj)
 {
   return ((obj != Qnil) && (obj != Qfalse)) ? YES : NO;
 }
 
-VALUE bool_to_rbobj (BOOL val)
+VALUE 
+bool_to_rbobj (BOOL val)
 {
   return (val ? Qtrue : Qfalse);
 }
 
-VALUE sel_to_rbobj (SEL val)
+VALUE 
+sel_to_rbobj (SEL val)
 {
   VALUE rbobj;
-  if (ocdata_to_rbobj(Qnil, _C_SEL, &val, &rbobj, NO)) {
+
+  // FIXME: this should be optimized
+
+  if (ocdata_to_rbobj(Qnil, ":", &val, &rbobj, NO)) {
     rbobj = rb_obj_as_string(rbobj);
     // str.tr!(':','_')
     rb_funcall(rbobj, rb_intern("tr!"), 2, rb_str_new2(":"), rb_str_new2("_"));
@@ -542,23 +510,26 @@ VALUE sel_to_rbobj (SEL val)
   return rbobj;
 }
 
-VALUE int_to_rbobj (int val)
+VALUE 
+int_to_rbobj (int val)
 {
   return INT2NUM(val);
 }
 
-VALUE uint_to_rbobj (unsigned int val)
+VALUE 
+uint_to_rbobj (unsigned int val)
 {
   return UINT2NUM(val);
 }
 
-VALUE double_to_rbobj (double val)
+VALUE 
+double_to_rbobj (double val)
 {
   return rb_float_new(val);
 }
 
 VALUE
-ocid_to_rbobj_cache_only(id ocid)
+ocid_to_rbobj_cache_only (id ocid)
 {
   VALUE result;
   BOOL  ok;
@@ -571,7 +542,7 @@ ocid_to_rbobj_cache_only(id ocid)
 }
 
 VALUE
-ocid_to_rbobj(VALUE context_obj, id ocid)
+ocid_to_rbobj (VALUE context_obj, id ocid)
 {
   VALUE result;
   BOOL  ok;
@@ -604,7 +575,8 @@ ocid_to_rbobj(VALUE context_obj, id ocid)
   return result;
 }
 
-const char * rbobj_to_cselstr(VALUE obj)
+const char * 
+rbobj_to_cselstr (VALUE obj)
 {
   int i;
   VALUE str = rb_obj_as_string(obj);
@@ -617,17 +589,20 @@ const char * rbobj_to_cselstr(VALUE obj)
   return STR2CSTR(str);
 }
 
-id rbobj_to_nsselstr(VALUE obj)
+id 
+rbobj_to_nsselstr (VALUE obj)
 {
   return [NSString stringWithUTF8String:rbobj_to_cselstr(obj)];
 }
 
-SEL rbobj_to_nssel(VALUE obj)
+SEL 
+rbobj_to_nssel (VALUE obj)
 {
   return NIL_P(obj) ? NULL : sel_registerName(rbobj_to_cselstr(obj));
 }
 
-static BOOL rbobj_to_objcptr(VALUE obj, void** cptr)
+static BOOL 
+rbobj_to_objcptr (VALUE obj, void** cptr)
 {
   if (TYPE(obj) == T_NIL) {
     *cptr = NULL;
@@ -667,7 +642,7 @@ static BOOL rbobj_to_objcptr(VALUE obj, void** cptr)
     if (bs_boxed == NULL)
       return NO;
 
-    data = rb_bs_boxed_get_data(obj, bs_boxed->octype, NULL, &ok);
+    data = rb_bs_boxed_get_data(obj, bs_boxed->encoding, NULL, &ok);
     if (!ok)
       return NO;
     *cptr = data;
@@ -678,7 +653,8 @@ static BOOL rbobj_to_objcptr(VALUE obj, void** cptr)
   return YES;
 }
 
-static BOOL rbobj_to_idptr(VALUE obj, id** idptr)
+static BOOL 
+rbobj_to_idptr (VALUE obj, id** idptr)
 {
   if (TYPE(obj) == T_NIL) {
     *idptr = nil;
@@ -713,21 +689,25 @@ static BOOL rbobj_to_idptr(VALUE obj, id** idptr)
 }
 
 BOOL
-rbobj_to_ocdata(VALUE obj, int octype, void* ocdata, BOOL to_libffi)
+rbobj_to_ocdata (VALUE obj, const char *octype_str, void* ocdata, BOOL to_libffi)
 {
   BOOL f_success = YES;
+  struct bsBoxed *bs_boxed;
 
 #if BYTE_ORDER == BIG_ENDIAN
   // libffi casts all types as a void pointer, which is problematic on PPC for types sized less than a void pointer (char, uchar, short, ushort, ...), as we have to shift the bytes to get the real value.
   if (to_libffi) {
-    int delta = sizeof(void *) - ocdata_size(octype, NULL);
+    int delta = sizeof(void *) - ocdata_size(octype_str);
     if (delta > 0)
       ocdata += delta; 
   }
 #endif
+  
+  if (*octype_str == _C_CONST)
+    octype_str++;
 
   // Make sure we convert booleans to NSNumber booleans.
-  if (octype != _C_ID) {
+  if (*octype_str != _C_ID) {
     if (TYPE(obj) == T_TRUE) {
       obj = INT2NUM(1);
     }
@@ -736,125 +716,118 @@ rbobj_to_ocdata(VALUE obj, int octype, void* ocdata, BOOL to_libffi)
     }
   }
 
-  switch (octype) {
+  if (find_bs_boxed_by_encoding(octype_str) != NULL) {
+    void *data;
+    size_t size;
 
-  case _C_ID:
-  case _C_CLASS: {
-    id nsobj;
-    f_success = rbobj_to_nsobj(obj, &nsobj);
-    if (f_success) *(id*)ocdata = nsobj;
-    break;
+    data = rb_bs_boxed_get_data(obj, octype_str, &size, &f_success);
+    if (f_success) {
+      if (data == NULL)
+        *(void **)ocdata = NULL;
+      else
+        memcpy(ocdata, data, size);
+      return YES;
+    }
   }
 
-  case _C_SEL:
-    *(SEL*)ocdata = rbobj_to_nssel(obj);
-    break;
+  if (find_bs_cf_type_by_encoding(octype_str) != NULL)
+    octype_str = "@";
 
-  case _C_UCHR:
-  case _PRIV_C_BOOL:
-#if defined(_C_BOOL)
-  case _C_BOOL:
-#endif
-    *(unsigned char*)ocdata = (unsigned char) NUM2UINT(rb_Integer(obj));
-    break;
+  switch (*octype_str) {
+    case _C_ID:
+    case _C_CLASS: 
+    {
+      id nsobj;
+      f_success = rbobj_to_nsobj(obj, &nsobj);
+      if (f_success) *(id*)ocdata = nsobj;
+      break;
+    }
 
-  case _C_CHR:
-    *(char*)ocdata = (char) NUM2INT(rb_Integer(obj));
-    break;
+    case _C_SEL:
+      *(SEL*)ocdata = rbobj_to_nssel(obj);
+      break;
 
-  case _C_SHT:
-    *(short*)ocdata = (short) NUM2INT(rb_Integer(obj));
-    break;
+    case _C_UCHR:
+    case _C_BOOL:
+      *(unsigned char*)ocdata = (unsigned char) NUM2UINT(rb_Integer(obj));
+      break;
 
-  case _C_USHT:
-    *(unsigned short*)ocdata = (unsigned short) NUM2UINT(rb_Integer(obj));
-    break;
+    case _C_CHR:
+      *(char*)ocdata = (char) NUM2INT(rb_Integer(obj));
+      break;
 
-  case _C_INT:
-    *(int*)ocdata = (int) NUM2INT(rb_Integer(obj));
-    break;
+    case _C_SHT:
+      *(short*)ocdata = (short) NUM2INT(rb_Integer(obj));
+      break;
 
-  case _C_UINT:
-    *(unsigned int*)ocdata = (unsigned int) NUM2UINT(rb_Integer(obj));
-    break;
+    case _C_USHT:
+      *(unsigned short*)ocdata = (unsigned short) NUM2UINT(rb_Integer(obj));
+      break;
 
-  case _C_LNG:
-    *(long*)ocdata = (long) NUM2LONG(rb_Integer(obj));
-    break;
+    case _C_INT:
+      *(int*)ocdata = (int) NUM2INT(rb_Integer(obj));
+      break;
 
-  case _C_ULNG:
-    *(unsigned long*)ocdata = (unsigned long) NUM2ULONG(rb_Integer(obj));
-    break;
+    case _C_UINT:
+      *(unsigned int*)ocdata = (unsigned int) NUM2UINT(rb_Integer(obj));
+      break;
+
+    case _C_LNG:
+      *(long*)ocdata = (long) NUM2LONG(rb_Integer(obj));
+      break;
+
+    case _C_ULNG:
+      *(unsigned long*)ocdata = (unsigned long) NUM2ULONG(rb_Integer(obj));
+      break;
 
 #if HAVE_LONG_LONG
-  case _C_LNG_LNG:
-    *(long long*)ocdata = (long long) NUM2LL(rb_Integer(obj));
-    break;
+    case _C_LNG_LNG:
+      *(long long*)ocdata = (long long) NUM2LL(rb_Integer(obj));
+      break;
 
-  case _C_ULNG_LNG:
-    *(unsigned long long*)ocdata = (unsigned long long) NUM2ULL(rb_Integer(obj));
-    break;
+    case _C_ULNG_LNG:
+      *(unsigned long long*)ocdata = (unsigned long long) NUM2ULL(rb_Integer(obj));
+      break;
 #endif
 
-  case _C_FLT:
-    *(float*)ocdata = (float) RFLOAT(rb_Float(obj))->value;
-    break;
+    case _C_FLT:
+      *(float*)ocdata = (float) RFLOAT(rb_Float(obj))->value;
+      break;
 
-  case _C_DBL:
-    *(double*)ocdata = RFLOAT(rb_Float(obj))->value;
-    break;
+    case _C_DBL:
+      *(double*)ocdata = RFLOAT(rb_Float(obj))->value;
+      break;
 
-    // case _C_PTR:
-  case _C_CHARPTR:
-    *(char**)ocdata = STR2CSTR(rb_obj_as_string(obj));
-    break;
+    case _C_CHARPTR:
+      *(char**)ocdata = STR2CSTR(rb_obj_as_string(obj));
+      break;
 
-  case _PRIV_C_PTR: {
-    //void* cptr = NULL;
-    f_success = rbobj_to_objcptr(obj, ocdata/*&cptr*/);
-    //if (f_success) *(void**)ocdata = cptr;
-    break;
-  }
-
-  case _PRIV_C_ID_PTR: {
-    //id* idptr = NULL;
-    f_success = rbobj_to_idptr(obj, ocdata/*&idptr*/);
-    //if (f_success) *(id**)ocdata = idptr;
-    break;
-  }
-
-  case _C_BFLD:
-  case _C_VOID:
-  case _C_UNDEF:
-  case _C_ARY_B:
-  case _C_ARY_E:
-  case _C_UNION_B:
-  case _C_UNION_E:
-  case _C_STRUCT_B:
-  case _C_STRUCT_E:
-
-  default:
-    if (octype > BS_BOXED_OCTYPE_THRESHOLD) {
-      void *data;
-      size_t size;
-
-      data = rb_bs_boxed_get_data(obj, octype, &size, &f_success);
-      if (f_success) {
-        if (data == NULL)
-          *(void **)ocdata = NULL;
-        else
-          memcpy(ocdata, data, size);
+    case _C_PTR:
+      bs_boxed = NULL;
+      if (is_id_ptr(octype_str)) {
+        f_success = rbobj_to_idptr(obj, ocdata);
       }
-    }
-    else
+#if 0
+      else if (is_boxed_ptr(octype_str, &bs_boxed)) {
+        void *data = rb_bs_boxed_get_data(obj, bs_boxed->encoding, NULL, &f_success);
+        *(void **)ocdata = &data;
+      }
+#endif
+      else {
+        f_success = rbobj_to_objcptr(obj, ocdata);
+      }
+      break;
+
+    default:
       f_success = NO;
-    break;
+      break;
   }
 
   return f_success;
 }
 
-static NSStringEncoding kcode_to_nsencoding(const char* kcode) 
+static 
+NSStringEncoding kcode_to_nsencoding (const char* kcode) 
 { 
   if (strcmp(kcode, "UTF8") == 0)
     return NSUTF8StringEncoding;
@@ -928,8 +901,40 @@ __iterate_until(const char *type, char end)
   return NULL;
 }
 
-static inline const char *
-__skip_modifiers(const char *type)
+BOOL 
+is_id_ptr (const char *type)
+{
+  if (*type != _C_PTR)
+    return NO;
+
+  type++;
+  type = encoding_skip_modifiers(type);
+
+  return *type == _C_ID; 
+}
+
+BOOL
+is_boxed_ptr (const char *type, struct bsBoxed **boxed)
+{
+  struct bsBoxed *b;
+
+  if (*type != _C_PTR)
+    return NO;
+
+  type++;
+
+  b = find_bs_boxed_by_encoding(type);
+  if (b != NULL) {
+    if (boxed != NULL)
+      *boxed = b;
+    return YES;
+  }
+
+  return NO;
+}
+
+const char *
+encoding_skip_modifiers(const char *type)
 {
   while (YES) {
     switch (*type) {
@@ -941,7 +946,7 @@ __skip_modifiers(const char *type)
       case 'N': // inout
       case 'V': // oneway
         type++;
-        break;      
+        break;
 
       default:
         return type;
@@ -958,7 +963,7 @@ __get_first_encoding(const char *type, char *buf, size_t buf_len)
 
   orig_type = type;
 
-  type = __skip_modifiers(type);
+  type = encoding_skip_modifiers(type);
 
   switch (*type) {
     case '\0':
