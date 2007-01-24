@@ -1,5 +1,11 @@
 2007-01-24  Laurent Sansonetti <lsansonetti@apple.com>
 
+	* sample/PathDemo/DemoView.rb,
+	  framework/src/objc/cls_objcid.m:
+	DemoView has now printing capabilities. Make sure #release does
+	tell the Ruby proxy object to not release the ObjC object a 
+	second time.
+
 	* framework/tool/gen_bridge_metadata.rb:
 	Discover more constants.
 

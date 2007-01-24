@@ -66,7 +66,7 @@ static VALUE
 objcid_s_new(int argc, VALUE* argv, VALUE klass)
 {
   VALUE obj;
-  obj = Data_Wrap_Struct(klass, 0, _objcid_data_free, _objcid_data_new());
+  obj = Data_Wrap_Struct(klass, NULL, _objcid_data_free, _objcid_data_new());
   rb_obj_call_init(obj, argc, argv);
   return obj;
 }
@@ -84,6 +84,16 @@ objcid_s_new_with_ocid(int argc, VALUE* argv, VALUE klass)
   }
   rb_obj_call_init(obj, argc, argv);
   return obj;
+}
+
+static VALUE
+objcid_release(VALUE rcv)
+{
+  if (OBJCID_DATA_PTR(rcv)->can_be_released) {
+    [OBJCID_ID(rcv) release];
+    OBJCID_DATA_PTR(rcv)->can_be_released = NO;
+  }
+  return rcv;
 }
 
 static VALUE
@@ -136,6 +146,7 @@ init_cls_ObjcID(VALUE outer)
   rb_define_method(_kObjcID, "initialize", objcid_initialize, -1);
   rb_define_method(_kObjcID, "__ocid__", objcid_ocid, 0);
   rb_define_method(_kObjcID, "__inspect__", objcid_inspect, 0);
+  rb_define_method(_kObjcID, "release", objcid_release, 0);
   rb_define_method(_kObjcID, "inspect", objcid_inspect, 0);
 
   return _kObjcID;
