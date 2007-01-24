@@ -46,10 +46,14 @@ enum osxobjc_nsdata_type {
   _PRIV_C_ID_PTR,
 };
 
-int     to_octype       (const char* oc_type_str);
-size_t  ocdata_size     (int octype, const char* octype_str);
-void*   ocdata_malloc   (int octype, const char* octype_str);
-#define OCDATA_ALLOCA(octype,s)     alloca(ocdata_size((octype),(s)))
+size_t  ocdata_size     (const char* octype_str);
+void*   ocdata_malloc   (const char* octype_str);
+#define OCDATA_ALLOCA(s)  alloca(ocdata_size(s))
+
+const char *encoding_skip_modifiers(const char *type);
+BOOL is_id_ptr (const char *type);
+struct bsBoxed;
+BOOL is_boxed_ptr (const char *type, struct bsBoxed **boxed);
 
 const char * rbobj_to_cselstr  (VALUE obj);
 id           rbobj_to_nsselstr (VALUE obj);
@@ -67,8 +71,8 @@ VALUE   ocid_to_rbobj (VALUE context_obj, id ocid);
 VALUE  ocstr_to_rbstr (id ocstr);
 
 BOOL  ocdata_to_rbobj (VALUE context_obj,
-		       int octype, const void* ocdata, VALUE* result, BOOL from_libffi);
-BOOL  rbobj_to_ocdata (VALUE obj, int octype, void* ocdata, BOOL to_libffi);
+		       const char *octype, const void* ocdata, VALUE* result, BOOL from_libffi);
+BOOL  rbobj_to_ocdata (VALUE obj, const char *octype, void* ocdata, BOOL to_libffi);
 
 void init_rb2oc_cache(void);
 void init_oc2rb_cache(void);

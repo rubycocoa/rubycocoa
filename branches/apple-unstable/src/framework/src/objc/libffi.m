@@ -37,7 +37,7 @@ bs_boxed_ffi_type(struct bsBoxed *bs_boxed)
         char *octypestr;
 
         octypestr = bs_boxed->opt.s.fields[i].encoding;
-        bs_boxed->ffi_type->elements[i] = ffi_type_for_octype(to_octype(octypestr), octypestr);
+        bs_boxed->ffi_type->elements[i] = ffi_type_for_octype(octypestr);
       }
       bs_boxed->ffi_type->elements[bs_boxed->opt.s.field_count] = NULL;
     }
@@ -83,55 +83,68 @@ fake_ary_ffi_type (unsigned bytes)
 }
 
 ffi_type *
-ffi_type_for_octype (int octype, char *octypestr)
+ffi_type_for_octype (const char *octypestr)
 {
-  switch (octype) {
+  if (*octypestr == _C_CONST)
+    octypestr++;
+
+  switch (*octypestr) {
     case _C_ID:
     case _C_CLASS:
     case _C_SEL:
     case _C_CHARPTR:
-    case _PRIV_C_ID_PTR:
-    case _PRIV_C_PTR:
+    case _C_PTR:
       return &ffi_type_pointer;
-#if defined(_C_BOOL)
+
     case _C_BOOL:
-#endif
-    case _PRIV_C_BOOL:
     case _C_UCHR:
       return &ffi_type_uchar;
+
     case _C_CHR:
       return &ffi_type_schar;
+
     case _C_SHT:
       return &ffi_type_sshort;
+
     case _C_USHT:
       return &ffi_type_ushort;
+
     case _C_INT:
       return &ffi_type_sint;
+
     case _C_UINT:
       return &ffi_type_uint;
+
     case _C_LNG:
       return sizeof(int) == sizeof(long) ? &ffi_type_sint : &ffi_type_slong;
+
 #if defined(_C_LNG_LNG)
     case _C_LNG_LNG: 
       return &ffi_type_sint64;
 #endif
+
     case _C_ULNG:
       return sizeof(unsigned int) == sizeof(unsigned long) ? &ffi_type_uint : &ffi_type_ulong;
+
 #if defined(_C_ULNG_LNG)
     case _C_ULNG_LNG: 
       return &ffi_type_uint64;
 #endif
+
     case _C_FLT:
       return &ffi_type_float;
+
     case _C_DBL:
       return &ffi_type_double;
+
     case _C_VOID:
       return &ffi_type_void;  
+
     case _C_BFLD:
       {
         unsigned int size;
 
-        size = ocdata_size(octype, octypestr);
+        size = ocdata_size(octypestr);
         if (size > 0) {
           if (size == 1)
             return &ffi_type_uchar;
@@ -144,6 +157,7 @@ ffi_type_for_octype (int octype, char *octypestr)
         }
       }
       break;
+
     case _C_ARY_B:
       {
         unsigned int size;
@@ -154,18 +168,19 @@ ffi_type_for_octype (int octype, char *octypestr)
           return fake_ary_ffi_type(size);
       }
       break;
+
     default:
-      if (octype > BS_BOXED_OCTYPE_THRESHOLD) {
+      {
         struct bsBoxed *bs_boxed;
 
-        bs_boxed = find_bs_boxed_by_octype(octype);
+        bs_boxed = find_bs_boxed_by_encoding(octypestr);
         if (bs_boxed != NULL)
           return bs_boxed_ffi_type(bs_boxed);
       }
       break;
   }
 
-  NSLog (@"XXX returning ffi type void for unrecognized octype %d", octype);
+  NSLog (@"XXX returning ffi type void for unrecognized encoding '%s'", octypestr);
 
   return &ffi_type_void;
 }
@@ -180,7 +195,7 @@ rb_ffi_dispatch (
   VALUE *argv, 
   ffi_type **arg_types, 
   void **arg_values, 
-  int ret_octype, 
+  char *ret_octype, 
   void *func_sym, 
   void (*retain_if_necessary)(VALUE arg, BOOL retval, void *ctx), 
   void *retain_if_necessary_ctx, 
@@ -264,7 +279,6 @@ rb_ffi_dispatch (
     else {
       VALUE arg;
       const char *octype_str;
-      int octype;
       void *value;
       struct bsArg *bs_arg;
       BOOL is_c_array;
@@ -272,7 +286,6 @@ rb_ffi_dispatch (
 
       arg = argv[i - skipped];
       octype_str = ARG_OCTYPESTR(i);
-      octype = to_octype(octype_str);
       bs_arg = find_bs_arg_by_index(call_entry, i, expected_argc);
 
       if (bs_arg != NULL) {
@@ -289,9 +302,9 @@ rb_ffi_dispatch (
         const char * ptype;
 
         ptype = octype_str;
-        if (*ptype == 'r')
+        if (*ptype == _C_CONST)
           ptype++;
-        if (*ptype != '^')
+        if (*ptype != _C_PTR)
           return rb_err_new(rb_eRuntimeError, "Internal error: argument #%d is not a defined as a pointer in the runtime or it is described as such in the metadata", i);
         ptype++;
 
@@ -306,7 +319,7 @@ rb_ffi_dispatch (
         }
 
         if (bs_arg->c_ary_type == bsCArrayArgFixedLength) {
-          int expected_len = bs_arg->c_ary_type_value * ocdata_size(to_octype(ptype), ptype);
+          int expected_len = bs_arg->c_ary_type_value * ocdata_size(ptype);
           if (expected_len != len)
             return rb_err_new(rb_eArgError, "Argument #%d has an invalid length (expected %d, got %d)", i, expected_len, len); 
         }
@@ -319,21 +332,21 @@ rb_ffi_dispatch (
           
           FFI_LOG("arg[%d] (%p) : %s (defined as a C array delimited by arg #%d in the metadata)", i, arg, octype_str, bs_arg->c_ary_type_value);
         }
-        value = OCDATA_ALLOCA(octype, octype_str);
+        value = OCDATA_ALLOCA(octype_str);
         if (len > 0)
-          *(void **) value = alloca(ocdata_size(to_octype(ptype), ptype) * len);
+          *(void **) value = alloca(ocdata_size(ptype) * len);
       }
       // Regular argument. 
       else {
         FFI_LOG("arg[%d] (%p) : %s", i, arg, octype_str);
         len = 0;
-        value = OCDATA_ALLOCA(octype, octype_str);
+        value = OCDATA_ALLOCA(octype_str);
       }
 
-      if (!rbobj_to_ocdata(arg, octype, value, NO))
+      if (!rbobj_to_ocdata(arg, octype_str, value, NO))
         return rb_err_new(ocdataconv_err_class(), "Cannot convert the argument #%d as '%s' to Objective-C", i, octype_str); 
       
-      arg_types[i + argc_delta] = ffi_type_for_octype(octype, "");
+      arg_types[i + argc_delta] = ffi_type_for_octype(octype_str);
       arg_values[i + argc_delta] = value;
 
       if (is_c_array && bs_arg->c_ary_type == bsCArrayArgDelimitedByArg) {
@@ -349,10 +362,10 @@ rb_ffi_dispatch (
   }
 
   // Prepare return type/val.
-  FFI_LOG("retval (%p) : %d", retval, ret_octype);
-  ret_type = ffi_type_for_octype(ret_octype, "");
-  if (ret_octype != _C_VOID) {
-    size_t ret_len = ocdata_size(ret_octype, "");
+  FFI_LOG("retval (%p) : %s", retval, ret_octype);
+  ret_type = ffi_type_for_octype(ret_octype);
+  if (ret_type != &ffi_type_void) {
+    size_t ret_len = ocdata_size(ret_octype);
     FFI_LOG("allocated %ld bytes for the result", ret_len);
     retval = alloca(ret_len);
   }
@@ -384,7 +397,7 @@ rb_ffi_dispatch (
     arg = (i < given_argc) ? argv[i] : Qnil;
     if (arg == Qnil)
       continue;
-    if (to_octype(ARG_OCTYPESTR(i)) != _PRIV_C_ID_PTR)
+    if (!is_id_ptr(ARG_OCTYPESTR(i)))
       continue;
     if (rb_obj_is_kind_of(arg, objid_s_class()) != Qtrue)
       continue;
@@ -393,16 +406,20 @@ rb_ffi_dispatch (
   }
 
   // Get result
-  if (ret_octype != _C_VOID) {
-    FFI_LOG("getting return value (%p of type '%c')", retval, (char)ret_octype);
+  if (ret_type != &ffi_type_void) {
+    FFI_LOG("getting return value (%p of type '%s')", retval, ret_octype);
 
-    if (call_entry != NULL && call_entry->retval != NULL && call_entry->retval->octype != -1 && call_entry->retval->octype != ret_octype) {
-      FFI_LOG("coercing result from octype %c to octype %c", (char)ret_octype, (char)call_entry->retval->octype);
-      ret_octype = call_entry->retval->octype;
+    if (call_entry != NULL 
+        && call_entry->retval != NULL 
+        && call_entry->retval->octypestr != NULL
+        && strcmp(call_entry->retval->octypestr, ret_octype) != 0) {
+
+      FFI_LOG("coercing result from octype '%s' to octype '%s'", ret_octype, call_entry->retval->octypestr);
+      ret_octype = call_entry->retval->octypestr;
     }
 
     if (!ocdata_to_rbobj(Qnil, ret_octype, retval, result, YES))
-      return rb_err_new(ocdataconv_err_class(), "Cannot convert the result as '%c' to Ruby", (char)ret_octype); 
+      return rb_err_new(ocdataconv_err_class(), "Cannot convert the result as '%s' to Ruby", ret_octype); 
     
     FFI_LOG("got return value");
     (*retain_if_necessary)(*result, YES, retain_if_necessary_ctx);
@@ -416,7 +433,7 @@ rb_ffi_dispatch (
     VALUE retval_ary;
 
     retval_ary = rb_ary_new();
-    if (ret_octype != _C_VOID) { 
+    if (*ret_octype != _C_VOID) { 
       // Don't test if *result is nil, as nil may have been returned!
       rb_ary_push(retval_ary, *result);
     }
@@ -428,17 +445,16 @@ rb_ffi_dispatch (
       if (value != NULL) {
         VALUE rbval;
         const char *octype_str;
-        int octype;
         struct bsArg *bs_arg;
 
         octype_str = ARG_OCTYPESTR(i);
-        if (octype_str[0] == _C_PTR)
+        if (*octype_str == _C_PTR)
           octype_str++;
         FFI_LOG("got omitted pointer[%d] : %s (%p)", i, octype_str, value);
-        octype = to_octype(octype_str);        
         rbval = Qnil;
-
-        if (octype == _PRIV_C_PTR 
+        if (*octype_str == _C_CONST)
+          octype_str++;
+        if (*octype_str == _C_PTR 
             && (bs_arg = find_bs_arg_by_index(call_entry, i, expected_argc)) != NULL) {
 
           switch (bs_arg->c_ary_type) {
@@ -446,7 +462,7 @@ rb_ffi_dispatch (
               {
                 void *length_value = arg_values[bs_arg->c_ary_type_value + argc_delta];
                 if (length_value != NULL) {
-                  rbval = rb_str_new((char *)value, (int)length_value * ocdata_size(octype, octype_str));
+                  rbval = rb_str_new((char *)value, (int)length_value * ocdata_size(octype_str));
                 }
                 else {
                   FFI_LOG("array length should have been returned by argument #%d, but it's NULL, defaulting on ObjCPtr", bs_arg->c_ary_type_value);
@@ -469,7 +485,7 @@ rb_ffi_dispatch (
         }
 
         if (NIL_P(rbval)) {
-          if (!ocdata_to_rbobj(Qnil, to_octype(octype_str), &value, &rbval, YES))
+          if (!ocdata_to_rbobj(Qnil, octype_str, &value, &rbval, YES))
             return rb_err_new(ocdataconv_err_class(), "Cannot convert the passed-by-reference argument #%d as '%s' to Ruby", i, octype_str);
         }
         (*retain_if_necessary)(rbval, NO, retain_if_necessary_ctx);

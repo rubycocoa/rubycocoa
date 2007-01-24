@@ -35,8 +35,7 @@ class SubClassB < OSX::Override
 
 end
 
-OSX.ns_import :NSView
-class OSX::NSView
+class OSX::NSObject
     def a_sample_method
     end
 end
@@ -126,7 +125,7 @@ class TC_SubClass < Test::Unit::TestCase
 
   def test_ancestors
     # Basic ancestors.
-    assert(OSX::NSTableView.ancestors.include?(OSX::NSView))
+    assert(OSX::NSString.ancestors.include?(OSX::NSObject))
     
     # CoreFoundation-bridged ancestors.
     assert(OSX::NSCFString.ancestors.include?(OSX::NSString))
@@ -134,9 +133,9 @@ class TC_SubClass < Test::Unit::TestCase
     assert_kind_of(OSX::NSCFArray, OSX::NSArray.array)  
  
     # Method manually defined in an ancestor. 
-    tv = OSX::NSTableView.alloc.initWithFrame(OSX::NSZeroRect)
-    assert(tv.is_a?(OSX::NSView))
-    assert(tv.respond_to?(:a_sample_method))
+    s = OSX::NSString.stringWithString('foo')
+    assert(s.is_a?(OSX::NSObject))
+    assert(s.respond_to?(:a_sample_method))
   end
 
   OSX.ns_import :SkipInternalClass

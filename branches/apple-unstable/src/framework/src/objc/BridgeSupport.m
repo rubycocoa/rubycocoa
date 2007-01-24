@@ -34,7 +34,6 @@ VALUE objboxed_s_class(void)
 }
 
 static struct st_table *bsBoxed;       // boxed encoding -> struct bsBoxed
-static struct st_table *bsBoxed2;      // boxed octype -> struct bsBoxed
 static struct st_table *bsCFTypes;     // encoding -> struct bsCFType
 static struct st_table *bsCFTypes2;    // CFTypeID -> struct bsCFType
 static struct st_table *bsFunctions;   // function name -> struct bsFunction
@@ -60,9 +59,6 @@ struct bsFunction *current_function = NULL;
       x[0] = tolower(x[0]);   \
   }                           \
   while (0)
-
-// struct proxies octype constants, each proxy has a unique octype, starting at a given threshold. 
-static int bs_boxed_octype_idx = BS_BOXED_OCTYPE_THRESHOLD + 1;
 
 #if HAS_LIBXML2
 #include <libxml/xmlreader.h>
@@ -315,6 +311,12 @@ bails:
   return NO;
 }
 
+static VALUE
+rb_bs_boxed_get_encoding (VALUE rcv)
+{
+  return rb_ivar_get(rcv, ivarEncodingID);  
+}
+
 struct bsBoxed *
 find_bs_boxed_for_klass (VALUE klass)
 {
@@ -338,8 +340,7 @@ bs_boxed_size(struct bsBoxed *bs_struct)
     unsigned i;
  
     for (i = 0, size = 0; i < bs_struct->opt.s.field_count; i++)
-      size += ocdata_size(to_octype(bs_struct->opt.s.fields[i].encoding),
-                          bs_struct->opt.s.fields[i].encoding);           
+      size += ocdata_size(bs_struct->opt.s.fields[i].encoding);           
 
     bs_struct->size = size; 
   }
@@ -389,14 +390,14 @@ rb_bs_struct_new (int argc, VALUE *argv, VALUE rcv)
 
   if (argc > 0) {
     for (i = 0, pos = 0; i < bs_struct->opt.s.field_count; i++) {
-      int field_octype;
+      const char *field_octype;
 
-      field_octype = to_octype(bs_struct->opt.s.fields[i].encoding);
+      field_octype = bs_struct->opt.s.fields[i].encoding;
 
       if (!rbobj_to_ocdata(argv[i], field_octype, data + pos, NO))
         rb_raise(rb_eArgError, "Cannot convert arg #%d of type %d to Objective-C", i, field_octype);
 
-      pos += ocdata_size(field_octype, bs_struct->opt.s.fields[i].encoding);
+      pos += ocdata_size(field_octype);
     }
   }
   
@@ -418,6 +419,12 @@ rb_bs_boxed_new_from_ocdata (struct bsBoxed *bs_boxed, void *ocdata)
   memcpy(data, ocdata, bs_boxed->size);
   
   return Data_Wrap_Struct(bs_boxed->klass, NULL, free, data);
+}
+
+VALUE
+rb_bs_boxed_ptr_new_from_ocdata (struct bsBoxed *bs_boxed, void *ocdata)
+{
+  return Data_Wrap_Struct(bs_boxed->klass, NULL, NULL, ocdata); 
 }
 
 static void *
@@ -494,7 +501,7 @@ rb_bs_boxed_opaque_get_data(VALUE obj, struct bsBoxed *bs_boxed, size_t *size, B
 }
 
 void *
-rb_bs_boxed_get_data(VALUE obj, int octype, size_t *psize, BOOL *psuccess)
+rb_bs_boxed_get_data(VALUE obj, const char *encoding, size_t *psize, BOOL *psuccess)
 {
   struct bsBoxed *bs_boxed;
   void *data;
@@ -505,7 +512,7 @@ rb_bs_boxed_get_data(VALUE obj, int octype, size_t *psize, BOOL *psuccess)
   data = NULL;
   success = NO;  
 
-  bs_boxed = find_bs_boxed_by_octype(octype);
+  bs_boxed = find_bs_boxed_by_encoding(encoding);
   if (bs_boxed != NULL) {
     switch (bs_boxed->type) {
       case bsBoxedStructType:
@@ -530,7 +537,7 @@ rb_bs_boxed_get_data(VALUE obj, int octype, size_t *psize, BOOL *psuccess)
 }
 
 static void *
-rb_bs_struct_get_field_data(VALUE rcv, int *field_octype_out)
+rb_bs_struct_get_field_data(VALUE rcv, char **field_encoding_out)
 {
   struct bsBoxed *bs_struct;
   char *field;
@@ -540,7 +547,7 @@ rb_bs_struct_get_field_data(VALUE rcv, int *field_octype_out)
   void *struct_data;
   void *data;
 
-  *field_octype_out = -1;
+  *field_encoding_out = "";
   bs_struct = rb_bs_struct_get_bs_struct(CLASS_OF(rcv));
 
   if (bs_struct->opt.s.field_count == 0)
@@ -559,17 +566,17 @@ rb_bs_struct_get_field_data(VALUE rcv, int *field_octype_out)
        i < bs_struct->opt.s.field_count; 
        i++) {
      
-    int field_octype;
+    char *field_octype;
 
-    field_octype = to_octype(bs_struct->opt.s.fields[i].encoding);
+    field_octype = bs_struct->opt.s.fields[i].encoding;
     
     if (strncmp(bs_struct->opt.s.fields[i].name, field, field_len) == 0) {
-      *field_octype_out = field_octype;
+      *field_encoding_out = field_octype;
       data = struct_data + offset;
       break;
     }
 
-    offset += ocdata_size(field_octype, bs_struct->opt.s.fields[i].encoding); 
+    offset += ocdata_size(field_octype);
   }
 
   if (data == NULL)
@@ -600,11 +607,11 @@ rb_bs_struct_get (VALUE rcv)
   ivar_id = rb_bs_struct_field_ivar_id();
   if (rb_ivar_defined(rcv, ivar_id) == Qfalse) {
     void *data;
-    int octype;
+    char *octype;
 
     data = rb_bs_struct_get_field_data(rcv, &octype);
     if (!ocdata_to_rbobj(Qnil, octype, data, &result, NO))
-      rb_raise(rb_eRuntimeError, "Can't convert data %p of type %d to Ruby", data, octype);
+      rb_raise(rb_eRuntimeError, "Can't convert data %p of type %s to Ruby", data, octype);
 
     rb_ivar_set(rcv, ivar_id, result);
   }
@@ -619,11 +626,11 @@ static VALUE
 rb_bs_struct_set (VALUE rcv, VALUE val)
 {
   void *data;
-  int octype;
+  char *octype;
 
   data = rb_bs_struct_get_field_data(rcv, &octype);
   if (!rbobj_to_ocdata(val, octype, data, NO))
-    rb_raise(rb_eRuntimeError, "Can't convert Ruby object %p of type %d to Objective-C", val, octype);
+    rb_raise(rb_eRuntimeError, "Can't convert Ruby object %p of type %s to Objective-C", val, octype);
 
   rb_ivar_set(rcv, rb_bs_struct_field_ivar_id(), val);
 
@@ -704,10 +711,9 @@ init_bs_boxed (bsBoxedType type, const char *name, const char *encoding, VALUE k
   bs_boxed->size = 0; // lazy determined
   bs_boxed->encoding = strdup(encoding);
   bs_boxed->klass = klass;
-  bs_boxed->octype = bs_boxed_octype_idx++;
   bs_boxed->ffi_type = NULL; // lazy determined
 
-  DLOG("MDLOSX", "Imported boxed type of name `%s' and type %d", name, bs_boxed->octype);
+  DLOG("MDLOSX", "Imported boxed type of name `%s' encoding `%s'", name, bs_boxed->encoding);
 
   return bs_boxed;
 }
@@ -796,9 +802,9 @@ func_dispatch_retain_if_necessary(VALUE arg, BOOL is_retval, void *ctx)
   struct bsFunction *func = (struct bsFunction *)ctx;
 
   // retain the new ObjC object, that will be released once the Ruby object is collected
-  if (func->retval->octype == _C_ID) {
+  if (*encoding_skip_modifiers(func->retval->octypestr) == _C_ID || find_bs_cf_type_by_encoding(func->retval->octypestr) != NULL) {
     if (func->retval->should_be_retained && !OBJCID_DATA_PTR(arg)->retained) {
-      DLOG("MDLOSX", "\tretaining objc value");
+      DLOG("MDLOSX", "retaining objc value");
       [OBJCID_ID(arg) retain];
     }
     OBJCID_DATA_PTR(arg)->retained = YES;
@@ -873,7 +879,7 @@ bridge_support_dispatcher (int argc, VALUE *argv, VALUE rcv)
     argv, 
     arg_types, 
     arg_values, 
-    func->retval->octype, 
+    func->retval->octypestr, 
     func->sym, 
     func_dispatch_retain_if_necessary, 
     (void *)func, 
@@ -891,7 +897,7 @@ bridge_support_dispatcher (int argc, VALUE *argv, VALUE rcv)
   return result;
 }
 
-static struct bsRetval default_func_retval = { bsCArrayArgUndefined, -1, _C_VOID, NO };  
+static struct bsRetval default_func_retval = { bsCArrayArgUndefined, -1, "v", NO };  
 
 static VALUE
 osx_load_bridge_support_file (VALUE mOSX, VALUE path)
@@ -955,18 +961,9 @@ osx_load_bridge_support_file (VALUE mOSX, VALUE path)
         }
         else {
           char *  const_type;
-          int     type;
 
           const_type = get_attribute_and_check(reader, "type");
-          type = to_octype(const_type);
-          free (const_type);
-          
-          if (type == -1) {
-            free (const_name);
-          }
-          else {
-            st_insert(bsConstants, (st_data_t)const_name, (st_data_t)type);
-          }
+          st_insert(bsConstants, (st_data_t)const_name, (st_data_t)const_type);
         }
       }
       break;
@@ -1026,7 +1023,6 @@ osx_load_bridge_support_file (VALUE mOSX, VALUE path)
         }
         else {
           st_insert(bsBoxed, (st_data_t)bs_boxed->encoding, (st_data_t)bs_boxed);
-          st_insert(bsBoxed2, (st_data_t)bs_boxed->octype, (st_data_t)bs_boxed);
         }
 
         free(struct_decorated_encoding);
@@ -1053,7 +1049,6 @@ osx_load_bridge_support_file (VALUE mOSX, VALUE path)
           }
           else {
             st_insert(bsBoxed, (st_data_t)bs_boxed->encoding, (st_data_t)bs_boxed);
-            st_insert(bsBoxed2, (st_data_t)bs_boxed->octype, (st_data_t)bs_boxed);
           }
         }      
       }
@@ -1231,7 +1226,6 @@ osx_load_bridge_support_file (VALUE mOSX, VALUE path)
           else {
             bsCArrayArgType type;
             int value;
-            char *return_type;
             struct bsRetval *retval;  
 
             get_c_ary_type_attribute(reader, &type, &value);
@@ -1241,20 +1235,15 @@ osx_load_bridge_support_file (VALUE mOSX, VALUE path)
             
             retval->c_ary_type = type;
             retval->c_ary_type_value = value;
-            
-            return_type = get_attribute(reader, "type");
-            if (return_type != NULL) {
-              retval->octype = to_octype(return_type);
-              free(return_type);
-            }
-            else {
-              retval->octype = -1;
-            }
+            retval->octypestr = get_attribute(reader, "type");
 
             if (func != NULL) {
-              if (retval->octype != -1) {
-                retval->should_be_retained = retval->octype == _C_ID
-                  ? !get_boolean_attribute(reader, "already_retained", NO) : YES;
+              if (retval->octypestr != NULL) {
+                retval->should_be_retained = 
+                  *encoding_skip_modifiers(retval->octypestr) == _C_ID
+                  || find_bs_cf_type_by_encoding(retval->octypestr) != NULL
+                    ? !get_boolean_attribute(reader, "already_retained", NO) 
+                    : YES;
                 func->retval = retval;
               }
               else {
@@ -1426,17 +1415,17 @@ osx_import_c_constant (VALUE self, VALUE sym)
 {
   const char *  name;
   char *        real_name;
-  int           octype;
+  char *        octypestr;
   void *        cvalue;
   VALUE         value;
   
   name = rb_id2name(SYM2ID(sym));
   real_name = (char *)name;
-  if (!st_lookup(bsConstants, (st_data_t)name, (st_data_t *)&octype)) {
+  if (!st_lookup(bsConstants, (st_data_t)name, (st_data_t *)&octypestr)) {
     // Decapitalize the string and try again.
     real_name = strdup(name);
     DECAPITALIZE(real_name);
-    if (!st_lookup(bsConstants, (st_data_t)real_name, (st_data_t *)&octype)) {
+    if (!st_lookup(bsConstants, (st_data_t)real_name, (st_data_t *)&octypestr)) {
       free(real_name);
       rb_raise(rb_eLoadError, "C constant '%s' not found", name);
     }
@@ -1445,9 +1434,9 @@ osx_import_c_constant (VALUE self, VALUE sym)
   cvalue = dlsym(RTLD_DEFAULT, real_name);
   value = Qnil;
   if (cvalue != NULL) {
-    DLOG("MDLOSX", "Importing C constant `%s' of type %d", name, octype);
-    if (!ocdata_to_rbobj(Qnil, octype, cvalue, &value, NO))
-      rb_raise(ocdataconv_err_class(), "Cannot convert the Objective-C constant '%s' as '%c' to Ruby", name, (char)octype);    
+    DLOG("MDLOSX", "Importing C constant `%s' of type '%s'", name, octypestr);
+    if (!ocdata_to_rbobj(Qnil, octypestr, cvalue, &value, NO))
+      rb_raise(ocdataconv_err_class(), "Cannot convert the Objective-C constant '%s' as '%s' to Ruby", name, octypestr);
     rb_define_const(self, name, value);
     DLOG("MDLOSX", "Imported C constant `%s' with value %p", name, value);
   }
@@ -1467,17 +1456,6 @@ find_bs_boxed_by_encoding (const char *encoding)
   struct bsBoxed *bs_boxed;
 
   if (!st_lookup(bsBoxed, (st_data_t)encoding, (st_data_t *)&bs_boxed))
-    return NULL;
-
-  return bs_boxed;
-}
-
-struct bsBoxed *
-find_bs_boxed_by_octype (const int octype)
-{
-  struct bsBoxed *bs_boxed;
-
-  if (!st_lookup(bsBoxed2, (st_data_t)octype, (st_data_t *)&bs_boxed))
     return NULL;
 
   return bs_boxed;
@@ -1588,11 +1566,10 @@ void
 initialize_bridge_support (VALUE mOSX)
 {
   cOSXBoxed = rb_define_class_under(mOSX, "Boxed", rb_cObject);
-
   ivarEncodingID = rb_intern("@__encoding__");
+  rb_define_singleton_method(cOSXBoxed, "encoding", rb_bs_boxed_get_encoding, 0);
 
   bsBoxed = st_init_strtable();
-  bsBoxed2 = st_init_numtable();
   bsCFTypes = st_init_strtable();
   bsCFTypes2 = st_init_numtable();
   bsConstants = st_init_strtable();

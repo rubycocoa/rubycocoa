@@ -221,7 +221,6 @@ osx_mf_objc_symbol_to_obj(VALUE mdl, VALUE const_name, VALUE const_type)
   char buf[BUFSIZ];
   NSSymbol sym = NULL;
   void* addr = NULL;
-  int octype;
 
   const_name = rb_obj_as_string(const_name);
   const_type = rb_obj_as_string(const_type);
@@ -239,8 +238,7 @@ osx_mf_objc_symbol_to_obj(VALUE mdl, VALUE const_name, VALUE const_type)
   if (addr == NULL)
     rb_raise(rb_eRuntimeError, "address of '%s' is NULL.", STR2CSTR(const_name));
 
-  octype = to_octype(STR2CSTR(const_type));
-  if (!ocdata_to_rbobj(Qnil, octype, addr, &result, NO))
+  if (!ocdata_to_rbobj(Qnil, STR2CSTR(const_type), addr, &result, NO))
     rb_raise(rb_eRuntimeError, "cannot convert to rbobj for type '%s'.", STR2CSTR(const_type));
 
   return result;

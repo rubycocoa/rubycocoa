@@ -146,7 +146,7 @@ ocm_send(int argc, VALUE* argv, VALUE rcv, VALUE* result)
 
     if (NIL_P(exception)) {
       if (*methodReturnType != _C_VOID) {
-        if (!ocdata_to_rbobj(rcv, *methodReturnType, (const void *)&val, result, NO)) {
+        if (!ocdata_to_rbobj(rcv, methodReturnType, (const void *)&val, result, NO)) {
           exception = rb_err_new(ocdataconv_err_class(), "Cannot convert the result as '%s' to Ruby", methodReturnType);
         }
         else {
@@ -191,7 +191,7 @@ ocm_send(int argc, VALUE* argv, VALUE rcv, VALUE* result)
     argv, 
     arg_types, 
     arg_values, 
-    to_octype(methodReturnType), 
+    methodReturnType, 
     imp, 
     ocm_retain_arg_if_necessary, 
     &context, 

@@ -1,5 +1,24 @@
 2007-01-24  Laurent Sansonetti <lsansonetti@apple.com>
 
+	* framework/src/objc/libffi.h,
+	  framework/src/objc/RBObject.m,
+	  framework/src/objc/libffi.m,
+	  framework/src/objc/mdl_osxobjc.m,
+	  framework/src/objc/mdl_objwrapper.m,
+	  framework/src/objc/RBClassUtils.m,
+	  framework/src/objc/ocdata_conv.h,
+	  framework/src/objc/ocdata_conv.m,
+	  framework/src/objc/BridgeSupport.h,
+	  framework/src/objc/OverrideMixin.m,
+	  framework/src/objc/BridgeSupport.m,
+	  tests/tc_passbyref.rb,
+	  tests/tc_ovmix.rb,
+	  tests/tc_subclass.rb,
+	  tests/objc_test.m:
+	- Refactored the encoding-based data conversion routines ;
+	- Added support for pointers to boxed types (from ObjC to Ruby) ;
+	- Updated test cases.
+
 	* sample/PathDemo/DemoView.rb,
 	  framework/src/objc/cls_objcid.m:
 	DemoView has now printing capabilities. Make sure #release does
