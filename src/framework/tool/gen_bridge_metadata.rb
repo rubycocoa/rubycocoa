@@ -68,7 +68,7 @@ class OCHeaderAnalyzer
   end
 
   def externs
-    re = /^#{@externname}\s+\b(.*);.*$/
+    re = /^\s*#{@externname}\s+\b(.*);.*$/
     @externs ||= @cpp_result.scan(re).map { |m| m[0].strip }
   end
 
