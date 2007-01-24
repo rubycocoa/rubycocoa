@@ -65,13 +65,13 @@ oc_err_new (NSException* nsexcp)
   char buf[BUFSIZ];
 
   if ([[nsexcp name] hasPrefix: @"RBException_"]) {
-      // This is a wrapped Ruby exception
-      id rberr = [[nsexcp userInfo] objectForKey: @"$!"];
-      if (rberr) {
-          VALUE err = ocid_get_rbobj(rberr);
-          if (err != Qnil)
-              return err;
-      }
+    // This is a wrapped Ruby exception
+    id rberr = [[nsexcp userInfo] objectForKey: @"$!"];
+    if (rberr) {
+      VALUE err = ocid_get_rbobj(rberr);
+      if (err != Qnil)
+        return err;
+    }
   }
   
   pool = [[NSAutoreleasePool alloc] init];

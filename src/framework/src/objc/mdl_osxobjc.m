@@ -165,45 +165,34 @@ thread_switcher_start()
 /******************/
 
 static VALUE
-wrapper_rb_osx_const (VALUE name)
-{
-  VALUE mOSX;
-  
-  mOSX = osx_s_module();
-  if (NIL_P(mOSX)) 
-    return Qnil;
-  
-  return rb_const_get(mOSX, rb_intern(StringValueCStr(name)));
-}
-
-static VALUE
-rb_osx_const (const char* name)
+rb_osx_class_const (const char* name)
 {
   VALUE mOSX;
   VALUE constant;
+  ID name_id;
  
+  if (strlen(name) == 0)
+    return Qnil;
+
   mOSX = osx_s_module();
   if (NIL_P(mOSX)) 
     return Qnil;
 
-  constant = Qnil;
+  name_id = rb_intern(name);
+  if (!rb_is_const_id(name_id))
+    return Qnil;
 
-  if (current_function != NULL && strcmp(current_function->name, "NSClassFromString") == 0) {
-    // We are called within NSClassFromString, just return the constant if it exists.
-    // We don't want to trigger an import as it would cause an infinite loop.
-    if (rb_const_defined(mOSX, rb_intern(name))) 
-      constant = rb_const_get(mOSX, rb_intern(name));
+  // Get the class constant, triggering an import if necessary.
+  // Don't import the class if we are called within NSClassFromString, just return the constant 
+  // if it exists (otherwise it would cause an infinite loop).
+  if (rb_const_defined(mOSX, name_id)) {
+    constant = rb_const_get(mOSX, name_id);
+  }
+  else if (current_function == NULL || strcmp(current_function->name, "NSClassFromString") != 0) {
+    constant = rb_funcall(mOSX, rb_intern("ns_import"), 1, rb_str_new2(name));
   }
   else {
-    VALUE old_ruby_debug;
-    // Explicitely call const_get, this will make sure the constant is generated if it does not
-    // exist (triggering const_missing -> OSX::ns_import...).
-    // Disable warnings just between the const_get instruction, as it would raise too many false
-    // positives.
-    old_ruby_debug = ruby_debug;
-    ruby_debug = Qfalse;
-    constant = rb_rescue2(&wrapper_rb_osx_const, rb_str_new2(name), NULL, Qnil, rb_eNameError, NULL);  
-    ruby_debug = old_ruby_debug;
+    constant = Qnil;
   }
 
   return constant;
@@ -212,7 +201,7 @@ rb_osx_const (const char* name)
 static VALUE
 rb_cls_ocobj (const char* name)
 {
-  VALUE cls = rb_osx_const(name);
+  VALUE cls = rb_osx_class_const(name);
   if (cls == Qnil) 
     cls = _cOCObject;
   return cls;

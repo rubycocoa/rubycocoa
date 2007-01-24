@@ -14,7 +14,7 @@ module OSX
       @nsexception = ocexcp
       @name = @nsexception.ocm_send(:name).to_s
       @reason = @nsexception.ocm_send(:reason).to_s
-      @user_info = @nsexception.ocm_send(:userInfo)
+      @userInfo = @nsexception.ocm_send(:userInfo)
       msg = "#{@name} - #{@reason}" if msg.nil?
       super(msg)
     end
