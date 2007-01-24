@@ -27,8 +27,8 @@ class DemoView < MyView
 
   def drawRect(rect)
     r = rect.to_cgrect
-    context = NSGraphicsContext.currentContext.graphicsPort
-    
+	context = NSGraphicsContext.currentContext.graphicsPort
+	
     CGContextSetGrayFillColor(context, 1.0, 1.0)
     CGContextFillRect(context, r)
 
@@ -40,22 +40,31 @@ class DemoView < MyView
     else
       NSLog("Invalid demo number #{@demoNumber}")
     end
+	
+	unless NSGraphicsContext.currentContextDrawingToScreen
+	  # Cocoa's printing mechanism assumes that the current context object
+	  # has a retain count of 1 during the printing.
+	  # RubyCocoa retains the context object until the next Ruby garbage
+	  # collection, which is unfortunately not predictable.
+	  # So we need to manually release the object.
+	  context.release
+	end
   end
 
 =begin
+  # Not functional yet!
   def knowsPageRange(range)
-	puts "knowsPageRange #{range}"
-	true
+	p range
+    true
   end
 =end
 
   def rectForPage(page)
-	puts "rectForPage #{page}"
     bounds
   end
 
   private
-  
+
   # The various demo functions
 
   RAND_MAX = 2147483647.0
