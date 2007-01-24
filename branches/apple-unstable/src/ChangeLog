@@ -1,3 +1,12 @@
+2007-01-24  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* framework/src/ruby/osx/objc/oc_exception.rb,
+	  framework/src/objc/mdl_osxobjc.m,
+	  framework/src/objc/ocexception.m:
+	Improved automatic class constant retrieval, fixed a bug in the 
+	OCException class (making sure #userInfo is binded to the right
+	instance variable).
+
 2007-01-23  Laurent Sansonetti <lsansonetti@apple.com>
 
 	* misc/libffi/Makefile.rubycocoa,
