@@ -1,5 +1,8 @@
 2007-01-24  Laurent Sansonetti <lsansonetti@apple.com>
 
+	* framework/tool/gen_bridge_metadata.rb:
+	Discover more constants.
+
 	* framework/src/ruby/osx/objc/oc_exception.rb,
 	  framework/src/objc/mdl_osxobjc.m,
 	  framework/src/objc/ocexception.m:
