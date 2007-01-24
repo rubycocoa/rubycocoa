@@ -1,5 +1,8 @@
 2007-01-24  Laurent Sansonetti <lsansonetti@apple.com>
 
+	* sample/PathDemo:
+	Full (pure Ruby) printing capabilities.
+
 	* framework/src/objc/libffi.h,
 	  framework/src/objc/RBObject.m,
 	  framework/src/objc/libffi.m,
