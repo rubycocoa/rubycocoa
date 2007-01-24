@@ -14,7 +14,7 @@ class NSRect
   end
 end
 
-class DemoView < MyView
+class DemoView < NSView
 
   attr_accessor :demoNumber
 
@@ -51,13 +51,12 @@ class DemoView < MyView
 	end
   end
 
-=begin
-  # Not functional yet!
   def knowsPageRange(range)
-	p range
+	# The range is passed by reference.
+	range.location = 1
+	range.length = 1
     true
   end
-=end
 
   def rectForPage(page)
     bounds
