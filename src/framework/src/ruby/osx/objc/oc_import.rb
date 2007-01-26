@@ -270,7 +270,7 @@ module OSX
     def ib_action(name, &blk)
       if block_given? then
         define_method(name, blk)
-        sel = name.to_s.sub(/[^:]$/, ':')
+        sel = name.to_s.sub(/([^:])$/, '\1:')
         OSX.objc_class_method_add(self, sel, false, "v@:@")
       end
     end
