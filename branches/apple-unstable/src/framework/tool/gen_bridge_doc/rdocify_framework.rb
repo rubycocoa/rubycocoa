@@ -50,6 +50,18 @@ def get_reference_files(framework_path)
       end
     end
   end
+  Dir.entries(misc_dir).each do |f|
+    if f.include? 'DataTypes'
+      # Get the data types reference file
+      ref_dir_path = File.join(misc_dir, f, 'Reference/')
+      Dir.entries(ref_dir_path).each do |rf|
+        if File.extname(rf) == '.html'
+          ref_path = File.join(ref_dir_path, rf)
+          reference_files.push({:name => "#{File.basename(framework_path)}DataTypes", :path => ref_path})
+        end
+      end
+    end
+  end
   
   return reference_files
 end
