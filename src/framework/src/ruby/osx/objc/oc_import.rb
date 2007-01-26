@@ -258,26 +258,28 @@ module OSX
     def ns_overrides(*args)
       warn "ns_overrides is no longer necessary, should not be called anymore and will be removed in a next release. Please update your code to not use it."
     end
+    alias_method :ns_override,  :ns_overrides
+    alias_method :ib_override,  :ns_overrides
+    alias_method :ib_overrides, :ns_overrides
 
     # declare write-only attribute accessors which are named IBOutlet
     # in the Objective-C world.
-    def ns_outlets(*args)
+    def ib_outlets(*args)
       attr_writer(*args)
     end
+    alias_method :ib_outlet, :ib_outlets
+
+    def ns_outlets(*args)
+      warn "ns_outlet(s) will be deprecated. Please use ib_outlet(s) instead."
+      ib_outlets(*args)
+    end
+    alias_method :ns_outlet,  :ns_outlets
 
     # declare a IBAction method. if given a block, it mean the
     # implementation of the action.
     def ib_action(name, &blk)
       define_method(name, blk) if block_given?
     end
-
-    # for look and feel
-    alias_method :ns_override,  :ns_overrides
-    alias_method :ib_override,  :ns_overrides
-    alias_method :ib_overrides, :ns_overrides
-    alias_method :ns_outlet,  :ns_outlets
-    alias_method :ib_outlet,  :ns_outlets
-    alias_method :ib_outlets, :ns_outlets
 
     def _ns_behavior_method_added(sym, class_method)
       sel = sym.to_s.gsub(/([^_])_/, '\1:')
