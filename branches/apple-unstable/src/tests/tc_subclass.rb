@@ -102,6 +102,52 @@ class TC_SubClass < Test::Unit::TestCase
     assert_equal( 12345.to_s, obj.instance_eval{ @dummy_outlet } )
   end
 
+  def test_action
+    kls = Class.new(OSX::NSObject)
+    kls.class_eval do
+      attr_reader :foo, :bar, :baz
+      def initialize
+        @prefix = 'hello,'
+      end
+      def setFoo(sender)
+        @foo = @prefix + sender.to_s
+      end
+    end
+    assert_nothing_thrown {
+      kls.class_eval do 
+        ib_action :setFoo
+      end
+    }
+    assert_nothing_thrown {
+      kls.class_eval do
+        ib_action(:setBar) { |sender|
+          @bar = @prefix + sender.to_s
+        }
+      end
+    }
+    assert_nothing_thrown {
+      kls.class_eval do
+        ib_action :setBaz do |sender|
+          @baz = @prefix + sender.to_s
+        end
+      end
+    }
+    assert_nothing_thrown {
+      kls.class_eval do
+        ib_action(:hoge) { @foo = @bar = @baz = 'hoge' }
+      end
+    }
+    obj = kls.alloc.init
+    assert_nothing_thrown { obj.objc_send(:setFoo, "world") }
+    assert_equal( "hello,world", obj.foo )
+    assert_nothing_thrown { obj.objc_send(:setBar, "world") }
+    assert_equal( "hello,world", obj.bar )
+    assert_nothing_thrown { obj.objc_send(:setBaz, "world") }
+    assert_equal( "hello,world", obj.baz )
+    assert_nothing_thrown { obj.objc_send(:hoge) }
+    assert_equal( 'hoge', obj.foo )
+  end
+
   def test_addmethod
     obj = SubClassA.alloc.init
     assert_raise( OSX::OCMessageSendException ) { obj.unknownMethod('dummy') }
