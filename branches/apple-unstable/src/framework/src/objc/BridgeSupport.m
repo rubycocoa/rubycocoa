@@ -317,6 +317,29 @@ rb_bs_boxed_get_encoding (VALUE rcv)
   return rb_ivar_get(rcv, ivarEncodingID);  
 }
 
+static VALUE
+rb_bs_boxed_get_fields (VALUE rcv)
+{
+  struct bsBoxed *boxed;
+  VALUE ary;
+  unsigned i;
+
+  boxed = find_bs_boxed_for_klass(rcv);
+  ary = rb_ary_new();
+
+  if (boxed->type != bsBoxedStructType)
+    return ary;
+
+  for (i = 0; i < boxed->opt.s.field_count; i++) {
+    struct bsStructField *  field;
+
+    field = &boxed->opt.s.fields[i];
+    rb_ary_push(ary, ID2SYM(rb_intern(field->name))); 
+  }
+
+  return ary;
+}
+
 struct bsBoxed *
 find_bs_boxed_for_klass (VALUE klass)
 {
@@ -1568,6 +1591,7 @@ initialize_bridge_support (VALUE mOSX)
   cOSXBoxed = rb_define_class_under(mOSX, "Boxed", rb_cObject);
   ivarEncodingID = rb_intern("@__encoding__");
   rb_define_singleton_method(cOSXBoxed, "encoding", rb_bs_boxed_get_encoding, 0);
+  rb_define_singleton_method(cOSXBoxed, "fields", rb_bs_boxed_get_fields, 0);
 
   bsBoxed = st_init_strtable();
   bsCFTypes = st_init_strtable();

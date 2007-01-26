@@ -1,3 +1,10 @@
+2007-01-26  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* framework/src/objc/BridgeSupport.m,
+	  tests/tc_types.rb:
+	Added OSX::Boxed.fields, a convenience method to get the list of fields in a 
+	given boxed class (only works on structures).
+
 2007-01-26  Eloy Duran <eloy.de.enige@gmail.com>
 
 	* framework/tool/gen_bridge_doc/lib/cocoa_ref.rb,

@@ -180,4 +180,15 @@ class TC_Types < Test::Unit::TestCase
     two_hundred = four_pow_four.decimalNumberBySubtracting(fifty_six)
     assert_equal(200, two_hundred.doubleValue)
   end
+
+  def test_boxed_fields
+    ary = OSX::NSRect.fields
+    assert_kind_of(Array, ary)
+    assert_equal(2, ary.size)
+    assert(ary.include?(:origin))
+    assert(ary.include?(:size))
+    ary = OSX::NSZone.fields
+    assert_kind_of(Array, ary)
+    assert_equal(0, ary.size) 
+  end
 end
