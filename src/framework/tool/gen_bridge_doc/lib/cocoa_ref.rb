@@ -135,7 +135,6 @@ module CocoaRef
       arr = []
       while @elements[index].name == 'p'
         arr.push @elements[index].inner_html
-        #str += @elements[index].inner_html
         index = index.next
       end
       arr.delete_if {|paragraph| paragraph.strip.empty? }
@@ -293,6 +292,40 @@ module CocoaRef
       return notification_def
     end
     
+    def get_methodlike_function_def(index)
+      function_def = CocoaRef::FunctionDef.new
+      function_def.name         = self.get_name_for_method(index)
+      function_def.description,  new_index = self.get_description_for_method(index)
+      function_def.definition,   new_index = self.get_definition_for_function(new_index)
+      function_def.parameters,   new_index = self.get_parameters_for_method(new_index)
+      function_def.return_value, new_index = self.get_return_value_for_method(new_index)
+      function_def.discussion,   new_index = self.get_discussion_for_function(new_index)
+      function_def.availability, new_index = self.get_availability_for_method(new_index)
+      function_def.see_also,     new_index = self.get_see_also_for_method(new_index)
+      return function_def
+    end
+    
+    def get_definition_for_function(index)
+      elm_index = find_next_tag('pre', '', index)
+      unless elm_index.nil?
+        elm = @elements[elm_index]
+        return [elm.inner_html, elm_index + 1]
+      else
+        return ['', index]
+      end
+    end
+    
+    def get_discussion_for_function(index)
+      elm_index = find_next_tag('h5', 'tight', index)
+      unless elm_index.nil?
+        elm = @elements[elm_index]
+        if elm.inner_html == 'Discussion'
+          return self.get_the_text(index + 1)
+        end
+      end
+      return ['', index]
+    end
+      
     def find_next_tag(tag, css_class, start_from = 0)
       found = false
       index = start_from
@@ -322,10 +355,10 @@ module CocoaRef
   end
   
   class ClassDef
-    attr_accessor :description, :name, :type, :method_defs, :constant_defs, :notification_defs
+    attr_accessor :description, :name, :type, :method_defs, :constant_defs, :notification_defs, :function_defs, :framework
     
     def initialize
-      @description, @name, @type, @method_defs, @constant_defs, @notification_defs = [], '', '', [], [], []
+      @description, @name, @type, @method_defs, @constant_defs, @notification_defs, @function_defs, @framework = [], '', '', [], [], [], [], ''
     end
     
     def errors?
@@ -349,7 +382,17 @@ module CocoaRef
         end
       end
       
-      return (errors_in_methods or errors_in_contstants)
+      errors_in_functions = false
+      @function_defs.each do |f|
+        # First call the to_rdoc method, because it might contain errors
+        f.to_rdoc
+        if f.log.errors?
+          errors_in_functions = true
+          break
+        end
+      end
+      
+      return (errors_in_methods or errors_in_contstants or errors_in_functions)
     end
     
     def output_filename
@@ -357,6 +400,8 @@ module CocoaRef
         return "#{@name}.rb"
       elsif @type == :additions
         return "#{@name}Additions.rb"
+      elsif @type == :functions
+        return "#{@name}Functions.rb"
       end
     end
     
@@ -367,11 +412,20 @@ module CocoaRef
     def to_s
       @method_defs.each {|m| m.to_s }
     end
+    
+    def module_name
+      "OSX::#{@framework}::"
+    end
+    
     def to_rdoc
       str = ''
       
       if @type == :additions
         str += "# This module is automatically mixed-in in the #{@name} class.\n"
+        str += "#\n"
+      end
+      if @type == :functions
+        str += "# This module is automatically mixed-in in the OSX module.\n"
         str += "#\n"
       end
       
@@ -382,16 +436,19 @@ module CocoaRef
       
       if @type == :class
         if @name == 'NSObject'
-          str += "class OSX::#{@name}\n"
+          str += "class #{module_name}#{@name}\n"
         else
-          str += "class OSX::#{@name} < #{OSX.const_get(@name).superclass}\n"
+          str += "class #{module_name}#{@name} < #{OSX.const_get(@name).superclass}\n"
         end
       elsif @type == :additions
-        str += "module OSX::#{@name}Additions\n"
+        str += "module #{module_name}#{@name}Additions\n"
+      elsif @type == :functions
+        str += "module #{module_name}#{@name}Functions\n"
       end
       
       @constant_defs.each {|c| str += c.to_rdoc }
       @method_defs.each {|m| str += m.to_rdoc(@name) }
+      @function_defs.each {|f| str += f.to_rdoc }
       
       unless @notification_defs.empty?
         str += "  # ------------------------\n"
@@ -482,15 +539,15 @@ module CocoaRef
       method_def_parts.each do |m|          
         str = "#{m[:name] unless m[:name].nil?}, #{string_spacer(longest_name.length - m[:name].length) unless m[:name] == longest_name}#{m[:arg] unless m[:arg].nil?}"
         if index.zero?
-          objc_method_style.push "#{class_name + '.alloc.' if @type == :class_method}objc_method(:#{str}#{(index == method_def_parts.length - 1) ? ')' : ','}"
+          objc_method_style.push "#{class_name + '.alloc.' if @type == :class_method}objc_send(:#{str}#{(index == method_def_parts.length - 1) ? ')' : ','}"
         elsif index == method_def_parts.length - 1
           spacer = ''
-          (class_name.length + 7).times{ spacer += ' '} if @type == :class_method
-          objc_method_style.push "#{spacer}            :#{str})"
+          (class_name.length + 5).times{ spacer += ' '} if @type == :class_method
+          objc_method_style.push "#{spacer}          :#{str})"
         else
           spacer = ''
-          (class_name.length + 7).times{ spacer += ' '} if @type == :class_method
-          objc_method_style.push "#{spacer}            :#{str},"
+          (class_name.length + 5).times{ spacer += ' '} if @type == :class_method
+          objc_method_style.push "#{spacer}          :#{str},"
         end
         index = index.next
       end
@@ -644,16 +701,118 @@ module CocoaRef
     end
   end
   
+  class FunctionDef < MethodDef
+    def to_rdoc
+      str  = ''
+      str += "  # Description::  #{@description.rdocify}\n"  unless @description.empty?
+      unless @discussion.empty?
+        index = 0
+        @discussion.each do |paragraph|
+          if index.zero?
+            str += "  # Discussion::   #{paragraph.rdocify}\n"
+          else
+            str += "  #                #{paragraph.rdocify}\n"
+          end
+          str += "  #\n"
+          index = index.next
+        end
+      end
+      str += "  # Availability:: #{@availability.rdocify}\n" unless @availability.empty?
+      unless @see_also.empty?
+        str += "  # See also::     "
+        @see_also.each do |s|
+          str += "<tt>#{s.to_rb_def}</tt> " unless s.empty?
+        end
+        str += "\n"
+      end
+      str += "  def #{self.to_rb_def}\n"
+      str += "    # #{self.definition.gsub(/\n/, ' ').strip_tags.clean_special_chars}\n"
+      str += "    #\n"
+    
+      str += "  end\n\n"
+    
+      return str
+    end
+    
+    def to_rb_def
+      #puts @definition.clean_objc
+    
+      function_def_parts = self.parse
+      str = "#{@name}(#{function_def_parts.collect {|f| f[:arg] }.join(', ')})"
+    
+      if str =~ /^[_(]+/
+        error_str  = "[WARNING] A empty string was returned as the method definition for:\n"
+        error_str += "          #{@name}\n"
+        @log.add(error_str)
+        return 'an_error_occurred_while_parsing_method_def!'
+      else
+        return str
+      end
+    end
+    
+    def regexp_start
+      self.override_result('(\()(.+)(\))', :new_regexp_start)
+    end
+    def regexp_repeater
+      self.override_result('([\w\*]+)(\s)([\*\w]+)', :new_regexp_repeater)
+    end
+    
+    def regexp_result_arg(res)
+      self.override_result(res.last.gsub(/\*/, ''), :new_regexp_result_arg, [res])
+    end
+    def regexp_result_type(res)
+      self.override_result(res.first.gsub(/\*/, ''), :new_regexp_result_type, [res])
+    end
+    
+    def parse
+      args_part = self.definition.clean_objc.scan(Regexp.new(self.regexp_start)).flatten[1]  
+      return [] if args_part.nil?
+      
+      args = args_part.split(', ')
+      function_def_parts = []
+      if args.length == 1 and args.first == 'void'
+        return function_def_parts
+      else
+        args.each do |a|
+          if a.split("\s").length > 1
+            parsed_arg = a.scan(Regexp.new(self.regexp_repeater)).flatten
+            #p parsed_arg
+          
+            unless parsed_arg.empty?
+              function_def_part = {}
+              function_def_part[:arg]  = regexp_result_arg(parsed_arg)
+              function_def_part[:type] = regexp_result_type(parsed_arg)
+              function_def_parts.push function_def_part
+            else
+              puts "[WARNING] A empty string was returned as a argument to function:\n" if $COCOA_REF_DEBUG
+              puts "          #{@name}\n" if $COCOA_REF_DEBUG
+            end
+          else
+            function_def_part = {}
+            function_def_part[:arg]  = a
+            function_def_part[:type] = 'id'
+            function_def_parts.push function_def_part
+          end
+        end
+      
+        #p function_def_parts
+        return function_def_parts
+      end
+    end
+  end
+  
   class Parser
     attr_reader :class_def
     
     def initialize(file, framework = '')
       @log = CocoaRef::Log.new
+      @framework = framework.gsub(/Framework/, '')
       @hpricot = CocoaRef::HpricotProxy.new(file)
       @class_def = parse_reference(file)
+      @class_def.framework = @framework
       
       unless framework == 'ApplicationKit' or framework == 'Foundation' or framework.empty?
-        OSX.require_framework framework.gsub(/Framework/, '')
+        OSX.require_framework @framework
       end
       
       # Check if there is a overrides file in the override_dir for the given class
@@ -663,6 +822,9 @@ module CocoaRef
         require include_file
         @class_def.method_defs.each do |m|
           m.instance_eval "self.send :extend, #{@class_def.name}Overrides"
+        end
+        @class_def.function_defs.each do |f|
+          f.instance_eval "self.send :extend, #{@class_def.name}FunctionsOverrides"
         end
       end
     end
@@ -685,7 +847,11 @@ module CocoaRef
         elsif element.fits_the_description?('h1', 'Deprecation Reference')
           class_def.type = :class
           class_def.name = element.inner_html.strip_tags.split(' ').first
+        elsif element.fits_the_description?('h1', 'Functions Reference')
+          class_def.type = :functions
+          class_def.name = @framework
         end
+        
         if element.fits_the_description?('h2', 'Class Description')
           class_def.description = @hpricot.get_the_text(index + 1).first
         end
@@ -703,7 +869,14 @@ module CocoaRef
         if busy_with == 'Instance Methods' and @hpricot.start_of_method_def?(index)
           class_def.method_defs.push @hpricot.get_method_def(index, :instance_method)
         end
-
+        
+        if class_def.type == :functions and element.fits_the_description?('h2', 'Functions')
+          busy_with = 'Functions'
+        end
+        if busy_with == 'Functions' and @hpricot.start_of_method_def?(index)
+          class_def.function_defs.push @hpricot.get_methodlike_function_def(index)
+        end
+        
         if element.fits_the_description?('h2', 'Notifications')
           busy_with = 'Notifications'
         end

@@ -20,8 +20,10 @@ def rdoc( str )
 end
 
 def get_reference_files(framework_path)
-  classes_dir = File.join(framework_path, 'Classes/')
   reference_files = []
+  
+  # Get the Class reference files
+  classes_dir = File.join(framework_path, 'Classes/')
   Dir.entries(classes_dir).each do |f|
     class_path = File.join(classes_dir, f)
     if File.directory?(class_path) and not f == '.' and not f == '..'
@@ -34,6 +36,21 @@ def get_reference_files(framework_path)
       end
     end
   end
+  
+  misc_dir = File.join(framework_path, 'Miscellaneous/')
+  Dir.entries(misc_dir).each do |f|
+    if f.include? 'Functions'
+      # Get the functions reference file
+      ref_dir_path = File.join(misc_dir, f, 'Reference/')
+      Dir.entries(ref_dir_path).each do |rf|
+        if File.extname(rf) == '.html'
+          ref_path = File.join(ref_dir_path, rf)
+          reference_files.push({:name => "#{File.basename(framework_path)}Functions", :path => ref_path})
+        end
+      end
+    end
+  end
+  
   return reference_files
 end
 
