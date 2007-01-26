@@ -2,6 +2,16 @@
 
 	* framework/tool/gen_bridge_doc/lib/cocoa_ref.rb,
 	  framework/tool/gen_bridge_doc/lib/lib/method_def.rb,
+	  framework/tool/gen_bridge_doc/lib/lib/datatype_def.rb,
+	  framework/tool/gen_bridge_doc/lib/lib/hpricot_proxy.rb,
+	  framework/tool/gen_bridge_doc/rdocify_framework.rb,
+	- Fixed some opaque methods in the wrapped structures that were showing up where they shouldn't ;
+	- Fixed some little bugs.
+
+2007-01-26  Eloy Duran <eloy.de.enige@gmail.com>
+
+	* framework/tool/gen_bridge_doc/lib/cocoa_ref.rb,
+	  framework/tool/gen_bridge_doc/lib/lib/method_def.rb,
 	  framework/tool/gen_bridge_doc/lib/lib/class_additions.rb,
 	  framework/tool/gen_bridge_doc/lib/lib/class_def.rb,
 	  framework/tool/gen_bridge_doc/lib/lib/function_def.rb,

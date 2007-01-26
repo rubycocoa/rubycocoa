@@ -272,6 +272,9 @@ module CocoaRef
       begin
         OSX.const_get(name).ancestors.include?(OSX::Boxed)
       rescue NameError
+        # Here we can output the name of the data structure that we skipped.
+        # Laurent wanted this to debug BridgeSupport.
+        #puts name
         return nil
       end
       
