@@ -68,7 +68,7 @@ unless ARGV[0].nil?
         command "mkdir -p #{output_dir}"
       end
     else
-      output_dir = File.join(File.expand_path(__FILE__), '../doc/')
+      output_dir = File.join(File.dirname(File.expand_path(__FILE__)), 'doc/')
     end
     
     SUPPORTED_FRAMEWORKS = ['/Developer/ADC Reference Library/documentation/Cocoa/Reference/ApplicationKit/',
