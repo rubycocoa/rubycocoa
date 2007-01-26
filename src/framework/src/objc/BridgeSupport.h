@@ -88,6 +88,7 @@ struct bsStructField {
 struct bsStruct {
   struct bsStructField *fields;
   int field_count;
+  BOOL opaque;
 };
 
 struct bsOpaque {

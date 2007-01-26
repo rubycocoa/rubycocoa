@@ -191,4 +191,11 @@ class TC_Types < Test::Unit::TestCase
     assert_kind_of(Array, ary)
     assert_equal(0, ary.size) 
   end
+
+  def test_boxed_opaque
+    assert(!OSX::NSRect.opaque?)
+    assert(!OSX::NSSize.opaque?)
+    assert(OSX::NSZone.opaque?)
+    assert(OSX::NSDecimal.opaque?)
+  end
 end

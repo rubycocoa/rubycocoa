@@ -340,6 +340,18 @@ rb_bs_boxed_get_fields (VALUE rcv)
   return ary;
 }
 
+static VALUE
+rb_bs_boxed_is_opaque (VALUE rcv)
+{
+  struct bsBoxed *boxed;
+  BOOL opaque;
+
+  boxed = find_bs_boxed_for_klass(rcv);
+  opaque = boxed->type == bsBoxedStructType ? boxed->opt.s.opaque : YES;
+
+  return opaque ? Qtrue : Qfalse;
+}
+
 struct bsBoxed *
 find_bs_boxed_for_klass (VALUE klass)
 {
@@ -780,6 +792,7 @@ init_bs_boxed_struct (VALUE mOSX, const char *name, const char *decorated_encodi
   ASSERT_ALLOC(bs_boxed->opt.s.fields);
   memcpy(bs_boxed->opt.s.fields, fields, sizeof(struct bsStructField) * field_count); 
   bs_boxed->opt.s.field_count = field_count;
+  bs_boxed->opt.s.opaque = is_opaque;
 
   return bs_boxed;
 }
@@ -1592,6 +1605,7 @@ initialize_bridge_support (VALUE mOSX)
   ivarEncodingID = rb_intern("@__encoding__");
   rb_define_singleton_method(cOSXBoxed, "encoding", rb_bs_boxed_get_encoding, 0);
   rb_define_singleton_method(cOSXBoxed, "fields", rb_bs_boxed_get_fields, 0);
+  rb_define_singleton_method(cOSXBoxed, "opaque?", rb_bs_boxed_is_opaque, 0);
 
   bsBoxed = st_init_strtable();
   bsCFTypes = st_init_strtable();
