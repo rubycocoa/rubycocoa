@@ -1,3 +1,10 @@
+2007-01-26  Fujimoto Hisa  <hisa@fobj.com>
+
+	* framework/src/ruby/osx/objc/oc_import.rb, tests/tc_subclass.rb:
+	added ib_action as a declaration for a IBAction method. if given a
+	block, it mean the implementation of the action. 
+	thanks to Chris McGrath!
+
 2007-01-24  Laurent Sansonetti <lsansonetti@apple.com>
 
 	* sample/PathDemo:

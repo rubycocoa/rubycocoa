@@ -265,6 +265,16 @@ module OSX
       attr_writer(*args)
     end
 
+    # declare a IBAction method. if given a block, it mean the
+    # implementation of the action.
+    def ib_action(name, &blk)
+      if block_given? then
+        define_method(name, blk)
+        sel = name.to_s.sub(/[^:]$/, ':')
+        OSX.objc_class_method_add(self, sel, false, "v@:@")
+      end
+    end
+
     # for look and feel
     alias_method :ns_override,  :ns_overrides
     alias_method :ib_override,  :ns_overrides
