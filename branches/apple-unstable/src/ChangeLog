@@ -19,6 +19,9 @@
 
 2007-01-26  Fujimoto Hisa  <hisa@fobj.com>
 
+	* framework/src/ruby/osx/objc/oc_import.rb:
+	deperecated ns_outlet(s). use ib_outlet(s) instead.
+
 	* framework/src/ruby/osx/objc/oc_import.rb, tests/tc_subclass.rb:
 	added ib_action as a declaration for a IBAction method. if given a
 	block, it mean the implementation of the action. 
