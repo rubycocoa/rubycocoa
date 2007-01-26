@@ -34,18 +34,23 @@ class CocoaRef::MethodDef
       end
       str += "\n"
     end
-    str += "  def #{'self.' if @type == :class_method}#{self.to_rb_def}\n"
+    
+    ruby_style_def = self.to_rb_def
+    
+    str += "  def #{'self.' if @type == :class_method}#{ruby_style_def}\n"
     str += "    # #{self.definition.gsub(/\n/, ' ').strip_tags.clean_special_chars}\n"
     str += "    #\n"
-  
-    objc_method_style = self.to_objc_method(class_name)
-    unless objc_method_style.nil?
-      str += "    # This is an alternative way of calling this method:\n"
-      objc_method_style.each do |line|
-        str += "    #{line}\n"
+    
+    unless ruby_style_def == 'an_error_occurred_while_parsing_method_def!'
+      objc_method_style = self.to_objc_method(class_name)
+      unless objc_method_style.nil?
+        str += "    # This is an alternative way of calling this method:\n"
+        objc_method_style.each do |line|
+          str += "    #{line}\n"
+        end
       end
     end
-  
+    
     str += "  end\n\n"
   
     return str
@@ -61,7 +66,7 @@ class CocoaRef::MethodDef
     method_def_parts = self.parse
     return nil if method_def_parts.nil?
     return nil if method_def_parts.length == 1 and method_def_parts.first.empty?
-    
+
     longest_name = ''
     method_def_parts.each do |m|
       longest_name = m[:name] if m[:name].length > longest_name.length

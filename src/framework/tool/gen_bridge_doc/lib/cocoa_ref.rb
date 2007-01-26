@@ -53,7 +53,7 @@ module CocoaRef
       @class_def.framework = @framework
       
       # Check if there is a overrides file in the override_dir for the given class
-      include_file = File.join(File.dirname(File.expand_path(__FILE__)), framework, @class_def.output_filename)      
+      include_file = File.join(File.dirname(File.expand_path(__FILE__)), @framework, @class_def.output_filename)      
       if File.exist?(include_file)
         # If it exists, require it and extend the methods to use the overrides
         require include_file

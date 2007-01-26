@@ -36,14 +36,16 @@ class CocoaRef::DataTypeDef < CocoaRef::MethodDef
     
     str += "  class #{@name}\n"
     str += "    attr_accessor :#{fields.join(', :')}\n" unless fields.empty?
-    str += "    def initialize(#{fields.join(', ')})\n"
-    str += "    end\n\n"
-    str += "    # :call-seq:\n"
-    str += "    #   to_a => [#{fields.join(', ')}]\n"
-    str += "    #\n"
-    str += "    # Returns the values of the fields as an Array.\n"
-    str += "    def to_a\n"
-    str += "    end\n\n"
+    unless OSX.const_get(@name).opaque?
+      str += "    def initialize(#{fields.join(', ')})\n"
+      str += "    end\n\n"
+      str += "    # :call-seq:\n"
+      str += "    #   to_a => [#{fields.join(', ')}]\n"
+      str += "    #\n"
+      str += "    # Returns the values of the fields as an Array.\n"
+      str += "    def to_a\n"
+      str += "    end\n\n"
+    end
     str += "    # :call-seq:\n"
     str += "    #   == => true or false\n"
     str += "    #\n"

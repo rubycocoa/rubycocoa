@@ -38,26 +38,28 @@ def get_reference_files(framework_path)
   end
   
   misc_dir = File.join(framework_path, 'Miscellaneous/')
-  Dir.entries(misc_dir).each do |f|
-    if f.include? 'Functions'
-      # Get the functions reference file
-      ref_dir_path = File.join(misc_dir, f, 'Reference/')
-      Dir.entries(ref_dir_path).each do |rf|
-        if File.extname(rf) == '.html'
-          ref_path = File.join(ref_dir_path, rf)
-          reference_files.push({:name => "#{File.basename(framework_path)}Functions", :path => ref_path})
+  if File.exist?(misc_dir)
+    Dir.entries(misc_dir).each do |f|
+      if f.include? 'Functions'
+        # Get the functions reference file
+        ref_dir_path = File.join(misc_dir, f, 'Reference/')
+        Dir.entries(ref_dir_path).each do |rf|
+          if File.extname(rf) == '.html'
+            ref_path = File.join(ref_dir_path, rf)
+            reference_files.push({:name => "#{File.basename(framework_path)}Functions", :path => ref_path})
+          end
         end
       end
     end
-  end
-  Dir.entries(misc_dir).each do |f|
-    if f.include? 'DataTypes'
-      # Get the data types reference file
-      ref_dir_path = File.join(misc_dir, f, 'Reference/')
-      Dir.entries(ref_dir_path).each do |rf|
-        if File.extname(rf) == '.html'
-          ref_path = File.join(ref_dir_path, rf)
-          reference_files.push({:name => "#{File.basename(framework_path)}DataTypes", :path => ref_path})
+    Dir.entries(misc_dir).each do |f|
+      if f.include? 'DataTypes'
+        # Get the data types reference file
+        ref_dir_path = File.join(misc_dir, f, 'Reference/')
+        Dir.entries(ref_dir_path).each do |rf|
+          if File.extname(rf) == '.html'
+            ref_path = File.join(ref_dir_path, rf)
+            reference_files.push({:name => "#{File.basename(framework_path)}DataTypes", :path => ref_path})
+          end
         end
       end
     end
