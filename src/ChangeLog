@@ -1,3 +1,19 @@
+2007-01-26  Eloy Duran <eloy.de.enige@gmail.com>
+
+	* framework/tool/gen_bridge_doc/lib/cocoa_ref.rb,
+	  framework/tool/gen_bridge_doc/lib/lib/method_def.rb,
+	  framework/tool/gen_bridge_doc/lib/lib/class_additions.rb,
+	  framework/tool/gen_bridge_doc/lib/lib/class_def.rb,
+	  framework/tool/gen_bridge_doc/lib/lib/function_def.rb,
+	  framework/tool/gen_bridge_doc/lib/lib/notification_def.rb,
+	  framework/tool/gen_bridge_doc/lib/lib/clean_up.rb,
+	  framework/tool/gen_bridge_doc/lib/lib/constant_def.rb,
+	  framework/tool/gen_bridge_doc/lib/lib/datatype_def.rb,
+	  framework/tool/gen_bridge_doc/lib/lib/hpricot_proxy.rb,
+	  framework/tool/gen_bridge_doc/rdocify_framework.rb,
+	- Added support for ruby wrapped structures ;
+	- Split up huge file into several maintainable files.
+
 2007-01-26  Laurent Sansonetti <lsansonetti@apple.com>
 
 	* framework/src/objc/BridgeSupport.m,
