@@ -268,11 +268,7 @@ module OSX
     # declare a IBAction method. if given a block, it mean the
     # implementation of the action.
     def ib_action(name, &blk)
-      if block_given? then
-        define_method(name, blk)
-        sel = name.to_s.sub(/([^:])$/, '\1:')
-        OSX.objc_class_method_add(self, sel, false, "v@:@")
-      end
+      define_method(name, blk) if block_given?
     end
 
     # for look and feel
