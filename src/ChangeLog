@@ -1,6 +1,13 @@
 2007-01-30  Eloy Duran <eloy.de.enige@gmail.com>
 
 	* framework/tool/gen_bridge_doc/lib/cocoa_ref.rb,
+	  framework/tool/gen_bridge_doc/lib/lib/class_def.rb,
+	  framework/tool/gen_bridge_doc/rdocify_framework.rb:
+	- Added support for informal protocols.
+
+2007-01-30  Eloy Duran <eloy.de.enige@gmail.com>
+
+	* framework/tool/gen_bridge_doc/lib/cocoa_ref.rb,
 	  framework/tool/gen_bridge_doc/lib/Foundation/HTMLParserOverrides.rb,
 	  framework/tool/gen_bridge_doc/lib/lib/method_def.rb,
 	  framework/tool/gen_bridge_doc/lib/lib/class_additions.rb,

@@ -68,6 +68,8 @@ class CocoaRef::ClassDef
       return "#{@name}DataTypes.rb"
     elsif @type == :constants
       return "#{@name}Constants.rb"
+    elsif @type == :protocols
+      return "#{@name}Protocol.rb"
     end
   end
   
@@ -114,6 +116,8 @@ class CocoaRef::ClassDef
       str += "module #{module_name}DataTypes\n"
     elsif @type == :constants
       str += "module #{module_name}Constants\n"
+    elsif @type == :protocols
+      str += "class #{module_name}Protocols::#{@name}Protocol\n"
     end
     
     if @type == :constants

@@ -94,8 +94,17 @@ module CocoaRef
           class_def.type = :additions
           class_def.name = element.inner_html.strip_tags.split(' ').first
         elsif element.fits_the_description?('h1', 'Deprecation Reference')
-          class_def.type = :class
-          class_def.name = element.inner_html.strip_tags.split(' ').first
+          # FIXME: this is a check for NSObjCTypeSerializationCallBack.
+          # It's deprecated therefor it shows up here, but it's a protocol ref actually.
+          # Maybe we need to skip deprecated refs anyway...
+          name = element.inner_html.strip_tags.split(' ').first
+          if name == 'NSObjCTypeSerializationCallBack'
+            class_def.type = :protocols
+            class_def.name = name
+          else
+            class_def.type = :class
+            class_def.name = name
+          end
         elsif element.fits_the_description?('h1', 'Functions Reference')
           class_def.type = :functions
           class_def.name = @framework
@@ -105,6 +114,9 @@ module CocoaRef
         elsif element.fits_the_description?('h1', 'Constants Reference')
           class_def.type = :constants
           class_def.name = @framework
+        elsif element.fits_the_description?('h1', 'Protocol') # FIXME: Had to remove the ref part because of a bug with appkit/protocols/NSIgnoreMisspelledWords
+          class_def.type = :protocols
+          class_def.name = element.inner_html.strip_tags.split(' ').first
         end
 
         if element.fits_the_description?('h2', 'Class Description')
