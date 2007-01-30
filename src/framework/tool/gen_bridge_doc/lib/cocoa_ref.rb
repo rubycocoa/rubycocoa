@@ -10,6 +10,7 @@ end
 require 'osx/cocoa'
 
 lib_path = File.join(File.dirname(File.expand_path(__FILE__)), 'lib/')
+require "#{lib_path}/extras"
 require "#{lib_path}/class_additions"
 require "#{lib_path}/clean_up"
 require "#{lib_path}/hpricot_proxy"
@@ -48,15 +49,25 @@ module CocoaRef
       end
       
       @log = CocoaRef::Log.new
+      
+      # LOAD THE HPRICOT PROXY AND ANY OVERRIDES IF NEEDED
       @hpricot = CocoaRef::HpricotProxy.new(file)
+      html_parser_overrides_file = File.join(File.dirname(File.expand_path(__FILE__)), @framework, 'HTMLParserOverrides.rb')
+      if File.exist?(html_parser_overrides_file)
+        # If it exists, require it and extend the html parser to use the overrides
+        require html_parser_overrides_file
+        @hpricot.extend HTMLParserOverrides        
+      end
+      
+      # START PARSING
       @class_def = parse_reference(file)
       @class_def.framework = @framework
       
       # Check if there is a overrides file in the override_dir for the given class
-      include_file = File.join(File.dirname(File.expand_path(__FILE__)), @framework, @class_def.output_filename)      
-      if File.exist?(include_file)
+      class_overrides_file = File.join(File.dirname(File.expand_path(__FILE__)), @framework, @class_def.output_filename)      
+      if File.exist?(class_overrides_file)
         # If it exists, require it and extend the methods to use the overrides
-        require include_file
+        require class_overrides_file
         @class_def.method_defs.each do |m|
           m.instance_eval "self.send :extend, #{@class_def.name}Overrides"
         end
@@ -73,6 +84,7 @@ module CocoaRef
     def parse_reference(file)
       class_def = ClassDef.new
       busy_with = ''
+      constant_type = :normal
       index = 0
       @hpricot.elements.each do |element|
         if element.fits_the_description?('h1', 'Class Reference') or element.fits_the_description?('h1', 'Class Objective-C Reference')
@@ -90,8 +102,11 @@ module CocoaRef
         elsif element.fits_the_description?('h1', 'Data Types Reference')
           class_def.type = :data_types
           class_def.name = @framework
+        elsif element.fits_the_description?('h1', 'Constants Reference')
+          class_def.type = :constants
+          class_def.name = @framework
         end
-        
+
         if element.fits_the_description?('h2', 'Class Description')
           class_def.description = @hpricot.get_the_text(index + 1).first
         end
@@ -135,19 +150,42 @@ module CocoaRef
         if element.fits_the_description?('h2', 'Constants')
           busy_with = 'Constants'
         end
-        if busy_with == 'Constants' and @hpricot.start_of_method_def?(index)
+        if busy_with == 'Constants' and class_def.type != :constants and @hpricot.start_of_method_def?(index)
           constants = @hpricot.get_constant_defs(index)
           class_def.constant_defs.concat(constants) unless constants.nil?
         end
-
         # There are also constant descriptions which are more like method descriptions
-        if busy_with == 'Constants' and @hpricot.start_of_method_def?(index)
+        if busy_with == 'Constants' and class_def.type != :constants and @hpricot.start_of_method_def?(index)
           constant = @hpricot.get_methodlike_constant_def(index)
           if not constant.discussion.empty? and not constant.availability.empty?
             class_def.constant_defs.push constant
           end
         end
-
+        
+        # For the constants in the misc dir there are several types of constants,
+        # we probably want to use this as different sections.
+        if busy_with == 'Constants' and class_def.type == :constants
+          if element.fits_the_description?('h3', 'Enumerations')
+            constant_type = :enumeration
+          elsif element.fits_the_description?('h3', 'Global Variables')
+            constant_type = :global
+          elsif element.fits_the_description?('h3', 'Errors')
+            constant_type = :error
+          elsif element.fits_the_description?('h3', 'Notifications')
+            constant_type = :notification
+          elsif element.fits_the_description?('h3', 'Exceptions')
+            constant_type = :exception
+          end
+        end
+        # Then there are the constants defined in the misc dir, which are a bit different
+        if busy_with == 'Constants' and class_def.type == :constants and @hpricot.start_of_framework_constant_def?(index)
+          constants = @hpricot.get_constant_defs(index, constant_type)
+          class_def.constant_defs.concat(constants) unless constants.nil?
+        elsif busy_with == 'Constants' and class_def.type == :constants and @hpricot.start_of_method_def?(index)
+          constants = @hpricot.get_constant_defs(index)
+          class_def.constant_defs.concat(constants) unless constants.nil?
+        end
+        
         index = index.next
       end
       

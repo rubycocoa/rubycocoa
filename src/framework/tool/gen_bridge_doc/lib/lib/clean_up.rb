@@ -3,6 +3,18 @@
 
 class String
   
+  def to_rb_def
+    self.strip_tags.clean_up.gsub(/\(\w+\)/, '').strip.split(':').join('_')
+  end
+  
+  def clean_objc
+    self.clean_special_chars.strip_tags.unescape_chars.strip_tags
+  end
+  
+  def rdocify
+    self.convert_types.convert_tags.clean_up
+  end
+  
   # FIXME: At the moment this is only used by a method that cleans
   # a obj-c method description. It might be possible that we
   # can also just use the normal clean_up method, but I haven't
