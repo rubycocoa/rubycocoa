@@ -37,6 +37,23 @@ def get_reference_files(framework_path)
     end
   end
   
+  # Get the Protocol reference files
+  protocols_dir = File.join(framework_path, 'Protocols/')
+  if File.exist?(protocols_dir)
+    Dir.entries(protocols_dir).each do |f|
+      protocol_path = File.join(protocols_dir, f)
+      if File.directory?(protocol_path) and not f == '.' and not f == '..'
+        ref_dir_path = File.join(protocol_path, 'Reference/')
+        Dir.entries(ref_dir_path).each do |rf|
+          if File.extname(rf) == '.html'
+            ref_path = File.join(ref_dir_path, rf)
+            reference_files.push({:name => File.basename(protocol_path), :path => ref_path})
+          end
+        end
+      end
+    end
+  end
+  
   misc_dir = File.join(framework_path, 'Miscellaneous/')
   if File.exist?(misc_dir)
     Dir.entries(misc_dir).each do |f|
