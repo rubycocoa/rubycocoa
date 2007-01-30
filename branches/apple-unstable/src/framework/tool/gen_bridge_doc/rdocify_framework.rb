@@ -40,6 +40,18 @@ def get_reference_files(framework_path)
   misc_dir = File.join(framework_path, 'Miscellaneous/')
   if File.exist?(misc_dir)
     Dir.entries(misc_dir).each do |f|
+      if f.include? 'Constants'
+        # Get the constants reference file
+        ref_dir_path = File.join(misc_dir, f, 'Reference/')
+        Dir.entries(ref_dir_path).each do |rf|
+          if File.extname(rf) == '.html'
+            ref_path = File.join(ref_dir_path, rf)
+            reference_files.push({:name => "#{File.basename(framework_path)}Constants", :path => ref_path})
+          end
+        end
+      end
+    end
+    Dir.entries(misc_dir).each do |f|
       if f.include? 'Functions'
         # Get the functions reference file
         ref_dir_path = File.join(misc_dir, f, 'Reference/')

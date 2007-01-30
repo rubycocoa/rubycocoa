@@ -1,10 +1,14 @@
 module CocoaRef
   class HpricotProxy
-    attr_accessor :elements
+    include Extras
+    
+    attr_accessor :elements, :exclude_constant_names
     attr_reader :log
   
     def initialize(file)
       @log = CocoaRef::Log.new
+      @exclude_constant_names = ['NSString', 'NSSize']
+      
       doc = open(file) {|f| Hpricot f, :fixup_tags => true }
       @elements = (doc/"//body/*")
     end
@@ -12,7 +16,13 @@ module CocoaRef
     def start_of_method_def?(index)
       @elements[index].name == 'h3' and @elements[index].get_attribute('class') == 'tight' and @elements[index + 1].spacer?
     end
-      
+    
+    # This is a check for for the start of a constant def
+    # as they are used in e.g. Miscallaneous/AppKit_Constants
+    def start_of_framework_constant_def?(index)
+      @elements[index].name == 'h4' and @elements[index + 1].spacer?
+    end
+    
     def get_method_def(index, type)
       method_def = CocoaRef::MethodDef.new
       method_def.type         = type
@@ -122,15 +132,17 @@ module CocoaRef
       return constant_def
     end
   
-    def get_constant_defs(index)
-      constants, new_elm_index = self.get_names_and_values_for_constants(index)      
-      constants, new_elm_index = self.get_descriptions_and_availability_for_constants(new_elm_index, constants)
-    
+    def get_constant_defs(index, type = :normal)
+      constants, new_elm_index = self.get_names_and_values_for_constants(index)
+      constants_with_desc_and_avail, new_elm_index = self.get_descriptions_and_availability_for_constants(new_elm_index, constants)
+      constants = constants_with_desc_and_avail unless constants_with_desc_and_avail.nil?
+      
       unless constants.nil?
         constant_defs = []
         constants.each do |c|
           constant_def = CocoaRef::ConstantDef.new
           constant_def.name          = c[:name]
+          constant_def.type          = type unless type == :normal # Only add types from the misc dir constants
           constant_def.value         = c[:value]
           constant_def.description   = c[:description]
           constant_def.availability  = c[:availability]
@@ -141,29 +153,57 @@ module CocoaRef
         warning_str += "          It might be a bug, please cross check the original reference with the output.\n"
         puts warning_str if $COCOA_REF_DEBUG
       end
-    
+      
       return constant_defs
     end
-  
+    
     def get_names_and_values_for_constants(index)
       elm_index = find_next_tag('pre', '', index)
       children = @elements[elm_index].children
       names_and_values = []
       elm_index = elm_index.next
       children_index = 0
-      children.each do |elm|
-        # 16-01-2007: Added a extra comparison to exclude NSString links.
-        if elm.is_a?(Hpricot::Elem) and elm.name == 'a' and not elm.inner_html == 'NSString'
-          names_and_values.push({:name => elm.inner_html, :value => ''})
+      last_excluded_constant_name = ''
+      until children_index > (children.length - 1) do
+        elm = children[children_index]
         
-          # This is a check for constant names that are not the children of a <a> tag
+        if elm.is_a?(Hpricot::Elem) and elm.name == 'a' and @exclude_constant_names.include?(elm.inner_html)
+          last_excluded_constant_name = "OSX::#{elm.inner_html}"
+        end
+        
+        if elm.is_a?(Hpricot::Elem) and elm.name == 'a' and not @exclude_constant_names.include?(elm.inner_html)
+          names_and_values.push({:name => elm.inner_html, :value => last_excluded_constant_name})
+
+        # This is a check for constant names that are not the children of a <a> tag
         elsif elm.is_a?(Hpricot::Comment) and elm.to_s == '<!--a-->'
-          names_and_values.push({:name => children[children_index + 1].to_s, :value => ''})
+          names_and_values.push({:name => children[children_index + 1].to_s, :value => last_excluded_constant_name})
+          
+        elsif elm.is_a?(Hpricot::Text) and elm.to_s =~ /\w+;/ and not elm.to_s.include?('}')
+          parsed_name = elm.to_s.scan(/(\w+)(;)/).flatten.first
+          names_and_values.push({:name => parsed_name, :value => last_excluded_constant_name})
         
+        elsif elm.is_a?(Hpricot::Text) and elm.to_s.include?('define')
+          elms = elm.to_s.split("\n")
+          elms.delete("")
+          elms.each do |e|
+            parsed_name = e.to_s.scan(/(define\s+)(\w+)/).flatten.last
+            names_and_values.push({:name => parsed_name, :value => ''})
+          end
+          
         elsif elm.is_a?(Hpricot::Text) and elm.to_s.include?('=')
-          parsed_value = elm.to_s.gsub(/&lt;/, '<').scan(/([\s=]+)([\(\-\w\d\)<>\s]+)/).flatten
+          # First we check if we have arrived at a piece of text that only holds
+          # a equal sign, but not the value itself
+          if elm.to_s =~ /=\s+$/
+            # If so, then it's probably a <!--a--> comment tag,
+            # so move the index up 2 elements where the text should be.
+            children_index = children_index + 2
+            parsed_value = children[children_index].to_s
+          else
+            # Parse the text that should contain the equal sign and the value itself.
+            parsed_value = elm.to_s.gsub(/&lt;/, '<').scan(/([\s=]+)([\(\-_\w\d\)<>\s]+)/).flatten[1]
+          end
           unless names_and_values.last.nil? or names_and_values.last.empty?
-            names_and_values.last[:value] = parsed_value[1]
+            names_and_values.last[:value] = parsed_value
           else
             error_str  = "[WARNING] A value was found without a matching name in the constants section...\n"
             error_str += "          It might be a bug, please cross check the original reference with the output.\n"

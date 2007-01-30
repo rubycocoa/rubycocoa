@@ -66,6 +66,8 @@ class CocoaRef::ClassDef
       return "#{@name}Functions.rb"
     elsif @type == :data_types
       return "#{@name}DataTypes.rb"
+    elsif @type == :constants
+      return "#{@name}Constants.rb"
     end
   end
   
@@ -85,11 +87,11 @@ class CocoaRef::ClassDef
     str = ''
     
     if @type == :additions
-      str += "# This module is automatically mixed-in in the #{@name} class.\n"
+      str += "# By requiring the #{@framework} framework, this module is automatically mixed-in in the #{@name} class.\n"
       str += "#\n"
     end
-    if @type == :functions or @type == :data_types
-      str += "# This module is automatically mixed-in in the OSX module.\n"
+    if @type == :functions or @type == :data_types or @type == :constants
+      str += "# By requiring the #{@framework} framework, this module is automatically mixed-in in the OSX module.\n"
       str += "#\n"
     end
     
@@ -109,10 +111,49 @@ class CocoaRef::ClassDef
     elsif @type == :functions
       str += "module #{module_name}#{@name}Functions\n"
     elsif @type == :data_types
-      str += "module OSX::#{@framework}::DataTypes\n"
+      str += "module #{module_name}DataTypes\n"
+    elsif @type == :constants
+      str += "module #{module_name}Constants\n"
     end
     
-    @constant_defs.each {|c| str += c.to_rdoc }
+    if @type == :constants
+      # This only needs to be done if this is a framework constants ref from the misc dir
+      constant_type = :normal
+      @constant_defs.each do |c|
+        # First check if we arrived at another section, if so create a rdoc section
+        if constant_type != c.type
+          s = case c.type
+          when :enumeration
+            "Enumerations"
+          when :global
+            "Global Variables"
+          when :error
+            "Errors"
+          when :notification
+            "Notifications"
+          when :exception
+            "Exceptions"
+          end
+          
+          unless s.nil?
+            str += "  # ------------------------\n"
+            str += "  # :section: #{s}\n"
+            str += "  #\n"
+            str += "  # This section contains the #{s.downcase} included by the #{@name} framework\n"
+            str += "  #\n"
+            str += "  # ------------------------\n\n"
+          end
+          
+          constant_type = c.type
+        end
+        # Add the actual constant
+        str += c.to_rdoc
+      end
+    else
+      # if this was just a regular ref than just add the constants in the normal way
+      @constant_defs.each {|c| str += c.to_rdoc }
+    end
+    
     @method_defs.each {|m| str += m.to_rdoc(@name) }
     @function_defs.each {|f| str += f.to_rdoc }
     @datatype_defs.each {|d| str += d.to_rdoc }

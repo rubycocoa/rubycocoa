@@ -1,3 +1,20 @@
+2007-01-30  Eloy Duran <eloy.de.enige@gmail.com>
+
+	* framework/tool/gen_bridge_doc/lib/cocoa_ref.rb,
+	  framework/tool/gen_bridge_doc/lib/Foundation/HTMLParserOverrides.rb,
+	  framework/tool/gen_bridge_doc/lib/lib/method_def.rb,
+	  framework/tool/gen_bridge_doc/lib/lib/class_additions.rb,
+	  framework/tool/gen_bridge_doc/lib/lib/class_def.rb,
+	  framework/tool/gen_bridge_doc/lib/lib/clean_up.rb,
+	  framework/tool/gen_bridge_doc/lib/lib/extras.rb,
+	  framework/tool/gen_bridge_doc/lib/lib/constant_def.rb,
+	  framework/tool/gen_bridge_doc/lib/lib/hpricot_proxy.rb,
+	  framework/tool/gen_bridge_doc/rdocify_framework.rb:
+	- Improved constants parsing ;
+	- Added support for framework constants ;
+	- Added override for the foundation constants ;
+	- Added fix for local vars that are named class, they are now renamed to klass.
+
 2007-01-26  Eloy Duran <eloy.de.enige@gmail.com>
 
 	* framework/tool/gen_bridge_doc/lib/cocoa_ref.rb,
