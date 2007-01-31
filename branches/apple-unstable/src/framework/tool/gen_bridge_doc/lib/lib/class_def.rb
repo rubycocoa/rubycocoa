@@ -13,6 +13,10 @@ class CocoaRef::ClassDef
     @framework         = ''
   end
   
+  def empty?
+    @method_defs.empty? and @constant_defs.empty? and @notification_defs.empty? and @function_defs.empty? and @datatype_defs.empty?
+  end
+  
   def errors?
     errors_in_methods = false
     @method_defs.each do |m|
@@ -96,6 +100,10 @@ class CocoaRef::ClassDef
       str += "# By requiring the #{@framework} framework, this module is automatically mixed-in in the OSX module.\n"
       str += "#\n"
     end
+    if @type == :protocols
+      str += "# This is a overview of the methods your class must implement in order to conform to the #{@name} protocol.\n"
+      str += "#\n"
+    end
     
     self.parse_description.each do |paragraph|
       str += "# #{paragraph}\n"
@@ -117,7 +125,7 @@ class CocoaRef::ClassDef
     elsif @type == :constants
       str += "module #{module_name}Constants\n"
     elsif @type == :protocols
-      str += "class #{module_name}Protocols::#{@name}Protocol\n"
+      str += "module #{module_name}Protocols::#{@name}Protocol\n"
     end
     
     if @type == :constants

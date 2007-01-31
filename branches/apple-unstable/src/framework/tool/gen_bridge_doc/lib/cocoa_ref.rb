@@ -77,6 +77,10 @@ module CocoaRef
       end
     end
     
+    def empty?
+      @class_def.empty?
+    end
+    
     def errors?
       @log.errors? or @hpricot.log.errors? or @class_def.errors?
     end

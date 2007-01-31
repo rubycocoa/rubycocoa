@@ -75,9 +75,9 @@ unless ARGV[0].nil?
                             '/Developer/ADC Reference Library/documentation/Cocoa/Reference/Foundation/',
                             '/Developer/ADC Reference Library/documentation/Cocoa/Reference/WebKit/',
                             '/Developer/ADC Reference Library/documentation/Cocoa/Reference/CoreDataFramework/',
-                            '/Developer/ADC Reference Library/documentation/QuickTime/Reference/QTKitFramework/']
-    #SUPPORTED_FRAMEWORKS = ['/Developer/ADC Reference Library/documentation/UserExperience/Reference/AddressBook/']
-    #SUPPORTED_FRAMEWORKS = ['/Developer/ADC Reference Library/documentation/Cocoa/Reference/ApplicationKit/']
+                            '/Developer/ADC Reference Library/documentation/QuickTime/Reference/QTKitFramework/',
+                            '/Developer/ADC Reference Library/documentation/UserExperience/Reference/AddressBook/']
+
     start_time = Time.now
     
     # Setup the env
