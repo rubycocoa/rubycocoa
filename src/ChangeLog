@@ -1,5 +1,12 @@
 2007-01-31  Eloy Duran <eloy.de.enige@gmail.com>
 
+	* framework/tool/gen_bridge_doc/lib/cocoa_ref.rb,
+	  framework/tool/gen_bridge_doc/lib/InstantMessage/IMService.rb,
+	  framework/tool/gen_bridge_doc.rb:
+	- Added support for the InstantMessage framework.
+
+2007-01-31  Eloy Duran <eloy.de.enige@gmail.com>
+
 	* framework/tool/gen_bridge_doc/lib/AddressBook/ABSearchElement.rb,
 	  framework/tool/gen_bridge_doc/lib/cocoa_ref.rb,
 	  framework/tool/gen_bridge_doc/lib/lib/method_def.rb,

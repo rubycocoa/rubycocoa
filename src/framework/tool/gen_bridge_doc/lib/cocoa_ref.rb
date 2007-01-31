@@ -43,7 +43,7 @@ module CocoaRef
     attr_reader :class_def
     
     def initialize(file, framework = '')
-      @framework = framework.gsub(/Framework/, '')
+      @framework = framework.gsub(/Frame\w+/, '')
       unless framework == 'ApplicationKit' or framework == 'Foundation' or framework.empty?
         OSX.require_framework @framework
       end

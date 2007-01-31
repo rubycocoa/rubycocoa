@@ -76,7 +76,8 @@ unless ARGV[0].nil?
                             '/Developer/ADC Reference Library/documentation/Cocoa/Reference/WebKit/',
                             '/Developer/ADC Reference Library/documentation/Cocoa/Reference/CoreDataFramework/',
                             '/Developer/ADC Reference Library/documentation/QuickTime/Reference/QTKitFramework/',
-                            '/Developer/ADC Reference Library/documentation/UserExperience/Reference/AddressBook/']
+                            '/Developer/ADC Reference Library/documentation/UserExperience/Reference/AddressBook/',
+                            '/Developer/ADC Reference Library/documentation/AppleApplications/Reference/InstantMessageFrameworkRef/']
 
     start_time = Time.now
     
