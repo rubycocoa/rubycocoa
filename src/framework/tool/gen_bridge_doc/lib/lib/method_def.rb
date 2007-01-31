@@ -77,7 +77,7 @@ class CocoaRef::MethodDef
     objc_method_style = []
     index = 0
     method_def_parts.each do |m|          
-      str = "#{m[:name] unless m[:name].nil?}, #{string_spacer(longest_name.length - m[:name].length) unless m[:name] == longest_name}#{m[:arg].gsub(/class/, 'klass') unless m[:arg].nil?}"
+      str = "#{m[:name] unless m[:name].nil?}, #{string_spacer(longest_name.length - m[:name].length) unless m[:name] == longest_name}#{m[:arg] unless m[:arg].nil?}"
       if index.zero?
         objc_method_style.push "#{class_name + '.alloc.' if @type == :class_method}objc_send(:#{str}#{(index == method_def_parts.length - 1) ? ')' : ','}"
       elsif index == method_def_parts.length - 1
@@ -139,7 +139,7 @@ class CocoaRef::MethodDef
       method_def_part[:type] = md_type.strip unless md_type.nil?
       
       md_arg = regexp_result_arg(parsed_method_def, i)
-      method_def_part[:arg]  = md_arg.strip unless md_arg.nil?
+      method_def_part[:arg]  = md_arg.strip.gsub(/class/, 'klass') unless md_arg.nil?
       method_def_parts.push(method_def_part)
     end
     #p method_def_parts
@@ -154,7 +154,7 @@ class CocoaRef::MethodDef
   
     if self.definition.strip_tags.include?(':') and not self.definition.strip_tags[-2...-1] == ':'
       method_def_parts = self.parse
-      str = "#{method_def_parts.collect {|m| m[:name]}.join('_')}(#{method_def_parts.collect{|m| m[:arg].gsub(/class/, 'klass') }.join(', ')})"
+      str = "#{method_def_parts.collect {|m| m[:name]}.join('_')}(#{method_def_parts.collect{|m| m[:arg] }.join(', ')})"
     else
       str = "#{parsed_method_name.join('_')}"
     end
