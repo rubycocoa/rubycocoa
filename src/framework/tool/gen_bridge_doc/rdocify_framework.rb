@@ -134,11 +134,24 @@ else
   exit
 end
 
+framework_name = File.basename(framework_path)
+# This is a workaround for pdfkit which is in the quartz dir,
+# if it looks like that there are more frameworks that need
+# special treatment than this should be done with a less hacky way.
+framework_name = 'PDFKit' if framework_name == 'QuartzFramework'
+
 puts ""
-puts "Working on: #{framework_path}"
+puts "Working on: #{framework_name}"
 puts ""
 
 reference_files = get_reference_files(framework_path)
+
+# This is a workaround for pdfkit which is in the quartz dir,
+# if it looks like that there are more frameworks that need
+# special treatment than this should be done with a less hacky way.
+if File.basename(framework_path) == 'QuartzFramework'
+  reference_files.delete_if {|r| ['QCView_Class', 'QCRenderer_Class'].include?(r[:name]) }
+end
 
 unless output_dir.empty?
   output_dir = File.expand_path(output_dir)
@@ -154,7 +167,7 @@ success = 0
 skipped = 0
 reference_files.each do |ref|
   puts "Processing reference file: #{ref[:name]}"
-  cocoa_ref_parser = CocoaRef::Parser.new(ref[:path], File.basename(framework_path))
+  cocoa_ref_parser = CocoaRef::Parser.new(ref[:path], framework_name)
   if cocoa_ref_parser.empty?
     skipped = skipped.next
     puts 'Skipping because there was no info found of our interest in the reference file...'
@@ -169,7 +182,7 @@ reference_files.each do |ref|
 end
 
 puts ''
-puts "Stats for: #{framework_path}"
+puts "Stats for: #{framework_name}"
 puts "  Written: #{success} files"
 puts "  Skipped: #{skipped} files"
 puts ''

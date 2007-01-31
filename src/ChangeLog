@@ -1,5 +1,15 @@
 2007-01-31  Eloy Duran <eloy.de.enige@gmail.com>
 
+	* framework/tool/gen_bridge_doc/lib/PDFKit/PDFSelection.rb,
+	  framework/tool/gen_bridge_doc/lib/PDFKit/PDFView.rb,
+	  framework/tool/gen_bridge_doc/lib/PDFKit/PDFPage.rb,
+	  framework/tool/gen_bridge_doc/lib/PDFKit/PDFDocument.rb,
+	  framework/tool/gen_bridge_doc/rdocify_framework.rb,
+	  framework/tool/gen_bridge_doc.rb:
+	- Added support for PDFKit.
+
+2007-01-31  Eloy Duran <eloy.de.enige@gmail.com>
+
 	* framework/tool/gen_bridge_doc/lib/QuartzCore/CIImage.rb,
 	  framework/tool/gen_bridge_doc/lib/QuartzCore/CIVector.rb,
 	  framework/tool/gen_bridge_doc/lib/QuartzCore/CISampler.rb,
