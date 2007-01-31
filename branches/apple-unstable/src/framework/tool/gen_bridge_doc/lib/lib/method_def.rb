@@ -10,7 +10,7 @@ class CocoaRef::MethodDef
   end
   
   def to_s
-    str  = "METHOD:\n#{@name}\n"
+    str  = "METHOD:\n#{self.name}\n"
     str += "TYPE:\n#{@type.to_s}\n"
     str += "DEFINITION:\n#{self.definition.strip_tags}\n"
     str += "DESCRIPTION:\n#{@description.strip_tags}\n"
@@ -94,6 +94,10 @@ class CocoaRef::MethodDef
     return objc_method_style
   end
   
+  def name
+    self.override_result(@name, :new_name)
+  end
+  
   def definition
     self.override_result(@definition, :new_definition)
   end
@@ -116,7 +120,7 @@ class CocoaRef::MethodDef
   end
   
   def parse
-    parsed_method_name = @name.split(':')
+    parsed_method_name = self.name.split(':')
   
     regexp = regexp_start
     method_def_parts = []
@@ -149,7 +153,7 @@ class CocoaRef::MethodDef
   def to_rb_def
     #puts @definition.clean_objc
   
-    parsed_method_name = @name.split(':')
+    parsed_method_name = self.name.split(':')
     #p parsed_method_name
   
     if self.definition.strip_tags.include?(':') and not self.definition.strip_tags[-2...-1] == ':'
