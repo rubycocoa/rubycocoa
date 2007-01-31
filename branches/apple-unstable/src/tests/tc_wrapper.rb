@@ -98,4 +98,25 @@ class TC_OCObjWrapper < Test::Unit::TestCase
     assert(!OSX::NSProtocolChecker.ancestors.include?(OSX::NSObject))
   end
 
+  def test_alias
+    # alias class method
+    assert_raises OSX::OCMessageSendException do
+      str = NSString.str('RubyCocoa')
+    end
+    OSX::NSString.objc_alias_class_method 'str:', 'stringWithString:'
+    str = NSString.str('RubyCocoa')
+    assert(str.isEqualToString?('RubyCocoa'), 'alias class method')
+    # alias instance method
+    assert_raises OSX::OCMessageSendException do
+      substr = str.substr([4..8])
+    end
+    OSX::NSString.objc_alias_method 'substr:', 'substringWithRange:'
+    substr = str.substr([4..8])
+    assert(substr.isEqualToString?('Cocoa'), 'alias instace method')
+    # RuntimeError should be raise when the selctor does not exist
+    assert_raises RuntimeError do
+      OSX::NSString.objc_alias_method 'foo', 'foobarbaz'
+    end
+  end
+
 end

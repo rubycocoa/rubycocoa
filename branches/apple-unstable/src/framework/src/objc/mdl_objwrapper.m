@@ -369,6 +369,55 @@ wrapper_objc_class_method_type (VALUE rcv, VALUE name)
   return rb_str_new2(str);
 }
 
+
+static id 
+_objc_alias_method (Class klass, VALUE new, VALUE old)
+{
+  Method me;
+  struct objc_method_list* mlp;
+  SEL new_name;
+  SEL old_name;
+
+  old_name = rbobj_to_nssel(old);
+  new_name = rbobj_to_nssel(new);
+  me = class_getInstanceMethod(klass, old_name);
+
+  // warn if trying to alias a method that isn't a member of the specified class
+  if (me == NULL)
+    rb_raise(rb_eRuntimeError, "could not alias '%s' for '%s' to class '%s': Objective-C cannot find it in the class", (char *)new_name, (char *)old_name, klass->name);
+    
+  // copy with new name
+  // FIXME: we can write like this // mlp = method_list_alloc(1);
+  mlp = NSZoneMalloc(NSDefaultMallocZone(), sizeof(struct objc_method_list));
+  mlp->obsolete = NULL;
+  mlp->method_count = 0;
+
+  mlp->method_list[0].method_name = strdup((const char*)new_name);
+  mlp->method_list[0].method_types = me->method_types;
+  mlp->method_list[0].method_imp = me->method_imp;
+  mlp->method_count += 1;
+
+  class_addMethods(klass, mlp);
+
+  return nil;
+}
+
+static VALUE
+wrapper_objc_alias_method (VALUE rcv, VALUE new, VALUE old)
+{
+  Class klass = rbobj_get_ocid (rcv);
+  _objc_alias_method(klass, new, old);
+  return rcv;
+}
+
+static VALUE
+wrapper_objc_alias_class_method (VALUE rcv, VALUE new, VALUE old)
+{
+  Class klass = (rbobj_get_ocid (rcv))->isa;
+  _objc_alias_method(klass, new, old);
+  return rcv;
+}
+
 /*****************************************/
 
 VALUE
@@ -388,6 +437,9 @@ init_mdl_OCObjWrapper(VALUE outer)
   rb_define_method(_mClsWrapper, "objc_class_methods", wrapper_objc_class_methods, -1);
   rb_define_method(_mClsWrapper, "objc_instance_method_type", wrapper_objc_instance_method_type, 1);
   rb_define_method(_mClsWrapper, "objc_class_method_type", wrapper_objc_class_method_type, 1);
+
+  rb_define_method(_mClsWrapper, "_objc_alias_method", wrapper_objc_alias_method, 2);
+  rb_define_method(_mClsWrapper, "_objc_alias_class_method", wrapper_objc_alias_class_method, 2);
 
   return Qnil;
 }

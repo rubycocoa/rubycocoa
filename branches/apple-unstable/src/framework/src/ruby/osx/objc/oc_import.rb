@@ -314,6 +314,18 @@ module OSX
       objc_method(name, types)
     end
 
+    def objc_alias_method(new, old)
+      new_sel = new.to_s.gsub(/([^_])_/, '\1:')
+      old_sel = old.to_s.gsub(/([^_])_/, '\1:')
+      _objc_alias_method(new, old)
+    end
+
+    def objc_alias_class_method(new, old)
+      new_sel = new.to_s.gsub(/([^_])_/, '\1:')
+      old_sel = old.to_s.gsub(/([^_])_/, '\1:')
+      _objc_alias_class_method(new, old)
+    end
+
     # TODO: support more types such as pointers...
     OCTYPES = {
       :id      => '@',

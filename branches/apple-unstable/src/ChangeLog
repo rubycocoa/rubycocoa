@@ -1,3 +1,11 @@
+2007-01-31  kimura wataru <kimuraw@i.nifty.jp>
+
+        * framework/src/objc/mdl_objwrapper.m,
+          framework/src/ruby/osx/objc/oc_import.rb,
+          tests/tc_wrapper.rb:
+        new methods objc_alias_method, objc_alias_class_method at OCClsWrapper.
+        these methods enables to alias objc method of Cococa classes.
+
 2007-01-30  Eloy Duran <eloy.de.enige@gmail.com>
 
 	* framework/tool/gen_bridge_doc/lib/cocoa_ref.rb,
