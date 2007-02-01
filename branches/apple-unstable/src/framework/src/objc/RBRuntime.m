@@ -83,7 +83,10 @@ static char* framework_ruby_path()
 static void load_path_unshift(const char* path)
 {
   extern VALUE rb_load_path;
-  rb_ary_unshift(rb_load_path, rb_str_new2(path));
+  VALUE rpath = rb_str_new2(path);
+
+  if (! RTEST(rb_ary_includes(rb_load_path, rpath)))
+    rb_ary_unshift(rb_load_path, rpath);
 }
 
 static int
@@ -154,18 +157,17 @@ int
 RBBundleInit(const char *rb_main_name, const char *class_name)
 {
   extern void Init_stack(VALUE*);
-  static int done_p = 0;
+  static int first_flg = 0;
   VALUE stack_start;
 
-  if (done_p) return 0;
-  done_p = 1;
-
-  ruby_init();
-  Init_stack(&stack_start);
-  ruby_init_loadpath();
-  RBRubyCocoaInit();
+  if (! first_flg) {
+    ruby_init();
+    Init_stack(&stack_start);
+    ruby_init_loadpath();
+    RBRubyCocoaInit();
+    first_flg = 1;
+  }
   load_path_unshift(resource_path_for(class_name));
   rb_funcall(Qnil, rb_intern("require"), 1, rb_str_new2(rb_main_name));
-
-  return 1;
+  return 0;
 }
