@@ -1,3 +1,9 @@
+2007-02-01  Fujimoto Hisa  <hisa@fobj.com>
+
+	* framework/src/objc/RBRuntime.m:
+	support multiple calling RBBundleInit() in a
+	process. load_path_unshift() checked including the specified path.
+
 2007-01-31  Eloy Duran <eloy.de.enige@gmail.com>
 
 	* framework/tool/gen_bridge_doc/lib/PDFKit/PDFSelection.rb,
