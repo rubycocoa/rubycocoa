@@ -1,3 +1,8 @@
+2007-02-02  kimura wataru <kimuraw@i.nifty.jp>
+
+	* template/ProjectBuilder/Application/Cocoa-Ruby Core Data Application/AppDelegate.rb:
+	fix a typo in AppDelegate#saveAction.
+
 2007-02-01  Fujimoto Hisa  <hisa@fobj.com>
 
 	* framework/src/objc/RBRuntime.m:
