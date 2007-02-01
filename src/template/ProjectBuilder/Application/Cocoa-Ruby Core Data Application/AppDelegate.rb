@@ -55,7 +55,7 @@ class AppDelegate < OSX::NSObject
   
   def saveAction(sender)
     error = nil
-    unless managerObjectContext.save?(error)
+    unless managedObjectContext.save?(error)
       OSX::NSApplication.sharedApplication.presentError(error)
     end
   end
