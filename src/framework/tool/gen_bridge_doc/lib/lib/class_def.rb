@@ -85,15 +85,11 @@ class CocoaRef::ClassDef
     @method_defs.each {|m| m.to_s }
   end
   
-  def module_name
-    "OSX::#{@framework}::"
-  end
-  
   def to_rdoc
     str = ''
     
     if @type == :additions
-      str += "# By requiring the #{@framework} framework, this module is automatically mixed-in in the #{@name} class.\n"
+      str += "# By requiring the #{@framework} framework, this module is automatically mixed-in in the OSX::#{@name} class.\n"
       str += "#\n"
     end
     if @type == :functions or @type == :data_types or @type == :constants
@@ -101,7 +97,7 @@ class CocoaRef::ClassDef
       str += "#\n"
     end
     if @type == :protocols
-      str += "# This is a overview of the methods your class must implement in order to conform to the #{@name} protocol.\n"
+      str += "# This is a overview of the methods your class must implement in order to conform to the OSX::#{@name} protocol.\n"
       str += "#\n"
     end
     
@@ -112,20 +108,21 @@ class CocoaRef::ClassDef
     
     if @type == :class
       if @name == 'NSObject'
-        str += "class #{module_name}#{@name}\n"
+        str += "class OSX::#{@name}\n"
       else
-        str += "class #{module_name}#{@name} < #{OSX.const_get(@name).superclass}\n"
+        # Lookup the name of the superclass
+        str += "class OSX::#{@name} < #{OSX.const_get(@name).superclass}\n"
       end
     elsif @type == :additions
-      str += "module #{module_name}#{@name}Additions\n"
+      str += "module OSX::#{@name}Additions\n"
     elsif @type == :functions
-      str += "module #{module_name}#{@name}Functions\n"
+      str += "module OSX::#{@name}Functions\n"
     elsif @type == :data_types
-      str += "module #{module_name}DataTypes\n"
+      str += "module OSX\n"
     elsif @type == :constants
-      str += "module #{module_name}Constants\n"
+      str += "module OSX\n"
     elsif @type == :protocols
-      str += "module #{module_name}Protocols::#{@name}Protocol\n"
+      str += "module OSX::#{@name}Protocol\n"
     end
     
     if @type == :constants
