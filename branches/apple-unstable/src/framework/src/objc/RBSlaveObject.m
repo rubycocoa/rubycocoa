@@ -8,7 +8,6 @@
 #import <Foundation/Foundation.h>
 #import "RBObject.h"
 #import "RBSlaveObject.h"
-#import "RBRuntime.h"
 #import "RBClassUtils.h"
 #import "osx_ruby.h"
 #import "ocdata_conv.h"

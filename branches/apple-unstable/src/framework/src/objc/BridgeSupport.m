@@ -18,7 +18,7 @@
 #import <objc/objc-runtime.h>
 #import "ocdata_conv.h"
 #import "ffi.h"
-#import "RBRuntime.h" // for DLOG
+#import "internal_macros.h"
 #import "cls_objcid.h"
 #import "BridgeSupportLexer.h"
 #import "RBClassUtils.h"

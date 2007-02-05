@@ -1,3 +1,28 @@
+2007-02-05  Fujimoto Hisa  <hisa@fobj.com>
+
+	* framework/src/objc/RBSlaveObject.m,
+	  framework/src/objc/RBObject.m,
+	  framework/src/objc/libffi.m,
+	  framework/src/objc/RBRuntime.h,
+	  framework/src/objc/RBRuntime.m,
+	  framework/src/objc/mdl_objwrapper.m,
+	  framework/src/objc/RBClassUtils.m,
+	  framework/src/objc/ocdata_conv.m,
+	  framework/src/objc/OverrideMixin.m,
+	  framework/src/objc/BridgeSupport.m,
+	  framework/src/objc/cls_objcid.m,
+	  framework/src/objc/internal_macros.h:
+	moved some macros (for debugging) to internal_macros.h from
+	RBRuntime.h.
+
+	* framework/src/objc/RBRuntime.h, framework/src/objc/RBRuntime.m:
+	modified an argument type of RBBundleInit to specify the current Bundle.
+
+	* framework/src/objc/RBClassUtils.m:
+	modified class_map_dic_add, and created an internal class named
+	RBClassMapInfo.  it's to keep a bundle object which is related
+	with a class written by ruby (not yet implement).
+
 2007-02-04  Eloy Duran <eloy.de.enige@gmail.com>
 
 	* framework/tool/gen_bridge_doc/lib/lib/class_def.rb:

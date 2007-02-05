@@ -14,7 +14,7 @@
 #import <string.h>
 #import <stdlib.h>
 #import "RBObject.h"
-#import "RBRuntime.h" // for DLOG
+#import "internal_macros.h"
 
 static VALUE _kObjcID = Qnil;
 

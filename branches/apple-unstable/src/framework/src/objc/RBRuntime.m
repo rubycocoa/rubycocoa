@@ -16,32 +16,23 @@
 #import "mdl_osxobjc.h"
 #import "ocdata_conv.h"
 #import "OverrideMixin.h"
+#import "internal_macros.h"
 
 #define RUBY_MAIN_NAME "rb_main.rb"
 
-/*
-  syntax: POOL_DO(the_pool) { ... } END_POOL(the_pool);
-*/
-#define POOL_DO(POOL)   id POOL = [[NSAutoreleasePool alloc] init];
-#define END_POOL(POOL)  [(POOL) release];
-
 /* this function should be called from inside a NSAutoreleasePool */
-static NSBundle* bundle_for(const char* class_name)
+static NSBundle* bundle_for(Class klass)
 {
-  if (class_name != NULL) {
-    NSString* str = [NSString stringWithUTF8String: class_name];
-    return [NSBundle bundleForClass: NSClassFromString(str)];
-  }
-  else {
-    return [NSBundle mainBundle];
-  }
+  return (klass == nil) ?
+    [NSBundle mainBundle] : 
+    [NSBundle bundleForClass: klass];
 }
 
-static char* resource_item_path_for(const char* item_name, const char* class_name)
+static char* resource_item_path_for(const char* item_name, Class klass)
 {
   char* result;
   POOL_DO(pool) {
-    NSBundle* bundle = bundle_for(class_name);
+    NSBundle* bundle = bundle_for(klass);
     NSString* path = [NSString stringWithUTF8String: item_name];
     path = [bundle pathForResource: path ofType: nil];
     result = strdup([path fileSystemRepresentation]);
@@ -51,7 +42,7 @@ static char* resource_item_path_for(const char* item_name, const char* class_nam
 
 static char* resource_item_path(const char* item_name)
 {
-  return resource_item_path_for(item_name, NULL);
+  return resource_item_path_for(item_name, nil);
 }
 
 static char* rb_main_path(const char* main_name)
@@ -59,11 +50,11 @@ static char* rb_main_path(const char* main_name)
   return resource_item_path(main_name);
 }
 
-static char* resource_path_for(const char *class_name)
+static char* resource_path_for(Class klass)
 {
   char* result;
   POOL_DO(pool) {
-    NSBundle* bundle = bundle_for(class_name);
+    NSBundle* bundle = bundle_for(klass);
     NSString* path = [bundle resourcePath];
     result = strdup([path fileSystemRepresentation]);
   } END_POOL(pool);
@@ -72,12 +63,12 @@ static char* resource_path_for(const char *class_name)
 
 static char* resource_path()
 {
-  return resource_path_for(NULL);
+  return resource_path_for(nil);
 }
 
 static char* framework_ruby_path()
 {
-  return resource_item_path_for("ruby", "RBObject");
+  return resource_item_path_for("ruby", [RBObject class]);
 }
 
 static void load_path_unshift(const char* path)
@@ -119,7 +110,6 @@ int
 RBRubyCocoaInit()
 {
   static int init_p = 0;
-
   if (init_p) return 0;
 
   ruby_init();
@@ -154,7 +144,7 @@ RBApplicationMain(const char* rb_main_name, int argc, const char* argv[])
 }
 
 int
-RBBundleInit(const char *rb_main_name, const char *class_name)
+RBBundleInit(const char *rb_main_name, Class klass)
 {
   extern void Init_stack(VALUE*);
   static int first_flg = 0;
@@ -167,7 +157,7 @@ RBBundleInit(const char *rb_main_name, const char *class_name)
     RBRubyCocoaInit();
     first_flg = 1;
   }
-  load_path_unshift(resource_path_for(class_name));
+  load_path_unshift(resource_path_for(klass));
   rb_funcall(Qnil, rb_intern("require"), 1, rb_str_new2(rb_main_name));
   return 0;
 }

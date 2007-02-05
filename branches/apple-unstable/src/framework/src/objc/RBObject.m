@@ -11,7 +11,7 @@
 #import "mdl_osxobjc.h"
 #import "ocdata_conv.h"
 #import "BridgeSupport.h"
-#import "RBRuntime.h" // for DLOG
+#import "internal_macros.h"
 #import "OverrideMixin.h"
 
 #define RBOBJ_LOG(fmt, args...) DLOG("RBOBJ", fmt, ##args)
