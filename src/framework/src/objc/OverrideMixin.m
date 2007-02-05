@@ -11,7 +11,7 @@
 #import "OverrideMixin.h"
 #import "RBObject.h"
 #import "RBSlaveObject.h"
-#import "RBRuntime.h"
+#import "internal_macros.h"
 #import "RBClassUtils.h"
 #import "ocdata_conv.h"
 #import "BridgeSupport.h"

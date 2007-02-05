@@ -15,7 +15,7 @@
 #import <stdarg.h>
 #import <objc/objc-runtime.h>
 #import "BridgeSupport.h"
-#import "RBRuntime.h" // for DLOG
+#import "internal_macros.h"
 #import "ocexception.h"
 
 static VALUE _mObjWrapper = Qnil;

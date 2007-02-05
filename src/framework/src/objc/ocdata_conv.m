@@ -14,7 +14,7 @@
 #import <CoreFoundation/CFString.h> // CFStringEncoding
 #import "st.h"
 #import "BridgeSupport.h"
-#import "RBRuntime.h" // for DLOG
+#import "internal_macros.h"
 
 #define CACHE_LOCKING 0
 
