@@ -31,7 +31,7 @@
   while (0)
 
 /* syntax: POOL_DO(the_pool) { ... } END_POOL(the_pool); */
-#define POOL_DO(POOL)   id POOL = [[NSAutoreleasePool alloc] init];
-#define END_POOL(POOL)  [(POOL) release];
+#define POOL_DO(POOL)   { id POOL = [[NSAutoreleasePool alloc] init];
+#define END_POOL(POOL)  [(POOL) release]; }
 
 #endif	// _INTERNAL_MACROS_H_
