@@ -1,0 +1,16 @@
+{
+    IBClasses = (
+        {CLASS = FirstResponder; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
+        {CLASS = NSManagedObject; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
+        {
+            CLASS = Sticky; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {contents = NSView; stickyWindow = NSWindow; }; 
+            SUPERCLASS = NSManagedObject; 
+        }, 
+        {CLASS = StickyResizeCornerView; LANGUAGE = ObjC; SUPERCLASS = NSView; }, 
+        {CLASS = StickyTitleBarView; LANGUAGE = ObjC; SUPERCLASS = NSView; }, 
+        {CLASS = StickyWindow; LANGUAGE = ObjC; SUPERCLASS = NSWindow; }
+    ); 
+    IBVersion = 1; 
+}

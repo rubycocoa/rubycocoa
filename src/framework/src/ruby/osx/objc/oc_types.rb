@@ -4,103 +4,34 @@
 #  Copyright (c) 2001 FUJIMOTO Hisakuni
 #
 
-module OSX
+# This module adds syntax-sugar APIs on top of the Cocoa structures.
+# This is mostly to preserve backward compatibility with previous versions
+# of RubyCocoa where the C structures support was hardcoded in the bridge.
+# Now structures are automatically handled via the metadata mechanism, but
+# the API is not compatible with what we used to have.
 
-  module ToFloat
-    def force_to_f(val)
-      begin
-	val.to_f
-      rescue NameError
-	0.0
-      end
-    end
-  end
-  
-  class NSPoint
-    include ToFloat
-    attr_accessor :x, :y
-    ZERO = [0.0,0.0].freeze
-    def initialize(*args)
-      @x = force_to_f(args[0])
-      @y = force_to_f(args[1])
-    end
-    def to_a
-      [ @x, @y ]
-    end
-    def ==(other)
-      @x == other.x and @y == other.y
-    end
-  end
-
-  class NSSize
-    include ToFloat
-    attr_accessor :width, :height
-    ZERO = [0.0,0.0].freeze
-    def initialize(*args)
-      @width = force_to_f(args[0])
-      @height = force_to_f(args[1])
-    end
-    def to_a
-      [ @width, @height ]
-    end
-    def ==(other)
-      @width == other.width and @height == other.height
-    end
-  end
-
-  class NSRect
-    attr_accessor :origin, :size
-    ZERO = [0.0,0.0,0.0,0.0].freeze
-    def initialize(*args)
-      if args.size == 2 then
-	@origin = NSPoint.new(*(args[0].to_a))
-	@size = NSSize.new(*(args[1].to_a))
-      elsif args.size == 4 then
-	@origin = NSPoint.new(*(args[0,2]))
-	@size = NSSize.new(*(args[2,2]))
+class OSX::NSRect
+  class << self
+    alias_method :orig_new, :new
+    def new(*args)
+      origin, size = case args.size
+      when 0
+        [[0, 0], [0, 0]]
+      when 2
+        [args[0], args[1]]
+      when 4
+        [args[0..1], args[2..3]]
       else
-	@origin = NSPoint.new
-	@size = NSSize.new
+        raise ArgumentError, "wrong number of arguments (#{args.size} for either 0, 2 or 4)"
       end
-    end
-    def to_a
-      [ @origin.to_a, @size.to_a ]
-    end
-    def x() @origin.x end
-    def y() @origin.y end
-    def width() @size.width end
-    def height() @size.height end
-    def ==(other)
-      @origin == other.origin and @size == other.size
+      origin = OSX::NSPoint.new(*origin) unless origin.is_a?(OSX::NSPoint)
+      size = OSX::NSSize.new(*size) unless size.is_a?(OSX::NSSize)
+      orig_new(origin, size)
     end
   end
-
-  class NSRange
-    attr_accessor :location, :length
-    ZERO = [0,0].freeze
-    def initialize(*args)
-      @location = @length = 0
-      args.flatten!
-      if args.size == 1 then
-	if args[0].is_a? Range then
-	  rng = args[0]
-	  @location = rng.first
-	  @length = rng.last - rng.first + (rng.exclude_end? ? 0 : 1)
-	end
-      elsif args.size == 2 then
-	@location = args[0].to_i
-	@length = args[1].to_i
-      end
-    end
-    def to_a
-      [ @location, @length ]
-    end
-    def to_range
-      Range.new(@location, @location + @length - 1)
-    end
-    def ==(other)
-      @location == other.location and @length == other.length
-    end
-  end
-
-end				# module OSX
+  def x; origin.x; end
+  def y; origin.y; end
+  def width; size.width; end
+  def height; size.height; end
+  def to_a; [origin.to_a, size.to_a]; end
+end

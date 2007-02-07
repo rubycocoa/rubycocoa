@@ -2,7 +2,10 @@
 
 == RubyCocoaとは？
 
-RubyCocoaは、((<Mac OS X|URL:http://www.apple.co.jp/macosx/>))のアプリケーション環境((<Cocoa|URL:http://developer.apple.com/cocoa/>))ベースのソフトウェアを、オブジェクト指向スクリプト言語((<Ruby|URL:http://www.ruby-lang.org/>))で記述できるようにするフレームワークです。
+RubyCocoaは、
+オブジェクト指向スクリプト言語((<Ruby|URL:http://www.ruby-lang.org/>))での
+((<Cocoa|URL:http://developer.apple.com/cocoa/>))プログラミングを可能とする、
+((<Mac OS X|URL:http://www.apple.co.jp/macosx/>))のフレームワークです。
 
 RubyCocoaを使って、CocoaアプリケーションをRubyで書いたり、Rubyスクリプトで
 Cocoaオブジェクトを生成して機能を利用することができます。
@@ -80,28 +83,38 @@ RubyスクリプトとInterface BuilderのNibファイルのみで書かれたRubyCocoa
 == ライセンス
 
 ((<GNU Lesser General Public License version 2. LGPL
-|URL:http://www.gnu.org/licenses/lgpl.html>)) またはRubyライセンス
+|URL:http://www.gnu.org/licenses/lgpl.html>))
 
 
-== 歴史
+== 謝辞
 
-[2001年秋] 藤本尚邦がNSClassFromStringとNSObjectをラップするRuby拡張モジュールを実装。
-[2001年10月] InterfaceBuilder+ProjectBuilderとの統合。
-[2001年11月] RubyCocoa公開。
-[2002年2月ごろ] SourceForge にプロジェクトを登録(((<URL:http://rubycocoa.sourceforge.net/>)))。Chris Thomas、コミッタに参加。
-[2002年5月] Chris ThomasによるRubyCocoa解説記事"Examining RubyCocoa"が雑誌((<'Dr. Dobbs Journal, May 2002'|URL:http://www.ddj.com/articles/2002/0205/>)) に掲載された。
-[2003年] 木村渡、コミッタに参加。
-[2006年2月] Jonathan Paisley、コミッタに参加。
-[2006年] Tim BurksによるRubyCocoa情報サイト ((<rubycocoa.com|URL:http://www.rubycocoa.com/>))。
-[2006年5月] Laurent Sansonetti、コミッタに参加。
-[2006年8月] Tim Burks、コミッタに参加。
-[2006年8月] Apple WWDCにてLeopardへの搭載が公表。
+まずChris Thomasさん、Luc "lucsky" Heinrichさん、S.Sawadaさんに感謝いたします。
+
+さらに
+
+Gesse Gam, Hiroyuki Shimura, John Platte, kimura wataru, Masaki Yatsu,
+Masatoshi Seki, Michael Miller, Ogino Junya, Ralph Broom, Rich Kilmer,
+Shirai Kaoru, Tetsuhumi Takaishi, Tosh, Matthew Fero, Rod Schmidt,
+Jonathan Paisley, Norberto Ortigoza
+
+をはじめとする多くの方々に感謝いたします。
 
 
 == コンタクト
 
-* ((<URL:http://http://sourceforge.net/projects/rubycocoa/>)) (((<URL:http://www.macosforge.org/>))に移動予定)
-* hisa at sourceforge.net (暫定、Mac OS Forge に移動予定)
+バグリポート、こんなアイコン作りました、コメントなどお気軽に
+お寄せください。
 
+作者は仕事を探しています。
 
-RubyCocoa Project $Date$
+* RubyCocoaの開発・応用開発・サポート活動の支援・事業化
+* RubyCocoaのスポンサーになりたい
+* RubyCocoaベースの開発ツールの開発
+* その他なんでも (RubyCocoaじゃなくても)
+* 何か仕事を依頼したい
+
+などに関心のある企業・団体・個人の方がいらっしゃれば、お気軽に 
+((<こちら|URL:mailto:contact.rubycocoa@fobj.com>)) 
+までご連絡ください。
+
+藤本尚邦, <hisa at fobj.com>, $Date$

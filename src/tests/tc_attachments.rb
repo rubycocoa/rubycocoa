@@ -77,7 +77,7 @@ class TC_Attachments < Test::Unit::TestCase
   end
   
   def test_data
-    data = NSData.dataWithBytes_length("somedata",8)
+    data = NSData.dataWithBytes_length("somedata")
     assert_equal "somedata", data.rubyString
   end
   
@@ -93,4 +93,14 @@ class TC_Attachments < Test::Unit::TestCase
     # Doesn't seem to be a way to test that lockFocus/unlockFocus have been called,
     # so it's not possible to test the begin/ensure block in 'focus'.
   end
+
+  def test_indexset_to_a
+    assert_kind_of( RCIndexSetAttachment,
+                    OSX::NSIndexSet.alloc.init )
+    assert_respond_to( OSX::NSIndexSet.alloc.init, :to_a )
+    assert_kind_of( Array, OSX::NSIndexSet.alloc.init.to_a )
+    assert_equal( [1,2,3], 
+                  OSX::NSIndexSet.indexSetWithIndexesInRange(1..3).to_a )
+  end
+
 end

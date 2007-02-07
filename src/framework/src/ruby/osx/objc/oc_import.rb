@@ -8,54 +8,188 @@ require 'osx/objc/oc_wrapper'
 
 module OSX
 
-  init_cocoa # define OSX.NSClassFromString
+  FRAMEWORK_PATHS = [
+    '/System/Library/Frameworks',
+    '/Library/Frameworks'
+  ]
+
+  SIGN_PATHS = [
+    '/System/Library/BridgeSupport', 
+    '/Library/BridgeSupport'
+  ]
+
+  PRE_SIGN_PATHS = 
+    if path = ENV['BRIDGE_SUPPORT_PATH']
+      path.split(':')
+    else
+      []
+    end
+
+  if path = ENV['HOME']
+    FRAMEWORK_PATHS << File.join(ENV['HOME'], 'Library', 'Frameworks')
+    SIGN_PATHS << File.join(ENV['HOME'], 'Library', 'BridgeSupport')
+  end
+
+  # A name-to-path cache for the frameworks we support that are buried into umbrella frameworks.
+  QUICK_FRAMEWORKS = {
+    'CoreGraphics' => '/System/Library/Frameworks/ApplicationServices.framework/Frameworks/CoreGraphics.framework',
+    'PDFKit' => '/System/Library/Frameworks/Quartz.framework/Frameworks/PDFKit.framework',
+    'ImageKit' => '/System/Library/Frameworks/Quartz.framework/Frameworks/ImageKit.framework'
+  }
+
+  def _bundle_path_for_framework(framework)
+    if framework[0] == ?/
+      [OSX::NSBundle.bundleWithPath(framework), framework]
+    elsif path = QUICK_FRAMEWORKS[framework]
+      [OSX::NSBundle.bundleWithPath(path), path]
+    else
+      path = FRAMEWORK_PATHS.map { |dir| 
+        File.join(dir, "#{framework}.framework") 
+      }.find { |path| 
+        File.exist?(path) 
+      }
+      if path
+        [OSX::NSBundle.bundleWithPath(path), path]
+      end
+    end
+  end
+  module_function :_bundle_path_for_framework
+
+  def require_framework(framework)
+    return false if framework_loaded?(framework)
+    bundle, path = _bundle_path_for_framework(framework)
+    unless bundle.nil?
+      return false if bundle.isLoaded
+      if bundle.oc_load
+        load_bridge_support_signatures(path)
+        return true
+      end
+    end
+    raise LoadError, "Can't locate framework '#{framework}'"
+  end
+  module_function :require_framework
+
+  def framework_loaded?(framework)
+    bundle, path = _bundle_path_for_framework(framework)
+    unless bundle.nil?
+      loaded = bundle.isLoaded
+      unless loaded
+        # CoreFoundation/Foundation are linked at built-time.
+        id = bundle.bundleIdentifier
+        loaded = (id.isEqualToString('com.apple.CoreFoundation') or 
+                  id.isEqualToString('com.apple.Foundation'))
+      end
+      loaded
+    else
+      raise ArgumentError, "Can't locate framework '#{framework}'"
+    end
+  end
+  module_function :framework_loaded?
+
+  def load_bridge_support_signatures(framework)
+    # First, look into the pre paths.  
+    framework_name = framework[0] == ?/ ? File.basename(framework, '.framework') : framework
+    PRE_SIGN_PATHS.each do |dir|
+      path = File.join(dir, framework_name + '.xml')
+      if File.exist?(path)
+        load_bridge_support_file(path)
+        return true
+      end
+    end
+
+    # A path to a framework, let's search for BridgeSupport.xml inside the Resources folder.
+    if framework[0] == ?/
+      path = File.join(framework, 'Resources', 'BridgeSupport.xml')
+      if File.exist?(path)
+        load_bridge_support_file(path)
+        return true
+      end
+      framework = framework_name
+    end
+    
+    # Let's try to localize the framework and see if it contains the metadata.
+    FRAMEWORK_PATHS.each do |dir|
+      path = File.join(dir, "#{framework}.framework")
+      if File.exist?(path)
+        path = File.join(path, 'Resources', 'BridgeSupport.xml')
+        if File.exist?(path)
+          load_bridge_support_file(path)
+          return true
+        end
+        break
+      end
+    end
+ 
+    # We can still look into the general metadata directories. 
+    SIGN_PATHS.each do |dir|
+      path = File.join(dir, "#{framework}.xml")
+      if File.exist?(path)
+        load_bridge_support_file(path)
+        return true
+      end
+    end
+
+    # Damnit!
+    warn "Can't find signatures file for #{framework}" if $VERBOSE
+    return false
+  end
+  module_function :load_bridge_support_signatures
+
+  # Load C constants/classes lazily.
+  def self.const_missing(c)
+    begin
+      OSX::import_c_constant(c)
+    rescue LoadError
+      (OSX::ns_import(c) or raise NameError, "uninitialized constant #{c}")
+    end
+  end
+
+  def self.included(m)
+    if m.respond_to? :const_missing
+      m.module_eval <<-EOC,__FILE__,__LINE__+1
+        class <<self
+          alias_method :_osx_const_missing_prev, :const_missing
+          def const_missing(c)
+            begin
+              OSX.const_missing(c)
+            rescue NameError
+              _osx_const_missing_prev(c)
+            end
+          end
+	    end
+      EOC
+    else
+      m.module_eval <<-EOC,__FILE__,__LINE__+1
+        def self.const_missing(c)
+          OSX.const_missing(c)
+        end
+      EOC
+    end
+  end
+  
+  # Load the foundation frameworks.
+  OSX.load_bridge_support_signatures('CoreFoundation')
+  OSX.load_bridge_support_signatures('Foundation')
 
   # create Ruby's class for Cocoa class,
   # then define Constant under module 'OSX'.
   def ns_import(sym)
     if not OSX.const_defined?(sym)
       NSLog("importing #{sym}...") if $DEBUG
-      const_name = sym.to_s
-      sym_name = ":#{sym}"
-      klass = OSX.module_eval <<-EOE_NS_IMPORT,__FILE__,__LINE__+1
-      if clsobj = NSClassFromString(#{sym_name})
+      klass = if clsobj = NSClassFromString(sym)
         if rbcls = class_new_for_occlass(clsobj)
-          #{const_name} = rbcls
+          OSX.const_set(sym, rbcls)
         end
       end
-      EOE_NS_IMPORT
-      if methods_hash = @bridge_support_signatures[const_name]
-        if methods = methods_hash[:class_methods]
-          methods.each { |a| klass.register_objc_passbyref_class_method(*a) }
-        end
-        if methods = methods_hash[:instance_methods]
-          methods.each { |a| klass.register_objc_passbyref_instance_method(*a) }
-        end
-      end
-      NSLog("importing #{sym}... done (-> #{klass.ancestors.join(' -> ')})") if $DEBUG
+      NSLog("importing #{sym}... done (#{klass.ancestors.join(' -> ')})") if (klass and $DEBUG)
       return klass
     end
   end
   module_function :ns_import
 
-  # overwrite NSClassFromString to set up a flag while it's called (see mdl_osxobjc.m:rb_osx_const())
-  self.class_eval { class << self; alias_method :old_NSClassFromString, :NSClassFromString; end }
-  def self.NSClassFromString(*x)
-    @within_NSClassFromString = true
-    retval = old_NSClassFromString(*x)
-    @within_NSClassFromString = false    
-    return retval
-  end
-
   # create Ruby's class for Cocoa class
-  def OSX.class_new_for_occlass(occls)
-    superclass = if md = /^NSCF(.+)$/.match(occls.to_s)
-      # Translate CoreFoundation toll-free bridged classes to Cocoa.
-       OSX.const_get("NS" + md[1])
-    else
-      # Get real superclass if possible.
-      _objc_lookup_superclass(occls)
-    end
+  def class_new_for_occlass(occls)
+    superclass = _objc_lookup_superclass(occls)
     klass = Class.new(superclass)
     klass.class_eval <<-EOE_CLASS_NEW_FOR_OCCLASS,__FILE__,__LINE__+1
       if superclass == OSX::ObjcID
@@ -71,103 +205,29 @@ module OSX
     end
     return klass
   end
-  
-  # Load classes lazily.
-  def self.const_missing(c)
-    (OSX::ns_import(c) or raise NameError, "uninitialized constant #{c}")
-  end
-
-  def self.included(m)
-    return if m.respond_to? :_osx_const_missing_prev
-    if m.respond_to? :const_missing
-      m.module_eval <<-EOC,__FILE__,__LINE__+1
-        class <<self
-          alias_method :_osx_const_missing_prev, :const_missing
-          def const_missing(c)
-            begin
-              OSX.const_missing(c)
-            rescue NameError
-              _osx_const_missing_prev(c)
-            end
-          end
-	end
-      EOC
-    else
-      m.module_eval <<-EOC,__FILE__,__LINE__+1
-        def self.const_missing(c)
-          OSX.const_missing(c)
-        end
-      EOC
-    end
-  end
-
-  def OSX.load_bridge_support_signatures
-    @bridge_support_signatures ||= {}
-    @bridge_support_signatures.clear
-    NSLog("loading bridge support signatures...") if $DEBUG
-    ['/System/Library/BridgeSupport', 
-     '/Library/BridgeSupport', 
-     File.join(ENV['HOME'], 'Library', 'BridgeSupport')].each do |dir|
-      Dir.glob(File.join(dir, "*.xml")).each do |xmlfile|
-        load_bridge_support_file(xmlfile)
-      end
-    end
-  end
-  
-=begin
-  # This is a pure Ruby (and very slow) replacement for OSX.load_bridge_support_file 
-  # defined in mdl_osxobjc.m. The native version uses libxml2, this version is based on REXML. 
-  require 'rexml/document'
-  def OSX.load_bridge_support_file(path)
-    NSLog("loading bridge support file '#{path}'...") if $DEBUG
-    document = REXML::Document.new(File.open(path))
-    document.elements.each('/signatures/class') do |class_element|
-      unless name = class_element.attributes['name']
-        raise "Class element #{class_elememt} does not have a 'name' attribute."
-      end
-      @bridge_support_signatures[name] ||= {}
-      class_hash = @bridge_support_signatures[name]
-      [[:class_methods, class_element.elements['class_methods']],
-       [:instance_methods, class_element.elements['instance_methods']]].each do |key, methods_element|
-        next if methods_element.nil?
-        methods_element.elements.each('method') do |method_element|
-          unless selector = method_element.elements['selector']
-            raise "Method element #{method_element} does not have a 'signature' child."
-          end
-          passbyref_args = []
-          method_element.elements.each('by_reference_argument') { |arg| passbyref_args << arg.text.to_i }
-          if passbyref_args.empty?
-            raise "Method element #{method_element} does not have 'by_reference_argument' children."
-          end
-          class_hash[key] ||= []
-          class_hash[key] << [selector.text, *passbyref_args]
-        end
-      end
-      if class_hash.empty?
-        @bridge_support_signatures.delete(name)
-      end
-    end
-  end
-=end
-
-  def OSX._objc_lookup_superclass(occls)
+  module_function :class_new_for_occlass 
+ 
+  def _objc_lookup_superclass(occls)
     occls_superclass = occls.oc_superclass
-    if occls_superclass.nil?
+    if occls_superclass.nil? or occls_superclass.__ocid__ == occls.__ocid__ 
       OSX::ObjcID
+    elsif occls_superclass.is_a?(OSX::NSProxy) 
+      OSX::NSProxy
     else
       begin
-	OSX.const_get("#{occls_superclass}".to_sym) 
+        OSX.const_get("#{occls_superclass}".to_sym) 
       rescue NameError
-	# some ObjC internal class cannot become Ruby cosntant
-	# because of prefix '%' or '_'
-	if occls.__ocid__ != occls_superclass.__ocid__
-	  OSX._objc_lookup_superclass(occls_superclass)
-	else
-	  OSX::ObjcID # root class of ObjC
-	end
+        # some ObjC internal class cannot become Ruby constant
+        # because of prefix '%' or '_'
+        if occls.__ocid__ != occls_superclass.__ocid__
+          OSX._objc_lookup_superclass(occls_superclass)
+        else
+          OSX::ObjcID # root class of ObjC
+        end
       end
     end
   end
+  module_function :_objc_lookup_superclass
 
   module NSBehaviorAttachment
 
@@ -196,40 +256,108 @@ module OSX
     # declare to override instance methods of super class which is
     # defined by Objective-C.
     def ns_overrides(*args)
-      # insert specified selectors to Objective-C method table.
-      args.each do |name|
-	name = name.to_s.gsub('_',':')
-	OSX.objc_derived_class_method_add(self, name)
-      end
+      warn "ns_overrides is no longer necessary, should not be called anymore and will be removed in a next release. Please update your code to not use it."
     end
-
-    # declare write-only attribute accessors which are named IBOutlet
-    # in the Objective-C world.
-    def ns_outlets(*args)
-      attr_writer(*args)
-    end
-
-    # for look and feel
     alias_method :ns_override,  :ns_overrides
     alias_method :ib_override,  :ns_overrides
     alias_method :ib_overrides, :ns_overrides
-    alias_method :ns_outlet,  :ns_outlets
-    alias_method :ib_outlet,  :ns_outlets
-    alias_method :ib_outlets, :ns_outlets
 
-    def _ns_behavior_method_added(sym)
-      sel = sym.to_s.gsub(/([^_])_/, '\1:')
-      sel << ':' if instance_method(sym).arity > 0 and /[^:]\z/ =~ sel
-      return unless _ns_enable_override?(sel)
-      ns_override sel
+    # declare write-only attribute accessors which are named IBOutlet
+    # in the Objective-C world.
+    def ib_outlets(*args)
+      attr_writer(*args)
+    end
+    alias_method :ib_outlet, :ib_outlets
+
+    def ns_outlets(*args)
+      warn "ns_outlet(s) will be deprecated. Please use ib_outlet(s) instead."
+      ib_outlets(*args)
+    end
+    alias_method :ns_outlet,  :ns_outlets
+
+    # declare a IBAction method. if given a block, it mean the
+    # implementation of the action.
+    def ib_action(name, &blk)
+      define_method(name, blk) if block_given?
     end
 
-    def _ns_enable_override?(sel)
-      if ns_inherited? && self.objc_instance_method_type(sel)
-        true
-      else
-        false
+    def _ns_behavior_method_added(sym, class_method)
+      sel = sym.to_s.gsub(/([^_])_/, '\1:')
+      m = class_method ? method(sym) : instance_method(sym)
+      sel << ':' if m.arity > 0 and /[^:]\z/ =~ sel
+      return unless _ns_enable_override?(sel, class_method)
+      OSX.objc_class_method_add(self, sel, class_method, nil)
+    end
+
+    def _ns_enable_override?(sel, class_method)
+      ns_inherited? and (class_method ? self.objc_method_type(sel) : self.objc_instance_method_type(sel))
+    end
+
+    def _objc_export(name, types, class_method)
+      typefmt = _types_to_typefmt(types)
+      name = name.to_s
+      name = name[0].chr << name[1..-1].gsub(/_/, ':')
+      name << ':' if name[-1] != ?: and typefmt[-1] != ?:
+      OSX.objc_class_method_add(self, name, class_method, typefmt)
+    end
+
+    def objc_method(name, types)
+      _objc_export(name, types, false)
+    end
+
+    def objc_class_method(name, types)
+      _objc_export(name, types, true)
+    end
+
+    def objc_export(name, types)
+      warn "objc_export will be deprecated. please use objc_method instead."
+      objc_method(name, types)
+    end
+
+    def objc_alias_method(new, old)
+      new_sel = new.to_s.gsub(/([^_])_/, '\1:')
+      old_sel = old.to_s.gsub(/([^_])_/, '\1:')
+      _objc_alias_method(new, old)
+    end
+
+    def objc_alias_class_method(new, old)
+      new_sel = new.to_s.gsub(/([^_])_/, '\1:')
+      old_sel = old.to_s.gsub(/([^_])_/, '\1:')
+      _objc_alias_class_method(new, old)
+    end
+
+    # TODO: support more types such as pointers...
+    OCTYPES = {
+      :id      => '@',
+      :class   => '#',
+      :char    => 'c',
+      :uchar   => 'C',
+      :short   => 's',
+      :ushort  => 'S',
+      :int     => 'i',
+      :uint    => 'I',
+      :long    => 'l',
+      :ulong   => 'L',
+      :float   => 'f',
+      :double  => 'd',
+      :bool    => 'B',
+      :void    => 'v'
+    }
+    def _types_to_typefmt(types)
+      return types.strip if types.is_a?(String)
+      raise ArgumentError, "Array or String (as type format) expected (got #{types.klass} instead)" unless types.is_a?(Array)
+      raise ArgumentError, "Given types array should have at least an element" unless types.size > 0
+      octypes = types.map do |type|
+        if type.is_a?(Class) and type.ancestors.include?(OSX::Boxed)
+          type.instance_variable_get :@__encoding__
+        else
+          type = type.strip.intern unless type.is_a?(Symbol)
+          octype = OCTYPES[type]
+          raise "Invalid type (got '#{type}', expected one of : #{OCTYPES.keys.join(', ')}, or a boxed class)" if octype.nil?
+          octype
+        end
       end
+      octypes[0] + '@:' + octypes[1..-1].join
     end
 
   end				# module OSX::NSBehaviorAttachment
@@ -441,8 +569,12 @@ module OSX
     include NSBehaviorAttachment
     include NSKVCBehaviorAttachment
 
+    def singleton_method_added(sym)
+      _ns_behavior_method_added(sym, true)
+    end 
+ 
     def method_added(sym)
-      _ns_behavior_method_added(sym)
+      _ns_behavior_method_added(sym, false)
       _kvc_behavior_method_added(sym)
     end
 
@@ -461,23 +593,83 @@ end				# module OSX
 #
 class Object
   class <<self
-    alias __before_osx_inherited inherited
-    def inherited(subklass)
-      klassname = subklass.name
-      if /\AOSX::/ =~ klassname && klassname.split(/::/).size == 2
-	nsklass = klassname.split(/::/)[1]
-	# remove Ruby's class
-	OSX.instance_eval { remove_const nsklass.intern }
-        begin
-	  subklass = OSX.ns_import nsklass.intern
-	rescue NameError
-	  # redefine subclass (looks not a Cocoa class)
-	  OSX.const_set(nsklass, subklass)
-	end
+    def _real_class_and_mod(klass)
+      unless klass.ancestors.include?(OSX::Boxed)
+        klassname = klass.name
+        unless klassname.nil? || klassname.empty?
+          if Object.included_modules.include?(OSX) and /::/.match(klassname).nil?
+            [klassname, Object]
+          elsif klassname[0..4] == 'OSX::' and (tokens = klassname.split(/::/)).size == 2 and klass.superclass != OSX::Boxed
+            [tokens[1], OSX]
+          end
+        end
       end
-      __before_osx_inherited(subklass)
+    end
+
+    alias _before_osx_inherited inherited
+    def inherited(subklass)
+      nsklassname, mod = _real_class_and_mod(subklass) 
+      if nsklassname
+        # remove Ruby's class
+        mod.instance_eval { remove_const nsklassname.intern }
+        begin
+          klass = OSX.ns_import nsklassname.intern
+          raise NameError if klass.nil?
+          subklass = klass
+        rescue NameError
+          # redefine subclass (looks not a Cocoa class)
+          mod.const_set(nsklassname, subklass)
+        end
+      end
+      _before_osx_inherited(subklass)
+    end
+
+    def _register_method(sym, class_method)
+      if self != Object
+        nsklassname, mod = _real_class_and_mod(self)
+        if nsklassname
+          begin
+            nsklass = OSX.const_get(nsklassname)
+            raise NameError unless nsklass.ancestors.include?(OSX::NSObject)
+            if class_method
+              method = self.method(sym).unbind
+              OSX.__rebind_umethod__(nsklass.class, method)
+              nsklass.module_eval do 
+                (class << self; self; end).instance_eval do 
+                  if RUBY_VERSION >= "1.8.5"
+                    define_method(sym, method)
+                  else
+                    define_method(sym) { method.bind(self).call }
+                  end
+                end
+              end
+            else
+              method = self.instance_method(sym)
+              OSX.__rebind_umethod__(nsklass, method)
+              nsklass.module_eval do
+                if RUBY_VERSION >= "1.8.5"
+                  define_method(sym, method)
+                else
+                  define_method(sym) { method.bind(self).call }
+                end
+              end
+            end
+          rescue NameError
+          end
+        end
+      end
+    end
+
+    alias _before_method_added method_added
+    def method_added(sym)
+      _register_method(sym, false)
+      _before_method_added(sym)
+    end
+
+    alias _before_singleton_method_added singleton_method_added
+    def singleton_method_added(sym)
+      _register_method(sym, true)
+      _before_singleton_method_added(sym)
     end
   end
 end
-
-OSX.load_bridge_support_signatures

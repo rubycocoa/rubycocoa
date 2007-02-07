@@ -1,13 +1,12 @@
 require 'test/unit'
 require 'osx/cocoa'
 
-system 'make' || raise(RuntimeError, "'make' failed")
+system 'make -s' || raise(RuntimeError, "'make' failed")
 require 'objc_test.bundle'
 
 OSX.ns_import :RetainCount
 
 class RBSubclass < OSX::NSObject
-  attr_accessor :passed
 end
 
 class TC_RetainCount < Test::Unit::TestCase
@@ -38,21 +37,26 @@ class TC_RetainCount < Test::Unit::TestCase
     assert_equal(2, OSX::RetainCount.rbObject.retainCount, 'Ruby object')
   end
 
-  # argument from Objctive-C
-  def test_arg_from_objc
-    rcv = RBSubclass.alloc.init
-    OSX::RetainCount.setAnOcObjToReceiver_forKey(rcv, :passed)
-    assert_equal(2, rcv.passed.retainCount)
-    rcv.passed = nil
-    OSX::RetainCount.setAnRBObjToReceiver_forKey(rcv, :passed)
-    assert_equal(2, rcv.passed.retainCount)
-  end
-
+  # placeholder
   def test_placeholder
     assert_equal(1, OSX::NSMutableString.alloc.init.retainCount,
       'placeholder in ruby') 
     assert_equal(2, OSX::RetainCount.ocObjectFromPlaceholder.retainCount,
       'placeholder in Objc') 
+  end
+
+  # CF types
+  def test_cf_types
+    # /Create/ -> already retained by CF
+    url = OSX::CFURLCreateWithString(OSX::KCFAllocatorDefault, "http://www.google.com", nil)
+    assert_equal(1, url.retainCount)
+    # /Copy/ -> already retained by CF
+    # XXX copy methods return objects with a strange (very big) retain count
+    #url2 = OSX::CFURLCopyAbsoluteURL(url) 
+    #assert_equal(1, url2.retainCount)
+    # Other -> not retained by CF, retained by RubyCocoa
+    str = OSX::CFURLGetString(url)
+    assert_equal(2, str.retainCount)
   end
 end
 

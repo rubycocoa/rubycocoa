@@ -59,7 +59,7 @@ class TC_NSString < Test::Unit::TestCase
     nsstr = NSString.stringWithRubyString( @eucstr )
     data = nsstr.dataUsingEncoding( NSJapaneseEUCStringEncoding )
     bytes = "." * data.length
-    data.getBytes( bytes )
+    data.getBytes_length( bytes )
     assert_equal( @eucstr, bytes )
   end
 
@@ -67,7 +67,7 @@ class TC_NSString < Test::Unit::TestCase
     nsstr = NSString.stringWithRubyString( @eucstr )
     data = nsstr.dataUsingEncoding( NSShiftJISStringEncoding )
     bytes = "." * data.length
-    data.getBytes( bytes )
+    data.getBytes_length( bytes )
     assert_equal( @eucstr.tosjis, bytes )
   end
 
@@ -75,7 +75,7 @@ class TC_NSString < Test::Unit::TestCase
     nsstr = NSString.stringWithRubyString( @eucstr )
     data = nsstr.dataUsingEncoding( NSISO2022JPStringEncoding )
     bytes = "." * data.length
-    data.getBytes( bytes )
+    data.getBytes_length( bytes )
     assert_equal( @eucstr.tojis, bytes )
   end
 

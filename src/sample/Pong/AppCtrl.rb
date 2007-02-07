@@ -67,7 +67,7 @@ class AppCtrl < OSX::NSObject
   end
 
   def windowShouldClose (sender)
-    OSX.NSApp.stop(self)
+    OSX::NSApp.stop(self)
     true
   end
 

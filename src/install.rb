@@ -760,6 +760,11 @@ class Installer
     command 'rm -rf build'
     command 'rm -f src/objc/cocoa/rb_AppKit.m'
     command 'rm -f src/objc/cocoa/rb_Foundation.m'
+    command 'rm -rf bridge-support'
+    command 'rm -rf bridge-doc'
+    dive_into( '../misc/libffi' ) {
+      command config('make-prog') + ' -f Makefile.rubycocoa clean'
+    }
   end
 
   #
@@ -826,6 +831,7 @@ class ToplevelInstaller < Installer
     [ 'show',     'shows current configuration' ],
     [ 'setup',    'compiles extention or else' ],
     [ 'test',     'tests framework' ],
+    [ 'doc',      'generate documentation' ],
     [ 'install',  'installs files' ],
     [ 'package',  'make binary package into a dmg' ],
     [ 'clean',    "does `make clean' for each extention" ]
@@ -1037,6 +1043,7 @@ class ToplevelInstaller < Installer
   def exec_test
     dive_into('tests') {
       ENV['DYLD_FRAMEWORK_PATH'] = File.join('../framework', framework_obj_path)
+      ENV['BRIDGE_SUPPORT_PATH'] = '../framework/bridge-support'
       ruby_cmd = File.join(
 	Config::CONFIG['bindir'], Config::CONFIG['RUBY_INSTALL_NAME'])
       test_loadlibs(ruby_cmd)
@@ -1075,6 +1082,15 @@ class ToplevelInstaller < Installer
     ensure
       ENV.delete('DYLD_PRINT_LIBRARIES_POST_LAUNCH')
     end
+  end
+
+  # doc
+
+  def exec_doc
+    dive_into('framework') { 
+      run_hook 'pre-doc.rb'
+      run_hook 'post-doc.rb' 
+    }
   end
 
   #

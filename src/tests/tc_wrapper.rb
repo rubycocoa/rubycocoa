@@ -54,14 +54,15 @@ class TC_OCObjWrapper < Test::Unit::TestCase
     OSX.relaxed_syntax = true
     url1 = NSURL.alloc.initWithScheme_host_path_('http', 'localhost', '/foo') 
     url2 = NSURL.alloc.initWithScheme_host_path('http', 'localhost', '/foo') 
-    url3 = NSURL.alloc.initWithScheme('http', :host, 'localhost', :path, '/foo') 
-    url4 = NSURL.alloc.initWithScheme('http', :host => 'localhost', :path => '/foo')
-    assert_equal(1, url1.isEqual(url2)) 
-    assert_equal(1, url2.isEqual(url3)) 
-    assert_equal(1, url3.isEqual(url4))
+    assert_equal(true, url1.isEqual(url2)) 
+    url3 = NSURL.alloc.objc_send(:initWithScheme, 'http', :host, 'localhost', :path, '/foo')
+    assert_equal(true, url1.isEqual(url3))
+    # No need to check for symbol/value/... and inline Hash syntaxes, as they are deprecated.
+    # However we should check that an exception is raised (as if relaxed_syntax was false) for
+    # the 1.0.0 release.
     OSX.relaxed_syntax = false 
     url5 = NSURL.alloc.initWithScheme_host_path_('http', 'localhost', '/foo') 
-    assert_equal(1, url1.isEqual_(url5))
+    assert_equal(true, url1.isEqual_(url5))
     assert_raises OSX::OCMessageSendException do
       NSURL.alloc.initWithScheme_host_path('http', 'localhost', '/foo')
     end 
@@ -74,12 +75,47 @@ class TC_OCObjWrapper < Test::Unit::TestCase
     OSX.relaxed_syntax = old_relaxed_syntax
   end
 
+  def test_objc_send
+    # Some additional tests for objc_send.
+    assert_raises ArgumentError do 
+      OSX::NSObject.alloc.objc_send
+    end 
+    assert_nothing_raised { OSX::NSObject.alloc.objc_send :init }
+    assert_nothing_raised { OSX::NSArray.arrayWithObject(1).objc_send(:objectAtIndex, 0) }
+  end
+
   def test_missing_args
     assert_raises ArgumentError do
       NSURL.URLWithString_
     end
     assert_raises ArgumentError do
       NSURL.URLWithString_relativeToURL_('http://localhost')
+    end
+  end
+
+  def test_proxy_ancestors
+    assert(!OSX::NSProxy.ancestors.include?(OSX::NSObject))
+    assert(!OSX::NSProtocolChecker.ancestors.include?(OSX::NSObject))
+  end
+
+  def test_alias
+    # alias class method
+    assert_raises OSX::OCMessageSendException do
+      str = NSString.ocm_send('str:', 'RubyCocoa')
+    end
+    OSX::NSString.objc_alias_class_method 'str:', 'stringWithString:'
+    str = NSString.ocm_send('str:', 'RubyCocoa')
+    assert(str.isEqualToString?('RubyCocoa'), 'alias class method')
+    # alias instance method
+    assert_raises OSX::OCMessageSendException do
+      substr = str.ocm_send('substr:', [4..8])
+    end
+    OSX::NSString.objc_alias_method 'substr:', 'substringWithRange:'
+    substr = str.ocm_send('substr:', [4..8])
+    assert(substr.isEqualToString?('Cocoa'), 'alias instace method')
+    # RuntimeError should be raise when the selctor does not exist
+    assert_raises RuntimeError do
+      OSX::NSString.objc_alias_method 'foo', 'foobarbaz'
     end
   end
 

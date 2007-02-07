@@ -64,7 +64,7 @@ class TC_ObjcPtr < Test::Unit::TestCase
     src = 'hello world'
     data = NSData.dataWithRubyString( src )
     cptr = ObjcPtr.new( src.size )
-    data.getBytes( cptr )
+    data.getBytes_length( cptr )
     assert_equal( src.size, cptr.allocated_size )
   end
 

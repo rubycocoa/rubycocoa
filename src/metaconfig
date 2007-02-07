@@ -31,12 +31,12 @@ add_path_config 'install-root', '',
 add_path_config 'frameworks', '/Library/Frameworks',
   'path to the directory for installing RubyCocoa.framework'
 
-if File.exists?('/Developer/Applications/Project Builder.app') then
+if File.exist?('/Developer/Applications/Project Builder.app') then
   add_path_config 'projectbuilder-extras', '/Developer/ProjectBuilder Extras',
     'path to the directory for "Project Bulder Extras"'
 end 
 
-if File.exists?('/Developer/Applications/Xcode.app') then
+if File.exist?('/Developer/Applications/Xcode.app') then
   add_path_config 'xcode-extras', 
     '/Library/Application Support/Apple/Developer Tools',
     'path to the directory for "Xcode Extras"'
@@ -51,10 +51,13 @@ add_path_config 'documentation', '/Developer/Documentation',
 add_path_config 'bridge-support', '/Library/BridgeSupport',
   'path to the directory for BrigeSupport metadata files'
 
+add_bool_config 'gen-bridge-support', true,
+  'yes, generate bridge metadata files'
+
 ### build configuration ### 
 
 # Xcode 2.2 moved ruby.h, but ruby command reports old path.
-unless File.exists? File.join(Config::CONFIG['archdir'], 'ruby.h')
+unless File.exist? File.join(Config::CONFIG['archdir'], 'ruby.h')
   Config::CONFIG['archdir'] = Config::CONFIG['archdir'].sub(/powerpc/, 'universal')
 end
 add_path_config 'ruby-header-dir', Config::CONFIG['archdir'],
@@ -87,4 +90,3 @@ add_config 'rubycocoa-release-date', 'name',
 
 add_config 'rubycocoa-svn-revision', 'name', 
   RubyCocoaConfig::SVN_REVISION, 'RubyCocoa subversion revision number'
-
