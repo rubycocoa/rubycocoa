@@ -1,0 +1,18 @@
+<?xml version='1.0'?>
+<!DOCTYPE signatures SYSTEM "file://localhost/System/Library/DTDs/BridgeSupport.dtd">
+<signatures version='0.9'>
+  <!-- those AB*Ref CFTypes miss a gettypeid function (rdar://4908162) -->
+  <cftype name='ABAddressBookRef'/>
+  <cftype name='ABGroupRef'/>
+  <cftype name='ABMultiValueRef'/>
+  <cftype name='ABMutableMultiValueRef'/>
+  <cftype name='ABPersonRef'/>
+  <cftype name='ABPickerRef'/>
+  <cftype name='ABSearchElementRef'/>
+  <struct name='ABActionCallbacks'/>
+  <class name='ABIdentityPicker'>
+    <method selector='beginSheetModalForWindow:modalDelegate:didEndSelector:contextInfo:'>
+      <arg index='3' type_modifier='in'/>
+    </method>
+  </class>
+</signatures>
