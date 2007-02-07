@@ -1,0 +1,208 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html lang="ja">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="Content-Language" content="ja">
+  <link rel="stylesheet" type="text/css" href="style.css">
+  <title>RubyCocoa 1.0 Sneak Preview</title>
+</head>
+<body>
+<h1>RubyCocoa 1.0 Sneak Preview</h1>
+
+
+	<p>このページ(<a href="./">英文はこちら</a>)は、将来 1.0 リリース版となる RubyCocoa の unstable branch(訳注:apple-unstable-branch)の現状について説明したものです。</p>
+
+
+	<p>今のところ、まだまだ手をいれているものの、機能的な面はほとんど実装されていますし、安定版リリース(訳注:0.5.0)よりも信頼性があるとさえ言えます。そこで、pre-release 版を試すに当たってのご案内をここで提供します。あなたが見つけたどんな問題についてでも、レポートをいただければ幸いです。</p>
+
+
+	<h2>Getting Started</h2>
+
+
+	<p>最新の pre-release は、0.10.1 です。<a href="http://sourceforge.net/project/showfiles.php?group_id=44114">ダウンロードページ</a>からバイナリのインストーラとソースコードからダウンロード可能です。</p>
+
+
+	<p>ソースコードをダウンロードした場合は、自分で RubyCocoa をビルドする必要があります。</p>
+
+
+<pre>
+$ cd rubycocoa-unstable
+$ ruby install.rb config
+$ ruby install.rb setup
+$ sudo ruby install.rb install
+</pre>
+
+	<p>また、Subversion リポジトリから最新のコードを入手することもできます:</p>
+
+
+<pre>
+$ svn co https://rubycocoa.svn.sourceforge.net/svnroot/rubycocoa/branches/apple-unstable/src \
+    rubycocoa-unstable
+</pre>
+
+	<p>RubyCocoa をインストールすると、<tt>/Developer/Examples/RubyCocoa</tt> でサンプルスクリプトやプロジェクトを見つけることができます。buildall.rbを使って全てのサンプルアプリケーションをまとめてビルドすることができます:</p>
+
+
+<pre>
+$ cd /Developer/Examples/RubyCocoa
+$ mkdir All
+$ ruby buildall.rb All
+$ open All
+</pre> 
+
+	<h2>What&#8217;s New</h2>
+
+
+	<p>unstable ブランチでは、多くの修正と改善が行われました。重要な変更について説明します。</p>
+
+
+	<h3>Libffi Integration</h3>
+
+
+	<p>RubyCocoa でも <a href="http://sources.redhat.com/libffi/">Libffi</a> が導入されました。&#8221;FFI&#8221; は Foreign Function Interface の略語です。Libffi は、GCC プロジェクトの一部である C言語のライブラリで、あらゆる C言語の関数を実行することができます。agnostic な方法で(なんだかよくわからない方法で? 適した語を教えてください! &#8211; 訳者) 引数を格納、返り値を取り出し、変数の型を抽出することで(関数呼び出しが)実行されます。</p>
+
+
+	<p>RubyCocoa は、2つの世界(訳注:Objective-C と Ruby)間のメッセージ送信において、C 関数や Objective-C のメソッドを Ruby から呼び出しているのに対して、Objective-C からのメッセージ送信では専用の Ruby オブジェクトを経由させています。</p>
+
+
+	<p>RubyCocoa での Libffi の使用は、信頼性とパフォーマンスの向上をもたらしました。RubyCocoa では <tt>NSInvocation</tt> はもはや利用されていません。</p>
+
+
+	<h3>BridgeSupport Metadata</h3>
+
+
+	<p>Objective-C の動的性質のおかげで、ブリッジの提供に必要な情報(クラスやそのメソッドなど)は実行時に取得することができます。しかしながら、Objective-C 中の C の部分は動的なものではないために、関数や定数といった C のデータを実行時に知ることはできません。</p>
+
+
+	<p>RubyCocoa では、これらの C の要素を扱うために、ビルド時にヘッダファイルをパースすることにより静的なコードを生成していました。ですが、これは新しいフレームワークのサポートを追加したときに(訳注:RubyCocoa を)再ビルドしなければならないなど、保守性を低下させることにもなってしまいました。ですから、静的なコードではなくメタデータにより Cの要素を扱うというアイディアが実現されました(訳注:この文超訳)。われわれ開発者が用意しておいたメタデータファイルを、RubyCocoa は実行時に解釈します。</p>
+
+
+	<p>メタデータを生成するスクリプトが提供されており、ビルド時にはこのスクリプトによりデフォルトのフレームワークに関するメタデータが生成されます。メタデータファイルは <span class="caps">XML</span> 形式で、フレームワークごとに1ファイルとなります。メタデータは、C の関数、enum、定数、構造体、さらには opaque や Core Foudation の型、Objective-C の非定型プロトコルに関する情報を表現します。メタデータは、メソッドの返り値の <span class="caps">BOOL</span> 型(訳注:BOOL は内部的に unsigned char で 表現されるため、Objective-C のランタイムから、あるメソッドの返り値が <span class="caps">BOOL</span> であるかどうかを判断することができません)や、ポインタ渡しの引数による返り値に関しての情報も提供します。</p>
+
+
+	<p>RubyCocoa は、フレームワークのロード完了後にメタデータファイルを読み込みます。そのため、必要なときだけローカライズされたシンボルを扱うなど、メタデータの寛容な解釈を行うことができます。より多くのフレームワークをサポートすることができるように、メタデータ生成スクリプトは <tt>/usr/bin/gen_bridge_metadata</tt> としてインストールされます。また、メタデータファイルは <tt>/Library/BridgeSupport</tt> にインストールされます。</p>
+
+
+	<h3>More Frameworks Support</h3>
+
+
+	<p>新しいメタデータ機構のおかげで、以前よりも簡単にフレームワークのブリッジを提供することができるようになりました。今までの Foundation, AppKit と WebKit に加えて、unstable ブランチでは CoreFoundation, CoreGraphics, PDFKit, QuartzCore (CoreImage と CoreVideo), OpenGL, QTKit, InstantMessage をサポートしています。また、CoreDataおよびAddressBookは、 BridgeSupport による metadata ベースで置き換えられています。</p>
+
+
+	<p><tt>/Developer/Examples/RubyCocoa</tt>で、これらのフレームワークを使用したサンプルを見ることができます。</p>
+
+
+	<p>AddressBookとCoreDataをロードするためのライブラリ <tt>osx/addressbook</tt> と <tt>osx/coredata</tt> は削除されます(現在は警告メッセージを表示)。フレームワークをロードするための新しいAPI <tt>require_framework</tt> (詳細については以下のセクションを参照のこと)を使ってロードするようにしてください。</p>
+
+
+	<h3><span class="caps">API</span> Changes</h3>
+
+
+	<p>フレームワークをロードするための新しいAPI <tt>require_framework</tt> が加わりました。使い方は簡単で、引数にフレームワーク名を与えるだけです。デフォルトのフレームワークパスに含まれていないフレームワークに関しては、フルパスを指定することによりロードすることができます。</p>
+
+
+<pre>
+OSX.require_framework 'CoreData'
+OSX.require_framework '/Path/To/MyFramework.framework'
+</pre>
+
+	<p>RubyCocoa では、Objective-C のメッセージを Ruby で扱う際に、最後のアンダースコアを省略することができました。これは現在ではサポートされていますが、 <tt><span class="caps">OSX</span>.relaxed_syntax</tt>(初期値は <tt>true</tt>) の値が <tt>false</tt> のときには許可されない記法となります。</p>
+
+
+<pre>
+p OSX.relaxed_syntax                # returns true
+OSX::Array.arrayWithObject('foo')   # OK
+OSX.relaxed_syntax = false
+OSX::Array.arrayWithObject('foo')   # Exception! 
+OSX::Array.arrayWithObject_('foo')  # OK
+</pre> 
+
+	<p>Ruby から Objective-C にメッセージ送信するときの、<i>symbol / value&#8230;</i> という記法は利用できなくなりました。この記法を利用した呼び出しを行う都度、警告が出力され、最終リリース時には例外が発生するようになります。</p>
+
+
+<pre>
+OSX::NSURL.alloc.initWithScheme('http', :host, 'www.apple.com', :path, '/macosx')  # BAD
+OSX::NSURL.alloc.initWithScheme_host_path('http', 'www.apple.com', '/macosx')      # GOOD
+</pre>
+
+	<p>この変更に対する代替として、objc_sendメソッドが追加になりました(0.10.0以降)。</p>
+
+
+<pre>
+OSX::NSURL.alloc.objc_send(:initWithScheme, 'http',
+                           :host,           'www.apple.com',
+                           :path,           '/macosx')
+</pre>
+
+	<p>RubyCocoa では、C の定数を Ruby の <span class="caps">OSX</span> モジュールの定数であるかのように扱うことができます。以前のバージョン(訳注:0.4.2まで)では、OSX モジュールのメソッドのようになっていました。OSX モジュールのメソッド形式での定数アクセスは、今後廃止されます。現在では、メソッド呼び出しの都度警告が出力され、最終リリースでは例外が発生するようになります。</p>
+
+
+<pre>
+OSX.NSApp    # BAD
+OSX.NSApp()  # BAD
+OSX::NSApp   # GOOD
+</pre>
+
+	<p><tt>addRubyMethod_withType</tt>のことを聞いたことがあるかもしれません。これは、Rubyプログラムで定義したメソッドをObjective-Cランタイムに登録するためのメソッドです。このメソッドは、登録するRubyのメソッドを Objective-C のセレクタで指定するなど、Objective-Cプログラマ向けに書かれたものとなっています。Rubyに親しんでいるプログラマのための代替として、<tt>objc_export</tt>(<tt>objc_method</tt>に変更予定 &#8211; 2007.1.17)が追加されました。これは、Objective-Cランタイムに対して、Rubyで書いたメソッドの型(引数と戻り値)を宣言する意味合いを持っています(かなり意訳):</p>
+
+
+<pre>
+class MyClass : NSObject
+  # A method returning an 'id'.
+  def something
+    'something'
+  end
+  objc_export :something, %w{id}
+
+  # 2つ の int を引数にとり、その和を int で返す関数
+  def sum_with(x, y)
+    x + y
+  end
+  objc_export :sum_with, %w{int int int}
+
+  # NSPoint と NSSize を引数にとり、NSRect を返す関数
+  def makeRectWithPoint_size(point, size)
+    NSRect.new(point, size)
+  end
+  objc_export :makeRectWithPoint_size, [NSRect, NSPoint, NSSize]
+end
+</pre>
+
+	<h3>More Runtime Power</h3>
+
+
+	<p>Objective-Cベースの任意のクラス(OSX::NSobjectなど)について、Objective-Cにおけるカテゴリのように、Objective-Cのインスタンスメソッドの再定義・追加が可能になっています。これは、以前のバージョンではサブクラスに対してのみ可能でした。</p>
+
+
+	<p>以下は新しいメソッドを追加する例です:</p>
+
+
+<pre>
+class NSObject
+  def myMethod
+    # Do something
+    'foo'
+  end
+  objc_export :myMethod, ['id']
+end
+
+# Now, all NSObject-based objects in the Objective-C runtime will respond to [-myMethod]. 
+</pre>
+
+	<p>次は、既存の Objective-Cメソッドを再定義する例です:</p>
+
+
+<pre>
+class NSString
+  def length
+    42
+  end
+end
+
+# Now, all NSString objects will have a length of 42. Don't try this at home kids!
+</pre>
+
+	<h2>Support</h2>
+
+
+	<p>今のところは、<a href="http://lists.sourceforge.jp/mailman/listinfo/rubycocoa-devel">rubycocoa-devel メーリングリスト</a>でフィードバックを受け付けています（日本語での投稿は <a href="http://www.freeml.com/ctrl/html/MLInfoForm/rubycocoa@freeml.com">rubycocoa メーリングリスト</a>へお願いします）。バグトラッカーは現在準備中です。</p>

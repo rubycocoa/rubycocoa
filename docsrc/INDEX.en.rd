@@ -83,30 +83,32 @@ Interface Builder.
 == LICENSE
 
 ((<GNU Lesser General Public License version 2. LGPL
-|URL:http://www.gnu.org/licenses/lgpl.html>)),
-or the Ruby License.
+|URL:http://www.gnu.org/licenses/lgpl.html>))
 
 
-== History
+== ACKNOWLEDGEMENT
 
-[2001(fall)] Fujimoto Hisa implemented a ruby extend module to wrap NSObject and NSClassFromString.
-[2001.10] integrated with InterfaceBuilder and ProjectBuilder.
-[2001.11] 1st RubyCocoa was released.
-[2002.2(about)] registered a project to SourceForge (((<URL:http://sourceforge.net/projects/rubycocoa>))). Chris Thomas joined the commiters.
-[2002.5] On ((<'Dr. Dobbs Journal, May 2002'|URL:http://www.ddj.com/articles/2002/0205/>)), the article about RubyCocoa "Examining RubyCocoa" by Chris Thomas.
-[2003] Kimura Wataru joined the commiters.
-[2006.2] Jonathan Paisley joined the commiters.
-[2006] RubyCocoa resource site ((<rubycocoa.com|URL:http://www.rubycocoa.com/>)) by Tim Burks.
-[2006.5] Laurent Sansonetti joined the commiters.
-[2006.8] Tim Burks joined the commiters.
-[2006.8] RubyCocoa will be included in Leopard at Apple WWDC.
+Special thanks to Chris Thomas, Luc "lucsky" Heinrich and S. Sawada.
+
+And thanks to:
+
+Gesse Gam, Hiroyuki Shimura, John Platte, kimura wataru, Masaki Yatsu,
+Masatoshi Seki, Michael Miller, Ogino Junya, Ralph Broom, Rich Kilmer,
+Shirai Kaoru, Tetsuhumi Takaishi, Tosh, Matthew Fero, Rod Schmidt,
+Jonathan Paisley, Norberto Ortigoza
 
 
 == Contact
 
-* ((<URL:http://sourcefore.net/projects/rubycocoa/>)) (will be move to ((<URL:http://www.macosforge.org/>)))
-* RubyCocoa Project <hisa at sourceforge.net> (will be move to mac os forge account)
+Feel free to send comments, icon designs, bug reports and patches for
+RubyCocoa. I want to ask kind native English speakers to correct my strange
+English errors. Thanks.
+
+An author looks for a job (an income source).  Is there a supporter
+(sponsor, investor, etc.) with interest in the development of RubyCocoa or
+other software?
+
+Contact ((<me|URL:mailto:contact.rubycocoa@fobj.com>)) freely please.
 
 
-
-$Date$
+FUJIMOTO, Hisakuni <hisa at fobj.com> $Date$

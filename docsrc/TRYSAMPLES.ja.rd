@@ -61,14 +61,14 @@ Mac OS X 10.2を使っている人はさらに
 さい。
 
 
-== XcodeベースのソースからRubyCocoaアプリケーションを作る
+== Project BuilderベースのソースからRubyCocoaアプリケーションを作る
 
-次にXcodeベースのものを試してみましょう。コマンドラインから
+次にProject Builderベースのものを試してみましょう。コマンドラインから
 
   $ cd /Developer/Examples/RubyCocoa/simpleapp
-  $ xcodebuild      # アプリケーション作成
+  $ pbxbuild      # アプリケーション作成
 
-として構築します。もちろんXcodeを起動してその中で構築したり
+として構築します。もちろんProject Builderを起動してその中で構築したり
 実行したりすることもできます。実行してみましょう。
 
   % open build/SimpleApp.app

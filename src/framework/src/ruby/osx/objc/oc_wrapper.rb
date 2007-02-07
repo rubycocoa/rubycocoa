@@ -8,15 +8,49 @@ module OSX
 
   class << self
     attr_accessor :relaxed_syntax
+
+    # Backward compatibility check; get C constants
+    def method_missing(mname, *args)
+      if args.length == 0
+        begin
+          ret = const_get(mname)
+          warn "#{caller[0]}: syntax 'OSX.#{mname}' to get the constant is deprecated and its use is discouraged, please use 'OSX::#{mname}' instead."
+          return ret
+        rescue
+        end
+      end
+      raise NameError, "undefined method `#{mname}' for OSX:Module"
+    end
   end
 
   module OCObjWrapper
 
+    # A convenience method to dispatch a message to ObjC as symbol/value/...
+    # For example, [myObj doSomething:arg1 withObject:arg2] would translate as:
+    #   myObj.objc_send(:doSomething, arg1, :withObject, arg2)
+    def objc_send(*args)
+      raise ArgumentError, "wrong number of arguments (#{args.length} for at least 1)" if args.empty?
+      mname = ""
+      margs = []
+      args.each_with_index do |val, index|
+        if index % 2 == 0 then
+          mname << val.to_s << ':'
+        else
+          margs << val
+        end
+      end
+      mname.chomp!(':') if args.size == 1
+      return self.ocm_send(mname, *margs)
+    end
+
     def method_missing(mname, *args)
-      m_name, m_args, m_predicate = analyze_missing(mname, args)
-      ret = self.ocm_send(m_name, *m_args)
-      ret = (ret != 0) if m_predicate
-      ret
+      m_name, m_args, as_predicate = analyze_missing(mname, args)
+      result = self.ocm_send(m_name, *m_args)
+      if as_predicate && result.is_a?(Integer) then
+        result != 0
+      else
+        result
+      end
     end
 
     def ocnil?
@@ -63,15 +97,16 @@ module OSX
       # remove `oc_' prefix
       m_name.sub!(/^oc_/, '')
 
-      # is predicate ?
-      m_predicate = m_name.sub!(/\?$/,'')
-      # m_predicate = (/^is/ =~ m_name) unless m_predicate
+      # remove `?' suffix (to keep compatibility)
+      # explicit predicate if `?' suffix with OSX.relaxed_syntax
+      as_predicate = (m_name.sub!(/\?$/, '') && OSX.relaxed_syntax) ? true : false
 
       # check call style
       #   as Objective-C: [self aaa: a0 Bbb: a1 Ccc: a2]
       #   as Ruby:   self.aaa_Bbb_Ccc_ (a0, a1, a2)
-      # check relaxed call styles (only if OSX.relaxed_syntax == true)
+      # only if OSX.relaxed_syntax == true, check missing final underscore
       #   as Ruby:   self.aaa_Bbb_Ccc (a0, a1, a2)
+      # other syntaxes are now deprecated
       #   as Ruby:   self.aaa (a0, :Bbb, a1, :Ccc, a2)
       #   as Ruby:   self.aaa (a0, :Bbb => a1, :Ccc => a2)
       if OSX.relaxed_syntax
@@ -100,6 +135,7 @@ module OSX
           end
           m_name = "#{mname}_"
           m_args = args
+          warn "#{caller[1]}: inline Hash dispatch syntax is deprecated and its use is discouraged, please use '#{m_name}(...)' or 'objc_send(...)' instead."
         elsif (m_args.size >= 3) && ((m_args.size % 2) == 1) && (not m_name.include?('_')) then
           # Parse the symbol-value-symbol-value-... case.
           mname = m_name.dup
@@ -112,12 +148,13 @@ module OSX
             end
           end
           m_name = "#{mname}_"
+          warn "#{caller[1]}: symbol-value-... dispatch syntax is deprecated and its use is discouraged, please use '#{m_name}(...)' or 'objc_send(...)' instead."
           m_args = args
         else
           m_name.sub!(/[^_:]$/, '\0_') if m_args.size > 0
         end
       end
-      [ m_name, m_args, m_predicate ]
+      return [ m_name, m_args, as_predicate ]
     end
 
   end

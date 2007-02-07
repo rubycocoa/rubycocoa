@@ -33,7 +33,7 @@
 	<key>IFPkgFlagOverwritePermissions</key>
 	<false/>
 	<key>IFPkgFlagRelocatable</key>
-	<true/>
+	<false/>
 	<key>IFPkgFlagRestartAction</key>
 	<string>NoRestart</string>
 	<key>IFPkgFlagRootVolumeOnly</key>
@@ -71,5 +71,9 @@
 			<string>&lt;=</string>
 		</dict>
 	</array>
+    <key>IFPkgFlagBackgroundScaling</key>
+    <string>none</string>
+    <key>IFPkgFlagBackgroundAlignment</key>
+    <string>bottomleft</string>
 </dict>
 </plist>

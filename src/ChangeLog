@@ -1,195 +1,1679 @@
-2006-12-06  kimura wataru <kimuraw@i.nifty.jp>
+2007-02-05  Fujimoto Hisa  <hisa@fobj.com>
 
-	* VERSION:
-	- exported svn revison from $Revision: 1403 $ keyword.
-	- 0.5.0.
+	* framework/src/objc/RBSlaveObject.m,
+	  framework/src/objc/RBObject.m,
+	  framework/src/objc/libffi.m,
+	  framework/src/objc/RBRuntime.h,
+	  framework/src/objc/RBRuntime.m,
+	  framework/src/objc/mdl_objwrapper.m,
+	  framework/src/objc/RBClassUtils.m,
+	  framework/src/objc/ocdata_conv.m,
+	  framework/src/objc/OverrideMixin.m,
+	  framework/src/objc/BridgeSupport.m,
+	  framework/src/objc/cls_objcid.m,
+	  framework/src/objc/internal_macros.h:
+	moved some macros (for debugging) to internal_macros.h from
+	RBRuntime.h.
 
-	* doc/build.en.html, doc/build.ja.html, doc/changelog.html,
-	  doc/getting.en.html, doc/getting.ja.html, doc/index.en.html,
-	  doc/index.ja.html, doc/news.en.html, doc/news.ja.html:
-	update documents for releas-0.5.0.
+	* framework/src/objc/RBRuntime.h, framework/src/objc/RBRuntime.m:
+	modified an argument type of RBBundleInit to specify the current Bundle.
 
-2006-12-04  kimura wataru <kimuraw@i.nifty.jp>
+	* framework/src/objc/RBClassUtils.m:
+	modified class_map_dic_add, and created an internal class named
+	RBClassMapInfo.  it's to keep a bundle object which is related
+	with a class written by ruby (not yet implement).
+
+2007-02-04  Eloy Duran <eloy.de.enige@gmail.com>
+
+	* framework/tool/gen_bridge_doc/lib/lib/class_def.rb:
+	Removed the extra framework namespaces from the class definition.
+
+2007-02-01  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* sample/ViewModelDemo:
+	Added new sample code contributed by Jim Getzen.
+
+2007-02-02  kimura wataru <kimuraw@i.nifty.jp>
+
+	* template/ProjectBuilder/Application/Cocoa-Ruby Core Data Application/AppDelegate.rb:
+	fix a typo in AppDelegate#saveAction.
+
+2007-02-01  Fujimoto Hisa  <hisa@fobj.com>
+
+	* framework/src/objc/RBRuntime.m:
+	support multiple calling RBBundleInit() in a
+	process. load_path_unshift() checked including the specified path.
+
+2007-01-31  Eloy Duran <eloy.de.enige@gmail.com>
+
+	* framework/tool/gen_bridge_doc/lib/PDFKit/PDFSelection.rb,
+	  framework/tool/gen_bridge_doc/lib/PDFKit/PDFView.rb,
+	  framework/tool/gen_bridge_doc/lib/PDFKit/PDFPage.rb,
+	  framework/tool/gen_bridge_doc/lib/PDFKit/PDFDocument.rb,
+	  framework/tool/gen_bridge_doc/rdocify_framework.rb,
+	  framework/tool/gen_bridge_doc.rb:
+	- Added support for PDFKit.
+
+2007-01-31  Eloy Duran <eloy.de.enige@gmail.com>
+
+	* framework/tool/gen_bridge_doc/lib/QuartzCore/CIImage.rb,
+	  framework/tool/gen_bridge_doc/lib/QuartzCore/CIVector.rb,
+	  framework/tool/gen_bridge_doc/lib/QuartzCore/CISampler.rb,
+	  framework/tool/gen_bridge_doc/lib/QuartzCore/CIContext.rb,
+	  framework/tool/gen_bridge_doc/lib/QuartzCore/CIFilter.rb,
+	  framework/tool/gen_bridge_doc/lib/QuartzCore/CIFilterShape.rb,
+	  framework/tool/gen_bridge_doc/lib/QuartzCore/CIColor.rb,
+	  framework/tool/gen_bridge_doc/lib/QuartzCore/CIImageProviderProtocol.rb,
+	  framework/tool/gen_bridge_doc/lib/lib/method_def.rb:
+	- Added support for the QuartzCore framework.
+
+2007-01-31  Eloy Duran <eloy.de.enige@gmail.com>
+
+	* framework/tool/gen_bridge_doc/lib/cocoa_ref.rb,
+	  framework/tool/gen_bridge_doc/lib/InstantMessage/IMService.rb,
+	  framework/tool/gen_bridge_doc.rb:
+	- Added support for the InstantMessage framework.
+
+2007-01-31  Eloy Duran <eloy.de.enige@gmail.com>
+
+	* framework/tool/gen_bridge_doc/lib/AddressBook/ABSearchElement.rb,
+	  framework/tool/gen_bridge_doc/lib/cocoa_ref.rb,
+	  framework/tool/gen_bridge_doc/lib/lib/method_def.rb,
+	  framework/tool/gen_bridge_doc/lib/lib/class_def.rb,
+	  framework/tool/gen_bridge_doc/lib/lib/constant_def.rb,
+	  framework/tool/gen_bridge_doc/rdocify_framework.rb,
+	  framework/tool/gen_bridge_doc.rb:
+	- Added support for the AddressBook framework ;
+	- Added a check to see if there was any relevant info
+	  in a reference file before writing the file to disk ;
+	- Added a description to the informal protocols
+	  and changed them from a class to a module.
+
+	* ChangeLog:
+	Fixed indentation in last ChangeLog entry.
+
+2007-01-31  kimura wataru <kimuraw@i.nifty.jp>
+
+	* framework/src/objc/mdl_objwrapper.m,
+	  framework/src/ruby/osx/objc/oc_import.rb,
+	  tests/tc_wrapper.rb:
+	new methods objc_alias_method, objc_alias_class_method at OCClsWrapper.
+	these methods enables to alias objc method of Cococa classes.
+
+2007-01-30  Eloy Duran <eloy.de.enige@gmail.com>
+
+	* framework/tool/gen_bridge_doc/lib/cocoa_ref.rb,
+	  framework/tool/gen_bridge_doc/lib/lib/class_def.rb,
+	  framework/tool/gen_bridge_doc/rdocify_framework.rb:
+	- Added support for informal protocols.
+
+2007-01-30  Eloy Duran <eloy.de.enige@gmail.com>
+
+	* framework/tool/gen_bridge_doc/lib/cocoa_ref.rb,
+	  framework/tool/gen_bridge_doc/lib/Foundation/HTMLParserOverrides.rb,
+	  framework/tool/gen_bridge_doc/lib/lib/method_def.rb,
+	  framework/tool/gen_bridge_doc/lib/lib/class_additions.rb,
+	  framework/tool/gen_bridge_doc/lib/lib/class_def.rb,
+	  framework/tool/gen_bridge_doc/lib/lib/clean_up.rb,
+	  framework/tool/gen_bridge_doc/lib/lib/extras.rb,
+	  framework/tool/gen_bridge_doc/lib/lib/constant_def.rb,
+	  framework/tool/gen_bridge_doc/lib/lib/hpricot_proxy.rb,
+	  framework/tool/gen_bridge_doc/rdocify_framework.rb:
+	- Improved constants parsing ;
+	- Added support for framework constants ;
+	- Added override for the foundation constants ;
+	- Added fix for local vars that are named class, they are now renamed to klass.
+
+2007-01-26  Eloy Duran <eloy.de.enige@gmail.com>
+
+	* framework/tool/gen_bridge_doc/lib/cocoa_ref.rb,
+	  framework/tool/gen_bridge_doc/lib/lib/method_def.rb,
+	  framework/tool/gen_bridge_doc/lib/lib/datatype_def.rb,
+	  framework/tool/gen_bridge_doc/lib/lib/hpricot_proxy.rb,
+	  framework/tool/gen_bridge_doc/rdocify_framework.rb:
+	- Fixed some opaque methods in the wrapped structures that were showing up where they shouldn't ;
+	- Fixed some little bugs.
+
+2007-01-26  Eloy Duran <eloy.de.enige@gmail.com>
+
+	* framework/tool/gen_bridge_doc/lib/cocoa_ref.rb,
+	  framework/tool/gen_bridge_doc/lib/lib/method_def.rb,
+	  framework/tool/gen_bridge_doc/lib/lib/class_additions.rb,
+	  framework/tool/gen_bridge_doc/lib/lib/class_def.rb,
+	  framework/tool/gen_bridge_doc/lib/lib/function_def.rb,
+	  framework/tool/gen_bridge_doc/lib/lib/notification_def.rb,
+	  framework/tool/gen_bridge_doc/lib/lib/clean_up.rb,
+	  framework/tool/gen_bridge_doc/lib/lib/constant_def.rb,
+	  framework/tool/gen_bridge_doc/lib/lib/datatype_def.rb,
+	  framework/tool/gen_bridge_doc/lib/lib/hpricot_proxy.rb,
+	  framework/tool/gen_bridge_doc/rdocify_framework.rb:
+	- Added support for ruby wrapped structures ;
+	- Split up huge file into several maintainable files.
+
+2007-01-26  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* framework/src/objc/BridgeSupport.h,
+	  framework/src/objc/BridgeSupport.m,
+	  tests/tc_types.rb:
+	Added OSX::Boxed.opaque?, a convenience method to determine if a given wrapped
+	type has been declared as opaque in the metadata file.
+
+	* framework/src/objc/BridgeSupport.m,
+	  tests/tc_types.rb:
+	Added OSX::Boxed.fields, a convenience method to get the list of fields in a 
+	given boxed class (only works on structures).
+
+2007-01-26  Eloy Duran <eloy.de.enige@gmail.com>
+
+	* framework/tool/gen_bridge_doc/lib/cocoa_ref.rb,
+	  framework/tool/gen_bridge_doc/lib/Foundation/FoundationFunctions.rb,
+	  framework/tool/gen_bridge_doc/lib/ApplicationKit/ApplicationKitFunctions.rb,
+	  framework/tool/gen_bridge_doc/rdocify_framework.rb,
+	  framework/tool/gen_bridge_doc.rb:
+	- Added support for functions ;
+	- Added overrides for functions in AppKit & Foundation ;
+	- Fixed objc_method to objc_send ;
+	- Every framework now gets put in it's own module, this extra namespace is for easier doc browsing.
+
+2007-01-26  Fujimoto Hisa  <hisa@fobj.com>
 
 	* framework/src/ruby/osx/objc/oc_import.rb:
-	suppress override OSX.const_missing.
+	deperecated ns_outlet(s). use ib_outlet(s) instead.
 
-2006-11-23  kimura wataru <kimuraw@i.nifty.jp>
+	* framework/src/ruby/osx/objc/oc_import.rb, tests/tc_subclass.rb:
+	added ib_action as a declaration for a IBAction method. if given a
+	block, it mean the implementation of the action. 
+	thanks to Chris McGrath!
 
-	* framework/GeneratedConfig.xcconfig.in, pre-config.rb:
-	fix LDFLAGS for libruby, ppc mac cannot build universal binary.
+2007-01-24  Laurent Sansonetti <lsansonetti@apple.com>
 
-	* VERSION:
-	0.5.0-preview7
+	* sample/PathDemo:
+	Full (pure Ruby) printing capabilities.
 
-2006-11-16  kimura wataru <kimuraw@i.nifty.jp>
+	* framework/src/objc/libffi.h,
+	  framework/src/objc/RBObject.m,
+	  framework/src/objc/libffi.m,
+	  framework/src/objc/mdl_osxobjc.m,
+	  framework/src/objc/mdl_objwrapper.m,
+	  framework/src/objc/RBClassUtils.m,
+	  framework/src/objc/ocdata_conv.h,
+	  framework/src/objc/ocdata_conv.m,
+	  framework/src/objc/BridgeSupport.h,
+	  framework/src/objc/OverrideMixin.m,
+	  framework/src/objc/BridgeSupport.m,
+	  tests/tc_passbyref.rb,
+	  tests/tc_ovmix.rb,
+	  tests/tc_subclass.rb,
+	  tests/objc_test.m:
+	- Refactored the encoding-based data conversion routines ;
+	- Added support for pointers to boxed types (from ObjC to Ruby) ;
+	- Updated test cases.
 
-	* framework/src/objc/cocoa/init_cocoa.m:
-	fix: missing retain for result of Cocoa functions.
+	* sample/PathDemo/DemoView.rb,
+	  framework/src/objc/cls_objcid.m:
+	DemoView has now printing capabilities. Make sure #release does
+	tell the Ruby proxy object to not release the ObjC object a 
+	second time.
 
-2006-11-11  Jonathan Paisley <jp-www@dcs.gla.ac.uk>
+	* framework/tool/gen_bridge_metadata.rb:
+	Discover more constants.
 
-	* framework/RubyCocoa.xcodeproj/project.pbxproj, 
-	  framework/src/ruby/osx/objc/qtkit.rb,
-	  framework/src/ruby/osx/qtkit.rb,
-	  pre-config.rb, tests/tc_qtkit.rb:
-	Include QTKit.framework in the project.
-	Add missing osx/qtkit.rb from Copy Files build phase.
-	Remove '-undefined suppress' from LDFLAGS, since this
-	hid the error about missing QTMakeTimeRange and QTMakeTime.
-	Hopefully it is not needed.
-	Add rudimentary tests for the qtkit additions (incomplete).
+	* framework/src/ruby/osx/objc/oc_exception.rb,
+	  framework/src/objc/mdl_osxobjc.m,
+	  framework/src/objc/ocexception.m:
+	Improved automatic class constant retrieval, fixed a bug in the 
+	OCException class (making sure #userInfo is binded to the right
+	instance variable).
+
+2007-01-23  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* misc/libffi/Makefile.rubycocoa,
+	  framework/RubyCocoa.xcodeproj/project.pbxproj:
+	Build everything with -O3. This is to make sure the FFI-generated
+	closures are callable from the generated objc_msgSent_stret calls
+	by GCC. Otherwise closures return C structure may cause memory
+	corruption. Thanks a lot to Ronald Oussoren!
+
+2007-01-23  Fujimoto Hisa  <hisa@fobj.com>
+
+	* framework/src/objc/RBRuntime.h, framework/src/objc/RBRuntime.m:
+	Added RBBundleInit new (tentative) API to develop a
+	Bundle. This is a fairly experimental implementation currently.
+	Refactored some static functions for filepath management. It
+	should refactor more later about malloc/free issue. (thanks to
+	Kouhei Sutou for RBBundleInit)
+
+2007-01-22  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* sample/PathDemo:
+	Partial printing support (work in progress, still not functional).
+
+	* framework/src/objc/RBObject.h,
+	  framework/src/objc/RBObject.m,
+	  framework/src/objc/ocdata_conv.m,
+	  framework/src/objc/OverrideMixin.m,
+	  tests/tc_subclass.rb,
+	  tests/objc_test.m:
+	Partial fix for the Cocoa printing bug.
+
+2007-01-22  Fujimoto Hisa  <hisa@fobj.com>
+
+	* framework/pre-doc.rb,
+	  framework/tool/gen_bridge_doc/lib/cocoa_ref.rb,
+	  framework/tool/gen_bridge_doc/rdocify_framework.rb,
+	  framework/tool/gen_bridge_doc.rb:
+	defined three functional methods (command, ruby, rdoc) as the
+	wrapper for the system command with checking result. These methods
+	raise RuntimeError when something error. try loading the
+	standalone hpricot at first, before try loading the rubygems.
+
+2007-01-22  Eloy Duran <eloy.de.enige@gmail.com>
+
+	* framework/tool/gen_bridge_doc/lib/cocoa_ref.rb,
+	  framework/tool/gen_bridge_doc/lib/clean_up.rb:
+	Extracted the string clean up methods into a separate file,
+	this to make it easier for others to add the appropriate clean up code.
+
+2007-01-22  Chris Mcgrath <c_r_mcgrath@yahoo.co.uk>
+
+	* framework/src/ruby/osx/objc/oc_import.rb:
+	Fixed a bug in the direct override code.
+
+2007-01-22  Eloy Duran <eloy.de.enige@gmail.com>
+
+	* framework/tool/gen_bridge_doc/lib/cocoa_ref.rb:
+	fixed some mis-encoded chars. (thanks to Chris Mcgrath)
+
+2007-01-22  Eloy Duran <eloy.de.enige@gmail.com>
+
+	* framework/tool/gen_bridge_doc/lib/cocoa_ref.rb:
+	Modified the way the objc_method style code is layout,
+	they are now nicely aligned.
+
+2007-01-21  Eloy Duran <eloy.de.enige@gmail.com>
+
+	* pre-install.rb,
+	  framework/tool/gen_bridge_doc/lib/cocoa_ref.rb,
+	  framework/tool/gen_bridge_doc.rb:
+	- The RDoc generator now uses the framework in the build dir ;
+	- Workarounds for bug, that was fixed in the last rev, removed ;
+	- Check added for the individual html and ri dirs before trying to install them.
+
+2007-01-21  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* framework/src/ruby/osx/objc/oc_import.rb,
+	  framework/src/objc/mdl_objwrapper.m,
+	  tests/tc_wrapper.rb:
+	Fixed the import of NSProxy-based classes.
+
+2007-01-21  Eloy Duran <eloy.de.enige@gmail.com>
+
+	* framework/tool/gen_bridge_doc.rb:
+	fixed a bug where gen_bridge_doc.rb would call rdocify_framework.rb
+	with the ruby interpreter in the user env instead of the one that's used to call gen_bridge_doc.rb.
+
+2007-01-21  Eloy Duran <eloy.de.enige@gmail.com>
+
+	* pre-install.rb,
+	  framework/pre-doc.rb,
+	  framework/tool/gen_bridge_doc/lib/cocoa_ref.rb,
+	  framework/tool/gen_bridge_doc/rdocify_framework.rb,
+	  framework/tool/gen_bridge_doc.rb,
+	  install.rb:
+	- Modified rdocify_framework.rb to accept a optional output dir ;
+	- The install.rb doc phase now creates all the output files in framework/bridge-doc ;
+	- The install.rb clean phase now also removes the framework/bridge-doc dir ;
+	- Added workarounds for a bug where trying to get the superclass of a subclass of NSProxy results in a trap.
+
+2007-01-21  Eloy Duran <eloy.de.enige@gmail.com>
+
+	* pre-install.rb:
+	Fixed a bug in the path to the RI files.
 	
-2006-11-09  kimura wataru <kimuraw@i.nifty.jp>
+	* framework/tool/gen_bridge_doc/lib/cocoa_ref.rb,
+	  framework/tool/gen_bridge_doc/lib/Foundation/NSDate.rb,
+	  framework/tool/gen_bridge_doc/lib/Foundation/NSDateFormatter.rb,
+	  framework/tool/gen_bridge_doc/lib/Foundation/NSPortCoder.rb,
+	  framework/tool/gen_bridge_doc/lib/ApplicationKit/NSTableColumn.rb,
+	  framework/tool/gen_bridge_doc/lib/ApplicationKit/NSFont.rb,
+	  framework/tool/gen_bridge_doc.rb:
+	- Added inheritance support ;
+	- Added objc_method style definitions to the source view (click on the method itself for a popup) ;
+	- Modified gen_bridge_doc.rb to accept a output path.
+
+2007-01-20  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* template/**/TemplateInfo.plist:
+	Converted encoding to UTF-8 and format to XML (from old OpenStep format).
+
+2007-01-20  Eloy Duran <eloy.de.enige@gmail.com>
+
+	* framework/tool/gen_bridge_doc/lib/cocoa_ref.rb,
+	  framework/tool/gen_bridge_doc.rb:
+	Modified the way that the methods in the "See Also" sections are being displayed.
+	They are now in ruby style, so that RDoc creates links for them.
+
+2007-01-20  Eloy Duran <eloy.de.enige@gmail.com>
+
+	* pre-install.rb:
+	Modified the install phase to install the RI files
+	in the right place. (thanks to Norberto Ortigoza)
+
+2007-01-20  Fujimoto Hisa  <hisa@fobj.com>
+
+	* framework/src/objc/RBRuntime.m:
+	fixed memory leak for calling RBApplicationMain more than
+	once. (thanks Kouhei Sutou for suggestion)
+
+	* tests/tc_bs.rb:
+	Fixed test to spawn Ruby command lines to add option for seeking
+	library path for ../lib and ../ext/rubycocoa.
+
+2007-01-19  Eloy Duran <eloy.de.enige@gmail.com>
+
+	* framework/tool/gen_bridge_doc/lib/cocoa_ref.rb,
+	  framework/tool/gen_bridge_doc/lib/Foundation/NSDate.rb,
+	  framework/tool/gen_bridge_doc/lib/Foundation/NSDateFormatter.rb,
+	  framework/tool/gen_bridge_doc/lib/Foundation/NSPortCoder.rb,
+	  framework/tool/gen_bridge_doc/rdocify_framework.rb,
+	  framework/tool/gen_bridge_doc.rb:
+	- Enhanced reference html file finder method ;
+	- Added support for deprecated classes ;
+	- Added override modules for Foundation: NSDate.rb, NSDateFormatter.rb, NSPortCoder.rb ;
+	- Added rdoc for: Foundation ;
+	- Added rdoc for: WebKit ;
+	- Added rdoc for: CoreData ;
+	- Added rdoc for: QTKit
+
+2007-01-19  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* pre-install.rb,
+	  framework/pre-doc.rb,
+	  framework/tool/gen_bridge_doc.rb,
+	  install.rb:
+	- Modified the RDoc generator to generate RI files as well as HTML files ;
+	- Added a new install.rb task, 'doc', that starts the RDoc generator ;
+	- Modified the install phase to install the HTML files in the right place. RI files still uninstalled.
+
+	* framework/bridge-support-exceptions/CoreGraphics.xml:
+	Don't try to lookup tollfree-bridged CF classes as it may raise some allocation errors.
+
+	* framework/src/ruby/osx/objc/oc_import.rb:
+	Make sure builtin frameworks can't be required twice.
+
+	* framework/src/objc/RBObject.h,
+	  framework/src/objc/RBObject.m,
+	  framework/src/objc/ocdata_conv.m:
+	Better RBObject retention mechanism.
+
+	* framework/src/objc/BridgeSupport.m:
+	Fixed the messaging of functions with variadic parameters.
+
+2007-01-19  Fujimoto Hisa  <hisa@fobj.com>
+
+	* framework/src/ruby/osx/objc/oc_import.rb, 
+	  framework/src/ruby/osx/objc/cocoa_macros_appkit.rb,
+	  framework/src/ruby/osx/objc/oc_wrapper.rb:
+	using the warn as better way instead of sending a message to $stderr.
+
+2007-01-19  Eloy Duran <eloy.de.enige@gmail.com>
+
+	* framework/tool/gen_bridge_doc/lib/cocoa_ref.rb,
+	  framework/tool/gen_bridge_doc/lib/ApplicationKit/NSTableColumn.rb,
+	  framework/tool/gen_bridge_doc/lib/ApplicationKit/NSFont.rb,
+	  framework/tool/gen_bridge_doc/rdocify_framework.rb,
+	  framework/tool/gen_bridge_doc.rb:
+	- Added support for class additions, they are translated to modules ;
+	- Added support for parsing override modules ;
+	- Added some override modules: NSTableColumn.rb & NSFont.rb
+	  Which makes AppKit parse & generate completely!
+
+2007-01-18  Fujimoto Hisa  <hisa@fobj.com>
+
+	* framework/src/ruby/osx/objc/oc_import.rb, framework/src/ruby/osx/objc/oc_wrapper.rb:
+	replace STDERR with $stderr
+
+2007-01-18  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* framework/tool/gen_bridge_metadata.rb:
+	- Discover more functions ;
+	- Added the possibility to ignore tollfree bridged CF classes detection ;
+	- Faster numeric #define lookup.
+
+	* framework/src/ruby/osx/objc/oc_import.rb:
+	Deprecated ns_overrides.
+
+	* framework/src/ruby/osx/objc/oc_import.rb,
+	  framework/src/objc/mdl_osxobjc.m,
+	  framework/src/objc/RBClassUtils.h,
+	  tests/tc_ovmix.rb,
+	  tests/objc_test.m:
+	Added objc_class_method + test cases.
+
+	* pre-install.rb,
+	  template/ProjectBuilder/File/Ruby test case class.rb,
+	  template/ProjectBuilder/Target,
+	  template/ProjectBuilder/Target/Unit Test Target.trgttmpl:
+	Added Xcode unit test templates.  
+
+2007-01-17  Fujimoto Hisa  <hisa@fobj.com>
+
+	* framework/src/ruby/osx/objc/oc_import.rb:
+	replaced the name of objc_export with objc_method. objc_export
+	will be deprecated. it works yet with warning message.
+
+	* sample/Scripts/TransparentHello.rb, sample/Scripts/sndplay3.rb:
+	replaced deprecated symbol/value/... syntax to suppress warning.
+
+2007-01-17  Eloy Duran <eloy.de.enige@gmail.com>
+
+	* framework/tool/gen_bridge_doc/lib/cocoa_ref.rb:
+	Added a section for notifications.
+
+2007-01-16  Eloy Duran <eloy.de.enige@gmail.com>
+
+	* framework/tool/gen_bridge_doc/lib/cocoa_ref.rb,
+	  framework/tool/gen_bridge_doc/rdocify_framework.rb:
+	fixes for Appkit rdoc generator, went up from 107/50 to 140/17 success ratio.
+
+2007-01-16  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* sample/MailDemo:
+	- Renamed MailBox to Mailbox ;
+	- Removed a debug statement in the main file.
+	Thanks to Jean-Pierre.
+
+	* framework/src/ruby/osx/objc/oc_import.rb:
+	Fixed ns_overrides that was broken by previous commit.
+
+	* framework/src/objc/ocdata_conv.h:
+	Fixed definition of _C_CONST for old platforms.
+
+	* framework/src/objc/RBObject.m,
+	  framework/src/objc/ocdata_conv.m,
+	  framework/src/objc/OverrideMixin.m:
+	Now manually decoding methods Objective-C encoding.
+
+	* tests/tc_bs.rb:
+	Fixed test to spawn Ruby command lines to use the source root RubyCocoa.
+
+	* framework/src/ruby/osx/objc/oc_import.rb,
+	  framework/src/objc/RBObject.m,
+	  framework/src/objc/mdl_osxobjc.m,
+	  framework/src/objc/OverrideMixin.h,
+	  framework/src/objc/OverrideMixin.m,
+	  tests/tc_ovmix.rb,
+	  tests/tc_subclass.rb,
+	  tests/objc_test.m:
+	Added support for overriding class methods. Added test cases.
+
+2007-01-15  Eloy Duran <eloy.de.enige@gmail.com>
+
+	* framework/tool/gen_bridge_doc.rb:
+	Updated this script so that it also accepts the verbose and force flags: -v, -f
+	
+2007-01-15  Eloy Duran <eloy.de.enige@gmail.com>
+
+	* framework/tool/gen_bridge_doc.rb,
+	  framework/tool/gen_bridge_doc/lib/cocoa_ref.rb,
+	  framework/tool/gen_bridge_doc/rdocify_framework.rb:
+	Added the first support for Apple HTML Reference Docs to RDoc generation.
+	At this moment gen_bridge_doc.rb will only try to parse the AppKit framework.
+	By default it will not generate any rdoc files for reference files caused errors during parsing.
+	Once all errors for AppKit have been resolved other frameworks will gradually be added,
+	until we're on par with the supported frameworks in BridgeSupport.
+
+2007-01-15  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* framework/tool/gen_bridge_metadata.rb:
+	Discover functions that return ObjC objects that conform to a certain protocol.
+
+	* framework/bridge-support-exceptions/Foundation.xml:
+	Updated to describe functions with pointer-like arguments.
+
+	* sample/Spotlight/English.lproj/MainMenu.nib/info.nib,
+	  sample/Spotlight/English.lproj/MainMenu.nib/keyedobjects.nib:
+	Fixed the UI elements resizable flags and set the text views as not 
+	editable.
+
+	* framework/bridge-support-exceptions/Foundation.xml,
+	  framework/src/objc/libffi.h,
+	  framework/src/objc/libffi.m,
+	  framework/src/objc/ocdata_conv.m,
+	  framework/src/objc/OverrideMixin.m,
+	  framework/src/objc/BridgeSupport.m,
+	  framework/tool/gen_bridge_metadata.rb,
+	  tests/tc_types.rb:
+	- Added support for opaque structures ;
+	- Added support for _C_ARY_B and _C_BFLD types ;
+	- Fixed a bug when retrieving the encoding of structure fields ;
+	- Export NSDecimal as an opaque structure, added test cases.
+
+	* tests/*.rb:
+	- Run make silently ;
+	- Do not print the test case names unless $VERBOSE is true.
+
+2007-01-15  Fujimoto Hisa  <hisa@fobj.com>
+
+	* framework/tool/gen_bridge_metadata.rb:
+	Fixed a bug that ~/Library/Frameworks in framework_path was invalid.
+
+2007-01-14  Fujimoto Hisa  <hisa@fobj.com>
+
+	* framework/src/ruby/osx/objc/oc_wrapper.rb:
+	assume an explicit predicate if a received message has `?' suffix
+	and returned value is a integer when OSX.relaxed_syntax.  For
+	using a unsupported framework without metadata quickly.
+
+2007-01-13  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* framework/tool/gen_bridge_metadata.rb,
+	  framework/bridge-support-exceptions/AppKit.xml:
+	Improved the exceptions template to now mention functions pointer-like 
+	arguments. Added functions pointer-like metadata for AppKit.
 
 	* framework/RubyCocoa.xcodeproj/project.pbxproj,
-	  framework/src/ruby/osx/objc/qtkit.rb framework/src/ruby/osx/qtkit.rb,
-	  lib/osx/qtkit.rb:
-	add support of QTKit.(patch from Eloy Duran)
+	  framework/src/ruby/osx/objc/oc_import.rb,
+	  framework/src/objc/libffi.h,
+	  framework/src/objc/RBObject.m,
+	  framework/src/objc/libffi.m,
+	  framework/src/objc/RBRuntime.h,
+	  framework/src/objc/mdl_osxobjc.m,
+	  framework/src/objc/mdl_objwrapper.m,
+	  framework/src/objc/ocexception.h,
+	  framework/src/objc/ocdata_conv.m,
+	  framework/src/objc/ocexception.m,
+	  framework/src/objc/BridgeSupport.h,
+	  framework/src/objc/BridgeSupport.m:
+	- Added support for functions pointer-like arguments to the bridge ;
+	- Major refactoring of the libffi dispatching code. 
 
-	* framework/src/objc/ocdata_conv.h, framework/src/objc/ocdata_conv.m:
-	add conversions for QTKit structures.(patch from Eloy Duran)
+	* tests/tc_qtkit.rb,
+	  tests/tc_passbyref.rb:
+	Updated tests, removed debug log. 
 
-2006-11-05  kimura wataru <kimuraw@i.nifty.jp>
+2007-01-12  Fujimoto Hisa  <hisa@fobj.com>
+
+	* ext/rubycocoa/extconf.rb.in, framework/post-config.rb, framework/src/ruby/osx/objc/oc_import.rb, framework/tool/gen_bridge_metadata.rb, framework/tool/verify_bridge_metadata.rb, metaconfig, pre-config.rb, pre-setup.rb, sample/buildall.rb:
+	File.exists? will be obsoleted for Ruby 1.9, so replace it as File.exist?
+
+2007-01-11  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* framework/src/objc/BridgeSupport.h,
+	  framework/src/objc/BridgeSupport.m,
+	  framework/tool/gen_bridge_metadata.rb,
+	  tests/tc_types.rb,
+	  tests/objc_test.m,
+	  tests/Makefile:
+	Better FourCharCode description, added a new test case, removed build warnings
+	on PPC.
+
+	* framework/src/objc/BridgeSupport.m,
+	  framework/tool/gen_bridge_metadata.rb,
+	  tests/tc_types.rb:
+	Properly describe enumerations with a FourCharCode type value. Added a new
+	test case.
+
+2007-01-10  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* framework/RubyCocoa.xcodeproj/project.pbxproj,
+	  framework/src/ruby/osx/addressbook.rb,
+	  framework/src/ruby/osx/foundation.rb,
+	  framework/src/ruby/osx/objc/cocoa.rb,
+	  framework/src/ruby/osx/objc/oc_types.rb,
+	  framework/src/ruby/osx/objc/cocoa_macros.rb,
+	  framework/src/ruby/osx/objc/oc_import.rb,
+	  framework/src/ruby/osx/objc/ruby_addition.rb,
+	  framework/src/ruby/osx/objc/oc_attachments.rb,
+	  framework/src/ruby/osx/objc/oc_types_appkit.rb,
+	  framework/src/ruby/osx/objc/cocoa_macros_appkit.rb,
+	  framework/src/ruby/osx/objc/addressbook.rb,
+	  framework/src/ruby/osx/objc/oc_attachments_appkit.rb,
+	  tests/tc_bs.rb,
+	  lib/osx/addressbook.rb,
+	  lib/osx/cocoa.rb,
+	  lib/osx/foundation.rb,
+	  lib/osx/appkit.rb:
+	- Now RubyCocoa.framework doesn't link against AppKit anymore. Using osx/cocoa
+	  will load AppKit and CoreGraphics dynamically. Using osx/foundation just 
+	  link against CoreFoundation and Foundation ;
+	- Deprecated the osx/addressbook script (now that AddressBook is supported by 
+	  a BridgeSupport metadata file) ;
+	- Added new API, OSX.framework_loaded?, to know if a given framework has been
+	  loaded or not. Added test cases.
+
+	* framework/bridge-support-exceptions/*.xml,
+	  framework/src/objc/BridgeSupportLexer.h,
+	  framework/src/objc/BridgeSupport.h,
+	  framework/src/objc/gen_dummy_handler.rb,
+	  framework/src/objc/BridgeSupport.m,
+	  framework/src/objc/BridgeSupport.gperf,
+	  framework/src/objc/mdl_objwrapper.m,
+	  framework/tool/gen_bridge_metadata.rb:
+	First refactoring pass: merged the method_[arg|retval] and func_[arg|retval]
+	elements. Removed some dead code.
+
+2007-01-10  Eloy Duran <eloy.de.enige@gmail.com>
+
+	* tests/tc_qtkit.rb:
+	Added an updated version of the qtkit test case from Jonathan Paisley.
+
+2007-01-10  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* sample/MailDemo/English.lproj/InfoPlist.strings:
+	Removed inappropriate CFBundleShortVersionString tag.
+
+	* sample/ABPresence/Info.plist,
+	  sample/MailDemo/Info.plist:
+	Added missing CFBundleShortVersionString tags.
+
+=== RubyCocoa 0.10.1 ===
+
+2007-01-09  Fujimoto Hisa  <hisa@fobj.com>
+
+	* framework/tool/gen_bridge_metadata.rb:
+	fix an error message when the header file path not found.
+
+2007-01-09  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* framework/src/ruby/osx/objc/oc_wrapper.rb,
+	  tests/tc_wrapper.rb:
+	Raise an ArgumentError when trying to call #objc_send without arguments.
+	Added some test cases.
+
+	* framework/src/ruby/osx/objc/oc_import.rb:
+	Fixed a Ruby 1.8.2-only bug introduced by latest fix.
+
+	* framework/src/ruby/osx/objc/oc_import.rb,
+	  framework/src/objc/mdl_osxobjc.m:
+	Fixed a bug when overriding methods in a class that has not been imported yet,
+	by making sure the methods will be executed under the right scope.
+
+	* framework/src/ruby/osx/objc/oc_wrapper.rb:
+	Fixed a bug when using #objc_send to reach a method without argument.
+
+	* framework/src/ruby/osx/objc/oc_import.rb:
+	Fixed a bug when importing classes within modules when the OSX module is mixed
+	in the top-level object.
+
+2007-01-08  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* framework/src/ruby/osx/objc/oc_import.rb:
+	Make sure #ns_import and #require_framework can be called when the OSX module
+	is mixed in the top-level object.
+
+=== RubyCocoa 0.10.0 ===
+
+2007-01-08  Fujimoto Hisa  <hisa@fobj.com>
+
+	* ReadMe.ja.html,
+	  package/post-package.rb,
+	  package/pre-package.rb:
+	Japanese translation of ReadMe.html.
+
+2007-01-08  Laurent Sansonetti <lsansonetti@apple.com>
 
 	* VERSION:
-	0.5.0-preview6
+	Prepared for 0.10.0.
 
-2006-11-03  Jonathan Paisley <jp-www@dcs.gla.ac.uk>
+	* sample/*:
+	- Renamed some samples directories to match the same naming convention.
+	- Removed deprecated samples and SimpleApp.app binary ;
+	- Removed Ruby prefix from samples directories ;
+	- Created Scripts sub-directory and moved all one-file .rb scripts there.
 
-	* framework/src/ruby/osx/objc/oc_attachments.rb, 
-	  tests/tc_attachments.rb:
-	fix: Copy/paste error from NSData to NSImage. Add
-	test case for RCImageAttachment.
-	
-2006-11-03  kimura wataru <kimuraw@i.nifty.jp>
+	* sample/RubyMailDemo:
+	New sample code, a Ruby port of Scott Stevenson's MailDemo example.
 
-	* sample/MyViewer/WinCtrl.rb:
-	fix: MyViewer.app cannot open files.
+2007-01-06  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* sample/Hakoiri-Musume/rb_main.rb,
+	  sample/speak.rb,
+	  package/tmpl/postflight-universal.rb:
+	Fixed sheband lines to use /usr/bin/env ruby. Thanks to Jean-Pierre.
+
+	* framework/src/objc/OverrideMixin.m,
+	  framework/src/objc/mdl_osxobjc.m,
+	  framework/src/objc/mdl_objwrapper.m,
+	  tests/objc_test.m:
+	Eliminates compiler warnings.
+
+	* framework/src/ruby/osx/objc/oc_import.rb:
+	Properly append missing ':' to the selector if type format string was used.
+
+	* sample/RubyStickies/Sticky.rb:
+	Fixed a crash when closing a sticky.
+
+2007-01-06  Fujimoto Hisa  <hisa@fobj.com>
+
+	* sample/RubyStickies/StickiesAppDelegate.rb, 
+	  sample/RubyStickies/Sticky.rb, 
+	  sample/RubyStickies/StickyResizeCornerView.rb:
+	fixed the FIXME comments bugs.
+
+	* framework/src/ruby/osx/objc/oc_import.rb:
+	allow a type format string as a second argument of objc_export.
+
+2007-01-06  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* sample/RubyStickies:
+	Added new sample code, a Ruby port of /Developer/Examples/CoreData/Stickies.
+	Not functional yet (see the FIXME comments).
+
+2007-01-05  Fujimoto Hisa  <hisa@fobj.com>
+
+	* template/ProjectBuilder/Application/Cocoa-Ruby\ Core\ Data\ Document-based\ Application/MyDocument.rb, template/ProjectBuilder/Application/Cocoa-Ruby\ Core\ Data\ Application/AppDelegate.rb:
+	modify from deprecated expression for release 1.0
+
+2007-01-05  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* sample/buildall.rb:
+	Added new script, that builds all samples in a directory of your choice.
+
+	* framework/src/ruby/osx/objc/oc_import.rb,
+	  framework/src/objc/OverrideMixin.m,
+	  framework/src/objc/RBObject.m,
+	  framework/src/objc/mdl_osxobjc.m,
+	  framework/src/objc/RBClassUtils.m,
+	  framework/src/objc/ocdata_conv.h,
+	  framework/src/objc/ocdata_conv.m,
+	  tests/tc_ovmix.rb,
+	  tests/objc_test.m:
+	- Fixed direct import of Objective-C classes when the OSX module is
+	  included in Object ;
+	- Added the possibility to add or override any method directly in a
+	  given Objective-C class from Ruby (before it was only possible in a
+	  subclass). Added some test cases.
+
+	* framework/RubyCocoa.xcodeproj/project.pbxproj,
+	  framework/src/ruby/osx/coredata.rb,
+	  framework/src/ruby/osx/objc/coredata.rb,
+	  framework/src/ruby/osx/objc/cocoa_macros.rb,
+	  framework/post-config.rb,
+	  lib/osx/coredata.rb:
+	Migrated the old CoreData support to the new BridgeSupport metadata
+	mechanism. Deprecated osx/coredata.
+
+2007-01-04  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* framework/src/objc/RBObject.m:
+	Removed a debug log.
+
+	* framework/bridge-support-exceptions/AddressBook.xml,
+	  framework/bridge-support-exceptions/InstantMessage.xml:
+	Added exceptions for AddressBook and InstantMessage frameworks.
+
+	* sample/RubyMiniBrowser/MiniBrowser.xcodeproj/project.pbxproj:
+	Built the project for the native arch. Thanks to Vincent Isambart.
+
+	* sample/RubySpotlight/Spotlight.rb,
+	  sample/RubySpotlight/AppController.rb:
+	- Fixed usage of NSPredicate to not raise a runtime exception ;
+	- Ported deprecated code to new syntax.
+	Thanks to Vincent Isambart.
+
+	* pre-config.rb,
+	  framework/post-config.rb:
+	- Fail the config phase if Ruby wasn't built as a shared library ;
+	- Use the right Ruby binary to launch the metadata generator.
+	Thanks to Vincent Isambart.
+
+2007-01-04  Fujimoto Hisa  <hisa@fobj.com>
+
+	* framework/src/ruby/osx/objc/oc_attachments.rb:
+	adds a to_a method to a NSIndexSet, thanks to Eloy Duran.
+
+	* tests/tc_attachments.rb:
+	adds a test for NSIndexSet#to_a
+
+2007-01-04  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* sample/RubyQTKitSimpleDocument/QTKitPlayer.xcodeproj/project.pbxproj:
+	Fixed the project to use the current Mac OS X SDK.
+
+	* sample/RubyPathDemo/PathDemo.xcodeproj/project.pbxproj:
+	Fixed MainMenu.nib link.
+
+	* sample/RubyABPresence:
+	Added new sample code, a Ruby port of the ADC ABPresence program.
+
+	* framework/post-config.rb:
+	Now generate metadata information for AddressBook and InstantMessage.
+
+	* sample/SampleCIView.rb:
+	Fixed the header comment.
+
+2007-01-03  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* sample/RubyPathDemo:
+	Added new sample code, a Ruby port of /Developer/Examples/Quartz/PathDemo.
+
+	* framework/src/objc/RBObject.h,
+	  framework/src/objc/RBObject.m:
+	Better fix for the problem with RBObject wrapping a pure Ruby object that
+	was autoreleased.
+
+	* framework/src/ruby/osx/objc/oc_import.rb,
+	  tests/tc_ovmix.rb,
+	  tests/objc_test.m:
+	Added the possibility to use boxed classes when giving the method type to
+	OSX.objc_export. Added a test case.
+
+	* sample/RubyCocoaGL/English.lproj/InfoPlist.strings:
+	Removed the short version string tag that is inappropriate there.
+
+	* sample/RubyMiniBrowser/Info.plist:
+	Dump the short version string and uniquify the bundle identifier.
+
+	* template/PureEmptyApp.app/*,
+	  template/EmptyApp.app/*:
+	Removed unnecessary empty apps.
+
+	* framework/tool/gen_bridge_metadata.rb:
+	Properly format enums with signed values.
+
+	* framework/src/objc/OverrideMixin.m:
+	Fixed a memory bug when KVC values, making sure the Objective-C values are not
+	autoreleased while they are still used in Ruby.
+
+	* framework/src/objc/ocdata_conv.h,
+	  framework/src/objc/ocdata_conv.m,
+	  tests/tc_ovmix.rb,
+	  tests/objc_test.m:
+	Defines the official long long runtime constants if necessary. Added a test 
+	case to be sure long long types are properly bridged.
+
+2007-01-02  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* framework/src/objc/BridgeSupport.m:
+	Fixed support for long long types. Added some logs.
+
+	* framework/src/ruby/osx/objc/oc_import.rb,
+	  tests/tc_ovmix.rb,
+	  tests/objc_test.m:
+	Introduced OSX::NSBehaviorAttachment#objc_export, a convenience facility to 
+	export Ruby methods to the Objective-C runtime (a shortcut to 
+	addRubyMethod_withType). First argument is the Ruby name of the method, and
+	second is an array of C types (ex: %w{void int} for a '(void)(int)' function).
+	Added a test case.
+
+	* framework/src/ruby/osx/objc/oc_wrapper.rb,
+	  tests/tc_wrapper.rb:
+	Introduced OCObjWrapper#objc_send, a convenience facility to send messages
+	using a symbol/value/... syntax (thanks to Hisa-san). Added a test case. 
+
+	* sample/RubyMiniBrowser/rb_main.rb:
+	Removed the OCObjWrapper#objc_send definition.
+
+	* framework/src/objc/RBObject.h,
+	  framework/src/objc/RBObject.m,
+	  framework/src/objc/ocdata_conv.m,
+	  tests/tc_subclass.rb,
+	  tests/objc_test.m:
+	Make sure RBObject proxies are not released until the proxied Ruby object is
+	garbage-collected. Added a test case.
+
+	* framework/src/objc/OverrideMixin.m,
+	  framework/src/objc/RBObject.m,
+	  framework/src/objc/mdl_objwrapper.m,
+	  framework/src/objc/ocdata_conv.h,
+	  framework/src/objc/ocdata_conv.m,
+	  tests/tc_subclass.rb:
+	Fixed a regression introduced by the new FFI support, when messages could not
+	be properly forwarded to Objective-C objects that are overriding the default
+	message dispatching mechanism (like NSUndoManager). Added test cases.
+
+	* framework/src/ruby/osx/objc/oc_import.rb:
+	Message NSBundle#oc_load as #load may have been overriden by the active 
+	record library (thanks Chris McGrath).
+
+=== RubyCocoa 0.9.0 ===
+
+2006-12-26  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* VERSION,
+	  ReadMe.ascii.html,
+	  package/post-package.rb,
+	  package/pre-package.rb,
+	  package/tmpl/Info.plist,
+	  framework/pre-install.rb,
+	  ReadMe.html,
+	  ReadMe.sjis.html,
+	  package/tmpl/background.gif:
+	Preparation for the first release.
+
+2006-12-25  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* framework/RubyCocoa.xcodeproj/project.pbxproj,
+	  framework/src/ruby/osx/webkit.rb,
+	  framework/src/ruby/osx/qtkit.rb,
+	  lib/osx/webkit.rb,
+	  lib/osx/qtkit.rb:
+	Added osx/webkit and osx/qtkit files to preserve API compatibility with the 
+	stable branch, that warn the user of their deprecation and to the appropriate
+	OSX.require_framework call.
+
+2006-12-25  Fujimoto Hisa  <hisa@fobj.com>
+
+	* sample/RubyMiniBrowser:
+	Added new sample code (port of /Developer/Examples/WebKit/MiniBrowser)
+
+2006-12-23  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* framework/src/ruby/osx/objc/oc_wrapper.rb:
+	Make sure constants can still be retrieved via OSX.TheConstantName, but print
+	a warning stating that this syntax is deprecated and that its use is 
+	discouraged.
+
+	* sample/RubyCGPDFViewer/MyDocument.rb:
+	Fixed a runtime error, thanks to Eloy Duran.
+
+	* sample/RubyCGPDFViewer/MainController.rb:
+	Fixed a typo, thanks to Eloy Duran.
+
+2006-12-22  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* framework/src/objc/BridgeSupport.h,
+	  framework/src/objc/BridgeSupport.m,
+	  framework/src/objc/ocdata_conv.m,
+	  tests/tc_types.rb:
+	Make sure we calculate the size of boxed structures in 
+	ocdata_size(). Added a test case.
+
+	* sample/RubyPDFKitViewer/MyPDFDocument.rb:
+	Fixed the initial window layout plus some runtime errors.
+
+	* sample/RubyCIMicroPaint/CIMicroPaintView.rb:
+	Fix random runtime error in #brushSize= kvc callback.
+
+2006-12-19  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* framework/src/objc/BridgeSupport.m,
+	  framework/src/objc/mdl_objwrapper.m,
+	  framework/src/objc/BridgeSupport.m:
+	- Fixed FFI uchar/slong/ulong conversion (Tiger only) ;
+	- Fixed misc bugs.
+
+2006-12-18  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* tests/tc_types.rb:
+	Fixed test case comparing NSZeroRect (for PPC).
+
+	* sample/RubyCocoaGL:
+	Added new sample code (port of CocoaGL).
+
+2006-12-16  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* framework/bridge-support-exceptions/QuartzCore.xml:
+	Fixed Tiger build.
+
+	* sample/RubyRoundTransparentWindow/English.lproj/MainMenu.nib/JavaCompiling.plist,
+	  sample/RubyRocks/English.lproj/Game.nib/JavaCompiling.plist:
+	Removed unnecessary files.
+
+	* sample/RubyQTKitSimpleDocument/Info.plist:
+	Added missing CFBundleShortVersionString tag.
+
+2006-12-15  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* sample/RubyQTKitSimpleDocument:
+	New sample code (port of QTKitSimpleDocument), a very basic NSDocument-based
+	QuickTime viewer.
+
+	* framework/tool/gen_bridge_metadata.rb:
+	Make sure we don't describe the same informal protocol signature more than 
+	once.
+
+	* framework/post-config.rb,
+	  framework/bridge-support-exceptions/QTKit.xml:
+	Added support for QTKit.framework.
+
+	* sample/dotview/Info.plist,
+	  sample/multinib/Info.plist:
+	Change the bundle identifier from com.apple.* to com.apple.rubycocoa.*.
+
+	 * sample/RubyCIBevelSample,
+	   sample/SampleCIView.rb:
+	New sample code (Ruby port of CIBevelSample) that uses CoreImage and OpenGL.
+
+	* framework/bridge-support-exceptions/AppKit.xml,
+	  framework/bridge-support-exceptions/OpenGL.xml,
+	  framework/bridge-support-exceptions/QuartzCore.xml,
+	  framework/src/ruby/osx/objc/oc_import.rb,
+	  framework/post-config.rb.
+	  framework/tool/gen_bridge_metadata.rb:
+	- Added support for OpenGL.framework ;
+	- Added the exception file for QuartzCore that was forgotten in the last 
+	  commit ;
+	- Improved the numeric #define support ;
+	- Misc fixes.
+
+	* sample/RubyCIMicroPaint,
+	  sample/SampleCIView.rb:
+	New sample code (Ruby port of the CIMicroPaint example) that uses CoreImage
+	and OpenGL.
+
+2006-12-13  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* framework/post-config.rb,
+	  sample/RubyCIExposureSample,
+	  sample/RubyCITransitionSelectorSample:
+	Added support for the QuartzCore framework (CoreImage + CoreVideo). Added some 
+	new sample code, RubyCIExposureSample and RubyCITransitionSelectorSample, ports
+	of /Developer/Examples/Quartz/Core Image/* original Objective-C samples.
+
+	* framework/src/objc/BridgeSupport.m:
+	Fix an important bug in the structure libffi handling, plus some minor bugs in
+	the function dispatcher.
+
+	* framework/tool/gen_bridge_metadata.rb:
+	- Fix order of (function|method)_(retval|arg) elements ;
+	- Properly handle informal protocol methods with missing argument keys.
+
+	* template/ProjectBuilder/File/*:
+	Fix the ?YEAR? macros in the trailing comment.
+
+	* sample/RubyCGPDFViewer:
+	New sample code, a Ruby port of /Developer/Examples/Quartz/PDF/CGPDFViewer,
+	a pure CoreGraphics-based PDF viewer.
+
+	* framework/post-config.rb:
+	Re-generate the bridge support files if the generator is younger than the
+	files.
+
+	* framework/bridge-support-exceptions/AppKit.xml,
+	  framework/bridge-support-exceptions/CoreFoundation.xml,
+	  framework/src/ruby/osx/objc/oc_import.rb,
+	  framework/src/objc/BridgeSupportLexer.h,
+	  framework/src/objc/BridgeSupport.h,
+	  framework/src/objc/BridgeSupport.m,
+	  framework/src/objc/BridgeSupport.gperf,
+	  framework/src/objc/mdl_objwrapper.m,
+	  framework/src/objc/ocdata_conv.h,
+	  framework/src/objc/ocdata_conv.m,
+	  framework/tool/gen_bridge_metadata.rb,
+	  tests/tc_passbyref.rb:
+	- Removed the predicate attribute and now explicitely mark functions/methods
+	  returning boolean types with the _C_BOOL encoding ;
+	- Replaced cftype's typeid attribute by gettypeid_func, we can't rely on
+	  hardcoded TypeID because their value isn't fixed (e.g. it depends on the
+	  order the frameworks are loaded) ;
+	- Removed duplicate cftype elements in the exceptions ;
+	- Introduced a function_retval sub-element to store information about the
+	  return value of functions, and moved the returns attribute there ;
+	- Exceptions can now document methods where the return or argument values
+	  should be coerced to a certain type (e.g. NSGraphicsContext#graphicsPort
+	  should return a CGContextRef and not a void *).
+ 
+	* sample/RubyPDFKitViewer/Info.plist:
+	Changed the bundle identifier to avoid conflicts with the original
+	Objective-C project.
+
+	* sample/circle.rb:
+	Not necessary to require CoreGraphics anymore, as it's pre-loaded.
+
+2006-12-11  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* framework/post-config.rb,
+	  sample/RubyPDFKitViewer:
+	Added support for PDFKit. Added a new sample code, basically a Ruby port of
+	/Developer/Examples/Quartz/PDFKit/PDFKitViewer.
+
+	* framework/src/ruby/osx/objc/oc_import.rb:
+	- Added a default framework-name-to-path cache for quick/easy 
+	  #require_framework operations ;
+	- Fixed a typo bug in #require_framework.
+
+	* framework/tool/gen_bridge_metadata.rb:
+	- Wrap more enums ;
+	- Removed dead code ;
+	- Make sure the XML elements are sorted before writing, this makes the 
+	  comparison of metadata files easier. 
+
+	* framework/post-config.rb:
+	Added some lines that starts the verification tool on each metadata file.
+	The lines are commented, as this is definitely not something we want to do by 
+	default.
+
+2006-12-10  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* framework/src/ruby/osx/objc/oc_types.rb:
+	Do not flatten the args as it breaks API compatibility with the previous
+	stable release.
+
+	* framework/tool/gen_bridge_metadata.rb:
+	Ignore all comments left by the pre-processor after the pre-processing phase.
+
+2006-12-09  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* framework/src/ruby/osx/objc/oc_import.rb,
+	  install.rb:
+	Introduced an environment variable BRIDGE_SUPPORT_PATH that can be used to
+	point RubyCocoa to one or more paths where bridge support metadata files
+	should be looked for in priority. Set the variable for the test phase.
+
+	* framework/src/objc/BridgeSupport.m:
+	Removed some dead code.
+
+	* framework/tool/verify_bridge_metadata.rb:
+	Added a first version of a bridge support metadata verifier. This one is 
+	currently based on HeaderDoc.
+
+2006-12-09  kimura wataru <kimuraw@i.nifty.jp>
+
+	* install.rb:
+	at clean task, cleaning framework/bridge-support and misc/libffi.
+
+2006-12-08  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* framework/src/objc/BridgeSupport.h,
+	  framework/src/objc/BridgeSupport.m,
+	  framework/src/objc/mdl_objwrapper.m,
+	  framework/tool/gen_bridge_metadata.rb:
+	Modified the generator to handle all functions and not only functions marked
+	with the 'extern' keyword. Fixed several parsing bugs. Refactored the 
+	RubyCocoa parsing side.
+
+	* framework/bridge-support-exceptions/Foundation.xml,
+	  framework/src/objc/BridgeSupport.h,
+	  framework/src/objc/BridgeSupport.m,
+	  framework/src/objc/ocdata_conv.m,
+	  framework/tool/gen_bridge_metadata.rb,
+	  tests/tc_types.rb:
+	Defined 'NSZone *' as an opaque type. Fixed the conversion code to allow nil
+	to be passed for an opaque argument. Added a test case.
+
+	* framework/bridge-support-exceptions/CoreGraphics.xml,
+	  framework/src/objc/BridgeSupport.h,
+	  framework/src/objc/BridgeSupportLexer.h,
+	  framework/src/objc/BridgeSupport.m,
+	  framework/src/objc/BridgeSupport.gperf,
+	  framework/src/objc/ocdata_conv.m,
+	  framework/tool/gen_bridge_metadata.rb:
+	Added the possibility to specify 'opaque' types into metadata exceptions that
+	will be translated by the bridge into instances of a new class that inherits
+	from OSX::Boxed, like the existing C structures wrappers. Fixed the 
+	CoreGraphics exceptions file to mention the necessary opaque types.
+
+2006-12-07  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* framework/bridge-support-exceptions/*,
+	  framework/src/objc/BridgeSupport.m,
+	  framework/src/objc/RBClassUtils.h,
+	  framework/src/objc/RBClassUtils.m,
+	  framework/post-config.rb:
+	- Added bridge support exceptions files, updated the build system to use them ;
+	- Generate bridge support files for CoreFoundation, Foundation, AppKit, WebKit
+	  and CoreGraphics ;
+	- Fixed Tiger build. 
+
+	* framework/src/objc/BridgeSupport.h,
+	  framework/src/objc/BridgeSupport.m,
+	  framework/src/objc/mdl_osxobjc.m,
+	  framework/src/objc/ocdata_conv.m,
+	  tests/tc_types.rb:
+	Support for the new CFType metadata descriptions. Creates proxies for CFTypes
+	that don't have a toll-free bridged Cocoa class. Updated test cases.
+
+2006-12-06  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* framework/tool/gen_bridge_metadata.rb:
+	Another iteration on the CFType support, fixed 2 parsing bugs.
+
+	* framework/src/objc/BridgeSupport.h,
+	  framework/src/objc/BridgeSupport.m,
+	  framework/src/objc/ocdata_conv.m:
+	Added support of passing struct pointers.
+
+	* sample/circle.rb:
+	Added new CoreGraphics sample.
+
+2006-12-05  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* framework/tool/gen_bridge_metadata.rb:
+	- Fixed the parsing of C functions with unamed arguments (ex: 
+	  "int foo(int, float);") ;
+	- Make sure we clean the generated source files when trying to get the
+	  encoding of numeric #define constants ;
+	- Ignore compiler attribute directives at the end of structures ;
+	- Can take extra parameters from the GBM_FLAGS environment variable.
+
+	* framework/src/ruby/osx/objc/oc_import.rb,
+	  framework/src/objc/BridgeSupport.h,
+	  framework/src/objc/BridgeSupport.m,
+	  framework/src/objc/ocdata_conv.m,
+	  framework/tool/gen_bridge_metadata.rb,
+	  tests/tc_retaincount.rb,
+	  tests/tc_types.rb:
+	Second and final pass on the CoreFoundation support. Added some test cases.
+
+2006-12-04  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* framework/src/objc/BridgeSupport.h,
+	  framework/src/objc/BridgeSupportLexer.h,
+	  framework/src/objc/BridgeSupport.m,
+	  framework/src/objc/BridgeSupport.gperf,
+	  framework/src/objc/ocdata_conv.m,
+	  framework/tool/gen_bridge_metadata.rb:
+	Added support for CoreFoundation types (work still in progress).
+
+	* framework/src/objc/BridgeSupport.m,
+	  framework/tool/gen_bridge_metadata.rb:
+	- Removed struct sizes from the metadata as they are not necessary ;
+	- Structures can me marked as opaque in the exceptions, so that the final 
+	  struct encoding won't be decorated with fields info.
+
+	* framework/src/objc/OverrideMixin.m:
+	Fixed a leak.
+
+2006-12-03  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* framework/src/objc/ocdata_conv.m (to_octype):
+	Don't check if the second char is '_' to handle structures, as it's not 
+	mandatory at all.
+
+	* framework/src/ruby/osx/objc/oc_import.rb:
+	Don't try to do the Object::inherited class replacement for classes that
+	inherit from OSX::Boxed (e.g. C structures proxies).
+
+2006-12-01  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* framework/tool/gen_bridge_metadata.rb:
+	- Added the possibility to specify the compiler flags instead of using the
+	  default one (necessary to wrap CoreGraphics) ;
+	- Templates now contain the list of C structures found in the given headers ;
+	- Misc fixes.
+
+	* framework/src/ruby/osx/objc/oc_wrapper.rb,
+	  tests/tc_exception.rb,
+	  tests/tc_wrapper.rb:
+	Deprecated symbol/value/... and inline Hash dispatching syntaxes. A warning
+	is now printed when those syntaxes are used, but it will be replaced by an
+	exception for the final 1.0.0 release.
+
+2006-11-30  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* framework/src/objc/BridgeSupport.m:
+	Make sure constants names from metadata are capitalized before used.
+
+	* framework/tool/gen_bridge_metadata.rb:
+	- Fix template generator ;
+	- Properly deal with methods defined in more than one line ;
+	- Properly deal with frameworks that don't have a central header, such as 
+	  Message.framework.
+	Thanks to Ronald Oussoren.
+
+2006-11-29  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* framework/src/objc/ocdata_conv.m,
+	  tests/tc_types.rb:
+	Make sure Ruby booleans are converted to real NSNumber booleans.
+
+2006-11-21  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* framework/src/objc/BridgeSupport.m,
+	  framework/tool/gen_bridge_metadata.rb:
+	Better metadata enum value formats (thanks to Ronald Oussoren).
+
+2006-11-19  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* framework/src/ruby/osx/objc/oc_import.rb,
+	  framework/src/objc/BridgeSupport.m:
+	- Better OSX.require_framework method ;
+	- Do not create enum constants if already defined.
+
+2006-11-18  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* framework/src/objc/BridgeSupportLexer.h,
+	  framework/src/objc/BridgeSupport.m,
+	  framework/src/objc/BridgeSupport.gperf:
+	Now using a gperf-generated hash function when parsing XML elements for
+	the bridge support files, instead of a succession of costly strcmp() calls.
+
+2006-11-17  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* framework/src/objc/BridgeSupport.m,
+	  framework/tool/gen_bridge_metadata.rb:
+	- Now using real encoding types instead of C level constants (_C_*) in the
+	  metadata files ;
+	- Added support to grab #define numeric constants ;
+	- Added support to grab several constants defined in the same expression 
+	  line (for example: `extern int foo, bar;') ;
+	- Quick refactoring of the metadata generator.
+
+2006-11-16  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* framework/src/ruby/osx/objc/oc_import.rb:
+	Added OSX.require_framework convenience method to load a given framework
+	and its bridge support signature files at the same time.
+
+2006-11-10  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* framework/src/ruby/osx/objc/oc_import.rb:
+	Adjust the frameworks and bridge support signatures paths regardless if 
+	the HOME environment variable is set or not. A RubyCocoa program might not 
+	define HOME in its environment (for example, if launchd'ed).
+
+	* framework/src/ruby/osx/objc/oc_types.rb,
+	  framework/src/ruby/osx/objc/oc_all.rb,
+	  framework/src/objc/OverrideMixin.m,
+	  framework/src/objc/BridgeSupport.h,
+	  framework/src/objc/BridgeSupport.m,
+	  framework/src/objc/mdl_objwrapper.m,
+	  framework/src/objc/ocdata_conv.h,
+	  framework/src/objc/ocdata_conv.m,
+	  framework/tool/gen_bridge_metadata.rb,
+	  tests/tc_types.rb,
+	  tests/tc_subclass.rb:
+	- Structures are now described in metadata files ;
+	- Removed all hardcoded information about NSRect/NSSize/etc... ;
+	- Fixed several bugs ;
+	- Added more test cases.
+
+2006-11-05  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* framework/src/objc/mdl_objwrapper.m,
+	  framework/src/objc/BridgeSupport.h,
+	  framework/src/objc/RBObject.m,
+	  tests/tc_subclass.rb:
+	- Some refactoring in the ocm dispatch methods. Made the usage of 
+	  NSMethodDescription optional when possible ;
+	- Updated test case ;
+	- Moved a warning killer ObjC interface to BridgeSupport.h.
+
+	* framework/src/objc/OverrideMixin.m:
+	Fixed another memory leak.
+
+2006-11-02  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* framework/src/objc/mdl_objwrapper.m,
+	  tests/tc_retaincount.rb,
+	  tests/objc_test.m:
+	- Fixed leak of ObjC objects from placeholder-like classes ; 
+	- Added a new test case to test the fix.
+	Investigation and solution by Kimura Wataru. 
+
+	* framework/post-config.rb,
+	  framework/RubyCocoa.xcodeproj/project.pbxproj,
+	  framework/src/ruby/osx/webkit.rb,
+	  framework/src/ruby/osx/objc/webkit.rb:
+	- Generate metadata files for WebKit.
+	- Removed previous handwritten webkit.rb files.
+
+	* framework/tool/gen_bridge_metadata.rb:
+	Import all headers when compiling intermediate C files.
+
+	* framework/src/objc/mdl_objwrapper.m:
+	Fixed memory leak.
 
 2006-11-02  kimura wataru <kimuraw@i.nifty.jp>
 
 	* framework/src/ruby/osx/objc/oc_import.rb:
 	fix: automatic override incorrectly with methods contains "_".
 
-2006-11-01  kimura wataru <kimuraw@i.nifty.jp>
+2006-11-01  Laurent Sansonetti <lsansonetti@apple.com>
 
-	* framework/src/objc/mdl_objwrapper.m:
-	fix: release placeholder objects by ruby GC.
-	
-	* tests/objc_test.m, tests/tc_retaincount.rb:
-	add test for placeholder objects.
+	* sample/RubyRoundTransparentWindow/pentagram.tif,
+	  sample/RubyRoundTransparentWindow/pentagon.tif,
+	  sample/RubyRoundTransparentWindow/RoundTransparentWindow.xcodeproj/project.pbxproj,
+	  sample/RubyRoundTransparentWindow/RTW.rb:
+	Renamed pentagram.tif to pentagon.tif.
 
-2006-10-29  kimura wataru <kimuraw@i.nifty.jp>
+	* framework/src/objc/OverrideMixin.m,
+	  framework/src/objc/BridgeSupport.m,
+	  framework/src/objc/RBObject.m,
+	  framework/src/objc/mdl_osxobjc.m,
+	  framework/src/objc/mdl_objwrapper.m,
+	  framework/src/objc/ocdata_conv.h,
+	  framework/src/objc/ocdata_conv.m:
+	- fixed small integers (char, uchar, short, ushort, ...)
+	  libffi conversion from/to Ruby on PPC ;
+	- fixed allocation of ffi_call result value.
 
-	* framework/src/objc/RBObject.m,
-	  tests/objc_test.m, tests/tc_retaincount.rb:
-	-[RBObject fetchForwardArgumentsOf] retain objc object when the 
-	object was passed from ObjC to Ruby.
-	(same process as ocm_retain_result_if_necessary() in mdl_objwrapper.m)
+2006-10-30  Laurent Sansonetti <lsansonetti@apple.com>
 
-2006-10-28  kimura wataru <kimuraw@i.nifty.jp>
+	* tests/tc_booleans.rb,
+	  tests/tc_ovmix.rb,
+	  tests/tc_types.rb,
+	  tests/objc_test.m:
+	Improved tests to check type conversion.
 
-	* doc/build.en.html, doc/build.ja.html, doc/changelog.html,
-	  doc/getting.en.html, doc/getting.ja.html, doc/index.en.html,
-	  doc/index.ja.html, doc/news.en.html, doc/news.ja.html:
-	update documents for releas-0.5.0.
+2006-10-28  Laurent Sansonetti <lsansonetti@apple.com>
 
-	* VERSION:
-	(this change was reverted from some troubles) 0.5.0
+	* sample/RubyTypingTutor/BigLetterView.rb:
+	Fixed constants expressions to not use functions.
 
-2006-10-26  kimura wataru <kimuraw@i.nifty.jp>
+	* framework/src/objc/RBObject.m:
+	Transform [RBObject -rbobjRaiseRubyException] to a
+	C function, as the receiver of rbobj_call_ruby() may
+	not be a RBObject instance (since the move to libffi).
 
-	* ext/rubycocoa/extconf.rb.in:
-	including and linking SDK at building universal binary.
+	* sample/simpleapp/AppController.rb:
+	Fixed NSApp() -> NSApp. 
 
-	* VERSION:
-	0.5.0-preview5
-
-2006-10-26  Fujimoto Hisa  <hisa@fobj.com>
-
-	* pre-config.rb, ext/rubycocoa/extconf.rb.in:
-	rubycocoa.bundle (stub extend module) build as universal binary
-
-	* VERSION:
-	0.5.0-preview4
-
-2006-10-25  kimura wataru <kimuraw@i.nifty.jp>
-	* framework/GeneratedConfig.xcconfig.in, 
-	  framework/RubyCocoa.xcodeproj/project.pbxproj, pre-config.rb:
-	set GENERATE_MASTER_OBJECT_FILE to "YES" with only libruby.a.
-
-	* VERSION:
-	set version to 0.5.0-preview2.
-
-	* framework/GeneratedConfig.xcconfig.in, pre-config.rb:
- 	use ARCHS and SDKROOT of Xcode settings for building universal
-	binary, not CFLAGS and LDFLAGS.
-
-	* VERSION:
-	set version to 0.5.0-preview3.
-
-2006-10-23  kimura wataru <kimuraw@i.nifty.jp>
-
-	* framework/src/ruby/osx/objc/coredata.rb,
-	  sample/RubyRaiseMan/PreferenceController.rb,
-	  sample/RubySpotlight/AppController.rb, sample/fontnames.rb:
-	NSArray#to_a.each convert NSArray#each (RCArrayAttachment).
-
-2006-10-23  kimura wataru <kimuraw@i.nifty.jp>
-
-	* framework/src/ruby/osx/objc/coredata.rb,
-	  sample/RubyRaiseMan/PreferenceController.rb,
-	  sample/RubySpotlight/AppController.rb, sample/fontnames.rb:
-	NSArray#to_a.each convert NSArray#each (RCArrayAttachment).
-
-2006-10-23  Fujimoto Hisa  <hisa@fobj.com>
+2006-10-28  Fujimoto Hisa  <hisa@fobj.com>
 
 	* VERSION, pre-config.rb, framework/src/objc/Version.h.in, framework/src/objc/mdl_osxobjc.m, metaconfig:
 	add a constant OSX::SVN_REVISION
 
-2006-10-22  kimura wataru <kimuraw@i.nifty.jp>
-
-	* template/ProjectBuilder/Application/Cocoa-Ruby Application/,
-	  template/ProjectBuilder/Application/Cocoa-Ruby Document-based Application/:
-	convert Xcode native project file (pbproj -> xcodeproj).
-
-	* doc/build.en.html, doc/build.ja.html, doc/changelog.html, 
-	  doc/changes.en.html, doc/changes.ja.html, doc/getting.en.html, 
-	  doc/getting.ja.html, doc/index.en.html, doc/index.ja.html, 
-	  doc/links.en.html, doc/links.ja.html, doc/programming.en.html, 
-	  doc/programming.ja.html, doc/references.en.html, doc/references.ja.html,
-	  doc/trysamples.en.html, doc/trysamples.ja.html:
-	update documents.
-
-	* framework/pre-install.rb:
-	fix: config install-root does not affect location of BridgeSupport.
-
-2006-10-21  kimura wataru <kimuraw@i.nifty.jp>
-
-	* lib/osx/appkit.rb, lib/osx/foundation.rb:
-	fix: osx/objc/appkit.rb, foundation.rb was removed.
+2006-10-27  Laurent Sansonetti <lsansonetti@apple.com>
 
 	* framework/src/objc/mdl_objwrapper.m:
-	objc_methods(false) returns methods defined in the reciever class.
-	(default: true)
+	Direct call to easy methods.
 
-	* ReadMe.ascii.html, ReadMe.sjis.html:
-	update description about installed contents.
+	* template/ProjectBuilder/File/*:
+	Fixed harcoded copyright date (2001) to ?DATE?.
 
-	* VERSION:
-	set version to 0.5.0-preview.
+	* framework/src/objc/OverrideMixin.m,
+	  framework/src/objc/BridgeSupport.m,
+	  framework/tool/gen_bridge_metadata.rb:
+	Make sure the branch builds on all versions of Mac OS X.
 
-2006-10-18  kimura wataru <kimuraw@i.nifty.jp>
+2006-10-03  Laurent Sansonetti <lsansonetti@apple.com>
 
-	* sample/RubyRocks/RubyRocks.rb,
-	  sample/RubyRoundTransparentWindow/RTW.rb:
-	ns_overrides not needed.
+	* framework/src/objc/BridgeSupport.h,
+	  framework/src/objc/BridgeSupport.m,
+	  framework/src/objc/mdl_objwrapper.m,
+	  framework/src/objc/ocdata_conv.m:
+	Added support for additional exceptions.
 
-2006-09-23  kimura wataru <kimuraw@i.nifty.jp>
+	* tests/tc_passbyref.rb:
+	Added tests for the new exceptions support.
 
-	* pre-config.rb:
-	fix: .pbxproj was not generated in template/ProjectBuilder/Application/.
+2006-10-02  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* framework/tool/gen_bridge_metadata.rb:
+	- Better support of pointer-like argument detection (check for .+Array types
+	  like NSPointArray etc...). Support could be better though by resolving the
+	  typedefs ;
+	- Include the DTD as part of the XML header.
+
+2006-09-30  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* template/ProjectBuilder/Application/Cocoa-Ruby Document-based Application/Info.plist,
+	  template/ProjectBuilder/Application/Cocoa-Ruby Application/Info.plist:
+	Added missing CFBundleIdentifier and CFBundleShortVersionString tags.
+
+2006-09-29  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* template/**/*.project.pbxproj:
+	- Removed unnecessary Default target and set the Release target
+	  as default ; 
+	- Removed unnecessary project/target build settings and added missing
+	  settings to conform with other recent Xcode templates.
+
+	* template/ProjectBuilder/Application/Cocoa-Ruby Document-based Application/Info.plist,
+	  template/ProjectBuilder/Application/Cocoa-Ruby Document-based Application/CocoaDocApp.xcodeproj/TemplateInfo.plist,
+	  template/ProjectBuilder/Application/Cocoa-Ruby Document-based Application/CocoaDocApp.xcodeproj/project.pbxproj,
+	  template/ProjectBuilder/Application/Cocoa-Ruby Application/CocoaApp.xcodeproj/TemplateInfo.plist,
+	  template/ProjectBuilder/Application/Cocoa-Ruby Application/CocoaApp.xcodeproj/project.pbxproj,
+	  template/ProjectBuilder/Application/Cocoa-Ruby Application/Info.plist:
+	Upgraded to use native targets.
+
+2006-09-28  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* template/ProjectBuilder/File/Ruby NSView subclass.rb,
+	  template/ProjectBuilder/File/Ruby NSDocument subclass.rb,
+	  template/ProjectBuilder/Application/Cocoa-Ruby Document-based Application/MyDocument.rb,
+	  template/ProjectBuilder/Application/Cocoa-Ruby Core Data Document-based Application/MyDocument.rb:
+	Removed unnecessary ns_override(s) calls.
+
+	* template/ProjectBuilder/Application/Cocoa-Ruby Core Data Application/CocoaApp.xcodeproj/TemplateInfo.plist,
+	  template/ProjectBuilder/Application/Cocoa-Ruby Core Data Application/AppDelegate.rb,
+	  template/ProjectBuilder/Application/Cocoa-Ruby Core Data Application/English.lproj/MainMenu.nib/keyedobjects.nib,
+	  template/ProjectBuilder/Application/Cocoa-Ruby Core Data Application/English.lproj/MainMenu.nib/classes.nib:
+	Fixed this template to accepts a project name that is not capitalized.
+	The project name was used as a Ruby class name, and if it was not 
+	capitalized it didn't run (as Ruby expects class names to be constants).
+
+	* framework/src/objc/OverrideMixin.m,
+	  framework/src/objc/RBRuntime.m,
+	  framework/src/objc/OverrideMixin.h:
+	Make sure we don't generate multiple ffi closures for the same
+	method encoding type, to avoid infinite loops.
+
+	* tests/tc_subclass.rb:
+	Improved the ns_override test.
+
+	* template/**/*.project.pbxproj:
+	Renamed targets to be consistent with other templates,
+	s/Development/Debug and s/Deployment/Release.
+
+2006-09-27  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* (sample|template)/**/InfoPlist.strings:
+	Removed inappropriate CFBundleShortVersionString tags.
+
+	* framework/tool/gen_bridge_metadata.rb:
+	- Mention if informal protocol methods are class methods or not ;
+	- Link against Foundation by default, as we need it to resolve 
+	  informal protocol methods encoding.
+
+	* tests/tc_ovmix.rb, tests/objc_test.m:
+	Added a test case to check #addRubyMethod_withType, based on
+	bug report #1535223.
+
+	* framework/src/objc/OverrideMixin.m,
+	  framework/src/objc/RBObject.m:
+	Use libffi closures as IMPs when marking pure Ruby methods
+	as Objective-C methods (#addRubyMethod_withType), and directly
+	call the slave object when called.
+
+	* framework/RubyCocoa.xcodeproj/project.pbxproj,
+	  framework/src/objc/RBObject.m,
+	  framework/src/objc/DummyProtocolHandler.h,
+	  framework/src/objc/DummyProtocolHandler.m,
+	  framework/src/objc/BridgeSupport.h,
+	  framework/src/objc/BridgeSupport.m,
+	  framework/src/objc/DummyProtocolHandler.m.erb:
+	Read the list of informal protocols from the metadata files, and
+	do not rely on DummyProtocolHandler anymore. The latter was 
+	removed from the repository.
+
+2006-09-26  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* framework/src/ruby/osx/objc/oc_import.rb:
+	Don't automatically map NSCF* classes to their NS* equivalent, as
+	it brings problem with NSCFBoolean and it's not necessary anymore
+	as we have real class hierarchy.
+
+	* framework/tool/gen_bridge_metadata.rb:
+	Added support to generate information regarding informal protocols.
+
+	* framework/src/objc/ocdata_conv.h:
+	Removed unnecessary macro introduced by mistake.
+
+	* framework/src/objc/mdl_objwrapper.m,
+	  framework/src/objc/cls_objcid.h,
+	  framework/src/objc/cls_objcid.m:
+	Do not release objects issued by 'alloc/allocWithZone:', as some
+	classes may always return the same singleton object (placeholder)
+	each time, and return the real new object with 'init'.
+
+2006-09-25  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* sample/TransparentHello.rb,
+	  sample/mk_app0/AppController.rb,
+	  sample/thread0/AppController.rb,
+	  sample/mk_app1/AppController.rb,
+	  sample/Hakoiri-Musume/cocoa_hako.rb,
+	  sample/Hakoiri-Musume/rb_main.rb,
+	  sample/Pong/AppCtrl.rb,
+	  sample/MyViewer/main.rb,
+	  sample/MyViewer/MyInspector.rb,
+	  sample/HelloWorld.rb:
+	Fixed usage of constants in samples (making sure they use the
+	OSX:: prefix instead of OSX.).
+
+	* lib/osx/foundation.rb,
+	  lib/osx/appkit.rb:
+	Fixed these files to include osx/objc/cocoa and not 
+	osx/objc/[foundation|appkit] that don't exist anymore. 
+
+2006-09-24  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* framework/src/ruby/osx/objc/cocoa_macros.rb,
+	  framework/src/objc/mdl_objwrapper.m,
+	  framework/src/objc/ocdata_conv.h,
+	  framework/src/objc/ocdata_conv.m,
+	  framework/src/objc/BridgeSupport.h,
+	  framework/src/objc/BridgeSupport.m,
+	  framework/src/objc/cls_objcptr.h,
+	  framework/src/objc/cls_objcptr.m:
+	Added support to handle the exceptions metadata.
+
+	* tests/tc_passbyref.rb,
+	  tests/tc_nsattributedstring.rb,
+	  tests/tc_objcptr.rb,
+	  tests/tc_nsstring.rb,
+	  tests/tc_nsdata.rb,
+	  tests/tc_attachments.rb:
+	Added new tests / modified previous tests according to
+	the new exceptions metadata support.
+
+2006-09-22  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* tests/tc_passbyref.rb:
+	Added tests to check methods described by the exceptions 
+	metadata (10.5 only).
+
+2006-09-21  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* framework/src/objc/BridgeSupport.h,
+	  framework/src/objc/BridgeSupport.m:
+	Added support to parse the exceptions metadata.
+
+	* tests/tc_booleans.rb:
+	Added a test case to check methods returning 'char'.
+
+	* framework/tool/gen_bridge_metadata.rb:
+	- added ability to merge the exceptions to the final metadata ;
+	- the arg element becomes function_arg and method_arg according
+	  to the parent element.
+
+2006-09-20  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* framework/src/objc/mdl_objwrapper.m,
+	  framework/src/objc/BridgeSupport.h,
+	  framework/src/objc/BridgeSupport.m,
+	  framework/tool/gen_bridge_metadata.rb,
+	  tests/tc_passbyref.rb:
+	Refactored the generated metadata format.
+
+2006-09-19  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* sample/**/lrz.mode1v3:
+	Removed bad files.
+
+	* template/ProjectBuilder/Application/**/.[pbproj|xcode]:
+	Upgraded old Xcode project files to recent format (.xcodeproj).
+
+	* pre-config, pre-install.rb:
+	Removed project templates generation, fix the location of
+	RubyCocoa.framework once they are installed.
+
+	* framework/tool/gen_bridge_metadata.rb:
+	Added option to generate exception template.
 
 2006-09-19  kimura wataru <kimuraw@i.nifty.jp>
 
@@ -197,14 +1681,19 @@
 	  framework/src/ruby/osx/objc/oc_import.rb:
 	fix "lazy import" with overriding Object.inherit.
 
-2006-09-18  kimura wataru <kimuraw@i.nifty.jp>
+2006-09-18  Laurent Sansonetti <lsansonetti@apple.com>
 
-	* pre-install.rb:
-	remove .svn directories at installation of Xcode templates.
-	(fix: ".svn" appears in Xcode's "New File...")
+	* metaconfig, framework/post-config.rb, framework/pre-install.rb,
+	  framework/tool/generate_bridge_support.rb,
+	  framework/tool/gen_bridge_metadata.rb:
+	- generate_bridge_support -> gen_bridge_metadata. 
+	- Use builtin gen_bridge_metadata tool if found.
+	- Added a new build config variable, gen-bridge-metadata, to control
+	  the generation of metadata files (true by default).
+	- Improved the options parser of gen_bridge_metadata.
 
-	* framework/RubyCocoa.xcodeproj/project.pbxproj:
-	enable to build with static libruby.
+	* framework/src/objc/ocdata_conv.m:
+	Removed unnecessary pthread locks.
 
 2006-09-14  Laurent Sansonetti <lsansonetti@apple.com>
 

@@ -1,6 +1,7 @@
 # $Id$
 
 require 'erb'
+require 'fileutils'
 
 work_dir = 'work'
 contents_dir = File.join(work_dir, 'files')
@@ -11,7 +12,7 @@ def erb(src, dest, bind)
   open(dest, 'w') {|f| f.write str}
 end
 
-`rm -rf "#{work_dir}"` if File.exist? work_dir
+FileUtils.rm_rf work_dir
 Dir.mkdir work_dir
 
 # .plist
@@ -24,10 +25,12 @@ Dir.mkdir File.join(resources_dir, 'English.lproj')
 Dir.mkdir File.join(resources_dir, 'Japanese.lproj')
 
 File.link '../COPYING', File.join(resources_dir, 'License.txt')
-File.link '../ReadMe.ascii.html', 
-  File.join(resources_dir, 'English.lproj', 'ReadMe.html')
-File.link '../ReadMe.sjis.html', 
-  File.join(resources_dir, 'Japanese.lproj', 'ReadMe.html')
+File.link '../ReadMe.html', 
+          File.join(resources_dir, 'English.lproj', 'ReadMe.html')
+File.link '../ReadMe.ja.html', 
+          File.join(resources_dir, 'Japanese.lproj', 'ReadMe.html')
+
+File.link('tmpl/background.gif', File.join(resources_dir, 'background.gif'))
 
 if @config['build-universal'] == 'yes'
   postflight = File.join(resources_dir, 'postflight')

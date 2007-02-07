@@ -94,7 +94,7 @@ class CocoaHako < OSX::NSObject
   end
   
   def windowShouldClose(sender)
-    OSX.NSApp.stop(nil)
+    OSX::NSApp.stop(nil)
     false
   end
 

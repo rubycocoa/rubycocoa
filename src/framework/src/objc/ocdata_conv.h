@@ -11,12 +11,20 @@
 #import "osx_ruby.h"
 
 #if HAVE_LONG_LONG
-/* long long is missing from objc-class.h */
+/* long long is missing from objc-class.h
+   _C_LLNG and _C_ULLNG are kept for historical reasons, but the official 
+   constants are _C_LNG_LNG and _C_ULNG_LNG */
 # ifndef _C_LLNG
 #  define _C_LLNG 'q'
 # endif
+# ifndef _C_LNG_LNG
+#  define _C_LNG_LNG 'q'
+# endif
 # ifndef _C_ULLNG
 #  define _C_ULLNG 'Q'
+# endif
+# ifndef _C_ULNG_LNG
+#  define _C_ULNG_LNG 'Q'
 # endif
 /* NUM2ULL is missing from ruby.h */
 # ifndef NUM2ULL
@@ -24,22 +32,28 @@
 # endif
 #endif	/* HAVE_LONG_LONG */
 
+#if !defined(_C_BOOL)
+# define _C_BOOL 'B'
+#endif
+
+#if !defined(_C_CONST)
+# define _C_CONST 'r'
+#endif
+
 enum osxobjc_nsdata_type {
   _PRIV_C_BOOL = 1024,
-  _PRIV_C_NSRECT,
-  _PRIV_C_NSPOINT,
-  _PRIV_C_NSSIZE,
-  _PRIV_C_NSRANGE,
-  _PRIV_C_QTTIMERANGE,
-  _PRIV_C_QTTIME,
   _PRIV_C_PTR,
   _PRIV_C_ID_PTR,
 };
 
-int     to_octype       (const char* oc_type_str);
-size_t  ocdata_size     (int octype, const char* octype_str);
-void*   ocdata_malloc   (int octype, const char* octype_str);
-#define OCDATA_ALLOCA(octype,s)  alloca(ocdata_size((octype),(s)))
+size_t  ocdata_size     (const char* octype_str);
+void*   ocdata_malloc   (const char* octype_str);
+#define OCDATA_ALLOCA(s)  alloca(ocdata_size(s))
+
+const char *encoding_skip_modifiers(const char *type);
+BOOL is_id_ptr (const char *type);
+struct bsBoxed;
+BOOL is_boxed_ptr (const char *type, struct bsBoxed **boxed);
 
 const char * rbobj_to_cselstr  (VALUE obj);
 id           rbobj_to_nsselstr (VALUE obj);
@@ -57,10 +71,14 @@ VALUE   ocid_to_rbobj (VALUE context_obj, id ocid);
 VALUE  ocstr_to_rbstr (id ocstr);
 
 BOOL  ocdata_to_rbobj (VALUE context_obj,
-		       int octype, const void* ocdata, VALUE* result);
-BOOL  rbobj_to_ocdata (VALUE obj, int octype, void* ocdata);
+		       const char *octype, const void* ocdata, VALUE* result, BOOL from_libffi);
+BOOL  rbobj_to_ocdata (VALUE obj, const char *octype, void* ocdata, BOOL to_libffi);
 
 void init_rb2oc_cache(void);
 void init_oc2rb_cache(void);
 void remove_from_rb2oc_cache(VALUE rbobj);
 void remove_from_oc2rb_cache(id ocid);
+VALUE ocid_to_rbobj_cache_only(id ocid);
+
+@class NSMethodSignature;
+void decode_method_encoding(const char *encoding, NSMethodSignature *methodSignature, unsigned *argc, char **retval_type, char ***arg_types, BOOL strip_first_two_args);

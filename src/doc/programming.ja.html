@@ -218,9 +218,26 @@ end</pre>
 <p>のように定義することもできます。ns_outlets には ib_outlets という別名
 もあります。</p>
 <h2><a name='label-15' id='label-15'>メソッドのオーバーライド</a></h2><!-- RDLabel: "メソッドのオーバーライド" -->
+<p>親クラスで定義されているメソッドをオーバーライドする場合、ns_overrides
+(別名ib_overrides)を使ってオーバーライドしたことを宣言する必要がありま
+す。</p>
+<pre>class MyCustomView &lt; OSX::NSView
+  ns_overrides :drawRect_, 'mouseUp:'
+
+  def drawRect(frame)
+  end
+
+  ...
+end</pre>
+<p>ns_overrides の引数には Objective-C のメッセージセレクタを文字列または
+シンボルで表現したものを与えます。ただし「メソッド名の決定方法とバリエー
+ション」で説明した末尾を省略する記法を使うことはできません。引数の数に
+合わせて正確に記述する必要があります。</p>
 <p>オーバーライドしているメソッドの定義の中でスーパークラスの同じメソッド
 を呼ぶ場合にはメソッド名に "super_" 接頭辞を付けて呼びます。</p>
 <pre>class MyCustomView &lt; OSX::NSView
+
+  ns_overrides :drawRect_
 
   def drawRect (frame)
     p frame
@@ -255,8 +272,8 @@ Cocoa派生クラスではどちらかいえばあまり奨められません。理由は先に述べ
 <p>その他の場合には、Cocoaの流儀で "init" 接頭辞を持つメソッドに書くのが
 よいでしょう。メソッドがselfを返すようにすることを忘れないでください。</p>
 <h2><a name='label-18' id='label-18'>RubyCocoaアプリケーションのデバッグ</a></h2><!-- RDLabel: "RubyCocoaアプリケーションのデバッグ" -->
-<p>今のところ(2006-10-10)、RubyCocoaアプリケーションに対応する
-Xcodeのプラグインモジュールが存在しないため、Xcode上
+<p>今のところ(2003-01-05)、RubyCocoaアプリケーションに対応する
+ProjectBuilderのプラグインモジュールが存在しないため、ProjectBuilder上
 でRubyのデバッガを使うことはできません。</p>
 <p>しかし、RubyCocoaアプリケーションをシェルなどからオプション付きで起動
 することにより、Rubyに付属のデバッガなどを使うことは可能です。Emacs使

@@ -3,7 +3,6 @@
 #
 #  Copyright (c) 2001 FUJIMOTO Hisakuni
 #
-require 'osx/cocoa'
 
 class String
 

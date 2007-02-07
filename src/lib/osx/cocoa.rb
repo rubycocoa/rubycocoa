@@ -4,5 +4,5 @@
 #  Copyright (c) 2001-2006 FUJIMOTO Hisakuni
 #
 
-require 'rubycocoa'
+require 'osx/foundation'
 require 'osx/objc/cocoa'

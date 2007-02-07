@@ -109,6 +109,12 @@ rb_objcptr_allocated_size(VALUE rcv)
   return UINT2NUM (ALLOCATED_SIZE_OF (rcv));
 }
 
+long
+objcptr_allocated_size(VALUE rcv)
+{
+  return ALLOCATED_SIZE_OF (rcv);
+}
+
 static VALUE
 rb_objcptr_bytestr_at(VALUE rcv, VALUE offset, VALUE length)
 {

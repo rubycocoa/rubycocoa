@@ -8,7 +8,7 @@ require 'test/unit'
 require 'osx/cocoa'
 
 ###class ExceptionTest < OSX::NSObject
-system 'make' || raise(RuntimeError, "'make' failed")
+system 'make -s' || raise(RuntimeError, "'make' failed")
 require 'objc_test.bundle'
 
 OSX.ns_import "RBExceptionTestBase" # at end of RBObject.m
@@ -22,9 +22,7 @@ class ExceptionTest < OSX::RBExceptionTestBase
   end
 
   def ns_raise
-    @exception = OSX::NSException.exceptionWithName("ns_raise_name",
-                                           :reason,"ns_raise_reason",
-                                           :userInfo,nil)
+    @exception = OSX::NSException.exceptionWithName_reason_userInfo("ns_raise_name", "ns_raise_reason", nil)
     @exception.raise
   end
 

@@ -15,53 +15,69 @@
 #import <Foundation/NSPathUtilities.h>
 #import "mdl_osxobjc.h"
 #import "ocdata_conv.h"
+#import "OverrideMixin.h"
+#import "internal_macros.h"
 
 #define RUBY_MAIN_NAME "rb_main.rb"
 
-static char* rb_main_path(const char* rb_main_name)
+/* this function should be called from inside a NSAutoreleasePool */
+static NSBundle* bundle_for(Class klass)
+{
+  return (klass == nil) ?
+    [NSBundle mainBundle] : 
+    [NSBundle bundleForClass: klass];
+}
+
+static char* resource_item_path_for(const char* item_name, Class klass)
 {
   char* result;
-  id path;
-  id pool = [[NSAutoreleasePool alloc] init];
-  NSBundle* bundle = [NSBundle mainBundle];
-  if (rb_main_name == NULL) rb_main_name = RUBY_MAIN_NAME;
-  path = [NSString stringWithUTF8String: rb_main_name];
-  result = strdup([[bundle pathForResource: path ofType: nil] fileSystemRepresentation]);
-  [pool release];
+  POOL_DO(pool) {
+    NSBundle* bundle = bundle_for(klass);
+    NSString* path = [NSString stringWithUTF8String: item_name];
+    path = [bundle pathForResource: path ofType: nil];
+    result = strdup([path fileSystemRepresentation]);
+  } END_POOL(pool);
+  return result;
+}
+
+static char* resource_item_path(const char* item_name)
+{
+  return resource_item_path_for(item_name, nil);
+}
+
+static char* rb_main_path(const char* main_name)
+{
+  return resource_item_path(main_name);
+}
+
+static char* resource_path_for(Class klass)
+{
+  char* result;
+  POOL_DO(pool) {
+    NSBundle* bundle = bundle_for(klass);
+    NSString* path = [bundle resourcePath];
+    result = strdup([path fileSystemRepresentation]);
+  } END_POOL(pool);
   return result;
 }
 
 static char* resource_path()
 {
-  NSString* str;
-  char* result;
-  id pool = [[NSAutoreleasePool alloc] init];
-  NSBundle* bundle = [NSBundle mainBundle];
-  str = [bundle resourcePath];
-  result = strdup([str fileSystemRepresentation]);
-  [pool release];
-  return result;
+  return resource_path_for(nil);
 }
 
 static char* framework_ruby_path()
 {
-  NSString* str;
-  char* result;
-  const char* dirname = "/ruby";
-  id pool = [[NSAutoreleasePool alloc] init];
-  NSBundle* bundle = [NSBundle bundleForClass: [RBObject class]];
-  str = [bundle resourcePath];
-  result = (char*) malloc (strlen([str fileSystemRepresentation]) + strlen(dirname) + 1);
-  strcpy (result, [str fileSystemRepresentation]);
-  strcat (result, dirname);
-  [pool release];
-  return result;
+  return resource_item_path_for("ruby", [RBObject class]);
 }
 
 static void load_path_unshift(const char* path)
 {
   extern VALUE rb_load_path;
-  rb_ary_unshift(rb_load_path, rb_str_new2(path));
+  VALUE rpath = rb_str_new2(path);
+
+  if (! RTEST(rb_ary_includes(rb_load_path, rpath)))
+    rb_ary_unshift(rb_load_path, rpath);
 }
 
 static int
@@ -91,10 +107,31 @@ prepare_argv(int argc, const char* argv[], const char* rb_main_name, const char*
 }
 
 int
+RBRubyCocoaInit()
+{
+  static int init_p = 0;
+  if (init_p) return 0;
+
+  ruby_init();
+  load_path_unshift(framework_ruby_path()); // add a ruby part of rubycocoa to $LOAD_PATH
+  init_rb2oc_cache(); // initialize the Ruby->ObjC internal cache
+  init_oc2rb_cache(); // initialize the ObjC->Ruby internal cache
+  initialize_mdl_osxobjc();	// initialize an objc part of rubycocoa
+  init_ovmix();
+  init_p = 1;
+
+  return 1;
+}
+
+int
 RBApplicationMain(const char* rb_main_name, int argc, const char* argv[])
 {
+  static int done_p = 0;
   int ruby_argc;
   const char** ruby_argv;
+
+  if (done_p) return 0;
+  done_p = 1;
 
   ruby_argc = prepare_argv(argc, argv, rb_main_name, &ruby_argv);
 
@@ -107,18 +144,20 @@ RBApplicationMain(const char* rb_main_name, int argc, const char* argv[])
 }
 
 int
-RBRubyCocoaInit()
+RBBundleInit(const char *rb_main_name, Class klass)
 {
-  static int init_p = 0;
+  extern void Init_stack(VALUE*);
+  static int first_flg = 0;
+  VALUE stack_start;
 
-  if (init_p) return 0;
-
-  ruby_init();
-  load_path_unshift(framework_ruby_path()); // add a ruby part of rubycocoa to $LOAD_PATH
-  init_rb2oc_cache(); // initialize the Ruby->ObjC internal cache
-  init_oc2rb_cache(); // initialize the ObjC->Ruby internal cache
-  initialize_mdl_osxobjc();	// initialize an objc part of rubycocoa
-  init_p = 1;
-
-  return 1;
+  if (! first_flg) {
+    ruby_init();
+    Init_stack(&stack_start);
+    ruby_init_loadpath();
+    RBRubyCocoaInit();
+    first_flg = 1;
+  }
+  load_path_unshift(resource_path_for(klass));
+  rb_funcall(Qnil, rb_intern("require"), 1, rb_str_new2(rb_main_name));
+  return 0;
 }
