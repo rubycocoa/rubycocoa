@@ -1,3 +1,21 @@
+2007-02-07  Fujimoto Hisa  <hisa@fobj.com>
+
+	* bundle-support branch - temporary branch (from apple-unstable)
+	for *EXPERIMENT* of bundle/plugin support. Maybe these API/SPEC is
+	dynamically changed for a while.
+
+	* framework/RubyCocoa.xcodeproj/project.pbxproj,
+	  framework/src/ruby/osx/objc/oc_bundle_support.rb,
+	  framework/src/ruby/osx/objc/oc_all.rb
+	  framework/src/ruby/osx/objc/oc_import.rb:
+	temporary implementation for bundle/plugin support by ruby program.
+
+	* sample/RubyAnywhere:
+	SIMBL plugin example.
+
+	* sample/VPRubyPluginEnabler:
+	VoodooPad plugin example (not complete)
+	
 2007-02-05  Fujimoto Hisa  <hisa@fobj.com>
 
 	* framework/src/objc/RBSlaveObject.m,

@@ -20,6 +20,7 @@
 		4D9283230B55505C0070944C /* oc_types_appkit.rb in CopyFiles */ = {isa = PBXBuildFile; fileRef = 4D9283200B55505C0070944C /* oc_types_appkit.rb */; };
 		4DBC6E770B55541F0034513D /* cocoa_macros_appkit.rb in CopyFiles */ = {isa = PBXBuildFile; fileRef = 4DBC6E760B55541F0034513D /* cocoa_macros_appkit.rb */; };
 		4DFE2FB90B5548ED002A7B34 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0867D69BFE84028FC02AAC07 /* Foundation.framework */; };
+		4E85DA260B788E43007290BD /* oc_bundle_support.rb in CopyFiles */ = {isa = PBXBuildFile; fileRef = 4E85DA250B788E43007290BD /* oc_bundle_support.rb */; };
 		FCDF92650A87E09E0002AD01 /* cls_objcid.h in Headers */ = {isa = PBXBuildFile; fileRef = E88C6D58035BB1F5031D1B90 /* cls_objcid.h */; };
 		FCDF92660A87E09E0002AD01 /* cls_objcptr.h in Headers */ = {isa = PBXBuildFile; fileRef = E88C6D5A035BB1F5031D1B90 /* cls_objcptr.h */; };
 		FCDF92680A87E09E0002AD01 /* ocdata_conv.h in Headers */ = {isa = PBXBuildFile; fileRef = E88C6D5F035BB1F5031D1B90 /* ocdata_conv.h */; };
@@ -100,6 +101,7 @@
 			dstPath = ruby/osx/objc;
 			dstSubfolderSpec = 7;
 			files = (
+				4E85DA260B788E43007290BD /* oc_bundle_support.rb in CopyFiles */,
 				FCDF927E0A87E09E0002AD01 /* application.rb in CopyFiles */,
 				FCDF92800A87E09E0002AD01 /* cocoa.rb in CopyFiles */,
 				FCDF92810A87E09E0002AD01 /* cocoa_macros.rb in CopyFiles */,
@@ -133,6 +135,7 @@
 		4D92831F0B55505C0070944C /* oc_attachments_appkit.rb */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.script.ruby; path = oc_attachments_appkit.rb; sourceTree = "<group>"; };
 		4D9283200B55505C0070944C /* oc_types_appkit.rb */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.script.ruby; path = oc_types_appkit.rb; sourceTree = "<group>"; };
 		4DBC6E760B55541F0034513D /* cocoa_macros_appkit.rb */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.script.ruby; path = cocoa_macros_appkit.rb; sourceTree = "<group>"; };
+		4E85DA250B788E43007290BD /* oc_bundle_support.rb */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.ruby; path = oc_bundle_support.rb; sourceTree = "<group>"; };
 		E813DE9B036CC9C1033794D5 /* RBSlaveObject.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RBSlaveObject.h; sourceTree = "<group>"; };
 		E813DE9D036D122F033794D5 /* mdl_osxobjc.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = mdl_osxobjc.h; sourceTree = "<group>"; };
 		E813DE9E036D122F033794D5 /* mdl_osxobjc.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = mdl_osxobjc.m; sourceTree = "<group>"; };
@@ -313,6 +316,7 @@
 				E88C6E7F035BB408031D1B90 /* oc_types.rb */,
 				4D9283200B55505C0070944C /* oc_types_appkit.rb */,
 				E88C6E80035BB408031D1B90 /* oc_wrapper.rb */,
+				4E85DA250B788E43007290BD /* oc_bundle_support.rb */,
 				E8FD49D003D45B2603A81C6F /* ruby_addition.rb */,
 			);
 			path = objc;
