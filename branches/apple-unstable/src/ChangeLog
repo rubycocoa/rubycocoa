@@ -1,5 +1,8 @@
 2007-02-06  Laurent Sansonetti <lsansonetti@apple.com>
 
+	* framework/tool/gen_bridge_metadata.rb:
+	Support for private frameworks/headers.
+
 	* framework/src/objc/BridgeSupport.m:
 	Don't try to retain nil objects.
 

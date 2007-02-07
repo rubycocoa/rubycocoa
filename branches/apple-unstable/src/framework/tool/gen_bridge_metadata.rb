@@ -863,11 +863,14 @@ EOS
     @objc = false
     @out_io = STDOUT
     @generate_exception_template = false       
- 
+    @private = false 
+
     OptionParser.new do |opts|
       opts.banner = "Usage: #{File.basename(__FILE__)} [options] <headers...>\nSee -h or gen_bridge_metadata(1) for more help."
       opts.separator ''
       opts.separator 'Options:'
+
+      opts.on('-p', '--private', 'Look into private headers') { @private = true } 
 
       opts.on('-f', '--framework FRAMEWORK', 'Grep headers within the given framework') do |opt|
         handle_framework(opt)
@@ -977,8 +980,14 @@ EOS
     die "Can't find framework '#{val}'" if path.nil?
     parent_path, name = path.scan(/^(.+)\/(\w+)\.framework$/)[0]
     headers_path = File.join(path, 'Headers')
-    die "Can't locate framework headers at '#{headers_path}'" unless File.exist?(headers_path)
+    die "Can't locate framework headers at '#{headers_path}'" unless File.exist?(headers_path) or @private
     headers = Dir.glob(File.join(headers_path, '**', '*.h'))
+    if @private
+      headers_path = File.join(path, 'PrivateHeaders')
+      if File.exist?(headers_path)
+        headers.concat(Dir.glob(File.join(headers_path, '**', '*.h')))
+      end
+    end
     libpath = File.join(path, name)
     die "Can't locate framework library at '#{libpath}'" unless File.exist?(libpath)
     OBJC.dlload(libpath)
@@ -997,9 +1006,12 @@ EOS
   def framework_path(val)
     return val if File.exist?(val)
     val += '.framework' unless /\.framework$/.match(val)
-    ['/System/Library/Frameworks',
+    paths = ['/System/Library/Frameworks',
      '/Library/Frameworks',
-     "#{ENV['HOME']}/Library/Frameworks"].each do |dir|
+     "#{ENV['HOME']}/Library/Frameworks"
+    ]
+    paths << '/System/Library/PrivateFrameworks' if @private
+    paths.each do |dir|
       path = File.join(dir, val)
       return path if File.exist?(path)
     end
