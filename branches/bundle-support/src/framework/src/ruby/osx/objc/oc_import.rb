@@ -246,6 +246,7 @@ module OSX
       kls_name = self.name.split('::')[-1]
       occls = OSX.objc_derived_class_new(self, kls_name, spr_name)
       self.instance_eval "@ocid = #{occls.__ocid__}",__FILE__,__LINE__+1
+      OSX::BundleSupport.bind_class_with_current_bundle(self) if kls_name
       @inherited = true
     end
 
