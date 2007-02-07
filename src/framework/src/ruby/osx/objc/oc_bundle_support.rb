@@ -12,7 +12,8 @@ module OSX
     NSBundle.objc_alias_class_method '_originalBundleForClass:', 'bundleForClass:'
     class NSBundle
       def NSBundle.bundleForClass(cls)
-        OSX::NSClassFromString("NSObject")
+        OSX::NSClassFromString("NSObject") # some magic to suppress error,
+                                           # i can't see why this effects.
         bdl = OSX::BundleSupport.bundle_for_class(cls)
         bdl ||= self._originalBundleForClass(cls)
         return bdl
