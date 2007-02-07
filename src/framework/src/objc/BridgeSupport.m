@@ -838,7 +838,9 @@ func_dispatch_retain_if_necessary(VALUE arg, BOOL is_retval, void *ctx)
   struct bsFunction *func = (struct bsFunction *)ctx;
 
   // retain the new ObjC object, that will be released once the Ruby object is collected
-  if (*encoding_skip_modifiers(func->retval->octypestr) == _C_ID || find_bs_cf_type_by_encoding(func->retval->octypestr) != NULL) {
+  if (!NIL_P (arg) 
+      && (*encoding_skip_modifiers(func->retval->octypestr) == _C_ID 
+          || find_bs_cf_type_by_encoding(func->retval->octypestr) != NULL)) {
     if (func->retval->should_be_retained && !OBJCID_DATA_PTR(arg)->retained) {
       DLOG("MDLOSX", "retaining objc value");
       [OBJCID_ID(arg) retain];
