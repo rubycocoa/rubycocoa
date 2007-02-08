@@ -1,5 +1,8 @@
 2007-02-08  Laurent Sansonetti <lsansonetti@apple.com>
 
+	* framework/src/objc/mdl_objwrapper.m:
+	Make sure to return nil when easy dispatching void methods.
+
 	* framework/bridge-support-exceptions/AppKit.xml,
 	  framework/src/objc/BridgeSupport.m,
 	  framework/post-config.rb,

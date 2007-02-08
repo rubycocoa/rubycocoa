@@ -146,12 +146,16 @@ ocm_send(int argc, VALUE* argv, VALUE rcv, VALUE* result)
 
     if (NIL_P(exception)) {
       if (*methodReturnType != _C_VOID) {
+        OBJWRP_LOG("got return value %p", val);
         if (!ocdata_to_rbobj(rcv, methodReturnType, (const void *)&val, result, NO)) {
           exception = rb_err_new(ocdataconv_err_class(), "Cannot convert the result as '%s' to Ruby", methodReturnType);
         }
         else {
           ocm_retain_arg_if_necessary(*result, YES, &context);
         }
+      }
+      else {
+        *result = Qnil;
       }
     }
     else {
