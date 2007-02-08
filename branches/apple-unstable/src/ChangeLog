@@ -1,3 +1,14 @@
+2007-02-08  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* framework/bridge-support-exceptions/AppKit.xml,
+	  framework/src/objc/BridgeSupport.m,
+	  framework/post-config.rb,
+	  framework/tool/gen_bridge_metadata.rb,
+	  tests/tc_wrapper.rb:
+	Inline functions are now described in the metadata files and a separate
+	.dylib file that contains the exported calls is generated and installed
+	at the same location than the XML files. Added a test case.
+
 2007-02-06  Laurent Sansonetti <lsansonetti@apple.com>
 
 	* framework/tool/gen_bridge_metadata.rb:

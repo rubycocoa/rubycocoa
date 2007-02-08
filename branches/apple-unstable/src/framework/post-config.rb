@@ -16,6 +16,24 @@ intern_h = File.join(@config['ruby-header-dir'], 'intern.h')
   end
 end
 
+def call_generator(path, special_flags, extension=nil, additional_flags=nil)
+  framework = File.basename(path, '.framework')
+  extension ||= 'xml'
+  out = "bridge-support/#{framework}.#{extension}"
+  generator = "#{@config['ruby-prog']} tool/gen_bridge_metadata.rb"
+  generator << " #{special_flags}" if special_flags
+  generator << " #{additional_flags}" if additional_flags
+  generator << " -f #{path}"
+  exceptions = "bridge-support-exceptions/#{framework}.xml"
+  generator << " -e #{exceptions}" if File.exist?(exceptions)
+  if !File.exist?(out) or File.size(out) == 0 or File.mtime('tool/gen_bridge_metadata.rb') > File.mtime(out)
+    generator << " -o #{out}"
+    $stderr.puts "create #{out} ..."
+    command("rm -rf #{out}")
+    command(generator) 
+  end
+end
+
 # generate bridge support metadata files for Cocoa & its dependencies. 
 TIGER_OR_LOWER = `uname -r`.strip.to_f < 9.0
 if @config['gen-bridge-support'] != 'no'
@@ -33,18 +51,8 @@ if @config['gen-bridge-support'] != 'no'
    ['/System/Library/Frameworks/AddressBook.framework', nil],
    ['/System/Library/Frameworks/InstantMessage.framework', nil],
   ].each do |path, special_flags|
-    framework = File.basename(path, '.framework')
-    out = "bridge-support/#{framework}.xml"
-    if !File.exist?(out) or File.size(out) == 0 or File.mtime('tool/gen_bridge_metadata.rb') > File.mtime(out)
-      generator = "#{@config['ruby-prog']} tool/gen_bridge_metadata.rb"
-      generator << " #{special_flags}" if special_flags
-      generator << " -f #{path}"
-      exceptions = "bridge-support-exceptions/#{framework}.xml"
-      generator << " -e #{exceptions}" if File.exist?(exceptions)
-      generator << " -o #{out}"
-      $stderr.puts "create #{out} ..."
-      command(generator) 
-    end
+    call_generator(path, special_flags) 
+    call_generator(path, special_flags, 'dylib', '-F dylib') 
     # Uncomment this to launch the verification tool on each metadata file.
     # Warning: this can take some time, and there are several false positives.
     #$stderr.puts "verify #{out} ..."

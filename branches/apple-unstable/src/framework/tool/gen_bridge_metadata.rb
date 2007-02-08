@@ -76,10 +76,19 @@ class OCHeaderAnalyzer
     @constants ||= externs.map { |i| constant?(i, true) }.flatten.compact
   end
 
-  def functions
-    skip_inline_re = /(static)?\s__inline__[^{;]+(;|\{([^{}]*(\{[^}]+\})?)*\})\s*/
-    func_re = /(^([\w\s\*<>]+)\s*\(([^)]*)\)\s*);/
-    @functions ||= @cpp_result.gsub(skip_inline_re, '').scan(func_re).map do |m|
+  def functions(inline=false)
+    if inline
+      return @inline_functions if @inline_functions
+      inline_func_re = /__inline__\s+((__attribute__\(\([^)]*\)\)\s+)?([\w\s\*<>]+)\s*\(([^)]*)\)\s*)\{/
+      res = @cpp_result.scan(inline_func_re)
+      res.each { |x| x.delete_at(1) }
+    else
+      return @functions if @functions
+      skip_inline_re = /(static)?\s__inline__[^{;]+(;|\{([^{}]*(\{[^}]+\})?)*\})\s*/
+      func_re = /(^([\w\s\*<>]+)\s*\(([^)]*)\)\s*);/
+      res = @cpp_result.gsub(skip_inline_re, '').scan(func_re)
+    end
+    funcs = res.map do |m|
       orig, base, args = m
       base.sub!(/^.*extern\s+/, '')
       func = constant?(base)
@@ -87,9 +96,15 @@ class OCHeaderAnalyzer
         args = args.strip.split(',').map { |i| constant?(i) }
         next if args.any? { |x| x.nil? }
         args = [] if args.size == 1 and args[0].rettype == 'void'
-        FuncInfo.new(func, args, orig)
+        FuncInfo.new(func, args, orig, inline)
       end
     end.compact
+    if inline
+      @inline_functions = funcs
+    else
+      @functions = funcs
+    end
+    funcs
   end
 
   def informal_protocols
@@ -276,7 +291,7 @@ class OCHeaderAnalyzer
   class FuncInfo < VarInfo
     attr_reader :args, :argc
 
-    def initialize(func, args, orig)
+    def initialize(func, args, orig, inline=false)
       super(func.rettype, func.name, orig)
       @args = args
       @argc = @args.size
@@ -285,11 +300,16 @@ class OCHeaderAnalyzer
         @variadic = true
         @args.pop
       end
+      @inline = inline
       self
     end
 
     def variadic?
       @variadic
+    end
+
+    def inline?
+      @inline
     end
   end
 
@@ -347,7 +367,7 @@ class BridgeSupportGenerator
   def initialize(args)
     parse_args(args)
     scan_headers
-    unless @generate_exception_template
+    if @generate_format == FORMAT_FINAL
       collect_types_encoding
       collect_enums
       collect_numeric_defines
@@ -355,8 +375,12 @@ class BridgeSupportGenerator
       collect_structs_encoding
       collect_inf_protocols_encoding
     end
-    generate_xml
-    @out_io.close unless @out_io == STDOUT
+    if @generate_format == FORMAT_DYLIB
+      collect_types_encoding
+      generate_dylib
+    else
+      generate_xml
+    end
   end
 
   #######
@@ -605,6 +629,37 @@ EOS
     end
   end
 
+  def generate_dylib
+    inline_functions = @functions.select { |x| x.inline? }
+    if inline_functions.empty?
+      puts "No inline functions in the given framework/library, no need to generate a dylib."
+      return
+    end    
+    code = "#{@import_directive}\n"
+    inline_functions.each do |function|
+      orig = function.orig.sub(/__attribute__\(\(always_inline\)\)/, '').strip
+      new = orig.sub(function.name, '__dummy_' + function.name)
+      ret = encoding_of(function) == 'v' ? '' : 'return '
+      code << <<EOC
+#{new} __asm__ ("_#{function.name}");
+#{new} { 
+  #{ret}#{function.name}(#{function.args.map { |x| x.name }.join(', ')});
+} 
+EOC
+    end
+    tmp_src = File.open(unique_tmp_path('src', '.m'), 'w')
+    tmp_src.puts code
+    tmp_src.close
+    if File.extname(@out_file) != '.dylib'
+      @out_file << '.dylib'
+    end
+    gcc = "gcc #{tmp_src.path} -o #{@out_file} #{@compiler_flags} -dynamiclib -O3"
+    unless system(gcc)
+      die "Can't compile dylib source file '#{tmp_src.path}'"
+    end
+    File.unlink(tmp_src.path)
+  end
+
   def generate_xml
     document = REXML::Document.new
     document << REXML::XMLDecl.new
@@ -612,7 +667,8 @@ EOS
     root = document.add_element('signatures')
     root.add_attribute('version', VERSION)
 
-    if @generate_exception_template
+    case @generate_format
+    when FORMAT_TEMPLATE
       # Generate the exception template file.
       @cftype_names.sort.each do |name|
         element = root.add_element('cftype')
@@ -666,7 +722,7 @@ EOS
         element.add_attribute('name', class_name)
         method_elements.each { |x| element.add_element(x) }
       end
-    else
+    when FORMAT_FINAL
       # Generate the final metadata file.
       @resolved_structs.sort { |x, y| x[0] <=> y[0] }.each do |name, encoding|
         element = root.add_element('struct')
@@ -703,6 +759,7 @@ EOS
         element = root.add_element('function')
         element.add_attribute('name', function.name)
         element.add_attribute('variadic', true) if function.variadic?
+        element.add_attribute('inline', true) if function.inline?
         function.args.each do |arg|
           element.add_element('arg').add_attribute('type', encoding_of(arg))
         end
@@ -743,7 +800,11 @@ EOS
       @exceptions.each { |x| merge_document_with_exceptions(document, x) }
     end
 
-    document.write(@out_io, 0)
+    if @out_file
+      File.open(@out_file, 'w') { |io| document.write(io, 0) }
+    else
+      document.write(STDOUT, 0)
+    end
   end
 
   def merge_document_with_exceptions(document, exception_document)
@@ -833,11 +894,17 @@ EOS
     @headers.each do |path|
       die "Given header file `#{path}' doesn't exist" unless File.exist?(path)
       analyzer = OCHeaderAnalyzer.new(path)
-      @functions.concat(analyzer.functions)
-      if @generate_exception_template
+      case @generate_format
+      when FORMAT_DYLIB
+        @functions.concat(analyzer.functions(true))
+      when FORMAT_TEMPLATE
+        @functions.concat(analyzer.functions)
+        @functions.concat(analyzer.functions(true))
         @struct_names.concat(analyzer.struct_names)
         @cftype_names.concat(analyzer.cftype_names)
-      else
+      when FORMAT_FINAL 
+        @functions.concat(analyzer.functions)
+        @functions.concat(analyzer.functions(true))
         @constants.concat(analyzer.constants)
         @enums.merge!(analyzer.enums)
         @defines.concat(analyzer.defines)
@@ -856,13 +923,16 @@ EOS
       end
     end
   end
+
+  FORMATS = ['final', 'exceptions-template', 'dylib']
+  FORMAT_FINAL, FORMAT_TEMPLATE, FORMAT_DYLIB = FORMATS
  
   def parse_args(args)
     @headers = []
     @exceptions = []
     @objc = false
-    @out_io = STDOUT
-    @generate_exception_template = false       
+    @out_file = nil
+    @generate_format = FORMAT_FINAL
     @private = false 
 
     OptionParser.new do |opts|
@@ -878,17 +948,16 @@ EOS
       end
 
       opts.on('-o', '--output OUTFILE', 'Redirect output to the given file (stdout by default)') do |opt|
-        die 'Output file can\'t be specified more than once' if @out_io != STDOUT
-        @out_io = File.open(opt, 'w')
+        die 'Output file can\'t be specified more than once' if @out_file
+        @out_file = opt
       end
 
       opts.on('-e', '--exception EXCPFILE', 'Consider the given exception file when generating the metadata') do |opt|
         @exceptions << opt
       end
 
-      formats = ['final', 'exceptions-template']
-      opts.on('-F', '--format FORMAT', formats, {}, "Select metadata format ('#{formats.first}' (default), '#{formats.last}')") do |opt|
-        @generate_exception_template = opt == formats.last 
+      opts.on('-F', '--format FORMAT', FORMATS, {}, "Select metadata format ('#{FORMATS.first}' (default), '#{FORMATS[1..-1].map { |x| '\'' + x + '\'' }.join(', ')})") do |opt|
+        @generate_format = opt
       end
 
       opts.on('-c', '--compiler-flags FLAGS', 'Specify custom compiler flags (by default, "-F... -framework ...")') do |flags|
@@ -922,6 +991,9 @@ EOS
         @headers.concat(args)
         if @headers.empty?
           die "No headers given", opts.banner
+        end
+        if @generate_format == FORMAT_DYLIB and @out_file.nil? 
+          die "dylib format requires --output"
         end
       end
     end
