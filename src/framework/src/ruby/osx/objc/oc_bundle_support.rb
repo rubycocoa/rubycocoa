@@ -26,18 +26,22 @@ module OSX
     @@bundles    = [] unless defined? @@bundles
     @@bundle_map = {} unless defined? @@bundle_map
 
-    def do_with_bundle(bdl)
+    def init_bundle(bdl)
       _push_bundle!(bdl)
-      yield(bdl)
+      loginfo("init_bundle ...")
+      yield(self)
+    rescue Exception => err
+      logerr(err)
     ensure
+      loginfo("init_bundle done.")
       _pop_bundle!
     end
-    module_function :do_with_bundle
+    module_function :init_bundle
 
-    def do_for_class(cls)
-      do_with_bundle(OSX::NSBundle._originalBundleForClass(cls)) {|b| yield(b) }
+    def init_bundle_for_class(cls)
+      init_bundle(OSX::NSBundle._originalBundleForClass(cls)) {|*x| yield(*x) }
     end
-    module_function :do_for_class
+    module_function :init_bundle_for_class
 
     def bundle_for_class(cls)
       @@bundle_map[cls.__ocid__]
@@ -51,10 +55,41 @@ module OSX
     end
     module_function :bind_class_with_current_bundle
 
+    def loginfo(fmt, *args)
+      OSX.NSLog("#{_bundle_name} (#{_process_name}): #{fmt % args}")
+    end
+    module_function :loginfo
+
+    def logerr(err)
+      loginfo("*ERROR* - %s", err)
+      err.backtrace.each { |s| loginfo("    %s", s) }
+    end
+    module_function :logerr
+
     private
     def self._push_bundle!(bdl) @@bundles.push(bdl) end
     def self._pop_bundle!;      @@bundles.pop  end
     def self._current_bundle;   @@bundles.last end
+
+    def self._bundle_name
+      if bdl = _current_bundle then
+        bdl.to_s.sub(/^.*<(.*)>.*$/,'\1').split('/').last
+      end
+    end
+
+    def self._process_name
+      @@process_name ||= OSX::NSProcessInfo.processInfo.processName
+    end
   end
+
+  def init_bundle(bdl)
+    BundleSupport.init_bundle(bdl) { |*x| yield(*x) }
+  end
+  module_function :init_bundle
+
+  def init_bundle_for_class(cls)
+    BundleSupport.init_bundle_for_class(cls) { |*x| yield(*x) }
+  end
+  module_function :init_bundle_for_class
 
 end

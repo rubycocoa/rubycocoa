@@ -4,6 +4,11 @@
 	checked existence of module variables in BundleSupport before I
 	define it.
 
+	* framework/src/ruby/osx/objc/oc_bundle_support.rb, sample/VPRubyPluginEnabler/vpr_init.rb, sample/RubyAnywhere/ruby_anywhere_init.rb:
+	implement the init_bundle_for_class. usage is
+	OSX.init_bundle_for_class(BUNDLE_PRINCIPLE_CLASS)
+	  { ... define classes in the bundle context ... }
+
 2007-02-07  Fujimoto Hisa  <hisa@fobj.com>
 
 	* bundle-support branch - temporary branch (from apple-unstable)

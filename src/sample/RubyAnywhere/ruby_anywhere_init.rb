@@ -9,15 +9,13 @@
 
 require 'osx/cocoa'
 
-OSX::BundleSupport.do_for_class(OSX::RubyAnywhereLoader) do
-  begin
-    require 'ruby_anywhere'
-    require 'RcodeController'
-    rcode = RcodeController.instance
-    OSX::NSBundle.loadNibNamed_owner("Rcode.nib", rcode)
-    RubyAW.nslog("ruby_anywhere_init.rb (%s) loaded.", 
-                 OSX::NSProcessInfo.processInfo.processName)
-  rescue Exception => err
-    RubyAW.logerr(err)
-  end
+def hoge
+  raise "hoge"
+end
+
+OSX.init_bundle_for_class(OSX::RubyAnywhereLoader) do
+  require 'ruby_anywhere'
+  require 'RcodeController'
+  rcode = RcodeController.instance
+  OSX::NSBundle.loadNibNamed_owner("Rcode.nib", rcode)
 end
