@@ -24,7 +24,7 @@ module OSX
 
   module BundleSupport
     @@bundles    = [] unless defined? @@bundles
-    @@bundle_map = [] unless defined? @@bundle_map
+    @@bundle_map = {} unless defined? @@bundle_map
 
     def do_with_bundle(bdl)
       _push_bundle!(bdl)
