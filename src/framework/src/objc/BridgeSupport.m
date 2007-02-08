@@ -875,7 +875,7 @@ bridge_support_dispatcher (int argc, VALUE *argv, VALUE rcv)
   // lookup function symbol
   if (func->sym == NULL) {
     func->sym = dlsym(RTLD_DEFAULT, func_name);
-    if (func->sym == NULL)
+    if (func->sym == NULL) 
       rb_fatal("Can't locate function symbol '%s' : %s", func->name, dlerror());
   }
 
@@ -937,6 +937,25 @@ bridge_support_dispatcher (int argc, VALUE *argv, VALUE rcv)
 
 static struct bsRetval default_func_retval = { bsCArrayArgUndefined, -1, "v", NO };  
 
+static void
+__load_bridge_support_dylib (const char *signature_file)
+{
+  char buf[PATH_MAX];
+  size_t len;
+
+  len = strlen(signature_file);
+  if (len < 5 || len > sizeof buf)
+    return;
+  if (strcmp(".xml", &signature_file[len - 4]) != 0)
+    return;
+  strncpy(buf, signature_file, len - 3);
+  buf[len - 3] = '\0';
+  strcat(buf, "dylib");
+
+  if (dlopen(buf, RTLD_LAZY) == NULL)
+    DLOG("MDLOSX", "Can't load the bridge support bundle `%s' : %s", buf, dlerror());
+}
+
 static VALUE
 osx_load_bridge_support_file (VALUE mOSX, VALUE path)
 {
@@ -950,6 +969,8 @@ osx_load_bridge_support_file (VALUE mOSX, VALUE path)
   char *              protocol_name;
 
   cpath = STR2CSTR(path);
+
+  __load_bridge_support_dylib (cpath);
 
   DLOG("MDLOSX", "Loading bridge support file `%s'", cpath);
   

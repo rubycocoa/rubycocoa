@@ -3,6 +3,7 @@
   <ignored_headers>
     <header>NSSpellServer.h</header>
     <header>NSSimpleHorizontalTypesetter.h</header>
+    <header>NSGridView.h</header>
   </ignored_headers>
   <function name='NSConvertGlyphsToPackedGlyphs'>
     <arg index='0' type_modifier='in' c_array_delimited_by_arg='1'/>

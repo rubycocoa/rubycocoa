@@ -119,4 +119,11 @@ class TC_OCObjWrapper < Test::Unit::TestCase
     end
   end
 
+  def test_inline_functions
+    rect = OSX::NSMakeRect(1,2,3,4)
+    assert_kind_of(OSX::NSRect, rect)
+    assert_equal([[1,2],[3,4]], rect.to_a)
+    assert_equal(rect, OSX::NSRect.new(1,2,3,4))
+  end
+
 end
