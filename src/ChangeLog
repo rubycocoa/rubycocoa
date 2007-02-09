@@ -1,5 +1,11 @@
 2007-02-09  Fujimoto Hisa  <hisa@fobj.com>
 
+	* framework/src/ruby/osx/objc/oc_bundle_support.rb,
+	  framework/src/ruby/osx/objc/oc_import.rb,
+	  framework/src/objc/mdl_bundle_support.m:
+	moved the implementation of method swizzling for
+	NSBundle.bundleForClass into Objective-C from Ruby side.
+
 	* framework/src/ruby/osx/objc/oc_bundle_support.rb, 
 	framework/src/ruby/osx/objc/oc_import.rb:
 	fixed to avoid a bus error by the adhoc way, inserted
