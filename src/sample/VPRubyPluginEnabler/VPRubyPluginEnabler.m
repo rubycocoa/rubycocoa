@@ -10,21 +10,23 @@
 #import <VPPlugin/VPPlugin.h>
 #import <RubyCocoa/RBRuntime.h>
 
+static const char* init_prog_name   = "vpr_init.rb";
+
 @interface VPRubyPluginEnabler : VPPlugin
-+ (VPRubyPluginEnabler*) realInstance;
 - (void) didRegister;
 @end
 
-static VPRubyPluginEnabler* real_instance = nil;
-
 @implementation VPRubyPluginEnabler
-+ (VPRubyPluginEnabler*) realInstance { return real_instance; }
-
 - (void) didRegister {
-  if (! real_instance) {
-    RBBundleInit("vpr_init.rb", [self class]);
-    real_instance = self;
-    NSLog(@"VPRubyPluginEnabler didRegister.");
+  static int installed = 0;
+  if (! installed) {
+    if (RBBundleInit(init_prog_name, [self class], self) == YES) {
+      installed = 1;
+      NSLog(@"VPRubyPluginEnabler#didRegister => OK");
+    }
+    else {
+      NSLog(@"VPRubyPluginEnabler#didRegister => NG");
+    }
   }
 }
 @end

@@ -9,13 +9,19 @@
 require 'osx/cocoa'
 
 class VPRubyPlugin
-  @@instance = nil
 
-  def self.instance; @@instance ||= self.new end
-  def self.load;     self.instance end
-  def self.manager;  self.instance.manager end
+  def self.load(enabler)
+    @@instance ||= self.new(enabler) 
+  end
+
+  def self.instance; @@instance end
+  def self.manager;  instance.manager end
+
+  def initialize(enabler)
+    @enabler
+  end
 
   def manager
-    OSX::VPRubyPluginEnabler.realInstance.pluginManager
+    @enabler.pluginManager
   end
 end

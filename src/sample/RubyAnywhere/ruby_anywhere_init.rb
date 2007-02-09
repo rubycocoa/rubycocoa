@@ -9,12 +9,13 @@
 
 require 'osx/cocoa'
 
-def hoge
-  raise "hoge"
-end
+OSX.init_for_bundle do
+  |bdl, param, log|
+  # bdl    - the bundle related with the 2nd argument of RBBundleInit
+  # param  - the 3rd argument of RBBundleInit as optional data
+  # log    - logger for this block
+  log.info("param=%p", param.to_s)
 
-OSX.init_bundle_for_class(OSX::RubyAnywhereLoader) do
-  require 'ruby_anywhere'
   require 'RcodeController'
   rcode = RcodeController.instance
   OSX::NSBundle.loadNibNamed_owner("Rcode.nib", rcode)

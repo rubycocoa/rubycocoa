@@ -1,3 +1,36 @@
+2007-02-09  Fujimoto Hisa  <hisa@fobj.com>
+
+	* framework/src/ruby/osx/objc/oc_bundle_support.rb,
+	  framework/src/objc/mdl_bundle_support.h,
+	  framework/src/objc/mdl_bundle_support.m,
+	  framework/src/objc/RBRuntime.m,
+	  framework/RubyCocoa.xcodeproj/project.pbxproj:
+	primitive/core part of Bundle Support implementation move to
+	Objecive-C from Ruby.  Addtional part is still in Ruby.
+
+	* framework/src/objc/RBRuntime.h, framework/src/objc/RBRuntime.m:
+	changed some RBBundleInit API. Objecive-C class defiend by ruby
+	program (1st argument) bound with the bundle related with 2nd
+	argument class. New 3rd argument can use for passing some data
+	from objective-c world to ruby world. and then, the result means
+	success when YES and failed when NO.
+
+	* framework/src/ruby/osx/objc/oc_bundle_support.rb:
+	removed init_bundle_for_class, and added init_for_bundle ...
+	OSX.init_for_bundle do
+          |bdl, param, log|
+          # bdl    - the bundle related with the 2nd argument of RBBundleInit
+          # param  - the 3rd argument of RBBundleInit as optional data
+          # log    - logger for this block
+          log.info("param=%p", param.to_s)
+	  require 'YourObjcClass'  # the class bound with the bdl instead 
+	                           # of the mainbundle
+	  ...
+	end
+	
+	* sample/RubyAnywhere, sample/VPRubyPluginEnabler:
+	modified for current bundle support spec.
+
 2007-02-08  Fujimoto Hisa  <hisa@fobj.com>
 
 	* framework/src/ruby/osx/objc/oc_bundle_support.rb:

@@ -9,7 +9,15 @@
 
 require 'osx/cocoa'
 
-OSX.init_bundle_for_class(OSX::VPRubyPluginEnabler) do
+OSX.init_for_bundle do
+  |bdl, enabler, log|
+  # bdl     - the bundle related with the 2nd argument of RBBundleInit
+  # enabler - the 3rd argument of RBBundleInit (VPRubyPluginEnabler)
+  # log     - logger for this block
+
+  log.info("enabler=%p", enabler.to_s)
+  log.info("enabler.pluginManager=%p", enabler.pluginManager.to_s)
+
   require 'VPRubyPlugin'
-  VPRubyPlugin.load
+  VPRubyPlugin.load(enabler)
 end
