@@ -21,18 +21,15 @@ class RcodeController < OSX::NSObject
   ERR_COLOR = NSColor.redColor
   OUT_COLOR = NSColor.blueColor
 
-  @@instance = nil
-
   def self.instance
-    if @@instance.nil? then
-      @@instance = self.alloc.init
-    end
-    return @@instance
+    @@instance ||= self.alloc.init
   end
 
-  def initialize
+  def init
+    super_init
     @host_app = NSApplication.sharedApplication
-    @bundle = NSBundle.bundleForClass(self.class)
+    @bundle = NSBundle.bundleForClass(self.oc_class)
+    return self
   end
 
   def awakeFromNib
