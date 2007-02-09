@@ -51,7 +51,7 @@ module OSX
       
       def error(err)
         info("*ERROR* - %s", err)
-        err.backtrace.each { |s| loginfo("    %s", s) }
+        err.backtrace.each { |s| info("    %s", s) }
       end
     end
   end
