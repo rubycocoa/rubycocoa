@@ -1,5 +1,8 @@
 2007-02-09  Fujimoto Hisa  <hisa@fobj.com>
 
+	* sample/VPRubyPluginEnabler:
+	VoodooPad plugin example works good.
+	
 	* framework/src/ruby/osx/objc/oc_bundle_support.rb,
 	  framework/src/ruby/osx/objc/oc_import.rb,
 	  framework/src/objc/mdl_bundle_support.m:
