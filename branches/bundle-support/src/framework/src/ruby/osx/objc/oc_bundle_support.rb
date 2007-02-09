@@ -8,22 +8,6 @@
 
 module OSX
 
-  if not NSBundle.respondsToSelector?('_originalBundleForClass:') then
-    NSBundle.objc_alias_class_method '_originalBundleForClass:', 'bundleForClass:'
-    class NSBundle
-      def NSBundle.bundleForClass(cls)
-        OSX::NSClassFromString("NSObject") # FIXME - this line has no
-                                           # meaning, but it's effect
-                                           # to avoid a BUS
-                                           # error. why so?
-        bdl = OSX::BundleSupport.bundle_for_class(cls)
-        bdl ||= self._originalBundleForClass(cls)
-        return bdl
-      end
-    end
-    NSBundle.objc_class_method 'bundleForClass:', [:id, :class]
-  end
-
   module BundleSupport
 
     def init_for_bundle

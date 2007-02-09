@@ -77,15 +77,22 @@ static VALUE rb_current_bundle(VALUE mdl) { return _current_bundle(); }
 
 /** bundle_map - the  mapping table of class to bundle **/
 
+static id
+bundle_for_class(Class klass)
+{
+  VALUE bundle = rb_hash_aref(BUNDLE_MAP, OCID2NUM(klass));
+  return rbobj_get_ocid(bundle);
+}
+
 static VALUE
-bundle_for_class(VALUE mdl, VALUE objc_class)
+rb_bundle_for_class(VALUE mdl, VALUE objc_class)
 {
   VALUE ocid = OCID2NUM(rbobj_get_ocid(objc_class));
   return rb_hash_aref(BUNDLE_MAP, ocid);
 }
 
 static VALUE
-bind_class_with_current_bundle(VALUE mdl, VALUE objc_class)
+rb_bind_class_with_current_bundle(VALUE mdl, VALUE objc_class)
 {
   VALUE stack_item;
   stack_item = _current_bundle();
@@ -168,6 +175,30 @@ VALUE bundle_support_load(const char* rb_main_name,
   return Qnil;
 }
 
+
+/* replace NSBundle.bundleForClass */
+static IMP original_bundleForClass = NULL;
+
+static id rubycocoa_bundleForClass(id rcv, SEL op, id klass)
+{
+  id bundle = bundle_for_class(klass);
+  if (! bundle)
+    bundle = original_bundleForClass(rcv, op, klass);
+  return bundle;
+}
+
+static void setup_bundleForClass()
+{
+  if (original_bundleForClass == NULL) {
+    Method method;
+    method = class_getClassMethod([NSBundle class], @selector(bundleForClass:));
+    if (method) {
+      original_bundleForClass = method->method_imp;
+      method->method_imp = (IMP) rubycocoa_bundleForClass;
+    }
+  }
+}
+
 /** initialize primitive functions for module OSX::BundleSupport **/
 void
 initialize_mdl_bundle_support()
@@ -180,14 +211,15 @@ initialize_mdl_bundle_support()
 
     rb_define_module_function(_mBundleSupport, 
                               "bundle_for_class",
-			      bundle_for_class, 1);
+			      rb_bundle_for_class, 1);
 
     rb_define_module_function(_mBundleSupport, 
                               "bind_class_with_current_bundle",
-			      bind_class_with_current_bundle, 1);
+			      rb_bind_class_with_current_bundle, 1);
 
     rb_define_module_function(_mBundleSupport,
                               "_current_bundle",
                               rb_current_bundle, 0);
+    setup_bundleForClass();
   }
 }
