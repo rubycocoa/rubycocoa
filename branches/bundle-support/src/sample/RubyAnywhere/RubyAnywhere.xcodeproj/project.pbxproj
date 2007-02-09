@@ -10,7 +10,6 @@
 		4EC189B40B71A7D80004D480 /* RubyAnywhereLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EC189B30B71A7D80004D480 /* RubyAnywhereLoader.m */; };
 		4EC189BD0B71AA3D0004D480 /* ruby_anywhere_init.rb in Resources */ = {isa = PBXBuildFile; fileRef = 4EC189BC0B71AA3D0004D480 /* ruby_anywhere_init.rb */; };
 		4EC189CC0B71AC210004D480 /* RubyCocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4EC189CB0B71AC210004D480 /* RubyCocoa.framework */; };
-		4EC18A2F0B71C0440004D480 /* ruby_anywhere.rb in Resources */ = {isa = PBXBuildFile; fileRef = 4EC18A2E0B71C0440004D480 /* ruby_anywhere.rb */; };
 		4EC18A350B71CB4B0004D480 /* Rcode.nib in Resources */ = {isa = PBXBuildFile; fileRef = 4EC18A330B71CB4B0004D480 /* Rcode.nib */; };
 		4EC18A3B0B71D15B0004D480 /* ruby_logo_small.icns in Resources */ = {isa = PBXBuildFile; fileRef = 4EC18A3A0B71D15B0004D480 /* ruby_logo_small.icns */; };
 		4EC18A3D0B71D1640004D480 /* RcodeController.rb in Resources */ = {isa = PBXBuildFile; fileRef = 4EC18A3C0B71D1640004D480 /* RcodeController.rb */; };
@@ -27,7 +26,6 @@
 		4EC189B30B71A7D80004D480 /* RubyAnywhereLoader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RubyAnywhereLoader.m; sourceTree = "<group>"; };
 		4EC189BC0B71AA3D0004D480 /* ruby_anywhere_init.rb */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.ruby; path = ruby_anywhere_init.rb; sourceTree = "<group>"; };
 		4EC189CB0B71AC210004D480 /* RubyCocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RubyCocoa.framework; path = /Library/Frameworks/RubyCocoa.framework; sourceTree = "<absolute>"; };
-		4EC18A2E0B71C0440004D480 /* ruby_anywhere.rb */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.ruby; path = ruby_anywhere.rb; sourceTree = "<group>"; };
 		4EC18A340B71CB4B0004D480 /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/Rcode.nib; sourceTree = "<group>"; };
 		4EC18A3A0B71D15B0004D480 /* ruby_logo_small.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = ruby_logo_small.icns; sourceTree = "<group>"; };
 		4EC18A3C0B71D1640004D480 /* RcodeController.rb */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.ruby; path = RcodeController.rb; sourceTree = "<group>"; };
@@ -85,7 +83,6 @@
 			isa = PBXGroup;
 			children = (
 				4EC18A3C0B71D1640004D480 /* RcodeController.rb */,
-				4EC18A2E0B71C0440004D480 /* ruby_anywhere.rb */,
 			);
 			name = Classes;
 			sourceTree = "<group>";
@@ -170,7 +167,6 @@
 			files = (
 				8D5B49B0048680CD000E48DA /* InfoPlist.strings in Resources */,
 				4EC189BD0B71AA3D0004D480 /* ruby_anywhere_init.rb in Resources */,
-				4EC18A2F0B71C0440004D480 /* ruby_anywhere.rb in Resources */,
 				4EC18A350B71CB4B0004D480 /* Rcode.nib in Resources */,
 				4EC18A3B0B71D15B0004D480 /* ruby_logo_small.icns in Resources */,
 				4EC18A3D0B71D1640004D480 /* RcodeController.rb in Resources */,
