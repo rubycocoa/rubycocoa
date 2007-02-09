@@ -175,6 +175,9 @@ module OSX
   # then define Constant under module 'OSX'.
   def ns_import(sym)
     if not OSX.const_defined?(sym)
+      NSClassFromString("NSObject") # FIXME - this line has no
+                                    # meaning, but it's effect to
+                                    # avoid a BUS error. why so?
       NSLog("importing #{sym}...") if $DEBUG
       klass = if clsobj = NSClassFromString(sym)
         if rbcls = class_new_for_occlass(clsobj)

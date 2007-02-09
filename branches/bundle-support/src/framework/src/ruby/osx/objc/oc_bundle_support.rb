@@ -12,8 +12,10 @@ module OSX
     NSBundle.objc_alias_class_method '_originalBundleForClass:', 'bundleForClass:'
     class NSBundle
       def NSBundle.bundleForClass(cls)
-        OSX::NSClassFromString("NSObject") # some magic to suppress error,
-                                           # i can't see why this effects.
+        OSX::NSClassFromString("NSObject") # FIXME - this line has no
+                                           # meaning, but it's effect
+                                           # to avoid a BUS
+                                           # error. why so?
         bdl = OSX::BundleSupport.bundle_for_class(cls)
         bdl ||= self._originalBundleForClass(cls)
         return bdl

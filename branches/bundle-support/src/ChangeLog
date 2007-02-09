@@ -1,5 +1,10 @@
 2007-02-09  Fujimoto Hisa  <hisa@fobj.com>
 
+	* framework/src/ruby/osx/objc/oc_bundle_support.rb, 
+	framework/src/ruby/osx/objc/oc_import.rb:
+	fixed to avoid a bus error by the adhoc way, inserted
+	NSClassFromString without mean.
+
 	* framework/src/ruby/osx/objc/oc_bundle_support.rb,
 	  framework/src/objc/mdl_bundle_support.h,
 	  framework/src/objc/mdl_bundle_support.m,
