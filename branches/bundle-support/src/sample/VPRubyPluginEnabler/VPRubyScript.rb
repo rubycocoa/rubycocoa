@@ -13,43 +13,45 @@ class VPRubyScript < OSX::NSObject
   def loginfo(fmt, *args) VPRubyPlugin.loginfo(fmt, *args) end
   def logerror(err)       VPRubyPlugin.logerror(err)       end
 
-  def self.load(path) parse(File.read(path), path) end
-  def self.parse(str, fname, lineno = 1)
-    obj = self.alloc.init
-    obj.parse(str, fname, lineno = 1)
-    return obj
+  def self.load(path)
+    return self.alloc.initWithPath(path)
   end
 
-  def parse(str, fname = nil, lineno = 1)
-    instance_eval(str, fname, lineno)
-  end
+  attr_reader :selector
 
-  def selector; 'execute:' end
-
-  def execute(windowController)
-    @procedure.call(windowController)
-  rescue Exception => err
-    logerror(err)
+  %w( menuTitle superMenuTitle shortcutKey ).each do |key|
+    define_method(key) { @spec[key.to_sym] }
   end
-  objc_method :execute, [:void, :id]
 
   def shortcutMask
     warn "FIXME - shortcutMask"
     return 0 # if @spec[:shortcutMask].nil?
   end
 
+  def initWithPath(path)
+    @selector = 'execute:'
+    @path = path
+    parse!
+    return self
+  end
+
+  def execute(windowController)
+    parse!
+    @procedure.call(windowController)
+  rescue Exception => err
+    logerror(err)
+  end
+  objc_method :execute, [:void, :id]
+
   private
+
+  def parse!
+    prog = File.read(@path)
+    instance_eval(prog, @path, 1) # => invoke v_pscript
+  end
 
   def vp_script(spec, &blk)
     @spec = spec
     @procedure = blk
   end
-  
-  class << self
-    def spec_reader(*keys)
-      keys.each { |key| define_method(key) { @spec[key] } }
-    end
-  end
-
-  spec_reader :menuTitle, :superMenuTitle, :shortcutKey
 end
