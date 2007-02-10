@@ -4,7 +4,8 @@ metadata_files = Dir.glob('bridge-support/*.xml')
 unless metadata_files.empty?
   bridge_support_dir = File.expand_path("#{install_root}#{@config['bridge-support']}")
   command "mkdir -p #{bridge_support_dir}"
-  command "cp bridge-support/*.xml #{bridge_support_dir}"
+  command "cp bridge-support/*.bridgesupport #{bridge_support_dir}"
+  command "cp bridge-support/*.dylib #{bridge_support_dir}"
 end
 
 # If required, backup files create here.
