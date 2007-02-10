@@ -1,5 +1,8 @@
-vp_script( :superMenuTitle => "R Word Count",
-           :menuTitle      => "R In Document" ) do |windowController|
+vp_spec(
+  :superMenuTitle => "R Word Count",
+       :menuTitle => "R In Document" )
+
+vp_action do |windowController|
 
   totalPageCount  = 0
   totalWordCount  = 0
@@ -22,7 +25,9 @@ vp_script( :superMenuTitle => "R Word Count",
   end
 
   s = format("There are %d words in %d pages", totalWordCount, totalPageCount)
+
+  # FIXME - cant access the function NSRunAlertPanel from RBBundleInit of RubyCocoa
   # OSX..NSAlert("Document word count", s, nil, nil, nil)
   OSX.NSLog("Word Count: #{s}")
 
-end                             # vp_script
+end
