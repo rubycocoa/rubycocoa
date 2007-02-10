@@ -1,3 +1,16 @@
+2007-02-10  Fujimoto Hisa  <hisa@fobj.com>
+
+	* sample/VPRubyPluginEnabler:
+	added VoodooPad plugin convetions. the VPRubyScript#vp_spec is
+	configuration for menu item. the VPRubyScript#vp_action is a
+	definition of a script procedure. the action is evaluated when an
+	user selects the menu item. so the script is able to modify
+	without re-launch the app.
+	
+	* framework/src/objc/RBRuntime.m:
+	fixed to check the result of bundle_support_load by
+	rb_obj_is_kind_of instead of rb_obj_is_instance_of.
+
 2007-02-09  Fujimoto Hisa  <hisa@fobj.com>
 
 	* sample/VPRubyPluginEnabler:

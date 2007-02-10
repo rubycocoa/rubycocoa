@@ -163,7 +163,7 @@ RBBundleInit(const char *rb_main_name, Class klass, id additional_param)
   load_path_unshift(resource_path_for(klass));
   err = bundle_support_load(rb_main_name, klass, additional_param);
 
-  if (RTEST(rb_obj_is_instance_of(err, rb_eException)))
+  if (RTEST(rb_obj_is_kind_of(err, rb_eException)))
     return NO;
   else
     return YES;
