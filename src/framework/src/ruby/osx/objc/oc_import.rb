@@ -89,17 +89,18 @@ module OSX
   def load_bridge_support_signatures(framework)
     # First, look into the pre paths.  
     framework_name = framework[0] == ?/ ? File.basename(framework, '.framework') : framework
+    bs_name = framework_name + '.bridgesupport'
     PRE_SIGN_PATHS.each do |dir|
-      path = File.join(dir, framework_name + '.xml')
+      path = File.join(dir, bs_name)
       if File.exist?(path)
         load_bridge_support_file(path)
         return true
       end
     end
 
-    # A path to a framework, let's search for BridgeSupport.xml inside the Resources folder.
+    # A path to a framework, let's search for a BridgeSupport file inside the Resources folder.
     if framework[0] == ?/
-      path = File.join(framework, 'Resources', 'BridgeSupport.xml')
+      path = File.join(framework, 'Resources', bs_name)
       if File.exist?(path)
         load_bridge_support_file(path)
         return true
@@ -111,7 +112,7 @@ module OSX
     FRAMEWORK_PATHS.each do |dir|
       path = File.join(dir, "#{framework}.framework")
       if File.exist?(path)
-        path = File.join(path, 'Resources', 'BridgeSupport.xml')
+        path = File.join(path, 'Resources', bs_name)
         if File.exist?(path)
           load_bridge_support_file(path)
           return true
@@ -122,7 +123,7 @@ module OSX
  
     # We can still look into the general metadata directories. 
     SIGN_PATHS.each do |dir|
-      path = File.join(dir, "#{framework}.xml")
+      path = File.join(dir, bs_name)
       if File.exist?(path)
         load_bridge_support_file(path)
         return true
