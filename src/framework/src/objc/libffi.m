@@ -254,7 +254,7 @@ rb_ffi_dispatch (
       char *type = ARG_OCTYPESTR(i);
       if (*type == _C_CONST)
         type++;
-      if (*type == _C_PTR)
+      if (*type == _C_PTR && find_bs_cf_type_by_encoding(type) == NULL)
         pointers_args_count++;
     }
     if (pointers_args_count + given_argc != expected_argc)

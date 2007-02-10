@@ -937,23 +937,16 @@ bridge_support_dispatcher (int argc, VALUE *argv, VALUE rcv)
 
 static struct bsRetval default_func_retval = { bsCArrayArgUndefined, -1, "v", NO };  
 
-static void
-__load_bridge_support_dylib (const char *signature_file)
+static VALUE 
+osx_load_bridge_support_dylib (VALUE rcv, VALUE path)
 {
-  char buf[PATH_MAX];
-  size_t len;
+  const char *cpath;
 
-  len = strlen(signature_file);
-  if (len < 15 || len > sizeof buf)
-    return;
-  if (strcmp(".bridgesupport", &signature_file[len - 14]) != 0)
-    return;
-  strncpy(buf, signature_file, len - 3);
-  buf[len - 13] = '\0';
-  strcat(buf, "dylib");
+  cpath = STR2CSTR(path);
+  if (dlopen(cpath, RTLD_LAZY) == NULL)
+    rb_raise(rb_eArgError, "Can't load the bridge support dylib file `%s' : %s", cpath, dlerror());
 
-  if (dlopen(buf, RTLD_LAZY) == NULL)
-    DLOG("MDLOSX", "Can't load the bridge support bundle `%s' : %s", buf, dlerror());
+  return Qnil;
 }
 
 static VALUE
@@ -969,8 +962,6 @@ osx_load_bridge_support_file (VALUE mOSX, VALUE path)
   char *              protocol_name;
 
   cpath = STR2CSTR(path);
-
-  __load_bridge_support_dylib (cpath);
 
   DLOG("MDLOSX", "Loading bridge support file `%s'", cpath);
   
@@ -1642,6 +1633,9 @@ initialize_bridge_support (VALUE mOSX)
   rb_define_module_function(mOSX, "load_bridge_support_file",
     osx_load_bridge_support_file, 1);
   
+  rb_define_module_function(mOSX, "load_bridge_support_dylib",
+    osx_load_bridge_support_dylib, 1);
+
   rb_define_module_function(mOSX, "import_c_constant",
     osx_import_c_constant, 1);
 }

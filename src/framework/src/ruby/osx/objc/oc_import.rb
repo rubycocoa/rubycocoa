@@ -86,49 +86,48 @@ module OSX
   end
   module_function :framework_loaded?
 
+  def __load_bridge_support_file__(dir, framework_name)
+    bs = File.join(dir, framework_name + '.bridgesupport')
+    pbs = File.join(dir, framework_name + 'Private.bridgesupport')
+    if File.exist?(bs) or File.exist?(pbs)
+      # Load the .dylib first (if any).
+      dylib = File.join(dir, framework_name + '.dylib')
+      load_bridge_support_dylib(dylib) if File.exist?(dylib) 
+
+      # Then the regular metadata file.
+      load_bridge_support_file(bs) if File.exist?(bs)
+    
+      # And finally the private metadata file (if any).
+      load_bridge_support_file(pbs) if File.exist?(pbs)
+      return true
+    end
+    return false
+  end
+  module_function :__load_bridge_support_file__
+
   def load_bridge_support_signatures(framework)
     # First, look into the pre paths.  
-    framework_name = framework[0] == ?/ ? File.basename(framework, '.framework') : framework
-    bs_name = framework_name + '.bridgesupport'
-    PRE_SIGN_PATHS.each do |dir|
-      path = File.join(dir, bs_name)
-      if File.exist?(path)
-        load_bridge_support_file(path)
-        return true
-      end
-    end
+    fname = framework[0] == ?/ ? File.basename(framework, '.framework') : framework
+    PRE_SIGN_PATHS.each { |dir| return true if __load_bridge_support_file__(dir, fname) }
 
     # A path to a framework, let's search for a BridgeSupport file inside the Resources folder.
     if framework[0] == ?/
-      path = File.join(framework, 'Resources', bs_name)
-      if File.exist?(path)
-        load_bridge_support_file(path)
-        return true
-      end
-      framework = framework_name
+      path = File.join(framework, 'Resources', 'BridgeSupport')
+      return true if __load_bridge_support_file__(path, fname)
+      framework = fname
     end
     
     # Let's try to localize the framework and see if it contains the metadata.
     FRAMEWORK_PATHS.each do |dir|
       path = File.join(dir, "#{framework}.framework")
       if File.exist?(path)
-        path = File.join(path, 'Resources', bs_name)
-        if File.exist?(path)
-          load_bridge_support_file(path)
-          return true
-        end
-        break
+        path = File.join(path, 'Resources', 'BridgeSupport')
+        return true if __load_bridge_support_file__(path, fname)
       end
     end
  
     # We can still look into the general metadata directories. 
-    SIGN_PATHS.each do |dir|
-      path = File.join(dir, bs_name)
-      if File.exist?(path)
-        load_bridge_support_file(path)
-        return true
-      end
-    end
+    SIGN_PATHS.each { |dir| return true if __load_bridge_support_file__(dir, fname) }
 
     # Damnit!
     warn "Can't find signatures file for #{framework}" if $VERBOSE
