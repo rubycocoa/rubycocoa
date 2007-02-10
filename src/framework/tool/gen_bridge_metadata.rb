@@ -245,6 +245,7 @@ class OCHeaderAnalyzer
       t = type.gsub(/\b(__)?const\b/,'')
       t.gsub!(/<[^>]*>/, '')
       t.gsub!(/\b(in|out|inout|oneway|const)\b/, '')
+      t.gsub!(/\b__private_extern__\b/, '')
       t.delete!('()')
       t.strip!
       raise 'empty type' if t.empty?
@@ -895,7 +896,7 @@ EOC
     @ocmethods = {}
     @headers.each do |path|
       die "Given header file `#{path}' doesn't exist" unless File.exist?(path)
-      analyzer = OCHeaderAnalyzer.new(path) #!@private
+      analyzer = OCHeaderAnalyzer.new(path, !@private)
       case @generate_format
       when FORMAT_DYLIB
         @functions.concat(analyzer.functions(true))
@@ -1021,7 +1022,7 @@ EOC
         path = element.text
         path_re = /#{path}/
         @headers.delete_if { |x| path_re.match(x) }
-        @import_directive.gsub!(/#import.+#{path}>/, '')
+        @import_directive.gsub!(/#import.+#{path}>/, '') if @import_directive
       end
       doc.get_elements('/signatures/ignored_defines/regex').each do |element|
         @ignored_defines_regexps << Regexp.new(element.text.strip)
