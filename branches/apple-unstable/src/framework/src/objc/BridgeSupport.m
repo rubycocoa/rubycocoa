@@ -944,12 +944,12 @@ __load_bridge_support_dylib (const char *signature_file)
   size_t len;
 
   len = strlen(signature_file);
-  if (len < 5 || len > sizeof buf)
+  if (len < 15 || len > sizeof buf)
     return;
-  if (strcmp(".xml", &signature_file[len - 4]) != 0)
+  if (strcmp(".bridgesupport", &signature_file[len - 14]) != 0)
     return;
   strncpy(buf, signature_file, len - 3);
-  buf[len - 3] = '\0';
+  buf[len - 13] = '\0';
   strcat(buf, "dylib");
 
   if (dlopen(buf, RTLD_LAZY) == NULL)

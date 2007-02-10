@@ -1,5 +1,12 @@
 2007-02-09  Laurent Sansonetti <lsansonetti@apple.com>
 
+	* framework/src/objc/BridgeSupport.m,
+	  framework/post-config.rb:
+	- Not using the .xml extension for bridge support files anymore. Using
+	  .bridgesupport instead ;
+	- Not looking for BridgeSupport.xml within the frameworks bundles anymore.
+	  Looking for TheFrameworkName.bridgesupport instead.
+
 	* framework/tool/gen_bridge_metadata.rb:
 	Better support for private headers.
 
