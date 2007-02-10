@@ -1,5 +1,12 @@
 2007-02-09  Laurent Sansonetti <lsansonetti@apple.com>
 
+	* framework/tool/gen_bridge_metadata.rb:
+	- Now working when passing a framework path with spaces in it ;
+	- Don't clash with MyClass when generating the dummy executables, as it could
+	  be used in the target code ;
+	- When passing a framework path, make sure we use the dir name to set the 
+	  appropriate DYLD environment variable when running the dummy executables.
+
 	* framework/src/objc/BridgeSupport.m,
 	  framework/src/ruby/osx/objc/oc_import.rb,
 	  framework/post-config.rb:

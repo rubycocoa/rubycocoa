@@ -215,7 +215,7 @@ class OCHeaderAnalyzer
   def self.do_cpp(path, fails_on_error=true)
     f_on = false
     err_file = '/tmp/.cpp.err'
-    result = `#{CPP} #{CPPFLAGS} #{path} 2>#{err_file}`.select { |s|
+    result = `#{CPP} #{CPPFLAGS} \"#{path}\" 2>#{err_file}`.select { |s|
       # First pass to only grab non-empty lines and the pre-processed lines
       # only from the target header (and not the entire pre-processing result).
       next if s.strip.empty? 
@@ -566,18 +566,18 @@ EOS
 #{@import_directive}
 #import <objc/objc-class.h>
 
-@interface MyClass : NSObject
+@interface __MyClass : NSObject
 {
 #{ivar_st.join("\n")}
 }
 @end
 
-@implementation MyClass
+@implementation __MyClass
 @end
 
 int main (void) 
 {
-  Class klass = objc_getClass("MyClass");
+  Class klass = objc_getClass("__MyClass");
   #{log_st.join("\n")}
   return 0;
 }
@@ -611,16 +611,16 @@ EOS
 #{@import_directive}
 #import <objc/objc-class.h>
 
-@interface MyClass : NSObject
+@interface __MyClass : NSObject
 @end
 
-@implementation MyClass
+@implementation __MyClass
 #{objc_impl_st.join("\n")}
 @end
 
 int main (void) 
 {
-  Class klass = objc_getClass("MyClass");
+  Class klass = objc_getClass("__MyClass");
   #{log_st.join("\n  ")}
   return 0;
 }
@@ -1053,9 +1053,10 @@ EOC
   end
   
   def handle_framework(val)
-    path = framework_path(val)                
+    path = framework_path(val) 
+    (@framework_paths ||= []) << File.dirname(path)
     die "Can't find framework '#{val}'" if path.nil?
-    parent_path, name = path.scan(/^(.+)\/(\w+)\.framework$/)[0]
+    parent_path, name = path.scan(/^(.+)\/(\w+)\.framework\/?$/)[0]
     if @private
       headers_path = File.join(path, 'PrivateHeaders')
       die "Can't locate private framework headers at '#{headers_path}'" unless File.exist?(headers_path) 
@@ -1083,7 +1084,7 @@ EOC
       header_basenames.unshift("#{name}.h")
     end
     @import_directive = header_basenames.map { |x| "#import <#{name}/#{File.basename(x)}>" }.join("\n")
-    @compiler_flags ||= "-F#{parent_path} -framework #{name}"
+    @compiler_flags ||= "-F\"#{parent_path}\" -framework #{name}"
     @headers.concat(headers)
   end
  
@@ -1137,7 +1138,12 @@ EOC
       raise msg
     end
 
-    out = `#{tmp_bin_path}`
+    env = ''
+    if @framework_paths
+      env << "DYLD_FRAMEWORK_PATH=\"#{@framework_paths.join(':')}\""
+    end
+
+    out = `#{env} #{tmp_bin_path}`
     unless $?.success?
       raise "Can't execute compiled C code... aborting\nbinary is #{tmp_bin_path}"
     end
