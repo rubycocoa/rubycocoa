@@ -18,7 +18,7 @@ end
 
 def call_generator(path, special_flags, extension=nil, additional_flags=nil)
   framework = File.basename(path, '.framework')
-  extension ||= 'xml'
+  extension ||= 'bridgesupport'
   out = "bridge-support/#{framework}.#{extension}"
   generator = "#{@config['ruby-prog']} tool/gen_bridge_metadata.rb"
   generator << " #{special_flags}" if special_flags
@@ -32,6 +32,7 @@ def call_generator(path, special_flags, extension=nil, additional_flags=nil)
     command("rm -rf #{out}")
     command(generator) 
   end
+  return out
 end
 
 # generate bridge support metadata files for Cocoa & its dependencies. 
@@ -51,8 +52,10 @@ if @config['gen-bridge-support'] != 'no'
    ['/System/Library/Frameworks/AddressBook.framework', nil],
    ['/System/Library/Frameworks/InstantMessage.framework', nil],
   ].each do |path, special_flags|
-    call_generator(path, special_flags) 
-    call_generator(path, special_flags, 'dylib', '-F dylib') 
+    xml = call_generator(path, special_flags) 
+    if system("grep inline #{xml} >& /dev/null")
+      call_generator(path, special_flags, 'dylib', '-F dylib') 
+    end
     # Uncomment this to launch the verification tool on each metadata file.
     # Warning: this can take some time, and there are several false positives.
     #$stderr.puts "verify #{out} ..."

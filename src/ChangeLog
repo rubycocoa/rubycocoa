@@ -1,6 +1,7 @@
 2007-02-09  Laurent Sansonetti <lsansonetti@apple.com>
 
 	* framework/src/objc/BridgeSupport.m,
+	  framework/src/ruby/osx/objc/oc_import.rb,
 	  framework/post-config.rb:
 	- Not using the .xml extension for bridge support files anymore. Using
 	  .bridgesupport instead ;
