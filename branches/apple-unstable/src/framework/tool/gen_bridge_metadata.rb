@@ -28,9 +28,9 @@ class OCHeaderAnalyzer
   CPPFLAGS = "-x objective-c -D__APPLE_CPP__"
   CPPFLAGS << "-D__GNUC__" unless /\Acpp-4/.match(File.basename(CPP))
 
-  def initialize(path)
+  def initialize(path, fails_on_error=true)
     @path = path
-    @cpp_result = OCHeaderAnalyzer.do_cpp(path)
+    @cpp_result = OCHeaderAnalyzer.do_cpp(path, fails_on_error)
     @externname = "extern"
   end
 
@@ -212,9 +212,10 @@ class OCHeaderAnalyzer
     end
   end
 
-  def OCHeaderAnalyzer.do_cpp(path)
+  def self.do_cpp(path, fails_on_error=true)
     f_on = false
-    result = `#{CPP} #{CPPFLAGS} #{path}`.select { |s|
+    err_file = '/tmp/.cpp.err'
+    result = `#{CPP} #{CPPFLAGS} #{path} 2>#{err_file}`.select { |s|
       # First pass to only grab non-empty lines and the pre-processed lines
       # only from the target header (and not the entire pre-processing result).
       next if s.strip.empty? 
@@ -225,7 +226,8 @@ class OCHeaderAnalyzer
       # Second pass to ignore all pro-processor comments that were left.
       /^#/.match(s) == nil
     }.join
-    if $?.to_i != 0
+    if $?.to_i != 0 and fails_on_error 
+      STDERR.puts File.read(err_file)
       raise "#{CPP} returned #{$?.to_int/256} exit status"
     end
     return result
@@ -893,7 +895,7 @@ EOC
     @ocmethods = {}
     @headers.each do |path|
       die "Given header file `#{path}' doesn't exist" unless File.exist?(path)
-      analyzer = OCHeaderAnalyzer.new(path)
+      analyzer = OCHeaderAnalyzer.new(path) #!@private
       case @generate_format
       when FORMAT_DYLIB
         @functions.concat(analyzer.functions(true))
@@ -935,15 +937,17 @@ EOC
     @generate_format = FORMAT_FINAL
     @private = false 
 
+    frameworks_to_handle = []
+
     OptionParser.new do |opts|
       opts.banner = "Usage: #{File.basename(__FILE__)} [options] <headers...>\nSee -h or gen_bridge_metadata(1) for more help."
       opts.separator ''
       opts.separator 'Options:'
 
-      opts.on('-p', '--private', 'Look into private headers') { @private = true } 
+      opts.on('-p', '--private', 'Only grep private headers (framework only)') { @private = true } 
 
       opts.on('-f', '--framework FRAMEWORK', 'Grep headers within the given framework') do |opt|
-        handle_framework(opt)
+        frameworks_to_handle << opt
         @objc = true
       end
 
@@ -988,6 +992,7 @@ EOC
         rescue => e
           die e.message, opts.banner
         end
+        frameworks_to_handle.each { |f| handle_framework(f) }
         @headers.concat(args)
         if @headers.empty?
           die "No headers given", opts.banner
@@ -1051,21 +1056,28 @@ EOC
     path = framework_path(val)                
     die "Can't find framework '#{val}'" if path.nil?
     parent_path, name = path.scan(/^(.+)\/(\w+)\.framework$/)[0]
-    headers_path = File.join(path, 'Headers')
-    die "Can't locate framework headers at '#{headers_path}'" unless File.exist?(headers_path) or @private
-    headers = Dir.glob(File.join(headers_path, '**', '*.h'))
     if @private
       headers_path = File.join(path, 'PrivateHeaders')
-      if File.exist?(headers_path)
-        headers.concat(Dir.glob(File.join(headers_path, '**', '*.h')))
+      die "Can't locate private framework headers at '#{headers_path}'" unless File.exist?(headers_path) 
+      headers = Dir.glob(File.join(headers_path, '**', '*.h'))
+      headers_path = File.join(path, 'Headers')
+      public_headers = if File.exist?(headers_path)
+        OCHeaderAnalyzer::CPPFLAGS << " -I#{headers_path} "
+        Dir.glob(File.join(headers_path, '**', '*.h'))
+      else
+        []
       end
+    else
+      headers_path = File.join(path, 'Headers')
+      die "Can't locate public framework headers at '#{headers_path}'" unless File.exist?(headers_path) 
+      public_headers = headers = Dir.glob(File.join(headers_path, '**', '*.h'))
     end
     libpath = File.join(path, name)
     die "Can't locate framework library at '#{libpath}'" unless File.exist?(libpath)
     OBJC.dlload(libpath)
     # We can't just "#import <x/x.h>" as the main Framework header might not include _all_ headers.
     # So we are tricking this by importing the main header first, then all headers.
-    header_basenames = headers.map { |x| File.basename(x) }
+    header_basenames = (headers | public_headers).map { |x| File.basename(x) }
     if idx = header_basenames.index("#{name}.h")
       header_basenames.delete_at(idx)
       header_basenames.unshift("#{name}.h")
