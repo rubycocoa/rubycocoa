@@ -1,3 +1,8 @@
+2007-02-12  kimura wataru <kimuraw@i.nifty.jp>
+
+	* framework/pre-install.rb:
+	Fix the .{bridgesupport|dylib} files are not installed.
+
 2007-02-10  Laurent Sansonetti <lsansonetti@apple.com>
 
 	* framework/pre-install.rb:
