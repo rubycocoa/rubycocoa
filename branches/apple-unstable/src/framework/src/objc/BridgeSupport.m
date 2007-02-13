@@ -116,7 +116,7 @@ get_c_ary_type_attribute(xmlTextReaderPtr reader, bsCArrayArgType *type, int *va
 {
   char *c_ary_type;
 
-  if ((c_ary_type = get_attribute(reader, "c_array_delimited_by_arg")) != NULL) {
+  if ((c_ary_type = get_attribute(reader, "c_array_length_in_arg")) != NULL) {
     *type = bsCArrayArgDelimitedByArg;
     *value = atoi(c_ary_type);
   }
@@ -1056,7 +1056,7 @@ osx_load_bridge_support_file (VALUE mOSX, VALUE path)
         BOOL             is_opaque;
         struct bsBoxed * bs_boxed;
 
-        struct_decorated_encoding = get_attribute_and_check(reader, "encoding");
+        struct_decorated_encoding = get_attribute_and_check(reader, "type");
         struct_name = get_attribute_and_check(reader, "name");
         is_opaque_s = get_attribute(reader, "opaque");
         if (is_opaque_s != NULL) {
@@ -1082,7 +1082,7 @@ osx_load_bridge_support_file (VALUE mOSX, VALUE path)
       case BS_XML_OPAQUE: {
         char *  opaque_encoding;
 
-        opaque_encoding = get_attribute_and_check(reader, "encoding");
+        opaque_encoding = get_attribute_and_check(reader, "type");
         if (st_lookup(bsBoxed, (st_data_t)opaque_encoding, NULL)) {
           DLOG("MDLOSX", "Opaque type with encoding '%s' already defined -- skipping...", opaque_encoding);
           free(opaque_encoding);
@@ -1107,7 +1107,7 @@ osx_load_bridge_support_file (VALUE mOSX, VALUE path)
       case BS_XML_CFTYPE: {
         char *typeid_encoding;
 
-        typeid_encoding = get_attribute_and_check(reader, "encoding");
+        typeid_encoding = get_attribute_and_check(reader, "type");
         if (st_lookup(bsCFTypes, (st_data_t)typeid_encoding, NULL)) {
           DLOG("MDLOSX", "CFType with encoding '%s' already defined -- skipping...", typeid_encoding);
           free(typeid_encoding);
@@ -1237,11 +1237,11 @@ osx_load_bridge_support_file (VALUE mOSX, VALUE path)
     
             type_modifier = get_attribute(reader, "type_modifier");
             if (type_modifier != NULL) {
-              if (strcmp(type_modifier, "in") == 0)
+              if (strcmp(type_modifier, "n") == 0)
                 arg->type_modifier = bsTypeModifierIn;
-              else if (strcmp(type_modifier, "out") == 0)       
+              else if (strcmp(type_modifier, "o") == 0)       
                 arg->type_modifier = bsTypeModifierOut;
-              else if (strcmp(type_modifier, "inout") == 0)   
+              else if (strcmp(type_modifier, "N") == 0)   
                 arg->type_modifier = bsTypeModifierInout;
               else {
                 DLOG("MDLOSX", "Given type modifier '%s' is invalid, default'ing to 'out'", type_modifier);
@@ -1333,7 +1333,7 @@ osx_load_bridge_support_file (VALUE mOSX, VALUE path)
 
             informal_method->selector = selector;
             informal_method->is_class_method = is_class_method;
-            informal_method->encoding = get_attribute_and_check(reader, "encoding");
+            informal_method->encoding = get_attribute_and_check(reader, "type");
             informal_method->protocol_name = protocol_name;
 
             st_insert(hash, (st_data_t)selector, (st_data_t)informal_method);            
