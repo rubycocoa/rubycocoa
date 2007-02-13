@@ -12,25 +12,25 @@
   <struct name='CVFillExtendedPixelsCallBackData'/>
   <class name='CIContext'>
     <method selector='render:toBitmap:rowBytes:bounds:format:colorSpace:'>
-      <arg index='1' type_modifier='in'/>
+      <arg index='1' type_modifier='n'/>
     </method>
   </class>
   <class name='NSObject'>
     <method selector='provideImageData:bytesPerRow:origin:size:userInfo:'>
-      <arg index='0' type_modifier='in'/>
+      <arg index='0' type_modifier='n'/>
     </method>
   </class>
   <class name='CIPlugInRegistration'>
     <method selector='load:'>
-      <arg index='0' type_modifier='in'/>
+      <arg index='0' type_modifier='n'/>
     </method>
   </class>
   <class name='CIVector'>
     <method class_method='true' selector='vectorWithValues:count:'>
-      <arg index='0' type_modifier='in' c_array_delimited_by_arg='1'/>
+      <arg index='0' type_modifier='n' c_array_length_in_arg='1'/>
     </method>
     <method selector='initWithValues:count:'>
-      <arg index='0' type_modifier='in' c_array_delimited_by_arg='1'/>
+      <arg index='0' type_modifier='n' c_array_length_in_arg='1'/>
     </method>
   </class>
 </signatures>

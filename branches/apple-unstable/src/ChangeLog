@@ -1,3 +1,11 @@
+2007-02-13  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* framework/tool/gen_bridge_metadata.rb,
+	  framework/bridge-support-exceptions:
+	- New iteration on the metadata format ;
+	- Fixed a bug when retrieving extern definitions ;
+	- Fixed a bug when getting the value of negative enumerations.
+
 2007-02-13  Fujimoto Hisa  <hisa@fobj.com>
 
 	* merged the bundle-support.
