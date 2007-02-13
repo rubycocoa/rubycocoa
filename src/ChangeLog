@@ -1,7 +1,8 @@
 2007-02-13  Laurent Sansonetti <lsansonetti@apple.com>
 
 	* framework/tool/gen_bridge_metadata.rb,
-	  framework/bridge-support-exceptions:
+	  framework/bridge-support-exceptions,
+	  framework/src/objc/BridgeSupport.m:
 	- New iteration on the metadata format ;
 	- Fixed a bug when retrieving extern definitions ;
 	- Fixed a bug when getting the value of negative enumerations.
