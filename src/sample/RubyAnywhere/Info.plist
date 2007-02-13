@@ -11,7 +11,7 @@
     <key>CFBundleIconFile</key>
     <string></string>
     <key>CFBundleIdentifier</key>
-    <string>com.fobj.rubycocoa.simbl.rubyanywhere</string>
+    <string>com.apple.rubycocoa.simbl.rubyanywhere</string>
     <key>CFBundleInfoDictionaryVersion</key>
     <string>6.0</string>
     <key>CFBundlePackageType</key>
@@ -22,6 +22,8 @@
     <string>1.0</string>
     <key>NSPrincipalClass</key>
     <string>RubyAnywhereLoader</string>
+    <key>CFBundleShortVersionString</key>
+    <string>1.0</string>
     <key>SIMBLTargetApplications</key>
     <array>
       <dict>
