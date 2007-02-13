@@ -68,7 +68,7 @@ class OCHeaderAnalyzer
   end
 
   def externs
-    re = /^\s*#{@externname}\s+\b(.*);.*$/
+    re = /^\s*#{@externname}\s+\b(.*)\s*;.*$/
     @externs ||= @cpp_result.scan(re).map { |m| m[0].strip }
   end
 
@@ -397,7 +397,7 @@ class BridgeSupportGenerator
       if /^'....'$/.match(val)
         @resolved_enums[name] = val
       else 
-        lines << "printf(#{name} < 0 ? \"%s: %d\\n\" : \"%s: %u\\n\", \"#{name}\", #{name});" 
+        lines << "printf(((int)#{name}) < 0 ? \"%s: %d\\n\" : \"%s: %u\\n\", \"#{name}\", #{name});" 
       end
     end
     code = <<EOS
@@ -445,8 +445,8 @@ printf_format (const char *str)
     case _C_ULNG: return "%s: %lu\\n";
     case _C_LNG_LNG: return "%s: %lld\\n";
     case _C_ULNG_LNG: return "%s: %llu\\n";
-    case _C_FLT: return "%s: %f\\n";
-    case _C_DBL: return "%s: %lf\\n";
+    case _C_FLT: return "%s: %.17g\\n";
+    case _C_DBL: return "%s: %.17g\\n";
   }
   return NULL;
 }
@@ -486,11 +486,11 @@ EOS
   end
 
   def encoding_of(varinfo)
-    @types_encoding[varinfo.stripped_rettype]
-  end
-
-  def returns_bool?(varinfo)
-    ['BOOL', 'Boolean'].any? { |x| x == varinfo.stripped_rettype }
+    if ['BOOL', 'Boolean'].any? { |x| x == varinfo.stripped_rettype }
+      'B'
+    else
+      @types_encoding[varinfo.stripped_rettype]
+    end
   end
 
   def collect_cftypes_info
@@ -730,14 +730,14 @@ EOC
       @resolved_structs.sort { |x, y| x[0] <=> y[0] }.each do |name, encoding|
         element = root.add_element('struct')
         element.add_attribute('name', name)
-        element.add_attribute('encoding', encoding)
+        element.add_attribute('type', encoding)
         element.add_attribute('opaque', true) if @structs[name]
       end
       @resolved_cftypes.sort { |x, y| x[0] <=> y[0] }.each do |name, ary|
         encoding, tollfree, gettypeid_func = ary
         element = root.add_element('cftype')
         element.add_attribute('name', name) 
-        element.add_attribute('encoding', encoding)
+        element.add_attribute('type', encoding)
         element.add_attribute('gettypeid_func', gettypeid_func) if gettypeid_func 
         element.add_attribute('tollfree', tollfree) if tollfree 
       end
@@ -746,7 +746,7 @@ EOC
         raise "encoding of opaque type '#{name}' not resolved" if encoding.nil?
         element = root.add_element('opaque')
         element.add_attribute('name', name.sub(/\s*\*+$/, '')) 
-        element.add_attribute('encoding', encoding) 
+        element.add_attribute('type', encoding) 
       end
       @constants.sort.each do |constant| 
         element = root.add_element('constant')
@@ -769,7 +769,6 @@ EOC
         rettype = encoding_of(function)
         if rettype != 'v'
           retval_element = element.add_element('retval')
-          rettype = 'B' if returns_bool?(function) 
           retval_element.add_attribute('type', rettype) 
           retval_element.add_attribute('already_retained', true) \
             if @resolved_cftypes.has_key?(function.stripped_rettype) \
@@ -777,7 +776,7 @@ EOC
         end
       end
       @ocmethods.sort { |x, y| x[0] <=> y[0] }.each do |class_name, methods|
-        predicates = methods.select { |m| returns_bool?(m) } 
+        predicates = methods.select { |m| encoding_of(m) == 'B' } 
         next if predicates.empty?
         class_element = root.add_element('class')
         class_element.add_attribute('name', class_name)           
@@ -795,7 +794,7 @@ EOC
           element = prot_element.add_element('method')
           element.add_attribute('selector', entry.selector)
           element.add_attribute('class_method', true) if entry.class_method?
-          element.add_attribute('encoding', @resolved_inf_protocols_encoding[entry.selector])
+          element.add_attribute('type', @resolved_inf_protocols_encoding[entry.selector])
         end
       end
 
