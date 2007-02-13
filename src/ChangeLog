@@ -1,3 +1,85 @@
+2007-02-13  Fujimoto Hisa  <hisa@fobj.com>
+
+	* merged the bundle-support.
+
+	* sample/VPRubyPluginEnabler:
+	added VoodooPad plugin convetions. the VPRubyScript#vp_spec is
+	configuration for menu item. the VPRubyScript#vp_action is a
+	definition of a script procedure. the action is evaluated when an
+	user selects the menu item. so the script is able to modify
+	without re-launch the app. (2007-02-10)
+	
+	* framework/src/objc/RBRuntime.m:
+	fixed to check the result of bundle_support_load by
+	rb_obj_is_kind_of instead of rb_obj_is_instance_of.  (2007-02-10)
+
+	* sample/VPRubyPluginEnabler:
+	VoodooPad plugin example works good. (2007-02-09)
+	
+	* framework/src/ruby/osx/objc/oc_bundle_support.rb,
+	  framework/src/ruby/osx/objc/oc_import.rb,
+	  framework/src/objc/mdl_bundle_support.m:
+	moved the implementation of method swizzling for
+	NSBundle.bundleForClass into Objective-C from Ruby
+	side.  (2007-02-09)
+
+	* framework/src/ruby/osx/objc/oc_bundle_support.rb, 
+	framework/src/ruby/osx/objc/oc_import.rb:
+	fixed to avoid a bus error by the adhoc way, inserted
+	NSClassFromString without mean. (2007-02-09)
+
+	* framework/src/ruby/osx/objc/oc_bundle_support.rb,
+	  framework/src/objc/mdl_bundle_support.h,
+	  framework/src/objc/mdl_bundle_support.m,
+	  framework/src/objc/RBRuntime.m,
+	  framework/RubyCocoa.xcodeproj/project.pbxproj:
+	primitive/core part of Bundle Support implementation move to
+	Objecive-C from Ruby.  Addtional part is still in
+	Ruby. (2007-02-09)
+
+	* framework/src/objc/RBRuntime.h, framework/src/objc/RBRuntime.m:
+	changed some RBBundleInit API. Objecive-C class defiend by ruby
+	program (1st argument) bound with the bundle related with 2nd
+	argument class. New 3rd argument can use for passing some data
+	from objective-c world to ruby world. and then, the result means
+	success when YES and failed when NO. (2007-02-09)
+
+	* framework/src/ruby/osx/objc/oc_bundle_support.rb:
+	removed init_bundle_for_class, and added init_for_bundle ...
+	OSX.init_for_bundle do
+          |bdl, param, log|
+          # bdl    - the bundle related with the 2nd argument of RBBundleInit
+          # param  - the 3rd argument of RBBundleInit as optional data
+          # log    - logger for this block
+          log.info("param=%p", param.to_s)
+	  require 'YourObjcClass'  # the class bound with the bdl instead 
+	                           # of the mainbundle
+	  ...
+	end
+	
+	* sample/RubyAnywhere, sample/VPRubyPluginEnabler:
+	modified for current bundle support spec. (2007-02-09)
+
+	* framework/src/ruby/osx/objc/oc_bundle_support.rb:
+	checked existence of module variables in BundleSupport before I
+	define it. (2007-02-08)
+
+	* framework/src/ruby/osx/objc/oc_bundle_support.rb, sample/VPRubyPluginEnabler/vpr_init.rb, sample/RubyAnywhere/ruby_anywhere_init.rb:
+	implement the init_bundle_for_class. usage is
+	OSX.init_bundle_for_class(BUNDLE_PRINCIPLE_CLASS)
+	  { ... define classes in the bundle context ... }
+
+	* bundle-support branch - temporary branch (from apple-unstable)
+	for *EXPERIMENT* of bundle/plugin support. Maybe these API/SPEC is
+	dynamically changed for a while. (2007-02-07)
+
+	* framework/RubyCocoa.xcodeproj/project.pbxproj,
+	  framework/src/ruby/osx/objc/oc_bundle_support.rb,
+	  framework/src/ruby/osx/objc/oc_all.rb
+	  framework/src/ruby/osx/objc/oc_import.rb:
+	temporary implementation for bundle/plugin support by ruby
+	program. (2007-02-07)
+
 2007-02-12  kimura wataru <kimuraw@i.nifty.jp>
 
 	* framework/pre-install.rb:

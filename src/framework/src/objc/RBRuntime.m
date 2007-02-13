@@ -1,4 +1,4 @@
-/** -*-objc-*-
+/** -*- mode:objc; indent-tabs-mode:nil -*-
  *
  *   $Id$
  *
@@ -14,6 +14,7 @@
 #import <Foundation/NSString.h>
 #import <Foundation/NSPathUtilities.h>
 #import "mdl_osxobjc.h"
+#import "mdl_bundle_support.h"
 #import "ocdata_conv.h"
 #import "OverrideMixin.h"
 #import "internal_macros.h"
@@ -117,6 +118,7 @@ RBRubyCocoaInit()
   init_rb2oc_cache(); // initialize the Ruby->ObjC internal cache
   init_oc2rb_cache(); // initialize the ObjC->Ruby internal cache
   initialize_mdl_osxobjc();	// initialize an objc part of rubycocoa
+  initialize_mdl_bundle_support();
   init_ovmix();
   init_p = 1;
 
@@ -143,12 +145,13 @@ RBApplicationMain(const char* rb_main_name, int argc, const char* argv[])
   return 0;
 }
 
-int
-RBBundleInit(const char *rb_main_name, Class klass)
+BOOL
+RBBundleInit(const char *rb_main_name, Class klass, id additional_param)
 {
   extern void Init_stack(VALUE*);
   static int first_flg = 0;
   VALUE stack_start;
+  VALUE err;
 
   if (! first_flg) {
     ruby_init();
@@ -158,6 +161,10 @@ RBBundleInit(const char *rb_main_name, Class klass)
     first_flg = 1;
   }
   load_path_unshift(resource_path_for(klass));
-  rb_funcall(Qnil, rb_intern("require"), 1, rb_str_new2(rb_main_name));
-  return 0;
+  err = bundle_support_load(rb_main_name, klass, additional_param);
+
+  if (RTEST(rb_obj_is_kind_of(err, rb_eException)))
+    return NO;
+  else
+    return YES;
 }
