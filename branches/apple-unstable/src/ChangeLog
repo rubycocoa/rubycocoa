@@ -1,5 +1,11 @@
 2007-02-13  Laurent Sansonetti <lsansonetti@apple.com>
 
+	* sample/RubyAnywhere/Info.plist,
+	  sample/VPRubyPluginEnabler/Info.plist,
+	  sample/ViewModelDemo/English.lproj/InfoPlist.strings:
+	Fixed inappropriate CFBundleShortVersionString, malformed CFBundleIdentifier
+	and missing CFBundleShortVersionString.
+
 	* framework/tool/gen_bridge_metadata.rb,
 	  framework/bridge-support-exceptions,
 	  framework/src/objc/BridgeSupport.m:
