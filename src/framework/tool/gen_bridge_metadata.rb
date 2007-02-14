@@ -656,7 +656,7 @@ EOC
     if File.extname(@out_file) != '.dylib'
       @out_file << '.dylib'
     end
-    gcc = "gcc #{tmp_src.path} -o #{@out_file} #{@compiler_flags} -dynamiclib -O3"
+    gcc = "gcc #{ENV['CFLAGS']} #{tmp_src.path} -o #{@out_file} #{@compiler_flags} -dynamiclib -O3"
     unless system(gcc)
       die "Can't compile dylib source file '#{tmp_src.path}'"
     end
