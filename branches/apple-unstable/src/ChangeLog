@@ -1,3 +1,8 @@
+2007-02-14  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* framework/tool/gen_bridge_metadata.rb:
+	Honors the CFLAGS environment variable when generating the dylib.
+
 2007-02-14  Fujimoto Hisa  <hisa@fobj.com>
 
 	* sample/Fortune.wdgt:
