@@ -5,7 +5,7 @@
 	<key>CFBundleDisplayName</key>
 	<string>Fortune</string>
 	<key>CFBundleIdentifier</key>
-	<string>com.apple.widget.fortune</string>
+	<string>com.apple.rubycocoa.widget.fortune</string>
 	<key>CFBundleName</key>
 	<string>Fortune</string>
 	<key>CFBundleShortVersionString</key>
@@ -20,5 +20,7 @@
 	<string>Fortune.html</string>
 	<key>Plugin</key>
 	<string>SimplePlugin.widgetplugin</string>
+  <key>CFBundleDevelopmentRegion</key>
+  <string>English</string>
 </dict>
 </plist>
