@@ -1557,11 +1557,11 @@ find_bs_method(id klass, const char *selector, BOOL is_class_method)
   do {
     struct bsMethod *method;
 
-    method = __find_bs_method(((struct objc_class *)klass)->name, selector, is_class_method);
+    method = __find_bs_method(class_getName(klass), selector, is_class_method);
     if (method != NULL)
       return method;
    
-    klass = ((struct objc_class *)klass)->super_class;
+    klass = class_getSuperclass(klass);
   }
   while (klass != NULL);
 

@@ -17,6 +17,7 @@
 #import "BridgeSupport.h"
 #import "internal_macros.h"
 #import "ocexception.h"
+#import "objc_compat.h"
 
 static VALUE _mObjWrapper = Qnil;
 static VALUE _mClsWrapper = Qnil;
@@ -97,7 +98,7 @@ ocm_send(int argc, VALUE* argv, VALUE rcv, VALUE* result)
     goto bails;
   }
 
-  klass = ((struct objc_class *) oc_rcv)->isa;
+  klass = object_getClass(oc_rcv);
   method = class_getInstanceMethod(klass, selector); 
   if (method == NULL) {
     // If we can't get the method signature via the ObjC runtime, let's try the NSObject API,
@@ -112,10 +113,10 @@ ocm_send(int argc, VALUE* argv, VALUE rcv, VALUE* result)
   }
   else {
     methodSignature = nil;
-    imp = method->method_imp;
+    imp = method_getImplementation(method);
   }
 
-  decode_method_encoding(method != NULL ? method->method_types : NULL, methodSignature, &numberOfArguments, &methodReturnType, &argumentsTypes, YES);
+  decode_method_encoding(method != NULL ? method_getTypeEncoding(method) : NULL, methodSignature, &numberOfArguments, &methodReturnType, &argumentsTypes, YES);
 
   argc--;
   argv++;
@@ -123,9 +124,9 @@ ocm_send(int argc, VALUE* argv, VALUE rcv, VALUE* result)
   struct _ocm_retain_context context = { rcv, selector };
 
   is_class_method = TYPE(rcv) == T_CLASS;
-  klass = is_class_method ? (struct objc_class *) oc_rcv : ((struct objc_class *) oc_rcv)->isa;
+  klass = is_class_method ? (Class) oc_rcv : object_getClass(oc_rcv);
   
-  OBJWRP_LOG("ocm_send (%s%c%s): args_count=%d ret_type=%s", ((struct objc_class *) klass)->name, is_class_method ? '.' : '#', selector, argc, methodReturnType);
+  OBJWRP_LOG("ocm_send (%s%c%s): args_count=%d ret_type=%s", class_getName(klass), is_class_method ? '.' : '#', selector, argc, methodReturnType);
 
   // Easy case: a method returning ID (or nothing) _and_ without argument.
   // We don't need libffi here, we can just call it (faster).
@@ -253,6 +254,15 @@ wrapper_to_s (VALUE rcv)
 static void
 _ary_push_objc_methods (VALUE ary, Class cls, int recur)
 {
+  Class superclass = class_getSuperclass(cls);
+#if __OBJC2__
+  Method *methods;
+  unsigned int i, count;
+  methods = class_copyMethodList(cls, &count);
+  for (i = 0; i < count; i++)
+    rb_ary_push(ary, rb_str_new2((const char *)method_getName(methods[i])));
+  free(methods);
+#else
   void* iterator = NULL;
   struct objc_method_list* list;
 
@@ -264,9 +274,10 @@ _ary_push_objc_methods (VALUE ary, Class cls, int recur)
       rb_ary_push (ary, rb_str_new2((const char*)(methods[i].method_name)));
     }
   }
+#endif
 
-  if (recur && cls->super_class && !((cls->info ^ cls->super_class->info) & CLS_META))
-    _ary_push_objc_methods (ary, cls->super_class, recur);
+  if (recur && superclass != NULL && !class_isMetaClass(cls))
+    _ary_push_objc_methods (ary, superclass, recur);
   rb_funcall(ary, rb_intern("uniq!"), 0);
 }
 
@@ -318,8 +329,8 @@ _objc_method_type (Class cls, const char* name)
   method = class_getInstanceMethod(cls, sel_registerName(name));
   if (!method)
     return NULL;
-  return method->method_types;
-}
+  return method_getTypeEncoding(method);
+}  
 
 static VALUE
 _name_to_selstr (VALUE name)
@@ -378,7 +389,6 @@ static id
 _objc_alias_method (Class klass, VALUE new, VALUE old)
 {
   Method me;
-  struct objc_method_list* mlp;
   SEL new_name;
   SEL old_name;
 
@@ -388,21 +398,10 @@ _objc_alias_method (Class klass, VALUE new, VALUE old)
 
   // warn if trying to alias a method that isn't a member of the specified class
   if (me == NULL)
-    rb_raise(rb_eRuntimeError, "could not alias '%s' for '%s' to class '%s': Objective-C cannot find it in the class", (char *)new_name, (char *)old_name, klass->name);
-    
-  // copy with new name
-  // FIXME: we can write like this // mlp = method_list_alloc(1);
-  mlp = NSZoneMalloc(NSDefaultMallocZone(), sizeof(struct objc_method_list));
-  mlp->obsolete = NULL;
-  mlp->method_count = 0;
-
-  mlp->method_list[0].method_name = strdup((const char*)new_name);
-  mlp->method_list[0].method_types = me->method_types;
-  mlp->method_list[0].method_imp = me->method_imp;
-  mlp->method_count += 1;
-
-  class_addMethods(klass, mlp);
-
+    rb_raise(rb_eRuntimeError, "could not alias '%s' for '%s' to class '%s': Objective-C cannot find it in the class", (char *)new_name, (char *)old_name, class_getName(klass));
+  
+  class_addMethod(klass, new_name, method_getImplementation(me), method_getTypeEncoding(me));
+  
   return nil;
 }
 

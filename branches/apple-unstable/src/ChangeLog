@@ -1,5 +1,16 @@
 2007-02-14  Laurent Sansonetti <lsansonetti@apple.com>
 
+	* framework/RubyCocoa.xcodeproj/project.pbxproj,
+	  framework/src/objc/mdl_bundle_support.m,
+	  framework/src/objc/mdl_objwrapper.m,
+	  framework/src/objc/RBClassUtils.m,
+	  framework/src/objc/objc_compat.h,
+	  framework/src/objc/OverrideMixin.h,
+	  framework/src/objc/OverrideMixin.m,
+	  framework/src/objc/BridgeSupport.m:
+	Ported to the Objective-C 2.0 runtime, keeping compatibility with the previous
+	runtime.
+
 	* framework/tool/rb_nibtool.rb:
 	Added Ruby nibtool utility, by Chris Mcgrath, slightly modified to allow to 
 	dump the nib property list.
