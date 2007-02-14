@@ -329,20 +329,22 @@ module OSX
 
     # TODO: support more types such as pointers...
     OCTYPES = {
-      :id      => '@',
-      :class   => '#',
-      :char    => 'c',
-      :uchar   => 'C',
-      :short   => 's',
-      :ushort  => 'S',
-      :int     => 'i',
-      :uint    => 'I',
-      :long    => 'l',
-      :ulong   => 'L',
-      :float   => 'f',
-      :double  => 'd',
-      :bool    => 'B',
-      :void    => 'v'
+      :id       => '@',
+      :class    => '#',
+      :char     => 'c',
+      :uchar    => 'C',
+      :short    => 's',
+      :ushort   => 'S',
+      :int      => 'i',
+      :uint     => 'I',
+      :long     => 'l',
+      :ulong    => 'L',
+      :float    => 'f',
+      :double   => 'd',
+      :bool     => 'B',
+      :void     => 'v',
+      :selector => ':',
+      :sel      => ':',
     }
     def _types_to_typefmt(types)
       return types.strip if types.is_a?(String)
