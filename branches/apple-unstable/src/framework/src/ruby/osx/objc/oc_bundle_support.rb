@@ -14,7 +14,9 @@ module OSX
       bdl, prm = _current_bundle
       logger = Logger.new(bdl)
       logger.info("init_for_bundle ...")
+      OSX.NSClassFromString("NSObject") # FIXME - just ad-hoc magic to suppress a bus error
       ret = yield(bdl, prm, logger)
+      OSX.NSClassFromString("NSObject") # FIXME - just ad-hoc magic to suppress a bus error
       logger.info("init_for_bundle done.")
       ret
     rescue Exception => err

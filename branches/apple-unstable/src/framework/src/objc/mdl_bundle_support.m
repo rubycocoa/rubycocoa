@@ -77,17 +77,27 @@ static VALUE rb_current_bundle(VALUE mdl) { return _current_bundle(); }
 
 /** bundle_map - the  mapping table of class to bundle **/
 
+static id _ruby2ocid(VALUE obj)
+{
+#if 1
+  id ocid;
+  return (rbobj_to_nsobj(obj, &ocid) == YES) ? ocid : nil;
+#else
+  return rbobj_get_ocid(obj);
+#endif
+}
+
 static id
 bundle_for_class(Class klass)
 {
   VALUE bundle = rb_hash_aref(BUNDLE_MAP, OCID2NUM(klass));
-  return rbobj_get_ocid(bundle);
+  return _ruby2ocid(bundle);
 }
 
 static VALUE
 rb_bundle_for_class(VALUE mdl, VALUE objc_class)
 {
-  VALUE ocid = OCID2NUM(rbobj_get_ocid(objc_class));
+  VALUE ocid = OCID2NUM(_ruby2ocid(objc_class));
   return rb_hash_aref(BUNDLE_MAP, ocid);
 }
 
@@ -98,7 +108,7 @@ rb_bind_class_with_current_bundle(VALUE mdl, VALUE objc_class)
   stack_item = _current_bundle();
   if (! NIL_P(stack_item)) {
     VALUE ocid, bundle;
-    ocid = OCID2NUM(rbobj_get_ocid(objc_class));
+    ocid = OCID2NUM(_ruby2ocid(objc_class));
     bundle = rb_ary_entry(stack_item, 0);
     rb_hash_aset(BUNDLE_MAP, ocid, bundle);
     return bundle;
@@ -126,7 +136,11 @@ static VALUE load_try_clause(VALUE args)
   prog_name  = rb_ary_shift(args);
   stack_item = rb_ary_shift(args);
   _push_bundle(stack_item);
+#if 0
   rb_funcall(Qnil, rb_intern("require"), 1, prog_name);
+#else
+  rb_require(STR2CSTR(prog_name));
+#endif
   return Qnil;
 }
 
