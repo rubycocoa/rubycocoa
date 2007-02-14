@@ -207,8 +207,8 @@ static void setup_bundleForClass()
     Method method;
     method = class_getClassMethod([NSBundle class], @selector(bundleForClass:));
     if (method) {
-      original_bundleForClass = method->method_imp;
-      method->method_imp = (IMP) rubycocoa_bundleForClass;
+      original_bundleForClass = method_getImplementation(method);
+      method_setImplementation(method, (IMP)rubycocoa_bundleForClass);
     }
   }
 }

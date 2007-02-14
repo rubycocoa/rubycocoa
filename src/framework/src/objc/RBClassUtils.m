@@ -12,11 +12,20 @@
 #import <objc/objc.h>
 #import <objc/objc-class.h>
 #import <objc/objc-runtime.h>
+#import "objc_compat.h"
 
 #import "RBObject.h"
 #import "OverrideMixin.h"
 #import "ocdata_conv.h"
 
+#if __OBJC2__
+
+Class objc_class_alloc(const char* name, Class super_class)
+{
+  return objc_allocateClassPair(super_class, name, 0);
+}
+
+#else
 
 static void* alloc_from_default_zone(unsigned int size)
 {
@@ -65,29 +74,7 @@ Class objc_class_alloc(const char* name, Class super_class)
   isa->protocols = NULL;
   return c;
 }
-
-static void install_ivar_list(Class c)
-{
-  int i;
-  struct objc_ivar_list* ivlp = alloc_from_default_zone(override_mixin_ivar_list_size());
-  *ivlp = *(override_mixin_ivar_list());
-  for (i = 0; i < ivlp->ivar_count; i++) {
-    const char* tp = ivlp->ivar_list[i].ivar_type;
-    ivlp->ivar_list[i].ivar_offset = c->instance_size;
-    c->instance_size += ocdata_size(tp);
-  }
-  c->ivars = ivlp;
-}
-
-static void install_method_list(Class c)
-{
-  class_addMethods(c, override_mixin_method_list());
-}
-
-static void install_class_method_list(Class c)
-{
-  class_addMethods((c->isa), override_mixin_class_method_list());
-}
+#endif
 
 /**
  * Dictionary for Ruby class (key by name)
@@ -185,7 +172,7 @@ Class RBObjcClassNew(VALUE kls, const char* name, Class super_class)
   Class c;
 
   c = objc_class_alloc(name, super_class);
-  objc_addClass(c);
+  objc_registerClassPair(c);
   class_map_dic_add (name, kls);
   return c;
 }
@@ -197,16 +184,16 @@ Class RBObjcDerivedClassNew(VALUE kls, const char* name, Class super_class)
   c = objc_class_alloc(name, super_class);
 
   // init instance variable (m_proxy)
-  install_ivar_list(c);
+  install_ovmix_ivars(c);
 
   // init instance methods
-  install_method_list(c);
+  install_ovmix_methods(c);
 
   // init class methods
-  install_class_method_list(c);
+  install_ovmix_class_methods(c);
   
   // add class to runtime system
-  objc_addClass(c);
+  objc_registerClassPair(c);
   class_map_dic_add (name, kls);
   return c;
 }

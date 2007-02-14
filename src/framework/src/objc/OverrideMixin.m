@@ -18,23 +18,9 @@
 #import "st.h"
 #import <objc/objc-runtime.h>
 #import "mdl_osxobjc.h"
+#import "objc_compat.h"
 
 #define OVMIX_LOG(fmt, args...) DLOG("OVMIX", fmt, ##args)
-
-static void* alloc_from_default_zone(unsigned int size)
-{
-  return NSZoneMalloc(NSDefaultMallocZone(), size);
-}
-
-static struct objc_method_list* method_list_alloc(long cnt)
-{
-  struct objc_method_list* mlp;
-  mlp = alloc_from_default_zone(sizeof(struct objc_method_list)
-				+ (cnt-1) * sizeof(struct objc_method));
-  mlp->obsolete = NULL;
-  mlp->method_count = 0;
-  return mlp;
-}
 
 static SEL super_selector(SEL a_sel)
 {
@@ -247,14 +233,16 @@ static id imp_rbobj (id rcv, SEL method)
   return (id)rbobj;
 }
 
-static id imp_respondsToSelector (id rcv, SEL method, SEL arg0)
+static BOOL imp_respondsToSelector (id rcv, SEL method, SEL arg0)
 {
-  id ret;
+  BOOL ret;
   IMP simp = super_imp(rcv, method, (IMP)imp_respondsToSelector);
-  id slave = get_slave(rcv);
-  ret = (*simp)(rcv, method, arg0);
-  if (ret == NULL)
-    ret = (id)([slave respondsToSelector: arg0] != nil ? YES : NO);
+  
+  ret = ((BOOL (*)(id, SEL, SEL))simp)(rcv, method, arg0);
+  if (!ret) {
+    id slave = get_slave(rcv);
+    ret = [slave respondsToSelector: arg0];
+  }
   return ret;
 }
 
@@ -330,7 +318,7 @@ static id imp_c_allocWithZone(Class klass, SEL method, NSZone* zone)
 {
   id new_obj;
   id slave;
-  new_obj = class_createInstanceFromZone(klass, 0, zone ? zone : NSDefaultMallocZone());
+  new_obj = class_createInstance(klass, 0);
   slave = slave_obj_new(new_obj);
   set_slave(new_obj, slave);
   return new_obj;
@@ -339,232 +327,95 @@ static id imp_c_allocWithZone(Class klass, SEL method, NSZone* zone)
 static id imp_c_addRubyMethod(Class klass, SEL method, SEL arg0)
 {
   Method me;
-  struct objc_method_list* mlp;
-  IMP imp;
+  IMP me_imp, imp;
+  SEL me_name;
+  char *me_types;
 
   me = class_getInstanceMethod(klass, arg0);
+  me_imp = method_getImplementation(me);
+  me_name = method_getName(me);
+  me_types = method_getTypeEncoding(me);
 
   // warn if trying to override a method that isn't a member of the specified class
   if (me == NULL)
-    rb_raise(rb_eRuntimeError, "could not add '%s' to class '%s': Objective-C cannot find it in the superclass", (char *)arg0, klass->name);
+    rb_raise(rb_eRuntimeError, "could not add '%s' to class '%s': Objective-C cannot find it in the superclass", (char *)arg0, me_name);
     
   // override method
-  imp = ovmix_imp_for_type(me->method_types);
-  if (me->method_imp == imp) {
-    OVMIX_LOG("Already registered Ruby method by selector '%s' types '%s', skipping...", (char *)arg0, me->method_types);
+  imp = ovmix_imp_for_type(me_types);
+  if (me_imp == imp) {
+    OVMIX_LOG("Already registered Ruby method by selector '%s' types '%s', skipping...", (char *)arg0, me_types);
     return nil;
   }
   
-  mlp = method_list_alloc(2);
-  mlp->method_list[0].method_name = me->method_name;
-  mlp->method_list[0].method_types = strdup(me->method_types);
-  mlp->method_list[0].method_imp = imp;
-  mlp->method_count += 1;
-
-  // super method
-  mlp->method_list[1].method_name = super_selector(me->method_name);
-  mlp->method_list[1].method_types = strdup(me->method_types);
-  mlp->method_list[1].method_imp = me->method_imp;
-  mlp->method_count += 1;
+  class_addMethod(klass, me_name, imp, me_types);
+  class_addMethod(klass, super_selector(me_name), me_imp, me_types);
   
-  class_addMethods(klass, mlp);
-  OVMIX_LOG("Registered Ruby method by selector '%s' types '%s'", (char *)arg0, me->method_types);
+  OVMIX_LOG("Registered Ruby method by selector '%s' types '%s'", (char *)arg0, me_types);
 
   return nil;
 }
 
 static id imp_c_addRubyMethod_withType(Class klass, SEL method, SEL arg0, const char *type)
 {
-  struct objc_method_list* mlp = method_list_alloc(1);
-
-  // add method
-  mlp->method_list[0].method_name = sel_registerName((const char*)arg0);
-  mlp->method_list[0].method_types = strdup(type);
-  mlp->method_list[0].method_imp = ovmix_imp_for_type(type);
-  mlp->method_count += 1;
-
-  class_addMethods(klass, mlp);
+  class_addMethod(klass, sel_registerName((const char*)arg0), ovmix_imp_for_type(type), strdup(type));
   OVMIX_LOG("Registered Ruby method by selector '%s' types '%s'", (char *)arg0, type);
   return nil;
 }
 
-static struct objc_ivar imp_ivars[] = {
-  {				// struct objc_ivar {
-    "m_slave",			//   char *ivar_name;
-    "@",			//   char *ivar_type;
-    0,				//    int ivar_offset;
-#ifdef __alpha__
-    0				//    int space;
+void install_ovmix_ivars(Class c)
+{
+#if __OBJC2__
+  class_addIvar(c, "m_slave", ocdata_size("@"), 0, "@");
+#else
+  struct objc_ivar_list* ivlp = NSZoneMalloc(NSDefaultMallocZone(), sizeof(struct objc_ivar));
+  ivlp->ivar_count = 1;
+  ivlp->ivar_list[0].ivar_name = "m_slave";
+  ivlp->ivar_list[0].ivar_type = "@";
+  ivlp->ivar_list[0].ivar_offset = c->instance_size;
+  c->instance_size += ocdata_size("@");
+#ifdef __LP64__
+  ivlp->ivar_list[0].space = 0;
 #endif
-  }                             // } ivar_list[1];
-};
-
-/**
- *  instance methods
- **/
-static const char* imp_method_names[] = {
-  "__slave__",
-  "__rbobj__",
-  "respondsToSelector:",
-  "methodSignatureForSelector:",
-  "forwardInvocation:",
-  "valueForUndefinedKey:",
-  "setValue:forUndefinedKey:",
-};
-
-static struct objc_method imp_methods[] = {
-  { NULL,
-    "@4@4:8",
-    (IMP)imp_slave 
-  },
-  { NULL,
-    "L4@4:8",
-    (IMP)imp_rbobj 
-  },
-  { NULL,
-    "c8@4:8:12",
-    (IMP)imp_respondsToSelector
-  },
-  { NULL,
-    "@8@4:8:12",
-    (IMP)imp_methodSignatureForSelector
-  },
-  { NULL,
-    "v8@4:8@12",
-    (IMP)imp_forwardInvocation
-  },
-  { NULL,
-    "@12@0:4@8",
-    (IMP)imp_valueForUndefinedKey
-  },
-  { NULL,
-    "v16@0:4@8@12",
-    (IMP)imp_setValue_forUndefinedKey
-  },
-};
-
-
-/**
- *  class method for pure Objective-C classes
- **/
-static const char* imp_c_pure_method_names[] = {
-  "addRubyMethod:",
-  "addRubyMethod:withType:"
-};
-
-static struct objc_method imp_c_pure_methods[] = {
-  { NULL,
-    "@4@4:8:12",
-    (IMP)imp_c_addRubyMethod
-  },
-  { NULL,
-    "@4@4:8:12*16",
-    (IMP)imp_c_addRubyMethod_withType
-  }
-};
-
-/**
- *  class methods
- **/
-static const char* imp_c_method_names[] = {
-  "alloc",
-  "allocWithZone:"
-};
-
-static struct objc_method imp_c_methods[] = {
-  { NULL,
-    "@4@4:8",
-    (IMP)imp_c_alloc
-  },
-  { NULL,
-    "@8@4:8^{_NSZone=}12",
-    (IMP)imp_c_allocWithZone
-  }
-};
-
-long override_mixin_ivar_list_size()
-{
-  long cnt = sizeof(imp_ivars) / sizeof(struct objc_ivar);
-  return (sizeof(struct objc_ivar_list)
-	  - sizeof(struct objc_ivar)
-	  + (cnt * sizeof(struct objc_ivar)));
+  c->ivars = ivlp;
+#endif
 }
 
-struct objc_ivar_list* override_mixin_ivar_list()
+void install_ovmix_methods(Class c)
 {
-  static struct objc_ivar_list* imp_ilp = NULL;
-  if (imp_ilp == NULL) {
-    int i;
-    imp_ilp = alloc_from_default_zone(override_mixin_ivar_list_size());
-    imp_ilp->ivar_count = sizeof(imp_ivars) / sizeof(struct objc_ivar);
-    for (i = 0; i < imp_ilp->ivar_count; i++) {
-      imp_ilp->ivar_list[i] = imp_ivars[i];
-    }
-  }
-  return imp_ilp;
+  class_addMethod(c, @selector(__slave__), (IMP)imp_slave, "@4@4:8");
+  class_addMethod(c, @selector(__rbobj__), (IMP)imp_rbobj, "L4@4:8");
+  class_addMethod(c, @selector(respondsToSelector:), (IMP)imp_respondsToSelector, "c8@4:8:12");
+  class_addMethod(c, @selector(methodSignatureForSelector:), (IMP)imp_methodSignatureForSelector, "@8@4:8:12");
+  class_addMethod(c, @selector(forwardInvocation:), (IMP)imp_forwardInvocation, "v8@4:8@12");
+  class_addMethod(c, @selector(valueForUndefinedKey:), (IMP)imp_valueForUndefinedKey, "@12@0:4@8");
+  class_addMethod(c, @selector(setValue:forUndefinedKey:), (IMP)imp_setValue_forUndefinedKey, "v16@0:4@8@12");
+
 }
 
-struct objc_method_list* override_mixin_method_list()
+static inline void install_ovmix_pure_class_methods(Class c)
 {
-  static struct objc_method_list* imp_mlp = NULL;
-  if (imp_mlp == NULL) {
-    int i;
-    long cnt = sizeof(imp_methods) / sizeof(struct objc_method);
-    imp_mlp = method_list_alloc(cnt);
-    for (i = 0; i < cnt; i++) {
-      imp_mlp->method_list[i] = imp_methods[i];
-      imp_mlp->method_list[i].method_name = sel_getUid(imp_method_names[i]);
-      imp_mlp->method_count += 1;
-    }
-  }
-  return imp_mlp;
+  class_addMethod(c->isa, @selector(addRubyMethod:), (IMP)imp_c_addRubyMethod, "@4@4:8:12");
+  class_addMethod(c->isa, @selector(addRubyMethod:withType:), (IMP)imp_c_addRubyMethod_withType, "@4@4:8:12*16");
 }
 
-struct objc_method_list* override_mixin_class_method_list()
+void install_ovmix_class_methods(Class c)
 {
-  static struct objc_method_list* imp_c_mlp = NULL;
-  if (imp_c_mlp == NULL) {
-    int i;
-    long cnt = sizeof(imp_c_methods) / sizeof(struct objc_method);
-    imp_c_mlp = method_list_alloc(cnt);
-    for (i = 0; i < cnt; i++) {
-      imp_c_mlp->method_list[i]  = imp_c_methods[i];
-      imp_c_mlp->method_list[i].method_name = sel_getUid(imp_c_method_names[i]);
-      imp_c_mlp->method_count += 1;
-    }
-  }
-  return imp_c_mlp;
-}
-
-static struct objc_method_list* override_mixin_class_pure_method_list()
-{
-  static struct objc_method_list* imp_c_pure_mlp = NULL;
-  if (imp_c_pure_mlp == NULL) {
-    int i;
-    long cnt = sizeof(imp_c_pure_methods) / sizeof(struct objc_method);
-    imp_c_pure_mlp = method_list_alloc(cnt);
-    for (i = 0; i < cnt; i++) {
-      imp_c_pure_mlp->method_list[i]  = imp_c_pure_methods[i];
-      imp_c_pure_mlp->method_list[i].method_name = sel_getUid(imp_c_pure_method_names[i]);
-      imp_c_pure_mlp->method_count += 1;
-    }
-  }
-  return imp_c_pure_mlp;
+  class_addMethod(c->isa, @selector(alloc), (IMP)imp_c_alloc, "@4@4:8");
+  class_addMethod(c->isa, @selector(allocWithZone:), (IMP)imp_c_allocWithZone, "@8@4:8^{_NSZone=}12");
 }
 
 void init_ovmix(void)
 {   
   ffi_imp_closures = st_init_strtable();
   pthread_mutex_init(&ffi_imp_closures_lock, NULL);
-  class_addMethods(objc_lookUpClass("NSObject"), override_mixin_class_pure_method_list()); 
+  install_ovmix_pure_class_methods(objc_lookUpClass("NSObject"));
 }
 
 @implementation NSObject (__rbobj__)
 
 + (VALUE)__rbclass__
 {
-  return rb_const_get(osx_s_module(), rb_intern(((struct objc_class *)self)->name))
-; 
+  return rb_const_get(osx_s_module(), rb_intern(class_getName((Class)self)));
 }
 
 @end
