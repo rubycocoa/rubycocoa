@@ -1,5 +1,9 @@
 2007-02-15  Fujimoto Hisa  <hisa@fobj.com>
 
+	* framework/post-config.rb:
+	built a bridge support dylib file as universal binary when the
+	build-universal option is specified.
+
 	* framework/src/objc/objc_compat.h:
 	added compat macros for class_getSuperclass,
 	method_getName. enclosed macro variables with parentheses to avoid
