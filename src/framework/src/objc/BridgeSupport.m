@@ -24,6 +24,7 @@
 #import "RBClassUtils.h"
 #import "mdl_osxobjc.h"
 #import "ocexception.h"
+#import "objc_compat.h"
 
 static VALUE cOSXBoxed;
 static ID ivarEncodingID;
