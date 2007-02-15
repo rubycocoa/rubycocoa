@@ -173,8 +173,6 @@ free_bs_method (struct bsMethod *method)
   free(method);
 }
 
-extern struct FRAME *ruby_frame;
-
 static BOOL 
 undecorate_encoding(const char *src, char *dest, size_t dest_len, struct bsStructField *fields, size_t fields_count, int *out_fields_count)
 {
@@ -589,7 +587,7 @@ rb_bs_struct_get_field_data(VALUE rcv, char **field_encoding_out)
   if (bs_struct->opt.s.field_count == 0)
     rb_raise(rb_eRuntimeError, "Bridge support structure %p doesn't have any field", bs_struct);
 
-  field = rb_id2name(ruby_frame->orig_func);
+  field = rb_id2name(rb_frame_last_func());
   field_len = strlen(field);
   if (field[field_len - 1] == '=')
     field_len--;
@@ -627,7 +625,7 @@ rb_bs_struct_field_ivar_id(void)
   char ivar_name[128];
   int len;
 
-  len = snprintf(ivar_name, sizeof ivar_name, "@%s", rb_id2name(ruby_frame->orig_func));
+  len = snprintf(ivar_name, sizeof ivar_name, "@%s", rb_id2name(rb_frame_last_func()));
   if (ivar_name[len - 1] == '=')
     ivar_name[len - 1] = '\0'; 
 
@@ -865,13 +863,12 @@ bridge_support_dispatcher (int argc, VALUE *argv, VALUE rcv)
   NSAutoreleasePool *pool;
 
   // lookup structure
-  func_name = rb_id2name(ruby_frame->orig_func);
+  func_name = rb_id2name(rb_frame_last_func());
+  DLOG("MDLOSX", "dispatching function '%s'", func_name);
   if (!st_lookup(bsFunctions, (st_data_t)func_name, (st_data_t *)&func))
     rb_fatal("Unrecognized function '%s'", func_name);
   if (func == NULL)
     rb_fatal("Retrieved func structure is invalid");
-
-  DLOG("MDLOSX", "dispatching function '%s'", func_name);
 
   // lookup function symbol
   if (func->sym == NULL) {
