@@ -3,6 +3,7 @@
 new_filename_prefix = 'osx_'
 ruby_h = File.join(@config['ruby-header-dir'], 'ruby.h')
 intern_h = File.join(@config['ruby-header-dir'], 'intern.h')
+build_universal = (@config['build-universal'] == 'yes')
 [ ruby_h, intern_h ].each do |src_path|
   dst_fname = new_filename_prefix + File.basename(src_path)
   dst_fname = "src/objc/" + dst_fname
@@ -54,7 +55,9 @@ if @config['gen-bridge-support'] != 'no'
   ].each do |path, special_flags|
     xml = call_generator(path, special_flags) 
     if system("grep inline #{xml} >& /dev/null")
-      call_generator(path, special_flags, 'dylib', '-F dylib') 
+      addflg = "-F dylib"
+      addflg << " -c'-arch ppc -arch i386'" if build_universal
+      call_generator(path, special_flags, 'dylib', addflg) 
     end
     # Uncomment this to launch the verification tool on each metadata file.
     # Warning: this can take some time, and there are several false positives.
