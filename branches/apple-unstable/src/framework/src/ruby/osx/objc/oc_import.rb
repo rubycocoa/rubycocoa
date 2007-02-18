@@ -94,13 +94,13 @@ module OSX
     if File.exist?(bs) or File.exist?(pbs)
       # Load the .dylib first (if any).
       dylib = File.join(dir, framework_name + '.dylib')
-      load_bridge_support_dylib(dylib) if File.exist?(dylib) 
+      OSX.load_bridge_support_dylib(dylib) if File.exist?(dylib) 
 
       # Then the regular metadata file.
-      load_bridge_support_file(bs) if File.exist?(bs)
+      OSX.load_bridge_support_file(bs) if File.exist?(bs)
     
       # And finally the private metadata file (if any).
-      load_bridge_support_file(pbs) if File.exist?(pbs)
+      OSX.load_bridge_support_file(pbs) if File.exist?(pbs)
       return @bridge_support_signatures_loaded_marks[framework_name] = true
     end
     return false
