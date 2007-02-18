@@ -183,7 +183,7 @@ module OSX
               _osx_const_missing_prev(c)
             end
           end
-	    end
+        end
       EOC
     else
       m.module_eval <<-EOC,__FILE__,__LINE__+1
@@ -390,7 +390,7 @@ module OSX
       octypes[0] + '@:' + octypes[1..-1].join
     end
 
-  end				# module OSX::NSBehaviorAttachment
+  end       # module OSX::NSBehaviorAttachment
 
   module NSKVCAccessorUtil
     private
@@ -402,7 +402,7 @@ module OSX
     def kvc_setter_wrapper(key)
       return '_kvc_wrapper_' + key.to_s + '=' 
     end
-  end				# module OSX::NSKVCAccessorUtil
+  end       # module OSX::NSKVCAccessorUtil
 
   module NSKeyValueCodingAttachment
     include NSKVCAccessorUtil
@@ -410,20 +410,20 @@ module OSX
     # invoked from valueForUndefinedKey: of a Cocoa object
     def rbValueForKey(key)
       if m = kvc_getter_method(key.to_s)
-	return send(m)
+        return send(m)
       else
-	kvc_accessor_notfound(key)
+        kvc_accessor_notfound(key)
       end
     end
 
     # invoked from setValue:forUndefinedKey: of a Cocoa object
     def rbSetValue_forKey(value, key)
       if m = kvc_setter_method(key.to_s)
-	willChangeValueForKey(key)
-	send(m, value)
-	didChangeValueForKey(key)
+        willChangeValueForKey(key)
+        send(m, value)
+        didChangeValueForKey(key)
       else
-	kvc_accessor_notfound(key)
+        kvc_accessor_notfound(key)
       end
     end
 
@@ -434,14 +434,14 @@ module OSX
 
     def kvc_getter_method(key)
       [key, key + '?'].each do |m|
-	return m if respond_to? m
+        return m if respond_to? m
       end
       return nil # accessor not found
     end
  
     def kvc_setter_method(key)
       [kvc_internal_setter(key), key + '='].each do |m|
-	return m if respond_to? m
+        return m if respond_to? m
       end
       return nil
     end
@@ -451,7 +451,7 @@ module OSX
       raise sprintf(fmt, self.class, key.to_s)
     end
 
-  end				# module OSX::NSKeyValueCodingAttachment
+  end       # module OSX::NSKeyValueCodingAttachment
 
   module NSKVCBehaviorAttachment
     include NSKVCAccessorUtil
@@ -462,17 +462,17 @@ module OSX
 
     def kvc_writer(*args)
       args.flatten.each do |key|
-	setter = key.to_s + '='
-	attr_writer(key) unless method_defined?(setter)
-	alias_method kvc_internal_setter(key), setter
-	self.class_eval <<-EOE_KVC_WRITER,__FILE__,__LINE__+1
-	  def #{kvc_setter_wrapper(key)}(value)
-	    willChangeValueForKey('#{key.to_s}')
-	    send('#{kvc_internal_setter(key)}', value)
-	    didChangeValueForKey('#{key.to_s}')
-	  end
-	EOE_KVC_WRITER
-	alias_method setter, kvc_setter_wrapper(key)
+        setter = key.to_s + '='
+        attr_writer(key) unless method_defined?(setter)
+        alias_method kvc_internal_setter(key), setter
+        self.class_eval <<-EOE_KVC_WRITER,__FILE__,__LINE__+1
+          def #{kvc_setter_wrapper(key)}(value)
+            willChangeValueForKey('#{key.to_s}')
+            send('#{kvc_internal_setter(key)}', value)
+            didChangeValueForKey('#{key.to_s}')
+          end
+        EOE_KVC_WRITER
+        alias_method setter, kvc_setter_wrapper(key)
       end
     end
 
@@ -497,20 +497,20 @@ module OSX
     def kvc_wrapper_reader(*keys)
       keys.flatten.compact.each do |key|
         class_eval <<-EOE_KVC_WRAPPER,__FILE__,__LINE__+1
-    	def #{key}
-  	  valueForKey("#{key}")
-	end
-  	EOE_KVC_WRAPPER
+          def #{key}
+            valueForKey("#{key}")
+          end
+        EOE_KVC_WRAPPER
       end
     end
 
     def kvc_wrapper_writer(*keys)
       keys.flatten.compact.each do |key|
         class_eval <<-EOE_KVC_WRAPPER,__FILE__,__LINE__+1
-	def #{key}=(val)
-	  setValue_forKey(val, "#{key}")
-	end
-  	EOE_KVC_WRAPPER
+          def #{key}=(val)
+            setValue_forKey(val, "#{key}")
+          end
+        EOE_KVC_WRAPPER
       end
     end
 
@@ -529,47 +529,47 @@ module OSX
     #
     def kvc_array_accessor(*args)
       args.each do |key|
-	keyname = key.to_s
-	keyname[0..0] = keyname[0..0].upcase
-	self.addRubyMethod_withType("countOf#{keyname}".to_sym, "i4@8:12")
-	self.addRubyMethod_withType("objectIn#{keyname}AtIndex:".to_sym, "@4@8:12i16")
-	self.addRubyMethod_withType("insertObject:in#{keyname}AtIndex:".to_sym, "@4@8:12@16i20")
-	self.addRubyMethod_withType("removeObjectFrom#{keyname}AtIndex:".to_sym, "@4@8:12i16")
-	self.addRubyMethod_withType("replaceObjectIn#{keyname}AtIndex:withObject:".to_sym, "@4@8:12i16@20")
-	# get%s:range: - unimplemented. You can implement this method for performance improvements.
-	self.class_eval <<-EOT,__FILE__,__LINE__+1
-	  def countOf#{keyname}()
-	    return @#{key.to_s}.length
-	  end
+        keyname = key.to_s
+        keyname[0..0] = keyname[0..0].upcase
+        self.addRubyMethod_withType("countOf#{keyname}".to_sym, "i4@8:12")
+        self.addRubyMethod_withType("objectIn#{keyname}AtIndex:".to_sym, "@4@8:12i16")
+        self.addRubyMethod_withType("insertObject:in#{keyname}AtIndex:".to_sym, "@4@8:12@16i20")
+        self.addRubyMethod_withType("removeObjectFrom#{keyname}AtIndex:".to_sym, "@4@8:12i16")
+        self.addRubyMethod_withType("replaceObjectIn#{keyname}AtIndex:withObject:".to_sym, "@4@8:12i16@20")
+        # get%s:range: - unimplemented. You can implement this method for performance improvements.
+        self.class_eval <<-EOT,__FILE__,__LINE__+1
+          def countOf#{keyname}()
+            @#{key.to_s}.length
+          end
 
-	  def objectIn#{keyname}AtIndex(index)
-	    return @#{key.to_s}[index]
-	  end
+          def objectIn#{keyname}AtIndex(index)
+            @#{key.to_s}[index]
+          end
 
-	  def insertObject_in#{keyname}AtIndex(obj, index)
-	    indexes = OSX::NSIndexSet.indexSetWithIndex(index)
-	    willChange_valuesAtIndexes_forKey(OSX::NSKeyValueChangeInsertion, indexes, #{key.inspect})
-	    @#{key.to_s}.insert(index, obj)
-	    didChange_valuesAtIndexes_forKey(OSX::NSKeyValueChangeInsertion, indexes, #{key.inspect})
-	    nil
-	  end
+          def insertObject_in#{keyname}AtIndex(obj, index)
+            indexes = OSX::NSIndexSet.indexSetWithIndex(index)
+            willChange_valuesAtIndexes_forKey(OSX::NSKeyValueChangeInsertion, indexes, #{key.inspect})
+            @#{key.to_s}.insert(index, obj)
+            didChange_valuesAtIndexes_forKey(OSX::NSKeyValueChangeInsertion, indexes, #{key.inspect})
+            nil
+          end
 
-	  def removeObjectFrom#{keyname}AtIndex(index)
-	    indexes = OSX::NSIndexSet.indexSetWithIndex(index)
-	    willChange_valuesAtIndexes_forKey(OSX::NSKeyValueChangeRemoval, indexes, #{key.inspect})
-	    @#{key.to_s}.delete_at(index)
-	    didChange_valuesAtIndexes_forKey(OSX::NSKeyValueChangeRemoval, indexes, #{key.inspect})
-	    nil
-	  end
+          def removeObjectFrom#{keyname}AtIndex(index)
+            indexes = OSX::NSIndexSet.indexSetWithIndex(index)
+            willChange_valuesAtIndexes_forKey(OSX::NSKeyValueChangeRemoval, indexes, #{key.inspect})
+            @#{key.to_s}.delete_at(index)
+            didChange_valuesAtIndexes_forKey(OSX::NSKeyValueChangeRemoval, indexes, #{key.inspect})
+            nil
+          end
 
-	  def replaceObjectIn#{keyname}AtIndex_withObject(index, obj)
-	    indexes = OSX::NSIndexSet.indexSetWithIndex(index)
-	    willChange_valuesAtIndexes_forKey(OSX::NSKeyValueChangeReplacement, indexes, #{key.inspect})
-	    @#{key.to_s}[index] = obj
-	    didChange_valuesAtIndexes_forKey(OSX::NSKeyValueChangeReplacement, indexes, #{key.inspect})
-	    nil
-	  end
-	EOT
+          def replaceObjectIn#{keyname}AtIndex_withObject(index, obj)
+            indexes = OSX::NSIndexSet.indexSetWithIndex(index)
+            willChange_valuesAtIndexes_forKey(OSX::NSKeyValueChangeReplacement, indexes, #{key.inspect})
+            @#{key.to_s}[index] = obj
+            didChange_valuesAtIndexes_forKey(OSX::NSKeyValueChangeReplacement, indexes, #{key.inspect})
+            nil
+          end
+        EOT
       end
     end
 
@@ -585,7 +585,7 @@ module OSX
       alias_method sym, wrapper
     end
 
-  end				# module OSX::NSKVCBehaviorAttachment
+  end       # module OSX::NSKVCBehaviorAttachment
 
   module OCObjWrapper
 
@@ -610,7 +610,7 @@ module OSX
 
   end
 
-end				# module OSX
+end       # module OSX
 
 # The following code defines a new subclass of Object (Ruby's).
 # 
