@@ -1,3 +1,9 @@
+2007-02-18  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* framework/src/ruby/osx/objc/oc_import.rb,
+	  tests/tc_bs.rb:
+	Better fix for last fix. Added a test case.
+
 2007-02-18  Fujimoto Hisa  <hisa@fobj.com>
 
 	* sample/VPRubyPluginEnabler:
