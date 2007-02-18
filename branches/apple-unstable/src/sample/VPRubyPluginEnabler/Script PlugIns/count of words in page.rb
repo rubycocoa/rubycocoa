@@ -16,9 +16,5 @@ vp_action do  |windowController|
 
   s = format("%d words.\n%d lines.\n%d letters.", 
              wordCount, lineCount, letterCount)
-
-  # FIXME - cant access the function NSRunAlertPanel from RBBundleInit of RubyCocoa
-  # OSX.NSRunAlertPanel("Word Count", s, nil, nil, nil)
-  OSX.NSLog("Word Count: #{s}")
-
+  OSX.NSRunAlertPanel("Word Count", s, nil, nil, nil)
 end

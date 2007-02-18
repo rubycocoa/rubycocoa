@@ -55,17 +55,19 @@ module OSX
   end
   module_function :_bundle_path_for_framework
 
+  def self.__framework_name__(framework)
+    framework[0] == ?/ ? File.basename(framework, '.framework') : framework
+  end
+
   def require_framework(framework)
     return false if framework_loaded?(framework)
     bundle, path = _bundle_path_for_framework(framework)
-    unless bundle.nil?
-      return false if bundle.isLoaded
-      if bundle.oc_load
-        load_bridge_support_signatures(path)
-        return true
-      end
+    bundle.oc_load
+    if not bundle.isLoaded? then
+      raise ArgumentError, "Can't load framework '#{framework}'" 
     end
-    raise LoadError, "Can't locate framework '#{framework}'"
+    load_bridge_support_signatures(path)
+    return true
   end
   module_function :require_framework
 
@@ -73,7 +75,9 @@ module OSX
     bundle, path = _bundle_path_for_framework(framework)
     unless bundle.nil?
       loaded = bundle.isLoaded
-      unless loaded
+      if loaded then
+        load_bridge_support_signatures(path)
+      else
         # CoreFoundation/Foundation are linked at built-time.
         id = bundle.bundleIdentifier
         loaded = (id.isEqualToString('com.apple.CoreFoundation') or 
@@ -105,15 +109,32 @@ module OSX
   end
   module_function :__load_bridge_support_file__
 
+  def self.__bridge_support_signatures_loaded?(framework_name)
+    @@bridge_support_signatures_loaded_marks ||= {}
+    return @@bridge_support_signatures_loaded_marks[framework_name]
+  end
+
+  def self.__mark_bridge_support_signatures_loaded_for(framework_name)
+    @@bridge_support_signatures_loaded_marks ||= {}
+    return @@bridge_support_signatures_loaded_marks[framework_name] = true
+  end
+
   def load_bridge_support_signatures(framework)
     # First, look into the pre paths.  
-    fname = framework[0] == ?/ ? File.basename(framework, '.framework') : framework
-    PRE_SIGN_PATHS.each { |dir| return true if __load_bridge_support_file__(dir, fname) }
+    fname = __framework_name__(framework)
+    return true if __bridge_support_signatures_loaded?(fname)
+    PRE_SIGN_PATHS.each do |dir|
+      if __load_bridge_support_file__(dir, fname) then
+        return __mark_bridge_support_signatures_loaded_for(fname)
+      end
+    end
 
     # A path to a framework, let's search for a BridgeSupport file inside the Resources folder.
     if framework[0] == ?/
       path = File.join(framework, 'Resources', 'BridgeSupport')
-      return true if __load_bridge_support_file__(path, fname)
+      if __load_bridge_support_file__(path, fname) then
+        return __mark_bridge_support_signatures_loaded_for(fname)
+      end
       framework = fname
     end
     
@@ -122,12 +143,18 @@ module OSX
       path = File.join(dir, "#{framework}.framework")
       if File.exist?(path)
         path = File.join(path, 'Resources', 'BridgeSupport')
-        return true if __load_bridge_support_file__(path, fname)
+         if __load_bridge_support_file__(path, fname) then
+           return __mark_bridge_support_signatures_loaded_for(fname)
+         end
       end
     end
  
     # We can still look into the general metadata directories. 
-    SIGN_PATHS.each { |dir| return true if __load_bridge_support_file__(dir, fname) }
+    SIGN_PATHS.each do |dir|
+      if __load_bridge_support_file__(dir, fname) then
+        return __mark_bridge_support_signatures_loaded_for(fname)
+      end
+    end
 
     # Damnit!
     warn "Can't find signatures file for #{framework}" if $VERBOSE

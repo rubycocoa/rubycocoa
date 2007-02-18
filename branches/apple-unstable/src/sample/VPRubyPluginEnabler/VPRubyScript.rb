@@ -23,16 +23,15 @@ class VPRubyScript < OSX::NSObject
     define_method(key) { @spec[key.to_sym] }
   end
 
-  # FIXME - cant access constants from RBBundleInit of RubyCocoa
   SHORTCUT_MASKS = {
-    :alpha_shift => 65536,      # OSX::NSAlphaShiftKeyMask
-    :alternate   => 524288,     # OSX::NSAlternateKeyMask
-    :command     => 1048576,    # OSX::NSCommandKeyMask
-    :control     => 262144,     # OSX::NSControlKeyMask
-    :function    => 8388608,    # OSX::NSFunctionKeyMask
-    :help        => 4194304,    # OSX::NSHelpKeyMask
-    :numeric_pad => 2097152,    # OSX::NSNumericPadKeyMask
-    :shift       => 131072,     # OSX::NSShiftKeyMask
+    :alpha_shift => OSX::NSAlphaShiftKeyMask,
+    :alternate   => OSX::NSAlternateKeyMask,
+    :command     => OSX::NSCommandKeyMask,
+    :control     => OSX::NSControlKeyMask,
+    :function    => OSX::NSFunctionKeyMask,
+    :help        => OSX::NSHelpKeyMask,
+    :numeric_pad => OSX::NSNumericPadKeyMask,
+    :shift       => OSX::NSShiftKeyMask,
   }
 
   def shortcutMask
