@@ -1,5 +1,6 @@
 # -*- mode:ruby; indent-tabs-mode:nil; coding:utf-8 -*-
 require 'osx/cocoa'
+OSX.require_framework 'WebKit'
 
 class MyPluginClass < OSX::NSObject
 
@@ -34,20 +35,17 @@ class MyPluginClass < OSX::NSObject
       return nil
     end
   end
-  objc_class_method :webScriptNameForSelector, "@@::"
   
   def self.isSelectorExcludedFromWebScript(aSel)
     ret = ! is_available_selector?(aSel)
     log("isSelectorExcludedFromWebScript: %s => %s", aSel, ret)
     return ret
   end
-  objc_class_method :isSelectorExcludedFromWebScript, "B@::"
   
   def self.isKeyExcludedFromWebScript(k)
     log("isKeyExcludedFromWebScript: %s", k)
     return true
   end
-  objc_class_method :isKeyExcludedFromWebScript, "B@:*"
   
   def getFortune
     log("getFortune")

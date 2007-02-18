@@ -1,3 +1,17 @@
+2007-02-18  Fujimoto Hisa  <hisa@fobj.com>
+
+	* sample/VPRubyPluginEnabler:
+	use functions/constans (e.g. NSRunAlertPanel) in sample scripts.
+
+	* sample/Fortune.wdgt/SimplePlugin/MyPluginClass.rb:
+	added require_framework 'WebKit' to make sure bridge support files
+	are loaded.
+
+	* framework/src/ruby/osx/objc/oc_import.rb:
+	require_framework & framework_loaded? make sure that bridge
+	support files are loaded even if the framework is loaded by
+	outside of rubycocoa (e.g. host application of bundle)
+	
 2007-02-15  Laurent Sansonetti <lsansonetti@apple.com>
 
 	* framework/src/objc/BridgeSupport.m:

@@ -25,9 +25,5 @@ vp_action do |windowController|
   end
 
   s = format("There are %d words in %d pages", totalWordCount, totalPageCount)
-
-  # FIXME - cant access the function NSRunAlertPanel from RBBundleInit of RubyCocoa
-  # OSX..NSAlert("Document word count", s, nil, nil, nil)
-  OSX.NSLog("Word Count: #{s}")
-
+  OSX.NSRunAlertPanel("Document word count", s, nil, nil, nil)
 end

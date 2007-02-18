@@ -32,11 +32,6 @@ class VPRubyPlugin < OSX::NSObject
 
   def manager; @enabler.pluginManager end
 
-  def doSuperPluginStuff(window_controller)
-    loginfo("doSuperPluginStuff(%p)", window_controller.to_s)
-  end
-  objc_method :doSuperPluginStuff, [:void, :id]
-
   private
 
   def loginfo(fmt, *args) VPRubyPlugin.loginfo(fmt, *args) end
