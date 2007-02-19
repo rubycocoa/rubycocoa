@@ -1,3 +1,20 @@
+2007-02-19  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* framework/bridge-support-exceptions/CoreFoundation.xml,
+	  framework/src/objc/mdl_osxobjc.h,
+	  framework/src/objc/mdl_osxobjc.m,
+	  framework/src/objc/ocdata_conv.m,
+	  framework/src/objc/BridgeSupport.h,
+	  framework/src/objc/cls_objcid.h,
+	  framework/src/objc/BridgeSupport.m,
+	  framework/src/objc/cls_objcid.m,
+	  framework/tool/gen_bridge_metadata.rb,
+	  tests/tc_types.rb,
+	  tests/objc_test.m:
+	Added support for magic-cookie constants (kCFAllocatorUseContext). These
+	constants are marked in the bridge support files. Quick refactoring on some 
+	parts of the code. Added test cases. 
+
 2007-02-18  Laurent Sansonetti <lsansonetti@apple.com>
 
 	* framework/src/ruby/osx/objc/oc_import.rb,

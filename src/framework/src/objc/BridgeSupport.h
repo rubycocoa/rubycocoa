@@ -120,6 +120,13 @@ struct bsCFType {
   CFTypeID  type_id;
 };
 
+struct bsConst {
+  char *    name;
+  char *    encoding;
+  BOOL      is_magic_cookie;
+  char *    class_name;       // set lazily, and only for magic cookies
+};
+
 extern struct bsFunction *current_function;
 
 VALUE objboxed_s_class(void);
@@ -138,5 +145,7 @@ struct bsArg *find_bs_arg_by_index(struct bsCallEntry *entry, unsigned index, un
 struct bsArg *find_bs_arg_by_c_array_len_arg_index(struct bsCallEntry *entry, unsigned index);
 
 struct bsInformalProtocolMethod *find_bs_informal_protocol_method(const char *selector, BOOL is_class_method);
+
+struct bsConst *find_magic_cookie_const_by_value(void *value);
 
 void initialize_bridge_support(VALUE mOSX);

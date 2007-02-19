@@ -464,7 +464,10 @@ rbobj_to_nsobj (VALUE obj, id* nsobj)
   if (!ok) {
     *nsobj = rbobj_get_ocid(obj);
     if (*nsobj != nil || rbobj_convert_to_nsobj(obj, nsobj)) {
-      if ([*nsobj isProxy] && [*nsobj isRBObject]) {
+      BOOL  magic_cookie;
+
+      magic_cookie = find_magic_cookie_const_by_value(*nsobj) != NULL;
+      if (magic_cookie || ([*nsobj isProxy] && [*nsobj isRBObject])) {
         CACHE_LOCK(&rb2ocCacheLock);
         // Check out that the hash is still empty for us, to avoid a race condition.
         if (!st_lookup(rb2ocCache, (st_data_t)obj, (st_data_t *)nsobj))
@@ -561,9 +564,17 @@ ocid_to_rbobj (VALUE context_obj, id ocid)
   CACHE_UNLOCK(&oc2rbCacheLock);
 
   if (!ok) {
-    result = ocid_get_rbobj(ocid);
-    if (result == Qnil)
-      result = rbobj_get_ocid(context_obj) == ocid ? context_obj : ocobj_s_new(ocid);
+    struct bsConst *  bs_const;
+
+    bs_const = find_magic_cookie_const_by_value(ocid);
+    if (bs_const != NULL) {
+      result = ocobj_s_new_with_class_name(ocid, bs_const->class_name);
+    }
+    else {
+      result = ocid_get_rbobj(ocid);
+      if (result == Qnil)
+        result = rbobj_get_ocid(context_obj) == ocid ? context_obj : ocobj_s_new(ocid);
+    }
 
     CACHE_LOCK(&oc2rbCacheLock);
     // Check out that the hash is still empty for us, to avoid a race condition.

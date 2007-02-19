@@ -810,6 +810,17 @@ EOC
   end
 
   def merge_document_with_exceptions(document, exception_document)
+    # Merge constants.
+    exception_document.elements.each('/signatures/constant') do |const_element|
+      const_name = const_element.attributes['name']
+      orig_const_element = document.elements["/signatures/constant[@name='#{const_name}']"]
+      raise "Constant '#{const_name}' is described in an exception file but it has not been discovered by the final generator" if orig_const_element.nil?
+      magic_cookie = const_element.attributes['magic_cookie']
+      # Append the magic_cookie attribute.
+      if magic_cookie
+        orig_const_element.add_attribute('magic_cookie', true)
+      end
+    end
     # Merge functions.
     exception_document.elements.each('/signatures/function') do |func_element|
      func_name = func_element.attributes['name']

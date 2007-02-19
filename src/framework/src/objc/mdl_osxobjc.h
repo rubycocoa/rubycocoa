@@ -18,6 +18,7 @@
 VALUE osx_s_module();
 
 /** OCObject methods **/
+VALUE ocobj_s_new_with_class_name(id ocid, const char *cls_name);
 VALUE ocobj_s_new (id ocid);
 
 /** getter **/
