@@ -39,6 +39,7 @@ static struct st_table *bsCFTypes;     // encoding -> struct bsCFType
 static struct st_table *bsCFTypes2;    // CFTypeID -> struct bsCFType
 static struct st_table *bsFunctions;   // function name -> struct bsFunction
 static struct st_table *bsConstants;   // constant name -> type
+static struct st_table *bsMagicCookieConstants;                 // constant value -> struct bsConst
 static struct st_table *bsClasses;     // class name -> struct bsClass
 static struct st_table *bsInformalProtocolClassMethods;         // selector -> struct bsInformalProtocolMethod
 static struct st_table *bsInformalProtocolInstanceMethods;      // selector -> struct bsInformalProtocolMethod
@@ -999,19 +1000,37 @@ osx_load_bridge_support_file (VALUE mOSX, VALUE path)
         continue;
       switch (atom->val) {
       case BS_XML_CONSTANT: { 
-        char *  const_name;
-        
+        char *            const_name;
+        struct bsConst *  bs_const;
+
         const_name = get_attribute_and_check(reader, "name");
 
         if (st_lookup(bsConstants, (st_data_t)const_name, NULL)) {
           DLOG("MDLOSX", "Constant '%s' already registered, skipping...", const_name);
-          free (const_name);
+          free(const_name);
         }
         else {
           char *  const_type;
-
+          char *  const_magic_cookie;
+          
           const_type = get_attribute_and_check(reader, "type");
-          st_insert(bsConstants, (st_data_t)const_name, (st_data_t)const_type);
+          bs_const = (struct bsConst *)malloc(sizeof(struct bsConst));
+          ASSERT_ALLOC(bs_const);
+
+          bs_const->name = const_name;
+          bs_const->encoding = const_type;
+          bs_const->class_name = NULL;
+
+          const_magic_cookie = get_attribute(reader, "magic_cookie");
+          if (const_magic_cookie != NULL) {
+            bs_const->is_magic_cookie = strcmp(const_magic_cookie, "true") == 0;
+            free(const_magic_cookie);
+          }
+          else {
+            bs_const->is_magic_cookie = NO;
+          }
+
+          st_insert(bsConstants, (st_data_t)const_name, (st_data_t)bs_const);
         }
       }
       break;
@@ -1458,22 +1477,33 @@ osx_load_bridge_support_file (VALUE rcv, VALUE path)
 
 #endif
 
+struct bsConst *
+find_magic_cookie_const_by_value(void *value)
+{
+  struct bsConst *bs_const;
+
+  if (!st_lookup(bsMagicCookieConstants, (st_data_t)value, (st_data_t *)&bs_const))
+    return NULL;
+
+  return bs_const;
+}
+
 static VALUE
 osx_import_c_constant (VALUE self, VALUE sym)
 {
-  const char *  name;
-  char *        real_name;
-  char *        octypestr;
-  void *        cvalue;
-  VALUE         value;
+  const char *      name;
+  char *            real_name;
+  struct bsConst *  bs_const;
+  void *            cvalue;
+  VALUE             value;
   
   name = rb_id2name(SYM2ID(sym));
   real_name = (char *)name;
-  if (!st_lookup(bsConstants, (st_data_t)name, (st_data_t *)&octypestr)) {
+  if (!st_lookup(bsConstants, (st_data_t)name, (st_data_t *)&bs_const)) {
     // Decapitalize the string and try again.
     real_name = strdup(name);
     DECAPITALIZE(real_name);
-    if (!st_lookup(bsConstants, (st_data_t)real_name, (st_data_t *)&octypestr)) {
+    if (!st_lookup(bsConstants, (st_data_t)real_name, (st_data_t *)&bs_const)) {
       free(real_name);
       rb_raise(rb_eLoadError, "C constant '%s' not found", name);
     }
@@ -1482,9 +1512,20 @@ osx_import_c_constant (VALUE self, VALUE sym)
   cvalue = dlsym(RTLD_DEFAULT, real_name);
   value = Qnil;
   if (cvalue != NULL) {
-    DLOG("MDLOSX", "Importing C constant `%s' of type '%s'", name, octypestr);
-    if (!ocdata_to_rbobj(Qnil, octypestr, cvalue, &value, NO))
-      rb_raise(ocdataconv_err_class(), "Cannot convert the Objective-C constant '%s' as '%s' to Ruby", name, octypestr);
+    DLOG("MDLOSX", "Importing C constant `%s' of type '%s'", name, bs_const->encoding);
+    if (bs_const->is_magic_cookie) { 
+      struct bsCFType *bs_cftype;
+
+      bs_cftype = find_bs_cf_type_by_encoding(bs_const->encoding);
+      bs_const->class_name = bs_cftype != NULL
+        ? bs_cftype->bridged_class_name : "OCObject";
+
+      DLOG("MDLOSX", "Constant is a magic-cookie of fixed value %p, guessed class name '%s'", *(void **)cvalue, bs_const->class_name);
+
+      st_insert(bsMagicCookieConstants, (st_data_t)*(void **)cvalue, (st_data_t)bs_const);
+    }
+    if (!ocdata_to_rbobj(Qnil, bs_const->encoding, cvalue, &value, NO))
+      rb_raise(ocdataconv_err_class(), "Cannot convert the Objective-C constant '%s' as '%s' to Ruby", name, bs_const->encoding);
     rb_define_const(self, name, value);
     DLOG("MDLOSX", "Imported C constant `%s' with value %p", name, value);
   }
@@ -1623,6 +1664,7 @@ initialize_bridge_support (VALUE mOSX)
   bsCFTypes = st_init_strtable();
   bsCFTypes2 = st_init_numtable();
   bsConstants = st_init_strtable();
+  bsMagicCookieConstants = st_init_numtable();
   bsFunctions = st_init_strtable();
   bsClasses = st_init_strtable();
   bsInformalProtocolClassMethods = st_init_strtable();

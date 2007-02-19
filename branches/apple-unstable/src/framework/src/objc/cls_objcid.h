@@ -16,6 +16,7 @@ struct _objcid_data {
 
 /** class methods **/
 VALUE objid_s_class ();
+VALUE objcid_new_with_ocid(VALUE klass, id ocid);
 
 /** instance methods 
  * id* objcid_idptr (VALUE rcv);

@@ -363,6 +363,15 @@
 
 @end
 
+@interface TestMagicCookie : NSObject
+@end
+
+@implementation TestMagicCookie
++ (BOOL)isKCFAllocatorUseContext:(id)ocid { 
+  return ((unsigned)ocid == (unsigned)kCFAllocatorUseContext);
+}
+@end
+
 void Init_objc_test(){
   // dummy initializer for ruby's `require'
 }

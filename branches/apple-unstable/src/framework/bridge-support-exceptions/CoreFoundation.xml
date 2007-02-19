@@ -78,4 +78,5 @@
   <struct name='CFXMLEntityReferenceInfo'/>
   <struct name='CFXMLParserCallBacks'/>
   <struct name='CFXMLParserContext'/>
+  <constant name='kCFAllocatorUseContext' magic_cookie='true'/>
 </signatures>

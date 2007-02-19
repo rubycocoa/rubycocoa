@@ -198,4 +198,10 @@ class TC_Types < Test::Unit::TestCase
     assert(OSX::NSZone.opaque?)
     assert(OSX::NSDecimal.opaque?)
   end
+
+  def test_const_magic_cookie
+    assert_kind_of(OSX::CFAllocatorRef, OSX::KCFAllocatorUseContext)
+    # FIMXE test calling CFAllocatorCreate with KCFAllocatorUseContext once we support function pointers 
+    assert_equal(1, OSX::TestMagicCookie.isKCFAllocatorUseContext(OSX::KCFAllocatorUseContext))
+  end
 end
