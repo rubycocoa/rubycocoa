@@ -1,3 +1,10 @@
+2007-02-20  Fujimoto Hisa  <hisa@fobj.com>
+
+	* sample/VPRubyPluginEnabler:
+	aware of the standard user's "Script PlugIns" folder for ruby
+	script. implemented "Run Page as Ruby Plugin" and "Save Page as
+	Ruby Plugin..." command same as Lua version.
+
 2007-02-20  Laurent Sansonetti <lsansonetti@apple.com>
 
 	* install.rb:
