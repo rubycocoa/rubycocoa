@@ -19,10 +19,10 @@ static const NSString* additional_param = @"additional param if need";
   if (! installed) {
     if (RBBundleInit(init_prog_name, self, additional_param) == YES) {
       installed = 1;
-      NSLog(@"RubyAnywhere: installed.");
+      NSLog(@"RubyAnywhere: install => OK");
     }
     else {
-      NSLog(@"RubyAnywhere: failed to install.");
+      NSLog(@"RubyAnywhere: install => NG");
     }
   }
 }
