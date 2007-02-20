@@ -150,12 +150,10 @@ RBBundleInit(const char *rb_main_name, Class klass, id additional_param)
 {
   extern void Init_stack(VALUE*);
   static int first_flg = 0;
-  VALUE stack_start;
   VALUE err;
 
   if (! first_flg) {
     ruby_init();
-    Init_stack(&stack_start);
     ruby_init_loadpath();
     RBRubyCocoaInit();
     first_flg = 1;

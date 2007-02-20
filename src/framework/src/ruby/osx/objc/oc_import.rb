@@ -148,7 +148,7 @@ module OSX
 
   def self.included(m)
     if m.respond_to? :const_missing
-      m.module_eval <<-EOC,__FILE__,__LINE__+1
+      m.module_eval do
         class <<self
           alias_method :_osx_const_missing_prev, :const_missing
           def const_missing(c)
@@ -159,13 +159,13 @@ module OSX
             end
           end
         end
-      EOC
+      end
     else
-      m.module_eval <<-EOC,__FILE__,__LINE__+1
+      m.module_eval do
         def self.const_missing(c)
           OSX.const_missing(c)
         end
-      EOC
+      end
     end
   end
   
@@ -193,13 +193,13 @@ module OSX
   def class_new_for_occlass(occls)
     superclass = _objc_lookup_superclass(occls)
     klass = Class.new(superclass)
-    klass.class_eval <<-EOE_CLASS_NEW_FOR_OCCLASS,__FILE__,__LINE__+1
+    klass.class_eval do
       if superclass == OSX::ObjcID
         include OCObjWrapper 
         self.extend OCClsWrapper
       end
-      @ocid = #{occls.__ocid__}
-    EOE_CLASS_NEW_FOR_OCCLASS
+      @ocid = occls.__ocid__.to_i
+    end
     if superclass == OSX::ObjcID
       def klass.__ocid__() @ocid end
       def klass.to_s() name end
@@ -217,7 +217,8 @@ module OSX
       OSX::NSProxy
     else
       begin
-        OSX.const_get("#{occls_superclass}".to_sym) 
+        # OSX.const_get("#{occls_superclass}".to_sym) 
+        OSX.const_get(occls_superclass.to_s.to_sym) 
       rescue NameError
         # some ObjC internal class cannot become Ruby constant
         # because of prefix '%' or '_'
@@ -247,7 +248,7 @@ module OSX
       spr_name = superclass.name.split('::')[-1]
       kls_name = self.name.split('::')[-1]
       occls = OSX.objc_derived_class_new(self, kls_name, spr_name)
-      self.instance_eval "@ocid = #{occls.__ocid__}",__FILE__,__LINE__+1
+      self.instance_eval { @ocid = occls.__ocid__.to_i }
       OSX::BundleSupport.bind_class_with_current_bundle(self) if kls_name
       @inherited = true
     end

@@ -14,7 +14,8 @@ OSX.init_for_bundle do
   # bdl    - the bundle related with the 2nd argument of RBBundleInit
   # param  - the 3rd argument of RBBundleInit as optional data
   # log    - logger for this block
-  log.info("param=%p", param.to_s)
+
+  # log.info("param=%p", param.to_s)
 
   require 'RcodeController'
   rcode = RcodeController.instance
