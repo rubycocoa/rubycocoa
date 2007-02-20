@@ -106,6 +106,7 @@ class ClassesNibPlist
       #@plist.writeToFile_atomically(@plist_path, true)
       File.open(@plist_path, "w+") { |io| io.puts @plist }
     else
+      log "Writing updated classes.nib plist back to standard output"
       puts @plist
     end
   end
@@ -220,9 +221,9 @@ class Options
                                 "requires -d and -n options") do |create|
         options[:create] = true
       end
-      opts.on("-p", "--plist PATH", "Dump a properly list with the Ruby class metadata",
-                                    "requires -f option") do |plist|
-        options[:plist] = plist == "" ? nil : plist
+      opts.on("-p", "--plist", "Dump on standard output a property list of the Ruby class IB metadata",
+                               "requires -f option") do |plist|
+        options[:plist] = true
       end
       opts.on("-d", "--directory PATH", "Path to directory to create Ruby classes", "(for --create)") do |dir|
         options[:dir] = dir == "" ? nil : dir
@@ -279,7 +280,7 @@ nib_plist =
   if options[:nib]
     "#{options[:nib]}/classes.nib"
   else
-    options[:plist] 
+    nil 
   end
 if options[:update] || options[:plist]
   ClassesNibUpdater.update_nib(nib_plist, options[:file])
