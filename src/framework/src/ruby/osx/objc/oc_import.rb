@@ -615,7 +615,7 @@ class Object
     alias _before_osx_inherited inherited
     def inherited(subklass)
       nsklassname, mod = _real_class_and_mod(subklass) 
-      if nsklassname
+      if nsklassname and (first_char = nsklassname[0]) >= ?A and first_char <= ?Z
         # remove Ruby's class
         mod.instance_eval { remove_const nsklassname.intern }
         begin
