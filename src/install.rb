@@ -746,6 +746,7 @@ class Installer
 
   def clean_dir_ext( rel )
     clean
+    command 'rm -f Makefile extconf.rb'
   end
   
   def clean
@@ -758,8 +759,10 @@ class Installer
   def clean_dir_framework( rel )
     command buildcommand + ' clean'
     command 'rm -rf build'
-    command 'rm -f src/objc/cocoa/rb_AppKit.m'
-    command 'rm -f src/objc/cocoa/rb_Foundation.m'
+    command 'rm -f GeneratedConfig.xcconfig'
+    command 'rm -f src/objc/osx_intern.h'
+    command 'rm -f src/objc/osx_ruby.h'
+    command 'rm -f src/objc/Version.h'
     command 'rm -rf bridge-support'
     command 'rm -rf bridge-doc'
     dive_into( '../misc/libffi' ) {
