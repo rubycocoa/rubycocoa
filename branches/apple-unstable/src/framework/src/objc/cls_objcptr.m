@@ -6,18 +6,21 @@
  *
  **/
 #import "cls_objcptr.h"
+#import "ocdata_conv.h"
 #import <Foundation/Foundation.h>
 
 static VALUE _kObjcPtr = Qnil;
 
 struct _objcptr_data {
-  long  allocated_size;
-  void* cptr;
+  long    allocated_size;
+  void *  cptr;
+  char *  encoding; 
 };
 
 #define OBJCPTR_DATA_PTR(o) ((struct _objcptr_data*)(DATA_PTR(o)))
 #define CPTR_OF(o) (OBJCPTR_DATA_PTR(o)->cptr)
 #define ALLOCATED_SIZE_OF(o) (OBJCPTR_DATA_PTR(o)->allocated_size)
+#define ENCODING_OF(o) (OBJCPTR_DATA_PTR(o)->encoding)
 
 /** for debugging stuff **/
 void cptrlog(const char* s, VALUE obj)
@@ -35,6 +38,7 @@ _objcptr_data_free(struct _objcptr_data* dp)
       free (dp->cptr);
     dp->allocated_size = 0;
     dp->cptr = NULL;
+    dp->encoding = NULL;
     free (dp);
   }
 }
@@ -44,8 +48,9 @@ _objcptr_data_new()
 {
   struct _objcptr_data* dp = NULL;
   dp = malloc (sizeof(struct _objcptr_data)); // ALLOC?
-  dp->cptr = NULL;
   dp->allocated_size = 0;
+  dp->cptr = NULL;
+  dp->encoding = NULL;
   return dp;
 }
 
@@ -224,11 +229,12 @@ objcptr_s_class ()
 }
 
 VALUE
-objcptr_s_new_with_cptr (void* cptr)
+objcptr_s_new_with_cptr (void* cptr, char* encoding)
 {
   VALUE obj;
   obj = _objcptr_s_new (_kObjcPtr, 0);
   CPTR_OF(obj) = cptr;
+  ENCODING_OF(obj) = encoding + 1;  // skipping the first type
   return obj;
 }
 
@@ -242,6 +248,24 @@ void* objcptr_cptr (VALUE rcv)
   return NULL;
 }
 
+static VALUE
+rb_objcptr_at (VALUE rcv, VALUE key)
+{
+  unsigned offset;
+  VALUE val;
+
+  Check_Type(key, T_FIXNUM);
+  if (ENCODING_OF(rcv) == NULL)
+    rb_raise(rb_eRuntimeError, "#[] can't be called on this instance");
+
+  offset = FIX2INT(key);  
+  offset *= ocdata_size(ENCODING_OF(rcv));
+
+  if (!ocdata_to_rbobj(Qnil, ENCODING_OF(rcv), CPTR_OF(rcv) + offset, &val, NO))
+    rb_raise(rb_eRuntimeError, "Can't convert element of type '%s' at index %d offset %d", ENCODING_OF(rcv), FIX2INT(key), offset);
+
+  return val; 
+}
 
 /*******/
 
@@ -282,6 +306,8 @@ init_cls_ObjcPtr(VALUE outer)
   rb_define_alias (_kObjcPtr, "int", "int32");
   rb_define_alias (_kObjcPtr, "uint", "uint32");
   rb_define_alias (_kObjcPtr, "bool", "uint8");
+
+  rb_define_method (_kObjcPtr, "[]", rb_objcptr_at, 1);
 
   return _kObjcPtr;
 }

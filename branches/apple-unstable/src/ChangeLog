@@ -1,3 +1,14 @@
+2007-02-21  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* framework/src/objc/ocdata_conv.m,
+	  framework/src/objc/cls_objcptr.h,
+	  framework/src/objc/cls_objcptr.m,
+	  tests/tc_objcptr.rb:
+	Added the possibility to retrieve components from an ObjCPtr instance
+	giving an index. This works only for ObjCPtr objects returned by RubyCocoa
+	and the user is responsible to pass the right index value, otherwise it may
+	crash the program. Added tests cases.
+
 2007-02-20  Fujimoto Hisa  <hisa@fobj.com>
 
 	* framework/src/objc/RBRuntime.m:
