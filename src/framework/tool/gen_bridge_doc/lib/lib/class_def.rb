@@ -105,24 +105,21 @@ class CocoaRef::ClassDef
       str += "# #{paragraph}\n"
       str += "#\n"
     end
-    
-    if @type == :class
-      if @name == 'NSObject'
-        str += "class OSX::#{@name}\n"
-      else
-        # Lookup the name of the superclass
-        str += "class OSX::#{@name} < #{OSX.const_get(@name).superclass}\n"
+   
+    case @type
+    when :class
+      if @type == :class
+        if @name == 'NSObject'
+          str += "class OSX::#{@name}\n"
+        else
+          # Lookup the name of the superclass
+          str += "class OSX::#{@name} < #{OSX.const_get(@name).superclass}\n"
+        end
       end
-    elsif @type == :additions
-      str += "module OSX::#{@name}Additions\n"
-    elsif @type == :functions
-      str += "module OSX::#{@name}Functions\n"
-    elsif @type == :data_types
+    when :additions, :protocols
+      str += "class OSX::#{@name}\n"
+    when :functions, :data_types, :constants
       str += "module OSX\n"
-    elsif @type == :constants
-      str += "module OSX\n"
-    elsif @type == :protocols
-      str += "module OSX::#{@name}Protocol\n"
     end
     
     if @type == :constants
