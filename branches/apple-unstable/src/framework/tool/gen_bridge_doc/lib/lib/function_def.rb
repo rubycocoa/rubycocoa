@@ -51,7 +51,7 @@ class CocoaRef::FunctionDef < CocoaRef::MethodDef
     self.override_result('(\()(.+)(\))', :new_regexp_start)
   end
   def regexp_repeater
-    self.override_result('([\w\*]+)(\s)([\*\w]+)', :new_regexp_repeater)
+    self.override_result('^(.+)\s+([^\s]+)\s*$', :new_regexp_repeater)
   end
   
   def regexp_result_arg(res)
@@ -74,7 +74,7 @@ class CocoaRef::FunctionDef < CocoaRef::MethodDef
         if a.split("\s").length > 1
           parsed_arg = a.scan(Regexp.new(self.regexp_repeater)).flatten
           #p parsed_arg
-        
+
           unless parsed_arg.empty?
             function_def_part = {}
             function_def_part[:arg]  = regexp_result_arg(parsed_arg)
@@ -91,8 +91,16 @@ class CocoaRef::FunctionDef < CocoaRef::MethodDef
           function_def_parts.push function_def_part
         end
       end
-    
+
       #p function_def_parts
+      function_def_parts.each do |p|
+        if p[:arg] == '...'
+          p[:arg] = '*args'
+        else
+          p[:arg].sub!(/^[A-Z]/) { |s| s.downcase }
+          p[:arg].sub!(/\[\d*\]/, '')
+        end
+      end 
       return function_def_parts
     end
   end
