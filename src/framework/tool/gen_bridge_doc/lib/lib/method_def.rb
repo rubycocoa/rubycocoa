@@ -143,7 +143,10 @@ class CocoaRef::MethodDef
       method_def_part[:type] = md_type.strip unless md_type.nil?
       
       md_arg = regexp_result_arg(parsed_method_def, i)
-      method_def_part[:arg]  = md_arg.strip.gsub(/class/, 'klass') unless md_arg.nil?
+      unless md_arg.nil?
+        method_def_part[:arg] = md_arg.strip.gsub(/class/, 'klass') 
+        method_def_part[:arg].sub!(/^[A-Z]/) { |s| s.downcase }
+      end
       method_def_parts.push(method_def_part)
     end
     #p method_def_parts
