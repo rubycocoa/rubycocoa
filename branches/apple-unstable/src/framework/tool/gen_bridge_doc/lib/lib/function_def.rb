@@ -22,7 +22,7 @@ class CocoaRef::FunctionDef < CocoaRef::MethodDef
       end
       str += "\n"
     end
-    str += "  def #{self.to_rb_def}\n"
+    str += "  def self.#{self.to_rb_def}\n"
     str += "    # #{self.definition.gsub(/\n/, ' ').strip_tags.clean_special_chars}\n"
     str += "    #\n"
   
