@@ -60,6 +60,8 @@ unless File.exist?('/usr/lib/libffi.a')
     cflags << ' -I../../misc/libffi/include -I../misc/libffi/include ' 
     ldflags << ' -L../../misc/libffi -L../misc/libffi '
   end
+else
+  cflags << ' -I/usr/include/ffi '
 end
 cflags << ' -DMACOSX '
 ldflags << ' -lffi '
