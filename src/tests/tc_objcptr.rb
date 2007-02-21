@@ -84,6 +84,18 @@ class TC_ObjcPtr < Test::Unit::TestCase
     assert( bstr.tainted? )
   end
 
+  def test_ocptr_ary_like
+    components = [0.1, 0.5, 0.9, 0].pack('f*')
+    color = CGColorCreate(CGColorSpaceCreateDeviceRGB(), components)
+    assert_kind_of(CGColorRef, color)
+    components2 = CGColorGetComponents(color)
+    assert((components2[0] >= 0.09 and components2[0] <= 0.11))
+    assert((components2[1] >= 0.49 and components2[1] <= 0.51))
+    assert((components2[2] >= 0.89 and components2[2] <= 0.91))
+    assert_equal(components2.bytestr(components.length), components)
+    assert_raises(RuntimeError) { ObjcPtr.new(42)[0] }
+  end
+
 #   rb_define_method (_kObjcPtr, "int8_at", rb_objcptr_int8_at, 1);
 #   rb_define_method (_kObjcPtr, "uint8_at", rb_objcptr_uint8_at, 1);
 #   rb_define_method (_kObjcPtr, "int16_at", rb_objcptr_int16_at, 1);

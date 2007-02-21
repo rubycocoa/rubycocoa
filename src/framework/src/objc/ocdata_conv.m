@@ -240,7 +240,7 @@ ocdata_to_rbobj (VALUE context_obj, const char *octype_str, const void *ocdata, 
         rbval = rb_bs_boxed_ptr_new_from_ocdata(bs_boxed, *(void **)ocdata);
       }
       else {
-        rbval = objcptr_s_new_with_cptr (*(void**)ocdata);
+        rbval = objcptr_s_new_with_cptr (*(void**)ocdata, octype_str);
       }
        break;
 
