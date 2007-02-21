@@ -1,5 +1,11 @@
 2007-02-21  Laurent Sansonetti <lsansonetti@apple.com>
 
+	* framework/tool/gen_bridge_doc/lib/lib/method_def.rb:
+	Make sure we don't generate arguments with upcase names.
+
+	* framework/tool/gen_bridge_doc/lib/lib/constant_def.rb:
+	Do not reveal the constant values and use nil instead.
+
 	* framework/tool/gen_bridge_doc/lib/lib/function_def.rb:
 	- Fixed the function arguments parsing ;
 	- Make sure we don't generate arguments with upcase names ;

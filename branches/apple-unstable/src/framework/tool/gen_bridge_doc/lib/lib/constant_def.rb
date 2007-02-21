@@ -22,16 +22,7 @@ class CocoaRef::ConstantDef < CocoaRef::MethodDef
     
     # Make sure the first letter is upcased.
     name = @name[0...1].upcase << @name[1..-1]
-    unless @value.nil? or @value.empty?
-      if @value == 'OSX::NSString'
-        str += "  #{name} = '#{name}'\n\n"
-      else
-        str += "  #{name} = #{@value}\n\n"
-      end
-    else
-      puts "[WARNING] A `nil` or empty object, or just a Notification, was encountered as the value for constant: #{@name}" if $COCOA_REF_DEBUG
-      str += "  #{name} = '#{name}'\n\n"
-    end
+    str += "  #{name} = nil\n\n"
     return str
   end
 end
