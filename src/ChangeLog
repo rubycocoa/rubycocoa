@@ -1,5 +1,11 @@
 2007-02-21  Laurent Sansonetti <lsansonetti@apple.com>
 
+	* framework/tool/gen_bridge_doc/lib/lib/function_def.rb:
+	- Fixed the function arguments parsing ;
+	- Make sure we don't generate arguments with upcase names ;
+	- Make sure we don't generate arguments with names suffixed by [] ;
+	- Do not use '...' but '*args' for argument names.
+
 	* pre-config.rb:
 	When using /usr/lib/libffi.a, pass -I/usr/include/ffi to the compiler.
 
