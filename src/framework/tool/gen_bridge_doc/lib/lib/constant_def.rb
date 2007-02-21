@@ -1,6 +1,6 @@
 class CocoaRef::ConstantDef < CocoaRef::MethodDef
   attr_accessor :value
-  
+
   def initialize
     super
     @value = ''
@@ -24,5 +24,13 @@ class CocoaRef::ConstantDef < CocoaRef::MethodDef
     name = @name[0...1].upcase << @name[1..-1]
     str += "  #{name} = nil\n\n"
     return str
+  end
+
+  def eql?(o)
+    o.is_a?(self.class) and o.name == @name
+  end
+
+  def hash
+    @name.hash
   end
 end

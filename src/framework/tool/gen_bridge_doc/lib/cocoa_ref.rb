@@ -211,6 +211,9 @@ module CocoaRef
         @log.add(error_str)
       end
       
+      # Remove duplicate constants 
+      class_def.constant_defs.uniq!
+
       return class_def
     end
     
