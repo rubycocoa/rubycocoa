@@ -784,12 +784,12 @@ EOC
           element = REXML::Element.new('method')
           element.add_attribute('selector', method.selector)
           element.add_attribute('class_method', true) if method.class_method?
-          element.add_element('retval').add_attribute('type', 'B') if predicate
           bool_args.each do |i| 
             arg_elem = element.add_element('arg')
             arg_elem.add_attribute('index', i)
             arg_elem.add_attribute('type', 'B') 
           end
+          element.add_element('retval').add_attribute('type', 'B') if predicate
           element
         }.compact
         next if elements.empty?
