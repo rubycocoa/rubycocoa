@@ -49,7 +49,7 @@ class OCHeaderAnalyzer
   end
 
   def defines
-    re = /#define\s+([^\s]+)\s+([^\s]+)\s*$/
+    re = /#define\s+([^\s]+)\s+(\([^)]+\)|[^\s]+)\s*$/
     @defines ||= File.read(@path).scan(re).select { |m| !m[0].include?('(') and m[1] != '\\' }
   end
 
@@ -776,16 +776,26 @@ EOC
         end
       end
       @ocmethods.sort { |x, y| x[0] <=> y[0] }.each do |class_name, methods|
-        predicates = methods.select { |m| encoding_of(m) == 'B' } 
-        next if predicates.empty?
-        class_element = root.add_element('class')
-        class_element.add_attribute('name', class_name)           
-        predicates.sort.each do |method| 
-          element = class_element.add_element('method')
+        elements = methods.sort.map { |method| 
+          predicate = encoding_of(method) == 'B'
+          bool_args = []
+          method.args.each_with_index { |a, i| bool_args << i if encoding_of(a) == 'B' }
+          next if !predicate and bool_args.empty?
+          element = REXML::Element.new('method')
           element.add_attribute('selector', method.selector)
           element.add_attribute('class_method', true) if method.class_method?
-          element.add_element('retval').add_attribute('type', 'B')
-        end
+          element.add_element('retval').add_attribute('type', 'B') if predicate
+          bool_args.each do |i| 
+            arg_elem = element.add_element('arg')
+            arg_elem.add_attribute('index', i)
+            arg_elem.add_attribute('type', 'B') 
+          end
+          element
+        }.compact
+        next if elements.empty?
+        class_element = root.add_element('class')
+        class_element.add_attribute('name', class_name)           
+        elements.each { |x| class_element.add_element(x) }
       end
       @inf_protocols.sort.each do |protocol|
         prot_element = root.add_element('informal_protocol')
@@ -926,6 +936,8 @@ EOC
       end
       @ocmethods.merge!(analyzer.ocmethods) { |key, old, new| old.concat(new) }
     end
+    [@functions, @constants].each { |a| a.delete_if { |v| v.name[0] == ?_ } }
+    [@defines, @enums].each { |h| h.delete_if { |n, v| n[0] == ?_ } }
     @struct_names.uniq!
     @cftype_names.uniq!
     all_inf_protocol_signatures = @inf_protocols.map { |p| p.entries.map { |e| e.selector } }.flatten
