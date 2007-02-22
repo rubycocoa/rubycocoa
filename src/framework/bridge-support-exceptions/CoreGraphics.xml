@@ -245,10 +245,6 @@
   <function name='CGFontCreateWithPlatformFont'>
     <arg index='0' type='ATSFontRef'/>
   </function>
-  <function name='CGFontGetGlyphAdvances'>
-    <arg index='1' type_modifier='n' c_array_length_in_arg='2'/>
-    <arg index='3' type_modifier='o' c_array_length_in_arg='2'/>
-  </function>
   <function name='CGFontCreatePostScriptSubset'>
     <arg index='3' type_modifier='n' c_array_length_in_arg='4'/>
     <arg index='5' type_modifier='n' c_array_of_variable_length='true'/>
