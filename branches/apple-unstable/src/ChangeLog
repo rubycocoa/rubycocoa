@@ -1,3 +1,9 @@
+2007-02-22  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* framework/tool/verify_bridge_metadata.rb,
+	  framework/tool/verify_bridge_metadata-old.rb:
+	Renamed previous verifier as -old.
+
 2007-02-21  Laurent Sansonetti <lsansonetti@apple.com>
 
 	* framework/tool/gen_bridge_doc/lib/lib/class_def.rb,
