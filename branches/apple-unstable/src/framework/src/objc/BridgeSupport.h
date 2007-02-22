@@ -19,6 +19,7 @@ typedef enum {
     bsCArrayArgUndefined,
     bsCArrayArgDelimitedByArg,
     bsCArrayArgFixedLength,
+    bsCArrayArgVariableLength,
     bsCArrayArgDelimitedByNull
 } bsCArrayArgType;
 
