@@ -99,7 +99,12 @@
     </method>
   </class>
   <class name='NSWindow'>
-    <method selector='initWithWindowRef:' ignore='true' suggestion='Call the regular initializers.'/>
+    <method selector='initWithWindowRef:'>
+      <arg index='0' type='WindowRef'/>
+    </method>
+    <method selector='windowRef'>
+      <retval type='WindowRef'/>
+    </method>
   </class>
   <class name='NSOpenPanel'>
     <method selector='beginSheetForDirectory:file:types:modalForWindow:modalDelegate:didEndSelector:contextInfo:'>
@@ -145,7 +150,12 @@
     </method>
   </class>
   <class name='NSColorSpace'>
-    <method selector='initWithColorSyncProfile:' ignore='true' suggestion='Use other initializers.'/>
+    <method selector='initWithColorSyncProfile:'>
+      <arg index='0' type='CMProfileRef'/>
+    </method>
+    <method selector='colorSyncProfile'>
+      <retval type='CMProfileRef'/>
+    </method>
   </class>
   <class name='NSGraphicsContext'>
     <method class_method='true' selector='graphicsContextWithGraphicsPort:flipped:'>
