@@ -1283,15 +1283,19 @@ osx_load_bridge_support_file (VALUE mOSX, VALUE path)
     
             type_modifier = get_attribute(reader, "type_modifier");
             if (type_modifier != NULL) {
-              if (strcmp(type_modifier, "n") == 0)
-                arg->type_modifier = bsTypeModifierIn;
-              else if (strcmp(type_modifier, "o") == 0)       
-                arg->type_modifier = bsTypeModifierOut;
-              else if (strcmp(type_modifier, "N") == 0)   
-                arg->type_modifier = bsTypeModifierInout;
-              else {
-                DLOG("MDLOSX", "Given type modifier '%s' is invalid, default'ing to 'out'", type_modifier);
-                arg->type_modifier = bsTypeModifierOut;
+              switch (*type_modifier) {
+                case 'n':
+                  arg->type_modifier = bsTypeModifierIn;
+                  break;
+                case 'o':
+                  arg->type_modifier = bsTypeModifierOut;
+                  break;
+                case 'N':
+                  arg->type_modifier = bsTypeModifierInout;
+                  break;
+                default:
+                  DLOG("MDLOSX", "Given type modifier '%s' is invalid, default'ing to 'out'", type_modifier);
+                  arg->type_modifier = bsTypeModifierOut;
               }
               free(type_modifier);
             }
