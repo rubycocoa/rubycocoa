@@ -1,3 +1,13 @@
+2007-02-22  kimura wataru <kimuraw@i.nifty.jp>
+
+	* framework/src/objc/ocdata_conv.h,
+	  framework/src/objc/ocdata_conv.m:
+	- remove unused function rbobj_to_nsselstr().
+
+	* framework/src/objc/ocdata_conv.m:
+	- fix: break argument in rbobj_to_cselstr() when the argument is an
+	  instance of String.
+
 2007-02-22  Laurent Sansonetti <lsansonetti@apple.com>
 
 	* framework/bridge-support-exceptions/AppKit.xml,
