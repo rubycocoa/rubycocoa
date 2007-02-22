@@ -10,6 +10,15 @@
 
 2007-02-22  Laurent Sansonetti <lsansonetti@apple.com>
 
+	* framework/bridge-support-exceptions/CoreGraphics.xml,
+	  framework/src/objc/BridgeSupport.h,
+	  framework/src/objc/BridgeSupport.m,
+	  framework/tool/gen_bridge_metadata.rb,
+	  tests/tc_types.rb:
+	- Added possibility to ignore enumerations ;
+	- Mark CoreGraphics' kCGDirectMainDisplay as ignored ;
+	- Added a test case.
+
 	* framework/bridge-support-exceptions/AppKit.xml,
 	  framework/tool/gen_bridge_metadata.rb:
 	- Discover more numeric #define constants ;

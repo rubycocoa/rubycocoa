@@ -204,4 +204,9 @@ class TC_Types < Test::Unit::TestCase
     # FIMXE test calling CFAllocatorCreate with KCFAllocatorUseContext once we support function pointers 
     assert_equal(1, OSX::TestMagicCookie.isKCFAllocatorUseContext(OSX::KCFAllocatorUseContext))
   end
+
+  def test_ignored_enum
+    assert_raise(RuntimeError) { OSX::KCGDirectMainDisplay }
+    assert_nothing_raised { OSX.CGMainDisplayID() }
+  end
 end

@@ -827,8 +827,22 @@ EOC
       raise "Constant '#{const_name}' is described in an exception file but it has not been discovered by the final generator" if orig_const_element.nil?
       magic_cookie = const_element.attributes['magic_cookie']
       # Append the magic_cookie attribute.
-      if magic_cookie
+      if magic_cookie == 'true'
         orig_const_element.add_attribute('magic_cookie', true)
+      end
+    end
+    # Merge enums.
+    exception_document.elements.each('/signatures/enum') do |enum_element|
+      enum_name = enum_element.attributes['name']
+      orig_enum_element = document.elements["/signatures/enum[@name='#{enum_name}']"]
+      raise "Enum '#{enum_name}' is described in an exception file but it has not been discovered by the final generator" if orig_enum_element.nil?
+      ignore = enum_element.attributes['ignore']
+      # Append the ignore/suggestion attributes.
+      if ignore == 'true'
+        orig_enum_element.add_attribute('ignore', true)
+        suggestion = enum_element.attributes['suggestion']
+        orig_enum_element.add_attribute('suggestion', suggestion) if suggestion
+        orig_enum_element.delete_attribute('value')
       end
     end
     # Merge functions.

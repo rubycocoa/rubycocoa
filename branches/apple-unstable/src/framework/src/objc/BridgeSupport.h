@@ -125,6 +125,8 @@ struct bsConst {
   char *    encoding;
   BOOL      is_magic_cookie;
   char *    class_name;       // set lazily, and only for magic cookies
+  BOOL      ignored;
+  char *    suggestion;
 };
 
 extern struct bsFunction *current_function;
