@@ -10,6 +10,15 @@
 
 2007-02-22  Laurent Sansonetti <lsansonetti@apple.com>
 
+	* framework/src/objc/BridgeSupport.m:
+	Better type modifier analysis.
+
+	* framework/bridge-support-exceptions/OpenGL.xml:
+	Expose missing opaque types.  
+
+	* framework/bridge-support-exceptions/CoreGraphics.xml:
+	Added missing exception data.
+
 	* framework/bridge-support-exceptions/CoreGraphics.xml,
 	  framework/src/objc/BridgeSupport.h,
 	  framework/src/objc/BridgeSupport.m,
