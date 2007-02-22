@@ -835,14 +835,21 @@ EOC
     exception_document.elements.each('/signatures/enum') do |enum_element|
       enum_name = enum_element.attributes['name']
       orig_enum_element = document.elements["/signatures/enum[@name='#{enum_name}']"]
-      raise "Enum '#{enum_name}' is described in an exception file but it has not been discovered by the final generator" if orig_enum_element.nil?
-      ignore = enum_element.attributes['ignore']
-      # Append the ignore/suggestion attributes.
-      if ignore == 'true'
-        orig_enum_element.add_attribute('ignore', true)
-        suggestion = enum_element.attributes['suggestion']
-        orig_enum_element.add_attribute('suggestion', suggestion) if suggestion
-        orig_enum_element.delete_attribute('value')
+      if orig_enum_element.nil?
+        if @defines.any? { |n, v| n == enum_name }
+          document.root.add_element(enum_element) 
+        else
+          raise "Enum '#{enum_name}' is described in an exception file but it has not been discovered by the final generator" 
+        end
+      else
+        ignore = enum_element.attributes['ignore']
+        # Append the ignore/suggestion attributes.
+        if ignore == 'true'
+          orig_enum_element.add_attribute('ignore', true)
+          suggestion = enum_element.attributes['suggestion']
+          orig_enum_element.add_attribute('suggestion', suggestion) if suggestion
+          orig_enum_element.delete_attribute('value')
+        end
       end
     end
     # Merge functions.
