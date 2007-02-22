@@ -126,6 +126,11 @@ get_c_ary_type_attribute(xmlTextReaderPtr reader, bsCArrayArgType *type, int *va
     *type = bsCArrayArgFixedLength;
     *value = atoi(c_ary_type);
   }
+  else if ((c_ary_type = get_attribute(reader, "c_array_of_variable_length")) != NULL
+           && strcmp(c_ary_type, "true") == 0) {
+    *type = bsCArrayArgVariableLength;
+    *value = -1;
+  }
   else if ((c_ary_type = get_attribute(reader, "c_array_delimited_by_null")) != NULL
            && strcmp(c_ary_type, "true") == 0) {
     *type = bsCArrayArgDelimitedByNull;

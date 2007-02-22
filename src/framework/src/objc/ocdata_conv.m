@@ -613,7 +613,7 @@ rbobj_to_nssel (VALUE obj)
 }
 
 static BOOL 
-rbobj_to_objcptr (VALUE obj, void** cptr)
+rbobj_to_objcptr (VALUE obj, void** cptr, const char *octype_str)
 {
   if (TYPE(obj) == T_NIL) {
     *cptr = NULL;
@@ -621,23 +621,24 @@ rbobj_to_objcptr (VALUE obj, void** cptr)
   else if (TYPE(obj) == T_STRING) {
     *cptr = RSTRING(obj)->ptr;
   }
-#if 0
-  // TODO
   else if (TYPE(obj) == T_ARRAY) {
     if (RARRAY(obj)->len > 0) {
+      size_t len;
       void *ary;
       unsigned i;
-
+      
+      len = ocdata_size(octype_str);
       ary = *cptr;
+
       for (i = 0; i < RARRAY(obj)->len; i++) {
-        rbobj_to_ocdata( )
+        if (!rbobj_to_ocdata(RARRAY(obj)->ptr[i], octype_str, ary + (i * len), NO))
+          return NO;
       }
     }
     else {
       *cptr = NULL;
     }
   }
-#endif
   else if (rb_obj_is_kind_of(obj, objid_s_class()) == Qtrue) {
     *cptr = OBJCID_ID(obj);
   }
@@ -825,7 +826,7 @@ rbobj_to_ocdata (VALUE obj, const char *octype_str, void* ocdata, BOOL to_libffi
       }
 #endif
       else {
-        f_success = rbobj_to_objcptr(obj, ocdata);
+        f_success = rbobj_to_objcptr(obj, ocdata, octype_str + 1);
       }
       break;
 
