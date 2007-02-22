@@ -56,7 +56,6 @@ struct bsBoxed;
 BOOL is_boxed_ptr (const char *type, struct bsBoxed **boxed);
 
 const char * rbobj_to_cselstr  (VALUE obj);
-id           rbobj_to_nsselstr (VALUE obj);
 SEL          rbobj_to_nssel    (VALUE obj);
 BOOL         rbobj_to_nsobj    (VALUE obj, id* nsobj);
 BOOL         rbobj_to_bool     (VALUE obj);

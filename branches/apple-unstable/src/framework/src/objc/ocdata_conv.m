@@ -600,12 +600,6 @@ rbobj_to_cselstr (VALUE obj)
   return STR2CSTR(str);
 }
 
-id 
-rbobj_to_nsselstr (VALUE obj)
-{
-  return [NSString stringWithUTF8String:rbobj_to_cselstr(obj)];
-}
-
 SEL 
 rbobj_to_nssel (VALUE obj)
 {
