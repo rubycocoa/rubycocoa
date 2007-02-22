@@ -590,7 +590,13 @@ const char *
 rbobj_to_cselstr (VALUE obj)
 {
   int i;
-  VALUE str = rb_obj_as_string(obj);
+  VALUE str;
+  
+  if (rb_obj_is_kind_of(obj, rb_cString)) {
+    str = rb_str_dup(obj);
+  } else {
+    str = rb_obj_as_string(obj);
+  }
 
   // str[0..0] + str[1..-1].tr('_',':')
   for (i = 1; i < RSTRING(str)->len; i++) {
