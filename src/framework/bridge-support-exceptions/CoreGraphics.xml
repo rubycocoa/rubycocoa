@@ -44,4 +44,5 @@
   <struct name='CGPatternCallbacks'/>
   <struct name='CGPSConverterCallbacks'/>
   <struct name='CGScreenUpdateMoveDelta'/>
+  <enum name='kCGDirectMainDisplay' ignore='true' suggestion='Call CGMainDisplayID.'/>
 </signatures>

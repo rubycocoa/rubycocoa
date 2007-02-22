@@ -1020,6 +1020,8 @@ osx_load_bridge_support_file (VALUE mOSX, VALUE path)
           bs_const->name = const_name;
           bs_const->encoding = const_type;
           bs_const->class_name = NULL;
+          bs_const->ignored = NO;
+          bs_const->suggestion = NULL;
 
           const_magic_cookie = get_attribute(reader, "magic_cookie");
           if (const_magic_cookie != NULL) {
@@ -1037,32 +1039,59 @@ osx_load_bridge_support_file (VALUE mOSX, VALUE path)
 
       case BS_XML_ENUM: { 
         char *  enum_name;
+        BOOL    ignore;
 
+        ignore = NO;
         enum_name = get_attribute_and_check(reader, "name");
         if (rb_const_defined(mOSX, rb_intern(enum_name))) {
           DLOG("MDLOSX", "Enum '%s' already registered, skipping...", enum_name);
         }
         else {
-          char *  enum_value;        
-          VALUE   value;
+          char *  ignored;
 
-          enum_value = get_attribute_and_check(reader, "value");
-          if (strlen(enum_value) == 6 && enum_value[0] == '\'' && enum_value[5] == '\'') {
-            FourCharCode code = 
-              ((enum_value[1] << 24) | enum_value[2] << 16 | enum_value[3] << 8 | enum_value[4]);
-            value = INT2NUM(code);
+          ignored = get_attribute(reader, "ignore");
+          if (ignored != NULL) {
+            ignore = strcmp(ignored, "true") == 0;
+            free(ignored);
+          }
+
+          if (ignore) {
+            struct bsConst *  fake_bs_const;
+
+            fake_bs_const = (struct bsConst *)malloc(sizeof(struct bsConst));
+            ASSERT_ALLOC(fake_bs_const);
+
+            fake_bs_const->name = enum_name;
+            fake_bs_const->encoding = NULL;
+            fake_bs_const->is_magic_cookie = NO;
+            fake_bs_const->ignored = YES;
+            fake_bs_const->suggestion = get_attribute(reader, "suggestion");
+
+            st_insert(bsConstants, (st_data_t)enum_name, (st_data_t)fake_bs_const); 
           }
           else {
-            value = strchr(enum_value, '.') != NULL
-              ? rb_float_new(rb_cstr_to_dbl(enum_value, 1))
-              : rb_cstr_to_inum(enum_value, 10, 1); 
-          }
-          CAPITALIZE(enum_name);
-          rb_define_const(mOSX, enum_name, value);
+            char *  enum_value;        
+            VALUE   value;
 
-          free (enum_value);
+            enum_value = get_attribute_and_check(reader, "value");
+            if (strlen(enum_value) == 6 && enum_value[0] == '\'' && enum_value[5] == '\'') {
+              FourCharCode code = 
+                ((enum_value[1] << 24) | enum_value[2] << 16 | enum_value[3] << 8 | enum_value[4]);
+              value = INT2NUM(code);
+            }
+            else {
+              value = strchr(enum_value, '.') != NULL
+                ? rb_float_new(rb_cstr_to_dbl(enum_value, 1))
+                : rb_cstr_to_inum(enum_value, 10, 1); 
+            }
+            CAPITALIZE(enum_name);
+            rb_define_const(mOSX, enum_name, value);
+
+            free (enum_value);
+          }
         }
-        free (enum_name);
+        if (!ignore)
+          free (enum_name);
       }
       break;
 
@@ -1508,6 +1537,9 @@ osx_import_c_constant (VALUE self, VALUE sym)
       rb_raise(rb_eLoadError, "C constant '%s' not found", name);
     }
   }
+
+  if (bs_const->ignored)
+    rb_raise(rb_eRuntimeError, "Constant '%s' is not supported (suggested alternative: '%s')", bs_const->name, bs_const->suggestion != NULL ? bs_const->suggestion : "n/a");
 
   cvalue = dlsym(RTLD_DEFAULT, real_name);
   value = Qnil;
