@@ -1,3 +1,22 @@
+2007-02-24  Fujimoto Hisa  <hisa@fobj.com>
+
+	* framework/src/objc/RBObject.m, framework/src/objc/RBRuntime.m, framework/src/objc/internal_macros.h:
+	called Init_stack in RBObject#rbobjRespondsToSelector, when
+	initialized using RBBundleInit and FREQUENTLY_INIT_STACK_FLAG is
+	flagged. added (secret) api RBBundleInit2 to specify the
+	frequently_init_stack_flag.
+
+	* framework/src/objc/mdl_bundle_support.m, framework/src/objc/RBRuntime.m:
+	acceptted nil for the 2nd argument, which type is Class, of
+	RBBundleInit. it means using [NSBundle mainBundle] instead of
+	bundleForClass for looking up the bundle related with the 2nd
+	argument. So, it's able to initialize an app using
+	RBBundleInit (or RBBundleInit2). it's an alternative way of using
+	RBApplicationMain.
+
+	* cls_objcptr.m, cls_objcptr.h:
+	modified type of the encoding field of struct _objcptr_data as const.
+
 2007-02-22  kimura wataru <kimuraw@i.nifty.jp>
 
 	* framework/src/objc/ocdata_conv.h,

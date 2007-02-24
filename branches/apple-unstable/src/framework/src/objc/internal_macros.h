@@ -37,4 +37,8 @@
 #define POOL_DO(POOL)   { id POOL = [[NSAutoreleasePool alloc] init];
 #define END_POOL(POOL)  [(POOL) release]; }
 
+/* flag for calling Init_stack frequently */
+extern BOOL frequently_init_stack();
+#define FREQUENTLY_INIT_STACK_FLAG frequently_init_stack()
+
 #endif	// _INTERNAL_MACROS_H_

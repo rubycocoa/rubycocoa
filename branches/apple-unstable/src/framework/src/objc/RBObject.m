@@ -104,7 +104,13 @@ static int rb_obj_arity_of_method(VALUE rcv, SEL a_sel, BOOL *ok)
 {
   BOOL ret;
   RB_ID mid;
-  RBOBJ_LOG("rbobjRespondsToSelector(%s)", a_sel);
+  int state;
+  extern void Init_stack(VALUE*);
+
+  if (FREQUENTLY_INIT_STACK_FLAG) {
+    RBOBJ_LOG("rbobjRespondsToSelector(%s) w/Init_stack(%08lx)", a_sel, (void*)&state);
+    Init_stack((void*)&state);
+  }
   mid = rb_obj_sel_to_mid(m_rbobj, a_sel);
   ret = (rb_respond_to(m_rbobj, mid) != 0);
   RBOBJ_LOG("   --> %d", ret);

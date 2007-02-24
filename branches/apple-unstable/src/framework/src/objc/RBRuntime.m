@@ -19,8 +19,6 @@
 #import "OverrideMixin.h"
 #import "internal_macros.h"
 
-#define RUBY_MAIN_NAME "rb_main.rb"
-
 /* this function should be called from inside a NSAutoreleasePool */
 static NSBundle* bundle_for(Class klass)
 {
@@ -107,6 +105,19 @@ prepare_argv(int argc, const char* argv[], const char* rb_main_name, const char*
   return ruby_argc;
 }
 
+/* flag for calling Init_stack frequently */
+static BOOL frequently_init_stack_mode = YES;
+
+void set_frequently_init_stack(BOOL val)
+{
+  frequently_init_stack_mode = (val ? YES : NO);
+}
+
+BOOL frequently_init_stack()
+{
+  return frequently_init_stack_mode;
+}
+
 int
 RBRubyCocoaInit()
 {
@@ -117,7 +128,7 @@ RBRubyCocoaInit()
   load_path_unshift(framework_ruby_path()); // add a ruby part of rubycocoa to $LOAD_PATH
   init_rb2oc_cache(); // initialize the Ruby->ObjC internal cache
   init_oc2rb_cache(); // initialize the ObjC->Ruby internal cache
-  initialize_mdl_osxobjc();	// initialize an objc part of rubycocoa
+  initialize_mdl_osxobjc();     // initialize an objc part of rubycocoa
   initialize_mdl_bundle_support();
   init_ovmix();
   init_p = 1;
@@ -145,15 +156,23 @@ RBApplicationMain(const char* rb_main_name, int argc, const char* argv[])
   return 0;
 }
 
+/* unofficial api around Init_stack issue  */
 BOOL
-RBBundleInit(const char *rb_main_name, Class klass, id additional_param)
+RBBundleInit2(const char *rb_main_name, 
+              Class klass, 
+              id additional_param, 
+              BOOL frequently_init_stack_flag)
 {
   extern void Init_stack(VALUE*);
+  int state;
   static int first_flg = 0;
   VALUE err;
 
+  set_frequently_init_stack(frequently_init_stack_flag);
   if (! first_flg) {
     ruby_init();
+    DLOG("RBRT", "RBBundleInit w/Init_stack(%08lx)", (void*)&state);
+    Init_stack((void*)&state);
     ruby_init_loadpath();
     RBRubyCocoaInit();
     first_flg = 1;
@@ -165,4 +184,11 @@ RBBundleInit(const char *rb_main_name, Class klass, id additional_param)
     return NO;
   else
     return YES;
+}
+
+/* primary bundle init api */
+BOOL
+RBBundleInit(const char *rb_main_name, Class klass, id additional_param)
+{
+  return RBBundleInit2(rb_main_name, klass, additional_param, YES);
 }
