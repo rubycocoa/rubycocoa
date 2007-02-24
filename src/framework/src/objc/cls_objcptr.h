@@ -9,7 +9,7 @@
 
 /** class methods **/
 VALUE objcptr_s_class ();
-VALUE objcptr_s_new_with_cptr (void* cptr, char *encoding);
+VALUE objcptr_s_new_with_cptr (void* cptr, const char *encoding);
 
 /** instance methods **/
 void* objcptr_cptr (VALUE rcv);

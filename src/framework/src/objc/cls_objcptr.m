@@ -14,7 +14,7 @@ static VALUE _kObjcPtr = Qnil;
 struct _objcptr_data {
   long    allocated_size;
   void *  cptr;
-  char *  encoding; 
+  const char *  encoding; 
 };
 
 #define OBJCPTR_DATA_PTR(o) ((struct _objcptr_data*)(DATA_PTR(o)))
@@ -229,7 +229,7 @@ objcptr_s_class ()
 }
 
 VALUE
-objcptr_s_new_with_cptr (void* cptr, char* encoding)
+objcptr_s_new_with_cptr (void* cptr, const char* encoding)
 {
   VALUE obj;
   obj = _objcptr_s_new (_kObjcPtr, 0);

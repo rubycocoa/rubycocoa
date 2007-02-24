@@ -37,6 +37,14 @@ static const char* BUNDLE_STACK_NAME = "BUNDLE_STACK";
  * around the ns_import method.
  **/
 
+/* this function should be called from inside a NSAutoreleasePool */
+static NSBundle* bundle_for(Class klass)
+{
+  return (klass == nil) ?
+    [NSBundle mainBundle] : 
+    [NSBundle bundleForClass: klass];
+}
+
 static VALUE _make_stack_item(Class objc_class, id additional_param)
 {
   VALUE args = Qnil;
@@ -45,7 +53,7 @@ static VALUE _make_stack_item(Class objc_class, id additional_param)
     id bundle;
     VALUE a0, a1;
 
-    bundle = [NSBundle bundleForClass: objc_class];
+    bundle = bundle_for(objc_class);
     a0 = OCID2NUM(bundle);
     a1 = OCID2NUM(additional_param);
     args = rb_ary_new3(2, a0, a1);
