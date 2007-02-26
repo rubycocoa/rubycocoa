@@ -1,5 +1,5 @@
 #
-#  WorksheetController.rb
+#  ReplController.rb
 #  CocoaRepl
 #
 #  Created by Fujimoto Hisa on 06/10/17.
@@ -9,7 +9,7 @@
 require 'osx/cocoa'
 require 'stringio'
 
-class WorksheetController < OSX::NSObject
+class ReplController < OSX::NSObject
   include OSX
 
   FONTSIZE = 16
