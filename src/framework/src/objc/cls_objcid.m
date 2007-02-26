@@ -110,22 +110,26 @@ objcid_inspect(VALUE rcv)
   id                ocid;
   struct bsConst *  bs_const;
   const char *      class_desc;
+  id                pool;
 
   ocid = OBJCID_ID(rcv);
   bs_const = find_magic_cookie_const_by_value(ocid);
   if (bs_const != NULL) {
+    pool = nil;
     class_desc = bs_const->class_name;
   }
   else {
-    id pool = [[NSAutoreleasePool alloc] init];
+    pool = [[NSAutoreleasePool alloc] init];
     class_desc = [[[ocid class] description] UTF8String];
-    [pool release];
   }
 
   snprintf(s, sizeof(s), "#<%s:0x%lx class='%s' id=%p>",
     rb_class2name(CLASS_OF(rcv)),
     NUM2ULONG(rb_obj_id(rcv)), 
     class_desc, ocid);
+
+  if (pool != nil)
+    [pool release];
 
   return rb_str_new2(s);
 }
