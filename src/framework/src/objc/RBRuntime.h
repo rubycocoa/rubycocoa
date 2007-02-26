@@ -1,4 +1,4 @@
-/** -*-objc-*-
+/** -*- mode:ruby; indent-tabs-mode:nil -*-
  *
  *   $Id$
  *
@@ -17,8 +17,8 @@
  * return not 0 when something error.
  */
 int RBBundleInit (const char* path_to_ruby_program, 
-		  Class       objc_class, 
-		  id          additional_param);
+                  Class       objc_class, 
+                  id          additional_param);
 
 
 /** [API] RBApplicationInit
@@ -27,9 +27,9 @@ int RBBundleInit (const char* path_to_ruby_program,
  * return 0 when complete, or return not 0 when error.
  */
 int RBApplicationInit (const char* path_to_ruby_program,
-		       int         argc,
-		       const char* argv[],
-		       id          additional_param);
+                       int         argc,
+                       const char* argv[],
+                       id          additional_param);
 
 
 /** [API] RBRubyCocoaInit (for compatibility)
@@ -45,7 +45,7 @@ void RBRubyCocoaInit();
  */
 int
 RBApplicationMain (const char* path_to_ruby_program, 
-		   int         argc, 
-		   const char* argv[]);
+                   int         argc, 
+                   const char* argv[]);
 
 #endif  // _RBRUNTIME_H_
