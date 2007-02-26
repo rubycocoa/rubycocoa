@@ -1,4 +1,4 @@
-/** -*- mode:ruby; indent-tabs-mode:nil -*-
+/** -*- mode:objc; indent-tabs-mode:nil -*-
  *
  *   $Id$
  *
