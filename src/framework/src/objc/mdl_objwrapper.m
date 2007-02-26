@@ -92,6 +92,9 @@ ocm_send(int argc, VALUE* argv, VALUE rcv, VALUE* result)
   selector = rbobj_to_nssel(argv[0]);
   exception = Qnil;
 
+  methodReturnType = NULL;
+  argumentsTypes = NULL;
+
   oc_rcv = rbobj_get_ocid(rcv);
   if (oc_rcv == nil) {
     exception = rb_err_new(ocmsgsend_err_class(), "Can't get Objective-C object in %s", RSTRING(rb_inspect(rcv))->ptr);
@@ -206,6 +209,15 @@ success:
   OBJWRP_LOG("ocm_send (%s) done%s", (const char *)selector, NIL_P(exception) ? "" : " with exception");
 
 bails:
+  if (methodReturnType != NULL)
+    free(methodReturnType);
+  if (argumentsTypes != NULL) {
+    unsigned i;
+    for (i = 0; i < numberOfArguments; i++)
+      free(argumentsTypes[i]);
+    free(argumentsTypes);
+  }
+
   [pool release];
 
   return exception;

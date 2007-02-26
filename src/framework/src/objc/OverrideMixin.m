@@ -206,8 +206,11 @@ bails:
     free(cif);
   if (closure != NULL)
     free(closure);
-  if (arg_types != NULL)
+  if (arg_types != NULL) {
+    for (i = 0; i < argc; i++)
+      free(arg_types[i]);
     free(arg_types);
+  }
   if (retval_type != NULL)
     free(retval_type);
   if (error != NULL)
