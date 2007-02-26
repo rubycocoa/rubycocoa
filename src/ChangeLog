@@ -1,3 +1,21 @@
+2007-02-26  Fujimoto Hisa  <hisa@fobj.com>
+
+	* sample/CocoaRepl:
+	added example of read-eval-print loop application using
+	RBApplicationInit.
+
+	* framework/src/objc/RBRuntime.h, 
+	framework/src/objc/RBRuntime.m,
+	framework/src/objc/internal_macros.h,
+	framework/src/objc/RubyCocoa.h,
+	framework/src/objc/mdl_bundle_support.h,
+	framework/src/objc/mdl_bundle_support.m,
+	framework/src/ruby/osx/objc/oc_bundle_support.rb
+	sample/RubyAnywhere/RubyAnywhereLoader.m,
+	sample/VPRubyPluginEnabler/VPRubyPluginEnabler.m:
+	implemented the API candidate for release 1.0. added
+	RBApplicationInit and modified RBBundleInit.
+
 2007-02-24  Fujimoto Hisa  <hisa@fobj.com>
 
 	* framework/src/objc/RBObject.m, framework/src/objc/RBRuntime.m, framework/src/objc/internal_macros.h:

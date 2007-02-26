@@ -7,4 +7,3 @@
  **/
 
 #import <RubyCocoa/RBRuntime.h>
-#import <RubyCocoa/RBObject.h>

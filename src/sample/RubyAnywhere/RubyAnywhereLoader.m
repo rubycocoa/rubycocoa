@@ -6,8 +6,7 @@
 //  Created by Fujimoto Hisa on 07/02/01.
 //  Copyright 2007 FOBJ SYSTEMS. All rights reserved.
 
-static const char*     init_prog_name   = "ruby_anywhere_init.rb";
-static const NSString* additional_param = @"additional param if need";
+#import <RubyCocoa/RubyCocoa.h>
 
 @interface RubyAnywhereLoader : NSObject
 + (void) install;
@@ -17,13 +16,10 @@ static const NSString* additional_param = @"additional param if need";
 + (void) install {
   static int installed = 0;
   if (! installed) {
-    if (RBBundleInit(init_prog_name, self, additional_param) == YES) {
+    if (RBBundleInit("ruby_anywhere_init.rb", self, nil))
+      NSLog(@"RubyAnywhereLoader.install: failed");
+    else
       installed = 1;
-      NSLog(@"RubyAnywhere: install => OK");
-    }
-    else {
-      NSLog(@"RubyAnywhere: install => NG");
-    }
   }
 }
 @end

@@ -8,9 +8,7 @@
 
 #import <Cocoa/Cocoa.h>
 #import <VPPlugin/VPPlugin.h>
-#import <RubyCocoa/RBRuntime.h>
-
-static const char* init_prog_name   = "vpr_init.rb";
+#import <RubyCocoa/RubyCocoa.h>
 
 @interface VPRubyPluginEnabler : VPPlugin
 - (void) didRegister;
@@ -20,13 +18,10 @@ static const char* init_prog_name   = "vpr_init.rb";
 - (void) didRegister {
   static int installed = 0;
   if (! installed) {
-    if (RBBundleInit(init_prog_name, [self class], self) == YES) {
+    if (RBBundleInit("vpr_init.rb", [self class], self))
+      NSLog(@"VPRubyPluginEnabler#didRegister failed.");
+    else
       installed = 1;
-      NSLog(@"VPRubyPluginEnabler#didRegister => OK");
-    }
-    else {
-      NSLog(@"VPRubyPluginEnabler#didRegister => NG");
-    }
   }
 }
 @end

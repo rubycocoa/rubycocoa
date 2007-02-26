@@ -15,8 +15,10 @@
 #import "osx_ruby.h"
 
 void initialize_mdl_bundle_support();
-VALUE bundle_support_load(const char* rb_main_name, 
-                          Class objc_class,
-                          id additional_param);
+
+typedef VALUE (* bundle_support_program_loader_t)(const char*, Class, id);
+
+VALUE load_ruby_program_for_class(const char* path,    Class objc_class, id additional_param);
+VALUE eval_ruby_program_for_class(const char* program, Class objc_class, id additional_param);
 
 #endif  //  _MDL_BUNDLE_SUPPORT_H_
