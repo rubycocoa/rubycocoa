@@ -1,5 +1,10 @@
 2007-02-26  Laurent Sansonetti <lsansonetti@apple.com>
 
+	* framework/src/objc/mdl_objwrapper.m,
+	  framework/src/objc/ocdata_conv.m,
+	  framework/src/objc/OverrideMixin.m:
+	Fixed memory leaks in Ruby <-> ObjC messaging.
+
 	* framework/src/objc/cls_objcid.m:
 	Fixed ObjCID#inspect. 
 

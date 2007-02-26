@@ -1045,5 +1045,8 @@ decode_method_encoding(const char *encoding, NSMethodSignature *methodSignature,
       }
       *arg_types = p;
     }
+    else {
+      *arg_types = NULL;
+    }
   }
 }
