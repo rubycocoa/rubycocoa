@@ -10,14 +10,12 @@ module OSX
 
   module BundleSupport
 
-    def init_for_bundle
+    def init_for_bundle(option = nil)
       bdl, prm = _current_bundle
       logger = Logger.new(bdl)
-      logger.info("init_for_bundle ...")
-      OSX.NSClassFromString("NSObject") # FIXME - just ad-hoc magic to suppress a bus error
+      logger.info("init_for_bundle ...") if option && option[:verbose]
       ret = yield(bdl, prm, logger)
-      OSX.NSClassFromString("NSObject") # FIXME - just ad-hoc magic to suppress a bus error
-      logger.info("init_for_bundle done.")
+      logger.info("init_for_bundle done.") if option && option[:verbose]
       ret
     rescue Exception => err
       logger.error(err)
@@ -44,8 +42,8 @@ module OSX
     end
   end
 
-  def init_for_bundle
-    BundleSupport.init_for_bundle { |*x| yield(*x) }
+  def init_for_bundle(args = nil)
+    BundleSupport.init_for_bundle(args) { |*x| yield(*x) }
   end
   module_function :init_for_bundle
 

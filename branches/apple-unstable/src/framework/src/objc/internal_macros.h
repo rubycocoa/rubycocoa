@@ -38,7 +38,7 @@
 #define END_POOL(POOL)  [(POOL) release]; }
 
 /* flag for calling Init_stack frequently */
-extern BOOL frequently_init_stack();
-#define FREQUENTLY_INIT_STACK_FLAG frequently_init_stack()
+extern int rubycocoa_frequently_init_stack();
+#define FREQUENTLY_INIT_STACK_FLAG rubycocoa_frequently_init_stack()
 
 #endif	// _INTERNAL_MACROS_H_

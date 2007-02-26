@@ -106,89 +106,157 @@ prepare_argv(int argc, const char* argv[], const char* rb_main_name, const char*
 }
 
 /* flag for calling Init_stack frequently */
-static BOOL frequently_init_stack_mode = YES;
+static int frequently_init_stack_mode = 1;
 
-void set_frequently_init_stack(BOOL val)
+void rubycocoa_set_frequently_init_stack(int val)
 {
-  frequently_init_stack_mode = (val ? YES : NO);
+  frequently_init_stack_mode = (val ? 1 : 0);
 }
 
-BOOL frequently_init_stack()
+int rubycocoa_frequently_init_stack()
 {
   return frequently_init_stack_mode;
 }
 
-int
-RBRubyCocoaInit()
+static int rb_error_p(VALUE err)
 {
-  static int init_p = 0;
-  if (init_p) return 0;
-
-  ruby_init();
-  load_path_unshift(framework_ruby_path()); // add a ruby part of rubycocoa to $LOAD_PATH
-  init_rb2oc_cache(); // initialize the Ruby->ObjC internal cache
-  init_oc2rb_cache(); // initialize the ObjC->Ruby internal cache
-  initialize_mdl_osxobjc();     // initialize an objc part of rubycocoa
-  initialize_mdl_bundle_support();
-  init_ovmix();
-  init_p = 1;
-
-  return 1;
+  return RTEST(rb_obj_is_kind_of(err, rb_eException)) ? 1 : 0;
 }
 
-int
-RBApplicationMain(const char* rb_main_name, int argc, const char* argv[])
+static void rubycocoa_init()
 {
-  static int done_p = 0;
-  int ruby_argc;
-  const char** ruby_argv;
+  static int has_called = 0;
+  if (! has_called) {
+    init_rb2oc_cache();    // initialize the Ruby->ObjC internal cache
+    init_oc2rb_cache();    // initialize the ObjC->Ruby internal cache
+    initialize_mdl_osxobjc();  // initialize an objc part of rubycocoa
+    initialize_mdl_bundle_support();
+    init_ovmix();
+    load_path_unshift(framework_ruby_path()); // PATH_TO_FRAMEWORK/Resources/ruby
+    has_called = 1;
+  }
+}
 
-  if (done_p) return 0;
-  done_p = 1;
+static int
+rubycocoa_bundle_init(const char* program, 
+                      bundle_support_program_loader_t loader,
+                      Class klass, id param)
+{
+  static int has_called = 0;
+  VALUE result;
 
-  ruby_argc = prepare_argv(argc, argv, rb_main_name, &ruby_argv);
-
-  ruby_init();
-  ruby_options(ruby_argc, (char**) ruby_argv);
-  RBRubyCocoaInit();
-  load_path_unshift(resource_path()); // add a ruby part of oneself to $LOAD_PATH
-  ruby_run();
+  if (! has_called) {
+    has_called = 1;
+    ruby_init();
+    ruby_init_loadpath();
+    rubycocoa_init();
+    rubycocoa_set_frequently_init_stack(1);
+  }
+  load_path_unshift( resource_path_for( klass ));
+  result = loader(program, klass, param);
+  if (rb_error_p(result))
+    return 1;
   return 0;
 }
 
-/* unofficial api around Init_stack issue  */
-BOOL
-RBBundleInit2(const char *rb_main_name, 
-              Class klass, 
-              id additional_param, 
-              BOOL frequently_init_stack_flag)
+static int
+rubycocoa_app_init(const char* program, 
+                   bundle_support_program_loader_t loader,
+                   int argc, const char* argv[], id param)
 {
-  extern void Init_stack(VALUE*);
-  int state;
-  static int first_flg = 0;
-  VALUE err;
+  static int has_called = 0;
+  VALUE result;
 
-  set_frequently_init_stack(frequently_init_stack_flag);
-  if (! first_flg) {
+  if (! has_called) {
+    has_called = 1;
     ruby_init();
-    DLOG("RBRT", "RBBundleInit w/Init_stack(%08lx)", (void*)&state);
-    Init_stack((void*)&state);
+    ruby_script(argv[0]);
+    ruby_set_argv(argc - 1, (char**)(argv+1));
     ruby_init_loadpath();
-    RBRubyCocoaInit();
-    first_flg = 1;
+    rubycocoa_init();
+    rubycocoa_set_frequently_init_stack(0);
   }
-  load_path_unshift(resource_path_for(klass));
-  err = bundle_support_load(rb_main_name, klass, additional_param);
-
-  if (RTEST(rb_obj_is_kind_of(err, rb_eException)))
-    return NO;
-  else
-    return YES;
+  load_path_unshift(resource_path());
+  result = loader(program, nil, param);
+  if (rb_error_p(result))
+    return 1;
+  return 0;
 }
 
-/* primary bundle init api */
-BOOL
-RBBundleInit(const char *rb_main_name, Class klass, id additional_param)
+
+/** [API] RBBundleInit
+ *
+ * initialize ruby and rubycocoa for a bundle
+ * return not 0 when something error.
+ */
+int
+RBBundleInit(const char* path_to_ruby_program, Class klass, id param)
 {
-  return RBBundleInit2(rb_main_name, klass, additional_param, YES);
+  return rubycocoa_bundle_init(path_to_ruby_program, 
+                               load_ruby_program_for_class, 
+                               klass, param);
+}
+
+int
+RBBundleInitWithSource(const char* ruby_program, Class klass, id param)
+{
+  return rubycocoa_bundle_init(ruby_program, 
+                               eval_ruby_program_for_class,
+                               klass, param);
+}
+
+
+/** [API] RBApplicationInit
+ *
+ * initialize ruby and rubycocoa for a command/application
+ * return 0 when complete, or return not 0 when error.
+ */
+int
+RBApplicationInit(const char* path_to_ruby_program, int argc, const char* argv[], id param)
+{
+  return rubycocoa_app_init(path_to_ruby_program,
+                            load_ruby_program_for_class,
+                            argc, argv, param);
+}
+
+int
+RBApplicationInitWithSource(const char* ruby_program, int argc, const char* argv[], id param)
+{
+  return rubycocoa_app_init(ruby_program, 
+                            eval_ruby_program_for_class,
+                            argc, argv, param);
+}
+
+/** [API] initialize rubycocoa for a ruby extention library **/
+void
+RBRubyCocoaInit()
+{
+  static int has_called = 0;
+  if (! has_called) {
+    rubycocoa_init();
+    has_called = 1;
+  }
+}
+
+/** [API] launch rubycocoa application (api for compatibility) **/
+int
+RBApplicationMain(const char* rb_program_path, int argc, const char* argv[])
+{
+  static int has_called = 0;
+  int ruby_argc;
+  const char** ruby_argv;
+
+  if (! has_called) {
+    has_called = 1;
+
+    ruby_init();
+    ruby_argc = prepare_argv(argc, argv, rb_program_path, &ruby_argv);
+    ruby_options(ruby_argc, (char**) ruby_argv);
+
+    rubycocoa_init();
+    load_path_unshift(resource_path()); // PATH_TO_BUNDLE/Contents/resources
+
+    ruby_run();
+  }
+  return 0;
 }
