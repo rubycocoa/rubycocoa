@@ -106,7 +106,7 @@ prepare_argv(int argc, const char* argv[], const char* rb_main_name, const char*
 }
 
 /* flag for calling Init_stack frequently */
-static int frequently_init_stack_mode = 1;
+static int frequently_init_stack_mode = 0;
 
 void rubycocoa_set_frequently_init_stack(int val)
 {
