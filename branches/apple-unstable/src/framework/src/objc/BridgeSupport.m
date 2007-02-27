@@ -1245,6 +1245,20 @@ osx_load_bridge_support_file (VALUE mOSX, VALUE path)
       }
       break;
 
+      case BS_XML_FUNCTION_ALIAS: {
+        char *  alias_name;
+        char *  alias_original;
+
+        alias_name = get_attribute_and_check(reader, "name"); 
+        alias_original = get_attribute_and_check(reader, "original");
+
+        rb_define_alias(CLASS_OF(mOSX), alias_name, alias_original);
+
+        free(alias_name);
+        free(alias_original);
+      }
+      break;
+
       case BS_XML_CLASS: {
         char *  class_name;
         

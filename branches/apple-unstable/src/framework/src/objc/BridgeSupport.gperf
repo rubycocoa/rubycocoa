@@ -11,6 +11,7 @@ class, 8
 method, 9 
 cftype, 10
 opaque, 11
+function_alias, 12
 %%
 #define BS_XML_CONSTANT           1
 #define BS_XML_ENUM               2
@@ -23,3 +24,4 @@ opaque, 11
 #define BS_XML_METHOD             9
 #define BS_XML_CFTYPE             10
 #define BS_XML_OPAQUE             11
+#define BS_XML_FUNCTION_ALIAS     12

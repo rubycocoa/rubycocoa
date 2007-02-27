@@ -462,4 +462,7 @@
   <function name='CGReleaseScreenRefreshRects'>
     <arg index='0' type_modifier='n'/>
   </function>
+  <function_alias name='CGAffineTransformMake' original='__CGAffineTransformMake'/>
+  <function_alias name='CGPointApplyAffineTransform' original='__CGPointApplyAffineTransform'/>
+  <function_alias name='CGSizeApplyAffineTransform' original='__CGSizeApplyAffineTransform'/>
 </signatures>
