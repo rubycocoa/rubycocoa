@@ -12,7 +12,7 @@
   <opaque name='GLUquadricObj *'/>
   <opaque name='GLUtesselatorObj *'/>
   <opaque name='GLUtriangulatorObj *'/>
-  <opaque name='CGLContextObj'/>
+  <opaque name='CGLContextObj' type='^{_CGLContextObject=}'/>
   <opaque name='CGLPixelFormatObj'/>
   <opaque name='CGLRendererInfoObj'/>
   <opaque name='CGLPBufferObj'/>
