@@ -392,13 +392,8 @@ class BridgeSupportGenerator
 
   def collect_enums
     @resolved_enums ||= {} 
-    lines = []
-    @enums.each do |name, val|
-      if /^'....'$/.match(val)
-        @resolved_enums[name] = val
-      else 
-        lines << "printf(((int)#{name}) < 0 ? \"%s: %d\\n\" : \"%s: %u\\n\", \"#{name}\", #{name});" 
-      end
+    lines = @enums.map do |name, val|
+      "printf(((int)#{name}) < 0 ? \"%s: %d\\n\" : \"%s: %u\\n\", \"#{name}\", #{name});" 
     end
     code = <<EOS
 #{@import_directive}
@@ -775,6 +770,11 @@ EOC
             and /(Create|Copy)/.match(function.name)
         end
       end
+      @func_aliases.to_a.sort { |x, y| x[1] <=> y[1] }.each do |original, name|
+        element = root.add_element('function_alias')
+        element.add_attribute('name', name)
+        element.add_attribute('original', original)
+      end
       @ocmethods.sort { |x, y| x[0] <=> y[0] }.each do |class_name, methods|
         elements = methods.sort.map { |method| 
           predicate = encoding_of(method) == 'B'
@@ -957,8 +957,14 @@ EOC
       end
       @ocmethods.merge!(analyzer.ocmethods) { |key, old, new| old.concat(new) }
     end
-    [@functions, @constants].each { |a| a.delete_if { |v| v.name[0] == ?_ } }
-    [@defines, @enums].each { |h| h.delete_if { |n, v| n[0] == ?_ } }
+    to_not_delete = @func_aliases.keys
+    [@functions, @constants, @defines, @enums].each do |c|
+      c.delete_if do |*a|
+        n = a[0]
+        n = n.name if n.is_a?(OCHeaderAnalyzer::VarInfo)
+        !to_not_delete.include?(n) and n[0] == ?_ 
+      end
+    end
     @struct_names.uniq!
     @cftype_names.uniq!
     all_inf_protocol_signatures = @inf_protocols.map { |p| p.entries.map { |e| e.selector } }.flatten
@@ -1059,6 +1065,7 @@ EOC
     @cftypes = {} 
     @opaques = []
     @method_exception_types = []
+    @func_aliases = {}
     @exceptions.map! { |x| REXML::Document.new(File.read(x)) }
     @exceptions.each do |doc|
       doc.get_elements('/signatures/ignored_headers/header').each do |element|
@@ -1073,16 +1080,16 @@ EOC
       doc.get_elements('/signatures/struct').each do |elem|
         @structs[elem.attributes['name']] = elem.attributes['opaque'] == 'true'
       end
-      doc.get_elements('/signatures/cftype').map do |elem|
+      doc.get_elements('/signatures/cftype').each do |elem|
         @cftypes[elem.attributes['name']] = [
           elem.attributes['gettypeid_func'], 
           elem.attributes['ignore_tollfree'] == 'true'
         ]
       end
-      doc.get_elements('/signatures/opaque').map do |elem|
+      doc.get_elements('/signatures/opaque').each do |elem|
         @opaques << elem.attributes['name']
       end
-      doc.get_elements('/signatures/class/method').map do |elem|
+      doc.get_elements('/signatures/class/method').each do |elem|
         retval_elem = elem.elements['retval']
         if retval_elem
           type = retval_elem.attributes['type']
@@ -1092,6 +1099,10 @@ EOC
           type = arg_elem.attributes['type']
           @method_exception_types << type if type
         end
+      end
+      doc.get_elements('/signatures/function_alias').each do |elem|
+        name, original = elem.attributes['name'], elem.attributes['original']
+        @func_aliases[original.strip] = name.strip
       end
     end
   end
