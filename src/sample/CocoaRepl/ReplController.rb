@@ -5,7 +5,7 @@
 #  Created by Fujimoto Hisa on 06/10/17.
 #  Copyright (c) 2006 FUJIMOTO Hisa FOBJ SYSTEMS. All rights reserved.
 #
-
+$KCODE = 'utf-8'
 require 'osx/cocoa'
 require 'stringio'
 
@@ -28,7 +28,7 @@ class ReplController < OSX::NSObject
 
   def evaluate(sender)
     src = @scratchText.string.to_s.gsub(/\r/, "\n")
-    result = with_io_redirect { eval(src, TOPLEVEL_BINDING) }
+    result = with_io_redirect { eval(src, TOPLEVEL_BINDING, "(program)", 1) }
     @resultText.setString(result.inspect)
     @resultText.setTextColor(STD_COLOR)
   end
