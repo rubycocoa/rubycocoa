@@ -1,3 +1,8 @@
+2007-02-28  kimura wataru <kimuraw@i.nifty.jp>
+
+	* framework/src/ruby/osx/objc/oc_import.rb:
+	ns_override should not invoke for Objective-C classes.
+
 2007-02-27  Laurent Sansonetti <lsansonetti@apple.com>
 
 	* framework/bridge-support-exceptions/CoreGraphics.xml,
