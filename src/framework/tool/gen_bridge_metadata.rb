@@ -530,8 +530,8 @@ EOS
       m.map { |x| x.stripped_rettype } 
     }.flatten
     all_types |= @method_exception_types
-    all_types |= @opaques
- 
+    all_types |= @opaques.keys
+
     lines = all_types.map do |type|
       "printf(\"%s: %s\\n\", \"#{type}\", @encode(#{type}));"
     end
@@ -547,6 +547,15 @@ EOS
     compile_and_execute_code(code).split("\n").each do |line|
       name, value = line.split(':')
       @types_encoding[name.strip] = value.strip
+    end
+    
+    @opaques.each do |name, type|
+      next unless type
+      old_type = @types_encoding[name]
+      @types_encoding.each do |n, t|
+        next unless t == old_type
+        @types_encoding[n] = type
+      end
     end
   end
 
@@ -736,7 +745,7 @@ EOC
         element.add_attribute('gettypeid_func', gettypeid_func) if gettypeid_func 
         element.add_attribute('tollfree', tollfree) if tollfree 
       end
-      @opaques.sort.each do |name|
+      @opaques.keys.sort.each do |name|
         encoding = @types_encoding[name]
         raise "encoding of opaque type '#{name}' not resolved" if encoding.nil?
         element = root.add_element('opaque')
@@ -1063,7 +1072,7 @@ EOC
     @ignored_defines_regexps = []
     @structs = {} 
     @cftypes = {} 
-    @opaques = []
+    @opaques = {} 
     @method_exception_types = []
     @func_aliases = {}
     @exceptions.map! { |x| REXML::Document.new(File.read(x)) }
@@ -1087,7 +1096,7 @@ EOC
         ]
       end
       doc.get_elements('/signatures/opaque').each do |elem|
-        @opaques << elem.attributes['name']
+        @opaques[elem.attributes['name']] = elem.attributes['type']
       end
       doc.get_elements('/signatures/class/method').each do |elem|
         retval_elem = elem.elements['retval']

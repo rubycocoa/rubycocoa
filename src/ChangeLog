@@ -5,6 +5,10 @@
 
 2007-02-27  Laurent Sansonetti <lsansonetti@apple.com>
 
+	* framework/bridge-support-exceptions/OpenGL.xml,
+	  framework/tool/gen_bridge_metadata.rb:
+	Fix the CGLContextObj type, this fixes the crasher in some OpenGL samples.
+
 	* framework/bridge-support-exceptions/CoreGraphics.xml,
 	  framework/src/objc/BridgeSupport.gperf,
 	  framework/src/objc/BridgeSupportLexer.h,
