@@ -205,6 +205,7 @@ module OSX
       def klass.to_s() name end
       def klass.inherited(subklass) subklass.ns_inherited() end
     end
+    klass.instance_eval {@ns_imported = true}
     return klass
   end
   module_function :class_new_for_occlass 
@@ -251,10 +252,16 @@ module OSX
       self.instance_eval { @ocid = occls.__ocid__.to_i }
       OSX::BundleSupport.bind_class_with_current_bundle(self) if kls_name
       @inherited = true
+      @ns_imported = false # turn true at ns_import
     end
 
     def ns_inherited?
       return defined?(@inherited) && @inherited
+    end
+
+    # objc origin or not (ruby)
+    def ns_imported?
+      return defined?(@ns_imported) && @ns_imported
     end
 
     # declare to override instance methods of super class which is
@@ -294,7 +301,7 @@ module OSX
     end
 
     def _ns_enable_override?(sel, class_method)
-      ns_inherited? and (class_method ? self.objc_method_type(sel) : self.objc_instance_method_type(sel))
+      not(ns_imported?) and (class_method ? self.objc_method_type(sel) : self.objc_instance_method_type(sel))
     end
 
     def _objc_export(name, types, class_method)
