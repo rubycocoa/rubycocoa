@@ -1,5 +1,8 @@
 2007-02-28  Laurent Sansonetti <lsansonetti@apple.com>
 
+	* framework/tool/gen_bridge_metadata.rb:
+	Added preliminary support for 64-bit encodings.
+
 	* framework/src/ruby/osx/objc/oc_wrapper.rb:
 	Work around a bug when #method_missing is called when trying to call an
 	existing Ruby private method. Make sure we raise a MethodError exception
