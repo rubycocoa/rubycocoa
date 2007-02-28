@@ -105,6 +105,8 @@ class OSX::NSObject
     'foo'
   end
   objc_method :mySuperMethod, ['id']
+
+  objc_method(:mySuperMethodWithBlock, [:id, :int]) { |x| "foo_#{x}" }
 end
 
 class TC_OVMIX < Test::Unit::TestCase
@@ -132,4 +134,11 @@ class TC_OVMIX < Test::Unit::TestCase
     assert_equal('bar', OSX::NSString.mySuperClassMethod.to_s)
     assert_equal('bar', OSX::NSString.performSelector('mySuperClassMethod').to_s)
   end
+
+  def test_objc_method_with_block
+    o = OSX::NSString.stringWithCString('blah')
+    assert_equal('foo_123', o.mySuperMethodWithBlock(123).to_s)
+    assert_equal('foo_456', o.objc_send(:mySuperMethodWithBlock, 456).to_s)
+  end
+
 end

@@ -1,3 +1,9 @@
+2007-02-28  Fujimoto Hisa  <hisa@fobj.com>
+
+	* framework/src/ruby/osx/objc/oc_import.rb:
+	allowed to give a block to objc_method for implementation of the
+	method. added def_objc_method.
+
 2007-02-28  kimura wataru <kimuraw@i.nifty.jp>
 
 	* framework/src/ruby/osx/objc/oc_import.rb:

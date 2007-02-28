@@ -312,7 +312,16 @@ module OSX
       OSX.objc_class_method_add(self, name, class_method, typefmt)
     end
 
-    def objc_method(name, types)
+    def def_objc_method(name, types, &blk)
+      if block_given? then
+        objc_method(name, types, &blk) 
+      else
+        raise ArgumentError, "block for method implementation expected"
+      end
+    end
+
+    def objc_method(name, types, &blk)
+      define_method(name, blk) if block_given?
       _objc_export(name, types, false)
     end
 
