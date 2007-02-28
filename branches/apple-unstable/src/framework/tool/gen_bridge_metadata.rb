@@ -366,6 +366,7 @@ end
 
 class BridgeSupportGenerator
   VERSION = '0.9'
+  TIGER_OR_BELOW = `sw_vers -productVersion`.strip.to_f <= 10.4
 
   def initialize(args)
     parse_args(args)
@@ -480,11 +481,21 @@ EOS
     end
   end
 
-  def encoding_of(varinfo)
+  def encoding_of(varinfo, try_64_bit=false)
     if ['BOOL', 'Boolean'].any? { |x| x == varinfo.stripped_rettype }
       'B'
     else
-      @types_encoding[varinfo.stripped_rettype]
+      h = try_64_bit ? @types_64_encoding : @types_encoding
+      h[varinfo.stripped_rettype]
+    end
+  end
+
+  def add_type_attributes(element, varinfo)
+    type = encoding_of(varinfo)
+    element.add_attribute('type', type)
+    type64 = encoding_of(varinfo, true)
+    if type != type64
+      element.add_attribute('type64', type64)
     end
   end
 
@@ -522,6 +533,7 @@ EOS
 
   def collect_types_encoding
     @types_encoding ||= {}
+    @types_64_encoding ||= {}
     all_types = @functions.map { |x| 
       [x.stripped_rettype, *x.args.map { |y| y.stripped_rettype }] 
     }.flatten 
@@ -548,7 +560,20 @@ EOS
       name, value = line.split(':')
       @types_encoding[name.strip] = value.strip
     end
-    
+
+    begin
+      compile_and_execute_code(code, false, true).split("\n").each do |line|
+        name, value = line.split(':')
+        name.strip!
+        value.strip!
+        unless value == @types_encoding[name]
+          @types_64_encoding[name] = value
+        end
+      end
+    rescue => e 
+      raise e unless TIGER_OR_BELOW
+    end
+
     @opaques.each do |name, type|
       next unless type
       old_type = @types_encoding[name]
@@ -563,15 +588,18 @@ EOS
 
   def collect_structs_encoding
     @resolved_structs ||= {}
+    @resolved_structs_64 ||= {}
     ivar_st = []
     log_st = []
     @structs.each do |name, is_opaque|
       ivar_st << "#{name} a#{name};"
-      log_st << "printf(\"%s: %s\\n\", \"#{name}\", class_getInstanceVariable(klass, \"a#{name}\")->ivar_type);"
+      log_st << "printf(\"%s: %s\\n\", \"#{name}\", ivar_getTypeEncoding(class_getInstanceVariable(klass, \"a#{name}\")));"
     end
     code = <<EOS
 #{@import_directive}
 #import <objc/objc-class.h>
+
+#{TIGER_OR_BELOW ? '#define ivar_getTypeEncoding(x) (x->ivar_type)' : ''}
 
 @interface __MyClass : NSObject
 {
@@ -593,9 +621,21 @@ EOS
       name, value = line.split(':')
       @resolved_structs[name.strip] = value.strip
     end
+    
+    begin
+      compile_and_execute_code(code, false, true).split("\n").each do |line|
+        name, value = line.split(':')
+        name.strip!
+        value.strip!
+        unless value == @resolved_structs[name]
+          @resolved_structs_64[name] = value
+        end
+      end
+    rescue => e 
+      raise e unless TIGER_OR_BELOW
+    end
   end
 
-  TIGER_OR_BELOW = `sw_vers -productVersion`.strip.to_f <= 10.4
   def collect_inf_protocols_encoding
     objc_impl_st = []
     log_st = []
@@ -737,6 +777,10 @@ EOC
         element = root.add_element('struct')
         element.add_attribute('name', name)
         element.add_attribute('type', encoding)
+        encoding64 = @resolved_structs_64[name]
+        if encoding64 != encoding
+          element.add_attribute('type64', encoding64)
+        end
         element.add_attribute('opaque', true) if @structs[name]
       end
       @resolved_cftypes.sort { |x, y| x[0] <=> y[0] }.each do |name, ary|
@@ -758,7 +802,7 @@ EOC
       @constants.sort.each do |constant| 
         element = root.add_element('constant')
         element.add_attribute('name', constant.name)
-        element.add_attribute('type', encoding_of(constant))
+        add_type_attributes(element, constant)
       end
       @resolved_enums.sort { |x, y| x[0] <=> y[0] }.each do |enum, value| 
         element = root.add_element('enum')
@@ -771,12 +815,13 @@ EOC
         element.add_attribute('variadic', true) if function.variadic?
         element.add_attribute('inline', true) if function.inline?
         function.args.each do |arg|
-          element.add_element('arg').add_attribute('type', encoding_of(arg))
+          arg_elem = element.add_element('arg')
+          add_type_attributes(arg_elem, arg)
         end
         rettype = encoding_of(function)
         if rettype != 'v'
           retval_element = element.add_element('retval')
-          retval_element.add_attribute('type', rettype) 
+          add_type_attributes(retval_element, function)
           retval_element.add_attribute('already_retained', true) \
             if @resolved_cftypes.has_key?(function.stripped_rettype) \
             and /(Create|Copy)/.match(function.name)
@@ -1204,7 +1249,8 @@ EOC
     end
   end
 
-  def compile_and_execute_code(code, cleanup_when_fail=false)
+  IS_PPC = `arch`.strip == 'ppc'
+  def compile_and_execute_code(code, cleanup_when_fail=false, run_64_bit=false)
     if @import_directive.nil? or @compiler_flags.nil?
       STDERR.puts "Can't compile for non-frameworks targets (yet)"
       return ''
@@ -1217,7 +1263,15 @@ EOC
     tmp_bin_path = unique_tmp_path('bin')
     tmp_log_path = unique_tmp_path('log')
 
-    line = "gcc #{tmp_src.path} -o #{tmp_bin_path} #{@compiler_flags} 2>#{tmp_log_path}"
+    arch_flag =     
+      if run_64_bit
+        raise "64-bit not supported on Tiger or below" if TIGER_OR_BELOW
+        " -arch #{IS_PPC ? 'ppc64' : 'x86_64'}"
+      else
+        '' # nothing, by default the compiler choose the 32-bit arch
+      end
+
+    line = "gcc #{arch_flag} #{tmp_src.path} -o #{tmp_bin_path} #{@compiler_flags} 2>#{tmp_log_path}"
     unless system(line)
       msg = "Can't compile C code... aborting\ncommand was: #{line}\n\n#{File.read(tmp_log_path)}"
       File.unlink(tmp_log_path)
@@ -1229,6 +1283,8 @@ EOC
     if @framework_paths
       env << "DYLD_FRAMEWORK_PATH=\"#{@framework_paths.join(':')}\""
     end
+
+    env << " arch #{arch_flag}" if run_64_bit
 
     out = `#{env} #{tmp_bin_path}`
     unless $?.success?
