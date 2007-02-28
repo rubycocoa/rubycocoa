@@ -45,18 +45,19 @@ module OSX
 
     def method_missing(mname, *args)
       m_name, m_args, as_predicate = analyze_missing(mname, args)
-      if self.respond_to?(mname, true) and !self.respondsToSelector(m_name)
-        # method_missing may be called when trying to message an existing private
-        # Ruby method, here we make sure to call the Ruby method and not try to 
-        # resolve an Objective-C selector.
-        self.send(mname, *args)
-      else
+      begin
         result = self.ocm_send(m_name, *m_args)
         if as_predicate && result.is_a?(Integer) then
           result != 0
         else
           result
         end
+      rescue OCMessageSendException => e
+        if self.private_methods.include?(mname.to_s)
+          raise NoMethodError, "private method `#{mname}' called for ##{self}"
+        else
+          raise e
+        end 
       end
     end
 
