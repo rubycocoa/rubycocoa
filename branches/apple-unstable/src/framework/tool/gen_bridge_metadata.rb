@@ -25,7 +25,6 @@ class OCHeaderAnalyzer
 
   CPP = ['/usr/bin/cpp-4.0', '/usr/bin/cpp-3.3', '/usr/bin/cpp3'].find { |x| File.exist?(x) }
   raise "cpp not found" if CPP.nil?
-  #CPPFLAGS = "-x objective-c -D__APPLE_CPP__"
   CPPFLAGS = "-D__APPLE_CPP__"
   CPPFLAGS << "-D__GNUC__" unless /\Acpp-4/.match(File.basename(CPP))
 
