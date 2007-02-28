@@ -1,5 +1,10 @@
 2007-02-28  Laurent Sansonetti <lsansonetti@apple.com>
 
+	* framework/src/ruby/osx/objc/oc_wrapper.rb,
+	  tests/tc_wrapper.rb:
+	Work around a Ruby bug when #method_missing is called when trying to call an
+	existing Ruby private method. Added a test case.
+
 	* framework/bridge-support-exceptions/AddressBook.xml,
 	  framework/post-config.rb,
 	  framework/tool/gen_bridge_metadata.rb:
