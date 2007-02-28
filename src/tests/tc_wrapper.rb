@@ -8,16 +8,6 @@
 require 'test/unit'
 require 'osx/cocoa'
 
-class TestPrivateMethod < OSX::NSObject
-  def publicMethod
-    self.privateMethod + privateMethod
-  end
-  private
-  def privateMethod
-    42
-  end
-end
-
 class TC_OCObjWrapper < Test::Unit::TestCase
   include OSX
 
@@ -136,9 +126,4 @@ class TC_OCObjWrapper < Test::Unit::TestCase
     assert_equal(rect, OSX::NSRect.new(1,2,3,4))
   end
 
-  def test_private_method
-    # Test that #method_missing doesn't try to call an Objective-C selector when messaging an existing (Ruby) private method.
-    o = TestPrivateMethod.alloc.init
-    assert_equal(84, o.publicMethod)
-  end
 end
