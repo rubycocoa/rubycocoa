@@ -25,7 +25,8 @@ class OCHeaderAnalyzer
 
   CPP = ['/usr/bin/cpp-4.0', '/usr/bin/cpp-3.3', '/usr/bin/cpp3'].find { |x| File.exist?(x) }
   raise "cpp not found" if CPP.nil?
-  CPPFLAGS = "-x objective-c -D__APPLE_CPP__"
+  #CPPFLAGS = "-x objective-c -D__APPLE_CPP__"
+  CPPFLAGS = "-D__APPLE_CPP__"
   CPPFLAGS << "-D__GNUC__" unless /\Acpp-4/.match(File.basename(CPP))
 
   def initialize(path, fails_on_error=true)
@@ -557,6 +558,8 @@ EOS
         @types_encoding[n] = type
       end
     end
+
+    @types_encoding['CFTypeRef'] = '@'
   end
 
   def collect_structs_encoding
@@ -746,6 +749,7 @@ EOC
         element.add_attribute('tollfree', tollfree) if tollfree 
       end
       @opaques.keys.sort.each do |name|
+        next if @opaques_to_ignore.include?(name)
         encoding = @types_encoding[name]
         raise "encoding of opaque type '#{name}' not resolved" if encoding.nil?
         element = root.add_element('opaque')
@@ -875,9 +879,25 @@ EOC
         # Append attributes (except 'index').
         arg_element.attributes.each do |name, value|
           next if name == 'index'
+          if name == 'type'
+            orig_type = value
+            value = @types_encoding[value]
+            raise "encoding of function argument '#{func_name}' type '#{orig_type}' not resolved" if value.nil?
+          end
           orig_arg_element.add_attribute(name, value)
         end
-      end 
+      end
+      retval_element = func_element.elements['retval']
+      if retval_element
+        type_name = retval_element.attributes['type']
+        if type_name
+          type = @types_encoding[type_name]
+          raise "encoding of function return type '#{func_name}' not resolved" if type.nil?
+          orig_retval_element = orig_func_element.elements['retval']
+          raise "Function '#{func_name}' is described with a return value in an exception file but the return value has not been discovered by the final generator" if orig_retval_element.nil?
+          orig_retval_element.add_attribute('type', type)
+        end
+      end
     end
     # Merge class/methods.
     exception_document.elements.each('/signatures/class') do |class_element|
@@ -974,8 +994,7 @@ EOC
         !to_not_delete.include?(n) and n[0] == ?_ 
       end
     end
-    @struct_names.uniq!
-    @cftype_names.uniq!
+    [@constants, @struct_names, @cftype_names].each { |c| c.uniq! }
     all_inf_protocol_signatures = @inf_protocols.map { |p| p.entries.map { |e| e.selector } }.flatten
     @inf_protocols.each do |protocol|
       protocol.entries.delete_if do |entry|
@@ -1073,6 +1092,7 @@ EOC
     @structs = {} 
     @cftypes = {} 
     @opaques = {} 
+    @opaques_to_ignore = []
     @method_exception_types = []
     @func_aliases = {}
     @exceptions.map! { |x| REXML::Document.new(File.read(x)) }
@@ -1096,17 +1116,21 @@ EOC
         ]
       end
       doc.get_elements('/signatures/opaque').each do |elem|
-        @opaques[elem.attributes['name']] = elem.attributes['type']
+        name, type, ignore = elem.attributes['name'], elem.attributes['type'], elem.attributes['ignore']
+        @opaques[name] = type 
+        @opaques_to_ignore << name if ignore == 'true'
       end
-      doc.get_elements('/signatures/class/method').each do |elem|
-        retval_elem = elem.elements['retval']
-        if retval_elem
-          type = retval_elem.attributes['type']
-          @method_exception_types << type if type
-        end
-        elem.elements.each('arg') do |arg_elem|
-          type = arg_elem.attributes['type']
-          @method_exception_types << type if type
+      ['/signatures/class/method', '/signatures/function'].each do |path|
+        doc.get_elements(path).each do |elem|
+          retval_elem = elem.elements['retval']
+          if retval_elem
+            type = retval_elem.attributes['type']
+            @method_exception_types << type if type
+          end
+          elem.elements.each('arg') do |arg_elem|
+            type = arg_elem.attributes['type']
+            @method_exception_types << type if type
+          end
         end
       end
       doc.get_elements('/signatures/function_alias').each do |elem|

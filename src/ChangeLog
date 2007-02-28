@@ -1,3 +1,12 @@
+2007-02-28  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* framework/bridge-support-exceptions/AddressBook.xml,
+	  framework/post-config.rb,
+	  framework/tool/gen_bridge_metadata.rb:
+	- Do not explicitly specify the ObjC language when calling cpp(1) ;
+	- Override CFTypeRef and AddressBook's ABRecordRef types with '@' ;
+	- Misc fixes in the generator. 
+
 2007-02-28  Fujimoto Hisa  <hisa@fobj.com>
 
 	* framework/src/ruby/osx/objc/oc_import.rb:
