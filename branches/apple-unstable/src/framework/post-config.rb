@@ -45,11 +45,11 @@ if @config['gen-bridge-support'] != 'no'
    ['/System/Library/Frameworks/AppKit.framework', nil],
    ['/System/Library/Frameworks/CoreData.framework', nil],
    ['/System/Library/Frameworks/WebKit.framework', nil],
-   ['/System/Library/Frameworks/ApplicationServices.framework/Frameworks/CoreGraphics.framework', '-c "-framework ApplicationServices" -c -F/System/Library/Frameworks/ApplicationServices.framework/Frameworks'],
+   ['/System/Library/Frameworks/ApplicationServices.framework/Frameworks/CoreGraphics.framework', '-c "-framework ApplicationServices" -c -F/System/Library/Frameworks/ApplicationServices.framework/Frameworks -c "-include /System/Library/Frameworks/OpenGL.framework/Headers/CGLTypes.h"'],
    ['/System/Library/Frameworks/Quartz.framework/Frameworks/PDFKit.framework', nil],
    ['/System/Library/Frameworks/QuartzCore.framework', nil],
    ['/System/Library/Frameworks/OpenGL.framework', nil],
-   ['/System/Library/Frameworks/QTKit.framework', TIGER_OR_LOWER ? '' : '-c -DQT_BUILDING_ON_LEOPARD_OR_LATER -c "-framework QTKit"'],
+   ['/System/Library/Frameworks/QTKit.framework', TIGER_OR_LOWER ? '' : '-c -DQTKIT_ENABLE_LAYERKIT -c "-framework QTKit"'],
    ['/System/Library/Frameworks/AddressBook.framework', nil],
    ['/System/Library/Frameworks/InstantMessage.framework', nil],
   ].each do |path, special_flags|
@@ -59,9 +59,5 @@ if @config['gen-bridge-support'] != 'no'
       addflg << " -c'-arch ppc -arch i386'" if build_universal
       call_generator(path, special_flags, 'dylib', addflg) 
     end
-    # Uncomment this to launch the verification tool on each metadata file.
-    # Warning: this can take some time, and there are several false positives.
-    #$stderr.puts "verify #{out} ..."
-    #system("#{@config['ruby-prog']} tool/verify_bridge_metadata.rb #{out} #{File.join(path, 'Headers')}")
   end
 end
