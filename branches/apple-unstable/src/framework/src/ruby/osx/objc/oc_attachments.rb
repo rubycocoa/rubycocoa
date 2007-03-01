@@ -41,8 +41,6 @@ module OSX
 
   # NSDictionary additions
   class NSDictionary
-    include Enumerable
-
     def each
       iter = self.keyEnumerator
       while key = iter.nextObject do
@@ -71,6 +69,9 @@ module OSX
       self.setObject_forKey(obj, key)
       obj
     end
+  end
+  class NSDictionary
+    include Enumerable
   end
 
   # NSData additions
