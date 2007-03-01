@@ -118,21 +118,28 @@ int rubycocoa_frequently_init_stack()
   return frequently_init_stack_mode;
 }
 
-static int notify_if_error(const char* api_name, VALUE err)
+int RBNotifyException(const char* title, VALUE err)
 {
   VALUE ary;
   int i;
 
   if (! RTEST(rb_obj_is_kind_of(err, rb_eException))) return 0;
   NSLog(@"%s: %s: %s",
-        api_name,
+        title,
         STR2CSTR(rb_obj_as_string(rb_obj_class(err))),
         STR2CSTR(rb_obj_as_string(err)));
   ary = rb_funcall(err, rb_intern("backtrace"), 0);
-  for (i = 0; i < RARRAY(ary)->len; i++) {
-    NSLog(@"  %s\n", RSTRING(RARRAY(ary)->ptr[i])->ptr);
+  if (!NIL_P(ary)) {
+    for (i = 0; i < RARRAY(ary)->len; i++) {
+      NSLog(@"  %s\n", RSTRING(RARRAY(ary)->ptr[i])->ptr);
+    }
   }
   return 1;
+}
+
+static int notify_if_error(const char* api_name, VALUE err)
+{
+  return RBNotifyException(api_name, err);
 }
 
 static int rubycocoa_initialized_flag = 0;

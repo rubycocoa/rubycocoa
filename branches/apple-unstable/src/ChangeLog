@@ -1,3 +1,9 @@
+2007-03-02  Fujimoto Hisa  <hisa@fobj.com>
+
+	* framework/src/objc/RBObject.m, framework/src/objc/RBRuntime.m:
+	implemented RBNotifyException as framework of notification/logging
+	a reasonable message with backtrace for exception.
+
 2007-03-01  Laurent Sansonetti <lsansonetti@apple.com>
 
 	* framework/src/ruby/osx/objc/oc_attachments.rb,
