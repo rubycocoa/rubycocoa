@@ -286,9 +286,15 @@ module OSX
     end
 
     def _ns_behavior_method_added(sym, class_method)
-      sel = sym.to_s.gsub(/([^_])_/, '\1:')
-      m = class_method ? method(sym) : instance_method(sym)
-      sel << ':' if m.arity > 0 and /[^:]\z/ =~ sel
+      sel = sym.to_s.gsub(/([^_])_/, '\1:') 
+      arity = if @__imported_arity != nil and RUBY_VERSION < "1.8.5"
+        # This is a workaround for a Ruby 1.8.2 issue, the real arity is provided by _register_method. 
+        @__imported_arity
+      else
+        m = class_method ? method(sym) : instance_method(sym)
+        m.arity
+      end
+      sel << ':' if arity > 0 and /[^:]\z/ =~ sel
       return unless _ns_enable_override?(sel, class_method)
       OSX.objc_class_method_add(self, sel, class_method, nil)
     end
@@ -650,23 +656,19 @@ class Object
               method = self.method(sym).unbind
               OSX.__rebind_umethod__(nsklass.class, method)
               nsklass.module_eval do 
+                @__imported_arity = method.arity
                 (class << self; self; end).instance_eval do 
-                  if RUBY_VERSION >= "1.8.5"
-                    define_method(sym, method)
-                  else
-                    define_method(sym) { method.bind(self).call }
-                  end
+                  define_method(sym, method)
                 end
+                @__imported_arity = nil
               end
             else
               method = self.instance_method(sym)
               OSX.__rebind_umethod__(nsklass, method)
               nsklass.module_eval do
-                if RUBY_VERSION >= "1.8.5"
-                  define_method(sym, method)
-                else
-                  define_method(sym) { method.bind(self).call }
-                end
+                @__imported_arity = method.arity
+                define_method(sym, method)
+                @__imported_arity = nil
               end
             end
           rescue NameError

@@ -6,6 +6,10 @@
 
 2007-03-01  Laurent Sansonetti <lsansonetti@apple.com>
 
+	* framework/src/ruby/osx/objc/oc_import.rb,
+	  tests/tc_ovmix.rb:
+	Fixed direct method override feature for Ruby > 1.8.2 and < 1.8.5. 
+
 	* framework/src/ruby/osx/objc/oc_import.rb:
 	Reverted change introduced by r1601 as it breaks the direct method override
 	feature.
