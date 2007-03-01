@@ -124,6 +124,7 @@ int RBNotifyException(const char* title, VALUE err)
   int i;
 
   if (! RTEST(rb_obj_is_kind_of(err, rb_eException))) return 0;
+  if (ruby_debug != Qtrue) return 0;
   NSLog(@"%s: %s: %s",
         title,
         STR2CSTR(rb_obj_as_string(rb_obj_class(err))),

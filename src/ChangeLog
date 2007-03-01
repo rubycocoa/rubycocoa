@@ -6,6 +6,13 @@
 
 2007-03-01  Laurent Sansonetti <lsansonetti@apple.com>
 
+	* framework/src/ruby/osx/objc/oc_import.rb:
+	Reverted change introduced by r1601 as it breaks the direct method override
+	feature.
+
+	* framework/src/objc/RBRuntime.m:
+	Only log if $DEBUG is true.
+
 	* framework/src/ruby/osx/objc/oc_attachments.rb,
 	  framework/src/ruby/osx/objc/oc_wrapper.rb,
 	  framework/src/ruby/osx/objc/oc_attachments_appkit.rb,
