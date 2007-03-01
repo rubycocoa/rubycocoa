@@ -124,7 +124,9 @@ class TC_OVMIX < Test::Unit::TestCase
     assert(OSX::DirectOverride.ancestors.include?(OSX::NSObject))
     o = OSX::DirectOverride.alloc.init
     assert_kind_of(OSX::NSString, o.performSelector('overrideMe'))
+    assert_equal('foo', o.performSelector('overrideMe').to_s)
     assert_kind_of(OSX::NSString, OSX::DirectOverride.performSelector('classOverrideMe'))
+    assert_equal('bar', OSX::DirectOverride.performSelector('classOverrideMe').to_s)
   end
 
   def test_super_method
