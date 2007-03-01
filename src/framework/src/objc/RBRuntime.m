@@ -118,57 +118,64 @@ int rubycocoa_frequently_init_stack()
   return frequently_init_stack_mode;
 }
 
-static int rb_error_p(VALUE err)
+static int notify_if_error(const char* api_name, VALUE err)
 {
-  return RTEST(rb_obj_is_kind_of(err, rb_eException)) ? 1 : 0;
+  VALUE ary;
+  int i;
+
+  if (! RTEST(rb_obj_is_kind_of(err, rb_eException))) return 0;
+  NSLog(@"%s: %s: %s",
+        api_name,
+        STR2CSTR(rb_obj_as_string(rb_obj_class(err))),
+        STR2CSTR(rb_obj_as_string(err)));
+  ary = rb_funcall(err, rb_intern("backtrace"), 0);
+  for (i = 0; i < RARRAY(ary)->len; i++) {
+    NSLog(@"  %s\n", RSTRING(RARRAY(ary)->ptr[i])->ptr);
+  }
+  return 1;
+}
+
+static int rubycocoa_initialized_flag = 0;
+
+static int rubycocoa_initialized_p()
+{
+  return rubycocoa_initialized_flag;
 }
 
 static void rubycocoa_init()
 {
-  static int has_called = 0;
-  if (! has_called) {
+  if (! rubycocoa_initialized_flag) {
     init_rb2oc_cache();    // initialize the Ruby->ObjC internal cache
     init_oc2rb_cache();    // initialize the ObjC->Ruby internal cache
     initialize_mdl_osxobjc();  // initialize an objc part of rubycocoa
     initialize_mdl_bundle_support();
     init_ovmix();
     load_path_unshift(framework_ruby_path()); // PATH_TO_FRAMEWORK/Resources/ruby
-    has_called = 1;
+    rubycocoa_initialized_flag = 1;
   }
 }
 
-static int
+static VALUE
 rubycocoa_bundle_init(const char* program, 
                       bundle_support_program_loader_t loader,
                       Class klass, id param)
 {
-  static int has_called = 0;
-  VALUE result;
-
-  if (! has_called) {
-    has_called = 1;
+  if (! rubycocoa_initialized_p()) {
     ruby_init();
     ruby_init_loadpath();
     rubycocoa_init();
     rubycocoa_set_frequently_init_stack(1);
   }
   load_path_unshift( resource_path_for( klass ));
-  result = loader(program, klass, param);
-  if (rb_error_p(result))
-    return 1;
-  return 0;
+  return loader(program, klass, param);
 }
 
-static int
+static VALUE
 rubycocoa_app_init(const char* program, 
                    bundle_support_program_loader_t loader,
                    int argc, const char* argv[], id param)
 {
-  static int has_called = 0;
-  VALUE result;
-
-  if (! has_called) {
-    has_called = 1;
+  if (! rubycocoa_initialized_p()) {
     ruby_init();
     ruby_script(argv[0]);
     ruby_set_argv(argc - 1, (char**)(argv+1));
@@ -177,10 +184,7 @@ rubycocoa_app_init(const char* program,
     rubycocoa_set_frequently_init_stack(0);
   }
   load_path_unshift(resource_path());
-  result = loader(program, nil, param);
-  if (rb_error_p(result))
-    return 1;
-  return 0;
+  return loader(program, nil, param);
 }
 
 
@@ -192,17 +196,21 @@ rubycocoa_app_init(const char* program,
 int
 RBBundleInit(const char* path_to_ruby_program, Class klass, id param)
 {
-  return rubycocoa_bundle_init(path_to_ruby_program, 
-                               load_ruby_program_for_class, 
-                               klass, param);
+  VALUE result;
+  result = rubycocoa_bundle_init(path_to_ruby_program, 
+                                 load_ruby_program_for_class, 
+                                 klass, param);
+  return notify_if_error("RBBundleInit", result);
 }
 
 int
 RBBundleInitWithSource(const char* ruby_program, Class klass, id param)
 {
-  return rubycocoa_bundle_init(ruby_program, 
-                               eval_ruby_program_for_class,
-                               klass, param);
+  VALUE result;
+  result = rubycocoa_bundle_init(ruby_program, 
+                                 eval_ruby_program_for_class,
+                                 klass, param);
+  return notify_if_error("RBBundleInitWithSource", result);
 }
 
 
@@ -214,48 +222,43 @@ RBBundleInitWithSource(const char* ruby_program, Class klass, id param)
 int
 RBApplicationInit(const char* path_to_ruby_program, int argc, const char* argv[], id param)
 {
-  return rubycocoa_app_init(path_to_ruby_program,
-                            load_ruby_program_for_class,
-                            argc, argv, param);
+  VALUE result;
+  result = rubycocoa_app_init(path_to_ruby_program,
+                              load_ruby_program_for_class,
+                              argc, argv, param);
+  return notify_if_error("RBApplicationInit", result);
 }
 
 int
 RBApplicationInitWithSource(const char* ruby_program, int argc, const char* argv[], id param)
 {
-  return rubycocoa_app_init(ruby_program, 
-                            eval_ruby_program_for_class,
-                            argc, argv, param);
+  VALUE result;
+  result = rubycocoa_app_init(ruby_program, 
+                              eval_ruby_program_for_class,
+                              argc, argv, param);
+  return notify_if_error("RBApplicationInitWithSource", result);
 }
 
 /** [API] initialize rubycocoa for a ruby extention library **/
 void
 RBRubyCocoaInit()
 {
-  static int has_called = 0;
-  if (! has_called) {
-    rubycocoa_init();
-    has_called = 1;
-  }
+  rubycocoa_init();
 }
 
 /** [API] launch rubycocoa application (api for compatibility) **/
 int
 RBApplicationMain(const char* rb_program_path, int argc, const char* argv[])
 {
-  static int has_called = 0;
   int ruby_argc;
   const char** ruby_argv;
 
-  if (! has_called) {
-    has_called = 1;
-
+  if (! rubycocoa_initialized_p()) {
     ruby_init();
     ruby_argc = prepare_argv(argc, argv, rb_program_path, &ruby_argv);
     ruby_options(ruby_argc, (char**) ruby_argv);
-
     rubycocoa_init();
     load_path_unshift(resource_path()); // PATH_TO_BUNDLE/Contents/resources
-
     ruby_run();
   }
   return 0;

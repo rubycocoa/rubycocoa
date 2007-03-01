@@ -11,12 +11,13 @@ module OSX
   module BundleSupport
 
     def init_for_bundle(option = nil)
+      ret = nil
       bdl, prm = _current_bundle
       logger = Logger.new(bdl)
       logger.info("init_for_bundle ...") if $DEBUG || (option && option[:verbose])
-      ret = yield(bdl, prm, logger)
+      yield(bdl, prm, logger)
       logger.info("init_for_bundle done.") if $DEBUG || (option && option[:verbose])
-      ret
+      nil
     rescue Exception => err
       logger.error(err)
       logger.info("init_for_bundle failed.")
@@ -36,7 +37,10 @@ module OSX
       end
       
       def error(err)
-        info("*ERROR* - %s", err)
+        info("%s: %s", err.class, err)
+      end
+
+      def backtrace(err)
         err.backtrace.each { |s| info("    %s", s) }
       end
     end
