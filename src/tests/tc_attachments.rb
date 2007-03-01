@@ -19,14 +19,6 @@ class TC_Attachments < Test::Unit::TestCase
 
     @i = NSImage.alloc.initWithSize([100,100])
   end
-
-  def test_array_kind_of
-    assert_kind_of RCArrayAttachment, @a
-  end
-  
-  def test_dictionary_kind_of
-    assert_kind_of RCDictionaryAttachment, @d
-  end
   
   def test_array_size
     assert_equal 3, @a.size
@@ -82,7 +74,6 @@ class TC_Attachments < Test::Unit::TestCase
   end
   
   def test_image_focus
-    assert_kind_of RCImageAttachment, @i
     assert_respond_to @i, :focus
     success = false
     @i.focus do
@@ -95,8 +86,6 @@ class TC_Attachments < Test::Unit::TestCase
   end
 
   def test_indexset_to_a
-    assert_kind_of( RCIndexSetAttachment,
-                    OSX::NSIndexSet.alloc.init )
     assert_respond_to( OSX::NSIndexSet.alloc.init, :to_a )
     assert_kind_of( Array, OSX::NSIndexSet.alloc.init.to_a )
     assert_equal( [1,2,3], 

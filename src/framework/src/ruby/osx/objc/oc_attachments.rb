@@ -6,10 +6,8 @@
 
 module OSX
 
-  # attachment module for NSArray group
-  module RCArrayAttachment
-    include Enumerable
-
+  # NSArray additions
+  class NSArray
     def each
       iter = self.objectEnumerator
       while obj = iter.nextObject do
@@ -36,13 +34,13 @@ module OSX
     def push (obj)
       self.addObject(obj)
     end
+  end
+  class NSArray
+    include Enumerable
+  end
 
-  end                           # module RCArrayAttachment
-  OSX::NSArray.class_eval 'include RCArrayAttachment'
-
-
-  # attachment module for NSDictionary group
-  module RCDictionaryAttachment
+  # NSDictionary additions
+  class NSDictionary
     include Enumerable
 
     def each
@@ -73,24 +71,18 @@ module OSX
       self.setObject_forKey(obj, key)
       obj
     end
+  end
 
-  end                           # module RCDictionaryAttachment
-  OSX::NSDictionary.class_eval 'include RCDictionaryAttachment'
-
-
-  # attachment module for NSData group
-  module RCDataAttachment
-
+  # NSData additions
+  class NSData
     def rubyString
       cptr = self.bytes
       return cptr.bytestr( self.length )
     end
-
   end
-  OSX::NSData.class_eval 'include RCDataAttachment'
 
-  # attachment module for NSIndexSet group
-  module RCIndexSetAttachment
+  # NSIndexSet additions
+  class NSIndexSet
     def to_a
       result = []
       index = self.firstIndex
@@ -101,6 +93,22 @@ module OSX
       return result
     end
   end
-  OSX::NSIndexSet.class_eval 'include RCIndexSetAttachment'
 
+  # NSEnumerator additions
+  class NSEnumerator
+    def to_a
+      self.allObjects.to_a
+    end
+  end
+
+  # NSNumber additions
+  class NSNumber
+    def to_i
+      self.stringValue.to_s.to_i
+    end
+
+    def to_f
+      self.floatValue
+    end
+  end
 end

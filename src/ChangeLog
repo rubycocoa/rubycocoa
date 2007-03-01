@@ -1,3 +1,16 @@
+2007-03-01  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* framework/src/ruby/osx/objc/oc_attachments.rb,
+	  framework/src/ruby/osx/objc/oc_wrapper.rb,
+	  framework/src/ruby/osx/objc/oc_attachments_appkit.rb,
+	  tests/tc_attachments.rb,
+	  tests/tc_wrapper.rb:
+	- Removed old methods (to_a, to_f and to_i) in oc_wrapper ;
+	- Refactored attachments to add methods directly to the Objective-C
+	  class and not using modules anymore ;
+	- Fixed NSEnumerator#to_a ;
+	- Updated test cases.
+
 2007-03-01  Fujimoto Hisa  <hisa@fobj.com>
 
 	* framework/src/objc/RBRuntime.m,

@@ -6,8 +6,8 @@
 
 module OSX
 
-  # attachment module for NSImage group
-  module RCImageAttachment
+  # NSImage additions
+  class NSImage
     def focus
       lockFocus
       begin
@@ -17,6 +17,4 @@ module OSX
       end
     end
   end
-  OSX::NSImage.class_eval 'include RCImageAttachment'
-
 end

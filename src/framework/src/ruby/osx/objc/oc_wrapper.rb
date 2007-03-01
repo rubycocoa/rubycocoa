@@ -65,37 +65,6 @@ module OSX
       self.__ocid__ == 0
     end
 
-    def to_a
-      if self.ocm_send(:isKindOfClass_, OSX::NSArray) != 0 then
-        ary = Array.new
-        iter = self.ocm_send(:objectEnumerator)
-        while obj = iter.ocm_send(:nextObject) do
-          ary.push(obj)
-        end
-        ary
-      elsif self.ocm_send(:isKindOfClass_, OSX::NSEnumerator) != 0 then
-        self.ocm_send(:allObjects).to_a
-      else
-        [ self ]
-      end
-    end
-
-    def to_i
-      if self.ocm_send(:isKindOfClass_, OSX::NSNumber) != 0 then
-        self.ocm_send(:stringValue).to_s.to_i
-      else
-        super
-      end
-    end
-
-    def to_f
-      if self.ocm_send(:isKindOfClass_, OSX::NSNumber) != 0 then
-        self.ocm_send(:floatValue)
-      else
-        super
-      end
-    end
-
     private
 
     def analyze_missing(mname, args)
