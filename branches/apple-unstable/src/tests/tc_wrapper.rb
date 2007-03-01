@@ -126,4 +126,12 @@ class TC_OCObjWrapper < Test::Unit::TestCase
     assert_equal(rect, OSX::NSRect.new(1,2,3,4))
   end
 
+  def test_enumerator_to_a
+    ary = OSX::NSMutableArray.alloc.init
+    %w{One Two Three}.each { |o| ary.addObject(o) }
+    enum = ary.objectEnumerator
+    ary2 = enum.to_a
+    assert_kind_of(Array, ary2)
+    assert_equal(ary2, ary.to_a)
+  end
 end
