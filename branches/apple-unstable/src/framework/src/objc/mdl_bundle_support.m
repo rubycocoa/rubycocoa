@@ -125,99 +125,61 @@ rb_bind_class_with_current_bundle(VALUE mdl, VALUE objc_class)
   return Qnil;
 }
 
-
-/** bundle_support_load - core for RBBundleInit() in RBRuntime.m
-
-  def bundle_support_load(prog_name, objc_class, additional_param)
-    _push_bundle(bundle for objc_class, additional_param)
-    require(prog_name)
-    return nil
-  rescue Exception => err
-    return err
-  ensure
-    _pop_bundle
-  end
-**/
-static VALUE my_try_clause_for_load(VALUE args)
+static VALUE my_load_clause(VALUE prog_name)
 {
-  VALUE prog_path, stack_item;
-
-  prog_path  = rb_ary_shift(args);
-  stack_item = rb_ary_shift(args);
-  _push_bundle(stack_item);
-  return rb_require(STR2CSTR(prog_path));
+  rb_require(STR2CSTR(prog_name));
   return Qnil;
 }
 
-static VALUE my_try_clause_for_eval(VALUE args)
+static VALUE my_eval_clause(VALUE prog_source)
 {
-  VALUE prog_source, stack_item;
-
-  prog_source = rb_ary_shift(args);
-  stack_item  = rb_ary_shift(args);
-  _push_bundle(stack_item);
   rb_eval_string(STR2CSTR(prog_source));
   return Qnil;
 }
 
-static VALUE my_rescue_clause(VALUE arg)
+static VALUE my_rescue_clause(VALUE prog_name)
 {
-  VALUE msg;
-  msg = rb_obj_as_string(ruby_errinfo);
-  NSLog(@"RubyCocoa: load_ruby_program ERROR -- %s", STR2CSTR(msg));
-  rb_backtrace();
   return ruby_errinfo;
 }
 
-static VALUE my_main_clause_for_load(VALUE args)
-{
-  return rb_rescue(my_try_clause_for_load, args,
-                   my_rescue_clause, Qnil);
-}
-
-static VALUE my_main_clause_for_eval(VALUE args)
-{
-  return rb_rescue(my_try_clause_for_eval, args,
-                   my_rescue_clause, Qnil);
-}
-
-static VALUE my_ensure_clause(VALUE arg)
-{
-  _pop_bundle();
-  return Qnil;
-}
-
-static VALUE
-_make_main_args(const char* cstr, Class objc_class, id additional_param)
-{
-  VALUE str, stack_item;
-
-  str  = rb_str_new2(cstr);
-  stack_item = _make_stack_item(objc_class, additional_param);
-  return rb_ary_new3(2, str, stack_item);
-}
+/** 
+  def load_ruby_program_for_class(path, objc_klass, additional_param)
+    _push_bundle(bundle for objc_class, additional_param)
+    require(prog_name)
+    nil
+  rescue Exception => err
+    err
+  ensure
+    _pop_bundle
+  end
+**/
 
 VALUE
 load_ruby_program_for_class(const char* path, Class objc_class, id additional_param)
 {
-  VALUE args;
+  VALUE prog_name, stack_item, result;
 
-  args = _make_main_args(path, objc_class, additional_param);
-  if (! NIL_P(args))
-    return rb_ensure(my_main_clause_for_load, args,
-                     my_ensure_clause, Qnil);
-  return Qnil;
+  prog_name  = rb_str_new2(path);
+  stack_item = _make_stack_item(objc_class, additional_param);
+  _push_bundle(stack_item);
+  result = rb_rescue2( my_load_clause,   prog_name,
+                       my_rescue_clause, prog_name, rb_eException, (VALUE)0);
+  _pop_bundle();
+  return result;
 }
 
 VALUE
 eval_ruby_program_for_class(const char* program, Class objc_class, id additional_param)
 {
-  VALUE args = 
-    _make_main_args(program, objc_class, additional_param);
-  if (! NIL_P(args))
-    return rb_ensure(my_main_clause_for_eval, args,
-                     my_ensure_clause, Qnil);
-  return Qnil;
+  VALUE prog_source, stack_item, result;
+
+  prog_source = rb_str_new2(program);
+  stack_item  = _make_stack_item(objc_class, additional_param);
+  _push_bundle(stack_item);
+  result = rb_rescue2( my_eval_clause,   prog_source,
+                       my_rescue_clause, Qnil, rb_eException, (VALUE)0);
+  _pop_bundle();
+  return result;
 }
 
 
