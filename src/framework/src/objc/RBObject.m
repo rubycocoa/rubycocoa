@@ -216,6 +216,14 @@ static VALUE rbobject_protected_apply(VALUE a)
   return rb_apply(args[0],(RB_ID)args[1],(VALUE)args[2]);
 }
 
+static void notify_error(VALUE rcv, RB_ID mid)
+{
+  extern int RBNotifyException(const char* title, VALUE err);
+  char title[128];
+  snprintf(title, 128, "%s#%s", rb_obj_classname(rcv), rb_id2name(mid));
+  RBNotifyException(title, ruby_errinfo);
+}
+
 VALUE rbobj_call_ruby(id rbobj, SEL selector, VALUE args)
 {
   VALUE m_rbobj;
@@ -243,6 +251,7 @@ VALUE rbobj_call_ruby(id rbobj, SEL selector, VALUE args)
  
   rb_result = rb_protect(rbobject_protected_apply, (VALUE)stub_args, &err);
   if (err) {
+    notify_error(m_rbobj, mid);
     RBOBJ_LOG("got Ruby exception, raising Objective-C exception");
     rbobjRaiseRubyException();
     return Qnil; /* to be sure */
