@@ -46,13 +46,13 @@ class AppCtrl < OSX::NSObject
     @playingView.setNeedsDisplay(true)
   end
 
-  def mouseDragged (evt)
-    point = @playingView.convertPoint(evt.locationInWindow, :fromView, nil)
+  def mouseDragged(evt)
+    point = @playingView.convertPoint_fromView(evt.locationInWindow, nil)
     @paddle.hpos = point.x
     redraw
   end
 
-  def startBtnClicked (sender)
+  def startBtnClicked(sender)
     if @thread then
       stop
     else
@@ -60,13 +60,13 @@ class AppCtrl < OSX::NSObject
     end
   end
 
-  def resetBtnClicked (sender)
+  def resetBtnClicked(sender)
     stop
     reset
     redraw
   end
 
-  def windowShouldClose (sender)
+  def windowShouldClose(sender)
     OSX::NSApp.stop(self)
     true
   end

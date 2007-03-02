@@ -1,5 +1,8 @@
 2007-03-02  Fujimoto Hisa  <hisa@fobj.com>
 
+	* sample/Pong, sample/RubyRocks, sample/TypingTutor:
+	rewritten with modern sytanx instead of obsoleted syntax.
+
 	* framework/src/objc/RBRuntime.m,
 	framework/src/objc/internal_macros.h,
 	framework/src/ruby/osx/objc/oc_exception.rb,
