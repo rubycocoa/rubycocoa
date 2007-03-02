@@ -120,19 +120,24 @@ int rubycocoa_frequently_init_stack()
 
 int RBNotifyException(const char* title, VALUE err)
 {
-  VALUE ary;
+  VALUE ary,str;
+  VALUE printf_args[2];
   int i;
 
   if (! RTEST(rb_obj_is_kind_of(err, rb_eException))) return 0;
-  if (ruby_debug != Qtrue) return 0;
-  NSLog(@"%s: %s: %s",
-        title,
-        STR2CSTR(rb_obj_as_string(rb_obj_class(err))),
-        STR2CSTR(rb_obj_as_string(err)));
-  ary = rb_funcall(err, rb_intern("backtrace"), 0);
-  if (!NIL_P(ary)) {
-    for (i = 0; i < RARRAY(ary)->len; i++) {
-      NSLog(@"  %s\n", RSTRING(RARRAY(ary)->ptr[i])->ptr);
+  if (! RUBYCOCOA_SUPPRESS_EXCEPTION_LOGGING_P) {
+    NSLog(@"%s: %s: %s",
+          title,
+          STR2CSTR(rb_obj_as_string(rb_obj_class(err))),
+          STR2CSTR(rb_obj_as_string(err)));
+    ary = rb_funcall(err, rb_intern("backtrace"), 0);
+    if (!NIL_P(ary)) {
+      for (i = 0; i < RARRAY(ary)->len; i++) {
+        printf_args[0] = rb_str_new2("\t%s\n");
+        printf_args[1] = rb_ary_entry(ary, i);
+        str = rb_f_sprintf(2, printf_args);
+        rb_write_error(STR2CSTR(str));
+      }
     }
   }
   return 1;

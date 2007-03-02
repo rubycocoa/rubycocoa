@@ -1,5 +1,19 @@
 2007-03-02  Fujimoto Hisa  <hisa@fobj.com>
 
+	* framework/src/objc/RBRuntime.m,
+	framework/src/objc/internal_macros.h,
+	framework/src/ruby/osx/objc/oc_exception.rb,
+	framework/src/ruby/osx/objc/oc_bundle_support.rb,
+	framework/src/ruby/osx/objc/oc_import.rb,
+	tests/tc_exception.rb:
+	- Defined global variable `$RUBYCOCOA_VERBOSE' to record the
+	detail of RubyCocoa runtime information for debugging RubyCocoa
+	itself. You can use $VERBOSE of Ruby's pre-defined global variable
+	for same purpose as well.
+	- Recorded better backtrace information of an exception which is
+	raised from user's ruby program. It's debugging a ruby program
+	linked with RubyCocoa.
+
 	* framework/src/objc/RBObject.m, framework/src/objc/RBRuntime.m:
 	implemented RBNotifyException as framework of notification/logging
 	a reasonable message with backtrace for exception.
