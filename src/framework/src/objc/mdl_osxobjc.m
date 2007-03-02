@@ -20,6 +20,7 @@
 #import "BridgeSupport.h"
 #import <objc/objc-runtime.h>
 #import "cls_objcid.h"
+#import "objc_compat.h"
 
 #define OSX_MODULE_NAME "OSX"
 
@@ -180,8 +181,17 @@ rb_osx_class_const (const char* name)
     return Qnil;
 
   name_id = rb_intern(name);
-  if (!rb_is_const_id(name_id))
+  if (!rb_is_const_id(name_id)) {
+    // If the class name can't be a constant, let's use the superclass name.
+    Class klass = objc_getClass(name);
+    if (klass != NULL) {
+      Class superklass = class_getSuperclass(klass);
+      if (superklass != NULL)
+        return rb_osx_class_const(class_getName(superklass));
+    }
+ 
     return Qnil;
+  }
 
   // Get the class constant, triggering an import if necessary.
   // Don't import the class if we are called within NSClassFromString, just return the constant 
