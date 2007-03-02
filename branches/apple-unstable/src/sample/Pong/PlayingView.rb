@@ -16,11 +16,11 @@ class PlayingView < OSX::NSView
     @height = bounds.size.height
   end
 
-  def mouseDragged (evt)
+  def mouseDragged(evt)
     @appCtrl.mouseDragged(evt)
   end
 
-  def drawRect (frame)
+  def drawRect(frame)
     draw_bg
     draw_paddle
     draw_balls

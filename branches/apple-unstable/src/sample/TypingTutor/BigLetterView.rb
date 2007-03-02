@@ -3,7 +3,7 @@ require 'osx/cocoa'
 class BigLetterView < OSX::NSView
   include OSX
 
-  def draggingEntered (sender)
+  def draggingEntered(sender)
     log "draggingEntered:"
     if sender.draggingSource != self then
       pb = sender.draggingPasteboard
@@ -16,17 +16,17 @@ class BigLetterView < OSX::NSView
     return NSDragOperationNone
   end
 
-  def draggingExited (sender)
+  def draggingExited(sender)
     log "draggingExited:"
     @highlighted = false
     setNeedsDisplay true
   end
 
-  def prepareForDragOperation (sender)
+  def prepareForDragOperation(sender)
     true
   end
 
-  def performDragOperation (sender)
+  def performDragOperation(sender)
     pb = sender.draggingPasteboard
     unless readStringFromPasteboard(pb) then
       log "Error: Could not read from dragging pasteboard"
@@ -35,13 +35,13 @@ class BigLetterView < OSX::NSView
     return true
   end
 
-  def concludeDragOperation (sender)
+  def concludeDragOperation(sender)
     log "concludeDragOperation:"
     @highlighted = false
     setNeedsDisplay true
   end
 
-  def initWithFrame (rect)
+  def initWithFrame(rect)
     super_initWithFrame(rect)
     log "initializing view"
     prepareAttributes
@@ -55,19 +55,19 @@ class BigLetterView < OSX::NSView
     self
   end
 
-  def setBgColor (c)
+  def setBgColor(c)
     @bgColor = c
     setNeedsDisplay true
   end
 
-  def setString (c)
+  def setString(c)
     c = NSString.stringWithString(c) if c.is_a? String
     @string = c
     log "The string is now #{@string.to_s}"
     setNeedsDisplay true
   end
 
-  def drawStringCenterdIn (r)
+  def drawStringCenterdIn(r)
     sorig = NSPoint.new
     ssize = @string.sizeWithAttributes(@attributes)
     sorig.x = r.origin.x + (r.size.width - ssize.width) / 2
@@ -76,17 +76,17 @@ class BigLetterView < OSX::NSView
     font = @attributes.objectForKey(NSFontAttributeName)
 
     mask = @bold ? NSBoldFontMask : NSUnboldFontMask
-    font = @fmgr.convertFont(font, :toHaveTrait, mask)
+    font = @fmgr.convertFont_toHaveTrait(font, mask)
     @attributes.setObject_forKey(font, NSFontAttributeName)
 
     mask = @italic ? NSItalicFontMask : NSUnitalicFontMask
-    font = @fmgr.convertFont(font, :toHaveTrait, mask)
+    font = @fmgr.convertFont_toHaveTrait(font, mask)
     @attributes.setObject_forKey(font, NSFontAttributeName)
 
-    @string.drawAtPoint(sorig, :withAttributes, @attributes)
+    @string.drawAtPoint_withAttributes(sorig, @attributes)
   end
 
-  def drawRect (rect)
+  def drawRect(rect)
     b = bounds
     (@highlighted ? NSColor.whiteColor : @bgColor).set
     NSBezierPath.fillRect(b)
@@ -114,7 +114,7 @@ class BigLetterView < OSX::NSView
     true
   end
 
-  def keyDown (event)
+  def keyDown(event)
     input = event.characters
     if input.isEqual? "\t" then
       window.selectNextKeyView(nil)
@@ -138,42 +138,42 @@ class BigLetterView < OSX::NSView
 		       NSForegroundColorAttributeName)
   end
 
-  def savePDF (sender)
+  def savePDF(sender)
     panel = NSSavePanel.savePanel
     panel.setRequiredFileType "pdf"
     panel.
-      beginSheetForDirectory(nil,
-			     :file, nil,
-			     :modalForWindow, window,
-			     :modalDelegate, self,
-			     :didEndSelector, "didEnd_returnCode_contextInfo_",
-			     :contextInfo, nil)
+      objc_send :beginSheetForDirectory, nil,
+                                  :file, nil,
+                        :modalForWindow, window,
+                         :modalDelegate, self,
+                        :didEndSelector, "didEnd_returnCode_contextInfo_",
+                           :contextInfo, nil
   end
 
-  def didEnd_returnCode_contextInfo (sheet, code, contextInfo)
+  def didEnd_returnCode_contextInfo(sheet, code, contextInfo)
     if code == NSOKButton then
       data = dataWithPDFInsideRect(bounds)
-      data.writeToFile(sheet.filename, :atomically, true)
+      data.writeToFile_atomically(sheet.filename, true)
     end
   end
 
-  def boldClicked (sender)
+  def boldClicked(sender)
     @bold = (sender.state == NSOnState)
     setNeedsDisplay true
   end
   
-  def italicClicked (sender)
+  def italicClicked(sender)
     @italic = (sender.state == NSOnState)
     setNeedsDisplay true
   end
 
-  def writePDFToPasteboard (pb)
+  def writePDFToPasteboard(pb)
     types = [NSPDFPboardType]
     pb.addTypes_owner(types, self)
     pb.setData_forType(dataWithPDFInsideRect(bounds), types[0])
   end
   
-  def writeStringToPasteboard (pb)
+  def writeStringToPasteboard(pb)
     types = [NSStringPboardType]
     pb.declareTypes_owner(types, self)
     pb.setString_forType(@string, types[0])
@@ -189,27 +189,27 @@ class BigLetterView < OSX::NSView
     false
   end
 
-  def cut (sender)
+  def cut(sender)
     copy(sender)
     setString ""
   end
 
-  def copy (sender)
+  def copy(sender)
     pb = NSPasteboard.generalPasteboard
     writeStringToPasteboard(pb)
     writePDFToPasteboard(pb)
   end
 
-  def paste (sender)
+  def paste(sender)
     pb = NSPasteboard.generalPasteboard
     NSBeep unless readStringFromPasteboard(pb)
   end
 
-  def draggingSourceOperationMaskForLocal (flag)
+  def draggingSourceOperationMaskForLocal(flag)
     NSDragOperationCopy
   end
 
-  def mouseDragged (event)
+  def mouseDragged(event)
     # create the image that will be dragged and
     # a rect in which you will draw the letter in the image
     s = @string.sizeWithAttributes(@attributes)
@@ -236,18 +236,18 @@ class BigLetterView < OSX::NSView
     writeStringToPasteboard(pb)
 
     # start the drag
-    dragImage(an_image,
-	      :at, p,
-	      :offset, [0,0],
-	      :event, event,
-	      :pasteboard, pb,
-	      :source, self,
-	      :slideBack, true)
+    objc_send :dragImage, an_image,
+                     :at, p,
+                 :offset, [0,0],
+                  :event, event,
+             :pasteboard, pb,
+                 :source, self,
+              :slideBack, true
   end
 
   private
 
-  def log (msg)
+  def log(msg)
     $stderr.puts msg
   end
 
