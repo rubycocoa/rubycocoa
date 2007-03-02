@@ -92,4 +92,15 @@ class TC_Attachments < Test::Unit::TestCase
                   OSX::NSIndexSet.indexSetWithIndexesInRange(1..3).to_a )
   end
 
+  def test_userdefault
+    ud = OSX::NSUserDefaults.standardUserDefaults
+    ud['Foo'] = 42
+    assert_equal(ud['Foo'], ud.objectForKey('Foo'))
+    assert_equal(42, ud['Foo'].intValue)
+    assert_equal(42, ud.integerForKey('Foo'))
+    ud.delete('Foo')
+    assert_equal(nil, ud['Foo'])
+    assert_equal(0, ud.integerForKey('Foo'))
+  end
+
 end

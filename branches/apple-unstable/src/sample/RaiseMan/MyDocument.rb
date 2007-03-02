@@ -100,7 +100,6 @@ class MyDocument < OSX::NSDocument
     super_windowControllerDidLoadNib(aController)
 
     defaults = NSUserDefaults.standardUserDefaults
-    defaults.extend RCDictionaryAttachment
     colorAsData = defaults[PreferenceController::BNRTableBgColorKey]
     @tableView.setBackgroundColor NSUnarchiver.unarchiveObjectWithData(colorAsData)
 
