@@ -14,7 +14,7 @@ module OSX
       ret = nil
       bdl, prm = _current_bundle
       logger = Logger.new(bdl)
-      logger.info("init_for_bundle ...")
+      logger.info("init_for_bundle ...") if OSX._verbose? || (option && option[:verbose])
       yield(bdl, prm, logger)
       logger.info("init_for_bundle done.") if OSX._verbose? || (option && option[:verbose])
       nil
