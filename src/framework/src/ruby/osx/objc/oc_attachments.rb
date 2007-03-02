@@ -28,7 +28,6 @@ module OSX
     def []= (index, obj)
       index = self.count + index if index < 0
       self.replaceObjectAtIndex_withObject(index, obj)
-      obj
     end
 
     def push (obj)
@@ -67,11 +66,24 @@ module OSX
 
     def []= (key, obj)
       self.setObject_forKey(obj, key)
-      obj
     end
   end
   class NSDictionary
     include Enumerable
+  end
+
+  class NSUserDefaults
+    def [] (key)
+      self.objectForKey(key)
+    end
+
+    def []= (key, obj)
+      self.setObject_forKey(obj, key)
+    end
+
+    def delete (key)
+      self.removeObjectForKey(key)
+    end
   end
 
   # NSData additions

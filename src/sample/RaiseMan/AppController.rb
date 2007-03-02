@@ -13,7 +13,6 @@ class AppController < OSX::NSObject
   include OSX
   OSX.ns_autorelease_pool do
     defaultValues = NSMutableDictionary.dictionary
-    defaultValues.extend RCDictionaryAttachment
     colorAsData = NSArchiver.archivedDataWithRootObject(NSColor.yellowColor)
     defaultValues[PreferenceController::BNRTableBgColorKey] = colorAsData
     defaultValues[PreferenceController::BNREmptyDocKey] = true

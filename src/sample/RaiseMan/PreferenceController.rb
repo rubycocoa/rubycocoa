@@ -31,7 +31,6 @@ class PreferenceController < OSX::NSWindowController
 	color = sender.color
     colorAsData = NSArchiver.archivedDataWithRootObject(color)
     defaults = NSUserDefaults.standardUserDefaults
-    defaults.extend RCDictionaryAttachment
     defaults[BNRTableBgColorKey] = colorAsData
 	NSNotificationCenter.defaultCenter.
 	  postNotificationName_object(BNRColorChanged, color)
@@ -39,7 +38,6 @@ class PreferenceController < OSX::NSWindowController
 
   def changeNewEmptyDoc (sender)
     defaults = NSUserDefaults.standardUserDefaults
-    defaults.extend RCDictionaryAttachment
     defaults[BNREmptyDocKey] = sender.state
   end
 
@@ -54,7 +52,6 @@ class PreferenceController < OSX::NSWindowController
 
   def reload_user_defaults
     defaults = NSUserDefaults.standardUserDefaults
-    defaults.extend RCDictionaryAttachment
     colorAsData = defaults[BNRTableBgColorKey]
 	color = NSUnarchiver.unarchiveObjectWithData(colorAsData)
     @colorWell.setColor(color)

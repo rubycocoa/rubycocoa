@@ -1,5 +1,14 @@
 2007-03-02  Laurent Sansonetti <lsansonetti@apple.com>
 
+	* tests/tc_attachments.rb,
+	  framework/src/ruby/osx/objc/oc_attachments.rb:
+	Added Hash-like interface to NSUserDefaults. Added test cases. 
+
+	* sample/RaiseMan/PreferenceController.rb,
+	  sample/RaiseMan/AppController.rb,
+	  sample/RaiseMan/MyDocument.rb:
+	Removed mixing of old NSDictionaryAttachment module in NSUserDefaults.
+
 	* framework/src/objc/RBRuntime.m,
 	  framework/src/objc/internal_macros.h:
 	Grab the RUBYCOCOA_VERBOSE global variable value only once.
