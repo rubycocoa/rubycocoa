@@ -173,6 +173,9 @@ rubycocoa_bundle_init(const char* program,
                       bundle_support_program_loader_t loader,
                       Class klass, id param)
 {
+  extern void Init_stack(VALUE*);
+  int state;
+  Init_stack((void*)&state);
   if (! rubycocoa_initialized_p()) {
     ruby_init();
     ruby_init_loadpath();
@@ -188,6 +191,9 @@ rubycocoa_app_init(const char* program,
                    bundle_support_program_loader_t loader,
                    int argc, const char* argv[], id param)
 {
+  extern void Init_stack(VALUE*);
+  int state;
+  Init_stack((void*)&state);
   if (! rubycocoa_initialized_p()) {
     ruby_init();
     ruby_script(argv[0]);
