@@ -1,5 +1,10 @@
 2007-03-02  Laurent Sansonetti <lsansonetti@apple.com>
 
+	* framework/src/objc/mdl_osxobjc.m:
+	When wrapping a returned ocid in a Ruby object, if the wanted class name
+	can't be a constant (because starting with '_' or [a-z]), try to use the
+	superclass name when possible.
+
 	* tests/tc_attachments.rb,
 	  framework/src/ruby/osx/objc/oc_attachments.rb:
 	Added Hash-like interface to NSUserDefaults. Added test cases. 
