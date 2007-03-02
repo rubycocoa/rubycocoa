@@ -220,7 +220,7 @@ static void notify_error(VALUE rcv, RB_ID mid)
 {
   extern int RBNotifyException(const char* title, VALUE err);
   char title[128];
-  snprintf(title, 128, "%s#%s", rb_obj_classname(rcv), rb_id2name(mid));
+  snprintf(title, sizeof(title), "%s#%s", rb_obj_classname(rcv), rb_id2name(mid));
   RBNotifyException(title, ruby_errinfo);
 }
 
