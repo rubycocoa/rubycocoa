@@ -1,3 +1,9 @@
+2007-03-02  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* framework/src/objc/RBRuntime.m,
+	  framework/src/objc/internal_macros.h:
+	Grab the RUBYCOCOA_VERBOSE global variable value only once.
+
 2007-03-02  Fujimoto Hisa  <hisa@fobj.com>
 
 	* framework/src/objc/RBRuntime.m:

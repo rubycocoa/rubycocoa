@@ -18,8 +18,10 @@
 #define RUBYCOCOA_SUPPRESS_EXCEPTION_LOGGING_P \
   RTEST(rb_gv_get("RUBYCOCOA_SUPPRESS_EXCEPTION_LOGGING"))
 
+extern VALUE rubycocoa_verbose;
+
 #define RUBY_VERBOSE_P      RTEST(ruby_verbose)
-#define RUBYCOCOA_VERBOSE_P RTEST(rb_gv_get("RUBYCOCOA_VERBOSE"))
+#define RUBYCOCOA_VERBOSE_P RTEST(rubycocoa_verbose)
 #define VERBOSE_P           (RUBY_VERBOSE_P || RUBYCOCOA_VERBOSE_P)
 
 #define ASSERT_ALLOC(x) do { if (x == NULL) rb_fatal("can't allocate memory"); } while (0)

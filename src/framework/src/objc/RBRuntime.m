@@ -155,6 +155,9 @@ static int rubycocoa_initialized_p()
   return rubycocoa_initialized_flag;
 }
 
+// exported and used by internal_macros.h 
+VALUE rubycocoa_verbose;
+
 static void rubycocoa_init()
 {
   if (! rubycocoa_initialized_flag) {
@@ -165,6 +168,7 @@ static void rubycocoa_init()
     init_ovmix();
     load_path_unshift(framework_ruby_path()); // PATH_TO_FRAMEWORK/Resources/ruby
     rubycocoa_initialized_flag = 1;
+    rubycocoa_verbose = rb_gv_get("RUBYCOCOA_VERBOSE");
   }
 }
 
