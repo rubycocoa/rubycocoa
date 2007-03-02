@@ -15,22 +15,29 @@
 #import <Foundation/NSAutoreleasePool.h>
 #import <Foundation/NSString.h>
 
+#define RUBYCOCOA_SUPPRESS_EXCEPTION_LOGGING_P \
+  RTEST(rb_gv_get("RUBYCOCOA_SUPPRESS_EXCEPTION_LOGGING"))
+
+#define RUBY_VERBOSE_P      RTEST(ruby_verbose)
+#define RUBYCOCOA_VERBOSE_P RTEST(rb_gv_get("RUBYCOCOA_VERBOSE"))
+#define VERBOSE_P           (RUBY_VERBOSE_P || RUBYCOCOA_VERBOSE_P)
+
 #define ASSERT_ALLOC(x) do { if (x == NULL) rb_fatal("can't allocate memory"); } while (0)
 
-#define DLOG(mod, fmt, args...)                           \
-  do {                                                    \
-    if (ruby_debug == Qtrue) {                            \
-      NSAutoreleasePool * pool;                           \
-      NSString *          nsfmt;                          \
-                                                          \
-      pool = [[NSAutoreleasePool alloc] init];            \
-      nsfmt = [NSString stringWithFormat:                 \
-        [NSString stringWithFormat:@"%s : %s",            \
-          mod, fmt], ##args];                             \
-      NSLog(nsfmt);                                       \
-      [pool release];                                     \
-    }                                                     \
-  }                                                       \
+#define DLOG(mod, fmt, args...)                  \
+  do {                                           \
+    if (VERBOSE_P) {                             \
+      NSAutoreleasePool * pool;                  \
+      NSString *          nsfmt;                 \
+                                                 \
+      pool = [[NSAutoreleasePool alloc] init];   \
+      nsfmt = [NSString stringWithFormat:        \
+        [NSString stringWithFormat:@"%s : %s",   \
+          mod, fmt], ##args];                    \
+      NSLog(nsfmt);                              \
+      [pool release];                            \
+    }                                            \
+  }                                              \
   while (0)
 
 /* syntax: POOL_DO(the_pool) { ... } END_POOL(the_pool); */

@@ -132,7 +132,7 @@ module OSX
     SIGN_PATHS.each { |dir| return true if __load_bridge_support_file__(dir, fname) } 
 
     # Damnit!
-    warn "Can't find signatures file for #{framework}" if $VERBOSE
+    warn "Can't find signatures file for #{framework}" if OSX._verbose?
     return false
   end
   module_function :load_bridge_support_signatures
@@ -177,13 +177,13 @@ module OSX
   # then define Constant under module 'OSX'.
   def ns_import(sym)
     if not OSX.const_defined?(sym)
-      NSLog("importing #{sym}...") if $DEBUG
+      NSLog("importing #{sym}...") if OSX._verbose?
       klass = if clsobj = NSClassFromString(sym)
         if rbcls = class_new_for_occlass(clsobj)
           OSX.const_set(sym, rbcls)
         end
       end
-      NSLog("importing #{sym}... done (#{klass.ancestors.join(' -> ')})") if (klass and $DEBUG)
+      NSLog("importing #{sym}... done (#{klass.ancestors.join(' -> ')})") if (klass and OSX._verbose?)
       return klass
     end
   end

@@ -6,6 +6,10 @@
 
 module OSX
 
+  def self._verbose?
+    ($VERBOSE || $RUBYCOCOA_VERBOSE) ? true : false
+  end
+
   class OCException < RuntimeError
 
     attr_reader :name, :reason, :userInfo, :nsexception
