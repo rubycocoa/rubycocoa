@@ -1,5 +1,8 @@
 2007-03-02  Fujimoto Hisa  <hisa@fobj.com>
 
+	* framework/src/objc/RBRuntime.m:
+	Added Init_stack for loading multiple bundles.
+
 	* sample/Pong, sample/RubyRocks, sample/TypingTutor:
 	rewritten with modern sytanx instead of obsoleted syntax.
 
