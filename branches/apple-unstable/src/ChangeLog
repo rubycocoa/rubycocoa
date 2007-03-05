@@ -1,5 +1,11 @@
 2007-03-05  Laurent Sansonetti <lsansonetti@apple.com>
 
+	* sample/CIExposureSample/.gdb_history:
+	Removed.
+
+	* sample/CocoaRepl/Info.plist:
+	Added missing CFBundleShortVersionString.
+
 	* framework/tool/gen_bridge_metadata.rb:
 	Do not do 64-bit magic unless '--enable-64' is provided.
 
