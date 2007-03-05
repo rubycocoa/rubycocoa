@@ -1,3 +1,8 @@
+2007-03-05  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* framework/tool/gen_bridge_metadata.rb:
+	Do not do 64-bit magic unless '--enable-64' is provided.
+
 2007-03-02  Laurent Sansonetti <lsansonetti@apple.com>
 
 	* framework/src/objc/mdl_osxobjc.m:

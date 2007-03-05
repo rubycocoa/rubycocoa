@@ -561,7 +561,7 @@ EOS
       @types_encoding[name.strip] = value.strip
     end
 
-    begin
+    if @enable_64
       compile_and_execute_code(code, false, true).split("\n").each do |line|
         name, value = line.split(':')
         name.strip!
@@ -570,8 +570,6 @@ EOS
           @types_64_encoding[name] = value
         end
       end
-    rescue => e 
-      raise e unless TIGER_OR_BELOW
     end
 
     @opaques.each do |name, type|
@@ -622,7 +620,7 @@ EOS
       @resolved_structs[name.strip] = value.strip
     end
     
-    begin
+    if @enable_64 
       compile_and_execute_code(code, false, true).split("\n").each do |line|
         name, value = line.split(':')
         name.strip!
@@ -631,8 +629,6 @@ EOS
           @resolved_structs_64[name] = value
         end
       end
-    rescue => e 
-      raise e unless TIGER_OR_BELOW
     end
   end
 
@@ -1058,6 +1054,7 @@ EOC
     @out_file = nil
     @generate_format = FORMAT_FINAL
     @private = false 
+    @enable_64 = false
 
     frameworks_to_handle = []
 
@@ -1089,6 +1086,11 @@ EOC
       opts.on('-c', '--compiler-flags FLAGS', 'Specify custom compiler flags (by default, "-F... -framework ...")') do |flags|
         @compiler_flags ||= ''
         @compiler_flags << ' ' + flags + ' '
+      end
+
+      opts.on(nil, '--enable-64', 'Enable 64-bit annotations in the generated metadata (10.5 only)') do
+        die '--enable-64 requires Mac OS X 10.5 or later' if TIGER_OR_BELOW
+        @enable_64 = true
       end
 
       opts.on('-h', '--help', 'Show this message') do
