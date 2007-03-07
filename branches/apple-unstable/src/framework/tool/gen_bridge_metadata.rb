@@ -1187,7 +1187,8 @@ EOC
   end
   
   def handle_framework(val)
-    path = framework_path(val) 
+    path = framework_path(val)
+    die "Can't locate framework '#{val}'" if path.nil?
     (@framework_paths ||= []) << File.dirname(path)
     die "Can't find framework '#{val}'" if path.nil?
     parent_path, name = path.scan(/^(.+)\/(\w+)\.framework\/?$/)[0]
