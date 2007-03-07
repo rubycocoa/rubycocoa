@@ -1,8 +1,10 @@
 2007-03-07  Laurent Sansonetti <lsansonetti@apple.com>
 
 	* framework/tool/gen_bridge_metadata.rb:
-	When generating the exceptions template, use 'o' instead of 'out' for the
-	default type modifier attribute value.
+	- When generating the exceptions template, use 'o' instead of 'out' for the
+	  default type modifier attribute value ;
+	- Fail with a human-readable message when a given framework could not be
+	  located.
 
 2007-03-05  Laurent Sansonetti <lsansonetti@apple.com>
 
