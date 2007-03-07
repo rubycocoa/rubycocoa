@@ -740,7 +740,7 @@ EOC
         pointer_arg_indexes.each do |i|
           arg_element = element.add_element('arg')
           arg_element.add_attribute('index', i)
-          arg_element.add_attribute('type_modifier', 'out')
+          arg_element.add_attribute('type_modifier', 'o')
         end
       end
       @ocmethods.each do |class_name, methods|
@@ -758,7 +758,7 @@ EOC
           pointer_arg_indexes.each do |i|
             arg_element = element.add_element('arg')
             arg_element.add_attribute('index', i)
-            arg_element.add_attribute('type_modifier', 'out')
+            arg_element.add_attribute('type_modifier', 'o')
           end
           method_elements << element
         end
