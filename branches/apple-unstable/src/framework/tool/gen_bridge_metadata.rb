@@ -1199,9 +1199,9 @@ EOC
       headers_path = File.join(path, 'PrivateHeaders')
       die "Can't locate private framework headers at '#{headers_path}'" unless File.exist?(headers_path) 
       headers = Dir.glob(File.join(headers_path, '**', '*.h'))
-      headers_path = File.join(path, 'Headers')
-      public_headers = if File.exist?(headers_path)
-        OCHeaderAnalyzer::CPPFLAGS << " -I#{headers_path} "
+      public_headers_path = File.join(path, 'Headers')
+      public_headers = if File.exist?(public_headers_path)
+        OCHeaderAnalyzer::CPPFLAGS << " -I#{public_headers_path} "
         Dir.glob(File.join(headers_path, '**', '*.h'))
       else
         []
