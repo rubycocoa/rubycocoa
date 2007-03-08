@@ -1216,7 +1216,7 @@ EOC
     OBJC.dlload(libpath)
     # We can't just "#import <x/x.h>" as the main Framework header might not include _all_ headers.
     # So we are tricking this by importing the main header first, then all headers.
-    header_basenames = (headers | public_headers).map { |x| s.sub(/#{headers_path}\/*/, '') } 
+    header_basenames = (headers | public_headers).map { |x| x.sub(/#{headers_path}\/*/, '') } 
     if idx = header_basenames.index("#{name}.h")
       header_basenames.delete_at(idx)
       header_basenames.unshift("#{name}.h")
