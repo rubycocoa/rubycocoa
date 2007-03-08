@@ -1146,8 +1146,11 @@ EOC
       doc.get_elements('/signatures/ignored_headers/header').each do |element|
         path = element.text
         path_re = /#{path}/
-        @headers.delete_if { |x| path_re.match(x) }
-        @import_directive.gsub!(/#import.+#{path}>/, '') if @import_directive
+        ignored = @headers.select { |x| path_re.match(x) }
+        @headers -= ignored
+        if @import_directive
+          ignored.each { |x| @import_directive.gsub!(/#import.+#{File.basename(x)}>/, '') } 
+        end
       end
       doc.get_elements('/signatures/ignored_defines/regex').each do |element|
         @ignored_defines_regexps << Regexp.new(element.text.strip)
@@ -1213,12 +1216,12 @@ EOC
     OBJC.dlload(libpath)
     # We can't just "#import <x/x.h>" as the main Framework header might not include _all_ headers.
     # So we are tricking this by importing the main header first, then all headers.
-    header_basenames = (headers | public_headers).map { |x| File.basename(x) }
+    header_basenames = (headers | public_headers).map { |x| hpath.sub(/#{headers_path}\/*/, '') } 
     if idx = header_basenames.index("#{name}.h")
       header_basenames.delete_at(idx)
       header_basenames.unshift("#{name}.h")
     end
-    @import_directive = header_basenames.map { |x| "#import <#{name}/#{File.basename(x)}>" }.join("\n")
+    @import_directive = header_basenames.map { |x| "#import <#{name}/#{x}>" }.join("\n")
     @compiler_flags ||= "-F\"#{parent_path}\" -framework #{name}"
     @headers.concat(headers)
   end

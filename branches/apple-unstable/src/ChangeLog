@@ -1,3 +1,10 @@
+2007-03-08  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* framework/tool/gen_bridge_metadata.rb:
+	- Better ignored header exceptions support ;
+	- Properly define the import directive by keeping sub-directories within
+	  the headers directory.
+
 2007-03-07  Laurent Sansonetti <lsansonetti@apple.com>
 
 	* framework/tool/gen_bridge_metadata.rb:
