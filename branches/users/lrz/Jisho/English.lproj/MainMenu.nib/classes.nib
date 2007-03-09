@@ -1,0 +1,25 @@
+{
+    IBClasses = (
+        {CLASS = FirstResponder; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
+        {
+            CLASS = JSAppDelegate; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {windowController = id; }; 
+            SUPERCLASS = NSObject; 
+        }, 
+        {
+            ACTIONS = {goHistory = id; search = id; updateFontSize = id; }; 
+            CLASS = JSWindowController; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {
+                fontSizeSegmentedControl = id; 
+                historySegmentedControl = id; 
+                searchField = id; 
+                textView = id; 
+            }; 
+            SUPERCLASS = NSWindowController; 
+        }, 
+        {CLASS = NSSegmentedControl; LANGUAGE = ObjC; SUPERCLASS = NSControl; }
+    ); 
+    IBVersion = 1; 
+}
