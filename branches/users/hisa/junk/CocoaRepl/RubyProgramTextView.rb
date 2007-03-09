@@ -149,7 +149,6 @@ class RubyProgramTextViewDelegate < OSX::NSObject
   def tableViewSelectionDidChange(ntf)
     tbl = ntf.object
     row = tbl.selectedRow
-    NSLog("row=%@", row.inspect)
     showDescription(@words[row])
   end
 
