@@ -25,6 +25,23 @@
 		4DDCA70D0ACC9A6100E082CE /* RubyCocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E8F5E24E03AEB6EC03A81C6F /* RubyCocoa.framework */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXBuildStyle section */
+		52656F900BA1CF05004D1E29 /* Development */ = {
+			isa = PBXBuildStyle;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+			};
+			name = Development;
+		};
+		52656F910BA1CF05004D1E29 /* Deployment */ = {
+			isa = PBXBuildStyle;
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+			};
+			name = Deployment;
+		};
+/* End PBXBuildStyle section */
+
 /* Begin PBXFileReference section */
 		089C165DFE840E0CC02AAC07 /* English */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
@@ -182,12 +199,15 @@
 		29B97313FDCFA39411CA2CEA /* Project object */ = {
 			isa = PBXProject;
 			buildConfigurationList = 4D7A7B570ABF745500C2D4C0 /* Build configuration list for PBXProject "Jisho" */;
-			compatibilityVersion = "Xcode 2.4";
+			buildSettings = {
+			};
+			buildStyles = (
+				52656F900BA1CF05004D1E29 /* Development */,
+				52656F910BA1CF05004D1E29 /* Deployment */,
+			);
 			hasScannedForEncodings = 0;
 			mainGroup = 29B97314FDCFA39411CA2CEA /* Jisho */;
 			projectDirPath = "";
-			projectRoot = "";
-			shouldCheckCompatibility = 1;
 			targets = (
 				4DDCA7030ACC9A6100E082CE /* Jisho */,
 			);

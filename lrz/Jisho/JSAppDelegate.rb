@@ -10,6 +10,7 @@ class JSAppDelegate < NSObject
   ib_outlet :windowController
 
   def applicationDidFinishLaunching(notification)
+    NSUpdateDynamicServices() # Is this really needed?
     service = JSService.alloc.initWithWindowController(@windowController)
     notification.object.setServicesProvider(service)
   end

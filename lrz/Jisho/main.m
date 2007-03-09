@@ -10,6 +10,5 @@
 
 int main(int argc, const char *argv[])
 {
-  NSUpdateDynamicServices();
   return RBApplicationMain("rb_main.rb", argc, argv);
 }
