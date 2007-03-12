@@ -14,7 +14,7 @@ class TC_NSData < Test::Unit::TestCase
     data = NSData.data
     assert( data.isKindOfClass(NSData) )
     assert_equal( 0, data.length )
-    assert_kind_of( ObjcPtr, data.bytes )
+    assert_nil( data.bytes )
   end
 
   def test_s_dataWithBytes_length

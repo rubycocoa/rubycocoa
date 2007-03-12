@@ -291,6 +291,8 @@ rb_ffi_dispatch (
       if (bs_arg != NULL) {
         if (!bs_arg->null_accepted && NIL_P(arg))
           return rb_err_new(rb_eArgError, "Argument #%d cannot be nil", i);
+        if (bs_arg->octypestr != NULL) 
+          octype_str = bs_arg->octypestr;
         is_c_array = bs_arg->c_ary_type != bsCArrayArgUndefined;
       }
       else {
@@ -502,4 +504,68 @@ rb_ffi_dispatch (
   FFI_LOG("ffi dispatch done");
 
   return Qnil;
+}
+
+void *
+ffi_make_closure(const char *rettype, const char **argtypes, unsigned argc, void (*handler)(ffi_cif *,void *,void **,void *), void *context)
+{
+  const char *error;
+  unsigned i;
+  ffi_type *retval_ffi_type;
+  ffi_type **arg_ffi_types;
+  ffi_cif *cif;
+  ffi_closure *closure;
+
+  error = NULL;
+  cif = NULL;
+  closure = NULL;
+
+  arg_ffi_types = (ffi_type **)malloc(sizeof(ffi_type *) * (argc + 1));
+  if (arg_ffi_types == NULL) {
+    error = "Can't allocate memory";
+    goto bails;
+  }
+
+  for (i = 0; i < argc; i++) {
+    arg_ffi_types[i] = ffi_type_for_octype(argtypes[i]);
+  }
+  retval_ffi_type = ffi_type_for_octype(rettype);
+  arg_ffi_types[argc] = NULL;
+
+  cif = (ffi_cif *)malloc(sizeof(ffi_cif));
+  if (cif == NULL) {
+    error = "Can't allocate memory";
+    goto bails;
+  }
+
+  if (ffi_prep_cif(cif, FFI_DEFAULT_ABI, argc, retval_ffi_type, arg_ffi_types) != FFI_OK) {
+    error = "Can't prepare cif";
+    goto bails;
+  }
+
+  closure = (ffi_closure *)malloc(sizeof(ffi_closure));
+  if (closure == NULL) {
+    error = "Can't allocate memory";
+    goto bails;
+  }
+
+  if (ffi_prep_closure(closure, cif, handler, context) != FFI_OK) {
+    error = "Can't prepare closure";
+    goto bails;
+  }
+
+  goto done;
+
+bails:
+  if (arg_ffi_types != NULL)
+    free(arg_ffi_types);
+  if (cif != NULL)
+    free(cif);
+  if (closure != NULL)
+    free(closure);
+  if (error != NULL)
+    rb_raise(rb_eRuntimeError, error);
+
+done:
+  return closure;
 }

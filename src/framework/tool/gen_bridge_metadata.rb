@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 # Created by Laurent Sansonetti, 2006/08/31
-# Copyright (c) 2006 Apple Computer Inc.
+# Copyright (c) 2006-2007 Apple Inc.
 # Copyright (c) 2005-2006 FUJIMOTO Hisakuni
 
 require 'rexml/document'
@@ -65,6 +65,20 @@ class OCHeaderAnalyzer
   def cftype_names
     re = /typedef\s+(const\s+)?struct\s*\w+\s*\*\s*([^\s]+Ref)\s*;/
     @cftype_names ||= @cpp_result.scan(re).map { |m| m.compact[-1] }.flatten
+  end
+
+  def function_pointer_types
+    unless @func_ptr_types
+      re = /typedef\s+([\w\s]+)\s*\(\s*\*\s*(\w+)\s*\)\s*\(([^)]*)\)\s*;/
+      @func_ptr_types = {}
+      @cpp_result.scan(re).each do |m|
+        name = m[1]
+        args = m[2].split(',').map { |x| x.sub(/\w+\s*$/, '').strip } 
+        type = "#{m[0]}(*)(#{args.join(', ')})"
+        @func_ptr_types[name] = type
+      end
+    end
+    @func_ptr_types
   end
 
   def externs
@@ -145,7 +159,7 @@ class OCHeaderAnalyzer
       interface_re = /^@(interface|protocol)\s+(\w+)/
       end_re = /^@end/
       body_re = /^[-+]\s*(\([^)]+\))?\s*([^:\s;]+)/
-      args_re = /(\w+)\s*\:\s*(\([^)]+\))?\s*[^\s]+/m
+      args_re = /\w+\s*:/
       current_interface = nil
       @ocmethods = {}
       i = 0
@@ -166,12 +180,19 @@ class OCHeaderAnalyzer
           args = []
           selector = ''
           data = data[0..data.index(';')]
-          data.scan(args_re).each do |ary|
+          args_data = []
+          data.scan(args_re) { |x| args_data << [x, $'] }
+          args_data.each_with_index do |ary, n|
             argname, argtype = ary
-            selector << argname << ':'
-            if argtype
-              args << VarInfo.new(argtype, argname, '')
+            if n < args_data.length - 1
+              argtype.sub!(args_data[n + 1][1], '')
+              argtype.sub!(/\w+\s+\w+:\s*$/, '')
+            else
+              argtype.sub!(/\s+__attribute__\(\(.+\)\)/, '')
+              argtype.sub!(/\w+;$/, '')
             end
+            selector << argname
+            args << VarInfo.new(argtype, argname, '') unless argtype.empty?
           end
           selector = body_md[2] if selector.empty? 
           (@ocmethods[current_interface] ||= []) << MethodInfo.new(retval, selector, line[0] == ?+, args, line)
@@ -246,14 +267,19 @@ class OCHeaderAnalyzer
       t.gsub!(/<[^>]*>/, '')
       t.gsub!(/\b(in|out|inout|oneway|const)\b/, '')
       t.gsub!(/\b__private_extern__\b/, '')
-      t.delete!('()')
-      t.strip!
+      t.gsub!(/^\s*\(?\s*/, '')
+      t.gsub!(/\s*\)?\s*$/, '')
       raise 'empty type' if t.empty?
       @stripped_rettype = t
     end
 
     def pointer?
       @pointer ||= __pointer__?
+    end
+
+    def function_pointer?(func_ptr_types)
+      type = (func_ptr_types[@stripped_rettype] or @stripped_rettype)
+      @function_pointer ||= FuncPointerInfo.new_from_type(type)
     end
 
     def <=>(x)
@@ -313,6 +339,28 @@ class OCHeaderAnalyzer
 
     def inline?
       @inline
+    end
+  end
+
+  class FuncPointerInfo < FuncInfo
+    def self.new_from_type(type)
+      @cache ||= {}
+      info = @cache[type]
+      return info if info
+
+      tokens = type.split(/\(\*\)/)
+      return nil if tokens.size != 2
+
+      rettype = tokens.first.strip
+      rest = tokens.last.sub(/^\s*\(\s*/, '').sub(/\s*\)\s*$/, '')
+      argtypes = rest.split(/,/).map { |x| x.strip }
+
+      @cache[type] = self.new(rettype, argtypes, type) 
+    end
+
+    def initialize(rettype, argtypes, orig)
+      args = argtypes.map { |x| VarInfo.new(x, '', '') }
+      super(VarInfo.new(rettype, '', ''), args, orig)
     end
   end
 
@@ -497,6 +545,15 @@ EOS
     if type != type64
       element.add_attribute('type64', type64)
     end
+    if func_ptr_info = varinfo.function_pointer?(@func_ptr_types)
+      element.add_attribute('function_pointer', 'true')
+      func_ptr_info.args.each do |a| 
+        func_ptr_elem = element.add_element('arg')
+        add_type_attributes(func_ptr_elem, a)
+      end
+      func_ptr_retval = element.add_element('retval')
+      add_type_attributes(func_ptr_retval, func_ptr_info)
+    end 
   end
 
   def collect_cftypes_info
@@ -543,6 +600,10 @@ EOS
     }.flatten
     all_types |= @method_exception_types
     all_types |= @opaques.keys
+    all_types |= @func_ptr_types.values.map { |x| 
+      info = OCHeaderAnalyzer::FuncPointerInfo.new_from_type(x)
+      [info.stripped_rettype, *info.args.map { |y| y.stripped_rettype }] 
+    }.flatten
 
     lines = all_types.map do |type|
       "printf(\"%s: %s\\n\", \"#{type}\", @encode(#{type}));"
@@ -832,15 +893,25 @@ EOC
         elements = methods.sort.map { |method| 
           predicate = encoding_of(method) == 'B'
           bool_args = []
-          method.args.each_with_index { |a, i| bool_args << i if encoding_of(a) == 'B' }
-          next if !predicate and bool_args.empty?
+          func_pointer_args = []
+          method.args.each_with_index do |a, i| 
+            if encoding_of(a) == 'B'
+              bool_args << i 
+            elsif a.function_pointer?(@func_ptr_types)
+              func_pointer_args << i
+            end
+          end 
+          next if !predicate and bool_args.empty? and func_pointer_args.empty?
           element = REXML::Element.new('method')
           element.add_attribute('selector', method.selector)
           element.add_attribute('class_method', true) if method.class_method?
-          bool_args.each do |i| 
+          (bool_args | func_pointer_args).each do |i|
             arg_elem = element.add_element('arg')
             arg_elem.add_attribute('index', i)
-            arg_elem.add_attribute('type', 'B') 
+            arg_elem.add_attribute('type', 'B') if bool_args.include?(i)
+            if func_pointer_args.include?(i) 
+              add_type_attributes(arg_elem, method.args[i])
+            end
           end
           element.add_element('retval').add_attribute('type', 'B') if predicate
           element
@@ -1004,6 +1075,7 @@ EOC
     @cftype_names = []
     @inf_protocols = [] 
     @ocmethods = {}
+    @func_ptr_types = {}
     @headers.each do |path|
       die "Given header file `#{path}' doesn't exist" unless File.exist?(path)
       analyzer = OCHeaderAnalyzer.new(path, !@private)
@@ -1023,6 +1095,7 @@ EOC
         @defines.concat(analyzer.defines)
         list = analyzer.informal_protocols['NSObject']
         @inf_protocols.concat(list) unless list.nil? 
+        @func_ptr_types.merge!(analyzer.function_pointer_types)
       end
       @ocmethods.merge!(analyzer.ocmethods) { |key, old, new| old.concat(new) }
     end
@@ -1105,8 +1178,8 @@ EOC
 
       opts.separator ''
       opts.separator 'Examples:'
-      opts.separator "    #{__FILE__} --framework Foundation -o Foundation.metadata"
-      opts.separator "    #{__FILE__} /path/to/my/library/headers/* > MyLibrary.metadata"
+      opts.separator "    #{__FILE__} -f Foundation -o Foundation.bridgesupport"
+      opts.separator "    #{__FILE__} /path/to/my/library/headers/* > MyLibrary.bridgesupport"
 
       if args.empty?
         die opts.banner
