@@ -73,7 +73,15 @@ class OCHeaderAnalyzer
       @func_ptr_types = {}
       @cpp_result.scan(re).each do |m|
         name = m[1]
-        args = m[2].split(',').map { |x| x.sub(/\w+\s*$/, '').strip } 
+        args = m[2].split(',').map do |x| 
+          if x.include?(' ')
+            ptr = x.sub!(/\[\]\s*$/, '')
+            x = x.sub(/\w+\s*$/, '').strip
+            ptr ? x + '*' : x
+          else
+            x.strip
+          end
+        end 
         type = "#{m[0]}(*)(#{args.join(', ')})"
         @func_ptr_types[name] = type
       end
@@ -269,7 +277,7 @@ class OCHeaderAnalyzer
       t.gsub!(/\b__private_extern__\b/, '')
       t.gsub!(/^\s*\(?\s*/, '')
       t.gsub!(/\s*\)?\s*$/, '')
-      raise 'empty type' if t.empty?
+      raise "empty type (was '#{type}')" if t.empty?
       @stripped_rettype = t
     end
 
