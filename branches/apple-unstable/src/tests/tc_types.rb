@@ -224,4 +224,26 @@ class TC_Types < Test::Unit::TestCase
     assert_raise(ArgumentError) { ary.sortUsingFunction_context(proc { |a, b| }, nil) }
     assert_raise(ArgumentError) { ary.sortUsingFunction_context(proc { |a, b, c, d| }, nil) }
   end
+
+  def test_func_func_ptr_arg
+    ary = OSX::NSMutableArray.alloc.init
+    [5, 3, 2, 4, 1].each { |i| ary.addObject(i) }
+    i = 0
+    provided_ctx = nil
+    p = proc do |value, ctx|
+      if provided_ctx.nil?
+        assert_nil(ctx)
+      else
+        assert_equal(provided_ctx, ctx.bytestr(provided_ctx.length))
+      end
+      assert_kind_of(OSX::ObjcPtr, value)
+      i += 1
+    end
+    provided_ctx = nil
+    OSX::CFArrayApplyFunction(ary, OSX::NSMakeRange(0, ary.count), p, provided_ctx)
+    assert_equal(i, 5)
+    provided_ctx = "foobar"
+    OSX::CFArrayApplyFunction(ary, OSX::NSMakeRange(0, ary.count), p, provided_ctx)
+    assert_equal(i, 10)
+  end
 end
