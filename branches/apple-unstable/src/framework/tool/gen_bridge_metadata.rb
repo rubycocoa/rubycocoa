@@ -205,7 +205,7 @@ class OCHeaderAnalyzer
               argtype.sub!(/\w+\s+\w+:\s*$/, '')
             else
               argtype.sub!(/\s+__attribute__\(\(.+\)\)/, '')
-              argtype.sub!(/\w+;$/, '')
+              argtype.sub!(/\w+\s*;$/, '')
             end
             selector << argname
             args << VarInfo.new(argtype, argname, '') unless argtype.empty?
