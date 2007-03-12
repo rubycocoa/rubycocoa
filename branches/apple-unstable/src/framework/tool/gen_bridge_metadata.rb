@@ -69,9 +69,17 @@ class OCHeaderAnalyzer
 
   def function_pointer_types
     unless @func_ptr_types
-      re = /typedef\s+([\w\s]+)\s*\(\s*\*\s*(\w+)\s*\)\s*\(([^)]*)\)\s*;/
       @func_ptr_types = {}
-      @cpp_result.scan(re).each do |m|
+      re = /typedef\s+([\w\s]+)\s*\(\s*\*\s*(\w+)\s*\)\s*\(([^)]*)\)\s*;/
+      data = @cpp_result.scan(re)
+      re = /typedef\s+([\w\s]+)\s*\(([^)]+)\)\s*;/
+      data |= @cpp_result.scan(re).map do |m|
+        ary = m[0].split(/(\w+)$/)
+        ary[1] << ' *'
+        ary << m[1]
+        ary
+      end
+      data.each do |m|
         name = m[1]
         args = m[2].split(',').map do |x| 
           if x.include?(' ')
