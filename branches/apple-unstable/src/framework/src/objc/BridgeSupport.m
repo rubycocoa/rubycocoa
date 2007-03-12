@@ -964,8 +964,24 @@ osx_load_bridge_support_file (VALUE mOSX, VALUE path)
   unsigned int        i;
   struct bsArg        args[MAX_ARGS];
   char *              protocol_name;
+  BOOL                within_func_ptr_arg;
+  struct {
+    char *    retval;
+    char *    argv[MAX_ARGS];
+    unsigned  argc;
+  } func_ptr;
 
   cpath = STR2CSTR(path);
+
+#define RESET_FUNC_PTR_CTX()      \
+  do {                            \
+    func_ptr.retval = NULL;       \
+    func_ptr.argc = 0;            \
+    within_func_ptr_arg = NO;     \
+  }                               \
+  while (0)
+
+  RESET_FUNC_PTR_CTX();
 
   DLOG("MDLOSX", "Loading bridge support file `%s'", cpath);
   
@@ -1281,7 +1297,15 @@ osx_load_bridge_support_file (VALUE mOSX, VALUE path)
       break;
 
       case BS_XML_ARG: {
-        if (func != NULL || method != NULL) {
+        if (within_func_ptr_arg) {
+          if (func_ptr.argc > MAX_ARGS) {
+              DLOG("MDLOSX", "Maximum number of arguments reached for function pointer (%d), skipping...", MAX_ARGS);
+          }
+          else {
+            func_ptr.argv[func_ptr.argc++] = get_attribute_and_check(reader, "type");
+          }
+        }
+        else if (func != NULL || method != NULL) {
           int * argc;
 
           argc = func != NULL ? &func->argc : &method->argc;
@@ -1295,6 +1319,7 @@ osx_load_bridge_support_file (VALUE mOSX, VALUE path)
           else {
             char *  type_modifier;
             struct bsArg * arg; 
+            char *  func_ptr;
    
             arg = &args[(*argc)++];
  
@@ -1326,16 +1351,33 @@ osx_load_bridge_support_file (VALUE mOSX, VALUE path)
             get_c_ary_type_attribute(reader, &arg->c_ary_type, &arg->c_ary_type_value); 
   
             arg->octypestr = get_attribute(reader, "type");
+
+            func_ptr = get_attribute(reader, "function_pointer");
+            if (func_ptr != NULL) {
+              within_func_ptr_arg = strcmp(func_ptr, "true") == 0;
+              free(func_ptr);
+            }
+            else {
+              within_func_ptr_arg = NO;
+            }
           }
         }
         else {
-          DLOG("MDLOSX", "Argument defined outside of a function/method, skipping...");
+          DLOG("MDLOSX", "Argument defined outside of a function/method/function_pointer, skipping...");
         }
       }
       break;
 
       case BS_XML_RETVAL: {
-        if (func != NULL || method != NULL) {
+        if (within_func_ptr_arg) {
+          if (func_ptr.retval != NULL) {
+            DLOG("MDLOSX", "Function pointer return value defined more than once, skipping...");
+          } 
+          else {
+            func_ptr.retval = get_attribute(reader, "type");
+          }
+        }
+        else if (func != NULL || method != NULL) {
           if (func != NULL && func->retval != NULL && func->retval != &default_func_retval) {
             DLOG("MDLOSX", "Function '%s' return value defined more than once, skipping...", func->name);
           }
@@ -1451,6 +1493,34 @@ osx_load_bridge_support_file (VALUE mOSX, VALUE path)
       switch (atom->val) {
       case BS_XML_INFORMAL_PROTOCOL: {
         protocol_name = NULL;
+      }
+      break;
+
+      case BS_XML_ARG: {
+        if (within_func_ptr_arg) {
+          size_t len;
+          struct bsCallEntry *call_entry;
+          struct bsArg *arg;
+          char new_type[1028];
+
+          call_entry = func != NULL ? (struct bsCallEntry *)func : (struct bsCallEntry *)method;
+          arg = &args[call_entry->argc - 1];
+
+          new_type[0] = '^';
+          new_type[1] = '?';
+          new_type[2] = '\0';
+          len = sizeof(new_type) - 2;
+          strncat(new_type, func_ptr.retval, len);
+          len -= strlen(func_ptr.retval);
+          for (i = 0; i < func_ptr.argc; i++) {
+            strncat(new_type, func_ptr.argv[i], len);
+            len -= strlen(func_ptr.argv[i]);
+          }
+
+          arg->octypestr = (char *)strdup(new_type);
+
+          RESET_FUNC_PTR_CTX();
+        }
       }
       break;
 

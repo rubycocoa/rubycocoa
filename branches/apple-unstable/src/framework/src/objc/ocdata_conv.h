@@ -44,6 +44,7 @@ enum osxobjc_nsdata_type {
   _PRIV_C_BOOL = 1024,
   _PRIV_C_PTR,
   _PRIV_C_ID_PTR,
+  _PRIV_C_FUNC_PTR
 };
 
 size_t  ocdata_size     (const char* octype_str);

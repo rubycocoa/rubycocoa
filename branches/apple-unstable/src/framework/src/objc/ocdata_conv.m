@@ -240,9 +240,10 @@ ocdata_to_rbobj (VALUE context_obj, const char *octype_str, const void *ocdata, 
         rbval = rb_bs_boxed_ptr_new_from_ocdata(bs_boxed, *(void **)ocdata);
       }
       else {
-        rbval = objcptr_s_new_with_cptr (*(void**)ocdata, octype_str);
+        void *cptr = *(void**)ocdata;
+        rbval = cptr == NULL ? Qnil : objcptr_s_new_with_cptr (cptr, octype_str);
       }
-       break;
+      break;
 
     case _C_BOOL:
       rbval = bool_to_rbobj(*(BOOL*)ocdata);
@@ -612,6 +613,97 @@ rbobj_to_nssel (VALUE obj)
   return NIL_P(obj) ? NULL : sel_registerName(rbobj_to_cselstr(obj));
 }
 
+struct funcptr_closure_context {
+  char *    rettype;
+  char **   argtypes;
+  unsigned  argc;
+  VALUE     block;
+};
+
+static void
+funcptr_closure_handler (ffi_cif *cif, void *resp, void **args, void *userdata)
+{
+  struct funcptr_closure_context *context;
+  VALUE rb_args;
+  unsigned i;
+  VALUE retval;
+
+  context = (struct funcptr_closure_context *)userdata;
+  rb_args = rb_ary_new2(context->argc);
+
+  for (i = 0; i < context->argc; i++) {
+    VALUE arg;
+
+    if (!ocdata_to_rbobj(Qnil, context->argtypes[i], args[i], &arg, NO))
+      rb_raise(rb_eRuntimeError, "Can't convert Objective-C argument #%d of octype '%s' to Ruby value", i, context->argtypes[i]);
+
+    DATACONV_LOG("converted arg #%d of type %s to Ruby value %p", i, context->argtypes[i], arg);
+
+    rb_ary_store(rb_args, i, arg);
+  }
+
+  DATACONV_LOG("calling Ruby block with %d args...", RARRAY(rb_args)->len);
+  retval = rb_funcall2(context->block, rb_intern("call"), RARRAY(rb_args)->len, RARRAY(rb_args)->ptr);
+  DATACONV_LOG("called Ruby block");
+
+  if (*encoding_skip_modifiers(context->rettype) != _C_VOID) {
+    if (!rbobj_to_ocdata(retval, context->rettype, resp, YES))
+      rb_raise(rb_eRuntimeError, "Can't convert return Ruby value to Objective-C value of octype '%s'", context->rettype);
+  }
+}
+
+static BOOL
+rbobj_to_funcptr (VALUE obj, void **cptr, const char *octype_str)
+{
+  unsigned  argc;
+  unsigned  i;
+  char *    rettype;
+  char **   argtypes; 
+  int       block_arity;
+  struct funcptr_closure_context *  context;
+
+  if (TYPE(obj) == T_NIL) {
+    *cptr = NULL;
+    return YES;
+  }
+  
+  if (rb_obj_is_kind_of(obj, rb_cProc) == Qfalse)
+    return NO;
+
+  if (*octype_str != '?')
+    return NO;
+  octype_str++;
+  if (octype_str == NULL)
+    return NO;
+
+  decode_method_encoding(octype_str, nil, &argc, &rettype, &argtypes, NO); 
+
+  block_arity = FIX2INT(rb_funcall(obj, rb_intern("arity"), 0));
+  if (block_arity != argc) {
+    free(rettype);
+    if (argtypes != NULL) {
+      for (i = 0; i < argc; i++)
+        free(argtypes[i]);
+      free(argtypes);
+    }
+    // Should we return NO there? Probably better to raise an exception directly.
+    rb_raise(rb_eArgError, "Given Proc object has an invalid number of arguments (expected %d, got %d)", 
+             argc, block_arity); 
+    return NO;  // to be sure... 
+  }
+
+  context = (struct funcptr_closure_context *)malloc(sizeof(struct funcptr_closure_context));
+  ASSERT_ALLOC(context);
+  context->rettype = rettype;
+  context->argtypes = argtypes;
+  context->argc = argc;
+  context->block = obj; 
+
+  *cptr = ffi_make_closure(rettype, (const char **)argtypes, argc, funcptr_closure_handler, context);
+
+  return YES;
+}
+
 static BOOL 
 rbobj_to_objcptr (VALUE obj, void** cptr, const char *octype_str)
 {
@@ -827,6 +919,8 @@ rbobj_to_ocdata (VALUE obj, const char *octype_str, void* ocdata, BOOL to_libffi
 #endif
       else {
         f_success = rbobj_to_objcptr(obj, ocdata, octype_str + 1);
+        if (!f_success)
+          f_success = rbobj_to_funcptr(obj, ocdata, octype_str + 1);
       }
       break;
 

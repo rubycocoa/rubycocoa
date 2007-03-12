@@ -1,3 +1,18 @@
+2007-03-12  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* framework/src/objc/libffi.h,
+	  framework/src/objc/libffi.m,
+	  framework/src/objc/ocdata_conv.h,
+	  framework/src/objc/ocdata_conv.m,
+	  framework/src/objc/OverrideMixin.m,
+	  framework/src/objc/BridgeSupport.m,
+	  framework/tool/gen_bridge_metadata.rb,
+	  tests/tc_types.rb,
+	  tests/tc_nsdata.rb:
+	Added basic support for function pointers arguments. gen_bridge_metadata
+	annotates them and RubyCocoa is now able to convert Ruby Proc objects to
+	function pointer handlers by creating a FFI closure. Added test cases.
+
 2007-03-08  Laurent Sansonetti <lsansonetti@apple.com>
 
 	* framework/tool/gen_bridge_metadata.rb:

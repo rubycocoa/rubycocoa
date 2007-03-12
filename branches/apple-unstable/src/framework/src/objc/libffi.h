@@ -55,3 +55,5 @@ VALUE rb_ffi_dispatch(
   void (*retain_if_necessary)(VALUE arg, BOOL is_retval, void *ctx), 
   void *retain_if_necessary_ctx, 
   VALUE *result);
+
+void *ffi_make_closure(const char *rettype, const char **argtypes, unsigned argc, void (*handler)(ffi_cif *,void *,void **,void *), void *context);

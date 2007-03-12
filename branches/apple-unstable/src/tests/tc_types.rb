@@ -209,4 +209,19 @@ class TC_Types < Test::Unit::TestCase
     assert_raise(RuntimeError) { OSX::KCGDirectMainDisplay }
     assert_nothing_raised { OSX.CGMainDisplayID() }
   end
+
+  def test_method_func_ptr_arg
+    ary = OSX::NSMutableArray.alloc.init
+    [5, 3, 2, 4, 1].each { |i| ary.addObject(i) }
+    p = proc do |x, y, ctx| 
+      assert_equal(nil, ctx)
+      x.intValue <=> y.intValue
+    end 
+    ary.sortUsingFunction_context(p, nil)
+    assert_equal(ary.to_a.map { |i| i.to_i }, [1, 2, 3, 4, 5])
+    assert_raise(ArgumentError) { ary.sortUsingFunction_context(proc { || }, nil) }
+    assert_raise(ArgumentError) { ary.sortUsingFunction_context(proc { |a| }, nil) }
+    assert_raise(ArgumentError) { ary.sortUsingFunction_context(proc { |a, b| }, nil) }
+    assert_raise(ArgumentError) { ary.sortUsingFunction_context(proc { |a, b, c, d| }, nil) }
+  end
 end

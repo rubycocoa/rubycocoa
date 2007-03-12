@@ -123,15 +123,11 @@ static IMP
 ovmix_imp_for_type(const char *type)
 {
   BOOL ok;
+  void *closure;
   IMP imp;
-  const char *error;
   unsigned i, argc;
   char *retval_type;
   char **arg_types;
-  ffi_type *retval_ffi_type;
-  ffi_type **arg_ffi_types;
-  ffi_cif *cif;
-  ffi_closure *closure;
   char **octypes;
 
   pthread_mutex_lock(&ffi_imp_closures_lock);
@@ -141,49 +137,17 @@ ovmix_imp_for_type(const char *type)
   if (ok)
     return imp;
 
-  error = NULL;
-  cif = NULL;
-  closure = NULL;
-
   decode_method_encoding(type, nil, &argc, &retval_type, &arg_types, NO);
 
-  arg_ffi_types = (ffi_type **)malloc(sizeof(ffi_type *) * (argc + 1));
   octypes = (char **)malloc(sizeof(char *) * (argc + 1)); /* first int is retval octype, then arg octypes */
-  if (arg_ffi_types == NULL || octypes == NULL) {
-    error = "Can't allocate memory";
-    goto bails;
-  }
-
+  ASSERT_ALLOC(octypes);
   for (i = 0; i < argc; i++) {
     if (i >= 2)
       octypes[i - 1] = arg_types[i];
-    arg_ffi_types[i] = ffi_type_for_octype(arg_types[i]);
   }
   octypes[0] = retval_type;
-  retval_ffi_type = ffi_type_for_octype(retval_type);
-  arg_ffi_types[argc] = NULL;
 
-  cif = (ffi_cif *)malloc(sizeof(ffi_cif));
-  if (cif == NULL) {
-    error = "Can't allocate memory";
-    goto bails;
-  }
-
-  if (ffi_prep_cif(cif, FFI_DEFAULT_ABI, argc, retval_ffi_type, arg_ffi_types) != FFI_OK) {
-    error = "Can't prepare cif";
-    goto bails;
-  }
-
-  closure = (ffi_closure *)malloc(sizeof(ffi_closure));
-  if (closure == NULL) {
-    error = "Can't allocate memory";
-    goto bails;
-  }
-
-  if (ffi_prep_closure(closure, cif, ovmix_ffi_closure, octypes) != FFI_OK) {
-    error = "Can't prepare closure";
-    goto bails;
-  }
+  closure = ffi_make_closure(retval_type, (const char **)arg_types, argc, ovmix_ffi_closure, octypes);
 
   pthread_mutex_lock(&ffi_imp_closures_lock);
   imp = NULL;
@@ -192,32 +156,18 @@ ovmix_imp_for_type(const char *type)
     st_insert(ffi_imp_closures, (st_data_t)type, (st_data_t)closure);
   pthread_mutex_unlock(&ffi_imp_closures_lock);
   if (ok) {
-    error = NULL;   
-    goto bails;
-  }
-  
-  imp = (IMP)closure;
-  goto done;
-
-bails:
-  if (arg_ffi_types != NULL)
-    free(arg_ffi_types);
-  if (cif != NULL)
-    free(cif);
-  if (closure != NULL)
-    free(closure);
-  if (arg_types != NULL) {
-    for (i = 0; i < argc; i++)
-      free(arg_types[i]);
-    free(arg_types);
-  }
-  if (retval_type != NULL)
+    if (arg_types != NULL) {
+      for (i = 0; i < argc; i++)
+        free(arg_types[i]);
+      free(arg_types);
+    }
     free(retval_type);
-  if (error != NULL)
-    rb_raise(rb_eRuntimeError, error);
+    free(octypes);   
+    free(closure);
+    closure = imp;
+  }
 
-done:
-  return imp; 
+  return closure;
 }
 
 /**
