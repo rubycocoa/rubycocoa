@@ -1,3 +1,11 @@
+2007-03-13  Fujimoto Hisa  <hisa@fobj.com>
+
+	* framework/src/objc/cls_objcptr.m:
+	Added methods ObjcPtr#encoding and ObjcPtr#regard_as. the
+	regard_as is to specify the encoding for the receiver.  Modified
+	ObjcPtr.new to specify encoding and size. Modified ObjcPtr#[] to
+	get decoded values as an array.
+
 2007-03-12  Laurent Sansonetti <lsansonetti@apple.com>
 
 	* framework/src/objc/libffi.h,
