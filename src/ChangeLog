@@ -1,3 +1,9 @@
+2007-03-13  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* framework/tool/gen_bridge_metadata.rb:
+	Better detection of Objective-C methods, make sure exception markup is
+	properly merged for method arguments and return value.
+
 2007-03-13  Fujimoto Hisa  <hisa@fobj.com>
 
 	* framework/src/objc/cls_objcptr.m:
