@@ -22,6 +22,75 @@ struct _objcptr_data {
 #define ALLOCATED_SIZE_OF(o) (OBJCPTR_DATA_PTR(o)->allocated_size)
 #define ENCODING_OF(o) (OBJCPTR_DATA_PTR(o)->encoding)
 
+
+struct _encoding_type_rec {
+  struct _encoding_type_rec* next;
+  RB_ID        key;
+  const char*  encoding;
+};
+
+struct _encoding_type_rec* _encoding_type_list = NULL;
+
+static void
+_add_encoding_type(const char* key, const char* encstr)
+{
+  struct _encoding_type_rec* rec;
+
+  if (ocdata_size(encstr) > 0) {
+    rec = (struct _encoding_type_rec*)
+      malloc(sizeof(struct _encoding_type_rec));
+    rec->key      = rb_intern(key);
+    rec->encoding = encstr;
+    rec->next     = _encoding_type_list;
+    _encoding_type_list = rec;
+  }
+}
+
+static const char* initial_types[][2] = {
+  {      "char", "c" },
+  {     "uchar", "C" },
+  {     "short", "s" },
+  {    "ushort", "S" },
+  {       "int", "i" },
+  {      "uint", "I" },
+  {      "long", "l" },
+  {     "ulong", "L" },
+  {  "longlong", "q" },
+  { "ulonglong", "Q" },
+  {     "float", "f" },
+  {    "double", "d" },
+  { NULL, NULL }
+};
+
+static void _initialize_encoding_type_list()
+{
+  const char* (*ip)[2];
+
+  if (_encoding_type_list != NULL) return;
+  
+  ip = initial_types;
+  while ((*ip)[0] != NULL) {
+    _add_encoding_type((*ip)[0], (*ip)[1]);
+    ip++;
+  }
+}
+
+static const struct _encoding_type_rec*
+_lookup_encoding_type(VALUE key)
+{
+  struct _encoding_type_rec* rec;
+
+  _initialize_encoding_type_list();
+  rec = _encoding_type_list;
+  while (rec != NULL) {
+    if (SYMBOL_P(key) && rec->key == rb_to_id(key))
+      return rec;
+    rec = rec->next;
+  }
+  return NULL;
+}
+
+
 /** for debugging stuff **/
 void cptrlog(const char* s, VALUE obj)
 {
@@ -69,9 +138,29 @@ _objcptr_s_new(VALUE klass, long len)
 }
 
 static VALUE
-rb_objcptr_s_allocate(VALUE klass, VALUE length)
+rb_objcptr_s_allocate(int argc, VALUE* argv, VALUE klass)
 {
-  return _objcptr_s_new (klass, NUM2LONG (length));
+  VALUE  key, cnt, obj;
+  size_t length;
+  const struct _encoding_type_rec* rec;
+
+  argc = rb_scan_args(argc, argv, "11", &key, &cnt);
+
+  if (argc == 1 && ! SYMBOL_P(key)) {
+    length = NUM2LONG(key);
+    return _objcptr_s_new (klass, length);
+  }
+
+  rec = _lookup_encoding_type(key);
+  if (rec == NULL)
+    rb_raise(rb_eRuntimeError, "unsupported encoding -- %s", 
+	     rb_id2name(rb_to_id(key)));
+
+  length = (argc == 2) ? NUM2LONG(cnt) : 1;
+  length *= ocdata_size(rec->encoding);
+  obj = _objcptr_s_new (klass, length);
+  ENCODING_OF(obj) = rec->encoding;
+  return obj;
 }
 
 static VALUE
@@ -99,11 +188,12 @@ rb_objcptr_inspect(VALUE rcv)
   VALUE rbclass_name;
 
   rbclass_name = rb_mod_name(CLASS_OF(rcv));
-  snprintf(s, sizeof(s), "#<%s:0x%lx cptr=%p allocated_size=%ld>",
-	   STR2CSTR(rbclass_name),
-	   NUM2ULONG(rb_obj_id(rcv)),
-	   CPTR_OF(rcv),
-	   ALLOCATED_SIZE_OF(rcv));
+  snprintf(s, sizeof(s), "#<%s:0x%lx cptr=%p allocated_size=%ld encoding=%s>",
+           STR2CSTR(rbclass_name),
+           NUM2ULONG(rb_obj_id(rcv)),
+           CPTR_OF(rcv),
+           ALLOCATED_SIZE_OF(rcv),
+           ENCODING_OF(rcv) ? ENCODING_OF(rcv) : "(unknown)");
   // cptrlog ("rb_objcptr_inspect", rcv);
   return rb_str_new2(s);
 }
@@ -121,6 +211,27 @@ objcptr_allocated_size(VALUE rcv)
 }
 
 static VALUE
+rb_objcptr_encoding(VALUE rcv)
+{
+  return ENCODING_OF(rcv) ?
+    rb_str_new2(ENCODING_OF(rcv)):
+    Qnil;
+}
+
+static VALUE
+rb_objcptr_regard_as(VALUE rcv, VALUE key)
+{
+  const struct _encoding_type_rec* rec;
+
+  rec = _lookup_encoding_type(key);
+  if (rec == NULL)
+    rb_raise(rb_eRuntimeError, "unsupported encoding -- %s", 
+	     rb_id2name(rb_to_id(key)));
+  ENCODING_OF(rcv) = rec->encoding;
+  return rcv;
+}
+
+static VALUE
 rb_objcptr_bytestr_at(VALUE rcv, VALUE offset, VALUE length)
 {
   return rb_tainted_str_new ((char*)CPTR_OF(rcv) + NUM2LONG(offset), NUM2LONG(length));
@@ -135,7 +246,8 @@ rb_objcptr_bytestr(int argc, VALUE* argv, VALUE rcv)
   length = ALLOCATED_SIZE_OF(rcv);
   rb_scan_args(argc, argv, "01", &rb_length);
   if (length == 0 || rb_length != Qnil) {
-    Check_Type(rb_length, T_FIXNUM);
+    if (! FIXNUM_P(rb_length))
+      Check_Type(rb_length, T_BIGNUM);
     length = NUM2LONG(rb_length);
   }
   return rb_tainted_str_new (CPTR_OF(rcv), length);
@@ -242,22 +354,19 @@ objcptr_s_new_with_cptr (void* cptr, const char* encoding)
 void* objcptr_cptr (VALUE rcv)
 {
   if (CLASS_OF(rcv) == _kObjcPtr) {
-    OBJ_TAINT(rcv);		   // A raw C pointer is passed to the C world, so it may taint.
+    OBJ_TAINT(rcv);                // A raw C pointer is passed to the C world, so it may taint.
     return CPTR_OF(rcv);
   }
   return NULL;
 }
 
 static VALUE
-rb_objcptr_at (VALUE rcv, VALUE key)
+objcptr_at (VALUE rcv, VALUE key)
 {
   unsigned offset;
   VALUE val;
 
   Check_Type(key, T_FIXNUM);
-  if (ENCODING_OF(rcv) == NULL)
-    rb_raise(rb_eRuntimeError, "#[] can't be called on this instance");
-
   offset = FIX2INT(key);  
   offset *= ocdata_size(ENCODING_OF(rcv));
 
@@ -267,6 +376,53 @@ rb_objcptr_at (VALUE rcv, VALUE key)
   return val; 
 }
 
+static VALUE
+objcptr_to_a (VALUE rcv, VALUE index, VALUE count)
+{
+  size_t type_size, offset;
+  long   i, max;
+  void*  ptr;
+  const char* type;
+  VALUE val, ary;
+
+  if (!FIXNUM_P(index)) Check_Type(index, T_BIGNUM);
+  if (!FIXNUM_P(count)) Check_Type(count, T_BIGNUM);
+
+  type = ENCODING_OF(rcv);
+  type_size = ocdata_size(type);
+  offset = NUM2UINT(index) * type_size;
+  ptr = CPTR_OF(rcv);
+  max = NUM2LONG(count);
+  ary = rb_ary_new2(max);
+
+  for (i = 0; i < max; i++) {
+    val = Qnil;
+    if (! ocdata_to_rbobj(Qnil, type, ptr + offset, &val, NO))
+      rb_raise(rb_eRuntimeError,
+               "Can't convert element of type '%s' at index %d offset %d", 
+               type, i, offset);
+    rb_ary_store(ary, i, val);
+    offset += type_size;
+  }
+  return ary; 
+}
+
+static VALUE
+rb_objcptr_at (int argc, VALUE* argv, VALUE rcv)
+{
+  VALUE key, count;
+  
+  if (ENCODING_OF(rcv) == NULL)
+    rb_raise(rb_eRuntimeError, "#[] can't be called on this instance");
+
+  argc = rb_scan_args(argc, argv, "11", &key, &count);
+  if (argc == 1)
+    return objcptr_at(rcv, key);
+  else if (argc == 2)
+    return objcptr_to_a(rcv, key, count);
+  return Qnil;
+}
+
 /*******/
 
 VALUE
@@ -274,7 +430,7 @@ init_cls_ObjcPtr(VALUE outer)
 {
   _kObjcPtr = rb_define_class_under (outer, "ObjcPtr", rb_cObject);
 
-  rb_define_singleton_method (_kObjcPtr, "new", rb_objcptr_s_allocate, 1);
+  rb_define_singleton_method (_kObjcPtr, "new", rb_objcptr_s_allocate, -1);
   rb_define_singleton_method (_kObjcPtr, "allocate_as_int8", rb_objcptr_s_allocate_as_int8, 0);
   rb_define_singleton_method (_kObjcPtr, "allocate_as_int16", rb_objcptr_s_allocate_as_int16, 0);
   rb_define_singleton_method (_kObjcPtr, "allocate_as_int32", rb_objcptr_s_allocate_as_int32, 0);
@@ -283,6 +439,10 @@ init_cls_ObjcPtr(VALUE outer)
 
   rb_define_method (_kObjcPtr, "inspect", rb_objcptr_inspect, 0);
   rb_define_method (_kObjcPtr, "allocated_size", rb_objcptr_allocated_size, 0);
+
+  rb_define_method (_kObjcPtr, "encoding", rb_objcptr_encoding, 0);
+  rb_define_method (_kObjcPtr, "__regard_as__", rb_objcptr_regard_as, 1);
+  rb_define_alias  (_kObjcPtr, "regard_as", "__regard_as__");
 
   rb_define_method (_kObjcPtr, "bytestr_at", rb_objcptr_bytestr_at, 2);
   rb_define_method (_kObjcPtr, "bytestr", rb_objcptr_bytestr, -1);
@@ -307,7 +467,7 @@ init_cls_ObjcPtr(VALUE outer)
   rb_define_alias (_kObjcPtr, "uint", "uint32");
   rb_define_alias (_kObjcPtr, "bool", "uint8");
 
-  rb_define_method (_kObjcPtr, "[]", rb_objcptr_at, 1);
+  rb_define_method (_kObjcPtr, "[]", rb_objcptr_at, -1);
 
   return _kObjcPtr;
 }
