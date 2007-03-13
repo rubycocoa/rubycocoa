@@ -197,12 +197,18 @@ class OCHeaderAnalyzer
           selector = ''
           data = data[0..data.index(';')]
           args_data = []
-          data.scan(args_re) { |x| args_data << [x, $'] }
+          data.scan(args_re) { |x| args_data << [$`, x, $'] }
           args_data.each_with_index do |ary, n|
-            argname, argtype = ary
+            before, argname, argtype = ary
+            arg_nameless = (n > 0 and /\)\s*$/.match(before))
+            argname = ':' if arg_nameless
             if n < args_data.length - 1
-              argtype.sub!(args_data[n + 1][1], '')
-              argtype.sub!(/\w+\s+\w+:\s*$/, '')
+              argtype.sub!(args_data[n + 1][2], '')
+              if arg_nameless
+                argtype.sub!(/\w+\s*:\s*$/, '')
+              else
+                argtype.sub!(/\w+\s+\w+:\s*$/, '')
+              end
             else
               argtype.sub!(/\s+__attribute__\(\(.+\)\)/, '')
               argtype.sub!(/\w+\s*;$/, '')
@@ -1071,11 +1077,27 @@ EOC
                 orig_element.add_attribute(name, value)
               end
             end
-            # We can just append the retval/args, FIXME we need to solve potential conflicts
-            retval_element = orig_element.elements['retval']
-            orig_element.delete_element(retval_element) if retval_element
-            element.elements.each('arg') { |child| orig_element.add_element(child) }
-            orig_element.add_element(retval_element) if retval_element
+            # We can just append/update the retval/args
+            orig_retval = orig_element.elements['retval']
+            orig_element.delete_element(orig_retval) if orig_retval
+            element.elements.each('arg') do |child| 
+              index = child.attributes['index']
+              orig_arg = orig_element.elements["arg[@index='#{index}']"]
+              if orig_arg.nil?
+                orig_element.add_element(child) 
+              else
+                child.attributes.each do |name, value|
+                  orig_arg.add_attribute(name, value)
+                end
+              end
+            end
+            orig_element.add_element(orig_retval) if orig_retval
+            retval = element.elements['retval']
+            if retval
+              retval.attributes.each do |name, value|
+                orig_retval.add_attribute(name, value)
+              end
+            end
           end
         end
       end
