@@ -98,7 +98,27 @@ class Decorator
 
   DECORATORS = {}
   def self.install(key)        DECORATORS[key] = self   end
-  def Decorator.instance(key)  DECORATORS[key].instance end
+
+  def Decorator.instance(key)
+    klass = DECORATORS[key]
+    klass && klass.instance
+  end
+
+  def Decorator.default
+    Decorator.instance(:default)
+  end
+
+  def Decorator.default=(key)
+    DECORATORS[:default] = DECORATORS[key]
+  end
+
+  def Decorator.require_decorator(key)
+    require "#{key}_decorator"
+    Decorator.default = key
+    key
+  rescue Exception => err
+    nil
+  end
 
   def initialize(style)
     @style     ||= DecoratorStyle.instance(style)

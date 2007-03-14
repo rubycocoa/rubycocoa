@@ -59,8 +59,8 @@
 					PBXFileDataSource_Target_ColumnID,
 				);
 			};
-			PBXPerProjectTemplateStateSaveDate = 194950827;
-			PBXWorkspaceStateSaveDate = 194950827;
+			PBXPerProjectTemplateStateSaveDate = 195524588;
+			PBXWorkspaceStateSaveDate = 195524588;
 		};
 		sourceControlManager = 4ECB130C0B95937800CC96BF /* Source Control */;
 		userBuildSettings = {
@@ -84,6 +84,14 @@
 	4EA85E360BA0401B00F68C4E /* syntax_decorator.rb */ = {
 		uiCtxt = {
 			sepNavIntBoundsRect = "{{0, 0}, {1047, 3002}}";
+			sepNavSelRange = "{0, 0}";
+			sepNavVisRect = "{{0, 0}, {1047, 551}}";
+			sepNavWindowFrame = "{{38, 81}, {1092, 671}}";
+		};
+	};
+	4EA85F1A0BA16FA600F68C4E /* decorator.rb */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {1047, 3762}}";
 			sepNavSelRange = "{0, 0}";
 			sepNavVisRect = "{{0, 0}, {1047, 551}}";
 			sepNavWindowFrame = "{{38, 81}, {1092, 671}}";
@@ -131,9 +139,9 @@
 	};
 	4ECB13350B96BD8000CC96BF /* init_CocoaRepl.rb */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1047, 551}}";
-			sepNavSelRange = "{377, 0}";
-			sepNavVisRect = "{{0, 0}, {1047, 551}}";
+			sepNavIntBoundsRect = "{{0, 0}, {1047, 798}}";
+			sepNavSelRange = "{961, 0}";
+			sepNavVisRect = "{{0, 228}, {1047, 551}}";
 			sepNavWindowFrame = "{{38, 81}, {1092, 671}}";
 		};
 	};

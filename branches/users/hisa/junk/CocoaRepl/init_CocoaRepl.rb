@@ -33,8 +33,15 @@ class Array;  def_truncated_inspect 1, "...]" end
 class Hash;   def_truncated_inspect 1, "...}" end
 class String; def_truncated_inspect 1, '..."' end
 
+def load_decorator
+  require 'decorator'
+  Decorator.require_decorator(:ripper) ||
+    Decorator.require_decorator(:syntax) ||
+    Decorator.require_decorator(:simple)
+end
+
 OSX.init_for_bundle do |bdl,prm,lgr|
+  load_decorator
   require 'RubyProgramTextView'
   require 'ReplController'
-
 end

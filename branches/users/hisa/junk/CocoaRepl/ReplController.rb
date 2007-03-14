@@ -25,6 +25,8 @@ class ReplController < OSX::NSObject
     @scratchText.setFont(font)
     @resultText.setFont(font)
     @outText.setFont(font)
+    @descriptionText.setFont(NSFont.userFixedPitchFontOfSize(14))
+
     initial_msg = "Ruby #{RUBY_VERSION}"
     initial_msg << ", RubyCocoa #{RUBYCOCOA_VERSION}"
     initial_msg << " (#{RUBYCOCOA_SVN_REVISION})"
