@@ -117,6 +117,7 @@ class Decorator
     Decorator.default = key
     key
   rescue => err
+    warn(err.message)
     nil
   end
 
