@@ -31,6 +31,7 @@ class ReplController < OSX::NSObject
     initial_msg << ", RubyCocoa #{RUBYCOCOA_VERSION}"
     initial_msg << " (#{RUBYCOCOA_SVN_REVISION})"
     @statusView.setStringValue(initial_msg)
+    @statusView.window.setTitle("Read-Eval-Print Loop for #{initial_msg}")
 
     tvdel = RubyProgramTextViewDelegate.alloc.init
     tvdel.setController(self)
