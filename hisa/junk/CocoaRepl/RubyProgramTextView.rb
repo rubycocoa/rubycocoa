@@ -8,11 +8,7 @@
 #
 require 'osx/cocoa'
 require 'ri_contents'
-require 'syntax_decorator'
-require 'ripper_decorator'
-
-# TOKENIZE_PARSER = :ripper
-TOKENIZE_PARSER = :syntax
+require 'decorator'
 
 class OSX::NSTextStorage
   include OSX
@@ -80,14 +76,16 @@ class RubyProgramTextStorageDelegate < OSX::NSObject
 
   def init
     @ri = RiContents.instance
-    @decorator = Decorator.instance(TOKENIZE_PARSER)
+    @decorator = Decorator.default
     return self
   end
 
   def textStorageDidProcessEditing(ntf)
-    storage = ntf.object
-    range = storage.blockRangeForRange(storage.editedRange)
-    @decorator.decorate(storage, range)
+    if @decorator then
+      storage = ntf.object
+      range = storage.blockRangeForRange(storage.editedRange)
+      @decorator.decorate(storage, range)
+    end
   end
 end
 
@@ -98,11 +96,6 @@ class RubyProgramTextView < OSX::NSTextView
   def awakeFromNib
     textStorage.setDelegate(RubyProgramTextStorageDelegate.alloc.init)
   end
-
-#   def completedText
-#     r = rangeForUserCompletion
-#     textStorage.string.substringWithRange(r)
-#   end
 end
 
 
@@ -124,7 +117,7 @@ class RubyProgramTextViewDelegate < OSX::NSObject
     view = ntf.object
     range = view.rangeForUserCompletion
     if range.length > 0 then
-      @key = extract_key(view.textStorage, range)
+      @key = view.textStorage.string.substringWithRange(range).to_s
       @words = @ri.lookup_name(@key)
       @controller.textDidChange if @controller
     end

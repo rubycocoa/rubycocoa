@@ -10,6 +10,16 @@ require 'rdoc/ri/ri_paths'
 require 'rdoc/ri/ri_cache'
 require 'ri_entry'
 
+class LookupCache
+  def initialize
+    @cache = {}
+  end
+
+  def lookup(key)
+    @cache[key] || @cache[key] = yield
+  end
+end
+
 class RiContents
   
   def self.instance
@@ -27,40 +37,48 @@ class RiContents
     @class_method_names = @instance_method_names = nil
   end
 
+  LOOKUP_NAME_CACHE = LookupCache.new
+
   def lookup_name(key, *options)
-    key = _pattern_for(key, *options)
-    result = []
-    result.concat( lookup_class_name(key,  *options) )
-    result.concat( lookup_method_name(key, *options) )
-    result
+    LOOKUP_NAME_CACHE.lookup([key, options]) {
+      ptn = pattern_for(key, *options)
+      result = []
+      result.concat( lookup_class_name(ptn) )
+      result.concat( lookup_method_name(ptn) )
+      result
+    }
   end
 
   def lookup_class_name(key, *options)
-    key = _pattern_for(key, *options)
-    lookup_name_for(class_names, key) 
+    ptn = pattern_for(key, *options)
+    lookup_name_for(class_names, ptn) 
   end
 
   def lookup_method_name(key, *options)
-    key = _pattern_for(key, *options)
-    lookup_name_for(method_names, key)
+    ptn = pattern_for(key, *options)
+    lookup_name_for(method_names, ptn)
   end
 
+  LOOKUP_CACHE = LookupCache.new
+
   def lookup(key, *options)
-    key = _pattern_for(key, *options)
-    result = []
-    result.concat( lookup_class(key,  *options) )
-    result.concat( lookup_method(key, *options) )
-    result
+    LOOKUP_CACHE.lookup([key, options]) {
+      ptn = pattern_for(key, *options)
+      result = []
+      result.concat( lookup_class(ptn) )
+      result.concat( lookup_method(ptn) )
+      result
+    }
   end
 
   def lookup_class(key, *options)
-    key = _pattern_for(key, *options)
-    lookup_for(classes, key) 
+    ptn = pattern_for(key, *options)
+    lookup_for(classes, ptn) 
   end
 
   def lookup_method(key, *options)
-    key = _pattern_for(key, *options)
-    lookup_for(methods, key)
+    ptn = pattern_for(key, *options)
+    lookup_for(methods, ptn)
   end
 
   def classes
@@ -100,24 +118,34 @@ class RiContents
 
   private
 
-  def _pattern_for(key, *options)
+  PATTERN_CACHE = LookupCache.new
+
+  def pattern_for(key, *options)
     case key
     when String then
-      keys = []
-      keys << key[0].chr unless /^(\*|ns|osx)/i =~ key
-      key = Regexp.escape(key.to_s)
-      key.gsub!(/\\\*/,'.*')
-      if options.include?(:entire) then
-        keys << /^#{key}$/i 
-      else
-        keys << /^#{key}/i
-      end
-      keys
-    when Regexp then  [ key ]
-    when Array  then  key
+      PATTERN_CACHE.lookup([key, options]) {
+        _pattern_for(key, *options)
+      }
+    when Regexp then
+      [ key ]
+    when Array  then
+      key
     else
       raise TypeError, "require String or Regexp for key=#{key.inspect}"
     end
+  end
+
+  def _pattern_for(key, *options)
+    keys = []
+    keys << key[0].chr unless /^(\*|ns|osx)/i =~ key
+    key = Regexp.escape(key.to_s)
+    key.gsub!(/\\\*/,'.*')
+    if options.include?(:entire) then
+      keys << /^#{key}$/i 
+    else
+      keys << /^#{key}/i
+    end
+    keys
   end
 
   def lookup_for(ary, patterns)
