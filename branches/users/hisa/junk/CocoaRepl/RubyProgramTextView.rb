@@ -10,11 +10,21 @@ require 'osx/cocoa'
 require 'ri_contents'
 require 'decorator'
 
+class OSX::NSString
+  def rubyString
+    self.to_s.gsub(/\r/, "\n")
+  end
+end
+
 class OSX::NSTextStorage
   include OSX
 
+  def rubySubString(range)
+    string.substringWithRange(range).rubyString
+  end
+
   def rubyString
-    string.to_s.gsub(/\r/, "\n")
+    string.rubyString
   end
 
   def isEmptyLineForRange(range)
@@ -22,6 +32,10 @@ class OSX::NSTextStorage
     if range.nil? or /^\s*$/ =~ string.substringWithRange(range).to_s 
     then  true
     else  false  end
+  end
+
+  def lineRangeForRange(range)
+    string.lineRangeForRange(range)
   end
 
   def blockRangeForRange(range)
@@ -96,6 +110,23 @@ class RubyProgramTextView < OSX::NSTextView
   def awakeFromNib
     textStorage.setDelegate(RubyProgramTextStorageDelegate.alloc.init)
   end
+
+  def rangeForCurrentBlock
+    textStorage.blockRangeForRange(selectedRange)
+  end
+
+  def rangeForCurrentLine
+    textStorage.lineRangeForRange(selectedRange)
+  end
+
+  def selectCurrentBlock
+    setSelectedRange(rangeForCurrentBlock)
+  end
+
+  def selectCurrentLine
+    setSelectedRange(rangeForCurrentLine)
+  end
+
 end
 
 

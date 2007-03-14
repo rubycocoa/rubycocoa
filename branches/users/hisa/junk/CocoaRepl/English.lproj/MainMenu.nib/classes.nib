@@ -2,7 +2,7 @@
     IBClasses = (
         {CLASS = FirstResponder; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
         {
-            ACTIONS = {evaluate = id; tabChanged = id; }; 
+            ACTIONS = {evaluate = id; selectBlock = id; tabChanged = id; }; 
             CLASS = ReplController; 
             LANGUAGE = ObjC; 
             OUTLETS = {
