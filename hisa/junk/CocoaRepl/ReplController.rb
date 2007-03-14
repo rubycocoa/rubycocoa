@@ -47,13 +47,17 @@ class ReplController < OSX::NSObject
     end
   end
 
-  ib_action :evaluate do
-    src = @scratchText.textStorage.rubyString.to_s
+  ib_action :evaluate do |sender|
+    src = string_for_eval(sender.tag)
     ret, err, output = with_io_redirect { 
       eval(src, TOPLEVEL_BINDING, "(program)", 1) 
     }
     show_result(ret, err, output)
     nil
+  end
+
+  ib_action :selectBlock do
+    @scratchText.selectCurrentBlock
   end
 
   def textDidChange
@@ -66,6 +70,16 @@ class ReplController < OSX::NSObject
   end
 
   private
+
+  def string_for_eval(tag)
+    storage = @scratchText.textStorage
+    case tag
+    when 0 then storage.rubyString
+    when 1 then storage.rubySubString(@scratchText.selectedRange)
+    when 2 then storage.rubySubString(@scratchText.rangeForCurrentLine)
+    when 3 then storage.rubySubString(@scratchText.rangeForCurrentBlock)
+    end
+  end
 
   def show_result(ret, err, output)
     if err then
