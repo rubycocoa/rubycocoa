@@ -1,5 +1,9 @@
 2007-03-15  Laurent Sansonetti <lsansonetti@apple.com>
 
+	* framework/src/objc/RBRuntime.m:
+	Do not crash if one resource (for example rb_main.rb) isn't found, but 
+	propose a clear message to the user instead.
+
 	* framework/tool/gen_bridge_metadata.rb:
 	- Override the informal protocol method types for 'BOOL' types ;
 	- Make sure formal protocol methods are added to the NSObject class ;
