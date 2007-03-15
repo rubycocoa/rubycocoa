@@ -157,7 +157,7 @@ class OCHeaderAnalyzer
         line.strip!
         if md = interface_re.match(line)
           current_interface = md[1] == 'protocol' ? 'NSObject' : md[2]
-          current_category = md[3].strip.delete('()') if md[3]
+          current_category = md[3].delete('()').strip if md[3]
         elsif end_re.match(line)
           current_interface = current_category = nil
         elsif current_interface and (line[0] == ?+ or line[0] == ?-)
