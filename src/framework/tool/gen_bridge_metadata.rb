@@ -191,7 +191,7 @@ class OCHeaderAnalyzer
             args << VarInfo.new(argtype, argname, '') unless argtype.empty?
           end
           selector = body_md[2] if selector.empty?
-          method = MethodInfo.new(retval, selector, line[0] == ?+, args, line)
+          method = MethodInfo.new(retval, selector, line[0] == ?+, args, data)
           if current_category and current_interface == 'NSObject'
             (@inf_protocols[current_category] ||= []) << method
           end
