@@ -1005,6 +1005,9 @@ EOC
     # Merge class/methods.
     exception_document.elements.each('/signatures/class') do |class_element|
       class_name = class_element.attributes['name']
+      if @ocmethods[class_name].nil?
+        raise "Class '#{class_name}' is described in an exception file but it has not been discovered by the final generator"
+      end
       # First replace the type attributes by the real encoding.
       class_element.elements.each('method') do |element|
         retval_element = element.elements['retval']
