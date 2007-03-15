@@ -34,6 +34,10 @@ static char* resource_item_path_for(const char* item_name, Class klass)
     NSBundle* bundle = bundle_for(klass);
     NSString* path = [NSString stringWithUTF8String: item_name];
     path = [bundle pathForResource: path ofType: nil];
+    if (path == NULL) {
+      NSLog(@"ERROR: Cannot locate the bundle resource `%s' - aborting.", item_name);
+      exit(1);
+    }
     result = strdup([path fileSystemRepresentation]);
   } END_POOL(pool);
   return result;
