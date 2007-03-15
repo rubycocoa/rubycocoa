@@ -1,3 +1,10 @@
+2007-03-15  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* framework/tool/gen_bridge_metadata.rb:
+	- Override the informal protocol method types for 'BOOL' types ;
+	- Make sure formal protocol methods are added to the NSObject class ;
+	- Override 'BOOL *' types with '^B'.
+
 2007-03-13  Laurent Sansonetti <lsansonetti@apple.com>
 
 	* framework/tool/gen_bridge_metadata.rb:

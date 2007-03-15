@@ -138,54 +138,28 @@ class OCHeaderAnalyzer
   end
 
   def informal_protocols
-    if @inf_protocols.nil?
-      re = /^\s*(@interface\s+(\w+)\s*\(\s*(\w+)\s*\))\s*$([^@]*)^\s*@end\s*$/m
-      base_re = /(\b\w+)$/
-      arg_re = /(\s\w+|\.{3})$/
-      @inf_protocols = {}
-      @cpp_result.scan(re).each { |m|
-        porig = m[0].strip
-        pbase = m[1]
-        pname = m[2]
-        entries = m[3].strip.split(';').map {|i| i.strip.sub(/^\#[^\n]+\n/, '') }
-        entries.map! {|i|
-          next if i[0] != ?- and i[0] != ?+
-          i.gsub!(/\n/, ' ')
-          selector = []
-          i.split(':').each_with_index do |ii, n|
-            re = n == 0 ? base_re : arg_re
-            mmm = re.match(ii.strip)
-            selector << (mmm ? mmm[0].strip : '')
-          end
-          selector = if selector.size <= 1
-            selector[0]
-          else
-            selector[0...-1].join(':') + ':'
-          end
-          InformalProtocolEntry.new(i, selector, i[0] == ?+)
-        }.compact!
-        (@inf_protocols[pbase] ||= []) << InformalProtocol.new(porig, pbase, pname, entries)
-      }
-    end
-    return @inf_protocols
+    self.ocmethods # to generate @inf_protocols
+    @inf_protocols
   end
 
   def ocmethods
     if @ocmethods.nil?
-      interface_re = /^@(interface|protocol)\s+(\w+)/
+      @inf_protocols ||= {}
+      interface_re = /^@(interface|protocol)\s+(\w+)\s*(\([^)]+\))?/
       end_re = /^@end/
       body_re = /^[-+]\s*(\([^)]+\))?\s*([^:\s;]+)/
       args_re = /\w+\s*:/
-      current_interface = nil
+      current_interface = current_category = nil
       @ocmethods = {}
       i = 0
       @cpp_result.each_line do |line|
         size = line.size
         line.strip!
         if md = interface_re.match(line)
-          current_interface = md[2]
+          current_interface = md[1] == 'protocol' ? 'NSObject' : md[2]
+          current_category = md[3].strip.delete('()') if md[3]
         elsif end_re.match(line)
-          current_interface = nil
+          current_interface = current_category = nil
         elsif current_interface and (line[0] == ?+ or line[0] == ?-)
           mtype = line[0]
           data = @cpp_result[i..-1]
@@ -216,8 +190,12 @@ class OCHeaderAnalyzer
             selector << argname
             args << VarInfo.new(argtype, argname, '') unless argtype.empty?
           end
-          selector = body_md[2] if selector.empty? 
-          (@ocmethods[current_interface] ||= []) << MethodInfo.new(retval, selector, line[0] == ?+, args, line)
+          selector = body_md[2] if selector.empty?
+          method = MethodInfo.new(retval, selector, line[0] == ?+, args, line)
+          if current_category and current_interface == 'NSObject'
+            (@inf_protocols[current_category] ||= []) << method
+          end
+          (@ocmethods[current_interface] ||= []) << method
         end
         i += size
       end
@@ -398,38 +376,13 @@ class OCHeaderAnalyzer
     def class_method?
       @is_class
     end
-  end
 
-  class InformalProtocolEntry
-    attr_reader :orig, :selector
-
-    def initialize(orig, selector, is_class_method)
-      @orig = orig
-      @selector = selector
-      @is_class_method = is_class_method
+    def <=>(o)
+      @selector <=> o.selector
     end
 
-    def class_method?
-      @is_class_method
-    end
-
-    def <=>(x)
-      self.selector <=> x.selector
-    end
-  end
-
-  class InformalProtocol
-    attr_reader :orig, :base, :name, :entries
-
-    def initialize(orig, base, name, entries)
-      @orig = orig
-      @base = base
-      @name = name
-      @entries = entries
-    end
-
-    def <=>(x)
-      self.name <=> x.name
+    def <=>(o)
+      @selector <=> o.selector
     end
   end
 end
@@ -552,12 +505,19 @@ EOS
   end
 
   def encoding_of(varinfo, try_64_bit=false)
-    if ['BOOL', 'Boolean'].any? { |x| x == varinfo.stripped_rettype }
+    if /^(BOOL|Boolean)$/.match(varinfo.stripped_rettype)
       'B'
+    elsif /^(BOOL|Boolean)\s*\*$/.match(varinfo.stripped_rettype)
+      '^B'
     else
       h = try_64_bit ? @types_64_encoding : @types_encoding
       h[varinfo.stripped_rettype]
     end
+  end
+
+  def bool_type?(varinfo)
+    type = encoding_of(varinfo)
+    type and type[-1] == ?B
   end
 
   def add_type_attributes(element, varinfo)
@@ -719,16 +679,16 @@ EOS
     objc_impl_st = []
     log_st = []
     @resolved_inf_protocols_encoding ||= {}
-    @inf_protocols.each do |prot|
-      prot.entries.each do |entry|
-        objc_impl_st << "#{entry.orig}" + ' {}'
+    @inf_protocols.each do |name, methods|
+      methods.each do |method|
+        objc_impl_st << "#{method.orig}" + ' {}'
         log_st << if TIGER_OR_BELOW
           <<EOS
-printf("%s -> %s\\n", "#{entry.selector}", #{entry.class_method? ? "class_getClassMethod" : "class_getInstanceMethod"}(klass, @selector(#{entry.selector}))->method_types); 
+printf("%s -> %s\\n", "#{method.selector}", #{method.class_method? ? "class_getClassMethod" : "class_getInstanceMethod"}(klass, @selector(#{method.selector}))->method_types); 
 EOS
         else
           <<EOS
-printf("%s -> %s\\n", "#{entry.selector}", method_getDescription(#{entry.class_method? ? "class_getClassMethod" : "class_getInstanceMethod"}(klass, @selector(#{entry.selector})))->types); 
+printf("%s -> %s\\n", "#{method.selector}", method_getDescription(#{method.class_method? ? "class_getClassMethod" : "class_getInstanceMethod"}(klass, @selector(#{method.selector})))->types); 
 EOS
         end
       end
@@ -913,11 +873,11 @@ EOC
       end
       @ocmethods.sort { |x, y| x[0] <=> y[0] }.each do |class_name, methods|
         elements = methods.sort.map { |method| 
-          predicate = encoding_of(method) == 'B'
+          predicate = bool_type?(method)
           bool_args = []
           func_pointer_args = []
-          method.args.each_with_index do |a, i| 
-            if encoding_of(a) == 'B'
+          method.args.each_with_index do |a, i|
+            if bool_type?(a)
               bool_args << i 
             elsif a.function_pointer?(@func_ptr_types)
               func_pointer_args << i
@@ -930,12 +890,12 @@ EOC
           (bool_args | func_pointer_args).each do |i|
             arg_elem = element.add_element('arg')
             arg_elem.add_attribute('index', i)
-            arg_elem.add_attribute('type', 'B') if bool_args.include?(i)
+            arg_elem.add_attribute('type', encoding_of(method.args[i])) if bool_args.include?(i)
             if func_pointer_args.include?(i) 
               add_type_attributes(arg_elem, method.args[i])
             end
           end
-          element.add_element('retval').add_attribute('type', 'B') if predicate
+          element.add_element('retval').add_attribute('type', encoding_of(method)) if predicate
           element
         }.compact
         next if elements.empty?
@@ -943,14 +903,24 @@ EOC
         class_element.add_attribute('name', class_name)           
         elements.each { |x| class_element.add_element(x) }
       end
-      @inf_protocols.sort.each do |protocol|
+      @inf_protocols.sort { |x, y| x[0] <=> y[0] }.each do |name, methods|
         prot_element = root.add_element('informal_protocol')
-        prot_element.add_attribute('name', protocol.name)
-        protocol.entries.sort.each do |entry|
+        prot_element.add_attribute('name', name)
+        methods.sort.each do |method|
           element = prot_element.add_element('method')
-          element.add_attribute('selector', entry.selector)
-          element.add_attribute('class_method', true) if entry.class_method?
-          element.add_attribute('type', @resolved_inf_protocols_encoding[entry.selector])
+          method_type = @resolved_inf_protocols_encoding[method.selector]
+          offset = 0
+          method.args.each do |arg|
+            type = encoding_of(arg)
+            if type == 'B' or type == 'c'
+              offset = method_type.index('c', offset)
+              method_type[offset] = type if type == 'B'
+              offset += 1
+            end 
+          end
+          element.add_attribute('selector', method.selector)
+          element.add_attribute('class_method', true) if method.class_method?
+          element.add_attribute('type', method_type)
         end
       end
 
@@ -1111,7 +1081,7 @@ EOC
     @defines = []
     @struct_names = []
     @cftype_names = []
-    @inf_protocols = [] 
+    @inf_protocols = {} 
     @ocmethods = {}
     @func_ptr_types = {}
     @headers.each do |path|
@@ -1131,8 +1101,7 @@ EOC
         @constants.concat(analyzer.constants)
         @enums.merge!(analyzer.enums)
         @defines.concat(analyzer.defines)
-        list = analyzer.informal_protocols['NSObject']
-        @inf_protocols.concat(list) unless list.nil? 
+        @inf_protocols.merge!(analyzer.informal_protocols)
         @func_ptr_types.merge!(analyzer.function_pointer_types)
       end
       @ocmethods.merge!(analyzer.ocmethods) { |key, old, new| old.concat(new) }
@@ -1146,10 +1115,10 @@ EOC
       end
     end
     [@constants, @struct_names, @cftype_names].each { |c| c.uniq! }
-    all_inf_protocol_signatures = @inf_protocols.map { |p| p.entries.map { |e| e.selector } }.flatten
-    @inf_protocols.each do |protocol|
-      protocol.entries.delete_if do |entry|
-        s = entry.selector
+    all_inf_protocol_signatures = @inf_protocols.values.map { |ary| ary.map { |m| m.selector } }.flatten
+    @inf_protocols.each do |name, methods|
+      methods.delete_if do |method|
+        s = method.selector
         all_inf_protocol_signatures.select { |s2| s2 == s }.length > 1
       end
     end
