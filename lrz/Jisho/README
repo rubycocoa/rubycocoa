@@ -1,0 +1,69 @@
+Jisho is a Japanese dictionary tool, based on the very excellent JMDict 
+project. See the LICENSE file for licensing details.
+
+== Features ==
+
+- Can search by providing English, Hiragana and Katakana criterion.
+
+- Results show the Kanji first, followed by the possible Kana representations.
+  The English translation comes next.
+
+- You can increate the font size and go back and forward through the 
+  searched entries in the history.
+
+- Jisho registers a service that you can use to request translations from 
+  other applications. For example, select a word in Safari, and click on
+  the application menu, then "Services" and "Lookup in Jisho". You can activate
+  this using the ``command+t'' keyboard shortcut.
+
+== Build requirements ==
+
+In order to build and use Jisho, you need:
+
+1) Mac OS X 10.4.8 or later
+
+2) One of the recents RubyCocoa 1.0 pre-releases. You can grab one at:
+
+   http://rubycocoa.sourceforge.net/doc/unstable/
+
+3) Ferret. Installable from RubyGems using:
+
+   gem install ferret
+
+4) Libxml-ruby 0.4.0-pre-01 or later. Available from:
+
+   http://rubyforge.org/frs/?group_id=494 
+
+Once you have all those pieces installed on your machine, you can build Jisho
+by running: 
+
+   $ xcodebuild
+
+This should leave a Jisho.app bundle in your build directory, depending of 
+your Xcode configuration.
+
+== Generating the Ferret index ==
+
+Once you run Jisho for the first time, it will index the contents of the 
+XML-based JMDict dictionary into a Ferret index. During the indexing the
+popular pizza-of-the-death will appear. This should take from 10 to 20 minutes,
+depending of your hardware.
+
+The indexing is obviously performed only once. The path of the index file is:
+
+    ~/Library/Application Support/Jisho/index
+
+If you remove the `index' sub-directory, Jisho will re-generate it the next 
+time it is started.
+
+== Support ==
+
+I wrote this small project to experiment both the XML::Reader APIs and the 
+Ferret indexing engine. I do not plan to provide extensive support on this 
+project. If you run into a problem, please try to find what's wrong by 
+yourself.
+
+If you still don't know what's going wrong, feel free to drop me a message, but
+do not hold your breath for a quick response:
+
+    lrz@chopine.be
