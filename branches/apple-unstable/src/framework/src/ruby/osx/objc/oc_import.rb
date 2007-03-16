@@ -25,6 +25,10 @@ module OSX
       []
     end
 
+  if FileTest.directory? OSX::RUBYCOCOA_RESOURCES_PATH then
+    SIGN_PATHS << File.join(OSX::RUBYCOCOA_RESOURCES_PATH, "BridgeSupport")
+  end
+
   if path = ENV['HOME']
     FRAMEWORK_PATHS << File.join(ENV['HOME'], 'Library', 'Frameworks')
     SIGN_PATHS << File.join(ENV['HOME'], 'Library', 'BridgeSupport')

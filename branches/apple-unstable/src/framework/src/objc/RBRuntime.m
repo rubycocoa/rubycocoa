@@ -69,6 +69,11 @@ static char* resource_path()
   return resource_path_for(nil);
 }
 
+char* framework_resources_path()
+{
+  return resource_path_for([RBObject class]);
+}
+
 static char* framework_ruby_path()
 {
   return resource_item_path_for("ruby", [RBObject class]);
