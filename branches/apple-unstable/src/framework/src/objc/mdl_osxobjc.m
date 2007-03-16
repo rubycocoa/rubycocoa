@@ -385,6 +385,7 @@ void initialize_mdl_osxobjc()
 
   rb_define_const(mOSX, "RUBYCOCOA_RESOURCES_PATH",
 		  rb_obj_freeze(rb_str_new2(framework_resources_path())));
+  rb_define_const(mOSX, "RUBYCOCOA_SIGN_PATHS", rb_ary_new());
 
   rb_define_module_function(mOSX, "objc_symbol_to_obj", osx_mf_objc_symbol_to_obj, 2);
 

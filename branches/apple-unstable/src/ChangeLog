@@ -1,6 +1,16 @@
 2007-03-16  Fujimoto Hisa  <hisa@fobj.com>
 
 	* framework/src/ruby/osx/objc/oc_import.rb:
+	Allowed to put BridgeSupport directory into the Resources of the
+	application/bundle. It may be for 3rd party framework/library
+	which is not aware of BridgeSupport.
+
+	* framework/src/objc/mdl_osxobjc.m, framework/src/objc/RBRuntime.m:
+	Added constants OSX::RUBYCOCOA_SIGN_PATHS which includes each path
+	to BridgeSupport directory for the framework and an
+	application/bundles.
+
+	* framework/src/ruby/osx/objc/oc_import.rb:
 	Allowed to put BridgeSupport directory into the Resources of
 	RubyCocoa.framework.  for portability of RubyCocoa.framework.
 
