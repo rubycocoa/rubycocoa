@@ -25,6 +25,8 @@ module OSX
       []
     end
 
+  FRAMEWORK_PATHS.concat(RUBYCOCOA_FRAMEWORK_PATHS)
+
   if path = ENV['HOME']
     FRAMEWORK_PATHS << File.join(ENV['HOME'], 'Library', 'Frameworks')
     SIGN_PATHS << File.join(ENV['HOME'], 'Library', 'BridgeSupport')

@@ -1,3 +1,11 @@
+2007-03-16  Fujimoto Hisa  <hisa@fobj.com>
+
+	* framework/src/ruby/osx/objc/oc_import.rb, framework/src/objc/mdl_osxobjc.m, framework/src/objc/RBRuntime.m:
+	Added constants OSX::RUBYCOCOA_FRAMEWORK_PATHS which includes each
+	path to private/shared Frameworks directory for an
+	application/bundles. require_framework search into each
+	private/shared framework path for an application/bundles.
+	
 2007-03-16  Laurent Sansonetti <lsansonetti@apple.com>
 
 	* framework/tool/gen_bridge_metadata.rb:
