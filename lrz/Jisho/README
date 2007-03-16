@@ -10,7 +10,7 @@ https://rubycocoa.svn.sourceforge.net/svnroot/rubycocoa/branches/users/lrz/Jisho
 
 - Embed the very excellent EDICT dictionary, under its XML flavor (JMDict).
 
-- Can search by providing English, Hiragana and Katakana criterion.
+- Can search by providing English, Hiragana, Katakana and Kanji criterion.
 
 - Results show the Kanji first, followed by the possible Kana representations.
   The English translation comes next.
