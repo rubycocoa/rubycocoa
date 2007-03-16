@@ -32,7 +32,7 @@
 #line 1 "BridgeSupport.gperf"
 struct bs_xml_atom { char *name; int val; };
 
-#define TOTAL_KEYWORDS 12
+#define TOTAL_KEYWORDS 13
 #define MIN_WORD_LENGTH 3
 #define MAX_WORD_LENGTH 17
 #define MIN_HASH_VALUE 3
@@ -61,7 +61,7 @@ hash (register const char *str, register unsigned int len)
       22, 22, 22, 22, 22, 22, 22, 22, 22, 22,
       22, 22, 22, 22, 22, 22, 22, 22, 22, 22,
       22, 22, 22, 22, 22, 22, 22,  0, 22,  5,
-      22,  0,  0, 22, 22,  0, 22, 22, 22,  9,
+      22,  0,  0, 22, 22,  0, 22, 22, 22, 14,
       22, 15, 22, 22, 10,  0, 22, 22, 22, 22,
       22, 22, 22, 22, 22, 22, 22, 22, 22, 22,
       22, 22, 22, 22, 22, 22, 22, 22, 22, 22,
@@ -105,12 +105,14 @@ bs_xml_element (register const char *str, register unsigned int len)
       {"constant", 1},
 #line 14 "BridgeSupport.gperf"
       {"function_alias", 12},
-#line 11 "BridgeSupport.gperf"
-      {"method", 9 },
+#line 15 "BridgeSupport.gperf"
+      {"string_constant", 13},
 #line 8 "BridgeSupport.gperf"
       {"retval", 6},
 #line 6 "BridgeSupport.gperf"
       {"informal_protocol", 4},
+#line 11 "BridgeSupport.gperf"
+      {"method", 9 },
 #line 13 "BridgeSupport.gperf"
       {"opaque", 11}
     };
@@ -158,8 +160,11 @@ bs_xml_element (register const char *str, register unsigned int len)
               case 14:
                 resword = &wordlist[10];
                 goto compare;
-              case 18:
+              case 17:
                 resword = &wordlist[11];
+                goto compare;
+              case 18:
+                resword = &wordlist[12];
                 goto compare;
             }
           return 0;
@@ -174,7 +179,7 @@ bs_xml_element (register const char *str, register unsigned int len)
     }
   return 0;
 }
-#line 15 "BridgeSupport.gperf"
+#line 16 "BridgeSupport.gperf"
 
 #define BS_XML_CONSTANT           1
 #define BS_XML_ENUM               2
@@ -188,3 +193,4 @@ bs_xml_element (register const char *str, register unsigned int len)
 #define BS_XML_CFTYPE             10
 #define BS_XML_OPAQUE             11
 #define BS_XML_FUNCTION_ALIAS     12
+#define BS_XML_STRING_CONSTANT    13

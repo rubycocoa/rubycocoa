@@ -1058,6 +1058,52 @@ osx_load_bridge_support_file (VALUE mOSX, VALUE path)
       }
       break;
 
+      case BS_XML_STRING_CONSTANT: {
+        char *  strconst_name;
+
+        strconst_name = get_attribute_and_check(reader, "name");
+        if (rb_const_defined(mOSX, rb_intern(strconst_name))) {
+          DLOG("MDLOSX", "String constant '%s' already registered, skipping...", strconst_name);
+          free(strconst_name);
+        }
+        else { 
+          char *  strconst_value;
+          char *  strconst_nsstring;
+          BOOL    strconst_is_nsstring;
+          VALUE   value;
+
+          strconst_value = get_attribute_and_check(reader, "value");
+          strconst_nsstring = get_attribute(reader, "nsstring");
+          if (strconst_nsstring != NULL) {
+            strconst_is_nsstring = strcmp(strconst_nsstring, "true") == 0;
+            free(strconst_nsstring);
+          }
+          else {
+            strconst_is_nsstring = NO;
+          }
+
+          value = Qnil;
+          if (strconst_is_nsstring) {
+            NSString *nsvalue;
+            
+            nsvalue = [[NSString alloc] initWithUTF8String:strconst_value];
+            value = ocid_to_rbobj(Qnil, nsvalue);
+          }
+          else {
+            value = rb_str_new2(strconst_value);
+          }
+
+          CAPITALIZE(strconst_name);
+
+          if (!NIL_P(value))
+            rb_define_const(mOSX, strconst_name, value);
+
+          free(strconst_name);
+          free(strconst_value);   
+        }
+      }
+      break;
+
       case BS_XML_ENUM: { 
         char *  enum_name;
         BOOL    ignore;
