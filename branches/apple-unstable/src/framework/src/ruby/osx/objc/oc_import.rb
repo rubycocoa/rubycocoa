@@ -128,7 +128,7 @@ module OSX
       end
     end
 
-    # tyr to the app/bundle specific and RubyCocoa.framework metadata directories
+    # Try the app/bundle specific and RubyCocoa.framework metadata directories.
     RUBYCOCOA_SIGN_PATHS.each do |path| 
       if File.exist?(path) then
         return true if __load_bridge_support_file__(path, fname) 
