@@ -82,6 +82,36 @@ static char* bridge_support_path()
   return bridge_support_path_for(nil);
 }
 
+static char* private_frameworks_path_for(Class klass)
+{
+  char* result;
+  POOL_DO(pool) {
+    NSBundle* bundle = bundle_for(klass);
+    NSString* path = [bundle privateFrameworksPath];
+    result = strdup([path fileSystemRepresentation]);
+  } END_POOL(pool);
+  return result;
+}
+
+static char* private_frameworks_path() { 
+  return private_frameworks_path_for(nil);
+}
+
+static char* shared_frameworks_path_for(Class klass)
+{
+  char* result;
+  POOL_DO(pool) {
+    NSBundle* bundle = bundle_for(klass);
+    NSString* path = [bundle sharedFrameworksPath];
+    result = strdup([path fileSystemRepresentation]);
+  } END_POOL(pool);
+  return result;
+}
+
+static char* shared_frameworks_path() { 
+  return shared_frameworks_path_for(nil);
+}
+
 char* framework_resources_path()
 {
   return resource_path_for([RBObject class]);
@@ -115,6 +145,17 @@ static void sign_path_unshift(const char* path)
   rpath = rb_str_new2(path);
   if (! RTEST(rb_ary_includes(sign_paths, rpath)))
     rb_ary_unshift(sign_paths, rpath);
+}
+
+static void framework_paths_unshift(const char* path)
+{
+  VALUE frameworks_paths;
+  VALUE rpath;
+
+  frameworks_paths = rb_const_get(osx_s_module(), rb_intern("RUBYCOCOA_FRAMEWORK_PATHS"));
+  rpath = rb_str_new2(path);
+  if (! RTEST(rb_ary_includes(frameworks_paths, rpath)))
+    rb_ary_unshift(frameworks_paths, rpath);
 }
 
 static int
@@ -227,6 +268,8 @@ rubycocoa_bundle_init(const char* program,
   }
   load_path_unshift(resource_path_for(klass));
   sign_path_unshift(bridge_support_path_for(klass));
+  framework_paths_unshift(private_frameworks_path_for(klass));
+  framework_paths_unshift(shared_frameworks_path_for(klass));
   return loader(program, klass, param);
 }
 
@@ -248,6 +291,8 @@ rubycocoa_app_init(const char* program,
   }
   load_path_unshift(resource_path());
   sign_path_unshift(bridge_support_path());
+  framework_paths_unshift(private_frameworks_path());
+  framework_paths_unshift(shared_frameworks_path());
   return loader(program, nil, param);
 }
 
@@ -324,6 +369,8 @@ RBApplicationMain(const char* rb_program_path, int argc, const char* argv[])
     rubycocoa_init();
     load_path_unshift(resource_path()); // PATH_TO_BUNDLE/Contents/resources
     sign_path_unshift(bridge_support_path());
+    framework_paths_unshift(private_frameworks_path());
+    framework_paths_unshift(shared_frameworks_path());
     ruby_run();
   }
   return 0;
