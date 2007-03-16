@@ -19,6 +19,8 @@
 #import "OverrideMixin.h"
 #import "internal_macros.h"
 
+#define BRIDGE_SUPPORT_NAME "BridgeSupport"
+
 /* this function should be called from inside a NSAutoreleasePool */
 static NSBundle* bundle_for(Class klass)
 {
@@ -32,8 +34,9 @@ static char* resource_item_path_for(const char* item_name, Class klass)
   char* result;
   POOL_DO(pool) {
     NSBundle* bundle = bundle_for(klass);
-    NSString* path = [NSString stringWithUTF8String: item_name];
-    path = [bundle pathForResource: path ofType: nil];
+    NSString* path = [bundle resourcePath];
+    path = [path stringByAppendingFormat: @"/%@",
+                 [NSString stringWithUTF8String: item_name]];
     if (path == NULL) {
       NSLog(@"ERROR: Cannot locate the bundle resource `%s' - aborting.", item_name);
       exit(1);
@@ -69,6 +72,16 @@ static char* resource_path()
   return resource_path_for(nil);
 }
 
+static char* bridge_support_path_for(Class klass)
+{
+  return resource_item_path_for(BRIDGE_SUPPORT_NAME, klass);
+}
+
+static char* bridge_support_path()
+{
+  return bridge_support_path_for(nil);
+}
+
 char* framework_resources_path()
 {
   return resource_path_for([RBObject class]);
@@ -79,6 +92,11 @@ static char* framework_ruby_path()
   return resource_item_path_for("ruby", [RBObject class]);
 }
 
+static char* framework_bridge_support_path()
+{
+  return bridge_support_path_for([RBObject class]);
+}
+
 static void load_path_unshift(const char* path)
 {
   extern VALUE rb_load_path;
@@ -86,6 +104,17 @@ static void load_path_unshift(const char* path)
 
   if (! RTEST(rb_ary_includes(rb_load_path, rpath)))
     rb_ary_unshift(rb_load_path, rpath);
+}
+
+static void sign_path_unshift(const char* path)
+{
+  VALUE sign_paths;
+  VALUE rpath;
+
+  sign_paths = rb_const_get(osx_s_module(), rb_intern("RUBYCOCOA_SIGN_PATHS"));
+  rpath = rb_str_new2(path);
+  if (! RTEST(rb_ary_includes(sign_paths, rpath)))
+    rb_ary_unshift(sign_paths, rpath);
 }
 
 static int
@@ -176,6 +205,7 @@ static void rubycocoa_init()
     initialize_mdl_bundle_support();
     init_ovmix();
     load_path_unshift(framework_ruby_path()); // PATH_TO_FRAMEWORK/Resources/ruby
+    sign_path_unshift(framework_bridge_support_path());
     rubycocoa_initialized_flag = 1;
     rubycocoa_verbose = rb_gv_get("RUBYCOCOA_VERBOSE");
   }
@@ -195,7 +225,8 @@ rubycocoa_bundle_init(const char* program,
     rubycocoa_init();
     rubycocoa_set_frequently_init_stack(1);
   }
-  load_path_unshift( resource_path_for( klass ));
+  load_path_unshift(resource_path_for(klass));
+  sign_path_unshift(bridge_support_path_for(klass));
   return loader(program, klass, param);
 }
 
@@ -216,6 +247,7 @@ rubycocoa_app_init(const char* program,
     rubycocoa_set_frequently_init_stack(0);
   }
   load_path_unshift(resource_path());
+  sign_path_unshift(bridge_support_path());
   return loader(program, nil, param);
 }
 
@@ -291,6 +323,7 @@ RBApplicationMain(const char* rb_program_path, int argc, const char* argv[])
     ruby_options(ruby_argc, (char**) ruby_argv);
     rubycocoa_init();
     load_path_unshift(resource_path()); // PATH_TO_BUNDLE/Contents/resources
+    sign_path_unshift(bridge_support_path());
     ruby_run();
   }
   return 0;

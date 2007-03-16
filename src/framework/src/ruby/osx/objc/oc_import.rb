@@ -25,10 +25,6 @@ module OSX
       []
     end
 
-  if FileTest.directory? OSX::RUBYCOCOA_RESOURCES_PATH then
-    SIGN_PATHS << File.join(OSX::RUBYCOCOA_RESOURCES_PATH, "BridgeSupport")
-  end
-
   if path = ENV['HOME']
     FRAMEWORK_PATHS << File.join(ENV['HOME'], 'Library', 'Frameworks')
     SIGN_PATHS << File.join(ENV['HOME'], 'Library', 'BridgeSupport')
@@ -131,7 +127,14 @@ module OSX
         return true if __load_bridge_support_file__(path, fname)
       end
     end
- 
+
+    # tyr to the app/bundle specific and RubyCocoa.framework metadata directories
+    RUBYCOCOA_SIGN_PATHS.each do |path| 
+      if File.exist?(path) then
+        return true if __load_bridge_support_file__(path, fname) 
+      end
+    end
+
     # We can still look into the general metadata directories. 
     SIGN_PATHS.each { |dir| return true if __load_bridge_support_file__(dir, fname) } 
 
