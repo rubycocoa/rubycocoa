@@ -183,6 +183,9 @@
     <method selector='view:stringForToolTip:point:userData:'>
       <arg index='3' type_modifier='n'/>
     </method>
+    <method selector='insertGlyphs:length:forStartingGlyphAtIndex:characterIndex:'>
+      <arg index='0' type_modifier='n' c_array_length_in_arg='1'/>
+    </method>
   </class>
   <class name='NSTypesetter'>
     <method class_method='true' selector='printingAdjustmentInLayoutManager:forNominallySpacedGlyphRange:packedGlyphs:count:'>
@@ -207,10 +210,6 @@
       <arg index='0' type_modifier='o' c_array_length_in_arg='1'/>
     </method>
   </class>
-  <class name='NSGradient'>
-    <method selector='initWithColors:atLocations:colorSpace:' ignore='true' suggestion="Use other initializers."/>
-    <method selector='initWithColorsAndLocations:' ignore='true' suggestion="Use other initializers."/>
-  </class>
   <class name='NSOpenGLPixelFormat'>
     <method selector='initWithAttributes:'>
       <arg index='0' type_modifier='n' c_array_delimited_by_null='true'/>
@@ -221,21 +220,11 @@
       <arg index='3' type_modifier='n'/>
     </method>
   </class>
-  <class name='NSGlyphStorage'>
-    <method selector='insertGlyphs:length:forStartingGlyphAtIndex:characterIndex:'>
-      <arg index='0' type_modifier='n' c_array_length_in_arg='1'/>
-    </method>
-  </class>
   <class name='NSOpenGLContext'>
     <method selector='setOffScreen:width:height:rowbytes:' ignore='true'/>
   </class>
   <class name='NSMovie'>
     <method selector='initWithMovie:' ignore='true' suggestion='Use other initializers.'/>
-  </class>
-  <class name='NSPrintAccessoryController'>
-    <method selector='commitEditingWithDelegate:didCommitSelector:contextInfo:'>
-      <arg index='2' type_modifier='n'/>
-    </method>
   </class>
   <class name='NSDocument'>
     <method selector='saveDocumentWithDelegate:didSaveSelector:contextInfo:'>
