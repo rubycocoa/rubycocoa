@@ -8,6 +8,12 @@
 	
 2007-03-16  Laurent Sansonetti <lsansonetti@apple.com>
 
+	* framework/src/objc/BridgeSupport.gperf,
+	  framework/src/objc/BridgeSupportLexer.h,
+	  framework/src/objc/BridgeSupport.m,
+	  tests/tc_constants.rb:
+	Added support for string constants. Added test cases.
+
 	* framework/tool/gen_bridge_metadata.rb:
 	Emit metadata for string constants.
 

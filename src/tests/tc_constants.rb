@@ -65,5 +65,16 @@ class TC_Constants < Test::Unit::TestCase
      assert_equal :class_success, TestConstClass::Foo
    end
 
+   def test_string_constant
+     val = OSX::KCGNotifyEventTapAdded
+     assert_kind_of(String, val)
+     assert_equal('com.apple.coregraphics.eventTapAdded', val)
+   end
+
+   def test_string_constant_nsstring
+     val = OSX::KCGDisplayMode
+     assert_kind_of(OSX::NSString, val)
+     assert_equal('Mode', val.to_s)
+   end
 end
 
