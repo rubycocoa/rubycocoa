@@ -843,6 +843,27 @@ EOC
         element.add_attribute('name', constant.name)
         add_type_attributes(element, constant)
       end
+      @defines.sort { |x, y| x[0] <=> y[0] }.each do |name, value|
+        value.strip!
+        c_str = objc_str = false
+        if value[0] == ?" and value[-1] == ?"
+          value = value[1..-2]
+          c_str =  true
+        elsif value[0] == ?@ and value[1] == ?" and value[-1] == ?"
+          value = value[2..-2]
+          objc_str = true
+        elsif md = /^CFSTR\s*\(\s*([^)]+)\s*\)\s*$/.match(value)
+          if md[1][0] == ?" and md[1][-1] == ?"
+            value = md[1][1..-2]
+            objc_str = true
+          end
+        end
+        next if !c_str and !objc_str
+        element = root.add_element('string_constant')
+        element.add_attribute('name', name.strip)
+        element.add_attribute('value', value)
+        element.add_attribute('nsstring', objc_str) if objc_str
+      end
       @resolved_enums.sort { |x, y| x[0] <=> y[0] }.each do |enum, value| 
         element = root.add_element('enum')
         element.add_attribute('name', enum)
