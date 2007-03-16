@@ -1,3 +1,12 @@
+2007-03-16  Fujimoto Hisa  <hisa@fobj.com>
+
+	* framework/src/ruby/osx/objc/oc_import.rb:
+	Allowed to put BridgeSupport directory into the Resources of
+	RubyCocoa.framework.  for portability of RubyCocoa.framework.
+
+	* framework/src/objc/mdl_osxobjc.m, framework/src/objc/RBRuntime.m:
+	Added constants OSX::RUBYCOCOA_RESOURCES_PATH
+
 2007-03-16  Laurent Sansonetti <lsansonetti@apple.com>
 
 	* framework/bridge-support-exceptions/AddressBook.xml,
