@@ -1,7 +1,14 @@
 Jisho is a Japanese dictionary tool, based on the very excellent JMDict 
 project. See the LICENSE file for licensing details.
 
+Current version is 1.0. Further releases will be available from the following
+SVN repository:
+
+https://rubycocoa.svn.sourceforge.net/svnroot/rubycocoa/branches/users/lrz/Jisho
+
 == Features ==
+
+- Embed the very excellent EDICT dictionary, under its XML flavor (JMDict).
 
 - Can search by providing English, Hiragana and Katakana criterion.
 
