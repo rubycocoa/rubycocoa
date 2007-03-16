@@ -19,8 +19,6 @@
     <method selector='provideImageData:bytesPerRow:origin:size:userInfo:'>
       <arg index='0' type_modifier='n'/>
     </method>
-  </class>
-  <class name='CIPlugInRegistration'>
     <method selector='load:'>
       <arg index='0' type_modifier='n'/>
     </method>

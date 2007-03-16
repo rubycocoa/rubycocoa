@@ -1,3 +1,11 @@
+2007-03-16  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* framework/bridge-support-exceptions/AddressBook.xml,
+	  framework/bridge-support-exceptions/Foundation.xml,
+	  framework/bridge-support-exceptions/AppKit.xml,
+	  framework/bridge-support-exceptions/QuartzCore.xml:
+	Fixed config phase.
+
 2007-03-15  Laurent Sansonetti <lsansonetti@apple.com>
 
 	* framework/src/objc/RBRuntime.m:

@@ -11,9 +11,4 @@
   <cftype name='ABSearchElementRef'/>
   <struct name='ABActionCallbacks'/>
   <opaque name='ABRecordRef' type='@' ignore='true'/>
-  <class name='ABIdentityPicker'>
-    <method selector='beginSheetModalForWindow:modalDelegate:didEndSelector:contextInfo:'>
-      <arg index='3' type_modifier='n'/>
-    </method>
-  </class>
 </signatures>
