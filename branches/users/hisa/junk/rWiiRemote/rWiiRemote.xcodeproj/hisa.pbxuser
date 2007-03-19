@@ -1,0 +1,132 @@
+// !$*UTF8*$!
+{
+	29B97313FDCFA39411CA2CEA /* Project object */ = {
+		activeBuildConfigurationName = Debug;
+		activeExecutable = 4EDBE70A0B4D2675008E408E /* rWiiRemote */;
+		activeTarget = 4DDCA7030ACC9A6100E082CE /* rWiiRemote */;
+		breakpointsGroup = 4EDBE7520B4D27ED008E408E /* XCBreakpointsBucket */;
+		codeSenseManager = 4EDBE71D0B4D267F008E408E /* Code sense */;
+		executables = (
+			4EDBE70A0B4D2675008E408E /* rWiiRemote */,
+		);
+		perUserDictionary = {
+			PBXConfiguration.PBXFileTableDataSource3.PBXFileTableDataSource = {
+				PBXFileTableDataSourceColumnSortingDirectionKey = "-1";
+				PBXFileTableDataSourceColumnSortingKey = PBXFileDataSource_Filename_ColumnID;
+				PBXFileTableDataSourceColumnWidthsKey = (
+					20,
+					187,
+					20,
+					48,
+					43,
+					43,
+					20,
+				);
+				PBXFileTableDataSourceColumnsKey = (
+					PBXFileDataSource_FiletypeID,
+					PBXFileDataSource_Filename_ColumnID,
+					PBXFileDataSource_Built_ColumnID,
+					PBXFileDataSource_ObjectSize_ColumnID,
+					PBXFileDataSource_Errors_ColumnID,
+					PBXFileDataSource_Warnings_ColumnID,
+					PBXFileDataSource_Target_ColumnID,
+				);
+			};
+			PBXConfiguration.PBXTargetDataSource.PBXTargetDataSource = {
+				PBXFileTableDataSourceColumnSortingDirectionKey = "-1";
+				PBXFileTableDataSourceColumnSortingKey = PBXFileDataSource_Filename_ColumnID;
+				PBXFileTableDataSourceColumnWidthsKey = (
+					20,
+					200,
+					10,
+					20,
+					48.1626,
+					43,
+					43,
+				);
+				PBXFileTableDataSourceColumnsKey = (
+					PBXFileDataSource_FiletypeID,
+					PBXFileDataSource_Filename_ColumnID,
+					PBXTargetDataSource_PrimaryAttribute,
+					PBXFileDataSource_Built_ColumnID,
+					PBXFileDataSource_ObjectSize_ColumnID,
+					PBXFileDataSource_Errors_ColumnID,
+					PBXFileDataSource_Warnings_ColumnID,
+				);
+			};
+			PBXPerProjectTemplateStateSaveDate = 195747529;
+			PBXWorkspaceStateSaveDate = 195747529;
+		};
+		sourceControlManager = 4EDBE71C0B4D267F008E408E /* Source Control */;
+		userBuildSettings = {
+		};
+	};
+	29B97316FDCFA39411CA2CEA /* main.m */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {647, 304}}";
+			sepNavSelRange = "{267, 0}";
+			sepNavVisRect = "{{0, 147}, {647, 157}}";
+			sepNavWindowFrame = "{{107, 18}, {1092, 671}}";
+		};
+	};
+	4DDCA7030ACC9A6100E082CE /* rWiiRemote */ = {
+		activeExec = 0;
+		executables = (
+			4EDBE70A0B4D2675008E408E /* rWiiRemote */,
+		);
+	};
+	4EDBE70A0B4D2675008E408E /* rWiiRemote */ = {
+		isa = PBXExecutable;
+		activeArgIndex = 2147483647;
+		activeArgIndices = (
+		);
+		argumentStrings = (
+		);
+		autoAttachOnCrash = 1;
+		configStateDict = {
+		};
+		customDataFormattersEnabled = 1;
+		debuggerPlugin = GDBDebugging;
+		disassemblyDisplayState = 0;
+		dylibVariantSuffix = "";
+		enableDebugStr = 1;
+		environmentEntries = (
+		);
+		executableSystemSymbolLevel = 0;
+		executableUserSymbolLevel = 0;
+		libgmallocEnabled = 0;
+		name = rWiiRemote;
+		savedGlobals = {
+		};
+		sourceDirectories = (
+		);
+		variableFormatDictionary = {
+		};
+	};
+	4EDBE71C0B4D267F008E408E /* Source Control */ = {
+		isa = PBXSourceControlManager;
+		fallbackIsa = XCSourceControlManager;
+		isSCMEnabled = 0;
+		scmConfiguration = {
+		};
+		scmType = "";
+	};
+	4EDBE71D0B4D267F008E408E /* Code sense */ = {
+		isa = PBXCodeSenseManager;
+		indexTemplatePath = "";
+	};
+	4EDBE7520B4D27ED008E408E /* XCBreakpointsBucket */ = {
+		isa = XCBreakpointsBucket;
+		name = "プロジェクトブレークポイント";
+		objects = (
+		);
+	};
+	E8F5E25803AEB7C803A81C6F /* rb_main.rb */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {1047, 551}}";
+			sepNavSelRange = "{0, 0}";
+			sepNavVisRect = "{{0, 0}, {1047, 551}}";
+			sepNavWindowFrame = "{{84, 39}, {1092, 671}}";
+		};
+	};
+}

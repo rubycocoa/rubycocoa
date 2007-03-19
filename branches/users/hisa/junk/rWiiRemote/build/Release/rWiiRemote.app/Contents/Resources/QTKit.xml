@@ -1,0 +1,322 @@
+<?xml version='1.0'?>
+<!DOCTYPE signatures SYSTEM "file://localhost/System/Library/DTDs/BridgeSupport.dtd">
+<signatures version='0.9'>
+  <struct name='QTTime' encoding='{?=&quot;timeValue&quot;q&quot;timeScale&quot;l&quot;flags&quot;l}'/>
+  <struct name='QTTimeRange' encoding='{?=&quot;time&quot;{?=&quot;timeValue&quot;q&quot;timeScale&quot;l&quot;flags&quot;l}&quot;duration&quot;{?=&quot;timeValue&quot;q&quot;timeScale&quot;l&quot;flags&quot;l}}'/>
+  <constant name='QTAddImageCodecQuality' type='@'/>
+  <constant name='QTAddImageCodecType' type='@'/>
+  <constant name='QTDataReferenceTypeFile' type='@'/>
+  <constant name='QTDataReferenceTypeHandle' type='@'/>
+  <constant name='QTDataReferenceTypePointer' type='@'/>
+  <constant name='QTDataReferenceTypeResource' type='@'/>
+  <constant name='QTDataReferenceTypeURL' type='@'/>
+  <constant name='QTIndefiniteTime' type='{?=qll}'/>
+  <constant name='QTMediaCharacteristicAudio' type='@'/>
+  <constant name='QTMediaCharacteristicCanSendVideo' type='@'/>
+  <constant name='QTMediaCharacteristicCanStep' type='@'/>
+  <constant name='QTMediaCharacteristicHasNoDuration' type='@'/>
+  <constant name='QTMediaCharacteristicHasSkinData' type='@'/>
+  <constant name='QTMediaCharacteristicHasVideoFrameRate' type='@'/>
+  <constant name='QTMediaCharacteristicNonLinear' type='@'/>
+  <constant name='QTMediaCharacteristicProvidesActions' type='@'/>
+  <constant name='QTMediaCharacteristicProvidesKeyFocus' type='@'/>
+  <constant name='QTMediaCharacteristicVisual' type='@'/>
+  <constant name='QTMediaCreationTimeAttribute' type='@'/>
+  <constant name='QTMediaDurationAttribute' type='@'/>
+  <constant name='QTMediaModificationTimeAttribute' type='@'/>
+  <constant name='QTMediaQualityAttribute' type='@'/>
+  <constant name='QTMediaSampleCountAttribute' type='@'/>
+  <constant name='QTMediaTimeScaleAttribute' type='@'/>
+  <constant name='QTMediaType3D' type='@'/>
+  <constant name='QTMediaTypeAttribute' type='@'/>
+  <constant name='QTMediaTypeBase' type='@'/>
+  <constant name='QTMediaTypeFlash' type='@'/>
+  <constant name='QTMediaTypeHint' type='@'/>
+  <constant name='QTMediaTypeMPEG' type='@'/>
+  <constant name='QTMediaTypeMovie' type='@'/>
+  <constant name='QTMediaTypeMusic' type='@'/>
+  <constant name='QTMediaTypeQTVR' type='@'/>
+  <constant name='QTMediaTypeSkin' type='@'/>
+  <constant name='QTMediaTypeSound' type='@'/>
+  <constant name='QTMediaTypeSprite' type='@'/>
+  <constant name='QTMediaTypeStream' type='@'/>
+  <constant name='QTMediaTypeText' type='@'/>
+  <constant name='QTMediaTypeTimeCode' type='@'/>
+  <constant name='QTMediaTypeTween' type='@'/>
+  <constant name='QTMediaTypeVideo' type='@'/>
+  <constant name='QTMovieActiveSegmentAttribute' type='@'/>
+  <constant name='QTMovieAskUnresolvedDataRefsAttribute' type='@'/>
+  <constant name='QTMovieAutoAlternatesAttribute' type='@'/>
+  <constant name='QTMovieChapterDidChangeNotification' type='@'/>
+  <constant name='QTMovieChapterListDidChangeNotification' type='@'/>
+  <constant name='QTMovieCloseWindowRequestNotification' type='@'/>
+  <constant name='QTMovieCopyrightAttribute' type='@'/>
+  <constant name='QTMovieCreationTimeAttribute' type='@'/>
+  <constant name='QTMovieCurrentSizeAttribute' type='@'/>
+  <constant name='QTMovieCurrentTimeAttribute' type='@'/>
+  <constant name='QTMovieDataAttribute' type='@'/>
+  <constant name='QTMovieDataReferenceAttribute' type='@'/>
+  <constant name='QTMovieDataSizeAttribute' type='@'/>
+  <constant name='QTMovieDelegateAttribute' type='@'/>
+  <constant name='QTMovieDidEndNotification' type='@'/>
+  <constant name='QTMovieDisplayNameAttribute' type='@'/>
+  <constant name='QTMovieDontInteractWithUserAttribute' type='@'/>
+  <constant name='QTMovieDurationAttribute' type='@'/>
+  <constant name='QTMovieEditabilityDidChangeNotification' type='@'/>
+  <constant name='QTMovieEditableAttribute' type='@'/>
+  <constant name='QTMovieEditedNotification' type='@'/>
+  <constant name='QTMovieEnterFullScreenRequestNotification' type='@'/>
+  <constant name='QTMovieExitFullScreenRequestNotification' type='@'/>
+  <constant name='QTMovieExport' type='@'/>
+  <constant name='QTMovieExportManufacturer' type='@'/>
+  <constant name='QTMovieExportSettings' type='@'/>
+  <constant name='QTMovieExportType' type='@'/>
+  <constant name='QTMovieFileNameAttribute' type='@'/>
+  <constant name='QTMovieFileOffsetAttribute' type='@'/>
+  <constant name='QTMovieFlatten' type='@'/>
+  <constant name='QTMovieHasAudioAttribute' type='@'/>
+  <constant name='QTMovieHasDurationAttribute' type='@'/>
+  <constant name='QTMovieHasVideoAttribute' type='@'/>
+  <constant name='QTMovieIsActiveAttribute' type='@'/>
+  <constant name='QTMovieIsInteractiveAttribute' type='@'/>
+  <constant name='QTMovieIsLinearAttribute' type='@'/>
+  <constant name='QTMovieIsSteppableAttribute' type='@'/>
+  <constant name='QTMovieLoadStateAttribute' type='@'/>
+  <constant name='QTMovieLoadStateDidChangeNotification' type='@'/>
+  <constant name='QTMovieLoopModeDidChangeNotification' type='@'/>
+  <constant name='QTMovieLoopsAttribute' type='@'/>
+  <constant name='QTMovieLoopsBackAndForthAttribute' type='@'/>
+  <constant name='QTMovieMessageNotificationParameter' type='@'/>
+  <constant name='QTMovieMessageStringPostedNotification' type='@'/>
+  <constant name='QTMovieModificationTimeAttribute' type='@'/>
+  <constant name='QTMovieMutedAttribute' type='@'/>
+  <constant name='QTMovieNaturalSizeAttribute' type='@'/>
+  <constant name='QTMovieOpenAsyncOKAttribute' type='@'/>
+  <constant name='QTMoviePasteboardAttribute' type='@'/>
+  <constant name='QTMoviePasteboardType' type='@'/>
+  <constant name='QTMoviePlaysAllFramesAttribute' type='@'/>
+  <constant name='QTMoviePlaysSelectionOnlyAttribute' type='@'/>
+  <constant name='QTMoviePosterTimeAttribute' type='@'/>
+  <constant name='QTMoviePreferredMutedAttribute' type='@'/>
+  <constant name='QTMoviePreferredRateAttribute' type='@'/>
+  <constant name='QTMoviePreferredVolumeAttribute' type='@'/>
+  <constant name='QTMoviePreviewModeAttribute' type='@'/>
+  <constant name='QTMoviePreviewRangeAttribute' type='@'/>
+  <constant name='QTMovieRateAttribute' type='@'/>
+  <constant name='QTMovieRateChangesPreservePitchAttribute' type='@'/>
+  <constant name='QTMovieRateDidChangeNotification' type='@'/>
+  <constant name='QTMovieRateDidChangeNotificationParameter' type='@'/>
+  <constant name='QTMovieResolveDataRefsAttribute' type='@'/>
+  <constant name='QTMovieSelectionAttribute' type='@'/>
+  <constant name='QTMovieSelectionDidChangeNotification' type='@'/>
+  <constant name='QTMovieSizeDidChangeNotification' type='@'/>
+  <constant name='QTMovieStatusCodeNotificationParameter' type='@'/>
+  <constant name='QTMovieStatusFlagsNotificationParameter' type='@'/>
+  <constant name='QTMovieStatusStringNotificationParameter' type='@'/>
+  <constant name='QTMovieStatusStringPostedNotification' type='@'/>
+  <constant name='QTMovieTargetIDNotificationParameter' type='@'/>
+  <constant name='QTMovieTargetNameNotificationParameter' type='@'/>
+  <constant name='QTMovieTimeDidChangeNotification' type='@'/>
+  <constant name='QTMovieTimeScaleAttribute' type='@'/>
+  <constant name='QTMovieURLAttribute' type='@'/>
+  <constant name='QTMovieUneditableException' type='@'/>
+  <constant name='QTMovieViewControllerVisibleBinding' type='@'/>
+  <constant name='QTMovieViewFillColorBinding' type='@'/>
+  <constant name='QTMovieViewMovieBinding' type='@'/>
+  <constant name='QTMovieViewPreservesAspectRatioBinding' type='@'/>
+  <constant name='QTMovieVolumeAttribute' type='@'/>
+  <constant name='QTMovieVolumeDidChangeNotification' type='@'/>
+  <constant name='QTTrackBoundsAttribute' type='@'/>
+  <constant name='QTTrackCreationTimeAttribute' type='@'/>
+  <constant name='QTTrackDimensionsAttribute' type='@'/>
+  <constant name='QTTrackDisplayNameAttribute' type='@'/>
+  <constant name='QTTrackEnabledAttribute' type='@'/>
+  <constant name='QTTrackIDAttribute' type='@'/>
+  <constant name='QTTrackLayerAttribute' type='@'/>
+  <constant name='QTTrackMediaTypeAttribute' type='@'/>
+  <constant name='QTTrackModificationTimeAttribute' type='@'/>
+  <constant name='QTTrackRangeAttribute' type='@'/>
+  <constant name='QTTrackTimeScaleAttribute' type='@'/>
+  <constant name='QTTrackUsageInMovieAttribute' type='@'/>
+  <constant name='QTTrackUsageInPosterAttribute' type='@'/>
+  <constant name='QTTrackUsageInPreviewAttribute' type='@'/>
+  <constant name='QTTrackVolumeAttribute' type='@'/>
+  <constant name='QTZeroTime' type='{?=qll}'/>
+  <enum name='QTIncludeAggressiveTypes' value='4'/>
+  <enum name='QTIncludeAllTypes' value='65535'/>
+  <enum name='QTIncludeCommonTypes' value='0'/>
+  <enum name='QTIncludeStillImageTypes' value='1'/>
+  <enum name='QTIncludeTranslatableTypes' value='2'/>
+  <enum name='QTMovieOperationBeginPhase' value='0'/>
+  <enum name='QTMovieOperationEndPhase' value='2'/>
+  <enum name='QTMovieOperationUpdatePercentPhase' value='1'/>
+  <enum name='kQTTimeIsIndefinite' value='1'/>
+  <function name='QTEqualTimeRanges'>
+    <function_arg type='{?={?=qll}{?=qll}}'/>
+    <function_arg type='{?={?=qll}{?=qll}}'/>
+    <function_retval type='B'/>
+  </function>
+  <function name='QTGetTimeInterval'>
+    <function_arg type='{?=qll}'/>
+    <function_arg type='^d'/>
+    <function_retval type='B'/>
+  </function>
+  <function name='QTGetTimeRecord'>
+    <function_arg type='{?=qll}'/>
+    <function_arg type='^{TimeRecord={wide=Ii}i^{TimeBaseRecord}}'/>
+    <function_retval type='B'/>
+  </function>
+  <function name='QTIntersectionTimeRange'>
+    <function_arg type='{?={?=qll}{?=qll}}'/>
+    <function_arg type='{?={?=qll}{?=qll}}'/>
+    <function_retval type='{?={?=qll}{?=qll}}'/>
+  </function>
+  <function name='QTMakeTime'>
+    <function_arg type='q'/>
+    <function_arg type='l'/>
+    <function_retval type='{?=qll}'/>
+  </function>
+  <function name='QTMakeTimeRange'>
+    <function_arg type='{?=qll}'/>
+    <function_arg type='{?=qll}'/>
+    <function_retval type='{?={?=qll}{?=qll}}'/>
+  </function>
+  <function name='QTMakeTimeScaled'>
+    <function_arg type='{?=qll}'/>
+    <function_arg type='l'/>
+    <function_retval type='{?=qll}'/>
+  </function>
+  <function name='QTMakeTimeWithTimeInterval'>
+    <function_arg type='d'/>
+    <function_retval type='{?=qll}'/>
+  </function>
+  <function name='QTMakeTimeWithTimeRecord'>
+    <function_arg type='{TimeRecord={wide=Ii}i^{TimeBaseRecord}}'/>
+    <function_retval type='{?=qll}'/>
+  </function>
+  <function name='QTOSTypeForString'>
+    <function_arg type='@'/>
+    <function_retval type='L'/>
+  </function>
+  <function name='QTStringForOSType'>
+    <function_arg type='L'/>
+    <function_retval type='@'/>
+  </function>
+  <function name='QTStringFromTime'>
+    <function_arg type='{?=qll}'/>
+    <function_retval type='@'/>
+  </function>
+  <function name='QTStringFromTimeRange'>
+    <function_arg type='{?={?=qll}{?=qll}}'/>
+    <function_retval type='@'/>
+  </function>
+  <function name='QTTimeCompare'>
+    <function_arg type='{?=qll}'/>
+    <function_arg type='{?=qll}'/>
+    <function_retval type='i'/>
+  </function>
+  <function name='QTTimeDecrement'>
+    <function_arg type='{?=qll}'/>
+    <function_arg type='{?=qll}'/>
+    <function_retval type='{?=qll}'/>
+  </function>
+  <function name='QTTimeFromString'>
+    <function_arg type='@'/>
+    <function_retval type='{?=qll}'/>
+  </function>
+  <function name='QTTimeInTimeRange'>
+    <function_arg type='{?=qll}'/>
+    <function_arg type='{?={?=qll}{?=qll}}'/>
+    <function_retval type='B'/>
+  </function>
+  <function name='QTTimeIncrement'>
+    <function_arg type='{?=qll}'/>
+    <function_arg type='{?=qll}'/>
+    <function_retval type='{?=qll}'/>
+  </function>
+  <function name='QTTimeIsIndefinite'>
+    <function_arg type='{?=qll}'/>
+    <function_retval type='B'/>
+  </function>
+  <function name='QTTimeRangeEnd'>
+    <function_arg type='{?={?=qll}{?=qll}}'/>
+    <function_retval type='{?=qll}'/>
+  </function>
+  <function name='QTTimeRangeFromString'>
+    <function_arg type='@'/>
+    <function_retval type='{?={?=qll}{?=qll}}'/>
+  </function>
+  <function name='QTUnionTimeRange'>
+    <function_arg type='{?={?=qll}{?=qll}}'/>
+    <function_arg type='{?={?=qll}{?=qll}}'/>
+    <function_retval type='{?={?=qll}{?=qll}}'/>
+  </function>
+  <class name='NSObject'>
+    <method selector='movie:linkToURL:'>
+      <method_retval type='B'/>
+    </method>
+    <method selector='movieShouldLoadData:'>
+      <method_retval type='B'/>
+    </method>
+    <method selector='movieShouldTask:'>
+      <method_retval type='B'/>
+    </method>
+    <method selector='movie:shouldContinueOperation:withPhase:atPercent:withAttributes:'>
+      <method_retval type='B'/>
+    </method>
+  </class>
+  <class name='QTMedia'>
+    <method selector='hasCharacteristic:'>
+      <method_retval type='B'/>
+    </method>
+  </class>
+  <class name='QTMovie'>
+    <method class_method='true' selector='canInitWithPasteboard:'>
+      <method_retval type='B'/>
+    </method>
+    <method class_method='true' selector='canInitWithFile:'>
+      <method_retval type='B'/>
+    </method>
+    <method class_method='true' selector='canInitWithURL:'>
+      <method_retval type='B'/>
+    </method>
+    <method class_method='true' selector='canInitWithDataReference:'>
+      <method_retval type='B'/>
+    </method>
+    <method selector='muted'>
+      <method_retval type='B'/>
+    </method>
+    <method selector='writeToFile:withAttributes:'>
+      <method_retval type='B'/>
+    </method>
+    <method selector='canUpdateMovieFile'>
+      <method_retval type='B'/>
+    </method>
+    <method selector='updateMovieFile'>
+      <method_retval type='B'/>
+    </method>
+  </class>
+  <class name='QTMovieView'>
+    <method selector='isControllerVisible'>
+      <method_retval type='B'/>
+    </method>
+    <method selector='isEditable'>
+      <method_retval type='B'/>
+    </method>
+    <method selector='preservesAspectRatio'>
+      <method_retval type='B'/>
+    </method>
+  </class>
+  <class name='QTTrack'>
+    <method selector='isEnabled'>
+      <method_retval type='B'/>
+    </method>
+  </class>
+  <informal_protocol name='QTMovieDelegate'>
+    <method encoding='@12@0:4@8' selector='externalMovie:'/>
+    <method encoding='c16@0:4@8@12' selector='movie:linkToURL:'/>
+    <method encoding='c28@0:4@8@12i16@20@24' selector='movie:shouldContinueOperation:withPhase:atPercent:withAttributes:'/>
+    <method encoding='c12@0:4@8' selector='movieShouldLoadData:'/>
+    <method encoding='c12@0:4@8' selector='movieShouldTask:'/>
+  </informal_protocol>
+</signatures>
