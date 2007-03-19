@@ -254,7 +254,7 @@ rb_ffi_dispatch (
       char *type = ARG_OCTYPESTR(i);
       if (*type == _C_CONST)
         type++;
-      if (*type == _C_PTR && find_bs_cf_type_by_encoding(type) == NULL)
+      if ((*type == _C_PTR && find_bs_cf_type_by_encoding(type) == NULL) || *type == _C_ARY_B)
         pointers_args_count++;
     }
     if (pointers_args_count + given_argc != expected_argc)
@@ -262,30 +262,41 @@ rb_ffi_dispatch (
   }
 
   for (i = skipped = 0; i < expected_argc; i++) {
+    const char *octype_str;
+    
+    octype_str = ARG_OCTYPESTR(i);
     // C-array-length-like argument, which should be already defined
     // (at the same time than the C-array-like argument), unless it's
     // returned by reference.
     if (find_bs_arg_by_c_array_len_arg_index(call_entry, i) != NULL
-        && *ARG_OCTYPESTR(i) != _C_PTR) {
+        && *octype_str != _C_PTR) {
       skipped++;
     } 
     // Omitted pointer.
     else if (i - skipped >= given_argc) {
-      FFI_LOG("omitted pointer[%d]", i);
-      arg_values[i + argc_delta] = &arg_values[i + argc_delta];
+      FFI_LOG("omitted_pointer[%d]", i);
       arg_types[i + argc_delta] = &ffi_type_pointer;
+      if (*octype_str == _C_PTR) {
+        // Regular pointer.
+        arg_values[i + argc_delta] = &arg_values[i + argc_delta];
+      }
+      else {
+        // C_ARY.
+        void *value;
+        value = alloca(sizeof(void *));
+        *(void **)value = OCDATA_ALLOCA(octype_str);
+        arg_values[i + argc_delta] = value; 
+      }
     }
     // Regular argument.
     else {
       VALUE arg;
-      const char *octype_str;
       void *value;
       struct bsArg *bs_arg;
       BOOL is_c_array;
       int len;
 
       arg = argv[i - skipped];
-      octype_str = ARG_OCTYPESTR(i);
       bs_arg = find_bs_arg_by_index(call_entry, i, expected_argc);
 
       if (bs_arg != NULL) {
@@ -306,14 +317,14 @@ rb_ffi_dispatch (
         ptype = octype_str;
         if (*ptype == _C_CONST)
           ptype++;
-        if (*ptype != _C_PTR)
+        if (*ptype != _C_PTR && *ptype != _C_ARY_B)
           return rb_err_new(rb_eRuntimeError, "Internal error: argument #%d is not a defined as a pointer in the runtime or it is described as such in the metadata", i);
         ptype++;
 
         if (TYPE(arg) == T_STRING)
           len = RSTRING(arg)->len;
         else if (TYPE(arg) == T_ARRAY)
-          len = RARRAY(arg)->len;
+          len = RARRAY(arg)->len; // XXX should be RARRAY(arg)->len * ocdata_sizeof(...)
         else if (rb_obj_is_kind_of(arg, objcptr_s_class()))
           len = objcptr_allocated_size(arg); 
         else {
@@ -448,23 +459,33 @@ rb_ffi_dispatch (
         VALUE rbval;
         const char *octype_str;
         struct bsArg *bs_arg;
+        char fake_octype_str[512];
 
         octype_str = ARG_OCTYPESTR(i);
         if (*octype_str == _C_PTR)
           octype_str++;
-        FFI_LOG("got omitted pointer[%d] : %s (%p)", i, octype_str, value);
+        FFI_LOG("got omitted_pointer[%d] : %s (%p)", i, octype_str, value);
         rbval = Qnil;
         if (*octype_str == _C_CONST)
           octype_str++;
-        if (*octype_str == _C_PTR 
+        if ((*octype_str == _C_PTR || *octype_str == _C_ARY_B) 
             && (bs_arg = find_bs_arg_by_index(call_entry, i, expected_argc)) != NULL) {
 
           switch (bs_arg->c_ary_type) {
             case bsCArrayArgDelimitedByArg:
               {
-                void *length_value = arg_values[bs_arg->c_ary_type_value + argc_delta];
-                if (length_value != NULL) {
-                  rbval = rb_str_new((char *)value, (int)length_value * ocdata_size(octype_str));
+                int length_value = (int)arg_values[bs_arg->c_ary_type_value + argc_delta];
+                if (length_value != 0) {
+                  if (*octype_str == _C_ARY_B) {
+                    char *p = (char *)octype_str;
+                    p++;
+                    while (isdigit(*p)) { p++; }
+                    snprintf(fake_octype_str, sizeof fake_octype_str, "[%d%s", length_value, p);
+                    octype_str = fake_octype_str;
+                  }
+                  else {
+                    rbval = rb_str_new((char *)value, length_value * ocdata_size(octype_str));
+                  }
                 }
                 else {
                   FFI_LOG("array length should have been returned by argument #%d, but it's NULL, defaulting on ObjCPtr", bs_arg->c_ary_type_value);
