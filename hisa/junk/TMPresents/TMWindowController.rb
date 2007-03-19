@@ -2,6 +2,7 @@
 # $Id: TMWindowController.rb,v 1.17 2005/11/23 15:02:17 kimuraw Exp $
 #
 require 'osx/cocoa'
+OSX.ns_import "AppleRemote"
 
 module OSX
   unless defined? NSTornOffMenuWindowLevel
@@ -10,8 +11,6 @@ module OSX
 end
 
 class TMWindowController < OSX::NSWindowController
-  ns_overrides 'windowTitleForDocumentDisplayName:',
-    'dealloc'
 
   WINDOW_AUTOSAVE_NAME = 'WINDOW DEFAULT FRAME'
   NOTIFY_PAGE_CHANGED = 'TMPageChanged'
@@ -23,15 +22,32 @@ class TMWindowController < OSX::NSWindowController
     doc.addWindowController(self)
     window.setDelegate(self)
     setup_responder_chain
-    center.addObserver(self, :selector, 'pageChanged:',
-      :name, NOTIFY_PAGE_CHANGED, :object, doc)
+    center.objc_send(:addObserver, self,
+                     :selector, 'pageChanged:',
+                     :name, NOTIFY_PAGE_CHANGED, :object, doc)
+    r = OSX::AppleRemote.sharedRemote
+    r.setDelegate(self)
+    r.startListening(self)
     _go(start_page)
     return self
   end
 
+  # 5:left 0:up 4:right 1:bot 3:play  2:menu
+  def appleRemoteButton_pressedDown(buttonIdentifier, pressedDown)
+    case buttonIdentifier
+    when 0 then goToFirst(self)
+    when 1 then goToLast(self)
+    when 2 then ;
+    when 3 then evalPage(self)
+    when 4 then goToNext(self)
+    when 5 then goToPrev(self)
+    end
+  end
+  objc_method :appleRemoteButton_pressedDown, [:void, :int, :bool]
+
   def reloadDocument(sender)
     document.readFromFile_ofType(document.fileName, document.fileType)
-    _go(@page)
+    go(@page)
   end
 
   def windowTitleForDocumentDisplayName(disp_name)
@@ -82,13 +98,15 @@ class TMWindowController < OSX::NSWindowController
 
   def go(new_page)
     _go(new_page)
-    notif = OSX::NSNotification.notificationWithName(NOTIFY_PAGE_CHANGED,
-      :object, document, :userInfo, {'page' => new_page})
+    notif = OSX::NSNotification.
+      objc_send( :notificationWithName, NOTIFY_PAGE_CHANGED,
+                 :object, document, :userInfo, {'page' => new_page} )
     center.postNotification(notif)
   end
 
   def _go(new_page)
     return unless document
+    ResultView.instance.hide
     if new_page <= 0 then
       new_page = 1
     elsif new_page > document.page_count
@@ -103,17 +121,19 @@ class TMWindowController < OSX::NSWindowController
   def setup_window(full)
     if full
       rect = OSX::NSScreen.mainScreen.frame
-      win = TMFullScreenWindow.alloc.initWithContentRect(rect,
-	:styleMask, OSX::NSBorderlessWindowMask,
-	:backing, OSX::NSBackingStoreBuffered,
-	:defer, true)
+      win = TMFullScreenWindow.alloc.
+        objc_send( :initWithContentRect, rect,
+                   :styleMask, OSX::NSBorderlessWindowMask,
+                   :backing, OSX::NSBackingStoreBuffered,
+                   :defer, true )
       win.setLevel(OSX::NSTornOffMenuWindowLevel)
     else
       rect = [100, 200, 400, 300] # temporaly frame
-      win = OSX::NSWindow.alloc.initWithContentRect(rect,
-	:styleMask, normal_mask,
-	:backing, OSX::NSBackingStoreBuffered,
-	:defer, true)
+      win = OSX::NSWindow.alloc.
+        objc_send( :initWithContentRect, rect,
+                   :styleMask, normal_mask,
+                   :backing, OSX::NSBackingStoreBuffered,
+                   :defer, true)
       win.setFrameUsingName(WINDOW_AUTOSAVE_NAME)
     end
     view = TMView.alloc.initWithFrame(win.contentView.bounds)
@@ -158,6 +178,22 @@ end
 # page actions
 class TMWindowController
 
+  def evalPage(sender)
+    rv = ResultView.instance
+    str = document.string_at_page(@page)
+    result = eval(str, TOPLEVEL_BINDING)
+    rv = ResultView.instance
+    rv.text = OSX::NSString.stringWithString(result.to_s)
+    rv.show
+    OSX.NSLog("evalPage(%@) => %@", @page, result)
+  rescue Exception => err
+    rv = ResultView.instance
+    msg = "ERROR!\n" << err.message
+    rv.text = OSX::NSString.stringWithString(msg)
+    rv.show
+    OSX.NSLog("evalPage(%@) -- error %@", @page, err.message)
+  end
+
   def goToNext(sender)
     go(@page + 1)
   end
@@ -177,7 +213,6 @@ class TMWindowController
 end
 
 class TMFullScreenWindow < OSX::NSWindow
-  ns_overrides 'canBecomeKeyWindow'
 
   def canBecomeKeyWindow
     return true

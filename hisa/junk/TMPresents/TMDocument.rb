@@ -6,9 +6,6 @@ require 'TMWindowController'
 
 class TMDocument < OSX::NSDocument
 
-  ns_overrides 'readFromFile:ofType:',
-    'makeWindowControllers'
-
   def initailize
     @content = nil
   end
@@ -55,7 +52,7 @@ class TMDocument < OSX::NSDocument
      OSX::NSUTF8StringEncoding,
      OSX::NSISO2022JPStringEncoding,
     ].each do |encoding|
-      nsstr = OSX::NSString.alloc.initWithData(data, :encoding, encoding)
+      nsstr = OSX::NSString.alloc.initWithData_encoding(data, encoding)
       if nsstr 
         val = nsstr
         break

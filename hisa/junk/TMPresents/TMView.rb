@@ -15,8 +15,6 @@ module OSX
 end
 
 class TMView < OSX::NSView
-  ns_overrides 'drawRect:',
-    'mouseUp:', 'initWithFrame:'
   
   BASE_FONTSIZE = 36.0
   
@@ -29,9 +27,10 @@ class TMView < OSX::NSView
   def initWithFrame(frame)
     super_initWithFrame(frame)
     center = OSX::NSNotificationCenter.defaultCenter
-    center.addObserver(self, :selector, 'defaultsChanged:',
-      :name, OSX::NSUserDefaultsDidChangeNotification,
-      :object, nil)
+    center.objc_send( :addObserver, self,
+                      :selector, 'defaultsChanged:',
+                      :name, OSX::NSUserDefaultsDidChangeNotification,
+                      :object, nil)
     return self
   end
   
@@ -41,20 +40,26 @@ class TMView < OSX::NSView
     setNeedsDisplay(true)
   end
 
-  def drawRect(rect)
+  def draw_back(rect)
     super_drawRect(rect)
     if color_wiped?
       wipe(@outcolor)
-      return
+      return false
     end
-
-    return unless @text
-
+    return false unless @text
     wipe(defaults['backgroundColor'])
+    true
+  end
+
+  def draw_fore(rect)
     base_size = unit_size(@text)
     ratio = resize_ratio(base_size, draw_size)
     text_rect = text_rect(base_size * ratio, draw_size)
-    @text.drawInRect(text_rect, :withAttributes, text_attrs(ratio))
+    @text.drawInRect_withAttributes(text_rect, text_attrs(ratio))
+  end
+
+  def drawRect(rect)
+    draw_back(rect) && draw_fore(rect)
   end
 
   def defaultsChanged(notification)
@@ -100,12 +105,12 @@ class TMView < OSX::NSView
   end
 
   def text_attrs(ratio = 1.0)
-    font = OSX::NSFont.fontWithName(defaults['textFontName'],
-      :size, BASE_FONTSIZE * ratio)
+    font = OSX::NSFont.fontWithName_size(defaults['textFontName'],
+                                         BASE_FONTSIZE * ratio)
     style = paragragh_style
-    return {OSX.NSFontAttributeName => font,
-      OSX.NSForegroundColorAttributeName => defaults['textColor'],
-      OSX.NSParagraphStyleAttributeName => style}
+    return {OSX::NSFontAttributeName => font,
+      OSX::NSForegroundColorAttributeName => defaults['textColor'],
+      OSX::NSParagraphStyleAttributeName => style}
   end
 
   def paragragh_style
@@ -129,9 +134,6 @@ end
 
 # user oparations
 class TMView
-  ns_overrides 'mouseUp:',
-    'acceptsFirstResponder',
-    'keyDown:'
 
   ColorOutMap = {'b' => 'black', 'w' => 'white'}
 
@@ -140,7 +142,17 @@ class TMView
     window.windowController.goToNext(self)
   end
 
+  def keyUp(event)
+    if /^e/i =~ event.charactersIgnoringModifiers.to_s then
+      window.windowController.evalPage(self)
+      ResultView.instance.show
+    end
+  end
+
   def keyDown(event)
+    if /^e/i =~ event.charactersIgnoringModifiers.to_s then
+      return
+    end
     if color_wiped?
       colorout(nil)
       return
