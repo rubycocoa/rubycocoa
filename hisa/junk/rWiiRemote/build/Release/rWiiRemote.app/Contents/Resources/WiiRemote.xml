@@ -1,0 +1,40 @@
+<?xml version='1.0'?>
+<!DOCTYPE signatures SYSTEM "file://localhost/System/Library/DTDs/BridgeSupport.dtd">
+<signatures version='0.9'>
+  <enum name='WiiClassicControllerLeftJoyStick' value='1'/>
+  <enum name='WiiClassicControllerRightJoyStick' value='2'/>
+  <enum name='WiiNunchukAccelerationSensor' value='1'/>
+  <enum name='WiiNunchukCButton' value='12'/>
+  <enum name='WiiNunchukJoyStick' value='0'/>
+  <enum name='WiiNunchukZButton' value='11'/>
+  <enum name='WiiRemoteAButton' value='0'/>
+  <enum name='WiiRemoteAccelerationSensor' value='0'/>
+  <enum name='WiiRemoteBButton' value='1'/>
+  <enum name='WiiRemoteDownButton' value='8'/>
+  <enum name='WiiRemoteHomeButton' value='5'/>
+  <enum name='WiiRemoteLeftButton' value='9'/>
+  <enum name='WiiRemoteMinusButton' value='4'/>
+  <enum name='WiiRemoteOneButton' value='2'/>
+  <enum name='WiiRemotePlusButton' value='6'/>
+  <enum name='WiiRemoteRightButton' value='10'/>
+  <enum name='WiiRemoteTwoButton' value='3'/>
+  <enum name='WiiRemoteUpButton' value='7'/>
+  <class name='WiiRemote'>
+    <method selector='isExpansionPortAttached'>
+      <method_retval type='B'/>
+    </method>
+    <method selector='available'>
+      <method_retval type='B'/>
+    </method>
+    <method selector='isButtonPressed:'>
+      <method_retval type='B'/>
+    </method>
+  </class>
+  <informal_protocol name='WiiRemoteDelegate'>
+    <method encoding='v24@0:4S8C12C16C20' selector='accelerationChanged:accX:accY:accZ:'/>
+    <method encoding='v16@0:4S8c12' selector='buttonChanged:isPressed:'/>
+    <method encoding='v16@0:4f8f12' selector='irPointMovedX:Y:'/>
+    <method encoding='v20@0:4S8C12C16' selector='joyStickChanged:tiltX:tiltY:'/>
+    <method encoding='v12@0:4@8' selector='wiiRemoteDisconnected:'/>
+  </informal_protocol>
+</signatures>

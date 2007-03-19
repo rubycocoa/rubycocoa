@@ -1,0 +1,116 @@
+head	1.2;
+access;
+symbols;
+locks
+	hisa:1.2; strict;
+comment	@# @;
+
+
+1.2
+date	2007.01.04.12.13.20;	author hisa;	state Exp;
+branches;
+next	1.1;
+
+1.1
+date	2007.01.04.12.13.05;	author hisa;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.2
+log
+@*** empty log message ***
+@
+text
+@#
+#  rb_main.rb
+#  rWiiRemote
+#
+#  Created by Fujimoto Hisa on 06/12/13.
+#  Copyright (c) 2006 Fujimoto Hisa. All rights reserved.
+#
+
+ENV['BRIDGE_SUPPORT_PATH'] = File.dirname(__FILE__)
+
+require 'osx/cocoa'
+
+def rb_main_init
+  OSX::FRAMEWORK_PATHS <<
+    OSX::NSBundle.mainBundle.privateFrameworksPath.fileSystemRepresentation <<
+    OSX::NSBundle.mainBundle.sharedFrameworksPath.fileSystemRepresentation
+
+  OSX::SIGN_PATHS << 
+    File.join(OSX::NSBundle.mainBundle.bundlePath.fileSystemRepresentation,
+              "Contents", "BridgeSupport")
+
+  path = OSX::NSBundle.mainBundle.resourcePath.fileSystemRepresentation
+  rbfiles = Dir.entries(path).select {|x| /\.rb\z/ =~ x}
+  rbfiles -= [ File.basename(__FILE__) ]
+  rbfiles.each do |path|
+    require( File.basename(path) )
+  end
+end
+
+if $0 == __FILE__ then
+  rb_main_init
+  OSX.NSApplicationMain(0, nil)
+end
+@
+
+
+1.1
+log
+@Initial revision
+@
+text
+@a12 45
+module OSX
+
+  module OCClsWrapper
+    def objc_send(*args)
+      mname = ""
+      margs = []
+      args.each_with_index do |val, index|
+        if index % 2 == 0 then
+          mname << val << ':'
+        else
+          margs << val
+        end
+      end
+      return self.ocm_send(mname, *margs)
+    end
+    alias _  objc_send
+  end
+
+  module OCObjWrapper
+    def objc_send(*args)
+      mname = ""
+      margs = []
+      args.each_with_index do |val, index|
+        if index % 2 == 0 then
+          mname << val << ':'
+        else
+          margs << val
+        end
+      end
+      return self.ocm_send(mname, *margs)
+    end
+    alias _  objc_send
+  end
+
+  module NSBehaviorAttachment
+    def objc_export(name, typefmt)
+      name = name.to_s
+      name = name[0].chr << name[1..-1].gsub(/_/, ':')
+      if /[^:]$/ =~ name && /^.\d*@@\d*:\d*[^\d]/ =~ typefmt then
+        name << ":" end
+      self.addRubyMethod_withType(name, typefmt)
+    end
+  end
+end
+
+@

@@ -1,0 +1,4119 @@
+<?xml version='1.0'?>
+<!DOCTYPE signatures SYSTEM "file://localhost/System/Library/DTDs/BridgeSupport.dtd">
+<signatures version='0.9'>
+  <struct name='CFAllocatorContext' encoding='{?=&quot;version&quot;i&quot;info&quot;^v&quot;retain&quot;^?&quot;release&quot;^?&quot;copyDescription&quot;^?&quot;allocate&quot;^?&quot;reallocate&quot;^?&quot;deallocate&quot;^?&quot;preferredSize&quot;^?}'/>
+  <struct name='CFArrayCallBacks' encoding='{?=&quot;version&quot;i&quot;retain&quot;^?&quot;release&quot;^?&quot;copyDescription&quot;^?&quot;equal&quot;^?}'/>
+  <struct name='CFBagCallBacks' encoding='{?=&quot;version&quot;i&quot;retain&quot;^?&quot;release&quot;^?&quot;copyDescription&quot;^?&quot;equal&quot;^?&quot;hash&quot;^?}'/>
+  <struct name='CFBinaryHeapCallBacks' encoding='{?=&quot;version&quot;i&quot;retain&quot;^?&quot;release&quot;^?&quot;copyDescription&quot;^?&quot;compare&quot;^?}'/>
+  <struct name='CFBinaryHeapCompareContext' encoding='{?=&quot;version&quot;i&quot;info&quot;^v&quot;retain&quot;^?&quot;release&quot;^?&quot;copyDescription&quot;^?}'/>
+  <struct name='CFDictionaryKeyCallBacks' encoding='{?=&quot;version&quot;i&quot;retain&quot;^?&quot;release&quot;^?&quot;copyDescription&quot;^?&quot;equal&quot;^?&quot;hash&quot;^?}'/>
+  <struct name='CFDictionaryValueCallBacks' encoding='{?=&quot;version&quot;i&quot;retain&quot;^?&quot;release&quot;^?&quot;copyDescription&quot;^?&quot;equal&quot;^?}'/>
+  <struct name='CFGregorianDate' encoding='{?=&quot;year&quot;i&quot;month&quot;c&quot;day&quot;c&quot;hour&quot;c&quot;minute&quot;c&quot;second&quot;d}'/>
+  <struct name='CFGregorianUnits' encoding='{?=&quot;years&quot;i&quot;months&quot;i&quot;days&quot;i&quot;hours&quot;i&quot;minutes&quot;i&quot;seconds&quot;d}'/>
+  <struct name='CFMachPortContext' encoding='{?=&quot;version&quot;i&quot;info&quot;^v&quot;retain&quot;^?&quot;release&quot;^?&quot;copyDescription&quot;^?}'/>
+  <struct name='CFMessagePortContext' encoding='{?=&quot;version&quot;i&quot;info&quot;^v&quot;retain&quot;^?&quot;release&quot;^?&quot;copyDescription&quot;^?}'/>
+  <struct name='CFRange' encoding='{?=&quot;location&quot;i&quot;length&quot;i}'/>
+  <struct name='CFRunLoopObserverContext' encoding='{?=&quot;version&quot;i&quot;info&quot;^v&quot;retain&quot;^?&quot;release&quot;^?&quot;copyDescription&quot;^?}'/>
+  <struct name='CFRunLoopSourceContext' encoding='{?=&quot;version&quot;i&quot;info&quot;^v&quot;retain&quot;^?&quot;release&quot;^?&quot;copyDescription&quot;^?&quot;equal&quot;^?&quot;hash&quot;^?&quot;schedule&quot;^?&quot;cancel&quot;^?&quot;perform&quot;^?}'/>
+  <struct name='CFRunLoopTimerContext' encoding='{?=&quot;version&quot;i&quot;info&quot;^v&quot;retain&quot;^?&quot;release&quot;^?&quot;copyDescription&quot;^?}'/>
+  <struct name='CFSetCallBacks' encoding='{?=&quot;version&quot;i&quot;retain&quot;^?&quot;release&quot;^?&quot;copyDescription&quot;^?&quot;equal&quot;^?&quot;hash&quot;^?}'/>
+  <struct name='CFSocketContext' encoding='{?=&quot;version&quot;i&quot;info&quot;^v&quot;retain&quot;^?&quot;release&quot;^?&quot;copyDescription&quot;^?}'/>
+  <struct name='CFSocketSignature' encoding='{?=&quot;protocolFamily&quot;i&quot;socketType&quot;i&quot;protocol&quot;i&quot;address&quot;^{__CFData}}'/>
+  <struct name='CFStreamClientContext' encoding='{?=&quot;version&quot;i&quot;info&quot;^v&quot;retain&quot;^?&quot;release&quot;^?&quot;copyDescription&quot;^?}'/>
+  <struct name='CFStreamError' encoding='{?=&quot;domain&quot;i&quot;error&quot;i}'/>
+  <struct name='CFStringInlineBuffer' encoding='{?=&quot;buffer&quot;[64S]&quot;theString&quot;^{__CFString}&quot;directBuffer&quot;^S&quot;rangeToBuffer&quot;{?=&quot;location&quot;i&quot;length&quot;i}&quot;bufferedRangeStart&quot;i&quot;bufferedRangeEnd&quot;i}'/>
+  <struct name='CFSwappedFloat32' encoding='{?=&quot;v&quot;I}'/>
+  <struct name='CFSwappedFloat64' encoding='{?=&quot;v&quot;Q}'/>
+  <struct name='CFTreeContext' encoding='{?=&quot;version&quot;i&quot;info&quot;^v&quot;retain&quot;^?&quot;release&quot;^?&quot;copyDescription&quot;^?}'/>
+  <struct name='CFUUIDBytes' encoding='{?=&quot;byte0&quot;C&quot;byte1&quot;C&quot;byte2&quot;C&quot;byte3&quot;C&quot;byte4&quot;C&quot;byte5&quot;C&quot;byte6&quot;C&quot;byte7&quot;C&quot;byte8&quot;C&quot;byte9&quot;C&quot;byte10&quot;C&quot;byte11&quot;C&quot;byte12&quot;C&quot;byte13&quot;C&quot;byte14&quot;C&quot;byte15&quot;C}'/>
+  <struct name='CFXMLAttributeDeclarationInfo' encoding='{?=&quot;attributeName&quot;^{__CFString}&quot;typeString&quot;^{__CFString}&quot;defaultString&quot;^{__CFString}}'/>
+  <struct name='CFXMLAttributeListDeclarationInfo' encoding='{?=&quot;numberOfAttributes&quot;i&quot;attributes&quot;^{?}}'/>
+  <struct name='CFXMLDocumentInfo' encoding='{?=&quot;sourceURL&quot;^{__CFURL}&quot;encoding&quot;I}'/>
+  <struct name='CFXMLDocumentTypeInfo' encoding='{?=&quot;externalID&quot;{?=&quot;systemID&quot;^{__CFURL}&quot;publicID&quot;^{__CFString}}}'/>
+  <struct name='CFXMLElementInfo' encoding='{?=&quot;attributes&quot;^{__CFDictionary}&quot;attributeOrder&quot;^{__CFArray}&quot;isEmpty&quot;C&quot;_reserved&quot;[3c]}'/>
+  <struct name='CFXMLElementTypeDeclarationInfo' encoding='{?=&quot;contentDescription&quot;^{__CFString}}'/>
+  <struct name='CFXMLEntityInfo' encoding='{?=&quot;entityType&quot;i&quot;replacementText&quot;^{__CFString}&quot;entityID&quot;{?=&quot;systemID&quot;^{__CFURL}&quot;publicID&quot;^{__CFString}}&quot;notationName&quot;^{__CFString}}'/>
+  <struct name='CFXMLEntityReferenceInfo' encoding='{?=&quot;entityType&quot;i}'/>
+  <struct name='CFXMLExternalID' encoding='{?=&quot;systemID&quot;^{__CFURL}&quot;publicID&quot;^{__CFString}}'/>
+  <struct name='CFXMLNotationInfo' encoding='{?=&quot;externalID&quot;{?=&quot;systemID&quot;^{__CFURL}&quot;publicID&quot;^{__CFString}}}'/>
+  <struct name='CFXMLParserCallBacks' encoding='{?=&quot;version&quot;i&quot;createXMLStructure&quot;^?&quot;addChild&quot;^?&quot;endXMLStructure&quot;^?&quot;resolveExternalEntity&quot;^?&quot;handleError&quot;^?}'/>
+  <struct name='CFXMLParserContext' encoding='{?=&quot;version&quot;i&quot;info&quot;^v&quot;retain&quot;^?&quot;release&quot;^?&quot;copyDescription&quot;^?}'/>
+  <struct name='CFXMLProcessingInstructionInfo' encoding='{?=&quot;dataString&quot;^{__CFString}}'/>
+  <cftype name='CFAllocatorRef' encoding='^{__CFAllocator=}' gettypeid_func='CFAllocatorGetTypeID'/>
+  <cftype tollfree='NSCFArray' name='CFArrayRef' encoding='^{__CFArray=}' gettypeid_func='CFArrayGetTypeID'/>
+  <cftype tollfree='NSCFAttributedString' name='CFAttributedStringRef' encoding='^{__CFAttributedString=}' gettypeid_func='CFAttributedStringGetTypeID'/>
+  <cftype name='CFBagRef' encoding='^{__CFBag=}' gettypeid_func='CFBagGetTypeID'/>
+  <cftype name='CFBinaryHeapRef' encoding='^{__CFBinaryHeap=}' gettypeid_func='CFBinaryHeapGetTypeID'/>
+  <cftype name='CFBitVectorRef' encoding='^{__CFBitVector=}' gettypeid_func='CFBitVectorGetTypeID'/>
+  <cftype tollfree='NSCFBoolean' name='CFBooleanRef' encoding='^{__CFBoolean=}' gettypeid_func='CFBooleanGetTypeID'/>
+  <cftype name='CFBundleRef' encoding='^{__CFBundle=}' gettypeid_func='CFBundleGetTypeID'/>
+  <cftype tollfree='NSCFCalendar' name='CFCalendarRef' encoding='^{__CFCalendar=}' gettypeid_func='CFCalendarGetTypeID'/>
+  <cftype tollfree='NSCFCharacterSet' name='CFCharacterSetRef' encoding='^{__CFCharacterSet=}' gettypeid_func='CFCharacterSetGetTypeID'/>
+  <cftype tollfree='NSCFData' name='CFDataRef' encoding='^{__CFData=}' gettypeid_func='CFDataGetTypeID'/>
+  <cftype name='CFDateFormatterRef' encoding='^{__CFDateFormatter=}' gettypeid_func='CFDateFormatterGetTypeID'/>
+  <cftype tollfree='NSCFDate' name='CFDateRef' encoding='^{__CFDate=}' gettypeid_func='CFDateGetTypeID'/>
+  <cftype tollfree='NSCFDictionary' name='CFDictionaryRef' encoding='^{__CFDictionary=}' gettypeid_func='CFDictionaryGetTypeID'/>
+  <cftype tollfree='NSCFLocale' name='CFLocaleRef' encoding='^{__CFLocale=}' gettypeid_func='CFLocaleGetTypeID'/>
+  <cftype tollfree='NSMachPort' name='CFMachPortRef' encoding='^{__CFMachPort=}' gettypeid_func='CFMachPortGetTypeID'/>
+  <cftype name='CFMessagePortRef' encoding='^{__CFMessagePort=}' gettypeid_func='CFMessagePortGetTypeID'/>
+  <cftype name='CFNotificationCenterRef' encoding='^{__CFNotificationCenter=}' gettypeid_func='CFNotificationCenterGetTypeID'/>
+  <cftype tollfree='NSNull' name='CFNullRef' encoding='^{__CFNull=}' gettypeid_func='CFNullGetTypeID'/>
+  <cftype name='CFNumberFormatterRef' encoding='^{__CFNumberFormatter=}' gettypeid_func='CFNumberFormatterGetTypeID'/>
+  <cftype tollfree='NSCFNumber' name='CFNumberRef' encoding='^{__CFNumber=}' gettypeid_func='CFNumberGetTypeID'/>
+  <cftype name='CFPlugInInstanceRef' encoding='^{__CFPlugInInstance=}' gettypeid_func='CFPlugInInstanceGetTypeID'/>
+  <cftype name='CFPlugInRef' encoding='^{__CFBundle=}' gettypeid_func='CFPlugInGetTypeID'/>
+  <cftype tollfree='NSCFInputStream' name='CFReadStreamRef' encoding='^{__CFReadStream=}' gettypeid_func='CFReadStreamGetTypeID'/>
+  <cftype name='CFRunLoopObserverRef' encoding='^{__CFRunLoopObserver=}' gettypeid_func='CFRunLoopObserverGetTypeID'/>
+  <cftype name='CFRunLoopRef' encoding='^{__CFRunLoop=}' gettypeid_func='CFRunLoopGetTypeID'/>
+  <cftype name='CFRunLoopSourceRef' encoding='^{__CFRunLoopSource=}' gettypeid_func='CFRunLoopSourceGetTypeID'/>
+  <cftype tollfree='NSCFTimer' name='CFRunLoopTimerRef' encoding='^{__CFRunLoopTimer=}' gettypeid_func='CFRunLoopTimerGetTypeID'/>
+  <cftype tollfree='NSCFSet' name='CFSetRef' encoding='^{__CFSet=}' gettypeid_func='CFSetGetTypeID'/>
+  <cftype name='CFSocketRef' encoding='^{__CFSocket=}' gettypeid_func='CFSocketGetTypeID'/>
+  <cftype tollfree='NSCFString' name='CFStringRef' encoding='^{__CFString=}' gettypeid_func='CFStringGetTypeID'/>
+  <cftype tollfree='NSCFTimeZone' name='CFTimeZoneRef' encoding='^{__CFTimeZone=}' gettypeid_func='CFTimeZoneGetTypeID'/>
+  <cftype name='CFTreeRef' encoding='^{__CFTree=}' gettypeid_func='CFTreeGetTypeID'/>
+  <cftype tollfree='NSURL' name='CFURLRef' encoding='^{__CFURL=}' gettypeid_func='CFURLGetTypeID'/>
+  <cftype name='CFUUIDRef' encoding='^{__CFUUID=}' gettypeid_func='CFUUIDGetTypeID'/>
+  <cftype name='CFUserNotificationRef' encoding='^{__CFUserNotification=}' gettypeid_func='CFUserNotificationGetTypeID'/>
+  <cftype tollfree='NSCFOutputStream' name='CFWriteStreamRef' encoding='^{__CFWriteStream=}' gettypeid_func='CFWriteStreamGetTypeID'/>
+  <cftype name='CFXMLNodeRef' encoding='^{__CFXMLNode=}' gettypeid_func='CFXMLNodeGetTypeID'/>
+  <cftype name='CFXMLParserRef' encoding='^{__CFXMLParser=}' gettypeid_func='CFXMLParserGetTypeID'/>
+  <constant name='kCFAbsoluteTimeIntervalSince1904' type='d'/>
+  <constant name='kCFAbsoluteTimeIntervalSince1970' type='d'/>
+  <constant name='kCFAllocatorDefault' type='^{__CFAllocator=}'/>
+  <constant name='kCFAllocatorMalloc' type='^{__CFAllocator=}'/>
+  <constant name='kCFAllocatorMallocZone' type='^{__CFAllocator=}'/>
+  <constant name='kCFAllocatorNull' type='^{__CFAllocator=}'/>
+  <constant name='kCFAllocatorSystemDefault' type='^{__CFAllocator=}'/>
+  <constant name='kCFAllocatorUseContext' type='^{__CFAllocator=}'/>
+  <constant name='kCFBooleanFalse' type='^{__CFBoolean=}'/>
+  <constant name='kCFBooleanTrue' type='^{__CFBoolean=}'/>
+  <constant name='kCFBuddhistCalendar' type='^{__CFString=}'/>
+  <constant name='kCFBundleDevelopmentRegionKey' type='^{__CFString=}'/>
+  <constant name='kCFBundleExecutableKey' type='^{__CFString=}'/>
+  <constant name='kCFBundleIdentifierKey' type='^{__CFString=}'/>
+  <constant name='kCFBundleInfoDictionaryVersionKey' type='^{__CFString=}'/>
+  <constant name='kCFBundleLocalizationsKey' type='^{__CFString=}'/>
+  <constant name='kCFBundleNameKey' type='^{__CFString=}'/>
+  <constant name='kCFBundleVersionKey' type='^{__CFString=}'/>
+  <constant name='kCFChineseCalendar' type='^{__CFString=}'/>
+  <constant name='kCFCopyStringBagCallBacks' type='{?=i^?^?^?^?^?}'/>
+  <constant name='kCFCopyStringDictionaryKeyCallBacks' type='{?=i^?^?^?^?^?}'/>
+  <constant name='kCFCopyStringSetCallBacks' type='{?=i^?^?^?^?^?}'/>
+  <constant name='kCFCoreFoundationVersionNumber' type='d'/>
+  <constant name='kCFDateFormatterAMSymbol' type='^{__CFString=}'/>
+  <constant name='kCFDateFormatterCalendar' type='^{__CFString=}'/>
+  <constant name='kCFDateFormatterCalendarName' type='^{__CFString=}'/>
+  <constant name='kCFDateFormatterDefaultDate' type='^{__CFString=}'/>
+  <constant name='kCFDateFormatterDefaultFormat' type='^{__CFString=}'/>
+  <constant name='kCFDateFormatterEraSymbols' type='^{__CFString=}'/>
+  <constant name='kCFDateFormatterIsLenient' type='^{__CFString=}'/>
+  <constant name='kCFDateFormatterMonthSymbols' type='^{__CFString=}'/>
+  <constant name='kCFDateFormatterPMSymbol' type='^{__CFString=}'/>
+  <constant name='kCFDateFormatterShortMonthSymbols' type='^{__CFString=}'/>
+  <constant name='kCFDateFormatterShortWeekdaySymbols' type='^{__CFString=}'/>
+  <constant name='kCFDateFormatterTimeZone' type='^{__CFString=}'/>
+  <constant name='kCFDateFormatterTwoDigitStartDate' type='^{__CFString=}'/>
+  <constant name='kCFDateFormatterWeekdaySymbols' type='^{__CFString=}'/>
+  <constant name='kCFGregorianCalendar' type='^{__CFString=}'/>
+  <constant name='kCFHebrewCalendar' type='^{__CFString=}'/>
+  <constant name='kCFIslamicCalendar' type='^{__CFString=}'/>
+  <constant name='kCFIslamicCivilCalendar' type='^{__CFString=}'/>
+  <constant name='kCFJapaneseCalendar' type='^{__CFString=}'/>
+  <constant name='kCFLocaleCalendar' type='^{__CFString=}'/>
+  <constant name='kCFLocaleCalendarIdentifier' type='^{__CFString=}'/>
+  <constant name='kCFLocaleCollationIdentifier' type='^{__CFString=}'/>
+  <constant name='kCFLocaleCountryCode' type='^{__CFString=}'/>
+  <constant name='kCFLocaleCurrencyCode' type='^{__CFString=}'/>
+  <constant name='kCFLocaleCurrencySymbol' type='^{__CFString=}'/>
+  <constant name='kCFLocaleDecimalSeparator' type='^{__CFString=}'/>
+  <constant name='kCFLocaleExemplarCharacterSet' type='^{__CFString=}'/>
+  <constant name='kCFLocaleGroupingSeparator' type='^{__CFString=}'/>
+  <constant name='kCFLocaleIdentifier' type='^{__CFString=}'/>
+  <constant name='kCFLocaleLanguageCode' type='^{__CFString=}'/>
+  <constant name='kCFLocaleMeasurementSystem' type='^{__CFString=}'/>
+  <constant name='kCFLocaleScriptCode' type='^{__CFString=}'/>
+  <constant name='kCFLocaleUsesMetricSystem' type='^{__CFString=}'/>
+  <constant name='kCFLocaleVariantCode' type='^{__CFString=}'/>
+  <constant name='kCFNull' type='^{__CFNull=}'/>
+  <constant name='kCFNumberFormatterAlwaysShowDecimalSeparator' type='^{__CFString=}'/>
+  <constant name='kCFNumberFormatterCurrencyCode' type='^{__CFString=}'/>
+  <constant name='kCFNumberFormatterCurrencyDecimalSeparator' type='^{__CFString=}'/>
+  <constant name='kCFNumberFormatterCurrencySymbol' type='^{__CFString=}'/>
+  <constant name='kCFNumberFormatterDecimalSeparator' type='^{__CFString=}'/>
+  <constant name='kCFNumberFormatterDefaultFormat' type='^{__CFString=}'/>
+  <constant name='kCFNumberFormatterExponentSymbol' type='^{__CFString=}'/>
+  <constant name='kCFNumberFormatterFormatWidth' type='^{__CFString=}'/>
+  <constant name='kCFNumberFormatterGroupingSeparator' type='^{__CFString=}'/>
+  <constant name='kCFNumberFormatterGroupingSize' type='^{__CFString=}'/>
+  <constant name='kCFNumberFormatterInfinitySymbol' type='^{__CFString=}'/>
+  <constant name='kCFNumberFormatterInternationalCurrencySymbol' type='^{__CFString=}'/>
+  <constant name='kCFNumberFormatterMaxFractionDigits' type='^{__CFString=}'/>
+  <constant name='kCFNumberFormatterMaxIntegerDigits' type='^{__CFString=}'/>
+  <constant name='kCFNumberFormatterMinFractionDigits' type='^{__CFString=}'/>
+  <constant name='kCFNumberFormatterMinIntegerDigits' type='^{__CFString=}'/>
+  <constant name='kCFNumberFormatterMinusSign' type='^{__CFString=}'/>
+  <constant name='kCFNumberFormatterMultiplier' type='^{__CFString=}'/>
+  <constant name='kCFNumberFormatterNaNSymbol' type='^{__CFString=}'/>
+  <constant name='kCFNumberFormatterNegativePrefix' type='^{__CFString=}'/>
+  <constant name='kCFNumberFormatterNegativeSuffix' type='^{__CFString=}'/>
+  <constant name='kCFNumberFormatterPaddingCharacter' type='^{__CFString=}'/>
+  <constant name='kCFNumberFormatterPaddingPosition' type='^{__CFString=}'/>
+  <constant name='kCFNumberFormatterPerMillSymbol' type='^{__CFString=}'/>
+  <constant name='kCFNumberFormatterPercentSymbol' type='^{__CFString=}'/>
+  <constant name='kCFNumberFormatterPlusSign' type='^{__CFString=}'/>
+  <constant name='kCFNumberFormatterPositivePrefix' type='^{__CFString=}'/>
+  <constant name='kCFNumberFormatterPositiveSuffix' type='^{__CFString=}'/>
+  <constant name='kCFNumberFormatterRoundingIncrement' type='^{__CFString=}'/>
+  <constant name='kCFNumberFormatterRoundingMode' type='^{__CFString=}'/>
+  <constant name='kCFNumberFormatterSecondaryGroupingSize' type='^{__CFString=}'/>
+  <constant name='kCFNumberFormatterUseGroupingSeparator' type='^{__CFString=}'/>
+  <constant name='kCFNumberFormatterZeroSymbol' type='^{__CFString=}'/>
+  <constant name='kCFNumberNaN' type='^{__CFNumber=}'/>
+  <constant name='kCFNumberNegativeInfinity' type='^{__CFNumber=}'/>
+  <constant name='kCFNumberPositiveInfinity' type='^{__CFNumber=}'/>
+  <constant name='kCFPlugInDynamicRegisterFunctionKey' type='^{__CFString=}'/>
+  <constant name='kCFPlugInDynamicRegistrationKey' type='^{__CFString=}'/>
+  <constant name='kCFPlugInFactoriesKey' type='^{__CFString=}'/>
+  <constant name='kCFPlugInTypesKey' type='^{__CFString=}'/>
+  <constant name='kCFPlugInUnloadFunctionKey' type='^{__CFString=}'/>
+  <constant name='kCFPreferencesAnyApplication' type='^{__CFString=}'/>
+  <constant name='kCFPreferencesAnyHost' type='^{__CFString=}'/>
+  <constant name='kCFPreferencesAnyUser' type='^{__CFString=}'/>
+  <constant name='kCFPreferencesCurrentApplication' type='^{__CFString=}'/>
+  <constant name='kCFPreferencesCurrentHost' type='^{__CFString=}'/>
+  <constant name='kCFPreferencesCurrentUser' type='^{__CFString=}'/>
+  <constant name='kCFRunLoopCommonModes' type='^{__CFString=}'/>
+  <constant name='kCFRunLoopDefaultMode' type='^{__CFString=}'/>
+  <constant name='kCFSocketCommandKey' type='^{__CFString=}'/>
+  <constant name='kCFSocketErrorKey' type='^{__CFString=}'/>
+  <constant name='kCFSocketNameKey' type='^{__CFString=}'/>
+  <constant name='kCFSocketRegisterCommand' type='^{__CFString=}'/>
+  <constant name='kCFSocketResultKey' type='^{__CFString=}'/>
+  <constant name='kCFSocketRetrieveCommand' type='^{__CFString=}'/>
+  <constant name='kCFSocketValueKey' type='^{__CFString=}'/>
+  <constant name='kCFStreamPropertyAppendToFile' type='^{__CFString=}'/>
+  <constant name='kCFStreamPropertyDataWritten' type='^{__CFString=}'/>
+  <constant name='kCFStreamPropertyFileCurrentOffset' type='^{__CFString=}'/>
+  <constant name='kCFStreamPropertySocketNativeHandle' type='^{__CFString=}'/>
+  <constant name='kCFStreamPropertySocketRemoteHostName' type='^{__CFString=}'/>
+  <constant name='kCFStreamPropertySocketRemotePortNumber' type='^{__CFString=}'/>
+  <constant name='kCFStringBinaryHeapCallBacks' type='{?=i^?^?^?^?}'/>
+  <constant name='kCFStringTransformFullwidthHalfwidth' type='^{__CFString=}'/>
+  <constant name='kCFStringTransformHiraganaKatakana' type='^{__CFString=}'/>
+  <constant name='kCFStringTransformLatinArabic' type='^{__CFString=}'/>
+  <constant name='kCFStringTransformLatinCyrillic' type='^{__CFString=}'/>
+  <constant name='kCFStringTransformLatinGreek' type='^{__CFString=}'/>
+  <constant name='kCFStringTransformLatinHangul' type='^{__CFString=}'/>
+  <constant name='kCFStringTransformLatinHebrew' type='^{__CFString=}'/>
+  <constant name='kCFStringTransformLatinHiragana' type='^{__CFString=}'/>
+  <constant name='kCFStringTransformLatinKatakana' type='^{__CFString=}'/>
+  <constant name='kCFStringTransformLatinThai' type='^{__CFString=}'/>
+  <constant name='kCFStringTransformMandarinLatin' type='^{__CFString=}'/>
+  <constant name='kCFStringTransformStripCombiningMarks' type='^{__CFString=}'/>
+  <constant name='kCFStringTransformToLatin' type='^{__CFString=}'/>
+  <constant name='kCFStringTransformToUnicodeName' type='^{__CFString=}'/>
+  <constant name='kCFStringTransformToXMLHex' type='^{__CFString=}'/>
+  <constant name='kCFTypeArrayCallBacks' type='{?=i^?^?^?^?}'/>
+  <constant name='kCFTypeBagCallBacks' type='{?=i^?^?^?^?^?}'/>
+  <constant name='kCFTypeDictionaryKeyCallBacks' type='{?=i^?^?^?^?^?}'/>
+  <constant name='kCFTypeDictionaryValueCallBacks' type='{?=i^?^?^?^?}'/>
+  <constant name='kCFTypeSetCallBacks' type='{?=i^?^?^?^?^?}'/>
+  <constant name='kCFURLFileDirectoryContents' type='^{__CFString=}'/>
+  <constant name='kCFURLFileExists' type='^{__CFString=}'/>
+  <constant name='kCFURLFileLastModificationTime' type='^{__CFString=}'/>
+  <constant name='kCFURLFileLength' type='^{__CFString=}'/>
+  <constant name='kCFURLFileOwnerID' type='^{__CFString=}'/>
+  <constant name='kCFURLFilePOSIXMode' type='^{__CFString=}'/>
+  <constant name='kCFURLHTTPStatusCode' type='^{__CFString=}'/>
+  <constant name='kCFURLHTTPStatusLine' type='^{__CFString=}'/>
+  <constant name='kCFUserNotificationAlertHeaderKey' type='^{__CFString=}'/>
+  <constant name='kCFUserNotificationAlertMessageKey' type='^{__CFString=}'/>
+  <constant name='kCFUserNotificationAlternateButtonTitleKey' type='^{__CFString=}'/>
+  <constant name='kCFUserNotificationCheckBoxTitlesKey' type='^{__CFString=}'/>
+  <constant name='kCFUserNotificationDefaultButtonTitleKey' type='^{__CFString=}'/>
+  <constant name='kCFUserNotificationIconURLKey' type='^{__CFString=}'/>
+  <constant name='kCFUserNotificationLocalizationURLKey' type='^{__CFString=}'/>
+  <constant name='kCFUserNotificationOtherButtonTitleKey' type='^{__CFString=}'/>
+  <constant name='kCFUserNotificationPopUpSelectionKey' type='^{__CFString=}'/>
+  <constant name='kCFUserNotificationPopUpTitlesKey' type='^{__CFString=}'/>
+  <constant name='kCFUserNotificationProgressIndicatorValueKey' type='^{__CFString=}'/>
+  <constant name='kCFUserNotificationSoundURLKey' type='^{__CFString=}'/>
+  <constant name='kCFUserNotificationTextFieldTitlesKey' type='^{__CFString=}'/>
+  <constant name='kCFUserNotificationTextFieldValuesKey' type='^{__CFString=}'/>
+  <constant name='kCFXMLTreeErrorDescription' type='^{__CFString=}'/>
+  <constant name='kCFXMLTreeErrorLineNumber' type='^{__CFString=}'/>
+  <constant name='kCFXMLTreeErrorLocation' type='^{__CFString=}'/>
+  <constant name='kCFXMLTreeErrorStatusCode' type='^{__CFString=}'/>
+  <enum name='CFByteOrderBigEndian' value='2'/>
+  <enum name='CFByteOrderLittleEndian' value='1'/>
+  <enum name='CFByteOrderUnknown' value='0'/>
+  <enum name='CFNotificationSuspensionBehaviorCoalesce' value='2'/>
+  <enum name='CFNotificationSuspensionBehaviorDeliverImmediately' value='4'/>
+  <enum name='CFNotificationSuspensionBehaviorDrop' value='1'/>
+  <enum name='CFNotificationSuspensionBehaviorHold' value='3'/>
+  <enum name='COREFOUNDATION_CFPLUGINCOM_SEPARATE' value='1'/>
+  <enum name='E_ABORT' value='-2147483641'/>
+  <enum name='E_ACCESSDENIED' value='-2147483639'/>
+  <enum name='E_FAIL' value='-2147483640'/>
+  <enum name='E_HANDLE' value='-2147483642'/>
+  <enum name='E_INVALIDARG' value='-2147483645'/>
+  <enum name='E_NOINTERFACE' value='-2147483644'/>
+  <enum name='E_NOTIMPL' value='-2147483647'/>
+  <enum name='E_OUTOFMEMORY' value='-2147483646'/>
+  <enum name='E_POINTER' value='-2147483643'/>
+  <enum name='E_UNEXPECTED' value='-2147418113'/>
+  <enum name='FALSE' value='0'/>
+  <enum name='NULL' value='0'/>
+  <enum name='SEVERITY_ERROR' value='1'/>
+  <enum name='SEVERITY_SUCCESS' value='0'/>
+  <enum name='S_FALSE' value='1'/>
+  <enum name='S_OK' value='0'/>
+  <enum name='TRUE' value='1'/>
+  <enum name='kCFCalendarComponentsWrap' value='1'/>
+  <enum name='kCFCalendarUnitDay' value='16'/>
+  <enum name='kCFCalendarUnitEra' value='2'/>
+  <enum name='kCFCalendarUnitHour' value='32'/>
+  <enum name='kCFCalendarUnitMinute' value='64'/>
+  <enum name='kCFCalendarUnitMonth' value='8'/>
+  <enum name='kCFCalendarUnitSecond' value='128'/>
+  <enum name='kCFCalendarUnitWeek' value='256'/>
+  <enum name='kCFCalendarUnitWeekday' value='512'/>
+  <enum name='kCFCalendarUnitWeekdayOrdinal' value='1024'/>
+  <enum name='kCFCalendarUnitYear' value='4'/>
+  <enum name='kCFCharacterSetAlphaNumeric' value='10'/>
+  <enum name='kCFCharacterSetCapitalizedLetter' value='13'/>
+  <enum name='kCFCharacterSetControl' value='1'/>
+  <enum name='kCFCharacterSetDecimalDigit' value='4'/>
+  <enum name='kCFCharacterSetDecomposable' value='9'/>
+  <enum name='kCFCharacterSetIllegal' value='12'/>
+  <enum name='kCFCharacterSetLetter' value='5'/>
+  <enum name='kCFCharacterSetLowercaseLetter' value='6'/>
+  <enum name='kCFCharacterSetNonBase' value='8'/>
+  <enum name='kCFCharacterSetPunctuation' value='11'/>
+  <enum name='kCFCharacterSetSymbol' value='14'/>
+  <enum name='kCFCharacterSetUppercaseLetter' value='7'/>
+  <enum name='kCFCharacterSetWhitespace' value='2'/>
+  <enum name='kCFCharacterSetWhitespaceAndNewline' value='3'/>
+  <enum name='kCFCompareAnchored' value='8'/>
+  <enum name='kCFCompareBackwards' value='4'/>
+  <enum name='kCFCompareCaseInsensitive' value='1'/>
+  <enum name='kCFCompareEqualTo' value='0'/>
+  <enum name='kCFCompareGreaterThan' value='1'/>
+  <enum name='kCFCompareLessThan' value='-1'/>
+  <enum name='kCFCompareLocalized' value='32'/>
+  <enum name='kCFCompareNonliteral' value='16'/>
+  <enum name='kCFCompareNumerically' value='64'/>
+  <enum name='kCFCoreFoundationVersionNumber10_0' value='196.400000'/>
+  <enum name='kCFCoreFoundationVersionNumber10_0_3' value='196.500000'/>
+  <enum name='kCFCoreFoundationVersionNumber10_1' value='226.000000'/>
+  <enum name='kCFCoreFoundationVersionNumber10_1_2' value='227.200000'/>
+  <enum name='kCFCoreFoundationVersionNumber10_1_4' value='227.300000'/>
+  <enum name='kCFCoreFoundationVersionNumber10_2' value='263.000000'/>
+  <enum name='kCFCoreFoundationVersionNumber10_3' value='299.000000'/>
+  <enum name='kCFCoreFoundationVersionNumber10_3_3' value='299.300000'/>
+  <enum name='kCFCoreFoundationVersionNumber10_3_4' value='299.310000'/>
+  <enum name='kCFDateFormatterFullStyle' value='4'/>
+  <enum name='kCFDateFormatterLongStyle' value='3'/>
+  <enum name='kCFDateFormatterMediumStyle' value='2'/>
+  <enum name='kCFDateFormatterNoStyle' value='0'/>
+  <enum name='kCFDateFormatterShortStyle' value='1'/>
+  <enum name='kCFGregorianAllUnits' value='16777215'/>
+  <enum name='kCFGregorianUnitsDays' value='4'/>
+  <enum name='kCFGregorianUnitsHours' value='8'/>
+  <enum name='kCFGregorianUnitsMinutes' value='16'/>
+  <enum name='kCFGregorianUnitsMonths' value='2'/>
+  <enum name='kCFGregorianUnitsSeconds' value='32'/>
+  <enum name='kCFGregorianUnitsYears' value='1'/>
+  <enum name='kCFMessagePortIsInvalid' value='-3'/>
+  <enum name='kCFMessagePortReceiveTimeout' value='-2'/>
+  <enum name='kCFMessagePortSendTimeout' value='-1'/>
+  <enum name='kCFMessagePortSuccess' value='0'/>
+  <enum name='kCFMessagePortTransportError' value='-4'/>
+  <enum name='kCFNotFound' value='-1'/>
+  <enum name='kCFNotificationDeliverImmediately' value='1'/>
+  <enum name='kCFNotificationPostToAllSessions' value='2'/>
+  <enum name='kCFNumberCFIndexType' value='14'/>
+  <enum name='kCFNumberCharType' value='7'/>
+  <enum name='kCFNumberDoubleType' value='13'/>
+  <enum name='kCFNumberFloat32Type' value='5'/>
+  <enum name='kCFNumberFloat64Type' value='6'/>
+  <enum name='kCFNumberFloatType' value='12'/>
+  <enum name='kCFNumberFormatterCurrencyStyle' value='2'/>
+  <enum name='kCFNumberFormatterDecimalStyle' value='1'/>
+  <enum name='kCFNumberFormatterNoStyle' value='0'/>
+  <enum name='kCFNumberFormatterPadAfterPrefix' value='1'/>
+  <enum name='kCFNumberFormatterPadAfterSuffix' value='3'/>
+  <enum name='kCFNumberFormatterPadBeforePrefix' value='0'/>
+  <enum name='kCFNumberFormatterPadBeforeSuffix' value='2'/>
+  <enum name='kCFNumberFormatterParseIntegersOnly' value='1'/>
+  <enum name='kCFNumberFormatterPercentStyle' value='3'/>
+  <enum name='kCFNumberFormatterRoundCeiling' value='0'/>
+  <enum name='kCFNumberFormatterRoundDown' value='2'/>
+  <enum name='kCFNumberFormatterRoundFloor' value='1'/>
+  <enum name='kCFNumberFormatterRoundHalfDown' value='5'/>
+  <enum name='kCFNumberFormatterRoundHalfEven' value='4'/>
+  <enum name='kCFNumberFormatterRoundHalfUp' value='6'/>
+  <enum name='kCFNumberFormatterRoundUp' value='3'/>
+  <enum name='kCFNumberFormatterScientificStyle' value='4'/>
+  <enum name='kCFNumberFormatterSpellOutStyle' value='5'/>
+  <enum name='kCFNumberIntType' value='9'/>
+  <enum name='kCFNumberLongLongType' value='11'/>
+  <enum name='kCFNumberLongType' value='10'/>
+  <enum name='kCFNumberMaxType' value='14'/>
+  <enum name='kCFNumberSInt16Type' value='2'/>
+  <enum name='kCFNumberSInt32Type' value='3'/>
+  <enum name='kCFNumberSInt64Type' value='4'/>
+  <enum name='kCFNumberSInt8Type' value='1'/>
+  <enum name='kCFNumberShortType' value='8'/>
+  <enum name='kCFPropertyListBinaryFormat_v1_0' value='200'/>
+  <enum name='kCFPropertyListImmutable' value='0'/>
+  <enum name='kCFPropertyListMutableContainers' value='1'/>
+  <enum name='kCFPropertyListMutableContainersAndLeaves' value='2'/>
+  <enum name='kCFPropertyListOpenStepFormat' value='1'/>
+  <enum name='kCFPropertyListXMLFormat_v1_0' value='100'/>
+  <enum name='kCFRunLoopAfterWaiting' value='64'/>
+  <enum name='kCFRunLoopAllActivities' value='268435455'/>
+  <enum name='kCFRunLoopBeforeSources' value='4'/>
+  <enum name='kCFRunLoopBeforeTimers' value='2'/>
+  <enum name='kCFRunLoopBeforeWaiting' value='32'/>
+  <enum name='kCFRunLoopEntry' value='1'/>
+  <enum name='kCFRunLoopExit' value='128'/>
+  <enum name='kCFRunLoopRunFinished' value='1'/>
+  <enum name='kCFRunLoopRunHandledSource' value='4'/>
+  <enum name='kCFRunLoopRunStopped' value='2'/>
+  <enum name='kCFRunLoopRunTimedOut' value='3'/>
+  <enum name='kCFSocketAcceptCallBack' value='2'/>
+  <enum name='kCFSocketAutomaticallyReenableAcceptCallBack' value='2'/>
+  <enum name='kCFSocketAutomaticallyReenableDataCallBack' value='3'/>
+  <enum name='kCFSocketAutomaticallyReenableReadCallBack' value='1'/>
+  <enum name='kCFSocketAutomaticallyReenableWriteCallBack' value='8'/>
+  <enum name='kCFSocketCloseOnInvalidate' value='128'/>
+  <enum name='kCFSocketConnectCallBack' value='4'/>
+  <enum name='kCFSocketDataCallBack' value='3'/>
+  <enum name='kCFSocketError' value='-1'/>
+  <enum name='kCFSocketNoCallBack' value='0'/>
+  <enum name='kCFSocketReadCallBack' value='1'/>
+  <enum name='kCFSocketSuccess' value='0'/>
+  <enum name='kCFSocketTimeout' value='-2'/>
+  <enum name='kCFSocketWriteCallBack' value='8'/>
+  <enum name='kCFStreamErrorDomainCustom' value='-1'/>
+  <enum name='kCFStreamErrorDomainMacOSStatus' value='2'/>
+  <enum name='kCFStreamErrorDomainPOSIX' value='1'/>
+  <enum name='kCFStreamEventCanAcceptBytes' value='4'/>
+  <enum name='kCFStreamEventEndEncountered' value='16'/>
+  <enum name='kCFStreamEventErrorOccurred' value='8'/>
+  <enum name='kCFStreamEventHasBytesAvailable' value='2'/>
+  <enum name='kCFStreamEventNone' value='0'/>
+  <enum name='kCFStreamEventOpenCompleted' value='1'/>
+  <enum name='kCFStreamStatusAtEnd' value='5'/>
+  <enum name='kCFStreamStatusClosed' value='6'/>
+  <enum name='kCFStreamStatusError' value='7'/>
+  <enum name='kCFStreamStatusNotOpen' value='0'/>
+  <enum name='kCFStreamStatusOpen' value='2'/>
+  <enum name='kCFStreamStatusOpening' value='1'/>
+  <enum name='kCFStreamStatusReading' value='3'/>
+  <enum name='kCFStreamStatusWriting' value='4'/>
+  <enum name='kCFStringEncodingANSEL' value='1537'/>
+  <enum name='kCFStringEncodingASCII' value='1536'/>
+  <enum name='kCFStringEncodingBig5' value='2563'/>
+  <enum name='kCFStringEncodingBig5_E' value='2569'/>
+  <enum name='kCFStringEncodingBig5_HKSCS_1999' value='2566'/>
+  <enum name='kCFStringEncodingCNS_11643_92_P1' value='1617'/>
+  <enum name='kCFStringEncodingCNS_11643_92_P2' value='1618'/>
+  <enum name='kCFStringEncodingCNS_11643_92_P3' value='1619'/>
+  <enum name='kCFStringEncodingDOSArabic' value='1049'/>
+  <enum name='kCFStringEncodingDOSBalticRim' value='1030'/>
+  <enum name='kCFStringEncodingDOSCanadianFrench' value='1048'/>
+  <enum name='kCFStringEncodingDOSChineseSimplif' value='1057'/>
+  <enum name='kCFStringEncodingDOSChineseTrad' value='1059'/>
+  <enum name='kCFStringEncodingDOSCyrillic' value='1043'/>
+  <enum name='kCFStringEncodingDOSGreek' value='1029'/>
+  <enum name='kCFStringEncodingDOSGreek1' value='1041'/>
+  <enum name='kCFStringEncodingDOSGreek2' value='1052'/>
+  <enum name='kCFStringEncodingDOSHebrew' value='1047'/>
+  <enum name='kCFStringEncodingDOSIcelandic' value='1046'/>
+  <enum name='kCFStringEncodingDOSJapanese' value='1056'/>
+  <enum name='kCFStringEncodingDOSKorean' value='1058'/>
+  <enum name='kCFStringEncodingDOSLatin1' value='1040'/>
+  <enum name='kCFStringEncodingDOSLatin2' value='1042'/>
+  <enum name='kCFStringEncodingDOSLatinUS' value='1024'/>
+  <enum name='kCFStringEncodingDOSNordic' value='1050'/>
+  <enum name='kCFStringEncodingDOSPortuguese' value='1045'/>
+  <enum name='kCFStringEncodingDOSRussian' value='1051'/>
+  <enum name='kCFStringEncodingDOSThai' value='1053'/>
+  <enum name='kCFStringEncodingDOSTurkish' value='1044'/>
+  <enum name='kCFStringEncodingEBCDIC_CP037' value='3074'/>
+  <enum name='kCFStringEncodingEBCDIC_US' value='3073'/>
+  <enum name='kCFStringEncodingEUC_CN' value='2352'/>
+  <enum name='kCFStringEncodingEUC_JP' value='2336'/>
+  <enum name='kCFStringEncodingEUC_KR' value='2368'/>
+  <enum name='kCFStringEncodingEUC_TW' value='2353'/>
+  <enum name='kCFStringEncodingGBK_95' value='1585'/>
+  <enum name='kCFStringEncodingGB_18030_2000' value='1586'/>
+  <enum name='kCFStringEncodingGB_2312_80' value='1584'/>
+  <enum name='kCFStringEncodingHZ_GB_2312' value='2565'/>
+  <enum name='kCFStringEncodingISOLatin1' value='513'/>
+  <enum name='kCFStringEncodingISOLatin10' value='528'/>
+  <enum name='kCFStringEncodingISOLatin2' value='514'/>
+  <enum name='kCFStringEncodingISOLatin3' value='515'/>
+  <enum name='kCFStringEncodingISOLatin4' value='516'/>
+  <enum name='kCFStringEncodingISOLatin5' value='521'/>
+  <enum name='kCFStringEncodingISOLatin6' value='522'/>
+  <enum name='kCFStringEncodingISOLatin7' value='525'/>
+  <enum name='kCFStringEncodingISOLatin8' value='526'/>
+  <enum name='kCFStringEncodingISOLatin9' value='527'/>
+  <enum name='kCFStringEncodingISOLatinArabic' value='518'/>
+  <enum name='kCFStringEncodingISOLatinCyrillic' value='517'/>
+  <enum name='kCFStringEncodingISOLatinGreek' value='519'/>
+  <enum name='kCFStringEncodingISOLatinHebrew' value='520'/>
+  <enum name='kCFStringEncodingISOLatinThai' value='523'/>
+  <enum name='kCFStringEncodingISO_2022_CN' value='2096'/>
+  <enum name='kCFStringEncodingISO_2022_CN_EXT' value='2097'/>
+  <enum name='kCFStringEncodingISO_2022_JP' value='2080'/>
+  <enum name='kCFStringEncodingISO_2022_JP_1' value='2082'/>
+  <enum name='kCFStringEncodingISO_2022_JP_2' value='2081'/>
+  <enum name='kCFStringEncodingISO_2022_JP_3' value='2083'/>
+  <enum name='kCFStringEncodingISO_2022_KR' value='2112'/>
+  <enum name='kCFStringEncodingInvalidId' value='4294967295'/>
+  <enum name='kCFStringEncodingJIS_C6226_78' value='1572'/>
+  <enum name='kCFStringEncodingJIS_X0201_76' value='1568'/>
+  <enum name='kCFStringEncodingJIS_X0208_83' value='1569'/>
+  <enum name='kCFStringEncodingJIS_X0208_90' value='1570'/>
+  <enum name='kCFStringEncodingJIS_X0212_90' value='1571'/>
+  <enum name='kCFStringEncodingKOI8_R' value='2562'/>
+  <enum name='kCFStringEncodingKOI8_U' value='2568'/>
+  <enum name='kCFStringEncodingKSC_5601_87' value='1600'/>
+  <enum name='kCFStringEncodingKSC_5601_92_Johab' value='1601'/>
+  <enum name='kCFStringEncodingMacArabic' value='4'/>
+  <enum name='kCFStringEncodingMacArmenian' value='24'/>
+  <enum name='kCFStringEncodingMacBengali' value='13'/>
+  <enum name='kCFStringEncodingMacBurmese' value='19'/>
+  <enum name='kCFStringEncodingMacCeltic' value='39'/>
+  <enum name='kCFStringEncodingMacCentralEurRoman' value='29'/>
+  <enum name='kCFStringEncodingMacChineseSimp' value='25'/>
+  <enum name='kCFStringEncodingMacChineseTrad' value='2'/>
+  <enum name='kCFStringEncodingMacCroatian' value='36'/>
+  <enum name='kCFStringEncodingMacCyrillic' value='7'/>
+  <enum name='kCFStringEncodingMacDevanagari' value='9'/>
+  <enum name='kCFStringEncodingMacDingbats' value='34'/>
+  <enum name='kCFStringEncodingMacEthiopic' value='28'/>
+  <enum name='kCFStringEncodingMacExtArabic' value='31'/>
+  <enum name='kCFStringEncodingMacFarsi' value='140'/>
+  <enum name='kCFStringEncodingMacGaelic' value='40'/>
+  <enum name='kCFStringEncodingMacGeorgian' value='23'/>
+  <enum name='kCFStringEncodingMacGreek' value='6'/>
+  <enum name='kCFStringEncodingMacGujarati' value='11'/>
+  <enum name='kCFStringEncodingMacGurmukhi' value='10'/>
+  <enum name='kCFStringEncodingMacHFS' value='255'/>
+  <enum name='kCFStringEncodingMacHebrew' value='5'/>
+  <enum name='kCFStringEncodingMacIcelandic' value='37'/>
+  <enum name='kCFStringEncodingMacInuit' value='236'/>
+  <enum name='kCFStringEncodingMacJapanese' value='1'/>
+  <enum name='kCFStringEncodingMacKannada' value='16'/>
+  <enum name='kCFStringEncodingMacKhmer' value='20'/>
+  <enum name='kCFStringEncodingMacKorean' value='3'/>
+  <enum name='kCFStringEncodingMacLaotian' value='22'/>
+  <enum name='kCFStringEncodingMacMalayalam' value='17'/>
+  <enum name='kCFStringEncodingMacMongolian' value='27'/>
+  <enum name='kCFStringEncodingMacOriya' value='12'/>
+  <enum name='kCFStringEncodingMacRoman' value='0'/>
+  <enum name='kCFStringEncodingMacRomanLatin1' value='2564'/>
+  <enum name='kCFStringEncodingMacRomanian' value='38'/>
+  <enum name='kCFStringEncodingMacSinhalese' value='18'/>
+  <enum name='kCFStringEncodingMacSymbol' value='33'/>
+  <enum name='kCFStringEncodingMacTamil' value='14'/>
+  <enum name='kCFStringEncodingMacTelugu' value='15'/>
+  <enum name='kCFStringEncodingMacThai' value='21'/>
+  <enum name='kCFStringEncodingMacTibetan' value='26'/>
+  <enum name='kCFStringEncodingMacTurkish' value='35'/>
+  <enum name='kCFStringEncodingMacUkrainian' value='152'/>
+  <enum name='kCFStringEncodingMacVT100' value='252'/>
+  <enum name='kCFStringEncodingMacVietnamese' value='30'/>
+  <enum name='kCFStringEncodingNextStepJapanese' value='2818'/>
+  <enum name='kCFStringEncodingNextStepLatin' value='2817'/>
+  <enum name='kCFStringEncodingNonLossyASCII' value='3071'/>
+  <enum name='kCFStringEncodingShiftJIS' value='2561'/>
+  <enum name='kCFStringEncodingShiftJIS_X0213_00' value='1576'/>
+  <enum name='kCFStringEncodingShiftJIS_X0213_MenKuTen' value='1577'/>
+  <enum name='kCFStringEncodingUTF16' value='256'/>
+  <enum name='kCFStringEncodingUTF16BE' value='268435712'/>
+  <enum name='kCFStringEncodingUTF16LE' value='335544576'/>
+  <enum name='kCFStringEncodingUTF32' value='201326848'/>
+  <enum name='kCFStringEncodingUTF32BE' value='402653440'/>
+  <enum name='kCFStringEncodingUTF32LE' value='469762304'/>
+  <enum name='kCFStringEncodingUTF8' value='134217984'/>
+  <enum name='kCFStringEncodingUnicode' value='256'/>
+  <enum name='kCFStringEncodingVISCII' value='2567'/>
+  <enum name='kCFStringEncodingWindowsArabic' value='1286'/>
+  <enum name='kCFStringEncodingWindowsBalticRim' value='1287'/>
+  <enum name='kCFStringEncodingWindowsCyrillic' value='1282'/>
+  <enum name='kCFStringEncodingWindowsGreek' value='1283'/>
+  <enum name='kCFStringEncodingWindowsHebrew' value='1285'/>
+  <enum name='kCFStringEncodingWindowsKoreanJohab' value='1296'/>
+  <enum name='kCFStringEncodingWindowsLatin1' value='1280'/>
+  <enum name='kCFStringEncodingWindowsLatin2' value='1281'/>
+  <enum name='kCFStringEncodingWindowsLatin5' value='1284'/>
+  <enum name='kCFStringEncodingWindowsVietnamese' value='1288'/>
+  <enum name='kCFStringNormalizationFormC' value='2'/>
+  <enum name='kCFStringNormalizationFormD' value='0'/>
+  <enum name='kCFStringNormalizationFormKC' value='3'/>
+  <enum name='kCFStringNormalizationFormKD' value='1'/>
+  <enum name='kCFURLComponentFragment' value='12'/>
+  <enum name='kCFURLComponentHost' value='8'/>
+  <enum name='kCFURLComponentNetLocation' value='2'/>
+  <enum name='kCFURLComponentParameterString' value='10'/>
+  <enum name='kCFURLComponentPassword' value='6'/>
+  <enum name='kCFURLComponentPath' value='3'/>
+  <enum name='kCFURLComponentPort' value='9'/>
+  <enum name='kCFURLComponentQuery' value='11'/>
+  <enum name='kCFURLComponentResourceSpecifier' value='4'/>
+  <enum name='kCFURLComponentScheme' value='1'/>
+  <enum name='kCFURLComponentUser' value='5'/>
+  <enum name='kCFURLComponentUserInfo' value='7'/>
+  <enum name='kCFURLHFSPathStyle' value='1'/>
+  <enum name='kCFURLImproperArgumentsError' value='-15'/>
+  <enum name='kCFURLPOSIXPathStyle' value='0'/>
+  <enum name='kCFURLPropertyKeyUnavailableError' value='-17'/>
+  <enum name='kCFURLRemoteHostUnavailableError' value='-14'/>
+  <enum name='kCFURLResourceAccessViolationError' value='-13'/>
+  <enum name='kCFURLResourceNotFoundError' value='-12'/>
+  <enum name='kCFURLTimeoutError' value='-18'/>
+  <enum name='kCFURLUnknownError' value='-10'/>
+  <enum name='kCFURLUnknownPropertyKeyError' value='-16'/>
+  <enum name='kCFURLUnknownSchemeError' value='-11'/>
+  <enum name='kCFURLWindowsPathStyle' value='2'/>
+  <enum name='kCFUserNotificationAlternateResponse' value='1'/>
+  <enum name='kCFUserNotificationCancelResponse' value='3'/>
+  <enum name='kCFUserNotificationCautionAlertLevel' value='2'/>
+  <enum name='kCFUserNotificationDefaultResponse' value='0'/>
+  <enum name='kCFUserNotificationNoDefaultButtonFlag' value='32'/>
+  <enum name='kCFUserNotificationNoteAlertLevel' value='1'/>
+  <enum name='kCFUserNotificationOtherResponse' value='2'/>
+  <enum name='kCFUserNotificationPlainAlertLevel' value='3'/>
+  <enum name='kCFUserNotificationStopAlertLevel' value='0'/>
+  <enum name='kCFUserNotificationUseRadioButtonsFlag' value='64'/>
+  <enum name='kCFXMLEntityTypeCharacter' value='4'/>
+  <enum name='kCFXMLEntityTypeParameter' value='0'/>
+  <enum name='kCFXMLEntityTypeParsedExternal' value='2'/>
+  <enum name='kCFXMLEntityTypeParsedInternal' value='1'/>
+  <enum name='kCFXMLEntityTypeUnparsed' value='3'/>
+  <enum name='kCFXMLErrorElementlessDocument' value='11'/>
+  <enum name='kCFXMLErrorEncodingConversionFailure' value='3'/>
+  <enum name='kCFXMLErrorMalformedCDSect' value='7'/>
+  <enum name='kCFXMLErrorMalformedCharacterReference' value='13'/>
+  <enum name='kCFXMLErrorMalformedCloseTag' value='8'/>
+  <enum name='kCFXMLErrorMalformedComment' value='12'/>
+  <enum name='kCFXMLErrorMalformedDTD' value='5'/>
+  <enum name='kCFXMLErrorMalformedDocument' value='10'/>
+  <enum name='kCFXMLErrorMalformedName' value='6'/>
+  <enum name='kCFXMLErrorMalformedParsedCharacterData' value='14'/>
+  <enum name='kCFXMLErrorMalformedProcessingInstruction' value='4'/>
+  <enum name='kCFXMLErrorMalformedStartTag' value='9'/>
+  <enum name='kCFXMLErrorNoData' value='15'/>
+  <enum name='kCFXMLErrorUnexpectedEOF' value='1'/>
+  <enum name='kCFXMLErrorUnknownEncoding' value='2'/>
+  <enum name='kCFXMLNodeCurrentVersion' value='1'/>
+  <enum name='kCFXMLNodeTypeAttribute' value='3'/>
+  <enum name='kCFXMLNodeTypeAttributeListDeclaration' value='15'/>
+  <enum name='kCFXMLNodeTypeCDATASection' value='7'/>
+  <enum name='kCFXMLNodeTypeComment' value='5'/>
+  <enum name='kCFXMLNodeTypeDocument' value='1'/>
+  <enum name='kCFXMLNodeTypeDocumentFragment' value='8'/>
+  <enum name='kCFXMLNodeTypeDocumentType' value='11'/>
+  <enum name='kCFXMLNodeTypeElement' value='2'/>
+  <enum name='kCFXMLNodeTypeElementTypeDeclaration' value='14'/>
+  <enum name='kCFXMLNodeTypeEntity' value='9'/>
+  <enum name='kCFXMLNodeTypeEntityReference' value='10'/>
+  <enum name='kCFXMLNodeTypeNotation' value='13'/>
+  <enum name='kCFXMLNodeTypeProcessingInstruction' value='4'/>
+  <enum name='kCFXMLNodeTypeText' value='6'/>
+  <enum name='kCFXMLNodeTypeWhitespace' value='12'/>
+  <enum name='kCFXMLParserAddImpliedAttributes' value='32'/>
+  <enum name='kCFXMLParserAllOptions' value='16777215'/>
+  <enum name='kCFXMLParserNoOptions' value='0'/>
+  <enum name='kCFXMLParserReplacePhysicalEntities' value='4'/>
+  <enum name='kCFXMLParserResolveExternalEntities' value='16'/>
+  <enum name='kCFXMLParserSkipMetaData' value='2'/>
+  <enum name='kCFXMLParserSkipWhitespace' value='8'/>
+  <enum name='kCFXMLParserValidateDocument' value='1'/>
+  <enum name='kCFXMLStatusParseInProgress' value='-1'/>
+  <enum name='kCFXMLStatusParseNotBegun' value='-2'/>
+  <enum name='kCFXMLStatusParseSuccessful' value='0'/>
+  <function name='CFAbsoluteTimeAddGregorianUnits'>
+    <function_arg type='d'/>
+    <function_arg type='^{__CFTimeZone=}'/>
+    <function_arg type='{?=iiiiid}'/>
+    <function_retval type='d'/>
+  </function>
+  <function name='CFAbsoluteTimeGetCurrent'>
+    <function_retval type='d'/>
+  </function>
+  <function name='CFAbsoluteTimeGetDayOfWeek'>
+    <function_arg type='d'/>
+    <function_arg type='^{__CFTimeZone=}'/>
+    <function_retval type='l'/>
+  </function>
+  <function name='CFAbsoluteTimeGetDayOfYear'>
+    <function_arg type='d'/>
+    <function_arg type='^{__CFTimeZone=}'/>
+    <function_retval type='l'/>
+  </function>
+  <function name='CFAbsoluteTimeGetDifferenceAsGregorianUnits'>
+    <function_arg type='d'/>
+    <function_arg type='d'/>
+    <function_arg type='^{__CFTimeZone=}'/>
+    <function_arg type='L'/>
+    <function_retval type='{?=iiiiid}'/>
+  </function>
+  <function name='CFAbsoluteTimeGetGregorianDate'>
+    <function_arg type='d'/>
+    <function_arg type='^{__CFTimeZone=}'/>
+    <function_retval type='{?=iccccd}'/>
+  </function>
+  <function name='CFAbsoluteTimeGetWeekOfYear'>
+    <function_arg type='d'/>
+    <function_arg type='^{__CFTimeZone=}'/>
+    <function_retval type='l'/>
+  </function>
+  <function name='CFAllocatorAllocate'>
+    <function_arg type='^{__CFAllocator=}'/>
+    <function_arg type='l'/>
+    <function_arg type='L'/>
+    <function_retval type='^v'/>
+  </function>
+  <function name='CFAllocatorCreate'>
+    <function_arg type='^{__CFAllocator=}'/>
+    <function_arg type='^{?=i^v^?^?^?^?^?^?^?}'/>
+    <function_retval already_retained='true' type='^{__CFAllocator=}'/>
+  </function>
+  <function name='CFAllocatorDeallocate'>
+    <function_arg type='^{__CFAllocator=}'/>
+    <function_arg type='^v'/>
+  </function>
+  <function name='CFAllocatorGetContext'>
+    <function_arg type='^{__CFAllocator=}'/>
+    <function_arg type='^{?=i^v^?^?^?^?^?^?^?}'/>
+  </function>
+  <function name='CFAllocatorGetDefault'>
+    <function_retval type='^{__CFAllocator=}'/>
+  </function>
+  <function name='CFAllocatorGetPreferredSizeForSize'>
+    <function_arg type='^{__CFAllocator=}'/>
+    <function_arg type='l'/>
+    <function_arg type='L'/>
+    <function_retval type='l'/>
+  </function>
+  <function name='CFAllocatorGetTypeID'>
+    <function_retval type='L'/>
+  </function>
+  <function name='CFAllocatorReallocate'>
+    <function_arg type='^{__CFAllocator=}'/>
+    <function_arg type='^v'/>
+    <function_arg type='l'/>
+    <function_arg type='L'/>
+    <function_retval type='^v'/>
+  </function>
+  <function name='CFAllocatorSetDefault'>
+    <function_arg type='^{__CFAllocator=}'/>
+  </function>
+  <function name='CFArrayAppendArray'>
+    <function_arg type='^{__CFArray=}'/>
+    <function_arg type='^{__CFArray=}'/>
+    <function_arg type='{?=ii}'/>
+  </function>
+  <function name='CFArrayAppendValue'>
+    <function_arg type='^{__CFArray=}'/>
+    <function_arg type='^v'/>
+  </function>
+  <function name='CFArrayApplyFunction'>
+    <function_arg type='^{__CFArray=}'/>
+    <function_arg type='{?=ii}'/>
+    <function_arg type='^?'/>
+    <function_arg type='^v'/>
+  </function>
+  <function name='CFArrayBSearchValues'>
+    <function_arg type='^{__CFArray=}'/>
+    <function_arg type='{?=ii}'/>
+    <function_arg type='^v'/>
+    <function_arg type='^?'/>
+    <function_arg type='^v'/>
+    <function_retval type='l'/>
+  </function>
+  <function name='CFArrayContainsValue'>
+    <function_arg type='^{__CFArray=}'/>
+    <function_arg type='{?=ii}'/>
+    <function_arg type='^v'/>
+    <function_retval type='B'/>
+  </function>
+  <function name='CFArrayCreate'>
+    <function_arg type='^{__CFAllocator=}'/>
+    <function_arg type='^^v'/>
+    <function_arg type='l'/>
+    <function_arg type='^{?=i^?^?^?^?}'/>
+    <function_retval already_retained='true' type='^{__CFArray=}'/>
+  </function>
+  <function name='CFArrayCreateCopy'>
+    <function_arg type='^{__CFAllocator=}'/>
+    <function_arg type='^{__CFArray=}'/>
+    <function_retval already_retained='true' type='^{__CFArray=}'/>
+  </function>
+  <function name='CFArrayCreateMutable'>
+    <function_arg type='^{__CFAllocator=}'/>
+    <function_arg type='l'/>
+    <function_arg type='^{?=i^?^?^?^?}'/>
+    <function_retval type='^{__CFArray=}'/>
+  </function>
+  <function name='CFArrayCreateMutableCopy'>
+    <function_arg type='^{__CFAllocator=}'/>
+    <function_arg type='l'/>
+    <function_arg type='^{__CFArray=}'/>
+    <function_retval type='^{__CFArray=}'/>
+  </function>
+  <function name='CFArrayExchangeValuesAtIndices'>
+    <function_arg type='^{__CFArray=}'/>
+    <function_arg type='l'/>
+    <function_arg type='l'/>
+  </function>
+  <function name='CFArrayGetCount'>
+    <function_arg type='^{__CFArray=}'/>
+    <function_retval type='l'/>
+  </function>
+  <function name='CFArrayGetCountOfValue'>
+    <function_arg type='^{__CFArray=}'/>
+    <function_arg type='{?=ii}'/>
+    <function_arg type='^v'/>
+    <function_retval type='l'/>
+  </function>
+  <function name='CFArrayGetFirstIndexOfValue'>
+    <function_arg type='^{__CFArray=}'/>
+    <function_arg type='{?=ii}'/>
+    <function_arg type='^v'/>
+    <function_retval type='l'/>
+  </function>
+  <function name='CFArrayGetLastIndexOfValue'>
+    <function_arg type='^{__CFArray=}'/>
+    <function_arg type='{?=ii}'/>
+    <function_arg type='^v'/>
+    <function_retval type='l'/>
+  </function>
+  <function name='CFArrayGetTypeID'>
+    <function_retval type='L'/>
+  </function>
+  <function name='CFArrayGetValueAtIndex'>
+    <function_arg type='^{__CFArray=}'/>
+    <function_arg type='l'/>
+    <function_retval type='^v'/>
+  </function>
+  <function name='CFArrayGetValues'>
+    <function_arg type='^{__CFArray=}'/>
+    <function_arg type='{?=ii}'/>
+    <function_arg type='^^v'/>
+  </function>
+  <function name='CFArrayInsertValueAtIndex'>
+    <function_arg type='^{__CFArray=}'/>
+    <function_arg type='l'/>
+    <function_arg type='^v'/>
+  </function>
+  <function name='CFArrayRemoveAllValues'>
+    <function_arg type='^{__CFArray=}'/>
+  </function>
+  <function name='CFArrayRemoveValueAtIndex'>
+    <function_arg type='^{__CFArray=}'/>
+    <function_arg type='l'/>
+  </function>
+  <function name='CFArrayReplaceValues'>
+    <function_arg type='^{__CFArray=}'/>
+    <function_arg type='{?=ii}'/>
+    <function_arg type='^^v'/>
+    <function_arg type='l'/>
+  </function>
+  <function name='CFArraySetValueAtIndex'>
+    <function_arg type='^{__CFArray=}'/>
+    <function_arg type='l'/>
+    <function_arg type='^v'/>
+  </function>
+  <function name='CFArraySortValues'>
+    <function_arg type='^{__CFArray=}'/>
+    <function_arg type='{?=ii}'/>
+    <function_arg type='^?'/>
+    <function_arg type='^v'/>
+  </function>
+  <function name='CFAttributedStringBeginEditing'>
+    <function_arg type='^{__CFAttributedString=}'/>
+  </function>
+  <function name='CFAttributedStringCreate'>
+    <function_arg type='^{__CFAllocator=}'/>
+    <function_arg type='^{__CFString=}'/>
+    <function_arg type='^{__CFDictionary=}'/>
+    <function_retval already_retained='true' type='^{__CFAttributedString=}'/>
+  </function>
+  <function name='CFAttributedStringCreateCopy'>
+    <function_arg type='^{__CFAllocator=}'/>
+    <function_arg type='^{__CFAttributedString=}'/>
+    <function_retval already_retained='true' type='^{__CFAttributedString=}'/>
+  </function>
+  <function name='CFAttributedStringCreateMutable'>
+    <function_arg type='^{__CFAllocator=}'/>
+    <function_arg type='l'/>
+    <function_retval type='^{__CFAttributedString=}'/>
+  </function>
+  <function name='CFAttributedStringCreateMutableCopy'>
+    <function_arg type='^{__CFAllocator=}'/>
+    <function_arg type='l'/>
+    <function_arg type='^{__CFAttributedString=}'/>
+    <function_retval type='^{__CFAttributedString=}'/>
+  </function>
+  <function name='CFAttributedStringCreateWithSubstring'>
+    <function_arg type='^{__CFAllocator=}'/>
+    <function_arg type='^{__CFAttributedString=}'/>
+    <function_arg type='{?=ii}'/>
+    <function_retval already_retained='true' type='^{__CFAttributedString=}'/>
+  </function>
+  <function name='CFAttributedStringEndEditing'>
+    <function_arg type='^{__CFAttributedString=}'/>
+  </function>
+  <function name='CFAttributedStringGetAttribute'>
+    <function_arg type='^{__CFAttributedString=}'/>
+    <function_arg type='l'/>
+    <function_arg type='^{__CFString=}'/>
+    <function_arg type='^{?=ii}'/>
+    <function_retval type='^v'/>
+  </function>
+  <function name='CFAttributedStringGetAttributeAndLongestEffectiveRange'>
+    <function_arg type='^{__CFAttributedString=}'/>
+    <function_arg type='l'/>
+    <function_arg type='^{__CFString=}'/>
+    <function_arg type='{?=ii}'/>
+    <function_arg type='^{?=ii}'/>
+    <function_retval type='^v'/>
+  </function>
+  <function name='CFAttributedStringGetAttributes'>
+    <function_arg type='^{__CFAttributedString=}'/>
+    <function_arg type='l'/>
+    <function_arg type='^{?=ii}'/>
+    <function_retval type='^{__CFDictionary=}'/>
+  </function>
+  <function name='CFAttributedStringGetAttributesAndLongestEffectiveRange'>
+    <function_arg type='^{__CFAttributedString=}'/>
+    <function_arg type='l'/>
+    <function_arg type='{?=ii}'/>
+    <function_arg type='^{?=ii}'/>
+    <function_retval type='^{__CFDictionary=}'/>
+  </function>
+  <function name='CFAttributedStringGetLength'>
+    <function_arg type='^{__CFAttributedString=}'/>
+    <function_retval type='l'/>
+  </function>
+  <function name='CFAttributedStringGetMutableString'>
+    <function_arg type='^{__CFAttributedString=}'/>
+    <function_retval type='^{__CFString=}'/>
+  </function>
+  <function name='CFAttributedStringGetString'>
+    <function_arg type='^{__CFAttributedString=}'/>
+    <function_retval type='^{__CFString=}'/>
+  </function>
+  <function name='CFAttributedStringGetTypeID'>
+    <function_retval type='L'/>
+  </function>
+  <function name='CFAttributedStringRemoveAttribute'>
+    <function_arg type='^{__CFAttributedString=}'/>
+    <function_arg type='{?=ii}'/>
+    <function_arg type='^{__CFString=}'/>
+  </function>
+  <function name='CFAttributedStringReplaceAttributedString'>
+    <function_arg type='^{__CFAttributedString=}'/>
+    <function_arg type='{?=ii}'/>
+    <function_arg type='^{__CFAttributedString=}'/>
+  </function>
+  <function name='CFAttributedStringReplaceString'>
+    <function_arg type='^{__CFAttributedString=}'/>
+    <function_arg type='{?=ii}'/>
+    <function_arg type='^{__CFString=}'/>
+  </function>
+  <function name='CFAttributedStringSetAttribute'>
+    <function_arg type='^{__CFAttributedString=}'/>
+    <function_arg type='{?=ii}'/>
+    <function_arg type='^{__CFString=}'/>
+    <function_arg type='^v'/>
+  </function>
+  <function name='CFAttributedStringSetAttributes'>
+    <function_arg type='^{__CFAttributedString=}'/>
+    <function_arg type='{?=ii}'/>
+    <function_arg type='^{__CFDictionary=}'/>
+    <function_arg type='C'/>
+  </function>
+  <function name='CFBagAddValue'>
+    <function_arg type='^{__CFBag=}'/>
+    <function_arg type='^v'/>
+  </function>
+  <function name='CFBagApplyFunction'>
+    <function_arg type='^{__CFBag=}'/>
+    <function_arg type='^?'/>
+    <function_arg type='^v'/>
+  </function>
+  <function name='CFBagContainsValue'>
+    <function_arg type='^{__CFBag=}'/>
+    <function_arg type='^v'/>
+    <function_retval type='B'/>
+  </function>
+  <function name='CFBagCreate'>
+    <function_arg type='^{__CFAllocator=}'/>
+    <function_arg type='^^v'/>
+    <function_arg type='l'/>
+    <function_arg type='^{?=i^?^?^?^?^?}'/>
+    <function_retval already_retained='true' type='^{__CFBag=}'/>
+  </function>
+  <function name='CFBagCreateCopy'>
+    <function_arg type='^{__CFAllocator=}'/>
+    <function_arg type='^{__CFBag=}'/>
+    <function_retval already_retained='true' type='^{__CFBag=}'/>
+  </function>
+  <function name='CFBagCreateMutable'>
+    <function_arg type='^{__CFAllocator=}'/>
+    <function_arg type='l'/>
+    <function_arg type='^{?=i^?^?^?^?^?}'/>
+    <function_retval type='^{__CFBag=}'/>
+  </function>
+  <function name='CFBagCreateMutableCopy'>
+    <function_arg type='^{__CFAllocator=}'/>
+    <function_arg type='l'/>
+    <function_arg type='^{__CFBag=}'/>
+    <function_retval type='^{__CFBag=}'/>
+  </function>
+  <function name='CFBagGetCount'>
+    <function_arg type='^{__CFBag=}'/>
+    <function_retval type='l'/>
+  </function>
+  <function name='CFBagGetCountOfValue'>
+    <function_arg type='^{__CFBag=}'/>
+    <function_arg type='^v'/>
+    <function_retval type='l'/>
+  </function>
+  <function name='CFBagGetTypeID'>
+    <function_retval type='L'/>
+  </function>
+  <function name='CFBagGetValue'>
+    <function_arg type='^{__CFBag=}'/>
+    <function_arg type='^v'/>
+    <function_retval type='^v'/>
+  </function>
+  <function name='CFBagGetValueIfPresent'>
+    <function_arg type='^{__CFBag=}'/>
+    <function_arg type='^v'/>
+    <function_arg type='^^v'/>
+    <function_retval type='B'/>
+  </function>
+  <function name='CFBagGetValues'>
+    <function_arg type='^{__CFBag=}'/>
+    <function_arg type='^^v'/>
+  </function>
+  <function name='CFBagRemoveAllValues'>
+    <function_arg type='^{__CFBag=}'/>
+  </function>
+  <function name='CFBagRemoveValue'>
+    <function_arg type='^{__CFBag=}'/>
+    <function_arg type='^v'/>
+  </function>
+  <function name='CFBagReplaceValue'>
+    <function_arg type='^{__CFBag=}'/>
+    <function_arg type='^v'/>
+  </function>
+  <function name='CFBagSetValue'>
+    <function_arg type='^{__CFBag=}'/>
+    <function_arg type='^v'/>
+  </function>
+  <function name='CFBinaryHeapAddValue'>
+    <function_arg type='^{__CFBinaryHeap=}'/>
+    <function_arg type='^v'/>
+  </function>
+  <function name='CFBinaryHeapApplyFunction'>
+    <function_arg type='^{__CFBinaryHeap=}'/>
+    <function_arg type='^?'/>
+    <function_arg type='^v'/>
+  </function>
+  <function name='CFBinaryHeapContainsValue'>
+    <function_arg type='^{__CFBinaryHeap=}'/>
+    <function_arg type='^v'/>
+    <function_retval type='B'/>
+  </function>
+  <function name='CFBinaryHeapCreate'>
+    <function_arg type='^{__CFAllocator=}'/>
+    <function_arg type='l'/>
+    <function_arg type='^{?=i^?^?^?^?}'/>
+    <function_arg type='^{?=i^v^?^?^?}'/>
+    <function_retval already_retained='true' type='^{__CFBinaryHeap=}'/>
+  </function>
+  <function name='CFBinaryHeapCreateCopy'>
+    <function_arg type='^{__CFAllocator=}'/>
+    <function_arg type='l'/>
+    <function_arg type='^{__CFBinaryHeap=}'/>
+    <function_retval already_retained='true' type='^{__CFBinaryHeap=}'/>
+  </function>
+  <function name='CFBinaryHeapGetCount'>
+    <function_arg type='^{__CFBinaryHeap=}'/>
+    <function_retval type='l'/>
+  </function>
+  <function name='CFBinaryHeapGetCountOfValue'>
+    <function_arg type='^{__CFBinaryHeap=}'/>
+    <function_arg type='^v'/>
+    <function_retval type='l'/>
+  </function>
+  <function name='CFBinaryHeapGetMinimum'>
+    <function_arg type='^{__CFBinaryHeap=}'/>
+    <function_retval type='^v'/>
+  </function>
+  <function name='CFBinaryHeapGetMinimumIfPresent'>
+    <function_arg type='^{__CFBinaryHeap=}'/>
+    <function_arg type='^^v'/>
+    <function_retval type='B'/>
+  </function>
+  <function name='CFBinaryHeapGetTypeID'>
+    <function_retval type='L'/>
+  </function>
+  <function name='CFBinaryHeapGetValues'>
+    <function_arg type='^{__CFBinaryHeap=}'/>
+    <function_arg type='^^v'/>
+  </function>
+  <function name='CFBinaryHeapRemoveAllValues'>
+    <function_arg type='^{__CFBinaryHeap=}'/>
+  </function>
+  <function name='CFBinaryHeapRemoveMinimumValue'>
+    <function_arg type='^{__CFBinaryHeap=}'/>
+  </function>
+  <function name='CFBitVectorContainsBit'>
+    <function_arg type='^{__CFBitVector=}'/>
+    <function_arg type='{?=ii}'/>
+    <function_arg type='L'/>
+    <function_retval type='B'/>
+  </function>
+  <function name='CFBitVectorCreate'>
+    <function_arg type='^{__CFAllocator=}'/>
+    <function_arg type='*'/>
+    <function_arg type='l'/>
+    <function_retval already_retained='true' type='^{__CFBitVector=}'/>
+  </function>
+  <function name='CFBitVectorCreateCopy'>
+    <function_arg type='^{__CFAllocator=}'/>
+    <function_arg type='^{__CFBitVector=}'/>
+    <function_retval already_retained='true' type='^{__CFBitVector=}'/>
+  </function>
+  <function name='CFBitVectorCreateMutable'>
+    <function_arg type='^{__CFAllocator=}'/>
+    <function_arg type='l'/>
+    <function_retval type='^{__CFBitVector=}'/>
+  </function>
+  <function name='CFBitVectorCreateMutableCopy'>
+    <function_arg type='^{__CFAllocator=}'/>
+    <function_arg type='l'/>
+    <function_arg type='^{__CFBitVector=}'/>
+    <function_retval type='^{__CFBitVector=}'/>
+  </function>
+  <function name='CFBitVectorFlipBitAtIndex'>
+    <function_arg type='^{__CFBitVector=}'/>
+    <function_arg type='l'/>
+  </function>
+  <function name='CFBitVectorFlipBits'>
+    <function_arg type='^{__CFBitVector=}'/>
+    <function_arg type='{?=ii}'/>
+  </function>
+  <function name='CFBitVectorGetBitAtIndex'>
+    <function_arg type='^{__CFBitVector=}'/>
+    <function_arg type='l'/>
+    <function_retval type='L'/>
+  </function>
+  <function name='CFBitVectorGetBits'>
+    <function_arg type='^{__CFBitVector=}'/>
+    <function_arg type='{?=ii}'/>
+    <function_arg type='*'/>
+  </function>
+  <function name='CFBitVectorGetCount'>
+    <function_arg type='^{__CFBitVector=}'/>
+    <function_retval type='l'/>
+  </function>
+  <function name='CFBitVectorGetCountOfBit'>
+    <function_arg type='^{__CFBitVector=}'/>
+    <function_arg type='{?=ii}'/>
+    <function_arg type='L'/>
+    <function_retval type='l'/>
+  </function>
+  <function name='CFBitVectorGetFirstIndexOfBit'>
+    <function_arg type='^{__CFBitVector=}'/>
+    <function_arg type='{?=ii}'/>
+    <function_arg type='L'/>
+    <function_retval type='l'/>
+  </function>
+  <function name='CFBitVectorGetLastIndexOfBit'>
+    <function_arg type='^{__CFBitVector=}'/>
+    <function_arg type='{?=ii}'/>
+    <function_arg type='L'/>
+    <function_retval type='l'/>
+  </function>
+  <function name='CFBitVectorGetTypeID'>
+    <function_retval type='L'/>
+  </function>
+  <function name='CFBitVectorSetAllBits'>
+    <function_arg type='^{__CFBitVector=}'/>
+    <function_arg type='L'/>
+  </function>
+  <function name='CFBitVectorSetBitAtIndex'>
+    <function_arg type='^{__CFBitVector=}'/>
+    <function_arg type='l'/>
+    <function_arg type='L'/>
+  </function>
+  <function name='CFBitVectorSetBits'>
+    <function_arg type='^{__CFBitVector=}'/>
+    <function_arg type='{?=ii}'/>
+    <function_arg type='L'/>
+  </function>
+  <function name='CFBitVectorSetCount'>
+    <function_arg type='^{__CFBitVector=}'/>
+    <function_arg type='l'/>
+  </function>
+  <function name='CFBooleanGetTypeID'>
+    <function_retval type='L'/>
+  </function>
+  <function name='CFBooleanGetValue'>
+    <function_arg type='^{__CFBoolean=}'/>
+    <function_retval type='B'/>
+  </function>
+  <function name='CFBundleCloseBundleResourceMap'>
+    <function_arg type='^{__CFBundle=}'/>
+    <function_arg type='s'/>
+  </function>
+  <function name='CFBundleCopyAuxiliaryExecutableURL'>
+    <function_arg type='^{__CFBundle=}'/>
+    <function_arg type='^{__CFString=}'/>
+    <function_retval already_retained='true' type='^{__CFURL=}'/>
+  </function>
+  <function name='CFBundleCopyBuiltInPlugInsURL'>
+    <function_arg type='^{__CFBundle=}'/>
+    <function_retval already_retained='true' type='^{__CFURL=}'/>
+  </function>
+  <function name='CFBundleCopyBundleLocalizations'>
+    <function_arg type='^{__CFBundle=}'/>
+    <function_retval already_retained='true' type='^{__CFArray=}'/>
+  </function>
+  <function name='CFBundleCopyBundleURL'>
+    <function_arg type='^{__CFBundle=}'/>
+    <function_retval already_retained='true' type='^{__CFURL=}'/>
+  </function>
+  <function name='CFBundleCopyExecutableURL'>
+    <function_arg type='^{__CFBundle=}'/>
+    <function_retval already_retained='true' type='^{__CFURL=}'/>
+  </function>
+  <function name='CFBundleCopyInfoDictionaryForURL'>
+    <function_arg type='^{__CFURL=}'/>
+    <function_retval already_retained='true' type='^{__CFDictionary=}'/>
+  </function>
+  <function name='CFBundleCopyInfoDictionaryInDirectory'>
+    <function_arg type='^{__CFURL=}'/>
+    <function_retval already_retained='true' type='^{__CFDictionary=}'/>
+  </function>
+  <function name='CFBundleCopyLocalizationsForPreferences'>
+    <function_arg type='^{__CFArray=}'/>
+    <function_arg type='^{__CFArray=}'/>
+    <function_retval already_retained='true' type='^{__CFArray=}'/>
+  </function>
+  <function name='CFBundleCopyLocalizationsForURL'>
+    <function_arg type='^{__CFURL=}'/>
+    <function_retval already_retained='true' type='^{__CFArray=}'/>
+  </function>
+  <function name='CFBundleCopyLocalizedString'>
+    <function_arg type='^{__CFBundle=}'/>
+    <function_arg type='^{__CFString=}'/>
+    <function_arg type='^{__CFString=}'/>
+    <function_arg type='^{__CFString=}'/>
+    <function_retval already_retained='true' type='^{__CFString=}'/>
+  </function>
+  <function name='CFBundleCopyPreferredLocalizationsFromArray'>
+    <function_arg type='^{__CFArray=}'/>
+    <function_retval already_retained='true' type='^{__CFArray=}'/>
+  </function>
+  <function name='CFBundleCopyPrivateFrameworksURL'>
+    <function_arg type='^{__CFBundle=}'/>
+    <function_retval already_retained='true' type='^{__CFURL=}'/>
+  </function>
+  <function name='CFBundleCopyResourceURL'>
+    <function_arg type='^{__CFBundle=}'/>
+    <function_arg type='^{__CFString=}'/>
+    <function_arg type='^{__CFString=}'/>
+    <function_arg type='^{__CFString=}'/>
+    <function_retval already_retained='true' type='^{__CFURL=}'/>
+  </function>
+  <function name='CFBundleCopyResourceURLForLocalization'>
+    <function_arg type='^{__CFBundle=}'/>
+    <function_arg type='^{__CFString=}'/>
+    <function_arg type='^{__CFString=}'/>
+    <function_arg type='^{__CFString=}'/>
+    <function_arg type='^{__CFString=}'/>
+    <function_retval already_retained='true' type='^{__CFURL=}'/>
+  </function>
+  <function name='CFBundleCopyResourceURLInDirectory'>
+    <function_arg type='^{__CFURL=}'/>
+    <function_arg type='^{__CFString=}'/>
+    <function_arg type='^{__CFString=}'/>
+    <function_arg type='^{__CFString=}'/>
+    <function_retval already_retained='true' type='^{__CFURL=}'/>
+  </function>
+  <function name='CFBundleCopyResourceURLsOfType'>
+    <function_arg type='^{__CFBundle=}'/>
+    <function_arg type='^{__CFString=}'/>
+    <function_arg type='^{__CFString=}'/>
+    <function_retval already_retained='true' type='^{__CFArray=}'/>
+  </function>
+  <function name='CFBundleCopyResourceURLsOfTypeForLocalization'>
+    <function_arg type='^{__CFBundle=}'/>
+    <function_arg type='^{__CFString=}'/>
+    <function_arg type='^{__CFString=}'/>
+    <function_arg type='^{__CFString=}'/>
+    <function_retval already_retained='true' type='^{__CFArray=}'/>
+  </function>
+  <function name='CFBundleCopyResourceURLsOfTypeInDirectory'>
+    <function_arg type='^{__CFURL=}'/>
+    <function_arg type='^{__CFString=}'/>
+    <function_arg type='^{__CFString=}'/>
+    <function_retval already_retained='true' type='^{__CFArray=}'/>
+  </function>
+  <function name='CFBundleCopyResourcesDirectoryURL'>
+    <function_arg type='^{__CFBundle=}'/>
+    <function_retval already_retained='true' type='^{__CFURL=}'/>
+  </function>
+  <function name='CFBundleCopySharedFrameworksURL'>
+    <function_arg type='^{__CFBundle=}'/>
+    <function_retval already_retained='true' type='^{__CFURL=}'/>
+  </function>
+  <function name='CFBundleCopySharedSupportURL'>
+    <function_arg type='^{__CFBundle=}'/>
+    <function_retval already_retained='true' type='^{__CFURL=}'/>
+  </function>
+  <function name='CFBundleCopySupportFilesDirectoryURL'>
+    <function_arg type='^{__CFBundle=}'/>
+    <function_retval already_retained='true' type='^{__CFURL=}'/>
+  </function>
+  <function name='CFBundleCreate'>
+    <function_arg type='^{__CFAllocator=}'/>
+    <function_arg type='^{__CFURL=}'/>
+    <function_retval already_retained='true' type='^{__CFBundle=}'/>
+  </function>
+  <function name='CFBundleCreateBundlesFromDirectory'>
+    <function_arg type='^{__CFAllocator=}'/>
+    <function_arg type='^{__CFURL=}'/>
+    <function_arg type='^{__CFString=}'/>
+    <function_retval already_retained='true' type='^{__CFArray=}'/>
+  </function>
+  <function name='CFBundleGetAllBundles'>
+    <function_retval type='^{__CFArray=}'/>
+  </function>
+  <function name='CFBundleGetBundleWithIdentifier'>
+    <function_arg type='^{__CFString=}'/>
+    <function_retval type='^{__CFBundle=}'/>
+  </function>
+  <function name='CFBundleGetDataPointerForName'>
+    <function_arg type='^{__CFBundle=}'/>
+    <function_arg type='^{__CFString=}'/>
+    <function_retval type='^v'/>
+  </function>
+  <function name='CFBundleGetDataPointersForNames'>
+    <function_arg type='^{__CFBundle=}'/>
+    <function_arg type='^{__CFArray=}'/>
+    <function_arg type='^^v'/>
+  </function>
+  <function name='CFBundleGetDevelopmentRegion'>
+    <function_arg type='^{__CFBundle=}'/>
+    <function_retval type='^{__CFString=}'/>
+  </function>
+  <function name='CFBundleGetFunctionPointerForName'>
+    <function_arg type='^{__CFBundle=}'/>
+    <function_arg type='^{__CFString=}'/>
+    <function_retval type='^v'/>
+  </function>
+  <function name='CFBundleGetFunctionPointersForNames'>
+    <function_arg type='^{__CFBundle=}'/>
+    <function_arg type='^{__CFArray=}'/>
+    <function_arg type='^^v'/>
+  </function>
+  <function name='CFBundleGetIdentifier'>
+    <function_arg type='^{__CFBundle=}'/>
+    <function_retval type='^{__CFString=}'/>
+  </function>
+  <function name='CFBundleGetInfoDictionary'>
+    <function_arg type='^{__CFBundle=}'/>
+    <function_retval type='^{__CFDictionary=}'/>
+  </function>
+  <function name='CFBundleGetLocalInfoDictionary'>
+    <function_arg type='^{__CFBundle=}'/>
+    <function_retval type='^{__CFDictionary=}'/>
+  </function>
+  <function name='CFBundleGetMainBundle'>
+    <function_retval type='^{__CFBundle=}'/>
+  </function>
+  <function name='CFBundleGetPackageInfo'>
+    <function_arg type='^{__CFBundle=}'/>
+    <function_arg type='^I'/>
+    <function_arg type='^I'/>
+  </function>
+  <function name='CFBundleGetPackageInfoInDirectory'>
+    <function_arg type='^{__CFURL=}'/>
+    <function_arg type='^I'/>
+    <function_arg type='^I'/>
+    <function_retval type='B'/>
+  </function>
+  <function name='CFBundleGetPlugIn'>
+    <function_arg type='^{__CFBundle=}'/>
+    <function_retval type='^{__CFBundle=}'/>
+  </function>
+  <function name='CFBundleGetTypeID'>
+    <function_retval type='L'/>
+  </function>
+  <function name='CFBundleGetValueForInfoDictionaryKey'>
+    <function_arg type='^{__CFBundle=}'/>
+    <function_arg type='^{__CFString=}'/>
+    <function_retval type='^v'/>
+  </function>
+  <function name='CFBundleGetVersionNumber'>
+    <function_arg type='^{__CFBundle=}'/>
+    <function_retval type='L'/>
+  </function>
+  <function name='CFBundleIsExecutableLoaded'>
+    <function_arg type='^{__CFBundle=}'/>
+    <function_retval type='B'/>
+  </function>
+  <function name='CFBundleLoadExecutable'>
+    <function_arg type='^{__CFBundle=}'/>
+    <function_retval type='B'/>
+  </function>
+  <function name='CFBundleOpenBundleResourceFiles'>
+    <function_arg type='^{__CFBundle=}'/>
+    <function_arg type='^s'/>
+    <function_arg type='^s'/>
+    <function_retval type='l'/>
+  </function>
+  <function name='CFBundleOpenBundleResourceMap'>
+    <function_arg type='^{__CFBundle=}'/>
+    <function_retval type='s'/>
+  </function>
+  <function name='CFBundleUnloadExecutable'>
+    <function_arg type='^{__CFBundle=}'/>
+  </function>
+  <function name='CFCalendarAddComponents' variadic='true'>
+    <function_arg type='^{__CFCalendar=}'/>
+    <function_arg type='^d'/>
+    <function_arg type='L'/>
+    <function_arg type='*'/>
+    <function_retval type='B'/>
+  </function>
+  <function name='CFCalendarComposeAbsoluteTime' variadic='true'>
+    <function_arg type='^{__CFCalendar=}'/>
+    <function_arg type='^d'/>
+    <function_arg type='*'/>
+    <function_retval type='B'/>
+  </function>
+  <function name='CFCalendarCopyCurrent'>
+    <function_retval already_retained='true' type='^{__CFCalendar=}'/>
+  </function>
+  <function name='CFCalendarCopyLocale'>
+    <function_arg type='^{__CFCalendar=}'/>
+    <function_retval already_retained='true' type='^{__CFLocale=}'/>
+  </function>
+  <function name='CFCalendarCopyTimeZone'>
+    <function_arg type='^{__CFCalendar=}'/>
+    <function_retval already_retained='true' type='^{__CFTimeZone=}'/>
+  </function>
+  <function name='CFCalendarCreateWithIdentifier'>
+    <function_arg type='^{__CFAllocator=}'/>
+    <function_arg type='^{__CFString=}'/>
+    <function_retval already_retained='true' type='^{__CFCalendar=}'/>
+  </function>
+  <function name='CFCalendarDecomposeAbsoluteTime' variadic='true'>
+    <function_arg type='^{__CFCalendar=}'/>
+    <function_arg type='d'/>
+    <function_arg type='*'/>
+    <function_retval type='B'/>
+  </function>
+  <function name='CFCalendarGetComponentDifference' variadic='true'>
+    <function_arg type='^{__CFCalendar=}'/>
+    <function_arg type='d'/>
+    <function_arg type='d'/>
+    <function_arg type='L'/>
+    <function_arg type='*'/>
+    <function_retval type='B'/>
+  </function>
+  <function name='CFCalendarGetFirstWeekday'>
+    <function_arg type='^{__CFCalendar=}'/>
+    <function_retval type='l'/>
+  </function>
+  <function name='CFCalendarGetIdentifier'>
+    <function_arg type='^{__CFCalendar=}'/>
+    <function_retval type='^{__CFString=}'/>
+  </function>
+  <function name='CFCalendarGetMaximumRangeOfUnit'>
+    <function_arg type='^{__CFCalendar=}'/>
+    <function_arg type='i'/>
+    <function_retval type='{?=ii}'/>
+  </function>
+  <function name='CFCalendarGetMinimumDaysInFirstWeek'>
+    <function_arg type='^{__CFCalendar=}'/>
+    <function_retval type='l'/>
+  </function>
+  <function name='CFCalendarGetMinimumRangeOfUnit'>
+    <function_arg type='^{__CFCalendar=}'/>
+    <function_arg type='i'/>
+    <function_retval type='{?=ii}'/>
+  </function>
+  <function name='CFCalendarGetOrdinalityOfUnit'>
+    <function_arg type='^{__CFCalendar=}'/>
+    <function_arg type='i'/>
+    <function_arg type='i'/>
+    <function_arg type='d'/>
+    <function_retval type='l'/>
+  </function>
+  <function name='CFCalendarGetRangeOfUnit'>
+    <function_arg type='^{__CFCalendar=}'/>
+    <function_arg type='i'/>
+    <function_arg type='i'/>
+    <function_arg type='d'/>
+    <function_retval type='{?=ii}'/>
+  </function>
+  <function name='CFCalendarGetTypeID'>
+    <function_retval type='L'/>
+  </function>
+  <function name='CFCalendarSetFirstWeekday'>
+    <function_arg type='^{__CFCalendar=}'/>
+    <function_arg type='l'/>
+  </function>
+  <function name='CFCalendarSetLocale'>
+    <function_arg type='^{__CFCalendar=}'/>
+    <function_arg type='^{__CFLocale=}'/>
+  </function>
+  <function name='CFCalendarSetMinimumDaysInFirstWeek'>
+    <function_arg type='^{__CFCalendar=}'/>
+    <function_arg type='l'/>
+  </function>
+  <function name='CFCalendarSetTimeZone'>
+    <function_arg type='^{__CFCalendar=}'/>
+    <function_arg type='^{__CFTimeZone=}'/>
+  </function>
+  <function name='CFCharacterSetAddCharactersInRange'>
+    <function_arg type='^{__CFCharacterSet=}'/>
+    <function_arg type='{?=ii}'/>
+  </function>
+  <function name='CFCharacterSetAddCharactersInString'>
+    <function_arg type='^{__CFCharacterSet=}'/>
+    <function_arg type='^{__CFString=}'/>
+  </function>
+  <function name='CFCharacterSetCreateBitmapRepresentation'>
+    <function_arg type='^{__CFAllocator=}'/>
+    <function_arg type='^{__CFCharacterSet=}'/>
+    <function_retval already_retained='true' type='^{__CFData=}'/>
+  </function>
+  <function name='CFCharacterSetCreateCopy'>
+    <function_arg type='^{__CFAllocator=}'/>
+    <function_arg type='^{__CFCharacterSet=}'/>
+    <function_retval already_retained='true' type='^{__CFCharacterSet=}'/>
+  </function>
+  <function name='CFCharacterSetCreateInvertedSet'>
+    <function_arg type='^{__CFAllocator=}'/>
+    <function_arg type='^{__CFCharacterSet=}'/>
+    <function_retval already_retained='true' type='^{__CFCharacterSet=}'/>
+  </function>
+  <function name='CFCharacterSetCreateMutable'>
+    <function_arg type='^{__CFAllocator=}'/>
+    <function_retval type='^{__CFCharacterSet=}'/>
+  </function>
+  <function name='CFCharacterSetCreateMutableCopy'>
+    <function_arg type='^{__CFAllocator=}'/>
+    <function_arg type='^{__CFCharacterSet=}'/>
+    <function_retval type='^{__CFCharacterSet=}'/>
+  </function>
+  <function name='CFCharacterSetCreateWithBitmapRepresentation'>
+    <function_arg type='^{__CFAllocator=}'/>
+    <function_arg type='^{__CFData=}'/>
+    <function_retval already_retained='true' type='^{__CFCharacterSet=}'/>
+  </function>
+  <function name='CFCharacterSetCreateWithCharactersInRange'>
+    <function_arg type='^{__CFAllocator=}'/>
+    <function_arg type='{?=ii}'/>
+    <function_retval already_retained='true' type='^{__CFCharacterSet=}'/>
+  </function>
+  <function name='CFCharacterSetCreateWithCharactersInString'>
+    <function_arg type='^{__CFAllocator=}'/>
+    <function_arg type='^{__CFString=}'/>
+    <function_retval already_retained='true' type='^{__CFCharacterSet=}'/>
+  </function>
+  <function name='CFCharacterSetGetPredefined'>
+    <function_arg type='i'/>
+    <function_retval type='^{__CFCharacterSet=}'/>
+  </function>
+  <function name='CFCharacterSetGetTypeID'>
+    <function_retval type='L'/>
+  </function>
+  <function name='CFCharacterSetHasMemberInPlane'>
+    <function_arg type='^{__CFCharacterSet=}'/>
+    <function_arg type='l'/>
+    <function_retval type='B'/>
+  </function>
+  <function name='CFCharacterSetIntersect'>
+    <function_arg type='^{__CFCharacterSet=}'/>
+    <function_arg type='^{__CFCharacterSet=}'/>
+  </function>
+  <function name='CFCharacterSetInvert'>
+    <function_arg type='^{__CFCharacterSet=}'/>
+  </function>
+  <function name='CFCharacterSetIsCharacterMember'>
+    <function_arg type='^{__CFCharacterSet=}'/>
+    <function_arg type='S'/>
+    <function_retval type='B'/>
+  </function>
+  <function name='CFCharacterSetIsLongCharacterMember'>
+    <function_arg type='^{__CFCharacterSet=}'/>
+    <function_arg type='L'/>
+    <function_retval type='B'/>
+  </function>
+  <function name='CFCharacterSetIsSupersetOfSet'>
+    <function_arg type='^{__CFCharacterSet=}'/>
+    <function_arg type='^{__CFCharacterSet=}'/>
+    <function_retval type='B'/>
+  </function>
+  <function name='CFCharacterSetRemoveCharactersInRange'>
+    <function_arg type='^{__CFCharacterSet=}'/>
+    <function_arg type='{?=ii}'/>
+  </function>
+  <function name='CFCharacterSetRemoveCharactersInString'>
+    <function_arg type='^{__CFCharacterSet=}'/>
+    <function_arg type='^{__CFString=}'/>
+  </function>
+  <function name='CFCharacterSetUnion'>
+    <function_arg type='^{__CFCharacterSet=}'/>
+    <function_arg type='^{__CFCharacterSet=}'/>
+  </function>
+  <function name='CFCopyDescription'>
+    <function_arg type='^v'/>
+    <function_retval already_retained='true' type='^{__CFString=}'/>
+  </function>
+  <function name='CFCopyTypeIDDescription'>
+    <function_arg type='L'/>
+    <function_retval already_retained='true' type='^{__CFString=}'/>
+  </function>
+  <function name='CFDataAppendBytes'>
+    <function_arg type='^{__CFData=}'/>
+    <function_arg type='*'/>
+    <function_arg type='l'/>
+  </function>
+  <function name='CFDataCreate'>
+    <function_arg type='^{__CFAllocator=}'/>
+    <function_arg type='*'/>
+    <function_arg type='l'/>
+    <function_retval already_retained='true' type='^{__CFData=}'/>
+  </function>
+  <function name='CFDataCreateCopy'>
+    <function_arg type='^{__CFAllocator=}'/>
+    <function_arg type='^{__CFData=}'/>
+    <function_retval already_retained='true' type='^{__CFData=}'/>
+  </function>
+  <function name='CFDataCreateMutable'>
+    <function_arg type='^{__CFAllocator=}'/>
+    <function_arg type='l'/>
+    <function_retval type='^{__CFData=}'/>
+  </function>
+  <function name='CFDataCreateMutableCopy'>
+    <function_arg type='^{__CFAllocator=}'/>
+    <function_arg type='l'/>
+    <function_arg type='^{__CFData=}'/>
+    <function_retval type='^{__CFData=}'/>
+  </function>
+  <function name='CFDataCreateWithBytesNoCopy'>
+    <function_arg type='^{__CFAllocator=}'/>
+    <function_arg type='*'/>
+    <function_arg type='l'/>
+    <function_arg type='^{__CFAllocator=}'/>
+    <function_retval already_retained='true' type='^{__CFData=}'/>
+  </function>
+  <function name='CFDataDeleteBytes'>
+    <function_arg type='^{__CFData=}'/>
+    <function_arg type='{?=ii}'/>
+  </function>
+  <function name='CFDataGetBytePtr'>
+    <function_arg type='^{__CFData=}'/>
+    <function_retval type='*'/>
+  </function>
+  <function name='CFDataGetBytes'>
+    <function_arg type='^{__CFData=}'/>
+    <function_arg type='{?=ii}'/>
+    <function_arg type='*'/>
+  </function>
+  <function name='CFDataGetLength'>
+    <function_arg type='^{__CFData=}'/>
+    <function_retval type='l'/>
+  </function>
+  <function name='CFDataGetMutableBytePtr'>
+    <function_arg type='^{__CFData=}'/>
+    <function_retval type='*'/>
+  </function>
+  <function name='CFDataGetTypeID'>
+    <function_retval type='L'/>
+  </function>
+  <function name='CFDataIncreaseLength'>
+    <function_arg type='^{__CFData=}'/>
+    <function_arg type='l'/>
+  </function>
+  <function name='CFDataReplaceBytes'>
+    <function_arg type='^{__CFData=}'/>
+    <function_arg type='{?=ii}'/>
+    <function_arg type='*'/>
+    <function_arg type='l'/>
+  </function>
+  <function name='CFDataSetLength'>
+    <function_arg type='^{__CFData=}'/>
+    <function_arg type='l'/>
+  </function>
+  <function name='CFDateCompare'>
+    <function_arg type='^{__CFDate=}'/>
+    <function_arg type='^{__CFDate=}'/>
+    <function_arg type='^v'/>
+    <function_retval type='i'/>
+  </function>
+  <function name='CFDateCreate'>
+    <function_arg type='^{__CFAllocator=}'/>
+    <function_arg type='d'/>
+    <function_retval already_retained='true' type='^{__CFDate=}'/>
+  </function>
+  <function name='CFDateFormatterCopyProperty'>
+    <function_arg type='^{__CFDateFormatter=}'/>
+    <function_arg type='^{__CFString=}'/>
+    <function_retval type='^v'/>
+  </function>
+  <function name='CFDateFormatterCreate'>
+    <function_arg type='^{__CFAllocator=}'/>
+    <function_arg type='^{__CFLocale=}'/>
+    <function_arg type='i'/>
+    <function_arg type='i'/>
+    <function_retval already_retained='true' type='^{__CFDateFormatter=}'/>
+  </function>
+  <function name='CFDateFormatterCreateDateFromString'>
+    <function_arg type='^{__CFAllocator=}'/>
+    <function_arg type='^{__CFDateFormatter=}'/>
+    <function_arg type='^{__CFString=}'/>
+    <function_arg type='^{?=ii}'/>
+    <function_retval already_retained='true' type='^{__CFDate=}'/>
+  </function>
+  <function name='CFDateFormatterCreateStringWithAbsoluteTime'>
+    <function_arg type='^{__CFAllocator=}'/>
+    <function_arg type='^{__CFDateFormatter=}'/>
+    <function_arg type='d'/>
+    <function_retval already_retained='true' type='^{__CFString=}'/>
+  </function>
+  <function name='CFDateFormatterCreateStringWithDate'>
+    <function_arg type='^{__CFAllocator=}'/>
+    <function_arg type='^{__CFDateFormatter=}'/>
+    <function_arg type='^{__CFDate=}'/>
+    <function_retval already_retained='true' type='^{__CFString=}'/>
+  </function>
+  <function name='CFDateFormatterGetAbsoluteTimeFromString'>
+    <function_arg type='^{__CFDateFormatter=}'/>
+    <function_arg type='^{__CFString=}'/>
+    <function_arg type='^{?=ii}'/>
+    <function_arg type='^d'/>
+    <function_retval type='B'/>
+  </function>
+  <function name='CFDateFormatterGetDateStyle'>
+    <function_arg type='^{__CFDateFormatter=}'/>
+    <function_retval type='i'/>
+  </function>
+  <function name='CFDateFormatterGetFormat'>
+    <function_arg type='^{__CFDateFormatter=}'/>
+    <function_retval type='^{__CFString=}'/>
+  </function>
+  <function name='CFDateFormatterGetLocale'>
+    <function_arg type='^{__CFDateFormatter=}'/>
+    <function_retval type='^{__CFLocale=}'/>
+  </function>
+  <function name='CFDateFormatterGetTimeStyle'>
+    <function_arg type='^{__CFDateFormatter=}'/>
+    <function_retval type='i'/>
+  </function>
+  <function name='CFDateFormatterGetTypeID'>
+    <function_retval type='L'/>
+  </function>
+  <function name='CFDateFormatterSetFormat'>
+    <function_arg type='^{__CFDateFormatter=}'/>
+    <function_arg type='^{__CFString=}'/>
+  </function>
+  <function name='CFDateFormatterSetProperty'>
+    <function_arg type='^{__CFDateFormatter=}'/>
+    <function_arg type='^{__CFString=}'/>
+    <function_arg type='^v'/>
+  </function>
+  <function name='CFDateGetAbsoluteTime'>
+    <function_arg type='^{__CFDate=}'/>
+    <function_retval type='d'/>
+  </function>
+  <function name='CFDateGetTimeIntervalSinceDate'>
+    <function_arg type='^{__CFDate=}'/>
+    <function_arg type='^{__CFDate=}'/>
+    <function_retval type='d'/>
+  </function>
+  <function name='CFDateGetTypeID'>
+    <function_retval type='L'/>
+  </function>
+  <function name='CFDictionaryAddValue'>
+    <function_arg type='^{__CFDictionary=}'/>
+    <function_arg type='^v'/>
+    <function_arg type='^v'/>
+  </function>
+  <function name='CFDictionaryApplyFunction'>
+    <function_arg type='^{__CFDictionary=}'/>
+    <function_arg type='^?'/>
+    <function_arg type='^v'/>
+  </function>
+  <function name='CFDictionaryContainsKey'>
+    <function_arg type='^{__CFDictionary=}'/>
+    <function_arg type='^v'/>
+    <function_retval type='B'/>
+  </function>
+  <function name='CFDictionaryContainsValue'>
+    <function_arg type='^{__CFDictionary=}'/>
+    <function_arg type='^v'/>
+    <function_retval type='B'/>
+  </function>
+  <function name='CFDictionaryCreate'>
+    <function_arg type='^{__CFAllocator=}'/>
+    <function_arg type='^^v'/>
+    <function_arg type='^^v'/>
+    <function_arg type='l'/>
+    <function_arg type='^{?=i^?^?^?^?^?}'/>
+    <function_arg type='^{?=i^?^?^?^?}'/>
+    <function_retval already_retained='true' type='^{__CFDictionary=}'/>
+  </function>
+  <function name='CFDictionaryCreateCopy'>
+    <function_arg type='^{__CFAllocator=}'/>
+    <function_arg type='^{__CFDictionary=}'/>
+    <function_retval already_retained='true' type='^{__CFDictionary=}'/>
+  </function>
+  <function name='CFDictionaryCreateMutable'>
+    <function_arg type='^{__CFAllocator=}'/>
+    <function_arg type='l'/>
+    <function_arg type='^{?=i^?^?^?^?^?}'/>
+    <function_arg type='^{?=i^?^?^?^?}'/>
+    <function_retval type='^{__CFDictionary=}'/>
+  </function>
+  <function name='CFDictionaryCreateMutableCopy'>
+    <function_arg type='^{__CFAllocator=}'/>
+    <function_arg type='l'/>
+    <function_arg type='^{__CFDictionary=}'/>
+    <function_retval type='^{__CFDictionary=}'/>
+  </function>
+  <function name='CFDictionaryGetCount'>
+    <function_arg type='^{__CFDictionary=}'/>
+    <function_retval type='l'/>
+  </function>
+  <function name='CFDictionaryGetCountOfKey'>
+    <function_arg type='^{__CFDictionary=}'/>
+    <function_arg type='^v'/>
+    <function_retval type='l'/>
+  </function>
+  <function name='CFDictionaryGetCountOfValue'>
+    <function_arg type='^{__CFDictionary=}'/>
+    <function_arg type='^v'/>
+    <function_retval type='l'/>
+  </function>
+  <function name='CFDictionaryGetKeysAndValues'>
+    <function_arg type='^{__CFDictionary=}'/>
+    <function_arg type='^^v'/>
+    <function_arg type='^^v'/>
+  </function>
+  <function name='CFDictionaryGetTypeID'>
+    <function_retval type='L'/>
+  </function>
+  <function name='CFDictionaryGetValue'>
+    <function_arg type='^{__CFDictionary=}'/>
+    <function_arg type='^v'/>
+    <function_retval type='^v'/>
+  </function>
+  <function name='CFDictionaryGetValueIfPresent'>
+    <function_arg type='^{__CFDictionary=}'/>
+    <function_arg type='^v'/>
+    <function_arg type='^^v'/>
+    <function_retval type='B'/>
+  </function>
+  <function name='CFDictionaryRemoveAllValues'>
+    <function_arg type='^{__CFDictionary=}'/>
+  </function>
+  <function name='CFDictionaryRemoveValue'>
+    <function_arg type='^{__CFDictionary=}'/>
+    <function_arg type='^v'/>
+  </function>
+  <function name='CFDictionaryReplaceValue'>
+    <function_arg type='^{__CFDictionary=}'/>
+    <function_arg type='^v'/>
+    <function_arg type='^v'/>
+  </function>
+  <function name='CFDictionarySetValue'>
+    <function_arg type='^{__CFDictionary=}'/>
+    <function_arg type='^v'/>
+    <function_arg type='^v'/>
+  </function>
+  <function name='CFEqual'>
+    <function_arg type='^v'/>
+    <function_arg type='^v'/>
+    <function_retval type='B'/>
+  </function>
+  <function name='CFGetAllocator'>
+    <function_arg type='^v'/>
+    <function_retval type='^{__CFAllocator=}'/>
+  </function>
+  <function name='CFGetRetainCount'>
+    <function_arg type='^v'/>
+    <function_retval type='l'/>
+  </function>
+  <function name='CFGetTypeID'>
+    <function_arg type='^v'/>
+    <function_retval type='L'/>
+  </function>
+  <function name='CFGregorianDateGetAbsoluteTime'>
+    <function_arg type='{?=iccccd}'/>
+    <function_arg type='^{__CFTimeZone=}'/>
+    <function_retval type='d'/>
+  </function>
+  <function name='CFGregorianDateIsValid'>
+    <function_arg type='{?=iccccd}'/>
+    <function_arg type='L'/>
+    <function_retval type='B'/>
+  </function>
+  <function name='CFHash'>
+    <function_arg type='^v'/>
+    <function_retval type='L'/>
+  </function>
+  <function name='CFLocaleCopyAvailableLocaleIdentifiers'>
+    <function_retval already_retained='true' type='^{__CFArray=}'/>
+  </function>
+  <function name='CFLocaleCopyCurrent'>
+    <function_retval already_retained='true' type='^{__CFLocale=}'/>
+  </function>
+  <function name='CFLocaleCopyDisplayNameForPropertyValue'>
+    <function_arg type='^{__CFLocale=}'/>
+    <function_arg type='^{__CFString=}'/>
+    <function_arg type='^{__CFString=}'/>
+    <function_retval already_retained='true' type='^{__CFString=}'/>
+  </function>
+  <function name='CFLocaleCopyISOCountryCodes'>
+    <function_retval already_retained='true' type='^{__CFArray=}'/>
+  </function>
+  <function name='CFLocaleCopyISOCurrencyCodes'>
+    <function_retval already_retained='true' type='^{__CFArray=}'/>
+  </function>
+  <function name='CFLocaleCopyISOLanguageCodes'>
+    <function_retval already_retained='true' type='^{__CFArray=}'/>
+  </function>
+  <function name='CFLocaleCreate'>
+    <function_arg type='^{__CFAllocator=}'/>
+    <function_arg type='^{__CFString=}'/>
+    <function_retval already_retained='true' type='^{__CFLocale=}'/>
+  </function>
+  <function name='CFLocaleCreateCanonicalLanguageIdentifierFromString'>
+    <function_arg type='^{__CFAllocator=}'/>
+    <function_arg type='^{__CFString=}'/>
+    <function_retval already_retained='true' type='^{__CFString=}'/>
+  </function>
+  <function name='CFLocaleCreateCanonicalLocaleIdentifierFromScriptManagerCodes'>
+    <function_arg type='^{__CFAllocator=}'/>
+    <function_arg type='s'/>
+    <function_arg type='s'/>
+    <function_retval already_retained='true' type='^{__CFString=}'/>
+  </function>
+  <function name='CFLocaleCreateCanonicalLocaleIdentifierFromString'>
+    <function_arg type='^{__CFAllocator=}'/>
+    <function_arg type='^{__CFString=}'/>
+    <function_retval already_retained='true' type='^{__CFString=}'/>
+  </function>
+  <function name='CFLocaleCreateComponentsFromLocaleIdentifier'>
+    <function_arg type='^{__CFAllocator=}'/>
+    <function_arg type='^{__CFString=}'/>
+    <function_retval already_retained='true' type='^{__CFDictionary=}'/>
+  </function>
+  <function name='CFLocaleCreateCopy'>
+    <function_arg type='^{__CFAllocator=}'/>
+    <function_arg type='^{__CFLocale=}'/>
+    <function_retval already_retained='true' type='^{__CFLocale=}'/>
+  </function>
+  <function name='CFLocaleCreateLocaleIdentifierFromComponents'>
+    <function_arg type='^{__CFAllocator=}'/>
+    <function_arg type='^{__CFDictionary=}'/>
+    <function_retval already_retained='true' type='^{__CFString=}'/>
+  </function>
+  <function name='CFLocaleGetIdentifier'>
+    <function_arg type='^{__CFLocale=}'/>
+    <function_retval type='^{__CFString=}'/>
+  </function>
+  <function name='CFLocaleGetSystem'>
+    <function_retval type='^{__CFLocale=}'/>
+  </function>
+  <function name='CFLocaleGetTypeID'>
+    <function_retval type='L'/>
+  </function>
+  <function name='CFLocaleGetValue'>
+    <function_arg type='^{__CFLocale=}'/>
+    <function_arg type='^{__CFString=}'/>
+    <function_retval type='^v'/>
+  </function>
+  <function name='CFMachPortCreate'>
+    <function_arg type='^{__CFAllocator=}'/>
+    <function_arg type='^?'/>
+    <function_arg type='^{?=i^v^?^?^?}'/>
+    <function_arg type='*'/>
+    <function_retval already_retained='true' type='^{__CFMachPort=}'/>
+  </function>
+  <function name='CFMachPortCreateRunLoopSource'>
+    <function_arg type='^{__CFAllocator=}'/>
+    <function_arg type='^{__CFMachPort=}'/>
+    <function_arg type='l'/>
+    <function_retval already_retained='true' type='^{__CFRunLoopSource=}'/>
+  </function>
+  <function name='CFMachPortCreateWithPort'>
+    <function_arg type='^{__CFAllocator=}'/>
+    <function_arg type='I'/>
+    <function_arg type='^?'/>
+    <function_arg type='^{?=i^v^?^?^?}'/>
+    <function_arg type='*'/>
+    <function_retval already_retained='true' type='^{__CFMachPort=}'/>
+  </function>
+  <function name='CFMachPortGetContext'>
+    <function_arg type='^{__CFMachPort=}'/>
+    <function_arg type='^{?=i^v^?^?^?}'/>
+  </function>
+  <function name='CFMachPortGetInvalidationCallBack'>
+    <function_arg type='^{__CFMachPort=}'/>
+    <function_retval type='^?'/>
+  </function>
+  <function name='CFMachPortGetPort'>
+    <function_arg type='^{__CFMachPort=}'/>
+    <function_retval type='I'/>
+  </function>
+  <function name='CFMachPortGetTypeID'>
+    <function_retval type='L'/>
+  </function>
+  <function name='CFMachPortInvalidate'>
+    <function_arg type='^{__CFMachPort=}'/>
+  </function>
+  <function name='CFMachPortIsValid'>
+    <function_arg type='^{__CFMachPort=}'/>
+    <function_retval type='B'/>
+  </function>
+  <function name='CFMachPortSetInvalidationCallBack'>
+    <function_arg type='^{__CFMachPort=}'/>
+    <function_arg type='^?'/>
+  </function>
+  <function name='CFMakeCollectable'>
+    <function_arg type='^v'/>
+    <function_retval type='^v'/>
+  </function>
+  <function name='CFMessagePortCreateLocal'>
+    <function_arg type='^{__CFAllocator=}'/>
+    <function_arg type='^{__CFString=}'/>
+    <function_arg type='^?'/>
+    <function_arg type='^{?=i^v^?^?^?}'/>
+    <function_arg type='*'/>
+    <function_retval already_retained='true' type='^{__CFMessagePort=}'/>
+  </function>
+  <function name='CFMessagePortCreateRemote'>
+    <function_arg type='^{__CFAllocator=}'/>
+    <function_arg type='^{__CFString=}'/>
+    <function_retval already_retained='true' type='^{__CFMessagePort=}'/>
+  </function>
+  <function name='CFMessagePortCreateRunLoopSource'>
+    <function_arg type='^{__CFAllocator=}'/>
+    <function_arg type='^{__CFMessagePort=}'/>
+    <function_arg type='l'/>
+    <function_retval already_retained='true' type='^{__CFRunLoopSource=}'/>
+  </function>
+  <function name='CFMessagePortGetContext'>
+    <function_arg type='^{__CFMessagePort=}'/>
+    <function_arg type='^{?=i^v^?^?^?}'/>
+  </function>
+  <function name='CFMessagePortGetInvalidationCallBack'>
+    <function_arg type='^{__CFMessagePort=}'/>
+    <function_retval type='^?'/>
+  </function>
+  <function name='CFMessagePortGetName'>
+    <function_arg type='^{__CFMessagePort=}'/>
+    <function_retval type='^{__CFString=}'/>
+  </function>
+  <function name='CFMessagePortGetTypeID'>
+    <function_retval type='L'/>
+  </function>
+  <function name='CFMessagePortInvalidate'>
+    <function_arg type='^{__CFMessagePort=}'/>
+  </function>
+  <function name='CFMessagePortIsRemote'>
+    <function_arg type='^{__CFMessagePort=}'/>
+    <function_retval type='B'/>
+  </function>
+  <function name='CFMessagePortIsValid'>
+    <function_arg type='^{__CFMessagePort=}'/>
+    <function_retval type='B'/>
+  </function>
+  <function name='CFMessagePortSendRequest'>
+    <function_arg type='^{__CFMessagePort=}'/>
+    <function_arg type='l'/>
+    <function_arg type='^{__CFData=}'/>
+    <function_arg type='d'/>
+    <function_arg type='d'/>
+    <function_arg type='^{__CFString=}'/>
+    <function_arg type='r^^{__CFData}'/>
+    <function_retval type='l'/>
+  </function>
+  <function name='CFMessagePortSetInvalidationCallBack'>
+    <function_arg type='^{__CFMessagePort=}'/>
+    <function_arg type='^?'/>
+  </function>
+  <function name='CFMessagePortSetName'>
+    <function_arg type='^{__CFMessagePort=}'/>
+    <function_arg type='^{__CFString=}'/>
+    <function_retval type='B'/>
+  </function>
+  <function name='CFNotificationCenterAddObserver'>
+    <function_arg type='^{__CFNotificationCenter=}'/>
+    <function_arg type='^v'/>
+    <function_arg type='^?'/>
+    <function_arg type='^{__CFString=}'/>
+    <function_arg type='^v'/>
+    <function_arg type='i'/>
+  </function>
+  <function name='CFNotificationCenterGetDarwinNotifyCenter'>
+    <function_retval type='^{__CFNotificationCenter=}'/>
+  </function>
+  <function name='CFNotificationCenterGetDistributedCenter'>
+    <function_retval type='^{__CFNotificationCenter=}'/>
+  </function>
+  <function name='CFNotificationCenterGetLocalCenter'>
+    <function_retval type='^{__CFNotificationCenter=}'/>
+  </function>
+  <function name='CFNotificationCenterGetTypeID'>
+    <function_retval type='L'/>
+  </function>
+  <function name='CFNotificationCenterPostNotification'>
+    <function_arg type='^{__CFNotificationCenter=}'/>
+    <function_arg type='^{__CFString=}'/>
+    <function_arg type='^v'/>
+    <function_arg type='^{__CFDictionary=}'/>
+    <function_arg type='C'/>
+  </function>
+  <function name='CFNotificationCenterPostNotificationWithOptions'>
+    <function_arg type='^{__CFNotificationCenter=}'/>
+    <function_arg type='^{__CFString=}'/>
+    <function_arg type='^v'/>
+    <function_arg type='^{__CFDictionary=}'/>
+    <function_arg type='L'/>
+  </function>
+  <function name='CFNotificationCenterRemoveEveryObserver'>
+    <function_arg type='^{__CFNotificationCenter=}'/>
+    <function_arg type='^v'/>
+  </function>
+  <function name='CFNotificationCenterRemoveObserver'>
+    <function_arg type='^{__CFNotificationCenter=}'/>
+    <function_arg type='^v'/>
+    <function_arg type='^{__CFString=}'/>
+    <function_arg type='^v'/>
+  </function>
+  <function name='CFNullGetTypeID'>
+    <function_retval type='L'/>
+  </function>
+  <function name='CFNumberCompare'>
+    <function_arg type='^{__CFNumber=}'/>
+    <function_arg type='^{__CFNumber=}'/>
+    <function_arg type='^v'/>
+    <function_retval type='i'/>
+  </function>
+  <function name='CFNumberCreate'>
+    <function_arg type='^{__CFAllocator=}'/>
+    <function_arg type='i'/>
+    <function_arg type='^v'/>
+    <function_retval already_retained='true' type='^{__CFNumber=}'/>
+  </function>
+  <function name='CFNumberFormatterCopyProperty'>
+    <function_arg type='^{__CFNumberFormatter=}'/>
+    <function_arg type='^{__CFString=}'/>
+    <function_retval type='^v'/>
+  </function>
+  <function name='CFNumberFormatterCreate'>
+    <function_arg type='^{__CFAllocator=}'/>
+    <function_arg type='^{__CFLocale=}'/>
+    <function_arg type='i'/>
+    <function_retval already_retained='true' type='^{__CFNumberFormatter=}'/>
+  </function>
+  <function name='CFNumberFormatterCreateNumberFromString'>
+    <function_arg type='^{__CFAllocator=}'/>
+    <function_arg type='^{__CFNumberFormatter=}'/>
+    <function_arg type='^{__CFString=}'/>
+    <function_arg type='^{?=ii}'/>
+    <function_arg type='L'/>
+    <function_retval already_retained='true' type='^{__CFNumber=}'/>
+  </function>
+  <function name='CFNumberFormatterCreateStringWithNumber'>
+    <function_arg type='^{__CFAllocator=}'/>
+    <function_arg type='^{__CFNumberFormatter=}'/>
+    <function_arg type='^{__CFNumber=}'/>
+    <function_retval already_retained='true' type='^{__CFString=}'/>
+  </function>
+  <function name='CFNumberFormatterCreateStringWithValue'>
+    <function_arg type='^{__CFAllocator=}'/>
+    <function_arg type='^{__CFNumberFormatter=}'/>
+    <function_arg type='i'/>
+    <function_arg type='^v'/>
+    <function_retval already_retained='true' type='^{__CFString=}'/>
+  </function>
+  <function name='CFNumberFormatterGetDecimalInfoForCurrencyCode'>
+    <function_arg type='^{__CFString=}'/>
+    <function_arg type='^i'/>
+    <function_arg type='^d'/>
+    <function_retval type='B'/>
+  </function>
+  <function name='CFNumberFormatterGetFormat'>
+    <function_arg type='^{__CFNumberFormatter=}'/>
+    <function_retval type='^{__CFString=}'/>
+  </function>
+  <function name='CFNumberFormatterGetLocale'>
+    <function_arg type='^{__CFNumberFormatter=}'/>
+    <function_retval type='^{__CFLocale=}'/>
+  </function>
+  <function name='CFNumberFormatterGetStyle'>
+    <function_arg type='^{__CFNumberFormatter=}'/>
+    <function_retval type='i'/>
+  </function>
+  <function name='CFNumberFormatterGetTypeID'>
+    <function_retval type='L'/>
+  </function>
+  <function name='CFNumberFormatterGetValueFromString'>
+    <function_arg type='^{__CFNumberFormatter=}'/>
+    <function_arg type='^{__CFString=}'/>
+    <function_arg type='^{?=ii}'/>
+    <function_arg type='i'/>
+    <function_arg type='^v'/>
+    <function_retval type='B'/>
+  </function>
+  <function name='CFNumberFormatterSetFormat'>
+    <function_arg type='^{__CFNumberFormatter=}'/>
+    <function_arg type='^{__CFString=}'/>
+  </function>
+  <function name='CFNumberFormatterSetProperty'>
+    <function_arg type='^{__CFNumberFormatter=}'/>
+    <function_arg type='^{__CFString=}'/>
+    <function_arg type='^v'/>
+  </function>
+  <function name='CFNumberGetByteSize'>
+    <function_arg type='^{__CFNumber=}'/>
+    <function_retval type='l'/>
+  </function>
+  <function name='CFNumberGetType'>
+    <function_arg type='^{__CFNumber=}'/>
+    <function_retval type='i'/>
+  </function>
+  <function name='CFNumberGetTypeID'>
+    <function_retval type='L'/>
+  </function>
+  <function name='CFNumberGetValue'>
+    <function_arg type='^{__CFNumber=}'/>
+    <function_arg type='i'/>
+    <function_arg type='^v'/>
+    <function_retval type='B'/>
+  </function>
+  <function name='CFNumberIsFloatType'>
+    <function_arg type='^{__CFNumber=}'/>
+    <function_retval type='B'/>
+  </function>
+  <function name='CFPlugInAddInstanceForFactory'>
+    <function_arg type='^{__CFUUID=}'/>
+  </function>
+  <function name='CFPlugInCreate'>
+    <function_arg type='^{__CFAllocator=}'/>
+    <function_arg type='^{__CFURL=}'/>
+    <function_retval already_retained='true' type='^{__CFBundle=}'/>
+  </function>
+  <function name='CFPlugInFindFactoriesForPlugInType'>
+    <function_arg type='^{__CFUUID=}'/>
+    <function_retval type='^{__CFArray=}'/>
+  </function>
+  <function name='CFPlugInFindFactoriesForPlugInTypeInPlugIn'>
+    <function_arg type='^{__CFUUID=}'/>
+    <function_arg type='^{__CFBundle=}'/>
+    <function_retval type='^{__CFArray=}'/>
+  </function>
+  <function name='CFPlugInGetBundle'>
+    <function_arg type='^{__CFBundle=}'/>
+    <function_retval type='^{__CFBundle=}'/>
+  </function>
+  <function name='CFPlugInGetTypeID'>
+    <function_retval type='L'/>
+  </function>
+  <function name='CFPlugInInstanceCreate'>
+    <function_arg type='^{__CFAllocator=}'/>
+    <function_arg type='^{__CFUUID=}'/>
+    <function_arg type='^{__CFUUID=}'/>
+    <function_retval type='^v'/>
+  </function>
+  <function name='CFPlugInInstanceCreateWithInstanceDataSize'>
+    <function_arg type='^{__CFAllocator=}'/>
+    <function_arg type='l'/>
+    <function_arg type='^?'/>
+    <function_arg type='^{__CFString=}'/>
+    <function_arg type='^?'/>
+    <function_retval already_retained='true' type='^{__CFPlugInInstance=}'/>
+  </function>
+  <function name='CFPlugInInstanceGetFactoryName'>
+    <function_arg type='^{__CFPlugInInstance=}'/>
+    <function_retval type='^{__CFString=}'/>
+  </function>
+  <function name='CFPlugInInstanceGetInstanceData'>
+    <function_arg type='^{__CFPlugInInstance=}'/>
+    <function_retval type='^v'/>
+  </function>
+  <function name='CFPlugInInstanceGetInterfaceFunctionTable'>
+    <function_arg type='^{__CFPlugInInstance=}'/>
+    <function_arg type='^{__CFString=}'/>
+    <function_arg type='^^v'/>
+    <function_retval type='B'/>
+  </function>
+  <function name='CFPlugInInstanceGetTypeID'>
+    <function_retval type='L'/>
+  </function>
+  <function name='CFPlugInIsLoadOnDemand'>
+    <function_arg type='^{__CFBundle=}'/>
+    <function_retval type='B'/>
+  </function>
+  <function name='CFPlugInRegisterFactoryFunction'>
+    <function_arg type='^{__CFUUID=}'/>
+    <function_arg type='^?'/>
+    <function_retval type='B'/>
+  </function>
+  <function name='CFPlugInRegisterFactoryFunctionByName'>
+    <function_arg type='^{__CFUUID=}'/>
+    <function_arg type='^{__CFBundle=}'/>
+    <function_arg type='^{__CFString=}'/>
+    <function_retval type='B'/>
+  </function>
+  <function name='CFPlugInRegisterPlugInType'>
+    <function_arg type='^{__CFUUID=}'/>
+    <function_arg type='^{__CFUUID=}'/>
+    <function_retval type='B'/>
+  </function>
+  <function name='CFPlugInRemoveInstanceForFactory'>
+    <function_arg type='^{__CFUUID=}'/>
+  </function>
+  <function name='CFPlugInSetLoadOnDemand'>
+    <function_arg type='^{__CFBundle=}'/>
+    <function_arg type='C'/>
+  </function>
+  <function name='CFPlugInUnregisterFactory'>
+    <function_arg type='^{__CFUUID=}'/>
+    <function_retval type='B'/>
+  </function>
+  <function name='CFPlugInUnregisterPlugInType'>
+    <function_arg type='^{__CFUUID=}'/>
+    <function_arg type='^{__CFUUID=}'/>
+    <function_retval type='B'/>
+  </function>
+  <function name='CFPreferencesAddSuitePreferencesToApp'>
+    <function_arg type='^{__CFString=}'/>
+    <function_arg type='^{__CFString=}'/>
+  </function>
+  <function name='CFPreferencesAppSynchronize'>
+    <function_arg type='^{__CFString=}'/>
+    <function_retval type='B'/>
+  </function>
+  <function name='CFPreferencesAppValueIsForced'>
+    <function_arg type='^{__CFString=}'/>
+    <function_arg type='^{__CFString=}'/>
+    <function_retval type='B'/>
+  </function>
+  <function name='CFPreferencesCopyAppValue'>
+    <function_arg type='^{__CFString=}'/>
+    <function_arg type='^{__CFString=}'/>
+    <function_retval type='^v'/>
+  </function>
+  <function name='CFPreferencesCopyApplicationList'>
+    <function_arg type='^{__CFString=}'/>
+    <function_arg type='^{__CFString=}'/>
+    <function_retval already_retained='true' type='^{__CFArray=}'/>
+  </function>
+  <function name='CFPreferencesCopyKeyList'>
+    <function_arg type='^{__CFString=}'/>
+    <function_arg type='^{__CFString=}'/>
+    <function_arg type='^{__CFString=}'/>
+    <function_retval already_retained='true' type='^{__CFArray=}'/>
+  </function>
+  <function name='CFPreferencesCopyMultiple'>
+    <function_arg type='^{__CFArray=}'/>
+    <function_arg type='^{__CFString=}'/>
+    <function_arg type='^{__CFString=}'/>
+    <function_arg type='^{__CFString=}'/>
+    <function_retval already_retained='true' type='^{__CFDictionary=}'/>
+  </function>
+  <function name='CFPreferencesCopyValue'>
+    <function_arg type='^{__CFString=}'/>
+    <function_arg type='^{__CFString=}'/>
+    <function_arg type='^{__CFString=}'/>
+    <function_arg type='^{__CFString=}'/>
+    <function_retval type='^v'/>
+  </function>
+  <function name='CFPreferencesGetAppBooleanValue'>
+    <function_arg type='^{__CFString=}'/>
+    <function_arg type='^{__CFString=}'/>
+    <function_arg type='*'/>
+    <function_retval type='B'/>
+  </function>
+  <function name='CFPreferencesGetAppIntegerValue'>
+    <function_arg type='^{__CFString=}'/>
+    <function_arg type='^{__CFString=}'/>
+    <function_arg type='*'/>
+    <function_retval type='l'/>
+  </function>
+  <function name='CFPreferencesRemoveSuitePreferencesFromApp'>
+    <function_arg type='^{__CFString=}'/>
+    <function_arg type='^{__CFString=}'/>
+  </function>
+  <function name='CFPreferencesSetAppValue'>
+    <function_arg type='^{__CFString=}'/>
+    <function_arg type='^v'/>
+    <function_arg type='^{__CFString=}'/>
+  </function>
+  <function name='CFPreferencesSetMultiple'>
+    <function_arg type='^{__CFDictionary=}'/>
+    <function_arg type='^{__CFArray=}'/>
+    <function_arg type='^{__CFString=}'/>
+    <function_arg type='^{__CFString=}'/>
+    <function_arg type='^{__CFString=}'/>
+  </function>
+  <function name='CFPreferencesSetValue'>
+    <function_arg type='^{__CFString=}'/>
+    <function_arg type='^v'/>
+    <function_arg type='^{__CFString=}'/>
+    <function_arg type='^{__CFString=}'/>
+    <function_arg type='^{__CFString=}'/>
+  </function>
+  <function name='CFPreferencesSynchronize'>
+    <function_arg type='^{__CFString=}'/>
+    <function_arg type='^{__CFString=}'/>
+    <function_arg type='^{__CFString=}'/>
+    <function_retval type='B'/>
+  </function>
+  <function name='CFPropertyListCreateDeepCopy'>
+    <function_arg type='^{__CFAllocator=}'/>
+    <function_arg type='^v'/>
+    <function_arg type='L'/>
+    <function_retval type='^v'/>
+  </function>
+  <function name='CFPropertyListCreateFromStream'>
+    <function_arg type='^{__CFAllocator=}'/>
+    <function_arg type='^{__CFReadStream=}'/>
+    <function_arg type='l'/>
+    <function_arg type='L'/>
+    <function_arg type='^i'/>
+    <function_arg type='r^^{__CFString}'/>
+    <function_retval type='^v'/>
+  </function>
+  <function name='CFPropertyListCreateFromXMLData'>
+    <function_arg type='^{__CFAllocator=}'/>
+    <function_arg type='^{__CFData=}'/>
+    <function_arg type='L'/>
+    <function_arg type='r^^{__CFString}'/>
+    <function_retval type='^v'/>
+  </function>
+  <function name='CFPropertyListCreateXMLData'>
+    <function_arg type='^{__CFAllocator=}'/>
+    <function_arg type='^v'/>
+    <function_retval already_retained='true' type='^{__CFData=}'/>
+  </function>
+  <function name='CFPropertyListIsValid'>
+    <function_arg type='^v'/>
+    <function_arg type='i'/>
+    <function_retval type='B'/>
+  </function>
+  <function name='CFPropertyListWriteToStream'>
+    <function_arg type='^v'/>
+    <function_arg type='^{__CFWriteStream=}'/>
+    <function_arg type='i'/>
+    <function_arg type='r^^{__CFString}'/>
+    <function_retval type='l'/>
+  </function>
+  <function name='CFReadStreamClose'>
+    <function_arg type='^{__CFReadStream=}'/>
+  </function>
+  <function name='CFReadStreamCopyProperty'>
+    <function_arg type='^{__CFReadStream=}'/>
+    <function_arg type='^{__CFString=}'/>
+    <function_retval type='^v'/>
+  </function>
+  <function name='CFReadStreamCreateWithBytesNoCopy'>
+    <function_arg type='^{__CFAllocator=}'/>
+    <function_arg type='*'/>
+    <function_arg type='l'/>
+    <function_arg type='^{__CFAllocator=}'/>
+    <function_retval already_retained='true' type='^{__CFReadStream=}'/>
+  </function>
+  <function name='CFReadStreamCreateWithFile'>
+    <function_arg type='^{__CFAllocator=}'/>
+    <function_arg type='^{__CFURL=}'/>
+    <function_retval already_retained='true' type='^{__CFReadStream=}'/>
+  </function>
+  <function name='CFReadStreamGetBuffer'>
+    <function_arg type='^{__CFReadStream=}'/>
+    <function_arg type='l'/>
+    <function_arg type='^i'/>
+    <function_retval type='*'/>
+  </function>
+  <function name='CFReadStreamGetError'>
+    <function_arg type='^{__CFReadStream=}'/>
+    <function_retval type='{?=ii}'/>
+  </function>
+  <function name='CFReadStreamGetStatus'>
+    <function_arg type='^{__CFReadStream=}'/>
+    <function_retval type='i'/>
+  </function>
+  <function name='CFReadStreamGetTypeID'>
+    <function_retval type='L'/>
+  </function>
+  <function name='CFReadStreamHasBytesAvailable'>
+    <function_arg type='^{__CFReadStream=}'/>
+    <function_retval type='B'/>
+  </function>
+  <function name='CFReadStreamOpen'>
+    <function_arg type='^{__CFReadStream=}'/>
+    <function_retval type='B'/>
+  </function>
+  <function name='CFReadStreamRead'>
+    <function_arg type='^{__CFReadStream=}'/>
+    <function_arg type='*'/>
+    <function_arg type='l'/>
+    <function_retval type='l'/>
+  </function>
+  <function name='CFReadStreamScheduleWithRunLoop'>
+    <function_arg type='^{__CFReadStream=}'/>
+    <function_arg type='^{__CFRunLoop=}'/>
+    <function_arg type='^{__CFString=}'/>
+  </function>
+  <function name='CFReadStreamSetClient'>
+    <function_arg type='^{__CFReadStream=}'/>
+    <function_arg type='L'/>
+    <function_arg type='^?'/>
+    <function_arg type='^{?=i^v^?^?^?}'/>
+    <function_retval type='B'/>
+  </function>
+  <function name='CFReadStreamSetProperty'>
+    <function_arg type='^{__CFReadStream=}'/>
+    <function_arg type='^{__CFString=}'/>
+    <function_arg type='^v'/>
+    <function_retval type='B'/>
+  </function>
+  <function name='CFReadStreamUnscheduleFromRunLoop'>
+    <function_arg type='^{__CFReadStream=}'/>
+    <function_arg type='^{__CFRunLoop=}'/>
+    <function_arg type='^{__CFString=}'/>
+  </function>
+  <function name='CFRelease'>
+    <function_arg type='^v'/>
+  </function>
+  <function name='CFRetain'>
+    <function_arg type='^v'/>
+    <function_retval type='^v'/>
+  </function>
+  <function name='CFRunLoopAddCommonMode'>
+    <function_arg type='^{__CFRunLoop=}'/>
+    <function_arg type='^{__CFString=}'/>
+  </function>
+  <function name='CFRunLoopAddObserver'>
+    <function_arg type='^{__CFRunLoop=}'/>
+    <function_arg type='^{__CFRunLoopObserver=}'/>
+    <function_arg type='^{__CFString=}'/>
+  </function>
+  <function name='CFRunLoopAddSource'>
+    <function_arg type='^{__CFRunLoop=}'/>
+    <function_arg type='^{__CFRunLoopSource=}'/>
+    <function_arg type='^{__CFString=}'/>
+  </function>
+  <function name='CFRunLoopAddTimer'>
+    <function_arg type='^{__CFRunLoop=}'/>
+    <function_arg type='^{__CFRunLoopTimer=}'/>
+    <function_arg type='^{__CFString=}'/>
+  </function>
+  <function name='CFRunLoopContainsObserver'>
+    <function_arg type='^{__CFRunLoop=}'/>
+    <function_arg type='^{__CFRunLoopObserver=}'/>
+    <function_arg type='^{__CFString=}'/>
+    <function_retval type='B'/>
+  </function>
+  <function name='CFRunLoopContainsSource'>
+    <function_arg type='^{__CFRunLoop=}'/>
+    <function_arg type='^{__CFRunLoopSource=}'/>
+    <function_arg type='^{__CFString=}'/>
+    <function_retval type='B'/>
+  </function>
+  <function name='CFRunLoopContainsTimer'>
+    <function_arg type='^{__CFRunLoop=}'/>
+    <function_arg type='^{__CFRunLoopTimer=}'/>
+    <function_arg type='^{__CFString=}'/>
+    <function_retval type='B'/>
+  </function>
+  <function name='CFRunLoopCopyAllModes'>
+    <function_arg type='^{__CFRunLoop=}'/>
+    <function_retval already_retained='true' type='^{__CFArray=}'/>
+  </function>
+  <function name='CFRunLoopCopyCurrentMode'>
+    <function_arg type='^{__CFRunLoop=}'/>
+    <function_retval already_retained='true' type='^{__CFString=}'/>
+  </function>
+  <function name='CFRunLoopGetCurrent'>
+    <function_retval type='^{__CFRunLoop=}'/>
+  </function>
+  <function name='CFRunLoopGetNextTimerFireDate'>
+    <function_arg type='^{__CFRunLoop=}'/>
+    <function_arg type='^{__CFString=}'/>
+    <function_retval type='d'/>
+  </function>
+  <function name='CFRunLoopGetTypeID'>
+    <function_retval type='L'/>
+  </function>
+  <function name='CFRunLoopIsWaiting'>
+    <function_arg type='^{__CFRunLoop=}'/>
+    <function_retval type='B'/>
+  </function>
+  <function name='CFRunLoopObserverCreate'>
+    <function_arg type='^{__CFAllocator=}'/>
+    <function_arg type='L'/>
+    <function_arg type='C'/>
+    <function_arg type='l'/>
+    <function_arg type='^?'/>
+    <function_arg type='^{?=i^v^?^?^?}'/>
+    <function_retval already_retained='true' type='^{__CFRunLoopObserver=}'/>
+  </function>
+  <function name='CFRunLoopObserverDoesRepeat'>
+    <function_arg type='^{__CFRunLoopObserver=}'/>
+    <function_retval type='B'/>
+  </function>
+  <function name='CFRunLoopObserverGetActivities'>
+    <function_arg type='^{__CFRunLoopObserver=}'/>
+    <function_retval type='L'/>
+  </function>
+  <function name='CFRunLoopObserverGetContext'>
+    <function_arg type='^{__CFRunLoopObserver=}'/>
+    <function_arg type='^{?=i^v^?^?^?}'/>
+  </function>
+  <function name='CFRunLoopObserverGetOrder'>
+    <function_arg type='^{__CFRunLoopObserver=}'/>
+    <function_retval type='l'/>
+  </function>
+  <function name='CFRunLoopObserverGetTypeID'>
+    <function_retval type='L'/>
+  </function>
+  <function name='CFRunLoopObserverInvalidate'>
+    <function_arg type='^{__CFRunLoopObserver=}'/>
+  </function>
+  <function name='CFRunLoopObserverIsValid'>
+    <function_arg type='^{__CFRunLoopObserver=}'/>
+    <function_retval type='B'/>
+  </function>
+  <function name='CFRunLoopRemoveObserver'>
+    <function_arg type='^{__CFRunLoop=}'/>
+    <function_arg type='^{__CFRunLoopObserver=}'/>
+    <function_arg type='^{__CFString=}'/>
+  </function>
+  <function name='CFRunLoopRemoveSource'>
+    <function_arg type='^{__CFRunLoop=}'/>
+    <function_arg type='^{__CFRunLoopSource=}'/>
+    <function_arg type='^{__CFString=}'/>
+  </function>
+  <function name='CFRunLoopRemoveTimer'>
+    <function_arg type='^{__CFRunLoop=}'/>
+    <function_arg type='^{__CFRunLoopTimer=}'/>
+    <function_arg type='^{__CFString=}'/>
+  </function>
+  <function name='CFRunLoopRun'/>
+  <function name='CFRunLoopRunInMode'>
+    <function_arg type='^{__CFString=}'/>
+    <function_arg type='d'/>
+    <function_arg type='C'/>
+    <function_retval type='l'/>
+  </function>
+  <function name='CFRunLoopSourceCreate'>
+    <function_arg type='^{__CFAllocator=}'/>
+    <function_arg type='l'/>
+    <function_arg type='^{?=i^v^?^?^?^?^?^?^?^?}'/>
+    <function_retval already_retained='true' type='^{__CFRunLoopSource=}'/>
+  </function>
+  <function name='CFRunLoopSourceGetContext'>
+    <function_arg type='^{__CFRunLoopSource=}'/>
+    <function_arg type='^{?=i^v^?^?^?^?^?^?^?^?}'/>
+  </function>
+  <function name='CFRunLoopSourceGetOrder'>
+    <function_arg type='^{__CFRunLoopSource=}'/>
+    <function_retval type='l'/>
+  </function>
+  <function name='CFRunLoopSourceGetTypeID'>
+    <function_retval type='L'/>
+  </function>
+  <function name='CFRunLoopSourceInvalidate'>
+    <function_arg type='^{__CFRunLoopSource=}'/>
+  </function>
+  <function name='CFRunLoopSourceIsValid'>
+    <function_arg type='^{__CFRunLoopSource=}'/>
+    <function_retval type='B'/>
+  </function>
+  <function name='CFRunLoopSourceSignal'>
+    <function_arg type='^{__CFRunLoopSource=}'/>
+  </function>
+  <function name='CFRunLoopStop'>
+    <function_arg type='^{__CFRunLoop=}'/>
+  </function>
+  <function name='CFRunLoopTimerCreate'>
+    <function_arg type='^{__CFAllocator=}'/>
+    <function_arg type='d'/>
+    <function_arg type='d'/>
+    <function_arg type='L'/>
+    <function_arg type='l'/>
+    <function_arg type='^?'/>
+    <function_arg type='^{?=i^v^?^?^?}'/>
+    <function_retval already_retained='true' type='^{__CFRunLoopTimer=}'/>
+  </function>
+  <function name='CFRunLoopTimerDoesRepeat'>
+    <function_arg type='^{__CFRunLoopTimer=}'/>
+    <function_retval type='B'/>
+  </function>
+  <function name='CFRunLoopTimerGetContext'>
+    <function_arg type='^{__CFRunLoopTimer=}'/>
+    <function_arg type='^{?=i^v^?^?^?}'/>
+  </function>
+  <function name='CFRunLoopTimerGetInterval'>
+    <function_arg type='^{__CFRunLoopTimer=}'/>
+    <function_retval type='d'/>
+  </function>
+  <function name='CFRunLoopTimerGetNextFireDate'>
+    <function_arg type='^{__CFRunLoopTimer=}'/>
+    <function_retval type='d'/>
+  </function>
+  <function name='CFRunLoopTimerGetOrder'>
+    <function_arg type='^{__CFRunLoopTimer=}'/>
+    <function_retval type='l'/>
+  </function>
+  <function name='CFRunLoopTimerGetTypeID'>
+    <function_retval type='L'/>
+  </function>
+  <function name='CFRunLoopTimerInvalidate'>
+    <function_arg type='^{__CFRunLoopTimer=}'/>
+  </function>
+  <function name='CFRunLoopTimerIsValid'>
+    <function_arg type='^{__CFRunLoopTimer=}'/>
+    <function_retval type='B'/>
+  </function>
+  <function name='CFRunLoopTimerSetNextFireDate'>
+    <function_arg type='^{__CFRunLoopTimer=}'/>
+    <function_arg type='d'/>
+  </function>
+  <function name='CFRunLoopWakeUp'>
+    <function_arg type='^{__CFRunLoop=}'/>
+  </function>
+  <function name='CFSetAddValue'>
+    <function_arg type='^{__CFSet=}'/>
+    <function_arg type='^v'/>
+  </function>
+  <function name='CFSetApplyFunction'>
+    <function_arg type='^{__CFSet=}'/>
+    <function_arg type='^?'/>
+    <function_arg type='^v'/>
+  </function>
+  <function name='CFSetContainsValue'>
+    <function_arg type='^{__CFSet=}'/>
+    <function_arg type='^v'/>
+    <function_retval type='B'/>
+  </function>
+  <function name='CFSetCreate'>
+    <function_arg type='^{__CFAllocator=}'/>
+    <function_arg type='^^v'/>
+    <function_arg type='l'/>
+    <function_arg type='^{?=i^?^?^?^?^?}'/>
+    <function_retval already_retained='true' type='^{__CFSet=}'/>
+  </function>
+  <function name='CFSetCreateCopy'>
+    <function_arg type='^{__CFAllocator=}'/>
+    <function_arg type='^{__CFSet=}'/>
+    <function_retval already_retained='true' type='^{__CFSet=}'/>
+  </function>
+  <function name='CFSetCreateMutable'>
+    <function_arg type='^{__CFAllocator=}'/>
+    <function_arg type='l'/>
+    <function_arg type='^{?=i^?^?^?^?^?}'/>
+    <function_retval type='^{__CFSet=}'/>
+  </function>
+  <function name='CFSetCreateMutableCopy'>
+    <function_arg type='^{__CFAllocator=}'/>
+    <function_arg type='l'/>
+    <function_arg type='^{__CFSet=}'/>
+    <function_retval type='^{__CFSet=}'/>
+  </function>
+  <function name='CFSetGetCount'>
+    <function_arg type='^{__CFSet=}'/>
+    <function_retval type='l'/>
+  </function>
+  <function name='CFSetGetCountOfValue'>
+    <function_arg type='^{__CFSet=}'/>
+    <function_arg type='^v'/>
+    <function_retval type='l'/>
+  </function>
+  <function name='CFSetGetTypeID'>
+    <function_retval type='L'/>
+  </function>
+  <function name='CFSetGetValue'>
+    <function_arg type='^{__CFSet=}'/>
+    <function_arg type='^v'/>
+    <function_retval type='^v'/>
+  </function>
+  <function name='CFSetGetValueIfPresent'>
+    <function_arg type='^{__CFSet=}'/>
+    <function_arg type='^v'/>
+    <function_arg type='^^v'/>
+    <function_retval type='B'/>
+  </function>
+  <function name='CFSetGetValues'>
+    <function_arg type='^{__CFSet=}'/>
+    <function_arg type='^^v'/>
+  </function>
+  <function name='CFSetRemoveAllValues'>
+    <function_arg type='^{__CFSet=}'/>
+  </function>
+  <function name='CFSetRemoveValue'>
+    <function_arg type='^{__CFSet=}'/>
+    <function_arg type='^v'/>
+  </function>
+  <function name='CFSetReplaceValue'>
+    <function_arg type='^{__CFSet=}'/>
+    <function_arg type='^v'/>
+  </function>
+  <function name='CFSetSetValue'>
+    <function_arg type='^{__CFSet=}'/>
+    <function_arg type='^v'/>
+  </function>
+  <function name='CFShow'>
+    <function_arg type='^v'/>
+  </function>
+  <function name='CFShowStr'>
+    <function_arg type='^{__CFString=}'/>
+  </function>
+  <function name='CFSocketConnectToAddress'>
+    <function_arg type='^{__CFSocket=}'/>
+    <function_arg type='^{__CFData=}'/>
+    <function_arg type='d'/>
+    <function_retval type='i'/>
+  </function>
+  <function name='CFSocketCopyAddress'>
+    <function_arg type='^{__CFSocket=}'/>
+    <function_retval already_retained='true' type='^{__CFData=}'/>
+  </function>
+  <function name='CFSocketCopyPeerAddress'>
+    <function_arg type='^{__CFSocket=}'/>
+    <function_retval already_retained='true' type='^{__CFData=}'/>
+  </function>
+  <function name='CFSocketCopyRegisteredSocketSignature'>
+    <function_arg type='^{?=iii^{__CFData}}'/>
+    <function_arg type='d'/>
+    <function_arg type='^{__CFString=}'/>
+    <function_arg type='^{?=iii^{__CFData}}'/>
+    <function_arg type='r^^{__CFData}'/>
+    <function_retval type='i'/>
+  </function>
+  <function name='CFSocketCopyRegisteredValue'>
+    <function_arg type='^{?=iii^{__CFData}}'/>
+    <function_arg type='d'/>
+    <function_arg type='^{__CFString=}'/>
+    <function_arg type='r^^v'/>
+    <function_arg type='r^^{__CFData}'/>
+    <function_retval type='i'/>
+  </function>
+  <function name='CFSocketCreate'>
+    <function_arg type='^{__CFAllocator=}'/>
+    <function_arg type='l'/>
+    <function_arg type='l'/>
+    <function_arg type='l'/>
+    <function_arg type='L'/>
+    <function_arg type='^?'/>
+    <function_arg type='^{?=i^v^?^?^?}'/>
+    <function_retval already_retained='true' type='^{__CFSocket=}'/>
+  </function>
+  <function name='CFSocketCreateConnectedToSocketSignature'>
+    <function_arg type='^{__CFAllocator=}'/>
+    <function_arg type='^{?=iii^{__CFData}}'/>
+    <function_arg type='L'/>
+    <function_arg type='^?'/>
+    <function_arg type='^{?=i^v^?^?^?}'/>
+    <function_arg type='d'/>
+    <function_retval already_retained='true' type='^{__CFSocket=}'/>
+  </function>
+  <function name='CFSocketCreateRunLoopSource'>
+    <function_arg type='^{__CFAllocator=}'/>
+    <function_arg type='^{__CFSocket=}'/>
+    <function_arg type='l'/>
+    <function_retval already_retained='true' type='^{__CFRunLoopSource=}'/>
+  </function>
+  <function name='CFSocketCreateWithNative'>
+    <function_arg type='^{__CFAllocator=}'/>
+    <function_arg type='i'/>
+    <function_arg type='L'/>
+    <function_arg type='^?'/>
+    <function_arg type='^{?=i^v^?^?^?}'/>
+    <function_retval already_retained='true' type='^{__CFSocket=}'/>
+  </function>
+  <function name='CFSocketCreateWithSocketSignature'>
+    <function_arg type='^{__CFAllocator=}'/>
+    <function_arg type='^{?=iii^{__CFData}}'/>
+    <function_arg type='L'/>
+    <function_arg type='^?'/>
+    <function_arg type='^{?=i^v^?^?^?}'/>
+    <function_retval already_retained='true' type='^{__CFSocket=}'/>
+  </function>
+  <function name='CFSocketDisableCallBacks'>
+    <function_arg type='^{__CFSocket=}'/>
+    <function_arg type='L'/>
+  </function>
+  <function name='CFSocketEnableCallBacks'>
+    <function_arg type='^{__CFSocket=}'/>
+    <function_arg type='L'/>
+  </function>
+  <function name='CFSocketGetContext'>
+    <function_arg type='^{__CFSocket=}'/>
+    <function_arg type='^{?=i^v^?^?^?}'/>
+  </function>
+  <function name='CFSocketGetDefaultNameRegistryPortNumber'>
+    <function_retval type='S'/>
+  </function>
+  <function name='CFSocketGetNative'>
+    <function_arg type='^{__CFSocket=}'/>
+    <function_retval type='i'/>
+  </function>
+  <function name='CFSocketGetSocketFlags'>
+    <function_arg type='^{__CFSocket=}'/>
+    <function_retval type='L'/>
+  </function>
+  <function name='CFSocketGetTypeID'>
+    <function_retval type='L'/>
+  </function>
+  <function name='CFSocketInvalidate'>
+    <function_arg type='^{__CFSocket=}'/>
+  </function>
+  <function name='CFSocketIsValid'>
+    <function_arg type='^{__CFSocket=}'/>
+    <function_retval type='B'/>
+  </function>
+  <function name='CFSocketRegisterSocketSignature'>
+    <function_arg type='^{?=iii^{__CFData}}'/>
+    <function_arg type='d'/>
+    <function_arg type='^{__CFString=}'/>
+    <function_arg type='^{?=iii^{__CFData}}'/>
+    <function_retval type='i'/>
+  </function>
+  <function name='CFSocketRegisterValue'>
+    <function_arg type='^{?=iii^{__CFData}}'/>
+    <function_arg type='d'/>
+    <function_arg type='^{__CFString=}'/>
+    <function_arg type='^v'/>
+    <function_retval type='i'/>
+  </function>
+  <function name='CFSocketSendData'>
+    <function_arg type='^{__CFSocket=}'/>
+    <function_arg type='^{__CFData=}'/>
+    <function_arg type='^{__CFData=}'/>
+    <function_arg type='d'/>
+    <function_retval type='i'/>
+  </function>
+  <function name='CFSocketSetAddress'>
+    <function_arg type='^{__CFSocket=}'/>
+    <function_arg type='^{__CFData=}'/>
+    <function_retval type='i'/>
+  </function>
+  <function name='CFSocketSetDefaultNameRegistryPortNumber'>
+    <function_arg type='S'/>
+  </function>
+  <function name='CFSocketSetSocketFlags'>
+    <function_arg type='^{__CFSocket=}'/>
+    <function_arg type='L'/>
+  </function>
+  <function name='CFSocketUnregister'>
+    <function_arg type='^{?=iii^{__CFData}}'/>
+    <function_arg type='d'/>
+    <function_arg type='^{__CFString=}'/>
+    <function_retval type='i'/>
+  </function>
+  <function name='CFStreamCreatePairWithPeerSocketSignature'>
+    <function_arg type='^{__CFAllocator=}'/>
+    <function_arg type='^{?=iii^{__CFData}}'/>
+    <function_arg type='^^{__CFReadStream}'/>
+    <function_arg type='^^{__CFWriteStream}'/>
+  </function>
+  <function name='CFStreamCreatePairWithSocket'>
+    <function_arg type='^{__CFAllocator=}'/>
+    <function_arg type='i'/>
+    <function_arg type='^^{__CFReadStream}'/>
+    <function_arg type='^^{__CFWriteStream}'/>
+  </function>
+  <function name='CFStreamCreatePairWithSocketToHost'>
+    <function_arg type='^{__CFAllocator=}'/>
+    <function_arg type='^{__CFString=}'/>
+    <function_arg type='L'/>
+    <function_arg type='^^{__CFReadStream}'/>
+    <function_arg type='^^{__CFWriteStream}'/>
+  </function>
+  <function name='CFStringAppend'>
+    <function_arg type='^{__CFString=}'/>
+    <function_arg type='^{__CFString=}'/>
+  </function>
+  <function name='CFStringAppendCString'>
+    <function_arg type='^{__CFString=}'/>
+    <function_arg type='*'/>
+    <function_arg type='L'/>
+  </function>
+  <function name='CFStringAppendCharacters'>
+    <function_arg type='^{__CFString=}'/>
+    <function_arg type='^S'/>
+    <function_arg type='l'/>
+  </function>
+  <function name='CFStringAppendFormat' variadic='true'>
+    <function_arg type='^{__CFString=}'/>
+    <function_arg type='^{__CFDictionary=}'/>
+    <function_arg type='^{__CFString=}'/>
+  </function>
+  <function name='CFStringAppendFormatAndArguments'>
+    <function_arg type='^{__CFString=}'/>
+    <function_arg type='^{__CFDictionary=}'/>
+    <function_arg type='^{__CFString=}'/>
+    <function_arg type='*'/>
+  </function>
+  <function name='CFStringAppendPascalString'>
+    <function_arg type='^{__CFString=}'/>
+    <function_arg type='*'/>
+    <function_arg type='L'/>
+  </function>
+  <function name='CFStringCapitalize'>
+    <function_arg type='^{__CFString=}'/>
+    <function_arg type='^{__CFLocale=}'/>
+  </function>
+  <function name='CFStringCompare'>
+    <function_arg type='^{__CFString=}'/>
+    <function_arg type='^{__CFString=}'/>
+    <function_arg type='L'/>
+    <function_retval type='i'/>
+  </function>
+  <function name='CFStringCompareWithOptions'>
+    <function_arg type='^{__CFString=}'/>
+    <function_arg type='^{__CFString=}'/>
+    <function_arg type='{?=ii}'/>
+    <function_arg type='L'/>
+    <function_retval type='i'/>
+  </function>
+  <function name='CFStringConvertEncodingToIANACharSetName'>
+    <function_arg type='L'/>
+    <function_retval type='^{__CFString=}'/>
+  </function>
+  <function name='CFStringConvertEncodingToNSStringEncoding'>
+    <function_arg type='L'/>
+    <function_retval type='L'/>
+  </function>
+  <function name='CFStringConvertEncodingToWindowsCodepage'>
+    <function_arg type='L'/>
+    <function_retval type='L'/>
+  </function>
+  <function name='CFStringConvertIANACharSetNameToEncoding'>
+    <function_arg type='^{__CFString=}'/>
+    <function_retval type='L'/>
+  </function>
+  <function name='CFStringConvertNSStringEncodingToEncoding'>
+    <function_arg type='L'/>
+    <function_retval type='L'/>
+  </function>
+  <function name='CFStringConvertWindowsCodepageToEncoding'>
+    <function_arg type='L'/>
+    <function_retval type='L'/>
+  </function>
+  <function name='CFStringCreateArrayBySeparatingStrings'>
+    <function_arg type='^{__CFAllocator=}'/>
+    <function_arg type='^{__CFString=}'/>
+    <function_arg type='^{__CFString=}'/>
+    <function_retval already_retained='true' type='^{__CFArray=}'/>
+  </function>
+  <function name='CFStringCreateArrayWithFindResults'>
+    <function_arg type='^{__CFAllocator=}'/>
+    <function_arg type='^{__CFString=}'/>
+    <function_arg type='^{__CFString=}'/>
+    <function_arg type='{?=ii}'/>
+    <function_arg type='L'/>
+    <function_retval already_retained='true' type='^{__CFArray=}'/>
+  </function>
+  <function name='CFStringCreateByCombiningStrings'>
+    <function_arg type='^{__CFAllocator=}'/>
+    <function_arg type='^{__CFArray=}'/>
+    <function_arg type='^{__CFString=}'/>
+    <function_retval already_retained='true' type='^{__CFString=}'/>
+  </function>
+  <function name='CFStringCreateCopy'>
+    <function_arg type='^{__CFAllocator=}'/>
+    <function_arg type='^{__CFString=}'/>
+    <function_retval already_retained='true' type='^{__CFString=}'/>
+  </function>
+  <function name='CFStringCreateExternalRepresentation'>
+    <function_arg type='^{__CFAllocator=}'/>
+    <function_arg type='^{__CFString=}'/>
+    <function_arg type='L'/>
+    <function_arg type='C'/>
+    <function_retval already_retained='true' type='^{__CFData=}'/>
+  </function>
+  <function name='CFStringCreateFromExternalRepresentation'>
+    <function_arg type='^{__CFAllocator=}'/>
+    <function_arg type='^{__CFData=}'/>
+    <function_arg type='L'/>
+    <function_retval already_retained='true' type='^{__CFString=}'/>
+  </function>
+  <function name='CFStringCreateMutable'>
+    <function_arg type='^{__CFAllocator=}'/>
+    <function_arg type='l'/>
+    <function_retval type='^{__CFString=}'/>
+  </function>
+  <function name='CFStringCreateMutableCopy'>
+    <function_arg type='^{__CFAllocator=}'/>
+    <function_arg type='l'/>
+    <function_arg type='^{__CFString=}'/>
+    <function_retval type='^{__CFString=}'/>
+  </function>
+  <function name='CFStringCreateMutableWithExternalCharactersNoCopy'>
+    <function_arg type='^{__CFAllocator=}'/>
+    <function_arg type='^S'/>
+    <function_arg type='l'/>
+    <function_arg type='l'/>
+    <function_arg type='^{__CFAllocator=}'/>
+    <function_retval type='^{__CFString=}'/>
+  </function>
+  <function name='CFStringCreateWithBytes'>
+    <function_arg type='^{__CFAllocator=}'/>
+    <function_arg type='*'/>
+    <function_arg type='l'/>
+    <function_arg type='L'/>
+    <function_arg type='C'/>
+    <function_retval already_retained='true' type='^{__CFString=}'/>
+  </function>
+  <function name='CFStringCreateWithCString'>
+    <function_arg type='^{__CFAllocator=}'/>
+    <function_arg type='*'/>
+    <function_arg type='L'/>
+    <function_retval already_retained='true' type='^{__CFString=}'/>
+  </function>
+  <function name='CFStringCreateWithCStringNoCopy'>
+    <function_arg type='^{__CFAllocator=}'/>
+    <function_arg type='*'/>
+    <function_arg type='L'/>
+    <function_arg type='^{__CFAllocator=}'/>
+    <function_retval already_retained='true' type='^{__CFString=}'/>
+  </function>
+  <function name='CFStringCreateWithCharacters'>
+    <function_arg type='^{__CFAllocator=}'/>
+    <function_arg type='^S'/>
+    <function_arg type='l'/>
+    <function_retval already_retained='true' type='^{__CFString=}'/>
+  </function>
+  <function name='CFStringCreateWithCharactersNoCopy'>
+    <function_arg type='^{__CFAllocator=}'/>
+    <function_arg type='^S'/>
+    <function_arg type='l'/>
+    <function_arg type='^{__CFAllocator=}'/>
+    <function_retval already_retained='true' type='^{__CFString=}'/>
+  </function>
+  <function name='CFStringCreateWithFileSystemRepresentation'>
+    <function_arg type='^{__CFAllocator=}'/>
+    <function_arg type='*'/>
+    <function_retval already_retained='true' type='^{__CFString=}'/>
+  </function>
+  <function name='CFStringCreateWithFormat' variadic='true'>
+    <function_arg type='^{__CFAllocator=}'/>
+    <function_arg type='^{__CFDictionary=}'/>
+    <function_arg type='^{__CFString=}'/>
+    <function_retval already_retained='true' type='^{__CFString=}'/>
+  </function>
+  <function name='CFStringCreateWithFormatAndArguments'>
+    <function_arg type='^{__CFAllocator=}'/>
+    <function_arg type='^{__CFDictionary=}'/>
+    <function_arg type='^{__CFString=}'/>
+    <function_arg type='*'/>
+    <function_retval already_retained='true' type='^{__CFString=}'/>
+  </function>
+  <function name='CFStringCreateWithPascalString'>
+    <function_arg type='^{__CFAllocator=}'/>
+    <function_arg type='*'/>
+    <function_arg type='L'/>
+    <function_retval already_retained='true' type='^{__CFString=}'/>
+  </function>
+  <function name='CFStringCreateWithPascalStringNoCopy'>
+    <function_arg type='^{__CFAllocator=}'/>
+    <function_arg type='*'/>
+    <function_arg type='L'/>
+    <function_arg type='^{__CFAllocator=}'/>
+    <function_retval already_retained='true' type='^{__CFString=}'/>
+  </function>
+  <function name='CFStringCreateWithSubstring'>
+    <function_arg type='^{__CFAllocator=}'/>
+    <function_arg type='^{__CFString=}'/>
+    <function_arg type='{?=ii}'/>
+    <function_retval already_retained='true' type='^{__CFString=}'/>
+  </function>
+  <function name='CFStringDelete'>
+    <function_arg type='^{__CFString=}'/>
+    <function_arg type='{?=ii}'/>
+  </function>
+  <function name='CFStringFind'>
+    <function_arg type='^{__CFString=}'/>
+    <function_arg type='^{__CFString=}'/>
+    <function_arg type='L'/>
+    <function_retval type='{?=ii}'/>
+  </function>
+  <function name='CFStringFindAndReplace'>
+    <function_arg type='^{__CFString=}'/>
+    <function_arg type='^{__CFString=}'/>
+    <function_arg type='^{__CFString=}'/>
+    <function_arg type='{?=ii}'/>
+    <function_arg type='L'/>
+    <function_retval type='l'/>
+  </function>
+  <function name='CFStringFindCharacterFromSet'>
+    <function_arg type='^{__CFString=}'/>
+    <function_arg type='^{__CFCharacterSet=}'/>
+    <function_arg type='{?=ii}'/>
+    <function_arg type='L'/>
+    <function_arg type='^{?=ii}'/>
+    <function_retval type='B'/>
+  </function>
+  <function name='CFStringFindWithOptions'>
+    <function_arg type='^{__CFString=}'/>
+    <function_arg type='^{__CFString=}'/>
+    <function_arg type='{?=ii}'/>
+    <function_arg type='L'/>
+    <function_arg type='^{?=ii}'/>
+    <function_retval type='B'/>
+  </function>
+  <function name='CFStringGetBytes'>
+    <function_arg type='^{__CFString=}'/>
+    <function_arg type='{?=ii}'/>
+    <function_arg type='L'/>
+    <function_arg type='C'/>
+    <function_arg type='C'/>
+    <function_arg type='*'/>
+    <function_arg type='l'/>
+    <function_arg type='^i'/>
+    <function_retval type='l'/>
+  </function>
+  <function name='CFStringGetCString'>
+    <function_arg type='^{__CFString=}'/>
+    <function_arg type='*'/>
+    <function_arg type='l'/>
+    <function_arg type='L'/>
+    <function_retval type='B'/>
+  </function>
+  <function name='CFStringGetCStringPtr'>
+    <function_arg type='^{__CFString=}'/>
+    <function_arg type='L'/>
+    <function_retval type='*'/>
+  </function>
+  <function name='CFStringGetCharacterAtIndex'>
+    <function_arg type='^{__CFString=}'/>
+    <function_arg type='l'/>
+    <function_retval type='S'/>
+  </function>
+  <function name='CFStringGetCharacters'>
+    <function_arg type='^{__CFString=}'/>
+    <function_arg type='{?=ii}'/>
+    <function_arg type='^S'/>
+  </function>
+  <function name='CFStringGetCharactersPtr'>
+    <function_arg type='^{__CFString=}'/>
+    <function_retval type='^S'/>
+  </function>
+  <function name='CFStringGetDoubleValue'>
+    <function_arg type='^{__CFString=}'/>
+    <function_retval type='d'/>
+  </function>
+  <function name='CFStringGetFastestEncoding'>
+    <function_arg type='^{__CFString=}'/>
+    <function_retval type='L'/>
+  </function>
+  <function name='CFStringGetFileSystemRepresentation'>
+    <function_arg type='^{__CFString=}'/>
+    <function_arg type='*'/>
+    <function_arg type='l'/>
+    <function_retval type='B'/>
+  </function>
+  <function name='CFStringGetIntValue'>
+    <function_arg type='^{__CFString=}'/>
+    <function_retval type='l'/>
+  </function>
+  <function name='CFStringGetLength'>
+    <function_arg type='^{__CFString=}'/>
+    <function_retval type='l'/>
+  </function>
+  <function name='CFStringGetLineBounds'>
+    <function_arg type='^{__CFString=}'/>
+    <function_arg type='{?=ii}'/>
+    <function_arg type='^i'/>
+    <function_arg type='^i'/>
+    <function_arg type='^i'/>
+  </function>
+  <function name='CFStringGetListOfAvailableEncodings'>
+    <function_retval type='^I'/>
+  </function>
+  <function name='CFStringGetMaximumSizeForEncoding'>
+    <function_arg type='l'/>
+    <function_arg type='L'/>
+    <function_retval type='l'/>
+  </function>
+  <function name='CFStringGetMaximumSizeOfFileSystemRepresentation'>
+    <function_arg type='^{__CFString=}'/>
+    <function_retval type='l'/>
+  </function>
+  <function name='CFStringGetMostCompatibleMacStringEncoding'>
+    <function_arg type='L'/>
+    <function_retval type='L'/>
+  </function>
+  <function name='CFStringGetNameOfEncoding'>
+    <function_arg type='L'/>
+    <function_retval type='^{__CFString=}'/>
+  </function>
+  <function name='CFStringGetPascalString'>
+    <function_arg type='^{__CFString=}'/>
+    <function_arg type='*'/>
+    <function_arg type='l'/>
+    <function_arg type='L'/>
+    <function_retval type='B'/>
+  </function>
+  <function name='CFStringGetPascalStringPtr'>
+    <function_arg type='^{__CFString=}'/>
+    <function_arg type='L'/>
+    <function_retval type='*'/>
+  </function>
+  <function name='CFStringGetRangeOfComposedCharactersAtIndex'>
+    <function_arg type='^{__CFString=}'/>
+    <function_arg type='l'/>
+    <function_retval type='{?=ii}'/>
+  </function>
+  <function name='CFStringGetSmallestEncoding'>
+    <function_arg type='^{__CFString=}'/>
+    <function_retval type='L'/>
+  </function>
+  <function name='CFStringGetSystemEncoding'>
+    <function_retval type='L'/>
+  </function>
+  <function name='CFStringGetTypeID'>
+    <function_retval type='L'/>
+  </function>
+  <function name='CFStringHasPrefix'>
+    <function_arg type='^{__CFString=}'/>
+    <function_arg type='^{__CFString=}'/>
+    <function_retval type='B'/>
+  </function>
+  <function name='CFStringHasSuffix'>
+    <function_arg type='^{__CFString=}'/>
+    <function_arg type='^{__CFString=}'/>
+    <function_retval type='B'/>
+  </function>
+  <function name='CFStringInsert'>
+    <function_arg type='^{__CFString=}'/>
+    <function_arg type='l'/>
+    <function_arg type='^{__CFString=}'/>
+  </function>
+  <function name='CFStringIsEncodingAvailable'>
+    <function_arg type='L'/>
+    <function_retval type='B'/>
+  </function>
+  <function name='CFStringLowercase'>
+    <function_arg type='^{__CFString=}'/>
+    <function_arg type='^{__CFLocale=}'/>
+  </function>
+  <function name='CFStringNormalize'>
+    <function_arg type='^{__CFString=}'/>
+    <function_arg type='i'/>
+  </function>
+  <function name='CFStringPad'>
+    <function_arg type='^{__CFString=}'/>
+    <function_arg type='^{__CFString=}'/>
+    <function_arg type='l'/>
+    <function_arg type='l'/>
+  </function>
+  <function name='CFStringReplace'>
+    <function_arg type='^{__CFString=}'/>
+    <function_arg type='{?=ii}'/>
+    <function_arg type='^{__CFString=}'/>
+  </function>
+  <function name='CFStringReplaceAll'>
+    <function_arg type='^{__CFString=}'/>
+    <function_arg type='^{__CFString=}'/>
+  </function>
+  <function name='CFStringSetExternalCharactersNoCopy'>
+    <function_arg type='^{__CFString=}'/>
+    <function_arg type='^S'/>
+    <function_arg type='l'/>
+    <function_arg type='l'/>
+  </function>
+  <function name='CFStringTransform'>
+    <function_arg type='^{__CFString=}'/>
+    <function_arg type='^{?=ii}'/>
+    <function_arg type='^{__CFString=}'/>
+    <function_arg type='C'/>
+    <function_retval type='B'/>
+  </function>
+  <function name='CFStringTrim'>
+    <function_arg type='^{__CFString=}'/>
+    <function_arg type='^{__CFString=}'/>
+  </function>
+  <function name='CFStringTrimWhitespace'>
+    <function_arg type='^{__CFString=}'/>
+  </function>
+  <function name='CFStringUppercase'>
+    <function_arg type='^{__CFString=}'/>
+    <function_arg type='^{__CFLocale=}'/>
+  </function>
+  <function name='CFTimeZoneCopyAbbreviation'>
+    <function_arg type='^{__CFTimeZone=}'/>
+    <function_arg type='d'/>
+    <function_retval already_retained='true' type='^{__CFString=}'/>
+  </function>
+  <function name='CFTimeZoneCopyAbbreviationDictionary'>
+    <function_retval already_retained='true' type='^{__CFDictionary=}'/>
+  </function>
+  <function name='CFTimeZoneCopyDefault'>
+    <function_retval already_retained='true' type='^{__CFTimeZone=}'/>
+  </function>
+  <function name='CFTimeZoneCopyKnownNames'>
+    <function_retval already_retained='true' type='^{__CFArray=}'/>
+  </function>
+  <function name='CFTimeZoneCopySystem'>
+    <function_retval already_retained='true' type='^{__CFTimeZone=}'/>
+  </function>
+  <function name='CFTimeZoneCreate'>
+    <function_arg type='^{__CFAllocator=}'/>
+    <function_arg type='^{__CFString=}'/>
+    <function_arg type='^{__CFData=}'/>
+    <function_retval already_retained='true' type='^{__CFTimeZone=}'/>
+  </function>
+  <function name='CFTimeZoneCreateWithName'>
+    <function_arg type='^{__CFAllocator=}'/>
+    <function_arg type='^{__CFString=}'/>
+    <function_arg type='C'/>
+    <function_retval already_retained='true' type='^{__CFTimeZone=}'/>
+  </function>
+  <function name='CFTimeZoneCreateWithTimeIntervalFromGMT'>
+    <function_arg type='^{__CFAllocator=}'/>
+    <function_arg type='d'/>
+    <function_retval already_retained='true' type='^{__CFTimeZone=}'/>
+  </function>
+  <function name='CFTimeZoneGetData'>
+    <function_arg type='^{__CFTimeZone=}'/>
+    <function_retval type='^{__CFData=}'/>
+  </function>
+  <function name='CFTimeZoneGetName'>
+    <function_arg type='^{__CFTimeZone=}'/>
+    <function_retval type='^{__CFString=}'/>
+  </function>
+  <function name='CFTimeZoneGetSecondsFromGMT'>
+    <function_arg type='^{__CFTimeZone=}'/>
+    <function_arg type='d'/>
+    <function_retval type='d'/>
+  </function>
+  <function name='CFTimeZoneGetTypeID'>
+    <function_retval type='L'/>
+  </function>
+  <function name='CFTimeZoneIsDaylightSavingTime'>
+    <function_arg type='^{__CFTimeZone=}'/>
+    <function_arg type='d'/>
+    <function_retval type='B'/>
+  </function>
+  <function name='CFTimeZoneResetSystem'/>
+  <function name='CFTimeZoneSetAbbreviationDictionary'>
+    <function_arg type='^{__CFDictionary=}'/>
+  </function>
+  <function name='CFTimeZoneSetDefault'>
+    <function_arg type='^{__CFTimeZone=}'/>
+  </function>
+  <function name='CFTreeAppendChild'>
+    <function_arg type='^{__CFTree=}'/>
+    <function_arg type='^{__CFTree=}'/>
+  </function>
+  <function name='CFTreeApplyFunctionToChildren'>
+    <function_arg type='^{__CFTree=}'/>
+    <function_arg type='^?'/>
+    <function_arg type='^v'/>
+  </function>
+  <function name='CFTreeCreate'>
+    <function_arg type='^{__CFAllocator=}'/>
+    <function_arg type='^{?=i^v^?^?^?}'/>
+    <function_retval already_retained='true' type='^{__CFTree=}'/>
+  </function>
+  <function name='CFTreeFindRoot'>
+    <function_arg type='^{__CFTree=}'/>
+    <function_retval type='^{__CFTree=}'/>
+  </function>
+  <function name='CFTreeGetChildAtIndex'>
+    <function_arg type='^{__CFTree=}'/>
+    <function_arg type='l'/>
+    <function_retval type='^{__CFTree=}'/>
+  </function>
+  <function name='CFTreeGetChildCount'>
+    <function_arg type='^{__CFTree=}'/>
+    <function_retval type='l'/>
+  </function>
+  <function name='CFTreeGetChildren'>
+    <function_arg type='^{__CFTree=}'/>
+    <function_arg type='^^{__CFTree}'/>
+  </function>
+  <function name='CFTreeGetContext'>
+    <function_arg type='^{__CFTree=}'/>
+    <function_arg type='^{?=i^v^?^?^?}'/>
+  </function>
+  <function name='CFTreeGetFirstChild'>
+    <function_arg type='^{__CFTree=}'/>
+    <function_retval type='^{__CFTree=}'/>
+  </function>
+  <function name='CFTreeGetNextSibling'>
+    <function_arg type='^{__CFTree=}'/>
+    <function_retval type='^{__CFTree=}'/>
+  </function>
+  <function name='CFTreeGetParent'>
+    <function_arg type='^{__CFTree=}'/>
+    <function_retval type='^{__CFTree=}'/>
+  </function>
+  <function name='CFTreeGetTypeID'>
+    <function_retval type='L'/>
+  </function>
+  <function name='CFTreeInsertSibling'>
+    <function_arg type='^{__CFTree=}'/>
+    <function_arg type='^{__CFTree=}'/>
+  </function>
+  <function name='CFTreePrependChild'>
+    <function_arg type='^{__CFTree=}'/>
+    <function_arg type='^{__CFTree=}'/>
+  </function>
+  <function name='CFTreeRemove'>
+    <function_arg type='^{__CFTree=}'/>
+  </function>
+  <function name='CFTreeRemoveAllChildren'>
+    <function_arg type='^{__CFTree=}'/>
+  </function>
+  <function name='CFTreeSetContext'>
+    <function_arg type='^{__CFTree=}'/>
+    <function_arg type='^{?=i^v^?^?^?}'/>
+  </function>
+  <function name='CFTreeSortChildren'>
+    <function_arg type='^{__CFTree=}'/>
+    <function_arg type='^?'/>
+    <function_arg type='^v'/>
+  </function>
+  <function name='CFURLCanBeDecomposed'>
+    <function_arg type='^{__CFURL=}'/>
+    <function_retval type='B'/>
+  </function>
+  <function name='CFURLCopyAbsoluteURL'>
+    <function_arg type='^{__CFURL=}'/>
+    <function_retval already_retained='true' type='^{__CFURL=}'/>
+  </function>
+  <function name='CFURLCopyFileSystemPath'>
+    <function_arg type='^{__CFURL=}'/>
+    <function_arg type='i'/>
+    <function_retval already_retained='true' type='^{__CFString=}'/>
+  </function>
+  <function name='CFURLCopyFragment'>
+    <function_arg type='^{__CFURL=}'/>
+    <function_arg type='^{__CFString=}'/>
+    <function_retval already_retained='true' type='^{__CFString=}'/>
+  </function>
+  <function name='CFURLCopyHostName'>
+    <function_arg type='^{__CFURL=}'/>
+    <function_retval already_retained='true' type='^{__CFString=}'/>
+  </function>
+  <function name='CFURLCopyLastPathComponent'>
+    <function_arg type='^{__CFURL=}'/>
+    <function_retval already_retained='true' type='^{__CFString=}'/>
+  </function>
+  <function name='CFURLCopyNetLocation'>
+    <function_arg type='^{__CFURL=}'/>
+    <function_retval already_retained='true' type='^{__CFString=}'/>
+  </function>
+  <function name='CFURLCopyParameterString'>
+    <function_arg type='^{__CFURL=}'/>
+    <function_arg type='^{__CFString=}'/>
+    <function_retval already_retained='true' type='^{__CFString=}'/>
+  </function>
+  <function name='CFURLCopyPassword'>
+    <function_arg type='^{__CFURL=}'/>
+    <function_retval already_retained='true' type='^{__CFString=}'/>
+  </function>
+  <function name='CFURLCopyPath'>
+    <function_arg type='^{__CFURL=}'/>
+    <function_retval already_retained='true' type='^{__CFString=}'/>
+  </function>
+  <function name='CFURLCopyPathExtension'>
+    <function_arg type='^{__CFURL=}'/>
+    <function_retval already_retained='true' type='^{__CFString=}'/>
+  </function>
+  <function name='CFURLCopyQueryString'>
+    <function_arg type='^{__CFURL=}'/>
+    <function_arg type='^{__CFString=}'/>
+    <function_retval already_retained='true' type='^{__CFString=}'/>
+  </function>
+  <function name='CFURLCopyResourceSpecifier'>
+    <function_arg type='^{__CFURL=}'/>
+    <function_retval already_retained='true' type='^{__CFString=}'/>
+  </function>
+  <function name='CFURLCopyScheme'>
+    <function_arg type='^{__CFURL=}'/>
+    <function_retval already_retained='true' type='^{__CFString=}'/>
+  </function>
+  <function name='CFURLCopyStrictPath'>
+    <function_arg type='^{__CFURL=}'/>
+    <function_arg type='*'/>
+    <function_retval already_retained='true' type='^{__CFString=}'/>
+  </function>
+  <function name='CFURLCopyUserName'>
+    <function_arg type='^{__CFURL=}'/>
+    <function_retval already_retained='true' type='^{__CFString=}'/>
+  </function>
+  <function name='CFURLCreateAbsoluteURLWithBytes'>
+    <function_arg type='^{__CFAllocator=}'/>
+    <function_arg type='*'/>
+    <function_arg type='l'/>
+    <function_arg type='L'/>
+    <function_arg type='^{__CFURL=}'/>
+    <function_arg type='C'/>
+    <function_retval already_retained='true' type='^{__CFURL=}'/>
+  </function>
+  <function name='CFURLCreateCopyAppendingPathComponent'>
+    <function_arg type='^{__CFAllocator=}'/>
+    <function_arg type='^{__CFURL=}'/>
+    <function_arg type='^{__CFString=}'/>
+    <function_arg type='C'/>
+    <function_retval already_retained='true' type='^{__CFURL=}'/>
+  </function>
+  <function name='CFURLCreateCopyAppendingPathExtension'>
+    <function_arg type='^{__CFAllocator=}'/>
+    <function_arg type='^{__CFURL=}'/>
+    <function_arg type='^{__CFString=}'/>
+    <function_retval already_retained='true' type='^{__CFURL=}'/>
+  </function>
+  <function name='CFURLCreateCopyDeletingLastPathComponent'>
+    <function_arg type='^{__CFAllocator=}'/>
+    <function_arg type='^{__CFURL=}'/>
+    <function_retval already_retained='true' type='^{__CFURL=}'/>
+  </function>
+  <function name='CFURLCreateCopyDeletingPathExtension'>
+    <function_arg type='^{__CFAllocator=}'/>
+    <function_arg type='^{__CFURL=}'/>
+    <function_retval already_retained='true' type='^{__CFURL=}'/>
+  </function>
+  <function name='CFURLCreateData'>
+    <function_arg type='^{__CFAllocator=}'/>
+    <function_arg type='^{__CFURL=}'/>
+    <function_arg type='L'/>
+    <function_arg type='C'/>
+    <function_retval already_retained='true' type='^{__CFData=}'/>
+  </function>
+  <function name='CFURLCreateDataAndPropertiesFromResource'>
+    <function_arg type='^{__CFAllocator=}'/>
+    <function_arg type='^{__CFURL=}'/>
+    <function_arg type='r^^{__CFData}'/>
+    <function_arg type='r^^{__CFDictionary}'/>
+    <function_arg type='^{__CFArray=}'/>
+    <function_arg type='^i'/>
+    <function_retval type='B'/>
+  </function>
+  <function name='CFURLCreateFromFSRef'>
+    <function_arg type='^{__CFAllocator=}'/>
+    <function_arg type='^{FSRef=[80C]}'/>
+    <function_retval already_retained='true' type='^{__CFURL=}'/>
+  </function>
+  <function name='CFURLCreateFromFileSystemRepresentation'>
+    <function_arg type='^{__CFAllocator=}'/>
+    <function_arg type='*'/>
+    <function_arg type='l'/>
+    <function_arg type='C'/>
+    <function_retval already_retained='true' type='^{__CFURL=}'/>
+  </function>
+  <function name='CFURLCreateFromFileSystemRepresentationRelativeToBase'>
+    <function_arg type='^{__CFAllocator=}'/>
+    <function_arg type='*'/>
+    <function_arg type='l'/>
+    <function_arg type='C'/>
+    <function_arg type='^{__CFURL=}'/>
+    <function_retval already_retained='true' type='^{__CFURL=}'/>
+  </function>
+  <function name='CFURLCreatePropertyFromResource'>
+    <function_arg type='^{__CFAllocator=}'/>
+    <function_arg type='^{__CFURL=}'/>
+    <function_arg type='^{__CFString=}'/>
+    <function_arg type='^i'/>
+    <function_retval type='^v'/>
+  </function>
+  <function name='CFURLCreateStringByAddingPercentEscapes'>
+    <function_arg type='^{__CFAllocator=}'/>
+    <function_arg type='^{__CFString=}'/>
+    <function_arg type='^{__CFString=}'/>
+    <function_arg type='^{__CFString=}'/>
+    <function_arg type='L'/>
+    <function_retval already_retained='true' type='^{__CFString=}'/>
+  </function>
+  <function name='CFURLCreateStringByReplacingPercentEscapes'>
+    <function_arg type='^{__CFAllocator=}'/>
+    <function_arg type='^{__CFString=}'/>
+    <function_arg type='^{__CFString=}'/>
+    <function_retval already_retained='true' type='^{__CFString=}'/>
+  </function>
+  <function name='CFURLCreateStringByReplacingPercentEscapesUsingEncoding'>
+    <function_arg type='^{__CFAllocator=}'/>
+    <function_arg type='^{__CFString=}'/>
+    <function_arg type='^{__CFString=}'/>
+    <function_arg type='L'/>
+    <function_retval already_retained='true' type='^{__CFString=}'/>
+  </function>
+  <function name='CFURLCreateWithBytes'>
+    <function_arg type='^{__CFAllocator=}'/>
+    <function_arg type='*'/>
+    <function_arg type='l'/>
+    <function_arg type='L'/>
+    <function_arg type='^{__CFURL=}'/>
+    <function_retval already_retained='true' type='^{__CFURL=}'/>
+  </function>
+  <function name='CFURLCreateWithFileSystemPath'>
+    <function_arg type='^{__CFAllocator=}'/>
+    <function_arg type='^{__CFString=}'/>
+    <function_arg type='i'/>
+    <function_arg type='C'/>
+    <function_retval already_retained='true' type='^{__CFURL=}'/>
+  </function>
+  <function name='CFURLCreateWithFileSystemPathRelativeToBase'>
+    <function_arg type='^{__CFAllocator=}'/>
+    <function_arg type='^{__CFString=}'/>
+    <function_arg type='i'/>
+    <function_arg type='C'/>
+    <function_arg type='^{__CFURL=}'/>
+    <function_retval already_retained='true' type='^{__CFURL=}'/>
+  </function>
+  <function name='CFURLCreateWithString'>
+    <function_arg type='^{__CFAllocator=}'/>
+    <function_arg type='^{__CFString=}'/>
+    <function_arg type='^{__CFURL=}'/>
+    <function_retval already_retained='true' type='^{__CFURL=}'/>
+  </function>
+  <function name='CFURLDestroyResource'>
+    <function_arg type='^{__CFURL=}'/>
+    <function_arg type='^i'/>
+    <function_retval type='B'/>
+  </function>
+  <function name='CFURLGetBaseURL'>
+    <function_arg type='^{__CFURL=}'/>
+    <function_retval type='^{__CFURL=}'/>
+  </function>
+  <function name='CFURLGetByteRangeForComponent'>
+    <function_arg type='^{__CFURL=}'/>
+    <function_arg type='i'/>
+    <function_arg type='^{?=ii}'/>
+    <function_retval type='{?=ii}'/>
+  </function>
+  <function name='CFURLGetBytes'>
+    <function_arg type='^{__CFURL=}'/>
+    <function_arg type='*'/>
+    <function_arg type='l'/>
+    <function_retval type='l'/>
+  </function>
+  <function name='CFURLGetFSRef'>
+    <function_arg type='^{__CFURL=}'/>
+    <function_arg type='^{FSRef=[80C]}'/>
+    <function_retval type='B'/>
+  </function>
+  <function name='CFURLGetFileSystemRepresentation'>
+    <function_arg type='^{__CFURL=}'/>
+    <function_arg type='C'/>
+    <function_arg type='*'/>
+    <function_arg type='l'/>
+    <function_retval type='B'/>
+  </function>
+  <function name='CFURLGetPortNumber'>
+    <function_arg type='^{__CFURL=}'/>
+    <function_retval type='l'/>
+  </function>
+  <function name='CFURLGetString'>
+    <function_arg type='^{__CFURL=}'/>
+    <function_retval type='^{__CFString=}'/>
+  </function>
+  <function name='CFURLGetTypeID'>
+    <function_retval type='L'/>
+  </function>
+  <function name='CFURLHasDirectoryPath'>
+    <function_arg type='^{__CFURL=}'/>
+    <function_retval type='B'/>
+  </function>
+  <function name='CFURLWriteDataAndPropertiesToResource'>
+    <function_arg type='^{__CFURL=}'/>
+    <function_arg type='^{__CFData=}'/>
+    <function_arg type='^{__CFDictionary=}'/>
+    <function_arg type='^i'/>
+    <function_retval type='B'/>
+  </function>
+  <function name='CFUUIDCreate'>
+    <function_arg type='^{__CFAllocator=}'/>
+    <function_retval already_retained='true' type='^{__CFUUID=}'/>
+  </function>
+  <function name='CFUUIDCreateFromString'>
+    <function_arg type='^{__CFAllocator=}'/>
+    <function_arg type='^{__CFString=}'/>
+    <function_retval already_retained='true' type='^{__CFUUID=}'/>
+  </function>
+  <function name='CFUUIDCreateFromUUIDBytes'>
+    <function_arg type='^{__CFAllocator=}'/>
+    <function_arg type='{?=CCCCCCCCCCCCCCCC}'/>
+    <function_retval already_retained='true' type='^{__CFUUID=}'/>
+  </function>
+  <function name='CFUUIDCreateString'>
+    <function_arg type='^{__CFAllocator=}'/>
+    <function_arg type='^{__CFUUID=}'/>
+    <function_retval already_retained='true' type='^{__CFString=}'/>
+  </function>
+  <function name='CFUUIDCreateWithBytes'>
+    <function_arg type='^{__CFAllocator=}'/>
+    <function_arg type='C'/>
+    <function_arg type='C'/>
+    <function_arg type='C'/>
+    <function_arg type='C'/>
+    <function_arg type='C'/>
+    <function_arg type='C'/>
+    <function_arg type='C'/>
+    <function_arg type='C'/>
+    <function_arg type='C'/>
+    <function_arg type='C'/>
+    <function_arg type='C'/>
+    <function_arg type='C'/>
+    <function_arg type='C'/>
+    <function_arg type='C'/>
+    <function_arg type='C'/>
+    <function_arg type='C'/>
+    <function_retval already_retained='true' type='^{__CFUUID=}'/>
+  </function>
+  <function name='CFUUIDGetConstantUUIDWithBytes'>
+    <function_arg type='^{__CFAllocator=}'/>
+    <function_arg type='C'/>
+    <function_arg type='C'/>
+    <function_arg type='C'/>
+    <function_arg type='C'/>
+    <function_arg type='C'/>
+    <function_arg type='C'/>
+    <function_arg type='C'/>
+    <function_arg type='C'/>
+    <function_arg type='C'/>
+    <function_arg type='C'/>
+    <function_arg type='C'/>
+    <function_arg type='C'/>
+    <function_arg type='C'/>
+    <function_arg type='C'/>
+    <function_arg type='C'/>
+    <function_arg type='C'/>
+    <function_retval type='^{__CFUUID=}'/>
+  </function>
+  <function name='CFUUIDGetTypeID'>
+    <function_retval type='L'/>
+  </function>
+  <function name='CFUUIDGetUUIDBytes'>
+    <function_arg type='^{__CFUUID=}'/>
+    <function_retval type='{?=CCCCCCCCCCCCCCCC}'/>
+  </function>
+  <function name='CFUserNotificationCancel'>
+    <function_arg type='^{__CFUserNotification=}'/>
+    <function_retval type='l'/>
+  </function>
+  <function name='CFUserNotificationCreate'>
+    <function_arg type='^{__CFAllocator=}'/>
+    <function_arg type='d'/>
+    <function_arg type='L'/>
+    <function_arg type='^i'/>
+    <function_arg type='^{__CFDictionary=}'/>
+    <function_retval already_retained='true' type='^{__CFUserNotification=}'/>
+  </function>
+  <function name='CFUserNotificationCreateRunLoopSource'>
+    <function_arg type='^{__CFAllocator=}'/>
+    <function_arg type='^{__CFUserNotification=}'/>
+    <function_arg type='^?'/>
+    <function_arg type='l'/>
+    <function_retval already_retained='true' type='^{__CFRunLoopSource=}'/>
+  </function>
+  <function name='CFUserNotificationDisplayAlert'>
+    <function_arg type='d'/>
+    <function_arg type='L'/>
+    <function_arg type='^{__CFURL=}'/>
+    <function_arg type='^{__CFURL=}'/>
+    <function_arg type='^{__CFURL=}'/>
+    <function_arg type='^{__CFString=}'/>
+    <function_arg type='^{__CFString=}'/>
+    <function_arg type='^{__CFString=}'/>
+    <function_arg type='^{__CFString=}'/>
+    <function_arg type='^{__CFString=}'/>
+    <function_arg type='^I'/>
+    <function_retval type='l'/>
+  </function>
+  <function name='CFUserNotificationDisplayNotice'>
+    <function_arg type='d'/>
+    <function_arg type='L'/>
+    <function_arg type='^{__CFURL=}'/>
+    <function_arg type='^{__CFURL=}'/>
+    <function_arg type='^{__CFURL=}'/>
+    <function_arg type='^{__CFString=}'/>
+    <function_arg type='^{__CFString=}'/>
+    <function_arg type='^{__CFString=}'/>
+    <function_retval type='l'/>
+  </function>
+  <function name='CFUserNotificationGetResponseDictionary'>
+    <function_arg type='^{__CFUserNotification=}'/>
+    <function_retval type='^{__CFDictionary=}'/>
+  </function>
+  <function name='CFUserNotificationGetResponseValue'>
+    <function_arg type='^{__CFUserNotification=}'/>
+    <function_arg type='^{__CFString=}'/>
+    <function_arg type='l'/>
+    <function_retval type='^{__CFString=}'/>
+  </function>
+  <function name='CFUserNotificationGetTypeID'>
+    <function_retval type='L'/>
+  </function>
+  <function name='CFUserNotificationReceiveResponse'>
+    <function_arg type='^{__CFUserNotification=}'/>
+    <function_arg type='d'/>
+    <function_arg type='^I'/>
+    <function_retval type='l'/>
+  </function>
+  <function name='CFUserNotificationUpdate'>
+    <function_arg type='^{__CFUserNotification=}'/>
+    <function_arg type='d'/>
+    <function_arg type='L'/>
+    <function_arg type='^{__CFDictionary=}'/>
+    <function_retval type='l'/>
+  </function>
+  <function name='CFWriteStreamCanAcceptBytes'>
+    <function_arg type='^{__CFWriteStream=}'/>
+    <function_retval type='B'/>
+  </function>
+  <function name='CFWriteStreamClose'>
+    <function_arg type='^{__CFWriteStream=}'/>
+  </function>
+  <function name='CFWriteStreamCopyProperty'>
+    <function_arg type='^{__CFWriteStream=}'/>
+    <function_arg type='^{__CFString=}'/>
+    <function_retval type='^v'/>
+  </function>
+  <function name='CFWriteStreamCreateWithAllocatedBuffers'>
+    <function_arg type='^{__CFAllocator=}'/>
+    <function_arg type='^{__CFAllocator=}'/>
+    <function_retval already_retained='true' type='^{__CFWriteStream=}'/>
+  </function>
+  <function name='CFWriteStreamCreateWithBuffer'>
+    <function_arg type='^{__CFAllocator=}'/>
+    <function_arg type='*'/>
+    <function_arg type='l'/>
+    <function_retval already_retained='true' type='^{__CFWriteStream=}'/>
+  </function>
+  <function name='CFWriteStreamCreateWithFile'>
+    <function_arg type='^{__CFAllocator=}'/>
+    <function_arg type='^{__CFURL=}'/>
+    <function_retval already_retained='true' type='^{__CFWriteStream=}'/>
+  </function>
+  <function name='CFWriteStreamGetError'>
+    <function_arg type='^{__CFWriteStream=}'/>
+    <function_retval type='{?=ii}'/>
+  </function>
+  <function name='CFWriteStreamGetStatus'>
+    <function_arg type='^{__CFWriteStream=}'/>
+    <function_retval type='i'/>
+  </function>
+  <function name='CFWriteStreamGetTypeID'>
+    <function_retval type='L'/>
+  </function>
+  <function name='CFWriteStreamOpen'>
+    <function_arg type='^{__CFWriteStream=}'/>
+    <function_retval type='B'/>
+  </function>
+  <function name='CFWriteStreamScheduleWithRunLoop'>
+    <function_arg type='^{__CFWriteStream=}'/>
+    <function_arg type='^{__CFRunLoop=}'/>
+    <function_arg type='^{__CFString=}'/>
+  </function>
+  <function name='CFWriteStreamSetClient'>
+    <function_arg type='^{__CFWriteStream=}'/>
+    <function_arg type='L'/>
+    <function_arg type='^?'/>
+    <function_arg type='^{?=i^v^?^?^?}'/>
+    <function_retval type='B'/>
+  </function>
+  <function name='CFWriteStreamSetProperty'>
+    <function_arg type='^{__CFWriteStream=}'/>
+    <function_arg type='^{__CFString=}'/>
+    <function_arg type='^v'/>
+    <function_retval type='B'/>
+  </function>
+  <function name='CFWriteStreamUnscheduleFromRunLoop'>
+    <function_arg type='^{__CFWriteStream=}'/>
+    <function_arg type='^{__CFRunLoop=}'/>
+    <function_arg type='^{__CFString=}'/>
+  </function>
+  <function name='CFWriteStreamWrite'>
+    <function_arg type='^{__CFWriteStream=}'/>
+    <function_arg type='*'/>
+    <function_arg type='l'/>
+    <function_retval type='l'/>
+  </function>
+  <function name='CFXMLCreateStringByEscapingEntities'>
+    <function_arg type='^{__CFAllocator=}'/>
+    <function_arg type='^{__CFString=}'/>
+    <function_arg type='^{__CFDictionary=}'/>
+    <function_retval already_retained='true' type='^{__CFString=}'/>
+  </function>
+  <function name='CFXMLCreateStringByUnescapingEntities'>
+    <function_arg type='^{__CFAllocator=}'/>
+    <function_arg type='^{__CFString=}'/>
+    <function_arg type='^{__CFDictionary=}'/>
+    <function_retval already_retained='true' type='^{__CFString=}'/>
+  </function>
+  <function name='CFXMLNodeCreate'>
+    <function_arg type='^{__CFAllocator=}'/>
+    <function_arg type='i'/>
+    <function_arg type='^{__CFString=}'/>
+    <function_arg type='^v'/>
+    <function_arg type='l'/>
+    <function_retval already_retained='true' type='^{__CFXMLNode=}'/>
+  </function>
+  <function name='CFXMLNodeCreateCopy'>
+    <function_arg type='^{__CFAllocator=}'/>
+    <function_arg type='^{__CFXMLNode=}'/>
+    <function_retval already_retained='true' type='^{__CFXMLNode=}'/>
+  </function>
+  <function name='CFXMLNodeGetInfoPtr'>
+    <function_arg type='^{__CFXMLNode=}'/>
+    <function_retval type='^v'/>
+  </function>
+  <function name='CFXMLNodeGetString'>
+    <function_arg type='^{__CFXMLNode=}'/>
+    <function_retval type='^{__CFString=}'/>
+  </function>
+  <function name='CFXMLNodeGetTypeCode'>
+    <function_arg type='^{__CFXMLNode=}'/>
+    <function_retval type='i'/>
+  </function>
+  <function name='CFXMLNodeGetTypeID'>
+    <function_retval type='L'/>
+  </function>
+  <function name='CFXMLNodeGetVersion'>
+    <function_arg type='^{__CFXMLNode=}'/>
+    <function_retval type='l'/>
+  </function>
+  <function name='CFXMLParserAbort'>
+    <function_arg type='^{__CFXMLParser=}'/>
+    <function_arg type='i'/>
+    <function_arg type='^{__CFString=}'/>
+  </function>
+  <function name='CFXMLParserCopyErrorDescription'>
+    <function_arg type='^{__CFXMLParser=}'/>
+    <function_retval already_retained='true' type='^{__CFString=}'/>
+  </function>
+  <function name='CFXMLParserCreate'>
+    <function_arg type='^{__CFAllocator=}'/>
+    <function_arg type='^{__CFData=}'/>
+    <function_arg type='^{__CFURL=}'/>
+    <function_arg type='L'/>
+    <function_arg type='l'/>
+    <function_arg type='^{?=i^?^?^?^?^?}'/>
+    <function_arg type='^{?=i^v^?^?^?}'/>
+    <function_retval already_retained='true' type='^{__CFXMLParser=}'/>
+  </function>
+  <function name='CFXMLParserCreateWithDataFromURL'>
+    <function_arg type='^{__CFAllocator=}'/>
+    <function_arg type='^{__CFURL=}'/>
+    <function_arg type='L'/>
+    <function_arg type='l'/>
+    <function_arg type='^{?=i^?^?^?^?^?}'/>
+    <function_arg type='^{?=i^v^?^?^?}'/>
+    <function_retval already_retained='true' type='^{__CFXMLParser=}'/>
+  </function>
+  <function name='CFXMLParserGetCallBacks'>
+    <function_arg type='^{__CFXMLParser=}'/>
+    <function_arg type='^{?=i^?^?^?^?^?}'/>
+  </function>
+  <function name='CFXMLParserGetContext'>
+    <function_arg type='^{__CFXMLParser=}'/>
+    <function_arg type='^{?=i^v^?^?^?}'/>
+  </function>
+  <function name='CFXMLParserGetDocument'>
+    <function_arg type='^{__CFXMLParser=}'/>
+    <function_retval type='^v'/>
+  </function>
+  <function name='CFXMLParserGetLineNumber'>
+    <function_arg type='^{__CFXMLParser=}'/>
+    <function_retval type='l'/>
+  </function>
+  <function name='CFXMLParserGetLocation'>
+    <function_arg type='^{__CFXMLParser=}'/>
+    <function_retval type='l'/>
+  </function>
+  <function name='CFXMLParserGetSourceURL'>
+    <function_arg type='^{__CFXMLParser=}'/>
+    <function_retval type='^{__CFURL=}'/>
+  </function>
+  <function name='CFXMLParserGetStatusCode'>
+    <function_arg type='^{__CFXMLParser=}'/>
+    <function_retval type='i'/>
+  </function>
+  <function name='CFXMLParserGetTypeID'>
+    <function_retval type='L'/>
+  </function>
+  <function name='CFXMLParserParse'>
+    <function_arg type='^{__CFXMLParser=}'/>
+    <function_retval type='B'/>
+  </function>
+  <function name='CFXMLTreeCreateFromData'>
+    <function_arg type='^{__CFAllocator=}'/>
+    <function_arg type='^{__CFData=}'/>
+    <function_arg type='^{__CFURL=}'/>
+    <function_arg type='L'/>
+    <function_arg type='l'/>
+    <function_retval type='^{__CFTree=}'/>
+  </function>
+  <function name='CFXMLTreeCreateFromDataWithError'>
+    <function_arg type='^{__CFAllocator=}'/>
+    <function_arg type='^{__CFData=}'/>
+    <function_arg type='^{__CFURL=}'/>
+    <function_arg type='L'/>
+    <function_arg type='l'/>
+    <function_arg type='r^^{__CFDictionary}'/>
+    <function_retval type='^{__CFTree=}'/>
+  </function>
+  <function name='CFXMLTreeCreateWithDataFromURL'>
+    <function_arg type='^{__CFAllocator=}'/>
+    <function_arg type='^{__CFURL=}'/>
+    <function_arg type='L'/>
+    <function_arg type='l'/>
+    <function_retval type='^{__CFTree=}'/>
+  </function>
+  <function name='CFXMLTreeCreateWithNode'>
+    <function_arg type='^{__CFAllocator=}'/>
+    <function_arg type='^{__CFXMLNode=}'/>
+    <function_retval type='^{__CFTree=}'/>
+  </function>
+  <function name='CFXMLTreeCreateXMLData'>
+    <function_arg type='^{__CFAllocator=}'/>
+    <function_arg type='^{__CFTree=}'/>
+    <function_retval already_retained='true' type='^{__CFData=}'/>
+  </function>
+  <function name='CFXMLTreeGetNode'>
+    <function_arg type='^{__CFTree=}'/>
+    <function_retval type='^{__CFXMLNode=}'/>
+  </function>
+  <function name='__CFRangeMake'>
+    <function_arg type='l'/>
+    <function_arg type='l'/>
+    <function_retval type='{?=ii}'/>
+  </function>
+  <function name='__CFStringMakeConstantString'>
+    <function_arg type='*'/>
+    <function_retval type='^{__CFString=}'/>
+  </function>
+</signatures>

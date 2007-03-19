@@ -1,0 +1,19 @@
+{
+    IBClasses = (
+        {
+            CLASS = AppController; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {rubyCocoaVersion = id; rubyVersion = id; }; 
+            SUPERCLASS = NSObject; 
+        }, 
+        {CLASS = FirstResponder; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
+        {CLASS = GraphView; LANGUAGE = ObjC; SUPERCLASS = NSOpenGLView; }, 
+        {
+            CLASS = WiiRemocon; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {accView = id; }; 
+            SUPERCLASS = NSObject; 
+        }
+    ); 
+    IBVersion = 1; 
+}

@@ -1,0 +1,16 @@
+0000000045faa3f00000000000000135 7de3cac5080b094cb61389abc8ba4d9b ffffffffffffffffffffffffffffffff 1236 /Users/hisa/proj/rWiiRemote/src/build/rWiiRemote.build/Debug/rWiiRemote.build/Objects-normal/i386/main.o
+0000000045faa3f00000000000000135 d69e2cfa0fca8a7046bfe7d1df9fd1a9 ffffffffffffffffffffffffffffffff 1440 /Users/hisa/proj/rWiiRemote/src/build/rWiiRemote.build/Debug/rWiiRemote.build/Objects-normal/ppc/main.o
+5d884bedf1f8cd5d4d0253a01d3d34c7 c4b4f42825e992e8b279c58cfa77eff6 ffffffffffffffffffffffffffffffff 102 /Users/hisa/proj/rWiiRemote/src/build/Debug/rWiiRemote.app
+0000000045fa84c900000000000000ee 35456ced07d5f35b2a33c072eeba4e13 ffffffffffffffffffffffffffffffff 204 /Users/hisa/proj/rWiiRemote/src/build/Debug/rWiiRemote.app/Contents/Frameworks/WiiRemote.framework
+0000000045faa32700000000000000ee 3c2d355003dd6744d62921742c7bd131 ffffffffffffffffffffffffffffffff 204 /Users/hisa/proj/rWiiRemote/src/build/Debug/rWiiRemote.app/Contents/Frameworks/RubyCocoa.framework
+68593cf007ce723c08588448221dbdd4 8803d5edf4c3652532e79876ca2531df ffffffffffffffffffffffffffffffff 34376 /Users/hisa/proj/rWiiRemote/src/build/Debug/rWiiRemote.app/Contents/MacOS/rWiiRemote
+7de3cac54df1ad69b61389abc8b3ca97 a82a446f788316fd08b1b47c8452af96 ffffffffffffffffffffffffffffffff 13896 /Users/hisa/proj/rWiiRemote/src/build/rWiiRemote.build/Debug/rWiiRemote.build/Objects-normal/i386/rWiiRemote
+d69e2cfa4a302e5546bfe7d1df9656a4 6b0e9ea0788ce7fdf0455e4eb16a8e71 ffffffffffffffffffffffffffffffff 14504 /Users/hisa/proj/rWiiRemote/src/build/rWiiRemote.build/Debug/rWiiRemote.build/Objects-normal/ppc/rWiiRemote
+00000000000000000000000000000000 d8a4b64dcfe484997ba2ce9c1d23f526 ffffffffffffffffffffffffffffffff 3520 /Users/hisa/proj/rWiiRemote/src/build/Debug/rWiiRemote.app/Contents/Resources/GraphView.rb
+00000000000000000000000000000000 5cac57c3f21a601097c42180898b4a93 ffffffffffffffffffffffffffffffff 411 /Users/hisa/proj/rWiiRemote/src/build/Debug/rWiiRemote.app/Contents/Resources/AppController.rb
+00000000000000000000000000000000 679d2d37d006d31e293076457bdfabae ffffffffffffffffffffffffffffffff 4112 /Users/hisa/proj/rWiiRemote/src/build/Debug/rWiiRemote.app/Contents/Resources/WiiRemocon.rb
+00000000000000000000000000000000 aa3ad0f6f1fbb62b54002a9e104efae1 ffffffffffffffffffffffffffffffff 267 /Users/hisa/proj/rWiiRemote/src/build/Debug/rWiiRemote.app/Contents/Resources/rb_main.rb
+00000000000000000000000000000000 b7b9e75e6beec79210a79f0a228f6f67 ffffffffffffffffffffffffffffffff 432 /Users/hisa/proj/rWiiRemote/src/build/Debug/rWiiRemote.app/Contents/Resources/English.lproj/InfoPlist.strings
+00000000000000000000000000000000 4aac005c71102f9b0a568255ea72a673 ffffffffffffffffffffffffffffffff 170 /Users/hisa/proj/rWiiRemote/src/build/Debug/rWiiRemote.app/Contents/Resources/English.lproj/MainMenu.nib
+0000000045950c4f0000000000000351 7cc0e2d68de3d641ebb60d017968f18e ffffffffffffffffffffffffffffffff 8 /Users/hisa/proj/rWiiRemote/src/build/Debug/rWiiRemote.app/Contents/PkgInfo
+0000000045950c4f0000000000000351 7cc0e2d68de3d641ebb60d017968f18e ffffffffffffffffffffffffffffffff 801 /Users/hisa/proj/rWiiRemote/src/build/Debug/rWiiRemote.app/Contents/Info.plist
