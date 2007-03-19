@@ -5,8 +5,6 @@ require 'osx/cocoa'
 
 class TMDefaultsController < OSX::NSUserDefaultsController
 
-  ns_overrides 'initWithCoder:', 'valueForKeyPath:'
-
   # dependency set to NSUserDefaults
   OSX::NSUserDefaults.instance_eval <<-KVC_DEPENDENCY
     self.extend OSX::NSKVCBehaviorAttachment
@@ -17,12 +15,14 @@ class TMDefaultsController < OSX::NSUserDefaultsController
 
   def self.sharedUserDefaultsController
     return @@shared if @@shared
-    @@shared = self.alloc.initWithDefaults(nil,
-      :initialValues, 
-      {'textColor' => archive(OSX::NSColor.blackColor),
-       'textFontName' => 'HiraKakuPro-W6',
-       'backgroundColor' => archive(OSX::NSColor.whiteColor),
-       'keepBottomSpace' => 0})
+    @@shared = self.alloc.
+      objc_send( :initWithDefaults, nil,
+                 :initialValues, {
+                   'textColor' => archive(OSX::NSColor.blackColor),
+                   'textFontName' => 'HiraKakuPro-W6',
+                   'backgroundColor' => archive(OSX::NSColor.whiteColor),
+                   'keepBottomSpace' => 0
+                 } )
   end
 
   def initWithCoder(coder)
@@ -78,7 +78,7 @@ class TMDefaultsController < OSX::NSUserDefaultsController
   def display_fontname(key)
     font_key = key.to_s.sub(/\Adisplay/, '')
     font_key = font_key[0..0].downcase + font_key[1..-1]
-    font = OSX::NSFont.fontWithName(self[font_key], :size, 12.0)
+    font = OSX::NSFont.fontWithName_size(self[font_key], 12.0)
     if font
       font.displayName
     else
