@@ -1,3 +1,14 @@
+2007-03-19  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* framework/src/objc/libffi.m,
+	  framework/src/objc/ocdata_conv.m,
+	  tests/tc_passbyref.rb:
+	Added support for getting C_ARY_B type arguments by reference.
+	Added a test case.
+
+	* framework/bridge-support-exceptions/AppKit.xml:
+	Added missing exception data.
+
 2007-03-16  Fujimoto Hisa  <hisa@fobj.com>
 
 	* framework/src/ruby/osx/objc/oc_import.rb, framework/src/objc/mdl_osxobjc.m, framework/src/objc/RBRuntime.m:

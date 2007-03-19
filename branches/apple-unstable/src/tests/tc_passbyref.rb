@@ -119,6 +119,17 @@ class TC_PassByRef < Test::Unit::TestCase
         assert_equal(ary.last, types.length) 
     end
 
+    def test_out_c_array_length_pointer2
+        v = OSX::NSView.alloc.initWithFrame(OSX::NSZeroRect)
+        ary = v.getRectsExposedDuringLiveResize_count_()
+        assert_kind_of(Array, ary)
+        assert_equal(2, ary.length)
+        assert_equal(1, ary.last)
+        assert_kind_of(Array, ary.first)
+        assert_equal(1, ary.first.size)
+        assert_equal(OSX::NSZeroRect, ary.first.first)
+    end
+
     # TODO:
     #def test_null_terminated
     #end

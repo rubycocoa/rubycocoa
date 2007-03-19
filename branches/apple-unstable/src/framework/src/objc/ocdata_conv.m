@@ -74,6 +74,46 @@ void remove_from_rb2oc_cache(VALUE rbobj)
   CACHE_UNLOCK(&rb2ocCacheLock);
 }
 
+static BOOL
+cary_to_rbary (void *data, char *octype_str, VALUE *result)
+{
+  long i, count, size;
+  char *p, backup;
+  VALUE ary;
+
+  octype_str++;
+  p = octype_str;
+  while (isdigit(*octype_str)) 
+    octype_str++;
+
+  // first, get the number of entries  
+  backup = *octype_str;
+  *octype_str = '\0';
+  count = strtol(p, (char **)NULL, 10);
+  *octype_str = backup;
+
+  // second, remove the trailing ']'
+  size = strlen(octype_str);
+  *(octype_str + size - 1) = '\0';
+  size = ocdata_size(octype_str);
+
+  // third, convert every element into a new array
+  ary = rb_ary_new();
+  for (i = 0; i < count; i++) {
+    VALUE entry;
+
+    if (!ocdata_to_rbobj(Qnil, octype_str, *((void **)data + (i * size)), &entry, NO)) {
+      *result = Qnil;
+      return NO;
+    }
+
+    rb_ary_push(ary, entry);
+  }
+
+  *result = ary;
+  return YES;
+}
+
 size_t
 ocdata_size(const char* octype_str)
 {
@@ -243,6 +283,10 @@ ocdata_to_rbobj (VALUE context_obj, const char *octype_str, const void *ocdata, 
         void *cptr = *(void**)ocdata;
         rbval = cptr == NULL ? Qnil : objcptr_s_new_with_cptr (cptr, octype_str);
       }
+      break;
+  
+    case _C_ARY_B:
+      f_success = cary_to_rbary(*(void **)ocdata, (char *)octype_str, &rbval); 
       break;
 
     case _C_BOOL:
