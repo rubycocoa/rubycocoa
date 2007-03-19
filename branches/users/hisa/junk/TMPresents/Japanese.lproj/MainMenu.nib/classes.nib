@@ -1,0 +1,30 @@
+{
+    IBClasses = (
+        {
+            ACTIONS = {
+                goToFirst = id; 
+                goToLast = id; 
+                goToNext = id; 
+                goToPrev = id; 
+                reloadDocument = id; 
+                startFullScreen = id; 
+                stopFullScreen = id; 
+            }; 
+            CLASS = FirstResponder; 
+            LANGUAGE = ObjC; 
+            SUPERCLASS = NSObject; 
+        }, 
+        {
+            ACTIONS = {showFontPanel = id; }; 
+            CLASS = TMAppDelegate; 
+            LANGUAGE = ObjC; 
+            SUPERCLASS = NSObject; 
+        }, 
+        {
+            CLASS = TMDefaultsController; 
+            LANGUAGE = ObjC; 
+            SUPERCLASS = NSUserDefaultsController; 
+        }
+    ); 
+    IBVersion = 1; 
+}
