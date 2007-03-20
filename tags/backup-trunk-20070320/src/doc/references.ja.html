@@ -1,0 +1,350 @@
+<?xml version='1.0' encoding='EUC-JP'?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html lang='ja' xml:lang='ja' xmlns='http://www.w3.org/1999/xhtml'>
+
+<head>
+  <title>RubyCocoa - RubyCocoaリファレンス</title>
+  <meta content='text/html; charset=euc-jp' http-equiv='Content-type'/>
+  <meta name='Content-Language' content='ja'/>
+  <link href='rubycocoasite.css' rel='stylesheet' type='text/css'/>
+</head>
+
+<body>
+
+<!-- main table -->
+<table cellspacing='0' cellpadding='0' width='100%'>
+<colgroup><col width='100%'/></colgroup>
+
+<!-- body/header - title -->
+<tr class='site-title'><td width='100%'>
+RubyCocoa<font size='-1'> - A Ruby/Objective-C Bridge for Mac OS X with Cocoa</font>
+</td></tr>
+
+<!-- body/header - menubar -->
+<tr class='site-menubar'><td width='100%'>
+<table cellspacing='0' cellpadding='2' width='100%'>
+  <colgroup><col width='80%'/><col width='20%'/></colgroup>
+  <tr id='site-menubar'>
+  <td class='site-menubar' align='left' width='80%'>
+    <a href='index.ja.html'>RubyCocoaとは？</a> | <a href='getting.ja.html'>ダウンロード</a> | <a href='build.ja.html'>ソースから構築</a> | <a href='trysamples.ja.html'>サンプルを試す</a> | <a href='programming.ja.html'>プログラミング</a> | <a href='references.ja.html'>リファレンス</a> | <a href='changes.ja.html'>変更点</a> | <a href='faq.ja.html'>FAQ</a> | <a href='links.ja.html'>リンク集</a>
+  </td>
+  <td class='site-menubar' align='right' width='20%'>
+    <a href='index.en.html'>[英語]</a> [日本語]
+  </td>
+</tr>
+</table>
+</td></tr>
+
+<!-- body/main -->
+<tr><td width='100%'>
+<table cellspacing='0' cellpadding='12' width='100%'>
+  <colgroup><col width='80%'/><col width='20%'/></colgroup>
+  <tr>
+
+<!-- body/main/contents -->
+<td class='body-contents' id='body-contents' valign='top'>
+<h1><a name='label-0' id='label-0'>RubyCocoaリファレンス</a></h1><!-- RDLabel: "RubyCocoaリファレンス" -->
+<h2><a name='label-1' id='label-1'>OSX::ObjcIDクラス</a></h2><!-- RDLabel: "OSX::ObjcIDクラス" -->
+<p>Objective-Cオブジェクトのラッパー。ある一つのObjective-Cオブジェクトの
+オーナーとなりそれを包みます。通常、このクラスの存在を意識する必要はあ
+りません。</p>
+<h3><a name='label-2' id='label-2'>OSX::ObjcIDクラスのインスタンスメソッド</a></h3><!-- RDLabel: "OSX::ObjcIDクラスのインスタンスメソッド" -->
+<dl>
+<dt><a name='label-3' id='label-3'><code>OSX::ObjcID#inspect</code></a></dt><!-- RDLabel: "OSX::ObjcID#inspect" -->
+<dd>
+オブジェクトの情報を表す文字列を返します。</dd>
+<dt><a name='label-4' id='label-4'><code>OSX::ObjcID#__ocid__</code></a></dt><!-- RDLabel: "OSX::ObjcID#__ocid__" -->
+<dd>
+包んでいるObjective-Cオブジェクトのidの値を整数で返します。</dd>
+<dt><a name='label-5' id='label-5'><code>OSX::ObjcID#__inspect__</code></a></dt><!-- RDLabel: "OSX::ObjcID#__inspect__" -->
+<dd>
+OSX::ObjcID#inspectと同じです。</dd>
+</dl>
+<h2><a name='label-6' id='label-6'>OSX::OCObjWrapperモジュール</a></h2><!-- RDLabel: "OSX::OCObjWrapperモジュール" -->
+<p>Objective-Cオブジェクトに対してメッセージ送信(メソッド呼び出し)を行う
+機能を実装したミックスインモジュールです。RubyCocoaでは、Cocoaオブジェ
+クトにこのモジュールを装着しているために、Cocoaオブジェクトに対するメッ
+セージ送信が可能となっています。</p>
+<p>このモジュールを装着するオブジェクトは、操作の対象となるObjective-Cオ
+ブジェクトを特定するために、次のいずれかの条件を満たしている必要があり
+ます。</p>
+<ul>
+<li><a href='#label-1'>OSX::ObjcIDクラス</a>のインスタンスである</li>
+<li><a href='#label-4'>OSX::ObjcID#__ocid__</a>と同じ仕様のメソッドを実装している</li>
+</ul>
+<p>通常、このモジュールの存在自体を意識する必要はありませんが、メッセージ
+送信のメカニズムなどRubyCocoaの動きを理解する上では最も重要な部分でも
+あります。</p>
+<h3><a name='label-7' id='label-7'>Objective-Cオブジェクトへメッセージを送信する仕組み</a></h3><!-- RDLabel: "Objective-Cオブジェクトへメッセージを送信する仕組み" -->
+<p>OSX::OCObjWrapperモジュールはオブジェクトが処理できなかったメソッド呼
+び出しが<var>method_missing</var>に回って来る仕組みを利用して、操作対象の
+Objective-Cオブジェクトに対してメッセージを送信しています。</p>
+<h3><a name='label-8' id='label-8'>Rubyメソッド名からObjective-Cメッセージセレクタへの変換</a></h3><!-- RDLabel: "Rubyメソッド名からObjective-Cメッセージセレクタへの変換" -->
+<p>Rubyの世界でのメッセージ送信(メソッド呼び出し)をObjective-Cの世界での
+メッセージ送信にマップするためには、Rubyのメソッド名をObjective-Cのメッ
+セージセレクタに変換する必要があります。</p>
+<p>「メッセージセレクタの':'を'_'に置き換えたものがRubyでのメソッド名」</p>
+<p>これが変換の基本ルールです。例えば、メッセージセレクタ 
+'doSomething:with:with:' のメッセージを送信する場合、Rubyでのメソッド
+名は 'doSomething_with_with_' となります。</p>
+<p>実際には基本ルールの他に、見た目を良くするため以下に示すような表現のバ
+リエーションが存在します。</p>
+<ol>
+<li>末尾の'_'を省略する</li>
+<li>引数の中にキーワードを混ぜる</li>
+</ol>
+<p>これだけでは理解できないと思いますが、説明するのも難しいので具体例で示
+します。</p>
+<pre>[rcv doSomething: a with: b with: c]      // Objective-Cの場合
+rcv.doSomething_with_with_ (a, b, c)      # 基本ルール
+rcv.doSomething_with_with (a, b, c)       # バリエーション(1)
+rcv.doSomething (a, :with, b, :with, c)   # バリエーション(2)</pre>
+<h3><a name='label-9' id='label-9'>メソッド名接頭辞 "oc_"</a></h3><!-- RDLabel: "メソッド名接頭辞 "oc_"" -->
+<p>名前が"oc_"で始まるメソッドは直接、操作対象のObjective-Cオブジェクトへ
+メッセージ送信されます。主として、Ruby側とObjective-C側の両方に同名の
+メソッドが存在する場合に使います。</p>
+<h3><a name='label-10' id='label-10'>メソッド名接尾辞 "?"</a></h3><!-- RDLabel: "メソッド名接尾辞 "?"" -->
+<p>名前の最後に "?" をつけて送信したメッセージは、返ってきた値が0であるか
+調べて真偽値を返します。これは真偽値を返すメソッド呼び出しのときに使い
+ます。</p>
+<p>Objective-Cのメソッドは真偽値を単なる数値(0なら偽、その他は真の意)で返
+してくるので、Rubyではその値の意味が数値なのかあるいは真偽値なのかを判
+断できません。さらにRubyでは0も1も真のように振る舞うので、そのまま使う
+と論理が崩れてしまいます。したがって真偽値を返すメソッドを呼び出すとき
+には "?"接尾辞を使う必要があります。</p>
+<h3><a name='label-11' id='label-11'>OSX::OCObjWrapperモジュールのインスタンスメソッド</a></h3><!-- RDLabel: "OSX::OCObjWrapperモジュールのインスタンスメソッド" -->
+<dl>
+<dt><a name='label-12' id='label-12'><code>OSX::OCObjWrapper#to_s</code></a></dt><!-- RDLabel: "OSX::OCObjWrapper#to_s" -->
+<dd>
+操作対象のObjective-CオブジェクトのRuby文字列による表現を返しま
+す。</dd>
+<dt><a name='label-13' id='label-13'><code>OSX::OCObjWrapper#to_a</code></a></dt><!-- RDLabel: "OSX::OCObjWrapper#to_a" -->
+<dd>
+操作対象のObjective-CオブジェクトのRuby配列による表現を返します。</dd>
+<dt><a name='label-14' id='label-14'><code>OSX::OCObjWrapper#to_i</code></a></dt><!-- RDLabel: "OSX::OCObjWrapper#to_i" -->
+<dd>
+操作対象のObjective-Cオブジェクトの整数値による表現を返します。</dd>
+<dt><a name='label-15' id='label-15'><code>OSX::OCObjWrapper#to_f</code></a></dt><!-- RDLabel: "OSX::OCObjWrapper#to_f" -->
+<dd>
+操作対象のObjective-Cオブジェクトの実数値による表現を返します。</dd>
+<dt><a name='label-16' id='label-16'><code>OSX::OCObjWrapper#objc_methods(<var>inherit</var>=<var>true</var>)</code></a></dt><!-- RDLabel: "OSX::OCObjWrapper#objc_methods" -->
+<dt><a name='label-17' id='label-17'><code>OSX::OCObjWrapper#objc_class_methods(<var>inherit</var>=<var>true</var>)</code></a></dt><!-- RDLabel: "OSX::OCObjWrapper#objc_class_methods" -->
+<dt><a name='label-18' id='label-18'><code>OSX::OCObjWrapper#objc_instance_methods(<var>inherit</var>=<var>true</var>)</code></a></dt><!-- RDLabel: "OSX::OCObjWrapper#objc_instance_methods" -->
+<dd>
+操作対象のObjective-Cオブジェクトのメソッド名の一覧を返します。</dd>
+<dt><a name='label-19' id='label-19'><code>OSX::OCObjWrapper#objc_method_type (<var>name</var>)</code></a></dt><!-- RDLabel: "OSX::OCObjWrapper#objc_method_type" -->
+<dt><a name='label-20' id='label-20'><code>OSX::OCObjWrapper#objc_class_method_type (<var>name</var>)</code></a></dt><!-- RDLabel: "OSX::OCObjWrapper#objc_class_method_type" -->
+<dt><a name='label-21' id='label-21'><code>OSX::OCObjWrapper#objc_instance_method_type (<var>name</var>)</code></a></dt><!-- RDLabel: "OSX::OCObjWrapper#objc_instance_method_type" -->
+<dd>
+操作対象のObjective-Cオブジェクトのメソッドの型を返します。</dd>
+<dt><a name='label-22' id='label-22'><code>OSX::OCObjWrapper#ocm_responds? (<var>name</var>)</code></a></dt><!-- RDLabel: "OSX::OCObjWrapper#ocm_responds?" -->
+<dd>
+操作対象のObjective-Cオブジェクトが、引数<var>name</var>で指定された
+メソッドに応答可能かどうかを示す真偽値を返します。<var>name</var>はメッ
+セージセレクタそのものか基本ルールに従ったものでなければなりませ
+ん。通常、このメソッドを使う必要はありません。</dd>
+<dt><a name='label-23' id='label-23'><code>OSX::OCObjWrapper#ocm_send (<var>name</var> ...)</code></a></dt><!-- RDLabel: "OSX::OCObjWrapper#ocm_send" -->
+<dd>
+操作対象のObjective-Cオブジェクトに対して、引数<var>name</var>で指定
+されたメソッドを残りの引数とともに送信します。<var>name</var>はメッセー
+ジセレクタそのものか基本ルールに従ったものでなければなりません。
+通常、このメソッドを使う必要はありません。</dd>
+</dl>
+<h2><a name='label-24' id='label-24'>OSX::OCObjectクラス</a></h2><!-- RDLabel: "OSX::OCObjectクラス" -->
+<p>汎用のObjective-Cオブジェクトラッパー。OSXモジュール以下に定義されてい
+るどのCocoaクラスにも属さないObjective-Cオブジェクトは、このクラスのイ
+ンスタンスとして生成されます。通常、このクラスのインスタンスを明示的に
+生成したり、派生クラスを定義する必要はありません。</p>
+<h3><a name='label-25' id='label-25'>スーパークラス</a></h3><!-- RDLabel: "スーパークラス" -->
+<p><a href='#label-1'>OSX::ObjcIDクラス</a></p>
+<h3><a name='label-26' id='label-26'>インクルードしているモジュール</a></h3><!-- RDLabel: "インクルードしているモジュール" -->
+<p><a href='#label-6'>OSX::OCObjWrapperモジュール</a></p>
+<h2><a name='label-27' id='label-27'>Cocoaクラス</a></h2><!-- RDLabel: "Cocoaクラス" -->
+<p><var>NSObject, NSString, NSApplication</var>など全てのCocoaクラスは、
+<var>OSX::NSObject, OSX::NSString, OSX::NSApplication</var> のようにOSXモ
+ジュールに属するRubyのクラスとして定義されています。</p>
+<p>Cocoaクラス自体にもCocoaオブジェクトとして<!-- Reference, RDLabel "OSX::OCObjWrapperモジュー
+ル" doesn't exist --><em class='label-not-found'>OSX::OCObjWrapperモジュー
+ル</em><!-- Reference end -->が装着されています。</p>
+<h3><a name='label-28' id='label-28'>インクルードしているモジュール</a></h3><!-- RDLabel: "インクルードしているモジュール" -->
+<p><a href='#label-6'>OSX::OCObjWrapperモジュール</a></p>
+<h3><a name='label-29' id='label-29'>装着しているモジュール</a></h3><!-- RDLabel: "装着しているモジュール" -->
+<p><a href='#label-6'>OSX::OCObjWrapperモジュール</a></p>
+<h3><a name='label-30' id='label-30'>Cocoaクラスのクラスメソッド</a></h3><!-- RDLabel: "Cocoaクラスのクラスメソッド" -->
+<dl>
+<dt><a name='label-31' id='label-31'><code>Cocoaクラス.__ocid__</code></a></dt><!-- RDLabel: "Cocoaクラス.__ocid__" -->
+<dd>
+Cocoaクラスオブジェクトのidの値を整数で返します。</dd>
+</dl>
+<h2><a name='label-32' id='label-32'>Cocoa派生クラス</a></h2><!-- RDLabel: "Cocoa派生クラス" -->
+<p>Cocoaクラスの派生クラス。</p>
+<h3><a name='label-33' id='label-33'>Cocoa派生クラスのクラスメソッド</a></h3><!-- RDLabel: "Cocoa派生クラスのクラスメソッド" -->
+<dl>
+<dt><a name='label-34' id='label-34'><code>Cocoa派生クラス.ns_outlets (...)</code></a></dt><!-- RDLabel: "Cocoa派生クラス.ns_outlets" -->
+<dd>
+アウトレットを宣言します。実際には<var>attr_writer</var>を呼んでいる
+だけです。</dd>
+<dt><a name='label-35' id='label-35'><code>Cocoa派生クラス.ib_outlets (...)</code></a></dt><!-- RDLabel: "Cocoa派生クラス.ib_outlets" -->
+<dd>
+ns_outlets の別名</dd>
+</dl>
+<h3><a name='label-36' id='label-36'>インスタンスメソッド接頭辞 "super_"</a></h3><!-- RDLabel: "インスタンスメソッド接頭辞 "super_"" -->
+<p>オーバーライドしたメソッドに関して、スーパークラスでの実装を使いたい場合には 
+"super_" を付けたメソッド名で呼び出すことができます。</p>
+<pre>def drawRect (frame)
+  super_drawRect (frame)   # invoke SuperClass#drawRect
+end</pre>
+<h2><a name='label-37' id='label-37'>OSX::OCExceptionクラス</a></h2><!-- RDLabel: "OSX::OCExceptionクラス" -->
+<p>Objective-Cの世界で、Objective-Cオブジェクトへのメソッド呼び出しによっ
+て例外<var>NSException</var>が発生した場合、このクラスの例外が発生します。</p>
+<h3><a name='label-38' id='label-38'>OSX::OCExceptionクラスのインスタンスメソッド</a></h3><!-- RDLabel: "OSX::OCExceptionクラスのインスタンスメソッド" -->
+<dl>
+<dt><a name='label-39' id='label-39'><code>OSX::OCException#name</code></a></dt><!-- RDLabel: "OSX::OCException#name" -->
+<dd>
+例外名(NSException#name)を返します。</dd>
+<dt><a name='label-40' id='label-40'><code>OSX::OCException#reason</code></a></dt><!-- RDLabel: "OSX::OCException#reason" -->
+<dd>
+例外の理由文字列(NSException#reason)を返します。</dd>
+<dt><a name='label-41' id='label-41'><code>OSX::OCException#userInfo</code></a></dt><!-- RDLabel: "OSX::OCException#userInfo" -->
+<dd>
+ユーザ情報(NSException#userInfo)を返します。</dd>
+<dt><a name='label-42' id='label-42'><code>OSX::OCException#nsexception</code></a></dt><!-- RDLabel: "OSX::OCException#nsexception" -->
+<dd>
+NSExceptionを返します。</dd>
+</dl>
+<h2><a name='label-43' id='label-43'>OSX::NSPointクラス</a></h2><!-- RDLabel: "OSX::NSPointクラス" -->
+<p>Foundationフレームワークで定義されているデータ型<var>NSPoint</var>をRuby世
+界で扱うためのクラスです。</p>
+<h3><a name='label-44' id='label-44'>OSX::NSPointクラスのクラスメソッド</a></h3><!-- RDLabel: "OSX::NSPointクラスのクラスメソッド" -->
+<dl>
+<dt><a name='label-45' id='label-45'><code>OSX::NSPoint.new(<var>x</var>,<var>y</var>)</code></a></dt><!-- RDLabel: "OSX::NSPoint.new" -->
+</dl>
+<h3><a name='label-46' id='label-46'>OSX::NSPointクラスのインスタンスメソッド</a></h3><!-- RDLabel: "OSX::NSPointクラスのインスタンスメソッド" -->
+<dl>
+<dt><a name='label-47' id='label-47'><code>OSX::NSPoint#x</code></a></dt><!-- RDLabel: "OSX::NSPoint#x" -->
+<dt><a name='label-48' id='label-48'><code>OSX::NSPoint#y</code></a></dt><!-- RDLabel: "OSX::NSPoint#y" -->
+<dt><a name='label-49' id='label-49'><code>OSX::NSPoint#x= (<var>val</var>)</code></a></dt><!-- RDLabel: "OSX::NSPoint#x=" -->
+<dt><a name='label-50' id='label-50'><code>OSX::NSPoint#y= (<var>val</var>)</code></a></dt><!-- RDLabel: "OSX::NSPoint#y=" -->
+<dt><a name='label-51' id='label-51'><code>OSX::NSPoint#to_a</code></a></dt><!-- RDLabel: "OSX::NSPoint#to_a" -->
+<dd>
+配列<var>[x, y]</var>を返します。</dd>
+</dl>
+<h2><a name='label-52' id='label-52'>OSX::NSSizeクラス</a></h2><!-- RDLabel: "OSX::NSSizeクラス" -->
+<p>Foundationフレームワークで定義されているデータ型<var>NSSize</var>をRuby世界
+で扱うためのクラスです。</p>
+<h3><a name='label-53' id='label-53'>OSX::NSSizeクラスのクラスメソッド</a></h3><!-- RDLabel: "OSX::NSSizeクラスのクラスメソッド" -->
+<dl>
+<dt><a name='label-54' id='label-54'><code>OSX::NSSize.new(<var>width</var>, <var>height</var>)</code></a></dt><!-- RDLabel: "OSX::NSSize.new" -->
+</dl>
+<h3><a name='label-55' id='label-55'>OSX::NSSizeクラスのインスタンスメソッド</a></h3><!-- RDLabel: "OSX::NSSizeクラスのインスタンスメソッド" -->
+<dl>
+<dt><a name='label-56' id='label-56'><code>OSX::NSSize#width</code></a></dt><!-- RDLabel: "OSX::NSSize#width" -->
+<dt><a name='label-57' id='label-57'><code>OSX::NSSize#height</code></a></dt><!-- RDLabel: "OSX::NSSize#height" -->
+<dt><a name='label-58' id='label-58'><code>OSX::NSSize#width= (<var>val</var>)</code></a></dt><!-- RDLabel: "OSX::NSSize#width=" -->
+<dt><a name='label-59' id='label-59'><code>OSX::NSSize#height= (<var>val</var>)</code></a></dt><!-- RDLabel: "OSX::NSSize#height=" -->
+<dt><a name='label-60' id='label-60'><code>OSX::NSSize#to_a</code></a></dt><!-- RDLabel: "OSX::NSSize#to_a" -->
+<dd>
+配列<var>[width, height]</var>を返します。</dd>
+</dl>
+<h2><a name='label-61' id='label-61'>OSX::NSRectクラス</a></h2><!-- RDLabel: "OSX::NSRectクラス" -->
+<p>Foundationフレームワークで定義されているデータ型<var>NSRect</var>をRuby世界
+で扱うためのクラスです。</p>
+<h3><a name='label-62' id='label-62'>OSX::NSRectクラスのクラスメソッド</a></h3><!-- RDLabel: "OSX::NSRectクラスのクラスメソッド" -->
+<dl>
+<dt><a name='label-63' id='label-63'><code>OSX::NSRect.new(<var>origin</var>, <var>size</var>)</code></a></dt><!-- RDLabel: "OSX::NSRect.new" -->
+<dt><a name='label-64' id='label-64'><code>OSX::NSRect.new(<var>x</var>, <var>y</var>, <var>width</var>, <var>height</var>)</code></a></dt><!-- RDLabel: "OSX::NSRect.new" -->
+</dl>
+<h3><a name='label-65' id='label-65'>OSX::NSRectクラスのインスタンスメソッド</a></h3><!-- RDLabel: "OSX::NSRectクラスのインスタンスメソッド" -->
+<dl>
+<dt><a name='label-66' id='label-66'><code>OSX::NSRect#origin</code></a></dt><!-- RDLabel: "OSX::NSRect#origin" -->
+<dt><a name='label-67' id='label-67'><code>OSX::NSRect#size</code></a></dt><!-- RDLabel: "OSX::NSRect#size" -->
+<dt><a name='label-68' id='label-68'><code>OSX::NSRect#origin= (<var>val</var>)</code></a></dt><!-- RDLabel: "OSX::NSRect#origin=" -->
+<dt><a name='label-69' id='label-69'><code>OSX::NSRect#size= (<var>val</var>)</code></a></dt><!-- RDLabel: "OSX::NSRect#size=" -->
+<dt><a name='label-70' id='label-70'><code>OSX::NSRect#to_a</code></a></dt><!-- RDLabel: "OSX::NSRect#to_a" -->
+<dd>
+配列<var>[[x, y], [width, height]]</var>を返します。</dd>
+</dl>
+<h2><a name='label-71' id='label-71'>OSX::NSRangeクラス</a></h2><!-- RDLabel: "OSX::NSRangeクラス" -->
+<p>Foundationフレームワークで定義されているデータ型<var>NSRange</var>をRuby世
+界で扱うためのクラスです。</p>
+<h3><a name='label-72' id='label-72'>OSX::NSRangeクラスのクラスメソッド</a></h3><!-- RDLabel: "OSX::NSRangeクラスのクラスメソッド" -->
+<dl>
+<dt><a name='label-73' id='label-73'><code>OSX::NSRange.new(<var>range</var>)</code></a></dt><!-- RDLabel: "OSX::NSRange.new" -->
+<dt><a name='label-74' id='label-74'><code>OSX::NSRange.new(<var>location</var>, <var>length</var>)</code></a></dt><!-- RDLabel: "OSX::NSRange.new" -->
+</dl>
+<h3><a name='label-75' id='label-75'>OSX::NSRangeクラスのインスタンスメソッド</a></h3><!-- RDLabel: "OSX::NSRangeクラスのインスタンスメソッド" -->
+<dl>
+<dt><a name='label-76' id='label-76'><code>OSX::NSRect#location</code></a></dt><!-- RDLabel: "OSX::NSRect#location" -->
+<dt><a name='label-77' id='label-77'><code>OSX::NSRect#length</code></a></dt><!-- RDLabel: "OSX::NSRect#length" -->
+<dt><a name='label-78' id='label-78'><code>OSX::NSRect#location= (<var>val</var>)</code></a></dt><!-- RDLabel: "OSX::NSRect#location=" -->
+<dt><a name='label-79' id='label-79'><code>OSX::NSRect#length= (<var>val</var>)</code></a></dt><!-- RDLabel: "OSX::NSRect#length=" -->
+<dt><a name='label-80' id='label-80'><code>OSX::NSRect#to_a</code></a></dt><!-- RDLabel: "OSX::NSRect#to_a" -->
+<dd>
+<var>[ location, length ]</var>を返します。</dd>
+<dt><a name='label-81' id='label-81'><code>OSX::NSRect#to_range</code></a></dt><!-- RDLabel: "OSX::NSRect#to_range" -->
+<dd>
+RubyのRangeオブジェクトを返します。</dd>
+</dl>
+<p>$Date$
+$Revision$</p>
+
+</td>
+
+<!-- body/main/sidebar -->
+<td class='body-sidebar' valign='top'>
+
+<!-- body/main/sidebar/news -->
+<div id='sidebar-news'>
+</div>
+
+<!-- body/main/sidebar/contents -->
+<div id='sidebar-contents'>
+  <h2 class='body-sidebar'>コンテンツ</h2>
+  <ul class='body-sidebar'>
+    <li><a href='index.ja.html'>RubyCocoaとは？</a></li>
+    <li><a href='getting.ja.html'>ダウンロード</a></li>
+    <li><a href='build.ja.html'>ソースから構築</a></li>
+    <li><a href='trysamples.ja.html'>サンプルを試す</a></li>
+    <li><a href='programming.ja.html'>プログラミング</a></li>
+    <li><a href='references.ja.html'>リファレンス</a></li>
+    <li><a href='changes.ja.html'>変更点</a></li>
+    <li><a href='changelog.html'>変更ログ</a></li>
+    <li><a href='faq.ja.html'>FAQ</a></li>
+    <li><a href='news.ja.html'>ニュース</a></li>
+    <li><a href='links.ja.html'>関連リンク集</a></li>
+  </ul>
+</div>
+
+<!-- body/main/sidebar/links -->
+<div id='sidebar-links'>
+  <h2 class='body-sidebar'><a href='links.ja.html'>リンク</a></h2>
+  <ul class='body-sidebar'>
+    <li><a href='http://rubycocoa.sourceforge.net/'>RubyCocoa</a></li>
+    <li><a href='http://www.fobj.com/rubyaeosa/'>RubyAEOSA</a></li>
+    <li><a href='http://www.freeml.com/info/rubycocoa@freeml.com'>メーリングリスト (日本語)</a></li>
+    <li><a href='http://sourceforge.net/mail/?group_id=44114'>メーリングリスト (英語)</a></li>
+    <li><a href='http://sourceforge.net/projects/rubycocoa/'>RubyCocoaプロジェクト</a></li>
+    <li><a href='http://rubycocoa.sourceforge.net/w.ja'>RubyCocoa Wiki (日本語)</a></li>
+    <li><a href='http://rubycocoa.sourceforge.net/w.en'>RubyCocoa Wiki (英語)</a></li>
+    <li><a href='http://www.mouseup.net/rubycocoa/calc_app1.html'>チュートリアル</a></li>
+  </ul>
+</div>
+
+</td> <!-- end of body/main/sidebar -->
+
+</tr></table></td></tr> <!-- end of body/main -->
+
+<!-- body/footer -->
+<tr class='body-footer'><td width='100%'>
+<table cellspacing='4' cellpadding='0' width='100%'>
+  <tr>
+    <td align='left'>
+      <a href='http://sourceforge.net'>
+	<img src='http://sourceforge.net/sflogo.php?group_id=44114&amp;type=4' border='0' height='37' alt='SourceForge.net Logo' width='125'/>
+	</a>
+      </td>
+  </tr>
+</table>
+</td></tr>
+
+</table> <!-- end of main table -->
+</body>
+</html>
