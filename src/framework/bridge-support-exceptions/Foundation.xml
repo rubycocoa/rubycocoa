@@ -1,0 +1,375 @@
+<?xml version='1.0'?>
+<signatures>
+  <ignored_headers>
+    <header>NSSerialization.h</header>
+    <header>NSJavaSetup.h</header>
+    <header>NSCompatibility.h</header>
+    <header>NSUtilities.h</header>
+  </ignored_headers>
+  <struct name='NSPoint'/>
+  <struct name='NSSize'/>
+  <struct name='NSRect'/>
+  <struct name='NSRange'/>
+  <struct name='NSAffineTransformStruct'/>
+  <struct name='NSDecimal' opaque='true'/>
+  <struct name='NSSwappedFloat' opaque='true'/>
+  <struct name='NSSwappedDouble' opaque='true'/>
+  <opaque name='NSZone *'/>
+  <function name='NSDecimalCopy'>
+    <arg index='0' type_modifier='n'/>
+    <arg index='1' type_modifier='n'/>
+  </function>
+  <function name='NSDecimalCompact'>
+    <arg index='0' type_modifier='n'/>
+  </function>
+  <function name='NSDecimalCompare'>
+    <arg index='0' type_modifier='n'/>
+    <arg index='1' type_modifier='n'/>
+  </function>
+  <function name='NSDecimalRound'>
+    <arg index='0' type_modifier='n'/>
+    <arg index='1' type_modifier='n'/>
+  </function>
+  <function name='NSDecimalNormalize'>
+    <arg index='0' type_modifier='n'/>
+    <arg index='1' type_modifier='n'/>
+  </function>
+  <function name='NSDecimalAdd'>
+    <arg index='0' type_modifier='n'/>
+    <arg index='1' type_modifier='n'/>
+    <arg index='2' type_modifier='n'/>
+  </function>
+  <function name='NSDecimalSubtract'>
+    <arg index='0' type_modifier='n'/>
+    <arg index='1' type_modifier='n'/>
+    <arg index='2' type_modifier='n'/>
+  </function>
+  <function name='NSDecimalMultiply'>
+    <arg index='0' type_modifier='n'/>
+    <arg index='1' type_modifier='n'/>
+    <arg index='2' type_modifier='n'/>
+  </function>
+  <function name='NSDecimalDivide'>
+    <arg index='0' type_modifier='n'/>
+    <arg index='1' type_modifier='n'/>
+    <arg index='2' type_modifier='n'/>
+  </function>
+  <function name='NSDecimalPower'>
+    <arg index='0' type_modifier='n'/>
+    <arg index='1' type_modifier='n'/>
+  </function>
+  <function name='NSDecimalMultiplyByPowerOf10'>
+    <arg index='0' type_modifier='n'/>
+    <arg index='1' type_modifier='n'/>
+  </function>
+  <function name='NSDecimalString'>
+    <arg index='0' type_modifier='n'/>
+  </function>
+  <function name='NSSetUncaughtExceptionHandler'>
+    <arg index='0' type_modifier='n'/>
+  </function>
+  <function name='NSCopyHashTableWithZone'>
+    <arg index='1' type_modifier='n'/>
+  </function>
+  <function name='NSHashGet'>
+    <arg index='1' type_modifier='n'/>
+  </function>
+  <function name='NSHashInsert'>
+    <arg index='1' type_modifier='n'/>
+  </function>
+  <function name='NSHashInsertKnownAbsent'>
+    <arg index='1' type_modifier='n'/>
+  </function>
+  <function name='NSHashInsertIfAbsent'>
+    <arg index='1' type_modifier='n'/>
+  </function>
+  <function name='NSHashRemove'>
+    <arg index='1' type_modifier='n'/>
+  </function>
+  <function name='NSNextHashEnumeratorItem'>
+    <arg index='0' type_modifier='n'/>
+  </function>
+  <function name='NSEndHashTableEnumeration'>
+    <arg index='0' type_modifier='n'/>
+  </function>
+  <function name='NSCreateHashTableWithZone'>
+    <arg index='2' type_modifier='n'/>
+  </function>
+  <function name='NSCopyMapTableWithZone'>
+    <arg index='1' type_modifier='n'/>
+  </function>
+  <function name='NSMapMember'>
+    <arg index='1' type_modifier='n'/>
+  </function>
+  <function name='NSMapGet'>
+    <arg index='1' type_modifier='n'/>
+  </function>
+  <function name='NSMapInsert'>
+    <arg index='1' type_modifier='n'/>
+    <arg index='2' type_modifier='n'/>
+  </function>
+  <function name='NSMapInsertKnownAbsent'>
+    <arg index='1' type_modifier='n'/>
+    <arg index='2' type_modifier='n'/>
+  </function>
+  <function name='NSMapInsertIfAbsent'>
+    <arg index='1' type_modifier='n'/>
+    <arg index='2' type_modifier='n'/>
+  </function>
+  <function name='NSMapRemove'>
+    <arg index='1' type_modifier='n'/>
+  </function>
+  <function name='NSNextMapEnumeratorPair'>
+    <arg index='0' type_modifier='n'/>
+  </function>
+  <function name='NSEndMapTableEnumeration'>
+    <arg index='0' type_modifier='n'/>
+  </function>
+  <function name='NSCreateMapTableWithZone'>
+    <arg index='3' type_modifier='n'/>
+  </function>
+  <function name='NSAllocateObject'>
+    <arg index='2' type_modifier='n'/>
+  </function>
+  <function name='NSCopyObject'>
+    <arg index='2' type_modifier='n'/>
+  </function>
+  <function name='NSShouldRetainWithZone'>
+    <arg index='1' type_modifier='n'/>
+  </function>
+  <function name='NSRecycleZone'>
+    <arg index='0' type_modifier='n'/>
+  </function>
+  <function name='NSSetZoneName'>
+    <arg index='0' type_modifier='n'/>
+  </function>
+  <function name='NSZoneName'>
+    <arg index='0' type_modifier='n'/>
+  </function>
+  <function name='NSZoneFromPointer'>
+    <arg index='0' type_modifier='n'/>
+  </function>
+  <function name='NSZoneMalloc'>
+    <arg index='0' type_modifier='n'/>
+  </function>
+  <function name='NSZoneCalloc'>
+    <arg index='0' type_modifier='n'/>
+  </function>
+  <function name='NSZoneRealloc'>
+    <arg index='0' type_modifier='n'/>
+    <arg index='1' type_modifier='n'/>
+  </function>
+  <function name='NSZoneFree'>
+    <arg index='0' type_modifier='n'/>
+    <arg index='1' type_modifier='n'/>
+  </function>
+  <function name='NSReallocateCollectable'>
+    <arg index='0' type_modifier='n'/>
+  </function>
+  <function name='NSDeallocateMemoryPages'>
+    <arg index='0' type_modifier='n'/>
+  </function>
+  <function name='NSCopyMemoryPages'>
+    <arg index='0' type_modifier='n'/>
+    <arg index='1' type_modifier='n'/>
+  </function>
+  <class name='NSAppleEventDescriptor'>
+    <method class_method='true' selector='descriptorWithDescriptorType:bytes:length:'>
+      <arg index='1' type_modifier='n' c_array_length_in_arg='2'/>
+    </method>
+    <method selector='initWithDescriptorType:bytes:length:'>
+      <arg index='1' type_modifier='n' c_array_length_in_arg='2'/>
+    </method>
+  </class>
+  <class name='NSOutputStream'>
+    <method selector='write:maxLength:'>
+      <arg index='0' type_modifier='n' c_array_length_in_arg='1'/>
+    </method>
+    <method selector='initToBuffer:capacity:'>
+      <arg index='0' type_modifier='n' c_array_length_in_arg='1'/>
+    </method>
+    <method class_method='true' selector='outputStreamToBuffer:capacity:'>
+      <arg index='0' type_modifier='o' c_array_length_in_arg='1'/>
+    </method>
+  </class>
+  <class name='NSInputStream'>
+    <method selector='read:maxLength:'>
+      <arg index='0' type_modifier='o' c_array_length_in_arg='1'/>
+    </method>
+  </class>
+  <class name='NSKeyedArchiver'>
+    <method selector='encodeBytes:length:forKey:'>
+      <arg index='0' type_modifier='n' c_array_length_in_arg='1'/>
+    </method>
+  </class>
+  <class name='NSCoder'>
+    <method selector='encodeValueOfObjCType:at:'>
+      <arg index='1' type_modifier='n'/>
+    </method>
+    <method selector='decodeValueOfObjCType:at:'>
+      <arg index='1' type_modifier='n'/>
+    </method>
+    <method selector='encodeValuesOfObjCTypes:' ignore='true' suggestion='Call encodeValueOfObjCType:at: several times.'/>
+    <method selector='encodeArrayOfObjCType:count:at:'>
+      <arg index='0' type_modifier='n' c_array_length_in_arg='1'/>
+      <arg index='2' type_modifier='n'/>
+    </method>
+    <method selector='encodeBytes:length:'>
+      <arg index='0' type_modifier='n' c_array_length_in_arg='1'/>
+    </method>
+    <method selector='decodeValuesOfObjCTypes:' ignore='true' suggestion='Call decodeValueOfObjCType:at: several times.'/>
+    <method selector='decodeArrayOfObjCType:count:at:'>
+      <arg index='0' type_modifier='n' c_array_length_in_arg='1'/>
+      <arg index='2' type_modifier='n'/>
+    </method>
+    <method selector='encodeBytes:length:forKey:'>
+      <arg index='0' type_modifier='n' c_array_length_in_arg='1'/>
+    </method>
+  </class>
+  <class name='NSMutableArray'>
+    <method selector='removeObjectsFromIndices:numIndices:'>
+      <arg index='0' type_modifier='n' c_array_length_in_arg='1'/>
+    </method>
+  </class>
+  <class name='NSSet'>
+    <method selector='initWithObjects:count:'>
+      <arg index='0' type_modifier='n' c_array_length_in_arg='1'/>
+    </method>
+    <method class_method='true' selector='setWithObjects:count:'>
+      <arg index='0' type_modifier='n' c_array_length_in_arg='1'/>
+    </method>
+  </class>
+  <class name='NSData'> 
+    <method selector='getBytes:' ignore='true' suggestion='Call bytes or getBytes:length:.'/>
+    <method selector='getBytes:range:' ignore='true' suggestion='Call bytes or getBytes:length:.'/>
+    <method selector='getBytes:length:'>
+      <arg index='0' type_modifier='o' c_array_length_in_arg='1'/>
+    </method>
+    <method class_method='true' selector='dataWithBytes:length:'>
+      <arg index='0' type_modifier='n' c_array_length_in_arg='1'/>
+    </method>
+    <method class_method='true' selector='dataWithBytesNoCopy:length:' ignore='true' suggestion='Call dataWithBytes:length:.'/>
+    <method class_method='true' selector='dataWithBytesNoCopy:length:freeWhenDone:' ignore='true' suggestion='Call dataWithBytes:length:.'/>
+    <method selector='initWithBytes:length:'>
+      <arg index='0' type_modifier='n' c_array_length_in_arg='1'/>
+    </method>
+    <method selector='initWithBytesNoCopy:length:' ignore='true' suggestion='Call initWithBytes:length:.'/>
+    <method selector='initWithBytesNoCopy:length:freeWhenDone:' ignore='true' suggestion='Call initWithBytes:length:.'/>
+  </class>
+  <class name='NSArray'>
+    <method selector='getObjects:' ignore='true' suggestion='Call the usual object accessors.'/>
+    <method selector='getObjects:range:' ignore='true' suggestion='Call the usual object accessors.'/>
+    <method selector='initWithObjects:count:'>
+      <arg index='0' type_modifier='n' c_array_length_in_arg='1'/>
+    </method>
+    <method class_method='true' selector='arrayWithObjects:count:'>
+      <arg index='0' type_modifier='n' c_array_length_in_arg='1'/>
+    </method>
+    <method selector='addObserver:toObjectsAtIndexes:forKeyPath:options:context:'>
+      <arg index='4' type_modifier='n'/>
+    </method>
+    <method selector='addObserver:forKeyPath:options:context:'>
+      <arg index='3' type_modifier='n'/>
+    </method>
+  </class>
+  <class name='NSIndexSet'>
+    <method selector='getIndexes:maxCount:inIndexRange:'>
+      <arg index='0' type_modifier='n' c_array_length_in_arg='1'/>
+    </method>
+  </class>
+  <class name='NSDateFormatter'>
+    <method selector='getObjectValue:forString:range:error:'>
+      <arg index='2' type_modifier='N'/>
+    </method>
+  </class>
+  <class name='NSIndexPath'>
+    <method class_method='true' selector='indexPathWithIndexes:length:'>
+      <arg index='0' type_modifier='n' c_array_length_in_arg='1'/>
+    </method>
+    <method selector='initWithIndexes:length:'>
+      <arg index='0' type_modifier='n' c_array_length_in_arg='1'/>
+    </method>
+    <method selector='getIndexes:' ignore='true' suggestion='Call the usual accessors.'/>
+  </class>
+  <class name='NSMutableData'>
+    <method selector='appendBytes:length:'>
+      <arg index='0' type_modifier='n' c_array_length_in_arg='1'/>
+    </method>
+    <method selector='replaceBytesInRange:withBytes:' ignore='true' suggestion='Call replaceBytesInRange:withBytes:length:.'/>
+    <method selector='replaceBytesInRange:withBytes:length:'>
+      <arg index='1' type_modifier='n' c_array_length_in_arg='2'/>
+    </method>
+  </class>
+  <class name='NSString'>
+    <method selector='getFileSystemRepresentation:maxLength:'>
+      <arg index='0' type_modifier='o' c_array_length_in_arg='1'/>
+    </method>
+    <method selector='getCharacters:' ignore='true'/> <!-- XXX -->
+    <method selector='getCharacters:range:' ignore='true'/> <!-- XXX -->
+    <method selector='getCString:maxLength:encoding:'>
+      <arg index='0' type_modifier='o' c_array_length_in_arg='1'/>
+    </method>
+    <method selector='initWithCharactersNoCopy:length:freeWhenDone:' ignore='true' suggestion='Call initWithCharacters:length:.'/>
+    <method selector='initWithCharacters:length:'>
+      <arg index='0' type_modifier='n' c_array_length_in_arg='1'/>
+    </method>
+    <method selector='initWithBytes:length:encoding:'>
+      <arg index='0' type_modifier='n' c_array_length_in_arg='1'/>
+    </method>
+    <method selector='initWithBytesNoCopy:length:encoding:freeWhenDone:' ignore='true' suggestion='Call initWithBytes:length:encoding:.'/>
+    <method class_method='true' selector='stringWithCharacters:length:'>
+      <arg index='0' type_modifier='n' c_array_length_in_arg='1'/>
+    </method>
+  </class>
+  <class name='NSObject'>
+    <method selector='observeValueForKeyPath:ofObject:change:context:'>
+      <arg index='3' type_modifier='n'/>
+    </method>
+    <method selector='addObserver:forKeyPath:options:context:'>
+      <arg index='3' type_modifier='n'/>
+    </method>
+    <method selector='setObservationInfo:'>
+      <arg index='0' type_modifier='n'/>
+    </method>
+  </class>
+  <class name='NSInvocation'>
+    <method selector='getReturnValue:' ignore='true'/> <!-- XXX -->
+    <method selector='setReturnValue:'> 
+      <arg index='0' type_modifier='n'/>
+    </method>
+    <method selector='getArgument:atIndex:' ignore='true'/> <!-- XXX -->
+    <method selector='setArgument:atIndex:'>
+      <arg index='0' type_modifier='n'/>
+    </method>
+  </class>
+  <class name='NSNumberFormatter'>
+    <method selector='getObjectValue:forString:range:error:'>
+      <arg index='2' type_modifier='N'/>
+    </method>
+  </class>
+  <class name='NSDictionary'>
+    <method class_method='true' selector='dictionaryWithObjects:forKeys:count:'>
+      <arg index='0' type_modifier='n' c_array_length_in_arg='2'/>
+      <arg index='1' type_modifier='n' c_array_length_in_arg='2'/>
+    </method>
+    <method selector='initWithObjects:forKeys:count:'>
+      <arg index='0' type_modifier='n' c_array_length_in_arg='2'/>
+      <arg index='1' type_modifier='n' c_array_length_in_arg='2'/>
+    </method>
+  </class>
+  <class name='NSValue'>
+    <method selector='getValue:' ignore='true'/>
+    <method selector='initWithBytes:objCType:'>
+      <arg index='0' type_modifier='n'/>
+    </method>
+    <method class_method='true' selector='valueWithBytes:objCType:'>
+      <arg index='0' type_modifier='n'/>
+    </method>
+    <method class_method='true' selector='value:withObjCType:'>
+      <arg index='0' type_modifier='n'/>
+    </method>
+    <method class_method='true' selector='valueWithPointer:'>
+      <arg index='0' type_modifier='n'/>
+    </method>
+  </class>
+</signatures>
