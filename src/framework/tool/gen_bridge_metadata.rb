@@ -931,7 +931,7 @@ EOC
           element = prot_element.add_element('method')
           method_type = @resolved_inf_protocols_encoding[method.selector]
           offset = 0
-          method.args.each do |arg|
+          [method, *method.args].each do |arg|
             type = encoding_of(arg)
             if type == 'B' or type == 'c'
               offset = method_type.index('c', offset)

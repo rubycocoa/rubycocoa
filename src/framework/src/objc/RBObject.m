@@ -128,6 +128,8 @@ static int rb_obj_arity_of_method(VALUE rcv, SEL a_sel, BOOL *ok)
     const char* octstr = [msig getArgumentTypeAtIndex: (i+2)];
     void* ocdata = OCDATA_ALLOCA(octstr);
     BOOL f_conv_success;
+
+    RBOBJ_LOG("arg[%d] of type '%s'", i, octstr);
     [an_inv getArgument: ocdata atIndex: (i+2)];
     f_conv_success = ocdata_to_rbobj(Qnil, octstr, ocdata, &arg_val, NO);
     if (f_conv_success == NO) {
@@ -374,7 +376,7 @@ VALUE rbobj_call_ruby(id rbobj, SEL selector, VALUE args)
     method = find_bs_informal_protocol_method((const char *)a_sel, NO);
     if (method != NULL) {
       ret = [NSMethodSignature signatureWithObjCTypes:method->encoding];
-      RBOBJ_LOG("\tgot method signature from metadata");
+      RBOBJ_LOG("\tgot method signature from metadata (types: '%s')", method->encoding);
     }
   }
   // Ensure a dummy method signature ('id' for everything).
