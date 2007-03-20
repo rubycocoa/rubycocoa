@@ -1,0 +1,82 @@
+<?xml version='1.0'?>
+<!DOCTYPE signatures SYSTEM "file://localhost/System/Library/DTDs/BridgeSupport.dtd">
+<signatures version='0.9'>
+  <cftype name='CFAllocatorRef' gettypeid_func='CFAllocatorGetTypeID'/>
+  <cftype name='CFArrayRef' gettypeid_func='CFArrayGetTypeID'/>
+  <cftype name='CFAttributedStringRef' gettypeid_func='CFAttributedStringGetTypeID'/>
+  <cftype name='CFBagRef' gettypeid_func='CFBagGetTypeID'/>
+  <cftype name='CFBinaryHeapRef' gettypeid_func='CFBinaryHeapGetTypeID'/>
+  <cftype name='CFBitVectorRef' gettypeid_func='CFBitVectorGetTypeID'/>
+  <cftype name='CFBooleanRef' gettypeid_func='CFBooleanGetTypeID'/>
+  <cftype name='CFBundleRef' gettypeid_func='CFBundleGetTypeID'/>
+  <cftype name='CFCalendarRef' gettypeid_func='CFCalendarGetTypeID'/>
+  <cftype name='CFCharacterSetRef' gettypeid_func='CFCharacterSetGetTypeID'/>
+  <cftype name='CFDataRef' gettypeid_func='CFDataGetTypeID'/>
+  <cftype name='CFDateFormatterRef' gettypeid_func='CFDateFormatterGetTypeID'/>
+  <cftype name='CFDateRef' gettypeid_func='CFDateGetTypeID'/>
+  <cftype name='CFDictionaryRef' gettypeid_func='CFDictionaryGetTypeID'/>
+  <cftype name='CFLocaleRef' gettypeid_func='CFLocaleGetTypeID'/>
+  <cftype name='CFMachPortRef' gettypeid_func='CFMachPortGetTypeID'/>
+  <cftype name='CFMessagePortRef' gettypeid_func='CFMessagePortGetTypeID'/>
+  <cftype name='CFNotificationCenterRef' gettypeid_func='CFNotificationCenterGetTypeID'/>
+  <cftype name='CFNullRef' gettypeid_func='CFNullGetTypeID'/>
+  <cftype name='CFNumberFormatterRef' gettypeid_func='CFNumberFormatterGetTypeID'/>
+  <cftype name='CFNumberRef' gettypeid_func='CFNumberGetTypeID'/>
+  <cftype name='CFPlugInInstanceRef' gettypeid_func='CFPlugInInstanceGetTypeID'/>
+  <cftype name='CFPlugInRef' gettypeid_func='CFPlugInGetTypeID'/>
+  <cftype name='CFReadStreamRef' gettypeid_func='CFReadStreamGetTypeID'/>
+  <cftype name='CFRunLoopObserverRef' gettypeid_func='CFRunLoopObserverGetTypeID'/>
+  <cftype name='CFRunLoopRef' gettypeid_func='CFRunLoopGetTypeID'/>
+  <cftype name='CFRunLoopSourceRef' gettypeid_func='CFRunLoopSourceGetTypeID'/>
+  <cftype name='CFRunLoopTimerRef' gettypeid_func='CFRunLoopTimerGetTypeID'/>
+  <cftype name='CFSetRef' gettypeid_func='CFSetGetTypeID'/>
+  <cftype name='CFSocketRef' gettypeid_func='CFSocketGetTypeID'/>
+  <cftype name='CFStringRef' gettypeid_func='CFStringGetTypeID'/>
+  <cftype name='CFTimeZoneRef' gettypeid_func='CFTimeZoneGetTypeID'/>
+  <cftype name='CFTreeRef' gettypeid_func='CFTreeGetTypeID'/>
+  <cftype name='CFURLRef' gettypeid_func='CFURLGetTypeID'/>
+  <cftype name='CFUUIDRef' gettypeid_func='CFUUIDGetTypeID'/>
+  <cftype name='CFUserNotificationRef' gettypeid_func='CFUserNotificationGetTypeID'/>
+  <cftype name='CFWriteStreamRef' gettypeid_func='CFWriteStreamGetTypeID'/>
+  <cftype name='CFXMLNodeRef' gettypeid_func='CFXMLNodeGetTypeID'/>
+  <cftype name='CFXMLParserRef' gettypeid_func='CFXMLParserGetTypeID'/>
+  <struct name='CFArrayCallBacks'/>
+  <struct name='CFBagCallBacks'/>
+  <struct name='CFRange'/>
+  <struct name='CFAllocatorContext'/>
+  <struct name='CFBinaryHeapCompareContext'/>
+  <struct name='CFBinaryHeapCallBacks'/>
+  <struct name='CFSwappedFloat32'/>
+  <struct name='CFSwappedFloat64'/>
+  <struct name='CFGregorianDate'/>
+  <struct name='CFGregorianUnits'/>
+  <struct name='CFDictionaryKeyCallBacks'/>
+  <struct name='CFDictionaryValueCallBacks'/>
+  <struct name='CFMachPortContext'/>
+  <struct name='CFMessagePortContext'/>
+  <struct name='CFRunLoopSourceContext'/>
+  <struct name='CFRunLoopObserverContext'/>
+  <struct name='CFRunLoopTimerContext'/>
+  <struct name='CFSetCallBacks'/>
+  <struct name='CFSocketSignature'/>
+  <struct name='CFSocketContext'/>
+  <struct name='CFStreamClientContext'/>
+  <struct name='CFStreamError'/>
+  <struct name='CFStringInlineBuffer'/>
+  <struct name='CFTreeContext'/>
+  <struct name='CFUUIDBytes'/>
+  <struct name='CFXMLElementInfo'/>
+  <struct name='CFXMLProcessingInstructionInfo'/>
+  <struct name='CFXMLDocumentInfo'/>
+  <struct name='CFXMLExternalID'/>
+  <struct name='CFXMLDocumentTypeInfo'/>
+  <struct name='CFXMLNotationInfo'/>
+  <struct name='CFXMLElementTypeDeclarationInfo'/>
+  <struct name='CFXMLAttributeDeclarationInfo'/>
+  <struct name='CFXMLAttributeListDeclarationInfo'/>
+  <struct name='CFXMLEntityInfo'/>
+  <struct name='CFXMLEntityReferenceInfo'/>
+  <struct name='CFXMLParserCallBacks'/>
+  <struct name='CFXMLParserContext'/>
+  <constant name='kCFAllocatorUseContext' magic_cookie='true'/>
+</signatures>
