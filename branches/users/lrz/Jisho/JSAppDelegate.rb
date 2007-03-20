@@ -26,4 +26,9 @@ class JSAppDelegate < NSObject
     service = JSService.alloc.initWithWindowController(@windowController)
     notification.object.setServicesProvider(service)
   end
+
+  def applicationShouldHandleReopen_hasVisibleWindows(app, flag)
+    @windowController.showWindow(self) unless flag
+    return flag
+  end
 end
