@@ -32,6 +32,7 @@ class JSService < NSObject
       criterion = pboard.stringForType(NSStringPboardType)
       @windowController.searchField.setStringValue(criterion)
       @windowController.search(@windowController.searchField)
+      @windowController.window.makeKeyAndOrderFront(self)
     end
   end
   addRubyMethod_withType('translate:userData:error:', '@@:@@^@')
