@@ -1,0 +1,32 @@
+require 'rbconfig'
+# Xcode 2.2 moved ruby.h 
+unless File.exists? File.join(Config::CONFIG['archdir'], 'ruby.h')
+  Config::CONFIG['archdir'] = Config::CONFIG['archdir'].sub(/powerpc/, 'universal')
+end
+
+require 'mkmf'
+
+def command(cmd)
+  $stderr.puts "execute '#{cmd}' ..."
+  raise(RuntimeError, cmd) unless system(cmd)
+  $stderr.puts "execute '#{cmd}' done"
+end
+
+$CFLAGS = '-F../../framework/%%%build_dir%%%'
+$LDFLAGS  = '-F../../framework/%%%build_dir%%% -framework RubyCocoa'
+
+$CFLAGS << ' %%%other_cflags%%%'
+$LDFLAGS << ' %%%other_ldflags%%%'
+
+# check build as universal binary
+if '%%%build_universal%%%' == 'yes' then
+  # the value of sdkroot is depended on 10.4u.sdk, It should be more
+  # independent way for future (e.g Leopard).
+  sdkroot = '/Developer/SDKs/MacOSX10.4u.sdk'
+  $CFLAGS  << " -arch ppc -arch i386 -isysroot #{sdkroot}"
+  $LDFLAGS << " -arch ppc -arch i386 -Wl,-syslibroot,#{sdkroot}"
+end
+
+create_makefile('rubycocoa')
+command "mv -f Makefile Makefile.bak"
+command "sed -e 's/-no-cpp-precomp//' -e 's/-no-precomp//' Makefile.bak > Makefile"
