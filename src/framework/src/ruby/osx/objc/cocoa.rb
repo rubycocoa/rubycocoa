@@ -4,7 +4,10 @@
 #  Copyright (c) 2001 FUJIMOTO Hisakuni
 #
 
-OSX.init_cocoa
+require 'osx/objc/foundation'
 
-require 'osx/objc/oc_all.rb'
-require 'osx/objc/cocoa_macros'
+OSX.require_framework('CoreGraphics')
+OSX.require_framework('AppKit')
+
+require 'osx/objc/oc_types_appkit'
+require 'osx/objc/oc_attachments_appkit'

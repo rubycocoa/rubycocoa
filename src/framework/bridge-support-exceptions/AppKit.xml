@@ -1,0 +1,316 @@
+<?xml version='1.0'?>
+<signatures>
+  <ignored_headers>
+    <header>NSSpellServer.h</header>
+    <header>NSSimpleHorizontalTypesetter.h</header>
+    <header>NSGridView.h</header>
+  </ignored_headers>
+  <function name='NSConvertGlyphsToPackedGlyphs'>
+    <arg index='0' type_modifier='n' c_array_length_in_arg='1'/>
+    <arg index='3' type_modifier='n' c_array_length_in_arg='1'/>
+  </function>
+  <function name='NSRectFillList'>
+    <arg index='0' type_modifier='n' c_array_length_in_arg='1'/>
+  </function>
+  <function name='NSRectFillListWithGrays'>
+    <arg index='0' type_modifier='n' c_array_length_in_arg='2'/>
+    <arg index='1' type_modifier='n' c_array_length_in_arg='2'/>
+  </function>
+  <function name='NSRectFillListWithColors'>
+    <arg index='0' type_modifier='n' c_array_length_in_arg='2'/>
+    <arg index='1' type_modifier='n' c_array_length_in_arg='2'/>
+  </function>
+  <function name='NSRectFillListUsingOperation'>
+    <arg index='0' type_modifier='n' c_array_length_in_arg='1'/>
+  </function>
+  <function name='NSRectFillListWithColorsUsingOperation'>
+    <arg index='0' type_modifier='n' c_array_length_in_arg='2'/>
+    <arg index='1' type_modifier='n' c_array_length_in_arg='2'/>
+  </function>
+  <function name='NSRectClipList'>
+    <arg index='0' type_modifier='n' c_array_length_in_arg='1'/>
+  </function>
+  <function name='NSDrawTiledRects'>
+    <arg index='2' type_modifier='n' c_array_length_in_arg='4'/>
+    <arg index='3' type_modifier='n' c_array_length_in_arg='4'/>
+  </function>
+  <function name='NSCountWindows'>
+    <arg index='0' type_modifier='o' null_accepted='false'/>
+  </function>
+  <function name='NSWindowList'>
+    <arg index='1' type_modifier='o' c_array_length_in_arg='0'/>
+  </function>
+  <function name='NSCountWindowsForContext'>
+    <arg index='1' type_modifier='o' null_accepted='false'/>
+  </function>
+  <function name='NSWindowListForContext'>
+    <arg index='2' type_modifier='o' c_array_length_in_arg='1'/>
+  </function>
+  <function name='NSDrawColorTiledRects'>
+    <arg index='2' type_modifier='n' c_array_length_in_arg='4'/>
+    <arg index='3' type_modifier='n' c_array_length_in_arg='4'/>
+  </function>
+  <function name='NSShowAnimationEffect'>
+    <arg index='5' type_modifier='n'/>
+  </function>
+  <class name='NSPrintPanel'>
+    <method selector='beginSheetWithPrintInfo:modalForWindow:delegate:didEndSelector:contextInfo:'>
+      <arg index='4' type_modifier='n'/>
+    </method>
+  </class>
+  <class name='NSColor'>
+    <method class_method='true' selector='colorWithColorSpace:components:count:'>
+      <arg index='1' type_modifier='n' c_array_length_in_arg='2'/>
+    </method>
+    <method selector='getComponents:' ignore='true' suggestion='Use the specific accessors according to the color type.'/>
+  </class>
+  <class name='NSEvent'>
+    <method class_method='true' selector='enterExitEventWithType:location:modifierFlags:timestamp:windowNumber:context:eventNumber:trackingNumber:userData:'>
+      <arg index='8' type_modifier='n'/>
+    </method>
+  </class>
+  <class name='NSAlert'>
+    <method selector='beginSheetModalForWindow:modalDelegate:didEndSelector:contextInfo:'>
+      <arg index='3' type_modifier='n'/>
+    </method>
+  </class>
+  <class name='NSResponder'>
+    <method selector='presentError:modalForWindow:delegate:didPresentSelector:contextInfo:'>
+      <arg index='4' type_modifier='n'/>
+    </method>
+  </class>
+  <class name='NSFont'>
+    <method class_method='true' selector='fontWithName:matrix:'>
+      <arg index='1' type_modifier='n' c_array_of_fixed_length='6'/>
+    </method>
+    <method selector='getBoundingRects:forGlyphs:count:'>
+      <arg index='1' type_modifier='o' c_array_length_in_arg='2'/>
+      <arg index='2' type_modifier='n' c_array_length_in_arg='2'/>
+    </method>
+    <method selector='getAdvancements:forGlyphs:count:'>
+      <arg index='1' type_modifier='o' c_array_length_in_arg='2'/>
+      <arg index='2' type_modifier='n' c_array_length_in_arg='2'/>
+    </method>
+    <method selector='getAdvancements:forPackedGlyphs:length:' ignore='true' suggestion='Call getAdvancements:forGlyphs:count:.'/>
+  </class>
+  <class name='NSController'>
+    <method selector='commitEditingWithDelegate:didCommitSelector:contextInfo:'>
+      <arg index='2' type_modifier='n'/>
+    </method>
+  </class>
+  <class name='NSWindow'>
+    <method selector='initWithWindowRef:'>
+      <arg index='0' type='WindowRef'/>
+    </method>
+    <method selector='windowRef'>
+      <retval type='WindowRef'/>
+    </method>
+  </class>
+  <class name='NSOpenPanel'>
+    <method selector='beginSheetForDirectory:file:types:modalForWindow:modalDelegate:didEndSelector:contextInfo:'>
+      <arg index='6' type_modifier='n'/>
+    </method>
+    <method selector='beginForDirectory:file:types:modelessDelegate:didEndSelector:contextInfo:'>
+      <arg index='5' type_modifier='n'/>
+    </method>
+  </class>
+  <class name='NSLayoutManager'>
+    <method selector='insertGlyphs:length:forStartingGlyphAtIndex:characterIndex:'>
+      <arg index='0' type_modifier='n' c_array_length_in_arg='1'/>
+    </method>
+    <method selector='getGlyphsInRange:glyphs:characterIndexes:glyphInscriptions:elasticBits:' ignore='true' suggestion='Call glyphAtIndex: multiple times.'/>
+    <method selector='getGlyphsInRange:glyphs:characterIndexes:glyphInscriptions:elasticBits:bidiLevels:' ignore='true' suggestion='Call glyphAtIndex: multiple times.'/>
+    <method selector='getGlyphs:range:' ignore='true' suggestion='Call glyphAtIndex: multiple times.'/>
+    <method selector='setLocations:startingGlyphIndexes:count:forGlyphRange:' ignore='true' suggestion='Call setLocation:forStartOfGlyphRange: multiple times.'/>
+    <method selector='rectArrayForCharacterRange:withinSelectedCharacterRange:inTextContainer:rectCount:'>
+      <retval c_array_length_in_arg='3'/>
+    </method>
+    <method selector='rectArrayForGlyphRange:withinSelectedGlyphRange:inTextContainer:rectCount:'>
+      <retval c_array_length_in_arg='3'/>
+    </method>
+    <method selector='getLineFragmentInsertionPointsForCharacterAtIndex:alternatePositions:inDisplayOrder:positions:characterIndexes:' ignore='true'/>
+    <method selector='showPackedGlyphs:length:glyphRange:atPoint:font:color:printingAdjustment:'>
+      <arg index='0' type_modifier='n' c_array_length_in_arg='1'/>
+    </method>
+  </class>
+  <class name='NSPageLayout'>
+    <method selector='beginSheetWithPrintInfo:modalForWindow:delegate:didEndSelector:contextInfo:'>
+      <arg index='4' type_modifier='n'/>
+    </method>
+  </class>
+  <class name='NSBitmapImageRep'>
+    <method class_method='true' selector='getTIFFCompressionTypes:count:'>
+      <arg index='0' type_modifier='o' c_array_length_in_arg='1'/>
+    </method>
+    <method selector='getPixel:atX:y:'>
+      <arg index='0' type_modifier='n' c_array_of_fixed_length='4'/>
+    </method>
+    <method selector='setPixel:atX:y:'>
+      <arg index='0' type_modifier='o' c_array_of_fixed_length='4'/>
+    </method>
+  </class>
+  <class name='NSColorSpace'>
+    <method selector='initWithColorSyncProfile:'>
+      <arg index='0' type='CMProfileRef'/>
+    </method>
+    <method selector='colorSyncProfile'>
+      <retval type='CMProfileRef'/>
+    </method>
+  </class>
+  <class name='NSGraphicsContext'>
+    <method class_method='true' selector='graphicsContextWithGraphicsPort:flipped:'>
+      <arg index='0' type='CGContextRef'/>
+    </method>
+    <method selector='setFocusStack:' ignore='true'/>
+    <method selector='graphicsPort'>
+      <retval type='CGContextRef'/>
+    </method>
+  </class>
+  <class name='NSApplication'>
+    <method selector='beginSheet:modalForWindow:modalDelegate:didEndSelector:contextInfo:'>
+      <arg index='4' type_modifier='n'/>
+    </method>
+  </class>
+  <class name='NSSavePanel'>
+    <method selector='beginSheetForDirectory:file:modalForWindow:modalDelegate:didEndSelector:contextInfo:'>
+      <arg index='5' type_modifier='n'/>
+    </method>
+  </class>
+  <class name='NSObject'>
+    <method selector='commitEditingWithDelegate:didCommitSelector:contextInfo:'>
+      <arg index='2' type_modifier='n'/>
+    </method>
+    <method selector='view:stringForToolTip:point:userData:'>
+      <arg index='3' type_modifier='n'/>
+    </method>
+    <method selector='insertGlyphs:length:forStartingGlyphAtIndex:characterIndex:'>
+      <arg index='0' type_modifier='n' c_array_length_in_arg='1'/>
+    </method>
+  </class>
+  <class name='NSTypesetter'>
+    <method class_method='true' selector='printingAdjustmentInLayoutManager:forNominallySpacedGlyphRange:packedGlyphs:count:'>
+      <arg index='2' type_modifier='n' c_array_length_in_arg='3'/>
+    </method>
+    <method selector='getGlyphsInRange:glyphs:characterIndexes:glyphInscriptions:elasticBits:bidiLevels:' ignore='true'/>
+    <method selector='substituteGlyphsInRange:withGlyphs:' ignore='true'/>
+    <method selector='setLocation:withAdvancements:forStartOfGlyphRange:' ignore='true'/>
+    <method selector='setBidiLevels:forGlyphRange:' ignore='true'/>
+  </class>
+  <class name='NSView'>
+    <method selector='getRectsBeingDrawn:count:'>
+      <arg index='0' type_modifier='o' c_array_length_in_arg='1'/>
+    </method>
+    <method selector='addTrackingRect:owner:userData:assumeInside:'>
+      <arg index='2' type_modifier='n'/>
+    </method>
+    <method selector='addToolTipRect:owner:userData:'>
+      <arg index='2' type_modifier='n'/>
+    </method>
+    <method selector='getRectsExposedDuringLiveResize:count:'>
+      <arg index='0' type_modifier='o' c_array_length_in_arg='1'/>
+      <arg index='1' type_modifier='o'/>
+    </method>
+    <method selector='sortSubviewsUsingFunction:context:'>
+      <arg index='0' type_modifier='n'/>
+      <arg index='1' type_modifier='n'/>
+    </method>
+  </class>
+  <class name='NSOpenGLPixelFormat'>
+    <method selector='initWithAttributes:'>
+      <arg index='0' type_modifier='n' c_array_delimited_by_null='true'/>
+    </method>
+  </class>
+  <class name='NSPrintOperation'>
+    <method selector='runOperationModalForWindow:delegate:didRunSelector:contextInfo:'>
+      <arg index='3' type_modifier='n'/>
+    </method>
+  </class>
+  <class name='NSOpenGLContext'>
+    <method selector='setOffScreen:width:height:rowbytes:' ignore='true'/>
+  </class>
+  <class name='NSMovie'>
+    <method selector='initWithMovie:' ignore='true' suggestion='Use other initializers.'/>
+  </class>
+  <class name='NSDocument'>
+    <method selector='saveDocumentWithDelegate:didSaveSelector:contextInfo:'>
+      <arg index='2' type_modifier='n'/>
+    </method>
+    <method selector='runModalSavePanelForSaveOperation:delegate:didSaveSelector:contextInfo:'>
+      <arg index='3' type_modifier='n'/>
+    </method>
+    <method selector='saveToURL:ofType:forSaveOperation:delegate:didSaveSelector:contextInfo:'>
+      <arg index='5' type_modifier='n'/>
+    </method>
+    <method selector='autosaveDocumentWithDelegate:didAutosaveSelector:contextInfo:'>
+      <arg index='2' type_modifier='n'/>
+    </method>
+    <method selector='canCloseDocumentWithDelegate:shouldCloseSelector:contextInfo:'>
+      <arg index='2' type_modifier='n'/>
+    </method>
+    <method selector='runModalPageLayoutWithPrintInfo:delegate:didRunSelector:contextInfo:'>
+      <arg index='3' type_modifier='n'/>
+    </method>
+    <method selector='printDocumentWithSettings:showPrintPanel:delegate:didPrintSelector:contextInfo:'>
+      <arg index='4' type_modifier='n'/>
+    </method>
+    <method selector='runModalPrintOperation:delegate:didRunSelector:contextInfo:'>
+      <arg index='3' type_modifier='n'/>
+    </method>
+    <method selector='presentError:modalForWindow:delegate:didPresentSelector:contextInfo:'>
+      <arg index='4' type_modifier='n'/>
+    </method>
+    <method selector='shouldCloseWindowController:delegate:shouldCloseSelector:contextInfo:'>
+      <arg index='3' type_modifier='n'/>
+    </method>
+    <method selector='saveToFile:saveOperation:delegate:didSaveSelector:contextInfo:'>
+      <arg index='4' type_modifier='n'/>
+    </method>
+  </class>
+  <class name='NSMenu'>
+    <method class_method='true' selector='setMenuZone:' ignore='true'/>
+  </class>
+  <class name='NSCell'>
+    <method selector='getPeriodicDelay:interval:'>
+      <arg index='0' type_modifier='o' null_accepted='false'/>
+      <arg index='1' type_modifier='o' null_accepted='false'/>
+    </method>
+  </class>
+  <class name='NSDocumentController'>
+    <method selector='reviewUnsavedDocumentsWithAlertTitle:cancellable:delegate:didReviewAllSelector:contextInfo:'>
+      <arg index='4' type_modifier='n'/>
+    </method>
+    <method selector='closeAllDocumentsWithDelegate:didCloseAllSelector:contextInfo:'>
+      <arg index='2' type_modifier='n'/>
+    </method>
+    <method selector='presentError:modalForWindow:delegate:didPresentSelector:contextInfo:'>
+      <arg index='4' type_modifier='n'/>
+    </method>
+  </class>
+  <class name='NSButton'>
+    <method selector='getPeriodicDelay:interval:'>
+      <arg index='0' type_modifier='o' null_accepted='false'/>
+      <arg index='1' type_modifier='o' null_accepted='false'/>
+    </method>
+  </class>
+  <class name='NSBezierPath'>
+    <method class_method='true' selector='drawPackedGlyphs:atPoint:'>
+      <arg index='0' type_modifier='n' c_array_delimited_by_null='true'/>
+    </method>
+    <method selector='getLineDash:count:phase:'>
+      <arg index='0' type_modifier='o' c_array_length_in_arg='1'/>
+    </method>
+    <method selector='setLineDash:count:phase:'>
+      <arg index='0' type_modifier='n' c_array_length_in_arg='1'/>
+    </method>
+    <method selector='appendBezierPathWithPoints:count:'>
+      <arg index='0' type_modifier='n' c_array_length_in_arg='1'/>
+    </method>
+    <method selector='appendBezierPathWithGlyphs:count:'>
+      <arg index='0' type_modifier='n' c_array_length_in_arg='1'/>
+    </method>
+    <method selector='appendBezierPathWithPackedGlyphs:'>
+      <arg index='0' type_modifier='n' c_array_delimited_by_null='true'/>
+    </method>
+    <method selector='setAssociatedPoints:atIndex:' ignore='true'/>
+  </class>
+</signatures>

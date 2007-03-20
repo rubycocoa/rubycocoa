@@ -6,6 +6,10 @@
 
 module OSX
 
+  def self._verbose?
+    ($VERBOSE || $RUBYCOCOA_VERBOSE) ? true : false
+  end
+
   class OCException < RuntimeError
 
     attr_reader :name, :reason, :userInfo, :nsexception
@@ -14,7 +18,7 @@ module OSX
       @nsexception = ocexcp
       @name = @nsexception.ocm_send(:name).to_s
       @reason = @nsexception.ocm_send(:reason).to_s
-      @user_info = @nsexception.ocm_send(:userInfo)
+      @userInfo = @nsexception.ocm_send(:userInfo)
       msg = "#{@name} - #{@reason}" if msg.nil?
       super(msg)
     end

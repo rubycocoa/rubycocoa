@@ -14,12 +14,12 @@ class TC_NSData < Test::Unit::TestCase
     data = NSData.data
     assert( data.isKindOfClass(NSData) )
     assert_equal( 0, data.length )
-    assert_kind_of( ObjcPtr, data.bytes )
+    assert_nil( data.bytes )
   end
 
   def test_s_dataWithBytes_length
     src = "hello world"
-    data = NSData.dataWithBytes( src, :length, src.size )
+    data = NSData.dataWithBytes_length( src )
     assert( data.isKindOfClass(NSData) )
     assert_equal( src.size, data.length )
     assert_kind_of( ObjcPtr, data.bytes )
@@ -45,7 +45,7 @@ class TC_NSData < Test::Unit::TestCase
 
   def test_s_dataWithData
     src = 'hello world'
-    srcdata = NSData.dataWithBytes( src, :length, src.size )
+    srcdata = NSData.dataWithBytes_length( src )
     data = NSData.dataWithData( srcdata )
     assert( data.isKindOfClass(NSData) )
     assert_equal( src.size, data.length )
@@ -73,32 +73,12 @@ class TC_NSData < Test::Unit::TestCase
     assert( data.bytes.tainted? )
   end
 
-  def test_getBytes
-    src = 'hello world'
-    data = NSData.dataWithRubyString( src )
-    cptr = ObjcPtr.new( src.size )
-    data.getBytes( cptr )
-    assert_equal( src, cptr.bytestr( src.size ))
-    assert( cptr.tainted? )
-  end
-
-  # - (void)getBytes:(void *)buffer length:(unsigned)length;
   def test_getBytes_length
     src = 'hello world'
     data = NSData.dataWithRubyString( src )
     cptr = ObjcPtr.new( src.size )
-    data.getBytes_length( cptr, src.size - 5 )
-    assert_equal( src[0..-6], cptr.bytestr( src.size - 5 ))
-    assert( cptr.tainted? )
-  end
-
-  # - (void)getBytes:(void *)buffer range:(NSRange)range;
-  def test_getBytes_range
-    src = 'hello world'
-    data = NSData.dataWithRubyString( src )
-    cptr = ObjcPtr.new( src.size )
-    data.getBytes_range( cptr, 3..8 )
-    assert_equal( src[3..8], cptr.bytestr( 8 - 3 + 1))
+    data.getBytes_length( cptr )
+    assert_equal( src, cptr.bytestr( src.size ))
     assert( cptr.tainted? )
   end
 

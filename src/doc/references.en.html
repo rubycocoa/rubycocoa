@@ -133,24 +133,20 @@ returned.</dd>
 <dd>
 Expression by the Ruby Float of the Objective-C object is
 returned.</dd>
-<dt><a name='label-16' id='label-16'><code>OSX::OCObjWrapper#objc_methods(<var>inherit</var>=<var>true</var>)</code></a></dt><!-- RDLabel: "OSX::OCObjWrapper#objc_methods" -->
-<dt><a name='label-17' id='label-17'><code>OSX::OCObjWrapper#objc_class_methods(<var>inherit</var>=<var>true</var>)</code></a></dt><!-- RDLabel: "OSX::OCObjWrapper#objc_class_methods" -->
-<dt><a name='label-18' id='label-18'><code>OSX::OCObjWrapper#objc_instance_methods(<var>inherit</var>=<var>true</var>)</code></a></dt><!-- RDLabel: "OSX::OCObjWrapper#objc_instance_methods" -->
+<dt><a name='label-16' id='label-16'><code>OSX::OCObjWrapper#objc_methods</code></a></dt><!-- RDLabel: "OSX::OCObjWrapper#objc_methods" -->
 <dd>
 return an array of Objective-C method names.</dd>
-<dt><a name='label-19' id='label-19'><code>OSX::OCObjWrapper#objc_method_type (<var>name</var>)</code></a></dt><!-- RDLabel: "OSX::OCObjWrapper#objc_method_type" -->
-<dt><a name='label-20' id='label-20'><code>OSX::OCObjWrapper#objc_class_method_type (<var>name</var>)</code></a></dt><!-- RDLabel: "OSX::OCObjWrapper#objc_class_method_type" -->
-<dt><a name='label-21' id='label-21'><code>OSX::OCObjWrapper#objc_instance_method_type (<var>name</var>)</code></a></dt><!-- RDLabel: "OSX::OCObjWrapper#objc_instance_method_type" -->
+<dt><a name='label-17' id='label-17'><code>OSX::OCObjWrapper#objc_method_type (<var>name</var>)</code></a></dt><!-- RDLabel: "OSX::OCObjWrapper#objc_method_type" -->
 <dd>
 return a type of Objective-C method as string.</dd>
-<dt><a name='label-22' id='label-22'><code>OSX::OCObjWrapper#ocm_responds? (<var>name</var>)</code></a></dt><!-- RDLabel: "OSX::OCObjWrapper#ocm_responds?" -->
+<dt><a name='label-18' id='label-18'><code>OSX::OCObjWrapper#ocm_responds? (<var>name</var>)</code></a></dt><!-- RDLabel: "OSX::OCObjWrapper#ocm_responds?" -->
 <dd>
 The Objective-C object for operation returns the logical value
 which shows whether the method specified by Argument <var>name</var>
 can be responded. <var>name</var> must be the message selector itself
 or a thing according to the basic rule. Usually, it is not
 necessary to use this method.</dd>
-<dt><a name='label-23' id='label-23'><code>OSX::OCObjWrapper#ocm_send (<var>name</var> ...)</code></a></dt><!-- RDLabel: "OSX::OCObjWrapper#ocm_send" -->
+<dt><a name='label-19' id='label-19'><code>OSX::OCObjWrapper#ocm_send (<var>name</var> ...)</code></a></dt><!-- RDLabel: "OSX::OCObjWrapper#ocm_send" -->
 <dd>
 The method specified by Argument <var>name</var> is invoked with the
 remaining arguments to the Objective-C object for
@@ -158,139 +154,150 @@ operation. <var>name</var> must be the message selector itself or a
 thing according to the basic rule. Usually, it is not necessary
 to use this method.</dd>
 </dl>
-<h2><a name='label-24' id='label-24'>OSX::OCObject class</a></h2><!-- RDLabel: "OSX::OCObject class" -->
+<h2><a name='label-20' id='label-20'>OSX::OCObject class</a></h2><!-- RDLabel: "OSX::OCObject class" -->
 <p>A general-purpose Objective-C object wrapper. The Objective-C object
 belonging to no Cocoa class defined below as the OSX module is
 generated as an instance of this class. Usually, it is not necessary
 to generate the instance of this class clearly or to define an
 inherited class.</p>
-<h3><a name='label-25' id='label-25'>superclass</a></h3><!-- RDLabel: "superclass" -->
+<h3><a name='label-21' id='label-21'>superclass</a></h3><!-- RDLabel: "superclass" -->
 <p><a href='#label-1'>OSX::ObjcID class</a></p>
-<h3><a name='label-26' id='label-26'>include module</a></h3><!-- RDLabel: "include module" -->
+<h3><a name='label-22' id='label-22'>include module</a></h3><!-- RDLabel: "include module" -->
 <p><a href='#label-6'>OSX::OCObjWrapper module</a></p>
-<h2><a name='label-27' id='label-27'>Cocoa class</a></h2><!-- RDLabel: "Cocoa class" -->
+<h2><a name='label-23' id='label-23'>Cocoa class</a></h2><!-- RDLabel: "Cocoa class" -->
 <p>All Cocoa classes, such as NSObject, NSString, and NSApplication, are
 defined as a class of Ruby which belongs to an OSX module like
 OSX::NSObject, OSX::NSString, and OSX::NSApplication.</p>
 <p>The Cocoa class itself is attached with <a href='#label-6'>OSX::OCObjWrapper module</a>
 as a Cocoa object.</p>
-<h3><a name='label-28' id='label-28'>include module</a></h3><!-- RDLabel: "include module" -->
+<h3><a name='label-24' id='label-24'>include module</a></h3><!-- RDLabel: "include module" -->
 <p><a href='#label-6'>OSX::OCObjWrapper module</a></p>
-<h3><a name='label-29' id='label-29'>extend module</a></h3><!-- RDLabel: "extend module" -->
+<h3><a name='label-25' id='label-25'>extend module</a></h3><!-- RDLabel: "extend module" -->
 <p><a href='#label-6'>OSX::OCObjWrapper module</a></p>
-<h3><a name='label-30' id='label-30'>class methods of Cocoa class</a></h3><!-- RDLabel: "class methods of Cocoa class" -->
+<h3><a name='label-26' id='label-26'>class methods of Cocoa class</a></h3><!-- RDLabel: "class methods of Cocoa class" -->
 <dl>
-<dt><a name='label-31' id='label-31'><code>COCOA_CLASS}.__ocid__</code></a></dt><!-- RDLabel: "" -->
+<dt><a name='label-27' id='label-27'><code>COCOA_CLASS}.__ocid__</code></a></dt><!-- RDLabel: "" -->
 <dd>
 The integer value of id of the Cocoa's class object is returned.</dd>
 </dl>
-<h2><a name='label-32' id='label-32'>Cocoa inherited class</a></h2><!-- RDLabel: "Cocoa inherited class" -->
-<h3><a name='label-33' id='label-33'>class methods of Cocoa inherited class</a></h3><!-- RDLabel: "class methods of Cocoa inherited class" -->
+<h2><a name='label-28' id='label-28'>Cocoa inherited class</a></h2><!-- RDLabel: "Cocoa inherited class" -->
+<h3><a name='label-29' id='label-29'>class methods of Cocoa inherited class</a></h3><!-- RDLabel: "class methods of Cocoa inherited class" -->
 <dl>
-<dt><a name='label-34' id='label-34'><code>COCOA_INHERITED_CLASS}.ns_outlets (...)</code></a></dt><!-- RDLabel: "" -->
+<dt><a name='label-30' id='label-30'><code>COCOA_INHERITED_CLASS}.ns_overrides (...)</code></a></dt><!-- RDLabel: "" -->
+<dd>
+An override is declared for the method of a super class. This
+declaration is needed when carrying out the override of the
+method directly called from the world of Objective-C. As a
+typical example, the override of <var>drawRect:</var> may be carried
+out by the inherited class of NSView. To an argument, the method
+names according to the basic rule are enumerated.</dd>
+<dt><a name='label-31' id='label-31'><code>COCOA_INHERITED_CLASS}.ib_overrides (...)</code></a></dt><!-- RDLabel: "" -->
+<dd>
+the alias of <var>ns_overrides</var></dd>
+<dt><a name='label-32' id='label-32'><code>COCOA_INHERITED_CLASS}.ns_outlets (...)</code></a></dt><!-- RDLabel: "" -->
 <dd>
 An outlet is declared. being actual <var>attr_writer</var> -- it is
 calling it is .</dd>
-<dt><a name='label-35' id='label-35'><code>COCOA_INHERITED_CLASS}.ib_outlets (...)</code></a></dt><!-- RDLabel: "" -->
+<dt><a name='label-33' id='label-33'><code>COCOA_INHERITED_CLASS}.ib_outlets (...)</code></a></dt><!-- RDLabel: "" -->
 <dd>
 the alias of <var>ns_outlets</var></dd>
 </dl>
-<h3><a name='label-36' id='label-36'>instance method prefix "super_"</a></h3><!-- RDLabel: "instance method prefix "super_"" -->
-<p>For the overrided method, if you want to use the implementation of super class,
-use "super_" prefix.</p>
+<h3><a name='label-34' id='label-34'>instance method prefix "super_"</a></h3><!-- RDLabel: "instance method prefix "super_"" -->
+<p>For the method which is declared with ns_overrides, if you want to use
+the implementation of super class, use "super_" prefix.</p>
 <pre>ns_overrides :drawRect_
 def drawRect (frame)
   super_drawRect (frame)   # invoke SuperClass#drawRect
 end</pre>
-<h2><a name='label-37' id='label-37'>OSX::OCException class</a></h2><!-- RDLabel: "OSX::OCException class" -->
+<h2><a name='label-35' id='label-35'>OSX::OCException class</a></h2><!-- RDLabel: "OSX::OCException class" -->
 <p>When an exception <var>NSException</var> occurs by the method call to a
 Objective-C object in the world of Objective-C, the exception of this
 class will be raised.</p>
-<h3><a name='label-38' id='label-38'>instance methods of OSX::OCException class</a></h3><!-- RDLabel: "instance methods of OSX::OCException class" -->
+<h3><a name='label-36' id='label-36'>instance methods of OSX::OCException class</a></h3><!-- RDLabel: "instance methods of OSX::OCException class" -->
 <dl>
-<dt><a name='label-39' id='label-39'><code>OSX::OCException#name</code></a></dt><!-- RDLabel: "OSX::OCException#name" -->
+<dt><a name='label-37' id='label-37'><code>OSX::OCException#name</code></a></dt><!-- RDLabel: "OSX::OCException#name" -->
 <dd>
 the exception name (NSException#name) is returned.</dd>
-<dt><a name='label-40' id='label-40'><code>OSX::OCException#reason</code></a></dt><!-- RDLabel: "OSX::OCException#reason" -->
+<dt><a name='label-38' id='label-38'><code>OSX::OCException#reason</code></a></dt><!-- RDLabel: "OSX::OCException#reason" -->
 <dd>
 the reason string (NSException#reason) is returned.</dd>
-<dt><a name='label-41' id='label-41'><code>OSX::OCException#userInfo</code></a></dt><!-- RDLabel: "OSX::OCException#userInfo" -->
+<dt><a name='label-39' id='label-39'><code>OSX::OCException#userInfo</code></a></dt><!-- RDLabel: "OSX::OCException#userInfo" -->
 <dd>
 the user information (NSException#userInfo) is returned.</dd>
-<dt><a name='label-42' id='label-42'><code>OSX::OCException#nsexception</code></a></dt><!-- RDLabel: "OSX::OCException#nsexception" -->
+<dt><a name='label-40' id='label-40'><code>OSX::OCException#nsexception</code></a></dt><!-- RDLabel: "OSX::OCException#nsexception" -->
 <dd>
 NSException is returned.</dd>
 </dl>
-<h2><a name='label-43' id='label-43'>OSX::NSPoint class</a></h2><!-- RDLabel: "OSX::NSPoint class" -->
+<h2><a name='label-41' id='label-41'>OSX::NSPoint class</a></h2><!-- RDLabel: "OSX::NSPoint class" -->
 <p>It is a class for treating the data type <var>NSPoint</var> defined by the
 Foundation framework in the Ruby world.</p>
-<h3><a name='label-44' id='label-44'>class methods of OSX::NSPoint class</a></h3><!-- RDLabel: "class methods of OSX::NSPoint class" -->
+<h3><a name='label-42' id='label-42'>class methods of OSX::NSPoint class</a></h3><!-- RDLabel: "class methods of OSX::NSPoint class" -->
 <dl>
-<dt><a name='label-45' id='label-45'><code>OSX::NSPoint.new(<var>x</var>,<var>y</var>)</code></a></dt><!-- RDLabel: "OSX::NSPoint.new" -->
+<dt><a name='label-43' id='label-43'><code>OSX::NSPoint.new(<var>x</var>,<var>y</var>)</code></a></dt><!-- RDLabel: "OSX::NSPoint.new" -->
 </dl>
-<h3><a name='label-46' id='label-46'>instance methods of OSX::NSPoint class</a></h3><!-- RDLabel: "instance methods of OSX::NSPoint class" -->
+<h3><a name='label-44' id='label-44'>instance methods of OSX::NSPoint class</a></h3><!-- RDLabel: "instance methods of OSX::NSPoint class" -->
 <dl>
-<dt><a name='label-47' id='label-47'><code>OSX::NSPoint#x</code></a></dt><!-- RDLabel: "OSX::NSPoint#x" -->
-<dt><a name='label-48' id='label-48'><code>OSX::NSPoint#y</code></a></dt><!-- RDLabel: "OSX::NSPoint#y" -->
-<dt><a name='label-49' id='label-49'><code>OSX::NSPoint#x= (<var>val</var>)</code></a></dt><!-- RDLabel: "OSX::NSPoint#x=" -->
-<dt><a name='label-50' id='label-50'><code>OSX::NSPoint#y= (<var>val</var>)</code></a></dt><!-- RDLabel: "OSX::NSPoint#y=" -->
-<dt><a name='label-51' id='label-51'><code>OSX::NSPoint#to_a</code></a></dt><!-- RDLabel: "OSX::NSPoint#to_a" -->
+<dt><a name='label-45' id='label-45'><code>OSX::NSPoint#x</code></a></dt><!-- RDLabel: "OSX::NSPoint#x" -->
+<dt><a name='label-46' id='label-46'><code>OSX::NSPoint#y</code></a></dt><!-- RDLabel: "OSX::NSPoint#y" -->
+<dt><a name='label-47' id='label-47'><code>OSX::NSPoint#x= (<var>val</var>)</code></a></dt><!-- RDLabel: "OSX::NSPoint#x=" -->
+<dt><a name='label-48' id='label-48'><code>OSX::NSPoint#y= (<var>val</var>)</code></a></dt><!-- RDLabel: "OSX::NSPoint#y=" -->
+<dt><a name='label-49' id='label-49'><code>OSX::NSPoint#to_a</code></a></dt><!-- RDLabel: "OSX::NSPoint#to_a" -->
 <dd>
 Array <var>[x, y]</var> is returned.</dd>
 </dl>
-<h2><a name='label-52' id='label-52'>OSX::NSSize class</a></h2><!-- RDLabel: "OSX::NSSize class" -->
+<h2><a name='label-50' id='label-50'>OSX::NSSize class</a></h2><!-- RDLabel: "OSX::NSSize class" -->
 <p>It is a class for treating the data type <var>NSSize</var> defined by the
 Foundation framework in the Ruby world.</p>
-<h3><a name='label-53' id='label-53'>class methods of OSX::NSSize class</a></h3><!-- RDLabel: "class methods of OSX::NSSize class" -->
+<h3><a name='label-51' id='label-51'>class methods of OSX::NSSize class</a></h3><!-- RDLabel: "class methods of OSX::NSSize class" -->
 <dl>
-<dt><a name='label-54' id='label-54'><code>OSX::NSSize.new(<var>width</var>, <var>height</var>)</code></a></dt><!-- RDLabel: "OSX::NSSize.new" -->
+<dt><a name='label-52' id='label-52'><code>OSX::NSSize.new(<var>width</var>, <var>height</var>)</code></a></dt><!-- RDLabel: "OSX::NSSize.new" -->
 </dl>
-<h3><a name='label-55' id='label-55'>instance methods of OSX::NSSize class</a></h3><!-- RDLabel: "instance methods of OSX::NSSize class" -->
+<h3><a name='label-53' id='label-53'>instance methods of OSX::NSSize class</a></h3><!-- RDLabel: "instance methods of OSX::NSSize class" -->
 <dl>
-<dt><a name='label-56' id='label-56'><code>OSX::NSSize#width</code></a></dt><!-- RDLabel: "OSX::NSSize#width" -->
-<dt><a name='label-57' id='label-57'><code>OSX::NSSize#height</code></a></dt><!-- RDLabel: "OSX::NSSize#height" -->
-<dt><a name='label-58' id='label-58'><code>OSX::NSSize#width= (<var>val</var>)</code></a></dt><!-- RDLabel: "OSX::NSSize#width=" -->
-<dt><a name='label-59' id='label-59'><code>OSX::NSSize#height= (<var>val</var>)</code></a></dt><!-- RDLabel: "OSX::NSSize#height=" -->
-<dt><a name='label-60' id='label-60'><code>OSX::NSSize#to_a</code></a></dt><!-- RDLabel: "OSX::NSSize#to_a" -->
+<dt><a name='label-54' id='label-54'><code>OSX::NSSize#width</code></a></dt><!-- RDLabel: "OSX::NSSize#width" -->
+<dt><a name='label-55' id='label-55'><code>OSX::NSSize#height</code></a></dt><!-- RDLabel: "OSX::NSSize#height" -->
+<dt><a name='label-56' id='label-56'><code>OSX::NSSize#width= (<var>val</var>)</code></a></dt><!-- RDLabel: "OSX::NSSize#width=" -->
+<dt><a name='label-57' id='label-57'><code>OSX::NSSize#height= (<var>val</var>)</code></a></dt><!-- RDLabel: "OSX::NSSize#height=" -->
+<dt><a name='label-58' id='label-58'><code>OSX::NSSize#to_a</code></a></dt><!-- RDLabel: "OSX::NSSize#to_a" -->
 <dd>
 Array <var>[width, height]</var> is returned.</dd>
 </dl>
-<h2><a name='label-61' id='label-61'>OSX::NSRect class</a></h2><!-- RDLabel: "OSX::NSRect class" -->
+<h2><a name='label-59' id='label-59'>OSX::NSRect class</a></h2><!-- RDLabel: "OSX::NSRect class" -->
 <p>It is a class for treating the data type <var>NSRect</var> defined by the
 Foundation framework in the Ruby world.</p>
-<h3><a name='label-62' id='label-62'>class methods of OSX::NSRect class</a></h3><!-- RDLabel: "class methods of OSX::NSRect class" -->
+<h3><a name='label-60' id='label-60'>class methods of OSX::NSRect class</a></h3><!-- RDLabel: "class methods of OSX::NSRect class" -->
 <dl>
-<dt><a name='label-63' id='label-63'><code>OSX::NSRect.new(<var>origin</var>, <var>size</var>)</code></a></dt><!-- RDLabel: "OSX::NSRect.new" -->
-<dt><a name='label-64' id='label-64'><code>OSX::NSRect.new(<var>x</var>, <var>y</var>, <var>width</var>, <var>height</var>)</code></a></dt><!-- RDLabel: "OSX::NSRect.new" -->
+<dt><a name='label-61' id='label-61'><code>OSX::NSRect.new(<var>origin</var>, <var>size</var>)</code></a></dt><!-- RDLabel: "OSX::NSRect.new" -->
+<dt><a name='label-62' id='label-62'><code>OSX::NSRect.new(<var>x</var>, <var>y</var>, <var>width</var>, <var>height</var>)</code></a></dt><!-- RDLabel: "OSX::NSRect.new" -->
 </dl>
-<h3><a name='label-65' id='label-65'>instance methods of OSX::NSRect class</a></h3><!-- RDLabel: "instance methods of OSX::NSRect class" -->
+<h3><a name='label-63' id='label-63'>instance methods of OSX::NSRect class</a></h3><!-- RDLabel: "instance methods of OSX::NSRect class" -->
 <dl>
-<dt><a name='label-66' id='label-66'><code>OSX::NSRect#origin</code></a></dt><!-- RDLabel: "OSX::NSRect#origin" -->
-<dt><a name='label-67' id='label-67'><code>OSX::NSRect#size</code></a></dt><!-- RDLabel: "OSX::NSRect#size" -->
-<dt><a name='label-68' id='label-68'><code>OSX::NSRect#origin= (<var>val</var>)</code></a></dt><!-- RDLabel: "OSX::NSRect#origin=" -->
-<dt><a name='label-69' id='label-69'><code>OSX::NSRect#size= (<var>val</var>)</code></a></dt><!-- RDLabel: "OSX::NSRect#size=" -->
-<dt><a name='label-70' id='label-70'><code>OSX::NSRect#to_a</code></a></dt><!-- RDLabel: "OSX::NSRect#to_a" -->
+<dt><a name='label-64' id='label-64'><code>OSX::NSRect#origin</code></a></dt><!-- RDLabel: "OSX::NSRect#origin" -->
+<dt><a name='label-65' id='label-65'><code>OSX::NSRect#size</code></a></dt><!-- RDLabel: "OSX::NSRect#size" -->
+<dt><a name='label-66' id='label-66'><code>OSX::NSRect#origin= (<var>val</var>)</code></a></dt><!-- RDLabel: "OSX::NSRect#origin=" -->
+<dt><a name='label-67' id='label-67'><code>OSX::NSRect#size= (<var>val</var>)</code></a></dt><!-- RDLabel: "OSX::NSRect#size=" -->
+<dt><a name='label-68' id='label-68'><code>OSX::NSRect#to_a</code></a></dt><!-- RDLabel: "OSX::NSRect#to_a" -->
 <dd>
 Array <var>[[x, y], [width, height]]</var> is returned.</dd>
 </dl>
-<h2><a name='label-71' id='label-71'>OSX::NSRange class</a></h2><!-- RDLabel: "OSX::NSRange class" -->
+<h2><a name='label-69' id='label-69'>OSX::NSRange class</a></h2><!-- RDLabel: "OSX::NSRange class" -->
 <p>It is a class for treating the data type <var>NSRange</var> defined by the
 Foundation framework in the Ruby world.</p>
-<h3><a name='label-72' id='label-72'>class methods of OSX::NSRange class</a></h3><!-- RDLabel: "class methods of OSX::NSRange class" -->
+<h3><a name='label-70' id='label-70'>class methods of OSX::NSRange class</a></h3><!-- RDLabel: "class methods of OSX::NSRange class" -->
 <dl>
-<dt><a name='label-73' id='label-73'><code>OSX::NSRange.new(<var>range</var>)</code></a></dt><!-- RDLabel: "OSX::NSRange.new" -->
-<dt><a name='label-74' id='label-74'><code>OSX::NSRange.new(<var>location</var>, <var>length</var>)</code></a></dt><!-- RDLabel: "OSX::NSRange.new" -->
+<dt><a name='label-71' id='label-71'><code>OSX::NSRange.new(<var>range</var>)</code></a></dt><!-- RDLabel: "OSX::NSRange.new" -->
+<dt><a name='label-72' id='label-72'><code>OSX::NSRange.new(<var>location</var>, <var>length</var>)</code></a></dt><!-- RDLabel: "OSX::NSRange.new" -->
 </dl>
-<h3><a name='label-75' id='label-75'>instance methods of OSX::NSRange class</a></h3><!-- RDLabel: "instance methods of OSX::NSRange class" -->
+<h3><a name='label-73' id='label-73'>instance methods of OSX::NSRange class</a></h3><!-- RDLabel: "instance methods of OSX::NSRange class" -->
 <dl>
-<dt><a name='label-76' id='label-76'><code>OSX::NSRect#location</code></a></dt><!-- RDLabel: "OSX::NSRect#location" -->
-<dt><a name='label-77' id='label-77'><code>OSX::NSRect#length</code></a></dt><!-- RDLabel: "OSX::NSRect#length" -->
-<dt><a name='label-78' id='label-78'><code>OSX::NSRect#location= (<var>val</var>)</code></a></dt><!-- RDLabel: "OSX::NSRect#location=" -->
-<dt><a name='label-79' id='label-79'><code>OSX::NSRect#length= (<var>val</var>)</code></a></dt><!-- RDLabel: "OSX::NSRect#length=" -->
-<dt><a name='label-80' id='label-80'><code>OSX::NSRect#to_a</code></a></dt><!-- RDLabel: "OSX::NSRect#to_a" -->
+<dt><a name='label-74' id='label-74'><code>OSX::NSRect#location</code></a></dt><!-- RDLabel: "OSX::NSRect#location" -->
+<dt><a name='label-75' id='label-75'><code>OSX::NSRect#length</code></a></dt><!-- RDLabel: "OSX::NSRect#length" -->
+<dt><a name='label-76' id='label-76'><code>OSX::NSRect#location= (<var>val</var>)</code></a></dt><!-- RDLabel: "OSX::NSRect#location=" -->
+<dt><a name='label-77' id='label-77'><code>OSX::NSRect#length= (<var>val</var>)</code></a></dt><!-- RDLabel: "OSX::NSRect#length=" -->
+<dt><a name='label-78' id='label-78'><code>OSX::NSRect#to_a</code></a></dt><!-- RDLabel: "OSX::NSRect#to_a" -->
 <dd>
 Array <var>[ location, length ]</var> is returned.</dd>
-<dt><a name='label-81' id='label-81'><code>OSX::NSRect#to_range</code></a></dt><!-- RDLabel: "OSX::NSRect#to_range" -->
+<dt><a name='label-79' id='label-79'><code>OSX::NSRect#to_range</code></a></dt><!-- RDLabel: "OSX::NSRect#to_range" -->
 <dd>
 Ruby's Range object is returned.</dd>
 </dl>

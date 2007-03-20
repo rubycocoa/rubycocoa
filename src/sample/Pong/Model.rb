@@ -4,7 +4,7 @@ class Shape
 
   attr_reader :rect, :color
 
-  def initialize (x, y, w, h, c)
+  def initialize(x, y, w, h, c)
     @rect = OSX::NSRect.new(x, y, w, h)
     @color = c
   end
@@ -62,16 +62,16 @@ class BallMoving
     snd_init
   end
 
-  def set_speed (new_speed)
+  def set_speed(new_speed)
     @speed = new_speed
     recalc
   end
 
-  def speed= (new_speed)
+  def speed=(new_speed)
     set_speed(new_speed)
   end
 
-  def angle= (angle)
+  def angle=(angle)
     @angle = angle
     recalc
   end

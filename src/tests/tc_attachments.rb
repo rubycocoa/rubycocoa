@@ -19,14 +19,6 @@ class TC_Attachments < Test::Unit::TestCase
 
     @i = NSImage.alloc.initWithSize([100,100])
   end
-
-  def test_array_kind_of
-    assert_kind_of RCArrayAttachment, @a
-  end
-  
-  def test_dictionary_kind_of
-    assert_kind_of RCDictionaryAttachment, @d
-  end
   
   def test_array_size
     assert_equal 3, @a.size
@@ -77,12 +69,11 @@ class TC_Attachments < Test::Unit::TestCase
   end
   
   def test_data
-    data = NSData.dataWithBytes_length("somedata",8)
+    data = NSData.dataWithBytes_length("somedata")
     assert_equal "somedata", data.rubyString
   end
   
   def test_image_focus
-    assert_kind_of RCImageAttachment, @i
     assert_respond_to @i, :focus
     success = false
     @i.focus do
@@ -93,4 +84,23 @@ class TC_Attachments < Test::Unit::TestCase
     # Doesn't seem to be a way to test that lockFocus/unlockFocus have been called,
     # so it's not possible to test the begin/ensure block in 'focus'.
   end
+
+  def test_indexset_to_a
+    assert_respond_to( OSX::NSIndexSet.alloc.init, :to_a )
+    assert_kind_of( Array, OSX::NSIndexSet.alloc.init.to_a )
+    assert_equal( [1,2,3], 
+                  OSX::NSIndexSet.indexSetWithIndexesInRange(1..3).to_a )
+  end
+
+  def test_userdefault
+    ud = OSX::NSUserDefaults.standardUserDefaults
+    ud['Foo'] = 42
+    assert_equal(ud['Foo'], ud.objectForKey('Foo'))
+    assert_equal(42, ud['Foo'].intValue)
+    assert_equal(42, ud.integerForKey('Foo'))
+    ud.delete('Foo')
+    assert_equal(nil, ud['Foo'])
+    assert_equal(0, ud.integerForKey('Foo'))
+  end
+
 end

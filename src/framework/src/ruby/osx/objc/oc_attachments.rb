@@ -6,14 +6,12 @@
 
 module OSX
 
-  # attachment module for NSArray group
-  module RCArrayAttachment
-    include Enumerable
-
+  # NSArray additions
+  class NSArray
     def each
       iter = self.objectEnumerator
       while obj = iter.nextObject do
-	yield(obj)
+        yield(obj)
       end
       self
     end
@@ -30,25 +28,22 @@ module OSX
     def []= (index, obj)
       index = self.count + index if index < 0
       self.replaceObjectAtIndex_withObject(index, obj)
-      obj
     end
 
     def push (obj)
       self.addObject(obj)
     end
-
-  end				# module RCArrayAttachment
-  OSX::NSArray.class_eval 'include RCArrayAttachment'
-
-
-  # attachment module for NSDictionary group
-  module RCDictionaryAttachment
+  end
+  class NSArray
     include Enumerable
+  end
 
+  # NSDictionary additions
+  class NSDictionary
     def each
       iter = self.keyEnumerator
       while key = iter.nextObject do
-	yield(key, self.objectForKey(key))
+        yield(key, self.objectForKey(key))
       end
       self
     end
@@ -71,36 +66,62 @@ module OSX
 
     def []= (key, obj)
       self.setObject_forKey(obj, key)
-      obj
+    end
+  end
+  class NSDictionary
+    include Enumerable
+  end
+
+  class NSUserDefaults
+    def [] (key)
+      self.objectForKey(key)
     end
 
-  end				# module RCDictionaryAttachment
-  OSX::NSDictionary.class_eval 'include RCDictionaryAttachment'
+    def []= (key, obj)
+      self.setObject_forKey(obj, key)
+    end
 
+    def delete (key)
+      self.removeObjectForKey(key)
+    end
+  end
 
-  # attachment module for NSData group
-  module RCDataAttachment
-
+  # NSData additions
+  class NSData
     def rubyString
       cptr = self.bytes
       return cptr.bytestr( self.length )
     end
-
   end
-  OSX::NSData.class_eval 'include RCDataAttachment'
 
-
-  # attachment module for NSImage group
-  module RCImageAttachment
-    def focus
-      lockFocus
-      begin
-        yield
-      ensure
-        unlockFocus
+  # NSIndexSet additions
+  class NSIndexSet
+    def to_a
+      result = []
+      index = self.firstIndex
+      until index == OSX::NSNotFound
+        result << index
+        index = self.indexGreaterThanIndex(index)
       end
+      return result
     end
   end
-  OSX::NSImage.class_eval 'include RCImageAttachment'
 
+  # NSEnumerator additions
+  class NSEnumerator
+    def to_a
+      self.allObjects.to_a
+    end
+  end
+
+  # NSNumber additions
+  class NSNumber
+    def to_i
+      self.stringValue.to_s.to_i
+    end
+
+    def to_f
+      self.floatValue
+    end
+  end
 end

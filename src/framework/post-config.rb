@@ -3,6 +3,7 @@
 new_filename_prefix = 'osx_'
 ruby_h = File.join(@config['ruby-header-dir'], 'ruby.h')
 intern_h = File.join(@config['ruby-header-dir'], 'intern.h')
+build_universal = (@config['build-universal'] == 'yes')
 [ ruby_h, intern_h ].each do |src_path|
   dst_fname = new_filename_prefix + File.basename(src_path)
   dst_fname = "src/objc/" + dst_fname
@@ -16,7 +17,47 @@ intern_h = File.join(@config['ruby-header-dir'], 'intern.h')
   end
 end
 
-curdir = Dir.pwd
-Dir.chdir('src/objc/cocoa')
-command 'ruby gen_cocoa_wrapper.rb'
-Dir.chdir(curdir)
+def call_generator(path, special_flags, extension=nil, additional_flags=nil)
+  framework = File.basename(path, '.framework')
+  extension ||= 'bridgesupport'
+  out = "bridge-support/#{framework}.#{extension}"
+  generator = "#{@config['ruby-prog']} tool/gen_bridge_metadata.rb"
+  generator << " #{special_flags}" if special_flags
+  generator << " #{additional_flags}" if additional_flags
+  generator << " -f #{path}"
+  exceptions = "bridge-support-exceptions/#{framework}.xml"
+  generator << " -e #{exceptions}" if File.exist?(exceptions)
+  if !File.exist?(out) or File.size(out) == 0 or File.mtime('tool/gen_bridge_metadata.rb') > File.mtime(out)
+    generator << " -o #{out}"
+    $stderr.puts "create #{out} ..."
+    command("rm -rf #{out}")
+    command(generator) 
+  end
+  return out
+end
+
+# generate bridge support metadata files for Cocoa & its dependencies. 
+TIGER_OR_LOWER = `uname -r`.strip.to_f < 9.0
+if @config['gen-bridge-support'] != 'no'
+  command('mkdir -p bridge-support')
+  [['/System/Library/Frameworks/CoreFoundation.framework', nil],
+   ['/System/Library/Frameworks/Foundation.framework', nil],
+   ['/System/Library/Frameworks/AppKit.framework', nil],
+   ['/System/Library/Frameworks/CoreData.framework', nil],
+   ['/System/Library/Frameworks/WebKit.framework', nil],
+   ['/System/Library/Frameworks/ApplicationServices.framework/Frameworks/CoreGraphics.framework', '-c "-framework ApplicationServices" -c -F/System/Library/Frameworks/ApplicationServices.framework/Frameworks -c "-include /System/Library/Frameworks/OpenGL.framework/Headers/CGLTypes.h"'],
+   ['/System/Library/Frameworks/Quartz.framework/Frameworks/PDFKit.framework', nil],
+   ['/System/Library/Frameworks/QuartzCore.framework', nil],
+   ['/System/Library/Frameworks/OpenGL.framework', nil],
+   ['/System/Library/Frameworks/QTKit.framework', TIGER_OR_LOWER ? '' : '-c -DQTKIT_ENABLE_LAYERKIT -c "-framework QTKit"'],
+   ['/System/Library/Frameworks/AddressBook.framework', nil],
+   ['/System/Library/Frameworks/InstantMessage.framework', nil],
+  ].each do |path, special_flags|
+    xml = call_generator(path, special_flags) 
+    if system("grep inline #{xml} >& /dev/null")
+      addflg = "-F dylib"
+      addflg << " -c'-arch ppc -arch i386'" if build_universal
+      call_generator(path, special_flags, 'dylib', addflg) 
+    end
+  end
+end

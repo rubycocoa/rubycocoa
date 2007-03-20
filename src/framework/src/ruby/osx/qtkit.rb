@@ -1,5 +1,6 @@
-#
-# Version 1.0 2006-10-31
-# Created and maintained by Eloy Duran <eloy.de.enige@gmail.com>
+#  Copyright (c) 2006 Laurent Sansonetti
 
-require 'osx/objc/qtkit'
+require 'osx/cocoa'
+
+STDERR.puts "The osx/qtkit script has been deprecated, and its use is now discouraged. Please do `OSX.require_framework \"QTKit\"` instead."
+OSX.require_framework 'QTKit'

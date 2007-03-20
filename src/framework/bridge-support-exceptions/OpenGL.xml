@@ -1,0 +1,19 @@
+<?xml version='1.0'?>
+<!DOCTYPE signatures SYSTEM "file://localhost/System/Library/DTDs/BridgeSupport.dtd">
+<signatures version='0.9'>
+  <ignored_defines>
+    <regex>^gl</regex>
+  </ignored_defines>
+  <struct name='GLIFunctionDispatch'/>
+  <opaque name='GLUnurbs *'/>
+  <opaque name='GLUquadric *'/>
+  <opaque name='GLUtesselator *'/>
+  <opaque name='GLUnurbsObj *'/>
+  <opaque name='GLUquadricObj *'/>
+  <opaque name='GLUtesselatorObj *'/>
+  <opaque name='GLUtriangulatorObj *'/>
+  <opaque name='CGLContextObj' type='^{_CGLContextObject=}'/>
+  <opaque name='CGLPixelFormatObj'/>
+  <opaque name='CGLRendererInfoObj'/>
+  <opaque name='CGLPBufferObj'/>
+</signatures>

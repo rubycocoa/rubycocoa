@@ -3,15 +3,12 @@
 #  ÇPROJECTNAMEÈ
 #
 #  Created by ÇFULLUSERNAMEÈ on ÇDATEÈ.
-#  Copyright (c) 2001 ÇORGANIZATIONNAMEÈ. All rights reserved.
+#  Copyright (c) ÇYEARÈ ÇORGANIZATIONNAMEÈ. All rights reserved.
 #
 
 require 'osx/cocoa'
 
 class ÇFILEBASENAMEASIDENTIFIERÈ < OSX::NSDocument
-
-  ns_overrides 'windowNibName', 'dataRepresentationOfType:', 
-    'loadDataRepresentation:ofType:'
 
   def windowNibName
     # Implement this to return a nib to load OR implement

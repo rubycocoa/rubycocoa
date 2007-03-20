@@ -11,12 +11,10 @@
 
 == RubyCocoa
 
-: ((<RubyCocoa Resources (English)|URL:http://www.rubycocoa.com/>))
-  Documentation and examples for RubyCocoa written by Tim Burks.
+: ((<Let's make an application with RubyCocoa (Japanese)|URL:http://www.mouseup.net/rubycocoa/calc_app1.html>))
 
-: ((<MiniKidsGames|URL:http://minikidsgames.sourceforge.net/minikidsgames/>))
-
-  A collection of games and a game framework for RubyCocoa. 
+  Tutorial for RubyCocoa. It describes programming in RubyCocoa through making
+  a simple calculator application.
 
 : ((<An Introduction to RubyCocoa, Part 1 (English)|URL:http://www.macdevcenter.com/pub/a/mac/2004/10/05/cocoa.html>)) ((<, Part 2|URL:http://www.macdevcenter.com/pub/a/mac/2004/10/12/cocoa.html>)) 
 

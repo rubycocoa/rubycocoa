@@ -54,15 +54,15 @@ Now launch the application:
 or double-click 'CocoHako' in the Finder. 
 
 
-== Build a Xcode-based RubyCocoa application
+== Build a Project Builder-based RubyCocoa application
 
-The next example is Xcode-based. Type this to build it:
+The next example is Project Builder-based. Type this to build it:
 
   % cd /Developer/Examples/RubyCocoa/simpleapp
-  % xcodebuild
+  % pbxbuild
   % open build/SimpleApp.app
 
-You can build and run the application in Xcode, too. Launch the
+You can build and run the application in Project Builder, too. Launch the
 application:
 
 

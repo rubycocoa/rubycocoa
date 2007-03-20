@@ -17,11 +17,14 @@
 #import "ocdata_conv.h"
 #import <mach-o/dyld.h>
 #import <string.h>
+#import "BridgeSupport.h"
+#import <objc/objc-runtime.h>
+#import "cls_objcid.h"
+#import "objc_compat.h"
 
 #define OSX_MODULE_NAME "OSX"
 
 static VALUE _cOCObject = Qnil;
-static ID _within_NSClassFromString_ID;
 ID _relaxed_syntax_ID;
 
 static VALUE init_module_OSX()
@@ -79,19 +82,35 @@ osx_mf_objc_derived_class_new(VALUE mdl, VALUE kls, VALUE kls_name, VALUE super_
   return Qnil;
 }
 
-// def OSX.objc_derived_class_method_add (kls, method_name)
-// ex1.  OSX.objc_derived_class_method_add (AA::BB::CustomView, "drawRect:")
+// def OSX.objc_class_method_add (kls, method_name)
+// ex1.  OSX.objc_class_method_add (AA::BB::CustomView, "drawRect:")
 static VALUE
-osx_mf_objc_derived_class_method_add(VALUE mdl, VALUE kls, VALUE method_name)
+osx_mf_objc_class_method_add(VALUE mdl, VALUE kls, VALUE method_name, VALUE class_method, VALUE types)
 {
   Class a_class;
   SEL a_sel;
+  char *kls_name;
 
   method_name = rb_obj_as_string(method_name);
-  a_class = RBObjcClassFromRubyClass (kls);
   a_sel = sel_registerName(STR2CSTR(method_name));
-  if (a_class && a_sel) {
-    [a_class addRubyMethod: a_sel];
+  if (a_sel == NULL)
+    return Qnil;
+  kls_name = rb_class2name(kls);
+  if (strncmp(kls_name, "OSX::", 5) == 0 && (a_class = objc_lookUpClass(kls_name + 5)) != NULL) {
+    // override in the current class
+  }
+  else {
+    // override in the super class 
+    a_class = RBObjcClassFromRubyClass (kls);
+  }
+  if (a_class != NULL) {
+    id rcv;
+
+    rcv = RTEST(class_method) ? a_class->isa : a_class;
+    if (NIL_P(types))
+      [rcv addRubyMethod:a_sel];
+    else
+      [rcv addRubyMethod:a_sel withType:STR2CSTR(types)];
   }
   return Qnil;
 }
@@ -145,60 +164,46 @@ thread_switcher_start()
   [RBThreadSwitcher start];
 }
 
-static VALUE
-osx_mf_init_cocoa(VALUE mdl)
-{
-  extern void init_cocoa(VALUE);
-  static int init_p = 0;
-  if (init_p) 
-    return Qfalse;
-  rb_require("osx/objc/oc_types");
-  init_cocoa(mdl);
-  init_p = 1;
-  return Qtrue;
-}
-
 /******************/
 
 static VALUE
-wrapper_rb_osx_const (VALUE name)
-{
-  VALUE mOSX;
-  
-  mOSX = osx_s_module();
-  if (NIL_P(mOSX)) 
-    return Qnil;
-  
-  return rb_const_get(mOSX, rb_intern(StringValueCStr(name)));
-}
-
-static VALUE
-rb_osx_const (const char* name)
+rb_osx_class_const (const char* name)
 {
   VALUE mOSX;
   VALUE constant;
-  VALUE old_ruby_debug;
-  
+  ID name_id;
+ 
+  if (strlen(name) == 0)
+    return Qnil;
+
   mOSX = osx_s_module();
   if (NIL_P(mOSX)) 
     return Qnil;
 
-  constant = Qnil;
+  name_id = rb_intern(name);
+  if (!rb_is_const_id(name_id)) {
+    // If the class name can't be a constant, let's use the superclass name.
+    Class klass = objc_getClass(name);
+    if (klass != NULL) {
+      Class superklass = class_getSuperclass(klass);
+      if (superklass != NULL)
+        return rb_osx_class_const(class_getName(superklass));
+    }
+ 
+    return Qnil;
+  }
 
-  if (rb_ivar_get(mOSX, _within_NSClassFromString_ID) == Qtrue) {
-    // We are called by NSClassFromString, just return the constant if it exists.
-    if (rb_const_defined(mOSX, rb_intern(name)))
-      constant = rb_const_get(mOSX, rb_intern(name));
+  // Get the class constant, triggering an import if necessary.
+  // Don't import the class if we are called within NSClassFromString, just return the constant 
+  // if it exists (otherwise it would cause an infinite loop).
+  if (rb_const_defined(mOSX, name_id)) {
+    constant = rb_const_get(mOSX, name_id);
+  }
+  else if (current_function == NULL || strcmp(current_function->name, "NSClassFromString") != 0) {
+    constant = rb_funcall(mOSX, rb_intern("ns_import"), 1, rb_str_new2(name));
   }
   else {
-    // Explicitely call const_get, this will make sure the constant is generated if it does not
-    // exist (through const_missing -> OSX::ns_import...).
-    // Disable warnings just between the const_get instruction, as it would raise too many false
-    // positives.
-    old_ruby_debug = ruby_debug;
-    ruby_debug = Qfalse;
-    constant = rb_rescue2(&wrapper_rb_osx_const, rb_str_new2(name), NULL, Qnil, rb_eNameError, NULL);  
-    ruby_debug = old_ruby_debug;
+    constant = Qnil;
   }
 
   return constant;
@@ -207,7 +212,7 @@ rb_osx_const (const char* name)
 static VALUE
 rb_cls_ocobj (const char* name)
 {
-  VALUE cls = rb_osx_const(name);
+  VALUE cls = rb_osx_class_const(name);
   if (cls == Qnil) 
     cls = _cOCObject;
   return cls;
@@ -227,7 +232,6 @@ osx_mf_objc_symbol_to_obj(VALUE mdl, VALUE const_name, VALUE const_type)
   char buf[BUFSIZ];
   NSSymbol sym = NULL;
   void* addr = NULL;
-  int octype;
 
   const_name = rb_obj_as_string(const_name);
   const_type = rb_obj_as_string(const_type);
@@ -245,8 +249,7 @@ osx_mf_objc_symbol_to_obj(VALUE mdl, VALUE const_name, VALUE const_type)
   if (addr == NULL)
     rb_raise(rb_eRuntimeError, "address of '%s' is NULL.", STR2CSTR(const_name));
 
-  octype = to_octype(STR2CSTR(const_type));
-  if (!ocdata_to_rbobj(Qnil, octype, addr, &result))
+  if (!ocdata_to_rbobj(Qnil, STR2CSTR(const_type), addr, &result, NO))
     rb_raise(rb_eRuntimeError, "cannot convert to rbobj for type '%s'.", STR2CSTR(const_type));
 
   return result;
@@ -266,14 +269,24 @@ osx_s_module()
 }
 
 VALUE
+ocobj_s_new_with_class_name(id ocid, const char *cls_name)
+{
+  // Try to determine from the metadata if a given NSCFType object cannot be promoted to a better class.
+  if (strcmp(cls_name, "NSCFType") == 0) {
+    struct bsCFType *bs_cf_type;
+    
+    bs_cf_type = find_bs_cf_type_by_type_id(CFGetTypeID((CFTypeRef)ocid));
+    if (bs_cf_type != NULL)
+      cls_name = bs_cf_type->bridged_class_name;
+  }
+  
+  return objcid_new_with_ocid(rb_cls_ocobj(cls_name), ocid);
+}
+
+VALUE
 ocobj_s_new(id ocid)
 {
-  VALUE obj;
-  const char *cls_name;
-
-  cls_name = object_getClassName(ocid);
-  obj = rb_funcall(rb_cls_ocobj(cls_name), rb_intern("new_with_ocid"), 1, OCID2NUM(ocid));
-  return obj;
+  return ocobj_s_new_with_class_name(ocid, object_getClassName(ocid));
 }
 
 id
@@ -314,194 +327,36 @@ ocid_get_rbobj (id ocid)
   return result;
 }
 
-static ID _bridge_support_signatures_ID;
+// FIXME: this is a silly hack.
 
-#if HAS_LIBXML2
-#include <libxml/xmlreader.h>
-static BOOL
-next_node(xmlTextReaderPtr reader)
-{
-  int   retval;
-
-  retval = xmlTextReaderRead(reader);
-  if (retval == 0)
-    return NO;
-
-  if (retval < 0)
-    rb_raise(rb_eRuntimeError, "parsing error: %d", retval);
-
-  return YES;
-}
+struct RB_METHOD {
+  VALUE klass, rklass;
+  // ...
+};
 
 static VALUE
-get_attribute_and_check(xmlTextReaderPtr reader, const char *name)
+osx_mf_rebind_umethod(VALUE rcv, VALUE klass, VALUE umethod)
 {
-  xmlChar * attribute;
-  VALUE     value;
+  struct RB_METHOD *data;
+
+  Data_Get_Struct(umethod, struct RB_METHOD, data);
+  data->rklass = klass;
   
-  attribute = xmlTextReaderGetAttribute(reader, (const xmlChar *)name);
-  if (attribute == NULL)
-    rb_raise(rb_eRuntimeError, "expected attribute `%s' for element `%s'", name, xmlTextReaderConstName(reader));
-
-  value = rb_str_new2((const char *)attribute);
-  xmlFree(attribute);
-
-  return value;
+  return Qnil;
 }
-
-static VALUE
-get_value_and_check(xmlTextReaderPtr reader)
-{
-  const xmlChar * value;
-  
-  value = xmlTextReaderConstValue(reader);
-  if (value == NULL)
-    rb_raise(rb_eRuntimeError, "expected value for element `%s'", xmlTextReaderConstName(reader));
-
-  return rb_str_new2((const char *)value);
-}
-
-static inline void
-add_method_if_needed(VALUE signatures, VALUE class_name, VALUE methods_type, VALUE selector, VALUE passbyref_args_n)
-{
-  VALUE class_hash;
-  VALUE methods_type_ary;
-  VALUE value;
-  int i;
-
-  if (NIL_P(class_name) || NIL_P(methods_type) || NIL_P(selector) || NIL_P(passbyref_args_n) || RARRAY(passbyref_args_n)->len == 0)
-    return;
-  
-  class_hash = rb_hash_aref(signatures, class_name);
-  if (NIL_P(class_hash)) {
-    class_hash = rb_hash_new();
-    rb_hash_aset(signatures, class_name, class_hash);
-  }
-  
-  methods_type_ary = rb_hash_aref(class_hash, methods_type);
-  if (NIL_P(methods_type_ary)) {
-    methods_type_ary = rb_ary_new();
-    rb_hash_aset(class_hash, methods_type, methods_type_ary);
-  }
-  
-  value = rb_ary_new();
-  rb_ary_push(value, selector);
-  for (i = 0; i < RARRAY(passbyref_args_n)->len; i++)
-    rb_ary_push(value, RARRAY(passbyref_args_n)->ptr[i]);
-
-  rb_ary_push(methods_type_ary, value);
-  
-  rb_ary_clear(passbyref_args_n);
-}
-
-static VALUE
-osx_mf_load_bridge_support_file (VALUE rcv, VALUE path)
-{
-  const char *      cpath;
-  xmlTextReaderPtr  reader;
-  VALUE             signatures;
-  VALUE             current_class_name;
-  VALUE             current_methods_type;
-  VALUE             current_selector;
-  VALUE             current_passbyref_args_n;
-  
-  signatures = rb_ivar_get(rcv, _bridge_support_signatures_ID);
-  if (NIL_P(signatures))
-    rb_raise(rb_eRuntimeError, "internal bridge support signatures cache not available");
-
-  cpath = STR2CSTR(path);
-
-  DLOG(@"MDLOSX", "Loading bridge support file `%s'", cpath);
-  
-  reader = xmlNewTextReaderFilename(cpath);
-  if (reader == NULL)
-    rb_raise(rb_eRuntimeError, "cannot create XML text reader for file at path `%s'", cpath);
-
-  current_class_name = current_methods_type = current_selector = current_passbyref_args_n = Qnil;
-
-  while (YES) {
-    const char *name;
-    int node_type = -1;
-    BOOL eof;
-
-    do {
-      if ((eof = !next_node(reader)))
-        break;
-      
-      node_type = xmlTextReaderNodeType(reader);
-    }
-    while (node_type != 1 && node_type != 15);    
-    
-    if (eof)
-      break;
-
-#define next_value(reader)                      \
-  do {                                          \
-    if ((eof = !next_node(reader)))             \
-      break;                                    \
-  }                                             \
-  while (xmlTextReaderNodeType(reader) != 3)
-    
-    name = (const char *)xmlTextReaderConstName(reader);
-    
-    if (node_type == 1) {    
-      if (strcmp("class", name) == 0) {
-        current_class_name = get_attribute_and_check(reader, "name");
-      }
-      else if (strcmp("class_methods", name) == 0 || strcmp("instance_methods", name) == 0) {
-        current_methods_type = ID2SYM(rb_intern(name));
-      }
-      else if (strcmp("selector", name) == 0) {
-        next_value(reader);
-        if (eof)
-          break;
-        current_selector = get_value_and_check(reader);
-      }
-      else if (strcmp("by_reference_argument", name) == 0) {
-        next_value(reader);
-        if (eof)
-          break;
-        if (NIL_P(current_passbyref_args_n))
-          current_passbyref_args_n = rb_ary_new();
-        rb_ary_push(current_passbyref_args_n, rb_str_to_inum(get_value_and_check(reader), 10, Qfalse));
-      }
-    }
-    else if (node_type == 15) {
-      if (strcmp("method", name) == 0) {
-        add_method_if_needed(signatures, current_class_name, current_methods_type, current_selector, current_passbyref_args_n);      
-      }
-    }
-  }
-
-  xmlFreeTextReader(reader);
-
-  return rcv;
-}
-#else
-static VALUE
-osx_mf_load_bridge_support_file (VALUE rcv, VALUE path)
-{
-  rb_warn("libxml2 is not available, bridge support file `%s' cannot be read", STR2CSTR(path));
-  return rcv;
-}
-#endif
 
 /******************/
 
 void initialize_mdl_osxobjc()
 {
+  char* framework_resources_path();
   VALUE mOSX;
-
-  _bridge_support_signatures_ID = rb_intern("@bridge_support_signatures");
 
   mOSX = init_module_OSX();
   init_cls_ObjcPtr(mOSX);
   init_cls_ObjcID(mOSX);
   init_mdl_OCObjWrapper(mOSX);
   _cOCObject = init_cls_OCObject(mOSX);
-
-  _within_NSClassFromString_ID = rb_intern("@within_NSClassFromString");
-  rb_ivar_set(mOSX, _within_NSClassFromString_ID, Qfalse);
 
   _relaxed_syntax_ID = rb_intern("@relaxed_syntax");
   rb_ivar_set(mOSX, _relaxed_syntax_ID, Qtrue);
@@ -510,20 +365,16 @@ void initialize_mdl_osxobjc()
 			    osx_mf_objc_proxy_class_new, 2);
   rb_define_module_function(mOSX, "objc_derived_class_new", 
 			    osx_mf_objc_derived_class_new, 3);
-  rb_define_module_function(mOSX, "objc_derived_class_method_add",
-			    osx_mf_objc_derived_class_method_add, 2);
+  rb_define_module_function(mOSX, "objc_class_method_add",
+			    osx_mf_objc_class_method_add, 4);
 
   rb_define_module_function(mOSX, "ruby_thread_switcher_start",
 			    osx_mf_ruby_thread_switcher_start, -1);
   rb_define_module_function(mOSX, "ruby_thread_switcher_stop",
 			    osx_mf_ruby_thread_switcher_stop, 0);
 
-  rb_define_module_function(mOSX, "init_cocoa",
-			    osx_mf_init_cocoa, 0);
   rb_define_module_function(mOSX, "ns_autorelease_pool",
 			    ns_autorelease_pool, 0);
-  rb_define_module_function(mOSX, "load_bridge_support_file",
-			    osx_mf_load_bridge_support_file, 1);
 
   rb_define_const(mOSX, "RUBYCOCOA_VERSION", 
 		  rb_obj_freeze(rb_str_new2(RUBYCOCOA_VERSION)));
@@ -532,7 +383,16 @@ void initialize_mdl_osxobjc()
   rb_define_const(mOSX, "RUBYCOCOA_SVN_REVISION", 
 		  rb_obj_freeze(rb_str_new2(RUBYCOCOA_SVN_REVISION)));
 
+  rb_define_const(mOSX, "RUBYCOCOA_RESOURCES_PATH",
+		  rb_obj_freeze(rb_str_new2(framework_resources_path())));
+  rb_define_const(mOSX, "RUBYCOCOA_SIGN_PATHS", rb_ary_new());
+  rb_define_const(mOSX, "RUBYCOCOA_FRAMEWORK_PATHS", rb_ary_new());
+
   rb_define_module_function(mOSX, "objc_symbol_to_obj", osx_mf_objc_symbol_to_obj, 2);
 
+  rb_define_module_function(mOSX, "__rebind_umethod__", osx_mf_rebind_umethod, 2);
+  
   thread_switcher_start();
+  
+  initialize_bridge_support(mOSX);
 }

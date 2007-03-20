@@ -25,11 +25,6 @@ class TC_Constants < Test::Unit::TestCase
      assert_equal 10, OSX::NSKeyDown
      assert_equal 10, NSKeyDown
    end
-
-   # Check that a function constant can be accessed directly
-   def test_function_constant
-     assert_equal "NSGlobalDomain", OSX.NSGlobalDomain.to_s
-   end
    
    # Check that a function constant works when accessed as a real
    # constant using ::. Then check that it has now become
@@ -70,5 +65,16 @@ class TC_Constants < Test::Unit::TestCase
      assert_equal :class_success, TestConstClass::Foo
    end
 
+   def test_string_constant
+     val = OSX::KCGNotifyEventTapAdded
+     assert_kind_of(String, val)
+     assert_equal('com.apple.coregraphics.eventTapAdded', val)
+   end
+
+   def test_string_constant_nsstring
+     val = OSX::KCGDisplayMode
+     assert_kind_of(OSX::NSString, val)
+     assert_equal('Mode', val.to_s)
+   end
 end
 

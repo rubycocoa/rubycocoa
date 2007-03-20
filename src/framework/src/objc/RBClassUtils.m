@@ -12,11 +12,20 @@
 #import <objc/objc.h>
 #import <objc/objc-class.h>
 #import <objc/objc-runtime.h>
+#import "objc_compat.h"
 
 #import "RBObject.h"
 #import "OverrideMixin.h"
 #import "ocdata_conv.h"
 
+#if __OBJC2__
+
+Class objc_class_alloc(const char* name, Class super_class)
+{
+  return objc_allocateClassPair(super_class, name, 0);
+}
+
+#else
 
 static void* alloc_from_default_zone(unsigned int size)
 {
@@ -34,7 +43,7 @@ static struct objc_method_list** method_list_alloc(int cnt)
   return mlp;
 }
 
-static Class objc_class_alloc(const char* name, Class super_class)
+Class objc_class_alloc(const char* name, Class super_class)
 {
   Class c = alloc_from_default_zone(sizeof(struct objc_class));
   Class isa = alloc_from_default_zone(sizeof(struct objc_class));
@@ -65,83 +74,79 @@ static Class objc_class_alloc(const char* name, Class super_class)
   isa->protocols = NULL;
   return c;
 }
+#endif
 
-static void install_ivar_list(Class c)
+/**
+ * Dictionary for Ruby class (key by name)
+ **/
+static NSMutableDictionary* class_dic_by_name()
 {
-  int i;
-  struct objc_ivar_list* ivlp = alloc_from_default_zone(override_mixin_ivar_list_size());
-  *ivlp = *(override_mixin_ivar_list());
-  for (i = 0; i < ivlp->ivar_count; i++) {
-    const char* tp = ivlp->ivar_list[i].ivar_type;
-    int octype = to_octype(ivlp->ivar_list[i].ivar_type);
-    ivlp->ivar_list[i].ivar_offset = c->instance_size;
-    c->instance_size += ocdata_size(octype, tp);
+  static NSMutableDictionary* dic = nil;
+  if (!dic) dic = [[NSMutableDictionary alloc] init];
+  return dic;
+}
+
+/**
+ * Dictionary for Ruby class (key by value)
+ **/
+static NSMutableDictionary* class_dic_by_value()
+{
+  static NSMutableDictionary* dic = nil;
+  if (!dic) dic = [[NSMutableDictionary alloc] init];
+  return dic;
+}
+
+@interface RBClassMapInfo : NSObject {
+  NSString* kls_name;
+  NSNumber* kls_value;
+}
+- initWithName:(const char*)name value:(VALUE) kls;
+- (NSString*) name;
+- (NSNumber*) value;
+@end
+
+@implementation RBClassMapInfo
+- initWithName:(const char*)name value:(VALUE) kls {
+  self = [super init];
+  if (self) {
+    kls_name = [[NSString alloc] initWithUTF8String: name];
+    kls_value = [[NSNumber alloc] initWithUnsignedLong: kls];
   }
-  c->ivars = ivlp;
+  return self;
 }
-
-static void install_method_list(Class c)
-{
-  class_addMethods(c, override_mixin_method_list());
+- (void) dealloc {
+  [kls_name release];
+  [kls_value release];
+  [super dealloc];
 }
-
-static void install_class_method_list(Class c)
-{
-  class_addMethods((c->isa), override_mixin_class_method_list());
-}
-
-
-/**
- * Dictionary for Ruby class from  Objective-C class name
- **/
-static NSMutableDictionary* class_dic_name_to_value()
-{
-  static NSMutableDictionary* dic = nil;
-  if (!dic) dic = [[NSMutableDictionary alloc] init];
-  return dic;
-}
-
-/**
- * Dictionary for Objective-C class name from Ruby class
- **/
-static NSMutableDictionary* class_dic_value_to_name()
-{
-  static NSMutableDictionary* dic = nil;
-  if (!dic) dic = [[NSMutableDictionary alloc] init];
-  return dic;
-}
+- (NSString*) name  { return kls_name;  }
+- (NSNumber*) value { return kls_value; }
+@end
 
 /**
  * add class map entry to dictionaries.
  **/
 static void class_map_dic_add (const char* name, VALUE kls)
 {
-  NSString* kls_name;
-  NSNumber* kls_value;
-
-  kls_name = [[NSString alloc] initWithUTF8String: name];
-  kls_value = [[NSNumber alloc] initWithUnsignedLong: kls];
-  [class_dic_name_to_value() setObject: kls_value forKey: kls_name];
-  [class_dic_value_to_name() setObject: kls_name forKey: kls_value];
-  [kls_name release];
-  [kls_value release];
+  RBClassMapInfo* info =
+    [[RBClassMapInfo alloc] initWithName:name value:kls];
+  [class_dic_by_name()  setObject:info forKey: [info name]];
+  [class_dic_by_value() setObject:info forKey: [info value]];
+  [info release];
 }
-
 
 Class RBObjcClassFromRubyClass (VALUE kls)
 {
   id pool;
-  NSDictionary* dic;
   NSNumber* kls_value;
-  NSString* kls_name;
+  RBClassMapInfo* info;
   Class result = nil;
 
-  dic = class_dic_value_to_name();
   pool = [[NSAutoreleasePool alloc] init];
 
   kls_value = [NSNumber numberWithUnsignedLong: kls];
-  kls_name = [dic objectForKey: kls_value];
-  result = NSClassFromString (kls_name);
+  info = [class_dic_by_value() objectForKey: kls_value];
+  result = NSClassFromString ([info name]);
   [pool release];
   return result;
 }
@@ -149,17 +154,15 @@ Class RBObjcClassFromRubyClass (VALUE kls)
 VALUE RBRubyClassFromObjcClass (Class cls)
 {
   id pool;
-  NSDictionary* dic;
-  NSNumber* kls_value;
+  RBClassMapInfo* info;
   NSString* kls_name;
   VALUE result = Qnil;
 
-  dic = class_dic_name_to_value();
   pool = [[NSAutoreleasePool alloc] init];
 
   kls_name = NSStringFromClass(cls);
-  kls_value = [dic objectForKey: kls_name];
-  result = [kls_value unsignedLongValue];
+  info = [class_dic_by_name() objectForKey: kls_name];
+  result = [[info value] unsignedLongValue];
   [pool release];
   return result;
 }
@@ -169,7 +172,7 @@ Class RBObjcClassNew(VALUE kls, const char* name, Class super_class)
   Class c;
 
   c = objc_class_alloc(name, super_class);
-  objc_addClass(c);
+  objc_registerClassPair(c);
   class_map_dic_add (name, kls);
   return c;
 }
@@ -181,16 +184,17 @@ Class RBObjcDerivedClassNew(VALUE kls, const char* name, Class super_class)
   c = objc_class_alloc(name, super_class);
 
   // init instance variable (m_proxy)
-  install_ivar_list(c);
+  install_ovmix_ivars(c);
 
   // init instance methods
-  install_method_list(c);
+  install_ovmix_methods(c);
 
   // init class methods
-  install_class_method_list(c);
-
+  install_ovmix_class_methods(c);
+  
   // add class to runtime system
-  objc_addClass(c);
+  objc_registerClassPair(c);
   class_map_dic_add (name, kls);
   return c;
 }
+

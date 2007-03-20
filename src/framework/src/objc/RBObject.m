@@ -10,12 +10,20 @@
 #import "RBObject.h"
 #import "mdl_osxobjc.h"
 #import "ocdata_conv.h"
-#import "DummyProtocolHandler.h"
-#import "RBRuntime.h" // for DLOG
+#import "BridgeSupport.h"
+#import "internal_macros.h"
+#import "OverrideMixin.h"
 
 #define RBOBJ_LOG(fmt, args...) DLOG("RBOBJ", fmt, ##args)
 
 extern ID _relaxed_syntax_ID;
+
+#if MAC_OS_X_VERSION_MAX_ALLOWED <= MAC_OS_X_VERSION_10_4
+// On MacOS X 10.4 or earlier, +signatureWithObjCTypes: is a SPI 
+@interface NSMethodSignature (WarningKiller)
++ (id) signatureWithObjCTypes:(const char*)types;
+@end
+#endif
 
 static RB_ID sel_to_mid(SEL a_sel)
 {
@@ -69,33 +77,23 @@ static RB_ID rb_obj_sel_to_mid(VALUE rcv, SEL a_sel)
   return mid;
 }
 
-static int rb_obj_arity_of_method(VALUE rcv, SEL a_sel)
+static int rb_obj_arity_of_method(VALUE rcv, SEL a_sel, BOOL *ok)
 {
-  id pool = [[NSAutoreleasePool alloc] init];
   VALUE mstr;
   RB_ID mid;
   VALUE method;
   VALUE argc;
 
   mid = rb_obj_sel_to_mid(rcv, a_sel);
+  if (rb_respond_to(rcv, mid) == 0) {
+    *ok = NO;
+    return 0;
+  }
   mstr = rb_str_new2(rb_id2name(mid)); // mstr = sel_to_rbobj (a_sel);
   method = rb_funcall(rcv, rb_intern("method"), 1, mstr);
+  *ok = YES;
   argc = rb_funcall(method, rb_intern("arity"), 0);
-  [pool release];
   return NUM2INT(argc);
-}
-
-static SEL ruby_method_sel(int argc)
-{
-  char selName[1024];
-  int selNameLength;
-  int i;
-  
-  selNameLength = snprintf(selName, sizeof selName, "ruby_method_%d", argc);
-  for (i = 0; i < argc; i++)
-    selName[selNameLength++] = ':';
-  selName[selNameLength] = '\0';
-  return sel_registerName(selName);
 }
 
 @implementation RBObject
@@ -106,47 +104,17 @@ static SEL ruby_method_sel(int argc)
 {
   BOOL ret;
   RB_ID mid;
-  RBOBJ_LOG("rbobjRespondsToSelector(%s)", a_sel);
+  int state;
+  extern void Init_stack(VALUE*);
+
+  if (FREQUENTLY_INIT_STACK_FLAG) {
+    RBOBJ_LOG("rbobjRespondsToSelector(%s) w/Init_stack(%08lx)", a_sel, (void*)&state);
+    Init_stack((void*)&state);
+  }
   mid = rb_obj_sel_to_mid(m_rbobj, a_sel);
   ret = (rb_respond_to(m_rbobj, mid) != 0);
   RBOBJ_LOG("   --> %d", ret);
   return ret;
-}
-
-- (NSMethodSignature*)rbobjMethodSignatureForSelector: (SEL)a_sel
-{
-  NSMethodSignature* msig;
-  int argc;
-  RBOBJ_LOG("rbobjMethodSignatureForSelector(%s)", a_sel);
-  argc = rb_obj_arity_of_method(m_rbobj, a_sel);
-  if (argc < 0) argc = -1 - argc;
-  msig = [DummyProtocolHandler 
-	   instanceMethodSignatureForSelector: ruby_method_sel(argc)];
-  RBOBJ_LOG("   --> %@", msig);
-  return msig;
-}
-
-- (NSMethodSignature*) rbobjMethodSignatureForSheetSelector: (SEL)a_sel
-{
-  const char* tail = ":returnCode:contextInfo:";
-  const SEL dummy_sel = @selector(sheetPanelDidEnd:returnCode:contextInfo:);
-
-  const char* name;
-  int name_len, tail_len;
-  NSMethodSignature* msig;
-
-  msig = nil;
-  name = sel_getName(a_sel);
-  name_len = strlen(name);
-  tail_len = strlen(tail);
-  if (name_len > tail_len) {
-    if (strcmp(name + name_len - tail_len, tail) == 0) {
-      // it's sheet panel selector
-      msig = [DummyProtocolHandler
-	       instanceMethodSignatureForSelector: dummy_sel];
-    }
-  }
-  return msig;
 }
 
 - (VALUE)fetchForwardArgumentsOf: (NSInvocation*)an_inv
@@ -158,21 +126,16 @@ static SEL ruby_method_sel(int argc)
   for (i = 0; i < arg_cnt; i++) {
     VALUE arg_val;
     const char* octstr = [msig getArgumentTypeAtIndex: (i+2)];
-    int octype = to_octype(octstr);
-    void* ocdata = OCDATA_ALLOCA(octype, octstr);
+    void* ocdata = OCDATA_ALLOCA(octstr);
     BOOL f_conv_success;
+
+    RBOBJ_LOG("arg[%d] of type '%s'", i, octstr);
     [an_inv getArgument: ocdata atIndex: (i+2)];
-    f_conv_success = ocdata_to_rbobj(Qnil, octype, ocdata, &arg_val);
+    f_conv_success = ocdata_to_rbobj(Qnil, octstr, ocdata, &arg_val, NO);
     if (f_conv_success == NO) {
       arg_val = Qnil;
     }
     rb_ary_store(args, i, arg_val);
-    // Retain if the argument is not initialized for Ruby 
-    // see ocm_retain_result_if_necessary() in mdl_objwrapper.m
-    if (!NIL_P(arg_val) && octype == _C_ID && !OBJCID_DATA_PTR(arg_val)->retained) {
-      [OBJCID_ID(arg_val) retain];
-      OBJCID_DATA_PTR(arg_val)->retained = YES;
-    }
   }
   return args;
 }
@@ -180,33 +143,33 @@ static SEL ruby_method_sel(int argc)
 - (BOOL)stuffForwardResult: (VALUE)result to: (NSInvocation*)an_inv
 {
   NSMethodSignature* msig = [an_inv methodSignature];
-  const char* octype_str = [msig methodReturnType];
-  int octype = to_octype(octype_str);
+  const char* octype_str = encoding_skip_modifiers([msig methodReturnType]);
   BOOL f_success;
 
-  if (octype == _C_VOID) {
+  if (*octype_str == _C_VOID) {
     f_success = true;
   }
-  else if ((octype == _C_ID) || (octype == _C_CLASS)) {
+  else if ((*octype_str == _C_ID) || (*octype_str == _C_CLASS)) {
     id ocdata = rbobj_get_ocid(result);
     if (ocdata == nil) {
       if (result == m_rbobj)
-	ocdata = self;
+        ocdata = self;
       else
-	rbobj_to_nsobj(result, &ocdata);
+        rbobj_to_nsobj(result, &ocdata);
     }
     [an_inv setReturnValue: &ocdata];
     f_success = YES;
   }
   else {
-    void* ocdata = OCDATA_ALLOCA(octype, octype_str);
-    f_success = rbobj_to_ocdata (result, octype, ocdata);
+    void* ocdata = OCDATA_ALLOCA(octype_str);
+    f_success = rbobj_to_ocdata (result, octype_str, ocdata, NO);
     if (f_success) [an_inv setReturnValue: ocdata];
   }
   return f_success;
 }
 
--(void)rbobjRaiseRubyException
+static void 
+rbobjRaiseRubyException (void)
 {
   VALUE lasterr = rb_gv_get("$!");
   RB_ID mtd = rb_intern("nsexception");
@@ -255,26 +218,58 @@ static VALUE rbobject_protected_apply(VALUE a)
   return rb_apply(args[0],(RB_ID)args[1],(VALUE)args[2]);
 }
 
+static void notify_error(VALUE rcv, RB_ID mid)
+{
+  extern int RBNotifyException(const char* title, VALUE err);
+  char title[128];
+  snprintf(title, sizeof(title), "%s#%s", rb_obj_classname(rcv), rb_id2name(mid));
+  RBNotifyException(title, ruby_errinfo);
+}
+
+VALUE rbobj_call_ruby(id rbobj, SEL selector, VALUE args)
+{
+  VALUE m_rbobj;
+  RB_ID mid;
+  VALUE stub_args[3];
+  VALUE rb_result;
+  int err;
+
+  if ([rbobj respondsToSelector:@selector(__rbobj__)]) {
+    m_rbobj = [rbobj __rbobj__]; 
+  }
+  else if ([rbobj respondsToSelector:@selector(__rbclass__)]) {
+    m_rbobj = [rbobj __rbclass__]; 
+  }
+  else {
+    // Not an RBObject class, try to get the value from the cache. 
+    m_rbobj = ocid_to_rbobj_cache_only(rbobj);
+  }
+  mid = rb_obj_sel_to_mid(m_rbobj, selector);
+  stub_args[0] = m_rbobj;
+  stub_args[1] = mid;
+  stub_args[2] = args;
+ 
+  RBOBJ_LOG("calling method %s on Ruby object %p with %d args", rb_id2name(mid), m_rbobj, RARRAY(args)->len);
+ 
+  rb_result = rb_protect(rbobject_protected_apply, (VALUE)stub_args, &err);
+  if (err) {
+    notify_error(m_rbobj, mid);
+    RBOBJ_LOG("got Ruby exception, raising Objective-C exception");
+    rbobjRaiseRubyException();
+    return Qnil; /* to be sure */
+  }
+ 
+  return rb_result; 
+}
+
 - (void)rbobjForwardInvocation: (NSInvocation *)an_inv
 {
   VALUE rb_args;
   VALUE rb_result;
-  RB_ID mid;
-  VALUE args[3];
-  int err;
 
   RBOBJ_LOG("rbobjForwardInvocation(%@)", an_inv);
-  mid = rb_obj_sel_to_mid(m_rbobj, [an_inv selector]);
   rb_args = [self fetchForwardArgumentsOf: an_inv];
-  args[0] = m_rbobj;
-  args[1] = mid;
-  args[2] = rb_args;
-  
-  rb_result = rb_protect(rbobject_protected_apply,(VALUE)args,&err);
-  if (err) {
-      [self rbobjRaiseRubyException];
-  }
-
+  rb_result = rbobj_call_ruby(self, [an_inv selector], rb_args);
   [self stuffForwardResult: rb_result to: an_inv];
   RBOBJ_LOG("   --> rb_result=%s", STR2CSTR(rb_inspect(rb_result)));
 }
@@ -296,17 +291,28 @@ static VALUE rbobject_protected_apply(VALUE a)
 
 - (void) dealloc
 {
+  RBOBJ_LOG("deallocating RBObject %p", self);
   remove_from_rb2oc_cache(m_rbobj);
-  rb_gc_unregister_address (&m_rbobj);
+  if (m_rbobj_retained) {
+    RBOBJ_LOG("releasing Ruby object %p", m_rbobj);
+    rb_gc_unregister_address(&m_rbobj);
+  }
   [super dealloc];
+}
+
+- _initWithRubyObject: (VALUE)rbobj retains: (BOOL) flag
+{
+  m_rbobj = rbobj;
+  m_rbobj_retained = flag;
+  oc_master = nil;
+  if (flag)
+    rb_gc_register_address(&m_rbobj);
+  return self;
 }
 
 - initWithRubyObject: (VALUE)rbobj
 {
-  m_rbobj = rbobj;
-  oc_master = nil;
-  rb_gc_register_address (&m_rbobj);
-  return self;
+  return [self _initWithRubyObject: rbobj retains: YES];
 }
 
 - initWithRubyScriptCString: (const char*) cstr
@@ -355,15 +361,50 @@ static VALUE rbobject_protected_apply(VALUE a)
 {
   NSMethodSignature* ret = nil;
   RBOBJ_LOG("methodSignatureForSelector(%s)", a_sel);
-  if (a_sel == NULL) return nil;
-  if (oc_master != nil) 
+  if (a_sel == NULL) 
+    return nil;
+  // Try the master object.
+  if (oc_master != nil) { 
     ret = [oc_master instanceMethodSignatureForSelector:a_sel];
-  if (ret == nil)
-    ret = [DummyProtocolHandler instanceMethodSignatureForSelector: a_sel];
-  if (ret == nil)
-    ret = [self rbobjMethodSignatureForSheetSelector: a_sel];
-  if (ret == nil)
-    ret = [self rbobjMethodSignatureForSelector: a_sel];
+    if (ret != nil)
+      RBOBJ_LOG("\tgot method signature from the master object");
+  }
+  // Try the metadata.
+  if (ret == nil) {
+    struct bsInformalProtocolMethod *method;
+    
+    method = find_bs_informal_protocol_method((const char *)a_sel, NO);
+    if (method != NULL) {
+      ret = [NSMethodSignature signatureWithObjCTypes:method->encoding];
+      RBOBJ_LOG("\tgot method signature from metadata (types: '%s')", method->encoding);
+    }
+  }
+  // Ensure a dummy method signature ('id' for everything).
+  if (ret == nil) {
+    int argc;
+    BOOL ok;
+
+    argc = rb_obj_arity_of_method(m_rbobj, a_sel, &ok);
+    if (ok) {
+      char encoding[128], *p;
+      
+      if (argc < 0) 
+        argc = -1 - argc;
+      argc = MIN(sizeof(encoding) - 4, argc);    
+  
+      strcpy(encoding, "@@:");
+      p = &encoding[3];
+      while (argc-- > 0) {
+        *p++ = '@';
+      }
+      *p = '\0';
+      ret = [NSMethodSignature signatureWithObjCTypes:encoding];
+      RBOBJ_LOG("\tgenerated dummy method signature");
+    }
+    else {
+      RBOBJ_LOG("\tcan't generate a dummy method signature because receiver %s doesn't respond to the selector", STR2CSTR(rb_inspect(m_rbobj)));
+    }
+  }
   RBOBJ_LOG("   --> %@", ret);
   return ret;
 }
@@ -371,6 +412,8 @@ static VALUE rbobject_protected_apply(VALUE a)
 - (BOOL)respondsToSelector: (SEL)a_sel
 {
   BOOL ret;
+  if (a_sel == @selector(__rbobj__))
+    return YES;
   RBOBJ_LOG("respondsToSelector(%s)", a_sel);
   ret = [self rbobjRespondsToSelector: a_sel];
   RBOBJ_LOG("   --> %d", ret);

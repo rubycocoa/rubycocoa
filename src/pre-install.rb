@@ -1,5 +1,18 @@
 install_root = @config['install-root']
 
+# Fix Xcode projects to point to the right location of RubyCocoa.framework 
+DEFAULT_FRAMEWORK_PATH = '/Library/Frameworks/RubyCocoa.framework'
+TARGET_FRAMEWORK_PATH = File.join(File.expand_path("#{install_root}#{@config['frameworks']}"), 'RubyCocoa.framework')
+TARGET_FRAMEWORK_PATH.sub!(/^#{ENV['DSTROOT']}/, '') if ENV['DSTROOT']
+def fix_xcode_projects_in_dir(dstdir)
+  Dir.glob("#{dstdir}/**/*.pbxproj") do |proj|
+    txt = File.read(proj)
+    if txt.gsub!(/#{DEFAULT_FRAMEWORK_PATH}/, TARGET_FRAMEWORK_PATH)
+      File.open(proj, 'w') { |io| io.write(txt) }
+    end
+  end
+end
+
 # If required, backup files create here.
 backup_dir = '/tmp/rubycocoa_backup'
 
@@ -16,6 +29,9 @@ pbtmpldir = "template/ProjectBuilder"
   [
     [ "#{pbtmpldir}/File",
       "#{extras_dir}/File Templates/Ruby" ],
+
+    [ "#{pbtmpldir}/Target",
+      "#{extras_dir}/Target Templates/Ruby" ],
 
     [ "#{pbtmpldir}/Application/Cocoa-Ruby Application",
       "#{extras_dir}/Project Templates/Application/Cocoa-Ruby Application" ],
@@ -39,7 +55,8 @@ pbtmpldir = "template/ProjectBuilder"
     command "mkdir -p '#{File.dirname(dstdir)}'"
     command "cp -R '#{srcdir}' '#{dstdir}'"
     command "find '#{dstdir}' -name '*.in' -print0 | xargs -0 rm"
-    command "find '#{dstdir}' -name '.svn' -type d -print0 | xargs -0 rm -rf"
+  
+    fix_xcode_projects_in_dir(dstdir) 
   end
 end
 
@@ -58,18 +75,16 @@ end
   command "cp -R '#{srcdir}' '#{dstdir}/RubyCocoa'"
   command "chmod -R #{chmod} '#{dstdir}/RubyCocoa'" if chmod
 
-  # Fix sample Xcode projects to point to the new location of frameworks
-  if fix_xcode_projects
-    default_framework_path = '/Library/Frameworks/RubyCocoa.framework'
-    target_framework_path = File.join(File.expand_path("#{install_root}#{@config['frameworks']}"), 'RubyCocoa.framework')
-    if ENV['DSTROOT']
-      target_framework_path.sub!(/^#{ENV['DSTROOT']}/, '')
-    end
-    Dir.glob("#{dstdir}/RubyCocoa/**/*.pbxproj") do |proj|
-      txt = File.read(proj)
-      if txt.gsub!(/#{default_framework_path}/, target_framework_path)
-        File.open(proj, 'w') { |io| io.write(txt) }
-      end
-    end
+  fix_xcode_projects_in_dir(dstdir) if fix_xcode_projects
+end
+if File.exist?('framework/bridge-doc')
+  # Frameworks HTML documentation 
+  dstdir = "#{install_root}#{@config['documentation']}/RubyCocoa/Frameworks"
+  command "cp -R 'framework/bridge-doc/html' '#{dstdir}'" if File.exist?('framework/bridge-doc/html')
+  # Frameworks RI documentation
+  basedstdir = "#{Config::CONFIG['datadir']}/ri/#{Config::CONFIG['ruby_version']}/site"
+  unless File.exist?(basedstdir)
+    command "mkdir -p '#{basedstdir}'"
   end
+  command "cp -R 'framework/bridge-doc/ri/OSX' '#{basedstdir}'" if File.exist?('framework/bridge-doc/ri/OSX')
 end
