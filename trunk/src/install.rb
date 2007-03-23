@@ -625,8 +625,9 @@ class Installer
   end
 
   def setup_dir_framework( relpath )
-    command buildcommand
     fwname = "RubyCocoa"
+    command "rm -f #{framework_obj_path}/#{fwname}.framework/Versions/Current"
+    command buildcommand
     obj_file = "#{fwname}.framework/Versions/Current/#{fwname}"
     cmd = 'strip -x ' + File.join(framework_obj_path, obj_file)
     command cmd
@@ -746,7 +747,7 @@ class Installer
 
   def clean_dir_ext( rel )
     clean
-    command 'rm -f Makefile extconf.rb'
+    command 'rm -f Makefile Makefile.bak extconf.rb rubycocoa.o rubycocoa.bundle'
   end
   
   def clean

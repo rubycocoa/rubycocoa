@@ -21,6 +21,10 @@ module RubyCocoaConfig
     `/usr/bin/defaults read /System/Library/CoreServices/SystemVersion ProductUserVisibleVersion`
   end
 
+  def framework_version
+    # "#{RubyCocoaConfig::VERSION}_RUBY-#{RUBY_VERSION}"
+    "A"
+  end
 end
 
 ### install destination ### 
@@ -90,3 +94,6 @@ add_config 'rubycocoa-release-date', 'name',
 
 add_config 'rubycocoa-svn-revision', 'name', 
   RubyCocoaConfig::SVN_REVISION, 'RubyCocoa subversion revision number'
+
+add_config 'rubycocoa-framework-version', 'name',
+  RubyCocoaConfig.framework_version, 'RubyCocoa Framework version name'

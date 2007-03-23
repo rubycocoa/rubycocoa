@@ -1,3 +1,18 @@
+2007-03-23  Fujimoto Hisa  <hisa@fobj.com>
+
+	* Rakefile:
+	Added rakefile with targets build, clean, install, minclean, test
+	and package.
+
+	* pre-config.rb, install.rb, metaconfig,
+	framework/RubyCocoa.xcodeproj/project.pbxproj, 
+	framework/GeneratedConfig.xcconfig.in:
+	Added option `--rubycocoa-framework-version=name' in config phase
+	for FRAMEWORK_VERSION value of xcodebuild. The default value is	"A"
+
+	* framework/RubyCocoa.xcodeproj/project.pbxproj, framework/src/objc/RubyCocoa.h:
+	Added Objective-C version of API for initialize/load.
+
 2007-03-20  Laurent Sansonetti <lsansonetti@apple.com>
 
 	* framework/src/objc/RBObject.m:
