@@ -1,3 +1,11 @@
+2007-03-24  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* framework/src/objc/libffi.m,
+	  framework/src/objc/BridgeSupport.m:
+	Some support for the next BridgeSupport format (value64, le_value and 
+	be_value attributes for the enum element). Coerce the return value of
+	FFI dispatch at the beginning.
+
 2007-03-24  Fujimoto Hisa  <hisa@fobj.com>
 
 	* framework/src/objc/RubyCocoa.m:

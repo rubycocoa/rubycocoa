@@ -375,6 +375,14 @@ rb_ffi_dispatch (
   }
 
   // Prepare return type/val.
+  if (call_entry != NULL 
+      && call_entry->retval != NULL 
+      && call_entry->retval->octypestr != NULL
+      && strcmp(call_entry->retval->octypestr, ret_octype) != 0) {
+
+    FFI_LOG("coercing result from octype '%s' to octype '%s'", ret_octype, call_entry->retval->octypestr);
+    ret_octype = call_entry->retval->octypestr;
+  }
   FFI_LOG("retval (%p) : %s", retval, ret_octype);
   ret_type = ffi_type_for_octype(ret_octype);
   if (ret_type != &ffi_type_void) {
@@ -421,15 +429,6 @@ rb_ffi_dispatch (
   // Get result
   if (ret_type != &ffi_type_void) {
     FFI_LOG("getting return value (%p of type '%s')", retval, ret_octype);
-
-    if (call_entry != NULL 
-        && call_entry->retval != NULL 
-        && call_entry->retval->octypestr != NULL
-        && strcmp(call_entry->retval->octypestr, ret_octype) != 0) {
-
-      FFI_LOG("coercing result from octype '%s' to octype '%s'", ret_octype, call_entry->retval->octypestr);
-      ret_octype = call_entry->retval->octypestr;
-    }
 
     if (!ocdata_to_rbobj(Qnil, ret_octype, retval, result, YES))
       return rb_err_new(ocdataconv_err_class(), "Cannot convert the result as '%s' to Ruby", ret_octype); 

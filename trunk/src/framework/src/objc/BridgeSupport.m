@@ -1140,21 +1140,31 @@ osx_load_bridge_support_file (VALUE mOSX, VALUE path)
             char *  enum_value;        
             VALUE   value;
 
-            enum_value = get_attribute_and_check(reader, "value");
-            if (strlen(enum_value) == 6 && enum_value[0] == '\'' && enum_value[5] == '\'') {
-              FourCharCode code = 
-                ((enum_value[1] << 24) | enum_value[2] << 16 | enum_value[3] << 8 | enum_value[4]);
-              value = INT2NUM(code);
-            }
-            else {
+            enum_value = get_attribute(reader, "value");
+#if __LP64__
+            if (enum_value == NULL)
+              enum_value = get_attribute(reader, "value64");
+#endif
+#if BYTE_ORDER == BIG_ENDIAN
+            if (enum_value == NULL)
+              enum_value = get_attribute(reader, "be_value");
+#else
+            if (enum_value == NULL)
+              enum_value = get_attribute(reader, "le_value");
+#endif
+            if (enum_value != NULL) {     
               value = strchr(enum_value, '.') != NULL
                 ? rb_float_new(rb_cstr_to_dbl(enum_value, 1))
                 : rb_cstr_to_inum(enum_value, 10, 1); 
-            }
-            CAPITALIZE(enum_name);
-            rb_define_const(mOSX, enum_name, value);
+            
+              CAPITALIZE(enum_name);
+              rb_define_const(mOSX, enum_name, value);
 
-            free (enum_value);
+              free (enum_value);
+            }
+            else {
+              DLOG("MDLOSX", "Enum '%s' doesn't have a compatible value attribute, skipping...", enum_name);
+            }
           }
         }
         if (!ignore)
