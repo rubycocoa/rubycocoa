@@ -1,6 +1,6 @@
 2007-03-24  Fujimoto Hisa  <hisa@fobj.com>
 
-	* framework/src/objc/RBObject.m:
+	* framework/src/objc/RubyCocoa.m:
 	oops! svn add and commit the file.
 
 2007-03-23  Fujimoto Hisa  <hisa@fobj.com>
