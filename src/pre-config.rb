@@ -19,6 +19,7 @@ config_ary = [
   [ :rubycocoa_version_short,   @config['rubycocoa-version-short'] ],
   [ :rubycocoa_release_date, @config['rubycocoa-release-date'] ],
   [ :rubycocoa_svn_revision,  @config['rubycocoa-svn-revision'] ],
+  [ :rubycocoa_framework_version,  @config['rubycocoa-framework-version'] ],
   [ :build_dir, framework_obj_path ],
 ]
 
