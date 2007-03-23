@@ -3,18 +3,19 @@ require 'rake'
 
 task :default => :build
 
-SVN_REPOS_URL = "https://rubycocoa.svn.sourceforge.net/svnroot/rubycocoa/trunk/src"
-SVN = "/usr/bin/env svn"
+module RakeFileUtils
+  SVN_REPOS_URL = "https://rubycocoa.svn.sourceforge.net/svnroot/rubycocoa/trunk/src"
+  SVN = "/usr/bin/env svn"
 
-def svn(*args)
-  run "#{SVN} #{args.join(' ')}"
-end
+  def svn(*args)
+    sh "#{SVN} #{args.join(' ')}"
+  end
 
-def svnversion
-  log 'svnversion'
-  vers = `svnversion`.strip
-  fail "Command Failed: svnversion" if not $?.success?
-  vers
+  def svnversion
+    vers = `svnversion`.strip.split(':').first
+    fail "Command Failed: svnversion" if not $?.success?
+    vers
+  end
 end
 
 desc "build RubyCocoa.framework"
