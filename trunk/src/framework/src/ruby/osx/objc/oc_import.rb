@@ -141,7 +141,7 @@ module OSX
     SIGN_PATHS.each { |dir| return true if __load_bridge_support_file__(dir, fname) } 
 
     # Damnit!
-    warn "Can't find signatures file for #{framework}" if OSX._verbose?
+    warn "Can't find signatures file for #{framework}" if OSX._debug?
     return false
   end
   module_function :load_bridge_support_signatures
@@ -186,13 +186,13 @@ module OSX
   # then define Constant under module 'OSX'.
   def ns_import(sym)
     if not OSX.const_defined?(sym)
-      NSLog("importing #{sym}...") if OSX._verbose?
+      NSLog("importing #{sym}...") if OSX._debug?
       klass = if clsobj = NSClassFromString(sym)
         if rbcls = class_new_for_occlass(clsobj)
           OSX.const_set(sym, rbcls)
         end
       end
-      NSLog("importing #{sym}... done (#{klass.ancestors.join(' -> ')})") if (klass and OSX._verbose?)
+      NSLog("importing #{sym}... done (#{klass.ancestors.join(' -> ')})") if (klass and OSX._debug?)
       return klass
     end
   end
@@ -296,7 +296,7 @@ module OSX
 
     def _ns_behavior_method_added(sym, class_method)
       sel = sym.to_s.gsub(/([^_])_/, '\1:') 
-      arity = if @__imported_arity != nil and RUBY_VERSION < "1.8.5"
+      arity = if defined?(@__imported_arity) and @__imported_arity != nil and RUBY_VERSION < "1.8.5"
         # This is a workaround for a Ruby 1.8.2 issue, the real arity is provided by _register_method. 
         @__imported_arity
       else

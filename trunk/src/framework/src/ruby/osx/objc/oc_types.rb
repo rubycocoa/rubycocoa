@@ -33,5 +33,6 @@ class OSX::NSRect
   def y; origin.y; end
   def width; size.width; end
   def height; size.height; end
+  alias_method :old_to_a, :to_a # To remove a warning.
   def to_a; [origin.to_a, size.to_a]; end
 end
