@@ -235,7 +235,7 @@ static int rubycocoa_initialized_p()
 }
 
 // exported and used by internal_macros.h 
-VALUE rubycocoa_verbose;
+VALUE rubycocoa_debug = Qfalse;
 
 static void rubycocoa_init()
 {
@@ -248,7 +248,7 @@ static void rubycocoa_init()
     load_path_unshift(framework_ruby_path()); // PATH_TO_FRAMEWORK/Resources/ruby
     sign_path_unshift(framework_bridge_support_path());
     rubycocoa_initialized_flag = 1;
-    rubycocoa_verbose = rb_gv_get("RUBYCOCOA_VERBOSE");
+    rb_define_variable("$RUBYCOCOA_DEBUG", &ruby_debug);
   }
 }
 

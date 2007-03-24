@@ -1,5 +1,15 @@
 2007-03-24  Laurent Sansonetti <lsansonetti@apple.com>
 
+	* framework/src/ruby/osx/objc/oc_exception.rb,
+	  framework/src/ruby/osx/objc/oc_types.rb,
+	  framework/src/ruby/osx/objc/oc_bundle_support.rb,
+	  framework/src/ruby/osx/objc/oc_import.rb,
+	  framework/src/objc/RBRuntime.m,
+	  framework/src/objc/internal_macros.h:
+	- Make sure DLOG macros are active only if $DEBUG or $RUBYCOCOA_DEBUG
+	  are true (and not $VERBOSE or $RUBYCOCOA_VERBOSE) ;
+	- Removed warnings.
+
 	* framework/src/objc/libffi.m,
 	  framework/src/objc/BridgeSupport.m:
 	Some support for the next BridgeSupport format (value64, le_value and 

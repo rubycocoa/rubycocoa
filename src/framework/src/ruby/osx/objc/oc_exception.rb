@@ -6,8 +6,8 @@
 
 module OSX
 
-  def self._verbose?
-    ($VERBOSE || $RUBYCOCOA_VERBOSE) ? true : false
+  def self._debug?
+    ($DEBUG || $RUBYCOCOA_DEBUG)
   end
 
   class OCException < RuntimeError
