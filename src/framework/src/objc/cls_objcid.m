@@ -16,6 +16,7 @@
 #import "RBObject.h"
 #import "internal_macros.h"
 #import "BridgeSupport.h"
+#import "mdl_osxobjc.h"
 
 static VALUE _kObjcID = Qnil;
 
@@ -100,7 +101,7 @@ objcid_initialize(int argc, VALUE* argv, VALUE rcv)
 static VALUE
 objcid_ocid(VALUE rcv)
 {
-  return UINT2NUM((unsigned int) OBJCID_ID(rcv));
+  return OCID2NUM(OBJCID_ID(rcv));
 }
 
 static VALUE

@@ -1,3 +1,9 @@
+2007-03-28  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* framework/src/objc/mdl_osxobjc.h,
+	  framework/src/objc/cls_objcid.m:
+	Started working on the 64-bit support.
+
 2007-03-24  Laurent Sansonetti <lsansonetti@apple.com>
 
 	* framework/src/ruby/osx/objc/oc_exception.rb,

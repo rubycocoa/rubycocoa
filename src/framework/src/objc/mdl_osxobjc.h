@@ -11,8 +11,13 @@
 #import "cls_objcptr.h"
 #import "mdl_objwrapper.h"
 
-#define OCID2NUM(val) UINT2NUM((unsigned int)(val))
-#define NUM2OCID(val) ((id)NUM2UINT((VALUE)(val)))
+#if __LP64__
+# define OCID2NUM(val) ULONG2NUM((unsigned long)(val))
+# define NUM2OCID(val) ((id)NUM2ULONG((VALUE)(val)))
+#else
+# define OCID2NUM(val) UINT2NUM((unsigned int)(val))
+# define NUM2OCID(val) ((id)NUM2UINT((VALUE)(val)))
+#endif
 
 /** OSX module **/
 VALUE osx_s_module();
