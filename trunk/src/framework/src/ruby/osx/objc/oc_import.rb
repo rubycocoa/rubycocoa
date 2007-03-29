@@ -254,11 +254,13 @@ module OSX
     # Objective-C World.
     def ns_inherited()
       return if ns_inherited?
-      spr_name = superclass.name.split('::')[-1]
       kls_name = self.name.split('::')[-1]
-      occls = OSX.objc_derived_class_new(self, kls_name, spr_name)
-      self.instance_eval { @ocid = occls.__ocid__.to_i }
-      OSX::BundleSupport.bind_class_with_current_bundle(self) if kls_name
+      if kls_name
+        spr_name = superclass.name.split('::')[-1]
+        occls = OSX.objc_derived_class_new(self, kls_name, spr_name)
+        self.instance_eval { @ocid = occls.__ocid__.to_i }
+        OSX::BundleSupport.bind_class_with_current_bundle(self) 
+      end
       @inherited = true
     end
 

@@ -130,6 +130,8 @@ ovmix_imp_for_type(const char *type)
   char **arg_types;
   char **octypes;
 
+  OVMIX_LOG("retrieving closure imp for method type '%s'", type);
+
   pthread_mutex_lock(&ffi_imp_closures_lock);
   imp = NULL;
   ok = st_lookup(ffi_imp_closures, (st_data_t)type, (st_data_t *)&imp);
@@ -285,15 +287,16 @@ static id imp_c_addRubyMethod(Class klass, SEL method, SEL arg0)
   char *me_types;
 
   me = class_getInstanceMethod(klass, arg0);
-  me_imp = method_getImplementation(me);
-  me_name = method_getName(me);
-  me_types = method_getTypeEncoding(me);
-
   // warn if trying to override a method that isn't a member of the specified class
   if (me == NULL)
-    rb_raise(rb_eRuntimeError, "could not add '%s' to class '%s': Objective-C cannot find it in the superclass", (char *)arg0, me_name);
+    rb_raise(rb_eRuntimeError, "could not add '%s' to class '%s': Objective-C cannot find it in the superclass", (char *)arg0, class_getName(klass));
     
+  me_imp = method_getImplementation(me);
+  me_name = method_getName(me);
+  me_types = strdup(method_getTypeEncoding(me));
+
   // override method
+  OVMIX_LOG("Registering Ruby method by selector '%s' types '%s'", (char *)arg0, me_types);
   imp = ovmix_imp_for_type(me_types);
   if (me_imp == imp) {
     OVMIX_LOG("Already registered Ruby method by selector '%s' types '%s', skipping...", (char *)arg0, me_types);
