@@ -79,7 +79,7 @@ objcid_new_with_ocid(VALUE klass, id ocid)
 static VALUE
 wrapper_objcid_s_new_with_ocid(VALUE klass, VALUE rbocid)
 {
-  return objcid_new_with_ocid(klass, (id)NUM2UINT(rbocid));
+  return objcid_new_with_ocid(klass, NUM2OCID(rbocid));
 }
 
 static VALUE

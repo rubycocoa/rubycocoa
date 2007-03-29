@@ -226,7 +226,13 @@ ocdata_size(const char* octype_str)
       break;
 
     default:
-      NSGetSizeAndAlignment(octype_str, (unsigned int *)&result, NULL);
+      NSGetSizeAndAlignment(octype_str, 
+#if __LP64__
+         (unsigned long *)&result, 
+#else
+         (unsigned int *)&result, 
+#endif
+         NULL);
       break;
   }
 
@@ -1134,7 +1140,8 @@ __get_first_encoding(const char *type, char *buf, size_t buf_len)
   while (*p >= '0' && *p <= '9') { p++; }
 
   if (buf != NULL) {
-    size_t len = MIN(buf_len, (long)(type - orig_type));
+    size_t len = (long)(type - orig_type);
+    assert(len < buf_len);
     strncpy(buf, orig_type, len);
     buf[len] = '\0';
   }
@@ -1154,7 +1161,7 @@ decode_method_encoding(const char *encoding, NSMethodSignature *methodSignature,
     __decode_method_encoding_with_method_signature(methodSignature, argc, retval_type, arg_types, strip_first_two_args);   
   }
   else {
-    char buf[128];
+    char buf[256];
 
     DATACONV_LOG("decoding method encoding '%s' manually", encoding);
     encoding = __get_first_encoding(encoding, buf, sizeof buf);
@@ -1178,7 +1185,7 @@ decode_method_encoding(const char *encoding, NSMethodSignature *methodSignature,
       i = 0;
       p = (char **)malloc(sizeof(char *) * (*argc));
       while ((encoding = __get_first_encoding(encoding, buf, sizeof buf)) != NULL) {
-        DATACONV_LOG("arg[%d] -> %s\n", i, buf);
+        DATACONV_LOG("arg[%d] -> %s", i, buf);
         p[i++] = strdup(buf);
       }
       *arg_types = p;

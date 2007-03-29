@@ -31,7 +31,7 @@ bs_boxed_ffi_type(struct bsBoxed *bs_boxed)
       bs_boxed->ffi_type->size = 0; // IMPORTANT: we need to leave this to 0 and not set the real size
       bs_boxed->ffi_type->alignment = 0;
       bs_boxed->ffi_type->type = FFI_TYPE_STRUCT;
-      bs_boxed->ffi_type->elements = malloc(bs_boxed->opt.s.field_count * sizeof(ffi_type *));
+      bs_boxed->ffi_type->elements = malloc((bs_boxed->opt.s.field_count + 1) * sizeof(ffi_type *));
       ASSERT_ALLOC(bs_boxed->ffi_type->elements);
       for (i = 0; i < bs_boxed->opt.s.field_count; i++) {
         char *octypestr;
@@ -160,7 +160,11 @@ ffi_type_for_octype (const char *octypestr)
 
     case _C_ARY_B:
       {
+#if __LP64__
+        unsigned long size;
+#else
         unsigned int size;
+#endif
 
         NSGetSizeAndAlignment(octypestr, &size, NULL);
 
@@ -540,6 +544,8 @@ ffi_make_closure(const char *rettype, const char **argtypes, unsigned argc, void
   cif = NULL;
   closure = NULL;
 
+  FFI_LOG("make closure argc %d", argc);
+
   arg_ffi_types = (ffi_type **)malloc(sizeof(ffi_type *) * (argc + 1));
   if (arg_ffi_types == NULL) {
     error = "Can't allocate memory";
@@ -548,6 +554,7 @@ ffi_make_closure(const char *rettype, const char **argtypes, unsigned argc, void
 
   for (i = 0; i < argc; i++) {
     arg_ffi_types[i] = ffi_type_for_octype(argtypes[i]);
+    FFI_LOG("arg[%d] -> ffi_type %p", i, arg_ffi_types[i]);
   }
   retval_ffi_type = ffi_type_for_octype(rettype);
   arg_ffi_types[argc] = NULL;

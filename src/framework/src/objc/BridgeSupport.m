@@ -95,10 +95,39 @@ get_attribute_and_check(xmlTextReaderPtr reader, const char *name)
   if (attribute == NULL)
     rb_raise(rb_eRuntimeError, "expected attribute `%s' for element `%s'", name, xmlTextReaderConstName(reader));
 
-  if (strlen(name) == 0)
+  if (strlen(attribute) == 0)
     rb_raise(rb_eRuntimeError, "empty attribute `%s' for element `%s'", name, xmlTextReaderConstName(reader));
 
   return attribute;
+}
+
+static inline char *
+get_type_attribute(xmlTextReaderPtr reader)
+{
+  xmlChar * value;
+
+#if __LP64__
+  value = xmlTextReaderGetAttribute(reader, (xmlChar *)"type64");
+  if (value == NULL)
+#endif
+  value = xmlTextReaderGetAttribute(reader, (xmlChar *)"type");
+
+  return (char *)value;
+}
+
+static inline char *
+get_type_attribute_and_check(xmlTextReaderPtr reader)
+{
+  char * value;
+
+  value = get_type_attribute(reader);
+  if (value == NULL)
+    rb_raise(rb_eRuntimeError, "expected attribute `type' for element `%s'", xmlTextReaderConstName(reader));
+
+  if (strlen(value) == 0)
+    rb_raise(rb_eRuntimeError, "empty attribute `type' for element `%s'", xmlTextReaderConstName(reader));
+
+  return value;
 }
 
 static inline char *
@@ -753,8 +782,6 @@ init_bs_boxed (bsBoxedType type, const char *name, const char *encoding, VALUE k
   bs_boxed->klass = klass;
   bs_boxed->ffi_type = NULL; // lazy determined
 
-  DLOG("MDLOSX", "Imported boxed type of name `%s' encoding `%s'", name, bs_boxed->encoding);
-
   return bs_boxed;
 }
 
@@ -1034,7 +1061,7 @@ osx_load_bridge_support_file (VALUE mOSX, VALUE path)
           char *  const_type;
           char *  const_magic_cookie;
           
-          const_type = get_attribute_and_check(reader, "type");
+          const_type = get_type_attribute_and_check(reader);
           bs_const = (struct bsConst *)malloc(sizeof(struct bsConst));
           ASSERT_ALLOC(bs_const);
 
@@ -1179,7 +1206,7 @@ osx_load_bridge_support_file (VALUE mOSX, VALUE path)
         BOOL             is_opaque;
         struct bsBoxed * bs_boxed;
 
-        struct_decorated_encoding = get_attribute_and_check(reader, "type");
+        struct_decorated_encoding = get_type_attribute_and_check(reader);
         struct_name = get_attribute_and_check(reader, "name");
         is_opaque_s = get_attribute(reader, "opaque");
         if (is_opaque_s != NULL) {
@@ -1195,7 +1222,13 @@ osx_load_bridge_support_file (VALUE mOSX, VALUE path)
           DLOG("MDLOSX", "Can't init structure '%s' -- skipping...", struct_decorated_encoding);
         }
         else {
-          st_insert(bsBoxed, (st_data_t)bs_boxed->encoding, (st_data_t)bs_boxed);
+          if (st_lookup(bsBoxed, (st_data_t)bs_boxed->encoding, NULL)) {
+            DLOG("MDLOSX", "Another C structure already registered under the encoding '%s', skipping...", bs_boxed->encoding); 
+          }
+          else {
+            st_insert(bsBoxed, (st_data_t)bs_boxed->encoding, (st_data_t)bs_boxed);
+            DLOG("MDLOSX", "Imported boxed type of name `%s' encoding `%s'", name, bs_boxed->encoding);
+          }
         }
 
         free(struct_decorated_encoding);
@@ -1205,7 +1238,7 @@ osx_load_bridge_support_file (VALUE mOSX, VALUE path)
       case BS_XML_OPAQUE: {
         char *  opaque_encoding;
 
-        opaque_encoding = get_attribute_and_check(reader, "type");
+        opaque_encoding = get_type_attribute_and_check(reader);
         if (st_lookup(bsBoxed, (st_data_t)opaque_encoding, NULL)) {
           DLOG("MDLOSX", "Opaque type with encoding '%s' already defined -- skipping...", opaque_encoding);
           free(opaque_encoding);
@@ -1230,7 +1263,7 @@ osx_load_bridge_support_file (VALUE mOSX, VALUE path)
       case BS_XML_CFTYPE: {
         char *typeid_encoding;
 
-        typeid_encoding = get_attribute_and_check(reader, "type");
+        typeid_encoding = get_type_attribute_and_check(reader);
         if (st_lookup(bsCFTypes, (st_data_t)typeid_encoding, NULL)) {
           DLOG("MDLOSX", "CFType with encoding '%s' already defined -- skipping...", typeid_encoding);
           free(typeid_encoding);
@@ -1358,7 +1391,7 @@ osx_load_bridge_support_file (VALUE mOSX, VALUE path)
               DLOG("MDLOSX", "Maximum number of arguments reached for function pointer (%d), skipping...", MAX_ARGS);
           }
           else {
-            func_ptr.argv[func_ptr.argc++] = get_attribute_and_check(reader, "type");
+            func_ptr.argv[func_ptr.argc++] = get_type_attribute_and_check(reader);
           }
         }
         else if (func != NULL || method != NULL) {
@@ -1406,7 +1439,7 @@ osx_load_bridge_support_file (VALUE mOSX, VALUE path)
             arg->null_accepted = get_boolean_attribute(reader, "null_accepted", YES);
             get_c_ary_type_attribute(reader, &arg->c_ary_type, &arg->c_ary_type_value); 
   
-            arg->octypestr = get_attribute(reader, "type");
+            arg->octypestr = get_type_attribute(reader);
 
             func_ptr = get_attribute(reader, "function_pointer");
             if (func_ptr != NULL) {
@@ -1430,7 +1463,7 @@ osx_load_bridge_support_file (VALUE mOSX, VALUE path)
             DLOG("MDLOSX", "Function pointer return value defined more than once, skipping...");
           } 
           else {
-            func_ptr.retval = get_attribute(reader, "type");
+            func_ptr.retval = get_type_attribute(reader);
           }
         }
         else if (func != NULL || method != NULL) {
@@ -1452,7 +1485,7 @@ osx_load_bridge_support_file (VALUE mOSX, VALUE path)
             
             retval->c_ary_type = type;
             retval->c_ary_type_value = value;
-            retval->octypestr = get_attribute(reader, "type");
+            retval->octypestr = get_type_attribute(reader);
 
             if (func != NULL) {
               if (retval->octypestr != NULL) {
@@ -1500,7 +1533,7 @@ osx_load_bridge_support_file (VALUE mOSX, VALUE path)
 
             informal_method->selector = selector;
             informal_method->is_class_method = is_class_method;
-            informal_method->encoding = get_attribute_and_check(reader, "type");
+            informal_method->encoding = get_type_attribute_and_check(reader);
             informal_method->protocol_name = protocol_name;
 
             st_insert(hash, (st_data_t)selector, (st_data_t)informal_method);            

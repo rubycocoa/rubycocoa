@@ -58,6 +58,8 @@ end
 
 class SimpleClass; end
 
+class TestActionClass < OSX::NSObject; end
+
 class TC_SubClass < Test::Unit::TestCase
 
   def test_s_new
@@ -103,7 +105,7 @@ class TC_SubClass < Test::Unit::TestCase
   end
 
   def test_action
-    kls = Class.new(OSX::NSObject)
+    kls = TestActionClass
     kls.class_eval do
       attr_reader :foo, :bar, :baz
       def initialize
