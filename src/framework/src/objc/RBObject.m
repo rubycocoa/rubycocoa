@@ -96,6 +96,15 @@ static int rb_obj_arity_of_method(VALUE rcv, SEL a_sel, BOOL *ok)
   return NUM2INT(argc);
 }
 
+@interface __RBObjectThreadDispatcher : NSObject
+{
+  id _returned_ocid;
+  RBObject * _rbobj;
+  NSInvocation * _invocation;
+}
++ (void)dispatchInvocation:(NSInvocation *)invocation toRBObject:(RBObject *)rbobj;
+@end
+
 @implementation RBObject
 
 // private methods
@@ -140,11 +149,15 @@ static int rb_obj_arity_of_method(VALUE rcv, SEL a_sel, BOOL *ok)
   return args;
 }
 
-- (BOOL)stuffForwardResult: (VALUE)result to: (NSInvocation*)an_inv
+- (BOOL)stuffForwardResult: (VALUE)result to: (NSInvocation*)an_inv returnedOcid: (id *) returnedOcid
 {
   NSMethodSignature* msig = [an_inv methodSignature];
   const char* octype_str = encoding_skip_modifiers([msig methodReturnType]);
   BOOL f_success;
+
+  RBOBJ_LOG("stuff forward result of type '%s'", octype_str);
+
+  *returnedOcid = nil;
 
   if (*octype_str == _C_VOID) {
     f_success = true;
@@ -152,10 +165,13 @@ static int rb_obj_arity_of_method(VALUE rcv, SEL a_sel, BOOL *ok)
   else if ((*octype_str == _C_ID) || (*octype_str == _C_CLASS)) {
     id ocdata = rbobj_get_ocid(result);
     if (ocdata == nil) {
-      if (result == m_rbobj)
+      if (result == m_rbobj) {
         ocdata = self;
-      else
+      }
+      else {
         rbobj_to_nsobj(result, &ocdata);
+        *returnedOcid = ocdata;
+      }
     }
     [an_inv setReturnValue: &ocdata];
     f_success = YES;
@@ -262,16 +278,19 @@ VALUE rbobj_call_ruby(id rbobj, SEL selector, VALUE args)
   return rb_result; 
 }
 
-- (void)rbobjForwardInvocation: (NSInvocation *)an_inv
+- (id)rbobjForwardInvocation: (NSInvocation *)an_inv
 {
   VALUE rb_args;
   VALUE rb_result;
+  id returned_ocid;
 
   RBOBJ_LOG("rbobjForwardInvocation(%@)", an_inv);
   rb_args = [self fetchForwardArgumentsOf: an_inv];
   rb_result = rbobj_call_ruby(self, [an_inv selector], rb_args);
-  [self stuffForwardResult: rb_result to: an_inv];
+  [self stuffForwardResult: rb_result to: an_inv returnedOcid: &returned_ocid];
   RBOBJ_LOG("   --> rb_result=%s", STR2CSTR(rb_inspect(rb_result)));
+
+  return returned_ocid;
 }
 
 // public class methods
@@ -349,7 +368,13 @@ VALUE rbobj_call_ruby(id rbobj, SEL selector, VALUE args)
   RBOBJ_LOG("forwardInvocation(%@)", an_inv);
   if ([self rbobjRespondsToSelector: [an_inv selector]]) {
     RBOBJ_LOG("   -> forward to Ruby Object");
-    [self rbobjForwardInvocation: an_inv];
+    if (CFRunLoopGetCurrent() == CFRunLoopGetMain()) {
+      [self rbobjForwardInvocation: an_inv];
+    }
+    else {
+      rb_warning("Invocation `%s' received from another thread - forwarding it to the main thread", [[an_inv description] UTF8String]);
+      [__RBObjectThreadDispatcher dispatchInvocation:an_inv toRBObject:self];
+    }
   }
   else {
     RBOBJ_LOG("   -> forward to super Objective-C Object");
@@ -421,6 +446,44 @@ VALUE rbobj_call_ruby(id rbobj, SEL selector, VALUE args)
 }
 
 @end
+
+@implementation __RBObjectThreadDispatcher
+
+- (id)initWithInvocation:(NSInvocation *)invocation RBObject:(RBObject *)rbobj
+{
+  self = [super init];
+  if (self != NULL) {
+    _returned_ocid = nil;
+    _invocation = invocation; // no retain
+    _rbobj = rbobj; // no retain
+  }
+  return self;
+}
+
+- (void)dispatch
+{
+  [self performSelectorOnMainThread:@selector(syncDispatch) withObject:nil waitUntilDone:YES];
+  if (_returned_ocid != nil)
+    [_returned_ocid autorelease]; 
+}
+
+- (void)syncDispatch
+{
+  _returned_ocid = [_rbobj rbobjForwardInvocation:_invocation];
+  if (_returned_ocid != nil)
+    [_returned_ocid retain];
+}
+
++ (void)dispatchInvocation:(NSInvocation *)invocation toRBObject:(RBObject *)rbobj
+{
+  __RBObjectThreadDispatcher *  dispatcher;
+
+  dispatcher = [[__RBObjectThreadDispatcher alloc] initWithInvocation:invocation RBObject:rbobj];
+  [dispatcher dispatch];
+  [dispatcher release];
+}
+
+@end 
 
 @implementation NSProxy (RubyCocoaEx)
 

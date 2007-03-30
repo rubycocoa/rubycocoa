@@ -56,4 +56,17 @@ VALUE rb_ffi_dispatch(
   void *retain_if_necessary_ctx, 
   VALUE *result);
 
-void *ffi_make_closure(const char *rettype, const char **argtypes, unsigned argc, void (*handler)(ffi_cif *,void *,void **,void *), void *context);
+void *ffi_make_closure(
+  const char *rettype, 
+  const char **argtypes, 
+  unsigned argc, 
+  void (*handler)(ffi_cif *,void *,void **,void *), 
+  void *context);
+
+void ffi_dispatch_closure_in_main_thread(
+  void (*handler)(ffi_cif *,void *,void **,void *), 
+  ffi_cif *cif, 
+  void *resp, 
+  void **args, 
+  void *userdata,
+  void (*finished_handler)(ffi_cif *,void *,void **,void *));

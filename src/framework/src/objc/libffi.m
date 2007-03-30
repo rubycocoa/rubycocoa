@@ -596,3 +596,69 @@ bails:
 done:
   return closure;
 }
+
+@interface __OVMIXThreadDispatcher : NSObject
+{
+  void (*_handler)(ffi_cif *,void *,void **,void *);
+  void (*_finished_handler)(ffi_cif *,void *,void **,void *);
+  ffi_cif * _cif;
+  void * _resp;
+  void ** _args;
+  void * _userdata;
+}
+@end
+
+@implementation __OVMIXThreadDispatcher
+
+- (id)initWithClosure:(void (*)(ffi_cif *,void *,void **,void *))handler 
+  cif:(ffi_cif *)cif 
+  resp:(void *)resp 
+  args:(void **)args 
+  userdata:(void *)userdata 
+  finished_handler:(void (*)(ffi_cif *,void *,void **,void *))finished_handler
+{
+  self = [super init];
+  if (self != NULL) {
+    _handler = handler;
+    _cif = cif;
+    _resp = resp;
+    _args = args;
+    _userdata = userdata;
+    _finished_handler = finished_handler;
+  }
+  return self;
+}
+
+- (void)dispatch
+{
+  [self performSelectorOnMainThread:@selector(syncDispatch) withObject:nil waitUntilDone:YES];
+}
+
+- (void)syncDispatch
+{
+  (*_handler)(_cif, _resp, _args, _userdata);
+  (*_finished_handler)(_cif, _resp, _args, _userdata);
+}
+
+@end
+
+void ffi_dispatch_closure_in_main_thread(
+  void (*handler)(ffi_cif *,void *,void **,void *),
+  ffi_cif *cif,
+  void *resp,
+  void **args,
+  void *userdata,
+  void (*finished_handler)(ffi_cif *,void *,void **,void *))
+{
+  __OVMIXThreadDispatcher * dispatcher;
+
+  dispatcher = [[__OVMIXThreadDispatcher alloc] 
+    initWithClosure:handler 
+    cif:cif 
+    resp:resp 
+    args:args 
+    userdata:userdata 
+    finished_handler:finished_handler];
+  [dispatcher dispatch];
+  [dispatcher release]; 
+}

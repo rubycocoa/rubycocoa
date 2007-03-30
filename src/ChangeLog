@@ -1,3 +1,15 @@
+2007-03-30  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* framework/src/objc/libffi.h,
+	  framework/src/objc/RBObject.m,
+	  framework/src/objc/libffi.m,
+	  framework/src/objc/OverrideMixin.m,
+	  tests/tc_thread.rb,
+	  tests/objc_test.m:
+	Allows RubyCocoa to be called by Objective-C from a thread that isn't the main
+	one, by routing the NSInvocation / FFI closure into the main thread via the
+	main run loop. Prints a warning before routing. Added some test cases. 
+
 2007-03-29  Laurent Sansonetti <lsansonetti@apple.com>
 
 	* framework/src/ruby/osx/objc/oc_import.rb,
