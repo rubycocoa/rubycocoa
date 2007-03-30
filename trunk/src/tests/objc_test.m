@@ -372,6 +372,38 @@
 }
 @end
 
+@interface TestThreadedCallback : NSObject
+@end
+
+@interface NSObject (ThreadedInterface)
+- (id)threaded;
+- (void)done;
+@end
+
+static BOOL TestThreadedCallbackDone = NO;
+
+@implementation TestThreadedCallback
+
++ (void)threadedCallback:(id)obj
+{
+  NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+  NSNumber *number = [obj threaded];
+  //NSLog (@"got %@", number);
+  if (![number isKindOfClass:[NSNumber class]] || [number intValue] != 42)
+    [NSException raise:@"TestThreadedCallbackError" format:@"assertion threaded failed, expected a NSNumber with a 42 value, got %@", number];
+  [pool release];
+  TestThreadedCallbackDone = YES;
+}
+
++ (void)callbackOnThreadRubyObject:(id)obj 
+{
+  TestThreadedCallbackDone = NO;
+  [NSThread detachNewThreadSelector:@selector(threadedCallback:) toTarget:self withObject:obj];
+  while (!TestThreadedCallbackDone && [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:[NSDate dateWithTimeIntervalSinceNow:0.2]]) {}
+}
+
+@end
+
 void Init_objc_test(){
   // dummy initializer for ruby's `require'
 }

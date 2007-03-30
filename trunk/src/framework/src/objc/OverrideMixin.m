@@ -72,6 +72,14 @@ static id get_slave(id rcv)
 VALUE rbobj_call_ruby(id rbobj, SEL selector, VALUE args);
 
 static void
+ovmix_ffi_closure_done(ffi_cif* cif, void* resp, void** args, void* userdata)
+{
+  char *retval_octype = *(char **)userdata;
+  if (*retval_octype == _C_ID)
+    [*(id *)resp retain];
+}
+
+static void
 ovmix_ffi_closure(ffi_cif* cif, void* resp, void** args, void* userdata)
 {
   char *retval_octype;
@@ -81,6 +89,15 @@ ovmix_ffi_closure(ffi_cif* cif, void* resp, void** args, void* userdata)
   VALUE retval;
 
   retval_octype = *(char **)userdata;
+
+  if (CFRunLoopGetCurrent() != CFRunLoopGetMain()) {
+    rb_warning("Closure `%s' called from another thread - forwarding it to the main thread", *(char **)args[1]);
+    ffi_dispatch_closure_in_main_thread(ovmix_ffi_closure, cif, resp, args, userdata, ovmix_ffi_closure_done);
+    if (*retval_octype == _C_ID)
+      [*(id *)resp autorelease];
+    return;
+  }
+
   args_octypes = ((char **)userdata) + 1;
   rb_args = rb_ary_new2(cif->nargs - 2);
 
