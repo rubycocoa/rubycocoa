@@ -271,7 +271,7 @@ module OSX
     # declare to override instance methods of super class which is
     # defined by Objective-C.
     def ns_overrides(*args)
-      warn "ns_overrides is no longer necessary, should not be called anymore and will be removed in a next release. Please update your code to not use it."
+      warn "#{caller[0]}: ns_overrides is no longer necessary, should not be called anymore and will be removed in a next release. Please update your code to not use it."
     end
     alias_method :ns_override,  :ns_overrides
     alias_method :ib_override,  :ns_overrides
@@ -285,7 +285,7 @@ module OSX
     alias_method :ib_outlet, :ib_outlets
 
     def ns_outlets(*args)
-      warn "ns_outlet(s) will be deprecated. Please use ib_outlet(s) instead."
+      warn "#{caller[0]}:: ns_outlet(s) is deprecated, and will be removed in a next release. Please use ib_outlet(s) instead."
       ib_outlets(*args)
     end
     alias_method :ns_outlet,  :ns_outlets
@@ -340,7 +340,7 @@ module OSX
     end
 
     def objc_export(name, types)
-      warn "objc_export will be deprecated. please use objc_method instead."
+      warn "#{caller[0]}: objc_export is deprecated, and will be removed in a next release. please use objc_method instead."
       objc_method(name, types)
     end
 
