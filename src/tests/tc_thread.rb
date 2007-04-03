@@ -17,7 +17,9 @@ class TestThreadNativeMethod < OSX::NSObject
 
   def threaded
     @tc.assert_equal(@tc.mainThread, OSX::NSThread.currentThread)
-    @tc.assert_equal(OSX::CFRunLoopGetCurrent(), OSX::CFRunLoopGetMain())
+    if defined? OSX::CFRunLoopGetMain then
+      @tc.assert_equal(OSX::CFRunLoopGetCurrent(), OSX::CFRunLoopGetMain())
+    end
     42
   end
   objc_method :threaded, ['id']
@@ -32,7 +34,9 @@ class TC_Thread < Test::Unit::TestCase
 
   def threaded
     assert_equal(@mainThread, OSX::NSThread.currentThread)
-    assert_equal(OSX::CFRunLoopGetCurrent(), OSX::CFRunLoopGetMain())
+    if defined? OSX::CFRunLoopGetMain then
+      assert_equal(OSX::CFRunLoopGetCurrent(), OSX::CFRunLoopGetMain())
+    end
     42
   end
 

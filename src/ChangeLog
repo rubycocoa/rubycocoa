@@ -1,3 +1,11 @@
+2007-04-04  Fujimoto Hisa  <hisa@fobj.com>
+
+	* framework/src/objc/RBObject.m, 
+	framework/src/objc/OverrideMixin.m, 
+	tests/tc_thread.rb:
+	fixed an issue that CFRunLoopGetMain isn't declared in CFRunLoop.h
+	on 10.4 (undocumented api?).
+
 2007-04-03  Laurent Sansonetti <lsansonetti@apple.com>
 
 	* framework/src/objc/libffi.m,
