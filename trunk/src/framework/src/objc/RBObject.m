@@ -365,6 +365,7 @@ VALUE rbobj_call_ruby(id rbobj, SEL selector, VALUE args)
 
 - (void)forwardInvocation: (NSInvocation *)an_inv
 {
+  extern CFRunLoopRef CFRunLoopGetMain(void);
   RBOBJ_LOG("forwardInvocation(%@)", an_inv);
   if ([self rbobjRespondsToSelector: [an_inv selector]]) {
     RBOBJ_LOG("   -> forward to Ruby Object");

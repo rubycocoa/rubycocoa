@@ -88,6 +88,8 @@ ovmix_ffi_closure(ffi_cif* cif, void* resp, void** args, void* userdata)
   unsigned i;
   VALUE retval;
 
+  extern CFRunLoopRef CFRunLoopGetMain(void);
+
   retval_octype = *(char **)userdata;
 
   if (CFRunLoopGetCurrent() != CFRunLoopGetMain()) {
