@@ -32,6 +32,7 @@ struct bsArg {
   int               c_ary_type_value;  // not set if arg_type is bsCArrayArgUndefined
   BOOL              null_accepted;
   char *            octypestr;
+  char *            sel_of_type;
 };
 
 struct bsRetval {
@@ -147,6 +148,7 @@ struct bsMethod *find_bs_method(id klass, const char *selector, BOOL is_class_me
 struct bsArg *find_bs_arg_by_index(struct bsCallEntry *entry, unsigned index, unsigned argc);
 struct bsArg *find_bs_arg_by_c_array_len_arg_index(struct bsCallEntry *entry, unsigned index);
 
+void register_bs_informal_protocol_method(struct bsInformalProtocolMethod *method);
 struct bsInformalProtocolMethod *find_bs_informal_protocol_method(const char *selector, BOOL is_class_method);
 
 struct bsConst *find_magic_cookie_const_by_value(void *value);

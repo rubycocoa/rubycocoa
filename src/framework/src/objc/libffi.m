@@ -362,6 +362,27 @@ rb_ffi_dispatch (
 
       if (!rbobj_to_ocdata(arg, octype_str, value, NO))
         return rb_err_new(ocdataconv_err_class(), "Cannot convert the argument #%d as '%s' to Objective-C", i, octype_str); 
+
+      // Register the selector value as an informal protocol, based on the metadata annotation.
+      if (*octype_str == _C_SEL && bs_arg != NULL && bs_arg->sel_of_type != NULL) {
+        struct bsInformalProtocolMethod * inf_prot_method;
+
+        inf_prot_method = find_bs_informal_protocol_method(*(char **)value, NO);
+        if (inf_prot_method != NULL) {
+          if (strcmp(inf_prot_method->encoding, bs_arg->sel_of_type) != 0)
+            return rb_err_new(ocdataconv_err_class(), "Cannot register the given selector '%s' as an informal protocol method of type '%s', because another informal protocol method is already registered with the same signature (but with another type, '%s'. Please rename your selector.", *(char **)value, bs_arg->sel_of_type, inf_prot_method->encoding);
+        }
+        else {
+          inf_prot_method = (struct bsInformalProtocolMethod *)malloc(sizeof(struct bsInformalProtocolMethod));
+          ASSERT_ALLOC(inf_prot_method);
+          inf_prot_method->selector = *(char **)value; // no need to dup it, selectors are unique
+          inf_prot_method->is_class_method = NO;
+          inf_prot_method->encoding = bs_arg->sel_of_type;
+          inf_prot_method->protocol_name = NULL; // unnamed
+          register_bs_informal_protocol_method(inf_prot_method);
+          NSLog(@"registered informal protocol method '%s' of type '%s'", *(char **)value, bs_arg->sel_of_type);
+        }
+      }
       
       arg_types[i + argc_delta] = ffi_type_for_octype(octype_str);
       arg_values[i + argc_delta] = value;
