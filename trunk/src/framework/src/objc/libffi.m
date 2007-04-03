@@ -380,7 +380,7 @@ rb_ffi_dispatch (
           inf_prot_method->encoding = bs_arg->sel_of_type;
           inf_prot_method->protocol_name = NULL; // unnamed
           register_bs_informal_protocol_method(inf_prot_method);
-          NSLog(@"registered informal protocol method '%s' of type '%s'", *(char **)value, bs_arg->sel_of_type);
+          FFI_LOG("registered informal protocol method '%s' of type '%s'", *(char **)value, bs_arg->sel_of_type);
         }
       }
       
