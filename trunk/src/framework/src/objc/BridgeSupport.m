@@ -1435,7 +1435,12 @@ osx_load_bridge_support_file (VALUE mOSX, VALUE path)
             else {
               arg->type_modifier = bsTypeModifierOut;
             } 
-   
+#if __LP64__
+            arg->sel_of_type = get_attribute(reader, "sel_of_type64");
+            if (arg->sel_of_type == NULL)
+#endif
+              arg->sel_of_type = get_attribute(reader, "sel_of_type");
+ 
             arg->null_accepted = get_boolean_attribute(reader, "null_accepted", YES);
             get_c_ary_type_attribute(reader, &arg->c_ary_type, &arg->c_ary_type_value); 
   
@@ -1852,6 +1857,16 @@ find_bs_arg_by_c_array_len_arg_index(struct bsCallEntry *entry, unsigned index)
       return &entry->argv[i];  
 
   return NULL;
+}
+
+void
+register_bs_informal_protocol_method(struct bsInformalProtocolMethod *method)
+{
+  struct st_table *hash;
+
+  hash = method->is_class_method ? bsInformalProtocolClassMethods : bsInformalProtocolInstanceMethods;
+
+  st_insert(hash, (st_data_t)method->selector, (st_data_t)method);
 }
 
 struct bsInformalProtocolMethod *
