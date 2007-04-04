@@ -398,11 +398,13 @@
 		0867D690FE84028FC02AAC07 /* Project object */ = {
 			isa = PBXProject;
 			buildConfigurationList = FCDF92590A87DF820002AD01 /* Build configuration list for PBXProject "RubyCocoa" */;
+			compatibilityVersion = "Xcode 2.4";
 			hasScannedForEncodings = 1;
 			mainGroup = 0867D691FE84028FC02AAC07 /* RubyCocoa */;
 			productRefGroup = 034768DFFF38A50411DB9C8B /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
+			shouldCheckCompatibility = 1;
 			targets = (
 				FCDF92630A87E09E0002AD01 /* RubyCocoa */,
 			);
@@ -462,6 +464,7 @@
 			buildSettings = {
 				GCC_MODEL_TUNING = "";
 				GCC_OPTIMIZATION_LEVEL = 3;
+				MACOSX_DEPLOYMENT_TARGET = "";
 				PRODUCT_NAME = RubyCocoa;
 			};
 			name = Development;
@@ -472,6 +475,7 @@
 			buildSettings = {
 				GCC_MODEL_TUNING = "";
 				GCC_OPTIMIZATION_LEVEL = 3;
+				MACOSX_DEPLOYMENT_TARGET = "";
 				PRODUCT_NAME = RubyCocoa;
 			};
 			name = Deployment;
@@ -482,6 +486,7 @@
 			buildSettings = {
 				GCC_MODEL_TUNING = "";
 				GCC_OPTIMIZATION_LEVEL = 3;
+				MACOSX_DEPLOYMENT_TARGET = "";
 				PRODUCT_NAME = RubyCocoa;
 			};
 			name = Default;

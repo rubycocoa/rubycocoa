@@ -498,13 +498,13 @@ rb_ffi_dispatch (
           switch (bs_arg->c_ary_type) {
             case bsCArrayArgDelimitedByArg:
               {
-                int length_value = (int)arg_values[bs_arg->c_ary_type_value + argc_delta];
+                long length_value = (long)arg_values[bs_arg->c_ary_type_value + argc_delta];
                 if (length_value != 0) {
                   if (*octype_str == _C_ARY_B) {
                     char *p = (char *)octype_str;
                     p++;
                     while (isdigit(*p)) { p++; }
-                    snprintf(fake_octype_str, sizeof fake_octype_str, "[%d%s", length_value, p);
+                    snprintf(fake_octype_str, sizeof fake_octype_str, "[%ld%s", length_value, p);
                     octype_str = fake_octype_str;
                   }
                   else {
