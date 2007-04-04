@@ -88,11 +88,9 @@ ovmix_ffi_closure(ffi_cif* cif, void* resp, void** args, void* userdata)
   unsigned i;
   VALUE retval;
 
-  extern CFRunLoopRef CFRunLoopGetMain(void);
-
   retval_octype = *(char **)userdata;
 
-  if (CFRunLoopGetCurrent() != CFRunLoopGetMain()) {
+  if (!IS_MAIN_THREAD()) {
     rb_warning("Closure `%s' called from another thread - forwarding it to the main thread", *(char **)args[1]);
     ffi_dispatch_closure_in_main_thread(ovmix_ffi_closure, cif, resp, args, userdata, ovmix_ffi_closure_done);
     if (*retval_octype == _C_ID)
