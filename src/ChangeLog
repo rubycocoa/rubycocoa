@@ -1,3 +1,8 @@
+2007-04-05  kimura wataru  <kimuraw@i.nifty.jp>
+
+	* framework/pre-doc.rb:
+	clean bridge-doc directory when doc task fails.
+
 2007-04-04  Fujimoto Hisa  <hisa@fobj.com>
 
 	* framework/post-config.rb:
