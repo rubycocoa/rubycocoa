@@ -1,8 +1,15 @@
+2007-04-04  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* framework/src/objc/RBObject.m,
+	  framework/src/objc/internal_macros.h,
+	  framework/src/objc/OverrideMixin.m:
+	Moved the is-main-thread check code in a macro.
+
 2007-04-04  Fujimoto Hisa  <hisa@fobj.com>
 
 	* framework/src/objc/RBObject.m, 
-	framework/src/objc/OverrideMixin.m, 
-	tests/tc_thread.rb:
+	  framework/src/objc/OverrideMixin.m, 
+	  tests/tc_thread.rb:
 	fixed an issue that CFRunLoopGetMain isn't declared in CFRunLoop.h
 	on 10.4 (undocumented api?).
 
