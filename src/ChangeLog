@@ -1,3 +1,10 @@
+2007-04-05  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* framework/RubyCocoa.xcodeproj/project.pbxproj,
+	  framework/src/objc/libffi.m:
+	Removed explicit 10.3 deployment target and use the default compiler target.
+	Fixed a 64-bit compilation warning.
+
 2007-04-05  kimura wataru  <kimuraw@i.nifty.jp>
 
 	* framework/pre-doc.rb:
