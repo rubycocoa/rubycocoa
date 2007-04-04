@@ -1,3 +1,11 @@
+2007-04-04  Fujimoto Hisa  <hisa@fobj.com>
+
+	* framework/post-config.rb:
+	added  QuartzComposer.framework.
+
+	* framework/src/objc/internal_macros.h:
+	included CFRunLoop.h to solve type for CFRunLoopRef.
+
 2007-04-04  Laurent Sansonetti <lsansonetti@apple.com>
 
 	* framework/src/objc/RBObject.m,

@@ -47,6 +47,7 @@ if @config['gen-bridge-support'] != 'no'
    ['/System/Library/Frameworks/WebKit.framework', nil],
    ['/System/Library/Frameworks/ApplicationServices.framework/Frameworks/CoreGraphics.framework', '-c "-framework ApplicationServices" -c -F/System/Library/Frameworks/ApplicationServices.framework/Frameworks -c "-include /System/Library/Frameworks/OpenGL.framework/Headers/CGLTypes.h"'],
    ['/System/Library/Frameworks/Quartz.framework/Frameworks/PDFKit.framework', nil],
+   ['/System/Library/Frameworks/Quartz.framework/Frameworks/QuartzComposer.framework', nil],
    ['/System/Library/Frameworks/QuartzCore.framework', nil],
    ['/System/Library/Frameworks/OpenGL.framework', nil],
    ['/System/Library/Frameworks/QTKit.framework', TIGER_OR_LOWER ? '' : '-c -DQTKIT_ENABLE_LAYERKIT -c "-framework QTKit"'],

@@ -52,6 +52,7 @@ extern int rubycocoa_frequently_init_stack();
 
 #if MAC_OS_X_VERSION_MAX_ALLOWED <= MAC_OS_X_VERSION_10_4
 // CFRunLoopGetMain isn't exported in 10.4 or below 
+#import <CoreFoundation/CFRunLoop.h>
 extern CFRunLoopRef CFRunLoopGetMain(void);
 #endif
 #define IS_MAIN_THREAD() (CFRunLoopGetCurrent() == CFRunLoopGetMain())
