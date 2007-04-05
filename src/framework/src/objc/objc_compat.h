@@ -10,8 +10,6 @@
 
 #if MAC_OS_X_VERSION_MAX_ALLOWED <= MAC_OS_X_VERSION_10_4
 
-#error foo
-
 #define objc_registerClassPair(klass) (objc_addClass(klass))
 
 #define class_createInstance(klass, extra_bytes) (class_createInstanceFromZone(klass, extra_bytes, NSDefaultMallocZone()))
