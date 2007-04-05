@@ -8,7 +8,9 @@
 
 #import <objc/objc-class.h>
 
-#if !__OBJC2__
+#if MAC_OS_X_VERSION_MAX_ALLOWED <= MAC_OS_X_VERSION_10_4
+
+#error foo
 
 #define objc_registerClassPair(klass) (objc_addClass(klass))
 

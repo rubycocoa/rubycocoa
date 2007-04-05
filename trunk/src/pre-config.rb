@@ -20,6 +20,7 @@ config_ary = [
   [ :rubycocoa_release_date, @config['rubycocoa-release-date'] ],
   [ :rubycocoa_svn_revision,  @config['rubycocoa-svn-revision'] ],
   [ :rubycocoa_framework_version,  @config['rubycocoa-framework-version'] ],
+  [ :macosx_deployment_target, @config['macosx-deployment-target'] ],
   [ :build_dir, framework_obj_path ],
 ]
 

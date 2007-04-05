@@ -337,9 +337,7 @@ static id imp_c_addRubyMethod_withType(Class klass, SEL method, SEL arg0, const 
 
 void install_ovmix_ivars(Class c)
 {
-#if __OBJC2__
-  class_addIvar(c, "m_slave", ocdata_size("@"), 0, "@");
-#else
+#if MAC_OS_X_VERSION_MAX_ALLOWED <= MAC_OS_X_VERSION_10_4
   struct objc_ivar_list* ivlp = NSZoneMalloc(NSDefaultMallocZone(), sizeof(struct objc_ivar));
   ivlp->ivar_count = 1;
   ivlp->ivar_list[0].ivar_name = "m_slave";
@@ -350,6 +348,8 @@ void install_ovmix_ivars(Class c)
   ivlp->ivar_list[0].space = 0;
 #endif
   c->ivars = ivlp;
+#else
+  class_addIvar(c, "m_slave", ocdata_size("@"), 0, "@");
 #endif
 }
 
