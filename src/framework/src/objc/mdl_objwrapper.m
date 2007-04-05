@@ -267,7 +267,7 @@ static void
 _ary_push_objc_methods (VALUE ary, Class cls, int recur)
 {
   Class superclass = class_getSuperclass(cls);
-#if __OBJC2__
+#if MAC_OS_X_VERSION_MAX_ALLOWED > MAC_OS_X_VERSION_10_4
   Method *methods;
   unsigned int i, count;
   methods = class_copyMethodList(cls, &count);
@@ -336,7 +336,7 @@ wrapper_objc_class_methods (int argc, VALUE* argv, VALUE rcv)
 static const char*
 _objc_method_type (Class cls, const char* name)
 {
-  struct objc_method* method;
+  Method method;
 
   method = class_getInstanceMethod(cls, sel_registerName(name));
   if (!method)

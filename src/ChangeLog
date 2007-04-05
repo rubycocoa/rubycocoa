@@ -1,5 +1,16 @@
 2007-04-05  Laurent Sansonetti <lsansonetti@apple.com>
 
+	* pre-config.rb,
+	  framework/RubyCocoa.xcodeproj/project.pbxproj,
+	  framework/src/objc/mdl_objwrapper.m,
+	  framework/src/objc/RBClassUtils.m,
+	  framework/src/objc/objc_compat.h,
+	  framework/src/objc/OverrideMixin.m,
+	  framework/GeneratedConfig.xcconfig.in:
+	Reverted previous change. Now configure the deployment target based on the
+	--macosx-deployment-target parameter passed to install.rb config. Fixed
+	more 64-bit compilation warnings.
+
 	* framework/RubyCocoa.xcodeproj/project.pbxproj,
 	  framework/src/objc/libffi.m:
 	Removed explicit 10.3 deployment target and use the default compiler target.

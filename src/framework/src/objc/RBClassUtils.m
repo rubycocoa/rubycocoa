@@ -18,7 +18,7 @@
 #import "OverrideMixin.h"
 #import "ocdata_conv.h"
 
-#if __OBJC2__
+#if MAC_OS_X_VERSION_MAX_ALLOWED > MAC_OS_X_VERSION_10_4
 
 Class objc_class_alloc(const char* name, Class super_class)
 {
