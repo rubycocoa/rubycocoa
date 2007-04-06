@@ -1,4 +1,5 @@
 #!/usr/bin/env ruby
+# Make the computer speaking, using AppleScript.
 
 class AppleScript
   require 'osx/cocoa'
