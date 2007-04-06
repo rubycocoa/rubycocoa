@@ -1,3 +1,10 @@
+2007-04-06  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* sample/Scripts/speak.rb,
+	  sample/Scripts/speak2.rb:
+	New sample, speak text via the SpeechSynthesis framework. Added a comment
+	to speak.rb.
+
 2007-04-05  Laurent Sansonetti <lsansonetti@apple.com>
 
 	* pre-config.rb,
