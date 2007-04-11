@@ -1,3 +1,9 @@
+2007-04-11  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* framework/src/objc/OverrideMixin.m:
+	Fixed a bug in [-setValue:forUndefinedKey:] to not insert nil values in the
+	cache dictionary.
+
 2007-04-06  Laurent Sansonetti <lsansonetti@apple.com>
 
 	* sample/Scripts/speak.rb,

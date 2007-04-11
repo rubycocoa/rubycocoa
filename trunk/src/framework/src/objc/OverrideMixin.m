@@ -267,7 +267,12 @@ static void imp_setValue_forUndefinedKey (id rcv, SEL method, id value, NSString
 
   if ([slave respondsToSelector: @selector(rbSetValue:forKey:)]) {
     [slave performSelector: @selector(rbSetValue:forKey:) withObject: value withObject: key];
-    [dict setObject:value forKey:key];
+    if (value == nil) {
+      [dict removeObjectForKey:key];
+    }
+    else {
+      [dict setObject:value forKey:key];
+    }
   }
   else
     [rcv performSelector: super_selector(method) withObject: value withObject: key];
