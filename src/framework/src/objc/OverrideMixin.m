@@ -209,7 +209,7 @@ static BOOL imp_respondsToSelector (id rcv, SEL method, SEL arg0)
 {
   BOOL ret;
   IMP simp = super_imp(rcv, method, (IMP)imp_respondsToSelector);
-  
+ 
   ret = ((BOOL (*)(id, SEL, SEL))simp)(rcv, method, arg0);
   if (!ret) {
     id slave = get_slave(rcv);
@@ -301,35 +301,46 @@ static id imp_c_allocWithZone(Class klass, SEL method, NSZone* zone)
   return new_obj;
 }
 
-static id imp_c_addRubyMethod(Class klass, SEL method, SEL arg0)
+void 
+ovmix_register_ruby_method(Class klass, SEL method, BOOL override)
 {
   Method me;
   IMP me_imp, imp;
   SEL me_name;
   char *me_types;
 
-  me = class_getInstanceMethod(klass, arg0);
+  me = class_getInstanceMethod(klass, method);
   // warn if trying to override a method that isn't a member of the specified class
   if (me == NULL)
-    rb_raise(rb_eRuntimeError, "could not add '%s' to class '%s': Objective-C cannot find it in the superclass", (char *)arg0, class_getName(klass));
+    rb_raise(rb_eRuntimeError, "could not add '%s' to class '%s': Objective-C cannot find it in the superclass", (char *)method, class_getName(klass));
     
   me_imp = method_getImplementation(me);
   me_name = method_getName(me);
   me_types = strdup(method_getTypeEncoding(me));
 
   // override method
-  OVMIX_LOG("Registering Ruby method by selector '%s' types '%s'", (char *)arg0, me_types);
+  OVMIX_LOG("Registering Ruby method by selector '%s' types '%s'", (char *)method, me_types);
   imp = ovmix_imp_for_type(me_types);
   if (me_imp == imp) {
-    OVMIX_LOG("Already registered Ruby method by selector '%s' types '%s', skipping...", (char *)arg0, me_types);
+    OVMIX_LOG("Already registered Ruby method by selector '%s' types '%s', skipping...", (char *)method, me_types);
     return nil;
   }
-  
-  class_addMethod(klass, me_name, imp, me_types);
+
+#if MAC_OS_X_VERSION_MAX_ALLOWED > MAC_OS_X_VERSION_10_4
+  if (override)
+    method_setImplementation(me, imp);
+  else
+#endif
+    class_addMethod(klass, me_name, imp, me_types);
+
   class_addMethod(klass, super_selector(me_name), me_imp, me_types);
   
-  OVMIX_LOG("Registered Ruby method by selector '%s' types '%s'", (char *)arg0, me_types);
+  OVMIX_LOG("Registered Ruby method by selector '%s' types '%s'", (char *)method, me_types);
+}
 
+static id imp_c_addRubyMethod(Class klass, SEL method, SEL arg0)
+{
+  ovmix_register_ruby_method(klass, arg0, NO);
   return nil;
 }
 

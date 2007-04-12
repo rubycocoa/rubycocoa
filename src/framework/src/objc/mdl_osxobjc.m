@@ -90,6 +90,7 @@ osx_mf_objc_class_method_add(VALUE mdl, VALUE kls, VALUE method_name, VALUE clas
   Class a_class;
   SEL a_sel;
   char *kls_name;
+  BOOL direct_override;
 
   method_name = rb_obj_as_string(method_name);
   a_sel = sel_registerName(STR2CSTR(method_name));
@@ -98,17 +99,19 @@ osx_mf_objc_class_method_add(VALUE mdl, VALUE kls, VALUE method_name, VALUE clas
   kls_name = rb_class2name(kls);
   if (strncmp(kls_name, "OSX::", 5) == 0 && (a_class = objc_lookUpClass(kls_name + 5)) != NULL) {
     // override in the current class
+    direct_override = YES;
   }
   else {
     // override in the super class 
-    a_class = RBObjcClassFromRubyClass (kls);
+    a_class = RBObjcClassFromRubyClass(kls);
+    direct_override = NO;
   }
   if (a_class != NULL) {
     id rcv;
 
     rcv = RTEST(class_method) ? a_class->isa : a_class;
     if (NIL_P(types))
-      [rcv addRubyMethod:a_sel];
+      ovmix_register_ruby_method(rcv, a_sel, direct_override);
     else
       [rcv addRubyMethod:a_sel withType:STR2CSTR(types)];
   }
