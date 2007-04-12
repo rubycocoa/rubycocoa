@@ -109,7 +109,7 @@ ovmix_ffi_closure(ffi_cif* cif, void* resp, void** args, void* userdata)
     if (!ocdata_to_rbobj(Qnil, args_octypes[i - 2], args[i], &arg, NO))
       rb_raise(rb_eRuntimeError, "Can't convert Objective-C argument #%d of octype '%s' to Ruby value", i - 2, args_octypes[i - 2]);
 
-    OVMIX_LOG("converted arg #%d to Ruby value %p", i - 2, arg);
+    OVMIX_LOG("converted arg #%d of type '%s' to Ruby value %p", i - 2, args_octypes[i - 2], arg);
 
     rb_ary_store(rb_args, i - 2, arg);
   }
@@ -323,7 +323,7 @@ ovmix_register_ruby_method(Class klass, SEL method, BOOL override)
   imp = ovmix_imp_for_type(me_types);
   if (me_imp == imp) {
     OVMIX_LOG("Already registered Ruby method by selector '%s' types '%s', skipping...", (char *)method, me_types);
-    return nil;
+    return;
   }
 
 #if MAC_OS_X_VERSION_MAX_ALLOWED > MAC_OS_X_VERSION_10_4

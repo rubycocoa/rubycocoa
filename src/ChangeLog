@@ -1,5 +1,11 @@
 2007-04-12  Laurent Sansonetti <lsansonetti@apple.com>
 
+	* framework/src/ruby/osx/objc/oc_import.rb,
+	  framework/src/objc/OverrideMixin.m,
+	  framework/src/objc/BridgeSupport.m,
+	  tests/tc_wrapper.rb:
+	Some cleanup changes, better logging, better tests.
+
 	* framework/src/objc/mdl_osxobjc.m,
 	  framework/src/objc/OverrideMixin.m:
 	When overriding methods directly into an Objective-C class (DirectOverride), 

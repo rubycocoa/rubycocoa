@@ -124,6 +124,11 @@ class TC_OCObjWrapper < Test::Unit::TestCase
     assert_kind_of(OSX::NSRect, rect)
     assert_equal([[1,2],[3,4]], rect.to_a)
     assert_equal(rect, OSX::NSRect.new(1,2,3,4))
+    assert_equal(rect, OSX::NSMakeRect(1,2,3,4))
+    assert_equal(rect.origin, OSX::NSPoint.new(1,2))
+    assert_equal(rect.origin, OSX::NSMakePoint(1,2))
+    assert_equal(rect.size, OSX::NSSize.new(3,4))
+    assert_equal(rect.size, OSX::NSMakeSize(3,4))
   end
 
   def test_enumerator_to_a
