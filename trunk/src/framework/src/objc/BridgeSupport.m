@@ -1227,7 +1227,7 @@ osx_load_bridge_support_file (VALUE mOSX, VALUE path)
           }
           else {
             st_insert(bsBoxed, (st_data_t)bs_boxed->encoding, (st_data_t)bs_boxed);
-            DLOG("MDLOSX", "Imported boxed type of name `%s' encoding `%s'", name, bs_boxed->encoding);
+            DLOG("MDLOSX", "Imported boxed type of name `%s' encoding `%s'", struct_name, bs_boxed->encoding);
           }
         }
 

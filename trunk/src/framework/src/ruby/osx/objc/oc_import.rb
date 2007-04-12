@@ -381,7 +381,7 @@ module OSX
       raise ArgumentError, "Given types array should have at least an element" unless types.size > 0
       octypes = types.map do |type|
         if type.is_a?(Class) and type.ancestors.include?(OSX::Boxed)
-          type.instance_variable_get :@__encoding__
+          type.encoding
         else
           type = type.strip.intern unless type.is_a?(Symbol)
           octype = OCTYPES[type]
