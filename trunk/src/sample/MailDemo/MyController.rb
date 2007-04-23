@@ -47,6 +47,7 @@ class MyController < NSObject
     @emailTable.reloadData
     @emailTable.selectRow_byExtendingSelection(mailbox.emails.count - 1, false)
   end
+  ib_action :addEmail
 
   def removeEmail(sender)
     # get current mailbox
@@ -70,6 +71,7 @@ class MyController < NSObject
       @emailTable.selectRow_byExtendingSelection(emails.count - 1, false)
     end
   end
+  ib_action :removeEmail
 
   def addMailbox(sender)
     # create and add new mailbox
@@ -80,6 +82,7 @@ class MyController < NSObject
     @mailboxTable.reloadData
     @mailboxTable.selectRow_byExtendingSelection(@mailboxes.count - 1, false)
   end
+  ib_action :addMailbox
 
   def removeMailbox(sender)
     # get current mailbox
@@ -93,6 +96,7 @@ class MyController < NSObject
     @mailboxTable.reloadData
     @mailboxTable.selectRow_byExtendingSelection(@mailboxes.count - 1, false)
   end
+  ib_action :removeMailbox
 
   def numberOfRowsInTableView(tableView)
     case tableView

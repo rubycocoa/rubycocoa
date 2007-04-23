@@ -35,10 +35,12 @@ class DotView < OSX::NSView
     @color = sender.color
     setNeedsDisplay true
   end
+  ib_action :setColor
 
   def setRadius (sender)
     @radius = sender.floatValue
     setNeedsDisplay true
   end
+  ib_action :setRadius
 
 end

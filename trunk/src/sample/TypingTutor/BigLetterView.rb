@@ -149,6 +149,7 @@ class BigLetterView < OSX::NSView
                         :didEndSelector, "didEnd_returnCode_contextInfo_",
                            :contextInfo, nil
   end
+  ib_action :savePDF
 
   def didEnd_returnCode_contextInfo(sheet, code, contextInfo)
     if code == NSOKButton then
@@ -161,11 +162,13 @@ class BigLetterView < OSX::NSView
     @bold = (sender.state == NSOnState)
     setNeedsDisplay true
   end
+  ib_action :boldClicked
   
   def italicClicked(sender)
     @italic = (sender.state == NSOnState)
     setNeedsDisplay true
   end
+  ib_action :italicClicked
 
   def writePDFToPasteboard(pb)
     types = [NSPDFPboardType]
@@ -193,17 +196,20 @@ class BigLetterView < OSX::NSView
     copy(sender)
     setString ""
   end
+  ib_action :cut
 
   def copy(sender)
     pb = NSPasteboard.generalPasteboard
     writeStringToPasteboard(pb)
     writePDFToPasteboard(pb)
   end
+  ib_action :copy
 
   def paste(sender)
     pb = NSPasteboard.generalPasteboard
     NSBeep unless readStringFromPasteboard(pb)
   end
+  ib_action :paste
 
   def draggingSourceOperationMaskForLocal(flag)
     NSDragOperationCopy

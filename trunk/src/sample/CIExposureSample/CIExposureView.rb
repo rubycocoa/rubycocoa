@@ -12,6 +12,7 @@ class CIExposureView <  NSView
     @exposureValue = sender.floatValue
     setNeedsDisplay(true)
   end
+  ib_action :sliderChanged
   
   def drawRect(rect)
     cg = CGRect.new(CGPoint.new(rect.origin.x, rect.origin.y), 

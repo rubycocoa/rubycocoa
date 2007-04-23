@@ -107,6 +107,7 @@ class MyInspector < OSX::NSObject
       showInfo(obj)
     end
   end
+  ib_action :shrink
 
   def shrinkAll (sender)
     obj = OSX::NSApp.mainWindow
@@ -116,6 +117,7 @@ class MyInspector < OSX::NSObject
       showInfo(obj)
     end
   end
+  ib_action :shrinkAll
 
   def windowDidBecomeKey (aNotification)
     @isClosed = false

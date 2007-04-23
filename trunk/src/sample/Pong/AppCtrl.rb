@@ -59,17 +59,20 @@ class AppCtrl < OSX::NSObject
       start
     end
   end
+  ib_action :startBtnClicked
 
   def resetBtnClicked(sender)
     stop
     reset
     redraw
   end
+  ib_action :resetBtnClicked
 
   def windowShouldClose(sender)
     OSX::NSApp.stop(self)
     true
   end
+  ib_action :windowShouldClose
 
   def ball_init(paddle)
     @movings = Array.new

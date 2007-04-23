@@ -74,6 +74,7 @@ class MyDocument < OSX::NSDocument
   def connectURL(sender)
     self.loadURL(OSX::NSURL.URLWithString(sender.stringValue))
   end
+  ib_action :connectURL
 
   # Methods used to update the load status
   # Updates the status and error messages

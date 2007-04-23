@@ -32,6 +32,7 @@ class ReplController < OSX::NSObject
     @resultText.setString(result.inspect)
     @resultText.setTextColor(STD_COLOR)
   end
+  ib_action :evaluate
 
   private
   def with_io_redirect

@@ -6,7 +6,6 @@
 #  Copyright (c) ÇYEARÈ ÇORGANIZATIONNAMEÈ. All rights reserved.
 #
 
-
 require 'osx/cocoa'
 OSX.require_framework 'CoreData'
 
@@ -18,7 +17,7 @@ class MyDocument < OSX::NSPersistentDocument
     return "MyDocument"
   end
 
-  def windowControllerDidLoadNib (aController)
+  def windowControllerDidLoadNib(aController)
     super_windowControllerDidLoadNib(aController)
     # user interface preparation code
   end
@@ -31,5 +30,4 @@ class MyDocument < OSX::NSPersistentDocument
       @@model_registered = true
     end
   end
-
 end

@@ -21,6 +21,7 @@ class AppController < OSX::NSObject
       @thread = start_thread
     end
   end
+  ib_action :btnClicked
 
   def windowShouldClose (sender)
     quit

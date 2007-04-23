@@ -8,11 +8,11 @@ class AppController < OSX::NSObject
     update_time
   end
 
-  def btnClicked(sender)
+  ib_action :btnClicked do |sender|
     update_time
   end
 
-  def windowShouldClose(sender)
+  ib_action :windowShouldClose do |sender|
     quit
     true
   end

@@ -25,6 +25,7 @@ class AppController < OSX::NSObject
     end
     @preferenceController.showWindow(self)
   end
+  ib_action :showPreferencePanel
 
   def applicationShouldOpenUntitledFile (sender)
     NSUserDefaults.standardUserDefaults.
