@@ -40,6 +40,16 @@
 {
   return NSZeroRect;
 }
++ (void)testFooOn:(id)instance
+{
+  int i = [instance foo];
+  if (i != 123) 
+    [NSException raise:@"TestOverride" format:@"assertion testFooOn failed, expected 123, got %d", i];
+}
++ (void)testFooOnClassName:(NSString *)name
+{
+  [self testFooOn:NSClassFromString(name)];
+}
 @end
 
 @interface RetainCount : NSObject
@@ -198,6 +208,7 @@
 - (void)foo3:(id)ary obj:(id)obj;
 - (NSRect)foo4:(NSPoint)point size:(NSSize)size;
 - (void)foo5:(NSRect *)rectPtr;
++ (int)superFoo;
 @end
 
 @interface TestRig : NSObject { }
@@ -209,12 +220,16 @@
 
 @implementation TestObjcExport
 
-- (void) run
++ (void)runTests
 {
     Class helperClass = NSClassFromString(@"ObjcExportHelper");
     id helper = [[helperClass alloc] init];
     NSRect r;
     int foo;
+
+    foo = [helperClass superFoo];
+    if (foo != 42)
+      [NSException raise:@"TestObjCExportError" format:@"assertion superFoo failed, expected 42, got %i", foo];
 
     id s = [helper foo1];
     if (![s isKindOfClass:[NSString class]] || ![s isEqualToString:@"s"])
@@ -317,6 +332,23 @@
   return nil;
 }
 
++ (void)checkOverridenMethods
+{
+  id obj;
+
+  obj = [DirectOverride classOverrideMe];
+
+  if (![obj isEqualToString:@"bar"])
+    [NSException raise:@"DirectOverride" format:@"assertion classOverrideMe failed, got %@", obj];
+
+  id directOverride = [[DirectOverride alloc] init];
+  obj = [directOverride overrideMe];
+  [directOverride release];
+
+  if (![obj isEqualToString:@"foo"])
+    [NSException raise:@"DirectOverride" format:@"assertion overrideMe failed, got %@", obj];
+}
+
 @end
 
 #import <AddressBook/ABPeoplePickerC.h>
@@ -400,6 +432,36 @@ static BOOL TestThreadedCallbackDone = NO;
   TestThreadedCallbackDone = NO;
   [NSThread detachNewThreadSelector:@selector(threadedCallback:) toTarget:self withObject:obj];
   while (!TestThreadedCallbackDone && [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:[NSDate dateWithTimeIntervalSinceNow:0.2]]) {}
+}
+
+@end
+
+@interface HybridClass : NSObject
+@end
+
+@interface NSObject (HybridClassIf)
+
+- (id)imethod;
++ (id)cmethod;
+
+@end
+
+@implementation HybridClass
+
++ (void)startTests
+{
+  NSNumber *number; 
+  HybridClass *hybrid;
+ 
+  number = [HybridClass cmethod];
+  if (![number isEqual:[NSNumber numberWithInt:42]])
+    [NSException raise:@"TestHybridClass" format:@"assertion cmethod failed, expected 42, got %@", number];
+
+  hybrid = [[self alloc] init];
+  number = [hybrid imethod];
+  [hybrid release];
+  if (![number isEqual:[NSNumber numberWithInt:42]])
+    [NSException raise:@"TestHybridClass" format:@"assertion imethod failed, expected 42, got %@", number];
 }
 
 @end

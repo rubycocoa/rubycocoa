@@ -699,5 +699,19 @@ class Object
       _register_method(sym, true)
       _before_singleton_method_added(sym)
     end
+
+    def method_missing(symbol, *args)
+      nsklassname, mod = _real_class_and_mod(self)
+      if nsklassname
+        begin
+          nsklass = OSX.const_get(nsklassname)
+          if nsklass.respond_to?(symbol)
+            return nsklass.send(symbol, *args)
+          end
+        rescue NameError
+        end
+      end
+      raise NoMethodError, "undefined method `#{symbol.to_s}' for #{self}"
+    end
   end
 end

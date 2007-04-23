@@ -259,7 +259,13 @@ VALUE rbobj_call_ruby(id rbobj, SEL selector, VALUE args)
   else {
     // Not an RBObject class, try to get the value from the cache. 
     m_rbobj = ocid_to_rbobj_cache_only(rbobj);
+    if (NIL_P(m_rbobj)) {
+      // Nothing in the cache, it means that this Objective-C object never
+      // crossed the bridge yet. Let's create the Ruby proxy.
+      m_rbobj = ocid_to_rbobj(Qnil, rbobj);    
+    }
   }
+
   mid = rb_obj_sel_to_mid(m_rbobj, selector);
   stub_args[0] = m_rbobj;
   stub_args[1] = mid;
