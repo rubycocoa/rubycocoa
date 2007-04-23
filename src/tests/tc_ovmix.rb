@@ -79,6 +79,11 @@ class ObjcExportHelper < OSX::NSObject
     rectPtr.size.height *= 10
   end
   addRubyMethod_withType("foo5:", "v@:^#{OSX::NSRect.encoding}")
+
+  def self.superFoo
+    42
+  end
+  objc_class_method :superFoo, ['int']
 end
 
 class TestStret < OSX::ObjcTestStret
@@ -116,8 +121,7 @@ class TC_OVMIX < Test::Unit::TestCase
   end
 
   def test_objc_method
-    testoe = OSX::TestObjcExport.alloc.init
-    testoe.run
+    OSX::TestObjcExport.runTests
   end
 
   def test_direct_override
@@ -127,6 +131,7 @@ class TC_OVMIX < Test::Unit::TestCase
     assert_equal('foo', o.performSelector('overrideMe').to_s)
     assert_kind_of(OSX::NSString, OSX::DirectOverride.performSelector('classOverrideMe'))
     assert_equal('bar', OSX::DirectOverride.performSelector('classOverrideMe').to_s)
+    OSX::DirectOverride.checkOverridenMethods
   end
 
   def test_super_method

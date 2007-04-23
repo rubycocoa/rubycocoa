@@ -94,6 +94,9 @@ class TC_SubClass < Test::Unit::TestCase
     assert_equal( 123, obj_b.class.oc_foo )
     assert_equal( OSX::NSRect.new(1,2,3,4), obj_b.giveRect )
     assert_equal( OSX::NSRect.new(1,2,3,4), obj_b.oc_giveRect )
+    OSX::Override.testFooOn(obj_b)
+    OSX::Override.testFooOn(SubClassB)
+    OSX::Override.testFooOnClassName('SubClassB')
   end
 
   def test_outlet

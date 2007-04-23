@@ -1,5 +1,15 @@
 2007-04-23  Laurent Sansonetti <lsansonetti@apple.com>
 
+	* framework/src/ruby/osx/objc/oc_import.rb
+	  framework/src/objc/RBObject.m
+	  tests/tc_ovmix.rb
+	  tests/objc_test.m
+	  tests/tc_subclass.rb,
+	  tests/tc_hybrid.rb:
+	Some work on messaging Ruby from Objective-C. Fixed a bug when the Ruby 
+	proxy cannot be determined, and another when OSX methods couldn't be called
+	directly on an Objective-C class from Ruby (DirectOverride). Added tests.
+
 	* pre-config.rb,
 	  framework/RubyCocoa.xcodeproj/project.pbxproj,
 	  framework/GeneratedConfig.xcconfig.in,
