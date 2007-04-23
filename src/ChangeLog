@@ -1,5 +1,15 @@
 2007-04-23  Laurent Sansonetti <lsansonetti@apple.com>
 
+	* pre-config.rb,
+	  framework/RubyCocoa.xcodeproj/project.pbxproj,
+	  framework/GeneratedConfig.xcconfig.in,
+	  metaconfig:
+	Introduced a new config phase variable, 'build-as-embeddable', turned on by
+	default, which builds RubyCocoa.framework with an INSTALL_PATH set to
+	@executable_path/../Frameworks/RubyCocoa.framework/RubyCocoa. When turned off,
+	INSTALL_PATH will get an absolute path value (the value of the 'frameworks'
+	config phase variable).
+
 	* sample/DotView/DotView.rb,
 	  sample/MultiNib/ApplicationDelegate.rb,
 	  sample/SimpleApp/AppController.rb,

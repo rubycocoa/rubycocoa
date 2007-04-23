@@ -58,6 +58,9 @@ add_path_config 'bridge-support', '/Library/BridgeSupport',
 add_bool_config 'gen-bridge-support', true,
   'yes, generate bridge metadata files'
 
+add_bool_config 'build-as-embeddable', true,
+  'yes, build the framework as embeddable (with INSTALL_PATH pointing to the current application\'s Frameworks directory)'
+
 ### build configuration ### 
 
 # Xcode 2.2 moved ruby.h, but ruby command reports old path.

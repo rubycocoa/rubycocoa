@@ -9,6 +9,9 @@ target_files = %w[
   framework/src/objc/Version.h
 ]
 
+install_path = @config['build-as-embeddable'] == 'yes' \
+  ? "@executable_path/../Frameworks" : @config['frameworks']
+
 config_ary = [
   [ :frameworks,      @config['frameworks'] ],
   [ :ruby_header_dir, @config['ruby-header-dir'] ],
@@ -22,6 +25,7 @@ config_ary = [
   [ :rubycocoa_framework_version,  @config['rubycocoa-framework-version'] ],
   [ :macosx_deployment_target, @config['macosx-deployment-target'] ],
   [ :build_dir, framework_obj_path ],
+  [ :install_path, install_path ]
 ]
 
 # build options
