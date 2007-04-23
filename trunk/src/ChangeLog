@@ -1,5 +1,10 @@
 2007-04-23  Laurent Sansonetti <lsansonetti@apple.com>
 
+	* framework/src/ruby/osx/objc/oc_import.rb,
+	  tests/tc_hybrid.rb:
+	Assume a '@@:' default signature when nothing is passed to objc_method and
+	objc_class_method. Adapted a test case.
+
 	* framework/src/ruby/osx/objc/oc_import.rb
 	  framework/src/objc/RBObject.m
 	  tests/tc_ovmix.rb

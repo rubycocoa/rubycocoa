@@ -8,12 +8,12 @@ class OSX::HybridClass
   def imethod
     42
   end
-  objc_method :imethod, ['id']
+  objc_method :imethod
 
   def self.cmethod
     42
   end
-  objc_class_method :cmethod, ['id']
+  objc_class_method :cmethod
 end
 
 class TC_Hybrid < Test::Unit::TestCase
