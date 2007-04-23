@@ -330,12 +330,12 @@ module OSX
       end
     end
 
-    def objc_method(name, types, &blk)
+    def objc_method(name, types=['id'], &blk)
       define_method(name, blk) if block_given?
       _objc_export(name, types, false)
     end
 
-    def objc_class_method(name, types)
+    def objc_class_method(name, types=['id'])
       _objc_export(name, types, true)
     end
 
