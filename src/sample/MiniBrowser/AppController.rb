@@ -133,6 +133,7 @@ class AppController < OSX::NSObject
   def clearHistory(sender)
     OSX::WebHistory.optionalSharedHistory.removeAllItems
   end
+  ib_action :clearHistory
 
   # This method will be invoked by the menu item whose represented
   # object is the selected history item
@@ -153,4 +154,5 @@ class AppController < OSX::NSObject
                     requestWithURL(OSX::NSURL.URLWithString(urlString)))
     end
   end
+  ib_action :goToHistoryItem
 end

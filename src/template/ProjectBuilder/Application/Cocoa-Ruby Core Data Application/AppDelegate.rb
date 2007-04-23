@@ -59,6 +59,7 @@ class AppDelegate < OSX::NSObject
       OSX::NSApplication.sharedApplication.presentError(error)
     end
   end
+  ib_action :saveAction
   
   def applicationShouldTerminate(sender)
     reply = OSX::NSTerminateNow
@@ -86,5 +87,4 @@ class AppDelegate < OSX::NSObject
     end
     return reply
   end
-
 end

@@ -45,10 +45,12 @@ class MyViewerCtrl < OSX::NSObject
       WinCtrl.alloc.initWithPath(aFile)
     end
   end
+  ib_action :openFile
 
   def activateInspector (sender)
     MyInspector.defaultInstance
   end
+  ib_action :activateInspector
 
   def showTitleMessage (title, message)
     panel = OSX::NSGetAlertPanel(title, "%@", nil, nil, nil, message)

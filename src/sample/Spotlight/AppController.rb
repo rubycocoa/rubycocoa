@@ -53,9 +53,11 @@ class AppController < NSObject
   def updateSearching (sender)
     refresh_metaDataView
   end
+  ib_action :updateSearching
   
   def search (sender)
     @spotlight.search()
   end
+  ib_action :search
 
 end

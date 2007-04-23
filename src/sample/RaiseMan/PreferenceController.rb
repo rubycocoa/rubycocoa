@@ -28,18 +28,20 @@ class PreferenceController < OSX::NSWindowController
   end
 
   def changeColor (sender)
-	color = sender.color
+	  color = sender.color
     colorAsData = NSArchiver.archivedDataWithRootObject(color)
     defaults = NSUserDefaults.standardUserDefaults
     defaults[BNRTableBgColorKey] = colorAsData
-	NSNotificationCenter.defaultCenter.
+	  NSNotificationCenter.defaultCenter.
 	  postNotificationName_object(BNRColorChanged, color)
   end
+  ib_action :changeColor
 
   def changeNewEmptyDoc (sender)
     defaults = NSUserDefaults.standardUserDefaults
     defaults[BNREmptyDocKey] = sender.state
   end
+  ib_action :changeNewEmptyDoc
 
   def resetToDefault (sender)
     defaults = NSUserDefaults.standardUserDefaults
@@ -47,6 +49,7 @@ class PreferenceController < OSX::NSWindowController
     keys.to_a.each {|key| defaults.removeObjectForKey(key) }
     reload_user_defaults
   end
+  ib_action :resetToDefault
 
   private
 

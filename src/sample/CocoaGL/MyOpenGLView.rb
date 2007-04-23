@@ -52,9 +52,8 @@ class MyOpenGLView <  NSOpenGLView
   end
   
   # The UI buttons are targetted to call this action method:
-  def setClearColor(sender)
+  ib_action :setClearColor do |sender|
     @colorIndex = sender.tag
     setNeedsDisplay(true)
   end
-
 end

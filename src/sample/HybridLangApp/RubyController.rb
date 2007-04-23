@@ -6,8 +6,7 @@ class RubyController < OSX::NSObject
 
   ib_outlets :textField
 
-  def btnClicked(sender)
+  ib_action :btnClicked do |sender|
     @textField.setStringValue "#{sender.title} !!"
   end
-
 end

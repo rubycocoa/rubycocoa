@@ -11,27 +11,27 @@ class MainController < NSObject
   # These six methods pass the appropriate message to the current
   # (frontmost) PDFView.  They are called by the menu items and enable
   # keyboard shortcuts.
-  def firstPage(sender)
+  ib_action :firstPage do |sender|
     currentPDFView.setPageNumber(1)
   end
   
-  def lastPage(sender)
+  ib_action :lastPage do |sender|
     currentPDFView.setPageNumber(currentPDFView.pageCount)
   end
 
-  def pageDown(sender)
+  ib_action :pageDown do |sender|
     currentPDFView.incrementPageNumber(self)
   end
   
-  def pageUp(sender)
+  ib_action :pageUp do |sender|
     currentPDFView.decrementPageNumber(self)
   end
 
-  def rotateLeft(sender)
+  ib_action :rotateLeft do |sender|
     currentPDFView.rotateLeft(self)
   end
 
-  def rotateRight(sender)
+  ib_action :rotateRight do |sender|
     currentPDFView.rotateRight(self)
   end
 
@@ -53,5 +53,4 @@ class MainController < NSObject
       true
     end
   end
-
 end

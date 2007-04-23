@@ -47,13 +47,15 @@ class MyDocument < OSX::NSDocument
 	  update_ui
 	end
   end
+  ib_action :deleteEmployee
 
   def newEmployee (sender)
     create_new_employee
     update_ui
   end
+  ib_action :newEmployee
 
-# data source
+  # data source
   def numberOfRowsInTableView (tblView)
     @employees.size
   end
@@ -76,7 +78,7 @@ class MyDocument < OSX::NSDocument
     updateChangeCount(NSChangeDone)
   end
 
-# delegate
+  # delegate
   def tableViewSelectionDidChange (aNotification)
     @deleteButton.setEnabled(@employees.size > 0 && @tableView.selectedRow != -1)
   end

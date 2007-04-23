@@ -8,7 +8,7 @@ class AppController < OSX::NSObject
     update_time
   end
 
-  def btnClicked(sender)
+  ib_action :btnClicked do |sender|
     btn_name = sender.title.to_s.downcase
     if /^time/ =~ btn_name then
       update_time
@@ -17,7 +17,7 @@ class AppController < OSX::NSObject
     end
   end
 
-  def windowShouldClose(sender)
+  ib_action :windowShouldClose do |sender|
     quit
     true
   end

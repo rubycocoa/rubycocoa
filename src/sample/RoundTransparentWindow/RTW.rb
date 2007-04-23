@@ -17,12 +17,12 @@ class Controller < OSX::NSObject
        # Watch out for this: the bridge gives you NO WARNING when it happens.
        @itsWindow.oc_display
     end
+    ib_action :changeTransparency 
 end
 
 class CustomWindow < OSX::NSWindow
     attr_accessor :initialLocation
 
-    ns_overrides :initWithContentRect_styleMask_backing_defer_
     def initWithContentRect_styleMask_backing_defer(contentRect, aStyle, bufferingType, flag)
 	result = super_initWithContentRect_styleMask_backing_defer_(contentRect, OSX::NSBorderlessWindowMask, OSX::NSBackingStoreBuffered, false)
 	result.setBackgroundColor(OSX::NSColor.clearColor)
@@ -33,12 +33,10 @@ class CustomWindow < OSX::NSWindow
 	result
     end
 
-    ns_overrides :canBecomeKeyWindow
     def canBecomeKeyWindow
 	true
     end
     
-    ns_overrides :mouseDragged_
     def mouseDragged(theEvent)
 	screenFrame = OSX::NSScreen.mainScreen.frame
 	windowFrame = self.frame
@@ -51,7 +49,6 @@ class CustomWindow < OSX::NSWindow
 	self.setFrameOrigin(newOrigin)
     end
     
-    ns_overrides :mouseDown_
     def mouseDown(theEvent)
 	windowFrame = frame
 	@initialLocation = convertBaseToScreen(theEvent.locationInWindow);
@@ -67,12 +64,10 @@ class CustomView < OSX::NSView
 	setNeedsDisplay(true)
     end
         
-    ns_overrides :acceptsFirstMouse_
     def acceptsFirstMouse(event)
 	true
     end
     
-    ns_overrides :drawRect_
     def drawRect(rect)
 	OSX::NSColor.clearColor.set
 	OSX::NSRectFill(frame) 

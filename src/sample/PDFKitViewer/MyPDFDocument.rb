@@ -76,12 +76,14 @@ class MyPDFDocument < NSDocument
   def toggleDrawer(sender)
     @drawer.toggle(self)
   end
+  ib_action :toggleDrawer
 
   def takeDestinationFromOutline(sender)
     # Get the destination associated with the search result list.  Tell the PDFView to go there.
     item = sender.itemAtRow(sender.selectedRow)
     @pdfView.goToDestination(item.destination) if item
   end
+  ib_action :takeDestinationFromOutline
 
   def displaySinglePage(sender)
     # Display single page mode.
@@ -89,6 +91,7 @@ class MyPDFDocument < NSDocument
       @pdfView.setDisplayMode(@pdfView.displayMode - 2)
     end
   end
+  ib_action :displaySinglePage
 
   def displayTwoUp(sender)
 	  # Display two-up.
@@ -96,6 +99,7 @@ class MyPDFDocument < NSDocument
 		  @pdfView.setDisplayMode(@pdfView.displayMode + 2)
     end
   end
+  ib_action :displayTwoUp
   
   def pageChanged(notification)
     doc = @pdfView.document
@@ -136,6 +140,7 @@ class MyPDFDocument < NSDocument
     doc.cancelFindString if doc.isFinding    
     doc.beginFindString_withOptions(sender.stringValue, NSCaseInsensitiveSearch)
   end
+  ib_action :doFind
 
   def startFind(notification)
     # Empty arrays.

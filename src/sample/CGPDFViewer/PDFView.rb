@@ -79,11 +79,11 @@ class PDFView <  NSView
   end
   
   # These two are convenience methods for the Page Up and Page Down toolbar items.
-  def incrementPageNumber(sender)
+  ib_action :incrementPageNumber do |sender|
     setPageNumber(@pageNumber + 1) if @pageNumber < pageCount
   end
 
-  def decrementPageNumber(sender)
+  ib_action :decrementPageNumber do |sender|
     setPageNumber(@pageNumber - 1) if @pageNumber > 1
   end
   
@@ -93,12 +93,12 @@ class PDFView <  NSView
 
   # As mentioned in -drawRect:, `angle' must be a multiple of 90. These methods
   # guarantee that it is.
-  def rotateRight(sender)
+  ib_action :rotateRight do |sender|
     @angle += 90
     self.setNeedsDisplay(true)
   end
 
-  def rotateLeft(sender)
+  ib_action :rotateLeft do |sender|
     @angle -= 90
     self.setNeedsDisplay(true)
   end

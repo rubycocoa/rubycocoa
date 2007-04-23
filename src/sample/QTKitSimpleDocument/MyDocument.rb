@@ -35,4 +35,5 @@ class MyDocument < NSDocument
     @mMovieView.movie.updateMovieFile
     updateChangeCount(NSChangeCleared)
   end
+  ib_action :saveDocument
 end

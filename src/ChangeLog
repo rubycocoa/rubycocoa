@@ -1,3 +1,38 @@
+2007-04-23  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* sample/DotView/DotView.rb,
+	  sample/MultiNib/ApplicationDelegate.rb,
+	  sample/SimpleApp/AppController.rb,
+	  sample/MakefileApp2/AppController.rb,
+	  sample/Pong/AppCtrl.rb,
+	  sample/PDFKitViewer/MyPDFDocument.rb,
+	  sample/QTKitSimpleDocument/MyDocument.rb,
+	  sample/MyViewer/MyInspector.rb,
+	  sample/MyViewer/MyViewerCtrl.rb,
+	  sample/CocoaGL/MyOpenGLView.rb,
+	  sample/Spotlight/AppController.rb,
+	  sample/HybridLangApp/RubyController.rb,
+	  sample/MailDemo/MyController.rb,
+	  sample/CIExposureSample/CIExposureView.rb,
+	  sample/RaiseMan/PreferenceController.rb,
+	  sample/RaiseMan/AppController.rb,
+	  sample/RaiseMan/MyDocument.rb,
+	  sample/MiniBrowser/AppController.rb,
+	  sample/MiniBrowser/MyDocument.rb,
+	  sample/RoundTransparentWindow/RTW.rb,
+	  sample/PathDemo/PathDemoController.rb,
+	  sample/CGPDFViewer/PDFView.rb,
+	  sample/CGPDFViewer/MainController.rb,
+	  sample/Thread/AppController.rb,
+	  sample/CocoaRepl/ReplController.rb,
+	  sample/TypingTutor/BigLetterView.rb,
+	  sample/MakefileApp/AppController.rb,
+	  sample/Stickies/StickiesAppDelegate.rb,
+	  template/ProjectBuilder/Application/Cocoa-Ruby Document-based Application/MyDocument.rb,
+	  template/ProjectBuilder/Application/Cocoa-Ruby Core Data Document-based Application/MyDocument.rb,
+	  template/ProjectBuilder/Application/Cocoa-Ruby Core Data Application/AppDelegate.rb:
+	Now using ib_action to annotate action methods.
+
 2007-04-12  Laurent Sansonetti <lsansonetti@apple.com>
 
 	* framework/src/ruby/osx/objc/oc_import.rb,
