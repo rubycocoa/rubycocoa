@@ -258,8 +258,11 @@ rb_ffi_dispatch (
       char *type = ARG_OCTYPESTR(i);
       if (*type == _C_CONST)
         type++;
-      if ((*type == _C_PTR && find_bs_cf_type_by_encoding(type) == NULL) || *type == _C_ARY_B)
-        pointers_args_count++;
+      if ((*type == _C_PTR && find_bs_cf_type_by_encoding(type) == NULL) || *type == _C_ARY_B) {
+        struct bsArg *bs_arg = find_bs_arg_by_index(call_entry, i, expected_argc);
+        if (bs_arg == NULL || bs_arg->type_modifier == bsTypeModifierOut)
+          pointers_args_count++;
+      }
     }
     if (pointers_args_count + given_argc != expected_argc)
       return rb_err_new(rb_eArgError, "wrong number of argument(s) (expected %d, got %d)", expected_argc, given_argc);
