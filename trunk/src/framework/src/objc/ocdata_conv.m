@@ -432,6 +432,15 @@ rbnum_to_nsnum (VALUE rbval, id* nsval)
   return result;
 }
 
+static BOOL
+rbtime_to_nsdate (VALUE rbval, id* nsval)
+{
+  NSTimeInterval seconds;
+  seconds = NUM2LONG(rb_funcall(rbval, rb_intern("to_i"), 0));
+  *nsval = [NSDate dateWithTimeIntervalSince1970:seconds]; 
+  return [(*nsval) isKindOfClass: [NSDate class]];
+}
+
 static void
 __slave_nsobj_free (void *p)
 {
@@ -473,6 +482,9 @@ rbobj_convert_to_nsobj (VALUE obj, id* nsobj)
       return rbnum_to_nsnum(obj, nsobj);
 
     default:
+      if (rb_obj_is_kind_of(obj, rb_cTime))
+        return rbtime_to_nsdate(obj, nsobj);
+
       if (!OBJ_FROZEN(obj)) {
         *nsobj = [[RBObject alloc] _initWithRubyObject:obj retains:YES];
         // Let's embed the ObjC object in a custom Ruby object that will 

@@ -1220,6 +1220,7 @@ osx_load_bridge_support_file (VALUE mOSX, VALUE path)
         bs_boxed = init_bs_boxed_struct(mOSX, struct_name, struct_decorated_encoding, is_opaque);
         if (bs_boxed == NULL) {
           DLOG("MDLOSX", "Can't init structure '%s' -- skipping...", struct_decorated_encoding);
+          free(struct_name);
         }
         else {
           if (st_lookup(bsBoxed, (st_data_t)bs_boxed->encoding, NULL)) {
