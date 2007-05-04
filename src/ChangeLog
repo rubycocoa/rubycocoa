@@ -1,3 +1,15 @@
+2007-05-04  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* framework/src/objc/ocdata_conv.m:
+	Convert Time objects to NSDate objects.
+
+	* framework/src/ruby/osx/objc/ruby_addition.rb,
+	  tests/tc_plist.rb:
+	Added syntax-sugar APIs to manage property lists. Added test cases.
+
+	* framework/src/objc/BridgeSupport.m:
+	Fixed a leak.
+
 2007-04-26  Laurent Sansonetti <lsansonetti@apple.com>
 
 	* framework/src/objc/libffi.m:
