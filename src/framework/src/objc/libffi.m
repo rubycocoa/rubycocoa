@@ -303,7 +303,7 @@ rb_ffi_dispatch (
       BOOL is_c_array;
       int len;
 
-      arg = argv[i - skipped];
+      arg = argv[i];
       bs_arg = find_bs_arg_by_index(call_entry, i, expected_argc);
 
       if (bs_arg != NULL) {
@@ -328,7 +328,9 @@ rb_ffi_dispatch (
           return rb_err_new(rb_eRuntimeError, "Internal error: argument #%d is not a defined as a pointer in the runtime or it is described as such in the metadata", i);
         ptype++;
 
-        if (TYPE(arg) == T_STRING)
+        if (NIL_P(arg))
+          len = 0;
+        else if (TYPE(arg) == T_STRING)
           len = RSTRING(arg)->len;
         else if (TYPE(arg) == T_ARRAY)
           len = RARRAY(arg)->len; // XXX should be RARRAY(arg)->len * ocdata_sizeof(...)
