@@ -1,3 +1,9 @@
+2007-05-09  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* misc/bridgesupport:
+	Created, this hosts the bridge support project that is now on 
+	MacOSForge.org, using svn:externals.
+
 2007-05-05  Laurent Sansonetti <lsansonetti@apple.com>
 
 	* framework/src/objc/libffi.m:
