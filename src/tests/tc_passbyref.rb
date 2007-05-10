@@ -77,7 +77,8 @@ class TC_PassByRef < Test::Unit::TestCase
 
     def test_in_c_array_byte
         s = OSX::NSString.alloc.initWithBytes_length_encoding('foobar', OSX::NSASCIIStringEncoding)
-        assert_equal(s.to_s, 'foobar')
+        assert_equal(6, s.length)
+        assert_equal('foobar', s.to_s)
     end
 
     def test_out_c_array_byte

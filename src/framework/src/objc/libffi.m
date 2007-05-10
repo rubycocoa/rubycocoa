@@ -303,7 +303,7 @@ rb_ffi_dispatch (
       BOOL is_c_array;
       int len;
 
-      arg = argv[i];
+      arg = argv[i - skipped];
       bs_arg = find_bs_arg_by_index(call_entry, i, expected_argc);
 
       if (bs_arg != NULL) {
