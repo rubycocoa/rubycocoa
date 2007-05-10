@@ -8,11 +8,60 @@ require 'osx/cocoa'
 system 'make -s' || raise(RuntimeError, "'make' failed")
 require 'objc_test.bundle'
 
+class PassByRefSubclass1 < OSX::PassByRef
+
+    def passByRefObject(objcptr)
+        unless objcptr.nil?
+          raise "#{objcptr} not an ObjCPtr" unless objcptr.is_a?(OSX::ObjcPtr)
+          objcptr.assign(self)
+          1
+        else
+          0
+        end
+    end
+
+    def passByRefInteger(objcptr)
+        unless objcptr.nil?
+          raise "#{objcptr} not an ObjCPtr" unless objcptr.is_a?(OSX::ObjcPtr)
+          objcptr.assign(6666)
+          1
+        else
+          0
+        end
+    end
+
+    def passByRefFloat(objcptr)
+        unless objcptr.nil?
+          raise "#{objcptr} not an ObjCPtr" unless objcptr.is_a?(OSX::ObjcPtr)
+          objcptr.assign(6666.0)
+          1
+        else
+          0
+        end
+    end
+
+    def passByRefVarious_integer_floating(objcptr1, objcptr2, objcptr3)
+        unless objcptr1.nil?
+          raise "#{objcptr1} not an ObjCPtr" unless objcptr1.is_a?(OSX::ObjcPtr)
+          objcptr1.assign(self)
+        end
+        unless objcptr2.nil?
+          raise "#{objcptr2} not an ObjCPtr" unless objcptr2.is_a?(OSX::ObjcPtr)
+          objcptr2.assign(6666)
+        end
+        unless objcptr3.nil?
+          raise "#{objcptr3} not an ObjCPtr" unless objcptr3.is_a?(OSX::ObjcPtr)
+          objcptr3.assign(6666.0)
+        end
+    end
+
+end
+
 class TC_PassByRef < Test::Unit::TestCase
 
     def test_passbyref_methods
         bridged = OSX::PassByRef.alloc.init
-        
+
         # Object.
         assert_equal(0, bridged.passByRefObject(nil))
         assert_equal([1, bridged], bridged.passByRefObject_)
@@ -30,6 +79,28 @@ class TC_PassByRef < Test::Unit::TestCase
         assert_equal([bridged, 666, 666.0], bridged.passByRefVarious_integer_floating_)
         assert_equal([666, 666.0], bridged.passByRefVarious_integer_floating_(nil))
         assert_equal(666.0, bridged.passByRefVarious_integer_floating_(nil, nil))
+    end
+
+    def test_passbyref_subclass_methods
+        bridged = OSX::PassByRefSubclass1.alloc.init
+        
+        # Object.
+        assert_equal(0, bridged.passByRefObject(nil))
+        assert_equal([1, bridged], bridged.passByRefObject_)
+    
+        # Integer.
+        assert_equal(0, bridged.passByRefInteger(nil))
+        assert_equal([1, 6666], bridged.passByRefInteger_)
+        
+        # Float.
+        assert_equal(0, bridged.passByRefFloat(nil))
+        assert_equal([1, 6666.0], bridged.passByRefFloat_)
+
+        # Various.
+        assert_nil(bridged.passByRefVarious_integer_floating(nil, nil, nil))
+        assert_equal([bridged, 6666, 6666.0], bridged.passByRefVarious_integer_floating_)
+        assert_equal([6666, 6666.0], bridged.passByRefVarious_integer_floating_(nil))
+        assert_equal(6666.0, bridged.passByRefVarious_integer_floating_(nil, nil))
     end
 
     def test_passbyref_foundation

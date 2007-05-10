@@ -377,6 +377,37 @@ objcptr_at (VALUE rcv, VALUE key)
 }
 
 static VALUE
+rb_objcptr_set_at (VALUE rcv, VALUE key, VALUE val)
+{
+  unsigned offset;
+
+  Check_Type(key, T_FIXNUM);
+
+  if (ENCODING_OF(rcv) == NULL)
+    rb_raise(rb_eRuntimeError, "#[]= can't be called on this instance");
+
+  offset = FIX2INT(key);  
+  offset *= ocdata_size(ENCODING_OF(rcv));
+ 
+  if (!rbobj_to_ocdata(val, ENCODING_OF(rcv), CPTR_OF(rcv) + offset, NO))
+    rb_raise(rb_eRuntimeError, "Can't convert given object to type '%s' at index %d offset %d", ENCODING_OF(rcv), FIX2INT(key), offset);
+
+  return val;
+}
+
+static VALUE
+rb_objcptr_assign (VALUE rcv, VALUE obj)
+{
+  if (ENCODING_OF(rcv) == NULL)
+    rb_raise(rb_eRuntimeError, "#assign can't be called on this instance");
+
+  if (!rbobj_to_ocdata(obj, ENCODING_OF(rcv), CPTR_OF(rcv), NO))
+    rb_raise(rb_eArgError, "Can't convert object to type '%s'", ENCODING_OF(rcv));
+  
+  return rcv;
+}
+
+static VALUE
 objcptr_to_a (VALUE rcv, VALUE index, VALUE count)
 {
   size_t type_size, offset;
@@ -468,6 +499,9 @@ init_cls_ObjcPtr(VALUE outer)
   rb_define_alias (_kObjcPtr, "bool", "uint8");
 
   rb_define_method (_kObjcPtr, "[]", rb_objcptr_at, -1);
+  rb_define_method (_kObjcPtr, "[]=", rb_objcptr_set_at, 2);
+
+  rb_define_method (_kObjcPtr, "assign", rb_objcptr_assign, 1);
 
   return _kObjcPtr;
 }
