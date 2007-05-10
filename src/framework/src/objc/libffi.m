@@ -277,7 +277,8 @@ rb_ffi_dispatch (
     // returned by reference.
     if (find_bs_arg_by_c_array_len_arg_index(call_entry, i) != NULL
         && *octype_str != _C_PTR) {
-      skipped++;
+      if (given_argc + skipped < expected_argc)
+        skipped++;
     } 
     // Omitted pointer.
     else if (i - skipped >= given_argc) {
