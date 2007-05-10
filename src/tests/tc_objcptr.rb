@@ -197,6 +197,29 @@ class TC_ObjcPtr < Test::Unit::TestCase
     assert_equal( true, nearly_equal.call( ary[3], 0.0 ))
   end
 
+  def test_ocptr_int_assign
+    obj = ObjcPtr.new(:int)
+    obj.assign(123)
+    assert_equal(123, obj.int)
+    number = NSNumber.numberWithInt(42)
+    obj.assign(number)
+    assert_equal(42, obj.int)
+    assert_raises(ArgumentError) { obj.assign('foo') }
+  end
+
+  def test_ocptr_no_assign
+    obj = ObjcPtr.new(10)
+    assert_raises(RuntimeError) { obj.assign(42) }
+  end
+
+  def test_ocptr_ary_assign
+    str = 'foobar'
+    obj = ObjcPtr.new(:char, str.length)
+    str.length.times { |i| obj[i] = str[i] }
+    assert_equal('foobar', obj.bytestr)
+    assert_raises(ArgumentError) { obj[0] = 'blah' }
+  end
+
 #   rb_define_method (_kObjcPtr, "int8_at", rb_objcptr_int8_at, 1);
 #   rb_define_method (_kObjcPtr, "uint8_at", rb_objcptr_uint8_at, 1);
 #   rb_define_method (_kObjcPtr, "int16_at", rb_objcptr_int16_at, 1);

@@ -1,5 +1,14 @@
 2007-05-10  Laurent Sansonetti <lsansonetti@apple.com>
 
+	* framework/src/objc/cls_objcptr.m:
+	Added new APIs to assign values to the pointer instance. #assign is to assign
+	a value to the entire pointer, and #[]= can be used to assign a value to a 
+	particular offset.
+
+	* tests/tc_passbyref.rb,
+	  tests/tc_objcptr.rb:
+	Added more tests.
+
 	* framework/src/objc/libffi.m:
 	Fixed a regression introduced by a recent commit.
 
