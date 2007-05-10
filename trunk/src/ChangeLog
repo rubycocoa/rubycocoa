@@ -1,5 +1,8 @@
 2007-05-10  Laurent Sansonetti <lsansonetti@apple.com>
 
+	* framework/src/objc/BridgeSupport.m:
+	Ignore the 'Nil' Foundation enumeration.
+
 	* framework/RubyCocoa.xcodeproj/project.pbxproj:
 	Added a build phase that copies the bridge support file within the RubyCocoa
 	framework bundle, only if the bridge support files have been generated.
