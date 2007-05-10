@@ -1137,7 +1137,7 @@ osx_load_bridge_support_file (VALUE mOSX, VALUE path)
 
         ignore = NO;
         enum_name = get_attribute_and_check(reader, "name");
-        if (rb_const_defined(mOSX, rb_intern(enum_name))) {
+        if (rb_const_defined(mOSX, rb_intern(enum_name)) || strcmp(enum_name, "Nil") == 0) {
           DLOG("MDLOSX", "Enum '%s' already registered, skipping...", enum_name);
         }
         else {
