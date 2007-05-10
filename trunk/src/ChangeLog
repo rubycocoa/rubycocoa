@@ -1,3 +1,20 @@
+2007-05-10  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* framework/RubyCocoa.xcodeproj/project.pbxproj:
+	Added a build phase that copies the bridge support file within the RubyCocoa
+	framework bundle, only if the bridge support files have been generated.
+
+	* framework/post-config.rb:
+	Updated to run the new bridge support build process.
+
+	* metaconfig:
+	Removed the 'bridge-support' config variable, now the bridge support files are
+	always copied within the RubyCocoa framework bundle. 
+
+	* framework/bridge-support-exceptions,
+	  framework/tool/gen_bridge_metadata.rb:
+	Removed.
+
 2007-05-09  Laurent Sansonetti <lsansonetti@apple.com>
 
 	* misc/bridgesupport:

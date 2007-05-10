@@ -381,6 +381,7 @@
 				FCDF928C0A87E09E0002AD01 /* Sources */,
 				FCDF929C0A87E09E0002AD01 /* Frameworks */,
 				FCDF929F0A87E09E0002AD01 /* Rez */,
+				4D7AD1190BF2994500F1A2C6 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -430,6 +431,22 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXRezBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		4D7AD1190BF2994500F1A2C6 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 12;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "if [ -d bridge-support ]; then\n  rm -rf $BUILT_PRODUCTS_DIR/RubyCocoa.framework/Resources/BridgeSupport\n  mkdir -p $BUILT_PRODUCTS_DIR/RubyCocoa.framework/Resources/BridgeSupport\n  cp bridge-support/*.bridgesupport bridge-support/*.dylib $BUILT_PRODUCTS_DIR/RubyCocoa.framework/Resources/BridgeSupport\nfi";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		FCDF928C0A87E09E0002AD01 /* Sources */ = {
