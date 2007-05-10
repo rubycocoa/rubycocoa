@@ -7,6 +7,10 @@ require 'osx/cocoa'
 
 class TC_Plist < Test::Unit::TestCase
 
+  def setup
+    @tiger_or_lower = `sw_vers -productVersion`.to_f <= 10.4
+  end
+
   def test_array
     obj = ['ichi', 2, 3, 'quatre', 5]
     verify(obj, OSX::NSArray)
@@ -24,7 +28,7 @@ class TC_Plist < Test::Unit::TestCase
 
   def test_bignum
     obj = 100_000_000_000
-    verify(obj, OSX::NSNumber)
+    verify(obj, OSX::NSNumber, !@tiger_or_lower)
   end
 
   def test_float
@@ -51,11 +55,10 @@ class TC_Plist < Test::Unit::TestCase
     verify(hash, OSX::NSDictionary)
   end
 
-  def verify(rbobj, nsklass)
-    [ nil, 
-      OSX::NSPropertyListXMLFormat_v1_0, 
-      OSX::NSPropertyListBinaryFormat_v1_0 ].each do |format|
-   
+  def verify(rbobj, nsklass, test_binary=true)
+    formats = [ nil, OSX::NSPropertyListXMLFormat_v1_0 ]
+    formats << OSX::NSPropertyListBinaryFormat_v1_0 if test_binary
+    formats.each do |format|
       data = rbobj.to_plist(format)
       assert_kind_of(String, data)
       obj = OSX.load_plist(data)

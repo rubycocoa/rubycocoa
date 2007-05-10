@@ -1,5 +1,15 @@
 2007-05-10  Laurent Sansonetti <lsansonetti@apple.com>
 
+	* framework/src/objc/libffi.m:
+	Fixed a regression introduced by a recent commit.
+
+	* tests/tc_plist.rb:
+	Do not test the serialization of big numbers in binary property lists on
+	Tiger or lower environments.
+
+	* tests/tc_passbyref.rb:
+	Better tests.
+
 	* framework/src/objc/BridgeSupport.m:
 	Ignore the 'Nil' Foundation enumeration.
 
