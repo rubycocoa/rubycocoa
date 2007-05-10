@@ -52,9 +52,6 @@ add_path_config 'examples', '/Developer/Examples',
 add_path_config 'documentation', '/Developer/Documentation',
   'path to the directory for Documentation'
 
-add_path_config 'bridge-support', '/Library/BridgeSupport',
-  'path to the directory for BrigeSupport metadata files'
-
 add_bool_config 'gen-bridge-support', true,
   'yes, generate bridge metadata files'
 
