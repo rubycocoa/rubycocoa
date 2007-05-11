@@ -15,6 +15,8 @@ void install_ovmix_ivars(Class c);
 void install_ovmix_methods(Class c);
 void install_ovmix_class_methods(Class c);
 
+void ovmix_register_ruby_method(Class klass, SEL method, BOOL override);
+
 @interface NSObject (__rbobj__)
 + (VALUE)__rbclass__;
 @end

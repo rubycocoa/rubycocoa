@@ -21,6 +21,7 @@
 #import <objc/objc-runtime.h>
 #import "cls_objcid.h"
 #import "objc_compat.h"
+#import "OverrideMixin.h"
 
 #define OSX_MODULE_NAME "OSX"
 
