@@ -116,7 +116,7 @@ class Decorator
     require "#{key}_decorator"
     Decorator.default = key
     key
-  rescue => err
+  rescue Exception => err
     warn(err.message)
     nil
   end
