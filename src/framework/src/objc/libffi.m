@@ -370,7 +370,7 @@ rb_ffi_dispatch (
         return rb_err_new(ocdataconv_err_class(), "Cannot convert the argument #%d as '%s' to Objective-C", i, octype_str); 
 
       // Register the selector value as an informal protocol, based on the metadata annotation.
-      if (*octype_str == _C_SEL && bs_arg != NULL && bs_arg->sel_of_type != NULL) {
+      if (*octype_str == _C_SEL && bs_arg != NULL && bs_arg->sel_of_type != NULL && *(char **)value != NULL) {
         struct bsInformalProtocolMethod * inf_prot_method;
 
         inf_prot_method = find_bs_informal_protocol_method(*(char **)value, NO);

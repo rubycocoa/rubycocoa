@@ -1,3 +1,8 @@
+2007-05-11  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* framework/src/objc/libffi.m:
+	Do not try to register a given selector value if it's NULL.
+
 2007-05-11  Fujimoto Hisa  <hisa@fobj.com>
 
 	* framework/src/ruby/osx/objc/oc_import.rb:
