@@ -36,6 +36,7 @@ module OSX
   QUICK_FRAMEWORKS = {
     'CoreGraphics' => '/System/Library/Frameworks/ApplicationServices.framework/Frameworks/CoreGraphics.framework',
     'PDFKit' => '/System/Library/Frameworks/Quartz.framework/Frameworks/PDFKit.framework',
+    'QuartzComposer' => '/System/Library/Frameworks/Quartz.framework/Frameworks/QuartzComposer.framework',
     'ImageKit' => '/System/Library/Frameworks/Quartz.framework/Frameworks/ImageKit.framework'
   }
 
