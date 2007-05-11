@@ -40,6 +40,19 @@ def load_decorator
     Decorator.require_decorator(:simple)
 end
 
+def create_window(opts = {})
+  frame = opts[:frame] || [10,10,640,480]
+  title = opts[:title]
+  win = OSX::NSWindow.alloc.
+    objc_send( :initWithContentRect, frame,
+               :styleMask, 0x1F,
+               :backing, OSX::NSBackingStoreBuffered,
+               :defer, false )
+  win.setTitle(title) if title
+  win.makeKeyAndOrderFront(nil)
+  win
+end
+
 OSX.init_for_bundle do |bdl,prm,lgr|
   load_decorator
   require 'RubyProgramTextView'

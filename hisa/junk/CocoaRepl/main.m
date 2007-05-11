@@ -9,8 +9,8 @@
 #import <Cocoa/Cocoa.h>
 #import <RubyCocoa/RubyCocoa.h>
 
-int main(int argc, char *argv[])
+int main(int argc, const char *argv[])
 {
-  RBApplicationInit("init_CocoaRepl.rb", argc, (const char**) argv, nil);
-  return NSApplicationMain(argc,  (const char**) argv);
+  RBApplicationInit("init_CocoaRepl.rb", argc, argv, nil);
+  return NSApplicationMain(argc, argv);
 }
