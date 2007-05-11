@@ -1,3 +1,11 @@
+2007-05-11  Fujimoto Hisa  <hisa@fobj.com>
+
+	* framework/src/ruby/osx/objc/oc_import.rb:
+	add QuartzComposer into the QUICK_FRAMEWORKS
+
+	* framework/src/objc/OverrideMixin.h, framework/src/objc/mdl_osxobjc.m:
+	declared ovmix_register_ruby_method that is defined in OverrideMixin.m
+
 2007-05-10  Laurent Sansonetti <lsansonetti@apple.com>
 
 	* framework/src/objc/cls_objcptr.m:
