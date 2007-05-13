@@ -1,3 +1,46 @@
+2007-05-13  Eloy Duran <e.duran@superalloy.nl>
+
+	* framework/RubyCocoa.xcodeproj/project.pbxproj,
+	  framework/src/ruby/osx/active_record.rb,
+	  framework/src/ruby/osx/objc/active_record.rb,
+	  tests/tc_active_record.rb,
+	  lib/osx/active_record.rb:
+	Added the osx/active_record lib, which enables the use of ActiveRecord in conjunction with bindings.
+	For now it implements at least the glue code for a belongs_to association.
+	There is a testcase with some basic tests. If ActiveRecord isn't found by osx/active_record
+	it will issue a warning about it and that you might need to require 'rubygems' first.
+	So you might see this warning when running the tests, but the testcase
+	will retry to require ActiveRecord after requiring rubygems.
+	If it's still not successful it will skip the testcase.
+
+	* sample/MailDemo/MailDemoActiveRecordBindings,
+	  sample/MailDemo/MailDemoActiveRecordBindings/main.m,
+	  sample/MailDemo/MailDemoActiveRecordBindings/TreeHouseIdeas.icns,
+	  sample/MailDemo/MailDemoActiveRecordBindings/Info.plist,
+	  sample/MailDemo/MailDemoActiveRecordBindings/maildemo.sql,
+	  sample/MailDemo/MailDemoActiveRecordBindings/Database.rb,
+	  sample/MailDemo/MailDemoActiveRecordBindings/maildemo.sqlite,
+	  sample/MailDemo/MailDemoActiveRecordBindings/Email.rb,
+	  sample/MailDemo/MailDemoActiveRecordBindings/rb_main.rb,
+	  sample/MailDemo/MailDemoActiveRecordBindings/MyController.rb,
+	  sample/MailDemo/MailDemoActiveRecordBindings/MailDemoActiveRecordBindings.xcodeproj,
+	  sample/MailDemo/MailDemoActiveRecordBindings/MailDemoActiveRecordBindings.xcodeproj/project.pbxproj,
+	  sample/MailDemo/MailDemoActiveRecordBindings/Mailbox.rb,
+	  sample/MailDemo/MailDemoActiveRecordBindings/README,
+	  sample/MailDemo/MailDemoActiveRecordBindings/English.lproj,
+	  sample/MailDemo/MailDemoActiveRecordBindings/English.lproj/InfoPlist.strings,
+	  sample/MailDemo/MailDemoActiveRecordBindings/English.lproj/MainMenu.nib,
+	  sample/MailDemo/MailDemoActiveRecordBindings/English.lproj/MainMenu.nib/info.nib,
+	  sample/MailDemo/MailDemoActiveRecordBindings/English.lproj/MainMenu.nib/keyedobjects.nib,
+	  sample/MailDemo/MailDemoActiveRecordBindings/English.lproj/MainMenu.nib/classes.nib,
+	  sample/MailDemo/MailDemoActiveRecordBindings/English.lproj/MainMenu~.nib,
+	  sample/MailDemo/MailDemoActiveRecordBindings/English.lproj/MainMenu~.nib/info.nib,
+	  sample/MailDemo/MailDemoActiveRecordBindings/English.lproj/MainMenu~.nib/keyedobjects.nib,
+	  sample/MailDemo/MailDemoActiveRecordBindings/English.lproj/MainMenu~.nib/classes.nib:
+	Added the MailDemo version that uses the new osx/active_record lib,
+	it achieves persistent storage by using ActiveRecord with a sqlite3 backend.
+	It shows how to use a belongs_to relationship with a subclass of NSArrayController.
+
 2007-05-13  Laurent Sansonetti <lsansonetti@apple.com>
 
 	* framework/src/objc/libffi.m,
