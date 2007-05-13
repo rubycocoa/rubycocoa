@@ -234,9 +234,6 @@ rb_ffi_dispatch (
         unsigned j;
         BOOL already;
         
-        if (expected_argc == given_argc)
-          rb_warn("argument #%d is no longer necessary (will be ignored)", arg->c_ary_type_value);
-  
         // Some methods may accept multiple 'array' 'in' arguments that refer to the same 'length' argument, like:
         //   [NSDictionary + dictionaryWithObjects: forKeys: count:]
         for (j = 0, already = NO; j < length_args_count; j++) {
@@ -273,12 +270,32 @@ rb_ffi_dispatch (
     
     octype_str = ARG_OCTYPESTR(i);
     // C-array-length-like argument, which should be already defined
-    // (at the same time than the C-array-like argument), unless it's
-    // returned by reference.
+    // at the same time than the C-array-like argument, unless it's
+    // returned by reference or specifically provided.
     if (find_bs_arg_by_c_array_len_arg_index(call_entry, i) != NULL
         && *octype_str != _C_PTR) {
-      if (given_argc + skipped < expected_argc)
+      if (given_argc + skipped < expected_argc) {
         skipped++;
+      }
+      else {
+        VALUE arg;
+        int *value;
+        int *prev_len;
+
+        arg = argv[i - skipped];
+        Check_Type(arg, T_FIXNUM);
+
+        value = OCDATA_ALLOCA(octype_str);
+        if (!rbobj_to_ocdata(arg, octype_str, value, NO))
+          return rb_err_new(ocdataconv_err_class(), "Cannot convert the argument #%d as '%s' to Objective-C", i, octype_str); 
+        
+        prev_len = arg_values[i + argc_delta];
+        if (prev_len != NULL && (*prev_len < *value || *value < 0))
+          return rb_err_new(rb_eArgError, "Incorrect array length of argument #%d (expected a non negative value greater or equal to %d, got %d)", i, *prev_len, *value);
+        
+        arg_types[i + argc_delta] = ffi_type_for_octype(octype_str);
+        arg_values[i + argc_delta] = value;
+      }
     } 
     // Omitted pointer.
     else if (i - skipped >= given_argc) {
@@ -350,9 +367,8 @@ rb_ffi_dispatch (
           int * prev_len;
         
           prev_len = arg_values[bs_arg->c_ary_type_value + argc_delta];
-          if (prev_len != NULL && *prev_len != len)
-            return rb_err_new(rb_eArgError, "Incorrect array length of argument #%d (expected %d, got %d)", i, *prev_len, len);
-          
+          if (prev_len != NULL && (*prev_len > len || *prev_len < 0))
+            return rb_err_new(rb_eArgError, "Incorrect array length of argument #%d (expected a non negative value greater or equal to %d, got %d)", i, len, *prev_len);
           FFI_LOG("arg[%d] (%p) : %s (defined as a C array delimited by arg #%d in the metadata)", i, arg, octype_str, bs_arg->c_ary_type_value);
         }
         value = OCDATA_ALLOCA(octype_str);

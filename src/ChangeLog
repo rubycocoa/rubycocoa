@@ -1,3 +1,12 @@
+2007-05-13  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* framework/src/objc/libffi.m,
+	  tests/tc_passbyref.rb:
+	Better behavior for C-array like arguments with a length argument. Do not emit
+	a warning anymore if a value is passed for the length argument. If the value
+	is either negative or greater than the size of the given array, raise an 
+	exception. Otherwise, just pass the value. Added tests. 
+
 2007-05-11  Laurent Sansonetti <lsansonetti@apple.com>
 
 	* framework/src/objc/libffi.m:
