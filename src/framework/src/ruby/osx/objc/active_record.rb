@@ -2,8 +2,9 @@ require 'osx/cocoa'
 begin
   require 'active_record'
 rescue LoadError
-  STDERR.puts "ActiveRecord was not found, if you have it installed as a gem you have to require 'rubygems' before you require 'osx/active_record'"
-  raise LoadError
+  msg = "ActiveRecord was not found, if you have it installed as a gem you have to require 'rubygems' before you require 'osx/active_record'"
+  $stderr.puts msg
+  raise LoadError, msg
 end
 
 # ---------------------------------------------------------
@@ -30,23 +31,6 @@ end
 class String
   def to_activerecord_proxy_class
     Object.const_get("#{self}Proxy")
-  end
-end
-
-class Object
-  # Return the ruby equivalant of the object
-  def to_rubytype
-    # p self.class
-    case self.class.to_s
-    when 'OSX::NSCFString'
-      return self.to_s
-    when 'OSX::NSCFArray'
-      return self.to_a
-    when 'OSX::NSConcreteAttributedString'
-      return self.string.to_s
-    else
-      return self
-    end
   end
 end
 
@@ -151,7 +135,17 @@ class ActiveRecordProxy < OSX::NSObject
       # FIXME: this is slow! check if there's another way to add the latest record to the array without reloading everything.
       @record.reload
     else
-      @record[key.to_s] = value.to_rubytype
+      # FIXME: this code should be refactored once we will provide a unique API to convert ObjC proxy objects to native Ruby types.
+      @record[key.to_s] = case value
+        when OSX::NSString
+          value.to_s
+        when OSX::NSArray
+          value.to_a
+        when OSX::NSAttributedString
+          value.string.to_s
+        else
+          value
+      end
       result = @record.save
     end
     return result

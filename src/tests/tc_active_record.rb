@@ -81,20 +81,6 @@ begin
       assert "Mailbox".to_activerecord_proxy_class == MailboxProxy
     end
   
-    def test_object_to_rubytype
-      # These cause a 'Illegal instruction'
-      # nscfstring = OSX::NSCFString.alloc.init
-      # assert nscfstring.to_rubytype.is_a?(String)
-    
-      # nscfarray = OSX::NSCFArray.alloc.init
-      # assert nscfarray.to_rubytype.is_a?(Array)
-    
-      nsconcretestring = OSX::NSConcreteAttributedString.alloc.init
-      assert nsconcretestring.to_rubytype.is_a?(String)
-    
-      assert nil.to_rubytype.is_a?(NilClass)
-    end
-  
     def test_proxy_initialization
       before = Mailbox.count
       proxy1 = MailboxProxy.alloc.init({'title' => 'foo'})
