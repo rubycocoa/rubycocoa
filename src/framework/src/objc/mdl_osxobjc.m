@@ -232,31 +232,8 @@ rb_obj_ocid(VALUE rcv)
 static VALUE
 osx_mf_objc_symbol_to_obj(VALUE mdl, VALUE const_name, VALUE const_type)
 {
-  VALUE result = Qnil;
-  char buf[BUFSIZ];
-  NSSymbol sym = NULL;
-  void* addr = NULL;
-
-  const_name = rb_obj_as_string(const_name);
-  const_type = rb_obj_as_string(const_type);
-
-  strncpy(buf+1, STR2CSTR(const_name), BUFSIZ - 1);
-  buf[0] = '_';
-  if (NSIsSymbolNameDefined(buf) == FALSE)
-    rb_raise(rb_eRuntimeError, "symbol '%s' not found.", STR2CSTR(const_name));
-
-  sym = NSLookupAndBindSymbol(buf);
-  if (sym == NULL)
-    rb_raise(rb_eRuntimeError, "symbol'%s' is NULL.", STR2CSTR(const_name));
-
-  addr = NSAddressOfSymbol(sym);
-  if (addr == NULL)
-    rb_raise(rb_eRuntimeError, "address of '%s' is NULL.", STR2CSTR(const_name));
-
-  if (!ocdata_to_rbobj(Qnil, STR2CSTR(const_type), addr, &result, NO))
-    rb_raise(rb_eRuntimeError, "cannot convert to rbobj for type '%s'.", STR2CSTR(const_type));
-
-  return result;
+  rb_raise(rb_eRuntimeError, "#objc_symbol_to_obj has been obsoleted");
+  return Qnil;
 }
 
 /***/
