@@ -124,4 +124,39 @@ module OSX
       self.floatValue
     end
   end
+
+  # NSDate additions
+  class NSDate
+    def to_time
+      Time.at(self.timeIntervalSince1970)
+    end
+  end
+
+  # NSObject additions
+  class NSObject
+    def to_ruby
+      case self 
+      when OSX::NSDate
+        self.to_time
+      when OSX::NSCFBoolean
+        self.boolValue
+      when OSX::NSNumber
+        OSX::CFNumberIsFloatType(self) ? self.to_f : self.to_i
+      when OSX::NSString
+        self.to_s
+      when OSX::NSArray
+        self.map { |x| x.is_a?(OSX::NSObject) ? x.to_ruby : x }
+      when OSX::NSDictionary
+        h = {}
+        self.each do |x, y| 
+          x = x.to_ruby if x.is_a?(OSX::NSObject)
+          y = y.to_ruby if y.is_a?(OSX::NSObject)
+          h[x] = y
+        end
+        h
+      else
+        self
+      end
+    end
+  end
 end

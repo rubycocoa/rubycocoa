@@ -126,7 +126,12 @@ class TC_Types < Test::Unit::TestCase
     d.setValue_forKey(123, '123')
     assert_kind_of(OSX::NSCFBoolean, d.objectForKey('true'))
     assert_kind_of(OSX::NSCFBoolean, d.objectForKey('false'))
-    assert_kind_of(OSX::NSDecimalNumber, d.objectForKey('123'))
+    assert_kind_of(OSX::NSNumber, d.objectForKey('123'))
+  end
+
+  def test_float_nsnumber
+    assert(!OSX::CFNumberIsFloatType(42))
+    assert(OSX::CFNumberIsFloatType(42.42))
   end
 
   def test_cftypes
