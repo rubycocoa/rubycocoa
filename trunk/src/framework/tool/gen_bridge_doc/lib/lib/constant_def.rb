@@ -21,8 +21,10 @@ class CocoaRef::ConstantDef < CocoaRef::MethodDef
     end
     
     # Make sure the first letter is upcased.
-    name = @name[0...1].upcase << @name[1..-1]
-    str += "  #{name} = nil\n\n"
+    if @name then
+      name = @name[0...1].upcase << @name[1..-1]
+      str += "  #{name} = nil\n\n"
+    end
     return str
   end
 
