@@ -27,6 +27,10 @@
 
 2007-05-14  Laurent Sansonetti <lsansonetti@apple.com>
 
+	* sample/MailDemo/MailDemoSimple/Info.plist,
+	  sample/MailDemo/MailDemoBindings/Info.plist:
+	Better CFBundleIdentifier tags.
+
 	* framework/src/ruby/osx/objc/ruby_addition.rb,
 	  framework/src/ruby/osx/objc/oc_attachments.rb,
 	  framework/src/objc/ocdata_conv.m,
