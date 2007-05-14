@@ -1,3 +1,12 @@
+2007-05-14  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* sample/MailDemo/MailDemoActiveRecordBindings/README,
+	  sample/MailDemo/MailDemoActiveRecordBindings/English.lproj/MainMenu~.nib:
+	Removed unnecessary files.
+
+	* sample/MailDemo/README:
+	Better introduction file.
+
 2007-05-13  Eloy Duran <e.duran@superalloy.nl>
 
 	* framework/RubyCocoa.xcodeproj/project.pbxproj,
