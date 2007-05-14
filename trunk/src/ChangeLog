@@ -1,5 +1,8 @@
 2007-05-14  Laurent Sansonetti <lsansonetti@apple.com>
 
+	* framework/src/objc/mdl_osxobjc.m:
+	Obsoleted #objc_symbol_to_obj.
+
 	* sample/MailDemo/MailDemoActiveRecordBindings/README,
 	  sample/MailDemo/MailDemoActiveRecordBindings/English.lproj/MainMenu~.nib:
 	Removed unnecessary files.
