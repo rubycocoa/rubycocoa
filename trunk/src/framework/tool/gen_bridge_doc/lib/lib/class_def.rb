@@ -1,11 +1,12 @@
 class CocoaRef::ClassDef
-  attr_accessor :description, :name, :type, :method_defs, :constant_defs, :notification_defs, :function_defs, :datatype_defs, :framework
+  attr_accessor :description, :name, :type, :method_defs, :delegate_method_defs, :constant_defs, :notification_defs, :function_defs, :datatype_defs, :framework
   
   def initialize
     @description       = []
     @name              = ''
     @type              = ''
     @method_defs       = []
+    @delegate_method_defs = []
     @constant_defs     = []
     @notification_defs = []
     @function_defs     = []
@@ -27,7 +28,17 @@ class CocoaRef::ClassDef
         break
       end
     end
-          
+    
+    errors_in_delegate_methods = false
+    @delegate_method_defs.each do |dm|
+      # First call the to_rdoc method, because it might contain errors
+      dm.to_rdoc(@name)
+      if dm.log.errors?
+        errors_in_delegate_methods = true
+        break
+      end
+    end
+    
     errors_in_contstants = false
     @constant_defs.each do |c|
       # First call the to_rdoc method, because it might contain errors
@@ -58,7 +69,7 @@ class CocoaRef::ClassDef
       end
     end
     
-    return (errors_in_methods or errors_in_contstants or errors_in_functions or errors_in_datatypes)
+    return (errors_in_methods or errors_in_delegate_methods or errors_in_contstants or errors_in_functions or errors_in_datatypes)
   end
   
   def output_filename
@@ -163,6 +174,16 @@ class CocoaRef::ClassDef
     @method_defs.each {|m| str += m.to_rdoc(@name) }
     @function_defs.each {|f| str += f.to_rdoc }
     @datatype_defs.each {|d| str += d.to_rdoc }
+    
+    unless @delegate_method_defs.empty?
+      str += "  # ------------------------\n"
+      str += "  # :section: Delegate Methods\n"
+      str += "  #\n"
+      str += "  # This section contains the delegate methods provided by the #{@name} class\n"
+      str += "  #\n"
+      str += "  # ------------------------\n"
+      @delegate_method_defs.each {|dm| str += dm.to_rdoc(@name) }
+    end
     
     unless @notification_defs.empty?
       str += "  # ------------------------\n"
