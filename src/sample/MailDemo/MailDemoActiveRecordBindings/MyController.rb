@@ -1,3 +1,7 @@
+#
+#  Copyright (c) 2007 Eloy Duran <e.duran@superalloy.nl>
+#
+
 class MyController < NSObject
   
   kvc_accessor :mailboxes

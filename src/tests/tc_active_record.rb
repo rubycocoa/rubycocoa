@@ -1,17 +1,15 @@
+#
+#  Copyright (c) 2007 Eloy Duran <e.duran@superalloy.nl>
+#
+
 require 'test/unit'
 begin
-  
-  def try_to_require(lib)
-    begin
-      require lib
-    rescue LoadError
-      STDERR.puts "Trying to require #{lib} again with rubygems"
-      require 'rubygems'
-      require lib
-    end
+  begin
+    require 'rubygems'
+  rescue LoadError
   end
-  try_to_require 'osx/active_record'
-  try_to_require 'sqlite3'
+  require 'osx/active_record'
+  require 'sqlite3'
   
   dbfile = '/tmp/maildemo.sqlite'
   File.delete(dbfile) if File.exist?(dbfile)
@@ -134,5 +132,5 @@ begin
   end
 
 rescue LoadError
-  STDERR.puts 'Skipping osx/active_record tests, you need to have active_record and sqlite3'
+  $stderr.puts 'Skipping osx/active_record tests, you need to have active_record and sqlite3'
 end
