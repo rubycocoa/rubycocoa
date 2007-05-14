@@ -9,7 +9,7 @@
 	<key>CFBundleIconFile</key>
 	<string>TreeHouseIdeas.icns</string>
 	<key>CFBundleIdentifier</key>
-	<string>com.apple.rubycocoa.MailDemo</string>
+	<string>com.apple.rubycocoa.MailDemoSimple</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundlePackageType</key>
