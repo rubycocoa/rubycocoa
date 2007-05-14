@@ -103,4 +103,11 @@ class TC_Attachments < Test::Unit::TestCase
     assert_equal(0, ud.integerForKey('Foo'))
   end
 
+  def test_nsdate
+    now = OSX::NSDate.date
+    now2 = Time.now
+    assert_kind_of(Time, now.to_time)
+    assert_equal(now2.to_i, now.to_time.to_i)
+  end
+
 end

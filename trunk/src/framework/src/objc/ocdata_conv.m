@@ -422,14 +422,27 @@ rbbool_to_nsnum (VALUE rbval, id* nsval)
 }
 
 static BOOL 
-rbnum_to_nsnum (VALUE rbval, id* nsval)
+rbint_to_nsnum (VALUE rbval, id* nsval)
 {
-  BOOL result;
-  VALUE rbstr = rb_obj_as_string(rbval);
-  id nsstr = [NSString stringWithUTF8String: STR2CSTR(rbstr)];
-  *nsval = [NSDecimalNumber decimalNumberWithString: nsstr];
-  result = [(*nsval) isKindOfClass: [NSDecimalNumber class]];
-  return result;
+#if HAVE_LONG_LONG
+  long long val;
+  val = NUM2LL(rbval);
+  *nsval = [NSNumber numberWithLongLong:val];
+#else
+  long val;
+  val = NUM2LONG(rbval);
+  *nsval = [NSNumber numberWithLong:val];
+#endif
+  return YES;
+}
+
+static BOOL 
+rbfloat_to_nsnum (VALUE rbval, id* nsval)
+{
+  double val;
+  val = NUM2DBL(rbval);
+  *nsval = [NSNumber numberWithDouble:val];
+  return YES; 
 }
 
 static BOOL
@@ -478,8 +491,10 @@ rbobj_convert_to_nsobj (VALUE obj, id* nsobj)
 
     case T_FIXNUM:
     case T_BIGNUM:
+      return rbint_to_nsnum(obj, nsobj);
+
     case T_FLOAT:
-      return rbnum_to_nsnum(obj, nsobj);
+      return rbfloat_to_nsnum(obj, nsobj);
 
     default:
       if (rb_obj_is_kind_of(obj, rb_cTime))

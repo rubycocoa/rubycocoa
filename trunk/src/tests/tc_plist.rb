@@ -5,6 +5,12 @@
 require 'test/unit'
 require 'osx/cocoa'
 
+class Time
+  def ==(o)
+    o.is_a?(Time) ? self.to_i == o.to_i : false
+  end
+end
+
 class TC_Plist < Test::Unit::TestCase
 
   def setup
@@ -13,36 +19,36 @@ class TC_Plist < Test::Unit::TestCase
 
   def test_array
     obj = ['ichi', 2, 3, 'quatre', 5]
-    verify(obj, OSX::NSArray)
+    verify(obj)
   end
 
   def test_dict
     obj = {'un' => 1, 'deux' => 'ni', 'trois' => 3}
-    verify(obj, OSX::NSDictionary)
+    verify(obj)
   end
 
   def test_fixnum
     obj = 42
-    verify(obj, OSX::NSNumber)
+    verify(obj)
   end
 
   def test_bignum
     obj = 100_000_000_000
-    verify(obj, OSX::NSNumber, !@tiger_or_lower)
+    verify(obj, !@tiger_or_lower)
   end
 
   def test_float
     obj = 42.5
-    verify(obj, OSX::NSNumber)
+    verify(obj)
   end
 
   def test_boolean
-    verify(true, OSX::NSCFBoolean)
-    verify(false, OSX::NSCFBoolean)
+    verify(true)
+    verify(false)
   end
 
   def test_time
-    verify(Time.now, OSX::NSDate)
+    verify(Time.now)
   end
 
   def test_complex
@@ -52,18 +58,18 @@ class TC_Plist < Test::Unit::TestCase
       'edited' => true,
       'last_modification' => Time.now 
     }
-    verify(hash, OSX::NSDictionary)
+    verify(hash)
   end
 
-  def verify(rbobj, nsklass, test_binary=true)
+  def verify(rbobj, test_binary=true)
     formats = [ nil, OSX::NSPropertyListXMLFormat_v1_0 ]
     formats << OSX::NSPropertyListBinaryFormat_v1_0 if test_binary
     formats.each do |format|
       data = rbobj.to_plist(format)
       assert_kind_of(String, data)
       obj = OSX.load_plist(data)
-      assert_kind_of(nsklass, obj)
-      assert(obj.isEqual(rbobj))
+      assert_kind_of(rbobj.class, obj)
+      assert_equal(obj, rbobj)
     end
   end
 

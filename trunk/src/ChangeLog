@@ -16,6 +16,16 @@
 
 2007-05-14  Laurent Sansonetti <lsansonetti@apple.com>
 
+	* framework/src/ruby/osx/objc/ruby_addition.rb,
+	  framework/src/ruby/osx/objc/oc_attachments.rb,
+	  framework/src/objc/ocdata_conv.m,
+	  tests/tc_plist.rb,
+	  tests/tc_types.rb,
+	  tests/tc_attachments.rb:
+	Introduced NSObject#to_ruby, which converts the given Cocoa type to the
+	Ruby equivalent (converting sub-elements for NSArray and NSDictionary).
+	Added and updated test cases.
+
 	* framework/src/ruby/osx/objc/active_record.rb,
 	  tests/tc_active_record.rb:
 	Removed Object#to_rubyttype, better exception name if active record cannot

@@ -29,7 +29,7 @@ module OSX
       :format, nil,
       :errorDescription
     raise error.to_s if obj.nil?
-    return obj
+    obj.respond_to?(:to_ruby) ? obj.to_ruby : obj
   end
   module_function :load_plist
 
