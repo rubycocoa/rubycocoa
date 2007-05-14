@@ -71,6 +71,9 @@ module CocoaRef
         @class_def.method_defs.each do |m|
           m.instance_eval "self.send :extend, #{@class_def.name}Overrides"
         end
+        @class_def.delegate_method_defs.each do |dm|
+          dm.instance_eval "self.send :extend, #{@class_def.name}Overrides"
+        end
         @class_def.function_defs.each do |f|
           f.instance_eval "self.send :extend, #{@class_def.name}FunctionsOverrides"
         end
@@ -139,6 +142,13 @@ module CocoaRef
         end
         if busy_with == 'Instance Methods' and @hpricot.start_of_method_def?(index)
           class_def.method_defs.push @hpricot.get_method_def(index, :instance_method)
+        end
+        
+        if element.fits_the_description?('h2', 'Delegate Methods')
+          busy_with = 'Delegate Methods'
+        end
+        if busy_with == 'Delegate Methods' and @hpricot.start_of_method_def?(index)
+          class_def.delegate_method_defs.push @hpricot.get_method_def(index, :instance_method)
         end
         
         if class_def.type == :functions and element.fits_the_description?('h2', 'Functions')

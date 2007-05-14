@@ -1,5 +1,16 @@
 2007-05-14  Eloy Duran <e.duran@superalloy.nl>
 
+	* framework/tool/gen_bridge_doc/lib/cocoa_ref.rb,
+	  framework/tool/gen_bridge_doc/lib/Foundation/NSArray.rb,
+	  framework/tool/gen_bridge_doc/lib/Foundation/NSXMLDocument.rb,
+	  framework/tool/gen_bridge_doc/lib/Foundation/NSString.rb,
+	  framework/tool/gen_bridge_doc/lib/lib/method_def.rb,
+	  framework/tool/gen_bridge_doc/lib/lib/class_def.rb,
+	  framework/tool/gen_bridge_doc/lib/ApplicationKit/NSTokenFieldCell.rb:
+	Added support for the latest documentation updates from apple.
+
+2007-05-14  Eloy Duran <e.duran@superalloy.nl>
+
 	* sample/MailDemo/MailDemoActiveRecordBindings/Database.rb,
 	  sample/MailDemo/MailDemoActiveRecordBindings/Email.rb,
 	  sample/MailDemo/MailDemoActiveRecordBindings/MyController.rb,

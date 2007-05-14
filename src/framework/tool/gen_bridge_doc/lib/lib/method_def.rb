@@ -5,6 +5,7 @@ class CocoaRef::MethodDef
   attr_reader :log
   
   def initialize
+    @methods_debug = false
     @type, @name, @description, @definition, @parameters, @return_value, @discussion, @availability, @see_also = '', '', '', '', '', '', '', '', []
     @log = CocoaRef::Log.new
   end
@@ -128,10 +129,10 @@ class CocoaRef::MethodDef
       method_def_parts.push regexp_repeater
     end
     regexp += method_def_parts.join("(\\s+)")
-    #puts regexp
+    puts regexp if @methods_debug
 
     parsed_method_def = self.definition.clean_objc.scan(Regexp.new(regexp)).flatten
-    #p parsed_method_def
+    p parsed_method_def if @methods_debug
 
     method_def_parts = []
     parsed_method_name.length.times do |i|
@@ -149,15 +150,15 @@ class CocoaRef::MethodDef
       end
       method_def_parts.push(method_def_part)
     end
-    #p method_def_parts
+    p method_def_parts if @methods_debug
     return method_def_parts
   end
   
   def to_rb_def
-    #puts @definition.clean_objc
+    puts @definition.clean_objc if @methods_debug
   
     parsed_method_name = self.name.split(':')
-    #p parsed_method_name
+    p parsed_method_name if @methods_debug
   
     if self.definition.strip_tags.include?(':') and not self.definition.strip_tags[-2...-1] == ':'
       method_def_parts = self.parse
