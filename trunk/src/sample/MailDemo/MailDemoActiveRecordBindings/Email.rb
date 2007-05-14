@@ -1,3 +1,7 @@
+#
+#  Copyright (c) 2007 Eloy Duran <e.duran@superalloy.nl>
+#
+
 class Email < ActiveRecord::Base
   belongs_to :mailbox
   

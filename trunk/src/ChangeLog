@@ -1,3 +1,19 @@
+2007-05-14  Eloy Duran <e.duran@superalloy.nl>
+
+	* sample/MailDemo/MailDemoActiveRecordBindings/Database.rb,
+	  sample/MailDemo/MailDemoActiveRecordBindings/Email.rb,
+	  sample/MailDemo/MailDemoActiveRecordBindings/MyController.rb,
+	  sample/MailDemo/MailDemoActiveRecordBindings/Mailbox.rb,
+	  framework/src/ruby/osx/active_record.rb,
+	  framework/src/ruby/osx/objc/active_record.rb,
+	  tests/tc_active_record.rb,
+	  lib/osx/active_record.rb:
+	Added some copyright info to the src files.
+	The testcase will now try to require rubygems directly,
+	so you will not be bothered by a message about this.
+	However it will tell you that the tests are skipped
+	if either active_record or sqlite3 aren't found.
+
 2007-05-14  Laurent Sansonetti <lsansonetti@apple.com>
 
 	* framework/src/ruby/osx/objc/active_record.rb,
