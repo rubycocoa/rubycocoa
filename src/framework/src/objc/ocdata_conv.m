@@ -1290,7 +1290,7 @@ set_octypes_for_format_str (char **octypes, unsigned len, char *format_str)
       if (type != NULL) {
         DATACONV_LOG("found format string token #%d of type '%s'", j, type);
 
-        if (len > 0 && j >= len)
+        if (len == 0 || j >= len)
           rb_raise(rb_eArgError, "Too much tokens in the format string `%s' for the given %d argument(s)", format_str, len);
 
         octypes[j++] = type;
