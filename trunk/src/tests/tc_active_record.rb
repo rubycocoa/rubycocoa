@@ -75,10 +75,6 @@ begin
       assert Mailbox.find(:all).to_activerecord_proxies.first.is_a?(MailboxProxy)
     end
   
-    def test_string_to_activerecord_proxy_class
-      assert "Mailbox".to_activerecord_proxy_class == MailboxProxy
-    end
-  
     def test_proxy_initialization
       before = Mailbox.count
       proxy1 = MailboxProxy.alloc.init({'title' => 'foo'})

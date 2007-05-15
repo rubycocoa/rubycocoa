@@ -144,6 +144,8 @@ module OSX
         OSX::CFNumberIsFloatType(self) ? self.to_f : self.to_i
       when OSX::NSString
         self.to_s
+      when OSX::NSAttributedString
+        self.string.to_s
       when OSX::NSArray
         self.map { |x| x.is_a?(OSX::NSObject) ? x.to_ruby : x }
       when OSX::NSDictionary
