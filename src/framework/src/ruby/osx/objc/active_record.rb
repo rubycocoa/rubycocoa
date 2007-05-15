@@ -17,7 +17,7 @@ end
 
 class ActiveRecord::Base
   def to_activerecord_proxy
-    klass = self.class.to_s.to_activerecord_proxy_class
+    klass = Object.const_get("#{self.class.to_s}Proxy")
     return klass.alloc.init(self)
   end
   alias_method :to_activerecord_proxies, :to_activerecord_proxy
@@ -25,17 +25,9 @@ end
 
 class Array
   def to_activerecord_proxies
-    return self if self.empty?
-    klass = self.first.class.to_s.to_activerecord_proxy_class
-    return self.map { |rec| klass.alloc.init(rec) }
+    self.map { |rec| rec.to_activerecord_proxy }
   end
   alias_method :to_activerecord_proxy, :to_activerecord_proxies
-end
-
-class String
-  def to_activerecord_proxy_class
-    Object.const_get("#{self}Proxy")
-  end
 end
 
 # ---------------------------------------------------------
@@ -139,17 +131,7 @@ class ActiveRecordProxy < OSX::NSObject
       # FIXME: this is slow! check if there's another way to add the latest record to the array without reloading everything.
       @record.reload
     else
-      # FIXME: this code should be refactored once we will provide a unique API to convert ObjC proxy objects to native Ruby types.
-      @record[key.to_s] = case value
-        when OSX::NSString
-          value.to_s
-        when OSX::NSArray
-          value.to_a
-        when OSX::NSAttributedString
-          value.string.to_s
-        else
-          value
-      end
+      @record[key.to_s] = value.to_ruby
       result = @record.save
     end
     return result

@@ -1,3 +1,17 @@
+2007-05-15  Eloy Duran <e.duran@superalloy.nl>
+
+	  sample/MailDemo/MailDemoActiveRecordBindings/MailboxProxy.rb,
+	  sample/MailDemo/MailDemoActiveRecordBindings/Email.rb,
+	  sample/MailDemo/MailDemoActiveRecordBindings/EmailProxy.rb,
+	  sample/MailDemo/MailDemoActiveRecordBindings/MailDemoActiveRecordBindings.xcodeproj/project.pbxproj,
+	  sample/MailDemo/MailDemoActiveRecordBindings/Mailbox.rb,
+	  framework/src/ruby/osx/objc/oc_attachments.rb,
+	  framework/src/ruby/osx/objc/active_record.rb,
+	  tests/tc_active_record.rb:
+	Updated the active_record lib to not pollute the String class and make use of the new NSObject#to_ruby method.
+	Added conversion for NSAttributedString to NSObject#to_ruby in oc_attachments.rb.
+	Separated the proxy classes from the actual model files, this to make it more clear what's what.
+
 2007-05-14  Eloy Duran <e.duran@superalloy.nl>
 
 	* framework/tool/gen_bridge_doc/lib/cocoa_ref.rb,
