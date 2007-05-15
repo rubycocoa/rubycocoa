@@ -1,6 +1,19 @@
+2007-05-15  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* framework/src/ruby/osx/objc/oc_wrapper.rb:
+	Better detection of the (deprecated) symbol-value-... syntax.
+
+	* framework/src/objc/mdl_objwrapper.m,
+	  framework/src/objc/ocdata_conv.h,
+	  framework/src/objc/ocdata_conv.m,
+	  framework/src/objc/BridgeSupport.h,
+	  framework/src/objc/BridgeSupport.m,
+	  tests/tc_printf_format.rb:
+	Added support for the 'printf_format' bridge support annotations.
+
 2007-05-15  Eloy Duran <e.duran@superalloy.nl>
 
-	  sample/MailDemo/MailDemoActiveRecordBindings/MailboxProxy.rb,
+	* sample/MailDemo/MailDemoActiveRecordBindings/MailboxProxy.rb,
 	  sample/MailDemo/MailDemoActiveRecordBindings/Email.rb,
 	  sample/MailDemo/MailDemoActiveRecordBindings/EmailProxy.rb,
 	  sample/MailDemo/MailDemoActiveRecordBindings/MailDemoActiveRecordBindings.xcodeproj/project.pbxproj,

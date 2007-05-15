@@ -113,7 +113,7 @@ module OSX
           m_name = "#{mname}_"
           m_args = args
           warn "#{caller[1]}: inline Hash dispatch syntax is deprecated and its use is discouraged, please use '#{m_name}(...)' or 'objc_send(...)' instead."
-        elsif (m_args.size >= 3) && ((m_args.size % 2) == 1) && (not m_name.include?('_')) then
+        elsif (m_args.size >= 3) && ((m_args.size % 2) == 1) && (not m_name.include?('_')) && (m_args.values_at(*(1..m_args.size - 1).to_a.select { |i| i % 2 != 0 }).all? { |x| x.is_a?(Symbol) }) then
           # Parse the symbol-value-symbol-value-... case.
           mname = m_name.dup
           args = []

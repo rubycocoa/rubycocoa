@@ -33,6 +33,7 @@ struct bsArg {
   BOOL              null_accepted;
   char *            octypestr;
   char *            sel_of_type;
+  BOOL              printf_format;
 };
 
 struct bsRetval {
@@ -46,15 +47,16 @@ struct bsCallEntry {
   int               argc;
   struct bsArg *    argv;
   struct bsRetval * retval;
+  BOOL              is_variadic;
 };
 
 struct bsFunction {
   int               argc;
   struct bsArg *    argv;
   struct bsRetval * retval;
+  BOOL              is_variadic;
   char *            name;
   void *            sym;
-  BOOL              is_variadic;
 };
 
 struct bsClass {
@@ -67,6 +69,7 @@ struct bsMethod {
   int               argc;
   struct bsArg *    argv;
   struct bsRetval * retval; // can be NULL
+  BOOL              is_variadic;
   char *            selector;
   BOOL              is_class_method;
   BOOL              ignore;

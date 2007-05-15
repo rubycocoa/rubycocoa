@@ -76,6 +76,7 @@ ocm_send(int argc, VALUE* argv, VALUE rcv, VALUE* result)
   IMP                   imp;
   NSMethodSignature *   methodSignature;
   unsigned              numberOfArguments;
+  unsigned              expected_argc;
   char *                methodReturnType;
   char **               argumentsTypes;
   BOOL                  is_class_method;
@@ -168,6 +169,8 @@ ocm_send(int argc, VALUE* argv, VALUE rcv, VALUE* result)
     goto success;
   }
 
+  expected_argc = numberOfArguments;
+
   bs_method = find_bs_method(klass, (const char *) selector, is_class_method); 
   if (bs_method != NULL) {
     OBJWRP_LOG("found metadata description\n");
@@ -175,11 +178,37 @@ ocm_send(int argc, VALUE* argv, VALUE rcv, VALUE* result)
       exception = rb_err_new(rb_eRuntimeError, "Method '%s' is not supported (suggested alternative: '%s')", selector, bs_method->suggestion != NULL ? bs_method->suggestion : "n/a");
       goto bails;
     }
+    if (bs_method->is_variadic && argc > numberOfArguments) {
+      unsigned i;
+      VALUE format_str;      
+
+      expected_argc = argc;
+      format_str = Qnil;
+      argumentsTypes = (char **)realloc(argumentsTypes, sizeof(char *) * argc);
+      ASSERT_ALLOC(argumentsTypes);
+
+      for (i = 0; i < bs_method->argc; i++) {
+        struct bsArg *bs_arg = &bs_method->argv[i];
+        if (bs_arg->printf_format) {
+          assert(bs_arg->index < argc);
+          format_str = argv[bs_arg->index];
+        }
+      }
+
+      if (NIL_P(format_str)) {
+        for (i = numberOfArguments; i < argc; i++)
+          argumentsTypes[i] = "@"; // _C_ID
+      }
+      else {
+        set_octypes_for_format_str(&argumentsTypes[numberOfArguments],
+          argc - numberOfArguments, STR2CSTR(format_str));
+      }
+    }
   }
 
-  arg_types = (ffi_type **) alloca((numberOfArguments + 3) * sizeof(ffi_type *));
+  arg_types = (ffi_type **) alloca((expected_argc + 3) * sizeof(ffi_type *));
   ASSERT_ALLOC(arg_types);
-  arg_values = (void **) alloca((numberOfArguments + 3) * sizeof(void *));
+  arg_values = (void **) alloca((expected_argc + 3) * sizeof(void *));
   ASSERT_ALLOC(arg_values);
 
   arg_types[0] = &ffi_type_pointer;
@@ -187,13 +216,13 @@ ocm_send(int argc, VALUE* argv, VALUE rcv, VALUE* result)
   arg_values[0] = &oc_rcv;
   arg_values[1] = &selector;
 
-  memset(arg_types + 2, 0, (numberOfArguments + 1) * sizeof(ffi_type *));
-  memset(arg_values + 2, 0, (numberOfArguments + 1) * sizeof(void *));
+  memset(arg_types + 2, 0, (expected_argc + 1) * sizeof(ffi_type *));
+  memset(arg_values + 2, 0, (expected_argc + 1) * sizeof(void *));
 
   exception = rb_ffi_dispatch(
     (struct bsCallEntry *)bs_method, 
     argumentsTypes, 
-    numberOfArguments, 
+    expected_argc, 
     argc, 
     2, 
     argv, 
