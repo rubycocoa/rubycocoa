@@ -922,13 +922,24 @@ bridge_support_dispatcher (int argc, VALUE *argv, VALUE rcv)
 
   if (func->is_variadic && argc > func->argc) {
     unsigned i;
+    VALUE format_str;
 
     DLOG("MDLOSX", "function is variadic, %d min argc, %d additional argc", func->argc, argc - func->argc);
     arg_octypesstr = (char **)alloca((expected_argc + 1) * sizeof(char *));
-    for (i = 0; i < func->argc; i++)
+    format_str = Qnil;
+    for (i = 0; i < func->argc; i++) {
       arg_octypesstr[i] = func->argv[i].octypestr;
-    for (i = func->argc; i < argc; i++)
-      arg_octypesstr[i] = "@"; // _C_ID;
+      if (func->argv[i].printf_format)
+        format_str = argv[i];
+    }
+    if (NIL_P(format_str)) {
+      for (i = func->argc; i < argc; i++)
+        arg_octypesstr[i] = "@"; // _C_ID;
+    }
+    else {
+      set_octypes_for_format_str(&arg_octypesstr[func->argc], 
+        argc - func->argc, STR2CSTR(format_str)); 
+    }
   }
   else {
     arg_octypesstr = NULL;
@@ -1441,7 +1452,8 @@ osx_load_bridge_support_file (VALUE mOSX, VALUE path)
             if (arg->sel_of_type == NULL)
 #endif
               arg->sel_of_type = get_attribute(reader, "sel_of_type");
- 
+
+            arg->printf_format = get_boolean_attribute(reader, "printf_format", NO); 
             arg->null_accepted = get_boolean_attribute(reader, "null_accepted", YES);
             get_c_ary_type_attribute(reader, &arg->c_ary_type, &arg->c_ary_type_value); 
   
@@ -1569,6 +1581,7 @@ osx_load_bridge_support_file (VALUE mOSX, VALUE path)
 
           method->selector = selector;
           method->is_class_method = is_class_method;
+          method->is_variadic = get_boolean_attribute(reader, "variadic", NO);
           method->ignore = get_boolean_attribute(reader, "ignore", NO);
           method->suggestion = method->ignore ? get_attribute(reader, "suggestion") : NULL;
           method->argc = 0;

@@ -1222,3 +1222,83 @@ decode_method_encoding(const char *encoding, NSMethodSignature *methodSignature,
     }
   }
 }
+
+void
+set_octypes_for_format_str (char **octypes, unsigned len, char *format_str)
+{
+  unsigned i, j, format_str_len;
+
+  // We cannot display this log because the given `format_str' format string will be evaluated within
+  // the output message. Fortunately, Ruby format string APIs do not do that.
+  //DATACONV_LOG("decoding format string `%s' types for %d argument(s)", format_str, len);
+
+  format_str_len = strlen(format_str);
+  i = j = 0;
+
+  while (i < format_str_len) {
+    if (format_str[i++] != '%')
+      continue;
+    if (i < format_str_len && format_str[i] == '%') {
+      i++;
+      continue;
+    }
+    while (i < format_str_len) {
+      char *type = NULL;
+      switch (format_str[i++]) {
+        case 'd':
+        case 'i':
+        case 'o':
+        case 'u':
+        case 'x':
+        case 'X':
+        case 'c':
+        case 'C':
+          type = "i"; // _C_INT;
+          break;
+
+        case 'D':
+        case 'O':
+        case 'U':
+          type = "l"; // _C_LNG;
+          break;
+
+        case 'f':       
+        case 'F':
+        case 'e':       
+        case 'E':
+        case 'g':       
+        case 'G':
+        case 'a':
+        case 'A':
+          type = "d"; // _C_DBL;
+          break;
+
+        case 's':
+        case 'S':
+          type = "*"; // _C_CHARPTR;
+          break;
+
+        case 'p':
+          type = "^"; // _C_PTR;
+          break;
+
+        case '@':
+          type = "@"; // _C_ID;
+          break;
+      }
+
+      if (type != NULL) {
+        DATACONV_LOG("found format string token #%d of type '%s'", j, type);
+
+        if (len > 0 && j >= len)
+          rb_raise(rb_eArgError, "Too much tokens in the format string `%s' for the given %d argument(s)", format_str, len);
+
+        octypes[j++] = type;
+
+        break;
+      }
+    }
+  }
+  for (; j < len; j++)
+    octypes[j] = "@"; // _C_ID;
+}
