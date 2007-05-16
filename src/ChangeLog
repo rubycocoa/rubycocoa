@@ -1,3 +1,15 @@
+2007-05-16  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* sample/MailDemo/MailDemoActiveRecordBindings/Info.plist:
+	Uses the icon.
+
+	* sample/buildall.rb:
+	Run xcodebuild in quiet mode, display the projects that were successfully 
+	built and those who failed at the end of the script.
+
+	* sample/ViewModelDemo/ViewModel Demo.xcodeproj/project.pbxproj:
+	Fixed the product name of the `Default' target. 
+
 2007-05-16  Fujimoto Hisa  <hisa@fobj.com>
 
 	* framework/pre-install.rb:
