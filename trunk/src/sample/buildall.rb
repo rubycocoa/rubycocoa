@@ -19,9 +19,13 @@ tmp_dir = '/tmp/rubycocoa_samples'
 rm_rf tmp_dir
 mkdir_p tmp_dir
 
+succeeded, failed = [], []
+
 Dir.glob('*/**/*.xcodeproj').each do |sampleDir|
-  Dir.chdir File.dirname(sampleDir) do
-    system("xcodebuild SYMROOT=#{tmp_dir}")
+  name = File.dirname(sampleDir)
+  Dir.chdir name do
+    ary = system("xcodebuild SYMROOT=#{tmp_dir} >& /dev/null") ? succeeded : failed
+    ary << name
   end
 end
 
@@ -29,4 +33,7 @@ Dir.glob(File.join(tmp_dir, '**/*.app')).each do |app|
   cp_r app, out_dir
 end
 
-puts "All samples built and copied in #{out_dir}"
+[succeeded, failed].each { |a| a << 'None' if a.empty? }
+
+puts "Successfully built samples: #{succeeded.join(', ')}"
+puts "Failed built samples: #{failed.join(', ')}"
