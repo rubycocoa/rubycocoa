@@ -1,3 +1,11 @@
+2007-05-16  Fujimoto Hisa  <hisa@fobj.com>
+
+	* framework/pre-install.rb:
+	removed the installation of the bridge support metada files,
+	because these files are included in the Resources of the
+	framework, or the files are installed at another
+	time (e.g. installing phage of the bridge support).
+
 2007-05-15  Laurent Sansonetti <lsansonetti@apple.com>
 
 	* framework/src/ruby/osx/objc/oc_wrapper.rb:
