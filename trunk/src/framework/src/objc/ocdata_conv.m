@@ -226,13 +226,19 @@ ocdata_size(const char* octype_str)
       break;
 
     default:
-      NSGetSizeAndAlignment(octype_str, 
+      @try {
+        NSGetSizeAndAlignment(octype_str, 
 #if __LP64__
-         (unsigned long *)&result, 
+          (unsigned long *)&result, 
 #else
-         (unsigned int *)&result, 
+          (unsigned int *)&result, 
 #endif
-         NULL);
+          NULL);
+        }
+        @catch (id exception) {
+          rb_raise(rb_eRuntimeError, "Cannot compute size of type `%s' : %s",
+            octype_str, [[exception description] UTF8String]);
+        }
       break;
   }
 
@@ -1188,7 +1194,7 @@ decode_method_encoding(const char *encoding, NSMethodSignature *methodSignature,
     __decode_method_encoding_with_method_signature(methodSignature, argc, retval_type, arg_types, strip_first_two_args);   
   }
   else {
-    char buf[256];
+    char buf[1024];
 
     DATACONV_LOG("decoding method encoding '%s' manually", encoding);
     encoding = __get_first_encoding(encoding, buf, sizeof buf);
