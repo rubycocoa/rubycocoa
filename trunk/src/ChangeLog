@@ -1,5 +1,8 @@
 2007-05-17  Laurent Sansonetti <lsansonetti@apple.com>
 
+	* framework/src/objc/BridgeSupport.m:
+	Added support to decode structure fields of the union type. 
+
 	* framework/src/objc/libffi.m,
 	  framework/src/objc/ocdata_conv.m:
 	- Properly handle exceptions NSGetSizeAndAlignment could throw ;
