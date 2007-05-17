@@ -1,3 +1,10 @@
+2007-05-17  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* framework/src/objc/libffi.m,
+	  framework/src/objc/ocdata_conv.m:
+	- Properly handle exceptions NSGetSizeAndAlignment could throw ;
+	- Increased the method encoding buffer when analyzing its arguments.
+
 2007-05-16  Laurent Sansonetti <lsansonetti@apple.com>
 
 	* sample/MailDemo/MailDemoActiveRecordBindings/Info.plist:

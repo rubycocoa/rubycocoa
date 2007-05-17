@@ -166,7 +166,13 @@ ffi_type_for_octype (const char *octypestr)
         unsigned int size;
 #endif
 
-        NSGetSizeAndAlignment(octypestr, &size, NULL);
+        @try {
+          NSGetSizeAndAlignment(octypestr, &size, NULL);
+        }
+        @catch (id exception) {
+          rb_raise(rb_eRuntimeError, "Cannot compute size of type `%s' : %s",
+            octypestr, [[exception description] UTF8String]);
+        }
 
         if (size > 0)  
           return fake_ary_ffi_type(size);
