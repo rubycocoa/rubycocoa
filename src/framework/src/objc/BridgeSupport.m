@@ -266,21 +266,24 @@ undecorate_encoding(const char *src, char *dest, size_t dest_len, struct bsStruc
       BOOL ok;
       int nested;
 
-      for (i = 0, is_struct = *p_src == '{', ok = NO, nested = 0; 
+      is_struct = *p_src == '{' || *p_src == '(';
+      for (i = 0, ok = NO, nested = 0; 
            i < src_len - (p_src - src) && !ok; 
            i++) {
 
         char c = p_src[i];
+
         if (is_struct) {
+          char opposite = *p_src == '{' ? '}' : ')';
           // Encoding is a structure, we need to match the closing '}',
           // taking into account that other structures can be nested in it.
-          if (c == '}') {
+          if (c == opposite) {
             if (nested == 0)
               ok = YES;
             else
               nested--;  
           }
-          else if (c == '{' && i > 0)
+          else if (c == *p_src && i > 0)
             nested++;
         }
         else {
