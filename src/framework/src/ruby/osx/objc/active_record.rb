@@ -45,7 +45,42 @@ module OSX
       end
     end
   end
+  
+  class ActiveRecordTableView < OSX::NSTableView
+    require 'active_support/core_ext/string/inflections'
+    include ActiveSupport::CoreExtensions::String::Inflections
 
+    # <tt>:activerecord_table</tt> should be the model class that you want to scaffold.
+    # <tt>:bind_to_controller</tt> should be the ActiveRecordSetController instance that you want the columns to be bound too.
+    # <tt>:except</tt> can be either a string or an array that says which columns should not be displayed.
+    #
+    # <code>
+    # ib_outlets :customersTableView, :customersRecordSetController
+    #
+    # def awakeFromNib
+    #   @customersTableView.scaffold_table_columns_for(:activerecord_table => Customer,
+    #                                                  :bind_to_controller => @customersRecordSetController,
+    #                                                  :except => "id")
+    # end
+    # </code>
+    def scaffold_table_columns_for(options)
+      raise ArgumentError, ":activerecord_table was nil, expected a ActiveRecord::Base subclass" if options[:activerecord_table].nil?
+      raise ArgumentError, ":bind_to_controller was nil, expected an instance of ActiveRecordSetController" if options[:bind_to_controller].nil?
+      options[:except] ||= []
+      options[:activerecord_table].column_names.each do |column_name|
+        # skip columns
+        next if options[:except].include?(column_name)
+        # setup new table column
+        table_column = OSX::NSTableColumn.alloc.init
+        table_column.headerCell.setStringValue(column_name.titleize)
+        # set the binding
+        table_column.bind_toObject_withKeyPath_options(OSX::NSValueBinding, options[:bind_to_controller], "arrangedObjects.#{column_name}", { "NSValidatesImmediately" => true })
+        # and add it to the table view
+        self.addTableColumn(table_column)
+      end
+    end
+  end
+  
   class ActiveRecordProxy < OSX::NSObject
     # Returns a new record proxy instance.
     # If the +arg+ is a ActiveRecord::Base instance it will return a proxy for that record.

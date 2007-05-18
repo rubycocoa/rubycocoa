@@ -1,5 +1,14 @@
 2007-05-18  Eloy Duran <e.duran@superalloy.nl>
 
+	* framework/src/ruby/osx/objc/active_record.rb:
+	Added a subclass of OSX::NSTableView called OSX::ActiveRecordTableView.
+	This subclass has an instance method called scaffold_table_columns_for().
+	You pass it a ActiveRecord::Base subclass and the ActiveRecordSetController instance
+	that the NSTableColumns should be bound to.
+	See the source file for an example.
+
+2007-05-18  Eloy Duran <e.duran@superalloy.nl>
+
 	* sample/MailDemo/MailDemoActiveRecordBindings/maildemo.sql,
 	  sample/MailDemo/MailDemoActiveRecordBindings/maildemo.sqlite,
 	  sample/MailDemo/MailDemoActiveRecordBindings/migrate,
