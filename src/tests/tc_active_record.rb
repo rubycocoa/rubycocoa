@@ -13,7 +13,7 @@ begin
   
   dbfile = '/tmp/maildemo.sqlite'
   File.delete(dbfile) if File.exist?(dbfile)
-  system("sqlite3 #{dbfile} < #{ File.join(File.dirname( File.expand_path(__FILE__) ), '../sample/MailDemo/MailDemoActiveRecordBindings/maildemo.sql') }")
+  system("sqlite3 #{dbfile} < #{ File.join(File.dirname( File.expand_path(__FILE__) ), 'maildemo.sql') }")
 
   ActiveRecord::Base.establish_connection({
     :adapter => 'sqlite3',
@@ -26,14 +26,14 @@ begin
     validates_presence_of :title
   end
 
-  class MailboxProxy < ActiveRecordProxy
+  class MailboxProxy < OSX::ActiveRecordProxy
   end
 
   class Email < ActiveRecord::Base
     belongs_to :mailbox
   end
 
-  class EmailProxy < ActiveRecordProxy
+  class EmailProxy < OSX::ActiveRecordProxy
     def rbValueForKey(key)
       if key.to_s == 'body'
         # The NSTextField expects a NSAttributedString

@@ -1,3 +1,21 @@
+2007-05-18  Eloy Duran <e.duran@superalloy.nl>
+
+	* sample/MailDemo/MailDemoActiveRecordBindings/maildemo.sql,
+	  sample/MailDemo/MailDemoActiveRecordBindings/maildemo.sqlite,
+	  sample/MailDemo/MailDemoActiveRecordBindings/migrate,
+	  sample/MailDemo/MailDemoActiveRecordBindings/migrate/002_create_emails.rb,
+	  sample/MailDemo/MailDemoActiveRecordBindings/migrate/001_create_mailboxes.rb,
+	  sample/MailDemo/MailDemoActiveRecordBindings/MyController.rb,
+	  sample/MailDemo/MailDemoActiveRecordBindings/MailDemoActiveRecordBindings.xcodeproj/project.pbxproj,
+	  sample/MailDemo/MailDemoActiveRecordBindings/Database.rb,
+	  framework/src/ruby/osx/objc/active_record.rb,
+	  tests/maildemo.sql,
+	  tests/tc_active_record.rb:
+	Added support for db migrations to osx/active_cocoa through the OSX::ActiveRecordConnector module.
+	It uses the ActiveRecord::Migrator module with some OSX specific syntax,
+	like automatically create a dbfile in ~/Library/Application Support/AppIdentifier/AppIdentifier.sqlite
+	Updated the MailDemoActiveRecordBindings to make use of the new connection module.
+
 2007-05-17  Laurent Sansonetti <lsansonetti@apple.com>
 
 	* framework/src/objc/BridgeSupport.m:
