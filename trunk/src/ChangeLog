@@ -1,3 +1,8 @@
+2007-05-19  Eloy Duran <e.duran@superalloy.nl>
+
+	* framework/src/ruby/osx/objc/active_record.rb:
+	Did some refining of the NSTableView subclass and the scaffold_columns_for method now also takes an optional block.
+
 2007-05-18  Eloy Duran <e.duran@superalloy.nl>
 
 	* framework/src/ruby/osx/objc/active_record.rb:
