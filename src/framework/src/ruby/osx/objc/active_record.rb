@@ -50,31 +50,42 @@ module OSX
     require 'active_support/core_ext/string/inflections'
     include ActiveSupport::CoreExtensions::String::Inflections
 
-    # <tt>:activerecord_table</tt> should be the model class that you want to scaffold.
-    # <tt>:bind_to_controller</tt> should be the ActiveRecordSetController instance that you want the columns to be bound too.
+    # <tt>:model</tt> should be the model class that you want to scaffold.
+    # <tt>:bind_to</tt> should be the ActiveRecordSetController instance that you want the columns to be bound too.
     # <tt>:except</tt> can be either a string or an array that says which columns should not be displayed.
     #
-    # <code>
-    # ib_outlets :customersTableView, :customersRecordSetController
+    #   ib_outlets :customersTableView, :customersRecordSetController
+    #   ib_outlets :invoicesTableView,  :invoicesRecordSetController
+    #  
+    #   def awakeFromNib
+    #     @customersTableView.scaffold_columns_for :model => Customer, :bind_to => @customersRecordSetController, :except => "id"
     #
-    # def awakeFromNib
-    #   @customersTableView.scaffold_table_columns_for(:activerecord_table => Customer,
-    #                                                  :bind_to_controller => @customersRecordSetController,
-    #                                                  :except => "id")
-    # end
-    # </code>
-    def scaffold_table_columns_for(options)
-      raise ArgumentError, ":activerecord_table was nil, expected a ActiveRecord::Base subclass" if options[:activerecord_table].nil?
-      raise ArgumentError, ":bind_to_controller was nil, expected an instance of ActiveRecordSetController" if options[:bind_to_controller].nil?
+    #     @invoicesTableView.scaffold_columns_for  :model => Invoice,  :bind_to => @invoicesRecordSetController do |table_column, column_options|
+    #       p table_column
+    #       p column_options
+    #       column_options['NSValidatesImmediately'] = true
+    #     end
+    #   end
+    def scaffold_columns_for(options, &block)
+      raise ArgumentError, ":model was nil, expected a ActiveRecord::Base subclass" if options[:model].nil?
+      raise ArgumentError, ":bind_to was nil, expected an instance of ActiveRecordSetController" if options[:bind_to].nil?
       options[:except] ||= []
-      options[:activerecord_table].column_names.each do |column_name|
+      options[:validates_immediately] ||= false
+      
+      options[:model].column_names.each do |column_name|
         # skip columns
         next if options[:except].include?(column_name)
         # setup new table column
         table_column = OSX::NSTableColumn.alloc.init
         table_column.headerCell.setStringValue(column_name.titleize)
+        # create a hash that will hold the options that will be passed as options to the bind method
+        column_options = {}
+        column_options['NSValidatesImmediately'] = options[:validates_immediately]
+        unless block.nil?
+          yield table_column, column_options
+        end
         # set the binding
-        table_column.bind_toObject_withKeyPath_options(OSX::NSValueBinding, options[:bind_to_controller], "arrangedObjects.#{column_name}", { "NSValidatesImmediately" => true })
+        table_column.bind_toObject_withKeyPath_options(OSX::NSValueBinding, options[:bind_to], "arrangedObjects.#{column_name}", column_options)
         # and add it to the table view
         self.addTableColumn(table_column)
       end
