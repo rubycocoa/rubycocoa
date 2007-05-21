@@ -1,3 +1,9 @@
+2007-05-21  kimura wataru <kimuraw@i.nifty.jp>
+
+	* framework/src/ruby/osx/objc/oc_attachments.rb,
+	  tests/tc_nsstring_compat.rb:
+	NSString behave like Ruby String, "to_s" will not be needed mostly.
+
 2007-05-19  Eloy Duran <e.duran@superalloy.nl>
 
 	* framework/src/ruby/osx/objc/active_record.rb:
