@@ -3,8 +3,64 @@
 #
 #  Copyright (c) 2001 FUJIMOTO Hisakuni
 #
+require 'osx/objc/oc_wrapper'
 
 module OSX
+
+  # NSString additions
+  class NSString
+    include OSX::OCObjWrapper
+
+    # enable to treat as String
+    def to_str
+      self.to_s
+    end
+
+    # comparison between Ruby String and Cocoa NSString
+    def ==(other)
+      if other.is_a? OSX::NSString
+        isEqualToString?(other)
+      elsif other.respond_to? :to_str
+        self.to_s == other.to_str
+      else
+        false
+      end
+    end
+
+    def <=>(other)
+      if other.respond_to? :to_str
+        self.to_str <=> other.to_str
+      else
+        nil
+      end
+    end
+
+    # responds to Ruby String methods
+    alias_method :_rbobj_respond_to?, :respond_to?
+    def respond_to?(mname, private = false)
+      String.public_method_defined?(mname) or _rbobj_respond_to?(mname, private)
+    end
+
+    alias_method :objc_method_missing, :method_missing
+    def method_missing(mname, *args)
+      if String.public_method_defined? mname
+	# call as Ruby string
+	rcv = self.to_s
+	org_val = rcv.dup
+	result = rcv.send(mname, *args)
+	# bang methods modify receiver itself, need to set the new value.
+	# if the receiver is mutable, NSInvalidArgumentException raises.
+	if rcv != org_val
+	  self.setString(rcv)
+	end
+      else
+	# call as objc string
+        result = objc_method_missing(mname, *args)
+      end
+      result
+    end
+  end
+
 
   # NSArray additions
   class NSArray
