@@ -1,3 +1,8 @@
+2007-05-21  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* framework/tool/standaloneify.rb:
+	Added the standaloneify.rb script, by Jonathan Paisley. Fixed a few bugs.
+
 2007-05-21  kimura wataru <kimuraw@i.nifty.jp>
 
 	* framework/src/ruby/osx/objc/oc_attachments.rb,
