@@ -1,10 +1,10 @@
-/*
- *  BridgeSupport.m
- *  RubyCocoa
+/* 
+ * Copyright (c) 2006-2007, The RubyCocoa Project.
+ * Copyright (c) 2001-2006, FUJIMOTO Hisakuni.
+ * All Rights Reserved.
  *
- *  Created by Laurent Sansonetti on 8/29/06.
- *  Copyright 2006 Apple Computer. All rights reserved.
- *
+ * RubyCocoa is free software, covered under either the Ruby's license or the 
+ * LGPL. See the COPYRIGHT file for more information.
  */
 
 #import <Foundation/Foundation.h>

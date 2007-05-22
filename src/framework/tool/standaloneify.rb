@@ -1,7 +1,10 @@
-# standaloneify.rb
-# Author: Jonathan Paisley <jp-www dcs.gla.ac.uk>
-# $Id: /local/dcs/trunk/prog/gps/gpsrb/standaloneify.rb 736 2005-04-23T09:31:55.719659Z jp  $
+# Copyright (c) 2007, The RubyCocoa Project.
+# Copyright (c) 2005-2006, Jonathan Paisley.
+# All Rights Reserved.
 #
+# RubyCocoa is free software, covered under either the Ruby's license or the 
+# LGPL. See the COPYRIGHT file for more information.
+
 # Takes a built RubyCocoa app bundle (as produced by the 
 # Xcode/ProjectBuilder template) and copies it into a new
 # app bundle that has all dependencies resolved.

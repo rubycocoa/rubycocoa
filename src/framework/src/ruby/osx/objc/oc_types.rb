@@ -1,8 +1,9 @@
+# Copyright (c) 2006-2007, The RubyCocoa Project.
+# Copyright (c) 2001-2006, FUJIMOTO Hisakuni.
+# All Rights Reserved.
 #
-#  $Id$
-#
-#  Copyright (c) 2001 FUJIMOTO Hisakuni
-#
+# RubyCocoa is free software, covered under either the Ruby's license or the 
+# LGPL. See the COPYRIGHT file for more information.
 
 # This module adds syntax-sugar APIs on top of the Cocoa structures.
 # This is mostly to preserve backward compatibility with previous versions

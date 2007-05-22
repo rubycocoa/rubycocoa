@@ -1,13 +1,11 @@
-/** -*- mode:objc; indent-tabs-mode:nil; coding:utf-8 -*-
+/* 
+ * Copyright (c) 2006-2007, The RubyCocoa Project.
+ * Copyright (c) 2001-2006, FUJIMOTO Hisakuni.
+ * All Rights Reserved.
  *
- *  internal_macros.h
- *  RubyCocoa
- *
- *  Copyright (c) 2007 Fujimoto Hisa
- *
- *  $Id$
- *
- **/
+ * RubyCocoa is free software, covered under either the Ruby's license or the 
+ * LGPL. See the COPYRIGHT file for more information.
+ */
 
 #ifndef _INTERNAL_MACROS_H_
 #define _INTERNAL_MACROS_H_

@@ -1,7 +1,15 @@
-# A BridgeSupport files verifier, based on the generated Ruby files from gen_bridge_doc.
+# Copyright (c) 2007, The RubyCocoa Project.
+# All Rights Reserved.
+#
+# RubyCocoa is free software, covered under either the Ruby's license or the 
+# LGPL. See the COPYRIGHT file for more information.
+
+# A BridgeSupport files verifier, based on the generated Ruby files from 
+# gen_bridge_doc.
 #
 # To run it from the source root:
-#    ruby framework/tool/verify_bridge_metadata.rb framework/bridge-support framework/bridge-doc
+#    ruby framework/tool/verify_bridge_metadata.rb framework/bridge-support 
+#       framework/bridge-doc
 #
 # (Make sure to have run install.rb config and doc tasks before.)
 

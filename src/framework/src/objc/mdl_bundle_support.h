@@ -1,12 +1,11 @@
-/** -*- mode:objc; indent-tabs-mode:nil -*-
+/* 
+ * Copyright (c) 2006-2007, The RubyCocoa Project.
+ * Copyright (c) 2001-2006, FUJIMOTO Hisakuni.
+ * All Rights Reserved.
  *
- *   mdl_bundle_support.h
- *   RubyCocoa
- *   $Id$
- *
- *  Created by Fujimoto Hisa on 2/8/07.
- *  Copyright 2007 Fujimoto Hisa, FOBJ SYSTEMS. All rights reserved.
- **/
+ * RubyCocoa is free software, covered under either the Ruby's license or the 
+ * LGPL. See the COPYRIGHT file for more information.
+ */
 
 #ifndef _MDL_BUNDLE_SUPPORT_H_
 #define  _MDL_BUNDLE_SUPPORT_H_

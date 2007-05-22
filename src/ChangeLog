@@ -8,6 +8,11 @@
 
 2007-05-22  Laurent Sansonetti <lsansonetti@apple.com>
 
+	* framework/**/*.{m.h.rb},
+	  lib/osx/*.rb,
+	  ext/rubycocoa/rubycocoa.m:
+	Updated copyright headers.
+
 	* framework/tool/standaloneify.rb:
 	When copying RubyCocoa.framework, use `cp -R' and not `cp -r'.
 
