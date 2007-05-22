@@ -83,7 +83,7 @@ if File.exist?('framework/bridge-doc')
   dstdir = "#{install_root}#{@config['documentation']}/RubyCocoa/Frameworks"
   command "cp -R 'framework/bridge-doc/html' '#{dstdir}'" if File.exist?('framework/bridge-doc/html')
   # Frameworks RI documentation
-  basedstdir = "#{Config::CONFIG['datadir']}/ri/#{Config::CONFIG['ruby_version']}/site"
+  basedstdir = @config['ri-dir']
   unless File.exist?(basedstdir)
     command "mkdir -p '#{basedstdir}'"
   end

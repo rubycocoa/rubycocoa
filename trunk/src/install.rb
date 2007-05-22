@@ -1113,6 +1113,7 @@ class ToplevelInstaller < Installer
     @config['install-root'] = install_dest
     @config['so-dir'] = File.join(install_dest, @config['so-dir'])
     @config['rb-dir'] = File.join(install_dest, @config['rb-dir'])
+    @config['ri-dir'] = File.join(install_dest, @config['ri-dir'])
     @packaging = true
     exec_install
     @packaging = false 
