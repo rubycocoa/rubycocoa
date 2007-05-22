@@ -1113,7 +1113,9 @@ class ToplevelInstaller < Installer
     @config['install-root'] = install_dest
     @config['so-dir'] = File.join(install_dest, @config['so-dir'])
     @config['rb-dir'] = File.join(install_dest, @config['rb-dir'])
+    @packaging = true
     exec_install
+    @packaging = false 
     @config = config_bak
     dive_into(rel) { run_hook 'post-package' }
   end
