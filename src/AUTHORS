@@ -18,11 +18,11 @@ Eloy Duran <e.duran@superalloy.nl>
 Fujimoto Hisa <hisa@fobj.com>
   Original author of the project.
 
-Kimura Wataru <kimuraw@i.nifty.jp>
-  Lots of major contributions (too numerous) and bugfixes.
-
 Jonathan Paisley <jp-www@dcs.gla.ac.uk>
   Contributed standaloneify, lots of bugfixes.
+
+Kimura Wataru <kimuraw@i.nifty.jp>
+  Lots of major contributions (too numerous) and bugfixes.
 
 Laurent Sansonetti <lsansonetti@apple.com>
   Major rewrite of the core (BridgeSupport, Libffi), bugfixes, documentation, 
