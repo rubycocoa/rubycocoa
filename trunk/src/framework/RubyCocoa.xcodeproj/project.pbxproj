@@ -137,8 +137,8 @@
 		4E85DA250B788E43007290BD /* oc_bundle_support.rb */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.ruby; path = oc_bundle_support.rb; sourceTree = "<group>"; };
 		4E85DEEB0B7B62D4007290BD /* mdl_bundle_support.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = mdl_bundle_support.m; sourceTree = "<group>"; };
 		4EA2DB800BB3A10E0031EF22 /* RubyCocoa.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RubyCocoa.m; path = objc/RubyCocoa.m; sourceTree = "<group>"; };
-		5135ABA70BF7A657006D304E /* active_record.rb */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.script.ruby; name = active_record.rb; path = src/ruby/osx/active_record.rb; sourceTree = "<group>"; };
-		5135ABAB0BF7A66F006D304E /* active_record.rb */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.script.ruby; name = active_record.rb; path = src/ruby/osx/objc/active_record.rb; sourceTree = "<group>"; };
+		5135ABA70BF7A657006D304E /* active_record.rb */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.script.ruby; path = active_record.rb; sourceTree = "<group>"; };
+		5135ABAB0BF7A66F006D304E /* active_record.rb */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.script.ruby; path = active_record.rb; sourceTree = "<group>"; };
 		E813DE9B036CC9C1033794D5 /* RBSlaveObject.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RBSlaveObject.h; sourceTree = "<group>"; };
 		E813DE9D036D122F033794D5 /* mdl_osxobjc.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = mdl_osxobjc.h; sourceTree = "<group>"; };
 		E813DE9E036D122F033794D5 /* mdl_osxobjc.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = mdl_osxobjc.m; sourceTree = "<group>"; };
@@ -207,8 +207,6 @@
 		0867D691FE84028FC02AAC07 /* RubyCocoa */ = {
 			isa = PBXGroup;
 			children = (
-				5135ABAB0BF7A66F006D304E /* active_record.rb */,
-				5135ABA70BF7A657006D304E /* active_record.rb */,
 				E8E03A17035D04E103E1EA43 /* src */,
 				089C1665FE841158C02AAC07 /* Resources */,
 				0867D69AFE84028FC02AAC07 /* External Frameworks and Libraries */,
@@ -306,6 +304,7 @@
 				E84D81EE13ADA29603A81C6F /* coredata.rb */,
 				4D100E500B40292100DEC855 /* webkit.rb */,
 				4D100E5A0B402A8400DEC855 /* qtkit.rb */,
+				5135ABA70BF7A657006D304E /* active_record.rb */,
 				E88C6E73035BB408031D1B90 /* objc */,
 			);
 			path = osx;
@@ -329,6 +328,7 @@
 				E88C6E80035BB408031D1B90 /* oc_wrapper.rb */,
 				4E85DA250B788E43007290BD /* oc_bundle_support.rb */,
 				E8FD49D003D45B2603A81C6F /* ruby_addition.rb */,
+				5135ABAB0BF7A66F006D304E /* active_record.rb */,
 			);
 			path = objc;
 			sourceTree = "<group>";
