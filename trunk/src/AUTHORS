@@ -1,0 +1,43 @@
+(Note: this file was made by quickly analyzing the ChangeLog, feel free to 
+ edit/update it if necessary.)
+
+= Current Maintainer =
+
+Laurent Sansonetti <lsansonetti@apple.com>
+Fujimoto Hisa <hisa@fobj.com> (secondary)
+
+= Current Developers =
+
+Chris Mcgrath <c_r_mcgrath@yahoo.co.uk>
+  Contributed rb_nibtool, bugfixes.
+
+Eloy Duran <e.duran@superalloy.nl>
+  Major contributions (earlier QTKit support, BridgeDoc, ActiveRecordBindings),
+  bugfixes, documentation, sample code.
+
+Fujimoto Hisa <hisa@fobj.com>
+  Original author of the project.
+
+Kimura Wataru <kimuraw@i.nifty.jp>
+  Lots of major contributions (too numerous) and bugfixes.
+
+Jonathan Paisley <jp-www@dcs.gla.ac.uk>
+  Contributed standaloneify, lots of bugfixes.
+
+Laurent Sansonetti <lsansonetti@apple.com>
+  Major rewrite of the core (BridgeSupport, Libffi), bugfixes, documentation, 
+  sample code.  
+
+= Retired Developers =
+
+Chris Thomas <kenshin@apple.com>
+  Bugfixes, sample code.
+
+Shirai Kaoru <shirai@korinkan.co.jp>
+  Bugfixes.
+
+Ralph Broom <rbroom@broom.org>
+  Documentation.
+
+Michael Miller <blackmariah@techie.com>
+  Documentation.
