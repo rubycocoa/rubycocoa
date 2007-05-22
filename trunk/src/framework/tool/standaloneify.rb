@@ -269,7 +269,7 @@ module Standaloneify
     raise "Cannot locate RubyCocoa.framework" unless rc_path  
     #FileUtils.cp_r(rc_path,frameworks_d)
     # Do not use FileUtils.cp_r because it tries to follow symlinks.
-    unless system("cp -r \"#{rc_path}\" \"#{frameworks_d}\"")
+    unless system("cp -R \"#{rc_path}\" \"#{frameworks_d}\"")
       raise "cannot copy #{rc_path} to #{frameworks_d}"
     end
 
