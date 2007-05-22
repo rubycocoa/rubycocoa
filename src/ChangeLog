@@ -8,6 +8,13 @@
 
 2007-05-22  Laurent Sansonetti <lsansonetti@apple.com>
 
+	* pre-install.rb,
+  	  install.rb,
+  	  metaconfig:
+	Added 'ri-dir' config variable, and use it when installing the RI 
+	files. When generating the binary package, make sure to prefix the
+	directory with the temporary package directory.
+
 	* VERSION:
 	Bumped to 0.11.
 

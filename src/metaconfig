@@ -70,6 +70,10 @@ add_path_config 'ruby-header-dir', Config::CONFIG['archdir'],
 add_path_config 'libruby-path', RubyCocoaConfig.libruby_path,
   'path to the libruby file'
 
+add_path_config 'ri-dir',
+  "#{Config::CONFIG['datadir']}/ri/#{Config::CONFIG['ruby_version']}/site",
+  'the directory for ri files'
+
 if RubyCocoaConfig.system_version.to_f >= 10.4
   add_bool_config 'build-universal', false,
     'yes, build universal binary (requires Xcode 2.1 or later and SDK)'
