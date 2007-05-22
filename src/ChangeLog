@@ -1,3 +1,5 @@
+=== RubyCocoa 0.11.0 ===
+
 2007-05-22  Fujimoto Hisa  <hisa@fobj.com>
 
 	* framework/RubyCocoa.xcodeproj/project.pbxproj:
@@ -9,8 +11,8 @@
 2007-05-22  Laurent Sansonetti <lsansonetti@apple.com>
 
 	* pre-install.rb,
-  	  install.rb,
-  	  metaconfig:
+	  install.rb,
+	  metaconfig:
 	Added 'ri-dir' config variable, and use it when installing the RI 
 	files. When generating the binary package, make sure to prefix the
 	directory with the temporary package directory.
