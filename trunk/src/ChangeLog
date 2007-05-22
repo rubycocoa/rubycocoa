@@ -1,6 +1,9 @@
 2007-05-22  Fujimoto Hisa  <hisa@fobj.com>
 
 	* framework/RubyCocoa.xcodeproj/project.pbxproj:
+	copy tools into the Version/Current/Tools directory.
+
+	* framework/RubyCocoa.xcodeproj/project.pbxproj:
 	put active_record.rb into appropriate group.
 
 2007-05-22  Laurent Sansonetti <lsansonetti@apple.com>

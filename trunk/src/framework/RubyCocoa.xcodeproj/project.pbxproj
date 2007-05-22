@@ -28,6 +28,9 @@
 		4E85DA260B788E43007290BD /* oc_bundle_support.rb in CopyFiles */ = {isa = PBXBuildFile; fileRef = 4E85DA250B788E43007290BD /* oc_bundle_support.rb */; };
 		4E85DEEC0B7B62D4007290BD /* mdl_bundle_support.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E85DEEB0B7B62D4007290BD /* mdl_bundle_support.m */; };
 		4EA2DB810BB3A10E0031EF22 /* RubyCocoa.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EA2DB800BB3A10E0031EF22 /* RubyCocoa.m */; };
+		4EACC7610C028851006372AD /* gen_bridge_doc.rb in CopyFiles */ = {isa = PBXBuildFile; fileRef = 4EACC75E0C028851006372AD /* gen_bridge_doc.rb */; };
+		4EACC7620C028851006372AD /* rb_nibtool.rb in CopyFiles */ = {isa = PBXBuildFile; fileRef = 4EACC75F0C028851006372AD /* rb_nibtool.rb */; };
+		4EACC7630C028851006372AD /* standaloneify.rb in CopyFiles */ = {isa = PBXBuildFile; fileRef = 4EACC7600C028851006372AD /* standaloneify.rb */; };
 		5135ABA80BF7A657006D304E /* active_record.rb in CopyFiles */ = {isa = PBXBuildFile; fileRef = 5135ABA70BF7A657006D304E /* active_record.rb */; };
 		5135ABAC0BF7A66F006D304E /* active_record.rb in CopyFiles */ = {isa = PBXBuildFile; fileRef = 5135ABAB0BF7A66F006D304E /* active_record.rb */; };
 		FCDF92650A87E09E0002AD01 /* cls_objcid.h in Headers */ = {isa = PBXBuildFile; fileRef = E88C6D58035BB1F5031D1B90 /* cls_objcid.h */; };
@@ -72,6 +75,18 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
+		4EACC7660C0288C8006372AD /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = Tools;
+			dstSubfolderSpec = 6;
+			files = (
+				4EACC7610C028851006372AD /* gen_bridge_doc.rb in CopyFiles */,
+				4EACC7620C028851006372AD /* rb_nibtool.rb in CopyFiles */,
+				4EACC7630C028851006372AD /* standaloneify.rb in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		FCDF92770A87E09E0002AD01 /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -137,6 +152,9 @@
 		4E85DA250B788E43007290BD /* oc_bundle_support.rb */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.ruby; path = oc_bundle_support.rb; sourceTree = "<group>"; };
 		4E85DEEB0B7B62D4007290BD /* mdl_bundle_support.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = mdl_bundle_support.m; sourceTree = "<group>"; };
 		4EA2DB800BB3A10E0031EF22 /* RubyCocoa.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RubyCocoa.m; path = objc/RubyCocoa.m; sourceTree = "<group>"; };
+		4EACC75E0C028851006372AD /* gen_bridge_doc.rb */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.ruby; name = gen_bridge_doc.rb; path = tool/gen_bridge_doc.rb; sourceTree = "<group>"; };
+		4EACC75F0C028851006372AD /* rb_nibtool.rb */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.ruby; name = rb_nibtool.rb; path = tool/rb_nibtool.rb; sourceTree = "<group>"; };
+		4EACC7600C028851006372AD /* standaloneify.rb */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.ruby; name = standaloneify.rb; path = tool/standaloneify.rb; sourceTree = "<group>"; };
 		5135ABA70BF7A657006D304E /* active_record.rb */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.script.ruby; path = active_record.rb; sourceTree = "<group>"; };
 		5135ABAB0BF7A66F006D304E /* active_record.rb */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.script.ruby; path = active_record.rb; sourceTree = "<group>"; };
 		E813DE9B036CC9C1033794D5 /* RBSlaveObject.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RBSlaveObject.h; sourceTree = "<group>"; };
@@ -209,6 +227,7 @@
 			children = (
 				E8E03A17035D04E103E1EA43 /* src */,
 				089C1665FE841158C02AAC07 /* Resources */,
+				4EACC75D0C02883D006372AD /* Tools */,
 				0867D69AFE84028FC02AAC07 /* External Frameworks and Libraries */,
 				034768DFFF38A50411DB9C8B /* Products */,
 				FCDF92610A87E06A0002AD01 /* GeneratedConfig.xcconfig */,
@@ -238,6 +257,16 @@
 				0867D69BFE84028FC02AAC07 /* Foundation.framework */,
 			);
 			name = "Linked Frameworks";
+			sourceTree = "<group>";
+		};
+		4EACC75D0C02883D006372AD /* Tools */ = {
+			isa = PBXGroup;
+			children = (
+				4EACC75E0C028851006372AD /* gen_bridge_doc.rb */,
+				4EACC75F0C028851006372AD /* rb_nibtool.rb */,
+				4EACC7600C028851006372AD /* standaloneify.rb */,
+			);
+			name = Tools;
 			sourceTree = "<group>";
 		};
 		E88C6D57035BB1F5031D1B90 /* objc */ = {
@@ -384,6 +413,7 @@
 			buildPhases = (
 				FCDF92640A87E09E0002AD01 /* Headers */,
 				FCDF92740A87E09E0002AD01 /* Resources */,
+				4EACC7660C0288C8006372AD /* CopyFiles */,
 				FCDF92770A87E09E0002AD01 /* CopyFiles */,
 				FCDF927C0A87E09E0002AD01 /* CopyFiles */,
 				FCDF928C0A87E09E0002AD01 /* Sources */,
