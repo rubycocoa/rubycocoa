@@ -1,3 +1,8 @@
+2007-05-22  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* framework/tool/standaloneify.rb:
+	When copying RubyCocoa.framework, use `cp -R' and not `cp -r'.
+
 2007-05-21  Laurent Sansonetti <lsansonetti@apple.com>
 
 	* framework/tool/standaloneify.rb:
