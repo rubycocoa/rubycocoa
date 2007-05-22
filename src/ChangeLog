@@ -8,6 +8,9 @@
 
 2007-05-22  Laurent Sansonetti <lsansonetti@apple.com>
 
+	* AUTHORS:
+	Added AUTHORS file, first revision.
+
 	* framework/**/*.{m.h.rb},
 	  lib/osx/*.rb,
 	  ext/rubycocoa/rubycocoa.m:
