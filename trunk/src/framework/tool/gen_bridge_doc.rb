@@ -1,7 +1,9 @@
 #!/usr/bin/env ruby
-
-# Created by Eloy Duran
-# Copyright (c) 2007 Eloy Duran, SuperAlloy
+# Copyright (c) 2006-2007, The RubyCocoa Project.
+# All Rights Reserved.
+#
+# RubyCocoa is free software, covered under either the Ruby's license or the 
+# LGPL. See the COPYRIGHT file for more information.
 
 require 'rbconfig'
 

@@ -1,8 +1,9 @@
+# Copyright (c) 2006-2007, The RubyCocoa Project.
+# Copyright (c) 2001-2006, FUJIMOTO Hisakuni.
+# All Rights Reserved.
 #
-#  $Id: oc_attachments.rb 1332 2007-01-04 03:15:32Z hisa $
-#
-#  Copyright (c) 2001 FUJIMOTO Hisakuni
-#
+# RubyCocoa is free software, covered under either the Ruby's license or the 
+# LGPL. See the COPYRIGHT file for more information.
 
 module OSX
 
