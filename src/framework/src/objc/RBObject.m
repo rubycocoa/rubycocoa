@@ -142,7 +142,7 @@ static int rb_obj_arity_of_method(VALUE rcv, SEL a_sel, BOOL *ok)
 
     RBOBJ_LOG("arg[%d] of type '%s'", i, octstr);
     [an_inv getArgument: ocdata atIndex: (i+2)];
-    f_conv_success = ocdata_to_rbobj(Qnil, octstr, ocdata, &arg_val, NO);
+    f_conv_success = ocdata_to_rbobj(Qfalse, octstr, ocdata, &arg_val, NO);
     if (f_conv_success == NO) {
       arg_val = Qnil;
     }

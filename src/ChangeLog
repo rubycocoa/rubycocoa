@@ -1,3 +1,12 @@
+2007-05-22  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* framework/src/objc/RBObject.m,
+	  framework/src/objc/ocdata_conv.m,
+	  framework/src/objc/OverrideMixin.m:
+	When converting Objective-C objects to Ruby, do not cache those
+	being converted in an Objective-C callback (either FFI closure or
+	NSInvocation), because there is no way to clear the cache after.
+
 2007-05-21  kimura wataru <kimuraw@i.nifty.jp>
 
 	* framework/src/ruby/osx/objc/cocoa_macros_appkit.rb:
