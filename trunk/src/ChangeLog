@@ -1,3 +1,8 @@
+2007-05-21  kimura wataru <kimuraw@i.nifty.jp>
+
+	* framework/src/ruby/osx/objc/cocoa_macros_appkit.rb:
+	fix: NSApplication.run_with_temp_app does not work.
+
 === RubyCocoa 0.11.0 ===
 
 2007-05-22  Fujimoto Hisa  <hisa@fobj.com>
