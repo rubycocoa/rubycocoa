@@ -28,16 +28,43 @@ Laurent Sansonetti <lsansonetti@apple.com>
   Major rewrite of the core (BridgeSupport, Libffi), bugfixes, documentation, 
   sample code.  
 
+
 = Retired Developers =
 
 Chris Thomas <kenshin@apple.com>
-  Bugfixes, sample code.
+  Many Bugfixes, sample code, article
 
-Shirai Kaoru <shirai@korinkan.co.jp>
-  Bugfixes.
 
-Ralph Broom <rbroom@broom.org>
-  Documentation.
+= Thanks To =
 
-Michael Miller <blackmariah@techie.com>
-  Documentation.
+...
+
+thanks for kindness at the early stage of development to ...
+
+Aaron J Reichow
+Chris Thomas        # article, bugfix, sample code
+Dave Thomas         # introduce on Ruby Garden
+Filip Pizlo
+Gesse Gam           # documentation
+Hiroyuki Shimura    # most early adapter
+John Platte
+Kazumi Okamoto
+Kozo Hara           # documentation
+Luc Heinrich        # sample code, test thread, etc...
+Masaki Yatsu
+Masao Kanemitsu
+Masatoshi Seki      # sample code
+Matthew Fero
+Michael Miller      # documentation
+Mitsuhiro Kondo
+Norberto Ortigoza
+Ogino Junya
+Paul Haddad
+Ralph Broom         # documentation
+Rich Kilmer
+Rod Schmidt
+S. Sawada           # tutorial, WebKit
+Shirai Kaoru        # bugfixes
+Tetsuhumi Takaishi
+Tosh
+... and other many people who helped the project
