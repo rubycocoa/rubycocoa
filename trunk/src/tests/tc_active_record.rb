@@ -63,7 +63,20 @@ begin
     def setup
       # when we need more complex tests here should probably go some code that flushes the db
     end
-  
+    
+    # ---------------------------------------------------------
+    # Class additions
+    # ---------------------------------------------------------
+    
+    # Array
+    def test_array_of_activerecords_to_proxies
+      assert Mailbox.find(:all).to_activerecord_proxies.first.is_a?(MailboxProxy)
+    end
+    def test_array_of_proxies_to_original_activerecords
+      mailboxes = Mailbox.find(:all).to_activerecord_proxies
+      assert mailboxes.original_records.first.is_a?(Mailbox)
+    end
+    # ActiveRecord::Base
     def test_activerecord_to_proxy
       mailbox = Mailbox.new({'title' => 'foo'})
       mailbox.save
@@ -71,10 +84,48 @@ begin
       proxy = mailbox.to_activerecord_proxy
       assert proxy.is_a?(MailboxProxy)
       assert_equal mailbox, proxy.to_activerecord
-    
-      assert Mailbox.find(:all).to_activerecord_proxies.first.is_a?(MailboxProxy)
     end
-  
+    
+    # ---------------------------------------------------------
+    # Subclasses of cocoa classes that add ActiveRecord support
+    # ---------------------------------------------------------
+    
+    # ActiveRecordTableView
+    def test_column_scaffolding
+      tableview = OSX::ActiveRecordTableView.alloc.init
+      recordset_controller = OSX::ActiveRecordSetController.alloc.init
+      
+      # make sure that the required args are passed
+      assert_raises ArgumentError do
+        tableview.scaffold_columns_for(:model => nil, :bind_to => recordset_controller)
+      end
+      assert_raises ArgumentError do
+        tableview.scaffold_columns_for(:model => Email, :bind_to => nil)
+      end
+      
+      # make sure the scaffolding will only contains the columns for: address, subject, body
+      tableview.scaffold_columns_for :model => Email, :bind_to => recordset_controller, :except => ['id', 'updated_at', 'mailbox_id']
+      assert tableview.tableColumns.map { |column| column.identifier.to_s } == ['address', 'subject', 'body']
+      
+      # test block
+      # FIXME: I want to be able to test if some bindings options have been set,
+      # unfortunately I can't find a way to get the bindings options back from the table column.
+      tableview.scaffold_columns_for :model => Email, :bind_to => recordset_controller, :except => 'mailbox_id' do |column, column_options|
+        if column.identifier.to_s == 'address'
+          column.headerCell.setStringValue 'foo'
+        end
+      end
+      tableview.tableColumns.each do |column|
+        if column.identifier.to_s == 'address'
+          assert column.headerCell.stringValue.to_s == 'foo'
+        else
+          assert column.headerCell.stringValue.to_s.downcase.gsub(/\s/, '_') == column.identifier.to_s
+        end
+      end
+    end
+    
+    
+    # ActiveRecordProxy
     def test_proxy_initialization
       before = Mailbox.count
       proxy1 = MailboxProxy.alloc.init({'title' => 'foo'})
@@ -85,10 +136,35 @@ begin
       proxy2 = MailboxProxy.alloc.init(proxy1.to_activerecord)
       assert Mailbox.count == before
       assert_equal proxy1.to_activerecord, proxy2.to_activerecord
+      
+      # create a new record through a proxy
+      before = Mailbox.count
+      proxy3 = MailboxProxy.alloc.init
+      assert Mailbox.count == (before + 1)
+      
+      # make sure that we return nil if we pass a wrong arg
+      assert_nil MailboxProxy.alloc.init('foo')
     end
-  
-    def test_proxy_record_class
-      assert Mailbox.find(:first).to_activerecord_proxy.record_class == Mailbox
+    
+    def test_generated_instance_methods_on_proxy
+      mailbox = Mailbox.find(:first).to_activerecord_proxy
+      # assign through generated setter
+      mailbox.title = 'foo'
+      assert mailbox['title'] == 'foo'
+      # check through generated getter
+      mailbox['title'] = 'bar'
+      assert mailbox.title == 'bar'
+      
+      # make sure that others don't work
+      assert_raises OSX::OCMessageSendException do
+        mailbox.pretty_sure_this_one_does_not_exist = 'foo'
+      end
+    end
+    
+    def test_methods_from_record
+      mailbox = Mailbox.find(:first)
+      proxy = mailbox.to_activerecord_proxy
+      assert proxy.record_methods == mailbox.methods
     end
   
     def test_proxy_is_association?
@@ -125,6 +201,28 @@ begin
       assert pointer.value.userInfo[OSX::NSLocalizedDescriptionKey].to_s == "Mailbox title can't be blank\n"
     end
   
+    # ActiveRecordProxy class methods
+    def test_proxy_to_model_class
+      assert MailboxProxy.model_class == Mailbox
+    end
+    
+    def test_find_first
+      mailbox = Mailbox.find(:first)
+      proxy = MailboxProxy.find(:first)
+      assert mailbox == proxy.original_record
+    end
+    
+    def test_find_all
+      mailboxes = Mailbox.find(:all)
+      proxies = MailboxProxy.find(:all)
+      assert mailboxes.last == proxies.last.original_record
+    end
+    
+    def test_find_by
+      mailbox = Mailbox.find_by_title('foo')
+      proxy = MailboxProxy.find_by_title('foo')
+      assert mailbox == proxy.original_record
+    end
   end
 
 rescue LoadError
