@@ -1,3 +1,17 @@
+2007-05-24  Eloy Duran <e.duran@superalloy.nl>
+
+	* framework/src/ruby/osx/objc/active_record.rb:
+	- Removed method_missing implementation that forwarded
+	  messages to the record that it wraps.
+	  Instead we now define all the methods available on the record,
+	  plus getters/setters for the attributes, at proxy initialization time.
+	- ActiveRecordTableView#scaffold_columns_for will now delete
+	  any existing columns before creating new ones.
+	- ActiveRecordSetController has a new instance method #setup_for,
+	  which is used to set the model that it manages and directly
+	  calls #setContent with any given content.
+	- Added Array#original_records returns an array of the original records.
+
 2007-05-22  Laurent Sansonetti <lsansonetti@apple.com>
 
 	* framework/src/objc/RBObject.m,

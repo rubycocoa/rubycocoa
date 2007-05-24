@@ -27,10 +27,16 @@ class ActiveRecord::Base
 end
 
 class Array
+  # Returns an array with proxies for all the original records in this array.
   def to_activerecord_proxies
     self.map { |rec| rec.to_activerecord_proxy }
   end
   alias_method :to_activerecord_proxy, :to_activerecord_proxies
+  
+  # Returns an array with all the original records for the proxies in this array.
+  def original_records
+    self.map { |rec| rec.original_record }
+  end
 end
 
 module OSX
@@ -47,6 +53,18 @@ module OSX
         super_remove(sender)
       end
     end
+    
+    # Sets up the ActiveRecordSetController for a given model and sets the content if it's specified.
+    #
+    # <tt>:model</tt> should be the model that we'll be handling.
+    # <tt>:content</tt> is optional, if specified it should be an array with or without any proxies for the model that we're handling.
+    def setup_for(options)
+      raise ArgumentError, ":model was nil, expected a ActiveRecord::Base subclass" if options[:model].nil?
+      # FIXME: not DRY, duplicated from ActiveRecord::Base#to_activerecord_proxy
+      self.setObjectClass( Object.const_get("#{options[:model].to_s}Proxy") )
+      self.setContent(options[:content]) unless options[:content].nil?
+    end
+    
   end
   
   class ActiveRecordTableView < OSX::NSTableView
@@ -56,14 +74,21 @@ module OSX
     # <tt>:model</tt> should be the model class that you want to scaffold.
     # <tt>:bind_to</tt> should be the ActiveRecordSetController instance that you want the columns to be bound too.
     # <tt>:except</tt> can be either a string or an array that says which columns should not be displayed.
+    # <tt>:validates_immediately</tt> set this to +true+ to add validation to every column. Defaults to +false+.
     #
     #   ib_outlets :customersTableView, :customersRecordSetController
-    #   ib_outlets :invoicesTableView,  :invoicesRecordSetController
     #  
     #   def awakeFromNib
-    #     @customersTableView.scaffold_columns_for :model => Customer, :bind_to => @customersRecordSetController, :except => "id"
+    #     @customersTableView.scaffold_columns_for :model => Customer, :bind_to => @customersRecordSetController, :validates_immediately => true, :except => "id"
+    #   end
     #
-    #     @invoicesTableView.scaffold_columns_for  :model => Invoice,  :bind_to => @invoicesRecordSetController do |table_column, column_options|
+    # You can also pass it a block which will yield 2 objects for every column, namely +table_column+ which is the new NSTableColumn
+    # and +column_opyions+ which is a hash that can be used to set additional options for the binding.
+    #
+    #   ib_outlets :customersTableView, :customersRecordSetController
+    #  
+    #   def awakeFromNib
+    #     @customersTableView.scaffold_columns_for :model => Customer, :bind_to => @customersRecordSetController do |table_column, column_options|
     #       p table_column
     #       p column_options
     #       column_options['NSValidatesImmediately'] = true
@@ -74,6 +99,9 @@ module OSX
       raise ArgumentError, ":bind_to was nil, expected an instance of ActiveRecordSetController" if options[:bind_to].nil?
       options[:except] ||= []
       options[:validates_immediately] ||= false
+      
+      # if there are any columns already, first remove them.
+      self.tableColumns.each { |column| self.removeTableColumn(column) }
       
       options[:model].column_names.each do |column_name|
         # skip columns
@@ -103,7 +131,7 @@ module OSX
       if super_init
         if arg.nil?
           # instantiate a new record
-          @record = record_class.send(:new)
+          @record = self.record_class.send(:new)
           return nil unless @record.save
         elsif arg.is_a? Hash
           # instantiate a new record with the options in arg
@@ -115,10 +143,32 @@ module OSX
         else
           return nil
         end
+
+        # define all the record attributes getters and setters
+        @record.attribute_names.each do |m|
+          self.class.class_eval do
+            define_method(m) do
+              return @record.send(m)
+            end
+            sym = "#{m}=".to_sym
+            define_method(sym) do |*args|
+              return @record.send(sym, *args)
+            end
+          end
+        end
+        # define the normal instance methods of the record
+        (@record.methods - self.methods).each do |m|
+          self.class.class_eval do
+            define_method(m) do |*args|
+              return @record.send(m, *args)
+            end
+          end
+        end
+        
         return self
       end
     end
-  
+    
     def record_class
       Object.const_get( self.class.to_s[0..-6] )
     end
@@ -145,20 +195,20 @@ module OSX
     end
   
     # Passes a method call on to the corresponding record object
-    def method_missing(method, *args)
-      if @record.respond_to? method
-        @record.send method, *args
-      else
-        super
-      end
-    end
+    # def method_missing(method, *args)
+    #   if @record.respond_to? method
+    #     @record.send method, *args
+    #   else
+    #     super
+    #   end
+    # end
   
     # KVC stuff
   
     # This method is called by the object that self is bound to,
     # if the requested key is a association return proxies for the records.
     def rbValueForKey(key)
-      # puts "valueForKey('#{key}')"
+      #puts "valueForKey('#{key}')"
     
       if is_association? key
         # return the associated records as record proxies
