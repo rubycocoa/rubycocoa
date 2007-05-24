@@ -108,6 +108,7 @@ module OSX
         next if options[:except].include?(column_name)
         # setup new table column
         table_column = OSX::NSTableColumn.alloc.init
+        table_column.setIdentifier(column_name)
         table_column.headerCell.setStringValue(column_name.titleize)
         # create a hash that will hold the options that will be passed as options to the bind method
         column_options = {}
@@ -124,6 +125,32 @@ module OSX
   end
   
   class ActiveRecordProxy < OSX::NSObject
+    
+    # class methods
+    class << self
+      # This find class method passes the message on to the model, but it will return proxies for the returned records
+      def find(*args)
+        result = self.model_class.find(*args)
+        return result.to_activerecord_proxies
+      end
+      
+      # This method_missing class method passes the find_by_ message on to the model, but it will return proxies for the returned records
+      def method_missing(method, *args)
+        if method.to_s.index('find_by_') == 0
+          result = self.model_class.send(method, *args)
+          return result.to_activerecord_proxies
+        else
+          super
+        end
+      end
+      
+      # Returns the model class for this proxy
+      def model_class
+        @model_class ||= Object.const_get(self.to_s[0..-6])
+        return @model_class
+      end
+    end
+    
     # Returns a new record proxy instance.
     # If the +arg+ is a ActiveRecord::Base instance it will return a proxy for that record.
     # If the +arg+ is a hash a new ActiveRecord::Base instance will be instantiated and will be passed the hash.
@@ -169,8 +196,9 @@ module OSX
       end
     end
     
+    # Returns the model class for this proxy
     def record_class
-      Object.const_get( self.class.to_s[0..-6] )
+      self.class.model_class
     end
   
     # Returns an Array of all the available methods on the corresponding record object
@@ -193,15 +221,6 @@ module OSX
       @record.class.reflect_on_all_associations.each { |assoc| return true if assoc.name == key_sym }
       return false
     end
-  
-    # Passes a method call on to the corresponding record object
-    # def method_missing(method, *args)
-    #   if @record.respond_to? method
-    #     @record.send method, *args
-    #   else
-    #     super
-    #   end
-    # end
   
     # KVC stuff
   

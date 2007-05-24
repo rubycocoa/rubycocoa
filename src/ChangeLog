@@ -1,5 +1,15 @@
 2007-05-24  Eloy Duran <e.duran@superalloy.nl>
 
+	* framework/src/ruby/osx/objc/active_record.rb,
+	  tests/tc_active_record.rb:
+	- ActiveRecordTableView#scaffold_columns_for will now set NSTableColumn#identifier
+	  to the name of the attribute so you can use this to check which column it is.
+	- Added metaclass methods #find & method_missing which handles #find_by_foo to the
+	  ActiveRecordProxy, which works as normal but returns proxies for the results.
+	- Optimized model class resolve method. Now also caches it.
+
+2007-05-24  Eloy Duran <e.duran@superalloy.nl>
+
 	* framework/src/ruby/osx/objc/active_record.rb:
 	- Removed method_missing implementation that forwarded
 	  messages to the record that it wraps.
