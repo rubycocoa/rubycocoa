@@ -349,7 +349,7 @@ rb_ffi_dispatch (
         ptype = octype_str;
         if (*ptype == _C_CONST)
           ptype++;
-        if (*ptype != _C_PTR && *ptype != _C_ARY_B)
+        if (*ptype != _C_PTR && *ptype != _C_ARY_B && *ptype != _C_CHARPTR)
           return rb_err_new(rb_eRuntimeError, "Internal error: argument #%d is not a defined as a pointer in the runtime or it is described as such in the metadata", i);
         ptype++;
 
