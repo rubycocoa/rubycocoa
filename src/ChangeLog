@@ -1,5 +1,9 @@
 2007-05-27  Laurent Sansonetti <lsansonetti@apple.com>
 
+	* sample/Scripts/circle.rb:
+	When calling CFURLCreateFromFileSystemRepresentation, it's not necessary
+	anymore to pass the length of the string.
+
 	* AUTHORS:
 	Some reformat, added Vincent.
 
