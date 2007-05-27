@@ -4,7 +4,7 @@ require 'osx/cocoa'
 include OSX
 
 path = "circle.pdf"
-url = CFURLCreateFromFileSystemRepresentation(nil, path, path.size, nil)
+url = CFURLCreateFromFileSystemRepresentation(nil, path, nil)
 rect = CGRect.new(CGPoint.new(0, 0), CGSize.new(612, 792)) # Landscape
 pdf = CGPDFContextCreateWithURL(url, rect, nil)
 
