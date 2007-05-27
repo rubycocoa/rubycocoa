@@ -1,5 +1,8 @@
 2007-05-27  Laurent Sansonetti <lsansonetti@apple.com>
 
+	* AUTHORS:
+	Some reformat, added Vincent.
+
 	* framework/src/objc/libffi.m:
 	Do not raise an exception when passing a String object as a C characters
 	pointer (_C_CHARPTR). Thanks to Vincent Isambart.

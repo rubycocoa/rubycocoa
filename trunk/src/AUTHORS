@@ -1,6 +1,3 @@
-(Note: this file was made by quickly analyzing the ChangeLog, feel free to 
- edit/update it if necessary.)
-
 = Current Maintainer =
 
 Laurent Sansonetti <lsansonetti@apple.com>
@@ -28,18 +25,16 @@ Laurent Sansonetti <lsansonetti@apple.com>
   Major rewrite of the core (BridgeSupport, Libffi), bugfixes, documentation, 
   sample code.  
 
-
 = Retired Developers =
 
 Chris Thomas <kenshin@apple.com>
   Many Bugfixes, sample code, article
 
-
 = Thanks To =
 
 ...
 
-thanks for kindness at the early stage of development to ...
+Thanks for the kindness, mainly at the early stage of development, to ...
 
 Aaron J Reichow
 Chris Thomas        # article, bugfix, sample code
@@ -67,4 +62,6 @@ S. Sawada           # tutorial, WebKit
 Shirai Kaoru        # bugfixes
 Tetsuhumi Takaishi
 Tosh
-... and other many people who helped the project
+Vincent Isamart     # bugfixes
+
+... and other many people who helped the project!
