@@ -136,7 +136,8 @@ class RubyProgramTextViewDelegate < OSX::NSObject
   def init
     @controller = nil
     @ri = RiContents.instance
-    @words = @key = nil
+    @key = nil
+    @words = []
     return self
   end
 
@@ -149,12 +150,14 @@ class RubyProgramTextViewDelegate < OSX::NSObject
     range = view.rangeForUserCompletion
     if range.length > 0 then
       @key = view.textStorage.string.substringWithRange(range).to_s
-      @words = @ri.lookup_name(@key)
-      @controller.textDidChange if @controller
+      showDescription(@key) if @words.include?(@key)
     end
   end
 
   def textView_completions_forPartialWordRange_indexOfSelectedItem(view, words, range, index)
+    @key = view.textStorage.string.substringWithRange(range).to_s
+    @words = @ri.lookup_name(@key)
+    @controller.reloadWordsTable if @controller
     @words
   end
 
