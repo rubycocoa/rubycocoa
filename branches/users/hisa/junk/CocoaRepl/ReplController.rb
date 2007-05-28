@@ -61,13 +61,14 @@ class ReplController < OSX::NSObject
     @scratchText.selectCurrentBlock
   end
 
-  def textDidChange
+  def reloadWordsTable
     @wordsTable.reloadData
     @tabView.selectTabViewItemWithIdentifier('reference')
   end
 
   def showDescription(str)
     @descriptionText.setString(str)
+    @tabView.selectTabViewItemWithIdentifier('reference')
   end
 
   private
