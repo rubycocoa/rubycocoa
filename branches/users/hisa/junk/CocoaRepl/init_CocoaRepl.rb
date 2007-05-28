@@ -35,7 +35,8 @@ class String; def_truncated_inspect 1, '..."' end
 
 def load_decorator
   require 'decorator'
-  Decorator.require_decorator(:ripper) ||
+  (ARGV.size > 0 && Decorator.require_decorator(ARGV.shift.to_sym)) ||
+    Decorator.require_decorator(:ripper) ||
     Decorator.require_decorator(:syntax) ||
     Decorator.require_decorator(:simple)
 end
