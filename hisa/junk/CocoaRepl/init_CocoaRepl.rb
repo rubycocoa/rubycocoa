@@ -54,6 +54,8 @@ def create_window(opts = {})
   win
 end
 
+ARGV.delete_if {|i| /-psn/ =~ i }
+
 OSX.init_for_bundle do |bdl,prm,lgr|
   load_decorator
   require 'RubyProgramTextView'
