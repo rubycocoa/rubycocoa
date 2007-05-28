@@ -23,7 +23,7 @@ module ActiveReload
       def initialize
         options = {}
         opts = OptionParser.new do |opts|
-          opts.banner = "Usage: #$0 [options]"
+          opts.banner = "Usage: #$0 [options] URL"
       
           opts.on('-w', '--width=[WIDTH]', Integer, 'Force width of the screenshot') do |v|
             options[:width] = v
