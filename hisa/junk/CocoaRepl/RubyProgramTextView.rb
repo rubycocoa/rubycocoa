@@ -85,31 +85,8 @@ class OSX::NSTextStorage
   end
 end
 
-class RubyProgramTextStorageDelegate < OSX::NSObject
-  include OSX
-
-  def init
-    @ri = RiContents.instance
-    @decorator = Decorator.default
-    return self
-  end
-
-  def textStorageDidProcessEditing(ntf)
-    if @decorator then
-      storage = ntf.object
-      range = storage.blockRangeForRange(storage.editedRange)
-      @decorator.decorate(storage, range)
-    end
-  end
-end
-
-
 class RubyProgramTextView < OSX::NSTextView
   include OSX
-
-  def awakeFromNib
-    textStorage.setDelegate(RubyProgramTextStorageDelegate.alloc.init)
-  end
 
   def rangeForCurrentBlock
     textStorage.blockRangeForRange(selectedRange)
@@ -136,6 +113,7 @@ class RubyProgramTextViewDelegate < OSX::NSObject
   def init
     @controller = nil
     @ri = RiContents.instance
+    @decorator = Decorator.default
     @key = nil
     @words = []
     return self
@@ -149,6 +127,11 @@ class RubyProgramTextViewDelegate < OSX::NSObject
     view = ntf.object
     range = view.rangeForUserCompletion
     if range.length > 0 then
+      if @decorator then
+        storage = view.textStorage
+        deco_range = storage.blockRangeForRange(range)
+        @decorator.decorate(storage, deco_range)
+      end
       @key = view.textStorage.string.substringWithRange(range).to_s
       showDescription(@key) if @words.include?(@key)
     end
