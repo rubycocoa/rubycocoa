@@ -44,7 +44,7 @@ def create_window(opts = {})
   title = opts[:title]
   win = OSX::NSWindow.alloc.
     objc_send( :initWithContentRect, frame,
-               :styleMask, 0x1F,
+               :styleMask, OSX::NSTitledWindowMask + OSX::NSResizableWindowMask,
                :backing, OSX::NSBackingStoreBuffered,
                :defer, false )
   win.setTitle(title) if title
