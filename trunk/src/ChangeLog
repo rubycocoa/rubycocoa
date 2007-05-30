@@ -1,4 +1,17 @@
-2007-05-21  kimura wataru <kimuraw@i.nifty.jp>
+2007-05-30  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* framework/src/ruby/osx/objc/oc_attachments.rb,
+	  tests/tc_nsstring_compat.rb:
+	Removed tabs, fixed some comments.
+
+	* framework/src/objc/libffi.m,
+	  tests/tc_passbyref.rb,
+	  tests/tc_wrapper.rb:
+	Fixed minor issues related to passed-by-reference arguments declared
+	between regular arguments.
+
+2007-05-30  kimura wataru <kimuraw@i.nifty.jp>
+
 	* framework/src/ruby/osx/objc/oc_attachments.rb, tests/tc_nsstring_compat.rb:
 	- re-enabled `NSString behave like Ruby String'
 	- OSX::NSString#length invokes [NSString length](objc) not String#length(ruby)

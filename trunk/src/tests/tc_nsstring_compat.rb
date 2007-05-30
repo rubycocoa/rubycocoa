@@ -7,7 +7,7 @@ class TC_ObjcString < Test::Unit::TestCase
     @nsstr = OSX::NSString.stringWithString('NSString')
   end
 
-  # to_str covenient
+  # to_str convenience
 
   def test_autoconv
     path = OSX::NSString.stringWithString(__FILE__)
@@ -47,7 +47,7 @@ class TC_ObjcString < Test::Unit::TestCase
     assert_equal('NSStringAppended', str) 
   end
 
-  def test_immutale
+  def test_immutable
     assert_raise(OSX::OCException, 'cannot modify immutable string') {
       @nsstr.gsub!(/S/, 'X')
     }

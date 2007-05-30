@@ -45,20 +45,20 @@ module OSX
 
     alias_method :objc_method_missing, :method_missing
     def method_missing(mname, *args)
-      ## TODO: shuoud test "respondsToSelector:"
+      ## TODO: shoud test "respondsToSelector:"
       if String.public_method_defined?(mname) && (mname != 'length')
-	# call as Ruby string
-	rcv = self.to_s
-	org_val = rcv.dup
-	result = rcv.send(mname, *args)
-	# bang methods modify receiver itself, need to set the new value.
-	# if the receiver is mutable, NSInvalidArgumentException raises.
-	if rcv != org_val
-	  self.setString(rcv)
-	end
+        # call as Ruby string
+        rcv = self.to_s
+        org_val = rcv.dup
+        result = rcv.send(mname, *args)
+        # bang methods modify receiver itself, need to set the new value.
+        # if the receiver is mutable, NSInvalidArgumentException raises.
+        if rcv != org_val
+          self.setString(rcv)
+        end
       else
-	# call as objc string
-	result = objc_method_missing(mname, *args)
+        # call as objc string
+        result = objc_method_missing(mname, *args)
       end
       result
     end
