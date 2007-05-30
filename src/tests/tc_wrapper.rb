@@ -139,4 +139,19 @@ class TC_OCObjWrapper < Test::Unit::TestCase
     assert_kind_of(Array, ary2)
     assert_equal(ary2, ary.to_a)
   end
+
+  def test_get_c_ari_and_pstring
+    path = '/System/Library/Frameworks/ApplicationServices.framework/Frameworks/SpeechSynthesis.framework'
+    return unless File.exist?(File.join(path, 'Resources/BridgeSupport/SpeechSynthesis.bridgesupport'))
+    OSX.require_framework(path)
+    error, numVoices = OSX.CountVoices
+    numVoices.times do |i|
+      error, voiceSpec = OSX.GetIndVoice(i)
+      assert_kind_of(OSX::VoiceSpec, voiceSpec)
+      error, voiceDesc = OSX.GetVoiceDescription(voiceSpec, 362)
+      assert_kind_of(OSX::VoiceDescription, voiceDesc)
+      #assert_kind_of(String, voiceDesc.name)
+      #assert_kind_of(String, voiceDesc.comment)
+    end
+  end
 end

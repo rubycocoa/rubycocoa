@@ -196,6 +196,17 @@ ffi_type_for_octype (const char *octypestr)
   return &ffi_type_void;
 }
 
+static inline BOOL
+__is_in(int elem, int *array, unsigned count)
+{
+  unsigned i;
+  for (i = 0; i < count; i++) {
+    if (array[i] == elem)
+      return YES;
+  }
+  return NO;
+}
+
 VALUE
 rb_ffi_dispatch (
   struct bsCallEntry *call_entry, 
@@ -214,6 +225,7 @@ rb_ffi_dispatch (
 {
   int         length_args[MAX_ARGS];
   unsigned    length_args_count;
+  unsigned    pointers_args[MAX_ARGS];
   unsigned    pointers_args_count;
   unsigned    skipped;
   int         i;
@@ -222,9 +234,17 @@ rb_ffi_dispatch (
   ffi_cif     cif;
   VALUE       exception;
 
-#define ARG_OCTYPESTR(i) (arg_octypes != NULL ? arg_octypes[i] : call_entry->argv[i].octypestr) 
+#define ARG_OCTYPESTR(i) \
+  (arg_octypes != NULL ? arg_octypes[i] : call_entry->argv[i].octypestr) 
 
-  FFI_LOG("argc expected %d given %d delta %d", expected_argc, given_argc, argc_delta);
+#define IS_POINTER_ARG(idx) \
+  (__is_in(idx, pointers_args, pointers_args_count)) 
+
+#define IS_LENGTH_ARG(idx) \
+  (__is_in(idx, length_args, length_args_count)) 
+
+  FFI_LOG("argc expected %d given %d delta %d", expected_argc, given_argc, 
+    argc_delta);
 
   // Check arguments count.
   length_args_count = pointers_args_count = 0;
@@ -233,16 +253,19 @@ rb_ffi_dispatch (
       struct bsArg *arg;
   
       arg = &call_entry->argv[i];
-      // The given argument is a C array with a length determined by the value of another argument, like:
-      //   [NSArray + arrayWithObjects: length:]
-      // If 'in' or 'inout, the 'length' argument is not necessary (but the 'array' is).        
-      // If 'out', the 'array' argument is not necessary (but the 'length' is).
+      // The given argument is a C array with a length determined by the value
+      // of another argument, like:
+      //   [NSArray +arrayWithObjects:length:]
+      // If 'in' or 'inout, the 'length' argument is not necessary (but the 
+      // 'array' is). If 'out', the 'array' argument is not necessary (but the 
+      // 'length' is).
       if (arg->c_ary_type == bsCArrayArgDelimitedByArg) {
         unsigned j;
         BOOL already;
         
-        // Some methods may accept multiple 'array' 'in' arguments that refer to the same 'length' argument, like:
-        //   [NSDictionary + dictionaryWithObjects: forKeys: count:]
+        // Some methods may accept multiple 'array' 'in' arguments that refer 
+        // to the same 'length' argument, like:
+        //   [NSDictionary +dictionaryWithObjects:forKeys:count:]
         for (j = 0, already = NO; j < length_args_count; j++) {
           if (length_args[j] == arg->c_ary_type_value) {
             already = YES;
@@ -255,21 +278,30 @@ rb_ffi_dispatch (
         length_args[length_args_count++] = arg->c_ary_type_value;
       }
     }
+    FFI_LOG("detected %d array length argument(s)", length_args_count);
   }
 
   if (expected_argc - length_args_count != given_argc) {
-    for (i = given_argc; i < expected_argc; i++) {
+    for (i = 0; i < expected_argc; i++) {
       char *type = ARG_OCTYPESTR(i);
       if (*type == _C_CONST)
         type++;
-      if ((*type == _C_PTR && find_bs_cf_type_by_encoding(type) == NULL) || *type == _C_ARY_B) {
-        struct bsArg *bs_arg = find_bs_arg_by_index(call_entry, i, expected_argc);
+      if (given_argc + pointers_args_count < expected_argc
+          && (i >= given_argc || !NIL_P(argv[i]))
+          && (*type == _C_PTR && find_bs_cf_type_by_encoding(type) == NULL) 
+              || *type == _C_ARY_B) {
+        struct bsArg *bs_arg;
+
+        bs_arg = find_bs_arg_by_index(call_entry, i, expected_argc);
         if (bs_arg == NULL || bs_arg->type_modifier == bsTypeModifierOut)
-          pointers_args_count++;
+          pointers_args[pointers_args_count++] = i;
       }
     }
+    FFI_LOG("detected %d omitted pointer(s)", pointers_args_count);
     if (pointers_args_count + given_argc != expected_argc)
-      return rb_err_new(rb_eArgError, "wrong number of argument(s) (expected %d, got %d)", expected_argc, given_argc);
+      return rb_err_new(rb_eArgError, 
+        "wrong number of argument(s) (expected %d, got %d)", expected_argc, 
+        given_argc);
   }
 
   for (i = skipped = 0; i < expected_argc; i++) {
@@ -279,8 +311,7 @@ rb_ffi_dispatch (
     // C-array-length-like argument, which should be already defined
     // at the same time than the C-array-like argument, unless it's
     // returned by reference or specifically provided.
-    if (find_bs_arg_by_c_array_len_arg_index(call_entry, i) != NULL
-        && *octype_str != _C_PTR) {
+    if (IS_LENGTH_ARG(i) && *octype_str != _C_PTR) {
       if (given_argc + skipped < expected_argc) {
         skipped++;
       }
@@ -305,8 +336,7 @@ rb_ffi_dispatch (
       }
     } 
     // Omitted pointer.
-    else if (i - skipped >= given_argc) {
-      FFI_LOG("omitted_pointer[%d]", i);
+    else if (IS_POINTER_ARG(i)) {
       arg_types[i + argc_delta] = &ffi_type_pointer;
       if (*octype_str == _C_PTR) {
         // Regular pointer.
@@ -319,14 +349,16 @@ rb_ffi_dispatch (
         *(void **)value = OCDATA_ALLOCA(octype_str);
         arg_values[i + argc_delta] = value; 
       }
+      FFI_LOG("omitted_pointer[%d] (%p) : %s", i, arg_values[i + argc_delta], octype_str);
+      skipped++;
     }
     // Regular argument.
     else {
       VALUE arg;
       void *value;
-      struct bsArg *bs_arg;
       BOOL is_c_array;
       int len;
+      struct bsArg *bs_arg;
 
       arg = argv[i - skipped];
       bs_arg = find_bs_arg_by_index(call_entry, i, expected_argc);
@@ -504,8 +536,11 @@ rb_ffi_dispatch (
       rb_ary_push(retval_ary, *result);
     }
 
-    for (i = expected_argc - pointers_args_count; i < expected_argc; i++) {
+    for (i = 0; i < expected_argc; i++) {
       void *value;
+
+      if (!IS_POINTER_ARG(i))
+        continue;
 
       value = arg_values[i + argc_delta];
       if (value != NULL) {
