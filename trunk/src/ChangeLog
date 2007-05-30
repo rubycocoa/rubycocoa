@@ -1,5 +1,9 @@
 2007-05-30  Laurent Sansonetti <lsansonetti@apple.com>
 
+	* framework/src/objc/ocdata_conv.m,
+	  tests/tc_wrapper.rb:
+	Better support for getting C_ARY_B types. Thanks to Matthias Neeracher.
+
 	* framework/src/ruby/osx/objc/oc_attachments.rb,
 	  tests/tc_nsstring_compat.rb:
 	Removed tabs, fixed some comments.
