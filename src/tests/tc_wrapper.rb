@@ -150,8 +150,8 @@ class TC_OCObjWrapper < Test::Unit::TestCase
       assert_kind_of(OSX::VoiceSpec, voiceSpec)
       error, voiceDesc = OSX.GetVoiceDescription(voiceSpec, 362)
       assert_kind_of(OSX::VoiceDescription, voiceDesc)
-      #assert_kind_of(String, voiceDesc.name)
-      #assert_kind_of(String, voiceDesc.comment)
+      assert_kind_of(Array, voiceDesc.name)
+      assert_kind_of(Array, voiceDesc.comment)
     end
   end
 end

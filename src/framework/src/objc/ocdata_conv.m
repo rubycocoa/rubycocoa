@@ -78,7 +78,7 @@ void remove_from_rb2oc_cache(VALUE rbobj)
 static BOOL
 cary_to_rbary (void *data, char *octype_str, VALUE *result)
 {
-  long i, count, size;
+  long i, count, size, pos;
   char *p, backup;
   VALUE ary;
 
@@ -94,16 +94,17 @@ cary_to_rbary (void *data, char *octype_str, VALUE *result)
   *octype_str = backup;
 
   // second, remove the trailing ']'
-  size = strlen(octype_str);
-  *(octype_str + size - 1) = '\0';
+  pos = strlen(octype_str)-1;
+  octype_str[pos] = '\0';
   size = ocdata_size(octype_str);
+  octype_str[pos] = ']';
 
   // third, convert every element into a new array
   ary = rb_ary_new();
   for (i = 0; i < count; i++) {
     VALUE entry;
 
-    if (!ocdata_to_rbobj(Qnil, octype_str, *((void **)data + (i * size)), &entry, NO)) {
+    if (!ocdata_to_rbobj(Qnil, octype_str, ((char *)data + (i * size)), &entry, NO)) {
       *result = Qnil;
       return NO;
     }
@@ -299,7 +300,7 @@ ocdata_to_rbobj (VALUE context_obj, const char *octype_str, const void *ocdata, 
       break;
   
     case _C_ARY_B:
-      f_success = cary_to_rbary(*(void **)ocdata, (char *)octype_str, &rbval); 
+      f_success = cary_to_rbary((void *)ocdata, (char *)octype_str, &rbval); 
       break;
 
     case _C_BOOL:
