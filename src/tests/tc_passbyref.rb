@@ -177,8 +177,8 @@ class TC_PassByRef < Test::Unit::TestCase
 
     def test_null_accepted
         assert_raises(ArgumentError) { OSX::NSCountWindows(nil) }
-        #r = OSX::NSCountWindows()
-        #assert_kind_of(Fixnum, r)
+        r = OSX::NSCountWindows()
+        assert_kind_of(Fixnum, r)
     end
 
     def test_in_c_array_fixed_length
