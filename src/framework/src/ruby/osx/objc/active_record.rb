@@ -101,7 +101,13 @@ module OSX
       options[:validates_immediately] ||= false
       
       # if there are any columns already, first remove them.
-      self.tableColumns.each { |column| self.removeTableColumn(column) }
+      cols = self.tableColumns
+      if cols.count > 0
+        # we create a temporary array because we do not want to mutate the
+        # original one during the enumeration
+        tmpCols = OSX::NSArray.arrayWithArray(cols)
+        tmpCols.each { |column| self.removeTableColumn(column) }
+      end
       
       options[:model].column_names.each do |column_name|
         # skip columns

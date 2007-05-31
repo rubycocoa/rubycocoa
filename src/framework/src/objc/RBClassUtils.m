@@ -19,6 +19,10 @@
 #import "OverrideMixin.h"
 #import "ocdata_conv.h"
 
+// XXX: the NSMutableDictionary-based hashing methods should be rewritten
+// to use st_table, which is 1) faster and 2) independent from ObjC (no need
+// to create autorelease pools etc...).
+
 #if MAC_OS_X_VERSION_MAX_ALLOWED > MAC_OS_X_VERSION_10_4
 
 Class objc_class_alloc(const char* name, Class super_class)
@@ -97,18 +101,25 @@ static NSMutableDictionary* class_dic_by_value()
   return dic;
 }
 
+static NSMutableDictionary* derived_class_dic()
+{
+  static NSMutableDictionary* dic = nil;
+  if (!dic) dic = [[NSMutableDictionary alloc] init];
+  return dic;
+}
+
 @interface RBClassMapInfo : NSObject {
   NSString* kls_name;
   NSNumber* kls_value;
 }
-- initWithName:(const char*)name value:(VALUE) kls;
+- (id)initWithName:(const char*)name value:(VALUE) kls;
 - (NSString*) name;
 - (NSNumber*) value;
 @end
 
 @implementation RBClassMapInfo
-- initWithName:(const char*)name value:(VALUE) kls {
-  self = [super init];
+- (id)initWithName:(const char*)name value:(VALUE) kls {
+  self = [self init];
   if (self) {
     kls_name = [[NSString alloc] initWithUTF8String: name];
     kls_value = [[NSNumber alloc] initWithUnsignedLong: kls];
@@ -178,6 +189,26 @@ Class RBObjcClassNew(VALUE kls, const char* name, Class super_class)
   return c;
 }
 
+BOOL is_objc_derived_class(VALUE kls)
+{
+  id pool;
+  BOOL ok;
+ 
+  pool = [[NSAutoreleasePool alloc] init];
+  ok = [derived_class_dic() objectForKey:[NSNumber numberWithUnsignedLong:kls]] != nil;
+  [pool release];
+  return ok;
+}
+
+void derived_class_dic_add(VALUE kls)
+{
+  id pool;
+ 
+  pool = [[NSAutoreleasePool alloc] init];
+  [derived_class_dic() setObject:[NSNumber numberWithBool:YES] forKey:[NSNumber numberWithUnsignedLong:kls]];
+  [pool release];
+}
+
 Class RBObjcDerivedClassNew(VALUE kls, const char* name, Class super_class)
 {
   Class c;
@@ -195,7 +226,8 @@ Class RBObjcDerivedClassNew(VALUE kls, const char* name, Class super_class)
   
   // add class to runtime system
   objc_registerClassPair(c);
-  class_map_dic_add (name, kls);
+  class_map_dic_add(name, kls);
+  derived_class_dic_add(kls);
   return c;
 }
 

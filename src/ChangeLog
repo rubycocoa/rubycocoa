@@ -13,6 +13,18 @@
 
 2007-05-31  Laurent Sansonetti <lsansonetti@apple.com>
 
+	* framework/src/objc/mdl_osxobjc.m:
+	Better logging.
+
+	* framework/src/objc/RBClassUtils.h,
+	  framework/src/objc/RBClassUtils.m,
+	  framework/src/objc/OverrideMixin.m:
+	Do not enable direct-override into ruby-derived classes.
+
+	* framework/src/ruby/osx/objc/active_record.rb:
+	When removing all table columns, make sure to iterate on a duplicate array
+	to not mutate the original one during the enumeration.
+
 	* framework/src/ruby/osx/objc/oc_import.rb:
 	When auto-overriding Objective-C methods, before doing the override compare
 	the methods arity and raise an exception if they are not the same.
