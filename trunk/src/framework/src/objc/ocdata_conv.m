@@ -81,6 +81,7 @@ cary_to_rbary (void *data, char *octype_str, VALUE *result)
   long i, count, size, pos;
   char *p, backup;
   VALUE ary;
+  BOOL ok;
 
   octype_str++;
   p = octype_str;
@@ -94,26 +95,31 @@ cary_to_rbary (void *data, char *octype_str, VALUE *result)
   *octype_str = backup;
 
   // second, remove the trailing ']'
-  pos = strlen(octype_str)-1;
+  pos = strlen(octype_str) - 1;
   octype_str[pos] = '\0';
   size = ocdata_size(octype_str);
-  octype_str[pos] = ']';
 
   // third, convert every element into a new array
   ary = rb_ary_new();
   for (i = 0; i < count; i++) {
     VALUE entry;
 
-    if (!ocdata_to_rbobj(Qnil, octype_str, ((char *)data + (i * size)), &entry, NO)) {
+    if (!ocdata_to_rbobj(Qnil, octype_str, (*(void **)data + (i * size)), &entry, NO)) {
       *result = Qnil;
-      return NO;
+      ok = NO;
+      goto bail;
     }
 
     rb_ary_push(ary, entry);
   }
 
   *result = ary;
-  return YES;
+  ok = YES;
+
+bail:
+  // put back the trailing ']'
+  octype_str[pos] = ']';
+  return ok;
 }
 
 size_t
@@ -300,7 +306,7 @@ ocdata_to_rbobj (VALUE context_obj, const char *octype_str, const void *ocdata, 
       break;
   
     case _C_ARY_B:
-      f_success = cary_to_rbary((void *)ocdata, (char *)octype_str, &rbval); 
+      f_success = cary_to_rbary(*(void **)ocdata, (char *)octype_str, &rbval); 
       break;
 
     case _C_BOOL:

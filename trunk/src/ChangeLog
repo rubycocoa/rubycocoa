@@ -1,3 +1,18 @@
+2007-05-31  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* framework/src/ruby/osx/objc/oc_wrapper.rb:
+	Added a convenience Ruby -> Objective-C shortcut, to call #foo= instead of 
+	#setFoo.
+
+	* framework/src/ruby/osx/objc/ruby_addition.rb:
+	Added some convenience API to pack/unpack Pascal strings.
+
+	* framework/src/objc/libffi.m,
+	  framework/src/objc/ocdata_conv.m,
+	  framework/src/objc/BridgeSupport.m,
+	  tests/tc_wrapper.rb:
+	Fixed some new bugs in the C_ARY_B type support. Added test cases.
+
 2007-05-31  Fujimoto Hisa  <hisa@fobj.com>
 
 	* framework/src/ruby/osx/objc/oc_attachments.rb:
@@ -7,6 +22,7 @@
 	added a test to assert NSStirng#length is the number of characters
 	rather than bytes. (failed the test currently)
 
+>>>>>>> .r1795
 2007-05-30  Laurent Sansonetti <lsansonetti@apple.com>
 
 	* AUTHORS:
