@@ -77,7 +77,17 @@ module OSX
 
       # remove `?' suffix (to keep compatibility)
       # explicit predicate if `?' suffix with OSX.relaxed_syntax
-      as_predicate = (m_name.sub!(/\?$/, '') && OSX.relaxed_syntax) ? true : false
+      as_predicate = false
+      if m_name[-1] == ??
+        m_name.chop!
+        as_predicate = OSX.relaxed_syntax
+      end
+
+      # convert foo= to setFoo
+      if m_name[-1] == ?=
+        m_name.chop!
+        m_name = 'set' + m_name[0].chr.upcase + m_name[1..-1]
+      end
 
       # check call style
       #   as Objective-C: [self aaa: a0 Bbb: a1 Ccc: a2]

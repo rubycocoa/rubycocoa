@@ -225,7 +225,7 @@ rb_ffi_dispatch (
 {
   int         length_args[MAX_ARGS];
   unsigned    length_args_count;
-  unsigned    pointers_args[MAX_ARGS];
+  int         pointers_args[MAX_ARGS];
   unsigned    pointers_args_count;
   unsigned    skipped;
   int         i;
@@ -566,8 +566,7 @@ rb_ffi_dispatch (
                 if (length_value != 0) {
                   if (*octype_str == _C_ARY_B) {
                     char *p = (char *)octype_str;
-                    p++;
-                    while (isdigit(*p)) { p++; }
+                    do { p++; } while (isdigit(*p));
                     snprintf(fake_octype_str, sizeof fake_octype_str, "[%ld%s", length_value, p);
                     octype_str = fake_octype_str;
                   }

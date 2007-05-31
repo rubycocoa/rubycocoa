@@ -680,10 +680,21 @@ rb_bs_struct_get (VALUE rcv)
   if (rb_ivar_defined(rcv, ivar_id) == Qfalse) {
     void *data;
     char *octype;
+    BOOL ok;
 
     data = rb_bs_struct_get_field_data(rcv, &octype);
-    if (!ocdata_to_rbobj(Qnil, octype, data, &result, NO))
-      rb_raise(rb_eRuntimeError, "Can't convert data %p of type %s to Ruby", data, octype);
+    if (*octype == _C_ARY_B) {
+      // Need to pass a pointer to pointer to the conversion routine, because
+      // that's what it expects.
+      void *p = &data;
+      ok = ocdata_to_rbobj(Qnil, octype, &p, &result, NO);
+    }
+    else {
+      ok = ocdata_to_rbobj(Qnil, octype, data, &result, NO);
+    }
+    if (!ok)
+      rb_raise(rb_eRuntimeError, "Can't convert data %p of type %s to Ruby", 
+        data, octype);
 
     rb_ivar_set(rcv, ivar_id, result);
   }

@@ -145,13 +145,32 @@ class TC_OCObjWrapper < Test::Unit::TestCase
     return unless File.exist?(File.join(path, 'Resources/BridgeSupport/SpeechSynthesis.bridgesupport'))
     OSX.require_framework(path)
     error, numVoices = OSX.CountVoices
-    numVoices.times do |i|
-      error, voiceSpec = OSX.GetIndVoice(i)
-      assert_kind_of(OSX::VoiceSpec, voiceSpec)
-      error, voiceDesc = OSX.GetVoiceDescription(voiceSpec, 362)
-      assert_kind_of(OSX::VoiceDescription, voiceDesc)
+    (1..numVoices).each do |i|
+      voiceSpec = OSX::VoiceSpec.new
+      error = OSX.GetIndVoice(i, voiceSpec)
+      voiceDesc = OSX::VoiceDescription.new
+      error = OSX.GetVoiceDescription(voiceSpec, voiceDesc, 362)
       assert_kind_of(Array, voiceDesc.name)
+      assert_equal(64, voiceDesc.name.length)
+      str = voiceDesc.name.pack_as_pstring
+      assert_kind_of(String, str)
+      assert_equal(voiceDesc.name[0..str.length], str.unpack_as_pstring)
       assert_kind_of(Array, voiceDesc.comment)
+      assert_equal(256, voiceDesc.comment.length)
+      str = voiceDesc.comment.pack_as_pstring
+      assert_kind_of(String, str)
+      assert_equal(voiceDesc.comment[0..str.length], str.unpack_as_pstring)
     end
+  end
+
+  def test_convenience_setters
+    button = OSX::NSButton.alloc.initWithFrame(NSZeroRect)
+    assert_kind_of(OSX::NSControl, button)
+    button.intValue = 1
+    assert_equal(1, button.intValue)
+    button.stringValue = '0'
+    assert_equal('0', button.stringValue)
+    button.objectValue = true
+    assert_equal(true, button.objectValue.to_ruby)
   end
 end

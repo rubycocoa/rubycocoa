@@ -5,6 +5,7 @@
 # RubyCocoa is free software, covered under either the Ruby's license or the 
 # LGPL. See the COPYRIGHT file for more information.
 
+# String additions.
 class String
 
   def nsencoding
@@ -21,6 +22,7 @@ class String
 
 end
 
+# Property list API.
 module OSX
   def load_plist(data)
     nsdata = OSX::NSData.alloc.initWithBytes_length(data.to_s)
@@ -58,5 +60,21 @@ end
     def to_plist(format=nil)
       OSX.object_to_plist(self, format)
     end
+  end
+end
+
+# Pascal strings API.
+class Array
+  def pack_as_pstring
+    len = self[0]
+    self[1..-1].pack("C#{len}")
+  end
+end
+
+class String
+  def unpack_as_pstring
+    ary = [self.length]
+    ary.concat(self.unpack('C*'))
+    return ary
   end
 end
