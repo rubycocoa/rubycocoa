@@ -313,7 +313,7 @@ module OSX
       if _ns_enable_override?(sel, class_method)
         expected_arity = sel.scan(/:/).length
         if expected_arity != arity
-          raise RuntimeError, "Cannot override Objective-C method #{sel} with Ruby method #{sym} (expected arity #{expected_arity}, got #{arity})"
+          raise RuntimeError, "Cannot override Objective-C method '#{sel}' with Ruby method ##{sym}, they should both have the same number of arguments. (expected arity #{expected_arity}, got #{arity})"
         end
         OSX.objc_class_method_add(self, sel, class_method, nil)
       end
