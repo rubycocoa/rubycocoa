@@ -1,7 +1,14 @@
 # -*- mode:ruby; indent-tabs-mode:nil; coding:utf-8 -*-
 require 'test/unit'
 require 'osx/cocoa'
-$KCODE = 'utf-8'
+
+def with_kcode(k)
+  cur = $KCODE
+  $KCODE = k
+  yield
+ensure
+  $KCODE = cur
+end
 
 class TC_ObjcString < Test::Unit::TestCase
 
@@ -68,8 +75,12 @@ class TC_ObjcString < Test::Unit::TestCase
   end
 
   def test_length
-    str = OSX::NSString.stringWithString('日本語の文字列')
-    assert_equal(7, str.length)
+    with_kcode('utf-8') do
+      assert_equal  7,  OSX::NSString.stringWithString('日本語の文字列').length
+      assert_equal 11, OSX::NSString.stringWithString('English+日本語').length # Japanese
+      assert_equal 15, OSX::NSString.stringWithString('English+العربية').length # Arabic
+      assert_equal 11, OSX::NSString.stringWithString('English+한국어').length # Hungle
+      assert_equal 18, OSX::NSString.stringWithString('English+Российская').length # Russian
+    end
   end
-
 end
