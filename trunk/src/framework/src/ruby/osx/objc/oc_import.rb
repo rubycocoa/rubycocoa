@@ -300,16 +300,23 @@ module OSX
 
     def _ns_behavior_method_added(sym, class_method)
       sel = sym.to_s.gsub(/([^_])_/, '\1:') 
-      arity = if defined?(@__imported_arity) and @__imported_arity != nil and RUBY_VERSION < "1.8.5"
-        # This is a workaround for a Ruby 1.8.2 issue, the real arity is provided by _register_method. 
+      arity = if defined?(@__imported_arity) and @__imported_arity != nil \
+              and RUBY_VERSION < "1.8.5"
+        # This is a workaround for a Ruby 1.8.2 issue, the real arity is 
+        # provided by _register_method. 
         @__imported_arity
       else
         m = class_method ? method(sym) : instance_method(sym)
         m.arity
       end
       sel << ':' if arity > 0 and /[^:]\z/ =~ sel
-      return unless _ns_enable_override?(sel, class_method)
-      OSX.objc_class_method_add(self, sel, class_method, nil)
+      if _ns_enable_override?(sel, class_method)
+        expected_arity = sel.scan(/:/).length
+        if expected_arity != arity
+          raise RuntimeError, "Cannot override Objective-C method #{sel} with Ruby method #{sym} (expected arity #{expected_arity}, got #{arity})"
+        end
+        OSX.objc_class_method_add(self, sel, class_method, nil)
+      end
     end
 
     def _ns_enable_override?(sel, class_method)

@@ -1,5 +1,9 @@
 2007-05-31  Laurent Sansonetti <lsansonetti@apple.com>
 
+	* framework/src/ruby/osx/objc/oc_import.rb:
+	When auto-overriding Objective-C methods, before doing the override compare
+	the methods arity and raise an exception if they are not the same.
+
 	* framework/src/ruby/osx/objc/oc_wrapper.rb:
 	Added a convenience Ruby -> Objective-C shortcut, to call #foo= instead of 
 	#setFoo.
