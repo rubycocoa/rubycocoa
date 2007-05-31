@@ -1,5 +1,7 @@
+# -*- mode:ruby; indent-tabs-mode:nil; coding:utf-8 -*-
 require 'test/unit'
 require 'osx/cocoa'
+$KCODE = 'utf-8'
 
 class TC_ObjcString < Test::Unit::TestCase
 
@@ -63,6 +65,11 @@ class TC_ObjcString < Test::Unit::TestCase
     assert_nothing_raised('can modify mutable string') {
       str.gsub!(/S/, 'X')}
     assert_equal('NXMutableXtring', str.to_s)
+  end
+
+  def test_length
+    str = OSX::NSString.stringWithString('日本語の文字列')
+    assert_equal(7, str.length)
   end
 
 end
