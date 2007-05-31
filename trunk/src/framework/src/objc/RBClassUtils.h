@@ -17,6 +17,8 @@ VALUE RBRubyClassFromObjcClass (Class cls);
 Class RBObjcClassNew(VALUE kls, const char* name, Class super_class);
 Class RBObjcDerivedClassNew(VALUE kls, const char* name, Class super_class);
 
+BOOL is_objc_derived_class(VALUE kls);
+
 Class objc_class_alloc(const char* name, Class super_class);
 
 @interface NSObject(RBOverrideMixin)

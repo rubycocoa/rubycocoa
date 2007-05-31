@@ -116,7 +116,7 @@ ovmix_ffi_closure(ffi_cif* cif, void* resp, void** args, void* userdata)
     rb_ary_store(rb_args, i - 2, arg);
   }
 
-  OVMIX_LOG("calling Ruby method...");
+  OVMIX_LOG("calling Ruby method `%s' on %@...", *(char **)args[1], *(id *)args[0]);
   retval = rbobj_call_ruby(*(id *)args[0], *(SEL *)args[1], rb_args);
   OVMIX_LOG("calling Ruby method done, retval %p", retval);
 
@@ -304,7 +304,7 @@ static id imp_c_allocWithZone(Class klass, SEL method, NSZone* zone)
 }
 
 void 
-ovmix_register_ruby_method(Class klass, SEL method, BOOL override)
+ovmix_register_ruby_method(Class klass, SEL method, BOOL direct_override)
 {
   Method me;
   IMP me_imp, imp;
@@ -321,7 +321,7 @@ ovmix_register_ruby_method(Class klass, SEL method, BOOL override)
   me_types = strdup(method_getTypeEncoding(me));
 
   // override method
-  OVMIX_LOG("Registering Ruby method by selector '%s' types '%s'", (char *)method, me_types);
+  OVMIX_LOG("Registering %sRuby method by selector '%s' types '%s'", direct_override ? "(direct override) " : "", (char *)method, me_types);
   imp = ovmix_imp_for_type(me_types);
   if (me_imp == imp) {
     OVMIX_LOG("Already registered Ruby method by selector '%s' types '%s', skipping...", (char *)method, me_types);
@@ -329,7 +329,7 @@ ovmix_register_ruby_method(Class klass, SEL method, BOOL override)
   }
 
 #if MAC_OS_X_VERSION_MAX_ALLOWED > MAC_OS_X_VERSION_10_4
-  if (override)
+  if (direct_override)
     method_setImplementation(me, imp);
   else
 #endif
