@@ -126,24 +126,28 @@ begin
     
     
     # ActiveRecordProxy
-    def test_proxy_initialization
+    def test_proxy_init
       before = Mailbox.count
-      proxy1 = MailboxProxy.alloc.init({'title' => 'foo'})
+      proxy  = MailboxProxy.alloc.init
       assert Mailbox.count == (before + 1)
-      assert proxy1.title == 'foo'
+    end
     
+    def test_proxy_initWithRecord
+      mailbox = Mailbox.new({ 'title' => 'initWithRecord' })
+      mailbox.save
+      
       before = Mailbox.count
-      proxy2 = MailboxProxy.alloc.init(proxy1.to_activerecord)
+      proxy = MailboxProxy.alloc.initWithRecord(mailbox)
+      
       assert Mailbox.count == before
-      assert_equal proxy1.to_activerecord, proxy2.to_activerecord
-      
-      # create a new record through a proxy
+      assert_equal proxy.to_activerecord, mailbox
+    end
+    
+    def test_proxy_initWithAttributes
       before = Mailbox.count
-      proxy3 = MailboxProxy.alloc.init
+      proxy = MailboxProxy.alloc.initWithAttributes({ 'title' => 'initWithAttributes' })
       assert Mailbox.count == (before + 1)
-      
-      # make sure that we return nil if we pass a wrong arg
-      assert_nil MailboxProxy.alloc.init('foo')
+      assert proxy.to_activerecord.title == 'initWithAttributes'
     end
     
     def test_generated_instance_methods_on_proxy
@@ -179,8 +183,8 @@ begin
     end
   
     def test_proxy_set_and_get_value_for_key
-      mailbox = MailboxProxy.alloc.init({'title' => 'bla'})
-      mailbox.setValue_forKey( [EmailProxy.alloc.init({'subject' => 'whatever', 'body' => 'foobar'})], 'emails' )
+      mailbox = MailboxProxy.alloc.initWithAttributes({'title' => 'bla'})
+      mailbox.setValue_forKey( [EmailProxy.alloc.initWithAttributes({'subject' => 'whatever', 'body' => 'foobar'})], 'emails' )
   
       assert mailbox.valueForKey('title').to_s == 'bla'
       assert mailbox.valueForKey('emails')[0].valueForKey('subject').to_s == 'whatever'

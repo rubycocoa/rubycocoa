@@ -1,5 +1,13 @@
 2007-05-31  Eloy Duran <e.duran@superalloy.nl>
 
+	* framework/src/ruby/osx/objc/active_record.rb,
+	  tests/tc_active_record.rb:
+	Fixed the ActiveRecordProxy#init method, it now takes no arguments.
+	Added ActiveRecordProxy#initWithRecord which returns a proxy for an existing record.
+	Added ActiveRecordProxy#initWithAttributes which creates a record with the attributes and returns a proxy. 
+
+2007-05-31  Eloy Duran <e.duran@superalloy.nl>
+
 	* framework/src/ruby/osx/objc/oc_import.rb:
 	Added a more descriptive message for the arity check.
 

@@ -21,7 +21,7 @@ end
 class ActiveRecord::Base
   def to_activerecord_proxy
     klass = Object.const_get("#{self.class.to_s}Proxy")
-    return klass.alloc.init(self)
+    return klass.alloc.initWithRecord(self)
   end
   alias_method :to_activerecord_proxies, :to_activerecord_proxy
 end
@@ -151,26 +151,15 @@ module OSX
       end
     end
     
-    # Returns a new record proxy instance.
-    # If the +arg+ is a ActiveRecord::Base instance it will return a proxy for that record.
-    # If the +arg+ is a hash a new ActiveRecord::Base instance will be instantiated and will be passed the hash.
-    def init(arg = nil)
+    # Creates a new record and returns a proxy for it.
+    def init
       if super_init
-        if arg.nil?
-          # instantiate a new record
+        # instantiate a new record if necessary
+        unless @record
           @record = self.record_class.send(:new)
           return nil unless @record.save
-        elsif arg.is_a? Hash
-          # instantiate a new record with the options in arg
-          @record = record_class.send(:new, arg)
-          return nil unless @record.save
-        elsif arg.is_a? ActiveRecord::Base
-          # use the passed record
-          @record = arg
-        else
-          return nil
         end
-
+        
         # define all the record attributes getters and setters
         @record.attribute_names.each do |m|
           self.class.class_eval do
@@ -194,6 +183,19 @@ module OSX
         
         return self
       end
+    end
+    
+    # Takes an existing record as an argument and returns a proxy for it.
+    def initWithRecord(record)
+      @record = record
+      self.init
+    end
+    
+    # Creates a new record with the given attributes and returns a proxy for it.
+    def initWithAttributes(attributes)
+      @record = record_class.send(:new, attributes)
+      return nil unless @record.save
+      self.init
     end
     
     # Returns the model class for this proxy
