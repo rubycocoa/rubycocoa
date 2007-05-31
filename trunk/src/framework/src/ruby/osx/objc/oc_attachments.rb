@@ -46,7 +46,7 @@ module OSX
     alias_method :objc_method_missing, :method_missing
     def method_missing(mname, *args)
       ## TODO: shoud test "respondsToSelector:"
-      if String.public_method_defined?(mname) && (mname != 'length')
+      if String.public_method_defined?(mname) && (mname != :length)
         # call as Ruby string
         rcv = self.to_s
         org_val = rcv.dup

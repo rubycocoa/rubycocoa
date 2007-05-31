@@ -1,5 +1,8 @@
 2007-05-31  Fujimoto Hisa  <hisa@fobj.com>
 
+	* framework/src/ruby/osx/objc/oc_attachments.rb:
+	 fixed NSString#length issue.
+
 	* tests/tc_nsstring_compat.rb:
 	added a test to assert NSStirng#length is the number of characters
 	rather than bytes. (failed the test currently)
