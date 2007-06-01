@@ -340,7 +340,16 @@ rb_ffi_dispatch (
       arg_types[i + argc_delta] = &ffi_type_pointer;
       if (*octype_str == _C_PTR) {
         // Regular pointer.
-        arg_values[i + argc_delta] = &arg_values[i + argc_delta];
+        //long size = ocdata_size(octype_str + 1);
+        //if (size <= sizeof(void *)) {
+        //  arg_values[i + argc_delta] = &arg_values[i + argc_delta];
+        //}
+        //else {
+          void *value;
+          value = alloca(sizeof(void *));
+          *(void **)value = OCDATA_ALLOCA(octype_str+1);
+          arg_values[i + argc_delta] = value; 
+        //}
       }
       else {
         // C_ARY.
@@ -349,7 +358,8 @@ rb_ffi_dispatch (
         *(void **)value = OCDATA_ALLOCA(octype_str);
         arg_values[i + argc_delta] = value; 
       }
-      FFI_LOG("omitted_pointer[%d] (%p) : %s", i, arg_values[i + argc_delta], octype_str);
+      FFI_LOG("omitted_pointer[%d] (%p) : %s", i, arg_values[i + argc_delta], 
+        octype_str);
       skipped++;
     }
     // Regular argument.
@@ -552,30 +562,48 @@ rb_ffi_dispatch (
         octype_str = ARG_OCTYPESTR(i);
         if (*octype_str == _C_PTR)
           octype_str++;
-        FFI_LOG("got omitted_pointer[%d] : %s (%p)", i, octype_str, value);
-        rbval = Qnil;
         if (*octype_str == _C_CONST)
           octype_str++;
+        FFI_LOG("got omitted_pointer[%d] : %s (%p)", i, octype_str, value);
+        rbval = Qnil;
         if ((*octype_str == _C_PTR || *octype_str == _C_ARY_B) 
-            && (bs_arg = find_bs_arg_by_index(call_entry, i, expected_argc)) != NULL) {
+            && (bs_arg = find_bs_arg_by_index(call_entry, i, expected_argc)) 
+              != NULL) {
 
           switch (bs_arg->c_ary_type) {
             case bsCArrayArgDelimitedByArg:
               {
-                long length_value = (long)arg_values[bs_arg->c_ary_type_value + argc_delta];
-                if (length_value != 0) {
+                void *length_data;
+                long length_value;
+
+                length_data = 
+                  arg_values[bs_arg->c_ary_type_value + argc_delta];
+                if (length_data == NULL) {
+                  length_value = 0;
+                }
+                else if (IS_POINTER_ARG(bs_arg->c_ary_type_value)) {
+                  long *p = *(long **)length_data;
+                  length_value = *p;
+                }
+                else {
+                  length_value = *(long *)length_data;
+                } 
+
+                if (length_value > 0) {
                   if (*octype_str == _C_ARY_B) {
                     char *p = (char *)octype_str;
                     do { p++; } while (isdigit(*p));
-                    snprintf(fake_octype_str, sizeof fake_octype_str, "[%ld%s", length_value, p);
+                    snprintf(fake_octype_str, sizeof fake_octype_str, 
+                      "[%ld%s", length_value, p);
                     octype_str = fake_octype_str;
                   }
                   else {
-                    rbval = rb_str_new((char *)value, length_value * ocdata_size(octype_str));
+                    rbval = rb_str_new((char *)value, 
+                      length_value * ocdata_size(octype_str));
                   }
                 }
                 else {
-                  FFI_LOG("array length should have been returned by argument #%d, but it's NULL, defaulting on ObjCPtr", bs_arg->c_ary_type_value);
+                  FFI_LOG("array length should have been returned by argument #%d, but it's invalid (%ld), defaulting on ObjCPtr", bs_arg->c_ary_type_value, length_value);
                 }
               }
               break;
@@ -595,7 +623,12 @@ rb_ffi_dispatch (
         }
 
         if (NIL_P(rbval)) {
-          if (!ocdata_to_rbobj(Qnil, octype_str, &value, &rbval, YES))
+          void *p;
+          if (*octype_str == _C_ARY_B)
+            p = &value;
+          else
+            p = *(void **)value;
+          if (!ocdata_to_rbobj(Qnil, octype_str, p, &rbval, YES))
             return rb_err_new(ocdataconv_err_class(), "Cannot convert the passed-by-reference argument #%d as '%s' to Ruby", i, octype_str);
         }
         (*retain_if_necessary)(rbval, NO, retain_if_necessary_ctx);
