@@ -220,7 +220,7 @@ class TC_PassByRef < Test::Unit::TestCase
       OSX::NSURL.URLWithString('file:///doesNotExist'), 
       OSX::NSArray.array)
     assert_kind_of(Array, ary)
-    assert_equal(4, ary.length) # XXX not working yet, size is 3.
+    assert_equal(4, ary.length)
     assert_equal(false, ary.first)
   end
 
