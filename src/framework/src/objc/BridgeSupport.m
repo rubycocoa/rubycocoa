@@ -355,6 +355,16 @@ rb_bs_boxed_get_encoding (VALUE rcv)
 }
 
 static VALUE
+rb_bs_boxed_get_size (VALUE rcv)
+{
+  struct bsBoxed *boxed;
+
+  boxed = find_bs_boxed_for_klass(rcv);
+
+  return LONG2NUM(bs_boxed_size(boxed));
+}
+
+static VALUE
 rb_bs_boxed_get_fields (VALUE rcv)
 {
   struct bsBoxed *boxed;
@@ -1914,6 +1924,7 @@ initialize_bridge_support (VALUE mOSX)
   cOSXBoxed = rb_define_class_under(mOSX, "Boxed", rb_cObject);
   ivarEncodingID = rb_intern("@__encoding__");
   rb_define_singleton_method(cOSXBoxed, "encoding", rb_bs_boxed_get_encoding, 0);
+  rb_define_singleton_method(cOSXBoxed, "size", rb_bs_boxed_get_size, 0);
   rb_define_singleton_method(cOSXBoxed, "fields", rb_bs_boxed_get_fields, 0);
   rb_define_singleton_method(cOSXBoxed, "opaque?", rb_bs_boxed_is_opaque, 0);
 
