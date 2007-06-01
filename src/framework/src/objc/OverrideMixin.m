@@ -125,7 +125,7 @@ ovmix_ffi_closure(ffi_cif* cif, void* resp, void** args, void* userdata)
     struct bsBoxed *bs_boxed;
     if (is_boxed_ptr(args_octypes[i - 2], &bs_boxed)) {
       VALUE arg = RARRAY(rb_args)->ptr[i - 2];
-      rb_bs_boxed_get_data(arg, bs_boxed->encoding, NULL, NULL);
+      rb_bs_boxed_get_data(arg, bs_boxed->encoding, NULL, NULL, NO);
     }
   }
 

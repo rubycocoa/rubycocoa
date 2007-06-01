@@ -510,7 +510,7 @@ rb_bs_boxed_ptr_new_from_ocdata (struct bsBoxed *bs_boxed, void *ocdata)
 }
 
 static void *
-rb_bs_boxed_struct_get_data(VALUE obj, struct bsBoxed *bs_boxed, size_t *size, BOOL *success)
+rb_bs_boxed_struct_get_data(VALUE obj, struct bsBoxed *bs_boxed, size_t *size, BOOL *success, BOOL clean_ivars)
 {
   void *  data;
   int     i;
@@ -550,6 +550,9 @@ rb_bs_boxed_struct_get_data(VALUE obj, struct bsBoxed *bs_boxed, size_t *size, B
       val = rb_ivar_get(obj, ivar_id);
       snprintf(buf, sizeof buf, "%s=", bs_boxed->opt.s.fields[i].name);
       rb_funcall(obj, rb_intern(buf), 1, val);
+
+      if (clean_ivars)
+        rb_obj_remove_instance_variable(obj, ID2SYM(ivar_id));
     } 
   }
   Data_Get_Struct(obj, void, data);
@@ -583,7 +586,7 @@ rb_bs_boxed_opaque_get_data(VALUE obj, struct bsBoxed *bs_boxed, size_t *size, B
 }
 
 void *
-rb_bs_boxed_get_data(VALUE obj, const char *encoding, size_t *psize, BOOL *psuccess)
+rb_bs_boxed_get_data(VALUE obj, const char *encoding, size_t *psize, BOOL *psuccess, BOOL clean_ivars)
 {
   struct bsBoxed *bs_boxed;
   void *data;
@@ -598,7 +601,7 @@ rb_bs_boxed_get_data(VALUE obj, const char *encoding, size_t *psize, BOOL *psucc
   if (bs_boxed != NULL) {
     switch (bs_boxed->type) {
       case bsBoxedStructType:
-        data = rb_bs_boxed_struct_get_data(obj, bs_boxed, &size, &success);
+        data = rb_bs_boxed_struct_get_data(obj, bs_boxed, &size, &success, clean_ivars);
         break;
       
       case bsBoxedOpaqueType:

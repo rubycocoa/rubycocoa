@@ -76,7 +76,7 @@ void remove_from_rb2oc_cache(VALUE rbobj)
 }
 
 static BOOL
-cary_to_rbary (void *data, char *octype_str, VALUE *result)
+convert_cary(VALUE *result, void *ocdata, char *octype_str, BOOL to_ruby)
 {
   long i, count, size, pos;
   char *p, backup;
@@ -99,27 +99,66 @@ cary_to_rbary (void *data, char *octype_str, VALUE *result)
   octype_str[pos] = '\0';
   size = ocdata_size(octype_str);
 
-  // third, convert every element into a new array
-  ary = rb_ary_new();
-  for (i = 0; i < count; i++) {
-    VALUE entry;
+  // third, do the conversion
+  if (to_ruby) {
+    ary = rb_ary_new();
+    for (i = 0; i < count; i++) {
+      VALUE entry;
+      void *p;
 
-    if (!ocdata_to_rbobj(Qnil, octype_str, (*(void **)data + (i * size)), &entry, NO)) {
-      *result = Qnil;
-      ok = NO;
-      goto bail;
+      p = *(void **)ocdata + (i * size);
+      if (!ocdata_to_rbobj(Qnil, octype_str, p, &entry, NO)) {
+        *result = Qnil;
+        ok = NO;
+        goto bail;
+      }
+      rb_ary_push(ary, entry);
     }
-
-    rb_ary_push(ary, entry);
+    
+    *result = ary;
+    ok = YES;
   }
+  else {
+    VALUE ary;
 
-  *result = ary;
-  ok = YES;
+    ary = *result;
+
+    Check_Type(ary, T_ARRAY);
+    if (RARRAY(ary)->len > count)
+      rb_raise(rb_eArgError, 
+        "Given Array expected with maximum %d elements, but got %d",
+        count, RARRAY(ary)->len);
+
+    for (i = 0; i < RARRAY(ary)->len; i++) {
+      VALUE val;
+      void *p;
+
+      val = RARRAY(ary)->ptr[i];
+      p = ocdata + (i * size);
+      if (!rbobj_to_ocdata(val, octype_str, p, NO)) {
+        ok = NO;
+        goto bail;
+      } 
+    }
+    ok = YES;
+  }
 
 bail:
   // put back the trailing ']'
   octype_str[pos] = ']';
   return ok;
+}
+
+static BOOL
+rbobj_to_cary (VALUE obj, void *data, char *octype_str)
+{
+  return convert_cary(&obj, data, octype_str, NO);
+}
+
+static BOOL
+cary_to_rbary (void *data, char *octype_str, VALUE *result)
+{
+  return convert_cary(result, data, octype_str, YES);
 }
 
 size_t
@@ -841,7 +880,7 @@ rbobj_to_objcptr (VALUE obj, void** cptr, const char *octype_str)
     if (bs_boxed == NULL)
       return NO;
 
-    data = rb_bs_boxed_get_data(obj, bs_boxed->encoding, NULL, &ok);
+    data = rb_bs_boxed_get_data(obj, bs_boxed->encoding, NULL, &ok, YES);
     if (!ok)
       return NO;
     *cptr = data;
@@ -919,7 +958,7 @@ rbobj_to_ocdata (VALUE obj, const char *octype_str, void* ocdata, BOOL to_libffi
     void *data;
     size_t size;
 
-    data = rb_bs_boxed_get_data(obj, octype_str, &size, &f_success);
+    data = rb_bs_boxed_get_data(obj, octype_str, &size, &f_success, YES);
     if (f_success) {
       if (data == NULL)
         *(void **)ocdata = NULL;
@@ -1006,18 +1045,16 @@ rbobj_to_ocdata (VALUE obj, const char *octype_str, void* ocdata, BOOL to_libffi
       if (is_id_ptr(octype_str)) {
         f_success = rbobj_to_idptr(obj, ocdata);
       }
-#if 0
-      else if (is_boxed_ptr(octype_str, &bs_boxed)) {
-        void *data = rb_bs_boxed_get_data(obj, bs_boxed->encoding, NULL, &f_success);
-        *(void **)ocdata = &data;
-      }
-#endif
       else {
         f_success = rbobj_to_objcptr(obj, ocdata, octype_str + 1);
         if (!f_success)
           f_success = rbobj_to_funcptr(obj, ocdata, octype_str + 1);
       }
       break;
+
+    case _C_ARY_B:
+      f_success = rbobj_to_cary(obj, ocdata, octype_str);
+      break;   
 
     default:
       f_success = NO;
