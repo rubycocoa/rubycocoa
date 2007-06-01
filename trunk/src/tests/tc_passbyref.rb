@@ -232,6 +232,8 @@ class TC_PassByRef < Test::Unit::TestCase
     assert_equal(362, voiceDescSize)
     error, numVoices = OSX.CountVoices
     assert(numVoices > 1)
+    globalVoiceSpec = OSX::VoiceSpec.new
+    globalVoiceDesc = OSX::VoiceDescription.new
     (1..numVoices).each do |i|
       # Get the spec by passing a reference to an existing spec structure, and also
       # by omitting the parameter, and verify that they are the same.
@@ -241,6 +243,9 @@ class TC_PassByRef < Test::Unit::TestCase
       error, voiceSpec2 = OSX.GetIndVoice(i)
       assert_equal(0, error)
       assert_equal(voiceSpec, voiceSpec2)
+      error = OSX.GetIndVoice(i, globalVoiceSpec)
+      assert_equal(0, error)
+      assert_equal(voiceSpec, globalVoiceSpec)
 
       # Same for the desc.
       voiceDesc = OSX::VoiceDescription.new
@@ -249,6 +254,9 @@ class TC_PassByRef < Test::Unit::TestCase
       error, voiceDesc2 = OSX.GetVoiceDescription(voiceSpec, voiceDescSize)
       assert_equal(0, error)
       assert_equal(voiceDesc, voiceDesc2)
+      error = OSX.GetVoiceDescription(voiceSpec, globalVoiceDesc, voiceDescSize)
+      assert_equal(0, error)
+      assert_equal(voiceDesc, globalVoiceDesc)
 
       # Test the pstring stuff. 
       assert_kind_of(Array, voiceDesc.name)
@@ -262,6 +270,12 @@ class TC_PassByRef < Test::Unit::TestCase
       assert_kind_of(String, str)
       assert_equal(voiceDesc.comment[0..str.length], str.unpack_as_pstring)
     end
+
+    # Test C_ARY setters.
+    globalVoiceDesc.name = 'foo'.unpack_as_pstring
+    assert_equal('foo',globalVoiceDesc.name.pack_as_pstring)
+    assert_raises(TypeError) { globalVoiceDesc.name = 'str' }
+    assert_raises(ArgumentError) { globalVoiceDesc.name = (0..65).to_a }
   end
 
   # TODO:

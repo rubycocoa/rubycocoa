@@ -1,5 +1,15 @@
 2007-06-01  Laurent Sansonetti <lsansonetti@apple.com>
 
+	* framework/src/objc/ocdata_conv.m,
+	  framework/src/objc/OverrideMixin.m,
+	  framework/src/objc/BridgeSupport.h,
+	  framework/src/objc/BridgeSupport.m,
+	  tests/tc_passbyref.rb:
+	- Fixed bugs when passing existing boxed structures as output arguments, 
+	  now we make sure the cached ivars are cleaned ;
+	- Added setter support for C_ARY types.
+	- Added test cases.
+
 	* framework/src/objc/libffi.m:
 	Fixed bugs when retrieving out arguments by omitting them.
 
