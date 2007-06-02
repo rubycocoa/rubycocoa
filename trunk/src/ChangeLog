@@ -1,3 +1,7 @@
+2007-06-01  kimura wataru <kimuraw@i.nifty.jp>
+	* sample/RubyAnywhere/English.lproj/Rcode.nib/:
+	code area (top NSTextView) accepts plain text, not styled text.
+
 2007-06-01  Laurent Sansonetti <lsansonetti@apple.com>
 
 	* framework/src/objc/ocdata_conv.m,
