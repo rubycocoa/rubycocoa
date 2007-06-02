@@ -2,6 +2,9 @@
 	* sample/RubyAnywhere/English.lproj/Rcode.nib/:
 	code area (top NSTextView) accepts plain text, not styled text.
 
+	* sample/Scripts/sndplay3.rb:
+	delete sndplay3.rb, this script is not different from sndplay2.rb.
+
 2007-06-01  Laurent Sansonetti <lsansonetti@apple.com>
 
 	* framework/src/objc/ocdata_conv.m,
