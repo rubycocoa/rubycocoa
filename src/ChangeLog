@@ -1,4 +1,10 @@
+2007-06-02  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* sample/Scripts/speak2.rb:
+	Print error if SpeechSynthesis is not supported (no bridge support file).
+
 2007-06-01  kimura wataru <kimuraw@i.nifty.jp>
+
 	* sample/RubyAnywhere/English.lproj/Rcode.nib/:
 	code area (top NSTextView) accepts plain text, not styled text.
 

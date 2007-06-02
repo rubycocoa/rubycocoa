@@ -1,6 +1,14 @@
 # Make the computer speak, using the SpeechSynthesis framework.
 require 'osx/foundation'
-OSX.require_framework '/System/Library/Frameworks/ApplicationServices.framework/Frameworks/SpeechSynthesis.framework'
+
+path = '/System/Library/Frameworks/ApplicationServices.framework/Frameworks/SpeechSynthesis.framework'
+
+unless File.exist?(File.join(path, 'Resources/BridgeSupport/SpeechSynthesis.bridgesupport'))
+  $stderr.puts "SpeechSynthesis.framework not supported"
+  exit 1
+end
+
+OSX.require_framework(path)
 
 error, channel =  OSX.NewSpeechChannel(nil)
 if error != 0
