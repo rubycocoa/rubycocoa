@@ -1,3 +1,10 @@
+2007-06-03  Eloy Duran <e.duran@superalloy.nl>
+
+	* framework/src/ruby/osx/objc/active_record.rb:
+	Adds documentation for ActiveRecordConnector.connect_to_sqlite_in_application_support().
+	Fixed a bug in rbSetValue_forKey where to_ruby could be called on a nil object.
+	Patch supplied by Justin Palmer.
+
 2007-06-02  Laurent Sansonetti <lsansonetti@apple.com>
 
 	* sample/Scripts/speak2.rb:
