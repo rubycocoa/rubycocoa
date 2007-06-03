@@ -249,7 +249,6 @@ module OSX
     # it's called when a update has occured.
     def rbSetValue_forKey(value, key)
       # puts "setValue_forKey('#{value}', '#{key}')"
-    
       if is_association? key
         # we are dealing with an association (only has_many for now),
         # so add the newest record to the has_many association of the @record
@@ -259,7 +258,7 @@ module OSX
         # FIXME: this is slow! check if there's another way to add the latest record to the array without reloading everything.
         @record.reload
       else
-        @record[key.to_s] = value.to_ruby
+        @record[key.to_s] = value.to_ruby rescue nil
         result = @record.save
       end
       return result
@@ -311,15 +310,25 @@ module OSX
     end
     module_function :connect_to_sqlite
     
+    # Connect to an SQLite database stored in the applications support directory ~/USER/Library/Application Support/APP/APP.sqlite.
+    # <tt>:always_migrate</tt> Always run migrations when this method is invoked, false by default.
+    # <tt>:migrations_dir</tt> The directory where migrations are stored, migrate/ by default.
+    # <tt>:log</tt> Log database activity, false by default.
+    #
+    #   ActiveRecordConnector.connect_to_sqlite_in_application_support :log => true
+    #
+    # If you run this for the first time and haven't already created a migration to create your database
+    # tables, etc., you'll need to force the migration if :always_migrate isn't enabled.
     def connect_to_sqlite_in_application_support(options = {})
       options[:always_migrate] ||= false
+      options[:migrations_dir] ||= 'migrate/'
 
       dbfile = File.join(self.get_app_support_path, "#{self.get_app_name}.sqlite")
       # connect
       self.connect_to_sqlite(dbfile, options)
       # do any necessary migrations
       if not File.exists?(dbfile) or options[:always_migrate]
-        migrations_dir = File.join(OSX::NSBundle.mainBundle.resourcePath.fileSystemRepresentation.to_s, 'migrate/')
+        migrations_dir = File.join(OSX::NSBundle.mainBundle.resourcePath.fileSystemRepresentation.to_s, options[:migrations_dir])
         # do a migration to the latest version
         ActiveRecord::Migrator.migrate(migrations_dir, nil)
       end
@@ -342,7 +351,6 @@ module OSX
         require 'FileUtils'
         FileUtils.mkdir_p(path_to_this_apps_app_support_dir)
       end
-
       return path_to_this_apps_app_support_dir
     end
     module_function :get_app_support_path
