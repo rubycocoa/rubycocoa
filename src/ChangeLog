@@ -1,3 +1,5 @@
+=== RubyCocoa 0.11.1 ===
+
 2007-06-03  Eloy Duran <e.duran@superalloy.nl>
 
 	* framework/tool/gen_bridge_doc/lib/lib/hpricot_proxy.rb:
