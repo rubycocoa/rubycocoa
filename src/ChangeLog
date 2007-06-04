@@ -1,3 +1,9 @@
+2007-06-03  Eloy Duran <e.duran@superalloy.nl>
+
+	* framework/tool/gen_bridge_doc/lib/lib/hpricot_proxy.rb:
+	Added Hpricot 0.5.x compatibility to the BridgeDoc tool.
+	Patch by Justin Palmer.
+
 2007-06-03  Laurent Sansonetti <lsansonetti@apple.com>
 
 	* framework/src/objc/ocdata_conv.m:

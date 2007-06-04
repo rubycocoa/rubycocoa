@@ -10,7 +10,7 @@ module CocoaRef
       @exclude_constant_names = ['NSString', 'NSSize']
       
       doc = open(file) {|f| Hpricot f, :fixup_tags => true }
-      @elements = (doc/"//body/*")
+      @elements = (doc/"//body/*").select{ |e| e.is_a?(Hpricot::Elem) }
     end
   
     def start_of_method_def?(index)
