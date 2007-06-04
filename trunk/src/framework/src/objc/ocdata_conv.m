@@ -684,17 +684,14 @@ ocid_to_rbobj (VALUE context_obj, id ocid)
   if (ocid == nil) 
     return Qnil;
 
-  ok = NO;
-  if (context_obj != Qfalse) {
-    // Cache new Ruby object addresses in an internal table to 
-    // avoid duplication.
-    //
-    // We are locking the access to the cache twice (lookup + insert) as
-    // ocobj_s_new is succeptible to call us again, to avoid a deadlock.
-    CACHE_LOCK(&oc2rbCacheLock);
-    ok = st_lookup(oc2rbCache, (st_data_t)ocid, (st_data_t *)&result);
-    CACHE_UNLOCK(&oc2rbCacheLock);
-  }
+  // Cache new Ruby object addresses in an internal table to 
+  // avoid duplication.
+  //
+  // We are locking the access to the cache twice (lookup + insert) as
+  // ocobj_s_new is succeptible to call us again, to avoid a deadlock.
+  CACHE_LOCK(&oc2rbCacheLock);
+  ok = st_lookup(oc2rbCache, (st_data_t)ocid, (st_data_t *)&result);
+  CACHE_UNLOCK(&oc2rbCacheLock);
 
   if (!ok) {
     struct bsConst *  bs_const;
