@@ -521,8 +521,9 @@ rb_bs_boxed_struct_get_data(VALUE obj, struct bsBoxed *bs_boxed, size_t *size, B
 {
   void *  data;
   int     i;
- 
-  *success = NO;
+
+  if (success != NULL) 
+    *success = NO;
  
   if (NIL_P(obj))
     return NULL;
@@ -564,8 +565,10 @@ rb_bs_boxed_struct_get_data(VALUE obj, struct bsBoxed *bs_boxed, size_t *size, B
   }
   Data_Get_Struct(obj, void, data);
 
-  *size = bs_boxed_size(bs_boxed);
-  *success = YES;
+  if (size != NULL)
+    *size = bs_boxed_size(bs_boxed);
+  if (success != NULL)
+    *success = YES;
 
   return data;
 }
@@ -790,6 +793,18 @@ rb_bs_struct_is_equal (VALUE rcv, VALUE other)
 }
 
 static VALUE
+rb_bs_struct_dup (VALUE rcv)
+{
+  struct bsBoxed * bs_struct;
+  void  *data;
+
+  bs_struct = rb_bs_struct_get_bs_struct(CLASS_OF(rcv));
+  data = rb_bs_boxed_struct_get_data(rcv, bs_struct, NULL, NULL, NO);
+
+  return rb_bs_boxed_new_from_ocdata(bs_struct, data);
+}
+
+static VALUE
 rb_define_bs_boxed_class (VALUE mOSX, const char *name, const char *encoding)
 {
   VALUE klass;
@@ -851,6 +866,7 @@ init_bs_boxed_struct (VALUE mOSX, const char *name, const char *decorated_encodi
   }
   rb_define_singleton_method(klass, "new", rb_bs_struct_new, -1);
   rb_define_method(klass, "==", rb_bs_struct_is_equal, 1);
+  rb_define_method(klass, "dup", rb_bs_struct_dup, 0);
 
   // Allocate and return bs_boxed entry.
   bs_boxed = init_bs_boxed(bsBoxedStructType, name, encoding, klass);

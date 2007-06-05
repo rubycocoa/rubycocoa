@@ -1,3 +1,10 @@
+2007-06-05  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* framework/src/objc/BridgeSupport.m,
+	  tests/tc_types.rb:
+	Define #dup for C structures boxed types, that returns a new copy of the
+	instance. Added test case.
+
 2007-06-05  Eloy Duran <e.duran@superalloy.nl>
 
 	* framework/src/ruby/osx/objc/active_record.rb,
