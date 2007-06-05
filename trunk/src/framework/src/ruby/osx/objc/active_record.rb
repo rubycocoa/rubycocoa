@@ -19,9 +19,25 @@ end
 # ---------------------------------------------------------
 
 class ActiveRecord::Base
+  class << self
+    alias_method :__inherited_before_proxy__, :inherited
+    def inherited(klass)
+      proxy_klass = "#{klass.to_s}Proxy"
+      unless Object.const_defined?(proxy_klass)
+        eval "class ::#{proxy_klass} < OSX::ActiveRecordProxy; end;"
+        # FIXME: This leads to a TypeError originating from: oc_import.rb:618:in `method_added'
+        # Object.const_set proxy_klass, Class.new(OSX::ActiveRecordProxy)
+      end
+      self.__inherited_before_proxy__(klass)
+    end
+  end
+  
+  # Returns a proxy for this instance.
   def to_activerecord_proxy
-    klass = Object.const_get("#{self.class.to_s}Proxy")
-    return klass.alloc.initWithRecord(self)
+    if self.class.instance_variable_get(:@proxy_klass).nil?
+      self.class.instance_variable_set(:@proxy_klass, Object.const_get("#{self.class.to_s}Proxy"))
+    end
+    return self.class.instance_variable_get(:@proxy_klass).alloc.initWithRecord(self)
   end
   alias_method :to_activerecord_proxies, :to_activerecord_proxy
 end
