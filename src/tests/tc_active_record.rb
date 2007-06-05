@@ -25,9 +25,11 @@ begin
   
     validates_presence_of :title
   end
-
-  class MailboxProxy < OSX::ActiveRecordProxy
-  end
+  
+  # Commented this out so we can test the automatic generation of proxy classes
+  #
+  # class MailboxProxy < OSX::ActiveRecordProxy
+  # end
 
   class Email < ActiveRecord::Base
     belongs_to :mailbox
@@ -77,6 +79,9 @@ begin
       assert mailboxes.original_records.first.is_a?(Mailbox)
     end
     # ActiveRecord::Base
+    def test_automatically_creates_a_proxy
+      assert Object.const_defined?('MailboxProxy')
+    end
     def test_activerecord_to_proxy
       mailbox = Mailbox.new({'title' => 'foo'})
       mailbox.save
