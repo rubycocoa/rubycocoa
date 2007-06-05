@@ -1,3 +1,9 @@
+2007-06-04  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* framework/src/objc/ocdata_conv.m,
+	  framework/src/objc/BridgeSupport.m:
+	Fixed NULL to C strings and opaque types conversion.
+
 === RubyCocoa 0.11.1 ===
 
 2007-06-03  Eloy Duran <e.duran@superalloy.nl>
