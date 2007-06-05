@@ -490,7 +490,14 @@ VALUE
 rb_bs_boxed_new_from_ocdata (struct bsBoxed *bs_boxed, void *ocdata)
 {
   void *data;
-    
+
+  if (ocdata == NULL)
+    return Qnil;
+  if (bs_boxed->type == bsBoxedOpaqueType) {
+    if (*(void **)ocdata == NULL)
+      return Qnil;
+  }
+  
   if (bs_boxed->type == bsBoxedStructType)
     bs_boxed_size(bs_boxed);
   if (bs_boxed->size == 0)

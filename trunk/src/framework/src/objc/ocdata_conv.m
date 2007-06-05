@@ -407,7 +407,10 @@ ocdata_to_rbobj (VALUE context_obj, const char *octype_str, const void *ocdata, 
       break;
 
     case _C_CHARPTR:
-      rbval = rb_str_new2(*(char**)ocdata); 
+      if (*(void **)ocdata == NULL)
+        rbval = Qnil;
+      else
+        rbval = rb_str_new2(*(char **)ocdata); 
       break;
   
     default:
