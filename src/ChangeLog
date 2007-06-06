@@ -1,5 +1,10 @@
 2007-06-05  Laurent Sansonetti <lsansonetti@apple.com>
 
+	* framework/src/ruby/osx/objc/oc_import.rb,
+	  framework/src/objc/mdl_objwrapper.m,
+	  tests/tc_wrapper.rb:
+	Fixed some bugs when importing NSProxy-based classes.
+
 	* framework/src/objc/BridgeSupport.m,
 	  tests/tc_types.rb:
 	Define #dup for C structures boxed types, that returns a new copy of the
