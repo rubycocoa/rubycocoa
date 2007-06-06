@@ -224,11 +224,10 @@ module OSX
     occls_superclass = occls.oc_superclass
     if occls_superclass.nil? or occls_superclass.__ocid__ == occls.__ocid__ 
       OSX::ObjcID
-    elsif occls_superclass.is_a?(OSX::NSProxy) 
+    elsif occls_superclass.is_a?(OSX::NSProxy) or occls_superclass.__ocid__ == OSX::NSProxy.__ocid__
       OSX::NSProxy
     else
       begin
-        # OSX.const_get("#{occls_superclass}".to_sym) 
         OSX.const_get(occls_superclass.to_s.to_sym) 
       rescue NameError
         # some ObjC internal class cannot become Ruby constant
