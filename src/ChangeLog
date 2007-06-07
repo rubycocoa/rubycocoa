@@ -1,3 +1,8 @@
+2007-06-06  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* framework/src/ruby/osx/objc/foundation.rb:
+	Updated the header to mention the new licensing message.
+
 2007-06-05  Laurent Sansonetti <lsansonetti@apple.com>
 
 	* framework/src/ruby/osx/objc/oc_import.rb,
