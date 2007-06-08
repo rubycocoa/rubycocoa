@@ -298,6 +298,7 @@ module OSX
     end
 
     def _ns_behavior_method_added(sym, class_method)
+      return if OSX._ignore_ns_override
       sel = sym.to_s.gsub(/([^_])_/, '\1:') 
       arity = if defined?(@__imported_arity) and @__imported_arity != nil \
               and RUBY_VERSION < "1.8.5"
