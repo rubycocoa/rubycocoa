@@ -32,5 +32,10 @@ VALUE ocobj_s_new (id ocid);
 id    rbobj_get_ocid (VALUE rcv);
 VALUE ocid_get_rbobj (id ocid);
 
+/** misc **/
+VALUE rb_osx_class_const (const char* name);
+VALUE rb_cls_ocobj (const char* name);
+VALUE ocobj_s_class (void);
+
 /** initialize **/
 void initialize_mdl_osxobjc();

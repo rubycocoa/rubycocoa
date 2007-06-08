@@ -20,6 +20,8 @@
 #import "ocexception.h"
 #import "objc_compat.h"
 
+#define OCM_AUTO_REGISTER 0 
+
 static VALUE _mObjWrapper = Qnil;
 static VALUE _mClsWrapper = Qnil;
 
@@ -40,7 +42,9 @@ ocm_retain_arg_if_necessary (VALUE result, BOOL is_result, void *context)
 
   // Retain if necessary the returned ObjC value unless it was generated 
   // by "alloc/allocWithZone/new/copy/mutableCopy". 
-  // Some classes may always return a static dummy object (placeholder) for every [-alloc], so we shouldn't release the return value of these messages.
+  // Some classes may always return a static dummy object (placeholder) for
+  // every [-alloc], so we shouldn't release the return value of these 
+  // messages.
   if (!NIL_P(result) && rb_obj_is_kind_of(result, objid_s_class()) == Qtrue) {
     if (!OBJCID_DATA_PTR(result)->retained
         && selector != @selector(alloc)
@@ -64,6 +68,133 @@ ocm_retain_arg_if_necessary (VALUE result, BOOL is_result, void *context)
     if (selector != @selector(alloc) && selector != @selector(allocWithZone:))
       OBJCID_DATA_PTR(result)->can_be_released = YES;
   }
+}
+
+static void
+ocm_closure_handler(ffi_cif *cif, void *resp, void **args, void *userdata)
+{
+  VALUE rcv, argv, mname;
+
+  OBJWRP_LOG("ocm_closure_handler ...");
+
+  rcv = (*(VALUE **)args)[0];
+  argv = (*(VALUE **)args)[1];
+  mname = (VALUE)userdata;
+
+  rb_ary_unshift(argv, Qnil);
+  rb_ary_unshift(argv, mname);
+
+  *(VALUE *)resp = wrapper_ocm_send(RARRAY(argv)->len, RARRAY(argv)->ptr, rcv); 
+  
+  OBJWRP_LOG("ocm_closure_handler ok");
+}
+
+static void *
+ocm_ffi_closure(VALUE mname)
+{
+  static ffi_cif *cif = NULL;
+  ffi_closure *closure;
+
+  if (cif == NULL) {
+    static ffi_type *args[3];
+
+    cif = (ffi_cif *)malloc(sizeof(ffi_cif));
+    ASSERT_ALLOC(cif);
+
+    args[0] = &ffi_type_pointer;
+    args[1] = &ffi_type_pointer;
+    args[2] = NULL;   
+
+    if (ffi_prep_cif(cif, FFI_DEFAULT_ABI, 2, &ffi_type_pointer, args) 
+        != FFI_OK) {
+      free(cif);
+      return NULL;
+    } 
+  }
+
+  closure = (ffi_closure *)malloc(sizeof(ffi_closure));
+  ASSERT_ALLOC(closure);
+ 
+  if (ffi_prep_closure(closure, cif, ocm_closure_handler, (void *)mname) 
+      != FFI_OK)
+    return NULL;
+
+  return closure; 
+}
+
+static BOOL ignore_ns_override = NO;
+
+static VALUE
+wrapper_ignore_ns_override (VALUE rcv)
+{
+  return ignore_ns_override ? Qtrue : Qfalse;
+}
+
+static void
+ocm_register(Class klass, VALUE oc_mname, VALUE rb_mname, SEL selector, 
+  BOOL is_class_method)
+{
+  Class c;
+  Method (*getMethod)(Class, SEL);
+  VALUE rclass;
+  RB_ID rclass_id;
+  void *closure;
+  char *rb_mname_str;
+
+  // Let's locate the original class where the method is defined.
+  getMethod = is_class_method ? class_getClassMethod : class_getInstanceMethod;
+  while ((c = class_getSuperclass(klass)) != NULL 
+         && (*getMethod)(c, selector) != NULL) { 
+    klass = c; 
+  }
+
+  // Find the class.
+  rclass_id = rb_intern(class_getName(klass));
+  if (!rb_const_defined(osx_s_module(), rclass_id)
+      || (rclass = rb_const_get(osx_s_module(), rclass_id)) == Qnil) {
+    OBJWRP_LOG("cannot register Ruby method (problem when getting class)");
+    return;
+  }
+
+  // Create the closure.
+  closure = ocm_ffi_closure(oc_mname);
+  if (closure == NULL) {
+    OBJWRP_LOG("cannot register Ruby method (problem when creating closure)");
+    return;
+  }
+
+  rb_mname_str = rb_id2name(SYM2ID(rb_mname));
+  OBJWRP_LOG("registering Ruby %s method `%s' on `%s'", 
+    is_class_method ? "class" : "instance", rb_mname_str, 
+    rb_class2name(rclass));
+
+  // Map.
+  ignore_ns_override = YES;
+  if (is_class_method)
+    rb_define_singleton_method(rclass, rb_mname_str, closure, -2); 
+  else
+    rb_define_method(rclass, rb_mname_str, closure, -2);
+  ignore_ns_override = NO;
+
+  // This is a dirty trick to make sure the mname object won't be collected.
+  {
+    RB_ID   mname_id;
+    VALUE   ary;
+
+    mname_id = rb_intern("@__mnames__");
+    if (rb_ivar_defined(rclass, mname_id) == Qtrue) {
+      ary = rb_ivar_get(rclass, mname_id);
+    }
+    else {
+      ary = rb_ary_new();
+      rb_ivar_set(rclass, mname_id, ary);
+    }
+    rb_ary_push(ary, oc_mname);
+  } 
+
+  OBJWRP_LOG("registered Ruby %s method `%s' on `%s'", 
+    is_class_method ? "class" : "instance", rb_mname_str, 
+    rb_class2name(rclass));
 }
 
 static VALUE
@@ -123,14 +254,25 @@ ocm_send(int argc, VALUE* argv, VALUE rcv, VALUE* result)
 
   decode_method_encoding(method != NULL ? method_getTypeEncoding(method) : NULL, methodSignature, &numberOfArguments, &methodReturnType, &argumentsTypes, YES);
 
-  argc--;
-  argv++;
-
   struct _ocm_retain_context context = { rcv, selector };
 
   is_class_method = TYPE(rcv) == T_CLASS;
-  klass = is_class_method ? (Class) oc_rcv : object_getClass(oc_rcv);
-  
+  if (is_class_method)
+    klass = (Class)oc_rcv;
+
+#if OCM_AUTO_REGISTER 
+  if (!NIL_P(argv[1])
+      && !rb_obj_is_kind_of(rcv, ocobj_s_class())
+      && method != NULL 
+      && rb_respond_to(rcv, SYM2ID(argv[1])) == 0)
+    ocm_register(klass, argv[0], argv[1], selector, is_class_method);
+#endif
+
+  argc--; // skip objc method name
+  argv++;
+  argc--; // skip ruby method name
+  argv++;
+
   OBJWRP_LOG("ocm_send (%s%c%s): args_count=%d ret_type=%s", class_getName(klass), is_class_method ? '.' : '#', selector, argc, methodReturnType);
 
   // Easy case: a method returning ID (or nothing) _and_ without argument.
@@ -484,6 +626,8 @@ init_mdl_OCObjWrapper(VALUE outer)
 
   rb_define_method(_mClsWrapper, "_objc_alias_method", wrapper_objc_alias_method, 2);
   rb_define_method(_mClsWrapper, "_objc_alias_class_method", wrapper_objc_alias_class_method, 2);
+
+  rb_define_module_function(outer, "_ignore_ns_override", wrapper_ignore_ns_override, 0);
 
   return Qnil;
 }

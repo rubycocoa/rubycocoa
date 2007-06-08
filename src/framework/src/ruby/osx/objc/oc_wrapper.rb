@@ -41,13 +41,13 @@ module OSX
         end
       end
       mname.chomp!(':') if args.size == 1
-      return self.ocm_send(mname, *margs)
+      return self.ocm_send(mname, nil, *margs)
     end
 
     def method_missing(mname, *args)
       m_name, m_args, as_predicate = analyze_missing(mname, args)
       begin
-        result = self.ocm_send(m_name, *m_args)
+        result = self.ocm_send(m_name, mname, *m_args)
         if as_predicate && result.is_a?(Integer) then
           result != 0
         else
