@@ -1,4 +1,5 @@
 #!/usr/bin/env ruby -Ku
+# vim:ts=2:sw=2:expandtab:
 # Copyright (c) 2006-2007, The RubyCocoa Project.
 # Copyright (c) 2007 Chris Mcgrath. (from nb_nibtool.rb)
 # Copyright (c) 2007 cho45. (rubycocoa command)
@@ -21,352 +22,343 @@ include FileUtils
 include OSX
 
 class RubyCocoaCommand
-	VERSION = "$Revision$"
+  VERSION = "$Revision$"
 
-	def self.run(argv)
-		new(argv.dup).run
-	end
+  def self.run(argv)
+    new(argv.dup).run
+  end
 
-	def initialize(argv)
-		@argv = argv
+  def initialize(argv)
+    @argv = argv
 
-		@subparsers = {
-			"help" => OptionParser.new { |opts|
-				opts.banner = <<-EOB.gsub(/^\t+/, "")
-					Usage: rubycocoa help <subcommand>
+    @subparsers = {
+      "help" => OptionParser.new { |opts|
+        opts.banner = <<-EOB.gsub(/^ {10}/, "")
+          Usage: rubycocoa help <subcommand>
 
-					Show help of subcommand.
-				EOB
-			},
+          Show help of subcommand.
+        EOB
+      },
 
-			"new" => OptionParser.new {|opts|
-				opts.banner = <<-EOB.gsub(/^\t+/, "")
-					Usage: rubycocoa create [options] "Application Name"
+      "new" => OptionParser.new {|opts|
+        opts.banner = <<-EOB.gsub(/^ {10}/, "")
+          Usage: rubycocoa create [options] "Application Name"
 
-					Create new application skelton.
-				EOB
+          Create new application skelton.
+        EOB
 
-				opts.separator ""
+        opts.separator ""
 
-				opts.separator "Options:"
-				opts.on("--template TEMPLATE", "specify templates (template dir.)") {|@template|}
-			},
+        opts.separator "Options:"
+        opts.on("--template TEMPLATE", "specify templates (template dir.)") {|@template|}
+      },
 
-#			"package" => OptionParser.new {|opts|
-#				opts.banner = <<-EOB.gsub(/^\t+/, "")
-#					Usage: rubycocoa package
-#
-#					This subcommand just runs `rake package'.
-#				EOB
-#			},
-#
-			# TODO: think better name
-			"update" =>  OptionParser.new {|opts|
-				opts.banner = <<-EOB.gsub(/^\t+/, "")
-					Usage: rubycocoa updatenib [options] <Nib File> <Ruby File>
+      "update" =>  OptionParser.new {|opts|
+        opts.banner = <<-EOB.gsub(/^ {10}/, "")
+          Usage: rubycocoa updatenib [options] <Nib File> <Ruby File>
 
-					Update nib with ruby class difinition.
-				EOB
-				opts.separator ""
+          Update nib with ruby class difinition.
+        EOB
+        opts.separator ""
 
-				opts.separator "Options:"
-				opts.on("-a", "--add_class", "Add class if the class is not in nib.") {|@add_class|}
-			},
+        opts.separator "Options:"
+        opts.on("-a", "--add_class", "Add class if the class is not in nib.") {|@add_class|}
+      },
 
-			"convert" =>  OptionParser.new {|opts|
-				opts.banner = <<-EOB.gsub(/^\t+/, "")
-					Usage: rubycocoa convert [options] <Nib File | Obj-c Header File>
+      "convert" =>  OptionParser.new {|opts|
+        opts.banner = <<-EOB.gsub(/^ {10}/, "")
+          Usage: rubycocoa convert [options] <Nib File | Obj-c Header File>
 
-					Generate files including ruby class from a nib or header.
-				EOB
+          Generate files including ruby class from a nib or header.
+        EOB
 
-				opts.separator ""
+        opts.separator ""
 
-				opts.separator "Options:"
-				opts.on("--overwrite", "overwite all files") {|@overwrite|}
-			},
-		}
+        opts.separator "Options:"
+        opts.on("--overwrite", "overwite all files") {|@overwrite|}
+      },
+    }
 
-		@parser = OptionParser.new do |parser|
-			parser.banner  = <<-EOB.gsub(/^\t+/, "")
-				Usage: rubycocoa <subcommand> [options] <files>
+    @parser = OptionParser.new do |parser|
+      parser.banner  = <<-EOB.gsub(/^ {8}/, "")
+        Usage: rubycocoa <subcommand> [options] <files>
 
-				`rubycocoa' command is a part of RubyCocoa.
-				This is for creating new application skelton.
+        `rubycocoa' command is a part of RubyCocoa.
+        This is for creating new application skelton.
 
-				Intro:
-				        You can make RubyCocoa application skelton with `new' subcommand.
+        Intro:
+                You can make RubyCocoa application skelton with `new' subcommand.
 
-				            rubycocoa new "New RubyCocoa Application"
-				
-				        After selecting template, rubycocoa make applicatoin dir in current.
-			EOB
+                    rubycocoa new "New RubyCocoa Application"
 
-			parser.separator ""
+                After selecting template, rubycocoa make applicatoin dir in current.
+      EOB
 
-			parser.separator "Subcommands:"
-			@subparsers.keys.sort.each do |k|
-				parser.separator "#{parser.summary_indent}    #{k}"
-			end
+      parser.separator ""
 
-			parser.separator ""
+      parser.separator "Subcommands:"
+      @subparsers.keys.sort.each do |k|
+        parser.separator "#{parser.summary_indent}    #{k}"
+      end
 
-			parser.separator "Options:"
-			parser.on('--version', "Show version string `#{VERSION}'") do
-				puts VERSION
-				exit
-			end
-		end
-	end
+      parser.separator ""
 
-	def run
-		@parser.order!(@argv)
-		if @argv.empty?
-			puts @parser.help
-			exit
-		else
-			subcommand = @argv.shift
-			method_name = "cmd_#{subcommand}"
-			if self.respond_to?(method_name)
-				@subparsers[subcommand].parse!(@argv)
-				self.send(method_name)
-			else
-				abort "Not implemented subcommand: `#{subcommand}'."
-			end
-		end
-	end
+      parser.separator "Options:"
+      parser.on('--version', "Show version string `#{VERSION}'") do
+        puts VERSION
+        exit
+      end
+    end
+  end
 
-	def cmd_new
-		appname, = @argv
-		abort "Application Name must be required" if appname.empty?
+  def run
+    @parser.order!(@argv)
+    if @argv.empty?
+      puts @parser.help
+      exit
+    else
+      subcommand = @argv.shift
+      method_name = "cmd_#{subcommand}"
+      if self.respond_to?(method_name)
+        @subparsers[subcommand].parse!(@argv)
+        self.send(method_name)
+      else
+        abort "Not implemented subcommand: `#{subcommand}'."
+      end
+    end
+  end
 
-		templates = Pathname.glob("#{ENV["HOME"]}/.rubycocoa/templates/*")
-		templates.concat Pathname.glob("/Library/Application Support/Apple/Developer Tools/Project Templates/Application/Cocoa-Ruby*")
-		templates.each_with_index do |f,i|
-			puts "% 2d: %s %s" % [i, f.basename, i == 0 ? "(default)" : ""]
-		end
-		print "Select Template> "
-		num = $stdin.gets.chomp
-		num = "0" if num.empty?
-		abort "Canceled since inputed not a number" unless num =~ /^\d/
+  def cmd_new
+    appname, = @argv
+    abort "Application Name must be required" if appname.empty?
 
-		num = num.to_i
-		template = templates[num]
-		puts "Creating `#{appname}' using `#{template.basename}'..."
+    templates = Pathname.glob("#{ENV["HOME"]}/.rubycocoa/templates/*")
+    templates.concat Pathname.glob("/Library/Application Support/Apple/Developer Tools/Project Templates/Application/Cocoa-Ruby*")
+    templates.each_with_index do |f,i|
+      puts "% 2d: %s %s" % [i, f.basename, i == 0 ? "(default)" : ""]
+    end
+    print "Select Template> "
+    num = $stdin.gets.chomp
+    num = "0" if num.empty?
+    abort "Canceled since inputed not a number" unless num =~ /^\d/
 
-		dest = Pathname.new(appname)
-		abort "#{appname} is exists. Cancel." if dest.exist?
-		cp_r template, dest
-		Pathname.glob(dest + "*Cocoa*App*") do |f|
-			f.rename(f.parent + f.basename.to_s.sub(/Cocoa(?:Doc)?App/, appname))
-		end
-		(dest + "#{appname}.xcodeproj/TemplateInfo.plist").unlink
-		Pathname.glob(dest + "**/*") do |f|
-			puts "=> #{f.realpath.to_s.sub(Pathname.pwd.to_s + "/", "")}"
-			next unless f.file?
-			f.open("rb+") do |g| 
-				content = apply_template(g.read, :project_name => appname, :file => f)
-				g.rewind
-				g << content
-				g.truncate g.tell
-			end
-		end
-	end
+    num = num.to_i
+    template = templates[num]
+    puts "Creating `#{appname}' using `#{template.basename}'..."
 
-	def cmd_convert
-		file = Pathname.new @argv[0]
-		tmpl = DATA.read
+    dest = Pathname.new(appname)
+    abort "#{appname} is exists. Cancel." if dest.exist?
+    cp_r template, dest
+    Pathname.glob(dest + "*Cocoa*App*") do |f|
+      f.rename(f.parent + f.basename.to_s.sub(/Cocoa(?:Doc)?App/, appname))
+    end
+    (dest + "#{appname}.xcodeproj/TemplateInfo.plist").unlink
+    Pathname.glob(dest + "**/*") do |f|
+      puts "=> #{f.realpath.to_s.sub(Pathname.pwd.to_s + "/", "")}"
+      next unless f.file?
+      f.open("rb+") do |g| 
+        content = apply_template(g.read, :project_name => appname, :file => f)
+        g.rewind
+        g << content
+        g.truncate g.tell
+      end
+    end
+  end
 
-		if file.extname == ".nib"
-			plist_path = file + "classes.nib"
-			plist = NSPropertyListSerialization.objc_send(
-				:propertyListFromData, NSData.alloc.initWithContentsOfFile(plist_path.to_s),
-				:mutabilityOption, NSPropertyListMutableContainersAndLeaves,
-				:format, nil,
-				:errorDescription, nil
-			)
-			unless plist
-				abort "Error while reading `#{nib}'"
-			end
-			plist["IBClasses"].each do |l|
-				class_name  = l["CLASS"].to_s
-				next if class_name == "FirstResponder"
-				super_class = l["SUPERCLASS"].to_s
-				actions = l["ACTIONS"] ? l["ACTIONS"].allKeys.map {|i| i.to_s } : []
-				outlets = l["OUTLETS"] ? l["OUTLETS"].allKeys.map {|i| i.to_s } : []
-				result =  ERB.new(tmpl, $SAFE, '-').result(binding)
+  def cmd_convert
+    file = Pathname.new @argv[0]
+    tmpl = DATA.read
 
-				path = Pathname.new(class_name + ".rb")
-				if path.exist?
-					puts "#{path} exists. skip."
-				else
-					puts "-> #{path}"
-					path.open("w") do |f|
-						f.puts result
-					end
-				end
-			end
-		else
-			header = file.read
-			_, class_name, super_class = */@interface ([^\s]+) : ([^\s]+)/.match(header)
+    if file.extname == ".nib"
+      plist_path = file + "classes.nib"
+      plist = NSPropertyListSerialization.objc_send(
+        :propertyListFromData, NSData.alloc.initWithContentsOfFile(plist_path.to_s),
+        :mutabilityOption, NSPropertyListMutableContainersAndLeaves,
+        :format, nil,
+        :errorDescription, nil
+      )
+      unless plist
+        abort "Error while reading `#{nib}'"
+      end
+      plist["IBClasses"].each do |l|
+        class_name  = l["CLASS"].to_s
+        next if class_name == "FirstResponder"
+        super_class = l["SUPERCLASS"].to_s
+        actions = l["ACTIONS"] ? l["ACTIONS"].allKeys.map {|i| i.to_s } : []
+        outlets = l["OUTLETS"] ? l["OUTLETS"].allKeys.map {|i| i.to_s } : []
+        result =  ERB.new(tmpl, $SAFE, '-').result(binding)
 
-			outlets = header.scan(/IBOutlet id (.*?);/)
-			actions = header.scan(/^- \(IBAction\)(.*?):\(id\)sender;/)
-			result =  ERB.new(tmpl, $SAFE, '-').result(binding)
+        path = Pathname.new(class_name + ".rb")
+        if path.exist?
+          puts "#{path} exists. skip."
+        else
+          puts "-> #{path}"
+          path.open("w") do |f|
+            f.puts result
+          end
+        end
+      end
+    else
+      header = file.read
+      _, class_name, super_class = */@interface ([^\s]+) : ([^\s]+)/.match(header)
 
-			path = Pathname.new(class_name + ".rb")
-			if path.exist?
-				puts "#{path} exists. skip."
-			else
-				puts "-> #{path}"
-				path.open("w") do |f|
-					f.puts result
-				end
-			end
-		end
-	end
+      outlets = header.scan(/IBOutlet id (.*?);/)
+      actions = header.scan(/^- \(IBAction\)(.*?):\(id\)sender;/)
+      result =  ERB.new(tmpl, $SAFE, '-').result(binding)
+
+      path = Pathname.new(class_name + ".rb")
+      if path.exist?
+        puts "#{path} exists. skip."
+      else
+        puts "-> #{path}"
+        path.open("w") do |f|
+          f.puts result
+        end
+      end
+    end
+  end
 
 
-	def cmd_update
-		nib, rb, = *@argv
-		nib = Pathname.pwd + nib
-		rb  = Pathname.pwd + rb
-		puts "Update `#{nib.basename}' with `#{rb.basename}'"
+  def cmd_update
+    nib, rb, = *@argv
+    nib = Pathname.pwd + nib
+    rb  = Pathname.pwd + rb
+    puts "Update `#{nib.basename}' with `#{rb.basename}'"
 
-		class << NSObject
-			@@collect_child_classes = false
-			@@subklasses = {}
-			@@current_class = nil
+    class << NSObject
+      @@collect_child_classes = false
+      @@subklasses = {}
+      @@current_class = nil
 
-			def ib_outlets(*args)
-				args.each do |arg|
-					puts "found outlet #{arg} in #{@@current_class}"
-					((@@subklasses[@@current_class] ||= {})[:outlets] ||= []) << arg
-				end
-			end
+      def ib_outlets(*args)
+        args.each do |arg|
+          puts "found outlet #{arg} in #{@@current_class}"
+          ((@@subklasses[@@current_class] ||= {})[:outlets] ||= []) << arg
+        end
+      end
 
-			alias_method :ns_outlet,  :ib_outlets
-			alias_method :ib_outlet,  :ib_outlets
-			alias_method :ns_outlets, :ib_outlets
+      alias_method :ns_outlet,  :ib_outlets
+      alias_method :ib_outlet,  :ib_outlets
+      alias_method :ns_outlets, :ib_outlets
 
-			def ib_action(name, &blk)
-				puts "found action #{name} in #{@@current_class}"
-				((@@subklasses[@@current_class] ||= {})[:actions] ||= []) << name
-			end
+      def ib_action(name, &blk)
+        puts "found action #{name} in #{@@current_class}"
+        ((@@subklasses[@@current_class] ||= {})[:actions] ||= []) << name
+      end
 
-			alias_method :_before_classes_nib_inherited, :inherited
-			def inherited(subklass)
-				if @@collect_child_classes
-					unless subklass.to_s == ""
-						puts "current class: #{subklass.to_s}"
-						@@current_class = subklass.to_s
-					end
-				end
-				_before_classes_nib_inherited(subklass)
-			end
-		end
-		NSObject.instance_eval { @@collect_child_classes = true }
-		load rb
-		NSObject.instance_eval { @@collect_child_classes = false }
+      alias_method :_before_classes_nib_inherited, :inherited
+      def inherited(subklass)
+        if @@collect_child_classes
+          unless subklass.to_s == ""
+            puts "current class: #{subklass.to_s}"
+            @@current_class = subklass.to_s
+          end
+        end
+        _before_classes_nib_inherited(subklass)
+      end
+    end
+    NSObject.instance_eval { @@collect_child_classes = true }
+    load rb
+    NSObject.instance_eval { @@collect_child_classes = false }
 
-		plist_path = nib + "classes.nib"
-		plist = NSPropertyListSerialization.objc_send(
-			:propertyListFromData, NSData.alloc.initWithContentsOfFile(plist_path.to_s),
-			:mutabilityOption, NSPropertyListMutableContainersAndLeaves,
-			:format, nil,
-			:errorDescription, nil
-		)
-		unless plist
-			abort "Error while reading `#{nib}'"
-		end
+    plist_path = nib + "classes.nib"
+    plist = NSPropertyListSerialization.objc_send(
+      :propertyListFromData, NSData.alloc.initWithContentsOfFile(plist_path.to_s),
+      :mutabilityOption, NSPropertyListMutableContainersAndLeaves,
+      :format, nil,
+      :errorDescription, nil
+    )
+    unless plist
+      abort "Error while reading `#{nib}'"
+    end
 
-		NSObject.instance_eval { @@subklasses }.each do |k, v|
-			class_def = plist["IBClasses"].find {|i| i["CLASS"] == k }
-			unless class_def
-				if @add_class
-					class_def = NSMutableDictionary.alloc.init
-					class_def['CLASS'] = k
-					class_def['LANGUAGE'] = 'ObjC'
-					plist['IBClasses'].addObject(class_def)
-				else
-					puts "Ruby class `#{k}' is not in nib."
-					next
-				end
-			end
+    NSObject.instance_eval { @@subklasses }.each do |k, v|
+      class_def = plist["IBClasses"].find {|i| i["CLASS"] == k }
+      unless class_def
+        if @add_class
+          class_def = NSMutableDictionary.alloc.init
+          class_def['CLASS'] = k
+          class_def['LANGUAGE'] = 'ObjC'
+          plist['IBClasses'].addObject(class_def)
+        else
+          puts "Ruby class `#{k}' is not in nib."
+          next
+        end
+      end
 
-			%w(outlets actions).each do |t|
-				next unless v[t.to_sym]
-				updated = NSMutableDictionary.dictionary
-				v[t.to_sym].each do |item|
-					puts "adding #{t} #{item}"
-					updated.setObject_forKey('id', item)
-				end
-				class_def[t.upcase] = updated unless updated.count == 0
-			end
-		end
+      %w(outlets actions).each do |t|
+        next unless v[t.to_sym]
+        updated = NSMutableDictionary.dictionary
+        v[t.to_sym].each do |item|
+          puts "adding #{t} #{item}"
+          updated.setObject_forKey('id', item)
+        end
+        class_def[t.upcase] = updated unless updated.count == 0
+      end
+    end
 
-		plist_path.open("wb") {|f| f.puts plist }
-	end
+    plist_path.open("wb") {|f| f.puts plist }
+  end
 
-	def cmd_help
-		subcommand, = @argv
-		if subcommand
-			if @subparsers.key? subcommand
-				puts @subparsers[subcommand].help
-			else
-				puts "No such subcommand `#{subcommand}'"
-				puts @parser.help
-			end
-		else
-			puts @parser.help
-		end
-	end
+  def cmd_help
+    subcommand, = @argv
+    if subcommand
+      if @subparsers.key? subcommand
+        puts @subparsers[subcommand].help
+      else
+        puts "No such subcommand `#{subcommand}'"
+        puts @parser.help
+      end
+    else
+      puts @parser.help
+    end
+  end
 
-	def cmd_package
-		exec("rake package")
-	end
+  def cmd_package
+    exec("rake package")
+  end
 
-	def apply_template(str, opts)
-		str.gsub(/«([A-Z]+)»/) do
-			m = Regexp.last_match
-			case m[1]
-			when "DATE"
-				now = NSCalendarDate.calendarDate
-				now.setCalendarFormat("%x")
-				now.description
-			when "TIME"
-				now = NSCalendarDate.calendarDate
-				now.setCalendarFormat("%X")
-				now.description
-			when "DIRECTORY"
-				opts[:file].parent.basename
-			when "FILEEXTENSION"
-				opts[:file].extname
-			when "FILENAME"
-				opts[:file].basename
-			when "FILEBASENAME"
-				opts[:file].basename(".*")
-			when "FILEBASENAMEASIDENTIFIER"
-				opts[:file].basename(".*").gsub(/\s+/, "_")
-			when "FULLUSERNAME"
-				NSFullUserName.to_s
-			when "USERNAME"
-				NSUserName.to_s
-			when "PROJECTNAME"
-				opts[:project_name]
-			when "PROJECTNAMEASIDENTIFIER"
-				opts[:project_name].gsub(/\s+/, "_")
-			when "PROJECTNAMEASXML"
-				opts[:project_name].gsub(/&/, "&amp;").gsub(/>/, "&gt;").gsub(/</, "&lt;")
-			else
-				m[0]
-			end
-		end
-	end
+  def apply_template(str, opts)
+    str.gsub(/«([A-Z]+)»/) do
+      m = Regexp.last_match
+      case m[1]
+      when "DATE"
+        now = NSCalendarDate.calendarDate
+        now.setCalendarFormat("%x")
+        now.description
+      when "TIME"
+        now = NSCalendarDate.calendarDate
+        now.setCalendarFormat("%X")
+        now.description
+      when "DIRECTORY"
+        opts[:file].parent.basename
+      when "FILEEXTENSION"
+        opts[:file].extname
+      when "FILENAME"
+        opts[:file].basename
+      when "FILEBASENAME"
+        opts[:file].basename(".*")
+      when "FILEBASENAMEASIDENTIFIER"
+        opts[:file].basename(".*").gsub(/\s+/, "_")
+      when "FULLUSERNAME"
+        NSFullUserName.to_s
+      when "USERNAME"
+        NSUserName.to_s
+      when "PROJECTNAME"
+        opts[:project_name]
+      when "PROJECTNAMEASIDENTIFIER"
+        opts[:project_name].gsub(/\s+/, "_")
+      when "PROJECTNAMEASXML"
+        opts[:project_name].gsub(/&/, "&amp;").gsub(/>/, "&gt;").gsub(/</, "&lt;")
+      else
+        m[0]
+      end
+    end
+  end
 end
 
 if $0 == __FILE__
-	RubyCocoaCommand.run(ARGV)
+  RubyCocoaCommand.run(ARGV)
 end
 
 __END__
@@ -374,17 +366,17 @@ require 'osx/cocoa'
 include OSX
 
 class <%=class_name%> < <%=super_class%>
-	<%- outlets.each do |outlet| -%>
-	ib_outlets :<%=outlet%>
-	<%- end %>
-	<%- actions.each do |action| -%>
+  <%- outlets.each do |outlet| -%>
+  ib_outlets :<%=outlet%>
+  <%- end %>
+  <%- actions.each do |action| -%>
 
-	ib_action :<%=action%> do |sender|
-	end
-	<%- end %>
+  ib_action :<%=action%> do |sender|
+  end
+  <%- end %>
 
-	def awakeFromNib
-	end
+  def awakeFromNib
+  end
 end
 
 
