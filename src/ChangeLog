@@ -1,3 +1,15 @@
+2007-06-09  Eloy Duran <e.duran@superalloy.nl>
+
+	* sample/MailDemo/MailDemoActiveRecordBindings/MailboxProxy.rb,
+	  sample/MailDemo/MailDemoActiveRecordBindings/EmailProxy.rb,
+	  sample/MailDemo/MailDemoActiveRecordBindings/MailDemoActiveRecordBindings.xcodeproj/project.pbxproj,
+	  framework/src/ruby/osx/objc/active_record.rb,
+	  tests/tc_active_record.rb:
+	Added the class method ActiveRecordProxy.on_get() which can be used to define filters to be applied
+	when a specified key is requested in rbValueForKey. So the filter will be run before returning the data.
+	Changed EmailProxy.rb to use the new on_get class method.
+	Removed the MailboxProxy.rb file, because the proxy class will automatically be defined whenever ActiveRecord::Base is inherited.
+
 2007-06-08  Laurent Sansonetti <lsansonetti@apple.com>
 
 	* framework/src/ruby/osx/objc/oc_exception.rb,

@@ -26,7 +26,7 @@ class ActiveRecord::Base
       unless Object.const_defined?(proxy_klass)
         eval "class ::#{proxy_klass} < OSX::ActiveRecordProxy; end;"
         # FIXME: This leads to a TypeError originating from: oc_import.rb:618:in `method_added'
-        # Object.const_set proxy_klass, Class.new(OSX::ActiveRecordProxy)
+        # Object.const_set(proxy_klass, Class.new(OSX::ActiveRecordProxy))
       end
       self.__inherited_before_proxy__(klass)
     end
@@ -150,6 +150,36 @@ module OSX
     
     # class methods
     class << self
+      # Use this class method to set any filters you need when a specific value for a key is requested.
+      # You can pass it a block, or a hash that contains either the key:
+      # - <tt>:return</tt> which needs an array that holds the class to be instantiated as the first element
+      # and the method to be called if the data isn't nil as the second element.
+      # If the data is nil the class will simply be instantiated with the normal alloc.init call.
+      # - <tt>:call</tt> which needs the method that it should call. When the method is called the data is sent as the argument.
+      #
+      #   class EmailProxy < OSX::ActiveRecordProxy
+      #     # on_get filter with: block
+      #     on_get :body do |content|
+      #       content ||= 'I'm so empty'
+      #       OSX::NSAttributedString.alloc.initWithString(content)
+      #     end
+      # 
+      #     # on_get filter with: return
+      #     on_get :subject, :return => [OSX::NSAttributedString, :initWithString]
+      # 
+      #     # on_get filter with: call
+      #     on_get :address, :call => :nsattributed_string_from_address
+      #     # and the method to be called
+      #     def nsattributed_string_from_address(address)
+      #       address ||= 'Emptier than this isn't possible'
+      #       OSX::NSAttributedString.alloc.initWithString(address)
+      #     end
+      #   end
+      def on_get(key, options={}, &block)
+        @on_get_filters ||= {}
+        @on_get_filters[key.to_sym] = ( block.nil? ? options : block )
+      end
+      
       # This find class method passes the message on to the model, but it will return proxies for the returned records
       def find(*args)
         result = self.model_class.find(*args)
@@ -247,7 +277,13 @@ module OSX
     end
   
     # KVC stuff
-  
+    
+    # Get the filter for a given key if it exists.
+    def on_get_filter_for_key(key)
+      filters = self.class.instance_variable_get(:@on_get_filters)
+      filters[key.to_sym] unless filters.nil?
+    end
+    
     # This method is called by the object that self is bound to,
     # if the requested key is a association return proxies for the records.
     def rbValueForKey(key)
@@ -257,7 +293,32 @@ module OSX
         # return the associated records as record proxies
         return @record.send(key.to_s.to_sym).to_activerecord_proxies
       else
-        return @record[key.to_s]
+        if filter = self.on_get_filter_for_key(key)
+          #puts "filter for key: #{key}"
+          if filter.is_a?(Hash)
+            case filter.keys.first
+            when :return
+              klass, method = filter[:return]
+              data = @record[key.to_s]
+              unless data.nil?
+                # if we have data, call the given init method and pass the data
+                return klass.alloc.send(method.to_sym, data)
+              else
+                # if we have no data simply initialize a new instance of klass
+                return klass.alloc.init
+              end
+            when :call
+              # call the given method and pass it the data
+              return self.send(filter[:call], @record[key.to_s])
+            end
+          elsif filter.is_a?(Proc)
+            # call the proc and pass it the data
+            return filter.call(@record[key.to_s])
+          end
+        else
+          # no filter, so simply return the data
+          return @record[key.to_s]
+        end
       end
     end
   
