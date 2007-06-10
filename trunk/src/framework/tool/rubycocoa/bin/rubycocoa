@@ -135,18 +135,22 @@ class RubyCocoaCommand
       puts @parser.help
       exit
     else
-      subcommand = @argv.shift
-      method_name = "cmd_#{subcommand}"
+      @subcommand = @argv.shift
+      method_name = "cmd_#{@subcommand}"
       if self.respond_to?(method_name)
-        @subparsers[subcommand].parse!(@argv)
+        @subparsers[@subcommand].parse!(@argv)
         self.send(method_name)
       else
-        abort "Not implemented subcommand: `#{subcommand}'."
+        puts "Not implemented subcommand: `#{@subcommand}'."
+        puts
+        puts @parser.help
       end
     end
   end
 
   def cmd_new
+    abort @subparsers[@subcommand].help if @argv.empty?
+
     appname, = @argv
     abort "Application Name is required" if appname.nil? || appname.empty?
 
@@ -190,6 +194,8 @@ class RubyCocoaCommand
   end
 
   def cmd_convert
+    abort @subparsers[@subcommand].help if @argv.empty?
+
     file = Pathname.new @argv[0]
     tmpl = DATA.read
 
@@ -244,6 +250,8 @@ class RubyCocoaCommand
 
 
   def cmd_update
+    abort @subparsers[@subcommand].help if @argv.empty?
+
     nib, rb, = *@argv
     nib = Pathname.pwd + nib
     rb  = Pathname.pwd + rb
@@ -343,6 +351,8 @@ class RubyCocoaCommand
   end
 
   def cmd_add
+    abort @subparsers[@subcommand].help if @argv.empty?
+
     proj_path = @argv.pop
     files = @argv
 
