@@ -1,3 +1,8 @@
+2007-06-10  Eloy Duran <e.duran@superalloy.nl>
+
+	* framework/tool/rubycocoa/bin/rubycocoa:
+	Fixed the shebang which was hardcoded to /usr/bin/ruby.
+
 2007-06-09  Eloy Duran <e.duran@superalloy.nl>
 
 	* sample/MailDemo/MailDemoActiveRecordBindings/MailboxProxy.rb,
