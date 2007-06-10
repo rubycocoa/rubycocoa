@@ -20,7 +20,7 @@
 #import "ocexception.h"
 #import "objc_compat.h"
 
-#define OCM_AUTO_REGISTER 0 
+#define OCM_AUTO_REGISTER 1
 
 static VALUE _mObjWrapper = Qnil;
 static VALUE _mClsWrapper = Qnil;
