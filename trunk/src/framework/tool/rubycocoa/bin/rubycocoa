@@ -1,4 +1,4 @@
-#!/usr/bin/env ruby -Ku
+#!/usr/bin/ruby -Ku
 # vim:ts=2:sw=2:expandtab:
 # Copyright (c) 2006-2007, The RubyCocoa Project.
 # Copyright (c) 2007 Chris Mcgrath. (from nb_nibtool.rb)
