@@ -16,6 +16,7 @@ require "optparse"
 require "pathname"
 require 'fileutils'
 require "osx/cocoa"
+require "osx/xcode"
 require "nkf"
 require "iconv"
 require "erb"
@@ -44,7 +45,7 @@ class RubyCocoaCommand
 
       "new" => OptionParser.new {|opts|
         opts.banner = <<-EOB.gsub(/^ {10}/, "")
-          Usage: rubycocoa create [options] "Application Name"
+          Usage: rubycocoa new [options] "Application Name"
 
           Create new application skelton.
         EOB
@@ -57,7 +58,7 @@ class RubyCocoaCommand
 
       "update" =>  OptionParser.new {|opts|
         opts.banner = <<-EOB.gsub(/^ {10}/, "")
-          Usage: rubycocoa updatenib [options] <Nib File> <Ruby File>
+          Usage: rubycocoa update [options] <Nib File> <Ruby File>
 
           Update nib with ruby class difinition.
         EOB
@@ -78,6 +79,21 @@ class RubyCocoaCommand
 
         opts.separator "Options:"
         opts.on("--overwrite", "overwite all files") {|@overwrite|}
+      },
+
+      "add" =>  OptionParser.new {|opts|
+        opts.banner = <<-EOB.gsub(/^ {10}/, "")
+          Usage: rubycocoa add [options] <Add Files> <Xcode Project>
+
+          Add files to Xcode project and resource build phase.
+        EOB
+        opts.separator ""
+
+        opts.separator "Options:"
+        opts.on("-t", "--type", "Specify file type (eg. text.script.ruby)") {|@type|}
+        opts.on("-p", "--pathtype", "Specify path type (<group>)") {|@pathtype|}
+        opts.on("-g", "--group", "Specify group (Classes)") {|@group|}
+        opts.on("--only-add", "Only add files (not adding to build phase)") {|@only_add|}
       },
     }
 
@@ -324,6 +340,26 @@ class RubyCocoaCommand
 
   def cmd_package
     exec("rake package")
+  end
+
+  def cmd_add
+    proj_path = @argv.pop
+    files = @argv
+
+    @group = "Classes" unless @group
+    @pathtype = "<group>" unless @pathtype
+
+    proj = XcodeProject.new(proj_path)
+    files.each do |f|
+      type = "text.script.ruby" unless @type
+      puts "Adding `#{f}' as `#{type}' to `#{@group} in `#{proj_path}'."
+      id = proj.groups[@group].add_file(type, f, @pathtype)
+      unless @only_add
+        puts "Adding `#{f}' to resource build phase."
+        proj.add_file_to_resouce_phase(id)
+      end
+    end
+    proj.save
   end
 
   def apply_template(str, opts)
