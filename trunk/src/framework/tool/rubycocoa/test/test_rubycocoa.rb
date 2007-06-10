@@ -5,6 +5,7 @@ require 'fileutils'
 require 'pp'
 require 'pathname'
 require 'iconv'
+ENV["RUBYLIB"] = "#{(Pathname.new(File.dirname(__FILE__))+"../lib").realpath}:#{ENV["RUBYLIB"]}"
 include FileUtils
 
 class RubyCocoaCommandTest < Test::Unit::TestCase
@@ -65,6 +66,16 @@ class RubyCocoaCommandTest < Test::Unit::TestCase
     cd 'Test Ruby Cocoa' do
       cp_r @testdir + 'BulletsController.rb', '.'
       system(@rubycocoa, "update", "-a", "English.lproj/MainMenu.nib", "BulletsController.rb")
+    end
+  end
+
+  def test_add
+    create
+    cd 'Test Ruby Cocoa' do
+      cp_r @testdir + 'BulletsController.rb', '.'
+      system(@rubycocoa, "add", "BulletsController.rb", "Test Ruby Cocoa.xcodeproj")
+      system("xcodebuild")
+      assert File.exist?("build/Release/Test Ruby Cocoa.app/Contents/Resources/BulletsController.rb")
     end
   end
 

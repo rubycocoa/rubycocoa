@@ -95,13 +95,13 @@ end
 #end
 
 
-if __FILE__ $0
+if __FILE__ == $0
   proj = XcodeProject.new("#{ENV["HOME"]}/tmp/testcocoa/testcocoa.xcodeproj")
   p proj.groups
   id = proj.groups["Classes"].add_file("text.script.ruby", "path.rb", "<group>")
   proj.add_file_to_resouce_phase(id)
+  proj.save
 end
-#proj.save
 #mainGroup = proj[proj.rootObject["mainGroup"]]
 #mainGroup["children"].each do |k|
 # obj = proj[k]
