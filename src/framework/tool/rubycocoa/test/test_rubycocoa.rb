@@ -4,6 +4,7 @@ require 'test/unit'
 require 'fileutils'
 require 'pp'
 require 'pathname'
+require 'iconv'
 include FileUtils
 
 class RubyCocoaCommandTest < Test::Unit::TestCase
@@ -27,6 +28,9 @@ class RubyCocoaCommandTest < Test::Unit::TestCase
       assert files.include?("Test Ruby Cocoa.xcodeproj"), "Check .xcodeproj"
       assert files.include?("Test Ruby Cocoa.xcodeproj/project.pbxproj"), "Check .pbxproj"
       assert_no_match /«PROJECTNAMEASXML»/, File.read("Info.plist")
+      assert_no_match /PROJECTNAME/, Iconv.conv("ISO-8859-1", "UTF-16", File.read("English.lproj/InfoPlist.strings"))
+      assert_no_match /PROJECTNAME/, File.read("rb_main.rb")
+      assert_no_match /PROJECTNAME/, File.read("main.m")
     end
   end
 

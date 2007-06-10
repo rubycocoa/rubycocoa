@@ -17,12 +17,14 @@ require "pathname"
 require 'fileutils'
 require "osx/cocoa"
 require "nkf"
+require "iconv"
 require "erb"
 include FileUtils
 include OSX
 
 class RubyCocoaCommand
   VERSION = "$Revision$"
+  ORGANIZATIONNAME = (ENV['ORGANIZATIONNAME'].nil? ? '«ORGANIZATIONNAME»' : ENV['ORGANIZATIONNAME'])
 
   def self.run(argv)
     new(argv.dup).run
@@ -83,15 +85,15 @@ class RubyCocoaCommand
       parser.banner  = <<-EOB.gsub(/^ {8}/, "")
         Usage: rubycocoa <subcommand> [options] <files>
 
-        `rubycocoa' command is a part of RubyCocoa.
-        This is for creating new application skelton.
+        The 'rubycocoa' command is a part of RubyCocoa.
+        It's a tool for creating new application skeltons.
 
         Intro:
-                You can make RubyCocoa application skelton with `new' subcommand.
+                You can create a RubyCocoa application skelton with the 'new' subcommand:
 
-                    rubycocoa new "New RubyCocoa Application"
+                    $ rubycocoa new "New RubyCocoa Application"
 
-                After selecting template, rubycocoa make applicatoin dir in current.
+                After selecting the template, 'rubycocoa' will create the application directory in the current directory.
       EOB
 
       parser.separator ""
@@ -130,7 +132,7 @@ class RubyCocoaCommand
 
   def cmd_new
     appname, = @argv
-    abort "Application Name must be required" if appname.empty?
+    abort "Application Name is required" if appname.nil? || appname.empty?
 
     templates = Pathname.glob("#{ENV["HOME"]}/.rubycocoa/templates/*")
     templates.concat Pathname.glob("/Library/Application Support/Apple/Developer Tools/Project Templates/Application/Cocoa-Ruby*")
@@ -140,14 +142,14 @@ class RubyCocoaCommand
     print "Select Template> "
     num = $stdin.gets.chomp
     num = "0" if num.empty?
-    abort "Canceled since inputed not a number" unless num =~ /^\d/
+    abort "Canceled because the input was not a number" unless num =~ /^\d/
 
     num = num.to_i
     template = templates[num]
     puts "Creating `#{appname}' using `#{template.basename}'..."
 
     dest = Pathname.new(appname)
-    abort "#{appname} is exists. Cancel." if dest.exist?
+    abort "#{appname} already exists. Exiting." if dest.exist?
     cp_r template, dest
     Pathname.glob(dest + "*Cocoa*App*") do |f|
       f.rename(f.parent + f.basename.to_s.sub(/Cocoa(?:Doc)?App/, appname))
@@ -156,8 +158,14 @@ class RubyCocoaCommand
     Pathname.glob(dest + "**/*") do |f|
       puts "=> #{f.realpath.to_s.sub(Pathname.pwd.to_s + "/", "")}"
       next unless f.file?
-      f.open("rb+") do |g| 
-        content = apply_template(g.read, :project_name => appname, :file => f)
+      f.open("rb+") do |g|
+        str = g.read
+        str = Iconv.conv("ISO-8859-1", "UTF-16", str) if f.basename.to_s == 'InfoPlist.strings'
+        if ['InfoPlist.strings', 'rb_main.rb', 'main.m'].include?(f.basename.to_s)
+          str = str.gsub(/\307|\253/, '«').gsub(/\310|\273/, '»')
+        end
+        content = apply_template(str, :project_name => appname, :file => f)
+        content = Iconv.conv("UTF-16", "ISO-8859-1", content) if f.basename.to_s == 'InfoPlist.strings'
         g.rewind
         g << content
         g.truncate g.tell
@@ -330,6 +338,8 @@ class RubyCocoaCommand
         now = NSCalendarDate.calendarDate
         now.setCalendarFormat("%X")
         now.description
+      when "YEAR"
+        Time.now.year
       when "DIRECTORY"
         opts[:file].parent.basename
       when "FILEEXTENSION"
@@ -341,15 +351,17 @@ class RubyCocoaCommand
       when "FILEBASENAMEASIDENTIFIER"
         opts[:file].basename(".*").gsub(/\s+/, "_")
       when "FULLUSERNAME"
-        NSFullUserName.to_s
+        OSX.NSFullUserName.to_s
       when "USERNAME"
-        NSUserName.to_s
+        OSX.NSUserName.to_s
       when "PROJECTNAME"
         opts[:project_name]
       when "PROJECTNAMEASIDENTIFIER"
         opts[:project_name].gsub(/\s+/, "_")
       when "PROJECTNAMEASXML"
         opts[:project_name].gsub(/&/, "&amp;").gsub(/>/, "&gt;").gsub(/</, "&lt;")
+      when "ORGANIZATIONNAME"
+        ORGANIZATIONNAME
       else
         m[0]
       end
