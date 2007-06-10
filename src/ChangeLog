@@ -1,7 +1,24 @@
+2007-06-10 SATOH Hiroh <cho45@lowreal.net>
+
+	* framework/tool/rubycocoa/bin/rubycocoa:
+	Show helps when command is called with a subcommand only.
+
 2007-06-10  Eloy Duran <e.duran@superalloy.nl>
 
 	* framework/tool/rubycocoa/bin/rubycocoa:
 	Fixed the shebang which was hardcoded to /usr/bin/ruby.
+
+2007-06-10 SATOH Hiroh <cho45@lowreal.net>
+
+	* framework/tool/rubycocoa/bin/rubycocoa:
+	Applied patch in [Rubycocoa-devel 969].
+	Fixed many text errors.
+	Fixed apply_template bug in UTF-16 template file (InfoPlist.strings)
+	Implemented "add" subcommand which add files to Xcode project.
+
+	* template/ProjectBuilder/Application/Cocoa-Ruby Application/Rakefile:
+	Added Rakefile to build Xcode project on CUI.
+	From [Rubycocoa-devel 906], [Rubycocoa-devel 907].
 
 2007-06-09  Eloy Duran <e.duran@superalloy.nl>
 
@@ -14,6 +31,12 @@
 	when a specified key is requested in rbValueForKey. So the filter will be run before returning the data.
 	Changed EmailProxy.rb to use the new on_get class method.
 	Removed the MailboxProxy.rb file, because the proxy class will automatically be defined whenever ActiveRecord::Base is inherited.
+
+2007-06-09 SATOH Hiroh <cho45@lowreal.net>
+
+	* framework/tool/rubycocoa:
+	Added 'rubycocoa' command (First checkin). This is a tool for creating new application
+	skeltons.
 
 2007-06-08  Laurent Sansonetti <lsansonetti@apple.com>
 
