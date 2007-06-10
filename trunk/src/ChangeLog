@@ -1,3 +1,8 @@
+2007-06-10  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* framework/src/objc/mdl_objwrapper.m:
+	Enable OCM_AUTO_REGISTER.
+
 2007-06-10 SATOH Hiroh <cho45@lowreal.net>
 
 	* framework/tool/rubycocoa/bin/rubycocoa:
