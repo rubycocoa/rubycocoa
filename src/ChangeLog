@@ -13,6 +13,13 @@
 	  framework/tool/rubycocoa/test/test_rubycocoa.rb:
 	Implemented "create" subcommand which create ruby class skeltons.
 
+	* framework/tool/rubycocoa/bin/rubycocoa,
+	  framework/tool/rubycocoa/test/test_rubycocoa.rb,
+	  framework/tool/rubycocoa/lib/osx/xcode.rb,
+	  template/ProjectBuilder/Application/Cocoa-Ruby Application/Rakefile:
+	Check duplicated file in Xcode project.
+	Fixed Rakefile task "package" filename.
+
 2007-06-10  Laurent Sansonetti <lsansonetti@apple.com>
 
 	* framework/src/objc/mdl_objwrapper.m:

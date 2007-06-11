@@ -29,6 +29,10 @@ class XcodeProject
       @dic["children"] = NSArray.alloc.initWithArray(@dic["children"].to_a << id)
       id
     end
+
+    def files
+      @dic["children"].map {|i| @proj[i] }
+    end
   end
 
   attr_accessor :objects
@@ -98,9 +102,13 @@ end
 if __FILE__ == $0
   proj = XcodeProject.new("#{ENV["HOME"]}/tmp/testcocoa/testcocoa.xcodeproj")
   p proj.groups
-  id = proj.groups["Classes"].add_file("text.script.ruby", "path.rb", "<group>")
-  proj.add_file_to_resouce_phase(id)
-  proj.save
+  p proj.objects.find { |k, v|
+    v["isa"] == "PBXFileReference" and v["path"] == "path.rb"
+  }
+  #p proj.groups["Classes"].files.find {|i| i["path"].to_s }
+#  id = proj.groups["Classes"].add_file("text.script.ruby", "path.rb", "<group>")
+#  proj.add_file_to_resouce_phase(id)
+#  proj.save
 end
 #mainGroup = proj[proj.rootObject["mainGroup"]]
 #mainGroup["children"].each do |k|
