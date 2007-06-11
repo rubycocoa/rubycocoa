@@ -8,14 +8,15 @@ require 'pathname'
 # Application own Settings
 APPNAME               = "«PROJECTNAME»"
 TARGET                = "#{APPNAME}.app"
-VERSION               = "rev#{`svn info`[/Revision: (\d+)/, 1]}"
+#VERSION               = "rev#{`svn info`[/Revision: (\d+)/, 1]}"
+VERSION               = Time.now.strftime("%Y-%m-%d")
 PUBLISH               = 'yourname@yourhost:path'
 DEFAULT_TARGET        = APPNAME
 DEFAULT_CONFIGURATION = 'Release'
+RELEASE_CONFIGURATION = 'Release'
 
 # Tasks
 task :default => [:run]
-
 
 
 desc "Build the default and run it."
@@ -29,6 +30,40 @@ task :build => "xcode:build:#{DEFAULT_TARGET}:#{DEFAULT_CONFIGURATION}"
 desc 'Deep clean of everything'
 task :clean do
   puts %x{ xcodebuild -alltargets clean }
+end
+
+desc "Add files to Xcode project"
+task :add do |t|
+ files = ARGV[(ARGV.index(t.name)+1)..-1]
+ project = %x{ xcodebuild -list }[/Information about project "([^"]+)":/, 1]
+ files << "#{project}.xcodeproj"
+ exec("rubycocoa", "add", *files)
+end
+
+desc "Package the application"
+task :package => ["xcode:build:#{DEFAULT_TARGET}:#{RELEASE_CONFIGURATION}", "pkg"] do
+  name = "#{APPNAME}.#{VERSION}"
+  mkdir "image"
+  sh %{rubycocoa standaloneify "build/#{DEFAULT_CONFIGURATION}/#{APPNAME}.app" "image/#{APPNAME}.app"}
+  puts 'Creating Image...'
+  sh %{
+  hdiutil create -volname '#{name}' -srcfolder image '#{name}'.dmg
+  rm -rf image
+  mv '#{name}'.dmg pkg
+  }
+end
+
+directory 'pkg'
+
+desc 'Make Localized nib from English.lproj and Lang.lproj/nib.strings'
+rule(/.nib$/ => [proc {|tn| File.dirname(tn) + '/nib.strings' }]) do |t|
+  p t.name
+  lproj = File.dirname(t.name)
+  target = File.basename(t.name)
+  rm_rf t.name
+  sh %{
+  nibtool -d #{lproj}/nib.strings -w #{t.name} English.lproj/#{target}
+  }
 end
 
 # [Rubycocoa-devel 906] dynamically xcode rake tasks
@@ -94,15 +129,6 @@ namespace :xcode do
 
    end
  end
-
- desc "Add files to Xcode project"
- task :add do |t|
-   files = ARGV[(ARGV.index(t.name)+1)..-1]
-   project = %x{ xcodebuild -list }[/Information about project "([^"]+)":/, 1]
-   files << "#{project}.xcodeproj"
-   exec("rubycocoa", "add", *files)
- end
-
 end
 
 
