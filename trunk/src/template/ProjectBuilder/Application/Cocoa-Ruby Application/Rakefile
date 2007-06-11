@@ -49,7 +49,7 @@ task :package => ["xcode:build:#{DEFAULT_TARGET}:#{RELEASE_CONFIGURATION}", "pkg
   sh %{
   hdiutil create -volname '#{name}' -srcfolder image '#{name}'.dmg
   rm -rf image
-  mv '#{name}'.dmg pkg
+  mv '#{name}.dmg' pkg
   }
 end
 

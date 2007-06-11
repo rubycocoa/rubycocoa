@@ -422,10 +422,14 @@ class RubyCocoaCommand
     files.each do |f|
       type = "text.script.ruby" unless @type
       puts "Adding `#{f}' as `#{type}' to `#{@group} in `#{proj_path}'."
-      id = proj.groups[@group].add_file(type, f, @pathtype)
-      unless @only_add
-        puts "Adding `#{f}' to resource build phase."
-        proj.add_file_to_resouce_phase(id)
+      if proj.objects.find {|k,v|  v["isa"] == "PBXFileReference" and v["path"] == f }
+        abort "`#{f}' is already in the Xcode project"
+      else
+        id = proj.groups[@group].add_file(type, f, @pathtype)
+        unless @only_add
+          puts "Adding `#{f}' to resource build phase."
+          proj.add_file_to_resouce_phase(id)
+        end
       end
     end
     proj.save
