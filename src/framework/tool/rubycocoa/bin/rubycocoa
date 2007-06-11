@@ -17,6 +17,7 @@ require "pathname"
 require 'fileutils'
 require "osx/cocoa"
 require "osx/xcode"
+require "osx/standaloneify"
 require "nkf"
 require "iconv"
 require "erb"
@@ -95,6 +96,20 @@ class RubyCocoaCommand
         opts.on("-g", "--group", "Specify group (Classes)") {|@group|}
         opts.on("--only-add", "Only add files (not adding to build phase)") {|@only_add|}
       },
+
+      "standaloneify" =>  OptionParser.new {|opts|
+        @extra_libs = []
+        opts.banner = <<-EOB.gsub(/^ {10}/, "")
+          Usage: rubycocoa standaloneify [options] <Ruby Cocoa.app> <Dest.app>
+
+          Creates a new application that should have dependencies resolved.
+        EOB
+        opts.separator ""
+
+        opts.separator "Options:"
+        opts.on("-f","--force","Delete target app if it exists already") { |@force| }
+        opts.on("-l LIBRARY","--lib","Extra library to bundle") { |lib| @extra_libs << lib }
+      },
     }
 
     @parser = OptionParser.new do |parser|
@@ -154,19 +169,24 @@ class RubyCocoaCommand
     appname, = @argv
     abort "Application Name is required" if appname.nil? || appname.empty?
 
-    templates = Pathname.glob("#{ENV["HOME"]}/.rubycocoa/templates/*")
-    templates.concat Pathname.glob("/Library/Application Support/Apple/Developer Tools/Project Templates/Application/Cocoa-Ruby*")
-    templates.each_with_index do |f,i|
-      puts "% 2d: %s %s" % [i, f.basename, i == 0 ? "(default)" : ""]
-    end
-    print "Select Template> "
-    num = $stdin.gets.chomp
-    num = "0" if num.empty?
-    abort "Canceled because the input was not a number" unless num =~ /^\d/
+    if @template
+      template = Pathname.new @template
+      abort "#{template} is not exists." unless template.exist?
+    else
+      templates = Pathname.glob("#{ENV["HOME"]}/.rubycocoa/templates/*")
+      templates.concat Pathname.glob("/Library/Application Support/Apple/Developer Tools/Project Templates/Application/Cocoa-Ruby*")
+      templates.each_with_index do |f,i|
+        puts "% 2d: %s %s" % [i, f.basename, i == 0 ? "(default)" : ""]
+      end
+      print "Select Template> "
+      num = $stdin.gets.chomp
+      num = "0" if num.empty?
+      abort "Canceled because the input was not a number" unless num =~ /^\d/
 
-    num = num.to_i
-    template = templates[num]
-    puts "Creating `#{appname}' using `#{template.basename}'..."
+      num = num.to_i
+      template = templates[num]
+    end
+    puts "Creating `#{appname}' using `#{template}'..."
 
     dest = Pathname.new(appname)
     abort "#{appname} already exists. Exiting." if dest.exist?
@@ -370,6 +390,14 @@ class RubyCocoaCommand
       end
     end
     proj.save
+  end
+
+  def cmd_standaloneify
+    src, dest, = *@argv
+    if @force
+      rm_rf dest
+    end
+    Standaloneify.make_standalone_application(src, dest, @extra_libs)
   end
 
   def apply_template(str, opts)

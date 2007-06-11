@@ -6,6 +6,7 @@ require 'pp'
 require 'pathname'
 require 'iconv'
 ENV["RUBYLIB"] = "#{(Pathname.new(File.dirname(__FILE__))+"../lib").realpath}:#{ENV["RUBYLIB"]}"
+ENV["PATH"]    = "#{(Pathname.new(File.dirname(__FILE__))+"../bin").realpath}:#{ENV["PATH"]}"
 include FileUtils
 
 class RubyCocoaCommandTest < Test::Unit::TestCase
@@ -79,9 +80,19 @@ class RubyCocoaCommandTest < Test::Unit::TestCase
     end
   end
 
+  def test_package
+    create
+    cd "Test Ruby Cocoa" do
+      system("rake", "package")
+      assert File.exists?("pkg/Test Ruby Cocoa.#{Time.now.strftime("%Y-%m-%d")}.dmg")
+    end
+  end
+
   def create(num=0)
-    IO.popen("#{@rubycocoa} new 'Test Ruby Cocoa'", "r+") do |f|
+    template = @testdir + "../../../../template/ProjectBuilder/Application/Cocoa-Ruby Application"
+    IO.popen("#{@rubycocoa} new --template '#{template}' 'Test Ruby Cocoa'", "r+") do |f|
       f.puts num
+      puts f.read
     end
   end
 end
