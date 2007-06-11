@@ -26,6 +26,7 @@ include OSX
 
 class RubyCocoaCommand
   VERSION = "$Revision$"
+  CONFIG_DIR = Pathname.new("#{ENV["HOME"]}/.rubycocoa")
   ORGANIZATIONNAME = (ENV['ORGANIZATIONNAME'].nil? ? '«ORGANIZATIONNAME»' : ENV['ORGANIZATIONNAME'])
 
   def self.run(argv)
@@ -55,6 +56,22 @@ class RubyCocoaCommand
 
         opts.separator "Options:"
         opts.on("--template TEMPLATE", "specify templates (template dir.)") {|@template|}
+      },
+
+      "create" =>  OptionParser.new {|opts|
+        opts.banner = <<-EOB.gsub(/^ {10}/, "")
+          Usage: rubycocoa create [options] ClassName[<SuperClass=NSObject]
+
+          Create a ruby class skelton.
+        EOB
+
+        opts.separator ""
+
+        @actions = []
+        @outlets = []
+        opts.separator "Options:"
+        opts.on("-a NAME", "--action NAME", "With action") {|action| @actions << action}
+        opts.on("-o NAME", "--outlet NAME", "With outlet") {|outlet| @outlets << outlet}
       },
 
       "update" =>  OptionParser.new {|opts|
@@ -173,7 +190,7 @@ class RubyCocoaCommand
       template = Pathname.new @template
       abort "#{template} is not exists." unless template.exist?
     else
-      templates = Pathname.glob("#{ENV["HOME"]}/.rubycocoa/templates/*")
+      templates = Pathname.glob(CONFIG_DIR + "templates/*")
       templates.concat Pathname.glob("/Library/Application Support/Apple/Developer Tools/Project Templates/Application/Cocoa-Ruby*")
       templates.each_with_index do |f,i|
         puts "% 2d: %s %s" % [i, f.basename, i == 0 ? "(default)" : ""]
@@ -217,7 +234,7 @@ class RubyCocoaCommand
     abort @subparsers[@subcommand].help if @argv.empty?
 
     file = Pathname.new @argv[0]
-    tmpl = DATA.read
+    tmpl = class_skelton
 
     if file.extname == ".nib"
       plist_path = file + "classes.nib"
@@ -268,6 +285,28 @@ class RubyCocoaCommand
     end
   end
 
+  def cmd_create
+    abort @subparsers[@subcommand].help if @argv.empty?
+
+    _, class_name, super_class = */^([^<]+)(?:<(.+))?$/.match(@argv[0])
+    tmpl = class_skelton
+
+    super_class = "NSObject" unless super_class
+
+    outlets = @outlets
+    actions = @actions
+    result  =  ERB.new(tmpl, $SAFE, '-').result(binding)
+
+    path = Pathname.new(class_name + ".rb")
+    if path.exist?
+      puts "#{path} exists. skip."
+    else
+      puts "-> #{path}"
+      path.open("w") do |f|
+        f.puts result
+      end
+    end
+  end
 
   def cmd_update
     abort @subparsers[@subcommand].help if @argv.empty?
@@ -439,6 +478,16 @@ class RubyCocoaCommand
       else
         m[0]
       end
+    end
+  end
+
+  def class_skelton
+    @class_skelton = DATA.read unless @class_skelton
+    users = CONFIG_DIR + "class.rb"
+    if users.exist?
+      users.read
+    else
+      @class_skelton
     end
   end
 end

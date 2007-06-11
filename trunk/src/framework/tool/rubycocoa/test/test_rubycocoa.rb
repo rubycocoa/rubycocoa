@@ -36,6 +36,24 @@ class RubyCocoaCommandTest < Test::Unit::TestCase
     end
   end
 
+  def test_create_class
+    create
+    cd 'Test Ruby Cocoa' do
+      system(@rubycocoa, "create", "AppController")
+      assert_match /class AppController < NSObject/, File.read("AppController.rb")
+
+      system(@rubycocoa, "create", "-a", "hello", "-o", "hogehoge", "AppController1")
+      assert_match /class AppController1 < NSObject/, File.read("AppController1.rb")
+      assert_match /ib_action :hello do/, File.read("AppController1.rb")
+      assert_match /ib_outlets :hogehoge/, File.read("AppController1.rb")
+
+      system(@rubycocoa, "create", "-a", "hello", "-o", "hogehoge", "AppController2<NSWindow")
+      assert_match /class AppController2 < NSWindow/, File.read("AppController2.rb")
+      assert_match /ib_action :hello do/, File.read("AppController2.rb")
+      assert_match /ib_outlets :hogehoge/, File.read("AppController2.rb")
+    end
+  end
+
   def test_convertnib
     create
     cd 'Test Ruby Cocoa' do
