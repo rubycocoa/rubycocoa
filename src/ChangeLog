@@ -20,6 +20,11 @@
 	Check duplicated file in Xcode project.
 	Fixed Rakefile task "package" filename.
 
+	* framework/tool/rubycocoa/test/test_rubycocoa.rb,
+	  template/ProjectBuilder/Application/Cocoa-Ruby Application/Rakefile:
+	Added "create", "add" and "update" task to Rakefile. Thease are wrapper
+	for the 'rubycocoa' command.
+
 2007-06-10  Laurent Sansonetti <lsansonetti@apple.com>
 
 	* framework/src/objc/mdl_objwrapper.m:

@@ -18,7 +18,6 @@ RELEASE_CONFIGURATION = 'Release'
 # Tasks
 task :default => [:run]
 
-
 desc "Build the default and run it."
 task :run => [:build] do
   sh %{open "build/Release/#{APPNAME}.app"}
@@ -34,10 +33,26 @@ end
 
 desc "Add files to Xcode project"
 task :add do |t|
- files = ARGV[(ARGV.index(t.name)+1)..-1]
+ files = ARGV[1..-1]
  project = %x{ xcodebuild -list }[/Information about project "([^"]+)":/, 1]
  files << "#{project}.xcodeproj"
  exec("rubycocoa", "add", *files)
+end
+
+desc "Create ruby skelton and add to Xcode project"
+task :create do |t|
+ args = ARGV[1..-1]
+ if system("rubycocoa", "create", *args)
+   project = %x{ xcodebuild -list }[/Information about project "([^"]+)":/, 1]
+   exec("rubycocoa", "add", args.last + ".rb", "#{project}.xcodeproj")
+ end
+end
+
+desc "Update nib with ruby file"
+task :update do |t|
+ args = ARGV[1..-1]
+ args.unshift("English.lproj/MainMenu.nib")
+ exec("rubycocoa", "update", *args)
 end
 
 desc "Package the application"
@@ -132,3 +147,9 @@ namespace :xcode do
 end
 
 
+if ["update", "add", "create"].include? ARGV[0]
+  # dupe rake
+  ARGV.map! {|a| a.sub(/^\+/, "-") }
+  Rake.application[ARGV[0].to_sym].invoke
+  exit # will not reach
+end
