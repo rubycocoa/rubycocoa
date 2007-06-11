@@ -102,14 +102,14 @@ class RubyCocoaCommandTest < Test::Unit::TestCase
   def test_raketasks
     create
     cd "Test Ruby Cocoa" do
-#      system("rake", "create", "-a", "hello", "AppController.rb")
-#      assert File.exists?("AppController.rb")
-#
-#      system("rake", "update", "AppController.rb")
-#      assert_match /hello/, File.read("English.lproj/MainMenu.nib/classes.nib")
+      system("rake", "create", "+a", "hello", "AppController")
+      assert File.exists?("AppController.rb")
+
+      system("rake", "update", "+a", "AppController.rb")
+      assert_match /hello/, File.read("English.lproj/MainMenu.nib/classes.nib")
 
       system("rake", "package")
-#      assert File.exists?("build/Release/Test Ruby Cocoa.app/Contents/Resources/AppController.rb")
+      assert File.exists?("build/Release/Test Ruby Cocoa.app/Contents/Resources/AppController.rb")
       assert File.exists?("pkg/Test Ruby Cocoa.#{Time.now.strftime("%Y-%m-%d")}.dmg")
     end
   end
