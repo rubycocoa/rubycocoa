@@ -1,3 +1,8 @@
+2007-06-12  SATOH Hiroh <cho45@lowreal.net>
+
+	* framework/tool/rubycocoa/bin/rubycocoa:
+	Fixed "update" subcommand which didn't consider superclass.
+
 2007-06-11  SATOH Hiroh <cho45@lowreal.net>
 
 	* framework/tool/rubycocoa/bin/rubycocoa,
