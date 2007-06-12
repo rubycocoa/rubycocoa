@@ -377,6 +377,10 @@ class RubyCocoaCommand
         end
       end
 
+      klass = k.split("::").inject(Object) { |par, const| par.const_get(const) }
+      superklass = klass.superclass.to_s.sub(/^OSX::/, '')
+      class_def.setObject_forKey(superklass, "SUPERCLASS")
+
       %w(outlets actions).each do |t|
         next unless v[t.to_sym]
         updated = NSMutableDictionary.dictionary
