@@ -33,6 +33,9 @@ class RubyCocoaCommandTest < Test::Unit::TestCase
       assert_no_match /PROJECTNAME/, Iconv.conv("ISO-8859-1", "UTF-16", File.read("English.lproj/InfoPlist.strings"))
       assert_no_match /PROJECTNAME/, File.read("rb_main.rb")
       assert_no_match /PROJECTNAME/, File.read("main.m")
+      assert_no_match /PROJECTNAME/, File.read("Rakefile")
+      system("xcodebuild")
+      assert File.exist?("build/Release/Test Ruby Cocoa.app/Contents/Resources/rb_main.rb")
     end
   end
 

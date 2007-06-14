@@ -211,10 +211,17 @@ class RubyCocoaCommand
     Pathname.glob(dest + "*Cocoa*App*") do |f|
       f.rename(f.parent + f.basename.to_s.sub(/Cocoa(?:Doc)?App/, appname))
     end
+    plist = read_plist(dest + "#{appname}.xcodeproj/TemplateInfo.plist")
     (dest + "#{appname}.xcodeproj/TemplateInfo.plist").unlink
-    Pathname.glob(dest + "**/*") do |f|
-      puts "=> #{f.realpath.to_s.sub(Pathname.pwd.to_s + "/", "")}"
-      next unless f.file?
+
+    (plist["FilesToRename"] || {}).each do |k, v|
+      (dest + k).rename(apply_template(v, :project_name => appname))
+      puts "#{k} => #{v}"
+    end
+    ((plist["FilesToMacroExpand"].to_a || []) << "#{appname}.xcodeproj/project.pbxproj").each do |name|
+      f = dest + apply_template(name, :project_name => appname)
+      #next unless f.exist?
+      puts "Expanding Macro: #{f}"
       f.open("rb+") do |g|
         str = g.read
         str = Iconv.conv("ISO-8859-1", "UTF-16", str) if f.basename.to_s == 'InfoPlist.strings'
@@ -238,15 +245,7 @@ class RubyCocoaCommand
 
     if file.extname == ".nib"
       plist_path = file + "classes.nib"
-      plist = NSPropertyListSerialization.objc_send(
-        :propertyListFromData, NSData.alloc.initWithContentsOfFile(plist_path.to_s),
-        :mutabilityOption, NSPropertyListMutableContainersAndLeaves,
-        :format, nil,
-        :errorDescription, nil
-      )
-      unless plist
-        abort "Error while reading `#{nib}'"
-      end
+      plist = read_plist(plist_path)
       plist["IBClasses"].each do |l|
         class_name  = l["CLASS"].to_s
         next if class_name == "FirstResponder"
@@ -353,15 +352,7 @@ class RubyCocoaCommand
     NSObject.instance_eval { @@collect_child_classes = false }
 
     plist_path = nib + "classes.nib"
-    plist = NSPropertyListSerialization.objc_send(
-      :propertyListFromData, NSData.alloc.initWithContentsOfFile(plist_path.to_s),
-      :mutabilityOption, NSPropertyListMutableContainersAndLeaves,
-      :format, nil,
-      :errorDescription, nil
-    )
-    unless plist
-      abort "Error while reading `#{nib}'"
-    end
+    plist = read_plist(plist_path)
 
     NSObject.instance_eval { @@subklasses }.each do |k, v|
       class_def = plist["IBClasses"].find {|i| i["CLASS"] == k }
@@ -447,8 +438,21 @@ class RubyCocoaCommand
     Standaloneify.make_standalone_application(src, dest, @extra_libs)
   end
 
+  def read_plist(path)
+      plist = NSPropertyListSerialization.objc_send(
+        :propertyListFromData, NSData.alloc.initWithContentsOfFile(path.to_s),
+        :mutabilityOption, NSPropertyListMutableContainersAndLeaves,
+        :format, nil,
+        :errorDescription, nil
+      )
+      unless plist
+        abort "Error while reading `#{path}'"
+      end
+      plist
+  end
+
   def apply_template(str, opts)
-    str.gsub(/«([A-Z]+)»/) do
+    str.to_s.gsub(/«([A-Z]+)»/) do
       m = Regexp.last_match
       case m[1]
       when "DATE"
