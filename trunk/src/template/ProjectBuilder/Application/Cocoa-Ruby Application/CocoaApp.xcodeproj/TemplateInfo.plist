@@ -10,6 +10,7 @@
 		<string>main.m</string>
 		<string>rb_main.rb</string>
 		<string>Info.plist</string>
+		<string>Rakefile</string>
 	</array>
 </dict>
 </plist>
