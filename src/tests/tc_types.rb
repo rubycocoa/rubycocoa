@@ -258,6 +258,8 @@ class TC_Types < Test::Unit::TestCase
     assert_equal(rect, rect2)
     size2 = rect2.size.dup
     assert_equal(rect.size, size2)
+    size3 = rect2.size.clone
+    assert_equal(rect.size, size3)
     assert(!OSX::NSZone.instance_methods(false).include?('dup'))
   end
 end

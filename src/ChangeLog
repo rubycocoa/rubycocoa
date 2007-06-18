@@ -1,5 +1,9 @@
 2007-06-17  Laurent Sansonetti <lsansonetti@apple.com>
 
+	* framework/src/objc/BridgeSupport.m,
+	  tests/tc_types.rb:
+	Define OSX::Boxed#clone as #dup.
+
 	* AUTHORS:
 	Added Satoshi-san.
 

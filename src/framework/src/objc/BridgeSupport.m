@@ -867,6 +867,7 @@ init_bs_boxed_struct (VALUE mOSX, const char *name, const char *decorated_encodi
   rb_define_singleton_method(klass, "new", rb_bs_struct_new, -1);
   rb_define_method(klass, "==", rb_bs_struct_is_equal, 1);
   rb_define_method(klass, "dup", rb_bs_struct_dup, 0);
+  rb_define_method(klass, "clone", rb_bs_struct_dup, 0);
 
   // Allocate and return bs_boxed entry.
   bs_boxed = init_bs_boxed(bsBoxedStructType, name, encoding, klass);
