@@ -255,8 +255,10 @@ static void install_dealloc_hook()
   cache_aware_dealloc_method = class_getInstanceMethod(nsobject,
     @selector(__clearCacheAndDealloc));
 
-  aliased_dealloc_method->method_imp = dealloc_method->method_imp;
-  dealloc_method->method_imp = cache_aware_dealloc_method->method_imp;
+  method_setImplementation(aliased_dealloc_method,
+    method_getImplementation(dealloc_method));
+  method_setImplementation(dealloc_method,
+    method_getImplementation(cache_aware_dealloc_method));
 }
 
 
@@ -275,6 +277,7 @@ static void rubycocoa_init()
   if (! rubycocoa_initialized_flag) {
     init_rb2oc_cache();    // initialize the Ruby->ObjC internal cache
     init_oc2rb_cache();    // initialize the ObjC->Ruby internal cache
+    install_dealloc_hook();
     initialize_mdl_osxobjc();  // initialize an objc part of rubycocoa
     initialize_mdl_bundle_support();
     init_ovmix();
