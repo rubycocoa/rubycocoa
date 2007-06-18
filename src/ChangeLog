@@ -1,3 +1,9 @@
+2007-06-14  Satoshi Nakagawa <snakagawa@infoteria.co.jp>
+
+	* framework/src/objc/RBRuntime.m,
+	  framework/src/objc/ocdata_conv.m:
+	Now cleaning the oc2rb cache upon the NSObject dealloc.
+
 2007-06-14  SATOH Hiroh <cho45@lowreal.net>
 
 	* framework/tool/rubycocoa/bin/rubycocoa,

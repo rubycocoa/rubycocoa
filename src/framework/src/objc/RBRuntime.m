@@ -228,6 +228,38 @@ static int notify_if_error(const char* api_name, VALUE err)
   return RBNotifyException(api_name, err);
 }
 
+@implementation NSObject (__DeallocHook)
+
+- (void) __dealloc
+{
+}
+
+- (void) __clearCacheAndDealloc
+{
+  remove_from_oc2rb_cache(self);
+  [self __dealloc];
+}
+
+@end
+
+static void install_dealloc_hook()
+{
+  Method dealloc_method, aliased_dealloc_method, cache_aware_dealloc_method;
+  Class nsobject;
+
+  nsobject = [NSObject class];
+
+  dealloc_method = class_getInstanceMethod(nsobject, @selector(dealloc));
+  aliased_dealloc_method = class_getInstanceMethod(nsobject, 
+    @selector(__dealloc));
+  cache_aware_dealloc_method = class_getInstanceMethod(nsobject,
+    @selector(__clearCacheAndDealloc));
+
+  aliased_dealloc_method->method_imp = dealloc_method->method_imp;
+  dealloc_method->method_imp = cache_aware_dealloc_method->method_imp;
+}
+
+
 static int rubycocoa_initialized_flag = 0;
 
 static int rubycocoa_initialized_p()

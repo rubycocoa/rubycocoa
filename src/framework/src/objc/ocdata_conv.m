@@ -709,13 +709,11 @@ ocid_to_rbobj (VALUE context_obj, id ocid)
         result = rbobj_get_ocid(context_obj) == ocid ? context_obj : ocobj_s_new(ocid);
     }
 
-    if (context_obj != Qfalse) {
-      CACHE_LOCK(&oc2rbCacheLock);
-      // Check out that the hash is still empty for us, to avoid a race condition.
-      if (!st_lookup(oc2rbCache, (st_data_t)ocid, (st_data_t *)&result))
-        st_insert(oc2rbCache, (st_data_t)ocid, (st_data_t)result);
-      CACHE_UNLOCK(&oc2rbCacheLock);
-    }
+    CACHE_LOCK(&oc2rbCacheLock);
+    // Check out that the hash is still empty for us, to avoid a race condition.
+    if (!st_lookup(oc2rbCache, (st_data_t)ocid, (st_data_t *)&result))
+      st_insert(oc2rbCache, (st_data_t)ocid, (st_data_t)result);
+    CACHE_UNLOCK(&oc2rbCacheLock);
   }
 
   return result;
