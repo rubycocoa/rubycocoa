@@ -1,5 +1,11 @@
 2007-06-17  Laurent Sansonetti <lsansonetti@apple.com>
 
+	* framework/src/objc/RBRuntime.m:
+	Make sure we install the NSObject dealloc hook + rewrote the hook code to 
+	use the new objc2 APIs.
+
+2007-06-17  Laurent Sansonetti <lsansonetti@apple.com>
+
 	* framework/src/objc/BridgeSupport.m,
 	  tests/tc_types.rb:
 	Define OSX::Boxed#clone as #dup.
