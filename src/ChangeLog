@@ -1,4 +1,9 @@
-2007-06-14  Satoshi Nakagawa <snakagawa@infoteria.co.jp>
+2007-06-17  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* AUTHORS:
+	Added Satoshi-san.
+
+2007-06-17  Satoshi Nakagawa <snakagawa@infoteria.co.jp>
 
 	* framework/src/objc/RBRuntime.m,
 	  framework/src/objc/ocdata_conv.m:
