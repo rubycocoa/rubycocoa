@@ -19,6 +19,7 @@
 #import "ocdata_conv.h"
 #import "OverrideMixin.h"
 #import "internal_macros.h"
+#import "objc_compat.h"
 
 #define BRIDGE_SUPPORT_NAME "BridgeSupport"
 
