@@ -415,10 +415,14 @@ class RubyCocoaCommand
 
     proj = XcodeProject.new(proj_path)
     files.each do |f|
+      f = Pathname.new(f)
+      if f.directory?
+        puts "#{f} is directory. skip."
+      end
       type = "text.script.ruby" unless @type
       puts "Adding `#{f}' as `#{type}' to `#{@group} in `#{proj_path}'."
       if proj.objects.find {|k,v|  v["isa"] == "PBXFileReference" and v["path"] == f }
-        abort "`#{f}' is already in the Xcode project"
+        puts "`#{f}' is already in the Xcode project"
       else
         id = proj.groups[@group].add_file(type, f, @pathtype)
         unless @only_add
