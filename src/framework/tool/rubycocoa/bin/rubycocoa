@@ -294,7 +294,7 @@ class RubyCocoaCommand
 
     outlets = @outlets
     actions = @actions
-    result  =  ERB.new(tmpl, $SAFE, '-').result(binding)
+    result  = ERB.new(tmpl, $SAFE, '-').result(binding)
 
     path = Pathname.new(class_name + ".rb")
     if path.exist?
@@ -498,7 +498,26 @@ class RubyCocoaCommand
   end
 
   def class_skelton
-    @class_skelton = DATA.read unless @class_skelton
+    unless @class_skelton
+      @class_skelton = <<-EOS.gsub(/        /, "")
+        require 'osx/cocoa'
+        include OSX
+
+        class <%=class_name%> < <%=super_class%>
+          <%- outlets.each do |outlet| -%>
+          ib_outlets :<%=outlet%>
+          <%- end %>
+          <%- actions.each do |action| -%>
+
+          ib_action :<%=action%> do |sender|
+          end
+          <%- end %>
+
+          def awakeFromNib
+          end
+        end
+      EOS
+    end
     users = CONFIG_DIR + "class.rb"
     if users.exist?
       users.read
@@ -510,24 +529,6 @@ end
 
 if $0 == __FILE__
   RubyCocoaCommand.run(ARGV)
-end
-
-__END__
-require 'osx/cocoa'
-include OSX
-
-class <%=class_name%> < <%=super_class%>
-  <%- outlets.each do |outlet| -%>
-  ib_outlets :<%=outlet%>
-  <%- end %>
-  <%- actions.each do |action| -%>
-
-  ib_action :<%=action%> do |sender|
-  end
-  <%- end %>
-
-  def awakeFromNib
-  end
 end
 
 

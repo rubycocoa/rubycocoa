@@ -8,6 +8,12 @@
 	file now)
 	Added test for making new application.
 
+	* framework/tool/rubycocoa/test/test_rubycocoa.rb,
+	framework/tool/rubycocoa/bin/rubycocoa:
+	Rewrited the tests to call RubyCocoaCommand directly (for better messages
+	when tests are failed)
+	Modifiled rubycocoa to use here doc instead of DATA (for using
+	RubyCocoaCommand as library)
 
 2007-06-19  Fujimoto Hisa  <hisa@fobj.com>
 
