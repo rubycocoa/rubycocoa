@@ -1,3 +1,14 @@
+2007-06-19  SATOH Hiroh <cho45@lowreal.net>
+
+	* framework/tool/rubycocoa/test/test_rubycocoa.rb,
+	framework/tool/rubycocoa/lib/osx/xcode.rb,
+	framework/tool/rubycocoa/bin/rubycocoa:
+	Modified to call to_s in xcode.rb for plist.
+	Modified "add" subcommand to ignore directory (This considers only .rb
+	file now)
+	Added test for making new application.
+
+
 2007-06-19  Fujimoto Hisa  <hisa@fobj.com>
 
 	* framework/src/objc/ocdata_conv.m:

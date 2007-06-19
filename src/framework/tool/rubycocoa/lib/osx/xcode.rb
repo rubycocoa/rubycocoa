@@ -5,6 +5,7 @@ require "osx/cocoa"
 include OSX
 
 class XcodeProject
+  class XcodeProjectError < StandardError; end
 
   class Group
     def initialize(proj, id)
@@ -22,9 +23,9 @@ class XcodeProject
     def add_file(type, path, tree)
       id = @proj.add_object({
         "isa"               => "PBXFileReference",
-        "lastKnownFileType" => type,
-        "path"              => path,
-        "sourceTree"        => tree,
+        "lastKnownFileType" => type.to_s,
+        "path"              => path.to_s,
+        "sourceTree"        => tree.to_s,
       })
       @dic["children"] = NSArray.alloc.initWithArray(@dic["children"].to_a << id)
       id
@@ -46,6 +47,8 @@ class XcodeProject
       :format, nil,
       :errorDescription, nil
     )
+
+    raise XcodeProjectError unless @plist
 
     @objects = @plist["objects"]
     @rootObject = self[@plist["rootObject"]]

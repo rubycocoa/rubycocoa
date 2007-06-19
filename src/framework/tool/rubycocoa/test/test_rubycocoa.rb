@@ -6,7 +6,9 @@ require 'pp'
 require 'pathname'
 require 'iconv'
 ENV["RUBYLIB"] = "#{(Pathname.new(File.dirname(__FILE__))+"../lib").realpath}:#{ENV["RUBYLIB"]}"
+$LOAD_PATH.unshift((Pathname.new(File.dirname(__FILE__))+"../lib").realpath.to_s)
 ENV["PATH"]    = "#{(Pathname.new(File.dirname(__FILE__))+"../bin").realpath}:#{ENV["PATH"]}"
+require 'osx/xcode'
 include FileUtils
 
 class RubyCocoaCommandTest < Test::Unit::TestCase
@@ -25,10 +27,14 @@ class RubyCocoaCommandTest < Test::Unit::TestCase
 
   def test_create
     create
+    assert File.exist?("Test Ruby Cocoa")
     cd 'Test Ruby Cocoa' do
       files = Dir['**/*']
       assert files.include?("Test Ruby Cocoa.xcodeproj"), "Check .xcodeproj"
       assert files.include?("Test Ruby Cocoa.xcodeproj/project.pbxproj"), "Check .pbxproj"
+      assert_nothing_raised do
+        XcodeProject.new("Test Ruby Cocoa.xcodeproj")
+      end
       assert_no_match /«PROJECTNAMEASXML»/, File.read("Info.plist")
       assert_no_match /PROJECTNAME/, Iconv.conv("ISO-8859-1", "UTF-16", File.read("English.lproj/InfoPlist.strings"))
       assert_no_match /PROJECTNAME/, File.read("rb_main.rb")
@@ -96,7 +102,7 @@ class RubyCocoaCommandTest < Test::Unit::TestCase
     cd 'Test Ruby Cocoa' do
       cp_r @testdir + 'BulletsController.rb', '.'
       system(@rubycocoa, "add", "BulletsController.rb", "Test Ruby Cocoa.xcodeproj")
-      system(@rubycocoa, "add", "BulletsController.rb", "Test Ruby Cocoa.xcodeproj")
+      #system(@rubycocoa, "add", "BulletsController.rb", "Test Ruby Cocoa.xcodeproj")
       system("xcodebuild")
       assert File.exist?("build/Release/Test Ruby Cocoa.app/Contents/Resources/BulletsController.rb")
     end
