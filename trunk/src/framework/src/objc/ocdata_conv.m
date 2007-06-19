@@ -79,24 +79,22 @@ static BOOL
 convert_cary(VALUE *result, void *ocdata, char *octype_str, BOOL to_ruby)
 {
   long i, count, size, pos;
-  char *p, backup;
   VALUE ary;
   BOOL ok;
 
   octype_str++;
-  p = octype_str;
-  while (isdigit(*octype_str)) 
-    octype_str++;
 
   // first, get the number of entries  
-  backup = *octype_str;
-  *octype_str = '\0';
-  count = strtol(p, (char **)NULL, 10);
-  *octype_str = backup;
+  count = 0;
+  while (isdigit(*octype_str)) {
+    count *= 10;
+    count += (long)(*octype_str - '0');
+    octype_str++;
+  }
 
   // second, remove the trailing ']'
   pos = strlen(octype_str) - 1;
-  octype_str[pos] = '\0';
+  octype_str[pos] = '\0';      /*  ((char*)octype_str)[pos] = '\0'; */
   size = ocdata_size(octype_str);
 
   // third, do the conversion
@@ -145,18 +143,18 @@ convert_cary(VALUE *result, void *ocdata, char *octype_str, BOOL to_ruby)
 
 bail:
   // put back the trailing ']'
-  octype_str[pos] = ']';
+  octype_str[pos] = ']'; /* ((char*)octype_str)[pos] = ']'; */
   return ok;
 }
 
 static BOOL
-rbobj_to_cary (VALUE obj, void *data, char *octype_str)
+rbobj_to_cary (VALUE obj, void *data, const char *octype_str)
 {
   return convert_cary(&obj, data, octype_str, NO);
 }
 
 static BOOL
-cary_to_rbary (void *data, char *octype_str, VALUE *result)
+cary_to_rbary (void *data, const char *octype_str, VALUE *result)
 {
   return convert_cary(result, data, octype_str, YES);
 }
@@ -345,7 +343,7 @@ ocdata_to_rbobj (VALUE context_obj, const char *octype_str, const void *ocdata, 
       break;
   
     case _C_ARY_B:
-      f_success = cary_to_rbary(*(void **)ocdata, (char *)octype_str, &rbval); 
+      f_success = cary_to_rbary(*(void **)ocdata, octype_str, &rbval); 
       break;
 
     case _C_BOOL:
@@ -618,7 +616,7 @@ rbobj_to_nsobj (VALUE obj, id* nsobj)
 BOOL 
 rbobj_to_bool (VALUE obj)
 {
-  return ((obj != Qnil) && (obj != Qfalse)) ? YES : NO;
+  return RTEST(obj) ? YES : NO;
 }
 
 VALUE 
