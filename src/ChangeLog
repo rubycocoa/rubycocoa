@@ -1,3 +1,9 @@
+2007-06-19  Fujimoto Hisa  <hisa@fobj.com>
+
+	* framework/src/objc/ocdata_conv.m:
+	used RTEST for rbobj_to_bool. emphasized that the convert_cary is
+	mutable about the octype_str.
+
 2007-06-17  Laurent Sansonetti <lsansonetti@apple.com>
 
 	* framework/src/objc/RBRuntime.m:
