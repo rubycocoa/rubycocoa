@@ -1,3 +1,4 @@
+# -*- mode:ruby; indent-tabs-mode:nil; coding:utf-8 -*-
 # vim:ts=2:sw=2:expandtab:
 require 'rubygems'
 require 'rake'
@@ -8,8 +9,8 @@ require 'pathname'
 # Application own Settings
 APPNAME               = "«PROJECTNAME»"
 TARGET                = "#{APPNAME}.app"
-#VERSION               = "rev#{`svn info`[/Revision: (\d+)/, 1]}"
-VERSION               = Time.now.strftime("%Y-%m-%d")
+#APPVERSION           = "rev#{`svn info`[/Revision: (\d+)/, 1]}"
+APPVERSION            = Time.now.strftime("%Y-%m-%d")
 PUBLISH               = 'yourname@yourhost:path'
 DEFAULT_TARGET        = APPNAME
 DEFAULT_CONFIGURATION = 'Release'
@@ -57,7 +58,7 @@ end
 
 desc "Package the application"
 task :package => ["xcode:build:#{DEFAULT_TARGET}:#{RELEASE_CONFIGURATION}", "pkg"] do
-  name = "#{APPNAME}.#{VERSION}"
+  name = "#{APPNAME}.#{APPVERSION}"
   mkdir "image"
   sh %{rubycocoa standaloneify "build/#{DEFAULT_CONFIGURATION}/#{APPNAME}.app" "image/#{APPNAME}.app"}
   puts 'Creating Image...'
