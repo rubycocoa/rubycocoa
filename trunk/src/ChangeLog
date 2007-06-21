@@ -1,5 +1,8 @@
 2007-06-21  Fujimoto Hisa  <hisa@fobj.com>
 
+	* tests/tc_rubycocoacommand.rb:
+	adhoc fixed the infinite loop issue when testing rubycocoa command.
+
 	* template/ProjectBuilder/Application/Cocoa-Ruby Application/Rakefile:
 	rename VERSION with APPVERSION, because VERSION is already defined
 	by ruby.
