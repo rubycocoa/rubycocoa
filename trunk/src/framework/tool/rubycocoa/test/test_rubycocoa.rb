@@ -1,4 +1,4 @@
-#!ruby
+# -*- mode:ruby:indent-tabs-mode:nil; coding:utf-8 -*-
 # vim:ts=2:sw=2:expandtab:
 require 'test/unit'
 require 'fileutils'
