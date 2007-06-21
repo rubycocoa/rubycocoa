@@ -1,3 +1,9 @@
+2007-06-21  Fujimoto Hisa  <hisa@fobj.com>
+
+	* template/ProjectBuilder/Application/Cocoa-Ruby Application/Rakefile:
+	rename VERSION with APPVERSION, because VERSION is already defined
+	by ruby.
+
 2007-06-19  SATOH Hiroh <cho45@lowreal.net>
 
 	* framework/tool/rubycocoa/test/test_rubycocoa.rb,
