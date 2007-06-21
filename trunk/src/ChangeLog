@@ -1,7 +1,11 @@
 2007-06-21  Fujimoto Hisa  <hisa@fobj.com>
 
+	* install.rb:
+	added test_rubycocoa_command to test phase.
+
 	* tests/tc_rubycocoacommand.rb:
-	adhoc fixed the infinite loop issue when testing rubycocoa command.
+	removed the file, because install.rb invoke the test for rubycocoa
+	command.
 
 	* template/ProjectBuilder/Application/Cocoa-Ruby Application/Rakefile:
 	rename VERSION with APPVERSION, because VERSION is already defined

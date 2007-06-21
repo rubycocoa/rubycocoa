@@ -18,14 +18,14 @@
 ### begin compat.rb
 
 unless Enumerable.instance_methods(false).include? 'inject' then
-module Enumerable
-  def inject( result )
-    each do |i|
-      result = yield(result, i)
+  module Enumerable
+    def inject( result )
+      each do |i|
+        result = yield(result, i)
+      end
+      result
     end
-    result
   end
-end
 end
 
 def File.read_all( fname )
@@ -719,7 +719,7 @@ class Installer
 
   def allext( dir )
     _allext(dir) or raise InstallError,
-        "no extention exists: Have you done 'ruby #{$0} setup' ?"
+        "no extention exists: Have you done 'ruby #{$0} setup' ? "
   end
 
   DLEXT = /\.#{ ::Config::CONFIG['DLEXT'] }\z/
@@ -1045,14 +1045,27 @@ class ToplevelInstaller < Installer
   #
 
   def exec_test
+    ruby_cmd = File.join(Config::CONFIG['bindir'],
+                         Config::CONFIG['RUBY_INSTALL_NAME'])
     dive_into('tests') {
       ENV['DYLD_FRAMEWORK_PATH'] = File.join('../framework', framework_obj_path)
       ENV['BRIDGE_SUPPORT_PATH'] = '../framework/bridge-support'
-      ruby_cmd = File.join(
-	Config::CONFIG['bindir'], Config::CONFIG['RUBY_INSTALL_NAME'])
       test_loadlibs(ruby_cmd)
       test_testcase(ruby_cmd)
     }
+    dive_into('framework') {
+      dive_into('tool') {
+        dive_into('rubycocoa') {
+          ENV['DYLD_FRAMEWORK_PATH'] = File.join('../framework', framework_obj_path)
+          ENV['BRIDGE_SUPPORT_PATH'] = '../framework/bridge-support'
+          test_rubycocoa_command(ruby_cmd)
+        }
+      }
+    }
+  end
+
+  def test_rubycocoa_command(ruby_cmd)
+    command %Q!"#{ruby_cmd}"  -I../../../ext/rubycocoa -I../../../lib setup.rb test!
   end
 
   def test_testcase(ruby_cmd)
