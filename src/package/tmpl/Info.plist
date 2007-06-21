@@ -66,9 +66,9 @@
 			<key>SpecType</key>
 			<string>plist</string>
 			<key>TestObject</key>
-			<string><%= system_version %>.9</string>
+			<string><%= system_version.to_f + 0.1 %></string>
 			<key>TestOperator</key>
-			<string>&lt;=</string>
+			<string>&lt;</string>
 		</dict>
 	</array>
     <key>IFPkgFlagBackgroundScaling</key>
