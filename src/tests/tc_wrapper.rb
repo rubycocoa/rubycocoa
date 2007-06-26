@@ -64,10 +64,7 @@ class TC_OCObjWrapper < Test::Unit::TestCase
     url5 = NSURL.alloc.initWithScheme_host_path_('http', 'localhost', '/foo') 
     assert_equal(true, url1.isEqual_(url5))
     assert_raises OSX::OCMessageSendException do
-      # We cannot check the following method
-      #   NSURL.alloc.initWithScheme_host_path('http', 'localhost', '/foo')
-      # because it has already been registered, so let's check another method:
-      NSString.stringWithCapacity(42)
+      NSURL.alloc.initWithScheme_host_path('http', 'localhost', '/foo')
     end 
     assert_raises OSX::OCMessageSendException do 
       NSURL.alloc.initWithScheme('http', :host, 'localhost', :path, '/foo')
@@ -99,23 +96,22 @@ class TC_OCObjWrapper < Test::Unit::TestCase
   def test_proxy_ancestors
     assert(!OSX::NSProxy.ancestors.include?(OSX::NSObject))
     assert(!OSX::NSProtocolChecker.ancestors.include?(OSX::NSObject))
-    assert(!OSX::NSDistantObject.ancestors.include?(OSX::NSObject))
   end
 
   def test_alias
     # alias class method
     assert_raises OSX::OCMessageSendException do
-      str = NSString.objc_send(:str, 'RubyCocoa')
+      str = NSString.ocm_send('str:', 'RubyCocoa')
     end
     OSX::NSString.objc_alias_class_method 'str:', 'stringWithString:'
-    str = NSString.objc_send(:str, 'RubyCocoa')
+    str = NSString.ocm_send('str:', 'RubyCocoa')
     assert(str.isEqualToString?('RubyCocoa'), 'alias class method')
     # alias instance method
     assert_raises OSX::OCMessageSendException do
-      substr = str.objc_send(:substr, [4..8])
+      substr = str.ocm_send('substr:', [4..8])
     end
     OSX::NSString.objc_alias_method 'substr:', 'substringWithRange:'
-    substr = str.objc_send(:substr, [4..8])
+    substr = str.ocm_send('substr:', [4..8])
     assert(substr.isEqualToString?('Cocoa'), 'alias instace method')
     # RuntimeError should be raise when the selctor does not exist
     assert_raises RuntimeError do

@@ -19,7 +19,6 @@
 #import "ocdata_conv.h"
 #import "OverrideMixin.h"
 #import "internal_macros.h"
-#import "objc_compat.h"
 
 #define BRIDGE_SUPPORT_NAME "BridgeSupport"
 
@@ -229,40 +228,6 @@ static int notify_if_error(const char* api_name, VALUE err)
   return RBNotifyException(api_name, err);
 }
 
-@implementation NSObject (__DeallocHook)
-
-- (void) __dealloc
-{
-}
-
-- (void) __clearCacheAndDealloc
-{
-  remove_from_oc2rb_cache(self);
-  [self __dealloc];
-}
-
-@end
-
-static void install_dealloc_hook()
-{
-  Method dealloc_method, aliased_dealloc_method, cache_aware_dealloc_method;
-  Class nsobject;
-
-  nsobject = [NSObject class];
-
-  dealloc_method = class_getInstanceMethod(nsobject, @selector(dealloc));
-  aliased_dealloc_method = class_getInstanceMethod(nsobject, 
-    @selector(__dealloc));
-  cache_aware_dealloc_method = class_getInstanceMethod(nsobject,
-    @selector(__clearCacheAndDealloc));
-
-  method_setImplementation(aliased_dealloc_method,
-    method_getImplementation(dealloc_method));
-  method_setImplementation(dealloc_method,
-    method_getImplementation(cache_aware_dealloc_method));
-}
-
-
 static int rubycocoa_initialized_flag = 0;
 
 static int rubycocoa_initialized_p()
@@ -278,7 +243,6 @@ static void rubycocoa_init()
   if (! rubycocoa_initialized_flag) {
     init_rb2oc_cache();    // initialize the Ruby->ObjC internal cache
     init_oc2rb_cache();    // initialize the ObjC->Ruby internal cache
-    install_dealloc_hook();
     initialize_mdl_osxobjc();  // initialize an objc part of rubycocoa
     initialize_mdl_bundle_support();
     init_ovmix();

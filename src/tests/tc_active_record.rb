@@ -25,32 +25,30 @@ begin
   
     validates_presence_of :title
   end
-  
-  # Commented this out so we can test the automatic generation of proxy classes
-  #
-  # class MailboxProxy < OSX::ActiveRecordProxy
-  # end
+
+  class MailboxProxy < OSX::ActiveRecordProxy
+  end
 
   class Email < ActiveRecord::Base
     belongs_to :mailbox
   end
-  
+
   class EmailProxy < OSX::ActiveRecordProxy
-    # on_get filter with: block
-    on_get :body do |content|
-      content ||= 'empty'
-      OSX::NSAttributedString.alloc.initWithString(content)
-    end
-    
-    # on_get filter with: return
-    on_get :subject, :return => [OSX::NSAttributedString, :initWithString]
-    
-    # on_get filter with: call
-    on_get :address, :call => :nsattributed_string_from_address
-    # and the method to be called
-    def nsattributed_string_from_address(address)
-      address ||= 'empty'
-      OSX::NSAttributedString.alloc.initWithString(address)
+    def rbValueForKey(key)
+      if key.to_s == 'body'
+        # The NSTextField expects a NSAttributedString
+        str = original_record[key.to_s]
+        if str.nil?
+          return OSX::NSAttributedString.alloc.init
+        else
+          return OSX::NSAttributedString.alloc.initWithString(str)
+        end
+      else
+        # For any other keys simply call super.
+        # Note that we don't use super_rbValueForKey
+        # because rbValueForKey is a method defined on the ruby side of the bridge.
+        return super
+      end
     end
   end
 
@@ -79,9 +77,6 @@ begin
       assert mailboxes.original_records.first.is_a?(Mailbox)
     end
     # ActiveRecord::Base
-    def test_automatically_creates_a_proxy
-      assert Object.const_defined?('MailboxProxy')
-    end
     def test_activerecord_to_proxy
       mailbox = Mailbox.new({'title' => 'foo'})
       mailbox.save
@@ -189,20 +184,13 @@ begin
   
     def test_proxy_set_and_get_value_for_key
       mailbox = MailboxProxy.alloc.initWithAttributes({'title' => 'bla'})
-      mailbox.setValue_forKey( [EmailProxy.alloc.initWithAttributes({'address' => 'bla@example.com', 'subject' => nil, 'body' => 'foobar'})], 'emails' )
+      mailbox.setValue_forKey( [EmailProxy.alloc.initWithAttributes({'subject' => 'whatever', 'body' => 'foobar'})], 'emails' )
   
       assert mailbox.valueForKey('title').to_s == 'bla'
-      assert mailbox.valueForKey('emails')[0].valueForKey('body').string.to_s == 'foobar'
+      assert mailbox.valueForKey('emails')[0].valueForKey('subject').to_s == 'whatever'
     
       # check the ability to override the valueForKey method in a subclass
-      #
-      # block
       assert mailbox.valueForKey('emails')[0].valueForKey('body').is_a?(OSX::NSAttributedString)
-      # return
-      assert mailbox.valueForKey('emails')[0].valueForKey('subject').is_a?(OSX::NSAttributedString)
-      assert mailbox.valueForKey('emails')[0].valueForKey('subject').string.to_s == '' # check that we get a new instace, because the value was set to nil
-      # call
-      assert mailbox.valueForKey('emails')[0].valueForKey('address').is_a?(OSX::NSAttributedString)
     end
   
     def test_proxy_validate_value_for_key_with_error

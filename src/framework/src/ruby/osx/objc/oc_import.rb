@@ -224,10 +224,11 @@ module OSX
     occls_superclass = occls.oc_superclass
     if occls_superclass.nil? or occls_superclass.__ocid__ == occls.__ocid__ 
       OSX::ObjcID
-    elsif occls_superclass.is_a?(OSX::NSProxy) or occls_superclass.__ocid__ == OSX::NSProxy.__ocid__
+    elsif occls_superclass.is_a?(OSX::NSProxy) 
       OSX::NSProxy
     else
       begin
+        # OSX.const_get("#{occls_superclass}".to_sym) 
         OSX.const_get(occls_superclass.to_s.to_sym) 
       rescue NameError
         # some ObjC internal class cannot become Ruby constant
@@ -298,7 +299,6 @@ module OSX
     end
 
     def _ns_behavior_method_added(sym, class_method)
-      return if OSX._ignore_ns_override
       sel = sym.to_s.gsub(/([^_])_/, '\1:') 
       arity = if defined?(@__imported_arity) and @__imported_arity != nil \
               and RUBY_VERSION < "1.8.5"

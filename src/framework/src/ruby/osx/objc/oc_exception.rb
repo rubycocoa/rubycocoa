@@ -17,9 +17,9 @@ module OSX
 
     def initialize(ocexcp, msg = nil)
       @nsexception = ocexcp
-      @name = @nsexception.objc_send(:name).to_s
-      @reason = @nsexception.objc_send(:reason).to_s
-      @userInfo = @nsexception.objc_send(:userInfo)
+      @name = @nsexception.ocm_send(:name).to_s
+      @reason = @nsexception.ocm_send(:reason).to_s
+      @userInfo = @nsexception.ocm_send(:userInfo)
       msg = "#{@name} - #{@reason}" if msg.nil?
       super(msg)
     end

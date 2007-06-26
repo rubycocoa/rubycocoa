@@ -251,15 +251,4 @@ class TC_Types < Test::Unit::TestCase
     OSX::CFArrayApplyFunction(ary, OSX::NSMakeRange(0, ary.count), p, provided_ctx)
     assert_equal(i, 10)
   end
-
-  def test_boxed_struct_dup
-    rect = OSX::NSRect.new(1, 2, 3, 4)
-    rect2 = rect.dup
-    assert_equal(rect, rect2)
-    size2 = rect2.size.dup
-    assert_equal(rect.size, size2)
-    size3 = rect2.size.clone
-    assert_equal(rect.size, size3)
-    assert(!OSX::NSZone.instance_methods(false).include?('dup'))
-  end
 end

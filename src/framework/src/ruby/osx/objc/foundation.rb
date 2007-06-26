@@ -1,9 +1,8 @@
-# Copyright (c) 2006-2007, The RubyCocoa Project.
-# Copyright (c) 2001-2006, FUJIMOTO Hisakuni.
-# All Rights Reserved.
 #
-# RubyCocoa is free software, covered under either the Ruby's license or the 
-# LGPL. See the COPYRIGHT file for more information.
+#  $Id: cocoa.rb 1063 2006-09-11 15:11:08Z lrz $
+#
+#  Copyright (c) 2001 FUJIMOTO Hisakuni
+#
 
 require 'osx/objc/oc_all.rb'
 require 'osx/objc/cocoa_macros'

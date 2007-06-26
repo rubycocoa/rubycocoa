@@ -173,7 +173,7 @@ thread_switcher_start()
 
 /******************/
 
-VALUE
+static VALUE
 rb_osx_class_const (const char* name)
 {
   VALUE mOSX;
@@ -216,13 +216,7 @@ rb_osx_class_const (const char* name)
   return constant;
 }
 
-VALUE
-ocobj_s_class (void)
-{
-  return _cOCObject;
-}
-
-VALUE
+static VALUE
 rb_cls_ocobj (const char* name)
 {
   VALUE cls = rb_osx_class_const(name);
