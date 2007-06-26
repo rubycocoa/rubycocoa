@@ -1,3 +1,10 @@
+=== RubyCocoa 0.11.1p1 ===
+2007-06-21  kimura wataru  <kimuraw@i.nifty.jp>
+
+	* package/tmpl/Info.plist:
+	fix version cheking: cannot install from .pkg into Mac OS X 10.4.10.
+	(10.4 <= current version <= 10.4.9) -> (10.4 <= current version < 10.5)
+
 === RubyCocoa 0.11.1 ===
 
 2007-06-03  Eloy Duran <e.duran@superalloy.nl>
