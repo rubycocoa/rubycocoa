@@ -150,13 +150,13 @@ bail:
 static BOOL
 rbobj_to_cary (VALUE obj, void *data, const char *octype_str)
 {
-  return convert_cary(&obj, data, octype_str, NO);
+  return convert_cary(&obj, data, (char *)octype_str, NO);
 }
 
 static BOOL
 cary_to_rbary (void *data, const char *octype_str, VALUE *result)
 {
-  return convert_cary(result, data, octype_str, YES);
+  return convert_cary(result, data, (char *)octype_str, YES);
 }
 
 size_t
