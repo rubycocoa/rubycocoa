@@ -1,5 +1,11 @@
 2007-06-28  Laurent Sansonetti <lsansonetti@apple.com>
 
+	* sample/Fortune.wdgt/SimplePlugin/SimplePlugin.xcodeproj/project.pbxproj,
+	  sample/RubyAnywhere/RubyAnywhere.xcodeproj/project.pbxproj,
+	  sample/VPRubyPluginEnabler/RubyPluginEnabler.xcodeproj/project.pbxproj,
+	  sample/CocoaRepl/CocoaRepl.xcodeproj/project.pbxproj:
+	Removed references to the 10.4u SDK and use instead the current SDK.
+
 	* pre-config.rb:
 	Fixed --build-universal for systems higher than 10.4.
 
