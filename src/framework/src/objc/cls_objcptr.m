@@ -224,12 +224,35 @@ static VALUE
 rb_objcptr_regard_as(VALUE rcv, VALUE key)
 {
   const struct _encoding_type_rec* rec;
+  BOOL ok;
+  const char *encoding;
 
+  ok = YES; 
   rec = _lookup_encoding_type(key);
-  if (rec == NULL)
+  if (rec == NULL) {
+#if __LP64__
+    unsigned long size;
+#else
+    unsigned int size;
+#endif
+    ok = NO;
+    encoding = STR2CSTR(key);
+    @try {
+      NSGetSizeAndAlignment(STR2CSTR(key), &size, NULL);
+      if (size > 0)
+        ok = YES;
+    }
+    @catch (id exception) {}
+  }
+  else {
+    encoding = rec->encoding;
+  }
+
+  if (!ok)
     rb_raise(rb_eRuntimeError, "unsupported encoding -- %s", 
 	     rb_id2name(rb_to_id(key)));
-  ENCODING_OF(rcv) = rec->encoding;
+
+  ENCODING_OF(rcv) = encoding;
   return rcv;
 }
 

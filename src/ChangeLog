@@ -1,3 +1,8 @@
+2007-06-28  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* framework/src/objc/cls_objcptr.m:
+	improved ObjcPtr#regard_as to accept an ObjC runtime encoding string.
+
 2007-06-21  kimura wataru  <kimuraw@i.nifty.jp>
 
 	* package/tmpl/Info.plist:
