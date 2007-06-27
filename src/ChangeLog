@@ -1,5 +1,9 @@
 2007-06-28  Laurent Sansonetti <lsansonetti@apple.com>
 
+	* framework/src/objc/libffi.m,
+	  framework/src/objc/ocdata_conv.m:
+	Fixed warnings and removed dead code.
+
 	* sample/Fortune.wdgt/SimplePlugin/SimplePlugin.xcodeproj/project.pbxproj,
 	  sample/RubyAnywhere/RubyAnywhere.xcodeproj/project.pbxproj,
 	  sample/VPRubyPluginEnabler/RubyPluginEnabler.xcodeproj/project.pbxproj,

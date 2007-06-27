@@ -230,7 +230,7 @@ rb_ffi_dispatch (
   unsigned    skipped;
   int         i;
   ffi_type *  ret_type;
-  void *      retval;
+  void *      retval = NULL;
   ffi_cif     cif;
   VALUE       exception;
 
@@ -340,16 +340,10 @@ rb_ffi_dispatch (
       arg_types[i + argc_delta] = &ffi_type_pointer;
       if (*octype_str == _C_PTR) {
         // Regular pointer.
-        //long size = ocdata_size(octype_str + 1);
-        //if (size <= sizeof(void *)) {
-        //  arg_values[i + argc_delta] = &arg_values[i + argc_delta];
-        //}
-        //else {
-          void *value;
-          value = alloca(sizeof(void *));
-          *(void **)value = OCDATA_ALLOCA(octype_str+1);
-          arg_values[i + argc_delta] = value; 
-        //}
+        void *value;
+        value = alloca(sizeof(void *));
+        *(void **)value = OCDATA_ALLOCA(octype_str+1);
+        arg_values[i + argc_delta] = value; 
       }
       else {
         // C_ARY.
@@ -479,7 +473,7 @@ rb_ffi_dispatch (
     FFI_LOG("coercing result from octype '%s' to octype '%s'", ret_octype, call_entry->retval->octypestr);
     ret_octype = call_entry->retval->octypestr;
   }
-  FFI_LOG("retval (%p) : %s", retval, ret_octype);
+  FFI_LOG("retval : %s", ret_octype);
   ret_type = ffi_type_for_octype(ret_octype);
   if (ret_type != &ffi_type_void) {
     size_t ret_len = ocdata_size(ret_octype);
