@@ -37,15 +37,19 @@ if @config['build-universal'] == 'yes'
   cflags << ' -arch ppc -arch i386'
   ldflags << ' -arch ppc -arch i386'
 
-  sdkroot = '/Developer/SDKs/MacOSX10.4u.sdk'
-  cflags << ' -isysroot ' << sdkroot
-  ldflags << ' -Wl,-syslibroot,' << sdkroot
+  if `sw_vers -productVersion`.to_f < 10.5
+    sdkroot = '/Developer/SDKs/MacOSX10.4u.sdk'
+    cflags << ' -isysroot ' << sdkroot
+    ldflags << ' -Wl,-syslibroot,' << sdkroot
 
-  # validation
-  raise "ERROR: SDK \"#{sdkroot}\" does not exist." unless File.exist?(sdkroot)
-  #libruby_sdk = File.join(sdkroot, @config['libruby-path'])
-  libruby_sdk = @config['libruby-path']
-  raise "ERROR: library \"#{libruby_sdk}\" does not exists." unless File.exist?(libruby_sdk)
+    # validation
+    raise "ERROR: SDK \"#{sdkroot}\" does not exist." unless File.exist?(sdkroot)
+    libruby_sdk = @config['libruby-path']
+    raise "ERROR: library \"#{libruby_sdk}\" does not exist." unless File.exist?(libruby_sdk)
+  else
+    cflags << ' -arch ppc64 -arch x86_64'
+    ldflags << ' -arch ppc64 -arch x86_64'
+  end
 end
 
 if File.exist?('/usr/include/libxml2') and File.exist?('/usr/lib/libxml2.dylib')

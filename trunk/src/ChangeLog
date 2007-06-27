@@ -1,7 +1,10 @@
 2007-06-28  Laurent Sansonetti <lsansonetti@apple.com>
 
+	* pre-config.rb:
+	Fixed --build-universal for systems higher than 10.4.
+
 	* framework/src/objc/cls_objcptr.m:
-	improved ObjcPtr#regard_as to accept an ObjC runtime encoding string.
+	Improved ObjcPtr#regard_as to accept an ObjC runtime encoding string.
 
 2007-06-21  kimura wataru  <kimuraw@i.nifty.jp>
 
