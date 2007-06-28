@@ -369,6 +369,7 @@ module OSX
     OCTYPES = {
       :id       => '@',
       :class    => '#',
+      :BOOL     => 'c',
       :char     => 'c',
       :uchar    => 'C',
       :short    => 's',
@@ -383,6 +384,9 @@ module OSX
       :void     => 'v',
       :selector => ':',
       :sel      => ':',
+      :longlong => 'q',
+      :ulonglong => 'Q',
+      :cstr     => '*',
     }
     def _types_to_typefmt(types)
       return types.strip if types.is_a?(String)
