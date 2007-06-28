@@ -1,3 +1,8 @@
+2007-06-28  Satoshi Nakagawa <snakagawa@infoteria.co.jp>
+
+	* framework/src/ruby/osx/objc/oc_import.rb:
+	add acceptable types of OCTYPES: BOOL, longlong, ulonglong and cstr.
+
 2007-06-28  Laurent Sansonetti <lsansonetti@apple.com>
 
 	* framework/src/objc/libffi.m,
