@@ -14,6 +14,10 @@
 
 2007-06-28  Laurent Sansonetti <lsansonetti@apple.com>
 
+	* framework/tool/rb_nibtool.rb:
+	- Write the property list as XML ;
+	- Support passing '-' as the source code path, which will read on stdin.
+
 	* sample/ViewModelDemo/Controller.rb:
 	Fixed the IB actions.
 

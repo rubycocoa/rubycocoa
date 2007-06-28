@@ -199,13 +199,22 @@ class ClassesNibPlist
   end
 
   def write_plist_data
+    data, error = NSPropertyListSerialization.objc_send \
+      :dataFromPropertyList, @plist,
+      :format, NSPropertyListXMLFormat_v1_0,
+      :errorDescription
+    if data.nil?
+      $stderr.puts error
+      exit 1
+    end
+    data = OSX::NSString.alloc.initWithData_encoding(data, NSUTF8StringEncoding)
+
     if @plist_path
       log "Writing updated classes.nib plist back to file"
-      #@plist.writeToFile_atomically(@plist_path, true)
-      File.open(@plist_path, "w+") { |io| io.puts @plist }
+      File.open(@plist_path, "w+") { |io| io.puts data }
     else
       log "Writing updated classes.nib plist back to standard output"
-      puts @plist
+      puts data
     end
   end
   
@@ -324,7 +333,11 @@ class Options
         options[:dir] = dir == "" ? nil : dir
       end
       opts.on("-f", "--file PATH", "Path to file containing Ruby class(es)", "(for --update and --plist)") do |file|
-        options[:file] = file == "" ? nil : file
+        options[:file] = case file
+          when '' then nil
+          when '-' then '/dev/stdin'
+          else file
+        end
       end
       opts.on("-n", "--nib PATH", "Path to .nib to update") do |nib|
         options[:nib] = nib == "" ? nil : nib
