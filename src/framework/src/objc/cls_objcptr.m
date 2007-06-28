@@ -133,7 +133,10 @@ _objcptr_s_new(VALUE klass, long len)
   rb_obj_taint(obj);
   if (len > 0) {
     CPTR_OF (obj) = (void*) malloc (len);
-    if (CPTR_OF (obj)) ALLOCATED_SIZE_OF(obj) = len;
+    if (CPTR_OF (obj)) {
+      ALLOCATED_SIZE_OF(obj) = len;
+      memset(CPTR_OF (obj), 0, len);
+    }
     rb_obj_untaint(obj);
   }
   return obj;
@@ -150,7 +153,9 @@ rb_objcptr_s_allocate(int argc, VALUE* argv, VALUE klass)
 
   if (argc == 1 && ! SYMBOL_P(key)) {
     length = NUM2LONG(key);
-    return _objcptr_s_new (klass, length);
+    obj = _objcptr_s_new (klass, length);
+    ENCODING_OF(obj) = "C"; /* uchar */
+    return obj;
   }
 
   rec = _lookup_encoding_type(key);
@@ -168,19 +173,28 @@ rb_objcptr_s_allocate(int argc, VALUE* argv, VALUE klass)
 static VALUE
 rb_objcptr_s_allocate_as_int8(VALUE klass)
 {
-  return _objcptr_s_new (klass, sizeof(int8_t));
+  VALUE obj;
+  obj = _objcptr_s_new (klass, sizeof(int8_t));
+  ENCODING_OF(obj) = "c"; /* char */
+  return obj;
 }
 
 static VALUE
 rb_objcptr_s_allocate_as_int16(VALUE klass)
 {
-  return _objcptr_s_new (klass, sizeof(int16_t));
+  VALUE obj;
+  obj = _objcptr_s_new (klass, sizeof(int16_t));
+  ENCODING_OF(obj) = "s"; /* short */
+  return obj;
 }
 
 static VALUE
 rb_objcptr_s_allocate_as_int32(VALUE klass)
 {
-  return _objcptr_s_new (klass, sizeof(int32_t));
+  VALUE obj;
+  obj = _objcptr_s_new (klass, sizeof(int32_t));
+  ENCODING_OF(obj) = "i"; /* int */
+  return obj;
 }
 
 static VALUE

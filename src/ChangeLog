@@ -1,3 +1,12 @@
+2007-06-28  Naoki Hiroshima <n+rubycocoa@h7a.org>
+
+	* framework/src/objc/cls_objcptr.m,
+	  tests/tc_objcptr.rb:
+	- ObjcPtr.new initialize ObjcPtr.encoding as "uchar" by default and clear
+	  allocated memory ;
+	- ObjcPtr#allocate_as_int{8,16,32} set ObjcPtr.encoding" as "char", "short", 
+	  and "int", respectively.
+
 2007-06-28  Satoshi Nakagawa <snakagawa@infoteria.co.jp>
 
 	* framework/src/ruby/osx/objc/oc_import.rb:

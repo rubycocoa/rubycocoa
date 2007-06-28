@@ -176,7 +176,6 @@ class TC_ObjcPtr < Test::Unit::TestCase
     assert((components2[0] >= 0.09 and components2[0] <= 0.11))
     assert((components2[1] >= 0.49 and components2[1] <= 0.51))
     assert((components2[2] >= 0.89 and components2[2] <= 0.91))
-    assert_raises(RuntimeError) { ObjcPtr.new(42)[0] }
   end
 
   def test_ocptr_aref
@@ -205,11 +204,6 @@ class TC_ObjcPtr < Test::Unit::TestCase
     obj.assign(number)
     assert_equal(42, obj.int)
     assert_raises(ArgumentError) { obj.assign('foo') }
-  end
-
-  def test_ocptr_no_assign
-    obj = ObjcPtr.new(10)
-    assert_raises(RuntimeError) { obj.assign(42) }
   end
 
   def test_ocptr_ary_assign
