@@ -1403,6 +1403,7 @@ osx_load_bridge_support_file (VALUE mOSX, VALUE path)
         ASSERT_ALLOC(func);
 
         st_insert(bsFunctions, (st_data_t)func_name, (st_data_t)func);
+        rb_undef_method(CLASS_OF(mOSX), func_name);
         rb_define_module_function(mOSX, func_name, bridge_support_dispatcher, -1);
 
         func->name = func_name;
@@ -1420,6 +1421,7 @@ osx_load_bridge_support_file (VALUE mOSX, VALUE path)
         alias_name = get_attribute_and_check(reader, "name"); 
         alias_original = get_attribute_and_check(reader, "original");
 
+        rb_undef_method(CLASS_OF(mOSX), alias_name);
         rb_define_alias(CLASS_OF(mOSX), alias_name, alias_original);
 
         free(alias_name);

@@ -5,6 +5,10 @@
 
 2007-06-28  Laurent Sansonetti <lsansonetti@apple.com>
 
+	* framework/src/objc/BridgeSupport.m:
+	Work around possible warnings when defining module functions, in case a 
+	function has already been defined.
+
 	* framework/src/objc/libffi.m,
 	  framework/src/objc/ocdata_conv.m:
 	Fixed warnings and removed dead code.
