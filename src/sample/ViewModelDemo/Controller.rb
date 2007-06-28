@@ -54,13 +54,14 @@ class Controller < NSObject
 		@objs.push myObj
 	end
 	
-	def numberSliderAction
+	def numberSliderAction(sender)
 		number = @numberSlider.intValue
 		@numberText.setStringValue("Number: "+number.to_s)
 		adjustNumberOfViewModels
 	end
+  ib_action :numberSliderAction
 	
-	def moveButtonAction
+	def moveButtonAction(sender)
 		# Assign new destinations to the objects
 		@objs.each do |obj|
 			destPt = getRandomViewPoint
@@ -76,8 +77,9 @@ class Controller < NSObject
 		#	handleEvents # keeps the UI active
 		#end
 	end
+  ib_action :moveButtonAction
 	
-	def speedSliderAction
+	def speedSliderAction(sender)
 		# No need to store the speed in an instance variable, since the speed is read
 		# right from the control in moveButtonAction. Just update the speed text.
 		speed = @speedSlider.floatValue
@@ -89,6 +91,7 @@ class Controller < NSObject
 		speed = speed.to_i
 		@speedText.setStringValue("Speed: "+speed.to_s)
 	end
+  ib_action :speedSliderAction
 		
 	def getRandomViewRect
 		rx = rand(@mySuperview.bounds.width - SQUARE_SIZE)
