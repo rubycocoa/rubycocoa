@@ -19,48 +19,142 @@ def die(*s)
   exit 1
 end
 
+# Requires rubygems if present.
+begin require 'rubygems'; rescue LoadError; end
+
 class OSX::NSObject
   class << self
-    @@collect_child_classes = false
     @@subklasses = {}
-    
-    def collect_child_classes=(value)
-      @@collect_child_classes = value
-    end
-    
-    def collect_child_classes?
-      @@collect_child_classes == true
-    end
-    
+
     def subklasses
       @@subklasses
     end
-    
-    def ib_outlets(*args)
-      args.each do |arg|
-        log "found outlet #{arg} in #{$current_class}"
-        ((subklasses[$current_class] ||= {})[:outlets] ||= []) << arg
-      end
-    end
-  
-    alias_method :ns_outlet,  :ib_outlets
-    alias_method :ib_outlet,  :ib_outlets
-    alias_method :ns_outlets, :ib_outlets
+  end
+end
 
-    def ib_action(name, &blk)
-      log "found action #{name} in #{$current_class}"
-      ((subklasses[$current_class] ||= {})[:actions] ||= []) << name
-    end
-  
-    alias_method :_before_classes_nib_inherited, :inherited
-    def inherited(subklass)
-      if collect_child_classes?
-        unless subklass.to_s == ""
-          log "current class: #{subklass.to_s}"
-          $current_class = subklass.to_s
+begin
+  require 'rubynode'
+  require 'enumerator'
+  # RubyNode is found, we can get the IB metadata by parsing the code. 
+  class OSX::NSObject
+    class << self
+      def collect_ib_metadata(ruby_file)
+        @current_class = nil
+        __parse_nodes(File.read(ruby_file).parse_to_nodes.transform)
+      end
+
+      def __parse_nodes(ary)
+        ary.each_slice(2) { |key, val| __parse_nodes_pair(key, val) }
+      end
+      
+      def __parse_nodes_pair(key, val)
+        case val
+        when Array
+          if val.all? { |e| e.is_a?(Array) }
+            val.each { |p| __parse_nodes(p) }
+          else
+            __parse_nodes(val)
+          end
+        when Hash 
+          case key
+          when :class
+            a = val[:super]
+            if a and a.is_a?(Array) and a[1].is_a?(Hash)
+              # This class inherits from another class, let's memorize the 
+              # class name. We could actually check that the super class is
+              # an Objective-C class, but this would require to load all the
+              # required frameworks.
+              sclass = (a[1][:vid] or a[1][:mid])
+              a = val[:cpath]
+              if sclass and a and a.is_a?(Array) and a[1].is_a?(Hash)
+                @current_class = a[1][:mid]
+                if @current_class
+                  subklasses[@current_class] ||= {}
+                  subklasses[@current_class][:super] = sclass
+                end
+              end
+            end
+          when :fcall
+            case val[:mid]
+            # Memorize IB outlets.
+            when :ns_outlet, :ib_outlet, :ns_outlets, :ib_outlets
+              if @current_class.nil?
+                $stderr.puts "ib_outlet detected without current_class, skipping..."
+              elsif val[:args].is_a?(Array) and !val[:args].empty?
+                c = (subklasses[@current_class][:outlets] ||= [])
+                val[:args][1].each do |key2, val2|
+                  if key2 == :lit and val2.is_a?(Hash) and val2[:lit]
+                    c << val2[:lit]
+                  end
+                end
+              end
+            # Memorize IB actions.
+            when :ib_action
+              if @current_class.nil?
+                $stderr.puts "ib_action detected without current_class, skipping..."
+              elsif val[:args].is_a?(Array) and !val[:args].empty?
+                c = (subklasses[@current_class][:actions] ||= [])
+                a = val[:args][1][0]
+                if val[:args][1].size != 1
+                  $stderr.puts "ib_action called without or with more than one argument, skipping..."
+                elsif a[0] == :lit and 
+                      a[1].is_a?(Hash) and
+                      a[1][:lit]
+                  c << a[1][:lit]
+                end
+              end
+            end
+          end
+          val.each do |key2, val2|
+            if val2.is_a?(Array)
+              __parse_nodes_pair(key2, val2)
+            end
+          end
         end
       end
-      _before_classes_nib_inherited(subklass)
+    end
+  end
+rescue LoadError
+  # We don't have a Ruby parser handy, let's evaluate/interpret the code as
+  # a second alternative.
+  class OSX::NSObject
+    class << self
+      @@collect_child_classes = false
+    
+      def ib_outlets(*args)
+        args.each do |arg|
+          log "found outlet #{arg} in #{$current_class}"
+          (subklasses[$current_class][:outlets] ||= []) << arg
+        end
+      end
+    
+      alias_method :ns_outlet,  :ib_outlets
+      alias_method :ib_outlet,  :ib_outlets
+      alias_method :ns_outlets, :ib_outlets
+  
+      def ib_action(name, &blk)
+        log "found action #{name} in #{$current_class}"
+        (subklasses[$current_class][:actions] ||= []) << name
+      end
+    
+      alias_method :_before_classes_nib_inherited, :inherited
+      def inherited(subklass)
+        if @@collect_child_classes
+          unless subklass.to_s == ""
+            log "current class: #{subklass.to_s}"
+            $current_class = subklass.to_s
+            subklasses[$current_class] ||= {}
+            subklasses[$current_class][:super] = subklass.superclass.to_s
+          end
+        end
+        _before_classes_nib_inherited(subklass)
+      end
+
+      def collect_ib_metadata(ruby_file)
+        @@collect_child_classes = true
+        require ruby_file
+        @@collect_child_classes = false 
+      end
     end
   end
 end
@@ -142,14 +236,11 @@ class ClassesNibUpdater
   # at them
   def find_classes_outlets_and_actions(ruby_file)
     log "Getting classes, outlets and actions"
-    NSObject.collect_child_classes = true
-    require ruby_file
-    NSObject.collect_child_classes = false
+    NSObject.collect_ib_metadata(ruby_file)
   end
 
   def update_superclass(ruby_class, ruby_class_plist)
-    klass = ruby_class.split("::").inject(Object) { |par, const| par.const_get(const) }
-    superklass = klass.superclass.to_s.sub(/OSX::/, '')
+    superklass = NSObject.subklasses[ruby_class][:super].to_s.sub(/^OSX::/, '')
     ruby_class_plist.setObject_forKey(superklass, "SUPERCLASS")
   end
   

@@ -5,6 +5,12 @@
 
 2007-06-28  Laurent Sansonetti <lsansonetti@apple.com>
 
+	* framework/tool/rb_nibtool.rb:
+	If the RubyNode library is present in the system, uses it to collect the
+	necessary IB metadata, by parsing the given Ruby source code file. If not,
+	uses the old behavior that requires the given Ruby source code file and 
+	collect the metadata via code evaluation.
+
 	* framework/src/objc/BridgeSupport.m:
 	Work around possible warnings when defining module functions, in case a 
 	function has already been defined.
