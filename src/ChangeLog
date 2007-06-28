@@ -14,6 +14,9 @@
 
 2007-06-28  Laurent Sansonetti <lsansonetti@apple.com>
 
+	* AUTHORS:
+	Added Naoki-san.
+
 	* framework/tool/rb_nibtool.rb:
 	If the RubyNode library is present in the system, uses it to collect the
 	necessary IB metadata, by parsing the given Ruby source code file. If not,
