@@ -926,7 +926,6 @@ BOOL
 rbobj_to_ocdata (VALUE obj, const char *octype_str, void* ocdata, BOOL to_libffi)
 {
   BOOL f_success = YES;
-  struct bsBoxed *bs_boxed;
 
 #if BYTE_ORDER == BIG_ENDIAN
   // libffi casts all types as a void pointer, which is problematic on PPC for types sized less than a void pointer (char, uchar, short, ushort, ...), as we have to shift the bytes to get the real value.
@@ -941,7 +940,7 @@ rbobj_to_ocdata (VALUE obj, const char *octype_str, void* ocdata, BOOL to_libffi
     octype_str++;
 
   // Make sure we convert booleans to NSNumber booleans.
-  if (*octype_str != _C_ID) {
+  if (*octype_str != _C_ID && *octype_str != _C_BOOL) {
     if (TYPE(obj) == T_TRUE) {
       obj = INT2NUM(1);
     }
@@ -982,8 +981,28 @@ rbobj_to_ocdata (VALUE obj, const char *octype_str, void* ocdata, BOOL to_libffi
       break;
 
     case _C_UCHR:
-    case _C_BOOL:
       *(unsigned char*)ocdata = (unsigned char) NUM2UINT(rb_Integer(obj));
+      break;
+
+    case _C_BOOL:
+      {
+        unsigned char v;
+
+        switch (TYPE(obj)) {
+          case T_FALSE:
+          case T_NIL:
+            v = 0;
+            break;
+          case T_TRUE:
+          // All other types should be converted as true, to follow the
+          // Ruby semantics (where for example any integer is always true,
+          // even 0).
+          default:
+            v = 1;
+            break;
+        }
+        *(unsigned char*)ocdata = v;
+      } 
       break;
 
     case _C_CHR:
@@ -1037,7 +1056,6 @@ rbobj_to_ocdata (VALUE obj, const char *octype_str, void* ocdata, BOOL to_libffi
       break;
 
     case _C_PTR:
-      bs_boxed = NULL;
       if (is_id_ptr(octype_str)) {
         f_success = rbobj_to_idptr(obj, ocdata);
       }

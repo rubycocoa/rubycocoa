@@ -1,3 +1,15 @@
+2007-06-29  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* framework/src/objc/RBObject.m,
+	  framework/src/objc/ocdata_conv.m,
+	  tests/tc_bool.rb:
+	- Fixed a PPC regression when converting small integers (less than 4 bytes)
+	  from a metadata-driven Ruby method (ex: an informal protocol method).
+	- Better generic Ruby -> ObjC boolean conversion, now trying to respect the
+	  Ruby semantics. Ruby's true and false are converted as true and false, 
+	  all integers (including 0) are converted as true and nil as false ;
+	- Added a test case (original code written by Kimura Wataru).
+
 2007-06-28  Naoki Hiroshima <n+rubycocoa@h7a.org>
 
 	* framework/src/objc/cls_objcptr.m,

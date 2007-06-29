@@ -180,7 +180,7 @@ static int rb_obj_arity_of_method(VALUE rcv, SEL a_sel, BOOL *ok)
   }
   else {
     void* ocdata = OCDATA_ALLOCA(octype_str);
-    f_success = rbobj_to_ocdata (result, octype_str, ocdata, NO);
+    f_success = rbobj_to_ocdata (result, octype_str, ocdata, YES);
     if (f_success) [an_inv setReturnValue: ocdata];
   }
   return f_success;
