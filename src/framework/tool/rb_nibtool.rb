@@ -198,7 +198,7 @@ class ClassesNibPlist
     ruby_class_plist
   end
 
-  def write_plist_data
+  def write_plist_data(cached_outlets_actions_values)
     data, error = NSPropertyListSerialization.objc_send \
       :dataFromPropertyList, @plist,
       :format, NSPropertyListXMLFormat_v1_0,
@@ -207,7 +207,14 @@ class ClassesNibPlist
       $stderr.puts error
       exit 1
     end
-    data = OSX::NSString.alloc.initWithData_encoding(data, NSUTF8StringEncoding)
+    data = OSX::NSString.alloc.initWithData_encoding(
+      data, NSUTF8StringEncoding).to_s
+
+    if cached_outlets_actions_values
+      cached_outlets_actions_values.each do |k, v|
+        data.sub!(k, v.to_s)
+      end 
+    end
 
     if @plist_path
       log "Writing updated classes.nib plist back to file"
@@ -237,7 +244,7 @@ class ClassesNibUpdater
       updater.update_superclass(klass, ruby_class_plist)
       updater.add_outlets_and_actions_to_plist(klass, ruby_class_plist)
     end
-    plist.write_plist_data
+    plist.write_plist_data(updater.cached_outlets_actions_values)
   end
  
   # we've taken over ns_outlets and ns_actions above, so just requiring the
@@ -252,21 +259,37 @@ class ClassesNibUpdater
     superklass = NSObject.subklasses[ruby_class][:super].to_s.sub(/^OSX::/, '')
     ruby_class_plist.setObject_forKey(superklass, "SUPERCLASS")
   end
-  
+
+  attr_reader :cached_outlets_actions_values
+ 
   def add_outlets_and_actions_to_plist(klass, ruby_class_plist)
     log "Adding outlets and actions to plist for #{klass}"
-    
+   
+    # We don't set the outlets and actions values directly in the
+    # sub-dictionaries because we want the keys to be ordered in the same
+    # order the outlets or actions have been defined in the given source code.
+    # So we temporary use placeholders and will replace them with the real
+    # values when writing the final plist format.
+    h = (@cached_outlets_actions_values ||= {})
+    @count ||= '__1'
+ 
     updated_outlets = NSMutableDictionary.dictionary
     NSObject.subklasses[klass][:outlets].each do |outlet|
       log "adding outlet #{outlet}"
-      updated_outlets.setObject_forKey('id', outlet)
+      k = @count + '__'
+      @count = @count.succ
+      updated_outlets.setObject_forKey('id', k)
+      h[k] = outlet
     end unless NSObject.subklasses[klass][:outlets].nil?
     ruby_class_plist['OUTLETS'] = updated_outlets unless updated_outlets.count == 0
-    
+
     updated_actions = NSMutableDictionary.dictionary
     NSObject.subklasses[klass][:actions].each do |action|
       log "adding action #{action}"
-      updated_actions.setObject_forKey('id', action)
+      k = @count + '__'
+      @count = @count.succ
+      updated_actions.setObject_forKey('id', k)
+      h[k] = action
     end unless NSObject.subklasses[klass][:actions].nil?
     ruby_class_plist['ACTIONS'] = updated_actions unless updated_actions.count == 0
   end
@@ -317,16 +340,16 @@ class Options
     options[:plist] = false
     opts = OptionParser.new do |opts|
       opts.banner = "Usage: #{__FILE__} [options]"
-      opts.on("-u", "--update", "Update the classes.nib file from a Ruby class",
-                                "requires -f and -n options") do |update|
+      opts.on("-u", "--update", "Update the classes.nib file from a Ruby",
+                                "class (requires -f and -n options)") do |update|
         options[:update] = true
       end
       opts.on("-c", "--create", "Create new Ruby classes from a nib",
-                                "requires -d and -n options") do |create|
+                                "(requires -d and -n options)") do |create|
         options[:create] = true
       end
-      opts.on("-p", "--plist", "Dump on standard output a property list of the Ruby class IB metadata",
-                               "requires -f option") do |plist|
+      opts.on("-p", "--plist", "Dump on standard output a property list", "of the Ruby class IB metadata",
+                               "(requires -f option)") do |plist|
         options[:plist] = true
       end
       opts.on("-d", "--directory PATH", "Path to directory to create Ruby classes", "(for --create)") do |dir|

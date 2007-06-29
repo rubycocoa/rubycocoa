@@ -1,3 +1,10 @@
+2007-06-30  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* framework/tool/rb_nibtool.rb:
+	When writing a plist for a given Ruby source code, make sure the outlets and
+	actions are ordered in the same order they have been defined in the given
+	code.
+
 2007-06-29  Laurent Sansonetti <lsansonetti@apple.com>
 
 	* framework/src/objc/RBObject.m,
