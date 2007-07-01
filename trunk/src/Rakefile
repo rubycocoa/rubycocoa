@@ -1,5 +1,6 @@
 # -*- mode:ruby -*-
 require 'rake'
+require 'fileutils'
 
 task :default => :build
 
@@ -20,7 +21,7 @@ end
 
 desc "build RubyCocoa.framework"
 task :build do
-  ruby "install.rb", "config", "--build-universal=yes"
+  ruby "install.rb", "config", "--prefix=/usr", "--build-universal=yes"
   ruby "install.rb", "setup"
   ruby "install.rb", "test"
 end
@@ -58,10 +59,24 @@ task :package do
   rm_rf dstdir
   svn "export", "-r", rev, SVN_REPOS_URL, dstdir
   chdir(dstdir) do
-    ruby "install.rb", "config", "--build-universal=yes"
+    ruby "install.rb", "config", "--prefix=/usr", "--build-universal=yes"
     ruby "install.rb", "setup"
     ruby "install.rb", "test"
     ruby "install.rb", "package"
+  end
+end
+
+desc "packaging RubyCocoa source"
+task :package_source do
+  rev = svnversion
+  dstdir = "/tmp/rubycocoa-#{Time.now.strftime("%Y%m%d_%H%M%S")}"
+  rm_rf dstdir
+  svn "export", "-r", rev, SVN_REPOS_URL, dstdir
+  chdir(dstdir) do
+    FileUtils.rm_rf(Dir.glob(dstdir + '**/.cvs*'))
+    FileUtils.rm_rf(Dir.glob(dstdir + '**/.DS_Store'))
+    sh "tar -cf ~/Desktop/RubyCocoa_source.tar *"
+    sh "gzip ~/Desktop/RubyCocoa_source.tar"
   end
 end
 

@@ -1,3 +1,9 @@
+2007-07-01  Satoshi Nakagawa <artension@gmail.com>
+
+	* Rakefile
+	- Added package_source task.
+	- Added '--prefix=/usr' parameter to build and package tasks.
+
 2007-06-30  Laurent Sansonetti <lsansonetti@apple.com>
 
 	* framework/tool/rb_nibtool.rb:
