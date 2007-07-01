@@ -1,6 +1,14 @@
+2007-07-02  Satoshi Nakagawa <artension@gmail.com>
+
+	* tests/objc_test.m,
+	  tests/tc_bool.rb,
+	  tests/ObjcTest.bridgesupport:
+	- Added BOOL type conversion tests for both objc to ruby and ruby to objc
+	  conversions.
+
 2007-07-01  Satoshi Nakagawa <artension@gmail.com>
 
-	* Rakefile
+	* Rakefile:
 	- Added package_source task.
 	- Added '--prefix=/usr' parameter to build and package tasks.
 
