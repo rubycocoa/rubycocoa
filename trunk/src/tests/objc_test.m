@@ -466,6 +466,118 @@ static BOOL TestThreadedCallbackDone = NO;
 
 @end
 
+
+@interface ObjcDataClass : NSObject
+@end
+
+@implementation ObjcDataClass
+- (BOOL)boolNo { return NO; }
+- (BOOL)boolYes { return YES; }
+- (bool)cppBoolFalse { return false; }
+- (bool)cppBoolTrue { return true; }
+- (int)intZero { return 0; }
+- (int)intOne { return 1; }
+- (int)int42 { return 42; }
+- (int)intMinusOne { return -1; }
+- (unsigned int)biguint { return 2147483650UL; }
+- (char)charZero { return (char)0; }
+- (char)charOne { return (char)1; }
+@end
+
+@interface NSObject (_ObjcConvertionTest)
+- (void)setNil;
+- (void)setFalse;
+- (void)setTrue;
+- (void)setZero;
+- (void)setOne;
+- (void)set42;
+- (BOOL)testBool;
+- (char)testChar;
+- (int)testInt;
+@end
+
+
+@interface ObjcConvertionTest : NSObject
+- (void)startTests:(id)target withMessage:(NSString*)m;
+@end
+
+@implementation ObjcConvertionTest
+
+- (void)startTests:(id)target withMessage:(NSString*)m
+{
+  BOOL b;
+  char c;
+  int i;
+  
+  [target setNil];
+  b = [target testBool];
+  if (b != NO)
+    [NSException raise:@"BoolConvertionTest" format:@"assertion failed %@, expected NO for nil, got %d", m, b];
+  c = [target testChar];
+  if (c != 0)
+    [NSException raise:@"BoolConvertionTest" format:@"assertion failed %@, expected 0 for nil, got %d", m, c];
+  i = [target testInt];
+  if (i != 0)
+    [NSException raise:@"BoolConvertionTest" format:@"assertion failed %@, expected 0 for nil, got %d", m, i];
+  
+  [target setFalse];
+  b = [target testBool];
+  if (b != NO)
+    [NSException raise:@"BoolConvertionTest" format:@"assertion failed %@, expected NO for false, got %d", m, b];
+  c = [target testChar];
+  if (c != 0)
+    [NSException raise:@"BoolConvertionTest" format:@"assertion failed %@, expected 0 for false, got %d", m, c];
+  i = [target testInt];
+  if (i != 0)
+    [NSException raise:@"BoolConvertionTest" format:@"assertion failed %@, expected 0 for false, got %d", m, i];
+  
+  [target setTrue];
+  b = [target testBool];
+  if (b != YES)
+    [NSException raise:@"BoolConvertionTest" format:@"assertion failed %@, expected YES for true, got %d", m, b];
+  c = [target testChar];
+  if (c != 1)
+    [NSException raise:@"BoolConvertionTest" format:@"assertion failed %@, expected 1 for true, got %d", m, c];
+  i = [target testInt];
+  if (i != 1)
+    [NSException raise:@"BoolConvertionTest" format:@"assertion failed %@, expected 1 for true, got %d", m, i];
+  
+  [target setZero];
+  b = [target testBool];
+  if (b != YES)
+    [NSException raise:@"BoolConvertionTest" format:@"assertion failed %@, expected YES for 0, got %d", m, b];
+  c = [target testChar];
+  if (c != 0)
+    [NSException raise:@"BoolConvertionTest" format:@"assertion failed %@, expected 0 for 0, got %d", m, c];
+  i = [target testInt];
+  if (i != 0)
+    [NSException raise:@"BoolConvertionTest" format:@"assertion failed %@, expected 0 for 0, got %d", m, i];
+  
+  [target setOne];
+  b = [target testBool];
+  if (b != YES)
+    [NSException raise:@"BoolConvertionTest" format:@"assertion failed %@, expected YES for 1, got %d", m, b];
+  c = [target testChar];
+  if (c != 1)
+    [NSException raise:@"BoolConvertionTest" format:@"assertion failed %@, expected 1 for 1, got %d", m, c];
+  i = [target testInt];
+  if (i != 1)
+    [NSException raise:@"BoolConvertionTest" format:@"assertion failed %@, expected 1 for 1, got %d", m, i];
+  
+  [target set42];
+  b = [target testBool];
+  if (b != YES)
+    [NSException raise:@"BoolConvertionTest" format:@"assertion failed %@, expected YES for 42, got %d", m, b];
+  c = [target testChar];
+  if (c != 42)
+    [NSException raise:@"BoolConvertionTest" format:@"assertion failed %@, expected 42 for 42, got %d", m, c];
+  i = [target testInt];
+  if (i != 42)
+    [NSException raise:@"BoolConvertionTest" format:@"assertion failed %@, expected 42 for 42, got %d", m, i];
+}
+
+@end
+
 void Init_objc_test(){
   // dummy initializer for ruby's `require'
 }
