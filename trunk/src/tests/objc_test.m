@@ -3,6 +3,29 @@
 //   some tests require objc codes
 #import <Foundation/Foundation.h>
 
+@interface RBThreadTest : NSObject
+{
+}
+@end
+
+@implementation RBThreadTest
+-(void)callWithAutoreleasePool:(id)closure {
+    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+    [closure call];
+    [pool release];
+}
+-(NSException *)callWithExceptionTryCatch:(id)closure {
+    NSException *result = nil;
+    @try {
+        [closure call];
+    }
+    @catch (NSException * e) {
+        result = e;
+    }
+    return result;
+}
+@end
+
 @interface RBExceptionTestBase : NSObject
 {
 }

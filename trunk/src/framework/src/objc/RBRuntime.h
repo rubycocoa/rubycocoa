@@ -37,7 +37,7 @@ int RBApplicationInit (const char* path_to_ruby_program,
  *
  * initialize rubycocoa for a ruby extention library
  */
-void RBRubyCocoaInit();
+void RBRubyCocoaInit (void);
 
 
 /** [API] RBApplicationMain (for compatibility)
@@ -48,5 +48,11 @@ int
 RBApplicationMain (const char* path_to_ruby_program, 
                    int         argc, 
                    const char* argv[]);
+
+/** [API] RBIsRubyThreadingSupported
+ *
+ * verify if this environment supports the Ruby threading
+ */
+BOOL RBIsRubyThreadingSupported (void);
 
 #endif  // _RBRUNTIME_H_

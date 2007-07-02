@@ -1,5 +1,14 @@
 2007-07-02  Laurent Sansonetti <lsansonetti@apple.com>
 
+	* framework/src/ruby/osx/objc/ruby_addition.rb,
+	  framework/src/objc/RBRuntime.h,
+	  framework/src/objc/RBRuntime.m,
+	  tests/tc_thread.rb,
+	  tests/objc_test.m,
+	  tests/Makefile:
+	Merged Jonathan's support to use Ruby Threads with RubyCocoa. This is for
+	Tiger only. Made a few modifications, work is still in progress. 
+
 	* misc/ruby-osx10_1.patch,
 	  misc/ruby-1.6.7-osx10.2.patch:
 	Removed (these patches are for Ruby 1.6.x).
