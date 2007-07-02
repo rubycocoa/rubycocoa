@@ -8,6 +8,10 @@
 }
 @end
 
+@interface NSObject (CallIP)
+- (void)call;
+@end
+
 @implementation RBThreadTest
 -(void)callWithAutoreleasePool:(id)closure {
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
