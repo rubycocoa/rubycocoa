@@ -1,5 +1,10 @@
 2007-07-02  Laurent Sansonetti <lsansonetti@apple.com>
 
+	* misc/ruby_thread_hooks.diff,
+	  misc/ruby_thread_hooks.txt:
+	Added the patch and some details that needs to be applied to the Ruby 
+	runtime in order to use Ruby Threads with RubyCocoa. 
+
 	* framework/src/ruby/osx/objc/ruby_addition.rb,
 	  framework/src/objc/RBRuntime.h,
 	  framework/src/objc/RBRuntime.m,
