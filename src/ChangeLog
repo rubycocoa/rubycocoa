@@ -1,3 +1,9 @@
+2007-07-02  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* tool/create-symlinks.rb:
+	Added a convenience tool that replaces an existing RubyCocoa installation
+	with symbolic links to the current build of RubyCocoa.
+
 2007-07-02  Satoshi Nakagawa <artension@gmail.com>
 
 	* tests/objc_test.m,
