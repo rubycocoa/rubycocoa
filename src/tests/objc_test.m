@@ -482,98 +482,52 @@ static BOOL TestThreadedCallbackDone = NO;
 - (unsigned int)biguint { return 2147483650UL; }
 - (char)charZero { return (char)0; }
 - (char)charOne { return (char)1; }
+- (float)floatTwo { return 2.0f; }
+- (double)doubleTwo { return 2.0; }
 @end
 
-@interface NSObject (_ObjcConvertionTest)
-- (void)setNil;
-- (void)setFalse;
-- (void)setTrue;
-- (void)setZero;
-- (void)setOne;
-- (void)set42;
+@interface NSObject (TypeConversionTest)
 - (BOOL)testBool;
 - (char)testChar;
 - (int)testInt;
+- (float)testFloat;
+- (double)testDouble;
 @end
 
 
-@interface ObjcConvertionTest : NSObject
-- (void)startTests:(id)target withMessage:(NSString*)m;
+@interface ObjcConversionTest : NSObject
 @end
 
-@implementation ObjcConvertionTest
+@implementation ObjcConversionTest
 
-- (void)startTests:(id)target withMessage:(NSString*)m
+- (NSString*)callbackTestBool:(id)target
 {
-  BOOL b;
-  char c;
-  int i;
-  
-  [target setNil];
-  b = [target testBool];
-  if (b != NO)
-    [NSException raise:@"BoolConvertionTest" format:@"assertion failed %@, expected NO for nil, got %d", m, b];
-  c = [target testChar];
-  if (c != 0)
-    [NSException raise:@"BoolConvertionTest" format:@"assertion failed %@, expected 0 for nil, got %d", m, c];
-  i = [target testInt];
-  if (i != 0)
-    [NSException raise:@"BoolConvertionTest" format:@"assertion failed %@, expected 0 for nil, got %d", m, i];
-  
-  [target setFalse];
-  b = [target testBool];
-  if (b != NO)
-    [NSException raise:@"BoolConvertionTest" format:@"assertion failed %@, expected NO for false, got %d", m, b];
-  c = [target testChar];
-  if (c != 0)
-    [NSException raise:@"BoolConvertionTest" format:@"assertion failed %@, expected 0 for false, got %d", m, c];
-  i = [target testInt];
-  if (i != 0)
-    [NSException raise:@"BoolConvertionTest" format:@"assertion failed %@, expected 0 for false, got %d", m, i];
-  
-  [target setTrue];
-  b = [target testBool];
-  if (b != YES)
-    [NSException raise:@"BoolConvertionTest" format:@"assertion failed %@, expected YES for true, got %d", m, b];
-  c = [target testChar];
-  if (c != 1)
-    [NSException raise:@"BoolConvertionTest" format:@"assertion failed %@, expected 1 for true, got %d", m, c];
-  i = [target testInt];
-  if (i != 1)
-    [NSException raise:@"BoolConvertionTest" format:@"assertion failed %@, expected 1 for true, got %d", m, i];
-  
-  [target setZero];
-  b = [target testBool];
-  if (b != YES)
-    [NSException raise:@"BoolConvertionTest" format:@"assertion failed %@, expected YES for 0, got %d", m, b];
-  c = [target testChar];
-  if (c != 0)
-    [NSException raise:@"BoolConvertionTest" format:@"assertion failed %@, expected 0 for 0, got %d", m, c];
-  i = [target testInt];
-  if (i != 0)
-    [NSException raise:@"BoolConvertionTest" format:@"assertion failed %@, expected 0 for 0, got %d", m, i];
-  
-  [target setOne];
-  b = [target testBool];
-  if (b != YES)
-    [NSException raise:@"BoolConvertionTest" format:@"assertion failed %@, expected YES for 1, got %d", m, b];
-  c = [target testChar];
-  if (c != 1)
-    [NSException raise:@"BoolConvertionTest" format:@"assertion failed %@, expected 1 for 1, got %d", m, c];
-  i = [target testInt];
-  if (i != 1)
-    [NSException raise:@"BoolConvertionTest" format:@"assertion failed %@, expected 1 for 1, got %d", m, i];
-  
-  [target set42];
-  b = [target testBool];
-  if (b != YES)
-    [NSException raise:@"BoolConvertionTest" format:@"assertion failed %@, expected YES for 42, got %d", m, b];
-  c = [target testChar];
-  if (c != 42)
-    [NSException raise:@"BoolConvertionTest" format:@"assertion failed %@, expected 42 for 42, got %d", m, c];
-  i = [target testInt];
-  if (i != 42)
-    [NSException raise:@"BoolConvertionTest" format:@"assertion failed %@, expected 42 for 42, got %d", m, i];
+  BOOL b = [target testBool];
+  return [NSString stringWithFormat:@"%d", b];
+}
+
+- (NSString*)callbackTestChar:(id)target
+{
+  char c = [target testChar];
+  return [NSString stringWithFormat:@"%d", c];
+}
+
+- (NSString*)callbackTestInt:(id)target
+{
+  int i = [target testInt];
+  return [NSString stringWithFormat:@"%d", i];
+}
+
+- (NSString*)callbackTestFloat:(id)target
+{
+  float f = [target testFloat];
+  return [NSString stringWithFormat:@"%1.1f", f];
+}
+
+- (NSString*)callbackTestDouble:(id)target
+{
+  double d = [target testDouble];
+  return [NSString stringWithFormat:@"%1.1lf", d];
 }
 
 @end

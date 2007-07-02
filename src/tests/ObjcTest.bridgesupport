@@ -20,12 +20,12 @@
     <method selector='intOne'>
       <retval type='i'/>
     </method>
-	<method selector='int42'>
-	  <retval type='i'/>
-	</method>
-	<method selector='intMinusOne'>
-	  <retval type='i'/>
-	</method>
+    <method selector='int42'>
+      <retval type='i'/>
+    </method>
+    <method selector='intMinusOne'>
+      <retval type='i'/>
+    </method>
     <method selector='biguint'>
       <retval type='I'/>
     </method>
@@ -35,10 +35,18 @@
     <method selector='charOne'>
       <retval type='c'/>
     </method>
+    <method selector='floatTwo'>
+      <retval type='f'/>
+    </method>
+    <method selector='doubleTwo'>
+      <retval type='d'/>
+    </method>
   </class>
   <informal_protocol name='TypeConversionTest'>
     <method type='B8@0:4' selector='testBool'/>
     <method type='c8@0:4' selector='testChar'/>
-    <method type='I8@0:4' selector='testInt'/>
+    <method type='i8@0:4' selector='testInt'/>
+    <method type='f8@0:4' selector='testFloat'/>
+    <method type='d8@0:4' selector='testDouble'/>
   </informal_protocol>
 </signatures>

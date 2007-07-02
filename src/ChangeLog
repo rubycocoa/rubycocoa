@@ -3,6 +3,14 @@
 	* tests/objc_test.m,
 	  tests/tc_bool.rb,
 	  tests/ObjcTest.bridgesupport:
+	- Reformed type conversion tests.
+	- Added test cases for float and double values.
+
+2007-07-02  Satoshi Nakagawa <artension@gmail.com>
+
+	* tests/objc_test.m,
+	  tests/tc_bool.rb,
+	  tests/ObjcTest.bridgesupport:
 	- Added BOOL type conversion tests for both objc to ruby and ruby to objc
 	  conversions.
 
