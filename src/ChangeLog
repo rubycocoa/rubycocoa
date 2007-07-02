@@ -1,5 +1,9 @@
 2007-07-02  Laurent Sansonetti <lsansonetti@apple.com>
 
+	* misc/ruby-osx10_1.patch,
+	  misc/ruby-1.6.7-osx10.2.patch:
+	Removed (these patches are for Ruby 1.6.x).
+
 	* tool/create-symlinks.rb:
 	Added a convenience tool that replaces an existing RubyCocoa installation
 	with symbolic links to the current build of RubyCocoa.
