@@ -7,21 +7,31 @@
  * LGPL. See the COPYRIGHT file for more information.
  */
 
-#import "RBRuntime.h"
-#import "RBObject.h"
 #import <string.h>
+#include <mach-o/dyld.h>
+#include <objc/objc-runtime.h>
+#include <dlfcn.h>
 #import <Foundation/NSBundle.h>
 #import <Foundation/NSAutoreleasePool.h>
 #import <Foundation/NSString.h>
 #import <Foundation/NSPathUtilities.h>
+#import <Foundation/NSThread.h>
+
+#import "RBRuntime.h"
+#import "RBObject.h"
 #import "mdl_osxobjc.h"
 #import "mdl_bundle_support.h"
 #import "ocdata_conv.h"
 #import "OverrideMixin.h"
 #import "internal_macros.h"
 #import "objc_compat.h"
+#import "st.h"
 
 #define BRIDGE_SUPPORT_NAME "BridgeSupport"
+
+/* we cannot use the original DLOG here because it uses autoreleased objects */
+#undef DLOG
+#define DLOG(f,args...) do { if (rubycocoa_debug == Qtrue) printf(f, args); } while (0) 
 
 /* this function should be called from inside a NSAutoreleasePool */
 static NSBundle* bundle_for(Class klass)
@@ -273,9 +283,16 @@ static int rubycocoa_initialized_p()
 // exported and used by internal_macros.h 
 VALUE rubycocoa_debug = Qfalse;
 
+static BOOL rb_cocoa_check_for_multiple_libruby(void);
+static void RBCocoaInstallRubyThreadSchedulerHooks(void);
+
 static void rubycocoa_init()
 {
   if (! rubycocoa_initialized_flag) {
+    // initialize the threading hooks
+    rb_cocoa_check_for_multiple_libruby();
+    RBCocoaInstallRubyThreadSchedulerHooks();
+
     init_rb2oc_cache();    // initialize the Ruby->ObjC internal cache
     init_oc2rb_cache();    // initialize the ObjC->Ruby internal cache
     install_dealloc_hook();
@@ -411,4 +428,407 @@ RBApplicationMain(const char* rb_program_path, int argc, const char* argv[])
     ruby_run();
   }
   return 0;
+}
+
+/******************************************************************************/
+
+/* Ruby Thread support:
+  
+   Ruby implements threads by using setjmp/longjmp to switch between separate 
+   C stacks within one native thread.
+
+   This confuses Objective C because NSThread stores a per-native-thread stack 
+   of autorelease pools and exception handlers. When the C stack changes, an 
+   error message like this is likely to appear:
+
+      Exception handlers were not properly removed. Some code has jumped or 
+      returned out of an NS_DURING...NS_HANDLER region without using the 
+      NS_VOIDRETURN or NS_VALUERETURN macros
+ 
+   The semantics of NSAutoreleasePools are also broken because the effective 
+   scope crosses multiple threads.
+   
+   The solution below requires a patch to the Ruby interpreter that implements 
+   the following function:
+
+      void rb_add_threadswitch_hook(rb_threadswitch_hook_func_t func)
+
+   A hook is registered that multiplexes sets of autorelease pools and 
+   exception stacks onto one NSThread.
+   Whenever a Ruby thread is switched in or out, the relevant context is saved 
+   and restored. 
+ 
+   Unfortunately, implementing this requires fiddling with two fields in the 
+   NSThread internal structure.
+
+   A further complication arises due to the dynamic linker. Suppose RubyCocoa 
+   has been linked against a patched libruby, but at runtime the user 
+   accidentally uses /usr/bin/ruby (unpatched) to load RubyCocoa. Since
+   /usr/bin/ruby links to /usr/lib/libruby.dylib, and RubyCocoa links to 
+   /path/to/patched/libruby.dylib, most of the functions will be picked up 
+   from /usr/lib/libruby.dylib, but rb_add_threadswitch_hook will be linked 
+   from the patched libruby.dylib.
+
+   The setup code explicitly determines the name of the libraries from which 
+   two relevant symbols have been loaded from, and issues a warning and aborts 
+   the setup process if they are different.
+
+   Tested on 10.4.7 PowerPC.
+*/
+
+static int rb_cocoa_thread_debug = 1;
+
+#ifndef RUBY_THREADSWITCH_INIT
+/* The declarations immediately below come from the patched ruby.h.
+   Since they are not available here (determined by the lack of definition for 
+   RUBY_THREADSWITCH_INIT) we define them manually, so that a patched 
+   libruby.dylib can still be used at runtime.
+*/
+
+typedef unsigned int rb_threadswitch_event_t;
+
+#define RUBY_THREADSWITCH_INIT 0x01
+#define RUBY_THREADSWITCH_FREE 0x02
+#define RUBY_THREADSWITCH_SAVE 0x04
+#define RUBY_THREADSWITCH_RESTORE 0x08
+
+typedef void (*rb_threadswitch_hook_func_t) _((rb_threadswitch_event_t,VALUE));
+#endif
+
+/* The following two functions are marked as weak imports so that RubyCocoa 
+   will still load without thread switching hooks support in the ruby 
+   interpreter.
+*/
+extern void *rb_add_threadswitch_hook(rb_threadswitch_hook_func_t func) 
+  __attribute__ ((weak_import));
+extern void rb_remove_threadswitch_hook(void *handle) 
+  __attribute__ ((weak_import));
+
+/* Cached values for direct call to +[NSThread currentThread] (not clear if 
+   this is a significant performance improvement) */
+static Class rb_cocoa_NSThread_class;
+static NSThread *(*rb_cocoa_NSThread_currentThread_imp)(id, SEL);
+static SEL rb_cocoa_currentThread_SEL;
+
+/* NSThread that was current when thread hooks were initialised. 
+   Any Ruby activity that isn't on this thread will cause an error.
+ */
+static NSThread *rb_cocoa_main_nsthread;
+
+/* Hash table mapping from a Ruby thread object (a VALUE) to a struct 
+   rb_cocoa_thread_context */
+static struct st_table *rb_cocoa_thread_state;
+
+/* True when between save/restore of two threads */
+static BOOL rb_cocoa_between_threads;
+
+#if MAC_OS_X_VERSION_MAX_ALLOWED <= MAC_OS_X_VERSION_10_4
+/* <= TIGER */
+
+/* Offsets into NSThread object of important instance vars */
+static int rb_cocoa_NSThread_autoreleasePool;
+static int rb_cocoa_NSThread_excHandlers;
+
+/* Access to the autoreleasePool ivar of NSThread */
+# define NSTHREAD_autoreleasePool_get(t) \
+    (*(void**)( ((char*)t) + rb_cocoa_NSThread_autoreleasePool ))
+# define NSTHREAD_autoreleasePool_set(t, d) \
+    (NSTHREAD_autoreleasePool_get(t) = d)
+
+/* Access to the excHandlers ivar of NSThread */
+# define NSTHREAD_excHandlers_get(t) \
+    (*(void**)( ((char*)t) + rb_cocoa_NSThread_excHandlers ))
+# define NSTHREAD_excHandlers_set(t, d) \
+    (NSTHREAD_excHandlers_get(t) = d)
+
+#else /* > TIGER */
+
+#error System not supported yet
+
+#endif
+
+struct rb_cocoa_thread_context
+{
+  void *excHandlers;
+  void *autoreleasePool;
+};
+
+/* Substitute for +[NSThread currentThread]. Not clear if this is really 
+   necessary, speed-wise */
+static NSThread *rb_cocoa_get_current_NSThread() 
+{
+  return rb_cocoa_NSThread_currentThread_imp(rb_cocoa_NSThread_class, 
+    rb_cocoa_currentThread_SEL);
+}
+
+/* Called when a new Ruby thread comes into existence.
+   The new thread may not be the current thread.
+*/
+static void* rb_cocoa_thread_init_context(NSThread *thread, VALUE rbthread)
+{
+  struct rb_cocoa_thread_context *ctx;
+  
+  ctx = (struct rb_cocoa_thread_context *)malloc(sizeof(*ctx));
+  ASSERT_ALLOC(ctx); 
+ 
+  if (rbthread == rb_thread_current()) {
+    // Ruby thread is current, so save current exception handlers and 
+    // autorelease pool
+    ctx->excHandlers = NSTHREAD_excHandlers_get(thread);
+    ctx->autoreleasePool = NSTHREAD_autoreleasePool_get(thread);
+  } 
+  else {
+    ctx->excHandlers = NULL;
+    ctx->autoreleasePool = NULL;
+  }
+  
+  return ctx;
+}
+
+/* Attempt to free autorelease pool state when a ruby thread is released.
+ */
+@interface NSAutoreleasePool (ReleaseAllPoolsIP)
++ (void)releaseAllPools;
+@end
+static void rb_cocoa_release_all_pools() {
+  if ([NSAutoreleasePool respondsToSelector: @selector(releaseAllPools)]) {
+    [NSAutoreleasePool releaseAllPools];
+  }
+}
+
+/* Called when a Ruby thread is destroyed.
+ */
+static void rb_cocoa_thread_free_context(NSThread *thread, VALUE rbthread, 
+  struct rb_cocoa_thread_context *ctx)
+{
+  if (rbthread != rb_thread_main()) {
+    void *save_pool;
+        
+    /* Temporarily switch back the dead thread's autorelease pool so it can be 
+       cleaned up */
+    save_pool = NSTHREAD_autoreleasePool_get(thread);
+    NSTHREAD_autoreleasePool_set(thread, ctx->autoreleasePool);
+    
+    rb_cocoa_release_all_pools();
+    
+    ctx->autoreleasePool = NSTHREAD_autoreleasePool_get(thread);
+    NSTHREAD_autoreleasePool_set(thread, save_pool);
+    
+    if (ctx->autoreleasePool != NULL) {
+      fprintf(stderr,"Warning: a Ruby thread leaked an autorelease pool %p (was %scurrent)\n",
+        ctx->autoreleasePool,
+        rbthread == rb_thread_current() ? "" : "not ");
+    }
+  }
+  free(ctx);
+}
+
+/*
+  Called when a Ruby thread is being restored.
+  We must restore the NSThread exception handler stack and the autorelease pool 
+  stack.
+ */
+static void rb_cocoa_thread_restore_context(NSThread *thread, 
+  struct rb_cocoa_thread_context *ctx)
+{
+  NSTHREAD_excHandlers_set(thread, ctx->excHandlers);
+  NSTHREAD_autoreleasePool_set(thread, ctx->autoreleasePool);
+  DLOG("Restored excHandlers and autoreleasePool to %p and %p\n",
+    NSTHREAD_excHandlers_get(thread), NSTHREAD_autoreleasePool_get(thread));
+    
+  rb_cocoa_between_threads = NO;
+}
+
+/*
+  Called when a Ruby thread is being saved.
+  We must save the current NSThread exception handler stack and autorelease 
+  pool stack.
+ */
+static void rb_cocoa_thread_save_context(NSThread *thread, 
+  struct rb_cocoa_thread_context *ctx)
+{
+  if (!rb_cocoa_between_threads) {
+    ctx->excHandlers = NSTHREAD_excHandlers_get(thread);
+    ctx->autoreleasePool = NSTHREAD_autoreleasePool_get(thread);
+    DLOG("Saved excHandlers and autoreleasePool as %p and %p\n", 
+      NSTHREAD_excHandlers_get(thread), NSTHREAD_autoreleasePool_get(thread));
+  }
+    
+  rb_cocoa_between_threads = YES;
+}
+
+/*
+  This function is registered with the ruby core as a threadswitch event hook.
+*/
+static void rb_cocoa_thread_schedule_hook(rb_threadswitch_event_t event, 
+  VALUE thread)
+{
+  void *context;
+  NSThread *nsthread;
+
+  nsthread = rb_cocoa_get_current_NSThread();
+  if (nsthread == NULL)
+      return;
+  if (nsthread != rb_cocoa_main_nsthread) {
+    DLOG("rb_cocoa_thread_schedule_hook: expecting to run on NSThread %p but was %p\n",
+      rb_cocoa_main_nsthread, nsthread);
+    return; /* could report as a fatal bug instead */
+  }
+    
+  switch (event) {
+    case RUBY_THREADSWITCH_INIT:
+      context = rb_cocoa_thread_init_context(nsthread, thread);
+      DLOG("Created context %p for thread %p\n", context, (void*)thread);
+      st_insert(rb_cocoa_thread_state, (st_data_t)thread, (st_data_t)context);
+      break;
+            
+    case RUBY_THREADSWITCH_FREE:
+      if (st_delete(rb_cocoa_thread_state, (st_data_t*)&thread, 
+        (st_data_t *)&context)) {
+
+        DLOG("Freeing context %p for thread %p\n", context, (void*)thread);
+        rb_cocoa_thread_free_context(nsthread,thread, 
+          (struct rb_cocoa_thread_context*) context);
+      }
+      break;
+
+    case RUBY_THREADSWITCH_SAVE:
+      if (!st_lookup(rb_cocoa_thread_state, (st_data_t)thread, 
+        (st_data_t *)&context)) {
+
+        DLOG("Created context before save %p for thread %p\n", context, 
+          (void*)thread);
+        context = rb_cocoa_thread_init_context(nsthread,thread);
+        st_insert(rb_cocoa_thread_state, (st_data_t)thread, (st_data_t)context);
+      }
+      DLOG("Saving context %p for thread %p\n", context, (void*)thread);
+      rb_cocoa_thread_save_context(nsthread,
+        (struct rb_cocoa_thread_context*) context);
+      break;
+            
+    case RUBY_THREADSWITCH_RESTORE:
+      if (st_lookup(rb_cocoa_thread_state, (st_data_t)thread, 
+        (st_data_t *)&context)) {
+        
+        DLOG("Restoring context %p for thread %p\n", context, (void*)thread);
+        rb_cocoa_thread_restore_context(nsthread,
+          (struct rb_cocoa_thread_context*) context);
+      }
+      break;
+  }
+}
+
+static BOOL rb_cocoa_did_install_thread_hooks;
+
+static void RBCocoaInstallRubyThreadSchedulerHooks()
+{
+  if (getenv("RUBYCOCOA_THREAD_HOOK_DISABLE") != NULL) {
+    if (rb_cocoa_thread_debug) {
+      NSLog(@"RBCocoaInstallRubyThreadSchedulerHooks: warning: disabled hooks due to RUBYCOCOA_THREAD_HOOK_DISABLE environment variable");
+    }
+    return;
+  }
+  
+  rb_cocoa_thread_debug = getenv("RUBYCOCOA_THREAD_DEBUG") != NULL;
+  
+  if (rb_add_threadswitch_hook == NULL) {
+    if (rb_cocoa_thread_debug) {
+      NSLog(@"RBCocoaInstallRubyThreadSchedulerHooks: warning: rb_set_cocoa_thread_hooks not present in ruby core");
+    }
+    return;
+  }
+  
+  NSSymbol threadswitch_symbol = 
+    NSLookupAndBindSymbol("_rb_add_threadswitch_hook");
+  NSSymbol ruby_init_symbol = 
+    NSLookupAndBindSymbol("_ruby_init");
+  
+  if (NSModuleForSymbol(threadswitch_symbol) 
+      != NSModuleForSymbol(ruby_init_symbol)) {
+    NSLog(@"RBCocoaInstallRubyThreadSchedulerHooks: warning: rb_set_cocoa_thread_hooks is linked from a different library (%s) than ruby_init (%s)",
+      NSNameOfModule(NSModuleForSymbol(threadswitch_symbol)), NSNameOfModule(NSModuleForSymbol(ruby_init_symbol)));
+    return;
+  }
+
+  rb_cocoa_thread_state = st_init_numtable();  
+  rb_cocoa_main_nsthread = [NSThread currentThread];
+  
+  rb_cocoa_NSThread_class = objc_lookUpClass("NSThread");
+  if (rb_cocoa_NSThread_class == NULL) {
+    NSLog(@"RBCocoaInstallRubyThreadSchedulerHooks: couldn't find NSThread class");
+    return;
+  }
+
+#if MAC_OS_X_VERSION_MAX_ALLOWED <= MAC_OS_X_VERSION_10_4  
+  Ivar v;
+
+  v = class_getInstanceVariable(rb_cocoa_NSThread_class, "autoreleasePool");
+  if (v == NULL) {
+    NSLog(@"RBCocoaInstallRubyThreadSchedulerHooks: couldn't find autoreleasePool ivar");
+    return;
+  }
+  
+  rb_cocoa_NSThread_autoreleasePool = v->ivar_offset;
+  
+  v = class_getInstanceVariable(rb_cocoa_NSThread_class, "excHandlers");
+  if (v == NULL) {
+    NSLog(@"RBCocoaInstallRubyThreadSchedulerHooks: couldn't find excHandlers ivar");
+    return;
+  }
+  
+  rb_cocoa_NSThread_excHandlers = v->ivar_offset;
+#endif
+
+  rb_cocoa_currentThread_SEL = @selector(currentThread);
+  Method method = class_getClassMethod(rb_cocoa_NSThread_class, 
+    rb_cocoa_currentThread_SEL);
+  if (method == NULL) {
+    NSLog(@"RBCocoaInstallRubyThreadSchedulerHooks: can't find IMP for +[NSThread currentThread]");
+    return;
+  }
+  rb_cocoa_NSThread_currentThread_imp = (NSThread*(*)(id, SEL)) 
+    method_getImplementation(method);
+
+  /* Finally, register the hook with the ruby core */
+  rb_add_threadswitch_hook(rb_cocoa_thread_schedule_hook);
+  rb_cocoa_did_install_thread_hooks = YES;
+
+  DLOG("Thread hooks done, main Ruby thread is %p\n", 
+    (void *)rb_thread_current());
+}
+
+@interface RBRuntime : NSObject
+@end
+
+@implementation RBRuntime
++(BOOL)isRubyThreadingSupported 
+{
+  return rb_cocoa_did_install_thread_hooks;
+}
+@end
+
+BOOL RBIsRubyThreadingSupported (void)
+{
+  return [RBRuntime isRubyThreadingSupported];
+}
+
+static BOOL rb_cocoa_check_for_multiple_libruby() 
+{
+  int i, count = _dyld_image_count();
+  const char *name;
+  const char *libruby_name = NULL;
+  BOOL multiple = false;
+  
+  for (i=0;i<count;i++) {
+    name = _dyld_get_image_name(i);
+    if (name && strstr(name, "/libruby.")) {
+      if (libruby_name) {
+        NSLog(@"WARNING: multiple libruby.dylib found: '%s' and '%s'", 
+          libruby_name, name);
+        multiple = true;
+      }
+      libruby_name = name;
+    }
+  }
+  return multiple;
 }
