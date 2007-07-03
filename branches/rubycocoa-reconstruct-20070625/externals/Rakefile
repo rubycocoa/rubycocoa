@@ -1,0 +1,40 @@
+# -*- mode:ruby; indent-tabs-mode:nil; coding:utf-8 -*-
+
+namespace :libffi do
+  task :default => :build
+
+  desc "build libffi.a"
+  task :build do
+    chdir "libffi" do
+      sh 'make -f Makefile.rubycocoa'
+    end
+  end
+
+  task :build do
+    chdir "libffi" do
+      sh 'make -f Makefile.rubycocoa'
+    end
+  end
+
+  desc "clean libffi"
+  task :clean do
+    chdir "libffi" do
+      sh 'make -f Makefile.rubycocoa clean'
+    end
+  end
+end
+
+namespace :bridgesupport do
+  task :default => :build
+
+  desc "build BridgeSupport files"
+  task :build do
+    chdir "bridgesupport" do |dir|
+      # cflags = build_universal ? '-arch ppc -arch i386 -isysroot /Developer/SDKs/MacOSX10.4u.sdk' : ''
+      # command("BSROOT=\"#{out_dir}\" CFLAGS=\"#{cflags}\" #{@config['ruby-prog']} build.rb")
+      cflags = '-arch ppc -arch i386 -isysroot /Developer/SDKs/MacOSX10.4u.sdk'
+      bsroot = File.expand_path "BridgeSupport"
+      sh "BSROOT='#{bsroot}' CFLAGS='#{cflags}' #{RUBY} build.rb"
+    end
+  end
+end
