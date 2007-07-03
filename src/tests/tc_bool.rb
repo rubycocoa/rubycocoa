@@ -94,11 +94,13 @@ class TC_BoolTypeConversion < Test::Unit::TestCase
       s = rcv.callbackTestBool(rubydata).to_s
       assert_equal(expected, s, "testing ruby to objc BOOL conversion #{msg}: #{v} <=> #{expected}")
     end
+=begin
     [[nil, '0'], [false, '0'], [true, '1'], [0, '0'], [1, '1'], [42, '42'], [2.0, '2']].each do |v, expected|
       rubydata.v = v
       s = rcv.callbackTestChar(rubydata).to_s
       assert_equal(expected, s, "testing ruby to objc char conversion #{msg}: #{v} <=> #{expected}")
     end
+=end
     [[nil, '0'], [false, '0'], [true, '1'], [0, '0'], [1, '1'], [42, '42'], [2.0, '2']].each do |v, expected|
       rubydata.v = v
       s = rcv.callbackTestInt(rubydata).to_s

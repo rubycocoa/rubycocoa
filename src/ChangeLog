@@ -1,3 +1,10 @@
+2007-07-03  Satoshi Nakagawa <artension@gmail.com>
+
+	* framework/src/objc/RBObject.m:
+	Fixed the BOOL return value conversion problems on PPC.
+	* tests/tc_bool.rb:
+	Removed tests for char return values under bridgesupport.
+
 2007-07-02  Laurent Sansonetti <lsansonetti@apple.com>
 
 	* misc/ruby_thread_hooks.diff,
