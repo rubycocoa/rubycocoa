@@ -1,3 +1,8 @@
+2007-07-03  kimura wataru  <kimuraw@i.nifty.jp>
+
+	* framework/tool/gen_bridge_doc.rb:
+	fix too deep path of documentations RubyCocoa/Frameworks/files.
+
 2007-07-03  Satoshi Nakagawa <artension@gmail.com>
 
 	* framework/src/objc/RBObject.m:

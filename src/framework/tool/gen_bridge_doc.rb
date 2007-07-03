@@ -95,8 +95,10 @@ unless ARGV[0].nil?
 
     # Create the rdoc files
     #system "rdoc  --line-numbers --inline-source --template gen_bridge_doc/allison/allison.rb gen_bridge_doc/output -o doc/html"
-    rdoc "#{output_dir}/ruby -o #{output_dir}/html"
-    rdoc "--ri #{output_dir}/ruby -o #{output_dir}/ri"
+    Dir.chdir "#{output_dir}/ruby" do
+      rdoc ". -o #{output_dir}/html"
+      rdoc "--ri . -o #{output_dir}/ri"
+    end
     
     puts ""
     puts "Total Cocoa Reference to RDoc processing time: #{Time.now - start_time} seconds"
