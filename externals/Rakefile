@@ -10,12 +10,6 @@ namespace :libffi do
     end
   end
 
-  task :build do
-    chdir "libffi" do
-      sh 'make -f Makefile.rubycocoa'
-    end
-  end
-
   desc "clean libffi"
   task :clean do
     chdir "libffi" do
