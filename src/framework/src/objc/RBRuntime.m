@@ -534,16 +534,19 @@ static int rb_cocoa_NSThread_excHandlers;
     (*(void**)( ((char*)t) + rb_cocoa_NSThread_autoreleasePool ))
 # define NSTHREAD_autoreleasePool_set(t, d) \
     (NSTHREAD_autoreleasePool_get(t) = d)
+# define NSTHREAD_autoreleasePool_copy NSTHREAD_autoreleasePool_get 
 
 /* Access to the excHandlers ivar of NSThread */
 # define NSTHREAD_excHandlers_get(t) \
     (*(void**)( ((char*)t) + rb_cocoa_NSThread_excHandlers ))
 # define NSTHREAD_excHandlers_set(t, d) \
     (NSTHREAD_excHandlers_get(t) = d)
+# define NSTHREAD_excHandlers_free(t, d)  
+# define NSTHREAD_excHandlers_copy NSTHREAD_excHandlers_get
 
 #else /* > TIGER */
 
-#error System not supported yet
+#error No implementation yet for this system (please contact lsansonetti@apple.com)
 
 #endif
 
@@ -570,12 +573,12 @@ static void* rb_cocoa_thread_init_context(NSThread *thread, VALUE rbthread)
   
   ctx = (struct rb_cocoa_thread_context *)malloc(sizeof(*ctx));
   ASSERT_ALLOC(ctx); 
- 
+
   if (rbthread == rb_thread_current()) {
     // Ruby thread is current, so save current exception handlers and 
     // autorelease pool
-    ctx->excHandlers = NSTHREAD_excHandlers_get(thread);
-    ctx->autoreleasePool = NSTHREAD_autoreleasePool_get(thread);
+    ctx->excHandlers = NSTHREAD_excHandlers_copy(thread);
+    ctx->autoreleasePool = NSTHREAD_autoreleasePool_copy(thread);
   } 
   else {
     ctx->excHandlers = NULL;
@@ -590,7 +593,8 @@ static void* rb_cocoa_thread_init_context(NSThread *thread, VALUE rbthread)
 @interface NSAutoreleasePool (ReleaseAllPoolsIP)
 + (void)releaseAllPools;
 @end
-static void rb_cocoa_release_all_pools() {
+static void rb_cocoa_release_all_pools() 
+{
   if ([NSAutoreleasePool respondsToSelector: @selector(releaseAllPools)]) {
     [NSAutoreleasePool releaseAllPools];
   }
@@ -603,12 +607,14 @@ static void rb_cocoa_thread_free_context(NSThread *thread, VALUE rbthread,
 {
   if (rbthread != rb_thread_main()) {
     void *save_pool;
-        
+ 
+    DLOG("Releasing all pools for thread %p\n", (void *)rbthread);
+       
     /* Temporarily switch back the dead thread's autorelease pool so it can be 
        cleaned up */
     save_pool = NSTHREAD_autoreleasePool_get(thread);
     NSTHREAD_autoreleasePool_set(thread, ctx->autoreleasePool);
-    
+
     rb_cocoa_release_all_pools();
     
     ctx->autoreleasePool = NSTHREAD_autoreleasePool_get(thread);
@@ -620,6 +626,7 @@ static void rb_cocoa_thread_free_context(NSThread *thread, VALUE rbthread,
         rbthread == rb_thread_current() ? "" : "not ");
     }
   }
+  NSTHREAD_excHandlers_free(thread, ctx->excHandlers);
   free(ctx);
 }
 
@@ -635,7 +642,7 @@ static void rb_cocoa_thread_restore_context(NSThread *thread,
   NSTHREAD_autoreleasePool_set(thread, ctx->autoreleasePool);
   DLOG("Restored excHandlers and autoreleasePool to %p and %p\n",
     NSTHREAD_excHandlers_get(thread), NSTHREAD_autoreleasePool_get(thread));
-    
+
   rb_cocoa_between_threads = NO;
 }
 
@@ -648,8 +655,14 @@ static void rb_cocoa_thread_save_context(NSThread *thread,
   struct rb_cocoa_thread_context *ctx)
 {
   if (!rb_cocoa_between_threads) {
-    ctx->excHandlers = NSTHREAD_excHandlers_get(thread);
-    ctx->autoreleasePool = NSTHREAD_autoreleasePool_get(thread);
+    if (ctx->excHandlers == NULL)
+      ctx->excHandlers = NSTHREAD_excHandlers_copy(thread);
+    else
+      ctx->excHandlers = NSTHREAD_excHandlers_get(thread);
+    if (ctx->autoreleasePool == NULL)
+      ctx->autoreleasePool = NSTHREAD_autoreleasePool_copy(thread);
+    else
+      ctx->autoreleasePool = NSTHREAD_autoreleasePool_get(thread);
     DLOG("Saved excHandlers and autoreleasePool as %p and %p\n", 
       NSTHREAD_excHandlers_get(thread), NSTHREAD_autoreleasePool_get(thread));
   }
