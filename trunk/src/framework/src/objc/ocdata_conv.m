@@ -159,6 +159,17 @@ cary_to_rbary (void *data, const char *octype_str, VALUE *result)
   return convert_cary(result, data, (char *)octype_str, YES);
 }
 
+size_t ocdata_alloc_size(const char* octype_str)
+{
+#if BYTE_ORDER == BIG_ENDIAN
+  size_t size = ocdata_size(octype_str);
+  if (size == 0) return 0;
+  return size < sizeof(void*) ? sizeof(void*) : size;
+#else
+  return ocdata_size(octype_str);
+#endif
+}
+
 size_t
 ocdata_size(const char* octype_str)
 {
@@ -293,7 +304,7 @@ ocdata_size(const char* octype_str)
 void *
 ocdata_malloc(const char* octype_str)
 {
-  size_t s = ocdata_size(octype_str);
+  size_t s = ocdata_alloc_size(octype_str);
   if (s == 0) return NULL;
   return malloc(s);
 }
@@ -931,8 +942,10 @@ rbobj_to_ocdata (VALUE obj, const char *octype_str, void* ocdata, BOOL to_libffi
   // libffi casts all types as a void pointer, which is problematic on PPC for types sized less than a void pointer (char, uchar, short, ushort, ...), as we have to shift the bytes to get the real value.
   if (to_libffi) {
     int delta = sizeof(void *) - ocdata_size(octype_str);
-    if (delta > 0)
-      ocdata += delta; 
+    if (delta > 0) {
+      memset(ocdata, 0, delta);
+      ocdata += delta;
+    }
   }
 #endif
   

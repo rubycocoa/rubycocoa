@@ -48,9 +48,10 @@ enum osxobjc_nsdata_type {
   _PRIV_C_FUNC_PTR
 };
 
-size_t  ocdata_size     (const char* octype_str);
-void*   ocdata_malloc   (const char* octype_str);
-#define OCDATA_ALLOCA(s)  alloca(ocdata_size(s))
+size_t  ocdata_alloc_size (const char* octype_str);
+size_t  ocdata_size       (const char* octype_str);
+void*   ocdata_malloc     (const char* octype_str);
+#define OCDATA_ALLOCA(s)  alloca(ocdata_alloc_size(s))
 
 const char *encoding_skip_modifiers(const char *type);
 BOOL is_id_ptr (const char *type);

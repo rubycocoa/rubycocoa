@@ -179,14 +179,7 @@ static int rb_obj_arity_of_method(VALUE rcv, SEL a_sel, BOOL *ok)
     f_success = YES;
   }
   else {
-#if BYTE_ORDER == BIG_ENDIAN
-    int size = ocdata_size(octype_str);
-    if (size < sizeof(void*)) size = sizeof(void*);
-    void* ocdata = alloca(size);
-    memset(ocdata, 0, size);
-#else
     void* ocdata = OCDATA_ALLOCA(octype_str);
-#endif
     f_success = rbobj_to_ocdata (result, octype_str, ocdata, YES);
     if (f_success) [an_inv setReturnValue: ocdata];
   }
