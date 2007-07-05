@@ -534,7 +534,7 @@ static int rb_cocoa_NSThread_excHandlers;
     (*(void**)( ((char*)t) + rb_cocoa_NSThread_autoreleasePool ))
 # define NSTHREAD_autoreleasePool_set(t, d) \
     (NSTHREAD_autoreleasePool_get(t) = d)
-# define NSTHREAD_autoreleasePool_init (NULL)
+# define NSTHREAD_autoreleasePool_init(t) (NULL)
 
 /* Access to the excHandlers ivar of NSThread */
 # define NSTHREAD_excHandlers_get(t) \
@@ -542,7 +542,7 @@ static int rb_cocoa_NSThread_excHandlers;
 # define NSTHREAD_excHandlers_set(t, d) \
     (NSTHREAD_excHandlers_get(t) = d)
 # define NSTHREAD_excHandlers_free(t, d)  
-# define NSTHREAD_excHandlers_init (NULL)
+# define NSTHREAD_excHandlers_init(t) (NULL)
 
 #else /* > TIGER */
 
