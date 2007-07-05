@@ -1,3 +1,12 @@
+2007-07-05  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* framework/src/objc/RBRuntime.m:
+	Better Ruby threading support.
+
+	* tests/tc_thread.rb:
+	When starting test_exceptions, assert that the Ruby threading support is
+	enabled.
+
 2007-07-04  Laurent Sansonetti <lsansonetti@apple.com>
 
 	* framework/src/objc/RBRuntime.m:
