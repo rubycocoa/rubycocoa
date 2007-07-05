@@ -133,6 +133,8 @@ class TC_Thread < Test::Unit::TestCase
   # there. We then switch back to the first thread to throw an exception, and 
   # finally to the second thread to throw an exception.
   def test_exceptions
+    assert_threads_supported
+
     barrier = Barrier.new
   
     t1 = Thread.new do
