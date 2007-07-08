@@ -1,5 +1,19 @@
 2007-07-08  Satoshi Nakagawa <artension@gmail.com>
 
+	* install.rb:
+	- Added --test-arch option for mainly testing PPC on Intel using Rosetta.
+	- Changed the clean task to execute `make clean' in ./tests.
+
+	* tests/morph.c,
+	  tests/Makefile:
+	Added morph command, which executes a command on a different architecture
+	using Rosetta. Currently it supports only ppc and i386.
+
+	* tests/tc_bool.rb:
+	Added make and require for objc_test.
+
+2007-07-08  Satoshi Nakagawa <artension@gmail.com>
+
 	* framework/src/ruby/osx/objc/oc_import.rb:
 	Fixed a bug, ':' completion is missing when the last parameter is a selector.
 

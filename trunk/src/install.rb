@@ -737,6 +737,9 @@ class Installer
   def exec_clean
     exec_task_traverse 'clean'
     rm_f 'config.save'
+    dive_into( './tests' ) {
+      clean
+    }
   end
 
   def clean_dir_bin( rel )
@@ -975,6 +978,17 @@ class ToplevelInstaller < Installer
       end
     end
   end
+  
+  def parsearg_test
+    @options['test-arch'] = nil
+    while i = ARGV.shift do
+      if /^--test-arch=(.*)$/ =~ i
+        @options['test-arch'] = $1 unless $1.empty?
+      else
+        raise InstallError, "test: unknown option #{i}"
+      end
+    end
+  end
 
 
   def print_usage( out )
@@ -1013,6 +1027,11 @@ class ToplevelInstaller < Installer
     out.puts 'Options for install:'
     out.printf "  %-20s %s [%s]\n",
         '--no-harm', 'only display what to do if given', 'off'
+
+    out.puts
+    out.puts 'Options for test:'
+    out.printf "  %-20s %s [%s]\n",
+        '--test-arch', 'target architecture for testing (i386 or ppc)', ''
 
     out.puts
   end
@@ -1069,7 +1088,10 @@ class ToplevelInstaller < Installer
   end
 
   def test_testcase(ruby_cmd)
-    command %Q!"#{ruby_cmd}" -I../ext/rubycocoa -I../lib testall.rb!
+    command config('make-prog') + ' -s' || raise(RuntimeError, "'make' failed")
+    cmd = %Q!"#{ruby_cmd}" -I../ext/rubycocoa -I../lib testall.rb!
+    cmd = "./morph #{@options['test-arch']} " + cmd if @options['test-arch'] and not @options['test-arch'].empty?
+    command cmd
   end
 
   # validate extension and framework on test task
@@ -1080,8 +1102,8 @@ class ToplevelInstaller < Installer
 	    %Q!-e 'require "osx/cocoa"' !
       require 'open3'
       libs = Open3.popen3(cmd) do |stdin, stdout, stderr|
-	stdin.close
-	stderr.read
+        stdin.close
+        stderr.read
       end
       lib = libs.find {|lib| /rubycocoa.bundle\b/ =~ lib}
       if /..\/ext\/rubycocoa/ =~ lib
