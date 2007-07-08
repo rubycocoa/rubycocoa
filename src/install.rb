@@ -980,10 +980,10 @@ class ToplevelInstaller < Installer
   end
   
   def parsearg_test
-    @options['test-arch'] = nil
+    @options['use-rosetta'] = false
     while i = ARGV.shift do
-      if /^--test-arch=(.*)$/ =~ i
-        @options['test-arch'] = $1 unless $1.empty?
+      if i == '--use-rosetta'
+        @options['use-rosetta'] = true
       else
         raise InstallError, "test: unknown option #{i}"
       end
@@ -1031,7 +1031,7 @@ class ToplevelInstaller < Installer
     out.puts
     out.puts 'Options for test:'
     out.printf "  %-20s %s [%s]\n",
-        '--test-arch', 'target architecture for testing (i386 or ppc)', ''
+        '--use-rosetta', 'use Rosetta for testing', 'off'
 
     out.puts
   end
@@ -1088,9 +1088,8 @@ class ToplevelInstaller < Installer
   end
 
   def test_testcase(ruby_cmd)
-    command config('make-prog') + ' -s' || raise(RuntimeError, "'make' failed")
     cmd = %Q!"#{ruby_cmd}" -I../ext/rubycocoa -I../lib testall.rb!
-    cmd = "./morph #{@options['test-arch']} " + cmd if @options['test-arch'] and not @options['test-arch'].empty?
+    cmd = "/usr/libexec/oah/translate " + cmd if @options['use-rosetta']
     command cmd
   end
 
