@@ -1,6 +1,9 @@
 require 'osx/cocoa'
 require 'test/unit'
 
+system 'make -s' || raise(RuntimeError, "'make' failed")
+require 'objc_test.bundle'
+
 class MyClass < OSX::NSObject
  attr_accessor :bool
  def control_textView_doCommandBySelector(control, textView, sel)
