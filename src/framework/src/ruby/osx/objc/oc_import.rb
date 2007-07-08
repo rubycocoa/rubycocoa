@@ -327,7 +327,7 @@ module OSX
       typefmt = _types_to_typefmt(types)
       name = name.to_s
       name = name[0].chr << name[1..-1].gsub(/_/, ':')
-      name << ':' if name[-1] != ?: and typefmt[-1] != ?:
+      name << ':' if name[-1] != ?: and typefmt.index('@:') != typefmt.length - 2
       OSX.objc_class_method_add(self, name, class_method, typefmt)
     end
 

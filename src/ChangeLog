@@ -1,3 +1,8 @@
+2007-07-08  Satoshi Nakagawa <artension@gmail.com>
+
+	* framework/src/ruby/osx/objc/oc_import.rb:
+	Fixed a bug, ':' completion is missing when the last parameter is a selector.
+
 2007-07-05  Laurent Sansonetti <lsansonetti@apple.com>
 
 	* framework/src/objc/RBRuntime.m:
