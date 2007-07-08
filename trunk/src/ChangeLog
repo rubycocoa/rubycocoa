@@ -1,3 +1,12 @@
+2007-07-09  Satoshi Nakagawa <artension@gmail.com>
+
+	* install.rb:
+	Changed an option name, --test-arch to --use-rosetta.
+
+	* tests/morph.c,
+	  tests/Makefile:
+	Removed morph.c. Because /usr/libexec/oah/translate is enough for using Rosetta.
+
 2007-07-08  Satoshi Nakagawa <artension@gmail.com>
 
 	* install.rb:

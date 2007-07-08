@@ -1,15 +1,9 @@
 TARGET = objc_test.bundle
 OBJS = objc_test.o
-MORPH = morph
-CFLAGS = -arch i386 -arch ppc -fobjc-exceptions
-
-all: ${TARGET} ${MORPH}
+CFLAGS = -arch ppc -arch i386 -fobjc-exceptions
 
 ${TARGET}: ${OBJS}
-	cc -o $@ -arch i386 -arch ppc -fobjc-exceptions -bundle -framework Foundation -framework AddressBook ${OBJS}
-
-${MORPH}:
-	cc -o $@ $@.c
+	cc -o $@ ${CFLAGS} -bundle -framework Foundation -framework AddressBook ${OBJS}
 
 clean:
-	rm -f ${TARGET} ${OBJS} ${MORPH}
+	rm -f ${TARGET} ${OBJS}
