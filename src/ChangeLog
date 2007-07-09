@@ -1,3 +1,9 @@
+2007-07-10  Satoshi Nakagawa <artension@gmail.com>
+
+	* framework/src/ruby/osx/objc/oc_import.rb:
+	Fixed a bug, ':' completion doesn't work when the return value is a struct
+	which has '@:' sequence.
+
 2007-07-09  Satoshi Nakagawa <artension@gmail.com>
 
 	* install.rb:
