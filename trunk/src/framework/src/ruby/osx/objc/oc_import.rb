@@ -323,11 +323,28 @@ module OSX
       ns_inherited? and (class_method ? self.objc_method_type(sel) : self.objc_instance_method_type(sel))
     end
 
+    def _no_param_method?(typefmt)
+      if typefmt[0] == ?{
+        count = 1
+        i = 0
+        while count > 0 and i = typefmt.index(/[{}]/, i + 1)
+          case typefmt[i]
+          when ?{; count += 1
+          when ?}; count -= 1
+          end
+        end
+        raise ArgumentError, "illegal type encodings" unless i
+        typefmt[i+1..-1] == '@:'
+      else
+        typefmt.index('@:') == typefmt.length - 2
+      end
+    end
+
     def _objc_export(name, types, class_method)
       typefmt = _types_to_typefmt(types)
       name = name.to_s
       name = name[0].chr << name[1..-1].gsub(/_/, ':')
-      name << ':' if name[-1] != ?: and typefmt.index('@:') != typefmt.length - 2
+      name << ':' if name[-1] != ?: and not _no_param_method?(typefmt)
       OSX.objc_class_method_add(self, name, class_method, typefmt)
     end
 
