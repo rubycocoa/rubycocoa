@@ -6,6 +6,7 @@
 //  Copyright (c) ÇYEARÈ ÇORGANIZATIONNAMEÈ. All rights reserved.
 //
 
+#import <Cocoa/Cocoa.h>
 #import <RubyCocoa/RBRuntime.h>
 
 int main(int argc, const char *argv[])

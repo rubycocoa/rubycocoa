@@ -1,3 +1,9 @@
+2007-07-14  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* template/ProjectBuilder/Application/*:
+	- Removed the .pch files in CoreData projects ;
+	- Modified the main.m files to `#import <Cocoa/Cocoa.h>'.
+
 2007-07-13  Laurent Sansonetti <lsansonetti@apple.com>
 
 	* framework/src/objc/RBRuntime.m,
