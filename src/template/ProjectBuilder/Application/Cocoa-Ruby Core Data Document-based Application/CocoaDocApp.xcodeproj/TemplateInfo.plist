@@ -6,17 +6,11 @@
 	<string>This project builds a Core Data application written in Ruby that uses the NSDocument architecture.</string>
 	<key>FilesToMacroExpand</key>
 	<array>
-		<string>«PROJECTNAME»_Prefix.pch</string>
 		<string>Info.plist</string>
 		<string>English.lproj/InfoPlist.strings</string>
 		<string>MyDocument.rb</string>
 		<string>rb_main.rb</string>
 		<string>main.m</string>
 	</array>
-	<key>FilesToRename</key>
-	<dict>
-		<key>CocoaApp_Prefix.pch</key>
-		<string>«PROJECTNAME»_Prefix.pch</string>
-	</dict>
 </dict>
 </plist>

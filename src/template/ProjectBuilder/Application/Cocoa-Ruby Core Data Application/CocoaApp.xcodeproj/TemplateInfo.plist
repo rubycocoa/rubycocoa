@@ -6,7 +6,6 @@
 	<string>This project builds a Core Data application written in Ruby.</string>
 	<key>FilesToMacroExpand</key>
 	<array>
-		<string>«PROJECTNAME»_Prefix.pch</string>
 		<string>«PROJECTNAME»AppDelegate.rb</string>
 		<string>Info.plist</string>
 		<string>English.lproj/InfoPlist.strings</string>
@@ -18,8 +17,6 @@
 		<string>«PROJECTNAME»AppDelegate.rb</string>
 		<key>CocoaApp.xcdatamodel</key>
 		<string>«PROJECTNAME»_DataModel.xcdatamodel</string>
-		<key>CocoaApp_Prefix.pch</key>
-		<string>«PROJECTNAME»_Prefix.pch</string>
 	</dict>
 </dict>
 </plist>
