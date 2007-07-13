@@ -545,8 +545,6 @@ static int rb_cocoa_NSThread_excHandlers;
 # define NSTHREAD_excHandlers_free(t, d)  
 # define NSTHREAD_excHandlers_init(t) (NULL)
 
-# define NSTHREAD_NEEDS_TO_SAVE 1
-
 #else /* > TIGER */
 
 #error No implementation yet for this system (please contact lsansonetti@apple.com)
@@ -678,7 +676,6 @@ static void rb_cocoa_thread_restore_context(NSThread *thread,
   rb_cocoa_between_threads = NO;
 }
 
-#if NSTHREAD_NEEDS_TO_SAVE
 /*
   Called when a Ruby thread is being saved.
   We must save the current NSThread exception handler stack and autorelease 
@@ -692,13 +689,13 @@ static void rb_cocoa_thread_save_context(NSThread *thread,
 
   if (!rb_cocoa_between_threads) {
     ctx->excHandlers = NSTHREAD_excHandlers_get(thread);
-    ctx->autoreleasePool = NSTHREAD_autoreleasePool_get(thread);
-    DLOG("Saved excHandlers as %p and %d autoreleasePool(s) as %p\n", 
-      ctx->excHandlers, NSAutoreleasePoolCount(), ctx->autoreleasePool);
+    // There is no need to save the autoreleasePools since they are unique
+    // per thread.
+    //ctx->autoreleasePool = NSTHREAD_autoreleasePool_get(thread);
+    DLOG("Saved excHandlers as %p\n", ctx->excHandlers);
   }
   rb_cocoa_between_threads = YES;
 }
-#endif
 
 static BOOL rb_cocoa_did_install_thread_hooks;
 
@@ -746,11 +743,9 @@ static void rb_cocoa_thread_schedule_hook(rb_threadswitch_event_t event,
         context = rb_cocoa_thread_init_context(nsthread, thread);
         st_insert(rb_cocoa_thread_state, (st_data_t)thread, (st_data_t)context);
       }
-#if NSTHREAD_NEEDS_TO_SAVE 
       DLOG("Saving context %p for thread %p\n", context, (void*)thread);
       rb_cocoa_thread_save_context(nsthread,
         (struct rb_cocoa_thread_context*) context);
-#endif
       break;
             
     case RUBY_THREADSWITCH_RESTORE:
