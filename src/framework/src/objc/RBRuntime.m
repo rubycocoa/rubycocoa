@@ -16,6 +16,7 @@
 #import <Foundation/NSString.h>
 #import <Foundation/NSPathUtilities.h>
 #import <Foundation/NSThread.h>
+#import <assert.h>
 
 #import "RBRuntime.h"
 #import "RBObject.h"
@@ -520,7 +521,7 @@ static NSThread *rb_cocoa_main_nsthread;
 static struct st_table *rb_cocoa_thread_state;
 
 /* True when between save/restore of two threads */
-static BOOL rb_cocoa_between_threads;
+static BOOL rb_cocoa_between_threads = NO;
 
 #if MAC_OS_X_VERSION_MAX_ALLOWED <= MAC_OS_X_VERSION_10_4
 /* <= TIGER */
@@ -554,7 +555,6 @@ struct rb_cocoa_thread_context
 {
   void *  excHandlers;
   void *  autoreleasePool;
-  id      pool;
 };
 
 /* Substitute for +[NSThread currentThread]. Not clear if this is really 
@@ -572,25 +572,37 @@ static void* rb_cocoa_thread_init_context(NSThread *thread, VALUE rbthread)
 {
   struct rb_cocoa_thread_context *ctx;
   
-  ctx = (struct rb_cocoa_thread_context *)malloc(sizeof(*ctx));
+  ctx = (struct rb_cocoa_thread_context *)malloc(
+    sizeof(struct rb_cocoa_thread_context));
   ASSERT_ALLOC(ctx); 
 
   if (rbthread == rb_thread_current()) {
     // Ruby thread is current, so save current exception handlers and 
     // autorelease pool
     ctx->excHandlers = NSTHREAD_excHandlers_get(thread);
+    if (ctx->excHandlers == NULL) {
+      ctx->excHandlers = NSTHREAD_excHandlers_init(thread);
+      NSTHREAD_excHandlers_set(thread, ctx->excHandlers);
+    }
     ctx->autoreleasePool = NSTHREAD_autoreleasePool_get(thread);
-    ctx->pool = nil;
+    if (ctx->autoreleasePool == NULL) {
+      ctx->autoreleasePool = NSTHREAD_autoreleasePool_init(thread);
+      NSTHREAD_autoreleasePool_set(thread, ctx->autoreleasePool);
+    }
   } 
   else {
     ctx->excHandlers = NSTHREAD_excHandlers_init(thread);
     ctx->autoreleasePool = NSTHREAD_autoreleasePool_init(thread);
 
-    // Create an autorelease pool by default
+    // Create an autorelease pool by default. All pools will be freed when the
+    // Ruby thread will die.
     void *backup = NSTHREAD_autoreleasePool_get(thread);
-    NSTHREAD_autoreleasePool_set(thread, ctx->autoreleasePool);
-    ctx->pool = [[NSAutoreleasePool alloc] init];
-    NSTHREAD_autoreleasePool_set(thread, backup);
+    if (backup != NULL) {
+      NSTHREAD_autoreleasePool_set(thread, ctx->autoreleasePool);
+      [[NSAutoreleasePool alloc] init];
+      assert(ctx->autoreleasePool == NSTHREAD_autoreleasePool_get(thread));
+      NSTHREAD_autoreleasePool_set(thread, backup);
+    }
   }
   return ctx;
 }
@@ -606,6 +618,8 @@ static void rb_cocoa_release_all_pools()
     [NSAutoreleasePool releaseAllPools];
   }
 }
+
+int NSAutoreleasePoolCount(void);
 
 /* Called when a Ruby thread is destroyed.
  */
@@ -624,13 +638,8 @@ static void rb_cocoa_thread_free_context(NSThread *thread, VALUE rbthread,
       save_pool = NSTHREAD_autoreleasePool_get(thread);
       NSTHREAD_autoreleasePool_set(thread, ctx->autoreleasePool);
 
-      if (ctx->pool != nil) {
-        [ctx->pool release];
-        ctx->pool = nil;
-      }
-
       rb_cocoa_release_all_pools();
-    
+
       ctx->autoreleasePool = NSTHREAD_autoreleasePool_get(thread);
       NSTHREAD_autoreleasePool_set(thread, save_pool);
     
@@ -656,8 +665,10 @@ static void rb_cocoa_thread_restore_context(NSThread *thread,
 {
   NSTHREAD_excHandlers_set(thread, ctx->excHandlers);
   NSTHREAD_autoreleasePool_set(thread, ctx->autoreleasePool);
-  DLOG("Restored excHandlers and autoreleasePool to %p and %p\n",
-    NSTHREAD_excHandlers_get(thread), NSTHREAD_autoreleasePool_get(thread));
+  DLOG("Restored excHandlers as %p and %d autoreleasePool(s) as %p\n",
+    ctx->excHandlers, NSAutoreleasePoolCount(), ctx->autoreleasePool);
+  assert(NSTHREAD_excHandlers_get(thread) == ctx->excHandlers);
+  assert(NSTHREAD_autoreleasePool_get(thread) == ctx->autoreleasePool);
 
   rb_cocoa_between_threads = NO;
 }
@@ -673,10 +684,11 @@ static void rb_cocoa_thread_save_context(NSThread *thread,
   if (!rb_cocoa_between_threads) {
     ctx->excHandlers = NSTHREAD_excHandlers_get(thread);
     ctx->autoreleasePool = NSTHREAD_autoreleasePool_get(thread);
-    DLOG("Saved excHandlers and autoreleasePool as %p and %p\n", 
-      NSTHREAD_excHandlers_get(thread), NSTHREAD_autoreleasePool_get(thread));
+    DLOG("Saved excHandlers as %p and %d autoreleasePool(s) as %p\n", 
+      ctx->excHandlers, NSAutoreleasePoolCount(), ctx->autoreleasePool);
+    assert(ctx->excHandlers != NULL);
+    assert(ctx->autoreleasePool != NULL);
   }
-    
   rb_cocoa_between_threads = YES;
 }
 
@@ -697,7 +709,7 @@ static void rb_cocoa_thread_schedule_hook(rb_threadswitch_event_t event,
       rb_cocoa_main_nsthread, nsthread);
     return; /* could report as a fatal bug instead */
   }
-    
+
   switch (event) {
     case RUBY_THREADSWITCH_INIT:
       context = rb_cocoa_thread_init_context(nsthread, thread);
@@ -721,7 +733,7 @@ static void rb_cocoa_thread_schedule_hook(rb_threadswitch_event_t event,
 
         DLOG("Created context before save %p for thread %p\n", context, 
           (void*)thread);
-        context = rb_cocoa_thread_init_context(nsthread,thread);
+        context = rb_cocoa_thread_init_context(nsthread, thread);
         st_insert(rb_cocoa_thread_state, (st_data_t)thread, (st_data_t)context);
       }
       DLOG("Saving context %p for thread %p\n", context, (void*)thread);
@@ -734,8 +746,9 @@ static void rb_cocoa_thread_schedule_hook(rb_threadswitch_event_t event,
         (st_data_t *)&context)) {
         
         DLOG("Restoring context %p for thread %p\n", context, (void*)thread);
-        rb_cocoa_thread_restore_context(nsthread,
-          (struct rb_cocoa_thread_context*) context);
+        if (thread != rb_thread_main())
+          rb_cocoa_thread_restore_context(nsthread,
+            (struct rb_cocoa_thread_context*) context);
       }
       break;
   }
