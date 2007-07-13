@@ -1,5 +1,9 @@
 2007-07-13  Laurent Sansonetti <lsansonetti@apple.com>
 
+	* framework/src/objc/RBRuntime.m,
+	  tests/tc_thread.rb:
+	More solid threading support. Added stress test.
+
 	* pre-config.rb:
 	- When calculating install-name from the 'frameworks' install.rb config
 	  variable, strip the DSTROOT if exists ;
