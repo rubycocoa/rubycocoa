@@ -602,11 +602,12 @@ static void* rb_cocoa_thread_init_context(NSThread *thread, VALUE rbthread)
   
       // Create an autorelease pool by default. All pools will be freed when the
       // Ruby thread will die.
-      if (ctx->autoreleasePool != NULL) {
-        NSTHREAD_autoreleasePool_set(thread, ctx->autoreleasePool);
-        [[NSAutoreleasePool alloc] init];
+      NSTHREAD_autoreleasePool_set(thread, ctx->autoreleasePool);
+      [[NSAutoreleasePool alloc] init];
+      if (ctx->autoreleasePool != NULL)
         assert(ctx->autoreleasePool == NSTHREAD_autoreleasePool_get(thread));
-      }
+      else
+        ctx->autoreleasePool = NSTHREAD_autoreleasePool_get(thread);
     }
   }
   return ctx;
@@ -694,8 +695,6 @@ static void rb_cocoa_thread_save_context(NSThread *thread,
     ctx->autoreleasePool = NSTHREAD_autoreleasePool_get(thread);
     DLOG("Saved excHandlers as %p and %d autoreleasePool(s) as %p\n", 
       ctx->excHandlers, NSAutoreleasePoolCount(), ctx->autoreleasePool);
-    assert(ctx->excHandlers != NULL);
-    assert(ctx->autoreleasePool != NULL);
   }
   rb_cocoa_between_threads = YES;
 }
