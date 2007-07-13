@@ -10,7 +10,8 @@ target_files = %w[
 ]
 
 install_path = @config['build-as-embeddable'] == 'yes' \
-  ? "@executable_path/../Frameworks" : @config['frameworks']
+  ? "@executable_path/../Frameworks" \
+  : @config['frameworks'].sub((ENV['DSTROOT'] or ''), '')
 
 config_ary = [
   [ :frameworks,      @config['frameworks'] ],
@@ -62,7 +63,7 @@ end
 raise 'ERROR: ruby must be built as a shared library' if Config::CONFIG["ENABLE_SHARED"] != 'yes'
 
 # Add the libffi library to the build process.
-unless File.exist?('/usr/lib/libffi.a')
+if !File.exist?('/usr/lib/libffi.a') and !File.exist?('/usr/lib/libffi.dylib')
   if File.exist?('/usr/local/lib/libffi.a') and File.exist?('/usr/local/include/ffi')
     cflags << ' -I/usr/local/include/ffi '
     ldflags << ' -L/usr/local/lib '

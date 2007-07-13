@@ -1,3 +1,11 @@
+2007-07-13  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* pre-config.rb:
+	- When calculating install-name from the 'frameworks' install.rb config
+	  variable, strip the DSTROOT if exists ;
+	- When checking if libffi is already installed in the system, check for
+	  libffi.dylib as well as libffi.a.
+
 2007-07-10  Satoshi Nakagawa <artension@gmail.com>
 
 	* framework/src/ruby/osx/objc/oc_import.rb:
