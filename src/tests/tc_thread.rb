@@ -1,6 +1,8 @@
 require 'test/unit'
 require 'osx/cocoa'
 require 'thread'
+require 'rbconfig'
+
 system 'make' || raise(RuntimeError, "'make' failed")
 require 'objc_test.bundle'
 
@@ -53,6 +55,7 @@ class TC_Thread < Test::Unit::TestCase
   def setup
     @mainThread = OSX::NSThread.currentThread
     @helper = OSX::RBThreadTest.alloc.init
+    @ruby_path = File.join(Config::CONFIG["bindir"], Config::CONFIG["RUBY_INSTALL_NAME"])
   end
 
   def threaded
@@ -172,5 +175,43 @@ class TC_Thread < Test::Unit::TestCase
     
     t1.join
     t2.join
+  end
+
+  # This is some very simple stress code. The test is that the code should not
+  # crash the interpreter :-)
+  def test_stress
+    assert_threads_supported
+    assert_nothing_raised do
+      10.times do
+        t = []
+        10.times do
+          t << Thread.new do
+            10.times do
+              OSX.ns_autorelease_pool do
+                ('a'..'z').to_a.each { |c| OSX::NSString.stringWithString(c) }
+              end
+            end
+          end
+        end
+        t.each { |th| GC.start; th.join; GC.start }
+      end
+    end
+  end
+
+  def test_existing_threads_before_rubycocoa
+    assert_threads_supported
+    code = <<EOS
+t = Thread.new { sleep 0.1 }
+require 'osx/foundation'
+t.join
+p 1
+EOS
+    assert_equal('1', __spawn_line(code.gsub(/\n/, ';')))
+  end
+
+  def __spawn_line(line)
+    res = `DYLD_FRAMEWORK_PATH=../framework/build/Default #{@ruby_path} -I../lib -I../ext/rubycocoa -e \"#{line}\"`
+    raise "Can't spawn Ruby line: '#{line}'" unless $?.success?
+    return res.strip
   end
 end

@@ -2,6 +2,10 @@
 
 	* framework/src/objc/RBRuntime.m,
 	  tests/tc_thread.rb:
+	Even More solid threading support. Added new test.
+
+	* framework/src/objc/RBRuntime.m,
+	  tests/tc_thread.rb:
 	More solid threading support. Added stress test.
 
 	* pre-config.rb:
