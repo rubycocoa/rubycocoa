@@ -198,7 +198,7 @@ class ClassesNibPlist
     ruby_class_plist
   end
 
-  def write_plist_data(cached_outlets_actions_values)
+  def write_plist_data
     data, error = NSPropertyListSerialization.objc_send \
       :dataFromPropertyList, @plist,
       :format, NSPropertyListXMLFormat_v1_0,
@@ -207,14 +207,7 @@ class ClassesNibPlist
       $stderr.puts error
       exit 1
     end
-    data = OSX::NSString.alloc.initWithData_encoding(
-      data, NSUTF8StringEncoding).to_s
-
-    if cached_outlets_actions_values
-      cached_outlets_actions_values.each do |k, v|
-        data.sub!(k, v.to_s)
-      end 
-    end
+    data = OSX::NSString.alloc.initWithData_encoding(data, NSUTF8StringEncoding)
 
     if @plist_path
       log "Writing updated classes.nib plist back to file"
@@ -234,7 +227,7 @@ class ClassesNibPlist
 end
 
 class ClassesNibUpdater
-  def self.update_nib(plist_path, ruby_file)
+  def self.update_nib(plist_path, ruby_file, sorted_plist)
     plist = ClassesNibPlist.new(plist_path)
     updater = new
     updater.find_classes_outlets_and_actions(ruby_file)
@@ -242,9 +235,10 @@ class ClassesNibUpdater
     NSObject.subklasses.each do |klass, data|
       ruby_class_plist = plist.find_ruby_class(klass)
       updater.update_superclass(klass, ruby_class_plist)
-      updater.add_outlets_and_actions_to_plist(klass, ruby_class_plist)
+      updater.add_outlets_and_actions_to_plist(klass, ruby_class_plist, 
+        sorted_plist)
     end
-    plist.write_plist_data(updater.cached_outlets_actions_values)
+    plist.write_plist_data
   end
  
   # we've taken over ns_outlets and ns_actions above, so just requiring the
@@ -259,39 +253,22 @@ class ClassesNibUpdater
     superklass = NSObject.subklasses[ruby_class][:super].to_s.sub(/^OSX::/, '')
     ruby_class_plist.setObject_forKey(superklass, "SUPERCLASS")
   end
-
-  attr_reader :cached_outlets_actions_values
- 
-  def add_outlets_and_actions_to_plist(klass, ruby_class_plist)
+  
+  def add_outlets_and_actions_to_plist(klass, ruby_class_plist, sorted_plist)
     log "Adding outlets and actions to plist for #{klass}"
    
-    # We don't set the outlets and actions values directly in the
-    # sub-dictionaries because we want the keys to be ordered in the same
-    # order the outlets or actions have been defined in the given source code.
-    # So we temporary use placeholders and will replace them with the real
-    # values when writing the final plist format.
-    h = (@cached_outlets_actions_values ||= {})
-    @count ||= '__1'
- 
-    updated_outlets = NSMutableDictionary.dictionary
-    NSObject.subklasses[klass][:outlets].each do |outlet|
-      log "adding outlet #{outlet}"
-      k = @count + '__'
-      @count = @count.succ
-      updated_outlets.setObject_forKey('id', k)
-      h[k] = outlet
-    end unless NSObject.subklasses[klass][:outlets].nil?
-    ruby_class_plist['OUTLETS'] = updated_outlets unless updated_outlets.count == 0
-
-    updated_actions = NSMutableDictionary.dictionary
-    NSObject.subklasses[klass][:actions].each do |action|
-      log "adding action #{action}"
-      k = @count + '__'
-      @count = @count.succ
-      updated_actions.setObject_forKey('id', k)
-      h[k] = action
-    end unless NSObject.subklasses[klass][:actions].nil?
-    ruby_class_plist['ACTIONS'] = updated_actions unless updated_actions.count == 0
+    [:outlets, :actions].each do |sym|
+      cont = NSObject.subklasses[klass][sym]
+      unless sorted_plist
+        hash = {}
+        cont.each do |val|
+          log "adding #{sym.to_s} #{val}"
+          hash[val] = 'id' 
+        end 
+        cont = hash
+      end
+      ruby_class_plist[sym.to_s.upcase] = cont unless cont.empty?
+    end
   end
 end
 
@@ -338,24 +315,32 @@ class Options
     options[:update] = false
     options[:create] = false
     options[:plist] = false
+    options[:sorted_plist] = false
     opts = OptionParser.new do |opts|
       opts.banner = "Usage: #{__FILE__} [options]"
       opts.on("-u", "--update", "Update the classes.nib file from a Ruby",
-                                "class (requires -f and -n options)") do |update|
+                                "class (requires -f and -n options)") do |_|
         options[:update] = true
       end
       opts.on("-c", "--create", "Create new Ruby classes from a nib",
-                                "(requires -d and -n options)") do |create|
+                                "(requires -d and -n options)") do |_|
         options[:create] = true
       end
       opts.on("-p", "--plist", "Dump on standard output a property list", "of the Ruby class IB metadata",
-                               "(requires -f option)") do |plist|
+                               "(requires -f option)") do |_|
         options[:plist] = true
       end
-      opts.on("-d", "--directory PATH", "Path to directory to create Ruby classes", "(for --create)") do |dir|
+      opts.on("-s", "--sorted-plist", 
+        "Dump a property list where the actions and",
+        "outlets are in sorted collections.",
+        "NOT compatible with the nib format.",
+         "(requires -p and -f options)") do |_|
+        options[:sorted_plist] = true
+      end
+      opts.on("-d", "--directory PATH", "Path to directory to create Ruby classes", "(requires -c option)") do |dir|
         options[:dir] = dir == "" ? nil : dir
       end
-      opts.on("-f", "--file PATH", "Path to file containing Ruby class(es)", "(for --update and --plist)") do |file|
+      opts.on("-f", "--file PATH", "Path to file containing Ruby class(es)", "(requires -u or -p options)") do |file|
         options[:file] = case file
           when '' then nil
           when '-' then '/dev/stdin'
@@ -397,6 +382,12 @@ class Options
         exit_with_opts(opts)
       end
     end
+    if options[:sorted_plist]
+      unless options[:plist]
+        puts "Must specify plist format"
+        exit_with_opts(opts)
+      end
+    end
     options
   end
   
@@ -414,7 +405,8 @@ nib_plist =
     nil 
   end
 if options[:update] || options[:plist]
-  ClassesNibUpdater.update_nib(nib_plist, options[:file])
+  ClassesNibUpdater.update_nib(nib_plist, options[:file], 
+    options[:sorted_plist])
 elsif options[:create]
   ClassesNibCreator.create_from_nib(nib_plist, options[:dir])
 else
