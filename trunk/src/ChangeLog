@@ -1,3 +1,11 @@
+2007-07-17  Fujimoto Hisa  <hisa@fobj.com>
+
+	* sample/CocoaRepl, sample/SimpleCocoaRepl:
+	Replaced new CocoaRepl. It shows one of desktop gui repl like the
+	emacs scratch buffer style. Renamed old one as SimpleCocoaRepl. It
+	is a more appropriate programming example (it's just simple) than
+	new one in fact.
+
 2007-07-17  Laurent Sansonetti <lsansonetti@apple.com>
 
 	* framework/src/objc/mdl_objwrapper.m:
