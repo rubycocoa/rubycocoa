@@ -131,10 +131,9 @@ void ffi_prep_args(extended_cif *ecif, unsigned *const stack)
 	   the size of the floating-point parameter are skipped.  */
 	case FFI_TYPE_FLOAT:
 	  double_tmp = *(float *)*p_argv;
-	  if (fparg_count >= NUM_FPR_ARG_REGISTERS)
-	    *(double *)next_arg = double_tmp;
-	  else
+	  if (fparg_count < NUM_FPR_ARG_REGISTERS)
 	    *fpr_base++ = double_tmp;
+	  *(double *)next_arg = double_tmp;
 	  next_arg++;
 	  fparg_count++;
 	  FFI_ASSERT(flags & FLAG_FP_ARGUMENTS);
@@ -142,10 +141,9 @@ void ffi_prep_args(extended_cif *ecif, unsigned *const stack)
 
 	case FFI_TYPE_DOUBLE:
 	  double_tmp = *(double *)*p_argv;
-	  if (fparg_count >= NUM_FPR_ARG_REGISTERS)
-	    *(double *)next_arg = double_tmp;
-	  else
+	  if (fparg_count < NUM_FPR_ARG_REGISTERS)
 	    *fpr_base++ = double_tmp;
+	  *(double *)next_arg = double_tmp;
 	  next_arg += 2;
 	  fparg_count++;
 	  FFI_ASSERT(flags & FLAG_FP_ARGUMENTS);
@@ -155,17 +153,15 @@ void ffi_prep_args(extended_cif *ecif, unsigned *const stack)
 
 	case FFI_TYPE_LONGDOUBLE:
 	  double_tmp = ((double *)*p_argv)[0];
-	  if (fparg_count >= NUM_FPR_ARG_REGISTERS)
-	    *(double *)next_arg = double_tmp;
-	  else
+	  if (fparg_count < NUM_FPR_ARG_REGISTERS)
 	    *fpr_base++ = double_tmp;
+	  *(double *)next_arg = double_tmp;
 	  next_arg += 2;
 	  fparg_count++;
 	  double_tmp = ((double *)*p_argv)[1];
-	  if (fparg_count >= NUM_FPR_ARG_REGISTERS)
-	    *(double *)next_arg = double_tmp;
-	  else
+	  if (fparg_count < NUM_FPR_ARG_REGISTERS)
 	    *fpr_base++ = double_tmp;
+	  *(double *)next_arg = double_tmp;
 	  next_arg += 2;
 	  fparg_count++;
 	  FFI_ASSERT(flags & FLAG_FP_ARGUMENTS);

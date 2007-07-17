@@ -94,7 +94,7 @@ ENTRY(ffi_closure_SYSV)
 
 # case FFI_TYPE_INT
 .Lret_type1:
-	lwz %r3,0(%r6)
+	lwz %r3,0(%r5)
 	b .Lfinish
 	nop
 	nop
