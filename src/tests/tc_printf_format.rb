@@ -12,6 +12,11 @@ class TC_PrintfFormat < Test::Unit::TestCase
     verify('%0.2f', 42.42)
   end
 
+  def test_char
+    verify('%c', ?a)
+    verify('%c', ?A)
+  end
+
   def test_str
     verify('foo %s bar %s', 'hoge', 42)
   end

@@ -1,3 +1,13 @@
+2007-07-18  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* misc/libffi/src/powerpc/ppc_closure.S,
+	  misc/libffi/src/powerpc/ffi_darwin.c:
+	Fixed a PPC bug where floating types were not properly handled by variadic
+	arguments.  
+
+	* tests/tc_printf_format.rb:
+	Added a new test.
+
 2007-07-17  Fujimoto Hisa  <hisa@fobj.com>
 
 	* sample/CocoaRepl, sample/SimpleCocoaRepl:
