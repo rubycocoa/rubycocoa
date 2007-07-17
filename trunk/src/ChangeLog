@@ -1,5 +1,8 @@
 2007-07-17  Laurent Sansonetti <lsansonetti@apple.com>
 
+	* framework/src/objc/mdl_objwrapper.m:
+	Do not auto-register predicate methods.
+
 	* framework/tool/rb_nibtool.rb:
 	- Reverted the change from 2007-06-30 ;
 	- Introduced a new flag, "-s", which outputs an altered property list, 

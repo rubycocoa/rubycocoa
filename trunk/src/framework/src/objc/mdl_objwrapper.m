@@ -140,6 +140,11 @@ ocm_register(Class klass, VALUE oc_mname, VALUE rb_mname, SEL selector,
   RB_ID rclass_id;
   void *closure;
   char *rb_mname_str;
+ 
+  // XXX Ignoring predicate methods for now. 
+  rb_mname_str = rb_id2name(SYM2ID(rb_mname));
+  if (rb_mname_str[strlen(rb_mname_str) - 1] == '?')
+    return;
 
   // Let's locate the original class where the method is defined.
   getMethod = is_class_method ? class_getClassMethod : class_getInstanceMethod;
@@ -163,7 +168,6 @@ ocm_register(Class klass, VALUE oc_mname, VALUE rb_mname, SEL selector,
     return;
   }
 
-  rb_mname_str = rb_id2name(SYM2ID(rb_mname));
   OBJWRP_LOG("registering Ruby %s method `%s' on `%s'", 
     is_class_method ? "class" : "instance", rb_mname_str, 
     rb_class2name(rclass));
