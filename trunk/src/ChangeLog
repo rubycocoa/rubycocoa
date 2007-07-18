@@ -1,5 +1,8 @@
 2007-07-18  Fujimoto Hisa  <hisa@fobj.com>
 
+	* sample/CocoaRepl/evaluator.rb, sample/CocoaRepl/ReplController.rb:
+	Checked evaluator should be singleton.
+
 	* sample/CocoaRepl/CocoaRepl.xcodeproj/project.pbxproj,
 	sample/CocoaRepl/main.m,
 	sample/CocoaRepl/main.rb,

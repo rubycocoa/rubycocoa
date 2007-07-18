@@ -12,7 +12,20 @@ class Evaluator
   include ReplObservable
   attr_reader :history
 
+  @@instance = nil
+
+  def self.create(max=nil)
+    self.new(max)
+  end
+
+  def self.instance
+    @@instance
+  end
+
   def initialize(max=nil)
+    if @@instance then
+      raise "Can't create multiple instance. use `#{self.class}.instance'"
+    end
     @max = nil
     @history = []
   end
