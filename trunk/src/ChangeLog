@@ -1,5 +1,8 @@
 2007-07-18  Laurent Sansonetti <lsansonetti@apple.com>
 
+	* sample/RubyConsole:
+	New sample code, based on Tim Burks' console.rb.
+
 	* misc/libffi/src/powerpc/ppc_closure.S,
 	  misc/libffi/src/powerpc/ffi_darwin.c:
 	Fixed a PPC bug where floating types were not properly handled by variadic
