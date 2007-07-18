@@ -22,8 +22,12 @@ Kimura Wataru <kimuraw@i.nifty.jp>
   Lots of major contributions (too numerous) and bugfixes.
 
 Laurent Sansonetti <lsansonetti@apple.com>
-  Major rewrite of the core (BridgeSupport, Libffi), bugfixes, documentation, 
-  sample code.  
+  Major rewrite of the core (BridgeSupport, Libffi), bugfixes, documentation,
+  sample code.
+
+Satoshi Nakagawa  <artension@gmail.com>
+  lots of bugfixes, around object cacheing.
+
 
 = Retired Developers =
 
