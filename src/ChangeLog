@@ -1,5 +1,14 @@
 2007-07-18  Laurent Sansonetti <lsansonetti@apple.com>
 
+	* sample/CocoaRepl/Info.plist:
+	Added missing CFBundleShortVersionString tag.
+
+	* sample/SimpleCocoaRepl/Info.plist:
+	Fixed duplicated CFBundleIdentifier tag.
+
+	* sample/CocoaRepl/CocoaRepl.xcodeproj/project.pbxproj:
+	Use the current SDK.
+
 	* AUTHORS:
 	Mention Jonathan's threading patches.
 
