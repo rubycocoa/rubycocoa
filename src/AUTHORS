@@ -16,7 +16,7 @@ Fujimoto Hisa <hisa@fobj.com>
   Original author of the project.
 
 Jonathan Paisley <jp-www@dcs.gla.ac.uk>
-  Contributed standaloneify, lots of bugfixes.
+  Contributed standaloneify, patches for Ruby threading, lots of bugfixes.
 
 Kimura Wataru <kimuraw@i.nifty.jp>
   Lots of major contributions (too numerous) and bugfixes.
