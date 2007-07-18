@@ -1,5 +1,8 @@
 2007-07-18  Laurent Sansonetti <lsansonetti@apple.com>
 
+	* AUTHORS:
+	Mention Jonathan's threading patches.
+
 	* sample/RubyConsole:
 	New sample code, based on Tim Burks' console.rb.
 
