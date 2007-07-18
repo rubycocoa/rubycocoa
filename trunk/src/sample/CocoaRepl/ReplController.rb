@@ -8,7 +8,8 @@
 #
 $KCODE = 'utf-8'
 require 'osx/cocoa'
-require 'stringio'
+require 'evaluator'
+require 'io'
 
 class ReplController < OSX::NSObject
   include OSX
@@ -22,7 +23,27 @@ class ReplController < OSX::NSObject
   ib_outlets :window
   ib_outlets :wordsTable, :descriptionText
 
+  # notification receiver for STDOUT/STDERR
+  def io_write(sender, key, string)
+    color = case sender
+            when STDOUT then OK_COLOR
+            when STDERR then ERR_COLOR
+            else             NSColor.blackColor
+            end
+    length = @outText.textStorage.length
+    range = NSRange.new(length, 0)
+    @outText.replaceCharactersInRange_withString(range, string)
+    range.length = @outText.textStorage.length - length
+    @outText.setTextColor_range(color, range)
+    @outText.setSelectedRange(range)
+    @outText.scrollRangeToVisible(range)
+    @tabView.selectTabViewItemWithIdentifier('output')
+  end
+
   def awakeFromNib
+    STDOUT.add_observer(self, :io_write)
+    STDERR.add_observer(self, :io_write)
+    @evaluator = Evaluator.new(100)
     DecoratorStyle.font_size = FONTSIZE
     font = NSFont.userFixedPitchFontOfSize(FONTSIZE)
     @scratchText.setFont(font)
@@ -30,17 +51,14 @@ class ReplController < OSX::NSObject
     @outText.setFont(font)
     @descriptionText.setFont(NSFont.userFixedPitchFontOfSize(14))
 
-    #<OSX::NSRect:0x6647d0 x=4 y=12 width=900 height=762>
-    # p "AAAAA", @window.frame, "BBBBB"
-    # default [4, 12], [900, 762]
+    # default window location
     @window.setFrameOrigin([4,12])
     @window.setContentSize([800,680])
 
     initial_msg = "Ruby #{RUBY_VERSION}"
     initial_msg << ", RubyCocoa #{RUBYCOCOA_VERSION}"
     initial_msg << " (r#{RUBYCOCOA_SVN_REVISION})"
-    @statusView.setStringValue(initial_msg)
-    # @window.setTitle("Read-Eval-Print Loop for #{initial_msg}")
+    @statusView.setStringValue("ready")
     @window.setTitle("RubyCocoa REPL : #{initial_msg}")
     @window.setAlphaValue(0.9)
 
@@ -69,12 +87,15 @@ class ReplController < OSX::NSObject
   end
 
   ib_action :evaluate do |sender|
+    @tabView.selectTabViewItemWithIdentifier('result')
     src = string_for_eval(sender.tag)
-    ret, err, output = with_io_redirect {
-      eval(src, TOPLEVEL_BINDING, "(program)", 1)
-    }
-    show_result(ret, err, output)
+    result = @evaluator.evaluate!(src)
+    show_result(result) if result
     nil
+  end
+
+  ib_action :complete do
+    @scratchText.complete(self)
   end
 
   ib_action :selectBlock do
@@ -116,38 +137,18 @@ class ReplController < OSX::NSObject
     end
   end
 
-  def show_result(ret, err, output)
+  def show_result(result)
     store_scratch
-    if err then
+    if err = result.error then
       @statusView.setStringValue(err.message[0,100])
-      info = err.message << "\n"
+      info = "#{err.class}: #{err.message}\n"
       err.backtrace.each { |i| info << "  #{i}\n" }
       @resultText.setString(info)
       @resultText.setTextColor(ERR_COLOR)
     else
-      @statusView.setStringValue(ret.inspect[0,100])
-      @resultText.setString(ret.inspect)
+      @statusView.setStringValue(result.retval.inspect[0,100])
+      @resultText.setString(result.retval.inspect)
       @resultText.setTextColor(OK_COLOR)
     end
-    if output.empty? then
-      @tabView.selectTabViewItemWithIdentifier('result')
-    else
-      @outText.setString(output)
-      @tabView.selectTabViewItemWithIdentifier('output')
-    end
-  end
-
-  def with_io_redirect
-    saved_out = $stdout
-    saved_err = $stderr
-    out_io = StringIO.new
-    $stdout = $stderr = out_io
-    ret = yield
-    [ ret, nil, out_io.string ]
-  rescue Exception => err
-    [ nil, err, out_io.string ]
-  ensure
-    $stdout = saved_out
-    $stderr = saved_err
   end
 end

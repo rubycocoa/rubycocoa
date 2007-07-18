@@ -1,5 +1,18 @@
 2007-07-18  Fujimoto Hisa  <hisa@fobj.com>
 
+	* sample/CocoaRepl/CocoaRepl.xcodeproj/project.pbxproj,
+	sample/CocoaRepl/main.m,
+	sample/CocoaRepl/main.rb,
+	sample/CocoaRepl/init_CocoaRepl.rb,
+	sample/CocoaRepl/observable.rb, 
+	sample/CocoaRepl/evaluator.rb,
+	sample/CocoaRepl/io.rb,
+	sample/CocoaRepl/ReplController.rb,
+	sample/CocoaRepl/English.lproj/MainMenu.nib:
+	Moved init_CocoaRepl.rb to main.rb. Implemented history suppotred
+	evaluator class. Rewrited better STDOUT/STDERR IO handling (STDIN
+	is not yet).
+	
 	* AUTHORS: 
 	Added Satoshi Nakagawa.
 

@@ -4,6 +4,7 @@
         {
             ACTIONS = {
                 alphaChanged = id; 
+                complete = id; 
                 evaluate = id; 
                 selectBlock = id; 
                 selectScratchView = id; 
