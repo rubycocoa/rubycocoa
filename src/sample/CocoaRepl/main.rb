@@ -1,6 +1,6 @@
 # -*- mode:ruby; indent-tabs-mode:nil; coding:utf-8 -*-
 #
-#  init_CocoaRepl.rb
+#  main.rb
 #  CocoaRepl
 #
 #  Created by Fujimoto Hisa on 07/03/01.
@@ -88,7 +88,7 @@ class OSX::NSWindow
                  :backing, OSX::NSBackingStoreBuffered,
                  :defer, false )
     win.setTitle(title) if title
-    win.makeKeyAndOrderFront(nil)
+    win.makeKeyAndOrderFront(OSX::NSApp)
     win
   end
 end
