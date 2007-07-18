@@ -14,30 +14,43 @@ class Evaluator
 
   @@instance = nil
 
-  def self.create(max=nil)
-    self.new(max)
-  end
+  def self.create(max=nil) self.new(max) end
+  def self.instance; @@instance end
 
-  def self.instance
-    @@instance
+  def self.evaluate(source, fname=nil, lineno=nil)
+    instance.evaluate!(source, fname, lineno)
   end
 
   def initialize(max=nil)
-    if @@instance then
-      raise "Can't create multiple instance. use `#{self.class}.instance'"
-    end
-    @max = nil
+    raise "Can't create multiple instance" if @@instance
+    @max = max
     @history = []
+    @@instance = self
+  end
+
+  def max=(newval)
+    @max = newval
+    adjust_size!
   end
 
   def evaluate!(source, fname=nil, lineno=nil)
-    @history.shift if @max and @history.size >= @max
     result = Result.evaluate(source, fname, lineno)
+    adjust_size!
     @history << result
     notify_to_observers(:evaluate!, result)
     result
   end
 
+  private
+
+  def adjust_size!
+    if @max and @history.size >= @max
+      @history.slice!(0, @history.size - @max)
+    end
+  end
+end
+
+class Evaluator
   class Result
     attr_reader :source, :retval, :error, :fname, :lineno
     attr_reader :start_time, :stop_time
@@ -71,12 +84,12 @@ class Evaluator
         @retval = eval(@source, @binding, @fname, @lineno)
         self
       rescue => err
+        $stderr.puts "#{err.class}: #{err.message}"
         @error = err
         self
       rescue Exception => err
-        info = "#{err.class}: #{err.message}\n"
-        err.backtrace.each { |i| info << "  #{i}\n" }
-        $stderr.puts(info)
+        $stderr.puts "#{err.class}: #{err.message}"
+        err.backtrace.each { |i| $stderr.puts "  #{i}" }
         @error = err
         self
       ensure

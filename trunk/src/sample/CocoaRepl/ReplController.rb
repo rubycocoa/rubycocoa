@@ -23,6 +23,11 @@ class ReplController < OSX::NSObject
   ib_outlets :window
   ib_outlets :wordsTable, :descriptionText
 
+  # notification receiver for Evaluator
+  def evaluated(sender, key, result)
+    show_result(result) if result
+  end
+
   # notification receiver for STDOUT/STDERR
   def io_write(sender, key, string)
     color = case sender
@@ -41,9 +46,9 @@ class ReplController < OSX::NSObject
   end
 
   def awakeFromNib
+    Evaluator.instance.add_observer(self, :evaluated)
     STDOUT.add_observer(self, :io_write)
     STDERR.add_observer(self, :io_write)
-    @evaluator = Evaluator.create(100)
     DecoratorStyle.font_size = FONTSIZE
     font = NSFont.userFixedPitchFontOfSize(FONTSIZE)
     @scratchText.setFont(font)
@@ -89,8 +94,7 @@ class ReplController < OSX::NSObject
   ib_action :evaluate do |sender|
     @tabView.selectTabViewItemWithIdentifier('result')
     src = string_for_eval(sender.tag)
-    result = @evaluator.evaluate!(src)
-    show_result(result) if result
+    Evaluator.evaluate(src)
     nil
   end
 
@@ -145,6 +149,7 @@ class ReplController < OSX::NSObject
       err.backtrace.each { |i| info << "  #{i}\n" }
       @resultText.setString(info)
       @resultText.setTextColor(ERR_COLOR)
+      @tabView.selectTabViewItemWithIdentifier('result')
     else
       @statusView.setStringValue(result.retval.inspect[0,100])
       @resultText.setString(result.retval.inspect)
