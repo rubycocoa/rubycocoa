@@ -8,7 +8,11 @@
 #
 $KCODE = 'utf-8'
 require 'osx/cocoa'
+require 'observable'
+require 'evaluator'
+require 'io'
 
+DEFAULT_HISTORY_SIZE = 500
 INSPECT_MAX = 80
 
 class Object
@@ -109,6 +113,7 @@ ARGV.delete_if {|i| /-psn/ =~ i }
 OSX.init_for_bundle do |bdl,prm,lgr|
   load_rc
   load_decorator
+  Evaluator.create(DEFAULT_HISTORY_SIZE)
   require 'RubyProgramTextView'
   require 'ReplController'
 end

@@ -1,5 +1,10 @@
 2007-07-18  Fujimoto Hisa  <hisa@fobj.com>
 
+	* sample/CocoaRepl/main.rb,
+	sample/CocoaRepl/evaluator.rb,
+	sample/CocoaRepl/ReplController.rb:
+	Handled evaluated notification in ReplController.
+
 	* sample/CocoaRepl/evaluator.rb, sample/CocoaRepl/ReplController.rb:
 	Checked evaluator should be singleton.
 
