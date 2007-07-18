@@ -43,7 +43,7 @@ class ReplController < OSX::NSObject
   def awakeFromNib
     STDOUT.add_observer(self, :io_write)
     STDERR.add_observer(self, :io_write)
-    @evaluator = Evaluator.new(100)
+    @evaluator = Evaluator.create(100)
     DecoratorStyle.font_size = FONTSIZE
     font = NSFont.userFixedPitchFontOfSize(FONTSIZE)
     @scratchText.setFont(font)
