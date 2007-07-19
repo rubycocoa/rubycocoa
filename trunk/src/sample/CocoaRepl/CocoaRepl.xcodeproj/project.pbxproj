@@ -20,6 +20,7 @@
                 4EC595D40C4DAE67003FC737 /* evaluator.rb in Resources */ = {isa = PBXBuildFile; fileRef = 4EC595D10C4DAE67003FC737 /* evaluator.rb */; };
                 4EC595D50C4DAE67003FC737 /* io.rb in Resources */ = {isa = PBXBuildFile; fileRef = 4EC595D20C4DAE67003FC737 /* io.rb */; };
                 4EC595D60C4DAE67003FC737 /* observable.rb in Resources */ = {isa = PBXBuildFile; fileRef = 4EC595D30C4DAE67003FC737 /* observable.rb */; };
+                4EC596B50C4F595D003FC737 /* cocoa_sweets.rb in Resources */ = {isa = PBXBuildFile; fileRef = 4EC596B40C4F595D003FC737 /* cocoa_sweets.rb */; };
                 4ECB13380B96BD8D00CC96BF /* RubyProgramTextView.rb in Resources */ = {isa = PBXBuildFile; fileRef = 4ECB13370B96BD8D00CC96BF /* RubyProgramTextView.rb */; };
                 4EDE7A390C157C9000A49786 /* CocoaRepl.icns in Resources */ = {isa = PBXBuildFile; fileRef = 4EDE7A380C157C9000A49786 /* CocoaRepl.icns */; };
                 8D11072A0486CEB800E47090 /* MainMenu.nib in Resources */ = {isa = PBXBuildFile; fileRef = 29B97318FDCFA39411CA2CEA /* MainMenu.nib */; };
@@ -49,6 +50,7 @@
                 4EC595D10C4DAE67003FC737 /* evaluator.rb */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.ruby; path = evaluator.rb; sourceTree = "<group>"; };
                 4EC595D20C4DAE67003FC737 /* io.rb */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.ruby; path = io.rb; sourceTree = "<group>"; };
                 4EC595D30C4DAE67003FC737 /* observable.rb */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.ruby; path = observable.rb; sourceTree = "<group>"; };
+                4EC596B40C4F595D003FC737 /* cocoa_sweets.rb */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.ruby; path = cocoa_sweets.rb; sourceTree = "<group>"; };
                 4ECB13370B96BD8D00CC96BF /* RubyProgramTextView.rb */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.ruby; path = RubyProgramTextView.rb; sourceTree = "<group>"; };
                 4EDE7A380C157C9000A49786 /* CocoaRepl.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = CocoaRepl.icns; sourceTree = "<group>"; };
                 8D1107310486CEB800E47090 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
@@ -129,6 +131,7 @@
                 29B97315FDCFA39411CA2CEA /* Other Sources */ = {
                         isa = PBXGroup;
                         children = (
+                                4EC596B40C4F595D003FC737 /* cocoa_sweets.rb */,
                                 4EC595CF0C4DAE55003FC737 /* main.rb */,
                                 29B97316FDCFA39411CA2CEA /* main.m */,
                         );
@@ -214,6 +217,7 @@
                                 4EC595D40C4DAE67003FC737 /* evaluator.rb in Resources */,
                                 4EC595D50C4DAE67003FC737 /* io.rb in Resources */,
                                 4EC595D60C4DAE67003FC737 /* observable.rb in Resources */,
+                                4EC596B50C4F595D003FC737 /* cocoa_sweets.rb in Resources */,
                         );
                         runOnlyForDeploymentPostprocessing = 0;
                 };

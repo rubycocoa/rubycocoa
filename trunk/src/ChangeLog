@@ -1,5 +1,15 @@
 2007-07-19  Fujimoto Hisa  <hisa@fobj.com>
 
+	* sample/CocoaRepl/cocoa_sweets.rb,
+	sample/CocoaRepl/main.rb,
+	sample/CocoaRepl/CocoaRepl.xcodeproj/project.pbxproj,
+	sample/CocoaRepl/ReplController.rb
+	sample/CocoaRepl/English.lproj/MainMenu.nib:
+	Added cocoa_sweets.rb, it has several useful syntax sugars for
+	repl especially instantiation. Handled NSDefaults in source code
+	rather than nib file, because Tiger's IB support less key-value
+	coding.
+
 	* CocoaRepl/ReplController.rb,
 	CocoaRepl/RubyProgramTextView.rb,
 	CocoaRepl/English.lproj/MainMenu.nib:
