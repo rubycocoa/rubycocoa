@@ -1,5 +1,11 @@
 2007-07-19  Laurent Sansonetti <lsansonetti@apple.com>
 
+	* misc/libruby.1.dylib-tiger-ppc.tar.gz,
+	  misc/libruby.1.dylib-tiger-i386.tar.gz,
+	  misc/libruby.1.dylib.txt,
+	  misc/ruby_thread_hooks.txt:
+	Provide already-patched libruby binaries for Tiger Intel and PPC.
+
 	* framework/src/ruby/osx/objc/ruby_addition.rb:
 	When creating a Thread without the threading support enabled, do not raise
 	an exception but print a warning instead.
