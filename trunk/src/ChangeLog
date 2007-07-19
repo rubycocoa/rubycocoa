@@ -1,5 +1,10 @@
 2007-07-19  Laurent Sansonetti <lsansonetti@apple.com>
 
+	* misc/README_THREADING,
+	  misc/libruby.1.dylib.txt,
+	  misc/ruby_thread_hooks.txt:
+	Removed old .txt files and added a better file, README_THREADING.
+
 	* misc/libruby.1.dylib-tiger-ppc.tar.gz,
 	  misc/libruby.1.dylib-tiger-i386.tar.gz,
 	  misc/libruby.1.dylib.txt,
