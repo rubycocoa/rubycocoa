@@ -93,7 +93,7 @@ class Thread
           OSX::RBRuntime.isRubyThreadingSupported?
       end
       if !@_rubycocoa_threads_allowed then
-        raise RuntimeError, "Ruby threads cannot be used in RubyCocoa without patches to the Ruby interpreter"
+        warn "#{caller[0]}: Ruby threads cannot be used in RubyCocoa without patches to the Ruby interpreter"
       end
       pre_rubycocoa_new(*args,&block)
     end
