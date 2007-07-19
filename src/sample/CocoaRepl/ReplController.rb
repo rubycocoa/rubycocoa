@@ -61,7 +61,6 @@ class ReplController < OSX::NSObject
     initial_msg << " (r#{RUBYCOCOA_SVN_REVISION})"
     @statusView.setStringValue("ready")
     @window.setTitle("RubyCocoa REPL : #{initial_msg}")
-    restore_alpha
 
     tvdel = RubyProgramTextViewDelegate.alloc.init
     tvdel.setController(self)
@@ -69,6 +68,7 @@ class ReplController < OSX::NSObject
     @wordsTable.setDelegate(@scratchText.delegate)
     @wordsTable.setDataSource(@scratchText.delegate)
     load_scratch
+    load_defaults_all
   end
 
   ib_action :selectScratchView do
@@ -76,8 +76,8 @@ class ReplController < OSX::NSObject
   end
 
   ib_action :alphaChanged do |sender|
-    @window.setAlphaValue(sender.floatValue)
-    save_alpha(sender.floatValue)
+    @window.alphaValue = sender.floatValue
+    save_defaults(DEFAULTS_KEY_ALPHA, @window.alphaValue)
   end
 
   ib_action :tabChanged do |sender|
@@ -125,6 +125,37 @@ class ReplController < OSX::NSObject
     end
   end
 
+  DEFAULTS_KEY_ALPHA = 'CocoaReplMainWindowAlphaValue'
+  DEFAULTS_KEY_WINDOW_ORIGIN = 'CocoaReplMainWindowOrigin'
+  DEFAULTS_KEY_WINDOW_SIZE   = 'CocoaReplMainWindowSize'
+
+  def save_defaults(key, val)
+    NSUserDefaults.standardUserDefaults.setObject_forKey(val, key)
+  end
+
+  def load_defaults(key, default=nil, &blk)
+    val = NSUserDefaults.standardUserDefaults.objectForKey(key) || default
+    yield(val) if block_given?
+    val
+  end
+
+  def load_defaults_all
+    @alphaSlider.floatValue =
+      @window.alphaValue = load_defaults(DEFAULTS_KEY_ALPHA, 0.9)
+    load_defaults(DEFAULTS_KEY_WINDOW_ORIGIN) do |v|
+      @window.setFrameOrigin(v.to_a) if v
+    end
+    load_defaults(DEFAULTS_KEY_WINDOW_SIZE) do |v|
+      @window.setContentSize(v.to_a) if v
+    end
+  end
+
+  def save_defaults_all
+    save_defaults(DEFAULTS_KEY_ALPHA, @window.alphaValue)
+    save_defaults(DEFAULTS_KEY_WINDOW_ORIGIN, @window.frame.origin.to_a)
+    save_defaults(DEFAULTS_KEY_WINDOW_SIZE,   @window.frame.size.to_a)
+  end
+
   def store_scratch
     str = @scratchText.textStorage.rubyString
     str.strip!
@@ -141,6 +172,7 @@ class ReplController < OSX::NSObject
 
   def show_result(result)
     store_scratch
+    save_defaults_all
     if err = result.error then
       @statusView.setStringValue(err.message[0,100])
       info = "#{err.class}: #{err.message}\n"
@@ -153,17 +185,5 @@ class ReplController < OSX::NSObject
       @resultText.setString(result.retval.inspect)
       @resultText.setTextColor(OK_COLOR)
     end
-  end
-
-  DEFAULT_ALPHA_KEY = 'CocoaReplMainWindowAlphaValue'
-  def save_alpha(val)
-    NSUserDefaults.standardUserDefaults.setObject_forKey(val, DEFAULT_ALPHA_KEY)
-  end
-
-  def restore_alpha
-    val = NSUserDefaults.standardUserDefaults.objectForKey(DEFAULT_ALPHA_KEY)
-    val ||= 0.9
-    @alphaSlider.setFloatValue(val)
-    @window.setAlphaValue(val)
   end
 end

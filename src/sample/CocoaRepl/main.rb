@@ -64,39 +64,6 @@ class OSX::NSRect
   end
 end
 
-module OSX::OCClsWrapper
-  def create(*args)
-    self.alloc.init
-  end
-end
-
-class OSX::NSWindow
-  def self.create(opts={})
-    if opts.is_a?(Array) and opts.size == 4 then
-      frame = opts
-    else
-      frame = opts[:frame]
-      title = opts[:title]
-    end
-    if frame.nil? then
-      frame = [0, 0, 200, 150]
-      size = OSX::NSScreen.mainScreen.frame.size
-      frame[0] = OSX::NSScreen.mainScreen.frame.size.width  - frame[2] - 10
-      frame[1] = OSX::NSScreen.mainScreen.frame.size.height - frame[3] - 50
-    end
-    win = self.alloc.
-      objc_send( :initWithContentRect, frame,
-                 :styleMask, OSX::NSTitledWindowMask +
-                 OSX::NSResizableWindowMask +
-                 OSX::NSClosableWindowMask,
-                 :backing, OSX::NSBackingStoreBuffered,
-                 :defer, false )
-    win.setTitle(title) if title
-    win.makeKeyAndOrderFront(OSX::NSApp)
-    win
-  end
-end
-
 def load_rc
   path = File.join(ENV['HOME'], ".cocoareplrc")
   load(path) if File.exist? path
@@ -114,6 +81,7 @@ OSX.init_for_bundle do |bdl,prm,lgr|
   load_rc
   load_decorator
   Evaluator.create(DEFAULT_HISTORY_SIZE)
+  require 'cocoa_sweets'
   require 'RubyProgramTextView'
   require 'ReplController'
 end
