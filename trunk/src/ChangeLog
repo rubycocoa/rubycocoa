@@ -1,3 +1,9 @@
+2007-07-19  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* framework/src/ruby/osx/objc/ruby_addition.rb:
+	When creating a Thread without the threading support enabled, do not raise
+	an exception but print a warning instead.
+
 2007-07-19  Fujimoto Hisa  <hisa@fobj.com>
 
 	* sample/CocoaRepl/cocoa_sweets.rb,
