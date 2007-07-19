@@ -5,6 +5,14 @@
 
 2007-07-19  Laurent Sansonetti <lsansonetti@apple.com>
 
+	* VERSION:
+	Bumping to 0.12.0.
+
+	* package/pre-package.rb,
+	  package/tmpl/postflight-universal.rb:
+	Now bundling the libruby binaries with the binary package, and installing
+	then during postflight. 
+
 	* misc/README_THREADING,
 	  misc/libruby.1.dylib.txt,
 	  misc/ruby_thread_hooks.txt:
