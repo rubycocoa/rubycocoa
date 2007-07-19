@@ -1,3 +1,12 @@
+2007-07-19  Fujimoto Hisa  <hisa@fobj.com>
+
+	* CocoaRepl/ReplController.rb,
+	CocoaRepl/RubyProgramTextView.rb,
+	CocoaRepl/English.lproj/MainMenu.nib:
+	Saved window size(kvc) and alpha value(source) into the
+	userdefaults. Decorated when reloading a program. (thanks to
+	Laurent for the patch)
+
 2007-07-18  Fujimoto Hisa  <hisa@fobj.com>
 
 	* sample/CocoaRepl/main.rb,
