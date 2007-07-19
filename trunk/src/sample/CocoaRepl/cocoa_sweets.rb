@@ -26,11 +26,27 @@ module OSX::OCClsWrapper
   end
 end
 
+# usage:
+#   NSURL.create "http://www.apple.com/"
+#   NSURL.create "/etc/httpd/httpd.conf"
+#   NSURL.create :url => "http://www.apple.com/"
+#   NSURL.create :path => "/etc/httpd/httpd.conf"
+
 class OSX::NSURL
   def self.create_with_url(str)   self.URLWithString(str)    end
   def self.create_with_str(str)   create_with_path(str)      end
   def self.create_with_path(path) self.fileURLWithPath(path) end
 end
+
+
+# usage:
+#   NSData.create "a ruby string as bytes"
+#   NSData.create "http://www.apple.com/index.html"
+#   NSData.create :str  => "a ruby string as bytes"
+#   NSData.create :url  => "http://www.apple.com/index.html"
+#   NSData.create :path => '/usr/share/dict/words'
+#   open('/usr/share/dict/words') { |io| NSData.create(io) }
+#   open('/usr/share/dict/words') { |io| NSData.create(:io=>io) }
 
 class OSX::NSData
   def self.create_with_str(str)   self.dataWithBytes_length(str, str.size) end
@@ -39,6 +55,13 @@ class OSX::NSData
   def self.create_with_io(io)     create_with_str(io.read) end
 end
 
+
+# usage:
+#   NSImage.create "/Library/Desktop Pictures/Aqua Blue.jpg"
+#   NSImage.create "http://path_to_image_url/image.jpg"
+#   NSImage.create :path => "/Library/Desktop Pictures/Aqua Blue.jpg"
+#   NSImage.create :url  => "http://path_to_image_url/image.jpg"
+
 class OSX::NSImage
   def self.create_with_path(path) self.alloc.initWithContentsOfFile(path) end
   def self.create_with_str(str)   create_with_path(str)  end
@@ -46,6 +69,14 @@ class OSX::NSImage
     self.alloc.initWithContentsOfURL(OSX::NSURL.create(url))
   end
 end
+
+
+# usage:
+#   NSWindow.create
+#   NSWindow.create(800, 600)
+#   NSWindow.create([800, 600])
+#   NSWindow.create(0, 0, 800, 600)
+#   NSWindow.create([0, 0, 800, 600])
 
 class OSX::NSWindow
   DEFAULT_SIZE   = [200, 150]
@@ -90,6 +121,16 @@ class OSX::NSWindow
     win
   end
 end
+
+
+# usage:
+#   NSView.create
+#   NSView.create(360, 240)
+#   NSView.create([360, 240])
+#   NSView.create(0, 0, 360, 240)
+#   NSView.create([0, 0, 360, 240])
+#   NSSlider.create(300, 20)
+#   ...
 
 class OSX::NSView
   def self.create(*arg)
