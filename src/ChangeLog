@@ -1,3 +1,8 @@
+2007-07-20  Fujimoto Hisa  <hisa@fobj.com>
+
+	* pre-config.rb, tests/Makefile.in, tests/Makefile:
+	Fixed tests/objc_test.bundle can't build on ppc mac.
+
 2007-07-19  Laurent Sansonetti <lsansonetti@apple.com>
 
 	* misc/README_THREADING,
