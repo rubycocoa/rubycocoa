@@ -104,6 +104,10 @@ class RubyProgramTextView < OSX::NSTextView
     setSelectedRange(rangeForCurrentLine)
   end
 
+  def decorate_all
+    self.delegate.decorate_all(self)
+  end
+
 end
 
 
@@ -135,6 +139,10 @@ class RubyProgramTextViewDelegate < OSX::NSObject
       @key = view.textStorage.string.substringWithRange(range).to_s
       showDescription(@key) if @words.include?(@key)
     end
+  end
+
+  def decorate_all(view)
+    @decorator && @decorator.decorate(view.textStorage)
   end
 
   def textView_completions_forPartialWordRange_indexOfSelectedItem(view, words, range, index)

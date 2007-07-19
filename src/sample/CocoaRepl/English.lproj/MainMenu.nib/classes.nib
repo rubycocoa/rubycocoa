@@ -13,6 +13,7 @@
             CLASS = ReplController; 
             LANGUAGE = ObjC; 
             OUTLETS = {
+                alphaSlider = id; 
                 descriptionText = id; 
                 outText = id; 
                 resultText = id; 

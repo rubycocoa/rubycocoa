@@ -20,7 +20,7 @@ class ReplController < OSX::NSObject
   SCRATCH_PATH = File.join(ENV['HOME'], ".cocoarepl_scratch.rb")
 
   ib_outlets :scratchText, :resultText, :outText, :tabView, :statusView
-  ib_outlets :window
+  ib_outlets :alphaSlider, :window
   ib_outlets :wordsTable, :descriptionText
 
   # notification receiver for Evaluator
@@ -56,16 +56,12 @@ class ReplController < OSX::NSObject
     @outText.setFont(font)
     @descriptionText.setFont(NSFont.userFixedPitchFontOfSize(14))
 
-    # default window location
-    @window.setFrameOrigin([4,12])
-    @window.setContentSize([800,680])
-
     initial_msg = "Ruby #{RUBY_VERSION}"
     initial_msg << ", RubyCocoa #{RUBYCOCOA_VERSION}"
     initial_msg << " (r#{RUBYCOCOA_SVN_REVISION})"
     @statusView.setStringValue("ready")
     @window.setTitle("RubyCocoa REPL : #{initial_msg}")
-    @window.setAlphaValue(0.9)
+    restore_alpha
 
     tvdel = RubyProgramTextViewDelegate.alloc.init
     tvdel.setController(self)
@@ -81,6 +77,7 @@ class ReplController < OSX::NSObject
 
   ib_action :alphaChanged do |sender|
     @window.setAlphaValue(sender.floatValue)
+    save_alpha(sender.floatValue)
   end
 
   ib_action :tabChanged do |sender|
@@ -137,6 +134,7 @@ class ReplController < OSX::NSObject
   def load_scratch
     if File.exist? SCRATCH_PATH then
       @scratchText.setString(File.read(SCRATCH_PATH))
+      @scratchText.decorate_all
       @scratchText.didChangeText
     end
   end
@@ -155,5 +153,17 @@ class ReplController < OSX::NSObject
       @resultText.setString(result.retval.inspect)
       @resultText.setTextColor(OK_COLOR)
     end
+  end
+
+  DEFAULT_ALPHA_KEY = 'CocoaReplMainWindowAlphaValue'
+  def save_alpha(val)
+    NSUserDefaults.standardUserDefaults.setObject_forKey(val, DEFAULT_ALPHA_KEY)
+  end
+
+  def restore_alpha
+    val = NSUserDefaults.standardUserDefaults.objectForKey(DEFAULT_ALPHA_KEY)
+    val ||= 0.9
+    @alphaSlider.setFloatValue(val)
+    @window.setAlphaValue(val)
   end
 end
