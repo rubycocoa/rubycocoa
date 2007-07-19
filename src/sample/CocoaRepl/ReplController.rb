@@ -126,8 +126,6 @@ class ReplController < OSX::NSObject
   end
 
   DEFAULTS_KEY_ALPHA = 'CocoaReplMainWindowAlphaValue'
-  DEFAULTS_KEY_WINDOW_ORIGIN = 'CocoaReplMainWindowOrigin'
-  DEFAULTS_KEY_WINDOW_SIZE   = 'CocoaReplMainWindowSize'
 
   def save_defaults(key, val)
     NSUserDefaults.standardUserDefaults.setObject_forKey(val, key)
@@ -142,18 +140,10 @@ class ReplController < OSX::NSObject
   def load_defaults_all
     @alphaSlider.floatValue =
       @window.alphaValue = load_defaults(DEFAULTS_KEY_ALPHA, 0.9)
-    load_defaults(DEFAULTS_KEY_WINDOW_ORIGIN) do |v|
-      @window.setFrameOrigin(v.to_a) if v
-    end
-    load_defaults(DEFAULTS_KEY_WINDOW_SIZE) do |v|
-      @window.setContentSize(v.to_a) if v
-    end
   end
 
   def save_defaults_all
     save_defaults(DEFAULTS_KEY_ALPHA, @window.alphaValue)
-    save_defaults(DEFAULTS_KEY_WINDOW_ORIGIN, @window.frame.origin.to_a)
-    save_defaults(DEFAULTS_KEY_WINDOW_SIZE,   @window.frame.size.to_a)
   end
 
   def store_scratch
