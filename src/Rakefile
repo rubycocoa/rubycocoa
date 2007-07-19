@@ -21,7 +21,7 @@ end
 
 desc "build RubyCocoa.framework"
 task :build do
-  ruby "install.rb", "config", "--prefix=/usr", "--build-universal=yes"
+  ruby "install.rb", "config", "--build-universal=yes"
   ruby "install.rb", "setup"
   ruby "install.rb", "test"
 end
