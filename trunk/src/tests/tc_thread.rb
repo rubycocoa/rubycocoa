@@ -193,7 +193,9 @@ class TC_Thread < Test::Unit::TestCase
             end
           end
         end
-        t.each { |th| GC.start; th.join; GC.start }
+        t.each { |th| GC.start; th.join; th.terminate }
+        t = nil
+        GC.start # Force the threads to be collected
       end
     end
   end

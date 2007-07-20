@@ -1,3 +1,10 @@
+2007-07-20  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* framework/src/objc/RBRuntime.m,
+	  tests/tc_thread.rb:
+	More robust threading support. Better stress case, with Thread objects
+	collection.
+
 2007-07-20  Satoshi Nakagawa <artension@gmail.com>
 
 	* Rakefile:
