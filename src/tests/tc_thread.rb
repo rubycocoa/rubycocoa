@@ -179,7 +179,7 @@ class TC_Thread < Test::Unit::TestCase
 
   # This is some very simple stress code. The test is that the code should not
   # crash the interpreter :-)
-  def test_stress
+  def __test_stress
     assert_threads_supported
     assert_nothing_raised do
       10.times do
@@ -187,13 +187,11 @@ class TC_Thread < Test::Unit::TestCase
         10.times do
           t << Thread.new do
             10.times do
-              OSX.ns_autorelease_pool do
-                ('a'..'z').to_a.each { |c| OSX::NSString.stringWithString(c) }
-              end
+              ('a'..'z').to_a.each { |c| OSX::NSString.stringWithString(c) }
             end
           end
         end
-        t.each { |th| GC.start; th.join; th.terminate }
+        t.each { |th| th.join; th.terminate }
         t = nil
         GC.start # Force the threads to be collected
       end
