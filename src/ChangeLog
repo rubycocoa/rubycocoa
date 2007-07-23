@@ -1,3 +1,8 @@
+2007-07-23  Fujimoto Hisa  <hisa@fobj.com>
+
+	* sample/SimpleCocoaRepl:
+	removed.
+
 2007-07-20  Laurent Sansonetti <lsansonetti@apple.com>
 
 	* framework/src/objc/RBRuntime.m,
