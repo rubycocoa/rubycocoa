@@ -1,5 +1,9 @@
 2007-07-23  Fujimoto Hisa  <hisa@fobj.com>
 
+	* doc/ja/*.txt, doc/html/ja/*.html, doc/Rakefile:
+	Added some Japanese documents as BlueCloth format. rewrited old
+	documents (thanks to Nakagawa-san)
+
 	* doc/*.html, doc/*.jpg, doc/*.css:
 	Remvoed old documents.
 
