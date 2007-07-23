@@ -1,3 +1,10 @@
+2007-07-24  Eloy Duran <eloy.de.enige@gmail.com>
+
+	* KNOWN_TO_BE_EMPTY,
+	  DOCUMENTATION_VERSION:
+	Tested BridgeDoc against the latest reference update
+	from 18-07-2007 and added a few info documents about this.
+
 2007-07-23  Laurent Sansonetti <lsansonetti@apple.com>
 
 	* doc/ja/installation.txt:
