@@ -1,7 +1,10 @@
 2007-07-23  Fujimoto Hisa  <hisa@fobj.com>
 
+	* doc/*.html, doc/*.jpg, doc/*.css:
+	Remvoed old documents.
+
 	* sample/SimpleCocoaRepl:
-	removed.
+	Removed.
 
 2007-07-20  Laurent Sansonetti <lsansonetti@apple.com>
 
