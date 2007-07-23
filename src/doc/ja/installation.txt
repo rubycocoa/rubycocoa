@@ -47,4 +47,4 @@ MacPorts で入れた /opt/local/bin/ruby を使う場合
     cd /Developer/Examples/RubyCocoa
     mkdir -p apps
     ruby buildall.rb apps
-    open /Developer/Examples/RubyCocoa/app
+    open /Developer/Examples/RubyCocoa/apps

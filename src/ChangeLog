@@ -1,3 +1,8 @@
+2007-07-23  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* doc/ja/installation.txt:
+	Fixed typo.
+
 2007-07-23  Fujimoto Hisa  <hisa@fobj.com>
 
 	* doc/ja/*.txt, doc/html/ja/*.html, doc/Rakefile:
