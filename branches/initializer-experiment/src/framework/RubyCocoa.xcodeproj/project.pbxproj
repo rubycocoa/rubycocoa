@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		28E702380C55AB6900C06658 /* initializer.rb in Resources */ = {isa = PBXBuildFile; fileRef = 28E702370C55AB6900C06658 /* initializer.rb */; };
+		28E7023A0C55AB7B00C06658 /* initializer.rb in Resources */ = {isa = PBXBuildFile; fileRef = 28E702390C55AB7B00C06658 /* initializer.rb */; };
 		4D0942F20B5833CA001986D6 /* ocexception.h in Headers */ = {isa = PBXBuildFile; fileRef = 4D0942F00B5833CA001986D6 /* ocexception.h */; };
 		4D0942F30B5833CA001986D6 /* ocexception.m in Sources */ = {isa = PBXBuildFile; fileRef = 4D0942F10B5833CA001986D6 /* ocexception.m */; };
 		4D09437F0B584304001986D6 /* libffi.h in Headers */ = {isa = PBXBuildFile; fileRef = 4D09437D0B584304001986D6 /* libffi.h */; };
@@ -132,6 +134,8 @@
 
 /* Begin PBXFileReference section */
 		0867D69BFE84028FC02AAC07 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
+		28E702370C55AB6900C06658 /* initializer.rb */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.script.ruby; path = initializer.rb; sourceTree = "<group>"; };
+		28E702390C55AB7B00C06658 /* initializer.rb */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.script.ruby; path = initializer.rb; sourceTree = "<group>"; };
 		4D0942F00B5833CA001986D6 /* ocexception.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ocexception.h; sourceTree = "<group>"; };
 		4D0942F10B5833CA001986D6 /* ocexception.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ocexception.m; sourceTree = "<group>"; };
 		4D09437D0B584304001986D6 /* libffi.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = libffi.h; sourceTree = "<group>"; };
@@ -326,6 +330,7 @@
 		E88C6E6E035BB408031D1B90 /* osx */ = {
 			isa = PBXGroup;
 			children = (
+				28E702370C55AB6900C06658 /* initializer.rb */,
 				E84D81EB03ADA29603A81C6F /* addressbook.rb */,
 				E84D81EC03ADA29603A81C6F /* appkit.rb */,
 				E84D81ED03ADA29603A81C6F /* cocoa.rb */,
@@ -342,6 +347,7 @@
 		E88C6E73035BB408031D1B90 /* objc */ = {
 			isa = PBXGroup;
 			children = (
+				28E702390C55AB7B00C06658 /* initializer.rb */,
 				4D92831E0B55505C0070944C /* foundation.rb */,
 				E88C6E76035BB408031D1B90 /* application.rb */,
 				E88C6E77035BB408031D1B90 /* cocoa.rb */,
@@ -453,6 +459,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				28E702380C55AB6900C06658 /* initializer.rb in Resources */,
+				28E7023A0C55AB7B00C06658 /* initializer.rb in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
