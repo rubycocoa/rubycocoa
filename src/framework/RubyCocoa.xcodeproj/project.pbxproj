@@ -89,6 +89,16 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		51C3C3FB0C55BC9900A0B5C9 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = ruby/osx/objc/active_record_support;
+			dstSubfolderSpec = 7;
+			files = (
+				5135ABAC0BF7A66F006D304E /* active_record_proxy.rb in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		FCDF92770A87E09E0002AD01 /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -112,7 +122,6 @@
 			dstPath = ruby/osx/objc;
 			dstSubfolderSpec = 7;
 			files = (
-				5135ABAC0BF7A66F006D304E /* active_record_proxy.rb in CopyFiles */,
 				4E85DA260B788E43007290BD /* oc_bundle_support.rb in CopyFiles */,
 				FCDF927E0A87E09E0002AD01 /* application.rb in CopyFiles */,
 				FCDF92800A87E09E0002AD01 /* cocoa.rb in CopyFiles */,
@@ -275,6 +284,14 @@
 			name = Tools;
 			sourceTree = "<group>";
 		};
+		51C3C3FA0C55BC6D00A0B5C9 /* active_record_support */ = {
+			isa = PBXGroup;
+			children = (
+				5135ABAB0BF7A66F006D304E /* active_record_proxy.rb */,
+			);
+			name = active_record_support;
+			sourceTree = "<group>";
+		};
 		E88C6D57035BB1F5031D1B90 /* objc */ = {
 			isa = PBXGroup;
 			children = (
@@ -350,6 +367,7 @@
 			isa = PBXGroup;
 			children = (
 				4D92831E0B55505C0070944C /* foundation.rb */,
+				51C3C3FA0C55BC6D00A0B5C9 /* active_record_support */,
 				E88C6E76035BB408031D1B90 /* application.rb */,
 				E88C6E77035BB408031D1B90 /* cocoa.rb */,
 				E88C6E78035BB408031D1B90 /* cocoa_macros.rb */,
@@ -365,7 +383,6 @@
 				E88C6E80035BB408031D1B90 /* oc_wrapper.rb */,
 				4E85DA250B788E43007290BD /* oc_bundle_support.rb */,
 				E8FD49D003D45B2603A81C6F /* ruby_addition.rb */,
-				5135ABAB0BF7A66F006D304E /* active_record_proxy.rb */,
 			);
 			path = objc;
 			sourceTree = "<group>";
@@ -424,6 +441,7 @@
 				4EACC7660C0288C8006372AD /* CopyFiles */,
 				FCDF92770A87E09E0002AD01 /* CopyFiles */,
 				FCDF927C0A87E09E0002AD01 /* CopyFiles */,
+				51C3C3FB0C55BC9900A0B5C9 /* CopyFiles */,
 				FCDF928C0A87E09E0002AD01 /* Sources */,
 				FCDF929C0A87E09E0002AD01 /* Frameworks */,
 				FCDF929F0A87E09E0002AD01 /* Rez */,

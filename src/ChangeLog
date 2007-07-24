@@ -1,3 +1,10 @@
+2007-07-24  Eloy Duran <eloy.de.enige@gmail.com>
+
+	* framework/RubyCocoa.xcodeproj/project.pbxproj,
+	  src/framework/src/ruby/osx/active_record_support/active_record_proxy.rb:
+	Created a new active_record_support dir and added a new copy phase for it.
+	Updated the copy phases to copy initializer.rb to the correct places.
+
 2007-07-23  Justin Palmer <encytemedia@gmail.com>
 
 	* lib/osx/initializer.rb,
