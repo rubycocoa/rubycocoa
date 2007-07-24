@@ -1,0 +1,15 @@
+Purpose and Ideas for this Branch
+
+* Allow transparent packaging.  Developers need only worry about creating their application 
+  and basic configuration not the innards of packaging and releasing. 
+
+  config.objc_frameworks << ['Webkit', 'Quartz']
+  config.active_record = true
+  config.include_dirs << %w(models controllers lib)
+
+* Allow Apps running in debug mode to use code from your working directory.  No need to 
+  continuously rebuild your application when just changing a few lines of Ruby.
+* When in debug mode and using ActiveRecord, allow database to reside in your working 
+  directory for easy access instead of buried in your users Application Support path.
+* Load database config from config/database.yml
+* Remove what Xcode dependencies we can.  (e.g. No need to add directories to Xcode)
