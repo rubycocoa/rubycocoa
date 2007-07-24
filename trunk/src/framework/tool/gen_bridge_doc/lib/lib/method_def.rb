@@ -1,13 +1,30 @@
 class CocoaRef::MethodDef
   include Extras
   
-  attr_accessor :type, :name, :description, :definition, :parameters, :return_value, :discussion, :availability, :see_also
+  attr_accessor :type, :name, :description, :definition, :parameters, :return_value, :discussion, :availability, :see_also, :is_a_setter_variant
   attr_reader :log
   
   def initialize
     @methods_debug = false
+    @is_a_setter_variant = false
     @type, @name, @description, @definition, @parameters, @return_value, @discussion, @availability, @see_also = '', '', '', '', '', '', '', '', []
     @log = CocoaRef::Log.new
+  end
+  
+  def is_setter?
+    @name != 'set' && @name != 'set:' && @name[0..2] == 'set'
+  end
+  
+  def create_rubyesque_setter_variant
+    # setFoo() will become foo=()
+    dup = self.dup
+    dup.is_a_setter_variant = true
+    dup.name = self.ruby_setter_for(@name)
+    return dup
+  end
+  
+  def ruby_setter_for(str)
+    str[3...4].downcase << str[4..-1]
   end
   
   def to_s
@@ -44,12 +61,14 @@ class CocoaRef::MethodDef
     str += "    # #{self.definition.gsub(/\n/, ' ').strip_tags.clean_special_chars}\n"
     str += "    #\n"
     
-    unless ruby_style_def == 'an_error_occurred_while_parsing_method_def!'
-      objc_method_style = self.to_objc_method(class_name)
-      unless objc_method_style.nil?
-        str += "    # This is an alternative way of calling this method:\n"
-        objc_method_style.each do |line|
-          str += "    #{line}\n"
+    unless self.is_a_setter_variant
+      unless ruby_style_def == 'an_error_occurred_while_parsing_method_def!'
+        objc_method_style = self.to_objc_method(class_name)
+        unless objc_method_style.nil?
+          str += "    # This is an alternative way of calling this method:\n"
+          objc_method_style.each do |line|
+            str += "    #{line}\n"
+          end
         end
       end
     end
@@ -162,9 +181,11 @@ class CocoaRef::MethodDef
   
     if self.definition.strip_tags.include?(':') and not self.definition.strip_tags[-2...-1] == ':'
       method_def_parts = self.parse
-      str = "#{method_def_parts.collect {|m| m[:name]}.join('_')}(#{method_def_parts.collect{|m| m[:arg] }.join(', ')})"
+      str = method_def_parts.collect {|m| m[:name]}.join('_')
+      str += '=' if self.is_a_setter_variant
+      str += '(' << method_def_parts.collect{|m| m[:arg] }.join(', ') << ')'
     else
-      str = "#{parsed_method_name.join('_')}"
+      str = parsed_method_name.join('_')
     end
   
     if str =~ /^[_(]+/
@@ -173,7 +194,11 @@ class CocoaRef::MethodDef
       @log.add(error_str)
       return 'an_error_occurred_while_parsing_method_def!'
     else
-      return str
+      if self.is_a_setter_variant
+        return self.ruby_setter_for(str)
+      else
+        return str
+      end
     end
   end
 end

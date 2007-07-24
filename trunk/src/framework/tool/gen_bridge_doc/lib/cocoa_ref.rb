@@ -226,7 +226,9 @@ module CocoaRef
       
       # Remove duplicate constants 
       class_def.constant_defs.uniq!
-
+      
+      class_def.create_syntactic_sugar_methods!
+      
       return class_def
     end
     
