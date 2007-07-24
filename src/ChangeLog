@@ -1,5 +1,15 @@
 2007-07-23  Justin Palmer <encytemedia@gmail.com>
 
+	* lib/osx/initializer.rb,
+	  IDEAS,
+	  framework/src/ruby/osx/objc/initializer.rb,
+	  framework/src/ruby/osx/initializer.rb,
+	  framework/RubyCocoa.xcodeproj/project.pbxproj:
+	Add initializer and configuration code.  Not used in anything yet, but
+	the MailDemoActiveRecordBindings is about to get an update.
+	
+2007-07-23  Justin Palmer <encytemedia@gmail.com>
+
 	* src/framework/src/ruby/osx/active_record.rb,
 	  src/framework/src/ruby/osx/active_record_proxy.rb,
 	  src/framework/src/ruby/osx/objc/active_record.rb,
