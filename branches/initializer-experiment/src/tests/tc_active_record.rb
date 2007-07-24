@@ -8,7 +8,7 @@ begin
     require 'rubygems'
   rescue LoadError
   end
-  require 'osx/active_record'
+  require 'osx/active_record_proxy'
   require 'sqlite3'
   
   dbfile = '/tmp/maildemo.sqlite'

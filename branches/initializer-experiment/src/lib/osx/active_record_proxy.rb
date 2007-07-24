@@ -6,4 +6,4 @@
 # LGPL. See the COPYRIGHT file for more information.
 
 require 'osx/cocoa'
-require 'osx/objc/active_record'
+require 'osx/objc/active_record_proxy'
