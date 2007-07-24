@@ -1,5 +1,11 @@
 2007-07-24  Eloy Duran <eloy.de.enige@gmail.com>
 
+	* sample/MailDemo/MailDemoActiveRecordBindings/Mailbox.rb:
+	Fixed a bug where emails belonging to a mailbox
+	were not deleted when the mailbox was deleted.
+
+2007-07-24  Eloy Duran <eloy.de.enige@gmail.com>
+
 	* framework/tool/gen_bridge_doc/lib/cocoa_ref.rb,
 	  framework/tool/gen_bridge_doc/lib/lib/method_def.rb,
 	  framework/tool/gen_bridge_doc/lib/lib/class_def.rb:
