@@ -1,6 +1,6 @@
 require "rubygems"
 require 'osx/cocoa'
-require "osx/active_record"
+require "osx/active_record_proxy"
 include OSX
 
 def rb_main_init

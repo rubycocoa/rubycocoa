@@ -1,3 +1,15 @@
+2007-07-23  Justin Palmer <encytemedia@gmail.com>
+
+  * src/framework/src/ruby/osx/active_record.rb,
+    src/framework/src/ruby/osx/active_record_proxy.rb,
+    src/framework/src/ruby/osx/objc/active_record.rb,
+    src/framework/src/ruby/osx/objc/active_record_proxy.rb
+    src/lib/osx/active_record.rb,
+    src/lib/osx/active_record_proxy.rb,
+    src/sample/MailDemo/MailDemoActiveRecordBindings/rb_main.rb
+  Rename active_record files to prevent require conflicts with the 
+  active_record gem.
+  
 2007-07-24  Eloy Duran <eloy.de.enige@gmail.com>
 
 	* KNOWN_TO_BE_EMPTY,
