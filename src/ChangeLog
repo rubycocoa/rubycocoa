@@ -1,5 +1,13 @@
 2007-07-24  Eloy Duran <eloy.de.enige@gmail.com>
 
+	* framework/tool/gen_bridge_doc/lib/cocoa_ref.rb,
+	  framework/tool/gen_bridge_doc/lib/lib/method_def.rb,
+	  framework/tool/gen_bridge_doc/lib/lib/class_def.rb:
+	Added the docs for the ruby-like setters that are supported by the bridge.
+	So for instance NSView will have documentation for #setNeedsDisplay() and #needsDisplay=()
+
+2007-07-24  Eloy Duran <eloy.de.enige@gmail.com>
+
 	* KNOWN_TO_BE_EMPTY,
 	  DOCUMENTATION_VERSION:
 	Tested BridgeDoc against the latest reference update

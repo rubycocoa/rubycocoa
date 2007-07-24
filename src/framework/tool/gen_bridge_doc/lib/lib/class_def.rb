@@ -96,6 +96,17 @@ class CocoaRef::ClassDef
     @method_defs.each {|m| m.to_s }
   end
   
+  def create_syntactic_sugar_methods!
+    @method_defs.each do |method|
+      # check for setter methods for which the bridge adds more rubyesque methods,
+      if method.is_setter?
+        puts method.name
+        @method_defs.push method.create_rubyesque_setter_variant
+        #puts method.create_rubyesque_setter_variant.name
+      end
+    end
+  end
+  
   def to_rdoc
     str = ''
     
