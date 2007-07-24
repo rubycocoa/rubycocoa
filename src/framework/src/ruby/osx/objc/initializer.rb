@@ -166,7 +166,7 @@ module OSX
     attr_accessor :use_active_record
     
     # An array of additional paths to prepend to the load path. By default,
-    # all +models+, +config+, +controllers+ and +db+ and mock paths are included in this list.
+    # all +models+, +config+, +controllers+ and +db+ paths are included in this list.
     attr_accessor :load_paths
     
     # The path to the database configuration file to use. (Defaults to
