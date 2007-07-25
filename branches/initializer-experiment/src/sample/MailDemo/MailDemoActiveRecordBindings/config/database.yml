@@ -1,0 +1,7 @@
+release:
+  adapter: sqlite3
+  database: maildemo.sqlite3
+
+debug:
+  adapter: sqlite3
+  database: maildemo-debug.sqlite3

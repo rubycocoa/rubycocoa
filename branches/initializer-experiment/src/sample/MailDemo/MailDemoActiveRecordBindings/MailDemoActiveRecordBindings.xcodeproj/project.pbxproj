@@ -13,7 +13,6 @@
 		4DDCA70A0ACC9A6100E082CE /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; settings = {ATTRIBUTES = (); }; };
 		4DDCA70C0ACC9A6100E082CE /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
 		4DDCA70D0ACC9A6100E082CE /* RubyCocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E8F5E24E03AEB6EC03A81C6F /* RubyCocoa.framework */; };
-		510A96220BFDF8A200CCEFE9 /* migrate in Resources */ = {isa = PBXBuildFile; fileRef = 510A961E0BFDF8A200CCEFE9 /* migrate */; };
 		51B5F2740BF9E2D700DD14B0 /* EmailProxy.rb in Resources */ = {isa = PBXBuildFile; fileRef = 51B5F2720BF9E2D700DD14B0 /* EmailProxy.rb */; };
 		51C0B76A0BF656A900153682 /* Email.rb in Resources */ = {isa = PBXBuildFile; fileRef = 51C0B7640BF656A900153682 /* Email.rb */; };
 		51C0B76B0BF656A900153682 /* Mailbox.rb in Resources */ = {isa = PBXBuildFile; fileRef = 51C0B7650BF656A900153682 /* Mailbox.rb */; };
@@ -29,8 +28,7 @@
 		29B97324FDCFA39411CA2CEA /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
 		29B97325FDCFA39411CA2CEA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
 		4DDCA7110ACC9A6100E082CE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = Info.plist; sourceTree = "<group>"; };
-		4DDCA7120ACC9A6100E082CE /* MailDemoActiveRecordBindings.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MailDemoActiveRecordBindings.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		510A961E0BFDF8A200CCEFE9 /* migrate */ = {isa = PBXFileReference; lastKnownFileType = folder; path = migrate; sourceTree = "<group>"; };
+		4DDCA7120ACC9A6100E082CE /* MailDemoActiveRecordBindings.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = MailDemoActiveRecordBindings.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		51B5F2720BF9E2D700DD14B0 /* EmailProxy.rb */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.script.ruby; path = EmailProxy.rb; sourceTree = "<group>"; };
 		51C0B7640BF656A900153682 /* Email.rb */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.script.ruby; path = Email.rb; sourceTree = "<group>"; };
 		51C0B7650BF656A900153682 /* Mailbox.rb */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.script.ruby; path = Mailbox.rb; sourceTree = "<group>"; };
@@ -95,7 +93,6 @@
 				29B97323FDCFA39411CA2CEA /* Frameworks */,
 				19C28FACFE9D520D11CA2CBB /* Products */,
 				4DDCA7110ACC9A6100E082CE /* Info.plist */,
-				510A961E0BFDF8A200CCEFE9 /* migrate */,
 			);
 			name = MailDemoActiveRecordBindings;
 			sourceTree = "<group>";
@@ -193,7 +190,6 @@
 				51C0B76D0BF656A900153682 /* MyController.rb in Resources */,
 				51C0B76E0BF656A900153682 /* TreeHouseIdeas.icns in Resources */,
 				51B5F2740BF9E2D700DD14B0 /* EmailProxy.rb in Resources */,
-				510A96220BFDF8A200CCEFE9 /* migrate in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

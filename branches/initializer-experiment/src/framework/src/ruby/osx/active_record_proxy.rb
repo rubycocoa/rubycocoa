@@ -7,3 +7,7 @@
 
 require 'osx/cocoa'
 require 'osx/objc/active_record_support/active_record_proxy'
+
+module OSX
+  include ActiveRecordSupport
+end
