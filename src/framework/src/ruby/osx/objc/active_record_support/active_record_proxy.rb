@@ -365,72 +365,29 @@ module OSX
     end
 
   end
-
-  # ---------------------------------------------------------
-  # Extra support classes/modules
-  # ---------------------------------------------------------
   
-  module ActiveRecordConnector
-    def connect_to_sqlite(dbfile, options = {})
-      options[:log] ||= false
+  module ActiveRecordSupport
+    # Check to see if the database exists for the current environment
+    def database_exists?
+      require 'erb'
+      database_file = YAML::load(ERB.new(IO.read(File.join(RUBYCOCOA_ROOT, 'config', 'database.yml'))).result)
+      File.exists?(database_file[RUBYCOCOA_ENV]['database'])
+    end
 
-      if options[:log]
-        ActiveRecord::Base.logger = Logger.new($stderr)
-        ActiveRecord::Base.colorize_logging = false
-      end
-
-      # Connect to the database
-      ActiveRecord::Base.establish_connection({
-        :adapter => 'sqlite3',
-        :dbfile => dbfile
-      })
+    def database_needs_migration?     
+      ActiveRecord::Migrator.current_version != ActiveRecord::Migrator.latest_version(File.join(RUBYCOCOA_ROOT, 'db', 'migrate'))
     end
-    module_function :connect_to_sqlite
-    
-    # Connect to an SQLite database stored in the applications support directory ~/USER/Library/Application Support/APP/APP.sqlite.
-    # <tt>:always_migrate</tt> Always run migrations when this method is invoked, false by default.
-    # <tt>:migrations_dir</tt> The directory where migrations are stored, migrate/ by default.
-    # <tt>:log</tt> Log database activity, false by default.
-    #
-    #   ActiveRecordConnector.connect_to_sqlite_in_application_support :log => true
-    #
-    # If you run this for the first time and haven't already created a migration to create your database
-    # tables, etc., you'll need to force the migration if :always_migrate isn't enabled.
-    def connect_to_sqlite_in_application_support(options = {})
-      options[:always_migrate] ||= false
-      options[:migrations_dir] ||= 'migrate/'
-
-      dbfile = File.join(self.get_app_support_path, "#{self.get_app_name}.sqlite")
-      # connect
-      self.connect_to_sqlite(dbfile, options)
-      # do any necessary migrations
-      if not File.exists?(dbfile) or options[:always_migrate]
-        migrations_dir = File.join(OSX::NSBundle.mainBundle.resourcePath.fileSystemRepresentation.to_s, options[:migrations_dir])
-        # do a migration to the latest version
-        ActiveRecord::Migrator.migrate(migrations_dir, nil)
-      end
-    end
-    module_function :connect_to_sqlite_in_application_support
-    
-    def get_app_name
-      OSX::NSBundle.mainBundle.bundleIdentifier.to_s.scan(/\w+$/).first
-    end
-    module_function :get_app_name
-    
-    def get_app_support_path
-      # get the path to the ~/Library/Application Support/ directory
-      user_app_support_path = File.join(OSX::NSSearchPathForDirectoriesInDomains(OSX::NSLibraryDirectory, OSX::NSUserDomainMask, true)[0].to_s, "Application Support")
-      # get the complete path to the directory that will hold the files for this app.
-      # e.g.: ~/Library/Application Support/SomeApp/
-      path_to_this_apps_app_support_dir = File.join(user_app_support_path, self.get_app_name)
-      # and create it if necessary
-      unless File.exists?(path_to_this_apps_app_support_dir)
-        require 'FileUtils'
-        FileUtils.mkdir_p(path_to_this_apps_app_support_dir)
-      end
-      return path_to_this_apps_app_support_dir
-    end
-    module_function :get_app_support_path
   end
-
 end
+
+
+module ActiveRecord
+  class Migrator
+    def self.latest_version(migrations_path)
+      files = Dir["#{migrations_path}/[0-9]*_*.rb"].sort
+      files.last.split('/').last.scan(/^[0-9]+/).first.to_i
+    end
+  end
+end
+
+include OSX::ActiveRecordSupport

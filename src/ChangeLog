@@ -1,3 +1,31 @@
+2007-07-25  Justin Palmer <encytemedia@gmail.com>
+	* src/framework/src/ruby/osx/active_record_proxy.rb,
+	  src/framework/src/ruby/osx/objc/initializer.rb,
+	  src/framework/src/ruby/osx/objc/active_record_support/active_record_proxy.rb:
+	Allows initializer to automatically copy over files specified in the load_paths 
+	during release mode so you no longer need to add folder references in XCode.
+	Currently, this only happens when building from XCode.
+	
+	* src/sample/MailDemo/MailDemoActiveRecordBindings/MailDemoActiveRecordBindings.xcodeproj/project.pbxproj,
+	  src/sample/MailDemo/MailDemoActiveRecordBindings/migrate,
+	  src/sample/MailDemo/MailDemoActiveRecordBindings/config,
+	  src/sample/MailDemo/MailDemoActiveRecordBindings/config/database.yml,
+	  src/sample/MailDemo/MailDemoActiveRecordBindings/config/boot.rb,
+	  src/sample/MailDemo/MailDemoActiveRecordBindings/config/environment.rb,
+	  src/sample/MailDemo/MailDemoActiveRecordBindings/config/environments,
+	  src/sample/MailDemo/MailDemoActiveRecordBindings/config/environments/release.rb,
+	  src/sample/MailDemo/MailDemoActiveRecordBindings/config/environments/debug.rb,
+	  src/sample/MailDemo/MailDemoActiveRecordBindings/db,
+	  src/sample/MailDemo/MailDemoActiveRecordBindings/db/migrate,
+	  src/sample/MailDemo/MailDemoActiveRecordBindings/db/migrate/002_create_emails.rb,
+	  src/sample/MailDemo/MailDemoActiveRecordBindings/db/migrate/001_create_mailboxes.rb:
+	Beginning to refashion MailDemoActiveRecordBindings as an example of using the initializer 
+	on an ActiveRecord-based application.  However, the initialization routines are not just 
+	meant for AR applications only.
+	
+	
+	
+	
 2007-07-24  Eloy Duran <eloy.de.enige@gmail.com>
 
 	* framework/RubyCocoa.xcodeproj/project.pbxproj,

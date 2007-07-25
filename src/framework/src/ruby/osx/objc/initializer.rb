@@ -32,6 +32,15 @@ RUBYCOCOA_ROOT =
 $:.unshift(RUBYCOCOA_ROOT)
 
 
+module OSX
+  # Are we building and running or just running this application by clicking on 
+  # an executable.
+  def building_application?
+    ENV['DYLD_LIBRARY_PATH']
+  end
+end
+
+
 # Environment initialization scheme ported/derived from Rails' Initializer.
 require 'erb'
 module OSX
@@ -62,8 +71,11 @@ module OSX
     # Step through the initialization routines, skipping the active_record 
     # routines if active_record isnt' being used.
     def process
-      set_load_path
-      copy_load_paths_for_release
+      unless ENV['DYLD_LIBRARY_PATH'].nil?
+        set_load_path
+        copy_load_paths_for_release
+      end
+      
       require_frameworks
       load_environment
       
@@ -83,18 +95,13 @@ module OSX
         require 'active_support'
         configuration.active_record = OrderedOptions.new
         require 'active_record'        
-        require Pathname.new(File.dirname(__FILE__) + "/../active_record_proxy").cleanpath
+        require 'osx/active_record_proxy'
       end
     end
     
     def initialize_database_directories
       return if configuration.environment == 'debug'
-      
-      app_name = OSX::NSBundle.mainBundle.bundleIdentifier.to_s.scan(/\w+$/).first
-      user_app_support_path = File.join(OSX::NSSearchPathForDirectoriesInDomains(OSX::NSLibraryDirectory, OSX::NSUserDomainMask, true)[0].to_s, "Application Support")
-      app_support_path = File.join(user_app_support_path, app_name)
-      
-      `mkdir -p '#{app_support_path}'` unless File.exists?(app_support_path)
+      `mkdir -p '#{configuration.application_support_path}'` unless File.exists?(configuration.application_support_path)
     end
     
     def initialize_database
@@ -144,10 +151,12 @@ module OSX
     # Copy the default load paths to the resource directory for the application if 
     # we are building a release, otherwise we do nothing. When in debug mode, the 
     # files are loaded directly from your working directory.
+    #
+    # TODO: Remove debug database from released app if it exists.
     def copy_load_paths_for_release
       return if configuration.environment == 'debug'
       configuration.load_paths.each do |path|
-        `cp -R #{RUBYCOCOA_ROOT}/#{path}` if File.directory?(path)
+        `cp -R #{path} #{RUBYCOCOA_ROOT}/#{File.basename(path)}` if File.directory?(path)
       end
     end
   end
@@ -155,6 +164,10 @@ module OSX
   class Configuration
     # The applications base directory
     attr_reader :root_path
+    
+    # The path to the applications support directory
+    # <tt>~/Library/Application Support/AppName</tt>
+    attr_accessor :application_support_path
     
     # List of Objective-C frameworks that should be required
     attr_accessor :objc_frameworks
@@ -173,8 +186,10 @@ module OSX
     # <tt>config/database.yml</tt>.)
     attr_accessor :database_configuration_file
     
+    
     def initialize
       set_root_path!
+      set_application_support_path!
       
       self.objc_frameworks              = []
       self.load_paths                   = default_load_paths
@@ -183,6 +198,12 @@ module OSX
     
     def set_root_path!
       @root_path = Pathname.new(::RUBYCOCOA_ROOT).realpath.to_s
+    end
+    
+    def set_application_support_path!
+      app_name = OSX::NSBundle.mainBundle.bundleIdentifier.to_s.scan(/\w+$/).first
+      user_app_support_path = File.join(OSX::NSSearchPathForDirectoriesInDomains(OSX::NSLibraryDirectory, OSX::NSUserDomainMask, true)[0].to_s, "Application Support")
+      @application_support_path = File.join(user_app_support_path, app_name)
     end
     
     # Returns the value of @use_active_record
@@ -205,16 +226,23 @@ module OSX
     # contents of the file are processed via ERB before being sent through
     # YAML::load.
     def database_configuration
-      YAML::load(ERB.new(IO.read(database_configuration_file)).result)
+      db_config = YAML::load(ERB.new(IO.read(database_configuration_file)).result)
+      db = db_config[environment]['database']
+      db_config[environment]['database'] = environment == 'release' ? "#{application_support_path}/#{db.split('/').last}" : "#{RUBYCOCOA_ROOT}/db/#{db.split('/').last}"
+      db_config
     end
     
     private
+      # Set the load paths, which specifies what directories should be copied over on release.
+      # We can't use RUBYCOCOA_ROOT here because when building for release the .app file is the 
+      # root, instead we need the path to the working directory.
       def default_load_paths
+        return if ENV['DYLD_LIBRARY_PATH'].nil?
         paths = %w(
           models
           controllers
           db
-        ).map { |dir| "#{root_path}/#{dir}" }.select { |dir| File.directory?(dir) }
+        ).map {|dir| "#{Pathname.new(ENV['DYLD_LIBRARY_PATH'] + "../../../").cleanpath}/#{dir}" }.select { |dir| File.directory?(dir) }
       end
       
       def default_database_configuration_file
