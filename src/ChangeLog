@@ -1,5 +1,9 @@
 2007-07-27  Fujimoto Hisa  <hisa@fobj.com>
 
+	* template/ProjectBuilder/File/Ruby application init.rb:
+	Added a file template of a ruby program. It should be loaded by
+	RBApplicationInit.
+
 	* template/ProjectBuilder/File/Ruby NSView subclass.rb,
 	template/ProjectBuilder/File/Ruby NSDocument subclass.rb:
 	Modified method definition by appropriate syntax, because it was
