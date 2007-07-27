@@ -10,13 +10,13 @@ require 'osx/cocoa'
 
 class ÇFILEBASENAMEASIDENTIFIERÈ <  OSX::NSView
 
-  def initWithFrame (frame)
+  def initWithFrame(frame)
     super_initWithFrame(frame)
     # Initialization code here.
     return self
   end
 
-  def drawRect (rect)
+  def drawRect(rect)
     # Drawing code here.
   end
 
