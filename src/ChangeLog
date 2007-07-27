@@ -1,3 +1,10 @@
+2007-07-27  Fujimoto Hisa  <hisa@fobj.com>
+
+	* template/ProjectBuilder/File/Ruby NSView subclass.rb,
+	template/ProjectBuilder/File/Ruby NSDocument subclass.rb:
+	Modified method definition by appropriate syntax, because it was
+	written by obsoleted syntax.
+
 2007-07-24  Eloy Duran <eloy.de.enige@gmail.com>
 
 	* sample/MailDemo/MailDemoActiveRecordBindings/Mailbox.rb:
