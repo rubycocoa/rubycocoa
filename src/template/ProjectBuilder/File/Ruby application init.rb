@@ -7,7 +7,7 @@
 #
 require 'osx/cocoa'
 
-def load_ruby_prorams(bundle)
+def load_ruby_programs(bundle)
   path = bundle.resourcePath.fileSystemRepresentation
   rbfiles = Dir.entries(path).select {|x| /\.rb\z/ =~ x}
   rbfiles -= [ File.basename(__FILE__) ]
@@ -22,5 +22,5 @@ OSX.init_for_bundle do |bundle, param, logger|
   # logger  - NSLog wrapper for this block
   #             usage: log.info("param=%p", param.to_s)
 
-  load_ruby_prorams(bundle)
+  load_ruby_programs(bundle)
 end
