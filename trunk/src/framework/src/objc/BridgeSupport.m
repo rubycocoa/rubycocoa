@@ -1942,9 +1942,23 @@ find_bs_informal_protocol_method(const char *selector, BOOL is_class_method)
   struct st_table *hash;
   struct bsInformalProtocolMethod *method;
 
-  hash = is_class_method ? bsInformalProtocolClassMethods : bsInformalProtocolInstanceMethods;
+  hash = is_class_method 
+    ? bsInformalProtocolClassMethods : bsInformalProtocolInstanceMethods;
 
-  return st_lookup(hash, (st_data_t)selector, (st_data_t *)&method) ? method : NULL;
+  return st_lookup(hash, (st_data_t)selector, (st_data_t *)&method) 
+    ? method : NULL;
+}
+
+static VALUE
+osx_lookup_informal_protocol_method_type (VALUE rcv, VALUE sel, 
+  VALUE is_class_method)
+{
+  struct bsInformalProtocolMethod *method;
+
+  method = find_bs_informal_protocol_method(STR2CSTR(sel), 
+    RTEST(is_class_method));
+
+  return method == NULL ? Qnil : rb_str_new2(method->encoding);
 }
 
 void
@@ -1975,4 +1989,7 @@ initialize_bridge_support (VALUE mOSX)
 
   rb_define_module_function(mOSX, "import_c_constant",
     osx_import_c_constant, 1);
+  
+  rb_define_module_function(mOSX, "lookup_informal_protocol_method_type",
+    osx_lookup_informal_protocol_method_type, 2);
 }

@@ -310,12 +310,14 @@ module OSX
         m.arity
       end
       sel << ':' if arity > 0 and /[^:]\z/ =~ sel
-      if _ns_enable_override?(sel, class_method)
+      mtype = nil
+      if _ns_enable_override?(sel, class_method) or
+      mtype = OSX.lookup_informal_protocol_method_type(sel, class_method)
         expected_arity = sel.scan(/:/).length
         if expected_arity != arity
           raise RuntimeError, "Cannot override Objective-C method '#{sel}' with Ruby method ##{sym}, they should both have the same number of arguments. (expected arity #{expected_arity}, got #{arity})"
         end
-        OSX.objc_class_method_add(self, sel, class_method, nil)
+        OSX.objc_class_method_add(self, sel, class_method, mtype)
       end
     end
 
