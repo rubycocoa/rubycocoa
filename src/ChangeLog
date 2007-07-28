@@ -1,3 +1,9 @@
+2007-07-27  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* framework/src/ruby/osx/objc/oc_import.rb,
+	  framework/src/objc/BridgeSupport.m:
+	Now automatically registering informal protocol methods.
+
 2007-07-27  Fujimoto Hisa  <hisa@fobj.com>
 
 	* template/ProjectBuilder/File/Ruby application init.rb:
