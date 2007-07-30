@@ -24,6 +24,24 @@ if BUILD_CONF[:ruby_program] != FileUtils::RUBY then
   puts "RUBY=#{BUILD_CONF[:ruby_program]}"
 end
 
+
+# tasks
 namespace :dep do
   load 'dependent/tasks.rake'
+end
+
+namespace :framework do
+
+  task :build => [ 'dep:libffi:build' ] do
+    chdir "framework" do
+      sh "xcodebuild"
+    end
+  end
+
+  task :clean do
+    chdir "framework" do
+      sh "xcodebuild", "clean"
+      rm_rf "build"
+    end
+  end
 end
