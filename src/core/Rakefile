@@ -1,0 +1,29 @@
+# -*- mode:ruby; indent-tabs-mode:nil; coding:utf-8 -*-
+
+
+# setup constants for build
+def const_setup(key, default = nil)
+  keystr = key.to_s.upcase
+  value = ENV[keystr] || BUILD_CONF[key] || default
+  BUILD_CONF[key] = value
+end
+
+load "build.conf" if FileTest.file?("build.conf")
+
+const_setup :sdk_root,     '/Developer/SDKs/MacOSX10.4u.sdk'
+const_setup :ruby_program, '/usr/bin/ruby'
+
+BUILD_CONF.each do |key, val|
+  self.class.const_set(key.to_s.upcase, val)
+end
+
+
+# special configuration for the ruby command
+if BUILD_CONF[:ruby_program] != FileUtils::RUBY then
+  FileUtils::RUBY = BUILD_CONF[:ruby_program]
+  puts "RUBY=#{BUILD_CONF[:ruby_program]}"
+end
+
+namespace :dep do
+  load 'dependent/tasks.rake'
+end
