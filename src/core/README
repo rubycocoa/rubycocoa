@@ -4,4 +4,4 @@ Here is a place to put the item at the core of the RubyCocoa runtime.
 * framework - the core of RubyCocoa.framework
 * rubylib - ruby extension library and additional libraries for ruby
             script
-* test - unit test for RubyCocoa.framework
+* test - various tests for RubyCocoa.framework runtime
