@@ -1,6 +1,7 @@
 Here is a place to put the item at the core of the RubyCocoa runtime.
 
-* framework - RubyCocoa.framework
+* dependent - stuffs RubyCocoa.framework depends on
+* framework - the core of RubyCocoa.framework
 * rubylib - ruby extension library and additional libraries for ruby
             script
 * test - unit test for RubyCocoa.framework

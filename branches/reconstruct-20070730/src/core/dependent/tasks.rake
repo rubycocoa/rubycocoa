@@ -1,11 +1,9 @@
 # -*- mode:ruby; indent-tabs-mode:nil; coding:utf-8 -*-
 
 
-build_root   = defined?(BUILD_ROOT) ? BUILD_ROOT : '.'
-sdk_root     = defined?(SDK_ROOT) ? SDK_ROOT : '/Developer/SDKs/MacOSX10.4u.sdk'
-ruby_program = defined?(RUBY) ? RUBY : '/usr/bin/ruby'
+build_root = File.dirname(File.expand_path(__FILE__))
 
-cflags       = "-arch ppc -arch i386 -isysroot #{sdk_root}"
+cflags       = "-arch ppc -arch i386 -isysroot #{SDK_ROOT}"
 bsroot       = "BridgeSupport"
 
 
@@ -38,7 +36,7 @@ namespace :bs do
   desc "build BridgeSupport files"
   task :build do
     chdir File.join(build_root, "bridgesupport") do
-      sh "BSROOT='#{bsroot}' CFLAGS='#{cflags}' #{ruby_program} build.rb"
+      sh "BSROOT='#{bsroot}' CFLAGS='#{cflags}' #{RUBY} build.rb"
     end
   end
 
