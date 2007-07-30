@@ -74,7 +74,7 @@ static RB_ID sel_to_mid_as_setter(SEL a_sel)
 static RB_ID rb_obj_sel_to_mid(VALUE rcv, SEL a_sel)
 {
   RB_ID mid = sel_to_mid(a_sel);
-  if (rb_respond_to(rcv, mid) == 0)
+  if (rb_obj_respond_to(rcv, mid, 1) == 0)
     mid = sel_to_mid_as_setter(a_sel);
   return mid;
 }
