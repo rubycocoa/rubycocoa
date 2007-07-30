@@ -1,3 +1,9 @@
+2007-07-30  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* framework/src/objc/RBObject.m:
+	Fixed a bug when translating ObjC selectors into Ruby method messages, to
+	also look in the receiver's private methods.
+
 2007-07-27  Laurent Sansonetti <lsansonetti@apple.com>
 
 	* framework/src/ruby/osx/objc/oc_import.rb,
