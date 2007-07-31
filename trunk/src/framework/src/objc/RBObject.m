@@ -1,9 +1,9 @@
-/* 
+/*
  * Copyright (c) 2006-2007, The RubyCocoa Project.
  * Copyright (c) 2001-2006, FUJIMOTO Hisakuni.
  * All Rights Reserved.
  *
- * RubyCocoa is free software, covered under either the Ruby's license or the 
+ * RubyCocoa is free software, covered under either the Ruby's license or the
  * LGPL. See the COPYRIGHT file for more information.
  */
 
@@ -21,7 +21,7 @@
 extern ID _relaxed_syntax_ID;
 
 #if MAC_OS_X_VERSION_MAX_ALLOWED <= MAC_OS_X_VERSION_10_4
-// On MacOS X 10.4 or earlier, +signatureWithObjCTypes: is a SPI 
+// On MacOS X 10.4 or earlier, +signatureWithObjCTypes: is a SPI
 @interface NSMethodSignature (WarningKiller)
 + (id) signatureWithObjCTypes:(const char*)types;
 @end
@@ -42,7 +42,7 @@ static RB_ID sel_to_mid(SEL a_sel)
   for (i = 0; i < length; i++)
     if (mname[i] == ':') mname[i] = '_';
 
-  if (RTEST(rb_ivar_get(osx_s_module(), _relaxed_syntax_ID))) {    
+  if (RTEST(rb_ivar_get(osx_s_module(), _relaxed_syntax_ID))) {
     // sub(/^(.*)_$/, "\1")
     for (i = length - 1; i >= 0; i--) {
       if (mname[i] != '_') break;
@@ -74,7 +74,11 @@ static RB_ID sel_to_mid_as_setter(SEL a_sel)
 static RB_ID rb_obj_sel_to_mid(VALUE rcv, SEL a_sel)
 {
   RB_ID mid = sel_to_mid(a_sel);
+#if RUBY_VERSION_CODE >= 186
   if (rb_obj_respond_to(rcv, mid, 1) == 0)
+#else
+  if (rb_respond_to(rcv, mid) == 0)
+#endif
     mid = sel_to_mid_as_setter(a_sel);
   return mid;
 }
@@ -186,7 +190,7 @@ static int rb_obj_arity_of_method(VALUE rcv, SEL a_sel, BOOL *ok)
   return f_success;
 }
 
-static void 
+static void
 rbobjRaiseRubyException (void)
 {
   VALUE lasterr = rb_gv_get("$!");
@@ -197,9 +201,9 @@ rbobjRaiseRubyException (void)
       [exc raise];
       return; // not reached
   }
-  
+
   NSMutableDictionary *info = [NSMutableDictionary dictionary];
-  
+
   id ocdata = rbobj_get_ocid(lasterr);
   if (ocdata == nil) {
       rbobj_to_nsobj(lasterr, &ocdata);
@@ -208,10 +212,10 @@ rbobjRaiseRubyException (void)
 
   VALUE klass = rb_class_path(CLASS_OF(lasterr));
   NSString *rbclass = [NSString stringWithUTF8String:STR2CSTR(klass)];
-  
+
   VALUE rbmessage = rb_obj_as_string(lasterr);
   NSString *message = [NSString stringWithUTF8String:STR2CSTR(rbmessage)];
-  
+
   NSMutableArray *backtraceArray = [NSMutableArray array];
   VALUE ary = rb_funcall(ruby_errinfo, rb_intern("backtrace"), 0);
   int c;
@@ -220,13 +224,13 @@ rbobjRaiseRubyException (void)
       NSString *nspath = [NSString stringWithUTF8String:path];
       [backtraceArray addObject: nspath];
   }
-  
+
   [info setObject: backtraceArray forKey: @"backtrace"];
-  
+
   NSException* myException = [NSException
       exceptionWithName:[@"RBException_" stringByAppendingString: rbclass]
-			 reason:message
-			 userInfo:info];
+                         reason:message
+                         userInfo:info];
   [myException raise];
 }
 
@@ -253,18 +257,18 @@ VALUE rbobj_call_ruby(id rbobj, SEL selector, VALUE args)
   int err;
 
   if ([rbobj respondsToSelector:@selector(__rbobj__)]) {
-    m_rbobj = [rbobj __rbobj__]; 
+    m_rbobj = [rbobj __rbobj__];
   }
   else if ([rbobj respondsToSelector:@selector(__rbclass__)]) {
-    m_rbobj = [rbobj __rbclass__]; 
+    m_rbobj = [rbobj __rbclass__];
   }
   else {
-    // Not an RBObject class, try to get the value from the cache. 
+    // Not an RBObject class, try to get the value from the cache.
     m_rbobj = ocid_to_rbobj_cache_only(rbobj);
     if (NIL_P(m_rbobj)) {
       // Nothing in the cache, it means that this Objective-C object never
       // crossed the bridge yet. Let's create the Ruby proxy.
-      m_rbobj = ocid_to_rbobj(Qnil, rbobj);    
+      m_rbobj = ocid_to_rbobj(Qnil, rbobj);
     }
   }
 
@@ -272,9 +276,9 @@ VALUE rbobj_call_ruby(id rbobj, SEL selector, VALUE args)
   stub_args[0] = m_rbobj;
   stub_args[1] = mid;
   stub_args[2] = args;
- 
+
   RBOBJ_LOG("calling method %s on Ruby object %p with %d args", rb_id2name(mid), m_rbobj, RARRAY(args)->len);
- 
+
   rb_result = rb_protect(rbobject_protected_apply, (VALUE)stub_args, &err);
   if (err) {
     notify_error(m_rbobj, mid);
@@ -282,8 +286,8 @@ VALUE rbobj_call_ruby(id rbobj, SEL selector, VALUE args)
     rbobjRaiseRubyException();
     return Qnil; /* to be sure */
   }
- 
-  return rb_result; 
+
+  return rb_result;
 }
 
 - (id)rbobjForwardInvocation: (NSInvocation *)an_inv
@@ -394,10 +398,10 @@ VALUE rbobj_call_ruby(id rbobj, SEL selector, VALUE args)
 {
   NSMethodSignature* ret = nil;
   RBOBJ_LOG("methodSignatureForSelector(%s)", a_sel);
-  if (a_sel == NULL) 
+  if (a_sel == NULL)
     return nil;
   // Try the master object.
-  if (oc_master != nil) { 
+  if (oc_master != nil) {
     ret = [oc_master instanceMethodSignatureForSelector:a_sel];
     if (ret != nil)
       RBOBJ_LOG("\tgot method signature from the master object");
@@ -405,7 +409,7 @@ VALUE rbobj_call_ruby(id rbobj, SEL selector, VALUE args)
   // Try the metadata.
   if (ret == nil) {
     struct bsInformalProtocolMethod *method;
-    
+
     method = find_bs_informal_protocol_method((const char *)a_sel, NO);
     if (method != NULL) {
       ret = [NSMethodSignature signatureWithObjCTypes:method->encoding];
@@ -420,11 +424,11 @@ VALUE rbobj_call_ruby(id rbobj, SEL selector, VALUE args)
     argc = rb_obj_arity_of_method(m_rbobj, a_sel, &ok);
     if (ok) {
       char encoding[128], *p;
-      
-      if (argc < 0) 
+
+      if (argc < 0)
         argc = -1 - argc;
-      argc = MIN(sizeof(encoding) - 4, argc);    
-  
+      argc = MIN(sizeof(encoding) - 4, argc);
+
       strcpy(encoding, "@@:");
       p = &encoding[3];
       while (argc-- > 0) {
@@ -472,7 +476,7 @@ VALUE rbobj_call_ruby(id rbobj, SEL selector, VALUE args)
 {
   [self performSelectorOnMainThread:@selector(syncDispatch) withObject:nil waitUntilDone:YES];
   if (_returned_ocid != nil)
-    [_returned_ocid autorelease]; 
+    [_returned_ocid autorelease];
 }
 
 - (void)syncDispatch
@@ -491,7 +495,7 @@ VALUE rbobj_call_ruby(id rbobj, SEL selector, VALUE args)
   [dispatcher release];
 }
 
-@end 
+@end
 
 @implementation NSProxy (RubyCocoaEx)
 
