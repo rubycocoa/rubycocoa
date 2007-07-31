@@ -70,17 +70,25 @@ ocm_retain_arg_if_necessary (VALUE result, BOOL is_result, void *context)
   }
 }
 
+struct ocm_closure_userdata 
+{
+  VALUE mname;
+  VALUE is_predicate;
+};
+
 static void
 ocm_closure_handler(ffi_cif *cif, void *resp, void **args, void *userdata)
 {
-  VALUE rcv, argv, mname;
+  VALUE rcv, argv, mname, is_predicate;
 
   OBJWRP_LOG("ocm_closure_handler ...");
 
   rcv = (*(VALUE **)args)[0];
   argv = (*(VALUE **)args)[1];
-  mname = (VALUE)userdata;
+  mname = ((struct ocm_closure_userdata *)userdata)->mname;
+  is_predicate = ((struct ocm_closure_userdata *)userdata)->is_predicate;
 
+  rb_ary_unshift(argv, is_predicate);
   rb_ary_unshift(argv, Qnil);
   rb_ary_unshift(argv, mname);
 
@@ -90,10 +98,11 @@ ocm_closure_handler(ffi_cif *cif, void *resp, void **args, void *userdata)
 }
 
 static void *
-ocm_ffi_closure(VALUE mname)
+ocm_ffi_closure(VALUE mname, VALUE is_predicate)
 {
   static ffi_cif *cif = NULL;
   ffi_closure *closure;
+  struct ocm_closure_userdata *userdata;
 
   if (cif == NULL) {
     static ffi_type *args[3];
@@ -115,7 +124,14 @@ ocm_ffi_closure(VALUE mname)
   closure = (ffi_closure *)malloc(sizeof(ffi_closure));
   ASSERT_ALLOC(closure);
  
-  if (ffi_prep_closure(closure, cif, ocm_closure_handler, (void *)mname) 
+  userdata = (struct ocm_closure_userdata *)malloc(
+    sizeof(struct ocm_closure_userdata));
+  ASSERT_ALLOC(userdata);
+
+  userdata->mname = mname;
+  userdata->is_predicate = is_predicate;
+
+  if (ffi_prep_closure(closure, cif, ocm_closure_handler, userdata) 
       != FFI_OK)
     return NULL;
 
@@ -131,8 +147,8 @@ wrapper_ignore_ns_override (VALUE rcv)
 }
 
 static void
-ocm_register(Class klass, VALUE oc_mname, VALUE rb_mname, SEL selector, 
-  BOOL is_class_method)
+ocm_register(Class klass, VALUE oc_mname, VALUE rb_mname, VALUE is_predicate,
+  SEL selector, BOOL is_class_method)
 {
   Class c;
   Method (*getMethod)(Class, SEL);
@@ -141,11 +157,6 @@ ocm_register(Class klass, VALUE oc_mname, VALUE rb_mname, SEL selector,
   void *closure;
   char *rb_mname_str;
  
-  // XXX Ignoring predicate methods for now. 
-  rb_mname_str = rb_id2name(SYM2ID(rb_mname));
-  if (rb_mname_str[strlen(rb_mname_str) - 1] == '?')
-    return;
-
   // Let's locate the original class where the method is defined.
   getMethod = is_class_method ? class_getClassMethod : class_getInstanceMethod;
   while ((c = class_getSuperclass(klass)) != NULL 
@@ -162,12 +173,13 @@ ocm_register(Class klass, VALUE oc_mname, VALUE rb_mname, SEL selector,
   }
 
   // Create the closure.
-  closure = ocm_ffi_closure(oc_mname);
+  closure = ocm_ffi_closure(oc_mname, is_predicate);
   if (closure == NULL) {
     OBJWRP_LOG("cannot register Ruby method (problem when creating closure)");
     return;
   }
 
+  rb_mname_str = rb_id2name(SYM2ID(rb_mname));
   OBJWRP_LOG("registering Ruby %s method `%s' on `%s'", 
     is_class_method ? "class" : "instance", rb_mname_str, 
     rb_class2name(rclass));
@@ -221,7 +233,7 @@ ocm_send(int argc, VALUE* argv, VALUE rcv, VALUE* result)
   void **               arg_values;
   VALUE                 exception;
 
-  if (argc < 1) 
+  if (argc < 3) 
     return Qfalse;
 
   pool = [[NSAutoreleasePool alloc] init];
@@ -258,6 +270,10 @@ ocm_send(int argc, VALUE* argv, VALUE rcv, VALUE* result)
 
   decode_method_encoding(method != NULL ? method_getTypeEncoding(method) : NULL, methodSignature, &numberOfArguments, &methodReturnType, &argumentsTypes, YES);
 
+  // force predicate conversion if required
+  if (*methodReturnType == _C_UCHR && RTEST(argv[2]))
+    *methodReturnType = 'B'; // _C_BOOL
+
   struct _ocm_retain_context context = { rcv, selector };
 
   is_class_method = TYPE(rcv) == T_CLASS;
@@ -269,12 +285,14 @@ ocm_send(int argc, VALUE* argv, VALUE rcv, VALUE* result)
       && !rb_obj_is_kind_of(rcv, ocobj_s_class())
       && method != NULL 
       && rb_respond_to(rcv, SYM2ID(argv[1])) == 0)
-    ocm_register(klass, argv[0], argv[1], selector, is_class_method);
+    ocm_register(klass, argv[0], argv[1], argv[2], selector, is_class_method);
 #endif
 
   argc--; // skip objc method name
   argv++;
   argc--; // skip ruby method name
+  argv++;
+  argc--; // skip is predicate flag
   argv++;
 
   OBJWRP_LOG("ocm_send (%s%c%s): args_count=%d ret_type=%s", class_getName(klass), is_class_method ? '.' : '#', selector, argc, methodReturnType);

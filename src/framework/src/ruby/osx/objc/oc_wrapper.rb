@@ -41,18 +41,13 @@ module OSX
         end
       end
       mname.chomp!(':') if args.size == 1
-      return self.ocm_send(mname, nil, *margs)
+      return self.ocm_send(mname, nil, false, *margs)
     end
 
     def method_missing(mname, *args)
       m_name, m_args, as_predicate = analyze_missing(mname, args)
       begin
-        result = self.ocm_send(m_name, mname, *m_args)
-        if as_predicate && result.is_a?(Integer) then
-          result != 0
-        else
-          result
-        end
+        result = self.ocm_send(m_name, mname, as_predicate, *m_args)
       rescue OCMessageSendException => e
         if self.private_methods.include?(mname.to_s)
           raise NoMethodError, "private method `#{mname}' called for ##{self}"
@@ -81,6 +76,11 @@ module OSX
       if m_name[-1] == ??
         m_name.chop!
         as_predicate = OSX.relaxed_syntax
+        # convert foo? to isFoo
+        orig_sel = m_args.size > 0 ? m_name.sub(/[^_:]$/, '\0_')  : m_name
+        unless ocm_responds?(orig_sel)
+          m_name = 'is' + m_name[0].chr.upcase + m_name[1..-1]
+        end
       end
 
       # convert foo= to setFoo

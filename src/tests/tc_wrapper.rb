@@ -154,4 +154,10 @@ class TC_OCObjWrapper < Test::Unit::TestCase
     button.objectValue = true
     assert_equal(true, button.objectValue.to_ruby)
   end
+
+  def test_convenience_predicates
+    ary = OSX::NSArray.arrayWithObject(1)
+    assert(ary.equalToArray?([1]))
+    assert(!ary.equalToArray?([2]))
+  end
 end
