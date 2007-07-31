@@ -1,46 +1,35 @@
 # -*- mode:ruby; indent-tabs-mode:nil; coding:utf-8 -*-
 
-
-# setup constants for build
-def const_setup(key, default = nil)
-  keystr = key.to_s.upcase
-  value = ENV[keystr] || BUILD_CONF[key] || default
-  BUILD_CONF[key] = value
-end
-
-load "build.conf" if FileTest.file?("build.conf")
-
-const_setup :sdk_root,     '/Developer/SDKs/MacOSX10.4u.sdk'
-const_setup :ruby_program, '/usr/bin/ruby'
-
-BUILD_CONF.each do |key, val|
-  self.class.const_set(key.to_s.upcase, val)
-end
-
-
-# special configuration for the ruby command
-if BUILD_CONF[:ruby_program] != FileUtils::RUBY then
-  FileUtils::RUBY = BUILD_CONF[:ruby_program]
-  puts "RUBY=#{BUILD_CONF[:ruby_program]}"
-end
-
+require 'rake_support'
 
 # tasks
 namespace :dep do
   load 'dependent/tasks.rake'
 end
 
-namespace :framework do
+namespace :fw do
 
-  task :build => [ 'dep:libffi:build' ] do
+  desc "build RubyCocoa.framework"
+  task :build => :build_release
+
+  desc "build RubyCocoa.framework (Release)"
+  task :build_release => [ 'dep:libffi:build' ] do
     chdir "framework" do
-      sh "xcodebuild"
+      xcodebuild "-configuration", "Release"
     end
   end
 
+  desc "build RubyCocoa.framework (Debug)"
+  task :build_debug => [ 'dep:libffi:build' ] do
+    chdir "framework" do
+      xcodebuild "-configuration", "Debug"
+    end
+  end
+
+  desc "remove the framework/build"
   task :clean do
     chdir "framework" do
-      sh "xcodebuild", "clean"
+      xcodebuild "clean"
       rm_rf "build"
     end
   end
