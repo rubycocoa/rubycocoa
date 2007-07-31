@@ -7,12 +7,6 @@ cflags       = "-arch ppc -arch i386 -isysroot #{SDK_ROOT}"
 bsroot       = "BridgeSupport"
 
 
-desc "build externals (libffi and BridgeSupport)"
-task :build => ['libffi:build', 'bs:build']
-
-desc "clean externals (libffi and BridgeSupport)"
-task :clean => ['libffi:clean', 'bs:clean']
-
 namespace :libffi do
 
   desc "build libffi.a"
