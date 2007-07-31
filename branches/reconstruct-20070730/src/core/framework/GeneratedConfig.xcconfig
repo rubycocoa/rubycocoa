@@ -1,0 +1,11 @@
+RUBYCOCOA_COMMENT = This file is generated from GeneratedConfig.xcconfig.in
+
+HEADER_SEARCH_PATHS = /usr/lib/ruby/1.8/universal-darwin8.0
+LIBRARY_SEARCH_PATHS = /usr/lib
+
+OTHER_LDFLAGS = -undefined suppress -flat_namespace -arch ppc -arch i386 -Wl,-syslibroot,/Developer/SDKs/MacOSX10.4u.sdk -lxml2  -L../dependent/libffi  -lffi  /usr/lib/libruby.1.dylib
+
+OTHER_CFLAGS = -fno-common -g -fobjc-exceptions -arch ppc -arch i386 -isysroot /Developer/SDKs/MacOSX10.4u.sdk -I/usr/include/libxml2 -DHAS_LIBXML2  -I../dependent/libffi/include -DMACOSX
+
+MACOSX_DEPLOYMENT_TARGET = 10.4
+INSTALL_PATH = @executable_path/../Frameworks
