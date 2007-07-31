@@ -1,3 +1,8 @@
+2007-07-31  Fujimoto Hisa  <hisa@fobj.com>
+
+	* framework/src/objc/RBObject.m:
+	Fixed link error with ruby 1.8.2.
+
 2007-07-30  Laurent Sansonetti <lsansonetti@apple.com>
 
 	* framework/src/objc/RBObject.m:
