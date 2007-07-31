@@ -48,11 +48,11 @@
 		4E181EF50C5DA22400F14902 /* oc_types.rb in CopyFiles */ = {isa = PBXBuildFile; fileRef = 4E181EE50C5DA22400F14902 /* oc_types.rb */; };
 		4E181EF60C5DA22400F14902 /* oc_wrapper.rb in CopyFiles */ = {isa = PBXBuildFile; fileRef = 4E181EE60C5DA22400F14902 /* oc_wrapper.rb */; };
 		4E181EF70C5DA22400F14902 /* ruby_addition.rb in CopyFiles */ = {isa = PBXBuildFile; fileRef = 4E181EE70C5DA22400F14902 /* ruby_addition.rb */; };
-		4E181F3D0C5DA56E00F14902 /* osx_intern.h in Headers */ = {isa = PBXBuildFile; fileRef = 4E181F390C5DA56E00F14902 /* osx_intern.h */; };
 		4E181F3E0C5DA56E00F14902 /* osx_ruby.h in Headers */ = {isa = PBXBuildFile; fileRef = 4E181F3A0C5DA56E00F14902 /* osx_ruby.h */; };
 		4E181F3F0C5DA56E00F14902 /* RBRuntime.h in Headers */ = {isa = PBXBuildFile; fileRef = 4E181F3B0C5DA56E00F14902 /* RBRuntime.h */; };
 		4E181F400C5DA56E00F14902 /* RubyCocoa.h in Headers */ = {isa = PBXBuildFile; fileRef = 4E181F3C0C5DA56E00F14902 /* RubyCocoa.h */; };
 		4E181F5A0C5DA63500F14902 /* RBObject.h in Headers */ = {isa = PBXBuildFile; fileRef = 4E181F590C5DA63500F14902 /* RBObject.h */; };
+		4E181FD80C5EBBE300F14902 /* osx_intern.h in Headers */ = {isa = PBXBuildFile; fileRef = 4E181F390C5DA56E00F14902 /* osx_intern.h */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -299,11 +299,11 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4E181F3D0C5DA56E00F14902 /* osx_intern.h in Headers */,
 				4E181F3E0C5DA56E00F14902 /* osx_ruby.h in Headers */,
 				4E181F3F0C5DA56E00F14902 /* RBRuntime.h in Headers */,
 				4E181F400C5DA56E00F14902 /* RubyCocoa.h in Headers */,
 				4E181F5A0C5DA63500F14902 /* RBObject.h in Headers */,
+				4E181FD80C5EBBE300F14902 /* osx_intern.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
