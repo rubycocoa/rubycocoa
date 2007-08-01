@@ -1,0 +1,75 @@
+# -*- mode:rd; coding:utf-8 -*-
+
+= RubyCocoa ソースツリー整理の覚え書き (後で消す)
+
+* core  -- RubyCocoaアプリ・スクリプトの実行環境
+* devel -- RubyCocoaアプリ・スクリプトの開発環境
+* tools -- (develとの関係を検討中)
+
+== core
+
+RubyCocoaアプリ・スクリプトの実行環境。最低限必要なもの。
+
+* RubyCocoa.framework
+* Ruby拡張ライブラリとその他いくつのRubyライブラリ
+
+
+=== ビルド設定項目(パラメータ)
+
+* libruby (どのRubyをリンクする？)
+  * /usr/lib/libruby.dylib   (default)
+  * その他
+
+* SDK_ROOT (10.4|10.5|その他)
+  * OSXのバージョンを選ぶとSDKが決まる方式もあり
+
+* arch, universal binary 関連 (ppc|i386|その他)
+
+* libffi
+  * core/dependent/libffi/libffi.a を静的リンク (10.4)
+  * SDKに入っているlibffie.a を静的リンク (10.5 or later)
+  * つまりSDK_ROOTで決定可能？
+
+* BridgeSupport
+  * core/dependent/bridgesupport/BridgeSupport を内蔵 (10.4)
+  * 内蔵しない (10.5 or later)
+  * つまりSDK_ROOTで決定可能？
+
+* INSTALL_PATH
+  * @executable_path/../Frameworks
+  * その他
+
+* identity
+  * RUBYCOCOA_VERSION
+  * RUBYCOCOA_SVN_REVISION
+  * RUBYCOCOA_STAGE (Release|Preview|Development|その他)
+
+
+== devel
+
+RubyCocoaアプリ・スクリプトの開発環境
+
+== tools
+
+ツール類は、develに入れるべきな気がしてる(2007-8-1)
+
+
+== パッケージング
+
+core と devel を分割して扱った上で、リリース・パッケージ化で、まとめた
+りまとめなかったり、配置ディレクトリ・リンクなどを判断する。
+
+
+== なぜソースツリーを整理するのか？
+
+今のソースツリーはRubyCocoaが拡張モジュールだった時代のまんま。一方、今
+のRubyCocoaの中心は、実行環境としてのフレームワーク。その上で:
+
+* 実行環境としてのフレームワーク (+Ruby側ライブラリ)
+* 開発環境としてのテンプレート・ツール・ドキュメント・サンプルコード
+
+と見るのが自然。ソースツリーと実体が合っていない。不自然なソースツリー
+にいろんなものをぐちゃぐちゃ突っ込んで、テストが破綻したりするカオス状
+態。リリース・パッケージング作業がはてしなく面倒。この状態を脱するのが
+ソースツリー整理の動機。
+
