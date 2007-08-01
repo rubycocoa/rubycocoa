@@ -24,6 +24,7 @@ RubyCocoaアプリ・スクリプトの実行環境。最低限必要なもの�
   * OSXのバージョンを選ぶとSDKが決まる方式もあり
 
 * arch, universal binary 関連 (ppc|i386|その他)
+  * librubyに合わせて自動選択するのがいいかもしれない
 
 * libffi
   * core/dependent/libffi/libffi.a を静的リンク (10.4)
