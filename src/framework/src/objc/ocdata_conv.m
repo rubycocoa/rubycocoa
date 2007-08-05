@@ -718,11 +718,19 @@ ocid_to_rbobj (VALUE context_obj, id ocid)
         result = rbobj_get_ocid(context_obj) == ocid ? context_obj : ocobj_s_new(ocid);
     }
 
-    CACHE_LOCK(&oc2rbCacheLock);
-    // Check out that the hash is still empty for us, to avoid a race condition.
-    if (!st_lookup(oc2rbCache, (st_data_t)ocid, (st_data_t *)&result))
-      st_insert(oc2rbCache, (st_data_t)ocid, (st_data_t)result);
-    CACHE_UNLOCK(&oc2rbCacheLock);
+    @try {
+      if (![ocid isKindOfClass:[NSString class]]
+          && ![ocid isKindOfClass:[NSData class]]
+          && ![ocid isKindOfClass:[NSArray class]]
+          && ![ocid isKindOfClass:[NSDictionary class]]) {
+        CACHE_LOCK(&oc2rbCacheLock);
+        // Check out that the hash is still empty for us, to avoid a race condition.
+        if (!st_lookup(oc2rbCache, (st_data_t)ocid, (st_data_t *)&result))
+          st_insert(oc2rbCache, (st_data_t)ocid, (st_data_t)result);
+        CACHE_UNLOCK(&oc2rbCacheLock);
+      }
+    }
+    @catch (id exception) {}
   }
 
   return result;

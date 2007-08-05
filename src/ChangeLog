@@ -1,3 +1,8 @@
+2007-08-06  Satoshi Nakagawa <artension@gmail.com>
+
+	* framework/src/objc/ocdata_conv.m:
+	Stopped registering objects in class clusters to the oc2rb cache.
+
 2007-07-31  Laurent Sansonetti <lsansonetti@apple.com>
 
 	* framework/src/ruby/osx/objc/oc_wrapper.rb,
