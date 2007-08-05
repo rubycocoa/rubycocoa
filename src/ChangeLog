@@ -1,6 +1,12 @@
 2007-08-06  Satoshi Nakagawa <artension@gmail.com>
 
 	* framework/src/objc/ocdata_conv.m:
+	- Removed checking for class cluster types.
+	- Reintroduced a check for callback cases to avoid registering to the oc2rb cache.
+
+2007-08-06  Satoshi Nakagawa <artension@gmail.com>
+
+	* framework/src/objc/ocdata_conv.m:
 	Stopped registering objects in class clusters to the oc2rb cache.
 
 2007-07-31  Laurent Sansonetti <lsansonetti@apple.com>
