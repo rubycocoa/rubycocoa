@@ -1,6 +1,13 @@
 2007-08-10  Satoshi Nakagawa <artension@gmail.com>
 
 	* framework/src/objc/RBObject.m,
+	  framework/src/objc/RBTestProbe.m,
+	  tests/tc_cache.rb:
+	Moved the test probe class to a new file.
+
+2007-08-10  Satoshi Nakagawa <artension@gmail.com>
+
+	* framework/src/objc/RBObject.m,
 	  tests/tc_cache.rb:
 	Added test cases for the oc2rb cache.
 
