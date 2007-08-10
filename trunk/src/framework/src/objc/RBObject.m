@@ -74,11 +74,7 @@ static RB_ID sel_to_mid_as_setter(SEL a_sel)
 static RB_ID rb_obj_sel_to_mid(VALUE rcv, SEL a_sel)
 {
   RB_ID mid = sel_to_mid(a_sel);
-#if RUBY_VERSION_CODE >= 186
-  if (rb_obj_respond_to(rcv, mid, 1) == 0)
-#else
   if (rb_respond_to(rcv, mid) == 0)
-#endif
     mid = sel_to_mid_as_setter(a_sel);
   return mid;
 }
@@ -278,6 +274,9 @@ VALUE rbobj_call_ruby(id rbobj, SEL selector, VALUE args)
   stub_args[2] = args;
 
   RBOBJ_LOG("calling method %s on Ruby object %p with %d args", rb_id2name(mid), m_rbobj, RARRAY(args)->len);
+
+  if (rb_respond_to(m_rbobj, mid) == 0)
+    rb_raise(rb_eRuntimeError, "Ruby object `%s' doesn't respond to the ObjC selector `%s', the method either doesn't exist or is private", RSTRING(rb_inspect(m_rbobj))->ptr, (char *)selector);
 
   rb_result = rb_protect(rbobject_protected_apply, (VALUE)stub_args, &err);
   if (err) {
