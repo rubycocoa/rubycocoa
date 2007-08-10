@@ -26,7 +26,7 @@ Installation is simple:
    previous version before.
 
    $ sudo mv /usr/lib/libruby.1.dylib /usr/lib/libruby.1.dylib.old
-   $ sudo mv misc/libruby.1.dylib /usr/lib/libruby.1.dylib
+   $ sudo mv libruby.1.dylib /usr/lib/libruby.1.dylib
 
 == Manually Patching ==
 
