@@ -1,3 +1,9 @@
+2007-08-10  Satoshi Nakagawa <artension@gmail.com>
+
+	* framework/src/objc/RBObject.m,
+	  tests/tc_cache.rb:
+	Added test cases for the oc2rb cache.
+
 2007-08-06  Satoshi Nakagawa <artension@gmail.com>
 
 	* framework/src/objc/ocdata_conv.m:
