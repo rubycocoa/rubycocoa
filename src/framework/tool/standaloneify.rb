@@ -262,24 +262,27 @@ module Standaloneify
     lib_d = File.join(contents_d,"lib")
     macos_d = File.join(contents_d,"MacOS")
 
-    # Create Frameworks dir and copy RubyCocoa in there
-    FileUtils.mkdir_p(frameworks_d)
-    FileUtils.mkdir_p(lib_d)
-    rc_path = [
-      "/System/Library/Frameworks/RubyCocoa.framework",
-      "/Library/Frameworks/RubyCocoa.framework"
-    ].find { |p| File.exist?(p) }
-    raise "Cannot locate RubyCocoa.framework" unless rc_path  
-    #FileUtils.cp_r(rc_path,frameworks_d)
-    # Do not use FileUtils.cp_r because it tries to follow symlinks.
-    unless system("cp -R \"#{rc_path}\" \"#{frameworks_d}\"")
-      raise "cannot copy #{rc_path} to #{frameworks_d}"
-    end
-
-    # Calculate paths to newly copied RubyCocoa framework        
+    # Calculate paths to the to-be copied RubyCocoa framework        
     ruby_cocoa_d = File.join(frameworks_d,"RubyCocoa.framework")
     ruby_cocoa_inc = File.join(ruby_cocoa_d,"Resources","ruby")
     ruby_cocoa_lib = File.join(ruby_cocoa_d,"RubyCocoa")
+    
+    # First check if the developer might already have added the RubyCocoa framework (in a copy phase)
+    unless File.exist? ruby_cocoa_d
+      # Create Frameworks dir and copy RubyCocoa in there
+      FileUtils.mkdir_p(frameworks_d)
+      FileUtils.mkdir_p(lib_d)
+      rc_path = [
+        "/System/Library/Frameworks/RubyCocoa.framework",
+        "/Library/Frameworks/RubyCocoa.framework"
+      ].find { |p| File.exist?(p) }
+      raise "Cannot locate RubyCocoa.framework" unless rc_path  
+      # FileUtils.cp_r(rc_path,frameworks_d)
+      # Do not use FileUtils.cp_r because it tries to follow symlinks.
+      unless system("cp -R \"#{rc_path}\" \"#{frameworks_d}\"")
+        raise "cannot copy #{rc_path} to #{frameworks_d}"
+      end
+    end
 
     # Copy in and update library references for RubyCocoa
     fixer = LibraryFixer.new
