@@ -34,7 +34,7 @@ class TCObjcToRubyCache < Test::Unit::TestCase
   
   def do_test_cache(klass)
     t = ObjcToRubyCacheCallbackTarget.alloc.init
-    res = OSX::RBCacheTestProbe.deallocTestFor_with(klass, t)
+    res = OSX::ObjcToRubyCacheTest.testObjcToRubyCacheFor_with(klass, t)
     assert_equal(0, res)
   end
 end

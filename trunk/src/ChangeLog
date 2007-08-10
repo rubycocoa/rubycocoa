@@ -1,3 +1,10 @@
+2007-08-11  Satoshi Nakagawa <artension@gmail.com>
+
+	* framework/src/objc/RBTestProbe.m,
+	  tests/objc_test.m,
+	  tests/tc_cache.rb:
+	Better separation between core and tests around the oc2rb cache tests.
+
 2007-08-10  Laurent Sansonetti <lsansonetti@apple.com>
 
 	* misc/README_THREADING,
