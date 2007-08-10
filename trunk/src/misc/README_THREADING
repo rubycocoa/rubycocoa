@@ -4,36 +4,29 @@ Using Ruby threads to call Objective-C APIs may result in random crashes
 unless the Ruby interpreter has been patched.
 
 For the rationale behind this problem, please read:
-
+:
 http://lists.sourceforge.jp/mailman/archives/rubycocoa-devel/2006-August/000373.html
 
 We strongly recommend you to patch your version of Ruby if you plan to write
 RubyCocoa threading code.
 
-== Binaries ==
+== Binary ==
 
-We provide binaries of libruby 1.8.2 that have been already patched.
+We provide a binary version of libruby 1.8.2 that have been already patched.
 
-These binaries are meant to replace Apple's version of Ruby in Tiger.
+This binary is meant to replace Apple's version of Ruby in Tiger.
 
 Installation is simple:
 
-1. Decompress the tarball for your architecture:
+1. Decompress the tarball
 
-   libruby.1.dylib-tiger-ppc.tar.gz:    For Tiger PPC architecture.
-   libruby.1.dylib-tiger-i386.tar.gz:   For Tiger Intel architecture.
+   $ tar -xzf misc/libruby.1.dylib-tiger.tar.gz
 
-   (We cannot distribute only one binary for both architecture, because the
-    Ruby load path is not the same _and_ is hardcoded in the binary.)
-
-2. Copy the resulted binary as /usr/lib/libruby.1.dylib. Make a backup of the
+2. Copy the resulted binary to /usr/lib/libruby.1.dylib. Make a backup of the
    previous version before.
 
-Example, for an Intel machine:
-
-$ tar -xzf misc/libruby.1.dylib-tiger-i386.tar.gz
-$ sudo mv /usr/lib/libruby.1.dylib /usr/lib/libruby.1.dylib.old
-$ sudo mv misc/libruby.1.dylib-tiger-i386 /usr/lib/libruby.1.dylib
+   $ sudo mv /usr/lib/libruby.1.dylib /usr/lib/libruby.1.dylib.old
+   $ sudo mv misc/libruby.1.dylib /usr/lib/libruby.1.dylib
 
 == Manually Patching ==
 
