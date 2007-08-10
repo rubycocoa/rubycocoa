@@ -1,5 +1,16 @@
 2007-08-10  Laurent Sansonetti <lsansonetti@apple.com>
 
+	* misc/README_THREADING,
+	  misc/libruby.1.dylib-tiger.tar.gz:
+	Added a single patched binary version of libruby for both Tiger PPC and 
+	Intel. Updated instructions.
+
+	* misc/libruby.1.dylib-tiger-ppc.tar.gz,
+	  misc/libruby.1.dylib-tiger-i386.tar.gz:
+	Removed.
+
+2007-08-10  Laurent Sansonetti <lsansonetti@apple.com>
+
 	* framework/src/objc/mdl_objwrapper.m:
 	Also auto-convert predicate return value to bool for signed char type.
 
