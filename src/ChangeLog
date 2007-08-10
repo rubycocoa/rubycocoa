@@ -1,3 +1,8 @@
+2007-08-10  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* framework/src/objc/mdl_objwrapper.m:
+	Also auto-convert predicate return value to bool for signed char type.
+
 2007-08-10  Satoshi Nakagawa <artension@gmail.com>
 
 	* framework/src/objc/RBObject.m,

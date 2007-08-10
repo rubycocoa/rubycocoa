@@ -271,7 +271,8 @@ ocm_send(int argc, VALUE* argv, VALUE rcv, VALUE* result)
   decode_method_encoding(method != NULL ? method_getTypeEncoding(method) : NULL, methodSignature, &numberOfArguments, &methodReturnType, &argumentsTypes, YES);
 
   // force predicate conversion if required
-  if (*methodReturnType == _C_UCHR && RTEST(argv[2]))
+  if ((*methodReturnType == _C_UCHR || *methodReturnType == _C_CHR)
+      && RTEST(argv[2]))
     *methodReturnType = 'B'; // _C_BOOL
 
   struct _ocm_retain_context context = { rcv, selector };
