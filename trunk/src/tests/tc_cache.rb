@@ -5,7 +5,7 @@ system 'make -s' || raise(RuntimeError, "'make' failed")
 require 'objc_test.bundle'
 
 class ObjcToRubyCacheCallbackTarget < OSX::NSObject
-  def _callbackTestMethod(obj)
+  def callback(obj)
   end
 end
 
