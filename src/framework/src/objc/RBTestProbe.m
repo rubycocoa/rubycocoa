@@ -10,21 +10,14 @@
 #import <Foundation/Foundation.h>
 #import "ocdata_conv.h"
 
-@interface RBCacheTestProbeCallback
-- (void)callback:(id)obj;
-@end
-
 @interface RBCacheTestProbe : NSObject
 @end
 
 @implementation RBCacheTestProbe
 
-+ (BOOL)deallocTestFor:(Class)klass with:(RBCacheTestProbeCallback*)target
++ (BOOL)findInOcidToRbobjCache:(id)ocid
 {
-  id obj = [[klass alloc] init];
-  [target callback:obj];
-  [obj release];
-  return ocid_to_rbobj_cache_only(obj) != Qnil;
+  return ocid_to_rbobj_cache_only(ocid) != Qnil;
 }
 
 @end

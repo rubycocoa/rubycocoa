@@ -559,6 +559,27 @@ static BOOL TestThreadedCallbackDone = NO;
 
 @end
 
+@interface NSObject (ObjcToRubyCacheTestUtility)
++ (BOOL)findInOcidToRbobjCache:(id)ocid;
+- (void)callback:(id)obj;
+@end
+
+@interface ObjcToRubyCacheTest : NSObject
+@end
+
+@implementation ObjcToRubyCacheTest
+
++ (BOOL)testObjcToRubyCacheFor:(Class)klass with:(id)target
+{
+  id obj = [[klass alloc] init];
+  [target callback:obj];
+  [obj release];
+  Class probe = [[NSBundle mainBundle] classNamed:@"RBCacheTestProbe"];
+  return [probe findInOcidToRbobjCache:obj];
+}
+
+@end
+
 void Init_objc_test(){
   // dummy initializer for ruby's `require'
 }
