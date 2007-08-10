@@ -505,3 +505,22 @@ VALUE rbobj_call_ruby(id rbobj, SEL selector, VALUE args)
 }
 
 @end
+
+@interface RBCacheTestProbeCallback
+- (void)_callbackTestMethod:(id)obj;
+@end
+
+@interface RBCacheTestProbe : NSObject
+@end
+
+@implementation RBCacheTestProbe
+
++ (BOOL)deallocTestFor:(Class)klass with:(RBCacheTestProbeCallback*)target
+{
+  id obj = [[klass alloc] init];
+  [target _callbackTestMethod:obj];
+  [obj release];
+  return ocid_to_rbobj_cache_only(obj) != Qnil;
+}
+
+@end
