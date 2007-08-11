@@ -38,8 +38,7 @@ if @config['build-universal'] == 'yes'
   File.chmod(0755, postflight)
   libruby_dir = File.join(resources_dir, 'libruby')
   FileUtils.mkdir libruby_dir
-  FileUtils.cp '../misc/libruby.1.dylib-tiger-i386.tar.gz', libruby_dir 
-  FileUtils.cp '../misc/libruby.1.dylib-tiger-ppc.tar.gz', libruby_dir 
+  FileUtils.cp '../misc/libruby.1.dylib-tiger.tar.gz', libruby_dir 
 end
 
 # contents

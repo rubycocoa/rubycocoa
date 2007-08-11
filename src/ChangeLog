@@ -1,3 +1,9 @@
+2007-08-11  Laurent Sansonetti <lsansonetti@apple.com>
+
+  	* package/pre-package.rb,
+	  package/tmpl/postflight-universal.rb:
+	Updated packaging process to now use the single patched libruby.
+
 2007-08-10  Laurent Sansonetti <lsansonetti@apple.com>
 
 	* framework/src/objc/RBObject.m:
