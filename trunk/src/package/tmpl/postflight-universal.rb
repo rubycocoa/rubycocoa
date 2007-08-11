@@ -28,16 +28,17 @@ begin
 
   end
 
-
-  Dir.chdir ENV['RECEIPT_PATH'] do
-    libruby_path = "libruby/libruby.1.dylib-tiger.tar.gz"
-    puts "libruby tarball is #{libruby_path}"
-    if File.exist? libruby_path
-      puts "overriding libruby"
-      exit 1 unless system("tar -xzf '#{libruby_path}' -C libruby") 
-      FileUtils.mv '/usr/lib/libruby.1.dylib', '/usr/lib/libruby.1.dylib.original'
-      FileUtils.mv 'libruby/libruby.1.dylib', '/usr/lib/libruby.1.dylib'
+  libruby = '/usr/lib/libruby.1.dylib'
+  patched_libruby = '/usr/lib/libruby-with-thread-hooks.1.dylib'
+  if File.exist?(libruby) and File.exist?(patched_libruby)
+    unless File.symlink?(libruby)
+      puts "Creating a backup of #{libruby}"
+      FileUtils.mv libruby, '/usr/lib/libruby.1.dylib.original'
     end
+    puts "Overwriting #{libruby} with #{patched_libruby}"
+    File.symlink patched_libruby, libruby
+  else
+    puts "Either libruby #{libruby} or patched libruby #{patched_libruby} doesn't exist, skipping overwrite..."
   end
 
   exit 0
