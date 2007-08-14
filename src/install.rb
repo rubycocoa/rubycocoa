@@ -630,7 +630,7 @@ class Installer
     command buildcommand
     obj_file = "#{fwname}.framework/Versions/Current/#{fwname}"
     cmd = 'strip -x ' + File.join(framework_obj_path, obj_file)
-    command cmd
+    #command cmd
   end
 
   def buildcommand

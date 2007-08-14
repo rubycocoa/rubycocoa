@@ -440,6 +440,7 @@
 		0867D690FE84028FC02AAC07 /* Project object */ = {
 			isa = PBXProject;
 			buildConfigurationList = FCDF92590A87DF820002AD01 /* Build configuration list for PBXProject "RubyCocoa" */;
+			compatibilityVersion = "Xcode 2.4";
 			hasScannedForEncodings = 1;
 			mainGroup = 0867D691FE84028FC02AAC07 /* RubyCocoa */;
 			productRefGroup = 034768DFFF38A50411DB9C8B /* Products */;
