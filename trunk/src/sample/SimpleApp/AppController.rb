@@ -69,7 +69,4 @@ class AppController < OSX::NSObject
   end
   ib_action :threadStart
 
-  def foo(sender); end
-  ib_action :foo
-
 end
