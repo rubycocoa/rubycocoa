@@ -36,4 +36,45 @@ class OSX::NSRect
   def height; size.height; end
   alias_method :old_to_a, :to_a # To remove a warning.
   def to_a; [origin.to_a, size.to_a]; end
+  def center; OSX::NSPoint.new(OSX::NSMidX(self), OSX::NSMidY(self)); end
+  def contain?(arg)
+    case arg
+    when OSX::NSRect
+      OSX::NSContainsRect(self, arg)
+    when OSX::NSPoint
+      OSX::NSPointInRect(arg, self)
+    else
+      raise ArgumentException, "argument should be NSRect or NSPoint"
+    end
+  end
+  def empty?; OSX::NSIsEmptyRect(self); end
+  def inflate(dx, dy); inset(-dx, -dy); end
+  def inset(dx, dy); OSX::NSInsetRect(self, dx, dy); end
+  def integral; OSX::NSIntegralRect(self); end
+  def intersect?(rect); OSX::NSIntersectsRect(self, rect); end
+  def intersection(rect); OSX::NSIntersectionRect(self, rect); end
+  def offset(dx, dy); OSX::NSOffsetRect(self, dx, dy); end
+  def union(rect); OSX::NSUnionRect(self, rect); end
+end
+
+class OSX::NSPoint
+  def in?(rect); OSX::NSPointInRect(self, rect); end
+  alias_method :inRect?, :in?
+end
+
+class OSX::NSRange
+  def contain?(arg)
+    case arg
+    when OSX::NSRange
+      location <= arg.location and arg.location + arg.length <= location + length
+    when Numeric
+      OSX::NSLocationInRange(arg, self)
+    else
+      raise ArgumentException, "argument should be NSRange or Numeric"
+    end
+  end
+  def empty?; length == 0; end
+  def intersect?(range); !intersection(range).empty?; end
+  def intersection(range); OSX::NSIntersectionRange(self, range); end
+  def union(range); OSX::NSUnionRange(self, range); end
 end
