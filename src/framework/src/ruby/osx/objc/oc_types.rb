@@ -55,11 +55,17 @@ class OSX::NSRect
   def intersection(rect); OSX::NSIntersectionRect(self, rect); end
   def offset(dx, dy); OSX::NSOffsetRect(self, dx, dy); end
   def union(rect); OSX::NSUnionRect(self, rect); end
+  def inspect; "#<#{self.class} x=#{x}, y=#{y}, width=#{width}, height=#{height}>"; end
 end
 
 class OSX::NSPoint
   def in?(rect); OSX::NSPointInRect(self, rect); end
   alias_method :inRect?, :in?
+  def inspect; "#<#{self.class} x=#{x}, y=#{y}>"; end
+end
+
+class OSX::NSSize
+  def inspect; "#<#{self.class} width=#{width}, height=#{height}>"; end
 end
 
 class OSX::NSRange
@@ -77,4 +83,5 @@ class OSX::NSRange
   def intersect?(range); !intersection(range).empty?; end
   def intersection(range); OSX::NSIntersectionRange(self, range); end
   def union(range); OSX::NSUnionRange(self, range); end
+  def inspect; "#<#{self.class} location=#{location}, length=#{length}>"; end
 end
