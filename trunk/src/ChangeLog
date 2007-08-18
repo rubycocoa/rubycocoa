@@ -1,3 +1,8 @@
+2007-08-18  Satoshi Nakagawa <artension@gmail.com>
+
+	* framework/src/ruby/osx/objc/oc_types.rb:
+	Added inspect method to NSRect, NSPoint, NSSize, NSRange.
+
 2007-08-17  Satoshi Nakagawa <artension@gmail.com>
 
 	* framework/src/ruby/osx/objc/oc_types.rb,
