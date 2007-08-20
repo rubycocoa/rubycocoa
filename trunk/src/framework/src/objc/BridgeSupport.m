@@ -95,8 +95,10 @@ get_attribute_and_check(xmlTextReaderPtr reader, const char *name)
   if (attribute == NULL)
     rb_raise(rb_eRuntimeError, "expected attribute `%s' for element `%s'", name, xmlTextReaderConstName(reader));
 
-  if (strlen(attribute) == 0)
+  if (strlen(attribute) == 0) {
+    free(attribute);
     rb_raise(rb_eRuntimeError, "empty attribute `%s' for element `%s'", name, xmlTextReaderConstName(reader));
+  }
 
   return attribute;
 }
@@ -124,8 +126,10 @@ get_type_attribute_and_check(xmlTextReaderPtr reader)
   if (value == NULL)
     rb_raise(rb_eRuntimeError, "expected attribute `type' for element `%s'", xmlTextReaderConstName(reader));
 
-  if (strlen(value) == 0)
+  if (strlen(value) == 0) {
+    free(value);
     rb_raise(rb_eRuntimeError, "empty attribute `type' for element `%s'", xmlTextReaderConstName(reader));
+  }
 
   return value;
 }
@@ -189,22 +193,40 @@ get_boolean_attribute(xmlTextReaderPtr reader, const char *name, BOOL default_va
 }
 
 static void
+free_bs_call_entry (struct bsCallEntry *entry)
+{
+  if (entry->argv != NULL) {
+    unsigned i;
+    for (i = 0; i < entry->argc; i++) {
+      if (entry->argv[i].octypestr != NULL)
+        free(entry->argv[i].octypestr);
+      if (entry->argv[i].sel_of_type != NULL)
+        free(entry->argv[i].sel_of_type);
+    }
+    free(entry->argv);
+  }
+  if (entry->retval) {
+    if (entry->retval->octypestr != NULL)
+      free(entry->retval->octypestr);
+    free(entry->retval);
+  }
+}
+
+static void
 free_bs_function (struct bsFunction *func)
 {
+  free_bs_call_entry((struct bsCallEntry *)func);
   free(func->name);
-  if (func->argv != NULL)
-    free(func->argv);
   free(func);
 }
 
 static void
 free_bs_method (struct bsMethod *method)
 {
+  free_bs_call_entry((struct bsCallEntry *)method);
   free(method->selector);
   if (method->suggestion != NULL)
     free(method->suggestion);
-  if (method->argv != NULL)
-    free(method->argv);
   free(method);
 }
 
@@ -1319,6 +1341,7 @@ osx_load_bridge_support_file (VALUE mOSX, VALUE path)
           else {
             st_insert(bsBoxed, (st_data_t)bs_boxed->encoding, (st_data_t)bs_boxed);
           }
+          free(opaque_encoding);
         }      
       }
       break;
@@ -1394,7 +1417,8 @@ osx_load_bridge_support_file (VALUE mOSX, VALUE path)
         char *  func_name;
         
         func_name = get_attribute_and_check(reader, "name");
-        if (st_delete(bsFunctions, (st_data_t *)&func_name, (st_data_t *)&func)) {
+        if (st_lookup(bsFunctions, (st_data_t)func_name, (st_data_t *)&func)) {
+          st_delete(bsFunctions, (st_data_t *)&func->name, (st_data_t *)&func);
           DLOG("MDLOSX", "Re-defining function '%s'", func_name);
           free_bs_function(func);
         }
@@ -1474,10 +1498,17 @@ osx_load_bridge_support_file (VALUE mOSX, VALUE path)
             char *  type_modifier;
             struct bsArg * arg; 
             char *  func_ptr;
-   
-            arg = &args[(*argc)++];
  
-            arg->index = method != NULL ? atoi(get_attribute_and_check(reader, "index")) : -1;
+            arg = &args[(*argc)++];
+
+            if (method != NULL) {
+              char * index = get_attribute_and_check(reader, "index");
+              arg->index = atoi(index);
+              free(index);
+            }
+            else {
+              arg->index = -1;
+            }
     
             type_modifier = get_attribute(reader, "type_modifier");
             if (type_modifier != NULL) {
@@ -1548,6 +1579,7 @@ osx_load_bridge_support_file (VALUE mOSX, VALUE path)
             bsCArrayArgType type;
             int value;
             struct bsRetval *retval;  
+            char *func_ptr;
 
             get_c_ary_type_attribute(reader, &type, &value);
   
@@ -1574,6 +1606,15 @@ osx_load_bridge_support_file (VALUE mOSX, VALUE path)
             }
             else {
               method->retval = retval;
+            }
+            
+            func_ptr = get_attribute(reader, "function_pointer");
+            if (func_ptr != NULL) {
+              within_func_ptr_arg = strcmp(func_ptr, "true") == 0;
+              free(func_ptr);
+            }
+            else {
+              within_func_ptr_arg = NO;
             }
           }
         }
@@ -1622,15 +1663,14 @@ osx_load_bridge_support_file (VALUE mOSX, VALUE path)
           is_class_method = get_boolean_attribute(reader, "class_method", NO);
 
           methods_hash = is_class_method ? klass->class_methods : klass->instance_methods;
-          if (st_delete(methods_hash, (st_data_t *)&selector, (st_data_t *)&method)) {
+          if (st_lookup(methods_hash, (st_data_t)selector, (st_data_t *)&method)) {
+            st_delete(methods_hash, (st_data_t *)&method->selector, (st_data_t *)&method);
             DLOG("MDLOSX", "Re-defining method '%s' in class '%s'", selector, klass->name);
             free_bs_method(method);
           }
 
           method = (struct bsMethod *)malloc(sizeof(struct bsMethod));
           ASSERT_ALLOC(method);
-
-          st_insert(methods_hash, (st_data_t)selector, (st_data_t)method);
 
           method->selector = selector;
           method->is_class_method = is_class_method;
@@ -1640,6 +1680,8 @@ osx_load_bridge_support_file (VALUE mOSX, VALUE path)
           method->argc = 0;
           method->argv = NULL;
           method->retval = NULL;
+          
+          st_insert(methods_hash, (st_data_t)selector, (st_data_t)method);
         }
       }
       break;
@@ -1657,15 +1699,12 @@ osx_load_bridge_support_file (VALUE mOSX, VALUE path)
       }
       break;
 
+      case BS_XML_RETVAL:
       case BS_XML_ARG: {
         if (within_func_ptr_arg) {
           size_t len;
           struct bsCallEntry *call_entry;
-          struct bsArg *arg;
           char new_type[1028];
-
-          call_entry = func != NULL ? (struct bsCallEntry *)func : (struct bsCallEntry *)method;
-          arg = &args[call_entry->argc - 1];
 
           new_type[0] = '^';
           new_type[1] = '?';
@@ -1673,12 +1712,28 @@ osx_load_bridge_support_file (VALUE mOSX, VALUE path)
           len = sizeof(new_type) - 2;
           strncat(new_type, func_ptr.retval, len);
           len -= strlen(func_ptr.retval);
+          free(func_ptr.retval);
           for (i = 0; i < func_ptr.argc; i++) {
             strncat(new_type, func_ptr.argv[i], len);
             len -= strlen(func_ptr.argv[i]);
+            free(func_ptr.argv[i]);
           }
 
-          arg->octypestr = (char *)strdup(new_type);
+          call_entry = func != NULL 
+            ? (struct bsCallEntry *)func : (struct bsCallEntry *)method;
+
+          if (atom->val == BS_XML_RETVAL) {
+            struct bsRetval *retval;
+            retval = call_entry->retval;
+            free(retval->octypestr);
+            retval->octypestr = (char *)strdup(new_type);
+          }
+          else {
+            struct bsArg *arg;
+            arg = &args[call_entry->argc - 1];
+            free(arg->octypestr);
+            arg->octypestr = (char *)strdup(new_type);
+          }
 
           RESET_FUNC_PTR_CTX();
         }
