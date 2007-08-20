@@ -1,3 +1,9 @@
+2007-08-21  Fujimoto Hisa  <hisa@fobj.com>
+
+	* framework/src/objc/RBRuntime.m:
+	Deallocated a string (duplicated outside) in
+	framework_paths_unshift().
+
 2007-08-20  Laurent Sansonetti <lsansonetti@apple.com>
 
 	* framework/src/objc/mdl_osxobjc.m,

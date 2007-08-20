@@ -140,7 +140,7 @@ static char* framework_bridge_support_path()
   return bridge_support_path_for([RBObject class]);
 }
 
-static void load_path_unshift(const char* path)
+static void load_path_unshift(char* path)
 {
   extern VALUE rb_load_path;
   VALUE rpath = rb_str_new2(path);
@@ -150,7 +150,7 @@ static void load_path_unshift(const char* path)
     rb_ary_unshift(rb_load_path, rpath);
 }
 
-static void sign_path_unshift(const char* path)
+static void sign_path_unshift(char* path)
 {
   VALUE sign_paths;
   VALUE rpath;
@@ -162,13 +162,14 @@ static void sign_path_unshift(const char* path)
     rb_ary_unshift(sign_paths, rpath);
 }
 
-static void framework_paths_unshift(const char* path)
+static void framework_paths_unshift(char* path)
 {
   VALUE frameworks_paths;
   VALUE rpath;
 
   frameworks_paths = rb_const_get(osx_s_module(), rb_intern("RUBYCOCOA_FRAMEWORK_PATHS"));
   rpath = rb_str_new2(path);
+  free(path);
   if (! RTEST(rb_ary_includes(frameworks_paths, rpath)))
     rb_ary_unshift(frameworks_paths, rpath);
 }
