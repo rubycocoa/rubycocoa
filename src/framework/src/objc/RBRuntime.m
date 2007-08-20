@@ -144,6 +144,7 @@ static void load_path_unshift(const char* path)
 {
   extern VALUE rb_load_path;
   VALUE rpath = rb_str_new2(path);
+  free(path);
 
   if (! RTEST(rb_ary_includes(rb_load_path, rpath)))
     rb_ary_unshift(rb_load_path, rpath);
@@ -156,6 +157,7 @@ static void sign_path_unshift(const char* path)
 
   sign_paths = rb_const_get(osx_s_module(), rb_intern("RUBYCOCOA_SIGN_PATHS"));
   rpath = rb_str_new2(path);
+  free(path);
   if (! RTEST(rb_ary_includes(sign_paths, rpath)))
     rb_ary_unshift(sign_paths, rpath);
 }

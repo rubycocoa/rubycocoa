@@ -373,8 +373,11 @@ void initialize_mdl_osxobjc()
   rb_define_const(mOSX, "RUBYCOCOA_SVN_REVISION", 
 		  rb_obj_freeze(rb_str_new2(RUBYCOCOA_SVN_REVISION)));
 
+  char *p = framework_resources_path();
   rb_define_const(mOSX, "RUBYCOCOA_RESOURCES_PATH",
-		  rb_obj_freeze(rb_str_new2(framework_resources_path())));
+		  rb_obj_freeze(rb_str_new2(p)));
+  free(p);
+
   rb_define_const(mOSX, "RUBYCOCOA_SIGN_PATHS", rb_ary_new());
   rb_define_const(mOSX, "RUBYCOCOA_FRAMEWORK_PATHS", rb_ary_new());
 

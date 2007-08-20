@@ -1,3 +1,12 @@
+2007-08-20  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* framework/src/objc/mdl_osxobjc.m,
+	  framework/src/objc/RBRuntime.m,
+	  framework/src/objc/BridgeSupport.m:
+	Fixed various memory leaks in the RubyCocoa initialization code, and in the
+	bridge support parsing code. No memory should now be leaked during
+	initialization.
+
 2007-08-18  Satoshi Nakagawa <artension@gmail.com>
 
 	* framework/src/ruby/osx/objc/oc_types.rb:
