@@ -99,4 +99,13 @@ class TCBoxed < Test::Unit::TestCase
     a = NSRange.new(10,0)
     assert_equal(true, a.empty?)
   end
+
+  def test_range_max
+    [ NSRange.new(10,10),
+      NSRange.new(30,20),
+      NSRange.new(10,40)
+    ].each do |r|
+      assert_equal(r.max, OSX::NSMaxRange(r))
+    end
+  end
 end
