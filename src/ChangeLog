@@ -1,5 +1,12 @@
 2007-08-22  Laurent Sansonetti <lsansonetti@apple.com>
 
+	* framework/src/objc/mdl_osxobjc.m:
+	Improved the ruby obj -> ocid conversion performance.
+
+	* framework/src/objc/ocdata_conv.h,
+	  framework/src/objc/ocdata_conv.m:
+	Improved the ruby obj -> SEL conversion performance.
+
 	* framework/src/ruby/osx/objc/oc_types.rb,
 	  tests/tc_boxed.rb:
 	Added NSRange#max as a convenience implementation of NSMaxRange(). 

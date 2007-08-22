@@ -285,7 +285,7 @@ rbobj_get_ocid (VALUE obj)
   RB_ID mtd;
 
   if (rb_obj_is_kind_of(obj, objid_s_class()) == Qtrue)
-    return rb_obj_ocid(obj);
+    return OBJCID_ID(obj);
 
   mtd = rb_intern("__ocid__");
   if (rb_respond_to(obj, mtd))

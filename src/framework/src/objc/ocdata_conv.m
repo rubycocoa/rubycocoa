@@ -730,30 +730,33 @@ ocid_to_rbobj (VALUE context_obj, id ocid)
   return result;
 }
 
-const char * 
+static SEL 
 rbobj_to_cselstr (VALUE obj)
 {
   int i;
   VALUE str;
-  
-  if (rb_obj_is_kind_of(obj, rb_cString)) {
-    str = rb_str_dup(obj);
-  } else {
-    str = rb_obj_as_string(obj);
-  }
+  char *sel;
+ 
+  str = rb_obj_is_kind_of(obj, rb_cString)
+    ? obj : rb_obj_as_string(obj);
 
-  // str[0..0] + str[1..-1].tr('_',':')
+  sel = (char *)alloca(RSTRING(str)->len);
+  sel[0] = RSTRING(str)->ptr[0];
   for (i = 1; i < RSTRING(str)->len; i++) {
-    if (RSTRING(str)->ptr[i] == '_')
-      RSTRING(str)->ptr[i] = ':';
+    char c = RSTRING(str)->ptr[i];
+    if (c == '_')
+      c = ':';
+    sel[i] = c;  
   }
-  return STR2CSTR(str);
+  sel[RSTRING(str)->len] = '\0';
+
+  return sel_registerName(sel);
 }
 
 SEL 
 rbobj_to_nssel (VALUE obj)
 {
-  return NIL_P(obj) ? NULL : sel_registerName(rbobj_to_cselstr(obj));
+  return NIL_P(obj) ? NULL : rbobj_to_cselstr(obj);
 }
 
 struct funcptr_closure_context {
