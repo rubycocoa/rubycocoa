@@ -83,5 +83,6 @@ class OSX::NSRange
   def intersect?(range); !intersection(range).empty?; end
   def intersection(range); OSX::NSIntersectionRange(self, range); end
   def union(range); OSX::NSUnionRange(self, range); end
+  def max; location + length; end
   def inspect; "#<#{self.class} location=#{location}, length=#{length}>"; end
 end

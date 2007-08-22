@@ -1,3 +1,10 @@
+2007-08-22  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* framework/src/ruby/osx/objc/oc_types.rb,
+	  tests/tc_boxed.rb:
+	Added NSRange#max as a convenience implementation of NSMaxRange(). 
+	Added test cases.
+
 2007-08-21  Fujimoto Hisa  <hisa@fobj.com>
 
 	* framework/src/objc/RBRuntime.m:
