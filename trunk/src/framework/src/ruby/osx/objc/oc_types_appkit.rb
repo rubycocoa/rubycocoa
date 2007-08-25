@@ -32,4 +32,20 @@ class OSX::NSRange
   def to_range
     Range.new(location, location + length - 1)
   end
+  def contain?(arg)
+    case arg
+    when OSX::NSRange
+      location <= arg.location and arg.location + arg.length <= location + length
+    when Numeric
+      OSX::NSLocationInRange(arg, self)
+    else
+      raise ArgumentException, "argument should be NSRange or Numeric"
+    end
+  end
+  def empty?; length == 0; end
+  def intersect?(range); !intersection(range).empty?; end
+  def intersection(range); OSX::NSIntersectionRange(self, range); end
+  def union(range); OSX::NSUnionRange(self, range); end
+  def max; location + length; end
+  def inspect; "#<#{self.class} location=#{location}, length=#{length}>"; end
 end
