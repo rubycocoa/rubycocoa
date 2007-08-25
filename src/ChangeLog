@@ -1,3 +1,9 @@
+2007-08-25  Satoshi Nakagawa <artension@gmail.com>
+
+	* framework/src/ruby/osx/objc/oc_types.rb,
+	  framework/src/ruby/osx/objc/oc_types_appkit.rb:
+	Moved NSRange utility to oc_types.appkit.rb.
+
 2007-08-22  Laurent Sansonetti <lsansonetti@apple.com>
 
 	* framework/src/objc/mdl_osxobjc.m:
