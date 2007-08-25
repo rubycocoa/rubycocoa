@@ -1,5 +1,12 @@
 2007-08-25  Satoshi Nakagawa <artension@gmail.com>
 
+	* framework/src/ruby/osx/objc/oc_attachments.rb,
+  	  tests/tc_nsarray.rb,
+	  tests/tc_nsdictionary.rb:
+	NSArray and NSDictionary behave like Ruby Array and Ruby Hash respectively.
+
+2007-08-25  Satoshi Nakagawa <artension@gmail.com>
+
 	* framework/src/ruby/osx/objc/oc_types.rb,
 	  framework/src/ruby/osx/objc/oc_types_appkit.rb:
 	Moved NSRange utility to oc_types.appkit.rb.
