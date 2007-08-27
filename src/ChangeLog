@@ -2,6 +2,13 @@
 
 	* framework/src/ruby/osx/objc/oc_attachments.rb,
 	  tests/tc_nsarray.rb:
+	- Refactoring Array methods on NSArray.
+	- Improved tests.
+
+2007-08-27  Satoshi Nakagawa <artension@gmail.com>
+
+	* framework/src/ruby/osx/objc/oc_attachments.rb,
+	  tests/tc_nsarray.rb:
 	- Changed NSArray#assoc to ignore [] element inside the array.
 	- Improved tests.
 
