@@ -329,6 +329,146 @@ module OSX
         end
       end
     end
+    
+    def fill(*args)
+      count = self.count
+      len = args.length
+      len -= 1 unless block_given?
+      case len
+      when 0
+        val = args.first
+        n = -1
+        map! do |i|
+          n += 1
+          block_given? ? yield(n) : val
+        end
+      when 1
+        if block_given?
+          first = args.first
+        else
+          val, first = args
+        end
+        case first
+        when Numeric
+          start = first.to_i
+          start += count if start < 0
+          n = -1
+          map! do |i|
+            n += 1
+            if start <= n
+              block_given? ? yield(n) : val
+            else
+              i
+            end
+          end
+        when Range
+          range = first
+          left = range.first
+          right = range.last
+          left += count if left < 0
+          right += count if right < 0
+          right += range.exclude_end? ? 0 : 1
+          if left < 0 || count < left
+            raise RangeError, "#{range} out of range"
+          end
+          ary = []
+          n = -1
+          map! do |i|
+            n += 1
+            if left <= n && n < right
+              block_given? ? yield(n) : val
+            else
+              i
+            end
+          end
+          (n+1).upto(right-1) do |i|
+            n += 1
+            addObject(block_given? ? yield(n) : val)
+          end
+          self
+        else
+          raise TypeError, "can't convert #{first.class} into Integer"
+        end
+      when 2
+        if block_given?
+          first, len = args
+        else
+          val, first, len = args
+        end
+        start = first
+        unless start.is_a? Numeric
+          raise TypeError, "can't convert #{start.class} into Integer"
+        end
+        unless len.is_a? Numeric
+          raise TypeError, "can't convert #{len.class} into Integer"
+        end
+        start = start.to_i
+        len = len.to_i
+        start += count if start < 0
+        if start < 0 || count < start
+          raise IndexError, "index #{first} out of array"
+        end
+        len = 0 if len < 0
+        last = start + len
+        n = -1
+        map! do |i|
+          n += 1
+          if start <= n && n < last
+            block_given? ? yield(n) : val
+          else
+            i
+          end
+        end
+        (n+1).upto(last-1) do |i|
+          n += 1
+          addObject(block_given? ? yield(i) : val)
+        end
+        self
+      else
+        raise ArgumentError, "wrong number of arguments (#{args.length}) for 2)"
+      end
+    end
+    
+    def first(n=nil)
+      if n
+        if n.is_a? Numeric
+          len = n.to_i
+          if len < 0
+            raise ArgumentError, "negative array size (or size too big)"
+          end
+          self[0...n]
+        else
+          raise TypeError, "can't convert #{n.class} into Integer"
+        end
+      else
+        self[0]
+      end
+    end
+    
+    def flatten
+      to_a.flatten
+    end
+    
+    def flatten!
+      setArray(to_a.flatten)
+      self
+    end
+    
+    def include?(val)
+      index(val) != nil
+    end
+    
+    def index(*args)
+      if block_given?
+        each_with_index {|i,n| return n if yield(i) }
+      elsif args.length == 1
+        val = args.first
+        each_with_index {|i,n| return n if i == val || i.isEqual(val) }
+      else
+        raise ArgumentError, "wrong number of arguments (#{args.length}) for 1)"
+      end
+      nil
+    end
 
     def join(*args)
       to_ruby.join(*args)
