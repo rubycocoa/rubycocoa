@@ -218,9 +218,11 @@ module OSX
     def assoc(key)
       self.each do |i|
         if i.is_a?(Array) || i.is_a?(NSArray)
-          val = i.first
-          if val == key || val.is_a?(NSObject) && val.isEqual(key)
-            return i.to_a
+          unless i.empty?
+            val = i.first
+            if val == key || val.is_a?(NSObject) && val.isEqual(key)
+              return i.to_a
+            end
           end
         end
       end

@@ -7,10 +7,7 @@ class TC_NSArray < Test::Unit::TestCase
   def test_equal
     a = NSMutableArray.alloc.init
     a.push(1, 2, 3)
-    ary = []
-    ary << NSNumber.numberWithInt(1)
-    ary << NSNumber.numberWithInt(2)
-    ary << NSNumber.numberWithInt(3)
+    ary = [1,2,3].map {|i| NSNumber.numberWithInt(i) }
     assert(a == ary)
   end
 
@@ -42,7 +39,7 @@ class TC_NSArray < Test::Unit::TestCase
     b = b.map {|i| NSNumber.numberWithInt(i) }
     [[0,3], [0,10], [0,-3], [-3,2], [-3,10],
      [-3,-3], [-10,2], [3,0], [10,0]].each do |i|
-      assert_equal(b[i[0],i[1]], a[i[0],i[1]])
+      assert_equal(b[*i], a[*i])
     end
   end
 
@@ -100,8 +97,8 @@ class TC_NSArray < Test::Unit::TestCase
         a = NSMutableArray.alloc.init
         a.push(1, 2, 3, 4, 5)
         b = [1, 2, 3, 4, 5]
-        a[d[0],d[1]] = val
-        b[d[0],d[1]] = val
+        a[*d] = val
+        b[*d] = val
         b = b.map {|i| NSNumber.numberWithInt(i) }
         assert_equal(NSMutableArray.alloc.initWithArray(b), a)
       end
@@ -150,7 +147,7 @@ class TC_NSArray < Test::Unit::TestCase
     a = NSMutableArray.alloc.init
     a.push(1, 2, 3)
     a *= 3
-    a = a.map {|i| i.respond_to?(:to_ruby) ? i.to_ruby : i }
+    a = a.map {|i| i.to_i }
     b = [1,2,3]
     b *= 3
     assert_equal(b, a)
@@ -261,7 +258,7 @@ class TC_NSArray < Test::Unit::TestCase
   
   def test_assoc
     a = NSMutableArray.alloc.init
-    a.push([1,2])
+    a.push([])
     a.push(1)
     a.push([4,5])
     a.push([8,5])
@@ -310,10 +307,9 @@ class TC_NSArray < Test::Unit::TestCase
   def test_concat
     a = NSMutableArray.alloc.init
     a.push(1, 2)
-    ary = []
-    ary << NSNumber.numberWithInt(3)
-    ary << NSNumber.numberWithInt(4)
-    a.concat(ary)
+    b = [3,4]
+    b = b.map {|i| NSNumber.numberWithInt(i) }
+    a.concat(b)
     e = NSMutableArray.alloc.init
     e.push(1, 2, 3, 4)
     assert_equal(e, a)
@@ -394,7 +390,7 @@ class TC_NSArray < Test::Unit::TestCase
     r = a.fetch(7) { 45 }
     assert_equal(45, r)
   end
-
+  
   def test_join
     a = NSMutableArray.alloc.init
     a.push(1, [2,3,[4,5]], 6)
