@@ -131,7 +131,7 @@ class TC_NSArray < Test::Unit::TestCase
   def test_plus_error
     a = alloc_nsarray(1,2,3)
     assert_raise(TypeError) { a + 0 }
-    assert_nothing_raised { a + NSArray.arrayWithArray([1,2]) }
+    assert_nothing_raised { a + alloc_nsarray(1,2) }
   end
 
   def test_plus_equal
@@ -235,7 +235,7 @@ class TC_NSArray < Test::Unit::TestCase
   
   def test_push_op
     a = alloc_nsarray(1,2,3)
-    b = NSMutableArray.alloc.init
+    b = alloc_nsarray
     b << 1 << 2 << 3
     assert_equal(a, b)
   end
@@ -357,6 +357,128 @@ class TC_NSArray < Test::Unit::TestCase
     assert_equal(99, r)
     r = a.fetch(7) { 45 }
     assert_equal(45, r)
+  end
+  
+  def test_fill
+    a = alloc_nsarray(1,2,3,4,5)
+    a.fill {|i| i*2 }
+    a = map_to_int(a)
+    b = [1,2,3,4,5].fill {|i| i*2 }
+    assert_equal(b, a)
+    
+    a = alloc_nsarray(1,2,3,4,5)
+    a.fill(99)
+    a = map_to_int(a)
+    b = [1,2,3,4,5].fill(99)
+    assert_equal(b, a)
+    
+    [-20, -3, 3, 20].each do |d|
+      a = alloc_nsarray(1,2,3,4,5)
+      a.fill(d) {|i| i*2 }
+      a = map_to_int(a)
+      b = [1,2,3,4,5].fill(d) {|i| i*2 }
+      assert_equal(b, a)
+      
+      a = alloc_nsarray(1,2,3,4,5)
+      a.fill(99, d)
+      a = map_to_int(a)
+      b = [1,2,3,4,5].fill(99, d)
+      assert_equal(b, a)
+    end
+    
+    [(-3...5), (-4..-1), (0..8), (5..6)].each do |d|
+      a = alloc_nsarray(1,2,3,4,5)
+      a.fill(d) {|i| i+100 }
+      a = map_to_int(a)
+      b = [1,2,3,4,5].fill(d) {|i| i+100 }
+      assert_equal(b, a)
+      
+      a = alloc_nsarray(1,2,3,4,5)
+      a.fill(99, d)
+      a = map_to_int(a)
+      b = [1,2,3,4,5].fill(99, d)
+      assert_equal(b, a)
+    end
+    
+    [[-3,2], [-4,8], [-5,30], [5,10]].each do |d|
+      a = alloc_nsarray(1,2,3,4,5)
+      a.fill(*d) {|i| i+100 }
+      a = map_to_int(a)
+      b = [1,2,3,4,5].fill(*d) {|i| i+100 }
+      assert_equal(b, a)
+      
+      a = alloc_nsarray(1,2,3,4,5)
+      a.fill(99, *d)
+      a = map_to_int(a)
+      b = [1,2,3,4,5].fill(99, *d)
+      assert_equal(b, a)
+    end
+  end
+  
+  def test_fill_error
+    a = alloc_nsarray(1,2,3,4,5)
+    assert_raise(RangeError) { a.fill(8..12) {|i| i } }
+    assert_raise(RangeError) { a.fill(99, 8..12) }
+    assert_raise(RangeError) { a.fill(99, -10..4) }
+    assert_raise(RangeError) { a.fill(99, 10..15) }
+    assert_raise(IndexError) { a.fill(99, -10,4) }
+    assert_raise(IndexError) { a.fill(99, 10,4) }
+    assert_nothing_raised { a.fill(5..12) {|i| i} }
+    assert_nothing_raised { a.fill(99, 5..12) }
+    assert_nothing_raised { a.fill(99, 6, 8) }
+  end
+
+  def test_first
+    a = alloc_nsarray(1,2,3,4,5)
+    r = a.first.to_i
+    assert_equal(1, r)
+    a = alloc_nsarray
+    r = a.first
+    assert_equal(nil, r)
+
+    0.upto(6) do |d|
+      a = alloc_nsarray(1,2,3,4,5)
+      a = a.first(d)
+      a = map_to_int(a)
+      b = [1,2,3,4,5].first(d)
+      assert_equal(b, a)
+    end
+  end
+
+  def test_first_error
+    a = alloc_nsarray
+    assert_raise(ArgumentError) { a.first(-1) }
+  end
+
+  def test_flatten
+    a = alloc_nsarray(1, [2,3,[4,5]], 6)
+    a = a.flatten
+    a = map_to_int(a)
+    assert_equal([1,2,3,4,5,6], a)
+    
+    a = alloc_nsarray(1, [2,3,[4,5]], 6)
+    a.flatten!
+    a = map_to_int(a)
+    assert_equal([1,2,3,4,5,6], a)
+    
+    a = alloc_nsarray
+    a = a.flatten
+    assert_equal([], a)
+  end
+  
+  def test_index
+    a = alloc_nsarray(1,2,3,4,5)
+    r = a.index(4)
+    assert_equal(3, r)
+    r = a.index {|i| i.to_i % 2 == 0 }
+    assert_equal(1, r)
+    r = a.index {|i| i.to_i > 12 }
+    assert_equal(nil, r)
+  end
+
+  def test_index_error
+    a = alloc_nsarray
+    assert_raise(ArgumentError) { a.index(-1, 3) }
   end
   
   def test_join

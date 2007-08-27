@@ -1,5 +1,13 @@
 2007-08-28  Satoshi Nakagawa <artension@gmail.com>
 
+	* framework/src/ruby/osx/objc/oc_attachments.rb,
+	  tests/tc_nsarray.rb:
+	- Implemented Array methods on NSArray:
+	  fill, first, flatten, flatten!, include?, index.
+	- Updated tests.
+
+2007-08-28  Satoshi Nakagawa <artension@gmail.com>
+
 	* framework/src/ruby/osx/objc/oc_attachments.rb:
 	Fixed typo.
 
