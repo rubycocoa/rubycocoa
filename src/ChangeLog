@@ -1,3 +1,10 @@
+2007-08-27  Satoshi Nakagawa <artension@gmail.com>
+
+	* framework/src/ruby/osx/objc/oc_types_appkit.rb,
+	  framework/src/ruby/osx/objc/oc_types.rb:
+	- Replaced ArgumentException to ArgumentError.
+	- Added a constructor of NSRange: new(Range, count).
+
 2007-08-26  Satoshi Nakagawa <artension@gmail.com>
 
 	* framework/src/ruby/osx/objc/oc_attachments.rb:
@@ -14,7 +21,7 @@
 
 	* framework/src/ruby/osx/objc/oc_types.rb,
 	  framework/src/ruby/osx/objc/oc_types_appkit.rb:
-	Moved NSRange utility to oc_types.appkit.rb.
+	Moved NSRange utility to oc_types_appkit.rb.
 
 2007-08-22  Laurent Sansonetti <lsansonetti@apple.com>
 
