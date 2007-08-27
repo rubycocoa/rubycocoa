@@ -44,7 +44,7 @@ class OSX::NSRect
     when OSX::NSPoint
       OSX::NSPointInRect(arg, self)
     else
-      raise ArgumentException, "argument should be NSRect or NSPoint"
+      raise ArgumentError, "argument should be NSRect or NSPoint"
     end
   end
   def empty?; OSX::NSIsEmptyRect(self); end
