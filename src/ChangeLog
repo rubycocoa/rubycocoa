@@ -1,5 +1,15 @@
 2007-08-27  Satoshi Nakagawa <artension@gmail.com>
 
+	* framework/src/ruby/osx/objc/oc_attachments.rb,
+	  tests/tc_nsarray.rb:
+	- Implemented Array methods for NSArray:
+	  [], []=, +, *, -, &, |, <<, assoc, at, clear, collect!, map!
+	  compact, compact!, concat, delete, delete_at, delete_if, reject!
+	  each_index, empty?, fetch, join.
+	- Added tests for new methods of NSArray.
+
+2007-08-27  Satoshi Nakagawa <artension@gmail.com>
+
 	* framework/src/ruby/osx/objc/oc_types_appkit.rb,
 	  framework/src/ruby/osx/objc/oc_types.rb:
 	- Replaced ArgumentException to ArgumentError.

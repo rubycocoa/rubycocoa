@@ -78,43 +78,259 @@ module OSX
     end
 
     def [](*args)
-      if args.length == 1
-        index = args[0]
-        if index.is_a? Numeric
-          index = self.count + index if index < 0
-          self.objectAtIndex(index)
+      case args.length
+      when 1
+        count = self.count
+        case args.first
+        when Numeric
+          index = args.first
+          index = index.to_i
+          index += count if index < 0
+          if (0...count).include?(index)
+            self.objectAtIndex(index)
+          else
+            nil
+          end
+        when Range
+          range = OSX::NSRange.new(args.first, count)
+          case range.location
+          when 0...count
+            indexset = OSX::NSIndexSet.indexSetWithIndexesInRange(range)
+            result = self.objectsAtIndexes(indexset)
+            result.to_a
+          else
+            nil
+          end
         else
-          method_missing(:[], *args)
+          raise TypeError, "can't convert #{args.first.class} into Integer"
+        end
+      when 2
+        start, len = args
+        unless start.is_a? Numeric
+          raise TypeError, "can't convert #{start.class} into Integer"
+        end
+        unless len.is_a? Numeric
+          raise TypeError, "can't convert #{len.class} into Integer"
+        end
+        start = start.to_i
+        len = len.to_i
+        if len < 0
+          nil
+        else
+          range = start...(start + len)
+          self[range]
         end
       else
-        method_missing(:[], *args)
+        raise ArgumentError, "wrong number of arguments (#{args.length} for 2)"
       end
     end
 
     def []=(*args)
-      if args.length == 2
-        index, obj = args
-        if index.is_a? Numeric
-          index = self.count + index if index < 0
-          self.replaceObjectAtIndex_withObject(index, obj)
-          obj
+      case args.length
+      when 2
+        count = self.count
+        case args.first
+        when Numeric
+          index, value = args
+          unless index.is_a? Numeric
+            raise TypeError, "can't convert #{index.class} into Integer"
+          end
+          if value == nil
+            raise ArgumentError, "attempt insert nil to NSDictionary"
+          end
+          index = index.to_i
+          index += count if index < 0
+          case index
+          when 0...count
+            self.replaceObjectAtIndex_withObject(index, value)
+          when count
+            self.addObject(value)
+          else
+            raise IndexError, "index #{args[0]} out of array"
+          end
+          value
+        when Range
+          range, value = args
+          nsrange = OSX::NSRange.new(range, count)
+          case nsrange.location
+          when 0...count
+            if nsrange.length > 0
+              self.removeObjectsInRange(nsrange)
+            end
+            value = value.to_a if value.is_a? NSArray
+            if value != nil && value != []
+              if value.is_a? Array
+                index = nsrange.location
+                value.each {|i| self.insertObject_atIndex(i, index); index += 1 }
+              else
+                self.insertObject_atIndex(value, nsrange.location)
+              end
+            end
+          when count
+            value = value.to_a if value.is_a? NSArray
+            if value != nil && value != []
+              if value.is_a? Array
+                self.addObjectsFromArray(value)
+              else
+                self.addObject(value)
+              end
+            end
+          else
+            raise IndexError, "index #{args[0].first} out of array"
+          end
+          value
         else
-          method_missing(:[]=, *args)
+          raise ArgumentError, "wrong number of arguments (#{args.length} for 3)"
+        end
+      when 3
+        start, len, value = args
+        unless start.is_a? Numeric
+          raise TypeError, "can't convert #{start.class} into Integer"
+        end
+        unless len.is_a? Numeric
+          raise TypeError, "can't convert #{len.class} into Integer"
+        end
+        start = start.to_i
+        len = len.to_i
+        if len < 0
+          raise IndexError, "negative length (#{len})"
+        else
+          range = start...(start + len)
+          self[range] = value
+          value
         end
       else
-        method_missing(:[]=, *args)
+        raise ArgumentError, "wrong number of arguments (#{args.length} for 3)"
       end
+    end
+    
+    def +(other); self.to_a + other; end
+    def *(times); self.to_a * times; end
+    def -(other); self.to_a - other; end
+    def &(other); self.to_a & other; end
+    def |(other); self.to_a | other; end
+    
+    def <<(obj)
+      self.addObject(obj)
+      self
+    end
+    
+    def assoc(key)
+      self.each do |i|
+        if i.is_a?(Array) || i.is_a?(NSArray)
+          val = i.first
+          if val == key || val.is_a?(NSObject) && val.isEqual(key)
+            return i.to_a
+          end
+        end
+      end
+      nil
+    end
+    
+    def at(pos)
+      self[pos]
+    end
+    
+    def clear
+      self.removeAllObjects
+      self
+    end
+    
+    def collect!(*args, &block)
+      self.setArray(self.to_a.collect(*args, &block))
+      self
+    end
+    alias_method :map!, :collect!
+    
+    # does nothing because NSArray cannot have nil
+    def compact; self.to_a; end
+    def compact!; self; end
+    
+    def concat(other)
+      self.addObjectsFromArray(other)
+      self
+    end
+    
+    def delete(val)
+      indexes = []
+      self.each_with_index {|i,n| indexes << n if i.isEqual(val) }
+      indexes.reverse.each {|n| self.removeObjectAtIndex(n) } unless indexes.empty?
+      block_given? ? yield : indexes.empty? ? nil : val
+    end
+    
+    def delete_at(pos)
+      unless pos.is_a? Numeric
+        raise TypeError, "can't convert #{pos.class} into Integer"
+      end
+      count = self.count
+      pos = pos.to_i
+      pos += count if pos < 0
+      if (0...count).include?(pos)
+        result = self[pos]
+        self.removeObjectAtIndex(pos)
+        result
+      else
+        nil
+      end
+    end
+    
+    def delete_if(&block)
+      reject!(&block)
+      self
+    end
+    
+    def reject!
+      indexes = []
+      self.each_with_index {|i,n| indexes << n if yield(i) }
+      if indexes.empty?
+        nil
+      else
+        indexes.reverse.each {|n| self.removeObjectAtIndex(n) }
+        self
+      end
+    end
+    
+    def each_index
+      self.each_with_index {|i,n| yield n }
+    end
+    
+    def empty?
+      self.count == 0
+    end
+    
+    def fetch(*args)
+      count = self.count
+      len = args.length
+      if len == 0 || len > 2
+        raise ArgumentError, "wrong number of arguments (#{len} for 2)"
+      end
+      nth = args.first
+      unless nth.is_a? Numeric
+        raise TypeError, "can't convert #{nth.class} into Integer"
+      end
+      index = nth.to_i
+      index += count if index < 0
+      if (0...count).include?(index)
+        self.objectAtIndex(index)
+      else
+        if len == 2
+          args[1]
+        elsif block_given?
+          yield
+        else
+          raise IndexError, "index #{nth} out of array"
+        end
+      end
+    end
+
+    def join(*args)
+      self.to_ruby.join(*args)
     end
 
     def size
       self.count
     end
     alias_method :length, :size
-    
-    def clear
-      self.removeAllObjects
-      self
-    end
 
     def push(*args)
       case args.length
@@ -125,11 +341,6 @@ module OSX
       else
         self.addObjectsFromArray(args)
       end
-      self
-    end
-    
-    def <<(obj)
-      self.addObject(obj)
       self
     end
 
