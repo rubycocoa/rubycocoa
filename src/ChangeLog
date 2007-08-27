@@ -2,6 +2,13 @@
 
 	* framework/src/ruby/osx/objc/oc_attachments.rb,
 	  tests/tc_nsarray.rb:
+	- Changed NSArray#assoc to ignore [] element inside the array.
+	- Improved tests.
+
+2007-08-27  Satoshi Nakagawa <artension@gmail.com>
+
+	* framework/src/ruby/osx/objc/oc_attachments.rb,
+	  tests/tc_nsarray.rb:
 	- Implemented Array methods for NSArray:
 	  [], []=, +, *, -, &, |, <<, assoc, at, clear, collect!, map!
 	  compact, compact!, concat, delete, delete_at, delete_if, reject!
