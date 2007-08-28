@@ -1,5 +1,10 @@
 2007-08-29  Satoshi Nakagawa <artension@gmail.com>
 
+	* framework/src/ruby/osx/objc/oc_attachments.rb:
+	Tweaked variable names.
+
+2007-08-29  Satoshi Nakagawa <artension@gmail.com>
+
 	* framework/src/ruby/osx/objc/oc_attachments.rb,
 	  tests/tc_nsarray.rb:
 	- Fixed a bug, cannot pass a block to method_missing of NSString, NSArray,
