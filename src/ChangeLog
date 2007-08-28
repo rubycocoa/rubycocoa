@@ -1,3 +1,20 @@
+2007-08-29  Satoshi Nakagawa <artension@gmail.com>
+
+	* framework/src/ruby/osx/objc/oc_attachments.rb,
+	  tests/tc_nsarray.rb:
+	- Fixed a bug, cannot pass a block to method_missing of NSString, NSArray,
+	  NSDictionary.
+	- Moved Array methods in NSArray to module NSAttachment.
+	- Implemented Array methods:
+	    reverse_each, insert, last, pop, rassoc, replace, reverse, reverse!,
+	    rindex, shift, slice, slice!, to_splat, unshift, values_at.
+	- Removed methods because of bad performance:
+	    +, *, -, &, |, flatten, flatten!.
+	- Changed not to use to_ruby in join.
+	- Improved collect! and map! performance.
+	- Fixed a bug, compact! should return nil.
+	- Updated tests.
+
 2007-08-28  Laurent Sansonetti <lsansonetti@apple.com>
 
 	* framework/src/objc/libffi.m,

@@ -44,13 +44,13 @@ module OSX
     end
 
     alias_method :objc_method_missing, :method_missing
-    def method_missing(mname, *args)
+    def method_missing(mname, *args, &block)
       ## TODO: should test "respondsToSelector:"
       if String.public_method_defined?(mname) && (mname != :length)
         # call as Ruby string
         rcv = self.to_s
         org_val = rcv.dup
-        result = rcv.send(mname, *args)
+        result = rcv.send(mname, *args, &block)
         # bang methods modify receiver itself, need to set the new value.
         # if the receiver is immutable, NSInvalidArgumentException raises.
         if rcv != org_val
@@ -64,71 +64,34 @@ module OSX
     end
   end
 
-
-  # NSArray additions
-  class NSArray
-    include OSX::OCObjWrapper
+  # For NSArray duck typing
+  module NSArrayAttachment
+    include Enumerable
 
     def each
-      iter = self.objectEnumerator
-      while obj = iter.nextObject do
+      iter = objectEnumerator
+      while obj = iter.nextObject
+        yield(obj)
+      end
+      self
+    end
+    
+    def reverse_each
+      iter = reverseObjectEnumerator
+      while obj = iter.nextObject
         yield(obj)
       end
       self
     end
 
     def [](*args)
-      case args.length
-      when 1
-        count = self.count
-        first = args.first
-        case first
-        when Numeric
-          index = first.to_i
-          index += count if index < 0
-          if 0 <= index && index < count
-            objectAtIndex(index)
-          else
-            nil
-          end
-        when Range
-          range = OSX::NSRange.new(first, count)
-          loc = range.location
-          if 0 <= loc && loc < count
-            indexset = OSX::NSIndexSet.indexSetWithIndexesInRange(range)
-            result = objectsAtIndexes(indexset)
-            result.to_a
-          else
-            nil
-          end
-        else
-          raise TypeError, "can't convert #{args.first.class} into Integer"
-        end
-      when 2
-        start, len = args
-        unless start.is_a? Numeric
-          raise TypeError, "can't convert #{start.class} into Integer"
-        end
-        unless len.is_a? Numeric
-          raise TypeError, "can't convert #{len.class} into Integer"
-        end
-        start = start.to_i
-        len = len.to_i
-        if len < 0
-          nil
-        else
-          range = start...(start + len)
-          self[range]
-        end
-      else
-        raise ArgumentError, "wrong number of arguments (#{args.length}) for 2)"
-      end
+      _read_impl(:[], args)
     end
 
     def []=(*args)
+      count = self.count
       case args.length
       when 2
-        count = self.count
         case args.first
         when Numeric
           index, value = args
@@ -156,17 +119,17 @@ module OSX
             if nsrange.length > 0
               removeObjectsInRange(nsrange)
             end
-            value = value.to_a if value.is_a? NSArray
+            value = value.to_a if value.is_a? OSX::NSArray
             if value != nil && value != []
               if value.is_a? Array
-                index = loc
-                value.each {|i| insertObject_atIndex(i, index); index += 1 }
+                indexset = OSX::NSIndexSet.indexSetWithIndexesInRange(NSRange.new(loc, value.length))
+                insertObjects_atIndexes(value, indexset)
               else
                 insertObject_atIndex(value, loc)
               end
             end
           elsif loc == count
-            value = value.to_a if value.is_a? NSArray
+            value = value.to_a if value.is_a? OSX::NSArray
             if value != nil && value != []
               if value.is_a? Array
                 addObjectsFromArray(value)
@@ -203,12 +166,6 @@ module OSX
       end
     end
     
-    def +(other); to_a + other; end
-    def *(times); to_a * times; end
-    def -(other); to_a - other; end
-    def &(other); to_a & other; end
-    def |(other); to_a | other; end
-    
     def <<(obj)
       addObject(obj)
       self
@@ -216,12 +173,9 @@ module OSX
     
     def assoc(key)
       each do |i|
-        if i.is_a?(Array) || i.is_a?(NSArray)
+        if i.is_a? OSX::NSArray
           unless i.empty?
-            val = i.first
-            if val == key || val.is_a?(NSObject) && val.isEqual(key)
-              return i.to_a
-            end
+            return i.to_a if i.first.isEqual(key)
           end
         end
       end
@@ -237,15 +191,15 @@ module OSX
       self
     end
     
-    def collect!(*args, &block)
-      setArray(collect(*args, &block))
+    def collect!
+      each_with_index {|i,n| replaceObjectAtIndex_withObject(n, yield(i)) }
       self
     end
     alias_method :map!, :collect!
     
     # does nothing because NSArray cannot have nil
     def compact; to_a; end
-    def compact!; self; end
+    def compact!; nil; end
     
     def concat(other)
       addObjectsFromArray(other)
@@ -445,15 +399,6 @@ module OSX
       end
     end
     
-    def flatten
-      to_a.flatten
-    end
-    
-    def flatten!
-      setArray(to_a.flatten)
-      self
-    end
-    
     def include?(val)
       index(val) != nil
     end
@@ -463,21 +408,69 @@ module OSX
         each_with_index {|i,n| return n if yield(i) }
       elsif args.length == 1
         val = args.first
-        each_with_index {|i,n| return n if i == val || i.isEqual(val) }
+        each_with_index {|i,n| return n if i.isEqual(val) }
       else
         raise ArgumentError, "wrong number of arguments (#{args.length}) for 1)"
       end
       nil
     end
-
-    def join(*args)
-      to_ruby.join(*args)
+    
+    def insert(n, *vals)
+      if n  == -1
+        push(*vals)
+      else
+        n += count + 1 if n < 0
+        self[n, 0] = vals
+      end
+      self
     end
 
-    def size
-      count
+    def join(sep=$,)
+      s = ''
+      each do |i|
+        s += sep if sep && !s.empty?
+        if i == self
+          s += '[...]'
+        elsif i.is_a? OSX::NSArray
+          s += i.join(sep)
+        else
+          s += i.to_s
+        end
+      end
+      s
     end
-    alias_method :length, :size
+    
+    def last(n=nil)
+      if n
+        if n.is_a? Numeric
+          len = n.to_i
+          if len < 0
+            raise ArgumentError, "negative array size (or size too big)"
+          end
+          if len == 0
+            []
+          elsif len >= count
+            to_a
+          else
+            self[(-len)..-1]
+          end
+        else
+          raise TypeError, "can't convert #{n.class} into Integer"
+        end
+      else
+        self[-1]
+      end
+    end
+    
+    def pop
+      if count > 0
+        result = lastObject
+        removeLastObject
+        result
+      else
+        nil
+      end
+    end
 
     def push(*args)
       case args.length
@@ -490,6 +483,182 @@ module OSX
       end
       self
     end
+    
+    def rassoc(key)
+      each do |i|
+        if i.is_a? OSX::NSArray
+          if i.count >= 1
+            return i.to_a if i[1].isEqual(key)
+          end
+        end
+      end
+      nil
+    end
+    
+    def replace(another)
+      setArray(another)
+      self
+    end
+    
+    def reverse
+      result = []
+      reverse_each {|i| result << i }
+      result
+    end
+    
+    def reverse!
+      result = NSMutableArray.alloc.init
+      reverse_each {|i| result.addObject(i) }
+      setArray(result)
+      self
+    end
+    
+    def rindex(*args)
+      if block_given?
+        n = count
+        reverse_each do |i|
+          n -= 1
+          return n if yield(i)
+        end
+      elsif args.length == 1
+        val = args.first
+        n = count
+        reverse_each do |i|
+          n -= 1
+          return n if i.isEqual(val)
+        end
+      else
+        raise ArgumentError, "wrong number of arguments (#{args.length}) for 1)"
+      end
+      nil
+    end
+    
+    def shift
+      unless empty?
+        result = objectAtIndex(0)
+        removeObjectAtIndex(0)
+        result
+      else
+        nil
+      end
+    end
+
+    def size
+      count
+    end
+    alias_method :length, :size
+    alias_method :nitems, :size
+    
+    def slice(*args)
+      self[*args]
+    end
+    
+    def slice!(*args)
+      _read_impl(:slice!, args)
+    end
+    
+    def to_splat
+      to_a
+    end
+    
+    def unshift(*args)
+      if count == 0
+        push(*args)
+      else
+        case args.length
+        when 0
+          ;
+        when 1
+          insertObject_atIndex(args.first, 0)
+        else
+          indexset = OSX::NSIndexSet.indexSetWithIndexesInRange(NSRange.new(0, args.length))
+          insertObjects_atIndexes(args, indexset)
+        end
+        self
+      end
+    end
+    
+    def values_at(*indexes)
+      result = []
+      indexes.each {|i| result << self[i] }
+      result
+    end
+
+    private
+    
+    def _read_impl(method, args)
+      slice = method == :slice!
+      count = self.count
+      case args.length
+      when 1
+        first = args.first
+        case first
+        when Numeric
+          index = first.to_i
+          index += count if index < 0
+          if 0 <= index && index < count
+            result = objectAtIndex(index)
+            removeObjectAtIndex(index) if slice
+            result
+          else
+            nil
+          end
+        when Range
+          range = OSX::NSRange.new(first, count)
+          loc = range.location
+          if 0 <= loc && loc < count
+            indexset = OSX::NSIndexSet.indexSetWithIndexesInRange(range)
+            result = objectsAtIndexes(indexset)
+            removeObjectsAtIndexes(indexset) if slice
+            result.to_a
+          else
+            if slice
+              raise RangeError, "#{first} out of range"
+            end
+            nil
+          end
+        else
+          raise TypeError, "can't convert #{args.first.class} into Integer"
+        end
+      when 2
+        start, len = args
+        unless start.is_a? Numeric
+          raise TypeError, "can't convert #{start.class} into Integer"
+        end
+        unless len.is_a? Numeric
+          raise TypeError, "can't convert #{len.class} into Integer"
+        end
+        start = start.to_i
+        len = len.to_i
+        if len < 0
+          if slice
+            raise IndexError, "negative length (#{args[1]})"
+          end
+          nil
+        else
+          if slice && start < 0
+            start += count
+            minus = start < 0
+          else
+            minus = false
+          end
+          range = start...(start + len)
+          result = _read_impl(method, [range])
+          if minus
+            nil
+          else
+            result
+          end
+        end
+      else
+        raise ArgumentError, "wrong number of arguments (#{args.length}) for 2)"
+      end
+    end    
+  end
+
+  # NSArray additions
+  class NSArray
+    include OSX::OCObjWrapper
 
     # enable to treat as Array
     def to_ary
@@ -522,13 +691,13 @@ module OSX
     end
 
     alias_method :objc_method_missing, :method_missing
-    def method_missing(mname, *args)
+    def method_missing(mname, *args, &block)
       ## TODO: should test "respondsToSelector:"
       if Array.public_method_defined?(mname)
         # call as Ruby array
         rcv = to_a
         org_val = rcv.dup
-        result = rcv.send(mname, *args)
+        result = rcv.send(mname, *args, &block)
         # bang methods modify receiver itself, need to set the new value.
         # if the receiver is immutable, NSInvalidArgumentException raises.
         if rcv != org_val
@@ -542,7 +711,7 @@ module OSX
     end
   end
   class NSArray
-    include Enumerable
+    include NSArrayAttachment
   end
 
   # NSDictionary additions
@@ -618,13 +787,13 @@ module OSX
     end
 
     alias_method :objc_method_missing, :method_missing
-    def method_missing(mname, *args)
+    def method_missing(mname, *args, &block)
       ## TODO: should test "respondsToSelector:"
       if Hash.public_method_defined?(mname)
         # call as Ruby hash
         rcv = self.to_hash
         org_val = rcv.dup
-        result = rcv.send(mname, *args)
+        result = rcv.send(mname, *args, &block)
         # bang methods modify receiver itself, need to set the new value.
         # if the receiver is immutable, NSInvalidArgumentException raises.
         if rcv != org_val
