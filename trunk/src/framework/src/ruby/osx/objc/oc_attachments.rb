@@ -399,6 +399,37 @@ module OSX
       end
     end
     
+    def flatten
+      result = NSMutableArray.alloc.init
+      each do |i|
+        if i.is_a? OSX::NSArray
+          result.addObjectsFromArray(i.flatten)
+        else
+          result.addObject(i)
+        end
+      end
+      result
+    end
+    
+    def flatten!
+      flat = true
+      result = NSMutableArray.alloc.init
+      each do |i|
+        if i.is_a? OSX::NSArray
+          flat = false
+          result.addObjectsFromArray(i.flatten)
+        else
+          result.addObject(i)
+        end
+      end
+      if flat
+        nil
+      else
+        setArray(result)
+        self
+      end
+    end
+    
     def include?(val)
       index(val) != nil
     end
@@ -460,6 +491,10 @@ module OSX
       else
         self[-1]
       end
+    end
+    
+    def pack(template)
+      to_ruby.pack(template)
     end
     
     def pop
@@ -557,8 +592,64 @@ module OSX
       _read_impl(:slice!, args)
     end
     
+    def sort(&block)
+      to_a.sort(&block)
+    end
+    
+    def sort!(&block)
+      setArray(to_a.sort(&block))
+      self
+    end
+    
     def to_splat
       to_a
+    end
+    
+    def transpose
+      if count == 0
+        []
+      else
+        len = objectAtIndex(0).count
+        each do |i|
+          unless i.is_a? OSX::NSArray
+            raise TypeError, "can't convert #{i.class} into Array"
+          end
+          if i.count != len
+            raise IndexError, "element size differs (#{i.count} should be #{len})"
+          end
+        end
+        result = []
+        len.times do |n|
+          cur = []
+          each {|i| cur << i.objectAtIndex(n) }
+          result << cur
+        end
+        result
+      end
+    end
+    
+    def uniq
+      result = OSX::NSMutableArray.alloc.init
+      each {|i| result.addObject(i) unless result.include?(i) }
+      result
+    end
+    
+    def uniq!
+      len = count
+      if len > 1
+        index = 0
+        while index < count - 1
+          removeObject_inRange(objectAtIndex(index), OSX::NSRange.new(index+1, count-index-1))
+          index += 1
+        end
+        if len == count
+          nil
+        else
+          self
+        end
+      else
+        nil
+      end
     end
     
     def unshift(*args)
@@ -851,6 +942,34 @@ module OSX
 
     def to_f
       self.floatValue
+    end
+    
+    def ==(other)
+      if other.is_a? NSNumber
+        isEqualToNumber?(other)
+      elsif other.is_a? Numeric
+        if OSX::CFNumberIsFloatType(self)
+          to_f == other
+        else
+          to_i == other
+        end
+      else
+        false
+      end
+    end
+
+    def <=>(other)
+      if other.is_a? NSNumber
+        compare(other)
+      elsif other.is_a? Numeric
+        if OSX::CFNumberIsFloatType(self)
+          to_f <=> other
+        else
+          to_i <= other
+        end
+      else
+        nil
+      end
     end
   end
 
