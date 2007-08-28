@@ -122,8 +122,8 @@ module OSX
             value = value.to_a if value.is_a? OSX::NSArray
             if value != nil && value != []
               if value.is_a? Array
-                indexset = OSX::NSIndexSet.indexSetWithIndexesInRange(NSRange.new(loc, value.length))
-                insertObjects_atIndexes(value, indexset)
+                indexes = OSX::NSIndexSet.indexSetWithIndexesInRange(NSRange.new(loc, value.length))
+                insertObjects_atIndexes(value, indexes)
               else
                 insertObject_atIndex(value, loc)
               end
@@ -207,12 +207,12 @@ module OSX
     end
     
     def delete(val)
-      set = OSX::NSMutableIndexSet.alloc.init
-      each_with_index {|i,n| set.addIndex(n) if i.isEqual(val) }
-      removeObjectsAtIndexes(set) if set.count > 0
+      indexes = OSX::NSMutableIndexSet.alloc.init
+      each_with_index {|i,n| indexes.addIndex(n) if i.isEqual(val) }
+      removeObjectsAtIndexes(indexes) if indexes.count > 0
       if block_given?
         yield
-      elsif set.count > 0
+      elsif indexes.count > 0
         val
       else
         nil
@@ -241,10 +241,10 @@ module OSX
     end
     
     def reject!
-      set = OSX::NSMutableIndexSet.alloc.init
-      each_with_index {|i,n| set.addIndex(n) if yield(i) }
-      if set.count > 0
-        removeObjectsAtIndexes(set)
+      indexes = OSX::NSMutableIndexSet.alloc.init
+      each_with_index {|i,n| indexes.addIndex(n) if yield(i) }
+      if indexes.count > 0
+        removeObjectsAtIndexes(indexes)
         self
       else
         nil
@@ -571,8 +571,8 @@ module OSX
         when 1
           insertObject_atIndex(args.first, 0)
         else
-          indexset = OSX::NSIndexSet.indexSetWithIndexesInRange(NSRange.new(0, args.length))
-          insertObjects_atIndexes(args, indexset)
+          indexes = OSX::NSIndexSet.indexSetWithIndexesInRange(NSRange.new(0, args.length))
+          insertObjects_atIndexes(args, indexes)
         end
         self
       end
@@ -607,9 +607,9 @@ module OSX
           range = OSX::NSRange.new(first, count)
           loc = range.location
           if 0 <= loc && loc < count
-            indexset = OSX::NSIndexSet.indexSetWithIndexesInRange(range)
-            result = objectsAtIndexes(indexset)
-            removeObjectsAtIndexes(indexset) if slice
+            indexes = OSX::NSIndexSet.indexSetWithIndexesInRange(range)
+            result = objectsAtIndexes(indexes)
+            removeObjectsAtIndexes(indexes) if slice
             result.to_a
           else
             if slice
