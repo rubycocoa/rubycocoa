@@ -1,5 +1,12 @@
 2007-08-28  Laurent Sansonetti <lsansonetti@apple.com>
 
+	* framework/src/objc/libffi.m,
+	  tests/tc_passbyref.rb:
+	Fixed a crash when passing a pointer to an ObjC object, then trying to convert
+	it as a Ruby object after the API call, but crashing because the pointer 
+	wasn't touched by the API. Now preparing passed-by-reference pointers to NULL.
+	Added a test case.
+
 	* framework/tool/rb_nibtool.rb:
 	Fixed a crash when the provided Ruby script only defines actions but no 
 	outlets, or vice-versa.
