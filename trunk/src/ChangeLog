@@ -1,3 +1,9 @@
+2007-08-28  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* framework/tool/rb_nibtool.rb:
+	Fixed a crash when the provided Ruby script only defines actions but no 
+	outlets, or vice-versa.
+
 2007-08-28  Satoshi Nakagawa <artension@gmail.com>
 
 	* framework/src/ruby/osx/objc/oc_attachments.rb,
