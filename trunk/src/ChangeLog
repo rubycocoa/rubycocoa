@@ -1,5 +1,13 @@
 2007-08-29  Satoshi Nakagawa <artension@gmail.com>
 
+	* framework/src/ruby/osx/objc/oc_attachments.rb,
+	  tests/tc_nsarray.rb:
+	- Added NSArrayAttachment methods: indexes, indices.
+	- Removed workaround for ruby's Array#slice! bug.
+	- Updated tests.
+
+2007-08-29  Satoshi Nakagawa <artension@gmail.com>
+
 	* framework/src/ruby/osx/objc/oc_attachments.rb:
 	Tweaked variable names.
 
