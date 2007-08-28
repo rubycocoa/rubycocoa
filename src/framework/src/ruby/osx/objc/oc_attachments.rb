@@ -583,6 +583,8 @@ module OSX
       indexes.each {|i| result << self[i] }
       result
     end
+    alias_method :indexes, :values_at
+    alias_method :indices, :values_at
 
     private
     
@@ -636,19 +638,8 @@ module OSX
           end
           nil
         else
-          if slice && start < 0
-            start += count
-            minus = start < 0
-          else
-            minus = false
-          end
           range = start...(start + len)
-          result = _read_impl(method, [range])
-          if minus
-            nil
-          else
-            result
-          end
+          _read_impl(method, [range])
         end
       else
         raise ArgumentError, "wrong number of arguments (#{args.length}) for 2)"

@@ -483,7 +483,7 @@ class TC_NSArray < Test::Unit::TestCase
   end
   
   def test_insert
-    [[3], [-3], [3,10,11,12], [-3,20,21], [0, 30], [-1,40]].each do |d|
+    [[3], [-3], [3,10,11,12], [-3,20,21], [4,1,2], [5,10], [0, 30], [-1,40]].each do |d|
       a = alloc_nsarray(1,2,3,4,5)
       a.insert(*d)
       a = map_to_int(a)
@@ -642,7 +642,7 @@ class TC_NSArray < Test::Unit::TestCase
       assert_equal(b, a.to_a)
     end
 
-    [[0,3], [0,10], [-3,2], [-3,10], [-7,1], [3,0]].each do |i|
+    [[0,3], [0,10], [-3,2], [-3,10], [3,0]].each do |i|
       a = alloc_nsarray(1,2,3,4,5)
       b = map_to_nsnumber([1,2,3,4,5])
       x = a.slice!(*i)
