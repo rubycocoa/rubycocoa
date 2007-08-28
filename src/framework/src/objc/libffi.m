@@ -337,21 +337,21 @@ rb_ffi_dispatch (
     } 
     // Omitted pointer.
     else if (IS_POINTER_ARG(i)) {
+      void *value;
       arg_types[i + argc_delta] = &ffi_type_pointer;
       if (*octype_str == _C_PTR) {
         // Regular pointer.
-        void *value;
         value = alloca(sizeof(void *));
         *(void **)value = OCDATA_ALLOCA(octype_str+1);
-        arg_values[i + argc_delta] = value; 
       }
       else {
         // C_ARY.
-        void *value;
         value = alloca(sizeof(void *));
         *(void **)value = OCDATA_ALLOCA(octype_str);
-        arg_values[i + argc_delta] = value; 
       }
+      void **p = *(void ***)value;
+      *p = NULL;
+      arg_values[i + argc_delta] = value; 
       FFI_LOG("omitted_pointer[%d] (%p) : %s", i, arg_values[i + argc_delta], 
         octype_str);
       skipped++;

@@ -278,6 +278,22 @@ class TC_PassByRef < Test::Unit::TestCase
     assert_raises(ArgumentError) { globalVoiceDesc.name = (0..65).to_a }
   end
 
+  def test_nsscanner_untouch_pointer
+    # [NSScanner scanUpToString_intoString] doesn't touch the 
+    # passed-by-reference NSString if the given token could not be scanned.
+    # RubyCocoa sets the pointer as NULL by default. 
+    string = "world\nis\nmine\n"
+    scanner = OSX::NSScanner.scannerWithString(string)
+    3.times do
+      go, line = scanner.scanUpToString_intoString("\n")
+      assert(go)
+      assert_kind_of(OSX::NSString, line)
+    end
+    go, line = scanner.scanUpToString_intoString("\n")
+    assert(!go)
+    assert_nil(line)
+  end
+
   # TODO:
   #def test_null_terminated
   #end
