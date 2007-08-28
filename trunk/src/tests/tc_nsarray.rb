@@ -19,7 +19,7 @@ class TC_NSArray < Test::Unit::TestCase
   end
   
   def map_to_int(ary)
-    ary.map {|i| i.to_i }
+    ary.map {|i| i.is_a?(OSX::NSNumber) ? i.to_i : i }
   end
   
   def test_equal
@@ -78,7 +78,7 @@ class TC_NSArray < Test::Unit::TestCase
     [33, nil, [], [11,22,33]].each do |val|
       [(0..4), (0...4), (0..5), (0...5), (1..15),
        (0...-1), (5..3), (3..10), (1..0), (1..-10),
-       (-5...3), (-3..-2)].each do |d|
+       (-5...3), (-3..-2), (-3...-3)].each do |d|
         a = alloc_nsarray(1,2,3,4,5)
         b = [1,2,3,4,5]
         a[d] = val
@@ -100,7 +100,8 @@ class TC_NSArray < Test::Unit::TestCase
 
   def test_assign_start_and_length
     [33, nil, [], [11,22,33]].each do |val|
-      [[1,3], [1,10], [-3,2], [-3,10]].each do |d|
+      [[1,3], [1,10], [-3,2], [-3,10], [-3,0],
+       [-1,0], [0,0]].each do |d|
         a = alloc_nsarray(1,2,3,4,5)
         b = [1,2,3,4,5]
         a[*d] = val
@@ -481,18 +482,26 @@ class TC_NSArray < Test::Unit::TestCase
     assert_raise(ArgumentError) { a.index(-1, 3) }
   end
   
+  def test_insert
+    [[3], [-3], [3,10,11,12], [-3,20,21], [0, 30], [-1,40]].each do |d|
+      a = alloc_nsarray(1,2,3,4,5)
+      a.insert(*d)
+      a = map_to_int(a)
+      b = [1,2,3,4,5]
+      b.insert(*d)
+      assert_equal(b, a)
+    end
+  end
+  
   def test_join
     a = alloc_nsarray(1, [2,3,[4,5]], 6)
-    s = a.join(',')
-    assert_equal([1,[2,3,[4,5]],6].join(','), s)
+    assert_equal([1,[2,3,[4,5]],6].join(','), a.join(','))
+    assert_equal([1,[2,3,[4,5]],6].join, a.join)
 
-    s = a.join
-    assert_equal([1,[2,3,[4,5]],6].join, s)
-
+    sep = $,
     $, = '::'
-    s = a.join
-    assert_equal([1,[2,3,[4,5]],6].join, s)
-    $, = nil
+    assert_equal([1,[2,3,[4,5]],6].join, a.join)
+    $, = sep
   end
   
   def test_join_error
@@ -500,16 +509,208 @@ class TC_NSArray < Test::Unit::TestCase
     assert_raise(TypeError) { a.join([]) }
     assert_raise(ArgumentError) { a.join(1,2) }
   end
+  
+  def test_last
+    a = alloc_nsarray(1,2,3,4,5)
+    r = a.last.to_i
+    assert_equal(5, r)
+    a = alloc_nsarray
+    r = a.last
+    assert_equal(nil, r)
 
-  def test_size
-    a = alloc_nsarray(1,2)
-    assert_equal(2, a.size)
-    assert_equal(2, a.length)
+    0.upto(6) do |d|
+      a = alloc_nsarray(1,2,3,4,5)
+      a = a.last(d)
+      a = map_to_int(a)
+      b = [1,2,3,4,5].last(d)
+      assert_equal(b, a)
+    end
+  end
+  
+  def test_pop
+    a = alloc_nsarray(1,2,3,4,5)
+    x = a.pop.to_i
+    b = [1,2,3,4,5]
+    y = b.pop
+    assert_equal(y, x)
+    
+    a = alloc_nsarray
+    x = a.pop
+    b = []
+    y = b.pop
+    assert_equal(y, x)
   end
 
   def test_push
     a = alloc_nsarray
     a.push(1,2,3,4,5)
     assert_equal(5, a.size)
+  end
+  
+  def test_rassoc
+    a = alloc_nsarray([], 1, [5,4], [6,7])
+    r = a.rassoc(4)
+    r = map_to_int(r)
+    assert_equal([5,4], r)
+  end
+  
+  def test_reverse
+    a = alloc_nsarray(1,2,3,4,5)
+    b = [1,2,3,4,5]
+    a = a.reverse
+    b = b.reverse
+    a = map_to_int(a)
+    assert_equal(b, a)
+  end
+  
+  def test_reverse!
+    a = alloc_nsarray(1,2,3,4,5)
+    b = [1,2,3,4,5]
+    a.reverse!
+    b.reverse!
+    a = map_to_int(a)
+    assert_equal(b, a)
+  end
+  
+  def test_rindex
+    [4, 99].each do |d|
+      a = alloc_nsarray(1,2,3,4,5,1,2,3,4,5)
+      x = a.rindex(d)
+      b = [1,2,3,4,5,1,2,3,4,5]
+      y = b.rindex(d)
+      assert_equal(y, x)
+    end
+  end
+  
+  def test_shift
+    a = alloc_nsarray(1,2,3,4,5)
+    x = a.shift.to_i
+    b = [1,2,3,4,5]
+    y = b.shift
+    assert_equal(y, x)
+    
+    a = alloc_nsarray
+    x = a.shift
+    b = []
+    y = b.shift
+    assert_equal(y, x)
+  end
+
+  def test_size
+    a = alloc_nsarray(1,2)
+    assert_equal(2, a.size)
+    assert_equal(2, a.length)
+  end
+  
+  def test_slice
+    a = alloc_nsarray(1,2,3,4,5)
+    b = map_to_nsnumber([1,2,3,4,5])
+    [-10, -5, -3, 0, 3, 5, 10].each do |i|
+      assert_equal(b.slice(i), a.slice(i))
+    end
+    
+    a = alloc_nsarray(1,2,3,4,5)
+    b = map_to_nsnumber([1,2,3,4,5])
+    [(0..3), (0...3), (0..5), (0...5), (2..20), (1..-1), (1..-10),
+     (-3...-1), (-3..4), (-10...3), (-20...-10), (10..3), (10..20)].each do |i|
+      assert_equal(b.slice(i), a.slice(i))
+    end
+
+    a = alloc_nsarray(1,2,3,4,5)
+    b = map_to_nsnumber([1,2,3,4,5])
+    [[0,3], [0,10], [0,-3], [-3,2], [-3,10],
+     [-3,-3], [-10,2], [3,0], [10,0]].each do |i|
+      assert_equal(b.slice(*i), a.slice(*i))
+    end
+  end
+  
+  def test_slice!
+    [-10, -5, -3, 0, 3, 5, 10].each do |i|
+      a = alloc_nsarray(1,2,3,4,5)
+      b = map_to_nsnumber([1,2,3,4,5])
+      assert_equal(b.slice!(i), a.slice!(i))
+      assert_equal(b, a)
+    end
+    
+    [(1..3), (1...3), (0..5), (0...5), (2..20), (1..-1), (1..-10),
+     (-3...-1), (-3..4)].each do |i|
+      a = alloc_nsarray(1,2,3,4,5)
+      b = map_to_nsnumber([1,2,3,4,5])
+      x = a.slice!(i)
+      y = b.slice!(i)
+      assert_equal(y, x)
+      assert_equal(b, a.to_a)
+    end
+
+    [[0,3], [0,10], [-3,2], [-3,10], [-7,1], [3,0]].each do |i|
+      a = alloc_nsarray(1,2,3,4,5)
+      b = map_to_nsnumber([1,2,3,4,5])
+      x = a.slice!(*i)
+      y = b.slice!(*i)
+      assert_equal(y, x)
+      assert_equal(b, a.to_a)
+    end
+  end
+  
+  def test_slice_error
+    a = alloc_nsarray(1,2,3,4,5)
+    b = map_to_nsnumber([1,2,3,4,5])
+    assert_raise(RangeError) { a.slice!(10..20) }
+    assert_nothing_raised { b.slice!(10..20) }
+    
+    [(-10...3), (-20...-10)].each do |i|
+      a = alloc_nsarray(1,2,3,4,5)
+      b = map_to_nsnumber([1,2,3,4,5])
+      assert_raise(RangeError) { a.slice!(i) }
+      assert_raise(RangeError) { b.slice!(i) }
+    end
+    
+    [[0,-3], [-3,-3]].each do |i|
+      a = alloc_nsarray(1,2,3,4,5)
+      b = map_to_nsnumber([1,2,3,4,5])
+      assert_raise(IndexError) { a.slice!(*i) }
+      assert_raise(IndexError) { b.slice!(*i) }
+    end
+  end
+  
+  def test_unshift
+    a = alloc_nsarray
+    b = []
+    a.unshift
+    b.unshift
+    a = map_to_int(a)
+    assert_equal(b, a)
+    
+    a = alloc_nsarray
+    b = []
+    a.unshift(6,7,8)
+    b.unshift(6,7,8)
+    a = map_to_int(a)
+    assert_equal(b, a)
+
+    a = alloc_nsarray(1,2,3,4,5)
+    b = [1,2,3,4,5]
+    a.unshift(6)
+    b.unshift(6)
+    a = map_to_int(a)
+    assert_equal(b, a)
+
+    a = alloc_nsarray(1,2,3,4,5)
+    b = [1,2,3,4,5]
+    a.unshift(6,7,8)
+    b.unshift(6,7,8)
+    a = map_to_int(a)
+    assert_equal(b, a)
+  end
+  
+  def test_values_at
+    [[], [1], [5], [1,6,7], [-1], [-8,-1,2,5,6,2]].each do |d|
+      a = alloc_nsarray(1,2,3,4,5)
+      b = [1,2,3,4,5]
+      x = a.values_at(*d)
+      y = b.values_at(*d)
+      x = map_to_int(x)
+      assert_equal(y, x)
+    end
   end
 end
