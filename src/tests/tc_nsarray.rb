@@ -5,9 +5,7 @@ class TC_NSArray < Test::Unit::TestCase
   include OSX
   
   def alloc_nsarray(*args)
-    ary = NSMutableArray.alloc.init
-    args.each {|i| ary.push(i) }
-    ary
+    NSMutableArray.arrayWithArray(args)
   end
   
   def to_nsarray(ary)
@@ -15,11 +13,18 @@ class TC_NSArray < Test::Unit::TestCase
   end
   
   def map_to_nsnumber(ary)
+    return nil unless ary
     ary.map {|i| NSNumber.numberWithInt(i) }
   end
   
   def map_to_int(ary)
+    return nil unless ary
     ary.map {|i| i.is_a?(OSX::NSNumber) ? i.to_i : i }
+  end
+  
+  def map_to_ruby(ary)
+    return nil unless ary
+    ary.map {|i| i.is_a?(OSX::NSObject) ? i.to_ruby : i }
   end
   
   def test_equal
@@ -39,8 +44,9 @@ class TC_NSArray < Test::Unit::TestCase
   def test_ref_range
     a = alloc_nsarray(1,2,3,4,5)
     b = map_to_nsnumber([1,2,3,4,5])
-    [(0..3), (0...3), (0..5), (0...5), (2..20), (1..-1), (1..-10),
-     (-3...-1), (-3..4), (-10...3), (-20...-10), (10..3), (10..20)].each do |i|
+    [(0..3), (0...3), (0..5), (0...5), (2..20),
+     (1..-1), (1..-10), (-3...-1), (-3..4), (-10...3),
+     (-20...-10), (10..3), (10..20)].each do |i|
       assert_equal(b[i], a[i])
     end
   end
@@ -95,7 +101,7 @@ class TC_NSArray < Test::Unit::TestCase
     assert_raise(IndexError) { a[10..5] = nil }
     assert_nothing_raised { a[5..5] = nil }
     assert_nothing_raised { a[5..-10] = nil }
-    assert_nothing_raised { a[5..5] = nil }
+    assert_nothing_raised { a[-5..10] = nil }
   end
 
   def test_assign_start_and_length
@@ -452,19 +458,27 @@ class TC_NSArray < Test::Unit::TestCase
   end
 
   def test_flatten
-    a = alloc_nsarray(1, [2,3,[4,5]], 6)
-    a = a.flatten
-    a = map_to_int(a)
-    assert_equal([1,2,3,4,5,6], a)
-    
-    a = alloc_nsarray(1, [2,3,[4,5]], 6)
-    a.flatten!
-    a = map_to_int(a)
-    assert_equal([1,2,3,4,5,6], a)
-    
-    a = alloc_nsarray
-    a = a.flatten
-    assert_equal([], a)
+    [[1,2,3,[4,5,[6],8]], [], [[]], [[],[]]].each do |d|
+      a = alloc_nsarray(*d)
+      b = d
+      a = a.flatten
+      b = b.flatten
+      a = map_to_ruby(a)
+      assert_equal(b, a)
+    end
+  end
+
+  def test_flatten!
+    [[1,2,3,[4,5,[6],8]], [], [[]], [[],[]]].each do |d|
+      a = alloc_nsarray(*d)
+      b = d
+      x = a.flatten!
+      y = b.flatten!
+      a = map_to_ruby(a)
+      x = map_to_ruby(x)
+      assert_equal(b, a)
+      assert_equal(y, x)
+    end
   end
   
   def test_index
@@ -483,7 +497,8 @@ class TC_NSArray < Test::Unit::TestCase
   end
   
   def test_insert
-    [[3], [-3], [3,10,11,12], [-3,20,21], [4,1,2], [5,10], [0, 30], [-1,40]].each do |d|
+    [[3], [-3], [3,10,11,12], [-3,20,21], [4,1,2],
+     [5,10], [0, 30], [-1,40]].each do |d|
       a = alloc_nsarray(1,2,3,4,5)
       a.insert(*d)
       a = map_to_int(a)
@@ -524,6 +539,18 @@ class TC_NSArray < Test::Unit::TestCase
       a = map_to_int(a)
       b = [1,2,3,4,5].last(d)
       assert_equal(b, a)
+    end
+  end
+  
+  def test_pack
+    [
+      [[1,-2],'c*'], [[513,65022],'s*'], [[67305985,4244504319],'I*']
+    ].each do |d|
+      a = alloc_nsarray(*d[0])
+      b = d[0]
+      x = a.pack(d[1])
+      y = b.pack(d[1])
+      assert_equal(y, x)
     end
   end
   
@@ -611,8 +638,9 @@ class TC_NSArray < Test::Unit::TestCase
     
     a = alloc_nsarray(1,2,3,4,5)
     b = map_to_nsnumber([1,2,3,4,5])
-    [(0..3), (0...3), (0..5), (0...5), (2..20), (1..-1), (1..-10),
-     (-3...-1), (-3..4), (-10...3), (-20...-10), (10..3), (10..20)].each do |i|
+    [(0..3), (0...3), (0..5), (0...5), (2..20),
+     (1..-1), (1..-10), (-3...-1), (-3..4), (-10...3),
+     (-20...-10), (10..3), (10..20)].each do |i|
       assert_equal(b.slice(i), a.slice(i))
     end
 
@@ -632,8 +660,8 @@ class TC_NSArray < Test::Unit::TestCase
       assert_equal(b, a)
     end
     
-    [(1..3), (1...3), (0..5), (0...5), (2..20), (1..-1), (1..-10),
-     (-3...-1), (-3..4)].each do |i|
+    [(1..3), (1...3), (0..5), (0...5), (2..20),
+     (1..-1), (1..-10), (-3...-1), (-3..4)].each do |i|
       a = alloc_nsarray(1,2,3,4,5)
       b = map_to_nsnumber([1,2,3,4,5])
       x = a.slice!(i)
@@ -670,6 +698,79 @@ class TC_NSArray < Test::Unit::TestCase
       b = map_to_nsnumber([1,2,3,4,5])
       assert_raise(IndexError) { a.slice!(*i) }
       assert_raise(IndexError) { b.slice!(*i) }
+    end
+  end
+  
+  def test_sort
+    [
+      [], [1], [4,5,6,1,-3,1,0,-2], [[1,2],[0,5]], ['z12','qab','abc','','!@#']
+    ].each do |d|
+      a = alloc_nsarray(*d)
+      b = d
+      a = a.sort
+      b = b.sort
+      a = map_to_ruby(a)
+      assert_equal(b, a)
+    end
+  end
+  
+  def test_sort!
+    [
+      [], [1], [4,5,6,1,-3,1,0,-2], [[1,2],[0,5]], ['z12','qab','abc','','!@#']
+    ].each do |d|
+      a = alloc_nsarray(*d)
+      b = d
+      a.sort!
+      b.sort!
+      a = a.to_ruby
+      assert_equal(b, a)
+    end
+  end
+  
+  def test_tranpose
+    [
+      [], [[1]], [[1,2],[3,4]], [[1,2,3,4,5],[6,7,8,9,0],[1,2,3,4,5]]
+    ].each do |d|
+      a = alloc_nsarray(*d)
+      b = d
+      a = a.transpose
+      b = b.transpose
+      a = a.map {|i| map_to_ruby(i) }
+      assert_equal(b, a)
+    end
+  end
+  
+  def test_transpose_error
+    assert_nothing_raised { [].transpose }
+    assert_raise(TypeError) { [1].transpose }
+    assert_raise(TypeError) { [[1,2],1].transpose }
+    assert_raise(IndexError) { [[1,2],[1]].transpose }
+    assert_raise(IndexError) { [[1,2],[1,2],[3,4,5,6]].transpose }
+  end
+  
+  def test_uniq
+    [[], [1,2,1,2,3], ['s',48,-87,'',48,48,'','ABC','ABC','AbC'],
+    [[1,2,[3]],4,[1,2,[3]],5,4,7]].each do |d|
+      a = alloc_nsarray(*d)
+      b = d
+      a = a.uniq
+      b = b.uniq
+      a = map_to_ruby(a)
+      assert_equal(b, a)
+    end
+  end
+  
+  def test_uniq!
+    [[], [1,2,1,2,3], ['s',48,-87,'',48,48,'','ABC','ABC','AbC'],
+     [[1,2,[3]],4,[1,2,[3]],5,4,7]].each do |d|
+      a = alloc_nsarray(*d)
+      b = d
+      x = a.uniq!
+      y = b.uniq!
+      a = a.to_ruby
+      x = map_to_ruby(x)
+      assert_equal(b, a)
+      assert_equal(y, x)
     end
   end
   
