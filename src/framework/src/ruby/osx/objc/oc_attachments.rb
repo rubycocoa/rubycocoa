@@ -130,20 +130,22 @@ module OSX
             if nsrange.length > 0
               removeObjectsInRange(nsrange)
             end
-            value = value.to_a if value.is_a? OSX::NSArray
-            if value != nil && value != []
-              if value.is_a? Array
-                indexes = OSX::NSIndexSet.indexSetWithIndexesInRange(NSRange.new(loc, value.length))
-                insertObjects_atIndexes(value, indexes)
+            if value != nil
+              if value.is_a?(Array) || value.is_a?(OSX::NSArray)
+                unless value.empty?
+                  indexes = OSX::NSIndexSet.indexSetWithIndexesInRange(NSRange.new(loc, value.length))
+                  insertObjects_atIndexes(value, indexes)
+                end
               else
                 insertObject_atIndex(value, loc)
               end
             end
           elsif loc == count
-            value = value.to_a if value.is_a? OSX::NSArray
-            if value != nil && value != []
-              if value.is_a? Array
-                addObjectsFromArray(value)
+            if value != nil
+              if value.is_a?(Array) || value.is_a?(OSX::NSArray)
+                unless value.empty?
+                  addObjectsFromArray(value)
+                end
               else
                 addObject(value)
               end
@@ -151,7 +153,7 @@ module OSX
           else
             raise IndexError, "index #{loc} out of array"
           end
-          value
+          args[1]
         else
           raise ArgumentError, "wrong number of arguments (#{args.length}) for 3)"
         end
@@ -184,22 +186,22 @@ module OSX
     
     def &(other)
       ary = other
-      unless ary.is_a? Array
+      unless ary.is_a?(Array) || ary.is_a?(OSX::NSArray)
         if ary.respond_to?(:to_ary)
           ary = ary.to_ary
-          unless ary.is_a? Array
+          unless ary.is_a?(Array) || ary.is_a?(OSX::NSArray)
             raise TypeError, "can't convert #{other.class} into Array"
           end
         else
           raise TypeError, "can't convert #{other.class} into Array"
         end
       end
-      result = []
-      dic = OSX::NSMutableDictionary.alloc.init
+      result = OSX::NSMutableArray.array
+      dic = OSX::NSMutableDictionary.dictionary
       each {|i| dic.setObject_forKey(i, i) }
       ary.each do |i|
         if dic.objectForKey(i)
-          result << i
+          result.addObject(i)
           dic.removeObjectForKey(i)
         end
       end
@@ -208,23 +210,23 @@ module OSX
     
     def |(other)
       ary = other
-      unless ary.is_a? Array
+      unless ary.is_a?(Array) || ary.is_a?(OSX::NSArray)
         if ary.respond_to?(:to_ary)
           ary = ary.to_ary
-          unless ary.is_a? Array
+          unless ary.is_a?(Array) || ary.is_a?(OSX::NSArray)
             raise TypeError, "can't convert #{other.class} into Array"
           end
         else
           raise TypeError, "can't convert #{other.class} into Array"
         end
       end
-      result = []
-      dic = OSX::NSMutableDictionary.alloc.init
+      result = OSX::NSMutableArray.array
+      dic = OSX::NSMutableDictionary.dictionary
       [self, ary].each do |obj|
         obj.each do |i|
           unless dic.objectForKey(i)
             dic.setObject_forKey(i, i)
-            result << i
+            result.addObject(i)
           end
         end
       end
@@ -234,7 +236,7 @@ module OSX
     def *(arg)
       case arg
       when Numeric
-        to_a * arg
+        OSX::NSMutableArray.arrayWithArray(to_a * arg)
       when String
         join(arg)
       else
@@ -244,35 +246,37 @@ module OSX
     
     def +(other)
       ary = other
-      unless ary.is_a? Array
+      unless ary.is_a?(Array) || ary.is_a?(OSX::NSArray)
         if ary.respond_to?(:to_ary)
           ary = ary.to_ary
-          unless ary.is_a? Array
+          unless ary.is_a?(Array) || ary.is_a?(OSX::NSArray)
             raise TypeError, "can't convert #{other.class} into Array"
           end
         else
           raise TypeError, "can't convert #{other.class} into Array"
         end
       end
-      to_a.concat(ary)
+      result = OSX::NSMutableArray.arrayWithArray(self)
+      result.addObjectsFromArray(other)
+      result
     end
     
     def -(other)
       ary = other
-      unless ary.is_a? Array
+      unless ary.is_a?(Array) || ary.is_a?(OSX::NSArray)
         if ary.respond_to?(:to_ary)
           ary = ary.to_ary
-          unless ary.is_a? Array
+          unless ary.is_a?(Array) || ary.is_a?(OSX::NSArray)
             raise TypeError, "can't convert #{other.class} into Array"
           end
         else
           raise TypeError, "can't convert #{other.class} into Array"
         end
       end
-      result = []
-      dic = OSX::NSMutableDictionary.alloc.init
+      result = OSX::NSMutableArray.array
+      dic = OSX::NSMutableDictionary.dictionary
       ary.each {|i| dic.setObject_forKey(i, i) }
-      each {|i| result << i unless dic.objectForKey(i) }
+      each {|i| result.addObject(i) unless dic.objectForKey(i) }
       result
     end
     
@@ -280,7 +284,7 @@ module OSX
       each do |i|
         if i.is_a? OSX::NSArray
           unless i.empty?
-            return i.to_a if i.first.isEqual(key)
+            return i if i.first.isEqual(key)
           end
         end
       end
@@ -303,7 +307,7 @@ module OSX
     alias_method :map!, :collect!
     
     # does nothing because NSArray cannot have nil
-    def compact; to_a; end
+    def compact; mutableCopy; end
     def compact!; nil; end
     
     def concat(other)
@@ -312,7 +316,7 @@ module OSX
     end
     
     def delete(val)
-      indexes = OSX::NSMutableIndexSet.alloc.init
+      indexes = OSX::NSMutableIndexSet.indexSet
       each_with_index {|i,n| indexes.addIndex(n) if i.isEqual(val) }
       removeObjectsAtIndexes(indexes) if indexes.count > 0
       if block_given?
@@ -430,7 +434,6 @@ module OSX
           if left < 0 || count < left
             raise RangeError, "#{range} out of range"
           end
-          ary = []
           n = -1
           map! do |i|
             n += 1
@@ -505,12 +508,12 @@ module OSX
     end
     
     def flatten
-      result = []
+      result = OSX::NSMutableArray.array
       each do |i|
         if i.is_a? OSX::NSArray
-          result.concat(i.flatten)
+          result.addObjectsFromArray(i.flatten)
         else
-          result << i
+          result.addObject(i)
         end
       end
       result
@@ -518,7 +521,7 @@ module OSX
     
     def flatten!
       flat = true
-      result = NSMutableArray.alloc.init
+      result = OSX::NSMutableArray.array
       each do |i|
         if i.is_a? OSX::NSArray
           flat = false
@@ -584,9 +587,9 @@ module OSX
             raise ArgumentError, "negative array size (or size too big)"
           end
           if len == 0
-            []
+            OSX::NSMutableArray.array
           elsif len >= count
-            to_a
+            mutableCopy
           else
             self[(-len)..-1]
           end
@@ -628,7 +631,7 @@ module OSX
       each do |i|
         if i.is_a? OSX::NSArray
           if i.count >= 1
-            return i.to_a if i[1].isEqual(key)
+            return i if i[1].isEqual(key)
           end
         end
       end
@@ -641,15 +644,11 @@ module OSX
     end
     
     def reverse
-      result = []
-      reverse_each {|i| result << i }
-      result
+      OSX::NSMutableArray.arrayWithArray(to_a.reverse)
     end
     
     def reverse!
-      result = NSMutableArray.alloc.init
-      reverse_each {|i| result.addObject(i) }
-      setArray(result)
+      setArray(to_a.reverse)
       self
     end
     
@@ -698,7 +697,7 @@ module OSX
     end
     
     def sort(&block)
-      to_a.sort(&block)
+      OSX::NSMutableArray.arrayWithArray(to_a.sort(&block))
     end
     
     def sort!(&block)
@@ -711,49 +710,40 @@ module OSX
     end
     
     def transpose
-      if count == 0
-        []
-      else
-        len = objectAtIndex(0).count
-        each do |i|
-          unless i.is_a? OSX::NSArray
-            raise TypeError, "can't convert #{i.class} into Array"
-          end
-          if i.count != len
-            raise IndexError, "element size differs (#{i.count} should be #{len})"
-          end
-        end
-        result = []
-        len.times do |n|
-          cur = []
-          each {|i| cur << i.objectAtIndex(n) }
-          result << cur
-        end
-        result
-      end
+      OSX::NSMutableArray.arrayWithArray(to_a.transpose)
     end
     
     def uniq
-      result = OSX::NSMutableArray.alloc.init
-      each {|i| result.addObject(i) unless result.include?(i) }
+      result = OSX::NSMutableArray.array
+      dic = OSX::NSMutableDictionary.dictionary
+      each do |i|
+        unless dic.has_key?(i)
+          dic.setObject_forKey(i, i)
+          result.addObject(i)
+        end
+      end
       result
     end
     
     def uniq!
-      len = count
-      if len > 1
-        index = 0
-        while index < count - 1
-          removeObject_inRange(objectAtIndex(index), OSX::NSRange.new(index+1, count-index-1))
-          index += 1
-        end
-        if len == count
-          nil
-        else
-          self
-        end
-      else
+      if empty?
         nil
+      else
+        dic = OSX::NSMutableDictionary.dictionary
+        indexes = OSX::NSMutableIndexSet.indexSet
+        each_with_index do |i,n|
+          if dic.has_key?(i)
+            indexes.addIndex(n)
+          else
+            dic.setObject_forKey(i, i)
+          end
+        end
+        if indexes.count > 0
+          removeObjectsAtIndexes(indexes)
+          self
+        else
+          nil
+        end
       end
     end
     
@@ -775,8 +765,8 @@ module OSX
     end
     
     def values_at(*indexes)
-      result = []
-      indexes.each {|i| result << self[i] }
+      result = OSX::NSMutableArray.array
+      indexes.each {|i| result.addObject(self[i]) }
       result
     end
     alias_method :indexes, :values_at
@@ -808,7 +798,7 @@ module OSX
             indexes = OSX::NSIndexSet.indexSetWithIndexesInRange(range)
             result = objectsAtIndexes(indexes)
             removeObjectsAtIndexes(indexes) if slice
-            result.to_a
+            result
           else
             if slice
               raise RangeError, "#{first} out of range"
