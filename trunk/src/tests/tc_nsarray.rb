@@ -27,6 +27,16 @@ class TC_NSArray < Test::Unit::TestCase
     ary.map {|i| i.is_a?(OSX::NSObject) ? i.to_ruby : i }
   end
   
+  def test_copy
+    assert_nothing_raised {
+      a = NSArray.arrayWithArray([1,2,3])
+      b = a.dup
+      b << 4
+      b = a.clone
+      b << 4
+    }
+  end
+  
   def test_equal
     a = alloc_nsarray(1,2,3)
     b = map_to_nsnumber([1,2,3])

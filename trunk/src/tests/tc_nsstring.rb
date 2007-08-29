@@ -78,5 +78,14 @@ class TC_NSString < Test::Unit::TestCase
     data.getBytes_length( bytes )
     assert_equal( @eucstr.tojis, bytes )
   end
-
+  
+  def test_copy
+    assert_nothing_raised {
+      a = NSString.stringWithString('abc')
+      b = a.dup
+      b += 'def'
+      b = a.clone
+      b += 'def'
+    }
+  end
 end
