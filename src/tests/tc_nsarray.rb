@@ -172,13 +172,16 @@ class TC_NSArray < Test::Unit::TestCase
   end
 
   def test_minus
-    a = alloc_nsarray(1,2,3)
-    b = alloc_nsarray(1,4)
-    a = a - b
-    a = map_to_int(a)
-    c = [1,2,3]
-    c = c - [1,4]
-    assert_equal(c, a)
+    [
+      [[],[1,2]], [[1,2],[]], [[1,2,3,4,1,2],[1,5,4,5]], [[1,2,3,4],[6,7]], [['a',1,'A','z',6],['a','b',2,3,4]]
+    ].each do |d|
+      a = alloc_nsarray(*d[0])
+      b = alloc_nsarray(*d[1])
+      a = a - b
+      a = map_to_ruby(a)
+      c = d[0] - d[1]
+      assert_equal(c, a)
+    end
   end
 
   def test_minus_error
@@ -188,21 +191,16 @@ class TC_NSArray < Test::Unit::TestCase
   end
 
   def test_and
-    a = alloc_nsarray(1,2,3,4)
-    b = alloc_nsarray(1,4,5)
-    a = a & b
-    a = map_to_int(a)
-    c = [1,2,3,4]
-    c = c & [1,4,5]
-    assert_equal(c, a)
-    
-    a = alloc_nsarray(1,2,3,4)
-    b = alloc_nsarray(6,7)
-    a = a & b
-    a = map_to_int(a)
-    c = [1,2,3,4]
-    c = c & [6,7]
-    assert_equal(c, a)
+    [
+      [[],[]], [[1,2,3,4,1,2],[1,5,4,5]], [[1,2,3,4],[6,7]], [['a',1,'A','z',6],['a','b',2,3,4]]
+    ].each do |d|
+      a = alloc_nsarray(*d[0])
+      b = alloc_nsarray(*d[1])
+      a = a & b
+      a = map_to_ruby(a)
+      c = d[0] & d[1]
+      assert_equal(c, a)
+    end
   end
   
   def test_and_error
@@ -212,26 +210,16 @@ class TC_NSArray < Test::Unit::TestCase
   end
 
   def test_or
-    a = alloc_nsarray(1,2,3,4)
-    b = alloc_nsarray(1,4,5)
-    a = a | b
-    a = map_to_int(a)
-    c = [1,2,3,4]
-    c = c | [1,4,5]
-    assert_equal(c, a)
-    
-    a = alloc_nsarray(1,2,3,4)
-    b = alloc_nsarray(6,7)
-    a = a | b
-    a = map_to_int(a)
-    c = [1,2,3,4]
-    c = c | [6,7]
-    assert_equal(c, a)
-    
-    a = alloc_nsarray(1,2,3,4)
-    a = a | []
-    a = map_to_int(a)
-    assert_equal([1,2,3,4]|[], a)
+    [
+      [[],[]], [[1,2,3,4,1,2],[1,5,4,5]], [[1,2,3,4],[6,7]], [['a',1,'A','z',6],['a','b',2,3,4]]
+    ].each do |d|
+      a = alloc_nsarray(*d[0])
+      b = alloc_nsarray(*d[1])
+      a = a | b
+      a = map_to_ruby(a)
+      c = d[0] | d[1]
+      assert_equal(c, a)
+    end
   end
   
   def test_or_error
