@@ -9,6 +9,64 @@ require 'osx/objc/oc_wrapper'
 
 module OSX
 
+  # Enumerable module for NSValue types
+  module NSEnumerable
+    include Enumerable
+    
+    def grep(pattern)
+      result = OSX::NSMutableArray.array
+      if block_given?
+        each {|i| result.addObject(yield(i)) if pattern === i }
+      else
+        each {|i| result.addObject(i) if pattern === i }
+      end
+      result
+    end
+    
+    def map
+      result = OSX::NSMutableArray.array
+      each {|i| result.addObject(yield(i)) }
+      result
+    end
+    alias_method :collect, :map
+    
+    def select
+      result = OSX::NSMutableArray.array
+      each {|i| result.addObject(i) if yield(i) }
+      result
+    end
+    alias_method :find_all, :select
+    
+    def partition
+      selected = OSX::NSMutableArray.array
+      others = OSX::NSMutableArray.array
+      each do |i|
+        if yield(i)
+          selected.addObject(i)
+        else
+          others.addObject(i)
+        end
+      end
+      OSX::NSMutableArray.arrayWithArray([selected, others])
+    end
+    
+    def reject
+      result = OSX::NSMutableArray.array
+      each {|i| result.addObject(i) unless yield(i) }
+      result
+    end
+    
+    def sort(&block)
+      OSX::NSMutableArray.arrayWithArray(to_a.sort(&block))
+    end
+    
+    def sort_by
+      map {|i| [yield(i),i] }.
+      sort {|a,b| a[0] <=> b[0] }.
+      map! {|i| i[1] }
+    end
+  end
+
   # NSString additions
   class NSString
     include OSX::OCObjWrapper
@@ -77,7 +135,7 @@ module OSX
 
   # For NSArray duck typing
   module NSArrayAttachment
-    include Enumerable
+    include NSEnumerable
 
     def each
       iter = objectEnumerator
@@ -696,10 +754,6 @@ module OSX
       _read_impl(:slice!, args)
     end
     
-    def sort(&block)
-      OSX::NSMutableArray.arrayWithArray(to_a.sort(&block))
-    end
-    
     def sort!(&block)
       setArray(to_a.sort(&block))
       self
@@ -904,7 +958,7 @@ module OSX
 
   # For NSDictionary duck typing
   module NSDictionaryAttachment
-    include Enumerable
+    include NSEnumerable
 
     def each
       iter = keyEnumerator
@@ -1301,7 +1355,7 @@ module OSX
       when OSX::NSAttributedString
         self.string.to_s
       when OSX::NSArray
-        self.map { |x| x.is_a?(OSX::NSObject) ? x.to_ruby : x }
+        self.to_a.map { |x| x.is_a?(OSX::NSObject) ? x.to_ruby : x }
       when OSX::NSDictionary
         h = {}
         self.each do |x, y| 
