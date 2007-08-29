@@ -1,6 +1,15 @@
 2007-08-30  Satoshi Nakagawa <artension@gmail.com>
 
 	* framework/src/ruby/osx/objc/oc_attachments.rb,
+	  tests/tc_nsdictionary.rb,
+	  tests/tc_attachments.rb:
+	- Added NSDictionaryAttachment methods:
+	    fetch, merge, merge!, shift, update, values_at.
+	- Updated tests.
+
+2007-08-30  Satoshi Nakagawa <artension@gmail.com>
+
+	* framework/src/ruby/osx/objc/oc_attachments.rb,
 	  tests/tc_nsarray.rb:
 	- All NSArrayAttachment methods returns NSArray not Array.
 	- Added type checks for NSArray when checking is_a?(Array).

@@ -102,6 +102,40 @@ class TC_NSDictionary < Test::Unit::TestCase
     assert_equal(b, a.to_ruby)
   end
   
+  def test_fetch
+    d = [1,2,3,4,5]
+    a = alloc_nsdictionary
+    d.each {|i| a[i] = i }
+    b = {}
+    d.each {|i| b[i] = i }
+    a = a.fetch(1)
+    b = b.fetch(1)
+    assert_equal(b, a.to_ruby)
+
+    d = [1,2,3,4,5]
+    a = alloc_nsdictionary
+    d.each {|i| a[i] = i }
+    b = {}
+    d.each {|i| b[i] = i }
+    a = a.fetch(8, 99)
+    b = b.fetch(8, 99)
+    assert_equal(b, a)
+
+    d = [1,2,3,4,5]
+    a = alloc_nsdictionary
+    d.each {|i| a[i] = i }
+    b = {}
+    d.each {|i| b[i] = i }
+    a = a.fetch(8) {99}
+    b = b.fetch(8) {99}
+    assert_equal(b, a)
+  end
+  
+  def test_fetch_error
+    assert_raise(IndexError) { alloc_nsdictionary.fetch(1) }
+    assert_raise(IndexError) { {}.fetch(1) }
+  end
+  
   def test_reject!
     d = [1,2,3,4,5]
     a = alloc_nsdictionary
@@ -170,6 +204,66 @@ class TC_NSDictionary < Test::Unit::TestCase
     d.each {|i| assert_equal(a.key(i*2).to_i, i)}
   end
   
+  def test_merge
+    x = [1,2,3,4,5]
+    y = [1,4,9,0,-2,6,8.5,10]
+    a = alloc_nsdictionary
+    x.each {|i| a[i] = i }
+    b = alloc_nsdictionary
+    y.each {|i| b[i] = i*2 }
+    c = {}
+    x.each {|i| c[i] = i }
+    d = {}
+    y.each {|i| d[i] = i*2 }
+    a = a.merge(b)
+    c = c.merge(d)
+    assert_equal(c, a.to_ruby)
+
+    x = [1,99,1,128,4]
+    y = [1,4,9,0,-2,6,8.5,10]
+    a = alloc_nsdictionary
+    x.each {|i| a[i] = i }
+    b = alloc_nsdictionary
+    y.each {|i| b[i] = i*2 }
+    c = {}
+    x.each {|i| c[i] = i }
+    d = {}
+    y.each {|i| d[i] = i*2 }
+    a = a.merge(b) {|k,v1,v2| v1.to_ruby < v2.to_ruby ? v1 : v2 }
+    c = c.merge(d) {|k,v1,v2| v1 < v2 ? v1 : v2 }
+    assert_equal(c, a.to_ruby)
+  end
+  
+  def test_merge!
+    x = [1,2,3,4,5]
+    y = [1,4,9,0,-2,6,8.5,10]
+    a = alloc_nsdictionary
+    x.each {|i| a[i] = i }
+    b = alloc_nsdictionary
+    y.each {|i| b[i] = i*2 }
+    c = {}
+    x.each {|i| c[i] = i }
+    d = {}
+    y.each {|i| d[i] = i*2 }
+    a.merge!(b)
+    c.merge!(d)
+    assert_equal(c, a.to_ruby)
+
+    x = [1,99,1,128,4]
+    y = [1,4,9,0,-2,6,8.5,10]
+    a = alloc_nsdictionary
+    x.each {|i| a[i] = i }
+    b = alloc_nsdictionary
+    y.each {|i| b[i] = i*2 }
+    c = {}
+    x.each {|i| c[i] = i }
+    d = {}
+    y.each {|i| d[i] = i*2 }
+    a.merge(b) {|k,v1,v2| v1.to_ruby < v2.to_ruby ? v1 : v2 }
+    c.merge(d) {|k,v1,v2| v1 < v2 ? v1 : v2 }
+    assert_equal(c, a.to_ruby)
+  end
+  
   def test_reject
     d = [1,2,3,4,5]
     a = alloc_nsdictionary
@@ -192,5 +286,49 @@ class TC_NSDictionary < Test::Unit::TestCase
     b.replace('a'=>1, 2=>3)
     a = map_to_ruby(a)
     assert_equal(b, a)
+  end
+  
+  def test_shift
+    d = [1,2,3,4,5]
+    a = alloc_nsdictionary
+    d.each {|i| a[i] = i*2 }
+    d.size.times do
+      x = a.shift
+      assert_kind_of(NSArray, x)
+      assert_equal(2, x.size)
+    end
+    assert_equal(nil, a.shift)
+  end
+  
+  def test_values_at
+    d = [1,2,3,4,5]
+    a = alloc_nsdictionary
+    d.each {|i| a[i] = i }
+    b = {}
+    d.each {|i| b[i] = i }
+    x = a.values_at(3,4)
+    y = b.values_at(3,4)
+    assert_equal(y, x.to_ruby)
+    
+    d = [1,2,3,4,5]
+    a = alloc_nsdictionary
+    a.default = 99
+    d.each {|i| a[i] = i }
+    b = {}
+    b.default = 99
+    d.each {|i| b[i] = i }
+    x = a.values_at(3,10,4)
+    y = b.values_at(3,10,4)
+    assert_equal(y, x.to_ruby)
+    
+    d = [1,2,3,4,5]
+    a = alloc_nsdictionary
+    a.default_proc = lambda {|k,v| 99}
+    d.each {|i| a[i] = i }
+    b = Hash.new lambda {|k,v| 99}
+    d.each {|i| b[i] = i }
+    x = a.values_at(3,5,4)
+    y = b.values_at(3,5,4)
+    assert_equal(y, x.to_ruby)
   end
 end

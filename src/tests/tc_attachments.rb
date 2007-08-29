@@ -54,12 +54,12 @@ class TC_Attachments < Test::Unit::TestCase
   end
   
   def test_dictionary_keys
-    assert_kind_of Array, @d.keys
+    assert_kind_of NSArray, @d.keys
     assert_equal ["a", "b"], @d.keys.map { |e| e.to_s }.sort
   end
   
   def test_dictionary_values
-    assert_kind_of Array, @d.values
+    assert_kind_of NSArray, @d.values
     assert_equal [1,2], @d.values.map { |e| e.to_i }.sort
   end
   
