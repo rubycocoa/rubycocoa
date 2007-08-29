@@ -1003,6 +1003,21 @@ module OSX
       self
     end
     
+    def fetch(key, *args)
+      result = objectForKey(key)
+      if result
+        result
+      else
+        if args.length > 0
+          args.first
+        elsif block_given?
+          yield(key)
+        else
+          raise IndexError, "key not found"
+        end
+      end
+    end
+    
     def reject!
       result = nil
       each do |key,value|
@@ -1043,7 +1058,40 @@ module OSX
     end
     
     def keys
-      allKeys.to_a
+      allKeys
+    end
+    
+    def merge(other, &block)
+      dic = mutableCopy
+      dic.merge!(other, &block)
+      dic
+    end
+    
+    def merge!(other)
+      if block_given?
+        other.each do |key,value|
+          if mine = objectForKey(key)
+            setObject_forKey(yield(key, mine, value),key)
+          else
+            setObject_forKey(value,key)
+          end
+        end
+      else
+        other.each {|key,value| setObject_forKey(value,key) }
+      end
+      self
+    end
+    alias_method :update, :merge!
+    
+    def shift
+      if empty?
+        default
+      else
+        key = allKeys.objectAtIndex(0)
+        value = objectForKey(key)
+        removeObjectForKey(key)
+        OSX::NSMutableArray.arrayWithArray([key, value])
+      end
     end
 
     def size
@@ -1063,7 +1111,19 @@ module OSX
     end
 
     def values
-      allValues.to_a
+      allValues
+    end
+    
+    def values_at(*args)
+      result = OSX::NSMutableArray.array
+      args.each do |k|
+        if v = objectForKey(k)
+          result.addObject(v)
+        else
+          result.addObject(default)
+        end
+      end
+      result
     end
   end
 
