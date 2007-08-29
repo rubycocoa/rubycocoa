@@ -1,6 +1,24 @@
 2007-08-29  Satoshi Nakagawa <artension@gmail.com>
 
 	* framework/src/ruby/osx/objc/oc_attachments.rb,
+	  tests/tc_nsdictionary.rb:
+	- Added dup and clone method to NSString, NSArray, NSDictionary.
+	- Refactoring NSArrayAttachment#*.
+	- Fixed a bug, NSArrayAttachment#flatten should return Array.
+	- Added NSDictionaryAttachment:
+	    each_key, each_pair, each_value, [], default, default=,
+	    default_proc, default_proc=, delete, delete_if, reject!,
+	    empty?, has_key?, include?, key?, member?, has_value?,
+	    invert, key, rehash, reject, replace.
+	- Updated tests.
+
+	* tests/tc_nsarray.rb,
+	  tests/tc_nsstring.rb:
+	Added copying tests.
+
+2007-08-29  Satoshi Nakagawa <artension@gmail.com>
+
+	* framework/src/ruby/osx/objc/oc_attachments.rb,
 	  tests/tc_nsarray.rb:
 	- Added NSArrayAttachment methods: &, |, *, +, -.
 	- Updated tests.

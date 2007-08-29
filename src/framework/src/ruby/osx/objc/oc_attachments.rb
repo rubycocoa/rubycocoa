@@ -13,6 +13,17 @@ module OSX
   class NSString
     include OSX::OCObjWrapper
 
+    def dup
+      mutableCopy
+    end
+    
+    def clone
+      obj = dup
+      obj.freeze if frozen?
+      obj.taint if tainted?
+      obj
+    end
+    
     # enable to treat as String
     def to_str
       self.to_s
@@ -223,11 +234,7 @@ module OSX
     def *(arg)
       case arg
       when Numeric
-        times = arg.to_i
-        result = []
-        ary = to_a
-        times.times {|i| result.concat(ary) }
-        result
+        to_a * arg
       when String
         join(arg)
       else
@@ -498,12 +505,12 @@ module OSX
     end
     
     def flatten
-      result = NSMutableArray.alloc.init
+      result = []
       each do |i|
         if i.is_a? OSX::NSArray
-          result.addObjectsFromArray(i.flatten)
+          result.concat(i.flatten)
         else
-          result.addObject(i)
+          result << i
         end
       end
       result
@@ -840,6 +847,17 @@ module OSX
   class NSArray
     include OSX::OCObjWrapper
 
+    def dup
+      mutableCopy
+    end
+    
+    def clone
+      obj = dup
+      obj.freeze if frozen?
+      obj.taint if tainted?
+      obj
+    end
+
     # enable to treat as Array
     def to_ary
       to_a
@@ -894,50 +912,190 @@ module OSX
     include NSArrayAttachment
   end
 
-  # NSDictionary additions
-  class NSDictionary
-    include OSX::OCObjWrapper
-    
+  # For NSDictionary duck typing
+  module NSDictionaryAttachment
+    include Enumerable
+
     def each
-      iter = self.keyEnumerator
-      while key = iter.nextObject do
-        yield(key, self.objectForKey(key))
+      iter = keyEnumerator
+      while key = iter.nextObject
+        yield([key, objectForKey(key)])
+      end
+      self
+    end
+
+    def each_pair
+      iter = keyEnumerator
+      while key = iter.nextObject
+        yield(key, objectForKey(key))
+      end
+      self
+    end
+    
+    def each_key
+      iter = keyEnumerator
+      while key = iter.nextObject
+        yield(key)
+      end
+      self
+    end
+    
+    def each_value
+      iter = objectEnumerator
+      while obj = iter.nextObject
+        yield(obj)
       end
       self
     end
     
     def [](key)
-      self.objectForKey(key)
+      result = objectForKey(key)
+      if result
+        result
+      else
+        default(key)
+      end
     end
 
     def []=(key, obj)
-      self.setObject_forKey(obj, key)
+      setObject_forKey(obj, key)
       obj
     end
     alias_method :store, :[]=
+    
+    def clear
+      removeAllObjects
+      self
+    end
+    
+    def default(*args)
+      if args.length <= 1
+        if @default_proc
+          @default_proc.call(self, args.first)
+        elsif @default
+          @default
+        else
+          nil
+        end
+      else
+        raise ArgumentError, "wrong number of arguments (#{args.length}) for 2)"
+      end
+    end
+    
+    def default=(value)
+      @default = value
+    end
+    
+    def default_proc
+      @default_proc
+    end
+    
+    def default_proc=(value)
+      @default_proc = value
+    end
+    
+    def delete(key)
+      obj = objectForKey(key)
+      if obj
+        removeObjectForKey(key)
+        obj
+      else
+        if block_given?
+          yield(key)
+        else
+          nil
+        end
+      end
+    end
+    
+    def delete_if(&block)
+      reject!(&block)
+      self
+    end
+    
+    def reject!
+      result = nil
+      each do |key,value|
+        if yield(key, value)
+          removeObjectForKey(key)
+          result = self
+        end
+      end
+      result
+    end
+    
+    def empty?
+      count == 0
+    end
+    
+    def has_key?(key)
+      objectForKey(key) != nil
+    end
+    alias_method :include?, :has_key?
+    alias_method :key?, :has_key?
+    alias_method :member?, :has_key?
+    
+    def has_value?(value)
+      each_value {|i| return true if i.isEqual?(value) }
+      false
+    end
+    alias_method :value?, :has_value?
+    
+    def invert
+      result = {}
+      each_pair {|key,value| result[value] = key }
+      result
+    end
+    
+    def key(val)
+      each_pair {|key,value| return key if value.isEqual?(val) }
+      nil
+    end
+    
+    def keys
+      allKeys.to_a
+    end
 
     def size
-      self.count
+      count
     end
     alias_method :length, :size
-
-    def keys
-      self.allKeys.to_a
+    
+    def rehash; self; end
+    
+    def reject(&block)
+      to_hash.delete_if(&block)
+    end
+    
+    def replace(other)
+      setDictionary(other)
+      self
     end
 
     def values
-      self.allValues.to_a
+      allValues.to_a
+    end
+  end
+
+  # NSDictionary additions
+  class NSDictionary
+    include OSX::OCObjWrapper
+
+    def dup
+      mutableCopy
     end
     
-    def clear
-      self.removeAllObjects
-      self
+    def clone
+      obj = dup
+      obj.freeze if frozen?
+      obj.taint if tainted?
+      obj
     end
     
     # enable to treat as Hash
     def to_hash
       h = {}
-      self.each {|k,v| h[k] = v }
+      each {|k,v| h[k] = v }
       h
     end
     
@@ -946,7 +1104,7 @@ module OSX
       if other.is_a? OSX::NSDictionary
         isEqualToDictionary?(other)
       elsif other.respond_to? :to_hash
-        self.to_hash == other.to_hash
+        to_hash == other.to_hash
       else
         false
       end
@@ -954,7 +1112,7 @@ module OSX
 
     def <=>(other)
       if other.respond_to? :to_hash
-        self.to_hash <=> other.to_hash
+        to_hash <=> other.to_hash
       else
         nil
       end
@@ -971,13 +1129,13 @@ module OSX
       ## TODO: should test "respondsToSelector:"
       if Hash.public_method_defined?(mname)
         # call as Ruby hash
-        rcv = self.to_hash
+        rcv = to_hash
         org_val = rcv.dup
         result = rcv.send(mname, *args, &block)
         # bang methods modify receiver itself, need to set the new value.
         # if the receiver is immutable, NSInvalidArgumentException raises.
         if rcv != org_val
-          self.setDictionary(rcv)
+          setDictionary(rcv)
         end
       else
         # call as objc dictionary
@@ -987,7 +1145,7 @@ module OSX
     end
   end
   class NSDictionary
-    include Enumerable
+    include NSDictionaryAttachment
   end
 
   class NSUserDefaults
