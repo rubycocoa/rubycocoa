@@ -1,3 +1,15 @@
+2007-08-30  Satoshi Nakagawa <artension@gmail.com>
+
+	* framework/src/ruby/osx/objc/oc_attachments.rb,
+	  tests/tc_nsarray.rb:
+	- All NSArrayAttachment methods returns NSArray not Array.
+	- Added type checks for NSArray when checking is_a?(Array).
+	- Changed to use to_a in *, sort, sort!, transpose of NSAttachment. 
+	  Because of performance.
+	- Improved performance of uniq, uniq! of NSAttachment.
+	- Fixed bugs, NSArrayAttachment#[]= should return the raw argument.
+	- Updated tests.
+
 2007-08-29  Satoshi Nakagawa <artension@gmail.com>
 
 	* framework/src/ruby/osx/objc/oc_attachments.rb,

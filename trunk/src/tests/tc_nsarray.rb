@@ -57,7 +57,9 @@ class TC_NSArray < Test::Unit::TestCase
     [(0..3), (0...3), (0..5), (0...5), (2..20),
      (1..-1), (1..-10), (-3...-1), (-3..4), (-10...3),
      (-20...-10), (10..3), (10..20)].each do |i|
-      assert_equal(b[i], a[i])
+      x = a[i]
+      assert_kind_of(NSArray, x) if x
+      assert_equal(b[i], x)
     end
   end
 
@@ -66,7 +68,9 @@ class TC_NSArray < Test::Unit::TestCase
     b = map_to_nsnumber([1,2,3,4,5])
     [[0,3], [0,10], [0,-3], [-3,2], [-3,10],
      [-3,-3], [-10,2], [3,0], [10,0]].each do |i|
-      assert_equal(b[*i], a[*i])
+      x = a[*i]
+      assert_kind_of(NSArray, x) if x
+      assert_equal(b[*i], x)
     end
   end
 
@@ -77,7 +81,6 @@ class TC_NSArray < Test::Unit::TestCase
       b = [1,2,3,4,5]
       a[d] = val
       b[d] = val
-      b = map_to_nsnumber(b)
       assert_equal(to_nsarray(b), a)
     end
   end
@@ -91,7 +94,7 @@ class TC_NSArray < Test::Unit::TestCase
   end
 
   def test_assign_range
-    [33, nil, [], [11,22,33]].each do |val|
+    [33, nil, [], [11,22,33], NSArray.arrayWithArray([1,2,3])].each do |val|
       [(0..4), (0...4), (0..5), (0...5), (1..15),
        (0...-1), (5..3), (3..10), (1..0), (1..-10),
        (-5...3), (-3..-2), (-3...-3)].each do |d|
@@ -99,7 +102,6 @@ class TC_NSArray < Test::Unit::TestCase
         b = [1,2,3,4,5]
         a[d] = val
         b[d] = val
-        b = map_to_nsnumber(b)
         assert_equal(to_nsarray(b), a)
       end
     end
@@ -115,14 +117,13 @@ class TC_NSArray < Test::Unit::TestCase
   end
 
   def test_assign_start_and_length
-    [33, nil, [], [11,22,33]].each do |val|
+    [33, nil, [], [11,22,33], NSArray.arrayWithArray([1,2,3])].each do |val|
       [[1,3], [1,10], [-3,2], [-3,10], [-3,0],
        [-1,0], [0,0]].each do |d|
         a = alloc_nsarray(1,2,3,4,5)
         b = [1,2,3,4,5]
         a[*d] = val
         b[*d] = val
-        b = map_to_nsnumber(b)
         assert_equal(to_nsarray(b), a)
       end
     end
@@ -139,6 +140,7 @@ class TC_NSArray < Test::Unit::TestCase
   def test_plus
     a = alloc_nsarray(1,2,3)
     a = a + [4,5,6] + a
+    assert_kind_of(NSArray, a)
     a = map_to_int(a)
     e = [1,2,3]
     e = e + [4,5,6] + e
@@ -155,6 +157,7 @@ class TC_NSArray < Test::Unit::TestCase
     a = alloc_nsarray(1,2,3)
     a += [4, 5, 6]
     a += [7, 8, 9]
+    assert_kind_of(NSArray, a)
     b = [1, 2, 3]
     b += [4, 5, 6]
     b += [7, 8, 9]
@@ -165,6 +168,7 @@ class TC_NSArray < Test::Unit::TestCase
   def test_multiply
     a = alloc_nsarray(1,2,3)
     a *= 3
+    assert_kind_of(NSArray, a)
     a = map_to_int(a)
     b = [1,2,3]
     b *= 3
@@ -172,6 +176,7 @@ class TC_NSArray < Test::Unit::TestCase
 
     a = alloc_nsarray(1,2,3)
     s = a * ','
+    assert_kind_of(String, s)
     assert_equal([1,2,3]*',', s)
   end
 
@@ -188,6 +193,7 @@ class TC_NSArray < Test::Unit::TestCase
       a = alloc_nsarray(*d[0])
       b = alloc_nsarray(*d[1])
       a = a - b
+      assert_kind_of(NSArray, a)
       a = map_to_ruby(a)
       c = d[0] - d[1]
       assert_equal(c, a)
@@ -207,6 +213,7 @@ class TC_NSArray < Test::Unit::TestCase
       a = alloc_nsarray(*d[0])
       b = alloc_nsarray(*d[1])
       a = a & b
+      assert_kind_of(NSArray, a)
       a = map_to_ruby(a)
       c = d[0] & d[1]
       assert_equal(c, a)
@@ -226,6 +233,7 @@ class TC_NSArray < Test::Unit::TestCase
       a = alloc_nsarray(*d[0])
       b = alloc_nsarray(*d[1])
       a = a | b
+      assert_kind_of(NSArray, a)
       a = map_to_ruby(a)
       c = d[0] | d[1]
       assert_equal(c, a)
@@ -248,6 +256,7 @@ class TC_NSArray < Test::Unit::TestCase
   def test_assoc
     a = alloc_nsarray([], 1, [4,5], [8,5])
     r = a.assoc(4)
+    assert_kind_of(NSArray, r)
     r = map_to_int(r)
     assert_equal([4,5], r)
   end
@@ -280,6 +289,7 @@ class TC_NSArray < Test::Unit::TestCase
   def test_collect!
     a = alloc_nsarray(1,2,3,4,5)
     a.collect! {|i| i.to_i * 2 }
+    assert_kind_of(NSArray, a)
     e = [1,2,3,4,5].map {|i| i*2 }
     e = map_to_nsnumber(e)
     assert_equal(e, a)
@@ -444,6 +454,7 @@ class TC_NSArray < Test::Unit::TestCase
     0.upto(6) do |d|
       a = alloc_nsarray(1,2,3,4,5)
       a = a.first(d)
+      assert_kind_of(NSArray, a)
       a = map_to_int(a)
       b = [1,2,3,4,5].first(d)
       assert_equal(b, a)
@@ -460,6 +471,7 @@ class TC_NSArray < Test::Unit::TestCase
       a = alloc_nsarray(*d)
       b = d
       a = a.flatten
+      assert_kind_of(NSArray, a)
       b = b.flatten
       a = map_to_ruby(a)
       assert_equal(b, a)
@@ -534,6 +546,7 @@ class TC_NSArray < Test::Unit::TestCase
     0.upto(6) do |d|
       a = alloc_nsarray(1,2,3,4,5)
       a = a.last(d)
+      assert_kind_of(NSArray, a)
       a = map_to_int(a)
       b = [1,2,3,4,5].last(d)
       assert_equal(b, a)
@@ -575,6 +588,7 @@ class TC_NSArray < Test::Unit::TestCase
   def test_rassoc
     a = alloc_nsarray([], 1, [5,4], [6,7])
     r = a.rassoc(4)
+    assert_kind_of(NSArray, r)
     r = map_to_int(r)
     assert_equal([5,4], r)
   end
@@ -583,6 +597,7 @@ class TC_NSArray < Test::Unit::TestCase
     a = alloc_nsarray(1,2,3,4,5)
     b = [1,2,3,4,5]
     a = a.reverse
+    assert_kind_of(NSArray, a)
     b = b.reverse
     a = map_to_int(a)
     assert_equal(b, a)
@@ -591,6 +606,13 @@ class TC_NSArray < Test::Unit::TestCase
   def test_reverse!
     a = alloc_nsarray(1,2,3,4,5)
     b = [1,2,3,4,5]
+    a.reverse!
+    b.reverse!
+    a = map_to_int(a)
+    assert_equal(b, a)
+    
+    a = alloc_nsarray(1,2,3,4,5,6)
+    b = [1,2,3,4,5,6]
     a.reverse!
     b.reverse!
     a = map_to_int(a)
@@ -706,6 +728,7 @@ class TC_NSArray < Test::Unit::TestCase
       a = alloc_nsarray(*d)
       b = d
       a = a.sort
+      assert_kind_of(NSArray, a)
       b = b.sort
       a = map_to_ruby(a)
       assert_equal(b, a)
@@ -732,6 +755,7 @@ class TC_NSArray < Test::Unit::TestCase
       a = alloc_nsarray(*d)
       b = d
       a = a.transpose
+      assert_kind_of(NSArray, a)
       b = b.transpose
       a = a.map {|i| map_to_ruby(i) }
       assert_equal(b, a)
@@ -752,6 +776,7 @@ class TC_NSArray < Test::Unit::TestCase
       a = alloc_nsarray(*d)
       b = d
       a = a.uniq
+      assert_kind_of(NSArray, a)
       b = b.uniq
       a = map_to_ruby(a)
       assert_equal(b, a)
@@ -803,10 +828,11 @@ class TC_NSArray < Test::Unit::TestCase
   end
   
   def test_values_at
-    [[], [1], [5], [1,6,7], [-1], [-8,-1,2,5,6,2]].each do |d|
+    [[], [1], [4], [1,3,4], [-1], [-3,-1,2,4,3,2]].each do |d|
       a = alloc_nsarray(1,2,3,4,5)
       b = [1,2,3,4,5]
       x = a.values_at(*d)
+      assert_kind_of(NSArray, x)
       y = b.values_at(*d)
       x = map_to_int(x)
       assert_equal(y, x)
