@@ -171,6 +171,104 @@ module OSX
       self
     end
     
+    def &(other)
+      ary = other
+      unless ary.is_a? Array
+        if ary.respond_to?(:to_ary)
+          ary = ary.to_ary
+          unless ary.is_a? Array
+            raise TypeError, "can't convert #{other.class} into Array"
+          end
+        else
+          raise TypeError, "can't convert #{other.class} into Array"
+        end
+      end
+      result = []
+      dic = OSX::NSMutableDictionary.alloc.init
+      each {|i| dic.setObject_forKey(i, i) }
+      ary.each do |i|
+        if dic.objectForKey(i)
+          result << i
+          dic.removeObjectForKey(i)
+        end
+      end
+      result
+    end
+    
+    def |(other)
+      ary = other
+      unless ary.is_a? Array
+        if ary.respond_to?(:to_ary)
+          ary = ary.to_ary
+          unless ary.is_a? Array
+            raise TypeError, "can't convert #{other.class} into Array"
+          end
+        else
+          raise TypeError, "can't convert #{other.class} into Array"
+        end
+      end
+      result = []
+      dic = OSX::NSMutableDictionary.alloc.init
+      [self, ary].each do |obj|
+        obj.each do |i|
+          unless dic.objectForKey(i)
+            dic.setObject_forKey(i, i)
+            result << i
+          end
+        end
+      end
+      result
+    end
+    
+    def *(arg)
+      case arg
+      when Numeric
+        times = arg.to_i
+        result = []
+        ary = to_a
+        times.times {|i| result.concat(ary) }
+        result
+      when String
+        join(arg)
+      else
+        raise TypeError, "can't convert #{arg.class} into Integer"
+      end
+    end
+    
+    def +(other)
+      ary = other
+      unless ary.is_a? Array
+        if ary.respond_to?(:to_ary)
+          ary = ary.to_ary
+          unless ary.is_a? Array
+            raise TypeError, "can't convert #{other.class} into Array"
+          end
+        else
+          raise TypeError, "can't convert #{other.class} into Array"
+        end
+      end
+      to_a.concat(ary)
+    end
+    
+    def -(other)
+      ary = other
+      unless ary.is_a? Array
+        if ary.respond_to?(:to_ary)
+          ary = ary.to_ary
+          unless ary.is_a? Array
+            raise TypeError, "can't convert #{other.class} into Array"
+          end
+        else
+          raise TypeError, "can't convert #{other.class} into Array"
+        end
+      end
+      result = []
+      dic = OSX::NSMutableDictionary.alloc.init
+      ary.each {|i| dic.setObject_forKey(i, i) }
+      each {|i| result << i unless dic.objectForKey(i) }
+      result
+    end
+    
     def assoc(key)
       each do |i|
         if i.is_a? OSX::NSArray
