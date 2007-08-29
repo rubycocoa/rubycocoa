@@ -14,17 +14,17 @@ class TC_NSArray < Test::Unit::TestCase
   
   def map_to_nsnumber(ary)
     return nil unless ary
-    ary.map {|i| NSNumber.numberWithInt(i) }
+    ary.to_a.map {|i| NSNumber.numberWithInt(i) }
   end
   
   def map_to_int(ary)
     return nil unless ary
-    ary.map {|i| i.is_a?(OSX::NSNumber) ? i.to_i : i }
+    ary.to_a.map {|i| i.is_a?(OSX::NSNumber) ? i.to_i : i }
   end
   
   def map_to_ruby(ary)
     return nil unless ary
-    ary.map {|i| i.is_a?(OSX::NSObject) ? i.to_ruby : i }
+    ary.to_a.map {|i| i.is_a?(OSX::NSObject) ? i.to_ruby : i }
   end
   
   def test_copy
@@ -836,6 +836,56 @@ class TC_NSArray < Test::Unit::TestCase
       y = b.values_at(*d)
       x = map_to_int(x)
       assert_equal(y, x)
+    end
+  end
+  
+  def test_grep
+    [['abc','d!ef','98adfa','zAvcz'], [1,2,3,4]].each do |d|
+      a = alloc_nsarray(*d)
+      b = d
+      x = a.grep(/^[a-z0-9]+$/) {|i| i.to_s*2 }
+      y = b.grep(/^[a-z0-9]+$/) {|i| i*2 }
+      assert_equal(y, x.to_ruby)
+    end
+  end
+  
+  def test_partition
+    [[1,2,3,4,5,6,7], []].each do |d|
+      a = alloc_nsarray(*d)
+      b = d
+      x = a.partition {|i| i.to_i < 4 }
+      y = b.partition {|i| i < 4 }
+      assert_equal(y, x.to_ruby)
+    end
+  end
+  
+  def test_reject
+    [[1,2,3,4,5,6,7], []].each do |d|
+      a = alloc_nsarray(*d)
+      b = d
+      x = a.reject {|i| i.to_i < 4 }
+      y = b.reject {|i| i < 4 }
+      assert_equal(y, x.to_ruby)
+    end
+  end
+  
+  def test_sort
+    [['abc','d!ef','98adfa','zAvcz'], [1,2,3,4]].each do |d|
+      a = alloc_nsarray(*d)
+      b = d
+      x = a.sort
+      y = b.sort
+      assert_equal(y, x.to_ruby)
+    end
+  end
+  
+  def test_sort_by
+    [[9,1,-5,4,8,0,3,4,12,8,3,6,7]].each do |d|
+      a = alloc_nsarray(*d)
+      b = d
+      x = a.sort_by {|i| i.to_i * 2 }
+      y = b.sort_by {|i| i.to_i * 2 }
+      assert_equal(y, x.to_ruby)
     end
   end
 end

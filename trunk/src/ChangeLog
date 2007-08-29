@@ -1,6 +1,15 @@
 2007-08-30  Satoshi Nakagawa <artension@gmail.com>
 
 	* framework/src/ruby/osx/objc/oc_attachments.rb,
+	  tests/tc_nsdictionary.rb:
+	- Added NSEnumerable:
+	    grep, map, collect, select, find_all, partition, reject,
+	    sort, sort_by.
+	- Updated tests.
+
+2007-08-30  Satoshi Nakagawa <artension@gmail.com>
+
+	* framework/src/ruby/osx/objc/oc_attachments.rb,
 	  tests/tc_nsdictionary.rb,
 	  tests/tc_attachments.rb:
 	- Added NSDictionaryAttachment methods:
