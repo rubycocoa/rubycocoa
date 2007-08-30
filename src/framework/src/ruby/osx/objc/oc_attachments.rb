@@ -65,6 +65,25 @@ module OSX
       sort {|a,b| a[0] <=> b[0] }.
       map! {|i| i[1] }
     end
+    
+    def zip(*args)
+      if block_given?
+        each_with_index do |obj,n|
+          cur = OSX::NSMutableArray.array
+          [self, *args].each {|i| cur.addObject(i[n]) }
+          yield(cur)
+        end
+        nil
+      else
+        result = OSX::NSMutableArray.array
+        each_with_index do |obj,n|
+          cur = OSX::NSMutableArray.array
+          [self, *args].each {|i| cur.addObject(i[n]) }
+          result.addObject(cur)
+        end
+        result
+      end
+    end
   end
 
   # NSString additions

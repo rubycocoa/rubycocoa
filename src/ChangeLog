@@ -1,7 +1,14 @@
 2007-08-30  Satoshi Nakagawa <artension@gmail.com>
 
 	* framework/src/ruby/osx/objc/oc_attachments.rb,
-	  tests/tc_nsdictionary.rb:
+	  tests/tc_nsarray.rb:
+	- Added NSEnumerable#zip.
+	- Updated tests.
+
+2007-08-30  Satoshi Nakagawa <artension@gmail.com>
+
+	* framework/src/ruby/osx/objc/oc_attachments.rb,
+	  tests/tc_nsarray.rb:
 	- Added NSEnumerable:
 	    grep, map, collect, select, find_all, partition, reject,
 	    sort, sort_by.
