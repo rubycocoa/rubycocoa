@@ -378,7 +378,7 @@ module OSX
     end
     
     def collect!
-      each_with_index {|i,n| replaceObjectAtIndex_withObject(n, yield(i)) }
+      copy.each_with_index {|i,n| replaceObjectAtIndex_withObject(n, yield(i)) }
       self
     end
     alias_method :map!, :collect!
@@ -1092,14 +1092,14 @@ module OSX
     end
     
     def reject!
-      result = nil
-      each do |key,value|
-        if yield(key, value)
-          removeObjectForKey(key)
-          result = self
-        end
+      keys = OSX::NSMutableArray.array
+      each {|key,value| keys.addObject(key) if yield(key, value) }
+      if keys.count > 0
+        removeObjectsForKeys(keys)
+        self
+      else
+        nil
       end
-      result
     end
     
     def empty?
