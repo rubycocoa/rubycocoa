@@ -888,4 +888,29 @@ class TC_NSArray < Test::Unit::TestCase
       assert_equal(y, x.to_ruby)
     end
   end
+  
+  def test_zip
+    [
+      [
+        [1,2,3],
+        [[4,5,6],[7,8,9]]
+      ],
+      [
+        [],
+        []
+      ],
+      [
+        [],
+        [[],[],[]]
+      ]
+    ].each do |d|
+      a = alloc_nsarray(*d[0])
+      b = d[0]
+      x = a.zip(*d[1])
+      y = b.zip(*d[1])
+      a.zip(*d[1]) {}
+      b.zip(*d[1]) {}
+      assert_equal(y, x.to_ruby)
+    end
+  end
 end
