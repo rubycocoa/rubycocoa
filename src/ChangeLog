@@ -1,3 +1,8 @@
+2007-09-03  Satoshi Nakagawa <artension@gmail.com>
+
+	* package/tmpl/postflight-universal.rb:
+	Fixed an error, "Please install again" on reinstalling.
+
 2007-08-30  Satoshi Nakagawa <artension@gmail.com>
 
 	* framework/src/ruby/osx/objc/oc_attachments.rb:
