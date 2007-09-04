@@ -232,7 +232,7 @@ module OSX
           end
           args[1]
         else
-          raise ArgumentError, "wrong number of arguments (#{args.length}) for 3)"
+          raise ArgumentError, "wrong number of arguments (#{args.length} for 3)"
         end
       when 3
         start, len, value = args
@@ -252,7 +252,7 @@ module OSX
           value
         end
       else
-        raise ArgumentError, "wrong number of arguments (#{args.length}) for 3)"
+        raise ArgumentError, "wrong number of arguments (#{args.length} for 3)"
       end
     end
     
@@ -449,7 +449,7 @@ module OSX
       count = self.count
       len = args.length
       if len == 0 || len > 2
-        raise ArgumentError, "wrong number of arguments (#{len}) for 2)"
+        raise ArgumentError, "wrong number of arguments (#{len} for 2)"
       end
       index = args.first
       unless index.is_a? Numeric
@@ -564,7 +564,7 @@ module OSX
         end
         self
       else
-        raise ArgumentError, "wrong number of arguments (#{args.length}) for 2)"
+        raise ArgumentError, "wrong number of arguments (#{args.length} for 2)"
       end
     end
     
@@ -626,7 +626,7 @@ module OSX
         val = args.first
         each_with_index {|i,n| return n if i.isEqual(val) }
       else
-        raise ArgumentError, "wrong number of arguments (#{args.length}) for 1)"
+        raise ArgumentError, "wrong number of arguments (#{args.length} for 1)"
       end
       nil
     end
@@ -744,7 +744,7 @@ module OSX
           return n if i.isEqual(val)
         end
       else
-        raise ArgumentError, "wrong number of arguments (#{args.length}) for 1)"
+        raise ArgumentError, "wrong number of arguments (#{args.length} for 1)"
       end
       nil
     end
@@ -901,7 +901,7 @@ module OSX
           _read_impl(method, [range])
         end
       else
-        raise ArgumentError, "wrong number of arguments (#{args.length}) for 2)"
+        raise ArgumentError, "wrong number of arguments (#{args.length} for 2)"
       end
     end    
   end
@@ -1041,7 +1041,7 @@ module OSX
           nil
         end
       else
-        raise ArgumentError, "wrong number of arguments (#{args.length}) for 2)"
+        raise ArgumentError, "wrong number of arguments (#{args.length} for 2)"
       end
     end
     
