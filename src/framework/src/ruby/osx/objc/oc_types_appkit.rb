@@ -42,7 +42,7 @@ class OSX::NSRange
     end
   end
   def to_range
-    Range.new(location, location + length - 1)
+    Range.new(location, location + length, true)
   end
   def contain?(arg)
     case arg
