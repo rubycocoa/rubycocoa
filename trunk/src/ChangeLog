@@ -1,5 +1,12 @@
 2007-09-05  Satoshi Nakagawa <artension@gmail.com>
 
+	* framework/src/ruby/osx/objc/oc_types_appkit.rb,
+	  tests/tc_types.rb:
+	- Changed NSRange#to_range to return a Range with exclude_end.
+	- Updated a test.
+
+2007-09-05  Satoshi Nakagawa <artension@gmail.com>
+
 	* framework/src/ruby/osx/objc/oc_attachments.rb:
 	Fixed typo.
 
