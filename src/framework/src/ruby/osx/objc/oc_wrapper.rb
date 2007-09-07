@@ -84,7 +84,7 @@ module OSX
       end
 
       # convert foo= to setFoo
-      if m_name[-1] == ?=
+      if m_name[-1] == ?= and m_name.index(?_, 1).nil?
         m_name.chop!
         m_name = 'set' + m_name[0].chr.upcase + m_name[1..-1]
       end
