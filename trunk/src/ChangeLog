@@ -1,3 +1,8 @@
+2007-09-07  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* framework/src/ruby/osx/objc/oc_wrapper.rb:
+	Do not translate 'set' methods that get more than one argument.
+
 2007-09-05  Satoshi Nakagawa <artension@gmail.com>
 
 	* framework/src/ruby/osx/objc/oc_types_appkit.rb,
