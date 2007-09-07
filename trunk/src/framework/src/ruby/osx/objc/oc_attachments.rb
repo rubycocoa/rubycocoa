@@ -152,10 +152,72 @@ module OSX
     end
   end
 
-  # For NSArray duck typing
-  module NSArrayAttachment
-    include NSEnumerable
+  # NSArray additions
+  class NSArray
+    include OSX::OCObjWrapper
 
+    def dup
+      mutableCopy
+    end
+    
+    def clone
+      obj = dup
+      obj.freeze if frozen?
+      obj.taint if tainted?
+      obj
+    end
+
+    # enable to treat as Array
+    def to_ary
+      to_a
+    end
+
+    # comparison between Ruby Array and Cocoa NSArray
+    def ==(other)
+      if other.is_a? OSX::NSArray
+        isEqualToArray?(other)
+      elsif other.respond_to? :to_ary
+        to_a == other.to_ary
+      else
+        false
+      end
+    end
+
+    def <=>(other)
+      if other.respond_to? :to_ary
+        to_a <=> other.to_ary
+      else
+        nil
+      end
+    end
+
+    # responds to Ruby String methods
+    alias_method :_rbobj_respond_to?, :respond_to?
+    def respond_to?(mname, private = false)
+      Array.public_method_defined?(mname) or _rbobj_respond_to?(mname, private)
+    end
+
+    alias_method :objc_method_missing, :method_missing
+    def method_missing(mname, *args, &block)
+      ## TODO: should test "respondsToSelector:"
+      if Array.public_method_defined?(mname)
+        # call as Ruby array
+        rcv = to_a
+        org_val = rcv.dup
+        result = rcv.send(mname, *args, &block)
+        # bang methods modify receiver itself, need to set the new value.
+        # if the receiver is immutable, NSInvalidArgumentException raises.
+        if rcv != org_val
+          setArray(rcv)
+        end
+      else
+        # call as objc array
+        result = objc_method_missing(mname, *args)
+      end
+      result
+    end
+
+    # For NSArray duck typing
     def each
       iter = objectEnumerator
       while obj = iter.nextObject
@@ -163,7 +225,7 @@ module OSX
       end
       self
     end
-    
+
     def reverse_each
       iter = reverseObjectEnumerator
       while obj = iter.nextObject
@@ -255,12 +317,12 @@ module OSX
         raise ArgumentError, "wrong number of arguments (#{args.length} for 3)"
       end
     end
-    
+
     def <<(obj)
       addObject(obj)
       self
     end
-    
+
     def &(other)
       ary = other
       unless ary.is_a?(Array) || ary.is_a?(OSX::NSArray)
@@ -284,7 +346,7 @@ module OSX
       end
       result
     end
-    
+
     def |(other)
       ary = other
       unless ary.is_a?(Array) || ary.is_a?(OSX::NSArray)
@@ -309,7 +371,7 @@ module OSX
       end
       result
     end
-    
+
     def *(arg)
       case arg
       when Numeric
@@ -320,7 +382,7 @@ module OSX
         raise TypeError, "can't convert #{arg.class} into Integer"
       end
     end
-    
+
     def +(other)
       ary = other
       unless ary.is_a?(Array) || ary.is_a?(OSX::NSArray)
@@ -337,7 +399,7 @@ module OSX
       result.addObjectsFromArray(other)
       result
     end
-    
+
     def -(other)
       ary = other
       unless ary.is_a?(Array) || ary.is_a?(OSX::NSArray)
@@ -356,7 +418,7 @@ module OSX
       each {|i| result.addObject(i) unless dic.objectForKey(i) }
       result
     end
-    
+
     def assoc(key)
       each do |i|
         if i.is_a? OSX::NSArray
@@ -367,31 +429,31 @@ module OSX
       end
       nil
     end
-    
+
     def at(pos)
       self[pos]
     end
-    
+
     def clear
       removeAllObjects
       self
     end
-    
+
     def collect!
       copy.each_with_index {|i,n| replaceObjectAtIndex_withObject(n, yield(i)) }
       self
     end
     alias_method :map!, :collect!
-    
+
     # does nothing because NSArray cannot have nil
     def compact; mutableCopy; end
     def compact!; nil; end
-    
+
     def concat(other)
       addObjectsFromArray(other)
       self
     end
-    
+
     def delete(val)
       indexes = OSX::NSMutableIndexSet.indexSet
       each_with_index {|i,n| indexes.addIndex(n) if i.isEqual(val) }
@@ -404,7 +466,7 @@ module OSX
         nil
       end
     end
-    
+
     def delete_at(pos)
       unless pos.is_a? Numeric
         raise TypeError, "can't convert #{pos.class} into Integer"
@@ -420,12 +482,12 @@ module OSX
         nil
       end
     end
-    
+
     def delete_if(&block)
       reject!(&block)
       self
     end
-    
+
     def reject!
       indexes = OSX::NSMutableIndexSet.alloc.init
       each_with_index {|i,n| indexes.addIndex(n) if yield(i) }
@@ -436,15 +498,15 @@ module OSX
         nil
       end
     end
-    
+
     def each_index
       each_with_index {|i,n| yield(n) }
     end
-    
+
     def empty?
       count == 0
     end
-    
+
     def fetch(*args)
       count = self.count
       len = args.length
@@ -469,7 +531,7 @@ module OSX
         end
       end
     end
-    
+
     def fill(*args)
       count = self.count
       len = args.length
@@ -567,7 +629,7 @@ module OSX
         raise ArgumentError, "wrong number of arguments (#{args.length} for 2)"
       end
     end
-    
+
     def first(n=nil)
       if n
         if n.is_a? Numeric
@@ -583,7 +645,7 @@ module OSX
         self[0]
       end
     end
-    
+
     def flatten
       result = OSX::NSMutableArray.array
       each do |i|
@@ -595,7 +657,7 @@ module OSX
       end
       result
     end
-    
+
     def flatten!
       flat = true
       result = OSX::NSMutableArray.array
@@ -614,11 +676,11 @@ module OSX
         self
       end
     end
-    
+
     def include?(val)
       index(val) != nil
     end
-    
+
     def index(*args)
       if block_given?
         each_with_index {|i,n| return n if yield(i) }
@@ -630,7 +692,7 @@ module OSX
       end
       nil
     end
-    
+
     def insert(n, *vals)
       if n  == -1
         push(*vals)
@@ -655,7 +717,7 @@ module OSX
       end
       s
     end
-    
+
     def last(n=nil)
       if n
         if n.is_a? Numeric
@@ -677,11 +739,11 @@ module OSX
         self[-1]
       end
     end
-    
+
     def pack(template)
       to_ruby.pack(template)
     end
-    
+
     def pop
       if count > 0
         result = lastObject
@@ -703,7 +765,7 @@ module OSX
       end
       self
     end
-    
+
     def rassoc(key)
       each do |i|
         if i.is_a? OSX::NSArray
@@ -714,21 +776,21 @@ module OSX
       end
       nil
     end
-    
+
     def replace(another)
       setArray(another)
       self
     end
-    
+
     def reverse
       OSX::NSMutableArray.arrayWithArray(to_a.reverse)
     end
-    
+
     def reverse!
       setArray(to_a.reverse)
       self
     end
-    
+
     def rindex(*args)
       if block_given?
         n = count
@@ -748,7 +810,7 @@ module OSX
       end
       nil
     end
-    
+
     def shift
       unless empty?
         result = objectAtIndex(0)
@@ -764,28 +826,28 @@ module OSX
     end
     alias_method :length, :size
     alias_method :nitems, :size
-    
+
     def slice(*args)
       self[*args]
     end
-    
+
     def slice!(*args)
       _read_impl(:slice!, args)
     end
-    
+
     def sort!(&block)
       setArray(to_a.sort(&block))
       self
     end
-    
+
     def to_splat
       to_a
     end
-    
+
     def transpose
       OSX::NSMutableArray.arrayWithArray(to_a.transpose)
     end
-    
+
     def uniq
       result = OSX::NSMutableArray.array
       dic = OSX::NSMutableDictionary.dictionary
@@ -797,7 +859,7 @@ module OSX
       end
       result
     end
-    
+
     def uniq!
       if empty?
         nil
@@ -819,7 +881,7 @@ module OSX
         end
       end
     end
-    
+
     def unshift(*args)
       if count == 0
         push(*args)
@@ -836,7 +898,7 @@ module OSX
         self
       end
     end
-    
+
     def values_at(*indexes)
       result = OSX::NSMutableArray.array
       indexes.each {|i| result.addObject(self[i]) }
@@ -846,7 +908,7 @@ module OSX
     alias_method :indices, :values_at
 
     private
-    
+
     def _read_impl(method, args)
       slice = method == :slice!
       count = self.count
@@ -903,300 +965,6 @@ module OSX
       else
         raise ArgumentError, "wrong number of arguments (#{args.length} for 2)"
       end
-    end    
-  end
-
-  # NSArray additions
-  class NSArray
-    include OSX::OCObjWrapper
-
-    def dup
-      mutableCopy
-    end
-    
-    def clone
-      obj = dup
-      obj.freeze if frozen?
-      obj.taint if tainted?
-      obj
-    end
-
-    # enable to treat as Array
-    def to_ary
-      to_a
-    end
-
-    # comparison between Ruby Array and Cocoa NSArray
-    def ==(other)
-      if other.is_a? OSX::NSArray
-        isEqualToArray?(other)
-      elsif other.respond_to? :to_ary
-        to_a == other.to_ary
-      else
-        false
-      end
-    end
-
-    def <=>(other)
-      if other.respond_to? :to_ary
-        to_a <=> other.to_ary
-      else
-        nil
-      end
-    end
-
-    # responds to Ruby String methods
-    alias_method :_rbobj_respond_to?, :respond_to?
-    def respond_to?(mname, private = false)
-      Array.public_method_defined?(mname) or _rbobj_respond_to?(mname, private)
-    end
-
-    alias_method :objc_method_missing, :method_missing
-    def method_missing(mname, *args, &block)
-      ## TODO: should test "respondsToSelector:"
-      if Array.public_method_defined?(mname)
-        # call as Ruby array
-        rcv = to_a
-        org_val = rcv.dup
-        result = rcv.send(mname, *args, &block)
-        # bang methods modify receiver itself, need to set the new value.
-        # if the receiver is immutable, NSInvalidArgumentException raises.
-        if rcv != org_val
-          setArray(rcv)
-        end
-      else
-        # call as objc array
-        result = objc_method_missing(mname, *args)
-      end
-      result
-    end
-  end
-  class NSArray
-    include NSArrayAttachment
-  end
-
-  # For NSDictionary duck typing
-  module NSDictionaryAttachment
-    include NSEnumerable
-
-    def each
-      iter = keyEnumerator
-      while key = iter.nextObject
-        yield([key, objectForKey(key)])
-      end
-      self
-    end
-
-    def each_pair
-      iter = keyEnumerator
-      while key = iter.nextObject
-        yield(key, objectForKey(key))
-      end
-      self
-    end
-    
-    def each_key
-      iter = keyEnumerator
-      while key = iter.nextObject
-        yield(key)
-      end
-      self
-    end
-    
-    def each_value
-      iter = objectEnumerator
-      while obj = iter.nextObject
-        yield(obj)
-      end
-      self
-    end
-    
-    def [](key)
-      result = objectForKey(key)
-      if result
-        result
-      else
-        default(key)
-      end
-    end
-
-    def []=(key, obj)
-      setObject_forKey(obj, key)
-      obj
-    end
-    alias_method :store, :[]=
-    
-    def clear
-      removeAllObjects
-      self
-    end
-    
-    def default(*args)
-      if args.length <= 1
-        if @default_proc
-          @default_proc.call(self, args.first)
-        elsif @default
-          @default
-        else
-          nil
-        end
-      else
-        raise ArgumentError, "wrong number of arguments (#{args.length} for 2)"
-      end
-    end
-    
-    def default=(value)
-      @default = value
-    end
-    
-    def default_proc
-      @default_proc
-    end
-    
-    def default_proc=(value)
-      @default_proc = value
-    end
-    
-    def delete(key)
-      obj = objectForKey(key)
-      if obj
-        removeObjectForKey(key)
-        obj
-      else
-        if block_given?
-          yield(key)
-        else
-          nil
-        end
-      end
-    end
-    
-    def delete_if(&block)
-      reject!(&block)
-      self
-    end
-    
-    def fetch(key, *args)
-      result = objectForKey(key)
-      if result
-        result
-      else
-        if args.length > 0
-          args.first
-        elsif block_given?
-          yield(key)
-        else
-          raise IndexError, "key not found"
-        end
-      end
-    end
-    
-    def reject!
-      keys = OSX::NSMutableArray.array
-      each {|key,value| keys.addObject(key) if yield(key, value) }
-      if keys.count > 0
-        removeObjectsForKeys(keys)
-        self
-      else
-        nil
-      end
-    end
-    
-    def empty?
-      count == 0
-    end
-    
-    def has_key?(key)
-      objectForKey(key) != nil
-    end
-    alias_method :include?, :has_key?
-    alias_method :key?, :has_key?
-    alias_method :member?, :has_key?
-    
-    def has_value?(value)
-      each_value {|i| return true if i.isEqual?(value) }
-      false
-    end
-    alias_method :value?, :has_value?
-    
-    def invert
-      result = {}
-      each_pair {|key,value| result[value] = key }
-      result
-    end
-    
-    def key(val)
-      each_pair {|key,value| return key if value.isEqual?(val) }
-      nil
-    end
-    
-    def keys
-      allKeys
-    end
-    
-    def merge(other, &block)
-      dic = mutableCopy
-      dic.merge!(other, &block)
-      dic
-    end
-    
-    def merge!(other)
-      if block_given?
-        other.each do |key,value|
-          if mine = objectForKey(key)
-            setObject_forKey(yield(key, mine, value),key)
-          else
-            setObject_forKey(value,key)
-          end
-        end
-      else
-        other.each {|key,value| setObject_forKey(value,key) }
-      end
-      self
-    end
-    alias_method :update, :merge!
-    
-    def shift
-      if empty?
-        default
-      else
-        key = allKeys.objectAtIndex(0)
-        value = objectForKey(key)
-        removeObjectForKey(key)
-        OSX::NSMutableArray.arrayWithArray([key, value])
-      end
-    end
-
-    def size
-      count
-    end
-    alias_method :length, :size
-    
-    def rehash; self; end
-    
-    def reject(&block)
-      to_hash.delete_if(&block)
-    end
-    
-    def replace(other)
-      setDictionary(other)
-      self
-    end
-
-    def values
-      allValues
-    end
-    
-    def values_at(*args)
-      result = OSX::NSMutableArray.array
-      args.each do |k|
-        if v = objectForKey(k)
-          result.addObject(v)
-        else
-          result.addObject(default)
-        end
-      end
-      result
     end
   end
 
@@ -1266,9 +1034,227 @@ module OSX
       end
       result
     end
-  end
-  class NSDictionary
-    include NSDictionaryAttachment
+    
+    # For NSDictionary duck typing
+    def each
+      iter = keyEnumerator
+      while key = iter.nextObject
+        yield([key, objectForKey(key)])
+      end
+      self
+    end
+
+    def each_pair
+      iter = keyEnumerator
+      while key = iter.nextObject
+        yield(key, objectForKey(key))
+      end
+      self
+    end
+
+    def each_key
+      iter = keyEnumerator
+      while key = iter.nextObject
+        yield(key)
+      end
+      self
+    end
+
+    def each_value
+      iter = objectEnumerator
+      while obj = iter.nextObject
+        yield(obj)
+      end
+      self
+    end
+
+    def [](key)
+      result = objectForKey(key)
+      if result
+        result
+      else
+        default(key)
+      end
+    end
+
+    def []=(key, obj)
+      setObject_forKey(obj, key)
+      obj
+    end
+    alias_method :store, :[]=
+
+    def clear
+      removeAllObjects
+      self
+    end
+
+    def default(*args)
+      if args.length <= 1
+        if @default_proc
+          @default_proc.call(self, args.first)
+        elsif @default
+          @default
+        else
+          nil
+        end
+      else
+        raise ArgumentError, "wrong number of arguments (#{args.length} for 2)"
+      end
+    end
+
+    def default=(value)
+      @default = value
+    end
+
+    def default_proc
+      @default_proc
+    end
+
+    def default_proc=(value)
+      @default_proc = value
+    end
+
+    def delete(key)
+      obj = objectForKey(key)
+      if obj
+        removeObjectForKey(key)
+        obj
+      else
+        if block_given?
+          yield(key)
+        else
+          nil
+        end
+      end
+    end
+
+    def delete_if(&block)
+      reject!(&block)
+      self
+    end
+
+    def fetch(key, *args)
+      result = objectForKey(key)
+      if result
+        result
+      else
+        if args.length > 0
+          args.first
+        elsif block_given?
+          yield(key)
+        else
+          raise IndexError, "key not found"
+        end
+      end
+    end
+
+    def reject!
+      keys = OSX::NSMutableArray.array
+      each {|key,value| keys.addObject(key) if yield(key, value) }
+      if keys.count > 0
+        removeObjectsForKeys(keys)
+        self
+      else
+        nil
+      end
+    end
+
+    def empty?
+      count == 0
+    end
+
+    def has_key?(key)
+      objectForKey(key) != nil
+    end
+    alias_method :include?, :has_key?
+    alias_method :key?, :has_key?
+    alias_method :member?, :has_key?
+
+    def has_value?(value)
+      each_value {|i| return true if i.isEqual?(value) }
+      false
+    end
+    alias_method :value?, :has_value?
+
+    def invert
+      result = {}
+      each_pair {|key,value| result[value] = key }
+      result
+    end
+
+    def key(val)
+      each_pair {|key,value| return key if value.isEqual?(val) }
+      nil
+    end
+
+    def keys
+      allKeys
+    end
+
+    def merge(other, &block)
+      dic = mutableCopy
+      dic.merge!(other, &block)
+      dic
+    end
+
+    def merge!(other)
+      if block_given?
+        other.each do |key,value|
+          if mine = objectForKey(key)
+            setObject_forKey(yield(key, mine, value),key)
+          else
+            setObject_forKey(value,key)
+          end
+        end
+      else
+        other.each {|key,value| setObject_forKey(value,key) }
+      end
+      self
+    end
+    alias_method :update, :merge!
+
+    def shift
+      if empty?
+        default
+      else
+        key = allKeys.objectAtIndex(0)
+        value = objectForKey(key)
+        removeObjectForKey(key)
+        OSX::NSMutableArray.arrayWithArray([key, value])
+      end
+    end
+
+    def size
+      count
+    end
+    alias_method :length, :size
+
+    def rehash; self; end
+
+    def reject(&block)
+      to_hash.delete_if(&block)
+    end
+
+    def replace(other)
+      setDictionary(other)
+      self
+    end
+
+    def values
+      allValues
+    end
+
+    def values_at(*args)
+      result = OSX::NSMutableArray.array
+      args.each do |k|
+        if v = objectForKey(k)
+          result.addObject(v)
+        else
+          result.addObject(default)
+        end
+      end
+      result
+    end
   end
 
   class NSUserDefaults

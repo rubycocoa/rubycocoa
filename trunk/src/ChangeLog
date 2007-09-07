@@ -1,3 +1,19 @@
+2007-09-07  Eloy Duran <eloy.de.enige@gmail.com>
+
+	* framework/src/ruby/osx/objc/oc_attachments.rb,
+	  framework/tool/gen_bridge_doc/lib/lib/method_def.rb,
+	  framework/tool/gen_bridge_doc/lib/lib/class_def.rb,
+	  framework/tool/gen_bridge_doc/lib/lib/clean_up.rb,
+	  framework/tool/gen_bridge_doc/DOCUMENTATION_VERSION,
+	  framework/tool/gen_bridge_doc.rb:
+	- Directly added duck-type methods to the NSArray & NSDictionary classes
+	  instead of including them from modules. This is so the methods are picked up by rdoc.
+	- Now also rdocify: oc_attachments.rb, oc_attachments_appkit.rb,
+	  oc_types.rb, oc_types_appkit.rb & ruby_addition.rb.
+	- Updated the gen_bridge_doc tool to work with the latest update from 13-08-2007.
+	- Fixed a bug where </i> tags weren't replaced by '_'.
+	- Added documentation for the translated bool methods, eg: isRunning -> running?.
+
 2007-09-07  Laurent Sansonetti <lsansonetti@apple.com>
 
 	* framework/src/ruby/osx/objc/oc_wrapper.rb:
