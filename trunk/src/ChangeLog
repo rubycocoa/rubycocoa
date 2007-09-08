@@ -1,5 +1,12 @@
 2007-09-08  Satoshi Nakagawa <artension@gmail.com>
 
+	* framework/src/ruby/osx/objc/oc_attachments.rb,
+	  tests/tc_types.rb:
+	- Added NSNumber#is_float?.
+	- Updated tests.
+
+2007-09-08  Satoshi Nakagawa <artension@gmail.com>
+
 	* framework/src/ruby/osx/objc/oc_attachments.rb:
 	NSArray and NSDictionary should include NSEnumerable.
 
