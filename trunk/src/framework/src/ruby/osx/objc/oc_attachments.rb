@@ -1315,7 +1315,7 @@ module OSX
       self.floatValue
     end
     
-    def is_float?
+    def float?
       OSX::CFNumberIsFloatType(self)
     end
     
@@ -1323,7 +1323,7 @@ module OSX
       if other.is_a? NSNumber
         isEqualToNumber?(other)
       elsif other.is_a? Numeric
-        if is_float?
+        if float?
           to_f == other
         else
           to_i == other
@@ -1337,7 +1337,7 @@ module OSX
       if other.is_a? NSNumber
         compare(other)
       elsif other.is_a? Numeric
-        if is_float?
+        if float?
           to_f <=> other
         else
           to_i <= other
@@ -1364,7 +1364,7 @@ module OSX
       when OSX::NSCFBoolean
         self.boolValue
       when OSX::NSNumber
-        self.is_float? ? self.to_f : self.to_i
+        self.float? ? self.to_f : self.to_i
       when OSX::NSString
         self.to_s
       when OSX::NSAttributedString
