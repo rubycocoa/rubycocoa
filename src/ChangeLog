@@ -2,6 +2,12 @@
 
 	* framework/src/ruby/osx/objc/oc_attachments.rb,
 	  tests/tc_types.rb:
+	Renamed NSNumber#is_float? to float?.
+
+2007-09-08  Satoshi Nakagawa <artension@gmail.com>
+
+	* framework/src/ruby/osx/objc/oc_attachments.rb,
+	  tests/tc_types.rb:
 	- Added NSNumber#is_float?.
 	- Updated tests.
 
