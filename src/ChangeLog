@@ -1,3 +1,8 @@
+2007-09-08  Satoshi Nakagawa <artension@gmail.com>
+
+	* framework/src/ruby/osx/objc/oc_attachments.rb:
+	NSArray and NSDictionary should include NSEnumerable.
+
 2007-09-07  Eloy Duran <eloy.de.enige@gmail.com>
 
 	* framework/src/ruby/osx/objc/oc_attachments.rb,

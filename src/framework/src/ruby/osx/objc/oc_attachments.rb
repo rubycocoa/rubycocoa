@@ -967,6 +967,9 @@ module OSX
       end
     end
   end
+  class NSArray
+    include NSEnumerable
+  end
 
   # NSDictionary additions
   class NSDictionary
@@ -1255,6 +1258,9 @@ module OSX
       end
       result
     end
+  end
+  class NSDictionary
+    include NSEnumerable
   end
 
   class NSUserDefaults
