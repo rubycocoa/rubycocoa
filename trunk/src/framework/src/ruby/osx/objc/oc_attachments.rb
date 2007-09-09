@@ -125,6 +125,10 @@ module OSX
       end
     end
 
+    def inspect
+      "#<#{self.class.to_s.gsub(/^OSX::/, '')} \"#{self.to_s}\">"
+    end
+    
     # responds to Ruby String methods
     alias_method :_rbobj_respond_to?, :respond_to?
     def respond_to?(mname, private = false)
@@ -218,6 +222,7 @@ module OSX
     end
 
     # For NSArray duck typing
+    
     def each
       iter = objectEnumerator
       while obj = iter.nextObject
@@ -907,6 +912,10 @@ module OSX
     alias_method :indexes, :values_at
     alias_method :indices, :values_at
 
+    def inspect
+      "#<#{self.class.to_s.gsub(/^OSX::/, '')} #{ self.to_a.inspect }>"
+    end
+
     private
 
     def _read_impl(method, args)
@@ -1258,6 +1267,10 @@ module OSX
       end
       result
     end
+    
+    def inspect
+      "#<#{self.class.to_s.gsub(/^OSX::/, '')} #{ self.to_hash.inspect }>"
+    end
   end
   class NSDictionary
     include NSEnumerable
@@ -1340,11 +1353,22 @@ module OSX
         if float?
           to_f <=> other
         else
-          to_i <= other
+          to_i <=> other
         end
       else
         nil
       end
+    end
+    
+    def inspect
+      "#<#{self.class.to_s.gsub(/^OSX::/, '')} #{self.description}>"
+    end
+  end
+
+  # NSCFBoolean additions
+  class NSCFBoolean
+    def inspect
+      "#<#{self.class.to_s.gsub(/^OSX::/, '')} #{ (self == 1) ? true : false }>"
     end
   end
 

@@ -1,3 +1,10 @@
+2007-09-09  Eloy Duran <eloy.de.enige@gmail.com>
+
+	* framework/src/ruby/osx/objc/oc_attachments.rb,
+	  tests/tc_attachments.rb:
+	- Added useful inspect methods to NSString, NSNumber, NSArray, NSDictionary & NSCFBoolean.
+	- Fixed a typo bug in NSNumber#<=>.
+
 2007-09-08  Satoshi Nakagawa <artension@gmail.com>
 
 	* framework/src/ruby/osx/objc/oc_attachments.rb,
