@@ -140,13 +140,16 @@ module OSX
       ## TODO: should test "respondsToSelector:"
       if String.public_method_defined?(mname) && (mname != :length)
         # call as Ruby string
-        rcv = self.to_s
+        rcv = to_s
         org_val = rcv.dup
         result = rcv.send(mname, *args, &block)
+        if result.__id__ == rcv.__id__
+          result = self
+        end
         # bang methods modify receiver itself, need to set the new value.
         # if the receiver is immutable, NSInvalidArgumentException raises.
         if rcv != org_val
-          self.setString(rcv)
+          setString(rcv)
         end
       else
         # call as objc string
@@ -209,6 +212,9 @@ module OSX
         rcv = to_a
         org_val = rcv.dup
         result = rcv.send(mname, *args, &block)
+        if result.__id__ == rcv.__id__
+          result = self
+        end
         # bang methods modify receiver itself, need to set the new value.
         # if the receiver is immutable, NSInvalidArgumentException raises.
         if rcv != org_val
@@ -1035,6 +1041,9 @@ module OSX
         rcv = to_hash
         org_val = rcv.dup
         result = rcv.send(mname, *args, &block)
+        if result.__id__ == rcv.__id__
+          result = self
+        end
         # bang methods modify receiver itself, need to set the new value.
         # if the receiver is immutable, NSInvalidArgumentException raises.
         if rcv != org_val
