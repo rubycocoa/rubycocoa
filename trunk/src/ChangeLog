@@ -1,3 +1,9 @@
+2007-09-14  Satoshi Nakagawa <artension@gmail.com>
+
+	* framework/src/ruby/osx/objc/oc_attachments.rb:
+	Fixed a bug, #method_missing of NSString, NSArray and NSDictionary should return self
+	when Ruby objects returned self.
+
 2007-09-09  Eloy Duran <eloy.de.enige@gmail.com>
 
 	* framework/src/ruby/osx/objc/oc_attachments.rb,
