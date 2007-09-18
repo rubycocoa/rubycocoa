@@ -203,6 +203,12 @@ static id imp_slave (id rcv, SEL method)
 static id imp_rbobj (id rcv, SEL method)
 {
   id slave = get_slave(rcv);
+  if (slave == nil) {
+    // Lazily create the slave, because the traditional allocation methods that 
+    // we hook might not have been called.
+    slave = slave_obj_new(rcv);
+    set_slave(rcv, slave);
+  }
   VALUE rbobj = [slave __rbobj__];
   return (id)rbobj;
 }

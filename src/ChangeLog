@@ -1,3 +1,9 @@
+2007-09-18  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* framework/src/objc/OverrideMixin.m:
+	Create the slave objects at demand, if they do not exist yet. This fixes a 
+	bindings / CoreData problem in 10.5.
+
 2007-09-14  Satoshi Nakagawa <artension@gmail.com>
 
 	* framework/src/ruby/osx/objc/oc_attachments.rb:
