@@ -1,5 +1,10 @@
 2007-09-18  Laurent Sansonetti <lsansonetti@apple.com>
 
+	* sample/Stickies/English.lproj/Sticky.nib:
+	Make sure the resize corner view doesn't overlap with the sticky content
+	scroll view, as the later could intercept the mouseDrag event before it can
+	reach the corner view (in 10.5).
+
 	* framework/src/objc/OverrideMixin.m:
 	Create the slave objects at demand, if they do not exist yet. This fixes a 
 	bindings / CoreData problem in 10.5.
