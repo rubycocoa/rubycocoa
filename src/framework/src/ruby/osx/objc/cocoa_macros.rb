@@ -51,7 +51,12 @@ module OSX
       when NKF::JIS then NSISO2022JPStringEncoding
       when NKF::EUC then NSJapaneseEUCStringEncoding
       when NKF::SJIS then NSShiftJISStringEncoding
-      else NSProprietaryStringEncoding
+      else 
+        if defined? NSProprietaryStringEncoding
+          NSProprietaryStringEncoding
+        else
+          NSUTF8StringEncoding
+        end
       end
     end
 
