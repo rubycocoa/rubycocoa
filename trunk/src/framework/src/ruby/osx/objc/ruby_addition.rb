@@ -60,6 +60,9 @@ end
     def to_plist(format=nil)
       OSX.object_to_plist(self, format)
     end
+    def to_ns
+      OSX.rbobj_to_nsobj(self)
+    end
   end
 end
 
