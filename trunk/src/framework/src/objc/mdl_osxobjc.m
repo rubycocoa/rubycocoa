@@ -354,7 +354,7 @@ osx_rbobj_to_nsobj (VALUE rcv, VALUE obj)
   OBJCID_DATA_PTR(val)->retained = YES;
   OBJCID_DATA_PTR(val)->can_be_released = YES;
 
-  [ocid autorelease];
+  [pool release];
 
   return val;
 }
