@@ -1386,6 +1386,9 @@ module OSX
     def to_time
       Time.at(self.timeIntervalSince1970)
     end
+    def inspect
+      "#<#{self.class.to_s.gsub(/^OSX::/, '')} #{self.description}>"
+    end
   end
 
   # NSObject additions

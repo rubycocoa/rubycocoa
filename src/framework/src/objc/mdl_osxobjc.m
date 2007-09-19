@@ -291,10 +291,12 @@ rbobj_get_ocid (VALUE obj)
   if (rb_respond_to(obj, mtd))
     return rb_obj_ocid(obj);
 
+#if 0
   if (rb_respond_to(obj, rb_intern("to_nsobj"))) {
     VALUE nso = rb_funcall(obj, rb_intern("to_nsobj"), 0);
     return rb_obj_ocid(nso);
   }
+#endif
 
   return nil;
 }
@@ -333,6 +335,28 @@ osx_mf_rebind_umethod(VALUE rcv, VALUE klass, VALUE umethod)
   data->rklass = klass;
   
   return Qnil;
+}
+
+static VALUE
+osx_rbobj_to_nsobj (VALUE rcv, VALUE obj)
+{
+  id ocid, pool;
+  VALUE val;
+
+  pool = [[NSAutoreleasePool alloc] init];
+  if (!rbobj_to_nsobj(obj, &ocid)) {
+    [pool release];
+    return Qnil;
+  }
+
+  val = ocid_to_rbobj(Qnil, ocid);
+  [ocid retain];
+  OBJCID_DATA_PTR(val)->retained = YES;
+  OBJCID_DATA_PTR(val)->can_be_released = YES;
+
+  [ocid autorelease];
+
+  return val;
 }
 
 /******************/
@@ -384,6 +408,8 @@ void initialize_mdl_osxobjc()
   rb_define_module_function(mOSX, "objc_symbol_to_obj", osx_mf_objc_symbol_to_obj, 2);
 
   rb_define_module_function(mOSX, "__rebind_umethod__", osx_mf_rebind_umethod, 2);
+
+  rb_define_module_function(mOSX, "rbobj_to_nsobj", osx_rbobj_to_nsobj, 1);
   
   thread_switcher_start();
   
