@@ -1,3 +1,13 @@
+2007-09-21  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* AUTHORS:
+	Added Gustav.
+
+2007-09-21  Gustav Munkby <grddev@gmail.com>
+
+	* framework/src/objc/RBRuntime.m:
+	Now resetting the context autorelease pools on every restore.
+
 2007-09-21  Satoshi Nakagawa <artension@gmail.com>
 
 	* framework/src/ruby/osx/objc/oc_attachments.rb,
