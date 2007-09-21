@@ -98,6 +98,56 @@ class TC_ObjcString < Test::Unit::TestCase
     assert_equal('foobar', s)
   end
   
+  def test_ref_nth
+    with_kcode('utf-8') do
+      s = OSX::NSMutableString.stringWithString('foo かきくけこ')
+      assert_equal(0x3053, s[-1])
+      assert_equal(0x3053, s[8])
+      assert_equal(nil, s[10])
+      assert_equal(nil, s[-10])
+    end
+  end
+  
+  def test_ref_substr
+    with_kcode('utf-8') do
+      s = OSX::NSMutableString.stringWithString('foo かきくけこ')
+      assert_equal('きくけ', s['きくけ'])
+      assert_equal('', s[''])
+      assert_equal(nil, s['abc'])
+    end
+  end
+  
+  def test_ref_range
+    with_kcode('utf-8') do
+      s = OSX::NSMutableString.stringWithString('foo かきくけこ')
+      assert_equal('foo', s[0..2])
+      assert_equal('oo', s[1...3])
+      assert_equal('くけこ', s[-3..8])
+      assert_equal('けこ', s[7..10])
+      assert_equal(nil, s[-10..-9])
+      assert_equal('', s[5..4])
+      assert_equal(nil, s[10..9])
+      assert_equal(nil, s[10..-2])
+    end
+  end
+  
+  def test_ref_regexp
+    with_kcode('utf-8') do
+      s = OSX::NSMutableString.stringWithString('foo かきくけこ')
+      assert_equal('きくけ', s[/きくけ/])
+      assert_equal('foo', s[/^foo/])
+      assert_equal(nil, s[/ABC/])
+    end
+  end
+  
+  def test_ref_regexp_n
+    with_kcode('utf-8') do
+      s = OSX::NSMutableString.stringWithString('foo bar buz')
+      assert_equal('foo bar', s[/([a-z]+) ([a-z]+)/,0])
+      assert_equal('bar', s[/([a-z]+) ([a-z]+)/,2])
+    end
+  end
+  
   def test_concat
     with_kcode('utf-8') do
       s = OSX::NSMutableString.stringWithString('foo')
