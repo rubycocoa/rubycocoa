@@ -128,7 +128,7 @@ module OSX
     def inspect
       "#<#{self.class.to_s.gsub(/^OSX::/, '')} \"#{self.to_s}\">"
     end
-    
+
     # responds to Ruby String methods
     alias_method :_rbobj_respond_to?, :respond_to?
     def respond_to?(mname, private = false)
@@ -157,6 +157,116 @@ module OSX
       end
       result
     end
+    
+    # For NSString duck typing
+
+    def *(times)
+      i = times.to_i
+      s = OSX::NSMutableString.string
+      times.times { s.appendString(self) }
+      s
+    end
+
+    def +(other)
+      s = mutableCopy
+      s.appendString(other)
+      s
+    end
+    
+    def <<(other)
+      case other
+      when Fixnum,NSNumber
+        i = other.to_i
+        if 0 <= i && i < 65536
+          appendString(OSX::NSString.stringWithFormat("%C", i))
+        else
+          raise TypeError, "can't convert #{other.class} into String"
+        end
+      when String,NSString
+        appendString(other)
+      else
+        raise TypeError, "can't convert #{other.class} into String"
+      end
+      self
+    end
+    alias_method :concat, :<<
+    
+    def capitalize
+      capitalizedString.mutableCopy
+    end
+    
+    def capitalize!
+      setString(capitalizedString)
+      self
+    end
+    
+    def clear
+      setString('')
+      self
+    end
+    
+    def downcase
+      lowercaseString.mutableCopy
+    end
+    
+    def downcase!
+      setString(lowercaseString)
+      self
+    end
+    
+    def empty?
+      length == 0
+    end
+    
+    def end_with?(str)
+      hasSuffix(str)
+    end
+    
+    def include?(str)
+      case str
+      when Fixnum,NSNumber
+        i = str.to_i
+        if 0 <= i && i < 65536
+          s = OSX::NSString.stringWithFormat("%C", i)
+          cs = OSX::NSCharacterSet.characterSetWithCharactersInString(s)
+          range = rangeOfCharacterFromSet(cs)
+          range.location != NSNotFound
+        else
+          raise TypeError, "can't convert #{other.class} into String"
+        end
+      when String,NSString
+        range = rangeOfString(str)
+        range.location != NSNotFound
+      else
+        raise TypeError, "can't convert #{other.class} into String"
+      end
+    end
+    
+    def size
+      length
+    end
+    
+    def start_with?(str)
+      hasPrefix(str)
+    end
+    
+    def to_f
+      to_s.to_f
+    end
+    
+    def to_i
+      to_s.to_i
+    end
+    
+    def upcase
+      uppercaseString.mutableCopy
+    end
+    
+    def upcase!
+      setString(uppercaseString)
+      self
+    end
+
   end
 
   # NSArray additions

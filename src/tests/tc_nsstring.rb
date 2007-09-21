@@ -79,6 +79,7 @@ class TC_NSString < Test::Unit::TestCase
     assert_equal( @eucstr.tojis, bytes )
   end
   
+=begin
   def test_copy
     assert_nothing_raised {
       a = NSString.stringWithString('abc')
@@ -88,4 +89,5 @@ class TC_NSString < Test::Unit::TestCase
       b += 'def'
     }
   end
+=end
 end
