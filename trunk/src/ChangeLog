@@ -1,3 +1,12 @@
+2007-09-21  Satoshi Nakagawa <artension@gmail.com>
+
+	* framework/src/ruby/osx/objc/oc_attachments.rb,
+	  tests/tc_nsstring_compat.rb:
+	- Added methods to NSString:
+	    *, +, <<, concat, capitalize, capitalize!, clear, downcase, downcase!, empty?
+	    end_with?, include?, size, start_with?, to_f, to_i, upcase, upcase!.
+	- Added tests.
+
 2007-09-19  Laurent Sansonetti <lsansonetti@apple.com>
 
 	* framework/src/ruby/osx/objc/ruby_addition.rb

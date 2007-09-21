@@ -40,6 +40,16 @@ class TC_ObjcString < Test::Unit::TestCase
     assert(!('RBString' == @nsstr), '2-4.Str == NSStr -> false')
   end
 
+  def test_length
+    with_kcode('utf-8') do
+      assert_equal  7,  OSX::NSString.stringWithString('日本語の文字列').length
+      assert_equal 11, OSX::NSString.stringWithString('English+日本語').length # Japanese
+      assert_equal 15, OSX::NSString.stringWithString('English+العربية').length # Arabic
+      assert_equal 11, OSX::NSString.stringWithString('English+한국어').length # Hungle
+      assert_equal 18, OSX::NSString.stringWithString('English+Российская').length # Russian
+    end
+  end
+
   # forwarding to Ruby String
 
   def test_respond_to
@@ -73,14 +83,103 @@ class TC_ObjcString < Test::Unit::TestCase
       str.gsub!(/S/, 'X')}
     assert_equal('NXMutableXtring', str.to_s)
   end
+  
+  # NSString duck typing
 
-  def test_length
+  def test_times
+    s = OSX::NSMutableString.stringWithString('foo')
+    s = s * 5
+    assert_equal('foo'*5, s)
+  end
+  
+  def test_plus
+    s = OSX::NSMutableString.stringWithString('foo')
+    s = s + 'bar'
+    assert_equal('foobar', s)
+  end
+  
+  def test_concat
     with_kcode('utf-8') do
-      assert_equal  7,  OSX::NSString.stringWithString('日本語の文字列').length
-      assert_equal 11, OSX::NSString.stringWithString('English+日本語').length # Japanese
-      assert_equal 15, OSX::NSString.stringWithString('English+العربية').length # Arabic
-      assert_equal 11, OSX::NSString.stringWithString('English+한국어').length # Hungle
-      assert_equal 18, OSX::NSString.stringWithString('English+Российская').length # Russian
+      s = OSX::NSMutableString.stringWithString('foo')
+      s << 'abc'
+      assert_equal('fooabc', s)
+      s << 123
+      assert_equal('fooabc{', s)
+      s.concat 0x3053
+      assert_equal('fooabc{こ', s)
     end
   end
+  
+  def test_capitalize
+    s = OSX::NSMutableString.stringWithString('foo bar')
+    assert_equal('Foo Bar', s.capitalize)
+    assert_equal('Foo Bar', s.capitalize!)
+  end
+  
+  def test_clear
+    s = OSX::NSMutableString.stringWithString('Foobar')
+    assert_equal(s, s.clear)
+    assert_equal('', s)
+    assert_equal(0, s.length)
+  end
+  
+  def test_downcase
+    s = OSX::NSMutableString.stringWithString('AbC dEF')
+    assert_equal('abc def', s.downcase)
+    assert_equal('abc def', s.downcase!)
+  end
+  
+  def test_empty
+    s = OSX::NSMutableString.stringWithString('Foobar')
+    assert_equal(false, s.empty?)
+    assert_equal(true, s.clear.empty?)
+  end
+  
+  def test_end_with
+    s = OSX::NSMutableString.stringWithString('abc def')
+    assert_equal(false, s.end_with?('abc'))
+    assert_equal(true, s.end_with?('def'))
+  end
+  
+  def test_include
+    with_kcode('utf-8') do
+      s = OSX::NSMutableString.stringWithString('abc def')
+      assert_equal(true, s.include?('c d'))
+      assert_equal(true, s.include?(0x62))
+      assert_equal(false, s.include?('C D'))
+      assert_equal(false, s.include?(0x41))
+      s = OSX::NSMutableString.stringWithString('abc かきくけこ')
+      assert_equal(true, s.include?('かき'))
+      assert_equal(true, s.include?(0x3053))
+      assert_equal(false, s.include?('は'))
+      assert_equal(false, s.include?(0x3060))
+    end
+  end
+  
+  def test_size
+    assert_equal(6, 'Foobar'.to_ns.size)
+  end
+  
+  def test_start_with
+    s = OSX::NSMutableString.stringWithString('abc def')
+    assert_equal(true, s.start_with?('abc'))
+    assert_equal(false, s.start_with?('def'))
+  end
+  
+  def test_upcase
+    s = OSX::NSMutableString.stringWithString('AbC dEF')
+    assert_equal('ABC DEF', s.upcase)
+    assert_equal('ABC DEF', s.upcase!)
+  end
+  
+  def test_to_f
+    s = OSX::NSMutableString.stringWithString('3358.123')
+    assert((s.to_f - 3358.123).abs < 0.01)
+  end
+  
+  def test_to_i
+    s = OSX::NSMutableString.stringWithString('3358.123')
+    assert_equal(3358, s.to_i)
+  end
+  
 end
