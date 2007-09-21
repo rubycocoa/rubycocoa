@@ -251,11 +251,11 @@ module OSX
     end
     
     def to_f
-      to_s.to_f
+      doubleValue
     end
     
     def to_i
-      to_s.to_i
+      intValue
     end
     
     def upcase

@@ -1,6 +1,14 @@
 2007-09-21  Satoshi Nakagawa <artension@gmail.com>
 
 	* framework/src/ruby/osx/objc/oc_attachments.rb,
+	  tests/tc_nsstring.rb:
+	- Changed to use intValue in NSString#to_i.
+	- Changed to use doubleValue in NSString#to_f.
+	- Updated tests.
+
+2007-09-21  Satoshi Nakagawa <artension@gmail.com>
+
+	* framework/src/ruby/osx/objc/oc_attachments.rb,
 	  tests/tc_nsstring_compat.rb:
 	- Added methods to NSString:
 	    *, +, <<, concat, capitalize, capitalize!, clear, downcase, downcase!, empty?
