@@ -175,14 +175,14 @@ module OSX
     
     def <<(other)
       case other
-      when Fixnum,NSNumber
+      when Numeric,OSX::NSNumber
         i = other.to_i
         if 0 <= i && i < 65536
           appendString(OSX::NSString.stringWithFormat("%C", i))
         else
           raise TypeError, "can't convert #{other.class} into String"
         end
-      when String,NSString
+      when String,OSX::NSString
         appendString(other)
       else
         raise TypeError, "can't convert #{other.class} into String"
@@ -190,6 +190,76 @@ module OSX
       self
     end
     alias_method :concat, :<<
+
+    def [](*args)
+      count = length
+      case args.length
+      when 1
+        first = args.first
+        case first
+        when Numeric,OSX::NSNumber
+          n = first.to_i
+          n += count if n < 0
+          if 0 <= n && n < count
+            characterAtIndex(n)
+          else
+            nil
+          end
+        when String,OSX::NSString
+          substr = first.to_s
+          if include?(substr)
+            OSX::NSMutableString.stringWithString(substr)
+          else
+            nil
+          end
+        when Regexp
+          rex = first
+          if rex =~ to_s
+            OSX::NSMutableString.stringWithString($&)
+          else
+            nil
+          end
+        when Range
+          range = OSX::NSRange.new(first, count)
+          loc = range.location
+          if 0 <= loc && loc < count
+            substringWithRange(range)
+          else
+            nil
+          end
+        else
+          raise TypeError, "can't convert #{first.class} into Integer"
+        end
+      when 2
+        first, second, = args
+        case first
+        when Numeric,OSX::NSNumber
+          n, len = first, second
+          unless len.is_a?(Numeric) || len.is_a?(OSX::NSNumber)
+            raise TypeError, "can't convert #{len.class} into Integer"
+          end
+          n = n.to_i
+          len = len.to_i
+          if len < 0
+            nil
+          else
+            range = n...(n + len)
+            self[range]
+          end
+        when Regexp
+          rex, n = first, second
+          if rex =~ to_s
+            OSX::NSMutableString.stringWithString($~[n])
+          else
+            nil
+          end
+        else
+          raise TypeError, "can't convert #{first.class} into Integer"
+        end
+      else
+        raise ArgumentError, "wrong number of arguments (#{args.length} for 2)"
+      end
+    end
     
     def capitalize
       capitalizedString.mutableCopy
@@ -224,19 +294,23 @@ module OSX
     
     def include?(str)
       case str
-      when Fixnum,NSNumber
+      when Numeric,OSX::NSNumber
         i = str.to_i
         if 0 <= i && i < 65536
           s = OSX::NSString.stringWithFormat("%C", i)
           cs = OSX::NSCharacterSet.characterSetWithCharactersInString(s)
           range = rangeOfCharacterFromSet(cs)
-          range.location != NSNotFound
+          range.location != OSX::NSNotFound
         else
           raise TypeError, "can't convert #{other.class} into String"
         end
-      when String,NSString
-        range = rangeOfString(str)
-        range.location != NSNotFound
+      when String,OSX::NSString
+        if str.empty?
+          true
+        else
+          range = rangeOfString(str)
+          range.location != OSX::NSNotFound
+        end
       else
         raise TypeError, "can't convert #{other.class} into String"
       end
@@ -366,7 +440,7 @@ module OSX
         case args.first
         when Numeric
           index, value = args
-          unless index.is_a? Numeric
+          unless index.is_a?(Numeric) || index.is_a?(OSX::NSNumber)
             raise TypeError, "can't convert #{index.class} into Integer"
           end
           if value == nil
@@ -419,10 +493,10 @@ module OSX
         end
       when 3
         start, len, value = args
-        unless start.is_a? Numeric
+        unless start.is_a?(Numeric) || start.is_a?(OSX::NSNumber)
           raise TypeError, "can't convert #{start.class} into Integer"
         end
-        unless len.is_a? Numeric
+        unless len.is_a?(Numeric) || len.is_a?(OSX::NSNumber)
           raise TypeError, "can't convert #{len.class} into Integer"
         end
         start = start.to_i
@@ -1041,7 +1115,7 @@ module OSX
       when 1
         first = args.first
         case first
-        when Numeric
+        when Numeric,OSX::NSNumber
           index = first.to_i
           index += count if index < 0
           if 0 <= index && index < count
@@ -1070,10 +1144,10 @@ module OSX
         end
       when 2
         start, len = args
-        unless start.is_a? Numeric
+        unless start.is_a?(Numeric) || start.is_a?(OSX::NSNumber)
           raise TypeError, "can't convert #{start.class} into Integer"
         end
-        unless len.is_a? Numeric
+        unless len.is_a?(Numeric) || len.is_a?(OSX::NSNumber)
           raise TypeError, "can't convert #{len.class} into Integer"
         end
         start = start.to_i
