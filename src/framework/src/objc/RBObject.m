@@ -324,6 +324,7 @@ VALUE rbobj_call_ruby(id rbobj, SEL selector, VALUE args)
   if (m_rbobj_retained) {
     RBOBJ_LOG("releasing Ruby object %p", m_rbobj);
     rb_gc_unregister_address(&m_rbobj);
+    m_rbobj_retained = NO;
   }
 }
 
