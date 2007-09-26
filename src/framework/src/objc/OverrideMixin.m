@@ -205,6 +205,17 @@ static id imp_slave (id rcv, SEL method)
   return get_slave(rcv);
 }
 
+@interface NSObject (AliasedCopyWithZone)
+- (id)__copyWithZone:(NSZone *)zone;
+@end
+
+static id imp_copyWithZone (id rcv, SEL method, NSZone *zone)
+{
+  id copy = [rcv __copyWithZone:zone];
+  set_slave(copy, nil);
+  return copy;
+}
+
 static id imp_rbobj (id rcv, SEL method)
 {
   id slave = get_slave(rcv);
@@ -214,8 +225,7 @@ static id imp_rbobj (id rcv, SEL method)
     slave = slave_obj_new(rcv);
     set_slave(rcv, slave);
   }
-  VALUE rbobj = [slave __rbobj__];
-  return (id)rbobj;
+  return (id)[slave __rbobj__];
 }
 
 static BOOL imp_respondsToSelector (id rcv, SEL method, SEL arg0)
@@ -388,7 +398,17 @@ void install_ovmix_methods(Class c)
   class_addMethod(c, @selector(forwardInvocation:), (IMP)imp_forwardInvocation, "v8@4:8@12");
   class_addMethod(c, @selector(valueForUndefinedKey:), (IMP)imp_valueForUndefinedKey, "@12@0:4@8");
   class_addMethod(c, @selector(setValue:forUndefinedKey:), (IMP)imp_setValue_forUndefinedKey, "v16@0:4@8@12");
+}
 
+void install_ovmix_hooks(Class c)
+{
+  if (class_respondsToSelector(c, @selector(copyWithZone:))) {
+    Method copy_method = class_getInstanceMethod(c, @selector(copyWithZone:));
+    if (copy_method != NULL) {
+      class_addMethod(c, @selector(__copyWithZone:), method_getImplementation(copy_method), "@8@4:8^{_NSZone=}12");
+      class_addMethod(c, @selector(copyWithZone:), (IMP)imp_copyWithZone, "@8@4:8^{_NSZone=}12");
+    }
+  }
 }
 
 static inline void install_ovmix_pure_class_methods(Class c)

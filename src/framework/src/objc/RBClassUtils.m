@@ -215,7 +215,7 @@ Class RBObjcDerivedClassNew(VALUE kls, const char* name, Class super_class)
 
   c = objc_class_alloc(name, super_class);
 
-  // init instance variable (m_proxy)
+  // init instance variable
   install_ovmix_ivars(c);
 
   // init instance methods
@@ -228,6 +228,10 @@ Class RBObjcDerivedClassNew(VALUE kls, const char* name, Class super_class)
   objc_registerClassPair(c);
   class_map_dic_add(name, kls);
   derived_class_dic_add(kls);
+
+  // init hooks
+  install_ovmix_hooks(c);
+
   return c;
 }
 
