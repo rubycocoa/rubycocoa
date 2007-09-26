@@ -762,6 +762,9 @@ rbobj_to_cselstr (VALUE obj)
   str = rb_obj_is_kind_of(obj, rb_cString)
     ? obj : rb_obj_as_string(obj);
 
+  if (rb_ivar_defined(str, rb_intern("@__is_sel__")) == Qtrue)
+    return sel_registerName(RSTRING(str)->ptr);
+
   sel = (char *)alloca(RSTRING(str)->len);
   sel[0] = RSTRING(str)->ptr[0];
   for (i = 1; i < RSTRING(str)->len; i++) {

@@ -62,6 +62,8 @@ class SimpleNSObjectClass < OSX::NSObject; end
 
 class TestActionClass < OSX::NSObject; end
 
+class NSCopyingClass < OSX::NSCell; end
+
 class TC_SubClass < Test::Unit::TestCase
 
   def test_s_new
@@ -245,6 +247,16 @@ class TC_SubClass < Test::Unit::TestCase
     end
     GC.start
     assert_equal(10_000, t)   
+  end
+
+  def test_rbobject_nscopying
+    o = NSCopyingClass.alloc.init
+    o.stringValue = 'foo'
+    o2 = o.copy
+
+    assert_kind_of(NSCopyingClass, o2)
+    assert(o.objc_send('__rbobj__') != o2.objc_send('__rbobj__'))
+    assert_equal(o.stringValue, o2.stringValue)
   end
 
 end

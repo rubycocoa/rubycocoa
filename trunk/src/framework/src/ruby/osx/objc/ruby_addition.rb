@@ -20,6 +20,12 @@ class String
     OSX::NSMutableString.stringWithRubyString(self)
   end
 
+  def to_sel
+    s = self.dup
+    s.instance_variable_set(:@__is_sel__, true)
+    return s
+  end
+
 end
 
 # Property list API.

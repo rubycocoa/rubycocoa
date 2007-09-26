@@ -1,3 +1,16 @@
+2007-09-27  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* framework/src/ruby/osx/objc/ruby_addition.rb,
+	  framework/src/ruby/osx/objc/oc_wrapper.rb,
+	  framework/src/objc/ocdata_conv.m:
+	#objc_send will now pass a frozen selector to the core, where underscore
+	characters won't be transformed as ':'. This is a convenience utility to
+	call ObjC methods that contain underscores as part of their selector, like
+	for example [__rbobj__].
+
+	* tests/tc_subclass.rb:
+	Added a test case for the [copyWithZone:] hook fix described just below. 
+
 2007-09-26  Laurent Sansonetti <lsansonetti@apple.com>
 
 	* framework/src/objc/RBObject.m,

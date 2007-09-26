@@ -41,7 +41,7 @@ module OSX
         end
       end
       mname.chomp!(':') if args.size == 1
-      return self.ocm_send(mname, nil, false, *margs)
+      return self.ocm_send(mname.to_sel, nil, false, *margs)
     end
 
     def method_missing(mname, *args)
