@@ -24,6 +24,8 @@
 static struct st_table *rb2ocCache;
 static struct st_table *oc2rbCache;
 
+static VALUE _ocid_to_rbobj (VALUE context_obj, id ocid, BOOL is_class);
+
 #if CACHE_LOCKING
 static pthread_mutex_t rb2ocCacheLock;
 static pthread_mutex_t oc2rbCacheLock;
@@ -340,7 +342,7 @@ ocdata_to_rbobj (VALUE context_obj, const char *octype_str, const void *ocdata, 
   switch (*octype_str) {
     case _C_ID:
     case _C_CLASS:
-      rbval = ocid_to_rbobj(context_obj, *(id*)ocdata);
+      rbval = _ocid_to_rbobj(context_obj, *(id*)ocdata, *octype_str == _C_CLASS);
       break;
 
     case _C_PTR:
@@ -566,7 +568,7 @@ rbobj_convert_to_nsobj (VALUE obj, id* nsobj)
         return rbtime_to_nsdate(obj, nsobj);
 
       if (!OBJ_FROZEN(obj)) {
-        *nsobj = [[RBObject alloc] _initWithRubyObject:obj retains:YES];
+        *nsobj = [[RBObject alloc] initWithRubyObject:obj];
         // Let's embed the ObjC object in a custom Ruby object that will 
         // autorelease the ObjC object when collected by the Ruby GC, and
         // put the Ruby object as an instance variable.
@@ -687,11 +689,12 @@ ocid_to_rbobj_cache_only (id ocid)
   return ok ? result : Qnil;
 }
 
-VALUE
-ocid_to_rbobj (VALUE context_obj, id ocid)
+static VALUE
+_ocid_to_rbobj (VALUE context_obj, id ocid, BOOL is_class)
 {
   VALUE result;
-  BOOL  ok;
+  BOOL  ok, shouldCache;
+  struct bsConst *  bs_const;
 
   if (ocid == nil) 
     return Qnil;
@@ -701,26 +704,39 @@ ocid_to_rbobj (VALUE context_obj, id ocid)
   //
   // We are locking the access to the cache twice (lookup + insert) as
   // ocobj_s_new is succeptible to call us again, to avoid a deadlock.
-  CACHE_LOCK(&oc2rbCacheLock);
-  ok = st_lookup(oc2rbCache, (st_data_t)ocid, (st_data_t *)&result);
-  CACHE_UNLOCK(&oc2rbCacheLock);
+
+  bs_const = find_magic_cookie_const_by_value(ocid);
+
+  if (bs_const == NULL &&
+      (is_class 
+       || [ocid isProxy] 
+       || find_bs_cf_type_by_type_id(CFGetTypeID(ocid)) != NULL)) {
+    // We don't cache CF-based objects because we don't have yet a reliable
+    // way to remove them from the cache.
+    ok = shouldCache = NO;
+  }
+  else {
+    CACHE_LOCK(&oc2rbCacheLock);
+    ok = st_lookup(oc2rbCache, (st_data_t)ocid, (st_data_t *)&result);
+    CACHE_UNLOCK(&oc2rbCacheLock);
+    shouldCache = context_obj != Qfalse;
+  }
 
   if (!ok) {
-    struct bsConst *  bs_const;
-
-    bs_const = find_magic_cookie_const_by_value(ocid);
     if (bs_const != NULL) {
       result = ocobj_s_new_with_class_name(ocid, bs_const->class_name);
     }
     else {
       result = ocid_get_rbobj(ocid);
       if (result == Qnil)
-        result = rbobj_get_ocid(context_obj) == ocid ? context_obj : ocobj_s_new(ocid);
+        result = rbobj_get_ocid(context_obj) == ocid 
+          ? context_obj : ocobj_s_new(ocid);
     }
 
-    if (context_obj != Qfalse) {
+    if (shouldCache) {
       CACHE_LOCK(&oc2rbCacheLock);
-      // Check out that the hash is still empty for us, to avoid a race condition.
+      // Check out that the hash is still empty for us, to avoid a race 
+      // condition.
       if (!st_lookup(oc2rbCache, (st_data_t)ocid, (st_data_t *)&result))
         st_insert(oc2rbCache, (st_data_t)ocid, (st_data_t)result);
       CACHE_UNLOCK(&oc2rbCacheLock);
@@ -728,6 +744,12 @@ ocid_to_rbobj (VALUE context_obj, id ocid)
   }
 
   return result;
+}
+
+VALUE
+ocid_to_rbobj (VALUE context_obj, id ocid)
+{
+  return _ocid_to_rbobj(context_obj, ocid, NO);
 }
 
 static SEL 

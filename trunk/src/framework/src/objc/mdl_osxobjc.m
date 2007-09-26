@@ -307,14 +307,11 @@ ocid_get_rbobj (id ocid)
   VALUE result = Qnil;
 
   @try {  
-    if ([ocid isProxy] && [ocid isRBObject])
-      result = [ocid __rbobj__];
-    else if ([ocid respondsToSelector: @selector(__rbobj__)])
+    if (([ocid isProxy] && [ocid isRBObject])
+        || [ocid respondsToSelector:@selector(__rbobj__)])
       result = [ocid __rbobj__];
   } 
-  @catch (id exception) {
-    result = Qnil;
-  }
+  @catch (id exception) {}
 
   return result;
 }
