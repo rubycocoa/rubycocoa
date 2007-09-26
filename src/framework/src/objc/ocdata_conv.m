@@ -707,10 +707,10 @@ _ocid_to_rbobj (VALUE context_obj, id ocid, BOOL is_class)
 
   bs_const = find_magic_cookie_const_by_value(ocid);
 
-  if (bs_const == NULL &&
-      (is_class 
-       || [ocid isProxy] 
-       || find_bs_cf_type_by_type_id(CFGetTypeID(ocid)) != NULL)) {
+  if (bs_const == NULL 
+      && (is_class 
+          || [ocid isProxy] 
+          || find_bs_cf_type_by_type_id(CFGetTypeID(ocid)) != NULL)) {
     // We don't cache CF-based objects because we don't have yet a reliable
     // way to remove them from the cache.
     ok = shouldCache = NO;
