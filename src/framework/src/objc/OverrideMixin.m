@@ -66,6 +66,11 @@ static id get_slave(id rcv)
   return ret;
 }
 
+void release_slave(id rcv)
+{
+  [get_slave(rcv) release];
+}
+
 /**
  * ruby method handler
  **/
@@ -293,6 +298,7 @@ static id imp_c_alloc(Class klass, SEL method)
 {
   id new_obj;
   id slave;
+
   new_obj = class_createInstance(klass, 0);
   slave = slave_obj_new(new_obj);
   set_slave(new_obj, slave);
@@ -301,12 +307,8 @@ static id imp_c_alloc(Class klass, SEL method)
 
 static id imp_c_allocWithZone(Class klass, SEL method, NSZone* zone)
 {
-  id new_obj;
-  id slave;
-  new_obj = class_createInstance(klass, 0);
-  slave = slave_obj_new(new_obj);
-  set_slave(new_obj, slave);
-  return new_obj;
+  // XXX: use zone
+  return imp_c_alloc(klass, method);
 }
 
 void 

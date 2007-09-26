@@ -58,6 +58,8 @@ end
 
 class SimpleClass; end
 
+class SimpleNSObjectClass < OSX::NSObject; end
+
 class TestActionClass < OSX::NSObject; end
 
 class TC_SubClass < Test::Unit::TestCase
@@ -232,6 +234,17 @@ class TC_SubClass < Test::Unit::TestCase
     assert_equal(n, test.addressOfObject(o))
     o = SimpleClass.new
     assert(n != test.addressOfObject(o))
+  end
+
+  def test_rbobject_gc
+    t = 1
+    10_000.times do
+      ObjectSpace.define_finalizer(
+        SimpleNSObjectClass.alloc.init, 
+        proc { t += 1 })
+    end
+    GC.start
+    assert_equal(10_000, t)   
   end
 
 end

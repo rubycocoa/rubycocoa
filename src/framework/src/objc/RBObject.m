@@ -319,14 +319,19 @@ VALUE rbobj_call_ruby(id rbobj, SEL selector, VALUE args)
 
 - (VALUE) __rbobj__  { return m_rbobj; }
 
-- (void) dealloc
+- (void) releaseRubyObject
 {
-  RBOBJ_LOG("deallocating RBObject %p", self);
-  remove_from_rb2oc_cache(m_rbobj);
   if (m_rbobj_retained) {
     RBOBJ_LOG("releasing Ruby object %p", m_rbobj);
     rb_gc_unregister_address(&m_rbobj);
   }
+}
+
+- (void) dealloc
+{
+  RBOBJ_LOG("deallocating RBObject %p", self);
+  remove_from_rb2oc_cache(m_rbobj);
+  [self releaseRubyObject];
   [super dealloc];
 }
 

@@ -1,3 +1,22 @@
+2007-09-26  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* framework/src/objc/RBObject.m,
+	  framework/src/objc/mdl_osxobjc.m,
+	  framework/src/objc/RBRuntime.m,
+	  framework/src/objc/mdl_objwrapper.m,
+	  framework/src/objc/OverrideMixin.h,
+	  framework/src/objc/ocdata_conv.m,
+	  framework/src/objc/OverrideMixin.m,
+	  tests/tc_subclass.rb:
+	- Fixed a bug when an object that was being allocated from a Ruby thread
+	  was still in the cache while the thread was killed, resulting in a
+	  corrupted cache.
+	- Make sure we do not cache CF-based objects.
+	- Fixed a circular retain cycle from ObjC objects allocated from an 
+	  NSObject-based Ruby class, resulting in a leak of both the ObjC object
+	  and its Ruby proxy.
+	- Added test cases.
+
 2007-09-21  Laurent Sansonetti <lsansonetti@apple.com>
 
 	* AUTHORS:

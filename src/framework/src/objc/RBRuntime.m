@@ -252,6 +252,7 @@ static int notify_if_error(const char* api_name, VALUE err)
 - (void) __clearCacheAndDealloc
 {
   remove_from_oc2rb_cache(self);
+  release_slave(self);
   [self __dealloc];
 }
 
