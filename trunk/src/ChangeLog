@@ -15,6 +15,9 @@
 	- Fixed a circular retain cycle from ObjC objects allocated from an 
 	  NSObject-based Ruby class, resulting in a leak of both the ObjC object
 	  and its Ruby proxy.
+	- Hook [copyWithZone:] and reset the slave object so that every ObjC object
+	  has a different slave object. This fixes a crash when releasing a slave 
+	  object that could be shared by multiple ObjC objects.
 	- Added test cases.
 
 2007-09-21  Laurent Sansonetti <lsansonetti@apple.com>
