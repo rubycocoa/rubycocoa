@@ -1,3 +1,8 @@
+2007-09-27  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* AUTHORS:
+	Fixed a typo in Vincent's last name.
+
 2007-09-27  Satoshi Nakagawa <artension@gmail.com>
 
 	* framework/src/objc/objc_compat.h:
