@@ -109,8 +109,8 @@ class TC_NSArray < Test::Unit::TestCase
   
   def test_assign_range_error
     a = alloc_nsarray(1,2,3,4,5)
-    assert_raise(IndexError) { a[-10..5] = nil }
-    assert_raise(IndexError) { a[10..5] = nil }
+    assert_raise(RangeError) { a[-10..5] = nil }
+    assert_raise(RangeError) { a[10..5] = nil }
     assert_nothing_raised { a[5..5] = nil }
     assert_nothing_raised { a[5..-10] = nil }
     assert_nothing_raised { a[-5..10] = nil }
