@@ -161,6 +161,9 @@ module OSX
     # For NSString duck typing
 
     def *(times)
+      unless times.is_a?(Numeric) || times.is_a?(OSX::NSNumber)
+        raise TypeError, "can't convert #{times.class} into Integer"
+      end
       i = times.to_i
       s = OSX::NSMutableString.string
       times.times { s.appendString(self) }
@@ -168,6 +171,9 @@ module OSX
     end
 
     def +(other)
+      unless other.is_a?(String) || other.is_a?(OSX::NSString)
+        raise TypeError, "can't convert #{other.class} into String"
+      end
       s = mutableCopy
       s.appendString(other)
       s
@@ -212,18 +218,20 @@ module OSX
           else
             nil
           end
-        when Regexp
-          rex = first
-          if rex =~ to_s
-            OSX::NSMutableString.stringWithString($&)
-          else
-            nil
-          end
+        #when Regexp
+        #  rex = first
+        #  if rex =~ to_s
+        #    OSX::NSMutableString.stringWithString($&)
+        #  else
+        #    nil
+        #  end
         when Range
           range = OSX::NSRange.new(first, count)
           loc = range.location
           if 0 <= loc && loc < count
-            substringWithRange(range)
+            substringWithRange(range).mutableCopy
+          elsif loc == count
+            OSX::NSMutableString.string
           else
             nil
           end
@@ -243,16 +251,21 @@ module OSX
           if len < 0
             nil
           else
-            range = n...(n + len)
-            self[range]
+            n += count if n < 0
+            if n >= 0
+              range = n...(n + len)
+              self[range]
+            else
+              nil
+            end
           end
-        when Regexp
-          rex, n = first, second
-          if rex =~ to_s
-            OSX::NSMutableString.stringWithString($~[n])
-          else
-            nil
-          end
+        #when Regexp
+        #  rex, n = first, second
+        #  if rex =~ to_s
+        #    OSX::NSMutableString.stringWithString($~[n])
+        #  else
+        #    nil
+        #  end
         else
           raise TypeError, "can't convert #{first.class} into Integer"
         end
@@ -262,12 +275,21 @@ module OSX
     end
     
     def capitalize
-      capitalizedString.mutableCopy
+      if length > 0
+        self[0..0].upcase + self[1..-1].downcase
+      else
+        OSX::NSMutableString.string
+      end
     end
     
     def capitalize!
-      setString(capitalizedString)
-      self
+      s = capitalize
+      if self != s
+        setString(s)
+        self
+      else
+        nil
+      end
     end
     
     def clear
@@ -280,8 +302,13 @@ module OSX
     end
     
     def downcase!
-      setString(lowercaseString)
-      self
+      s = lowercaseString
+      if self != s
+        setString(lowercaseString)
+        self
+      else
+        nil
+      end
     end
     
     def empty?
@@ -337,8 +364,13 @@ module OSX
     end
     
     def upcase!
-      setString(uppercaseString)
-      self
+      s = uppercaseString
+      if self != s
+        setString(uppercaseString)
+        self
+      else
+        nil
+      end
     end
 
   end
@@ -499,14 +531,19 @@ module OSX
         unless len.is_a?(Numeric) || len.is_a?(OSX::NSNumber)
           raise TypeError, "can't convert #{len.class} into Integer"
         end
-        start = start.to_i
+        n = start.to_i
         len = len.to_i
         if len < 0
           raise IndexError, "negative length (#{len})"
         else
-          range = start...(start + len)
-          self[range] = value
-          value
+          n += count if n < 0
+          if n >= 0
+            range = n...(n + len)
+            self[range] = value
+            value
+          else
+            raise IndexError, "index #{start} out of array"
+          end
         end
       else
         raise ArgumentError, "wrong number of arguments (#{args.length} for 3)"
@@ -590,7 +627,7 @@ module OSX
           raise TypeError, "can't convert #{other.class} into Array"
         end
       end
-      result = OSX::NSMutableArray.arrayWithArray(self)
+      result = mutableCopy
       result.addObjectsFromArray(other)
       result
     end
@@ -1130,9 +1167,11 @@ module OSX
           loc = range.location
           if 0 <= loc && loc < count
             indexes = OSX::NSIndexSet.indexSetWithIndexesInRange(range)
-            result = objectsAtIndexes(indexes)
+            result = objectsAtIndexes(indexes).mutableCopy
             removeObjectsAtIndexes(indexes) if slice
             result
+          elsif loc == count
+            OSX::NSMutableArray.array
           else
             if slice
               raise RangeError, "#{first} out of range"
@@ -1158,8 +1197,13 @@ module OSX
           end
           nil
         else
-          range = start...(start + len)
-          _read_impl(method, [range])
+          start += count if start < 0
+          if start >= 0
+            range = start...(start + len)
+            _read_impl(method, [range])
+          else
+            nil
+          end
         end
       else
         raise ArgumentError, "wrong number of arguments (#{args.length} for 2)"
