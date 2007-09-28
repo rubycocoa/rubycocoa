@@ -252,11 +252,11 @@ module OSX
             nil
           else
             n += count if n < 0
-            if n >= 0
+            if n < 0
+              nil
+            else
               range = n...(n + len)
               self[range]
-            else
-              nil
             end
           end
         #when Regexp
@@ -292,6 +292,27 @@ module OSX
       end
     end
     
+    def chop
+      len = length
+      if len == 0
+        OSX::NSMutableString.string
+      elsif hasSuffix("\r\n")
+        self[0...len-2]
+      else
+        self[0...len-1]
+      end
+    end
+    
+    def chop!
+      s = chop
+      if self != s
+        setString(s)
+        self
+      else
+        nil
+      end
+    end
+    
     def clear
       setString('')
       self
@@ -310,6 +331,48 @@ module OSX
         nil
       end
     end
+    
+    def each_line(rs=$/)
+      if rs == nil
+        yield mutableCopy
+      else
+        length = self.length
+        range = OSX::NSRange.new(0, length)
+        if rs.length == 0
+          paragraph_mode = true
+          sep = ($/*2).to_ns
+          lf = $/.to_ns
+        else
+          paragraph_mode = false
+          sep = rs.to_ns
+        end
+        
+        loop do
+          break if range.length == 0
+          result = rangeOfString_options_range(sep, 0, range)
+          if result.location == OSX::NSNotFound
+            yield substringWithRange(range).mutableCopy
+            break
+          end
+          if paragraph_mode
+            loop do
+              start = result.location + result.length
+              len = length - start
+              break if len < lf.length
+              s = substringWithRange(OSX::NSRange.new(start, lf.length))
+              break if s != lf
+              result.length += lf.length
+            end
+          end
+          current = OSX::NSRange.new(range.location, result.location - range.location + result.length)
+          yield substringWithRange(current).mutableCopy
+          range.location += current.length
+          range.length -= current.length
+        end
+      end
+      self
+    end
+    alias_method :each, :each_line
     
     def empty?
       length == 0
@@ -341,6 +404,17 @@ module OSX
       else
         raise TypeError, "can't convert #{other.class} into String"
       end
+    end
+    
+    def intern
+      to_s.intern
+    end
+    alias_method :to_sym, :intern
+    
+    def lines
+      result = OSX::NSMutableArray.array
+      each {|i| result << i }
+      result
     end
     
     def size
@@ -535,16 +609,14 @@ module OSX
         len = len.to_i
         if len < 0
           raise IndexError, "negative length (#{len})"
-        else
-          n += count if n < 0
-          if n >= 0
-            range = n...(n + len)
-            self[range] = value
-            value
-          else
-            raise IndexError, "index #{start} out of array"
-          end
         end
+        n += count if n < 0
+        if n < 0
+          raise IndexError, "index #{start} out of array"
+        end
+        range = n...(n + len)
+        self[range] = value
+        value
       else
         raise ArgumentError, "wrong number of arguments (#{args.length} for 3)"
       end
@@ -1198,11 +1270,11 @@ module OSX
           nil
         else
           start += count if start < 0
-          if start >= 0
+          if start < 0
+            nil
+          else
             range = start...(start + len)
             _read_impl(method, [range])
-          else
-            nil
           end
         end
       else
@@ -1545,6 +1617,10 @@ module OSX
         index = self.indexGreaterThanIndex(index)
       end
       return result
+    end
+    
+    def inspect
+      "#<#{self.class.to_s.gsub(/^OSX::/, '')} #{ self.to_a.inspect }>"
     end
   end
 
