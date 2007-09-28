@@ -387,7 +387,8 @@ module OSX
           end
         else
           if end_with?(rs)
-            self[0...length-rs.to_ns.length]
+            rs = rs.to_ns if rs.is_a?(String)
+            self[0...length-rs.length]
           else
             mutableCopy
           end
@@ -457,19 +458,22 @@ module OSX
       if rs == nil
         yield mutableCopy
       else
-        length = self.length
         pos = 0
         if rs.empty?
           paragraph_mode = true
-          sep = ($/*2).to_ns
-          lf = $/.to_ns
+          sep = $/*2
+          lf = $/
+          sep = sep.to_ns if sep.is_a?(String)
+          lf = lf.to_ns if lf.is_a?(String)
         else
           paragraph_mode = false
-          sep = rs.to_ns
+          sep = rs
+          sep = sep.to_ns if sep.is_a?(String)
         end
         
+        count = length
         loop do
-          break if length <= pos
+          break if count <= pos
           n = index(sep, pos)
           unless n
             yield self[pos..-1]
