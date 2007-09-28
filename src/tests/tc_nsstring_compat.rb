@@ -237,6 +237,14 @@ class TC_ObjcString < Test::Unit::TestCase
     end
   end
   
+  def test_chop
+    ['abc', "abc\n", "abc\r\n", "abc\r", ''].each do |s|
+      n = alloc_nsstring(s)
+      assert_equal(s.chop, n.chop)
+      assert_equal(s.chop!, n.chop!)
+    end
+  end
+  
   def test_clear
     s = alloc_nsstring('Foobar')
     assert_equal(s, s.clear)
@@ -249,6 +257,33 @@ class TC_ObjcString < Test::Unit::TestCase
       n = alloc_nsstring(s)
       assert_equal(s.downcase, n.downcase)
       assert_equal(s.downcase!, n.downcase!)
+    end
+  end
+  
+  def test_each_line
+    ["abc\ndef\r\nghi\njkl\n", "\n\n\nabc", "", "a\nb", "abc\rdef",
+     "\nabc\n\ndef\nghi\njkl\n\nmnopq\n\n"].each do |s|
+      n = alloc_nsstring(s)
+      a = []
+      b = []
+      n.each {|i| a << i.to_ruby }
+      s.each {|i| b << i }
+      assert_equal(b, a)
+      a = []
+      b = []
+      n.each(nil) {|i| a << i.to_ruby }
+      s.each(nil) {|i| b << i }
+      assert_equal(b, a)
+      a = []
+      b = []
+      n.each("\r\n") {|i| a << i.to_ruby }
+      s.each("\r\n") {|i| b << i }
+      assert_equal(b, a)
+      a = []
+      b = []
+      n.each('') {|i| a << i.to_ruby }
+      s.each('') {|i| b << i }
+      assert_equal(b, a)
     end
   end
   
@@ -276,6 +311,24 @@ class TC_ObjcString < Test::Unit::TestCase
       assert_equal(true, s.include?(0x3053))
       assert_equal(false, s.include?('は'))
       assert_equal(false, s.include?(0x3060))
+    end
+  end
+  
+  def test_intern
+    ['foo', 'abc_def', 'A_b_C'].each do |s|
+      n = alloc_nsstring(s)
+      assert_equal(s.intern, n.intern)
+      assert_equal(s.to_sym, n.to_sym)
+    end
+  end
+  
+  def test_lines
+    ["abc\ndef\r\nghi\njkl\n", "\n\n\nabc", "", "a\nb", "abc\rdef",
+     "\nabc\n\ndef\nghi\njkl\n\nmnopq\n\n"].each do |s|
+      n = alloc_nsstring(s)
+      a = []
+      s.each {|i| a << i }
+      assert_equal(n.lines, a)
     end
   end
   
