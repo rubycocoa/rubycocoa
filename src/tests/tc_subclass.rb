@@ -239,14 +239,14 @@ class TC_SubClass < Test::Unit::TestCase
   end
 
   def test_rbobject_gc
-    t = 1
+    @t = 0 
     10_000.times do
       ObjectSpace.define_finalizer(
         SimpleNSObjectClass.alloc.init, 
-        proc { t += 1 })
+        proc { @t += 1 })
     end
     GC.start
-    assert_equal(10_000, t)   
+    assert_equal(10_000, @t)   
   end
 
   def test_rbobject_nscopying
