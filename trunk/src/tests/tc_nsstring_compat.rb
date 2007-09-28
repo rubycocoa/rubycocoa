@@ -210,6 +210,74 @@ class TC_ObjcString < Test::Unit::TestCase
     assert_raise(TypeError) { n[3,nil] }
   end
   
+  def test_assign_nth
+    [[0,'AAA'], [2,''], [-1,'A'], [-3,'B']].each do |i,v|
+      s = 'abc'
+      n = alloc_nsstring(s)
+      s[i] = v
+      n[i] = v
+      assert_equal(s, n)
+    end
+  end
+  
+  def test_assign_nth_error
+    s = 'abc'
+    n = alloc_nsstring(s)
+    assert_raise(IndexError) { s[3] = '' }
+    assert_raise(IndexError) { n[3] = '' }
+    assert_raise(IndexError) { s[-4] = '' }
+    assert_raise(IndexError) { n[-4] = '' }
+    s = ''
+    n = alloc_nsstring(s)
+    assert_raise(IndexError) { s[0] = '' }
+    assert_raise(IndexError) { n[0] = '' }
+    assert_raise(IndexError) { s[-1] = '' }
+    assert_raise(IndexError) { n[-1] = '' }
+  end
+  
+  def test_assign_range
+    [0..1, 1..2, 2..3, 3..6, -3..2, -3..-2, -1..-1, 3..2,
+     0...2, 1...1, 1...2, 3...3, -3...2, -3...-2, -1...-1, 3...2].each do |r|
+      s = 'abc'
+      n = alloc_nsstring(s)
+      v = 'AAABBBCCC'
+      s[r] = v
+      n[r] = v
+      assert_equal(s, n)
+    end
+  end
+  
+  def test_assign_range_error
+    s = 'abc'
+    n = alloc_nsstring(s)
+    assert_raise(RangeError) { s[-10...3] = '' }
+    assert_raise(RangeError) { n[-10...3] = '' }
+    assert_raise(RangeError) { s[10..15] = '' }
+    assert_raise(RangeError) { n[10..15] = '' }
+  end
+  
+  def test_assign_nth_len
+    [[0,1], [0,3], [0,10], [2,3], [3,5], [-2,1], [-3,1]].each do |i,len|
+      s = 'abc'
+      n = alloc_nsstring(s)
+      v = 'ZZZZZZ'
+      s[i,len] = v
+      n[i,len] = v
+      assert_equal(s, n)
+    end
+  end
+  
+  def test_assign_nth_len_error
+    s = 'abc'
+    n = alloc_nsstring(s)
+    assert_raise(IndexError) { s[-10,3] = '' }
+    assert_raise(IndexError) { n[-10,3] = '' }
+    assert_raise(IndexError) { s[10,3] = '' }
+    assert_raise(IndexError) { n[10,3] = '' }
+    assert_raise(IndexError) { s[1,-3] = '' }
+    assert_raise(IndexError) { n[1,-3] = '' }
+  end
+  
 =begin
   def test_ref_regexp
     with_kcode('utf-8') do
@@ -312,6 +380,33 @@ class TC_ObjcString < Test::Unit::TestCase
       assert_equal(false, s.include?('は'))
       assert_equal(false, s.include?(0x3060))
     end
+  end
+  
+  def test_include_error
+    s = 'abc'
+    n = alloc_nsstring(s)
+    assert_raise(TypeError) { s.include?([]) }
+    assert_raise(TypeError) { n.include?([]) }
+  end
+  
+  def test_index
+    ['', 'a', 'z', 0x42, 0x100000].each do |i|
+      s = 'abc'
+      n = alloc_nsstring(s)
+      assert_equal(s.index(i), n.index(i))
+    end
+    [-5,-2,0,2,5].each do |i|
+      s = ''
+      n = alloc_nsstring(s)
+      assert_equal(s.index('a',i), n.index('a',i))
+    end
+  end
+  
+  def test_index_error
+    s = ''
+    n = alloc_nsstring(s)
+    assert_raise(TypeError) { s.index([]) }
+    assert_raise(TypeError) { n.index([]) }
   end
   
   def test_intern

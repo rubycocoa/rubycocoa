@@ -1,3 +1,13 @@
+2007-09-29  Satoshi Nakagawa <artension@gmail.com>
+
+	* framework/src/ruby/osx/objc/oc_attachments.rb,
+	  tests/tc_nsstring_compat.rb,
+	  tests/tc_nsarray.rb:
+	- Refactoring [], each and include? of NSString.
+	- Refactoring [] and []= of NSArray.
+	- Added methods to NSString: []=, index.
+	- Updated tests.
+
 2007-09-28  Laurent Sansonetti <lsansonetti@apple.com>
 
 	* sample/CocoaRepl/ReplController.rb:

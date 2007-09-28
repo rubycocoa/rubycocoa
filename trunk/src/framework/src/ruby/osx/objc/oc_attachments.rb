@@ -212,25 +212,31 @@ module OSX
             nil
           end
         when String,OSX::NSString
-          substr = first.to_s
-          if include?(substr)
-            OSX::NSMutableString.stringWithString(substr)
+          str = first.to_s
+          if include?(str)
+            OSX::NSMutableString.stringWithString(str)
           else
             nil
           end
         #when Regexp
-        #  rex = first
-        #  if rex =~ to_s
-        #    OSX::NSMutableString.stringWithString($&)
-        #  else
-        #    nil
-        #  end
         when Range
-          range = OSX::NSRange.new(first, count)
-          loc = range.location
-          if 0 <= loc && loc < count
-            substringWithRange(range).mutableCopy
-          elsif loc == count
+          range = first
+          n = range.first
+          n += count if n < 0
+          if n < 0 || count < n
+            return nil
+          end
+          last = range.last
+          last += count if last < 0
+          last -= 1 if range.exclude_end?
+          len = last - n + 1
+          len = 0 if len < 0
+          len = count - n if count < n + len
+
+          if 0 <= n && n < count
+            nsrange = OSX::NSRange.new(n, len)
+            substringWithRange(nsrange).mutableCopy
+          elsif n == count
             OSX::NSMutableString.string
           else
             nil
@@ -239,38 +245,106 @@ module OSX
           raise TypeError, "can't convert #{first.class} into Integer"
         end
       when 2
-        first, second, = args
+        first, second = args
         case first
         when Numeric,OSX::NSNumber
-          n, len = first, second
-          unless len.is_a?(Numeric) || len.is_a?(OSX::NSNumber)
-            raise TypeError, "can't convert #{len.class} into Integer"
+          unless second.is_a?(Numeric) || second.is_a?(OSX::NSNumber)
+            raise TypeError, "can't convert #{second.class} into Integer"
           end
-          n = n.to_i
-          len = len.to_i
-          if len < 0
+          n, len = first.to_i, second.to_i
+          n += count if n < 0
+          if n < 0 || count < n
+            nil
+          elsif len < 0
             nil
           else
-            n += count if n < 0
-            if n < 0
-              nil
-            else
-              range = n...(n + len)
-              self[range]
-            end
+            self[n...n+len]
           end
         #when Regexp
-        #  rex, n = first, second
-        #  if rex =~ to_s
-        #    OSX::NSMutableString.stringWithString($~[n])
-        #  else
-        #    nil
-        #  end
         else
           raise TypeError, "can't convert #{first.class} into Integer"
         end
       else
         raise ArgumentError, "wrong number of arguments (#{args.length} for 2)"
+      end
+    end
+    
+    def []=(*args)
+      count = length
+      case args.length
+      when 2
+        first, second = args
+        case first
+        when Numeric,OSX::NSNumber
+          n = first.to_i
+          n += count if n < 0
+          if n < 0 || count <= n
+            raise IndexError, "index #{first.to_i} out of string"
+          end
+          self[n..n] = second
+        when String,OSX::NSString
+          str = first
+          str = str.to_ns if str.is_a?(String)
+          n = index(str)
+          unless n
+            raise IndexError, "string not matched"
+          end
+          self[n...n+str.length] = second
+        when Range
+          range = first
+          n = range.first
+          n += count if n < 0
+          if n < 0 || count < n
+            raise RangeError, "#{range} out of range"
+          end
+          last = range.last
+          last += count if last < 0
+          last -= 1 if range.exclude_end?
+          len = last - n + 1
+          len = 0 if len < 0
+          
+          value = second
+          case value
+          when Numeric,OSX::NSNumber
+            str = OSX::NSString.stringWithFormat("%C", value.to_i)
+            setString(self[0...n] + str + (self[n+len...count] || ''))
+          when String,OSX::NSString
+            setString(self[0...n] + value + (self[n+len...count] || ''))
+          else
+            raise TypeError, "can't convert #{val.class} into String"
+          end
+          value
+          
+        #when Regexp
+        else
+          raise TypeError, "can't convert #{first.class} into Integer"
+        end
+      when 3
+        first = args.first
+        case first
+        when Numeric,OSX::NSNumber
+          n, len, value = args
+          unless len.is_a?(Numeric) || len.is_a?(OSX::NSNumber)
+            raise TypeError, "can't convert #{len.class} into Integer"
+          end
+          n = n.to_i
+          len = len.to_i
+          n += count if n < 0
+          if n < 0 || count < n
+            raise IndexError, "index #{first.to_i} out of string"
+          end
+          if len < 0
+            raise IndexError, "negative length (#{len})"
+          end
+          self[n...n+len] = value
+          value
+          
+        #when Regexp
+        else
+          raise TypeError, "can't convert #{first.class} into Integer"
+        end
+      else
+        raise ArgumentError, "wrong number of arguments (#{args.length} for 3)"
       end
     end
     
@@ -332,13 +406,13 @@ module OSX
       end
     end
     
-    def each_line(rs=$/)
+    def each(rs=$/)
       if rs == nil
         yield mutableCopy
       else
         length = self.length
-        range = OSX::NSRange.new(0, length)
-        if rs.length == 0
+        pos = 0
+        if rs.empty?
           paragraph_mode = true
           sep = ($/*2).to_ns
           lf = $/.to_ns
@@ -348,31 +422,27 @@ module OSX
         end
         
         loop do
-          break if range.length == 0
-          result = rangeOfString_options_range(sep, 0, range)
-          if result.location == OSX::NSNotFound
-            yield substringWithRange(range).mutableCopy
-            break
+          break if length <= pos
+          n = index(sep, pos)
+          unless n
+            yield self[pos..-1]
+            return
           end
+          len = sep.length
           if paragraph_mode
             loop do
-              start = result.location + result.length
-              len = length - start
-              break if len < lf.length
-              s = substringWithRange(OSX::NSRange.new(start, lf.length))
-              break if s != lf
-              result.length += lf.length
+              start = n + len
+              break if self[start,lf.length] != lf
+              len += lf.length
             end
           end
-          current = OSX::NSRange.new(range.location, result.location - range.location + result.length)
-          yield substringWithRange(current).mutableCopy
-          range.location += current.length
-          range.length -= current.length
+          yield self[pos...n+len]
+          pos = n + len
         end
       end
       self
     end
-    alias_method :each, :each_line
+    alias_method :each_line, :each
     
     def empty?
       length == 0
@@ -383,26 +453,40 @@ module OSX
     end
     
     def include?(str)
-      case str
+      index(str) != nil
+    end
+    
+    def index(pattern, pos=0)
+      case pattern
       when Numeric,OSX::NSNumber
-        i = str.to_i
+        i = pattern.to_i
         if 0 <= i && i < 65536
           s = OSX::NSString.stringWithFormat("%C", i)
-          cs = OSX::NSCharacterSet.characterSetWithCharactersInString(s)
-          range = rangeOfCharacterFromSet(cs)
-          range.location != OSX::NSNotFound
         else
-          raise TypeError, "can't convert #{other.class} into String"
+          return nil
         end
       when String,OSX::NSString
-        if str.empty?
-          true
-        else
-          range = rangeOfString(str)
-          range.location != OSX::NSNotFound
-        end
+        s = pattern
+      #when Regexp
       else
-        raise TypeError, "can't convert #{other.class} into String"
+        raise TypeError, "can't convert #{pattern.class} into String"
+      end
+      
+      if s.empty?
+        0
+      else
+        len = length
+        n = pos.to_i
+        n += len if n < 0
+        if n < 0 || len <= n
+          return nil
+        end
+        range = rangeOfString_options_range(s, 0, OSX::NSRange.new(n, len - n))
+        if range.location == OSX::NSNotFound
+          nil
+        else
+          range.location
+        end
       end
     end
     
@@ -545,18 +629,18 @@ module OSX
       when 2
         case args.first
         when Numeric
-          index, value = args
-          unless index.is_a?(Numeric) || index.is_a?(OSX::NSNumber)
-            raise TypeError, "can't convert #{index.class} into Integer"
+          n, value = args
+          unless n.is_a?(Numeric) || n.is_a?(OSX::NSNumber)
+            raise TypeError, "can't convert #{n.class} into Integer"
           end
           if value == nil
-            raise ArgumentError, "attempt insert nil to NSDictionary"
+            raise ArgumentError, "attempt insert nil to NSArray"
           end
-          index = index.to_i
-          index += count if index < 0
-          if 0 <= index && index < count
-            replaceObjectAtIndex_withObject(index, value)
-          elsif index == count
+          n = n.to_i
+          n += count if n < 0
+          if 0 <= n && n < count
+            replaceObjectAtIndex_withObject(n, value)
+          elsif n == count
             addObject(value)
           else
             raise IndexError, "index #{args[0]} out of array"
@@ -564,23 +648,33 @@ module OSX
           value
         when Range
           range, value = args
-          nsrange = OSX::NSRange.new(range, count)
-          loc = nsrange.location
-          if 0 <= loc && loc < count
-            if nsrange.length > 0
-              removeObjectsInRange(nsrange)
+          n = range.first
+          n += count if n < 0
+          if n < 0 || count < n
+            raise RangeError, "#{range} out of range"
+          end
+          last = range.last
+          last += count if last < 0
+          last -= 1 if range.exclude_end?
+          len = last - n + 1
+          len = 0 if len < 0
+          len = count - n if count < n + len
+          
+          if 0 <= n && n < count
+            if len > 0
+              removeObjectsInRange(OSX::NSRange.new(n, len))
             end
             if value != nil
               if value.is_a?(Array) || value.is_a?(OSX::NSArray)
                 unless value.empty?
-                  indexes = OSX::NSIndexSet.indexSetWithIndexesInRange(NSRange.new(loc, value.length))
+                  indexes = OSX::NSIndexSet.indexSetWithIndexesInRange(NSRange.new(n, value.length))
                   insertObjects_atIndexes(value, indexes)
                 end
               else
-                insertObject_atIndex(value, loc)
+                insertObject_atIndex(value, n)
               end
             end
-          elsif loc == count
+          else
             if value != nil
               if value.is_a?(Array) || value.is_a?(OSX::NSArray)
                 unless value.empty?
@@ -590,32 +684,29 @@ module OSX
                 addObject(value)
               end
             end
-          else
-            raise IndexError, "index #{loc} out of array"
           end
           args[1]
         else
           raise ArgumentError, "wrong number of arguments (#{args.length} for 3)"
         end
       when 3
-        start, len, value = args
-        unless start.is_a?(Numeric) || start.is_a?(OSX::NSNumber)
-          raise TypeError, "can't convert #{start.class} into Integer"
+        n, len, value = args
+        unless n.is_a?(Numeric) || n.is_a?(OSX::NSNumber)
+          raise TypeError, "can't convert #{n.class} into Integer"
         end
         unless len.is_a?(Numeric) || len.is_a?(OSX::NSNumber)
           raise TypeError, "can't convert #{len.class} into Integer"
         end
-        n = start.to_i
+        n = n.to_i
         len = len.to_i
+        n += count if n < 0
+        if n < 0 || count < n
+          raise IndexError, "index #{args[0]} out of array"
+        end
         if len < 0
           raise IndexError, "negative length (#{len})"
         end
-        n += count if n < 0
-        if n < 0
-          raise IndexError, "index #{start} out of array"
-        end
-        range = n...(n + len)
-        self[range] = value
+        self[n...n+len] = value
         value
       else
         raise ArgumentError, "wrong number of arguments (#{args.length} for 3)"
@@ -1225,43 +1316,53 @@ module OSX
         first = args.first
         case first
         when Numeric,OSX::NSNumber
-          index = first.to_i
-          index += count if index < 0
-          if 0 <= index && index < count
-            result = objectAtIndex(index)
-            removeObjectAtIndex(index) if slice
+          n = first.to_i
+          n += count if n < 0
+          if 0 <= n && n < count
+            result = objectAtIndex(n)
+            removeObjectAtIndex(n) if slice
             result
           else
             nil
           end
         when Range
-          range = OSX::NSRange.new(first, count)
-          loc = range.location
-          if 0 <= loc && loc < count
-            indexes = OSX::NSIndexSet.indexSetWithIndexesInRange(range)
-            result = objectsAtIndexes(indexes).mutableCopy
-            removeObjectsAtIndexes(indexes) if slice
-            result
-          elsif loc == count
-            OSX::NSMutableArray.array
-          else
+          range = first
+          n = range.first
+          n += count if n < 0
+          if n < 0 || count < n
             if slice
               raise RangeError, "#{first} out of range"
             end
-            nil
+            return nil
+          end
+          last = range.last
+          last += count if last < 0
+          last -= 1 if range.exclude_end?
+          len = last - n + 1
+          len = 0 if len < 0
+          len = count - n if count < n + len
+          
+          if 0 <= n && n < count
+            nsrange = OSX::NSRange.new(n, len)
+            indexes = OSX::NSIndexSet.indexSetWithIndexesInRange(nsrange)
+            result = objectsAtIndexes(indexes).mutableCopy
+            removeObjectsAtIndexes(indexes) if slice
+            result
+          else
+            OSX::NSMutableArray.array
           end
         else
           raise TypeError, "can't convert #{args.first.class} into Integer"
         end
       when 2
-        start, len = args
-        unless start.is_a?(Numeric) || start.is_a?(OSX::NSNumber)
-          raise TypeError, "can't convert #{start.class} into Integer"
+        n, len = args
+        unless n.is_a?(Numeric) || n.is_a?(OSX::NSNumber)
+          raise TypeError, "can't convert #{n.class} into Integer"
         end
         unless len.is_a?(Numeric) || len.is_a?(OSX::NSNumber)
           raise TypeError, "can't convert #{len.class} into Integer"
         end
-        start = start.to_i
+        n = n.to_i
         len = len.to_i
         if len < 0
           if slice
@@ -1269,12 +1370,11 @@ module OSX
           end
           nil
         else
-          start += count if start < 0
-          if start < 0
+          n += count if n < 0
+          if n < 0
             nil
           else
-            range = start...(start + len)
-            _read_impl(method, [range])
+            _read_impl(method, [n...n+len])
           end
         end
       else
