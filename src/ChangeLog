@@ -1,5 +1,10 @@
 2007-09-28  Laurent Sansonetti <lsansonetti@apple.com>
 
+	* sample/CocoaRepl/ReplController.rb:
+	Keep the text view delegate as an ivar, because otherwise it will be 
+	collected by the Ruby GC, because the text view doesn't retain its delegate,
+	and neither its datasource.
+
 	* framework/src/objc/RBObject.h,
 	  framework/src/objc/RBObject.m,
 	  framework/src/objc/mdl_objwrapper.m,
