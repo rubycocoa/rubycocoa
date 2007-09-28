@@ -255,11 +255,22 @@ static id imp_retain (id rcv, SEL method)
   return [rcv __retain];
 }
 
-static void imp_release (id rcv, SEL method)
+static inline void release_slave_rbobj_if_needed (id rcv)
 {
   if ([rcv retainCount] == 2)
     [get_slave(rcv) releaseRubyObject]; 
+}
+
+static void imp_release (id rcv, SEL method)
+{
+  release_slave_rbobj_if_needed(rcv);
   [rcv __release];
+}
+
+static id imp_autorelease (id rcv, SEL method)
+{
+  release_slave_rbobj_if_needed (rcv);
+  return [rcv __autorelease];
 }
 
 static id imp_rbobj (id rcv, SEL method)
@@ -457,6 +468,8 @@ void install_ovmix_hooks(Class c)
     (IMP)imp_retain);
   install_objc_hook(c, @selector(release), @selector(__release), 
     (IMP)imp_release);
+  install_objc_hook(c, @selector(autorelease), @selector(__autorelease), 
+    (IMP)imp_autorelease);
 }
 
 static inline void install_ovmix_pure_class_methods(Class c)
