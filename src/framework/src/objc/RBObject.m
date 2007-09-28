@@ -319,10 +319,26 @@ VALUE rbobj_call_ruby(id rbobj, SEL selector, VALUE args)
 
 - (VALUE) __rbobj__  { return m_rbobj; }
 
+- (void) trackRetainReleaseOfRubyObject
+{
+  RBOBJ_LOG("start tracking retain/release of Ruby object `%s'",  
+    RSTRING(rb_inspect(m_rbobj))->ptr);
+  m_rbobj_retain_release_track = YES;
+}
+
+- (void) retainRubyObject
+{
+  if (m_rbobj_retain_release_track && !m_rbobj_retained) {
+    RBOBJ_LOG("retaining Ruby object `%s'", RSTRING(rb_inspect(m_rbobj))->ptr);
+    rb_gc_register_address(&m_rbobj);
+    m_rbobj_retained = YES;
+  }
+}
+
 - (void) releaseRubyObject
 {
-  if (m_rbobj_retained) {
-    RBOBJ_LOG("releasing Ruby object %p", m_rbobj);
+  if (m_rbobj_retain_release_track && m_rbobj_retained) {
+    RBOBJ_LOG("releasing Ruby object `%s'", RSTRING(rb_inspect(m_rbobj))->ptr);
     rb_gc_unregister_address(&m_rbobj);
     m_rbobj_retained = NO;
   }
@@ -340,6 +356,7 @@ VALUE rbobj_call_ruby(id rbobj, SEL selector, VALUE args)
 {
   m_rbobj = rbobj;
   m_rbobj_retained = flag;
+  m_rbobj_retain_release_track = NO;
   oc_master = nil;
   if (flag)
     rb_gc_register_address(&m_rbobj);
