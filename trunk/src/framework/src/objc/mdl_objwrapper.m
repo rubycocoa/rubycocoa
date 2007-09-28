@@ -77,10 +77,9 @@ ocm_retain_arg_if_necessary (VALUE result, BOOL is_result, void *context)
     // will be properly auto-released.
     //
     // We only do this magic for objects that are explicitely allocated from
-    // Ruby (from #alloc or #allocWithZone).
-    else if ([OBJCID_ID(result) respondsToSelector:@selector(__slave__)]) {
-      id slave = [OBJCID_ID(result) performSelector:@selector(__slave__)];
-      [slave performSelector:@selector(releaseRubyObject)];
+    // Ruby.
+    if ([OBJCID_ID(result) respondsToSelector:@selector(__trackSlaveRubyObject)]) {
+      [OBJCID_ID(result) performSelector:@selector(__trackSlaveRubyObject)];
     }
   }
 }

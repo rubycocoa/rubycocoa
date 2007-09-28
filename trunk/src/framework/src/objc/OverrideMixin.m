@@ -45,7 +45,7 @@ static IMP super_imp(id rcv, SEL a_sel, IMP origin_imp)
   return NULL;
 }
 
-static id slave_obj_new(id rcv)
+static inline id slave_obj_new(id rcv)
 {
   return [[RBObject alloc] initWithClass: [rcv class] masterObject: rcv];
 }
@@ -54,21 +54,43 @@ static id slave_obj_new(id rcv)
  *  accessor for instance variables
  **/
 
-static void set_slave(id rcv, id slave)
+static inline void set_slave(id rcv, id slave)
 {
   object_setInstanceVariable(rcv, "m_slave", slave);
 }
 
-static id get_slave(id rcv)
+static inline id _get_slave(id rcv)
 {
   id ret;
   object_getInstanceVariable(rcv, "m_slave", (void*)(&ret));
   return ret;
 }
 
+// FIXME: for now this is safe, but this should ultimately move as an ivar 
+//        of the receiver
+static BOOL __slave_just_created = NO;
+
+static inline id get_slave(id rcv)
+{
+  id slave = _get_slave(rcv);
+  if (slave == nil) {
+    slave = slave_obj_new(rcv);
+    set_slave(rcv, slave);
+    __slave_just_created = YES;
+  }
+  else {
+    __slave_just_created = NO;
+  }
+  return slave;
+}
+
 void release_slave(id rcv)
 {
-  [get_slave(rcv) release];
+  id slave = _get_slave(rcv);
+  if (slave != nil) {
+    [slave release];
+    set_slave(rcv, nil);
+  }
 }
 
 /**
@@ -205,8 +227,10 @@ static id imp_slave (id rcv, SEL method)
   return get_slave(rcv);
 }
 
-@interface NSObject (AliasedCopyWithZone)
+@interface NSObject (AliasedOVMIXMethods)
 - (id)__copyWithZone:(NSZone *)zone;
+- (id)__retain;
+- (void)__release;
 @end
 
 static id imp_copyWithZone (id rcv, SEL method, NSZone *zone)
@@ -216,16 +240,31 @@ static id imp_copyWithZone (id rcv, SEL method, NSZone *zone)
   return copy;
 }
 
+static void imp_trackSlaveRubyObject (id rcv, SEL method)
+{
+  if (_get_slave(rcv) == NULL || __slave_just_created) {
+    id slave = get_slave(rcv);
+    [slave trackRetainReleaseOfRubyObject];
+    [slave releaseRubyObject]; 
+  }
+}
+
+static id imp_retain (id rcv, SEL method)
+{
+  [get_slave(rcv) retainRubyObject];
+  return [rcv __retain];
+}
+
+static void imp_release (id rcv, SEL method)
+{
+  if ([rcv retainCount] == 2)
+    [get_slave(rcv) releaseRubyObject]; 
+  [rcv __release];
+}
+
 static id imp_rbobj (id rcv, SEL method)
 {
-  id slave = get_slave(rcv);
-  if (slave == nil) {
-    // Lazily create the slave, because the traditional allocation methods that 
-    // we hook might not have been called.
-    slave = slave_obj_new(rcv);
-    set_slave(rcv, slave);
-  }
-  return (id)[slave __rbobj__];
+  return (id)[get_slave(rcv) __rbobj__];
 }
 
 static BOOL imp_respondsToSelector (id rcv, SEL method, SEL arg0)
@@ -235,8 +274,7 @@ static BOOL imp_respondsToSelector (id rcv, SEL method, SEL arg0)
  
   ret = ((BOOL (*)(id, SEL, SEL))simp)(rcv, method, arg0);
   if (!ret) {
-    id slave = get_slave(rcv);
-    ret = [slave respondsToSelector: arg0];
+    ret = [get_slave(rcv) respondsToSelector: arg0];
   }
   return ret;
 }
@@ -245,10 +283,9 @@ static id imp_methodSignatureForSelector (id rcv, SEL method, SEL arg0)
 {
   id ret;
   IMP simp = super_imp(rcv, method, (IMP)imp_methodSignatureForSelector);
-  id slave = get_slave(rcv);
   ret = (*simp)(rcv, method, arg0);
   if (ret == nil)
-    ret = [slave methodSignatureForSelector: arg0];
+    ret = [get_slave(rcv) methodSignatureForSelector: arg0];
   return ret;
 }
 
@@ -306,13 +343,7 @@ static void imp_setValue_forUndefinedKey (id rcv, SEL method, id value, NSString
  **/
 static id imp_c_alloc(Class klass, SEL method)
 {
-  id new_obj;
-  id slave;
-
-  new_obj = class_createInstance(klass, 0);
-  slave = slave_obj_new(new_obj);
-  set_slave(new_obj, slave);
-  return new_obj;
+  return class_createInstance(klass, 0);
 }
 
 static id imp_c_allocWithZone(Class klass, SEL method, NSZone* zone)
@@ -391,6 +422,7 @@ void install_ovmix_ivars(Class c)
 
 void install_ovmix_methods(Class c)
 {
+  class_addMethod(c, @selector(__trackSlaveRubyObject), (IMP)imp_trackSlaveRubyObject, "v@:");
   class_addMethod(c, @selector(__slave__), (IMP)imp_slave, "@4@4:8");
   class_addMethod(c, @selector(__rbobj__), (IMP)imp_rbobj, "L4@4:8");
   class_addMethod(c, @selector(respondsToSelector:), (IMP)imp_respondsToSelector, "c8@4:8:12");
@@ -400,15 +432,31 @@ void install_ovmix_methods(Class c)
   class_addMethod(c, @selector(setValue:forUndefinedKey:), (IMP)imp_setValue_forUndefinedKey, "v16@0:4@8@12");
 }
 
-void install_ovmix_hooks(Class c)
+static inline void 
+install_objc_hook(Class c, SEL orig, SEL new, IMP new_cb)
 {
-  if (class_respondsToSelector(c, @selector(copyWithZone:))) {
-    Method copy_method = class_getInstanceMethod(c, @selector(copyWithZone:));
-    if (copy_method != NULL) {
-      class_addMethod(c, @selector(__copyWithZone:), method_getImplementation(copy_method), "@8@4:8^{_NSZone=}12");
-      class_addMethod(c, @selector(copyWithZone:), (IMP)imp_copyWithZone, "@8@4:8^{_NSZone=}12");
+  if (class_respondsToSelector(c, orig)) {
+    Method method = class_getInstanceMethod(c, orig);
+    if (method != NULL) {
+      IMP orig_cb = method_getImplementation(method);
+      if (orig_cb != new_cb) {
+        OVMIX_LOG("hooking [%s -%s]", class_getName(c), (char *)orig);
+        char *types = method_getTypeEncoding(method);
+        class_addMethod(c, new, method_getImplementation(method), types);
+        class_addMethod(c, orig, new_cb, types);
+      }
     }
   }
+}
+
+void install_ovmix_hooks(Class c)
+{
+  install_objc_hook(c, @selector(copyWithZone:), @selector(__copyWithZone:), 
+    (IMP)imp_copyWithZone);
+  install_objc_hook(c, @selector(retain), @selector(__retain), 
+    (IMP)imp_retain);
+  install_objc_hook(c, @selector(release), @selector(__release), 
+    (IMP)imp_release);
 }
 
 static inline void install_ovmix_pure_class_methods(Class c)

@@ -1,3 +1,14 @@
+2007-09-28  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* framework/src/objc/RBObject.h,
+	  framework/src/objc/RBObject.m,
+	  framework/src/objc/mdl_objwrapper.m,
+	  framework/src/objc/OverrideMixin.m,
+	  framework/src/objc/RBSlaveObject.h:
+	Better OvMix retain cycle: if an OvMix object is created from Ruby, we by 
+	default don't retain its Ruby proxy, and start tracking retain/release 
+	messages, and appropriately re-retain/re-release the Ruby proxy.
+
 2007-09-29  Satoshi Nakagawa <artension@gmail.com>
 
 	* framework/src/ruby/osx/objc/oc_attachments.rb,
