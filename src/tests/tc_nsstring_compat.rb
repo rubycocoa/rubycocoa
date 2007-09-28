@@ -305,12 +305,47 @@ class TC_ObjcString < Test::Unit::TestCase
     end
   end
   
+  def test_chomp
+    ["", "abc", "abc\n", "abc\r", "abc\r\n", "abc\n\n", "abc\r\n\r\n\r\n\n\n", "ab\nc\r"].each do |s|
+      n = alloc_nsstring(s)
+      assert_equal(s.chomp, n.chomp)
+      assert_equal(s.chomp!, n.chomp!)
+      n = alloc_nsstring(s)
+      v = ''
+      assert_equal(s.chomp(v), n.chomp(v))
+      assert_equal(s.chomp!(v), n.chomp!(v))
+      n = alloc_nsstring(s)
+      v = "\r\n"
+      assert_equal(s.chomp(v), n.chomp(v))
+      assert_equal(s.chomp!(v), n.chomp!(v))
+      n = alloc_nsstring(s)
+      v = nil
+      assert_equal(s.chomp(v), n.chomp(v))
+      assert_equal(s.chomp!(v), n.chomp!(v))
+    end
+  end
+  
   def test_chop
     ['abc', "abc\n", "abc\r\n", "abc\r", ''].each do |s|
       n = alloc_nsstring(s)
       assert_equal(s.chop, n.chop)
       assert_equal(s.chop!, n.chop!)
     end
+  end
+  
+  def test_chop
+    ['abc', "abc\n", "abc\r\n", "abc\r", ''].each do |s|
+      n = alloc_nsstring(s)
+      assert_equal(s.chop, n.chop)
+      assert_equal(s.chop!, n.chop!)
+    end
+  end
+  
+  def test_chr
+    n = alloc_nsstring('abc')
+    assert_equal('a', n.chr)
+    n = alloc_nsstring('')
+    assert_equal('', n.chr)
   end
   
   def test_clear

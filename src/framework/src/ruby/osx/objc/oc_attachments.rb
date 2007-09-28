@@ -160,43 +160,6 @@ module OSX
     
     # For NSString duck typing
 
-    def *(times)
-      unless times.is_a?(Numeric) || times.is_a?(OSX::NSNumber)
-        raise TypeError, "can't convert #{times.class} into Integer"
-      end
-      i = times.to_i
-      s = OSX::NSMutableString.string
-      times.times { s.appendString(self) }
-      s
-    end
-
-    def +(other)
-      unless other.is_a?(String) || other.is_a?(OSX::NSString)
-        raise TypeError, "can't convert #{other.class} into String"
-      end
-      s = mutableCopy
-      s.appendString(other)
-      s
-    end
-    
-    def <<(other)
-      case other
-      when Numeric,OSX::NSNumber
-        i = other.to_i
-        if 0 <= i && i < 65536
-          appendString(OSX::NSString.stringWithFormat("%C", i))
-        else
-          raise TypeError, "can't convert #{other.class} into String"
-        end
-      when String,OSX::NSString
-        appendString(other)
-      else
-        raise TypeError, "can't convert #{other.class} into String"
-      end
-      self
-    end
-    alias_method :concat, :<<
-
     def [](*args)
       count = length
       case args.length
@@ -347,6 +310,43 @@ module OSX
         raise ArgumentError, "wrong number of arguments (#{args.length} for 3)"
       end
     end
+
+    def *(times)
+      unless times.is_a?(Numeric) || times.is_a?(OSX::NSNumber)
+        raise TypeError, "can't convert #{times.class} into Integer"
+      end
+      i = times.to_i
+      s = OSX::NSMutableString.string
+      times.times { s.appendString(self) }
+      s
+    end
+
+    def +(other)
+      unless other.is_a?(String) || other.is_a?(OSX::NSString)
+        raise TypeError, "can't convert #{other.class} into String"
+      end
+      s = mutableCopy
+      s.appendString(other)
+      s
+    end
+    
+    def <<(other)
+      case other
+      when Numeric,OSX::NSNumber
+        i = other.to_i
+        if 0 <= i && i < 65536
+          appendString(OSX::NSString.stringWithFormat("%C", i))
+        else
+          raise TypeError, "can't convert #{other.class} into String"
+        end
+      when String,OSX::NSString
+        appendString(other)
+      else
+        raise TypeError, "can't convert #{other.class} into String"
+      end
+      self
+    end
+    alias_method :concat, :<<
     
     def capitalize
       if length > 0
@@ -358,6 +358,45 @@ module OSX
     
     def capitalize!
       s = capitalize
+      if self != s
+        setString(s)
+        self
+      else
+        nil
+      end
+    end
+    
+    def chomp(rs=$/)
+      return mutableCopy unless rs
+      if rs.empty?
+        prev = self
+        while prev != (s = prev.chomp)
+          prev = s
+        end
+        s
+      else
+        if rs == "\n"
+          if end_with?("\r\n")
+            self[0...length-2]
+          elsif end_with?("\n")
+            self[0...length-1]
+          elsif end_with?("\r")
+            self[0...length-1]
+          else
+            mutableCopy
+          end
+        else
+          if end_with?(rs)
+            self[0...length-rs.to_ns.length]
+          else
+            mutableCopy
+          end
+        end
+      end
+    end
+    
+    def chomp!(rs=$/)
+      s = chomp(rs)
       if self != s
         setString(s)
         self
@@ -384,6 +423,14 @@ module OSX
         self
       else
         nil
+      end
+    end
+    
+    def chr
+      if empty?
+        OSX::NSMutableString.string
+      else
+        self[0..0]
       end
     end
     
