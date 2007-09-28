@@ -85,23 +85,80 @@ class TC_ObjcString < Test::Unit::TestCase
   end
   
   # NSString duck typing
+  
+  def alloc_nsstring(s)
+    OSX::NSMutableString.stringWithString(s)
+  end
 
   def test_times
-    s = OSX::NSMutableString.stringWithString('foo')
+    s = 'foo'
+    n = alloc_nsstring(s)
     s = s * 5
-    assert_equal('foo'*5, s)
+    n = n * 5
+    assert_equal(s, n)
+
+    s = 'foo'
+    n = alloc_nsstring(s)
+    s = s * 0
+    n = n * 0
+    assert_equal(s, n)
+  end
+  
+  def test_times_error
+    s = 'foo'
+    n = alloc_nsstring(s)
+    assert_raise(TypeError) { s * '' }
+    assert_raise(TypeError) { n * '' }
   end
   
   def test_plus
-    s = OSX::NSMutableString.stringWithString('foo')
+    s = 'foo'
+    n = alloc_nsstring(s)
     s = s + 'bar'
-    assert_equal('foobar', s)
+    n = n + 'bar'
+    assert_equal(s, n)
+  end
+  
+  def test_plus_error
+    s = 'foo'
+    n = alloc_nsstring(s)
+    assert_raise(TypeError) { s + 42 }
+    assert_raise(TypeError) { n + 42 }
+    assert_raise(TypeError) { s + nil }
+    assert_raise(TypeError) { n + nil }
+  end
+  
+  def test_concat
+    with_kcode('utf-8') do
+      s = alloc_nsstring('foo')
+      s << 'abc'
+      assert_equal('fooabc', s)
+      s << 123
+      assert_equal('fooabc{', s)
+      s.concat 0x3053
+      assert_equal('fooabc{こ', s)
+    end
+  end
+  
+  def test_concat_error
+    s = 'foo'
+    n = alloc_nsstring(s)
+    assert_raise(TypeError) { s << [] }
+    assert_raise(TypeError) { n << [] }
+    assert_raise(TypeError) { s << nil }
+    assert_raise(TypeError) { n << nil }
   end
   
   def test_ref_nth
+    s = 'abc'
+    n = alloc_nsstring(s)
+    [0, -1, -3, -4, -10, 2, 3, 10].each do |i|
+      assert_equal(s[i], n[i])
+    end
+    
     with_kcode('utf-8') do
-      s = OSX::NSMutableString.stringWithString('foo かきくけこ')
-      assert_equal(0x3053, s[-1])
+      s = alloc_nsstring('foo かきくけこ')
+      assert_equal(0x3051, s[-2])
       assert_equal(0x3053, s[8])
       assert_equal(nil, s[10])
       assert_equal(nil, s[-10])
@@ -110,7 +167,7 @@ class TC_ObjcString < Test::Unit::TestCase
   
   def test_ref_substr
     with_kcode('utf-8') do
-      s = OSX::NSMutableString.stringWithString('foo かきくけこ')
+      s = alloc_nsstring('foo かきくけこ')
       assert_equal('きくけ', s['きくけ'])
       assert_equal('', s[''])
       assert_equal(nil, s['abc'])
@@ -118,19 +175,42 @@ class TC_ObjcString < Test::Unit::TestCase
   end
   
   def test_ref_range
+    s = 'abc'
+    n = alloc_nsstring(s)
+    [0..0, 0..2, 0..10, 2..10, -1..0, -2..2, -3..2, -4..2].each do |i|
+      assert_equal(s[i], n[i])
+    end
+    
     with_kcode('utf-8') do
-      s = OSX::NSMutableString.stringWithString('foo かきくけこ')
+      s = alloc_nsstring('foo かきくけこ')
       assert_equal('foo', s[0..2])
       assert_equal('oo', s[1...3])
       assert_equal('くけこ', s[-3..8])
       assert_equal('けこ', s[7..10])
       assert_equal(nil, s[-10..-9])
       assert_equal('', s[5..4])
-      assert_equal(nil, s[10..9])
+      assert_equal(nil, s[10..10])
       assert_equal(nil, s[10..-2])
     end
   end
   
+  def test_ref_nth_len
+    s = 'abc'
+    n = alloc_nsstring(s)
+    [[0,0], [0,2], [0,10], [2,10], [3,3], [-1,0], [-2,2], [-3,2], [-4,2]].each do |i|
+      assert_equal(s[*i], n[*i])
+    end
+  end
+  
+  def test_ref_error
+    n = alloc_nsstring('foo')
+    assert_raise(TypeError) { n[[]] }
+    assert_raise(TypeError) { n[{}] }
+    assert_raise(TypeError) { n[nil] }
+    assert_raise(TypeError) { n[3,nil] }
+  end
+  
+=begin
   def test_ref_regexp
     with_kcode('utf-8') do
       s = OSX::NSMutableString.stringWithString('foo かきくけこ')
@@ -147,58 +227,51 @@ class TC_ObjcString < Test::Unit::TestCase
       assert_equal('bar', s[/([a-z]+) ([a-z]+)/,2])
     end
   end
+=end
   
-  def test_concat
-    with_kcode('utf-8') do
-      s = OSX::NSMutableString.stringWithString('foo')
-      s << 'abc'
-      assert_equal('fooabc', s)
-      s << 123
-      assert_equal('fooabc{', s)
-      s.concat 0x3053
-      assert_equal('fooabc{こ', s)
+  def test_capitalize
+    ['foO bar buz', ''].each do |s|
+      n = alloc_nsstring(s)
+      assert_equal(s.capitalize, n.capitalize)
+      assert_equal(s.capitalize!, n.capitalize!)
     end
   end
   
-  def test_capitalize
-    s = OSX::NSMutableString.stringWithString('foo bar')
-    assert_equal('Foo Bar', s.capitalize)
-    assert_equal('Foo Bar', s.capitalize!)
-  end
-  
   def test_clear
-    s = OSX::NSMutableString.stringWithString('Foobar')
+    s = alloc_nsstring('Foobar')
     assert_equal(s, s.clear)
     assert_equal('', s)
     assert_equal(0, s.length)
   end
   
   def test_downcase
-    s = OSX::NSMutableString.stringWithString('AbC dEF')
-    assert_equal('abc def', s.downcase)
-    assert_equal('abc def', s.downcase!)
+    ['foO bar buz', ''].each do |s|
+      n = alloc_nsstring(s)
+      assert_equal(s.downcase, n.downcase)
+      assert_equal(s.downcase!, n.downcase!)
+    end
   end
   
   def test_empty
-    s = OSX::NSMutableString.stringWithString('Foobar')
+    s = alloc_nsstring('Foobar')
     assert_equal(false, s.empty?)
     assert_equal(true, s.clear.empty?)
   end
   
   def test_end_with
-    s = OSX::NSMutableString.stringWithString('abc def')
+    s = alloc_nsstring('abc def')
     assert_equal(false, s.end_with?('abc'))
     assert_equal(true, s.end_with?('def'))
   end
   
   def test_include
     with_kcode('utf-8') do
-      s = OSX::NSMutableString.stringWithString('abc def')
+      s = alloc_nsstring('abc def')
       assert_equal(true, s.include?('c d'))
       assert_equal(true, s.include?(0x62))
       assert_equal(false, s.include?('C D'))
       assert_equal(false, s.include?(0x41))
-      s = OSX::NSMutableString.stringWithString('abc かきくけこ')
+      s = alloc_nsstring('abc かきくけこ')
       assert_equal(true, s.include?('かき'))
       assert_equal(true, s.include?(0x3053))
       assert_equal(false, s.include?('は'))
@@ -211,25 +284,31 @@ class TC_ObjcString < Test::Unit::TestCase
   end
   
   def test_start_with
-    s = OSX::NSMutableString.stringWithString('abc def')
+    s = alloc_nsstring('abc def')
     assert_equal(true, s.start_with?('abc'))
     assert_equal(false, s.start_with?('def'))
   end
   
   def test_upcase
-    s = OSX::NSMutableString.stringWithString('AbC dEF')
-    assert_equal('ABC DEF', s.upcase)
-    assert_equal('ABC DEF', s.upcase!)
+    ['foO bar buz', ''].each do |s|
+      n = alloc_nsstring(s)
+      assert_equal(s.upcase, n.upcase)
+      assert_equal(s.upcase!, n.upcase!)
+    end
   end
   
   def test_to_f
-    s = OSX::NSMutableString.stringWithString('3358.123')
-    assert((s.to_f - 3358.123).abs < 0.01)
+    ['3358.123', ''].each do |s|
+      n = alloc_nsstring(s)
+      assert((s.to_f - n.to_f).abs < 0.01)
+    end
   end
   
   def test_to_i
-    s = OSX::NSMutableString.stringWithString('3358.123')
-    assert_equal(3358, s.to_i)
+    ['-12345', '42', '3358.123', ''].each do |s|
+      n = alloc_nsstring(s)
+      assert((s.to_i - n.to_i).abs < 0.01)
+    end
   end
   
 end

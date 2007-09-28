@@ -1,3 +1,17 @@
+2007-09-28  Satoshi Nakagawa <artension@gmail.com>
+
+	* framework/src/ruby/osx/objc/oc_attachments.rb,
+	  tests/tc_nsarray.rb,
+	  tests/tc_nsstring_compat.rb:
+	- Added error checks for NSString#* and NSString#+.
+	- Disabled NSString#[regexp].
+	- NSString#capitalize should be compatible to String#capitalize.
+	- NSString#capitalize!, NSString#downcase! and NSString#upcase! should return nil when not modified.
+	- NSString#[start,len] and NSString#[start..end] should return '' when start == count.
+	- NSArray#[start,len] and NSArray#[start..end] should return [] when start == count.
+	- [-3,2] should be treated as (-3+count)..(-3+count+2) in NSArray#[] and NSArray#[]=.
+	- Updated tests.
+
 2007-09-27  Laurent Sansonetti <lsansonetti@apple.com>
 
 	* AUTHORS:

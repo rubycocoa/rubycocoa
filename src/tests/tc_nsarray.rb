@@ -55,8 +55,8 @@ class TC_NSArray < Test::Unit::TestCase
     a = alloc_nsarray(1,2,3,4,5)
     b = map_to_nsnumber([1,2,3,4,5])
     [(0..3), (0...3), (0..5), (0...5), (2..20),
-     (1..-1), (1..-10), (-3...-1), (-3..4), (-10...3),
-     (-20...-10), (10..3), (10..20)].each do |i|
+     (1..-1), (1..-10), (-3...-1), (-3..4), (-5..2), (-6..2), (-10...3),
+     (-20...-10), (10..3), (10..20), (5..5), (5...5), (6..6)].each do |i|
       x = a[i]
       assert_kind_of(NSArray, x) if x
       assert_equal(b[i], x)
@@ -66,8 +66,8 @@ class TC_NSArray < Test::Unit::TestCase
   def test_ref_start_and_length
     a = alloc_nsarray(1,2,3,4,5)
     b = map_to_nsnumber([1,2,3,4,5])
-    [[0,3], [0,10], [0,-3], [-3,2], [-3,10],
-     [-3,-3], [-10,2], [3,0], [10,0]].each do |i|
+    [[0,3], [0,10], [0,-3], [-3,2], [-3,3], [-3,10],
+     [-3,-3], [-10,2], [3,0], [10,0], [5,0], [6,0]].each do |i|
       x = a[*i]
       assert_kind_of(NSArray, x) if x
       assert_equal(b[*i], x)
@@ -119,7 +119,7 @@ class TC_NSArray < Test::Unit::TestCase
   def test_assign_start_and_length
     [33, nil, [], [11,22,33], NSArray.arrayWithArray([1,2,3])].each do |val|
       [[1,3], [1,10], [-3,2], [-3,10], [-3,0],
-       [-1,0], [0,0]].each do |d|
+       [-1,0], [0,0],[-2,3], [-2,2]].each do |d|
         a = alloc_nsarray(1,2,3,4,5)
         b = [1,2,3,4,5]
         a[*d] = val
