@@ -235,6 +235,16 @@ class TC_ObjcString < Test::Unit::TestCase
     assert_raise(IndexError) { n[-1] = '' }
   end
   
+  def test_assign_str
+    [['','AAA'], ['a',''], ['c','ZZZ'], ['','']].each do |str,v|
+      s = 'abc'
+      n = alloc_nsstring(s)
+      s[str] = v
+      n[str] = v
+      assert_equal(s, n)
+    end
+  end
+  
   def test_assign_range
     [0..1, 1..2, 2..3, 3..6, -3..2, -3..-2, -1..-1, 3..2,
      0...2, 1...1, 1...2, 3...3, 3..3, -3...2, -3...-2, -1...-1, 3...2].each do |r|
