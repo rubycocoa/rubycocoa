@@ -356,7 +356,7 @@ class TC_ObjcString < Test::Unit::TestCase
   end
   
   def test_downcase
-    ['foO bar buz', ''].each do |s|
+    ['foO bAr BuZ Z', 'abc', ''].each do |s|
       n = alloc_nsstring(s)
       assert_equal(s.downcase, n.downcase)
       assert_equal(s.downcase!, n.downcase!)

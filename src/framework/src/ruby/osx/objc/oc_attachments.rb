@@ -9,14 +9,15 @@ require 'osx/objc/oc_wrapper'
 
 module OSX
   
+  # Utility for private use
   module RangeUtil
     def self.normalize(range, count)
       n = range.first
       n += count if n < 0
       last = range.last
       last += count if last < 0
-      last -= 1 if range.exclude_end?
-      len = last - n + 1
+      last += 1 unless range.exclude_end?
+      len = last - n
       len = 0 if len < 0
       len = count - n if count < n + len
       [n, len, last]
@@ -293,7 +294,6 @@ module OSX
             raise IndexError, "negative length (#{len})"
           end
           self[n...n+len] = value
-          value
         #when Regexp
         else
           raise TypeError, "can't convert #{first.class} into Integer"
@@ -721,7 +721,7 @@ module OSX
               end
             end
           end
-          args[1]
+          value
         else
           raise ArgumentError, "wrong number of arguments (#{args.length} for 3)"
         end
@@ -743,7 +743,6 @@ module OSX
           raise IndexError, "negative length (#{len})"
         end
         self[n...n+len] = value
-        value
       else
         raise ArgumentError, "wrong number of arguments (#{args.length} for 3)"
       end
@@ -963,20 +962,20 @@ module OSX
       end
     end
 
-    def fill(*args)
+    def fill(*args, &block)
       count = self.count
       len = args.length
-      len -= 1 unless block_given?
+      len -= 1 unless block
       case len
       when 0
         val = args.first
         n = -1
         map! do |i|
           n += 1
-          block_given? ? yield(n) : val
+          block ? block.call(n) : val
         end
       when 1
-        if block_given?
+        if block
           first = args.first
         else
           val, first = args
@@ -989,7 +988,7 @@ module OSX
           map! do |i|
             n += 1
             if start <= n
-              block_given? ? yield(n) : val
+              block ? block.call(n) : val
             else
               i
             end
@@ -997,7 +996,6 @@ module OSX
         when Range
           range = first
           left, len, right = OSX::RangeUtil.normalize(range, count)
-          right += 1
           if left < 0 || count < left
             raise RangeError, "#{range} out of range"
           end
@@ -1005,21 +1003,21 @@ module OSX
           map! do |i|
             n += 1
             if left <= n && n < right
-              block_given? ? yield(n) : val
+              block ? block.call(n) : val
             else
               i
             end
           end
           (n+1).upto(right-1) do |i|
             n += 1
-            addObject(block_given? ? yield(n) : val)
+            addObject(block ? block.call(n) : val)
           end
           self
         else
           raise TypeError, "can't convert #{first.class} into Integer"
         end
       when 2
-        if block_given?
+        if block
           first, len = args
         else
           val, first, len = args
@@ -1038,21 +1036,11 @@ module OSX
           raise IndexError, "index #{first} out of array"
         end
         len = 0 if len < 0
-        last = start + len
-        n = -1
-        map! do |i|
-          n += 1
-          if start <= n && n < last
-            block_given? ? yield(n) : val
-          else
-            i
-          end
+        if block
+          fill(start...start+len, &block)
+        else
+          fill(val, start...start+len)
         end
-        (n+1).upto(last-1) do |i|
-          n += 1
-          addObject(block_given? ? yield(i) : val)
-        end
-        self
       else
         raise ArgumentError, "wrong number of arguments (#{args.length} for 2)"
       end
