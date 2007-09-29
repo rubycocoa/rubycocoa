@@ -200,8 +200,7 @@ module OSX
         when Range
           n, len = OSX::RangeUtil.normalize(first, count)
           if 0 <= n && n < count
-            nsrange = OSX::NSRange.new(n, len)
-            substringWithRange(nsrange).mutableCopy
+            substringWithRange(OSX::NSRange.new(n, len)).mutableCopy
           elsif n == count
             OSX::NSMutableString.string
           else
@@ -264,13 +263,15 @@ module OSX
           value = second
           case value
           when Numeric,OSX::NSNumber
-            str = OSX::NSString.stringWithFormat("%C", value.to_i)
-            setString(self[0...n] + str + (self[n+len...count] || ''))
+            value = OSX::NSString.stringWithFormat("%C", value.to_i)
           when String,OSX::NSString
-            setString(self[0...n] + value + (self[n+len...count] || ''))
           else
             raise TypeError, "can't convert #{val.class} into String"
           end
+          if len > 0
+            deleteCharactersInRange(OSX::NSRange.new(n, len))
+          end
+          insertString_atIndex(value, n)
           value
         #when Regexp
         else
@@ -341,8 +342,9 @@ module OSX
     alias_method :concat, :<<
     
     def capitalize
-      if length > 0
-        self[0..0].upcase + self[1..-1].downcase
+      len = length
+      if len > 0
+        substringToIndex(1).upcase + substringFromIndex(1).downcase
       else
         OSX::NSMutableString.string
       end
@@ -368,19 +370,17 @@ module OSX
         s
       else
         if rs == "\n"
-          if end_with?("\r\n")
-            self[0...length-2]
-          elsif end_with?("\n")
-            self[0...length-1]
-          elsif end_with?("\r")
-            self[0...length-1]
+          if hasSuffix("\r\n")
+            substringToIndex(length-2).mutableCopy
+          elsif hasSuffix("\n") || hasSuffix("\r")
+            substringToIndex(length-1).mutableCopy
           else
             mutableCopy
           end
         else
-          if end_with?(rs)
+          if hasSuffix(rs)
             rs = rs.to_ns if rs.is_a?(String)
-            self[0...length-rs.length]
+            substringToIndex(length-rs.length).mutableCopy
           else
             mutableCopy
           end
@@ -403,9 +403,9 @@ module OSX
       if len == 0
         OSX::NSMutableString.string
       elsif hasSuffix("\r\n")
-        self[0...len-2]
+        substringToIndex(length-2).mutableCopy
       else
-        self[0...len-1]
+        substringToIndex(length-1).mutableCopy
       end
     end
     
@@ -423,7 +423,7 @@ module OSX
       if empty?
         OSX::NSMutableString.string
       else
-        self[0..0]
+        substringToIndex(1).mutableCopy
       end
     end
     
@@ -439,14 +439,19 @@ module OSX
     def downcase!
       s = lowercaseString
       if self != s
-        setString(lowercaseString)
+        setString(s)
         self
       else
         nil
       end
     end
     
-    def each(rs=$/)
+    def each_byte(&block)
+      to_s.each_byte(&block)
+      self
+    end
+    
+    def each_line(rs=$/)
       if rs == nil
         yield mutableCopy
       else
@@ -485,7 +490,7 @@ module OSX
       end
       self
     end
-    alias_method :each_line, :each
+    alias_method :each, :each_line
     
     def empty?
       length == 0
@@ -493,6 +498,10 @@ module OSX
     
     def end_with?(str)
       hasSuffix(str)
+    end
+    
+    def hex
+      to_s.hex
     end
     
     def include?(str)
@@ -510,6 +519,7 @@ module OSX
         end
       when String,OSX::NSString
         s = pattern
+        s = s.to_ns if s.is_a?(String)
       #when Regexp
       else
         raise TypeError, "can't convert #{pattern.class} into String"
@@ -533,6 +543,28 @@ module OSX
       end
     end
     
+    def insert(n, other)
+      unless n.is_a?(Numeric) || n.is_a?(OSX::NSNumber)
+        raise TypeError, "can't convert #{n.class} into Integer"
+      end
+      unless other.is_a?(String) || other.is_a?(OSX::NSString)
+        raise TypeError, "can't convert #{other.class} into String"
+      end
+      n = n.to_i
+      if n == -1
+        appendString(other)
+      else
+        len = length
+        n += len + 1 if n < 0
+        if n < 0 || len < n
+          raise IndexError, "index #{n} out of string"
+        else
+          insertString_atIndex(other, n)
+        end
+      end
+      self
+    end
+    
     def intern
       to_s.intern
     end
@@ -544,6 +576,73 @@ module OSX
       result
     end
     
+    def oct
+      to_s.oct
+    end
+    
+    def ord
+      if length > 0
+        characterAtIndex(0)
+      else
+        0
+      end
+    end
+    
+    def replace(other)
+      setString(other)
+      self
+    end
+    
+    def reverse
+      s = OSX::NSMutableString.string
+      (length-1).downto(0) do |i|
+        s.appendFormat("%C", characterAtIndex(i))
+      end
+      s
+    end
+    
+    def reverse!
+      setString(reverse)
+      self
+    end
+    
+    def rindex(pattern, pos=self.length)
+      case pattern
+      when Numeric,OSX::NSNumber
+        i = pattern.to_i
+        if 0 <= i && i < 65536
+          s = OSX::NSString.stringWithFormat("%C", i)
+        else
+          return nil
+        end
+      when String,OSX::NSString
+        s = pattern
+        s = s.to_ns if s.is_a?(String)
+      #when Regexp
+      else
+        raise TypeError, "can't convert #{pattern.class} into String"
+      end
+      
+      if s.empty?
+        length
+      else
+        len = length
+        n = pos.to_i
+        n += len if n < 0
+        if n < 0
+          return nil
+        end
+        n += s.length
+        n = len if len < n
+        range = rangeOfString_options_range(s, OSX::NSBackwardsSearch, OSX::NSRange.new(0, n))
+        if range.location == OSX::NSNotFound
+          nil
+        else
+          range.location
+        end
+      end
+    end
+    
     def size
       length
     end
@@ -552,12 +651,27 @@ module OSX
       hasPrefix(str)
     end
     
-    def to_f
-      doubleValue
+    def strip
+      cs = OSX::NSCharacterSet.characterSetWithCharactersInString(" \t\r\n\f\v")
+      stringByTrimmingCharactersInSet(cs).mutableCopy
     end
     
-    def to_i
-      intValue
+    def strip!
+      s = strip
+      if self != s
+        setString(s)
+        self
+      else
+        nil
+      end
+    end
+    
+    def to_f
+      to_s.to_f
+    end
+    
+    def to_i(base=10)
+      to_s.to_i(base)
     end
     
     def upcase
@@ -567,7 +681,7 @@ module OSX
     def upcase!
       s = uppercaseString
       if self != s
-        setString(uppercaseString)
+        setString(s)
         self
       else
         nil
@@ -1110,7 +1224,7 @@ module OSX
     end
 
     def insert(n, *vals)
-      if n  == -1
+      if n == -1
         push(*vals)
       else
         n += count + 1 if n < 0
