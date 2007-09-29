@@ -8,6 +8,20 @@
 require 'osx/objc/oc_wrapper'
 
 module OSX
+  
+  module RangeUtil
+    def self.normalize(range, count)
+      n = range.first
+      n += count if n < 0
+      last = range.last
+      last += count if last < 0
+      last -= 1 if range.exclude_end?
+      len = last - n + 1
+      len = 0 if len < 0
+      len = count - n if count < n + len
+      [n, len, last]
+    end
+  end
 
   # Enumerable module for NSValue types
   module NSEnumerable
@@ -183,19 +197,7 @@ module OSX
           end
         #when Regexp
         when Range
-          range = first
-          n = range.first
-          n += count if n < 0
-          if n < 0 || count < n
-            return nil
-          end
-          last = range.last
-          last += count if last < 0
-          last -= 1 if range.exclude_end?
-          len = last - n + 1
-          len = 0 if len < 0
-          len = count - n if count < n + len
-
+          n, len = OSX::RangeUtil.normalize(first, count)
           if 0 <= n && n < count
             nsrange = OSX::NSRange.new(n, len)
             substringWithRange(nsrange).mutableCopy
@@ -254,18 +256,10 @@ module OSX
           end
           self[n...n+str.length] = second
         when Range
-          range = first
-          n = range.first
-          n += count if n < 0
+          n, len = OSX::RangeUtil.normalize(first, count)
           if n < 0 || count < n
-            raise RangeError, "#{range} out of range"
+            raise RangeError, "#{first} out of range"
           end
-          last = range.last
-          last += count if last < 0
-          last -= 1 if range.exclude_end?
-          len = last - n + 1
-          len = 0 if len < 0
-          
           value = second
           case value
           when Numeric,OSX::NSNumber
@@ -277,7 +271,6 @@ module OSX
             raise TypeError, "can't convert #{val.class} into String"
           end
           value
-          
         #when Regexp
         else
           raise TypeError, "can't convert #{first.class} into Integer"
@@ -301,7 +294,6 @@ module OSX
           end
           self[n...n+len] = value
           value
-          
         #when Regexp
         else
           raise TypeError, "can't convert #{first.class} into Integer"
@@ -699,17 +691,10 @@ module OSX
           value
         when Range
           range, value = args
-          n = range.first
-          n += count if n < 0
+          n, len = OSX::RangeUtil.normalize(range, count)
           if n < 0 || count < n
             raise RangeError, "#{range} out of range"
           end
-          last = range.last
-          last += count if last < 0
-          last -= 1 if range.exclude_end?
-          len = last - n + 1
-          len = 0 if len < 0
-          len = count - n if count < n + len
           
           if 0 <= n && n < count
             if len > 0
@@ -1011,11 +996,8 @@ module OSX
           end
         when Range
           range = first
-          left = range.first
-          right = range.last
-          left += count if left < 0
-          right += count if right < 0
-          right += range.exclude_end? ? 0 : 1
+          left, len, right = OSX::RangeUtil.normalize(range, count)
+          right += 1
           if left < 0 || count < left
             raise RangeError, "#{range} out of range"
           end
@@ -1378,20 +1360,13 @@ module OSX
           end
         when Range
           range = first
-          n = range.first
-          n += count if n < 0
+          n, len = OSX::RangeUtil.normalize(range, count)
           if n < 0 || count < n
             if slice
               raise RangeError, "#{first} out of range"
             end
             return nil
           end
-          last = range.last
-          last += count if last < 0
-          last -= 1 if range.exclude_end?
-          len = last - n + 1
-          len = 0 if len < 0
-          len = count - n if count < n + len
           
           if 0 <= n && n < count
             nsrange = OSX::NSRange.new(n, len)
