@@ -2,6 +2,16 @@
 
 	* framework/src/ruby/osx/objc/oc_attachments.rb,
 	  tests/tc_nsstring_compat.rb:
+	- Added methods to NSString:
+		each_byte, insert, hex, oct, ord, replace, reverse, reverse!, rindex.
+	- Changed to_i and to_f of NSString to forward to String.
+	- Refactoring []= and each of NSString.
+	- Updated tests.
+
+2007-09-29  Satoshi Nakagawa <artension@gmail.com>
+
+	* framework/src/ruby/osx/objc/oc_attachments.rb,
+	  tests/tc_nsstring_compat.rb:
 	- Refactoring NSString and NSArray.
 	- Improved tests.
 

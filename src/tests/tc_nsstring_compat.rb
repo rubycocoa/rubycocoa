@@ -237,7 +237,7 @@ class TC_ObjcString < Test::Unit::TestCase
   
   def test_assign_range
     [0..1, 1..2, 2..3, 3..6, -3..2, -3..-2, -1..-1, 3..2,
-     0...2, 1...1, 1...2, 3...3, -3...2, -3...-2, -1...-1, 3...2].each do |r|
+     0...2, 1...1, 1...2, 3...3, 3..3, -3...2, -3...-2, -1...-1, 3...2].each do |r|
       s = 'abc'
       n = alloc_nsstring(s)
       v = 'AAABBBCCC'
@@ -363,29 +363,42 @@ class TC_ObjcString < Test::Unit::TestCase
     end
   end
   
+  def test_each_byte
+    with_kcode('utf-8') do
+      ['abc\r\ndef', 'a', 'あいうabc\r\nかきく', ''].each do |s|
+        n = alloc_nsstring(s)
+        a = []
+        b = []
+        n.each_byte {|i| a << i }
+        s.each_byte {|i| b << i }
+        assert_equal(b, a)
+      end
+    end
+  end
+  
   def test_each_line
     ["abc\ndef\r\nghi\njkl\n", "\n\n\nabc", "", "a\nb", "abc\rdef",
      "\nabc\n\ndef\nghi\njkl\n\nmnopq\n\n"].each do |s|
       n = alloc_nsstring(s)
       a = []
       b = []
-      n.each {|i| a << i.to_ruby }
-      s.each {|i| b << i }
+      n.each_line {|i| a << i.to_ruby }
+      s.each_line {|i| b << i }
       assert_equal(b, a)
       a = []
       b = []
-      n.each(nil) {|i| a << i.to_ruby }
-      s.each(nil) {|i| b << i }
+      n.each_line(nil) {|i| a << i.to_ruby }
+      s.each_line(nil) {|i| b << i }
       assert_equal(b, a)
       a = []
       b = []
-      n.each("\r\n") {|i| a << i.to_ruby }
-      s.each("\r\n") {|i| b << i }
+      n.each_line("\r\n") {|i| a << i.to_ruby }
+      s.each_line("\r\n") {|i| b << i }
       assert_equal(b, a)
       a = []
       b = []
-      n.each('') {|i| a << i.to_ruby }
-      s.each('') {|i| b << i }
+      n.each_line('') {|i| a << i.to_ruby }
+      s.each_line('') {|i| b << i }
       assert_equal(b, a)
     end
   end
@@ -400,6 +413,13 @@ class TC_ObjcString < Test::Unit::TestCase
     s = alloc_nsstring('abc def')
     assert_equal(false, s.end_with?('abc'))
     assert_equal(true, s.end_with?('def'))
+  end
+  
+  def test_hex
+    ['', '10', '-10', 'ff', '0x10', '-0x10', '0b10', 'xyz', '10z', '1_0'].each do |s|
+      n = alloc_nsstring(s)
+      assert_equal(s.hex, n.hex)
+    end
   end
   
   def test_include
@@ -430,10 +450,10 @@ class TC_ObjcString < Test::Unit::TestCase
       n = alloc_nsstring(s)
       assert_equal(s.index(i), n.index(i))
     end
-    [-5,-2,0,2,5].each do |i|
-      s = ''
+    [-10,-6,-5,-4,-3,-2,-1,0,1,2,3,4,5,6,10].each do |i|
+      s = 'abcabc'
       n = alloc_nsstring(s)
-      assert_equal(s.index('a',i), n.index('a',i))
+      assert_equal(s.index('abc',i), n.index('abc',i))
     end
   end
   
@@ -442,6 +462,30 @@ class TC_ObjcString < Test::Unit::TestCase
     n = alloc_nsstring(s)
     assert_raise(TypeError) { s.index([]) }
     assert_raise(TypeError) { n.index([]) }
+  end
+  
+  def test_insert
+    [-4,-3,-2,-1,0,1,2,3].each do |i|
+      s = 'abc'
+      n = alloc_nsstring(s)
+      assert_equal(s.insert(i,'ZZ'), n.insert(i,'ZZ'))
+      assert_equal(s, n)
+    end
+  end
+  
+  def test_insert_error
+    [-10-5,4,10].each do |i|
+      s = 'abc'
+      n = alloc_nsstring(s)
+      assert_raise(IndexError) { s.insert(i,'ZZZ') }
+      assert_raise(IndexError) { n.insert(i,'ZZZ') }
+    end
+    s = 'abc'
+    n = alloc_nsstring(s)
+    assert_raise(TypeError) { s.insert([], '') }
+    assert_raise(TypeError) { n.insert([], '') }
+    assert_raise(TypeError) { s.insert(0, 0) }
+    assert_raise(TypeError) { n.insert(0, 0) }
   end
   
   def test_intern
@@ -462,6 +506,54 @@ class TC_ObjcString < Test::Unit::TestCase
     end
   end
   
+  def test_oct
+    ['', '10', '-10', '010', '8', '0b10', '0x10', '1_0_0x'].each do |s|
+      n = alloc_nsstring(s)
+      assert_equal(s.oct, n.oct)
+    end
+  end
+  
+  def test_ord
+    ['', 'a', 'Z', '0', "\n"].each do |s|
+      n = alloc_nsstring(s)
+      assert_equal(s[0] || 0, n.ord)
+    end
+  end
+  
+  def test_replace
+    s = 'abc'
+    n = alloc_nsstring(s)
+    n.replace('ZZZ')
+    assert_equal('ZZZ', n)
+  end
+  
+  def test_reverse
+    ['foO bar buZ', 'a', ''].each do |s|
+      n = alloc_nsstring(s)
+      assert_equal(s.reverse, n.reverse)
+      assert_equal(s.reverse!, n.reverse!)
+    end
+    with_kcode('utf-8') do
+      ['漢字', "あいうえおab\r\ncかきくけこ"].each do |s|
+        n = alloc_nsstring(s)
+        assert_equal(n, n.reverse.reverse)
+      end
+    end
+  end
+  
+  def test_rindex
+    ['', 'a', 'z', 0x42, 0x100000].each do |i|
+      s = 'abcabc'
+      n = alloc_nsstring(s)
+      assert_equal(s.rindex(i), n.rindex(i))
+    end
+    [-10,-6,-5,-4,-3,-2,-1,0,1,2,3,4,5,6,10].each do |i|
+      s = 'abcabc'
+      n = alloc_nsstring(s)
+      assert_equal(s.rindex('abc',i), n.rindex('abc',i))
+    end
+  end
+  
   def test_size
     assert_equal(6, 'Foobar'.to_ns.size)
   end
@@ -470,6 +562,14 @@ class TC_ObjcString < Test::Unit::TestCase
     s = alloc_nsstring('abc def')
     assert_equal(true, s.start_with?('abc'))
     assert_equal(false, s.start_with?('def'))
+  end
+  
+  def test_strip
+    ["", "   abc   ", "\t \r\n\f\vtest \t"].each do |s|
+      n = alloc_nsstring(s)
+      assert_equal(s.strip, n.strip)
+      assert_equal(s.strip!, n.strip!)
+    end
   end
   
   def test_upcase
@@ -481,16 +581,16 @@ class TC_ObjcString < Test::Unit::TestCase
   end
   
   def test_to_f
-    ['3358.123', ''].each do |s|
+    ['', '3358.123', '4_42.42', '1e-5', '12e5', '.1', "  \n10.12"].each do |s|
       n = alloc_nsstring(s)
       assert((s.to_f - n.to_f).abs < 0.01)
     end
   end
   
   def test_to_i
-    ['-12345', '42', '3358.123', ''].each do |s|
+    ['', '-12345', '42', '3358.123', '1_000_1', '0x10'].each do |s|
       n = alloc_nsstring(s)
-      assert((s.to_i - n.to_i).abs < 0.01)
+      assert_equal(s.to_i, n.to_i)
     end
   end
   
