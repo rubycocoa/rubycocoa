@@ -1,5 +1,12 @@
 2007-09-29  Satoshi Nakagawa <artension@gmail.com>
 
+	* framework/src/ruby/osx/objc/oc_attachments.rb,
+	  tests/tc_nsstring_compat.rb:
+	- Refactoring NSString and NSArray.
+	- Improved tests.
+
+2007-09-29  Satoshi Nakagawa <artension@gmail.com>
+
 	* framework/src/ruby/osx/objc/oc_attachments.rb:
 	Refactoring operations around Range.
 
