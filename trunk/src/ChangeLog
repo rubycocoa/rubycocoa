@@ -1,6 +1,11 @@
 2007-09-29  Satoshi Nakagawa <artension@gmail.com>
 
 	* framework/src/ruby/osx/objc/oc_attachments.rb:
+	Refactoring operations around Range.
+
+2007-09-29  Satoshi Nakagawa <artension@gmail.com>
+
+	* framework/src/ruby/osx/objc/oc_attachments.rb:
 	length should be counted on NSString.
 	
 2007-09-29  Satoshi Nakagawa <artension@gmail.com>
