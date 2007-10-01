@@ -1,5 +1,11 @@
 2007-09-02  Laurent Sansonetti <lsansonetti@apple.com>
 
+	* framework/src/objc/OverrideMixin.m,
+	  tests/tc_ovmix.rb,
+	  tests/objc_test.m:
+	Fixed a bug, when ObjC arguments that were passed from an ObjC closure
+	to Ruby were not retained, as they should. Added a test case.
+
 	* tool/create-symlinks.rb:
 	Fixed for Leopard.
 
