@@ -580,6 +580,25 @@ static BOOL TestThreadedCallbackDone = NO;
 
 @end
 
+@interface OvmixArgRetained : NSObject
+@end
+
+@implementation OvmixArgRetained
+
++ (void)test:(id)obj
+{
+  NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+  NSObject *o = [[[NSObject alloc] init] autorelease]; 
+  [obj performSelector:@selector(setObject:) withObject:o];
+  if ([obj performSelector:@selector(getObject)] != o)
+    [NSException raise:@"OvmixArgRetained" format:@"assertion1 failed"];
+  [pool release];
+  if ([obj performSelector:@selector(getObject)] != o)
+    [NSException raise:@"OvmixArgRetained" format:@"assertion2 failed"];
+}
+
+@end
+
 void Init_objc_test(){
   // dummy initializer for ruby's `require'
 }

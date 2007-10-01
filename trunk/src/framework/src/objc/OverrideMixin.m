@@ -140,6 +140,15 @@ ovmix_ffi_closure(ffi_cif* cif, void* resp, void** args, void* userdata)
 
     OVMIX_LOG("converted arg #%d of type '%s' to Ruby value %p", i - 2, args_octypes[i - 2], arg);
 
+    if (!NIL_P(arg)
+        && rb_obj_is_kind_of(arg, objid_s_class()) == Qtrue
+        && !OBJCID_DATA_PTR(arg)->retained) {
+	    OVMIX_LOG("retaining %p", OBJCID_ID(arg));
+      [OBJCID_ID(arg) retain];
+      OBJCID_DATA_PTR(arg)->retained = YES;
+      OBJCID_DATA_PTR(arg)->can_be_released = YES;
+    }
+
     rb_ary_store(rb_args, i - 2, arg);
   }
 
@@ -265,12 +274,6 @@ static void imp_release (id rcv, SEL method)
 {
   release_slave_rbobj_if_needed(rcv);
   [rcv __release];
-}
-
-static id imp_autorelease (id rcv, SEL method)
-{
-  release_slave_rbobj_if_needed (rcv);
-  return [rcv __autorelease];
 }
 
 static id imp_rbobj (id rcv, SEL method)
@@ -468,8 +471,6 @@ void install_ovmix_hooks(Class c)
     (IMP)imp_retain);
   install_objc_hook(c, @selector(release), @selector(__release), 
     (IMP)imp_release);
-  install_objc_hook(c, @selector(autorelease), @selector(__autorelease), 
-    (IMP)imp_autorelease);
 }
 
 static inline void install_ovmix_pure_class_methods(Class c)
