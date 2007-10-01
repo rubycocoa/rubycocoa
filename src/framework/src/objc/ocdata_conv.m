@@ -521,13 +521,6 @@ rbtime_to_nsdate (VALUE rbval, id* nsval)
   return [(*nsval) isKindOfClass: [NSDate class]];
 }
 
-static void
-__slave_nsobj_free (void *p)
-{
-  DATACONV_LOG("releasing RBObject %p", p);
-  [(id)p release];
-}
-
 static BOOL 
 rbobj_convert_to_nsobj (VALUE obj, id* nsobj)
 {
@@ -567,19 +560,7 @@ rbobj_convert_to_nsobj (VALUE obj, id* nsobj)
       if (rb_obj_is_kind_of(obj, rb_cTime))
         return rbtime_to_nsdate(obj, nsobj);
 
-      if (!OBJ_FROZEN(obj)) {
-        *nsobj = [[RBObject alloc] initWithRubyObject:obj];
-        // Let's embed the ObjC object in a custom Ruby object that will 
-        // autorelease the ObjC object when collected by the Ruby GC, and
-        // put the Ruby object as an instance variable.
-        VALUE slave_nsobj;
-        slave_nsobj = Data_Wrap_Struct(rb_cData, NULL, __slave_nsobj_free, *nsobj);   
-        rb_ivar_set(obj, rb_intern("@__slave_nsobj__"), slave_nsobj);
-      }
-      else {
-        // Ruby object is frozen, so we can't do much now.
-        *nsobj = [[[RBObject alloc] initWithRubyObject:obj] autorelease];
-      }
+      *nsobj = [[[RBObject alloc] initWithRubyObject:obj] autorelease];
       return YES;
   }
   return YES;

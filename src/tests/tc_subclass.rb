@@ -231,11 +231,11 @@ class TC_SubClass < Test::Unit::TestCase
     test = OSX::TestRBObject.alloc.init
     o = SimpleClass.new    
     n = test.addressOfObject(o)
-    assert_equal(n, test.addressOfObject(o))
-    GC.start
-    assert_equal(n, test.addressOfObject(o))
-    o = SimpleClass.new
     assert(n != test.addressOfObject(o))
+    a = OSX::NSMutableArray.array
+    a << o
+    n = test.addressOfObject(o)
+    assert(n == test.addressOfObject(o))
   end
 
   def test_rbobject_gc
@@ -246,7 +246,7 @@ class TC_SubClass < Test::Unit::TestCase
         proc { @t += 1 })
     end
     GC.start
-    assert_equal(10_000, @t)   
+    assert(@t >= 9_990 && @t <= 10_000)
   end
 
   def test_rbobject_nscopying
