@@ -1,3 +1,10 @@
+2007-09-02  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* framework/src/objc/ocdata_conv.m,
+	  tests/tc_subclass.rb:
+	Removed the old __slave_nsobj__ ivar hook. Now all pure-Ruby objects will
+	be wrapped in an autoreleased RBObject.
+
 2007-09-29  Satoshi Nakagawa <artension@gmail.com>
 
 	* tests/tc_nsstring_compat.rb:
