@@ -1,5 +1,8 @@
 2007-09-02  Laurent Sansonetti <lsansonetti@apple.com>
 
+	* tool/create-symlinks.rb:
+	Fixed for Leopard.
+
 	* framework/src/objc/ocdata_conv.m,
 	  tests/tc_subclass.rb:
 	Removed the old __slave_nsobj__ ivar hook. Now all pure-Ruby objects will
