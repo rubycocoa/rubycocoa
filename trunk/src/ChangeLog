@@ -1,4 +1,12 @@
-2007-09-02  Laurent Sansonetti <lsansonetti@apple.com>
+2007-10-02  Eloy Duran <eloy.de.enige@gmail.com>
+
+	* framework/tool/standaloneify.rb:
+	- Standaloneify now sets the environment variable ENV['RUBYCOCOA_STANDALONEIFYING?']
+	  This is to be able to prevent code from being ran when
+	  a application s being standaloneified.
+	- Standaloneify will now skip all the source files at any depth in Resources.
+
+2007-10-01  Laurent Sansonetti <lsansonetti@apple.com>
 
 	* framework/src/objc/OverrideMixin.m,
 	  tests/tc_ovmix.rb,
