@@ -25,7 +25,6 @@ mach_inject_bundle_pid(
 	if( !err ) {
 		frameworkBundle = CFBundleGetBundleWithIdentifier(
 			CFSTR("be.chopine.RubyInject"));
-    //frameworkBundle = CFBundleCreate(NULL, CFURLCreateWithString(NULL, CFSTR("/Library/Frameworks/mach_inject_bundle.framework"), NULL));
 		if( frameworkBundle == NULL )
 			err = err_mach_inject_bundle_couldnt_load_framework_bundle;
 	}
@@ -34,7 +33,6 @@ mach_inject_bundle_pid(
 	CFURLRef injectionURL = NULL;
 	if( !err ) {
 		injectionURL = CFBundleCopyResourceURL( frameworkBundle,
-			//CFSTR("mach_inject_bundle_stub.bundle"), NULL, NULL );
 			CFSTR("MachInjectBundleStub.bundle"), NULL, NULL );
 		if( !injectionURL )
 			err = err_mach_inject_bundle_couldnt_find_injection_bundle;
