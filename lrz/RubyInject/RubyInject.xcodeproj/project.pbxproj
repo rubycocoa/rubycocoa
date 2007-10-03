@@ -1,0 +1,568 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 44;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		4DAE96180CB2A57600828CF1 /* load_bundle.c in Sources */ = {isa = PBXBuildFile; fileRef = 4DAE956E0CB2A11E00828CF1 /* load_bundle.c */; };
+		4DAE96190CB2A58C00828CF1 /* mach_inject_bundle_stub.c in Sources */ = {isa = PBXBuildFile; fileRef = 4DAE95720CB2A11E00828CF1 /* mach_inject_bundle_stub.c */; };
+		4DAE964C0CB2A60300828CF1 /* RubyInject.h in Headers */ = {isa = PBXBuildFile; fileRef = 4DAE964A0CB2A60300828CF1 /* RubyInject.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4DAE964D0CB2A60300828CF1 /* RubyInject.m in Sources */ = {isa = PBXBuildFile; fileRef = 4DAE964B0CB2A60300828CF1 /* RubyInject.m */; };
+		4DAE96FA0CB2B47400828CF1 /* MachInjectBundleStub.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 4DAE960E0CB2A55000828CF1 /* MachInjectBundleStub.bundle */; };
+		4DAE97410CB2B62B00828CF1 /* RubyInjectBundle.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 4DAE97390CB2B62200828CF1 /* RubyInjectBundle.bundle */; };
+		4DAE97510CB2B67200828CF1 /* RubyInjectBundle.m in Sources */ = {isa = PBXBuildFile; fileRef = 4DAE97500CB2B67200828CF1 /* RubyInjectBundle.m */; };
+		4DAE986B0CB2E75300828CF1 /* mach_inject.c in Sources */ = {isa = PBXBuildFile; fileRef = 4DAE95700CB2A11E00828CF1 /* mach_inject.c */; };
+		4DAE986C0CB2E75800828CF1 /* mach_inject_bundle.c in Sources */ = {isa = PBXBuildFile; fileRef = 4DAE95680CB2A0CD00828CF1 /* mach_inject_bundle.c */; };
+		8DC2EF530486A6940098B216 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C1666FE841158C02AAC07 /* InfoPlist.strings */; };
+		8DC2EF570486A6940098B216 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7B1FEA5585E11CA2CBB /* Cocoa.framework */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		4DAE97450CB2B64400828CF1 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0867D690FE84028FC02AAC07 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 4DAE960D0CB2A55000828CF1 /* MachInjectBundleStub */;
+			remoteInfo = MachInjectBundleStub;
+		};
+		4DAE97470CB2B64700828CF1 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0867D690FE84028FC02AAC07 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 4DAE97380CB2B62200828CF1 /* RubyInjectBundle */;
+			remoteInfo = RubyInjectBundle;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		0867D69BFE84028FC02AAC07 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
+		0867D6A5FE840307C02AAC07 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
+		089C1667FE841158C02AAC07 /* English */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		1058C7B1FEA5585E11CA2CBB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
+		4DAE95680CB2A0CD00828CF1 /* mach_inject_bundle.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = mach_inject_bundle.c; sourceTree = "<group>"; };
+		4DAE95690CB2A0CD00828CF1 /* mach_inject_bundle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mach_inject_bundle.h; sourceTree = "<group>"; };
+		4DAE956E0CB2A11E00828CF1 /* load_bundle.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = load_bundle.c; sourceTree = "<group>"; };
+		4DAE956F0CB2A11E00828CF1 /* load_bundle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = load_bundle.h; sourceTree = "<group>"; };
+		4DAE95700CB2A11E00828CF1 /* mach_inject.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = mach_inject.c; sourceTree = "<group>"; };
+		4DAE95710CB2A11E00828CF1 /* mach_inject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mach_inject.h; sourceTree = "<group>"; };
+		4DAE95720CB2A11E00828CF1 /* mach_inject_bundle_stub.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = mach_inject_bundle_stub.c; sourceTree = "<group>"; };
+		4DAE95730CB2A11E00828CF1 /* mach_inject_bundle_stub.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mach_inject_bundle_stub.h; sourceTree = "<group>"; };
+		4DAE960E0CB2A55000828CF1 /* MachInjectBundleStub.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MachInjectBundleStub.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
+		4DAE960F0CB2A55000828CF1 /* MachInjectBundleStub-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "MachInjectBundleStub-Info.plist"; sourceTree = "<group>"; };
+		4DAE964A0CB2A60300828CF1 /* RubyInject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RubyInject.h; sourceTree = "<group>"; };
+		4DAE964B0CB2A60300828CF1 /* RubyInject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RubyInject.m; sourceTree = "<group>"; };
+		4DAE97390CB2B62200828CF1 /* RubyInjectBundle.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RubyInjectBundle.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
+		4DAE973A0CB2B62200828CF1 /* RubyInjectBundle-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "RubyInjectBundle-Info.plist"; sourceTree = "<group>"; };
+		4DAE97500CB2B67200828CF1 /* RubyInjectBundle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RubyInjectBundle.m; sourceTree = "<group>"; };
+		8DC2EF5A0486A6940098B216 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		8DC2EF5B0486A6940098B216 /* RubyInject.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = RubyInject.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		4DAE960C0CB2A55000828CF1 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4DAE97370CB2B62200828CF1 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8DC2EF560486A6940098B216 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8DC2EF570486A6940098B216 /* Cocoa.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		034768DFFF38A50411DB9C8B /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				8DC2EF5B0486A6940098B216 /* RubyInject.framework */,
+				4DAE960E0CB2A55000828CF1 /* MachInjectBundleStub.bundle */,
+				4DAE97390CB2B62200828CF1 /* RubyInjectBundle.bundle */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		0867D691FE84028FC02AAC07 /* RubyInject */ = {
+			isa = PBXGroup;
+			children = (
+				08FB77AEFE84172EC02AAC07 /* MachInjectBundleStub */,
+				4DAE974F0CB2B65400828CF1 /* RubyInjectBundle */,
+				4DAE96490CB2A5EF00828CF1 /* Sources */,
+				089C1665FE841158C02AAC07 /* Resources */,
+				0867D69AFE84028FC02AAC07 /* External Frameworks and Libraries */,
+				034768DFFF38A50411DB9C8B /* Products */,
+			);
+			name = RubyInject;
+			sourceTree = "<group>";
+		};
+		0867D69AFE84028FC02AAC07 /* External Frameworks and Libraries */ = {
+			isa = PBXGroup;
+			children = (
+				1058C7B0FEA5585E11CA2CBB /* Linked Frameworks */,
+				1058C7B2FEA5585E11CA2CBB /* Other Frameworks */,
+			);
+			name = "External Frameworks and Libraries";
+			sourceTree = "<group>";
+		};
+		089C1665FE841158C02AAC07 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				8DC2EF5A0486A6940098B216 /* Info.plist */,
+				089C1666FE841158C02AAC07 /* InfoPlist.strings */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
+		08FB77AEFE84172EC02AAC07 /* MachInjectBundleStub */ = {
+			isa = PBXGroup;
+			children = (
+				4DAE956E0CB2A11E00828CF1 /* load_bundle.c */,
+				4DAE956F0CB2A11E00828CF1 /* load_bundle.h */,
+				4DAE95720CB2A11E00828CF1 /* mach_inject_bundle_stub.c */,
+				4DAE95730CB2A11E00828CF1 /* mach_inject_bundle_stub.h */,
+				4DAE960F0CB2A55000828CF1 /* MachInjectBundleStub-Info.plist */,
+			);
+			name = MachInjectBundleStub;
+			sourceTree = "<group>";
+		};
+		1058C7B0FEA5585E11CA2CBB /* Linked Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				1058C7B1FEA5585E11CA2CBB /* Cocoa.framework */,
+			);
+			name = "Linked Frameworks";
+			sourceTree = "<group>";
+		};
+		1058C7B2FEA5585E11CA2CBB /* Other Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				0867D6A5FE840307C02AAC07 /* AppKit.framework */,
+				0867D69BFE84028FC02AAC07 /* Foundation.framework */,
+			);
+			name = "Other Frameworks";
+			sourceTree = "<group>";
+		};
+		4DAE96490CB2A5EF00828CF1 /* Sources */ = {
+			isa = PBXGroup;
+			children = (
+				4DAE964A0CB2A60300828CF1 /* RubyInject.h */,
+				4DAE964B0CB2A60300828CF1 /* RubyInject.m */,
+				4DAE95700CB2A11E00828CF1 /* mach_inject.c */,
+				4DAE95710CB2A11E00828CF1 /* mach_inject.h */,
+				4DAE95680CB2A0CD00828CF1 /* mach_inject_bundle.c */,
+				4DAE95690CB2A0CD00828CF1 /* mach_inject_bundle.h */,
+			);
+			name = Sources;
+			sourceTree = "<group>";
+		};
+		4DAE974F0CB2B65400828CF1 /* RubyInjectBundle */ = {
+			isa = PBXGroup;
+			children = (
+				4DAE97500CB2B67200828CF1 /* RubyInjectBundle.m */,
+				4DAE973A0CB2B62200828CF1 /* RubyInjectBundle-Info.plist */,
+			);
+			name = RubyInjectBundle;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		8DC2EF500486A6940098B216 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4DAE964C0CB2A60300828CF1 /* RubyInject.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		4DAE960D0CB2A55000828CF1 /* MachInjectBundleStub */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4DAE96130CB2A55000828CF1 /* Build configuration list for PBXNativeTarget "MachInjectBundleStub" */;
+			buildPhases = (
+				4DAE960A0CB2A55000828CF1 /* Resources */,
+				4DAE960B0CB2A55000828CF1 /* Sources */,
+				4DAE960C0CB2A55000828CF1 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = MachInjectBundleStub;
+			productName = MachInjectBundleStub;
+			productReference = 4DAE960E0CB2A55000828CF1 /* MachInjectBundleStub.bundle */;
+			productType = "com.apple.product-type.bundle";
+		};
+		4DAE97380CB2B62200828CF1 /* RubyInjectBundle */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4DAE973E0CB2B62200828CF1 /* Build configuration list for PBXNativeTarget "RubyInjectBundle" */;
+			buildPhases = (
+				4DAE97350CB2B62200828CF1 /* Resources */,
+				4DAE97360CB2B62200828CF1 /* Sources */,
+				4DAE97370CB2B62200828CF1 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = RubyInjectBundle;
+			productName = RubyInjectBundle;
+			productReference = 4DAE97390CB2B62200828CF1 /* RubyInjectBundle.bundle */;
+			productType = "com.apple.product-type.bundle";
+		};
+		8DC2EF4F0486A6940098B216 /* RubyInject */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 1DEB91AD08733DA50010E9CD /* Build configuration list for PBXNativeTarget "RubyInject" */;
+			buildPhases = (
+				8DC2EF500486A6940098B216 /* Headers */,
+				8DC2EF520486A6940098B216 /* Resources */,
+				8DC2EF540486A6940098B216 /* Sources */,
+				8DC2EF560486A6940098B216 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				4DAE97480CB2B64700828CF1 /* PBXTargetDependency */,
+				4DAE97460CB2B64400828CF1 /* PBXTargetDependency */,
+			);
+			name = RubyInject;
+			productInstallPath = "$(HOME)/Library/Frameworks";
+			productName = RubyInject;
+			productReference = 8DC2EF5B0486A6940098B216 /* RubyInject.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		0867D690FE84028FC02AAC07 /* Project object */ = {
+			isa = PBXProject;
+			buildConfigurationList = 1DEB91B108733DA50010E9CD /* Build configuration list for PBXProject "RubyInject" */;
+			compatibilityVersion = "Xcode 3.0";
+			hasScannedForEncodings = 1;
+			mainGroup = 0867D691FE84028FC02AAC07 /* RubyInject */;
+			productRefGroup = 034768DFFF38A50411DB9C8B /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				8DC2EF4F0486A6940098B216 /* RubyInject */,
+				4DAE960D0CB2A55000828CF1 /* MachInjectBundleStub */,
+				4DAE97380CB2B62200828CF1 /* RubyInjectBundle */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		4DAE960A0CB2A55000828CF1 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4DAE97350CB2B62200828CF1 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8DC2EF520486A6940098B216 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4DAE97410CB2B62B00828CF1 /* RubyInjectBundle.bundle in Resources */,
+				4DAE96FA0CB2B47400828CF1 /* MachInjectBundleStub.bundle in Resources */,
+				8DC2EF530486A6940098B216 /* InfoPlist.strings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		4DAE960B0CB2A55000828CF1 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4DAE96180CB2A57600828CF1 /* load_bundle.c in Sources */,
+				4DAE96190CB2A58C00828CF1 /* mach_inject_bundle_stub.c in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4DAE97360CB2B62200828CF1 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4DAE97510CB2B67200828CF1 /* RubyInjectBundle.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8DC2EF540486A6940098B216 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4DAE964D0CB2A60300828CF1 /* RubyInject.m in Sources */,
+				4DAE986B0CB2E75300828CF1 /* mach_inject.c in Sources */,
+				4DAE986C0CB2E75800828CF1 /* mach_inject_bundle.c in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		4DAE97460CB2B64400828CF1 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 4DAE960D0CB2A55000828CF1 /* MachInjectBundleStub */;
+			targetProxy = 4DAE97450CB2B64400828CF1 /* PBXContainerItemProxy */;
+		};
+		4DAE97480CB2B64700828CF1 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 4DAE97380CB2B62200828CF1 /* RubyInjectBundle */;
+			targetProxy = 4DAE97470CB2B64700828CF1 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		089C1666FE841158C02AAC07 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				089C1667FE841158C02AAC07 /* English */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		1DEB91AE08733DA50010E9CD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				FRAMEWORK_VERSION = A;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				INFOPLIST_FILE = Info.plist;
+				INSTALL_PATH = "$(HOME)/Library/Frameworks";
+				PRODUCT_NAME = RubyInject;
+				WRAPPER_EXTENSION = framework;
+				ZERO_LINK = YES;
+			};
+			name = Debug;
+		};
+		1DEB91AF08733DA50010E9CD /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				FRAMEWORK_VERSION = A;
+				GCC_MODEL_TUNING = G5;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				INFOPLIST_FILE = Info.plist;
+				INSTALL_PATH = "$(HOME)/Library/Frameworks";
+				PRODUCT_NAME = RubyInject;
+				WRAPPER_EXTENSION = framework;
+			};
+			name = Release;
+		};
+		1DEB91B208733DA50010E9CD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = (
+					i386,
+					ppc,
+				);
+				GCC_ENABLE_SYMBOL_SEPARATION = NO;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				OTHER_LDFLAGS = (
+					"-seg1addr",
+					0xc0000000,
+				);
+				PREBINDING = YES;
+				SDKROOT = "$(DEVELOPER_SDK_DIR)/MacOSX10.4u.sdk";
+			};
+			name = Debug;
+		};
+		1DEB91B308733DA50010E9CD /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = (
+					i386,
+					ppc,
+				);
+				GCC_ENABLE_SYMBOL_SEPARATION = NO;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				OTHER_LDFLAGS = (
+					"-seg1addr",
+					0xc0000000,
+				);
+				PREBINDING = YES;
+				SDKROOT = "$(DEVELOPER_SDK_DIR)/MacOSX10.4u.sdk";
+			};
+			name = Release;
+		};
+		4DAE96110CB2A55000828CF1 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_ENABLE_TRIGRAPHS = NO;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_MODEL_TUNING = G4;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PRECOMPILE_PREFIX_HEADER = NO;
+				GCC_USE_GCC3_PFE_SUPPORT = YES;
+				INFOPLIST_FILE = "MachInjectBundleStub-Info.plist";
+				INSTALL_PATH = "$(HOME)/Library/Bundles";
+				OTHER_LDFLAGS = (
+					"-framework",
+					Carbon,
+				);
+				PREBINDING = NO;
+				PRODUCT_NAME = MachInjectBundleStub;
+				STRIP_STYLE = all;
+				WRAPPER_EXTENSION = bundle;
+				ZERO_LINK = NO;
+			};
+			name = Debug;
+		};
+		4DAE96120CB2A55000828CF1 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_ENABLE_TRIGRAPHS = NO;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_MODEL_TUNING = G4;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PRECOMPILE_PREFIX_HEADER = NO;
+				GCC_USE_GCC3_PFE_SUPPORT = YES;
+				INFOPLIST_FILE = "MachInjectBundleStub-Info.plist";
+				INSTALL_PATH = "$(HOME)/Library/Bundles";
+				OTHER_LDFLAGS = (
+					"-framework",
+					Carbon,
+				);
+				PREBINDING = NO;
+				PRODUCT_NAME = MachInjectBundleStub;
+				STRIP_STYLE = all;
+				WRAPPER_EXTENSION = bundle;
+				ZERO_LINK = NO;
+			};
+			name = Release;
+		};
+		4DAE973C0CB2B62200828CF1 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PRECOMPILE_PREFIX_HEADER = NO;
+				INFOPLIST_FILE = "RubyInjectBundle-Info.plist";
+				INSTALL_PATH = "$(HOME)/Library/Bundles";
+				OTHER_LDFLAGS = (
+					"-framework",
+					Foundation,
+					"-framework",
+					AppKit,
+				);
+				PREBINDING = NO;
+				PRODUCT_NAME = RubyInjectBundle;
+				WRAPPER_EXTENSION = bundle;
+				ZERO_LINK = YES;
+			};
+			name = Debug;
+		};
+		4DAE973D0CB2B62200828CF1 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_MODEL_TUNING = G5;
+				GCC_PRECOMPILE_PREFIX_HEADER = NO;
+				INFOPLIST_FILE = "RubyInjectBundle-Info.plist";
+				INSTALL_PATH = "$(HOME)/Library/Bundles";
+				OTHER_LDFLAGS = (
+					"-framework",
+					Foundation,
+					"-framework",
+					AppKit,
+				);
+				PREBINDING = NO;
+				PRODUCT_NAME = RubyInjectBundle;
+				WRAPPER_EXTENSION = bundle;
+				ZERO_LINK = NO;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		1DEB91AD08733DA50010E9CD /* Build configuration list for PBXNativeTarget "RubyInject" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1DEB91AE08733DA50010E9CD /* Debug */,
+				1DEB91AF08733DA50010E9CD /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		1DEB91B108733DA50010E9CD /* Build configuration list for PBXProject "RubyInject" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1DEB91B208733DA50010E9CD /* Debug */,
+				1DEB91B308733DA50010E9CD /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		4DAE96130CB2A55000828CF1 /* Build configuration list for PBXNativeTarget "MachInjectBundleStub" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4DAE96110CB2A55000828CF1 /* Debug */,
+				4DAE96120CB2A55000828CF1 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		4DAE973E0CB2B62200828CF1 /* Build configuration list for PBXNativeTarget "RubyInjectBundle" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4DAE973C0CB2B62200828CF1 /* Debug */,
+				4DAE973D0CB2B62200828CF1 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 0867D690FE84028FC02AAC07 /* Project object */;
+}
