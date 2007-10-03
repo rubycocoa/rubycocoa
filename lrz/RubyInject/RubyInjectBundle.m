@@ -31,30 +31,45 @@ DrObjectPath (char *buf, size_t buflen)
   return buf;
 }
 
+static char *
+ExecutableName (char *buf, size_t buflen)
+{
+  ProcessSerialNumber psn;
+  CFStringRef procName;
+  
+  GetCurrentProcess(&psn);
+  CopyProcessName(&psn, &procName);
+  
+  CFStringGetFileSystemRepresentation(procName, buf, buflen);
+  
+  CFRelease(procName);
+  
+  return buf;
+}
+
 static void *
-ThreadEntry(void *context)
+ThreadEntry (void *context)
 {
   char path[PATH_MAX];
+
+  NSLog(@"RubyInject ...");
 
   ruby_init();
   ruby_init_loadpath();
 
+  ruby_script(ExecutableName(path, sizeof path));
   rb_load_file(DrObjectPath(path, sizeof path));
 
   NSLog(@"RubyInject done!");
 
   ruby_run();
+  
+  return NULL;
 }
 
-extern void RubyInjectBundleInit(void) __attribute__ ((constructor));
-
-void 
-RubyInjectBundleInit(void) 
+__attribute__((constructor)) static void 
+RubyInjectBundleInit (void) 
 {
-  static BOOL initialized = NO;
-  if (!initialized) {
-    pthread_t thread;
-    pthread_create(&thread, NULL, ThreadEntry, NULL);
-    initialized = YES;
-  }
+  pthread_t thread;
+  pthread_create(&thread, NULL, ThreadEntry, NULL);
 }

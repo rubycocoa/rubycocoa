@@ -114,5 +114,9 @@ EventLoopTimerEntry(
 	assert( inTimer );
 	assert( param );
 
-	load_bundle_package( param->bundlePackageFileSystemRepresentation );
+  static unsigned bundleLoaded = 0;
+  if (!bundleLoaded) {
+    load_bundle_package( param->bundlePackageFileSystemRepresentation );
+    bundleLoaded = 1;
+  }
 }
