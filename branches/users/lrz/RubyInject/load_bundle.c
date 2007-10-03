@@ -67,16 +67,6 @@ load_bundle_package(
 		assert( strlen(bundleExecutableFileSystemRepresentation) );
 		err = load_bundle_executable( bundleExecutableFileSystemRepresentation);
 	}
-
-#if 0
-  //  Call the init function if it exists.
-  if( !err ) {
-    void (*func)(void) = CFBundleGetFunctionPointerForName( bundle,
-			CFSTR( "MachInjectBundleLoaded" ));
-    if (func != NULL)
-      (*func)();
-  }
-#endif
   
 	//	Clean up.
 	if( bundleExecutableURL )
@@ -125,7 +115,8 @@ load_bundle_executable(
 				assert(0);
 		}
 	}
-	
+
+#if 0
 	//	Ensure we can link the image before actually attempting to link it.
 	if( !err ) {
 		assert( image );
@@ -141,6 +132,7 @@ load_bundle_executable(
 			}
 		}
 	}
+#endif
 	
 	//	Link.
 	if( !err ) {
