@@ -8,7 +8,7 @@
 
 class DrObject
   def evaluate(str)
-    eval(str).inspect
+    eval(str, TOPLEVEL_BINDING).inspect
   end
 end
 
