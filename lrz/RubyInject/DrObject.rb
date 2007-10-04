@@ -19,10 +19,23 @@ DRb.install_acl(ACL.new(%w{deny all allow localhost}))
 DRb.start_service(nil, DrObject.new)
 
 require 'syslog'
-Syslog.open#('')
+Syslog.open
 Syslog.log(Syslog::LOG_NOTICE, "DRb server started at `#{DRb.uri}'")
-Syslog.close
 
-# TODO: announce the server uri on bonjour
+begin
+  require 'rubygems'
+  require 'dnssd'
+  record = DNSSD::TextRecord.new
+  record['uri'] = DRb.uri
+  record['app'] = $0
+  record['pid'] = Process.pid.to_s
+  port = DRb.uri.scan(/:(\d+)/).to_s.to_i
+  DNSSD.register("druby-inject", '_http._tcp', 'local', port, record) do
+    Syslog.log(Syslog::LOG_NOTICE, 'Successfully advertised on Bonjour')
+  end
+rescue LoadError
+end
+
+Syslog.close
 
 DRb.thread.join
