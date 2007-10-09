@@ -1,3 +1,12 @@
+#
+#  inject.rb
+#  RubyInject
+#
+#  Created by Laurent Sansonetti on 10/3/07.
+#  Copyright 2007 Laurent Sansonetti. Some rights reserved. 
+#  <http://creativecommons.org/licenses/by/2.0/>
+#
+
 require 'osx/foundation'
 begin require 'rubygems'; rescue LoadError; end
 require 'dnssd'
