@@ -54,6 +54,10 @@ ThreadEntry (void *context)
 
   NSLog(@"RubyInject ...");
 
+  [[NSAutoreleasePool alloc] init];
+
+  [NSThread detachNewThreadSelector:@selector(version) toTarget:[NSObject class] withObject:nil];
+  
   ruby_init();
   ruby_init_loadpath();
 
@@ -63,7 +67,7 @@ ThreadEntry (void *context)
   NSLog(@"RubyInject done!");
 
   ruby_run();
-  
+
   return NULL;
 }
 

@@ -181,9 +181,9 @@
 			isa = PBXGroup;
 			children = (
 				4DAE9A550CB3167400828CF1 /* libruby.1.dylib */,
+				4DAE9A670CB319D800828CF1 /* DrObject.rb */,
 				4DAE97500CB2B67200828CF1 /* RubyInjectBundle.m */,
 				4DAE973A0CB2B62200828CF1 /* RubyInjectBundle-Info.plist */,
-				4DAE9A670CB319D800828CF1 /* DrObject.rb */,
 			);
 			name = RubyInjectBundle;
 			sourceTree = "<group>";
