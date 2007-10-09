@@ -3,7 +3,8 @@
 #  RubyInject
 #
 #  Created by Laurent Sansonetti on 10/3/07.
-#  Copyright (c) 2007 Laurent Sansonetti. All rights reserved.
+#  Copyright 2007 Laurent Sansonetti. Some rights reserved. 
+#  <http://creativecommons.org/licenses/by/2.0/>
 #
 
 class DrObject

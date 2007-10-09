@@ -3,7 +3,8 @@
 //  RubyInject
 //
 //  Created by Laurent Sansonetti on 10/2/07.
-//  Copyright 2007 Laurent Sansonetti. All rights reserved.
+//  Copyright 2007 Laurent Sansonetti. Some rights reserved. 
+//  <http://creativecommons.org/licenses/by/2.0/>
 //
 
 #import "RubyInject.h"
