@@ -1,3 +1,15 @@
+2007-09-10  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* framework/src/objc/RBObject.m,
+	  framework/src/objc/libffi.m,
+	  framework/src/objc/mdl_osxobjc.m,
+	  framework/src/objc/internal_macros.h,
+	  framework/src/objc/OverrideMixin.m:
+	Better facility that dispatches messages from threads to the thread where
+	RubyCocoa was initialized. It was previously assuming that RubyCocoa was
+	run in the main thread, which may not be always true (Ruby could be ran in
+	a different thread).
+
 2007-10-02  Eloy Duran <eloy.de.enige@gmail.com>
 
 	* framework/tool/standaloneify.rb:

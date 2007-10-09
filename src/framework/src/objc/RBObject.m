@@ -402,7 +402,7 @@ VALUE rbobj_call_ruby(id rbobj, SEL selector, VALUE args)
   RBOBJ_LOG("forwardInvocation(%@)", an_inv);
   if ([self rbobjRespondsToSelector: [an_inv selector]]) {
     RBOBJ_LOG("   -> forward to Ruby Object");
-    if (IS_MAIN_THREAD()) {
+    if (is_ruby_native_thread()) {
       [self rbobjForwardInvocation: an_inv];
     }
     else {
@@ -494,9 +494,12 @@ VALUE rbobj_call_ruby(id rbobj, SEL selector, VALUE args)
   return self;
 }
 
+extern NSThread *rubycocoaThread;
+
 - (void)dispatch
 {
-  [self performSelectorOnMainThread:@selector(syncDispatch) withObject:nil waitUntilDone:YES];
+  assert(rubycocoaThread != nil);
+  [self performSelector:@selector(syncDispatch) onThread:rubycocoaThread withObject:nil waitUntilDone:YES];
   if (_returned_ocid != nil)
     [_returned_ocid autorelease];
 }
