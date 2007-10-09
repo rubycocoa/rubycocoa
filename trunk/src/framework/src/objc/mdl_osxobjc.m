@@ -356,6 +356,8 @@ osx_rbobj_to_nsobj (VALUE rcv, VALUE obj)
   return val;
 }
 
+NSThread *rubycocoaThread;
+
 /******************/
 
 void initialize_mdl_osxobjc()
@@ -411,4 +413,6 @@ void initialize_mdl_osxobjc()
   thread_switcher_start();
   
   initialize_bridge_support(mOSX);
+
+  rubycocoaThread = [NSThread currentThread];
 }

@@ -119,7 +119,7 @@ ovmix_ffi_closure(ffi_cif* cif, void* resp, void** args, void* userdata)
 
   retval_octype = *(char **)userdata;
 
-  if (!IS_MAIN_THREAD()) {
+  if (!is_ruby_native_thread()) {
     rb_warning("Closure `%s' called from another thread - forwarding it to the main thread", *(char **)args[1]);
     ffi_dispatch_closure_in_main_thread(ovmix_ffi_closure, cif, resp, args, userdata, ovmix_ffi_closure_done);
     if (*retval_octype == _C_ID)
@@ -455,7 +455,7 @@ install_objc_hook(Class c, SEL orig, SEL new, IMP new_cb)
       IMP orig_cb = method_getImplementation(method);
       if (orig_cb != new_cb) {
         OVMIX_LOG("hooking [%s -%s]", class_getName(c), (char *)orig);
-        char *types = method_getTypeEncoding(method);
+        char *types = (char *)method_getTypeEncoding(method);
         class_addMethod(c, new, method_getImplementation(method), types);
         class_addMethod(c, orig, new_cb, types);
       }
