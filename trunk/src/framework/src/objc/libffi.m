@@ -744,8 +744,7 @@ extern NSThread *rubycocoaThread;
 
 - (void)dispatch
 {
-  assert(rubycocoaThread != nil);
-  [self performSelector:@selector(syncDispatch) onThread:rubycocoaThread withObject:nil waitUntilDone:YES];
+  DISPATCH_ON_RUBYCOCOA_THREAD(self, @selector(syncDispatch));
 }
 
 - (void)syncDispatch

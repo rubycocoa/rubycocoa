@@ -10,8 +10,7 @@
 #ifndef _INTERNAL_MACROS_H_
 #define _INTERNAL_MACROS_H_
 
-#import <Foundation/NSAutoreleasePool.h>
-#import <Foundation/NSString.h>
+#import <Foundation/Foundation.h>
 
 #define RUBYCOCOA_SUPPRESS_EXCEPTION_LOGGING_P \
   RTEST(rb_gv_get("RUBYCOCOA_SUPPRESS_EXCEPTION_LOGGING"))
@@ -47,5 +46,29 @@ extern VALUE rubycocoa_debug;
 /* flag for calling Init_stack frequently */
 extern int rubycocoa_frequently_init_stack();
 #define FREQUENTLY_INIT_STACK_FLAG rubycocoa_frequently_init_stack()
+
+extern NSThread *rubycocoaThread;
+extern NSRunLoop *rubycocoaRunLoop;
+
+#if MAC_OS_X_VERSION_MAX_ALLOWED <= MAC_OS_X_VERSION_10_4
+#import <CoreFoundation/CFRunLoop.h>
+extern CFRunLoopRef CFRunLoopGetMain(void);
+#define DISPATCH_ON_RUBYCOCOA_THREAD(self, sel) \
+  do { \
+    assert(rubycocoaRunLoop != nil); \
+    if ([rubycocoaRunLoop getCFRunLoop] != CFRunLoopGetMain()) \
+      [[NSException exceptionWithName:@"DispatchRubyCocoaThreadError" message:@"cannot forward %s to %@ because RubyCocoa doesn't run in the main thread" userInfo:nil] raise]; \
+    else \
+      [self performSelectorOnMainThread:sel withObject:nil waitUntilDone:YES];
+  } \
+  while (0) 
+#else
+#define DISPATCH_ON_RUBYCOCOA_THREAD(self, sel) \
+  do { \
+    assert(rubycocoaThread != nil); \
+    [self performSelector:sel onThread:rubycocoaThread withObject:nil waitUntilDone:YES]; \
+  } \
+  while (0)
+#endif
 
 #endif	// _INTERNAL_MACROS_H_

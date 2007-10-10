@@ -357,6 +357,7 @@ osx_rbobj_to_nsobj (VALUE rcv, VALUE obj)
 }
 
 NSThread *rubycocoaThread;
+NSRunLoop *rubycocoaRunLoop;
 
 /******************/
 
@@ -415,4 +416,5 @@ void initialize_mdl_osxobjc()
   initialize_bridge_support(mOSX);
 
   rubycocoaThread = [NSThread currentThread];
+  rubycocoaRunLoop = [NSRunLoop currentRunLoop];
 }
