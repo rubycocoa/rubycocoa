@@ -59,7 +59,7 @@ extern CFRunLoopRef CFRunLoopGetMain(void);
     if ([rubycocoaRunLoop getCFRunLoop] != CFRunLoopGetMain()) \
       [[NSException exceptionWithName:@"DispatchRubyCocoaThreadError" message:@"cannot forward %s to %@ because RubyCocoa doesn't run in the main thread" userInfo:nil] raise]; \
     else \
-      [self performSelectorOnMainThread:sel withObject:nil waitUntilDone:YES];
+      [self performSelectorOnMainThread:sel withObject:nil waitUntilDone:YES]; \
   } \
   while (0) 
 #else
