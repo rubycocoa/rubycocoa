@@ -659,7 +659,7 @@ class Object
   class <<self
     def _real_class_and_mod(klass)
       unless klass.ancestors.include?(OSX::Boxed)
-        klassname = klass.name
+        klassname = klass.name.to_s
         unless klassname.nil? || klassname.empty?
           if Object.included_modules.include?(OSX) and /::/.match(klassname).nil?
             [klassname, Object]
