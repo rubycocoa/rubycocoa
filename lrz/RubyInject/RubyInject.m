@@ -20,7 +20,9 @@
   bundlePath = [[NSBundle bundleForClass:[self class]] pathForResource:@"RubyInjectBundle" ofType:@"bundle"];
   err = mach_inject_bundle_pid([bundlePath fileSystemRepresentation], pid);
   if (err != err_none)
-    NSLog(@"Failure code %d", err);
+    [[NSException exceptionWithName:@"RubyInjectError" 
+      reason:[NSString stringWithFormat:@"Could not inject into PID %d, error %d", pid, err] 
+      userInfo:nil] raise];
 }
 
 @end
