@@ -251,6 +251,14 @@ class ClassesNibUpdater
 
   def update_superclass(ruby_class, ruby_class_plist)
     superklass = NSObject.subklasses[ruby_class][:super].to_s.sub(/^OSX::/, '')
+    # If the class has a superclass which isn't defined in the classes in the nib/ib
+    # then the class will still not show up. Because we can assume that it will be a
+    # descendant of NSObject use that as a default if the superclass can't be found.
+    begin
+      Object.const_get(superklass)
+    rescue NameError
+      superklass = :NSObject
+    end
     ruby_class_plist.setObject_forKey(superklass, "SUPERCLASS")
   end
   
@@ -259,6 +267,7 @@ class ClassesNibUpdater
    
     [:outlets, :actions].each do |sym|
       cont = NSObject.subklasses[klass][sym]
+      next if cont.nil?
       unless sorted_plist
         hash = {}
         cont.each do |val|

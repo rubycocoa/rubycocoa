@@ -1,3 +1,13 @@
+2007-10-24 Eloy Duran <e.duran@superalloy.nl>
+
+	* framework/tool/rb_nibtool.rb:
+	- Fixed bug where #each was called on nil if there were
+	  either no actions OR outlets in the class.
+	- Fixed bug where a new class from a source file would
+	  not show up in the class list in IB because the superclass
+	  is unknown to the classes list in IB.
+	  If the superclass const is not found it will default to NSObject.
+
 2007-09-12  Laurent Sansonetti <lsansonetti@apple.com>
 
 	* framework/src/ruby/osx/objc/oc_import.rb:
