@@ -1,3 +1,11 @@
+2007-10-24 Eloy Duran <e.duran@superalloy.nl>
+
+	* framework/src/ruby/osx/objc/oc_attachments.rb,
+	  framework/tool/rb_nibtool.rb:
+
+	- Added pretty print support to NSString, NSArray, NSDictionary. (require 'pp')
+	- Removed useless const.nil? statement in rb_nibtool.rb.
+
 2007-10-24  Laurent Sansonetti <lsansonetti@apple.com>
 
 	* framework/tool/rb_nibtool.rb:

@@ -144,6 +144,10 @@ module OSX
       "#<#{self.class.to_s.gsub(/^OSX::/, '')} \"#{self.to_s}\">"
     end
 
+    def pretty_print(q)
+      self.to_s.pretty_print(q)
+    end
+
     # responds to Ruby String methods
     alias_method :_rbobj_respond_to?, :respond_to?
     def respond_to?(mname, private = false)
@@ -1441,6 +1445,10 @@ module OSX
       "#<#{self.class.to_s.gsub(/^OSX::/, '')} #{ self.to_a.inspect }>"
     end
 
+    def pretty_print(q)
+      self.to_a.pretty_print(q)
+    end
+
     private
 
     def _read_impl(method, args)
@@ -1807,6 +1815,10 @@ module OSX
     
     def inspect
       "#<#{self.class.to_s.gsub(/^OSX::/, '')} #{ self.to_hash.inspect }>"
+    end
+    
+    def pretty_print(q)
+      self.to_hash.pretty_print(q)
     end
   end
   class NSDictionary
