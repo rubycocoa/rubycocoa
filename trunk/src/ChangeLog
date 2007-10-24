@@ -1,3 +1,8 @@
+2007-10-24  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* framework/tool/rb_nibtool.rb:
+	- Skip the use of NSObject if a superclass is unknown IF rubynode is used.
+
 2007-10-24 Eloy Duran <e.duran@superalloy.nl>
 
 	* framework/tool/rb_nibtool.rb:
