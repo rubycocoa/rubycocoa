@@ -280,7 +280,7 @@ class ClassesNibUpdater
         end 
         cont = hash
       end
-      ruby_class_plist[sym.to_s.upcase] = cont unless cont.nil? or cont.empty?
+      ruby_class_plist[sym.to_s.upcase] = cont unless cont.empty?
     end
   end
 end
