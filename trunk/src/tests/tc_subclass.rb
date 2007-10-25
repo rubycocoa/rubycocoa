@@ -64,12 +64,27 @@ class TestActionClass < OSX::NSObject; end
 
 class NSCopyingClass < OSX::NSCell; end
 
+class TestSuper < OSX::NSObject
+  def init
+    if super
+      @foo = 42
+    end
+    self
+  end
+  attr_reader :foo
+  def self.description
+    super + 'XXX'
+  end
+end
+
 class TC_SubClass < Test::Unit::TestCase
 
   def test_s_new
+    # all NSObject-based classes respond to new, others don't.
+    assert_kind_of(OSX::NSObject, OSX::NSObject.new)
     err = nil
     begin
-      SubClassA.new
+      OSX::NSProxy.new
     rescue => err
     end
     assert_kind_of( RuntimeError, err )
@@ -257,6 +272,12 @@ class TC_SubClass < Test::Unit::TestCase
     assert_kind_of(NSCopyingClass, o2)
     assert(o.objc_send('__rbobj__') != o2.objc_send('__rbobj__'))
     assert_equal(o.stringValue, o2.stringValue)
+  end
+
+  # XXX not working for now
+  def xxx_test_super
+    assert_equal(42, TestSuper.alloc.init.foo)
+    assert_equal('TestSuperXXX', TestSuper.description)
   end
 
 end
