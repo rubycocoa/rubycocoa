@@ -246,9 +246,14 @@ module OSX
 
     ERRMSG_FOR_RESTRICT_NEW = "use 'alloc.initXXX' to instantiate Cocoa Object"
 
-    # restrict creating an instance by Class#new of NSObject gruop.
+    # restrict creating an instance by Class#new, unless the Objective-C class 
+    # really responds to the new selector.
     def new
-      raise ERRMSG_FOR_RESTRICT_NEW
+      if ocm_responds?(:new)
+        objc_send(:new)
+      else
+        raise ERRMSG_FOR_RESTRICT_NEW
+      end
     end
 
     # initializer for definition of a derived class of a class on
