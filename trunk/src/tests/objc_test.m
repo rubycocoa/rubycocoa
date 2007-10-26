@@ -121,6 +121,21 @@
   return [[NSClassFromString(@"RBSubclass") alloc] init];
 }
 
++(int) rbNewCount
+{
+  int retainCount;
+  id obj;
+  obj = [NSClassFromString(@"RBSubclass") new];
+  retainCount = [obj retainCount];
+  [obj release];
+  return retainCount;
+}
+
++(id) rbNewObject
+{
+  return [NSClassFromString(@"RBSubclass") new];
+}
+
 @end
 
 // tc_uniqobj.rb
