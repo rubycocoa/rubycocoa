@@ -1,3 +1,8 @@
+2007-10-27  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* framework/src/objc/RBRuntime.m:
+	Added the 10.5 part of the threading support code.
+
 2007-10-26  kimura wataru  <kimuraw@i.nifty.jp>
 
 	* tests/objc_test.m, 
