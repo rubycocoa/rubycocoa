@@ -108,4 +108,14 @@ class TCBoxed < Test::Unit::TestCase
       assert_equal(r.max, OSX::NSMaxRange(r))
     end
   end
+  
+  def test_range_not_found
+    assert(NSRange.new(OSX::NSNotFound, 0).not_found?)
+    assert(!NSRange.new(0, 0).not_found?)
+    assert(!NSRange.new(1, 0).not_found?)
+    assert(!NSRange.new(0, 1).not_found?)
+    cs = OSX::NSCharacterSet.characterSetWithCharactersInString("abc")
+    r = OSX::NSString.stringWithString('xyz').rangeOfCharacterFromSet(cs)
+    assert(r.not_found?)
+  end
 end

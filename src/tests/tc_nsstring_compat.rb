@@ -89,6 +89,17 @@ class TC_ObjcString < Test::Unit::TestCase
   def alloc_nsstring(s)
     OSX::NSMutableString.stringWithString(s)
   end
+  
+  def test_format
+    s = 'abc %s abc'
+    n = alloc_nsstring(s)
+    args = 'hoge'
+    assert_equal(s % args, n % args)
+    s = 'abc %d,%o abc'
+    n = alloc_nsstring(s)
+    args = [10,10]
+    assert_equal(s % args, n % args)
+  end
 
   def test_times
     s = 'foo'
@@ -315,6 +326,33 @@ class TC_ObjcString < Test::Unit::TestCase
     end
   end
   
+  def test_casecmp
+    [['', ''], ['abc','abc'], ['AbC','abc'], ['012','abc']].each do |d|
+      a, b = d
+      c = alloc_nsstring(a)
+      d = alloc_nsstring(b)
+      assert_equal(a.casecmp(b), c.casecmp(d))
+      assert_equal(b.casecmp(a), d.casecmp(c))
+    end
+  end
+  
+  def test_center
+    [['abc',[6],' abc  '], ['',[3],'   '], ['abc',[1],'abc'],
+     ['abc',[-6],'abc'], ['abc',[8,'012'],'01abc012'], ['abc',[12,'012'],'0120abc01201']].each do |d|
+      s, param, res = d
+      n = alloc_nsstring(s)
+      r = alloc_nsstring(res)
+      assert_equal(r, n.center(*param))
+      assert_equal(s.center(*param), n.center(*param).to_s)
+    end
+    [['あいう',[6],' あいう  '], ['あいう',[12,'かき'],'かきかきあいうかきかきか']].each do |d|
+      s, param, res = d
+      n = alloc_nsstring(s)
+      r = alloc_nsstring(res)
+      assert_equal(r, n.center(*param))
+    end
+  end
+
   def test_chomp
     ["", "abc", "abc\n", "abc\r", "abc\r\n", "abc\n\n", "abc\r\n\r\n\r\n\n\n", "ab\nc\r"].each do |s|
       n = alloc_nsstring(s)
@@ -365,11 +403,25 @@ class TC_ObjcString < Test::Unit::TestCase
     assert_equal(0, s.length)
   end
   
+  def test_crypt
+    s = 'abcdef'
+    n = alloc_nsstring(s)
+    salt = '.1/1'
+    assert_equal(s.crypt(salt), n.crypt(salt))
+  end
+  
   def test_downcase
     ['foO bAr BuZ Z', 'abc', ''].each do |s|
       n = alloc_nsstring(s)
       assert_equal(s.downcase, n.downcase)
       assert_equal(s.downcase!, n.downcase!)
+    end
+  end
+  
+  def test_dump
+    ['', 'abc', "\r\n\v", 'あいう'].each do |s|
+      n = alloc_nsstring(s)
+      assert_equal(s.dump, n.dump)
     end
   end
   
@@ -516,6 +568,41 @@ class TC_ObjcString < Test::Unit::TestCase
     end
   end
   
+  def test_ljust
+    [['abc',[6],'abc   '], ['',[3],'   '], ['abc',[1],'abc'],
+     ['abc',[-6],'abc'], ['abc',[8,'012'],'abc01201'], ['abc',[9,'012'],'abc012012']].each do |d|
+      s, param, res = d
+      n = alloc_nsstring(s)
+      r = alloc_nsstring(res)
+      assert_equal(r, n.ljust(*param))
+      assert_equal(s.ljust(*param), n.ljust(*param).to_s)
+    end
+    [['あいう',[6],'あいう   '], ['あいう',[6,'かき'],'あいうかきか']].each do |d|
+      s, param, res = d
+      n = alloc_nsstring(s)
+      r = alloc_nsstring(res)
+      assert_equal(r, n.ljust(*param))
+    end
+  end
+  
+  def test_lstrip
+    ["", "   abc   ", "abc", "\t \r\n\f\vtest \t"].each do |s|
+      n = alloc_nsstring(s)
+      assert_equal(s.lstrip, n.lstrip)
+      assert_equal(s.lstrip!, n.lstrip!)
+    end
+  end
+  
+  def test_next
+    ['aa', '99', 'a9', 'Aa', 'zz', '-9', '9', '09'].each do |s|
+      n = alloc_nsstring(s)
+      assert_equal(s.next, n.next)
+      assert_equal(s.succ, n.succ)
+      assert_equal(s.next!, n.next!)
+      assert_equal(s.succ!, n.succ!)
+    end
+  end
+  
   def test_oct
     ['', '10', '-10', '010', '8', '0b10', '0x10', '1_0_0x'].each do |s|
       n = alloc_nsstring(s)
@@ -527,6 +614,14 @@ class TC_ObjcString < Test::Unit::TestCase
     ['', 'a', 'Z', '0', "\n"].each do |s|
       n = alloc_nsstring(s)
       assert_equal(s[0] || 0, n.ord)
+    end
+  end
+  
+  def test_partition
+    [['abcdefghicd','cd',['ab','cd','efghicd']], ['abc','x',['abc','','']]].each do |d|
+      s, sep, res = d
+      n = alloc_nsstring(s)
+      assert_equal(res, n.partition(sep).to_ruby)
     end
   end
   
@@ -564,8 +659,81 @@ class TC_ObjcString < Test::Unit::TestCase
     end
   end
   
+  def test_rjust
+    [['abc',[6],'   abc'], ['',[3],'   '], ['abc',[1],'abc'],
+     ['abc',[-6],'abc'], ['abc',[8,'012'],'01201abc'], ['abc',[9,'012'],'012012abc']].each do |d|
+      s, param, res = d
+      n = alloc_nsstring(s)
+      r = alloc_nsstring(res)
+      assert_equal(r, n.rjust(*param))
+      assert_equal(s.rjust(*param), n.rjust(*param).to_s)
+    end
+    [['あいう',[6],'   あいう'], ['あいう',[6,'かき'],'かきかあいう']].each do |d|
+      s, param, res = d
+      n = alloc_nsstring(s)
+      r = alloc_nsstring(res)
+      assert_equal(r, n.rjust(*param))
+    end
+  end
+  
+  def test_rpartition
+    [['abcdefghicd','cd',['abcdefghi','cd','']], ['abc','x',['abc','','']]].each do |d|
+      s, sep, res = d
+      n = alloc_nsstring(s)
+      assert_equal(res, n.rpartition(sep).to_ruby)
+    end
+  end
+  
+  def test_rstrip
+    ["", "   abc   ", "abc", "\t \r\n\f\vtest \t \r\n\f\v"].each do |s|
+      n = alloc_nsstring(s)
+      assert_equal(s.rstrip, n.rstrip)
+      assert_equal(s.rstrip!, n.rstrip!)
+    end
+  end
+  
   def test_size
     assert_equal(6, 'Foobar'.to_ns.size)
+  end
+  
+  def test_slice
+    ['abc def'].each do |s|
+      n = alloc_nsstring(s)
+      assert_equal(s.slice(1), n.slice(1))
+      assert_equal(s.slice(3,2), n.slice(3,2))
+      assert_equal(s.slice(4..6), n.slice(4..6))
+      assert_equal(s.slice(4...6), n.slice(4...6))
+    end
+  end
+  
+  def test_slice!
+    [-2, 0, 2, 6, 10].each do |i|
+      s = 'abc def'
+      n = alloc_nsstring(s)
+      assert_equal(s.slice!(i), n.slice!(i))
+      assert_equal(s, n)
+    end
+    [[-2,2], [0,2], [3,4], [4,6], [6,-2]].each do |i|
+      s = 'abc def'
+      n = alloc_nsstring(s)
+      assert_equal(s.slice!(*i), n.slice!(*i))
+      assert_equal(s, n)
+    end
+    ['', 'bc', 'def', 'x'].each do |i|
+      s = 'abc def'
+      n = alloc_nsstring(s)
+      assert_equal(s.slice!(i), n.slice!(i))
+      assert_equal(s, n)
+    end
+    [-2..2, 0...0, 1..2, 4...10, 10...20].each do |i|
+      s = 'abc def'
+      n = alloc_nsstring(s)
+      assert_equal(s.slice!(i), n.slice!(i))
+      assert_equal(s, n)
+    end
+    
+    with_kcode('utf-8') do
+    end
   end
   
   def test_start_with
@@ -582,12 +750,45 @@ class TC_ObjcString < Test::Unit::TestCase
     end
   end
   
+  def test_sum
+    ['', 'azxcvzxcvrqfsdfiaosjdoj2980qurt092g09jrjbhq02jgh0'].each do |s|
+      n = alloc_nsstring(s)
+      assert_equal(s.sum, n.sum)
+      assert_equal(s.sum(8), n.sum(8))
+      assert_equal(s.sum(11), n.sum(11))
+    end
+    n = alloc_nsstring('あいうえおかきくけこ')
+    assert_equal(58089, n.sum)
+    assert_equal(233, n.sum(8))
+  end
+  
+  def test_swapcase
+    ['', 'aBc', 'AbC ＡＢｃ', '012'].each do |s|
+      n = alloc_nsstring(s)
+      assert_equal(s.swapcase, n.swapcase)
+      assert_equal(s.swapcase!, n.swapcase!)
+    end
+  end
+  
   def test_upcase
     ['foO bar buz', ''].each do |s|
       n = alloc_nsstring(s)
       assert_equal(s.upcase, n.upcase)
       assert_equal(s.upcase!, n.upcase!)
     end
+  end
+  
+  def test_upto
+    a = alloc_nsstring('aa')
+    b = alloc_nsstring('ba')
+    r = []
+    a.upto(b) {|i| r << i }
+    r.map! {|i| i.to_ruby }
+    c = 'aa'
+    d = 'ba'
+    s = []
+    c.upto(d) {|i| s << i }
+    assert_equal(s, r)
   end
   
   def test_to_f
