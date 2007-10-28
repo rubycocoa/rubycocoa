@@ -1,3 +1,15 @@
+2007-10-28 Eloy Duran <e.duran@superalloy.nl>
+
+	* framework/tool/gen_bridge_doc.rb,
+	  framework/tool/gen_bridge_doc/lib/lib/datatype_def.rb,
+	  framework/tool/gen_bridge_doc/rdocify_framework.rb:
+	- Added check for 10.4 or 10.5 and use the appropriate path to the reference files.
+	- In 10.5 there are also some files in 'Introduction' instead of 'Reference',
+	  this may be a mistake from Apple, but it's supported now nonetheless.
+	- OSX::NSHashTable doesn't respond to #fields and #isOpaque.
+	- gen_bridge_doc is now able to run, however there are still quite some class reference
+	  files being skipped because of errors. Let alone all the new supported frameworks.
+
 2007-10-28  Satoshi Nakagawa <artension@gmail.com>
 
 	* framework/src/ruby/osx/objc/oc_attachments.rb:
