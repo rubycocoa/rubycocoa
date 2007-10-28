@@ -1734,9 +1734,9 @@ module OSX
     alias_method :value?, :has_value?
 
     def invert
-      result = {}
-      each_pair {|key,value| result[value] = key }
-      result
+      dic = OSX::NSMutableDictionary.dictionary
+      each_pair {|key,value| dic[value] = key }
+      dic
     end
 
     def key(val)
