@@ -1,3 +1,8 @@
+2007-10-28 Eloy Duran <e.duran@superalloy.nl>
+
+	* Rakefile:
+	Updated Rakefile to use '--gen-bridge-doc no' on 10.5.
+
 2007-10-28  Satoshi Nakagawa <artension@gmail.com>
 
 	* framework/src/ruby/osx/objc/oc_attachments.rb,
