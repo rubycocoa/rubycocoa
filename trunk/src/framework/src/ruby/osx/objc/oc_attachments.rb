@@ -180,63 +180,9 @@ module OSX
     # For NSString duck typing
 
     def [](*args)
-      count = length
-      case args.length
-      when 1
-        first = args.first
-        case first
-        when Numeric,OSX::NSNumber
-          n = first.to_i
-          n += count if n < 0
-          if 0 <= n && n < count
-            characterAtIndex(n)
-          else
-            nil
-          end
-        when String,OSX::NSString
-          str = first.to_s
-          if include?(str)
-            OSX::NSMutableString.stringWithString(str)
-          else
-            nil
-          end
-        #when Regexp
-        when Range
-          n, len = OSX::RangeUtil.normalize(first, count)
-          if 0 <= n && n < count
-            substringWithRange(OSX::NSRange.new(n, len)).mutableCopy
-          elsif n == count
-            OSX::NSMutableString.string
-          else
-            nil
-          end
-        else
-          raise TypeError, "can't convert #{first.class} into Integer"
-        end
-      when 2
-        first, second = args
-        case first
-        when Numeric,OSX::NSNumber
-          unless second.is_a?(Numeric) || second.is_a?(OSX::NSNumber)
-            raise TypeError, "can't convert #{second.class} into Integer"
-          end
-          n, len = first.to_i, second.to_i
-          n += count if n < 0
-          if n < 0 || count < n
-            nil
-          elsif len < 0
-            nil
-          else
-            self[n...n+len]
-          end
-        #when Regexp
-        else
-          raise TypeError, "can't convert #{first.class} into Integer"
-        end
-      else
-        raise ArgumentError, "wrong number of arguments (#{args.length} for 2)"
-      end
+      _read_impl(:[], args)
     end
+    alias_method :slice, :[]
     
     def []=(*args)
       count = length
@@ -307,6 +253,13 @@ module OSX
         raise ArgumentError, "wrong number of arguments (#{args.length} for 3)"
       end
     end
+    
+    def %(args)
+      if args.is_a?(Array) || args.is_a?(OSX::NSArray)
+        args = args.map {|i| i.is_a?(OSX::NSObject) ? i.to_ruby : i }
+      end
+      OSX::NSMutableString.stringWithString(to_s % args)
+    end
 
     def *(times)
       unless times.is_a?(Numeric) || times.is_a?(OSX::NSNumber)
@@ -361,6 +314,42 @@ module OSX
         self
       else
         nil
+      end
+    end
+    
+    def center(len, padstr=' ')
+      if !len.is_a?(Numeric) && !len.is_a?(OSX::NSNumber)
+        raise TypeError, "can't convert #{len.class} into Integer"
+      end
+      if !padstr.is_a?(String) && !padstr.is_a?(OSX::NSString)
+        raise TypeError, "can't convert #{padstr.class} into String"
+      end
+      len = len.to_i
+      padstr = OSX::NSString.stringWithString(padstr) if padstr.is_a?(String)
+      padlen = padstr.length
+      if padlen == 0
+        raise ArgumentError, "zero width padding"
+      end
+      curlen = length
+      if len <= curlen
+        mutableCopy
+      else
+        len -= curlen
+        leftlen = len / 2
+        rightlen = len - leftlen
+        s = OSX::NSMutableString.string
+        if leftlen > 0
+          s << padstr * (leftlen / padlen)
+          leftlen %= padlen
+          s << padstr.substringToIndex(leftlen) if leftlen > 0
+        end
+        s << self
+        if rightlen > 0
+          s << padstr * (rightlen / padlen)
+          rightlen %= padlen
+          s << padstr.substringToIndex(rightlen) if rightlen > 0
+        end
+        s
       end
     end
     
@@ -436,6 +425,10 @@ module OSX
       self
     end
     
+    def crypt(salt)
+      OSX::NSMutableString.stringWithString(to_s.crypt(salt.to_s))
+    end
+    
     def downcase
       lowercaseString.mutableCopy
     end
@@ -448,6 +441,10 @@ module OSX
       else
         nil
       end
+    end
+    
+    def dump
+      OSX::NSMutableString.stringWithString(to_s.dump)
     end
     
     def each_byte(&block)
@@ -580,6 +577,63 @@ module OSX
       result
     end
     
+    def ljust(len, padstr=' ')
+      if !len.is_a?(Numeric) && !len.is_a?(OSX::NSNumber)
+        raise TypeError, "can't convert #{len.class} into Integer"
+      end
+      if !padstr.is_a?(String) && !padstr.is_a?(OSX::NSString)
+        raise TypeError, "can't convert #{padstr.class} into String"
+      end
+      len = len.to_i
+      padstr = OSX::NSString.stringWithString(padstr) if padstr.is_a?(String)
+      padlen = padstr.length
+      if padlen == 0
+        raise ArgumentError, "zero width padding"
+      end
+      s = mutableCopy
+      curlen = length
+      if len <= curlen
+        s
+      else
+        len -= curlen
+        s << padstr * (len / padlen)
+        len %= padlen
+        s << padstr.substringToIndex(len) if len > 0
+        s
+      end
+    end
+    
+    def lstrip
+      cs = OSX::NSCharacterSet.characterSetWithCharactersInString(" \t\r\n\f\v").invertedSet
+      r = rangeOfCharacterFromSet(cs)
+      if r.not_found?
+        OSX::NSMutableString.string
+      else
+        substringFromIndex(r.location).mutableCopy
+      end
+    end
+    
+    def lstrip!
+      s = lstrip
+      if self != s
+        setString(s)
+        self
+      else
+        nil
+      end
+    end
+    
+    def next
+      OSX::NSMutableString.stringWithString(to_s.next)
+    end
+    alias_method :succ, :next
+    
+    def next!
+      setString(self.next)
+      self
+    end
+    alias_method :succ!, :next!
+
     def oct
       to_s.oct
     end
@@ -589,6 +643,21 @@ module OSX
         characterAtIndex(0)
       else
         0
+      end
+    end
+    
+    def partition(sep)
+      r = rangeOfString(sep)
+      if r.not_found?
+        left = mutableCopy
+        right = OSX::NSMutableString.string
+        sep = right.mutableCopy
+        OSX::NSMutableArray.arrayWithArray([left, sep, right])
+      else
+        left = substringToIndex(r.location).mutableCopy
+        right = substringFromIndex(r.location + r.length).mutableCopy
+        sep = substringWithRange(r).mutableCopy
+        OSX::NSMutableArray.arrayWithArray([left, sep, right])
       end
     end
     
@@ -647,8 +716,74 @@ module OSX
       end
     end
     
+    def rjust(len, padstr=' ')
+      if !len.is_a?(Numeric) && !len.is_a?(OSX::NSNumber)
+        raise TypeError, "can't convert #{len.class} into Integer"
+      end
+      if !padstr.is_a?(String) && !padstr.is_a?(OSX::NSString)
+        raise TypeError, "can't convert #{padstr.class} into String"
+      end
+      len = len.to_i
+      padstr = OSX::NSString.stringWithString(padstr) if padstr.is_a?(String)
+      padlen = padstr.length
+      if padlen == 0
+        raise ArgumentError, "zero width padding"
+      end
+      curlen = length
+      if len <= curlen
+        mutableCopy
+      else
+        s = OSX::NSMutableString.string
+        len -= curlen
+        s << padstr * (len / padlen)
+        len %= padlen
+        s << padstr.substringToIndex(len) if len > 0
+        s << self
+        s
+      end
+    end
+    
+    def rpartition(sep)
+      r = rangeOfString_options(sep, OSX::NSBackwardsSearch)
+      if r.not_found?
+        left = mutableCopy
+        right = OSX::NSMutableString.string
+        sep = right.mutableCopy
+        OSX::NSMutableArray.arrayWithArray([left, sep, right])
+      else
+        left = substringToIndex(r.location).mutableCopy
+        right = substringFromIndex(r.location + r.length).mutableCopy
+        sep = substringWithRange(r).mutableCopy
+        OSX::NSMutableArray.arrayWithArray([left, sep, right])
+      end
+    end
+    
+    def rstrip
+      cs = OSX::NSCharacterSet.characterSetWithCharactersInString(" \t\r\n\f\v").invertedSet
+      r = rangeOfCharacterFromSet_options(cs, OSX::NSBackwardsSearch)
+      if r.not_found?
+        OSX::NSMutableString.string
+      else
+        substringToIndex(r.location + 1).mutableCopy
+      end
+    end
+    
+    def rstrip!
+      s = rstrip
+      if self != s
+        setString(s)
+        self
+      else
+        nil
+      end
+    end
+    
     def size
       length
+    end
+    
+    def slice!(*args)
+      _read_impl(:slice!, args)
     end
     
     def start_with?(str)
@@ -662,6 +797,28 @@ module OSX
     
     def strip!
       s = strip
+      if self != s
+        setString(s)
+        self
+      else
+        nil
+      end
+    end
+    
+    def sum(bits=16)
+      bits = bits.to_i if bits.is_a?(OSX::NSNumber)
+      n = 0
+      0.upto(length-1) {|i| n += characterAtIndex(i) }
+      n = n & ((1 << bits) - 1) if bits > 0
+      n
+    end
+    
+    def swapcase
+      OSX::NSMutableString.stringWithString(to_s.swapcase)
+    end
+    
+    def swapcase!
+      s = swapcase
       if self != s
         setString(s)
         self
@@ -691,7 +848,84 @@ module OSX
         nil
       end
     end
-
+    
+    def upto(max)
+      max = OSX::NSString.stringWithString(max)
+      (self..max).each do |i|
+        yield i
+      end
+      self
+    end
+    
+    private
+    
+    def _read_impl(method, args)
+      slice = method == :slice!
+      count = length
+      case args.length
+      when 1
+        first = args.first
+        case first
+        when Numeric,OSX::NSNumber
+          n = first.to_i
+          n += count if n < 0
+          if 0 <= n && n < count
+            c = characterAtIndex(n)
+            deleteCharactersInRange(OSX::NSRange.new(n, 1)) if slice
+            c
+          else
+            nil
+          end
+        when String,OSX::NSString
+          str = first.to_ns
+          n = index(str)
+          if n
+            s = str.mutableCopy
+            deleteCharactersInRange(OSX::NSRange.new(n, str.length)) if slice
+            s
+          else
+            nil
+          end
+        #when Regexp
+        when Range
+          n, len = OSX::RangeUtil.normalize(first, count)
+          if 0 <= n && n < count
+            range = OSX::NSRange.new(n, len)
+            s = substringWithRange(range).mutableCopy
+            deleteCharactersInRange(range) if slice
+            s
+          elsif n == count
+            OSX::NSMutableString.string
+          else
+            nil
+          end
+        else
+          raise TypeError, "can't convert #{first.class} into Integer"
+        end
+      when 2
+        first, second = args
+        case first
+        when Numeric,OSX::NSNumber
+          unless second.is_a?(Numeric) || second.is_a?(OSX::NSNumber)
+            raise TypeError, "can't convert #{second.class} into Integer"
+          end
+          n, len = first.to_i, second.to_i
+          n += count if n < 0
+          if n < 0 || count < n
+            nil
+          elsif len < 0
+            nil
+          else
+            _read_impl(method, [n...n+len])
+          end
+        #when Regexp
+        else
+          raise TypeError, "can't convert #{first.class} into Integer"
+        end
+      else
+        raise ArgumentError, "wrong number of arguments (#{args.length} for 2)"
+      end
+    end
   end
 
   # NSArray additions
@@ -783,6 +1017,7 @@ module OSX
     def [](*args)
       _read_impl(:[], args)
     end
+    alias_method :slice, :[]
 
     def []=(*args)
       count = self.count
@@ -980,6 +1215,10 @@ module OSX
 
     def at(pos)
       self[pos]
+    end
+    
+    def casecmp(other)
+      caseInsensitiveCompare(other)
     end
 
     def clear
@@ -1360,10 +1599,6 @@ module OSX
     end
     alias_method :length, :size
     alias_method :nitems, :size
-
-    def slice(*args)
-      self[*args]
-    end
 
     def slice!(*args)
       _read_impl(:slice!, args)

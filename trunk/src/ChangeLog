@@ -1,3 +1,18 @@
+2007-10-28  Satoshi Nakagawa <artension@gmail.com>
+
+	* framework/src/ruby/osx/objc/oc_attachments.rb,
+	  tests/tc_nsstring_compat.rb:
+	- Added methods to NSString:
+		%, casecmp, center, dump, ljust, lstrip, lstrip!, next, next!,
+		partition, rjust, rstrip, rstrip!, rpartition. slice, slice!, succ,
+		succ!, sum, swapcase, swapcase!, upto.
+	- Added tests.
+
+	* framework/src/ruby/osx/objc/oc_types_appkit.rb,
+	  tests/tc_boxed.rb:
+	- Added NSRange#not_found?.
+	- Added tests.
+
 2007-10-28 Eloy Duran <e.duran@superalloy.nl>
 
 	* framework/tool/gen_bridge_doc.rb,
