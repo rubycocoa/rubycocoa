@@ -1,3 +1,8 @@
+2007-10-28 kimura wataru  <kimuraw@i.nifty.jp>
+
+	* Rakefile:
+	add a missed '=' into '--gen-bridge-doc no'.
+
 2007-10-28 Eloy Duran <e.duran@superalloy.nl>
 
 	* Rakefile:
