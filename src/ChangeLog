@@ -1,3 +1,8 @@
+2007-10-30 kimura wataru  <kimuraw@i.nifty.jp>
+
+	* Rakefile:
+	use '--gen-bridge-doc=no' at 'package' task on 10.5.
+
 2007-10-28 kimura wataru  <kimuraw@i.nifty.jp>
 
 	* Rakefile:
