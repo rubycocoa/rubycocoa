@@ -1,3 +1,11 @@
+2007-11-04 kimura wataru  <kimuraw@i.nifty.jp>
+
+	* pre-config.rb,
+	  framework/post-config.rb,
+	  metaconfig:
+	- new config option --sdkroot.
+	- fix setup error --macosx-deployment-target=10.4 on 10.5.
+
 2007-10-30 kimura wataru  <kimuraw@i.nifty.jp>
 
 	* Rakefile:

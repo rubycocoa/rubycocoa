@@ -83,6 +83,9 @@ add_config 'macosx-deployment-target', 'version',
   sprintf('%02.1f', RubyCocoaConfig.system_version.to_f),
   'target Mac OS X version'
 
+add_config 'sdkroot', 'sdkroot path', '',
+  '$SDKROOT of Xcode. automatically sets when --build-universal=yes for 10.4'
+
 ### versioning ### 
 
 add_config 'rubycocoa-version', 'name', 
