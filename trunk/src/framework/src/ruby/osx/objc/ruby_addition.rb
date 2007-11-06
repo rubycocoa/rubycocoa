@@ -54,8 +54,9 @@ end
     def to_plist(format=nil)
       OSX.object_to_plist(self, format)
     end
-    def to_ns
-      OSX.rbobj_to_nsobj(self)
+    def to_ns(returns_mutable=true)
+      o = OSX.rbobj_to_nsobj(self)
+      returns_mutable and o and o.oc_class.ocm_conforms?('NSMutableCopying') ? o.mutableCopy : o
     end
   end
 end
