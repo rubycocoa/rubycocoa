@@ -1,3 +1,10 @@
+2007-11-07  Satoshi Nakagawa <artension@gmail.com>
+
+	* framework/src/objc/mdl_osxobjc.m,
+	  framework/src/objc/ocdata_conv.m,
+	  tests/tc_nsstring.rb:
+	Fixed a bug, calling to_ns for a Ruby String which has illegal utf-8 sequences caused a bus error.
+
 2007-11-06 kimura wataru  <kimuraw@i.nifty.jp>
 
 	* framework/src/ruby/osx/objc/ruby_addition.rb,

@@ -591,7 +591,8 @@ rbobj_to_nsobj (VALUE obj, id* nsobj)
     *nsobj = rbobj_get_ocid(obj);
     if (*nsobj != nil || rbobj_convert_to_nsobj(obj, nsobj)) {
       BOOL  magic_cookie;
-
+      if (*nsobj == nil) return YES;
+      
       magic_cookie = find_magic_cookie_const_by_value(*nsobj) != NULL;
       if (magic_cookie || ([*nsobj isProxy] && [*nsobj isRBObject])) {
         CACHE_LOCK(&rb2ocCacheLock);
