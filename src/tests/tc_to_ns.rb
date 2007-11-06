@@ -53,5 +53,39 @@ class TC_to_ns < Test::Unit::TestCase
   def test_invalid_object
     assert(!/123/.respond_to?(:to_ns))
   end
-
+  
+  def test_string_to_ns
+    a, b = 'abc', 'def'
+    
+    n = a.to_ns
+    assert_nothing_raised { n << b }
+    assert_equal(a + b, n)
+    
+    n = a.to_ns(false)
+    assert_raises(OSX::OCException) { n << b }
+  end
+  
+  def test_array_to_ns
+    a = [1, 2, 'three']
+    b = [4, 'five', 6]
+    
+    n = a.to_ns
+    assert_nothing_raised { n.concat(b) }
+    assert_equal(a + b, n)
+    
+    # all NSCFArray from to_ns seems mutable
+    # n = a.to_ns(false)
+    # assert_raises(OSX::OCException) { n.concat(b) }
+  end
+  
+  def test_hash_to_ns
+    a = { 1=>'one', 2=>'two', 3=>'three' }
+    
+    n = a.to_ns
+    assert_nothing_raised { n.merge!(4 => 'four') }
+    
+    # all NSCFDictionary from to_ns seems mutable
+    # n = a.to_ns(false)
+    # assert_raises(OSX::OCException) { n.merge!(4 => 'four') }
+  end
 end
