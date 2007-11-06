@@ -8,18 +8,6 @@
 # String additions.
 class String
 
-  def nsencoding
-    OSX::NSString.guess_nsencoding(self)
-  end
-
-  def to_nsstring
-    OSX::NSString.stringWithRubyString(self)
-  end
-
-  def to_nsmutablestring
-    OSX::NSMutableString.stringWithRubyString(self)
-  end
-
   def to_sel
     s = self.dup
     s.instance_variable_set(:@__is_sel__, true)
