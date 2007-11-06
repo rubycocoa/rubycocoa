@@ -449,6 +449,15 @@ wrapper_ocm_responds_p(VALUE rcv, VALUE sel)
 }
 
 static VALUE
+wrapper_ocm_conforms_p(VALUE rcv, VALUE name)
+{
+  Protocol *protocol = objc_getProtocol(STR2CSTR(name));
+  if (protocol == NULL)
+    rb_raise(rb_eArgError, "Invalid protocol name `%s'", STR2CSTR(name));
+  return class_conformsToProtocol(rbobj_get_ocid(rcv), protocol) ? Qtrue : Qfalse;
+}
+
+static VALUE
 wrapper_ocm_send(int argc, VALUE* argv, VALUE rcv)
 {
   VALUE result;
@@ -655,6 +664,7 @@ init_mdl_OCObjWrapper(VALUE outer)
   _mObjWrapper = rb_define_module_under(outer, "OCObjWrapper");
 
   rb_define_method(_mObjWrapper, "ocm_responds?", wrapper_ocm_responds_p, 1);
+  rb_define_method(_mObjWrapper, "ocm_conforms?", wrapper_ocm_conforms_p, 1);
   rb_define_method(_mObjWrapper, "ocm_send", wrapper_ocm_send, -1);
   rb_define_method(_mObjWrapper, "to_s", wrapper_to_s, 0);
 

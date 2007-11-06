@@ -1,5 +1,13 @@
 2007-11-06  Laurent Sansonetti <lsansonetti@apple.com>
 
+	* framework/src/ruby/osx/objc/ruby_addition.rb,
+	  framework/src/objc/mdl_objwrapper.m,
+	  tests/tc_wrapper.rb:
+	- #to_ns now returns mutable objects by default. Pass false to get an 
+	  immutable object.
+	- Introduced #ocm_conforms? to verify that a given class conforms to a given
+	  Objective-C protocol. Added tests.
+
 	* framework/src/objc/RBSlaveObject.m:
 	Avoid an infinite loop when creating the slave proxy, which could be caused
 	by an attempt to pass an object to Objective-C in its #initialize method.

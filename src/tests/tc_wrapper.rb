@@ -160,4 +160,11 @@ class TC_OCObjWrapper < Test::Unit::TestCase
     assert(ary.equalToArray?([1]))
     assert(!ary.equalToArray?([2]))
   end
+
+  def test_conforms_to_protocol
+    assert(NSString.ocm_conforms?('NSMutableCopying'))
+    assert(!NSObject.ocm_conforms?('NSMutableCopying'))
+    assert(NSProxy.ocm_conforms?('NSObject'))
+    assert_raises(ArgumentError) { NSObject.ocm_conforms?('Foo') }
+  end
 end
