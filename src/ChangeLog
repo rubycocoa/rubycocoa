@@ -1,3 +1,9 @@
+2007-11-06  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* framework/src/objc/ocdata_conv.m:
+	Do not create immutable instances of NSArray and NSDictionary when converting Array and
+	Hash to Objective-C.
+
 2007-11-07  Satoshi Nakagawa <artension@gmail.com>
 
 	* tests/tc_to_ns.rb:

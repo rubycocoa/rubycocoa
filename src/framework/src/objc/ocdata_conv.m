@@ -439,16 +439,18 @@ ocdata_to_rbobj (VALUE context_obj, const char *octype_str, const void *ocdata, 
 static BOOL 
 rbary_to_nsary (VALUE rbary, id* nsary)
 {
-  long i;
-  long len = RARRAY(rbary)->len;
-  VALUE* items = RARRAY(rbary)->ptr;
-  NSMutableArray* result = [[[NSMutableArray alloc] init] autorelease];
-  for (i = 0; i < len; i++) {
-    id nsitem;
-    if (!rbobj_to_nsobj(items[i], &nsitem)) return NO;
-    [result addObject: nsitem];
-  }
-  *nsary = result;
+  long i, len;
+  id *objects;
+
+  len = RARRAY(rbary)->len;
+  objects = (id *)alloca(sizeof(id) * len);
+  ASSERT_ALLOC(objects);
+  
+  for (i = 0; i < len; i++)
+    if (!rbobj_to_nsobj(RARRAY(rbary)->ptr[i], &objects[i]))
+      return NO;
+  
+  *nsary = [[[NSArray alloc] initWithObjects:objects count:len] autorelease];
   return YES;
 }
 
@@ -462,22 +464,26 @@ rbhash_to_nsdic (VALUE rbhash, id* nsdic)
   VALUE* keys;
   VALUE val;
   long i, len;
-  NSMutableDictionary* result;
-  id nskey, nsval;
+  id *nskeys, *nsvals;
 
   ary_keys = rb_funcall(rbhash, rb_intern("keys"), 0);
   len = RARRAY(ary_keys)->len;
   keys = RARRAY(ary_keys)->ptr;
 
-  result = [[[NSMutableDictionary alloc] init] autorelease];
+  nskeys = (id *)alloca(sizeof(id) * len);
+  ASSERT_ALLOC(nskeys);
+  nsvals = (id *)alloca(sizeof(id) * len);
+  ASSERT_ALLOC(nsvals);
 
   for (i = 0; i < len; i++) {
-    if (!rbobj_to_nsobj(keys[i], &nskey)) return NO;
+    if (!rbobj_to_nsobj(keys[i], &nskeys[i])) 
+      return NO;
     val = rb_hash_aref(rbhash, keys[i]);
-    if (!rbobj_to_nsobj(val, &nsval)) return NO;
-    [result setObject: nsval forKey: nskey];
+    if (!rbobj_to_nsobj(val, &nsvals[i])) 
+      return NO;
   }
-  *nsdic = result;
+
+  *nsdic = [[[NSDictionary alloc] initWithObjects:nsvals forKeys:nskeys count:len] autorelease];
   return YES;
 }
 
