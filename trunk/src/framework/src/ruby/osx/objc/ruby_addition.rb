@@ -7,7 +7,22 @@
 
 # String additions.
 class String
-
+  
+  def nsencoding
+    warn "#{caller[0]}: nsencoding is now deprecated and its use is discouraged, please use 'NKF.guess(rbstr)' instead."
+    OSX::NSString.guess_nsencoding(self)
+  end
+	
+  def to_nsstring
+    warn "#{caller[0]}: to_nsstring is now deprecated and its use is discouraged, please use to_ns(false) instead."
+    OSX::NSString.stringWithRubyString(self)
+  end
+  
+  def to_nsmutablestring
+    warn "#{caller[0]}: to_nsmutablestring is now deprecated and its use is discouraged, please use to_ns instead."
+    OSX::NSMutableString.stringWithRubyString(self)
+  end
+  
   def to_sel
     s = self.dup
     s.instance_variable_set(:@__is_sel__, true)
