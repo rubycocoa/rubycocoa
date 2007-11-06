@@ -341,7 +341,7 @@ osx_rbobj_to_nsobj (VALUE rcv, VALUE obj)
   VALUE val;
 
   pool = [[NSAutoreleasePool alloc] init];
-  if (!rbobj_to_nsobj(obj, &ocid)) {
+  if (!rbobj_to_nsobj(obj, &ocid) || ocid == nil) {
     [pool release];
     return Qnil;
   }

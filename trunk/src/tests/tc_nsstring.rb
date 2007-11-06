@@ -88,4 +88,9 @@ class TC_NSString < Test::Unit::TestCase
       b += 'def'
     }
   end
+  
+  def test_to_ns
+    assert_equal(OSX::NSString.stringWithString('abc'), 'abc'.to_ns)
+    assert_equal(nil, "\270\236\010\210\245".to_ns)
+  end
 end
