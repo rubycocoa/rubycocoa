@@ -1,3 +1,9 @@
+2007-11-07  Satoshi Nakagawa <artension@gmail.com>
+
+	* framework/src/ruby/osx/objc/ruby_addition.rb:
+	Added String#nsenconding, to_nsstring, to_nsmutablestring again with deprecation warnings
+	due to compatibilities.
+
 2007-11-06  Laurent Sansonetti <lsansonetti@apple.com>
 
 	* framework/src/ruby/osx/objc/ruby_addition.rb,
