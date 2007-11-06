@@ -1,3 +1,9 @@
+2007-11-06  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* framework/src/objc/RBSlaveObject.m:
+	Avoid an infinite loop when creating the slave proxy, which could be caused
+	by an attempt to pass an object to Objective-C in its #initialize method.
+
 2007-11-07  Satoshi Nakagawa <artension@gmail.com>
 
 	* framework/src/objc/mdl_osxobjc.m,
