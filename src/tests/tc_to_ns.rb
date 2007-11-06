@@ -73,9 +73,8 @@ class TC_to_ns < Test::Unit::TestCase
     assert_nothing_raised { n.concat(b) }
     assert_equal(a + b, n)
     
-    # all NSCFArray from to_ns seems mutable
-    # n = a.to_ns(false)
-    # assert_raises(OSX::OCException) { n.concat(b) }
+    n = a.to_ns(false)
+    assert_raises(OSX::OCException) { n.concat(b) }
   end
   
   def test_hash_to_ns
@@ -84,8 +83,7 @@ class TC_to_ns < Test::Unit::TestCase
     n = a.to_ns
     assert_nothing_raised { n.merge!(4 => 'four') }
     
-    # all NSCFDictionary from to_ns seems mutable
-    # n = a.to_ns(false)
-    # assert_raises(OSX::OCException) { n.merge!(4 => 'four') }
+    n = a.to_ns(false)
+    assert_raises(OSX::OCException) { n.merge!(4 => 'four') }
   end
 end
