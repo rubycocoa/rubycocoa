@@ -1,3 +1,9 @@
+2007-11-06 kimura wataru  <kimuraw@i.nifty.jp>
+
+	* framework/src/ruby/osx/objc/ruby_addition.rb,
+	  tests/tc_rubystring.rb:
+	String#nsenconding, to_nsstring, to_nsmutablestring were obsoleted.
+
 2007-11-05 kimura wataru  <kimuraw@i.nifty.jp>
 
 	* pre-config.rb,
