@@ -1,6 +1,6 @@
 2007-11-07  Satoshi Nakagawa <artension@gmail.com>
 
-	* tests/tc_wrapper.rb:
+	* tests/tc_to_ns.rb:
 	Added test cases for to_ns.
 
 2007-11-07  Satoshi Nakagawa <artension@gmail.com>
