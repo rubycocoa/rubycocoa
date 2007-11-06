@@ -1,5 +1,10 @@
 2007-11-07  Satoshi Nakagawa <artension@gmail.com>
 
+	* tests/tc_wrapper.rb:
+	Added test cases for to_ns.
+
+2007-11-07  Satoshi Nakagawa <artension@gmail.com>
+
 	* framework/src/ruby/osx/objc/ruby_addition.rb:
 	Added String#nsenconding, to_nsstring, to_nsmutablestring again with deprecation warnings
 	due to compatibilities.
