@@ -71,7 +71,12 @@ end
     end
     def to_ns(returns_mutable=true)
       o = OSX.rbobj_to_nsobj(self)
-      returns_mutable and o and o.oc_class.ocm_conforms?('NSMutableCopying') ? o.mutableCopy : o
+      if returns_mutable
+        case self
+        when Array, Hash, String: o = o.mutableCopy unless o.nil?
+        end
+      end
+      o
     end
   end
 end
