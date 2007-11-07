@@ -1,5 +1,10 @@
 2007-11-07  kimura wataru  <kimuraw@i.nifty.jp>
 
+	* tests/tc_rubystring.rb:
+	add test for String#nsenconding, to_nsstring, to_nsmutablestring again. 
+
+2007-11-07  kimura wataru  <kimuraw@i.nifty.jp>
+
 	* sample/Scripts/darkroom.rb:
 	fix SEGV of darkroom.rb on Leopard. 
 
