@@ -1,3 +1,8 @@
+2007-11-07  kimura wataru  <kimuraw@i.nifty.jp>
+
+	* sample/Scripts/darkroom.rb:
+	fix SEGV of darkroom.rb on Leopard. 
+
 2007-11-07  Satoshi Nakagawa <artension@gmail.com>
 
 	* tests/tc_to_ns.rb:
