@@ -448,6 +448,9 @@ wrapper_ocm_responds_p(VALUE rcv, VALUE sel)
   return [oc_rcv respondsToSelector: oc_sel] ? Qtrue : Qfalse;
 }
 
+#if 0
+// Disabled, because we don't have a working implementation for systems
+// equal or below than Tiger.
 static VALUE
 wrapper_ocm_conforms_p(VALUE rcv, VALUE name)
 {
@@ -456,6 +459,7 @@ wrapper_ocm_conforms_p(VALUE rcv, VALUE name)
     rb_raise(rb_eArgError, "Invalid protocol name `%s'", STR2CSTR(name));
   return class_conformsToProtocol(rbobj_get_ocid(rcv), protocol) ? Qtrue : Qfalse;
 }
+#endif
 
 static VALUE
 wrapper_ocm_send(int argc, VALUE* argv, VALUE rcv)
@@ -664,7 +668,7 @@ init_mdl_OCObjWrapper(VALUE outer)
   _mObjWrapper = rb_define_module_under(outer, "OCObjWrapper");
 
   rb_define_method(_mObjWrapper, "ocm_responds?", wrapper_ocm_responds_p, 1);
-  rb_define_method(_mObjWrapper, "ocm_conforms?", wrapper_ocm_conforms_p, 1);
+	//rb_define_method(_mObjWrapper, "ocm_conforms?", wrapper_ocm_conforms_p, 1);
   rb_define_method(_mObjWrapper, "ocm_send", wrapper_ocm_send, -1);
   rb_define_method(_mObjWrapper, "to_s", wrapper_to_s, 0);
 

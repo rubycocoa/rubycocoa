@@ -1,3 +1,11 @@
+2007-11-10  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* framework/src/objc/mdl_objwrapper.m,
+	  framework/src/objc/objc_compat.h,
+	  tests/tc_wrapper.rb:
+	Removed #ocm_conforms? for now, because we don't have yet a working
+	implementation for systems equal or below than Tiger.
+
 2007-11-10  kimura wataru  <kimuraw@i.nifty.jp>
 
 	* framework/src/ruby/osx/objc/cocoa_macros.rb:
