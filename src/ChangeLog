@@ -1,3 +1,10 @@
+2007-11-10  kimura wataru  <kimuraw@i.nifty.jp>
+
+	* framework/src/ruby/osx/objc/cocoa_macros.rb:
+	- add CoreData.define_wrapper_for_entity(). this feature was a part of 
+	  CoreData.define_wrapper().
+	- remove "to_a" for NSArray in CoreData module.
+
 2007-11-07  kimura wataru  <kimuraw@i.nifty.jp>
 
 	* tests/tc_rubystring.rb:
