@@ -223,10 +223,11 @@ class TC_ObjcPtr < Test::Unit::TestCase
     ary = obj.as_id
     assert_kind_of(OSX::NSArray, ary)
     assert_kind_of(OSX::NSString, ary.first)
+    
     obj = ObjcPtrTest.new.returnVoidPtrForKCFBooleanTrue
-    assert_equal(true, obj.as_cfbooleanref)
+    assert_equal(true, obj.as_id.boolValue)
     obj = ObjcPtrTest.new.returnVoidPtrForKCFBooleanFalse
-    assert_equal(false, obj.as_cfbooleanref)
+    assert_equal(false, obj.as_id.boolValue)
   end
 
 #   rb_define_method (_kObjcPtr, "int8_at", rb_objcptr_int8_at, 1);

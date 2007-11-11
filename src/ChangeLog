@@ -2,6 +2,12 @@
 
 	* framework/src/objc/cls_objcptr.m,
 	  tests/tc_objcptr.rb,
+	Removed ObjcPtr#as_cfbooleanref, because #as_id.boolValue is enough.
+
+2007-11-12  Satoshi Nakagawa <artension@gmail.com>
+
+	* framework/src/objc/cls_objcptr.m,
+	  tests/tc_objcptr.rb,
 	  tests/objc_test.m,
 	  tests/ObjcPtrTest.bridgesupport:
 	- Added ObjcPtr#as_cfbooleanref.
