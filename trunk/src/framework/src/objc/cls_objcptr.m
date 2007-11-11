@@ -17,7 +17,7 @@ static VALUE _kObjcPtr = Qnil;
 struct _objcptr_data {
   long    allocated_size;
   void *  cptr;
-  const char *  encoding; 
+  const char *  encoding;
 };
 
 #define OBJCPTR_DATA_PTR(o) ((struct _objcptr_data*)(DATA_PTR(o)))
@@ -25,6 +25,15 @@ struct _objcptr_data {
 #define ALLOCATED_SIZE_OF(o) (OBJCPTR_DATA_PTR(o)->allocated_size)
 #define ENCODING_OF(o) (OBJCPTR_DATA_PTR(o)->encoding)
 
+static void _set_encoding(VALUE obj, const char* enc)
+{
+  if (ENCODING_OF(obj))
+    free ((char*)ENCODING_OF(obj));
+
+  char* buf = malloc(strlen(enc) + 1);
+  strcpy(buf, enc);
+  ENCODING_OF(obj) = buf;
+}
 
 struct _encoding_type_rec {
   struct _encoding_type_rec* next;
@@ -108,6 +117,8 @@ _objcptr_data_free(struct _objcptr_data* dp)
   if (dp != NULL) {
     if (dp->allocated_size > 0)
       free (dp->cptr);
+    if (dp->encoding)
+      free ((char*)dp->encoding);
     dp->allocated_size = 0;
     dp->cptr = NULL;
     dp->encoding = NULL;
@@ -155,7 +166,7 @@ rb_objcptr_s_allocate(int argc, VALUE* argv, VALUE klass)
   if (argc == 1 && ! SYMBOL_P(key)) {
     length = NUM2LONG(key);
     obj = _objcptr_s_new (klass, length);
-    ENCODING_OF(obj) = "C"; /* uchar */
+    _set_encoding(obj, "C"); /* uchar */
     return obj;
   }
 
@@ -167,7 +178,7 @@ rb_objcptr_s_allocate(int argc, VALUE* argv, VALUE klass)
   length = (argc == 2) ? NUM2LONG(cnt) : 1;
   length *= ocdata_size(rec->encoding);
   obj = _objcptr_s_new (klass, length);
-  ENCODING_OF(obj) = rec->encoding;
+  _set_encoding(obj, rec->encoding);
   return obj;
 }
 
@@ -176,7 +187,7 @@ rb_objcptr_s_allocate_as_int8(VALUE klass)
 {
   VALUE obj;
   obj = _objcptr_s_new (klass, sizeof(int8_t));
-  ENCODING_OF(obj) = "c"; /* char */
+  _set_encoding(obj, "c"); /* char */
   return obj;
 }
 
@@ -185,7 +196,7 @@ rb_objcptr_s_allocate_as_int16(VALUE klass)
 {
   VALUE obj;
   obj = _objcptr_s_new (klass, sizeof(int16_t));
-  ENCODING_OF(obj) = "s"; /* short */
+  _set_encoding(obj, "s"); /* short */
   return obj;
 }
 
@@ -194,7 +205,7 @@ rb_objcptr_s_allocate_as_int32(VALUE klass)
 {
   VALUE obj;
   obj = _objcptr_s_new (klass, sizeof(int32_t));
-  ENCODING_OF(obj) = "i"; /* int */
+  _set_encoding(obj, "i"); /* int */
   return obj;
 }
 
@@ -267,7 +278,7 @@ rb_objcptr_regard_as(VALUE rcv, VALUE key)
     rb_raise(rb_eRuntimeError, "unsupported encoding -- %s", 
 	     rb_id2name(rb_to_id(key)));
 
-  ENCODING_OF(rcv) = encoding;
+  _set_encoding(rcv, encoding);
   return rcv;
 }
 
@@ -386,7 +397,7 @@ objcptr_s_new_with_cptr (void* cptr, const char* encoding)
   VALUE obj;
   obj = _objcptr_s_new (_kObjcPtr, 0);
   CPTR_OF(obj) = cptr;
-  ENCODING_OF(obj) = encoding + 1;  // skipping the first type
+  _set_encoding(obj, encoding + 1); // skipping the first type  
   return obj;
 }
 
