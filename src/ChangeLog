@@ -1,3 +1,11 @@
+2007-11-12  Satoshi Nakagawa <artension@gmail.com>
+
+	* framework/src/objc/cls_objcptr.m:
+	Added _set_encoding to fix a bug, encoding was sometimes deallocated.
+
+	* tests/ObjcPtrTest.bridgesupport:
+	Use type_modifier 'n' for void*.
+
 2007-11-11 Chris McGrath <chris@octopod.info>
 
 	* framework/tool/rb_nibtool.rb:
