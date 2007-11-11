@@ -1,3 +1,9 @@
+2007-11-11 Chris McGrath <chris@octopod.info>
+
+	* framework/tool/rb_nibtool.rb:
+
+	- Fixed problem with rb_nibtool.rb not detecting existing classes
+
 2007-11-12  Satoshi Nakagawa <artension@gmail.com>
 
 	* framework/src/objc/cls_objcptr.m,

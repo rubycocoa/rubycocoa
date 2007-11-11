@@ -183,7 +183,7 @@ class ClassesNibPlist
     classes = @plist['IBClasses']
     if classes
       classes.each do |klass|
-        next unless klass['CLASS'].to_s == ruby_class
+        next unless klass['CLASS'].to_s == ruby_class.to_s
         ruby_class_plist = klass
       end
     else
