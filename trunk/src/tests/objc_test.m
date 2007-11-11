@@ -619,12 +619,22 @@ static BOOL TestThreadedCallbackDone = NO;
 
 @implementation ObjcPtrTest
 
-- (void*)returnVoidPtr
+- (void*)returnVoidPtrForArrayOfString
 {
   NSString* str = [NSString stringWithUTF8String:"foobar"];
   NSArray* ary = [NSArray arrayWithObject:str];
   [ary retain];
   return (void*)ary;
+}
+
+- (void*)returnVoidPtrForKCFBooleanTrue
+{
+  return (void*)kCFBooleanTrue;
+}
+
+- (void*)returnVoidPtrForKCFBooleanFalse
+{
+  return (void*)kCFBooleanFalse;
 }
 
 @end

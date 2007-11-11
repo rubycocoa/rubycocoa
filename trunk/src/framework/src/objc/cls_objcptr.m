@@ -9,7 +9,7 @@
 
 #import "cls_objcptr.h"
 #import "ocdata_conv.h"
-//#import "mdl_osxobjc.h"
+#import "mdl_osxobjc.h"
 #import <Foundation/Foundation.h>
 
 static VALUE _kObjcPtr = Qnil;
@@ -454,6 +454,12 @@ rb_objcptr_as_id (VALUE rcv)
 }
 
 static VALUE
+rb_objcptr_as_cfbooleanref (VALUE rcv)
+{
+  return CFBooleanGetValue(CPTR_OF(rcv)) ? Qtrue : Qfalse;
+}
+
+static VALUE
 objcptr_to_a (VALUE rcv, VALUE index, VALUE count)
 {
   size_t type_size, offset;
@@ -550,6 +556,7 @@ init_cls_ObjcPtr(VALUE outer)
   rb_define_method (_kObjcPtr, "assign", rb_objcptr_assign, 1);
   
   rb_define_method (_kObjcPtr, "as_id", rb_objcptr_as_id, 0);
+  rb_define_method (_kObjcPtr, "as_cfbooleanref", rb_objcptr_as_cfbooleanref, 0);
 
   return _kObjcPtr;
 }
