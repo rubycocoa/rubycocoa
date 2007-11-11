@@ -7,6 +7,10 @@
 require 'test/unit'
 require 'osx/cocoa'
 
+system 'make -s' || raise(RuntimeError, "'make' failed")
+require 'objc_test.bundle'
+OSX.load_bridge_support_file 'ObjcPtrTest.bridgesupport'
+
 class TC_ObjcPtr < Test::Unit::TestCase
   include OSX
 
@@ -212,6 +216,13 @@ class TC_ObjcPtr < Test::Unit::TestCase
     str.length.times { |i| obj[i] = str[i] }
     assert_equal('foobar', obj.bytestr)
     assert_raises(ArgumentError) { obj[0] = 'blah' }
+  end
+  
+  def test_ocptr_as_id
+    obj = ObjcPtrTest.new.returnVoidPtr
+    ary = obj.as_id
+    assert_kind_of(OSX::NSArray, ary)
+    assert_kind_of(OSX::NSString, ary.first)
   end
 
 #   rb_define_method (_kObjcPtr, "int8_at", rb_objcptr_int8_at, 1);
