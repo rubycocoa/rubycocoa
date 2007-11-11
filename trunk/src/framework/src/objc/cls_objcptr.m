@@ -9,6 +9,7 @@
 
 #import "cls_objcptr.h"
 #import "ocdata_conv.h"
+//#import "mdl_osxobjc.h"
 #import <Foundation/Foundation.h>
 
 static VALUE _kObjcPtr = Qnil;
@@ -447,6 +448,12 @@ rb_objcptr_assign (VALUE rcv, VALUE obj)
 }
 
 static VALUE
+rb_objcptr_as_id (VALUE rcv)
+{
+  return ocobj_s_new((id)CPTR_OF(rcv));
+}
+
+static VALUE
 objcptr_to_a (VALUE rcv, VALUE index, VALUE count)
 {
   size_t type_size, offset;
@@ -541,6 +548,8 @@ init_cls_ObjcPtr(VALUE outer)
   rb_define_method (_kObjcPtr, "[]=", rb_objcptr_set_at, 2);
 
   rb_define_method (_kObjcPtr, "assign", rb_objcptr_assign, 1);
+  
+  rb_define_method (_kObjcPtr, "as_id", rb_objcptr_as_id, 0);
 
   return _kObjcPtr;
 }

@@ -224,7 +224,7 @@
 
 @interface NSObject (TcSubclassFoo)
 
-- (int)calledFoo:(id)arg;
+- (long)calledFoo:(id)arg;
 
 @end
 
@@ -442,7 +442,7 @@
 
 @implementation TestMagicCookie
 + (BOOL)isKCFAllocatorUseContext:(id)ocid { 
-  return ((unsigned)ocid == (unsigned)kCFAllocatorUseContext);
+  return ((unsigned long)ocid == (unsigned long)kCFAllocatorUseContext);
 }
 @end
 
@@ -610,6 +610,21 @@ static BOOL TestThreadedCallbackDone = NO;
   [pool release];
   if ([obj performSelector:@selector(getObject)] != o)
     [NSException raise:@"OvmixArgRetained" format:@"assertion2 failed"];
+}
+
+@end
+
+@interface ObjcPtrTest : NSObject
+@end
+
+@implementation ObjcPtrTest
+
+- (void*)returnVoidPtr
+{
+  NSString* str = [NSString stringWithUTF8String:"foobar"];
+  NSArray* ary = [NSArray arrayWithObject:str];
+  [ary retain];
+  return (void*)ary;
 }
 
 @end

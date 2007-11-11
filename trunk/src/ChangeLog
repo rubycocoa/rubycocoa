@@ -1,3 +1,11 @@
+2007-11-12  Satoshi Nakagawa <artension@gmail.com>
+
+	* framework/src/objc/cls_objcptr.m,
+	  tests/tc_objcptr.rb,
+	  tests/objc_test.m,
+	  tests/ObjcPtrTest.bridgesupport:
+	Added ObjcPtr#as_id to extract an id from void*.
+
 2007-11-10  Laurent Sansonetti <lsansonetti@apple.com>
 
 	* framework/src/objc/mdl_objwrapper.m,
