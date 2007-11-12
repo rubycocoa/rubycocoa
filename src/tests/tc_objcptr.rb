@@ -220,14 +220,24 @@ class TC_ObjcPtr < Test::Unit::TestCase
   
   def test_ocptr_as_id
     obj = ObjcPtrTest.new.returnVoidPtrForArrayOfString
-    ary = obj.as_id
+    ary = obj.cast_as('@')
     assert_kind_of(OSX::NSArray, ary)
     assert_kind_of(OSX::NSString, ary.first)
     
     obj = ObjcPtrTest.new.returnVoidPtrForKCFBooleanTrue
-    assert_equal(true, obj.as_id.boolValue)
+    assert_equal(true, obj.cast_as('@').boolValue)
+    
     obj = ObjcPtrTest.new.returnVoidPtrForKCFBooleanFalse
-    assert_equal(false, obj.as_id.boolValue)
+    assert_equal(false, obj.cast_as('@').boolValue)
+    
+    obj = ObjcPtrTest.new.returnVoidPtrForInt
+    assert_equal(-2147483648, obj.cast_as('^i'))
+    
+    obj = ObjcPtrTest.new.returnVoidPtrForUInt
+    assert_equal(4294967295, obj.cast_as('^I'))
+    
+    obj = ObjcPtrTest.new.returnVoidPtrForCStr
+    assert_equal('foobar', obj.cast_as('*'))
   end
 
 #   rb_define_method (_kObjcPtr, "int8_at", rb_objcptr_int8_at, 1);

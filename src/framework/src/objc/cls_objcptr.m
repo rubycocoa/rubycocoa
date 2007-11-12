@@ -459,9 +459,22 @@ rb_objcptr_assign (VALUE rcv, VALUE obj)
 }
 
 static VALUE
-rb_objcptr_as_id (VALUE rcv)
+rb_objcptr_cast_as (VALUE rcv, VALUE encoding)
 {
-  return ocobj_s_new((id)CPTR_OF(rcv));
+  VALUE val;
+  const char* enc = StringValuePtr(encoding);
+  void* ptr;
+  
+  if (*enc == '^') {
+    enc++;
+    ptr = CPTR_OF(rcv);
+  } else {
+    ptr = &CPTR_OF(rcv);
+  }
+  
+  if (!ocdata_to_rbobj(Qnil, enc, ptr, &val, NO))
+    rb_raise(rb_eArgError, "Can't convert object to type '%s'", StringValuePtr(encoding));
+  return val;
 }
 
 static VALUE
@@ -560,7 +573,7 @@ init_cls_ObjcPtr(VALUE outer)
 
   rb_define_method (_kObjcPtr, "assign", rb_objcptr_assign, 1);
   
-  rb_define_method (_kObjcPtr, "as_id", rb_objcptr_as_id, 0);
+  rb_define_method (_kObjcPtr, "cast_as", rb_objcptr_cast_as, 1);
 
   return _kObjcPtr;
 }

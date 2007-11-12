@@ -637,6 +637,24 @@ static BOOL TestThreadedCallbackDone = NO;
   return (void*)kCFBooleanFalse;
 }
 
+- (void*)returnVoidPtrForInt
+{
+  static int i = -2147483648U;
+  return (void*)&i;
+}
+
+- (void*)returnVoidPtrForUInt
+{
+  static unsigned int i = 4294967295U;
+  return (void*)&i;
+}
+
+- (void*)returnVoidPtrForCStr
+{
+  static const char* str = "foobar";
+  return (void*)str;
+}
+
 @end
 
 void Init_objc_test(){

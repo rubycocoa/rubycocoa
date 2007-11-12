@@ -11,5 +11,14 @@
     <method selector='returnVoidPtrForKCFBooleanFalse'>
       <retval type_modifier='n'/>
     </method>
+    <method selector='returnVoidPtrForInt'>
+      <retval type_modifier='^v'/>
+    </method>
+    <method selector='returnVoidPtrForUInt'>
+      <retval type_modifier='^v'/>
+    </method>
+    <method selector='returnVoidPtrForCStr'>
+      <retval type_modifier='^v'/>
+    </method>
   </class>
 </signatures>
