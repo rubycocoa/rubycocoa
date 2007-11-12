@@ -1,3 +1,13 @@
+2007-11-13  Satoshi Nakagawa <artension@gmail.com>
+
+	* framework/src/objc/cls_objcptr.m,
+	  tests/tc_objcptr.rb,
+	  tests/objc_test.m,
+	  tests/ObjcPtrTest.bridgesupport:
+	- Added ObjcPtr#cast_as(encoding) for more generic casting from void*.
+	- Removed ObjcPtr#as_id.
+	- Updated tests.
+
 2007-11-12  Satoshi Nakagawa <artension@gmail.com>
 
 	* framework/src/objc/cls_objcptr.m:
