@@ -1,5 +1,8 @@
 2007-11-13  Laurent Sansonetti <lsansonetti@apple.com>
 
+	* framework/src/ruby/osx/objc/foundation.rb:
+	Load the libSystem.bridgesupport file if it exists.
+
 	* sample/Scripts/watcher.rb,
 	  sample/Scripts/libSystem/*.rb,
 	  sample/RSSPhotoViewer:
