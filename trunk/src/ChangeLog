@@ -1,5 +1,10 @@
 2007-11-13  Laurent Sansonetti <lsansonetti@apple.com>
 
+	* sample/Scripts/watcher.rb,
+	  sample/Scripts/libSystem/*.rb,
+	  sample/RSSPhotoViewer:
+	Added Leopard-only samples.
+
 	* VERSION:
 	Prepared for 0.13.0.
 
