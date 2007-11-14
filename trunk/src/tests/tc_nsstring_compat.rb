@@ -736,6 +736,37 @@ class TC_ObjcString < Test::Unit::TestCase
     end
   end
   
+  def test_split
+    (-1).upto(10) do |d|
+      s = ',,a,b,,c,d,e,,'
+      sep = ','
+      limit = d
+      n = alloc_nsstring(s)
+      assert_equal(s.split(sep, limit), n.split(sep, limit))
+    end
+    [-1,0,8,50].each do |d|
+      s = '   ,,, ,,,aaa,bbb,c,,d,,,  ,,,    '
+      sep = ','
+      limit = d
+      n = alloc_nsstring(s)
+      assert_equal(s.split(sep, limit), n.split(sep, limit))
+    end
+    [-1,0,3,30].each do |d|
+      s = '      aaa  bbb c    d      '
+      sep = ' '
+      limit = d
+      n = alloc_nsstring(s)
+      assert_equal(s.split(sep, limit), n.split(sep, limit))
+    end
+    [-1,0,3,8,30].each do |d|
+      s = '  a b c  '
+      sep = nil
+      limit = d
+      n = alloc_nsstring(s)
+      assert_equal(s.split(sep, limit), n.split(sep, limit))
+    end
+  end
+  
   def test_start_with
     s = alloc_nsstring('abc def')
     assert_equal(true, s.start_with?('abc'))

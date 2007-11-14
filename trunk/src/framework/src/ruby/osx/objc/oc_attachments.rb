@@ -573,7 +573,7 @@ module OSX
     
     def lines
       result = OSX::NSMutableArray.array
-      each {|i| result << i }
+      each_line {|i| result << i }
       result
     end
     
@@ -784,6 +784,61 @@ module OSX
     
     def slice!(*args)
       _read_impl(:slice!, args)
+    end
+    
+    def split(sep=$/, limit=0)
+      sep = sep.to_ns if sep.is_a?(String)
+      if sep && sep.empty?
+        result = OSX::NSMutableArray.array
+        if limit > 0
+          0.upto(limit-2) do |i|
+            result << self[i..i]
+          end
+          result << substringFromIndex(limit-1) if limit < length
+        else
+          0.upto(length-1) {|i| result << self[i..i]}
+          if limit == 0
+            while last = result[-1] && last.empty?
+              result.removeLastObject
+            end
+          end
+        end
+        result
+      else
+        space = ' '.to_ns
+        if sep.nil? || sep.isEqualTo(space)
+          str = lstrip
+          sep = space
+        else
+          str = self
+        end
+        
+        result = OSX::NSMutableArray.array
+        n = nil
+        pos = 0
+        count = str.length
+        
+        loop do
+          break if limit > 0 && result.size >= limit -1
+          break if count <= pos
+          n = str.index(sep, pos)
+          break unless n
+          len = sep.length
+          s = str[pos...n]
+          result << s unless s.empty? && sep == space
+          pos = n + len
+        end
+        
+        result << str.substringFromIndex(pos)
+        
+        if limit == 0
+          while (last = result[-1]) && last.empty?
+            result.removeLastObject
+          end
+        end
+        
+        result
+      end
     end
     
     def start_with?(str)
