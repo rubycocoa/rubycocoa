@@ -450,7 +450,7 @@ rbary_to_nsary (VALUE rbary, id* nsary)
     if (!rbobj_to_nsobj(RARRAY(rbary)->ptr[i], &objects[i]))
       return NO;
   
-  *nsary = [[[NSArray alloc] initWithObjects:objects count:len] autorelease];
+  *nsary = [[[NSMutableArray alloc] initWithObjects:objects count:len] autorelease];
   return YES;
 }
 
@@ -483,7 +483,7 @@ rbhash_to_nsdic (VALUE rbhash, id* nsdic)
       return NO;
   }
 
-  *nsdic = [[[NSDictionary alloc] initWithObjects:nsvals forKeys:nskeys count:len] autorelease];
+  *nsdic = [[[NSMutableDictionary alloc] initWithObjects:nsvals forKeys:nskeys count:len] autorelease];
   return YES;
 }
 
@@ -1126,7 +1126,7 @@ NSStringEncoding kcode_to_nsencoding (const char* kcode)
 id
 rbstr_to_ocstr(VALUE obj)
 {
-  return [[[NSString alloc] initWithData:[NSData dataWithBytes:RSTRING(obj)->ptr
+  return [[[NSMutableString alloc] initWithData:[NSData dataWithBytes:RSTRING(obj)->ptr
 			    			 length: RSTRING(obj)->len]
 			    encoding:KCODE_NSSTRENCODING] autorelease];
 }

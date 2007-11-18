@@ -69,14 +69,8 @@ end
     def to_plist(format=nil)
       OSX.object_to_plist(self, format)
     end
-    def to_ns(returns_mutable=true)
-      o = OSX.rbobj_to_nsobj(self)
-      if returns_mutable
-        case self
-        when Array, Hash, String: o = o.mutableCopy unless o.nil?
-        end
-      end
-      o
+    def to_ns
+      OSX.rbobj_to_nsobj(self)
     end
   end
 end

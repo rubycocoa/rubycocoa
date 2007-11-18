@@ -1,3 +1,14 @@
+2007-11-18  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* framework/src/ruby/osx/objc/ruby_addition.rb,
+	  framework/src/objc/ocdata_conv.m,
+	  tests/tc_to_ns.rb:
+	- Reverted the [2007-11-06] change where mutable objects weren't returned
+	  during conversion anymore. This wasn't a good idea after all.
+	- #to_ns doesn't accept a parameter anymore, it always returns mutable
+	  objects when possible (from String, Array and Hash).
+	- Updated the tests.
+
 2007-11-14  Satoshi Nakagawa <artension@gmail.com>
 
 	* framework/src/ruby/osx/objc/oc_attachments.rb,
