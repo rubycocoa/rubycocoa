@@ -14,7 +14,7 @@ class String
   end
 	
   def to_nsstring
-    warn "#{caller[0]}: to_nsstring is now deprecated and its use is discouraged, please use to_ns(false) instead."
+    warn "#{caller[0]}: to_nsstring is now deprecated and its use is discouraged, please use to_ns instead."
     OSX::NSString.stringWithRubyString(self)
   end
   
