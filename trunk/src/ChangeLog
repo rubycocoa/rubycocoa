@@ -1,3 +1,12 @@
+2007-11-22  kimura wataru  <kimuraw@i.nifty.jp>
+
+	* pre-install.rb, metaconfig:
+        - accepts multi values of config 'xcode-extras' with comma separated.
+	- change the location of templates for Xcode 3.0/2.5.
+	  -> 10.5: /Library/Application Support/Developer/3.0/Xcode/
+	  -> 10.4: /Library/Application Support/Developer/2.5/Xcode/,
+	           /Library/Application Support/Apple/Developer Tools
+
 2007-11-20  kimura wataru  <kimuraw@i.nifty.jp>
 
 	* sample/CocoaRepl/CocoaRepl.xcodeproj:

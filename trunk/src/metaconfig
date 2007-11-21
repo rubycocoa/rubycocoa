@@ -41,8 +41,15 @@ if File.exist?('/Developer/Applications/Project Builder.app') then
 end 
 
 if File.exist?('/Developer/Applications/Xcode.app') then
+  if RubyCocoaConfig.system_version.to_f >= 10.5
+    xcode_templates_dir = '/Library/Application Support/Developer/3.0/Xcode/'
+  else
+    xcode_templates_dir = 
+      ['/Library/Application Support/Apple/Developer Tools',
+       '/Library/Application Support/Developer/2.5/Xcode/'].join(',')
+  end
   add_path_config 'xcode-extras', 
-    '/Library/Application Support/Apple/Developer Tools',
+    xcode_templates_dir,
     'path to the directory for "Xcode Extras"'
 end 
 
