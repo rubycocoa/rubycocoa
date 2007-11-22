@@ -147,35 +147,6 @@ module OSX
     def pretty_print(q)
       self.to_s.pretty_print(q)
     end
-
-    # responds to Ruby String methods
-    alias_method :_rbobj_respond_to?, :respond_to?
-    def respond_to?(mname, private = false)
-      String.public_method_defined?(mname) or _rbobj_respond_to?(mname, private)
-    end
-
-    alias_method :objc_method_missing, :method_missing
-    def method_missing(mname, *args, &block)
-      ## TODO: should test "respondsToSelector:"
-      if String.public_method_defined?(mname) && (mname != :length)
-        # call as Ruby string
-        rcv = to_s
-        org_val = rcv.dup
-        result = rcv.send(mname, *args, &block)
-        if result.__id__ == rcv.__id__
-          result = self
-        end
-        # bang methods modify receiver itself, need to set the new value.
-        # if the receiver is immutable, NSInvalidArgumentException raises.
-        if rcv != org_val
-          setString(rcv)
-        end
-      else
-        # call as objc string
-        result = objc_method_missing(mname, *args)
-      end
-      result
-    end
     
     # For NSString duck typing
 
@@ -315,6 +286,10 @@ module OSX
       else
         nil
       end
+    end
+    
+    def casecmp(other)
+      caseInsensitiveCompare(other)
     end
     
     def center(len, padstr=' ')
@@ -1022,35 +997,6 @@ module OSX
       end
     end
 
-    # responds to Ruby String methods
-    alias_method :_rbobj_respond_to?, :respond_to?
-    def respond_to?(mname, private = false)
-      Array.public_method_defined?(mname) or _rbobj_respond_to?(mname, private)
-    end
-
-    alias_method :objc_method_missing, :method_missing
-    def method_missing(mname, *args, &block)
-      ## TODO: should test "respondsToSelector:"
-      if Array.public_method_defined?(mname)
-        # call as Ruby array
-        rcv = to_a
-        org_val = rcv.dup
-        result = rcv.send(mname, *args, &block)
-        if result.__id__ == rcv.__id__
-          result = self
-        end
-        # bang methods modify receiver itself, need to set the new value.
-        # if the receiver is immutable, NSInvalidArgumentException raises.
-        if rcv != org_val
-          setArray(rcv)
-        end
-      else
-        # call as objc array
-        result = objc_method_missing(mname, *args)
-      end
-      result
-    end
-
     # For NSArray duck typing
     
     def each
@@ -1270,10 +1216,6 @@ module OSX
 
     def at(pos)
       self[pos]
-    end
-    
-    def casecmp(other)
-      caseInsensitiveCompare(other)
     end
 
     def clear
@@ -1851,35 +1793,6 @@ module OSX
       else
         nil
       end
-    end
-
-    # responds to Ruby Hash methods
-    alias_method :_rbobj_respond_to?, :respond_to?
-    def respond_to?(mname, private = false)
-      Hash.public_method_defined?(mname) or _rbobj_respond_to?(mname, private)
-    end
-
-    alias_method :objc_method_missing, :method_missing
-    def method_missing(mname, *args, &block)
-      ## TODO: should test "respondsToSelector:"
-      if Hash.public_method_defined?(mname)
-        # call as Ruby hash
-        rcv = to_hash
-        org_val = rcv.dup
-        result = rcv.send(mname, *args, &block)
-        if result.__id__ == rcv.__id__
-          result = self
-        end
-        # bang methods modify receiver itself, need to set the new value.
-        # if the receiver is immutable, NSInvalidArgumentException raises.
-        if rcv != org_val
-          setDictionary(rcv)
-        end
-      else
-        # call as objc dictionary
-        result = objc_method_missing(mname, *args)
-      end
-      result
     end
     
     # For NSDictionary duck typing

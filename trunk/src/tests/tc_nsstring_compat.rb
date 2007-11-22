@@ -54,7 +54,7 @@ class TC_ObjcString < Test::Unit::TestCase
 
   def test_respond_to
     assert_respond_to(@nsstr, :ocm_send, 'should respond to "OSX::ObjcID#ocm_send"')
-    assert_respond_to(@nsstr, :gsub, 'should respond to "String#gsub"')
+    #assert_respond_to(@nsstr, :gsub, 'should respond to "String#gsub"')
     assert_respond_to(@nsstr, :+, 'should respond to "String#+"')
     assert(!@nsstr.respond_to?(:_xxx_not_defined_method_xxx_), 
       'should not respond to undefined method in String')
@@ -68,7 +68,7 @@ class TC_ObjcString < Test::Unit::TestCase
 
   def test_immutable
     assert_raise(OSX::OCException, 'cannot modify immutable string') {
-      @nsstr.gsub!(/S/, 'X')
+      @nsstr[1] = 'X'
     }
     assert_equal('NSString', @nsstr.to_s, 'value not changed on error(gsub!)')
     assert_raise(OSX::OCException, 'cannot modify immutable string') {
@@ -80,8 +80,9 @@ class TC_ObjcString < Test::Unit::TestCase
   def test_mutable
     str = OSX::NSMutableString.stringWithString('NSMutableString')
     assert_nothing_raised('can modify mutable string') {
-      str.gsub!(/S/, 'X')}
-    assert_equal('NXMutableXtring', str.to_s)
+      str[1] = 'X'
+    }
+    assert_equal('NXMutableString', str.to_s)
   end
   
   # NSString duck typing
