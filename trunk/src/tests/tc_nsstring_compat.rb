@@ -54,7 +54,6 @@ class TC_ObjcString < Test::Unit::TestCase
 
   def test_respond_to
     assert_respond_to(@nsstr, :ocm_send, 'should respond to "OSX::ObjcID#ocm_send"')
-    #assert_respond_to(@nsstr, :gsub, 'should respond to "String#gsub"')
     assert_respond_to(@nsstr, :+, 'should respond to "String#+"')
     assert(!@nsstr.respond_to?(:_xxx_not_defined_method_xxx_), 
       'should not respond to undefined method in String')
@@ -68,7 +67,7 @@ class TC_ObjcString < Test::Unit::TestCase
 
   def test_immutable
     assert_raise(OSX::OCException, 'cannot modify immutable string') {
-      @nsstr[1] = 'X'
+      @nsstr.gsub!(/S/, 'X')
     }
     assert_equal('NSString', @nsstr.to_s, 'value not changed on error(gsub!)')
     assert_raise(OSX::OCException, 'cannot modify immutable string') {
@@ -80,9 +79,9 @@ class TC_ObjcString < Test::Unit::TestCase
   def test_mutable
     str = OSX::NSMutableString.stringWithString('NSMutableString')
     assert_nothing_raised('can modify mutable string') {
-      str[1] = 'X'
+      str.gsub!(/S/, 'X')
     }
-    assert_equal('NXMutableString', str.to_s)
+    assert_equal('NXMutableXtring', str.to_s)
   end
   
   # NSString duck typing
@@ -404,11 +403,31 @@ class TC_ObjcString < Test::Unit::TestCase
     assert_equal(0, s.length)
   end
   
+  def test_count
+    [['a-z'], ['^a-z'], ['a-d','b-z'], ['0-9']].each do |d|
+      s = 'Foobar Foobar'
+      n = alloc_nsstring(s)
+      assert_equal(s.count(*d), n.count(*d))
+      assert_equal(s.count(*d.to_ns), n.count(*d.to_ns))
+    end
+  end
+  
   def test_crypt
     s = 'abcdef'
     n = alloc_nsstring(s)
     salt = '.1/1'
     assert_equal(s.crypt(salt), n.crypt(salt))
+  end
+  
+  def test_delete
+    [['a-z'], ['^a-z'], ['a-d','b-z'], ['0-9']].each do |d|
+      s = 'Foobar Foobar'
+      n = alloc_nsstring(s)
+      assert_equal(s.delete(*d), n.delete(*d))
+      assert_equal(s.delete(*d.to_ns), n.delete(*d.to_ns))
+      assert_equal(s.delete!(*d), n.delete!(*d))
+      assert_equal(s, n)
+    end
   end
   
   def test_downcase
@@ -476,6 +495,25 @@ class TC_ObjcString < Test::Unit::TestCase
     s = alloc_nsstring('abc def')
     assert_equal(false, s.end_with?('abc'))
     assert_equal(true, s.end_with?('def'))
+  end
+  
+  def test_gsub
+    [[/a-z/,'+'], [/^a-c/,'---'], [/^A-Z/,''], [/0-9/,'']].each do |d|
+      s = 'Foobar Fooooooobaaaaar'
+      n = alloc_nsstring(s)
+      assert_equal(s.gsub(*d), n.gsub(*d))
+      assert_equal(s.gsub!(*d), n.gsub!(*d))
+      assert_equal(s, n)
+
+      s = 'Foobar Fooooooobaaaaar'
+      n = alloc_nsstring(s)
+      sa = []
+      sr = s.gsub(d[0]) {|i| sa << i; d[1]}
+      na = []
+      nr = n.gsub(d[0]) {|i| na << i; d[1]}
+      assert_equal(sa, na)
+      assert_equal(sr, nr)
+    end
   end
   
   def test_hex
@@ -693,6 +731,23 @@ class TC_ObjcString < Test::Unit::TestCase
     end
   end
   
+  def test_scan
+    s = "aDb0c 0d3def"
+    n = s.to_ns
+    re = /..[a-z]?/
+    assert_equal(s.scan(re), n.scan(re))
+    
+    s = "ab0c 0dAdef"
+    n = s.to_ns
+    re = /..[a-z]?/
+    sa = []
+    sr = s.scan(re) {|i| sa << i}
+    na = []
+    nr = n.scan(re) {|i| na << i}
+    assert_equal(sa, na)
+    assert_equal(sr, nr)
+  end
+  
   def test_size
     assert_equal(6, 'Foobar'.to_ns.size)
   end
@@ -768,6 +823,16 @@ class TC_ObjcString < Test::Unit::TestCase
     end
   end
   
+  def test_squeeze
+    [['a-z'], ['^a-c'], ['^A-Z','a'], ['0-9']].each do |d|
+      s = 'Foobar Fooooooobaaaaar'
+      n = alloc_nsstring(s)
+      assert_equal(s.squeeze(*d), n.squeeze(*d))
+      assert_equal(s.squeeze!(*d), n.squeeze!(*d))
+      assert_equal(s, n)
+    end
+  end
+  
   def test_start_with
     s = alloc_nsstring('abc def')
     assert_equal(true, s.start_with?('abc'))
@@ -779,6 +844,25 @@ class TC_ObjcString < Test::Unit::TestCase
       n = alloc_nsstring(s)
       assert_equal(s.strip, n.strip)
       assert_equal(s.strip!, n.strip!)
+    end
+  end
+  
+  def test_sub
+    [[/[a-z]+/,'+'], [/[^a-c]+/,'---'], [/[^A-Z]+/,''], [/[0-9]/,'']].each do |d|
+      s = 'Foobar Fooooooobaaaaar'
+      n = alloc_nsstring(s)
+      assert_equal(s.sub(*d), n.sub(*d))
+      assert_equal(s.sub!(*d), n.sub!(*d))
+      assert_equal(s, n)
+
+      s = 'Foobar Fooooooobaaaaar'
+      n = alloc_nsstring(s)
+      sa = []
+      sr = s.sub(d[0]) {|i| sa << i; d[1]}
+      na = []
+      nr = n.sub(d[0]) {|i| na << i; d[1]}
+      assert_equal(sa, na)
+      assert_equal(sr, nr)
     end
   end
   
@@ -799,6 +883,28 @@ class TC_ObjcString < Test::Unit::TestCase
       n = alloc_nsstring(s)
       assert_equal(s.swapcase, n.swapcase)
       assert_equal(s.swapcase!, n.swapcase!)
+    end
+  end
+  
+  def test_tr
+    [['a-z','A-Z'], ['^A-Z','^a-z'], ['0-9','a-j'], ['z','Z']].each do |d|
+      s = 'Foobar Fooooooobaaaaar 0001239543333'
+      n = alloc_nsstring(s)
+      assert_equal(s.tr(*d), n.tr(*d))
+      assert_equal(s.tr(*d.to_ns), n.tr(*d.to_ns))
+      assert_equal(s.tr!(*d), n.tr!(*d))
+      assert_equal(s, n)
+    end
+  end
+  
+  def test_tr_s
+    [['a-z','A-Z'], ['^A-Z','^a-z'], ['0-9','a-j'], ['z','Z']].each do |d|
+      s = 'Foobar Fooooooobaaaaar 0001239543333'
+      n = alloc_nsstring(s)
+      assert_equal(s.tr_s(*d), n.tr_s(*d))
+      assert_equal(s.tr_s(*d.to_ns), n.tr_s(*d.to_ns))
+      assert_equal(s.tr_s!(*d), n.tr_s!(*d))
+      assert_equal(s, n)
     end
   end
   

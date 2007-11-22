@@ -400,8 +400,27 @@ module OSX
       self
     end
     
+    def count(*chars)
+      to_s.count(*chars)
+    end
+    
     def crypt(salt)
       OSX::NSMutableString.stringWithString(to_s.crypt(salt.to_s))
+    end
+    
+    def delete(*strs)
+      to_s.delete(*strs).to_ns
+    end
+    
+    def delete!(*strs)
+      s = to_s
+      result = s.delete!(*strs)
+      if result
+        setString(s)
+        self
+      else
+        nil
+      end
     end
     
     def downcase
@@ -474,6 +493,21 @@ module OSX
     
     def end_with?(str)
       hasSuffix(str)
+    end
+    
+    def gsub(*args, &block)
+      to_s.gsub(*args, &block).to_ns
+    end
+    
+    def gsub!(*args, &block)
+      s = to_s
+      result = s.gsub!(*args, &block)
+      if result
+        setString(s)
+        self
+      else
+        nil
+      end
     end
     
     def hex
@@ -753,6 +787,10 @@ module OSX
       end
     end
     
+    def scan(re, &block)
+      to_s.scan(re, &block).to_ns
+    end
+    
     def size
       length
     end
@@ -816,6 +854,21 @@ module OSX
       end
     end
     
+    def squeeze(*chars)
+      to_s.squeeze(*chars).to_ns
+    end
+    
+    def squeeze!(*chars)
+      s = to_s
+      result = s.squeeze!(*chars)
+      if result
+        setString(s)
+        self
+      else
+        nil
+      end
+    end
+    
     def start_with?(str)
       hasPrefix(str)
     end
@@ -828,6 +881,21 @@ module OSX
     def strip!
       s = strip
       if self != s
+        setString(s)
+        self
+      else
+        nil
+      end
+    end
+    
+    def sub(*args, &block)
+      to_s.sub(*args, &block).to_ns
+    end
+    
+    def sub!(*args, &block)
+      s = to_s
+      result = s.sub!(*args, &block)
+      if result
         setString(s)
         self
       else
@@ -863,6 +931,36 @@ module OSX
     
     def to_i(base=10)
       to_s.to_i(base)
+    end
+    
+    def tr(pattern, replace)
+      to_s.tr(pattern, replace).to_ns
+    end
+    
+    def tr!(pattern, replace)
+      s = to_s
+      result = s.tr!(pattern, replace)
+      if result
+        setString(s)
+        self
+      else
+        nil
+      end
+    end
+    
+    def tr_s(pattern, replace)
+      to_s.tr_s(pattern, replace).to_ns
+    end
+    
+    def tr_s!(pattern, replace)
+      s = to_s
+      result = s.tr_s!(pattern, replace)
+      if result
+        setString(s)
+        self
+      else
+        nil
+      end
     end
     
     def upcase

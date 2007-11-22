@@ -2,6 +2,15 @@
 
 	* framework/src/ruby/osx/objc/oc_attachments.rb,
 	  tests/tc_nsstring_compat.rb:
+	- Added duck typing methods to NSString:
+		count, delete, delete!, gsub, gsub!, scan, squeeze, squeeze!, sub, sub!,
+		tr, tr!, tr_s, tr_s!.
+	- Added tests.
+
+2007-11-22  Satoshi Nakagawa <artension@gmail.com>
+
+	* framework/src/ruby/osx/objc/oc_attachments.rb,
+	  tests/tc_nsstring_compat.rb:
 	- Removed method_missing for the duck typing in NSString, NSArray and NSDictionary.
 	  Now NSString doens't respond to:
 		~, =~, count, delete, delete!, gsub, gsub!, match, scan, squeeze, squeeze!,
