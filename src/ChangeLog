@@ -1,3 +1,8 @@
+2007-11-22  kimura wataru  <kimuraw@i.nifty.jp>
+
+	* package/tmpl/Info.plist:
+	correct CFBundleShortVersionString of .dmg package.
+
 2007-11-22  Satoshi Nakagawa <artension@gmail.com>
 
 	* framework/src/ruby/osx/objc/oc_attachments.rb,
