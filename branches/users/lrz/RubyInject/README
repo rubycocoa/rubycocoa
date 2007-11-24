@@ -37,11 +37,15 @@ $ sudo ruby inject.rb <pid> <ruby-script>
 after the injection. This is optional, if this parameter is not used an IRB 
 session will be started instead.
 
+== Samples ==
+
+See the samples directory.
+
 == About ==
 
-See the COPYRIGHT file for details about licensing.
-
 The author is Laurent Sansonetti <lrz@chopine.be>.
+
+See the COPYRIGHT file for details about licensing.
 
 RubyInject has a home page, http://rubycocoa.sf.net/RubyInject
 
