@@ -2,6 +2,12 @@
 
 2007-11-24  Laurent Sansonetti <lsansonetti@apple.com>
 
+	* package/pre-package.rb:
+	Do not insert the postflight script and the modified libruby.dylib in 10.5.
+
+	* metaconfig:
+	Default value for --build-universal in 10.5 is now 'yes'.
+
 	* VERSION:
 	Updated for 0.13.0.
 
