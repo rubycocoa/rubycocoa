@@ -82,7 +82,7 @@ add_path_config 'ri-dir',
   'the directory for ri files'
 
 if RubyCocoaConfig.system_version.to_f >= 10.4
-  add_bool_config 'build-universal', false,
+  add_bool_config 'build-universal', RubyCocoaConfig.system_version.to_f >= 10.5,
     'yes, build universal binary (requires Xcode 2.1 or later and SDK)'
 end
 

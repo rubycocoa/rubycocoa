@@ -36,7 +36,7 @@ File.link('tmpl/background.gif', File.join(resources_dir, 'background.gif'))
 Dir.mkdir contents_dir
 
 # Postflight and post-constent stuff
-if @config['build-universal'] == 'yes'
+if @config['build-universal'] == 'yes' and `sw_vers -productVersion`.to_f < 10.5
   postflight = File.join(resources_dir, 'postflight')
   erb('tmpl/postflight-universal.rb', postflight, binding)
   File.chmod(0755, postflight)
