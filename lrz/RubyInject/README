@@ -1,0 +1,50 @@
+== RubyInject ==
+
+RubyInject is a Mac OS X framework that allows you to inject at runtime the
+Ruby interpreter into any running application, using the mach_star mechanism.
+
+It will spawn a new thread on the remote process, initialize the Ruby
+interpreter, start a new DRb server that exposes an expression evaluator, and
+advertises the DRb server URI on bonjour (if you have the ruby-dnssd library).
+
+== Requirements ==
+
+- Mac OS X 10.5.
+- RubyCocoa 0.13.0 or later.
+
+== Installation ==
+
+RubyInject comes in 2 parts. First is the framework, that you can build and
+install:
+
+$ xcodebuild SYMROOT=/tmp
+$ cp -r /tmp/Release/RubyInject.framework /Library/Frameworks
+
+The second part is the client, which uses the framework to inject Ruby, then
+waits on bonjour to connect to the DRb server. It is a Ruby script named
+inject.rb. 
+
+You can manually copy inject.rb in one of the directories of your $PATH,
+or simply call it from the RubyInject project directory.
+
+== Usage ==
+
+$ sudo ruby inject.rb <pid> <ruby-script>
+
+<pid> is the process ID of the application you want to inject Ruby to.
+
+<ruby-script> is the path of a Ruby script that will be directly evaluated
+after the injection. This is optional, if this parameter is not used an IRB 
+session will be started instead.
+
+== About ==
+
+See the COPYRIGHT file for details about licensing.
+
+The author is Laurent Sansonetti <lrz@chopine.be>.
+
+RubyInject has a home page, http://rubycocoa.sf.net/RubyInject
+
+The latest bits are available on SVN: 
+
+$ svn co https://rubycocoa.svn.sourceforge.net/svnroot/rubycocoa/branches/users/lrz/RubyInject
