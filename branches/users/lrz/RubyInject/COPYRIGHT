@@ -1,16 +1,12 @@
-The following files 
-
-  load_bundle.[ch]
-  mach_inject.[ch]
-  mach_inject_bundle.[ch]
-  mach_inject_bundle_stub.[ch]
-
-are
+load_bundle.[ch]:
+mach_inject.[ch]:
+mach_inject_bundle.[ch]:
+mach_inject_bundle_stub.[ch]:
 
   Copyright (c) 2005 Jonathan 'Wolf' Rentzsch: <http://rentzsch.com>
   Some rights reserved: <http://creativecommons.org/licenses/by/2.0/>
 
-The rest of the files are
+The rest of the files:
 
   Copyright 2007 Laurent Sansonetti. Some rights reserved.
   <http://creativecommons.org/licenses/by/2.0/>
