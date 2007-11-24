@@ -57,8 +57,6 @@ ThreadEntry (void *context)
 
   [[NSAutoreleasePool alloc] init];
 
-  [NSThread detachNewThreadSelector:@selector(version) toTarget:[NSObject class] withObject:nil];
-  
   ruby_init();
   ruby_init_loadpath();
 
