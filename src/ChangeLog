@@ -2,7 +2,7 @@
 
 	* framework/src/ruby/osx/objc/oc_types.rb,
 	  tests/tc_boxed.rb:
-	- Added #x=, #y=, #width= and #height to NSRect.
+	- Added #x=, #y=, #width= and #height= to NSRect.
 	- Added tests.
 
 === RubyCocoa 0.13.0 ===
