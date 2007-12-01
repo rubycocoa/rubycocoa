@@ -5,6 +5,16 @@ require 'test/unit'
 class TCBoxed < Test::Unit::TestCase
   include OSX
   
+  def test_rect_assign
+    a = NSRect.new(13,42,49,52)
+    assert_nothing_raised {
+      a.x = 0
+      a.y = 1
+      a.width = 2
+      a.height = 3
+    }
+  end
+  
   def test_rect_center
     a = NSRect.new(100,100,200,200)
     b = NSPoint.new(200,200)
