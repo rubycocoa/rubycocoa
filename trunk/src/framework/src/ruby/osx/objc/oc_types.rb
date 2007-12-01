@@ -34,6 +34,10 @@ class OSX::NSRect
   def y; origin.y; end
   def width; size.width; end
   def height; size.height; end
+  def x=(v); origin.x = v; end
+  def y=(v); origin.y = v; end
+  def width=(v); size.width = v; end
+  def height=(v); size.height = v; end
   alias_method :old_to_a, :to_a # To remove a warning.
   def to_a; [origin.to_a, size.to_a]; end
   def center; OSX::NSPoint.new(OSX::NSMidX(self), OSX::NSMidY(self)); end
