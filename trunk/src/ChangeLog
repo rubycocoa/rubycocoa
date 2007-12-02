@@ -2,6 +2,13 @@
 
 	* framework/src/ruby/osx/objc/oc_types_appkit.rb,
 	  tests/tc_boxed.rb:
+	- Added #size and #size= to NSRange.
+	- Added tests.
+
+2007-12-02  Satoshi Nakagawa <artension@gmail.com>
+
+	* framework/src/ruby/osx/objc/oc_types_appkit.rb,
+	  tests/tc_boxed.rb:
 	- Now NSRange#empty? returns true when not_found?.
 	- Updated tests.
 

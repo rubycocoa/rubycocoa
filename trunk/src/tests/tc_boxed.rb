@@ -126,6 +126,13 @@ class TCBoxed < Test::Unit::TestCase
     end
   end
   
+  def test_range_size
+    a = NSRange.new(0,10)
+    assert_equal(10, a.size)
+    a.size = 42
+    assert_equal(10, a.length)
+  end
+  
   def test_range_not_found
     assert(NSRange.new(OSX::NSNotFound, 0).not_found?)
     assert(!NSRange.new(0, 0).not_found?)
