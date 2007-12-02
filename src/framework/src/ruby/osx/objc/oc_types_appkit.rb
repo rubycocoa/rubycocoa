@@ -54,7 +54,7 @@ class OSX::NSRange
       raise ArgumentError, "argument should be NSRange or Numeric"
     end
   end
-  def empty?; length == 0; end
+  def empty?; length == 0 || not_found?; end
   def intersect?(range); !intersection(range).empty?; end
   def intersection(range); OSX::NSIntersectionRange(self, range); end
   def union(range); OSX::NSUnionRange(self, range); end

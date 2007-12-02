@@ -108,6 +108,13 @@ class TCBoxed < Test::Unit::TestCase
   def test_range_empty
     a = NSRange.new(10,0)
     assert_equal(true, a.empty?)
+    s = 'abc'.to_ns
+    r = s.rangeOfString('z')
+    assert(r.not_found?)
+    assert(r.empty?)
+    r = s.rangeOfString('b')
+    assert(!r.not_found?)
+    assert(!r.empty?)
   end
 
   def test_range_max
