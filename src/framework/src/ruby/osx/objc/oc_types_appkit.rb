@@ -44,6 +44,8 @@ class OSX::NSRange
   def to_range
     Range.new(location, location + length, true)
   end
+  def size; length; end
+  def size=(v); length = v; end
   def contain?(arg)
     case arg
     when OSX::NSRange
