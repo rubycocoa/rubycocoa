@@ -1,3 +1,8 @@
+2007-12-04  Satoshi Nakagawa <artension@gmail.com>
+
+	* framework/src/ruby/osx/objc/oc_attachments.rb,
+	Added NSSelectionArray#to_a, workaround for a crash on Tiger.
+
 2007-12-02  Satoshi Nakagawa <artension@gmail.com>
 
 	* framework/src/ruby/osx/objc/oc_types_appkit.rb,
