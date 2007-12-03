@@ -2165,6 +2165,16 @@ module OSX
     end
   end
 
+  # NSSelectionArray additions
+  class NSSelectionArray
+    # workdaround for Tiger
+    def to_a
+      ary = []
+      (0...count).each {|i| ary << objectAtIndex(i) }
+      ary
+    end
+  end
+
   # NSEnumerator additions
   class NSEnumerator
     def to_a
