@@ -1,3 +1,9 @@
+2007-12-05  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* framework/src/objc/RBClassUtils.m:
+	When creating a new ObjC class for a Ruby class, if a class already
+	exists in ObjC land, uses it.
+
 2007-12-04  Satoshi Nakagawa <artension@gmail.com>
 
 	* framework/src/ruby/osx/objc/oc_attachments.rb,
