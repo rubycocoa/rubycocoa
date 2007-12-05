@@ -27,7 +27,8 @@
 
 Class objc_class_alloc(const char* name, Class super_class)
 {
-  return objc_allocateClassPair(super_class, name, 0);
+  Class klass = objc_getClass(name);
+  return klass != NULL ? klass : objc_allocateClassPair(super_class, name, 0);
 }
 
 #else
