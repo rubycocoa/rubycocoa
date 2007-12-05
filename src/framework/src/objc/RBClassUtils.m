@@ -28,7 +28,11 @@
 Class objc_class_alloc(const char* name, Class super_class)
 {
   Class klass = objc_getClass(name);
-  return klass != NULL ? klass : objc_allocateClassPair(super_class, name, 0);
+  if (klass != NULL) {
+    rb_warn("Cannot create Objective-C class for Ruby class `%s', because another class is already registered in Objective-C. Using the existing class instead for the Ruby class representation.", name);
+    return klass;
+  }
+  return objc_allocateClassPair(super_class, name, 0);
 }
 
 #else
