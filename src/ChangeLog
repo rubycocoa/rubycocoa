@@ -1,3 +1,8 @@
+2007-12-06  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* sample/Scripts/pdf2tiff.rb:
+	New sample code, contributed by Ernie Prabhakar.
+
 2007-12-05  Laurent Sansonetti <lsansonetti@apple.com>
 
 	* framework/src/objc/RBClassUtils.m:
