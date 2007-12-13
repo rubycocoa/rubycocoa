@@ -1,3 +1,8 @@
+2007-12-14  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* VERSION:
+	Tagged for 0.13.1.
+
 2007-12-14  Satoshi Nakagawa <artension@gmail.com>
 
 	* framework/src/ruby/osx/objc/oc_attachments.rb,
