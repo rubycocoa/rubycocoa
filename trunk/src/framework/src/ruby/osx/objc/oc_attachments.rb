@@ -147,6 +147,44 @@ module OSX
     def pretty_print(q)
       self.to_s.pretty_print(q)
     end
+
+    # responds to Ruby String methods
+    alias_method :_rbobj_respond_to?, :respond_to?
+    def respond_to?(mname, private = false)
+      String.public_method_defined?(mname) or _rbobj_respond_to?(mname, private)
+    end
+
+    alias_method :objc_method_missing, :method_missing
+    def method_missing(mname, *args, &block)
+      if mname == :match || mname == :=~
+        i = mname == :match ? 0 : 1
+        warn "#{caller[i]}: 'NSString##{mname}' doesn't work correctly. Because it returns byte indexes. Please use 'String##{mname}' instead."
+      end
+      
+      ## TODO: should test "respondsToSelector:"
+      if String.public_method_defined?(mname) && (mname != :length)
+        # call as Ruby string
+        rcv = to_s
+        org_val = rcv.dup
+        result = rcv.send(mname, *args, &block)
+        if result.__id__ == rcv.__id__
+          result = self
+        end
+        # bang methods modify receiver itself, need to set the new value.
+        # if the receiver is immutable, NSInvalidArgumentException raises.
+        if rcv != org_val
+          setString(rcv)
+        end
+      else
+        # call as objc string
+        result = objc_method_missing(mname, *args)
+      end
+      result
+    end
+    
+    def =~(*args)
+      method_missing(:=~, *args)
+    end
     
     # For NSString duck typing
 

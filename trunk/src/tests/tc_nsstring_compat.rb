@@ -943,4 +943,20 @@ class TC_ObjcString < Test::Unit::TestCase
     end
   end
   
+  def test_method_missing_dock_typing
+    assert(''.to_ns.ducktype_test)
+    assert_nothing_raised { ''.to_ns.ducktype_test }
+  end
+  
+  def test_warning_methods
+    #'a'.to_ns.match(/[a-z]/)
+    #'abcdef'.to_ns =~(/([a-z]+)/)
+  end
+end
+
+
+class String
+  def ducktype_test
+    true
+  end
 end
