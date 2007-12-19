@@ -390,8 +390,28 @@ ovmix_register_ruby_method(Class klass, SEL method, BOOL direct_override)
     OVMIX_LOG("Already registered Ruby method by selector '%s' types '%s', skipping...", (char *)method, me_types);
     return;
   }
-
+  
 #if MAC_OS_X_VERSION_MAX_ALLOWED > MAC_OS_X_VERSION_10_4
+  if (direct_override) {
+    // It's only ok to use setImplementation if this method is in our own
+    // class--otherwise it will change the behavior of our ancestors.
+    Method *meth_list, *iter;
+    BOOL ok = NO;
+    unsigned int count = 0;
+    
+    // Search our class' methods
+    iter = meth_list = class_copyMethodList(klass, &count);
+    for (; iter && count; ++iter, --count) {
+      if (sel_isEqual(method_getName(*iter), me_name)) {
+        ok = YES;
+        break;
+      }
+    }
+    if (!ok)
+      direct_override = NO;
+    free(meth_list);
+  }
+
   if (direct_override)
     method_setImplementation(me, imp);
   else

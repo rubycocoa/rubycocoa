@@ -1,8 +1,24 @@
+2007-12-19  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* AUTHORS:
+	Added Dave.
+
+2007-12-19  Dave Vasilevsky <djvasi@gmail.com>
+
+	* framework/src/objc/OverrideMixin.m,
+	  tests/tc_ovmix.rb,
+	  tests/objc_test.m:
+	- Fixed a bug when direct-overriding a method in a subclass of an 
+	  Objective-C class that implements the method ;
+	- Added test cases. 
+
 2007-12-18  Satoshi Nakagawa <artension@gmail.com>
 
 	* sample/GrowlClient/main.rb,
-	  sample/GrowlClient/growl.rb
+	  sample/GrowlClient/growl.rb:
 	Added a Growl sample.
+
+=== RubyCocoa 0.13.1 ===
 
 2007-12-14  Laurent Sansonetti <lsansonetti@apple.com>
 

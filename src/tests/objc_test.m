@@ -393,6 +393,37 @@
 
 @end
 
+
+// This needs to be separate from DirectOverride since the test might damage
+// this class.
+@interface DirectOverrideParent : NSObject
+@end
+
+@implementation DirectOverrideParent
+
+- (id)overrideMe
+{
+  return @"foo";
+}
+
+- (void)checkOverride:(NSString *)want
+{
+  id obj = [self overrideMe];
+
+  if (![obj isEqualToString:want])
+    [NSException raise:@"DirectOverrideInheritance"
+      format:@"assertion overrideMe failed, got %@", obj];
+}
+
+@end
+
+@interface DirectOverrideChild : DirectOverrideParent
+@end
+
+@implementation DirectOverrideChild
+@end
+
+
 #import <AddressBook/ABPeoplePickerC.h>
 
 @interface TestFourCharCode : NSObject
