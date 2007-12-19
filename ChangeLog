@@ -1,9 +1,3 @@
-2007-12-18  Satoshi Nakagawa <artension@gmail.com>
-
-	* sample/GrowlClient/main.rb,
-	  sample/GrowlClient/growl.rb
-	Added a Growl sample.
-
 2007-12-14  Laurent Sansonetti <lsansonetti@apple.com>
 
 	* VERSION:
