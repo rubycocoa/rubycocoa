@@ -688,6 +688,22 @@ static BOOL TestThreadedCallbackDone = NO;
 
 @end
 
+struct ttype1 {float a; float b;};
+struct ttype2 {float a[2];};
+
+@implementation NSObject (FooTests)
+- (struct ttype1)test1 {
+	struct ttype1 r = {1., 2.};
+	return r;
+}
+- (struct ttype2)test2 {
+	struct ttype2 r;
+	r.a[0] = 1.;
+	r.a[1] = 2.;
+	return r;
+}
+@end
+
 void Init_objc_test(){
   // dummy initializer for ruby's `require'
 }
