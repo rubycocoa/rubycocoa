@@ -54,7 +54,7 @@ bs_boxed_ffi_type(struct bsBoxed *bs_boxed)
 static struct st_table *ary_ffi_types = NULL;
 
 static ffi_type *
-fake_ary_ffi_type (unsigned bytes)
+fake_ary_ffi_type (unsigned bytes, unsigned align)
 {
   ffi_type *type;
   unsigned i;
@@ -71,7 +71,7 @@ fake_ary_ffi_type (unsigned bytes)
   ASSERT_ALLOC(type);
 
   type->size = bytes; 
-  type->alignment = 0;
+  type->alignment = align;
   type->type = FFI_TYPE_STRUCT;
   type->elements = malloc(bytes * sizeof(ffi_type *));
   ASSERT_ALLOC(type->elements);
@@ -154,7 +154,7 @@ ffi_type_for_octype (const char *octypestr)
           else if (size <= 4)
             return &ffi_type_uint; 
           else
-            return fake_ary_ffi_type(size);
+            return fake_ary_ffi_type(size, 0);
         }
       }
       break;
@@ -162,13 +162,13 @@ ffi_type_for_octype (const char *octypestr)
     case _C_ARY_B:
       {
 #if __LP64__
-        unsigned long size;
+        unsigned long size, align;
 #else
-        unsigned int size;
+        unsigned int size, align;
 #endif
 
         @try {
-          NSGetSizeAndAlignment(octypestr, &size, NULL);
+          NSGetSizeAndAlignment(octypestr, &size, &align);
         }
         @catch (id exception) {
           rb_raise(rb_eRuntimeError, "Cannot compute size of type `%s' : %s",
@@ -176,7 +176,7 @@ ffi_type_for_octype (const char *octypestr)
         }
 
         if (size > 0)  
-          return fake_ary_ffi_type(size);
+          return fake_ary_ffi_type(size, align);
       }
       break;
 
@@ -482,7 +482,8 @@ rb_ffi_dispatch (
   }
 
   // Prepare cif.
-  if (ffi_prep_cif(&cif, FFI_DEFAULT_ABI, expected_argc + argc_delta, ret_type, arg_types) != FFI_OK)
+  int cif_ret_status = ffi_prep_cif(&cif, FFI_DEFAULT_ABI, expected_argc + argc_delta, ret_type, arg_types);
+  if (cif_ret_status != FFI_OK)
     rb_fatal("Can't prepare the cif");
 
   // Call function.
