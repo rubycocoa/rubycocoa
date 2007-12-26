@@ -1,3 +1,18 @@
+2007-12-26  Laurent Sansonetti <lsansonetti@apple.com>
+	
+	* AUTHORS:
+	Added Jonathan.
+
+	* tests/CAryStructTest.bridgesupport,
+	  tests/objc_test.m,
+	  tests/tc_types.rb:
+	Added tests for the previous fix.
+
+2007-12-26  Jonathan deWerd <jjoonathan@gmail.com>
+
+	* framework/src/objc/libffi.m:
+	Fixed a bug when returning C array (CARY) in struct.
+
 2007-12-19  Laurent Sansonetti <lsansonetti@apple.com>
 
 	* AUTHORS:
