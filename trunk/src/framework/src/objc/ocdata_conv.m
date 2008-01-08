@@ -119,7 +119,7 @@ convert_cary(VALUE *result, void *ocdata, char *octype_str, BOOL to_ruby)
     ok = YES;
   }
   else {
-    VALUE ary;
+    volatile VALUE ary;
 
     ary = *result;
 
@@ -315,7 +315,7 @@ BOOL
 ocdata_to_rbobj (VALUE context_obj, const char *octype_str, const void *ocdata, VALUE *result, BOOL from_libffi)
 {
   BOOL f_success = YES;
-  VALUE rbval = Qnil;
+  volatile VALUE rbval = Qnil;
   struct bsBoxed *bs_boxed;
 
 #if BYTE_ORDER == BIG_ENDIAN
@@ -356,7 +356,7 @@ ocdata_to_rbobj (VALUE context_obj, const char *octype_str, const void *ocdata, 
       break;
   
     case _C_ARY_B:
-      f_success = cary_to_rbary(*(void **)ocdata, octype_str, &rbval); 
+      f_success = cary_to_rbary(*(void **)ocdata, octype_str, (VALUE*)&rbval); 
       break;
 
     case _C_BOOL:
@@ -460,7 +460,7 @@ rbary_to_nsary (VALUE rbary, id* nsary)
 static BOOL 
 rbhash_to_nsdic (VALUE rbhash, id* nsdic)
 {
-  VALUE ary_keys;
+  volatile VALUE ary_keys;
   VALUE* keys;
   VALUE val;
   long i, len;
@@ -744,7 +744,7 @@ static SEL
 rbobj_to_cselstr (VALUE obj)
 {
   int i;
-  VALUE str;
+  volatile VALUE str;
   char *sel;
  
   str = rb_obj_is_kind_of(obj, rb_cString)
@@ -783,7 +783,7 @@ static void
 funcptr_closure_handler (ffi_cif *cif, void *resp, void **args, void *userdata)
 {
   struct funcptr_closure_context *context;
-  VALUE rb_args;
+  volatile VALUE rb_args;
   unsigned i;
   VALUE retval;
 

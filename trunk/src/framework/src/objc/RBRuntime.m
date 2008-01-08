@@ -215,8 +215,9 @@ int rubycocoa_frequently_init_stack()
 
 int RBNotifyException(const char* title, VALUE err)
 {
-  VALUE ary,str;
-  VALUE printf_args[2];
+  volatile VALUE ary;
+  VALUE str;
+  volatile VALUE printf_args[2];
   int i;
 
   if (! RTEST(rb_obj_is_kind_of(err, rb_eException))) return 0;
