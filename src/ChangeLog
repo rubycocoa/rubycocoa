@@ -1,3 +1,15 @@
+2008-01-09  Satoshi Nakagawa <artension@gmail.com>
+
+	* framework/src/objc/RBObject.m
+	  framework/src/objc/RBRuntime.m
+	  framework/src/objc/ocdata_conv.m
+	  framework/src/objc/mdl_osxobjc.m
+	  framework/src/objc/mdl_objwrapper.m
+	  framework/src/objc/mdl_bundle_support.m
+	  framework/src/objc/cls_objcptr.m
+	  framework/src/objc/BridgeSupport.m
+	Migrated from STR2CSTR() to StringValuePtr().
+
 2007-12-26  Laurent Sansonetti <lsansonetti@apple.com>
 	
 	* AUTHORS:

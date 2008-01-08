@@ -207,16 +207,16 @@ rbobjRaiseRubyException (void)
   [info setObject: ocdata forKey: @"$!"];
 
   VALUE klass = rb_class_path(CLASS_OF(lasterr));
-  NSString *rbclass = [NSString stringWithUTF8String:STR2CSTR(klass)];
+  NSString *rbclass = [NSString stringWithUTF8String:StringValuePtr(klass)];
 
   VALUE rbmessage = rb_obj_as_string(lasterr);
-  NSString *message = [NSString stringWithUTF8String:STR2CSTR(rbmessage)];
+  NSString *message = [NSString stringWithUTF8String:StringValuePtr(rbmessage)];
 
   NSMutableArray *backtraceArray = [NSMutableArray array];
   VALUE ary = rb_funcall(ruby_errinfo, rb_intern("backtrace"), 0);
   int c;
   for (c=0; c<RARRAY(ary)->len; c++) {
-      const char *path = STR2CSTR(RARRAY(ary)->ptr[c]);
+      const char *path = StringValuePtr(RARRAY(ary)->ptr[c]);
       NSString *nspath = [NSString stringWithUTF8String:path];
       [backtraceArray addObject: nspath];
   }
@@ -293,13 +293,15 @@ VALUE rbobj_call_ruby(id rbobj, SEL selector, VALUE args)
 {
   VALUE rb_args;
   VALUE rb_result;
+  VALUE rb_result_inspect;
   id returned_ocid;
 
   RBOBJ_LOG("rbobjForwardInvocation(%@)", an_inv);
   rb_args = [self fetchForwardArgumentsOf: an_inv];
   rb_result = rbobj_call_ruby(self, [an_inv selector], rb_args);
   [self stuffForwardResult: rb_result to: an_inv returnedOcid: &returned_ocid];
-  RBOBJ_LOG("   --> rb_result=%s", STR2CSTR(rb_inspect(rb_result)));
+  rb_result_inspect = rb_inspect(rb_result);
+  RBOBJ_LOG("   --> rb_result=%s", StringValuePtr(rb_result_inspect));
 
   return returned_ocid;
 }
@@ -380,7 +382,8 @@ VALUE rbobj_call_ruby(id rbobj, SEL selector, VALUE args)
 
 - (NSString*) _copyDescription
 {
-  return [[[NSString alloc] initWithUTF8String: STR2CSTR(rb_inspect(m_rbobj))] autorelease];
+  VALUE str = rb_inspect(m_rbobj);
+  return [[[NSString alloc] initWithUTF8String: StringValuePtr(str)] autorelease];
 }
 
 - (BOOL)isKindOfClass: (Class)klass
@@ -461,7 +464,8 @@ VALUE rbobj_call_ruby(id rbobj, SEL selector, VALUE args)
       RBOBJ_LOG("\tgenerated dummy method signature");
     }
     else {
-      RBOBJ_LOG("\tcan't generate a dummy method signature because receiver %s doesn't respond to the selector", STR2CSTR(rb_inspect(m_rbobj)));
+      VALUE str = rb_inspect(m_rbobj);
+      RBOBJ_LOG("\tcan't generate a dummy method signature because receiver %s doesn't respond to the selector", StringValuePtr(str));
     }
   }
   RBOBJ_LOG("   --> %@", ret);

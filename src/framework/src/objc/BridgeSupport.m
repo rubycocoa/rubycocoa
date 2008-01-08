@@ -1011,7 +1011,7 @@ bridge_support_dispatcher (int argc, VALUE *argv, VALUE rcv)
     }
     else {
       set_octypes_for_format_str(&arg_octypesstr[func->argc], 
-        argc - func->argc, STR2CSTR(format_str)); 
+        argc - func->argc, StringValuePtr(format_str)); 
     }
   }
   else {
@@ -1057,7 +1057,7 @@ osx_load_bridge_support_dylib (VALUE rcv, VALUE path)
 {
   const char *cpath;
 
-  cpath = STR2CSTR(path);
+  cpath = StringValuePtr(path);
   if (dlopen(cpath, RTLD_LAZY) == NULL)
     rb_raise(rb_eArgError, "Can't load the bridge support dylib file `%s' : %s", cpath, dlerror());
 
@@ -1082,7 +1082,7 @@ osx_load_bridge_support_file (VALUE mOSX, VALUE path)
     unsigned  argc;
   } func_ptr;
 
-  cpath = STR2CSTR(path);
+  cpath = StringValuePtr(path);
 
 #define RESET_FUNC_PTR_CTX()      \
   do {                            \
@@ -1809,7 +1809,7 @@ osx_load_bridge_support_file (VALUE mOSX, VALUE path)
 static VALUE
 osx_load_bridge_support_file (VALUE rcv, VALUE path)
 {
-  rb_warn("libxml2 is not available, bridge support file `%s' cannot be read", STR2CSTR(path));
+  rb_warn("libxml2 is not available, bridge support file `%s' cannot be read", StringValuePtr(path));
   return rcv;
 }
 
@@ -2010,7 +2010,7 @@ osx_lookup_informal_protocol_method_type (VALUE rcv, VALUE sel,
 {
   struct bsInformalProtocolMethod *method;
 
-  method = find_bs_informal_protocol_method(STR2CSTR(sel), 
+  method = find_bs_informal_protocol_method(StringValuePtr(sel), 
     RTEST(is_class_method));
 
   return method == NULL ? Qnil : rb_str_new2(method->encoding);

@@ -1083,7 +1083,10 @@ rbobj_to_ocdata (VALUE obj, const char *octype_str, void* ocdata, BOOL to_libffi
       break;
 
     case _C_CHARPTR:
-      *(char**)ocdata = STR2CSTR(rb_obj_as_string(obj));
+      {
+        VALUE str = rb_obj_as_string(obj);
+        *(char**)ocdata = StringValuePtr(str);
+      }
       break;
 
     case _C_PTR:
