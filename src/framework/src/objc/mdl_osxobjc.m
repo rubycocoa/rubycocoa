@@ -125,7 +125,7 @@ osx_mf_objc_class_method_add(VALUE mdl, VALUE kls, VALUE method_name, VALUE clas
 static VALUE
 osx_mf_ruby_thread_switcher_start(int argc, VALUE* argv, VALUE mdl)
 {
-  VALUE arg_interval, arg_wait;
+  volatile VALUE arg_interval, arg_wait;
   double interval, wait;
 
   rb_scan_args(argc, argv, "02", &arg_interval, &arg_wait);

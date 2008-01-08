@@ -484,7 +484,8 @@ objcptr_to_a (VALUE rcv, VALUE index, VALUE count)
   long   i, max;
   void*  ptr;
   const char* type;
-  VALUE val, ary;
+  VALUE val;
+  VALUE ary;
 
   if (!FIXNUM_P(index)) Check_Type(index, T_BIGNUM);
   if (!FIXNUM_P(count)) Check_Type(count, T_BIGNUM);

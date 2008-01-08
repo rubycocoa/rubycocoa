@@ -113,7 +113,7 @@ ovmix_ffi_closure(ffi_cif* cif, void* resp, void** args, void* userdata)
 {
   char *retval_octype;
   char **args_octypes;
-  VALUE rb_args;
+  volatile VALUE rb_args;
   unsigned i;
   VALUE retval;
 

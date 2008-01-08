@@ -37,7 +37,7 @@ struct _ocm_retain_context {
 static void
 ocm_retain_arg_if_necessary (VALUE result, BOOL is_result, void *context)
 {
-  VALUE rcv = ((struct _ocm_retain_context *)context)->rcv;
+  volatile VALUE rcv = ((struct _ocm_retain_context *)context)->rcv;
   SEL selector = ((struct _ocm_retain_context *)context)->selector;
 
   // Retain if necessary the returned ObjC value unless it was generated 
@@ -93,7 +93,8 @@ struct ocm_closure_userdata
 static void
 ocm_closure_handler(ffi_cif *cif, void *resp, void **args, void *userdata)
 {
-  VALUE rcv, argv, mname, is_predicate;
+  VALUE rcv, mname, is_predicate;
+  volatile VALUE argv;
 
   OBJWRP_LOG("ocm_closure_handler ...");
 

@@ -55,7 +55,7 @@ static RB_ID sel_to_mid(SEL a_sel)
 
 static RB_ID sel_to_mid_as_setter(SEL a_sel)
 {
-  VALUE str = rb_str_new2(sel_getName(a_sel));
+  volatile VALUE str = rb_str_new2(sel_getName(a_sel));
 
   // if str.sub!(/^set([A-Z][^:]*):$/, '\1=') then
   //   str = str[0].chr.downcase + str[1..-1]
@@ -213,7 +213,7 @@ rbobjRaiseRubyException (void)
   NSString *message = [NSString stringWithUTF8String:StringValuePtr(rbmessage)];
 
   NSMutableArray *backtraceArray = [NSMutableArray array];
-  VALUE ary = rb_funcall(ruby_errinfo, rb_intern("backtrace"), 0);
+  volatile VALUE ary = rb_funcall(ruby_errinfo, rb_intern("backtrace"), 0);
   int c;
   for (c=0; c<RARRAY(ary)->len; c++) {
       const char *path = StringValuePtr(RARRAY(ary)->ptr[c]);
@@ -275,8 +275,10 @@ VALUE rbobj_call_ruby(id rbobj, SEL selector, VALUE args)
 
   RBOBJ_LOG("calling method %s on Ruby object %p with %d args", rb_id2name(mid), m_rbobj, RARRAY(args)->len);
 
-  if (rb_respond_to(m_rbobj, mid) == 0)
-    rb_raise(rb_eRuntimeError, "Ruby object `%s' doesn't respond to the ObjC selector `%s', the method either doesn't exist or is private", RSTRING(rb_inspect(m_rbobj))->ptr, (char *)selector);
+  if (rb_respond_to(m_rbobj, mid) == 0) {
+    VALUE str = rb_inspect(m_rbobj);
+    rb_raise(rb_eRuntimeError, "Ruby object `%s' doesn't respond to the ObjC selector `%s', the method either doesn't exist or is private", StringValuePtr(str), (char *)selector);
+  }
 
   rb_result = rb_protect(rbobject_protected_apply, (VALUE)stub_args, &err);
   if (err) {
@@ -323,15 +325,17 @@ VALUE rbobj_call_ruby(id rbobj, SEL selector, VALUE args)
 
 - (void) trackRetainReleaseOfRubyObject
 {
+  VALUE str = rb_inspect(m_rbobj);
   RBOBJ_LOG("start tracking retain/release of Ruby object `%s'",  
-    RSTRING(rb_inspect(m_rbobj))->ptr);
+    StringValuePtr(str));
   m_rbobj_retain_release_track = YES;
 }
 
 - (void) retainRubyObject
 {
   if (m_rbobj_retain_release_track && !m_rbobj_retained) {
-    RBOBJ_LOG("retaining Ruby object `%s'", RSTRING(rb_inspect(m_rbobj))->ptr);
+    VALUE str = rb_inspect(m_rbobj);
+    RBOBJ_LOG("retaining Ruby object `%s'", StringValuePtr(str));
     rb_gc_register_address(&m_rbobj);
     m_rbobj_retained = YES;
   }
@@ -340,7 +344,8 @@ VALUE rbobj_call_ruby(id rbobj, SEL selector, VALUE args)
 - (void) releaseRubyObject
 {
   if (m_rbobj_retain_release_track && m_rbobj_retained) {
-    RBOBJ_LOG("releasing Ruby object `%s'", RSTRING(rb_inspect(m_rbobj))->ptr);
+    VALUE str = rb_inspect(m_rbobj);
+    RBOBJ_LOG("releasing Ruby object `%s'", StringValuePtr(str));
     rb_gc_unregister_address(&m_rbobj);
     m_rbobj_retained = NO;
   }

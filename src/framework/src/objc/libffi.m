@@ -358,7 +358,7 @@ rb_ffi_dispatch (
     }
     // Regular argument.
     else {
-      VALUE arg;
+      volatile VALUE arg;
       void *value;
       BOOL is_c_array;
       int len;
@@ -533,7 +533,7 @@ rb_ffi_dispatch (
 
   // Get omitted pointers result, and pack them with the result in an array.
   if (pointers_args_count > 0) {
-    VALUE retval_ary;
+    volatile VALUE retval_ary;
 
     retval_ary = rb_ary_new();
     if (*ret_octype != _C_VOID) { 
@@ -549,7 +549,7 @@ rb_ffi_dispatch (
 
       value = arg_values[i + argc_delta];
       if (value != NULL) {
-        VALUE rbval;
+        volatile VALUE rbval;
         const char *octype_str;
         struct bsArg *bs_arg;
         char fake_octype_str[512];
@@ -623,7 +623,7 @@ rb_ffi_dispatch (
             p = &value;
           else
             p = *(void **)value;
-          if (!ocdata_to_rbobj(Qnil, octype_str, p, &rbval, YES))
+          if (!ocdata_to_rbobj(Qnil, octype_str, p, (VALUE*)&rbval, YES))
             return rb_err_new(ocdataconv_err_class(), "Cannot convert the passed-by-reference argument #%d as '%s' to Ruby", i, octype_str);
         }
         (*retain_if_necessary)(rbval, NO, retain_if_necessary_ctx);
