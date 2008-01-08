@@ -387,7 +387,7 @@ ocm_send(int argc, VALUE* argv, VALUE rcv, VALUE* result)
       }
       else {
         set_octypes_for_format_str(&argumentsTypes[numberOfArguments],
-          argc - numberOfArguments, STR2CSTR(format_str));
+          argc - numberOfArguments, StringValuePtr(format_str));
       }
     }
   }
@@ -454,9 +454,9 @@ wrapper_ocm_responds_p(VALUE rcv, VALUE sel)
 static VALUE
 wrapper_ocm_conforms_p(VALUE rcv, VALUE name)
 {
-  Protocol *protocol = objc_getProtocol(STR2CSTR(name));
+  Protocol *protocol = objc_getProtocol(StringValuePtr(name));
   if (protocol == NULL)
-    rb_raise(rb_eArgError, "Invalid protocol name `%s'", STR2CSTR(name));
+    rb_raise(rb_eArgError, "Invalid protocol name `%s'", StringValuePtr(name));
   return class_conformsToProtocol(rbobj_get_ocid(rcv), protocol) ? Qtrue : Qfalse;
 }
 #endif
@@ -592,7 +592,7 @@ wrapper_objc_method_type (VALUE rcv, VALUE name)
 
   oc_rcv = rbobj_get_ocid (rcv);
   name = _name_to_selstr (name);
-  str = _objc_method_type (oc_rcv->isa, STR2CSTR(name));
+  str = _objc_method_type (oc_rcv->isa, StringValuePtr(name));
   if (str == NULL) return Qnil;
   return rb_str_new2(str);
 }
@@ -605,7 +605,7 @@ wrapper_objc_instance_method_type (VALUE rcv, VALUE name)
 
   oc_rcv = rbobj_get_ocid (rcv);
   name = _name_to_selstr (name);
-  str = _objc_method_type (oc_rcv, STR2CSTR(name));
+  str = _objc_method_type (oc_rcv, StringValuePtr(name));
   if (str == NULL) return Qnil;
   return rb_str_new2(str);
 }
@@ -618,7 +618,7 @@ wrapper_objc_class_method_type (VALUE rcv, VALUE name)
 
   oc_rcv = rbobj_get_ocid (rcv);
   name = _name_to_selstr (name);
-  str = _objc_method_type (oc_rcv->isa, STR2CSTR(name));
+  str = _objc_method_type (oc_rcv->isa, StringValuePtr(name));
   if (str == NULL) return Qnil;
   return rb_str_new2(str);
 }

@@ -217,7 +217,7 @@ rb_objcptr_inspect(VALUE rcv)
 
   rbclass_name = rb_mod_name(CLASS_OF(rcv));
   snprintf(s, sizeof(s), "#<%s:0x%lx cptr=%p allocated_size=%ld encoding=%s>",
-           STR2CSTR(rbclass_name),
+           StringValuePtr(rbclass_name),
            NUM2ULONG(rb_obj_id(rcv)),
            CPTR_OF(rcv),
            ALLOCATED_SIZE_OF(rcv),
@@ -262,9 +262,9 @@ rb_objcptr_regard_as(VALUE rcv, VALUE key)
     unsigned int size;
 #endif
     ok = NO;
-    encoding = STR2CSTR(key);
+    encoding = StringValuePtr(key);
     @try {
-      NSGetSizeAndAlignment(STR2CSTR(key), &size, NULL);
+      NSGetSizeAndAlignment(StringValuePtr(key), &size, NULL);
       if (size > 0)
         ok = YES;
     }

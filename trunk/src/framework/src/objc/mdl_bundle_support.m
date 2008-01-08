@@ -125,13 +125,13 @@ rb_bind_class_with_current_bundle(VALUE mdl, VALUE objc_class)
 
 static VALUE my_load_clause(VALUE prog_name)
 {
-  rb_require(STR2CSTR(prog_name));
+  rb_require(StringValuePtr(prog_name));
   return Qnil;
 }
 
 static VALUE my_eval_clause(VALUE prog_source)
 {
-  rb_eval_string(STR2CSTR(prog_source));
+  rb_eval_string(StringValuePtr(prog_source));
   return Qnil;
 }
 
