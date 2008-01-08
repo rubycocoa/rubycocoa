@@ -2231,17 +2231,22 @@ module OSX
     end
     
     def float?
+      warn "#{caller[0]}: 'NSNumber#float?' is now deprecated and its use is discouraged, please use integer? instead."
       OSX::CFNumberIsFloatType(self)
+    end
+    
+    def integer?
+      !OSX::CFNumberIsFloatType(self)
     end
     
     def ==(other)
       if other.is_a? NSNumber
         isEqualToNumber?(other)
       elsif other.is_a? Numeric
-        if float?
-          to_f == other
-        else
+        if integer?
           to_i == other
+        else
+          to_f == other
         end
       else
         false
@@ -2252,10 +2257,10 @@ module OSX
       if other.is_a? NSNumber
         compare(other)
       elsif other.is_a? Numeric
-        if float?
-          to_f <=> other
-        else
+        if integer?
           to_i <=> other
+        else
+          to_f <=> other
         end
       else
         nil
@@ -2293,7 +2298,7 @@ module OSX
       when OSX::NSCFBoolean
         self.boolValue
       when OSX::NSNumber
-        self.float? ? self.to_f : self.to_i
+        self.integer? ? self.to_i : self.to_f
       when OSX::NSString
         self.to_s
       when OSX::NSAttributedString

@@ -132,8 +132,8 @@ class TC_Types < Test::Unit::TestCase
   def test_float_nsnumber
     assert(!OSX::CFNumberIsFloatType(42))
     assert(OSX::CFNumberIsFloatType(42.42))
-    assert(!OSX::NSNumber.numberWithInt(42).float?)
-    assert(OSX::NSNumber.numberWithFloat(42.42).float?)
+    assert(OSX::NSNumber.numberWithInt(42).integer?)
+    assert(!OSX::NSNumber.numberWithFloat(42.42).integer?)
   end
 
   def test_cftypes
