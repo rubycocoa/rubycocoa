@@ -322,6 +322,16 @@ class TC_NSArray < Test::Unit::TestCase
     r = e.delete(1)
     assert_equal(r, nil)
     assert_equal(e, a)
+    
+    a = alloc_nsarray(5)
+    called = false
+    a.delete(1) {called=true}
+    assert_equal(true, called)
+    
+    a = alloc_nsarray(5)
+    called = false
+    a.delete(5) {called=true}
+    assert_equal(false, called)
   end
   
   def test_delete_at
@@ -846,6 +856,7 @@ class TC_NSArray < Test::Unit::TestCase
       x = a.grep(/^[a-z0-9]+$/) {|i| i.to_s*2 }
       y = b.grep(/^[a-z0-9]+$/) {|i| i*2 }
       assert_equal(y, x.to_ruby)
+      assert_kind_of(NSArray, x)
     end
   end
   
@@ -856,6 +867,7 @@ class TC_NSArray < Test::Unit::TestCase
       x = a.partition {|i| i.to_i < 4 }
       y = b.partition {|i| i < 4 }
       assert_equal(y, x.to_ruby)
+      assert_kind_of(NSArray, x)
     end
   end
   
@@ -866,6 +878,7 @@ class TC_NSArray < Test::Unit::TestCase
       x = a.reject {|i| i.to_i < 4 }
       y = b.reject {|i| i < 4 }
       assert_equal(y, x.to_ruby)
+      assert_kind_of(NSArray, x)
     end
   end
   
@@ -876,6 +889,7 @@ class TC_NSArray < Test::Unit::TestCase
       x = a.sort
       y = b.sort
       assert_equal(y, x.to_ruby)
+      assert_kind_of(NSArray, x)
     end
   end
   
@@ -886,6 +900,7 @@ class TC_NSArray < Test::Unit::TestCase
       x = a.sort_by {|i| i.to_i * 2 }
       y = b.sort_by {|i| i.to_i * 2 }
       assert_equal(y, x.to_ruby)
+      assert_kind_of(NSArray, x)
     end
   end
   
@@ -911,6 +926,7 @@ class TC_NSArray < Test::Unit::TestCase
       a.zip(*d[1]) {}
       b.zip(*d[1]) {}
       assert_equal(y, x.to_ruby)
+      assert_kind_of(NSArray, x)
     end
   end
 end

@@ -1,3 +1,14 @@
+2008-01-13  Satoshi Nakagawa <artension@gmail.com>
+
+	* framework/src/ruby/osx/objc/oc_attachments.rb,
+	  tests/tc_nsstring_compat.rb,
+	  tests/tc_nsarray.rb,
+	  tests/tc_to_ns.rb:
+	- Refactoring.
+	- Fixed a bug, NSString#scan(regexp){block} passed String to its block argument. It should be NSString.
+	- Fixed a bug, NSString#split returned an array contains immutable NSString sometimes.
+	- Fixed a bug, NSArray#delete always yielded a block.
+
 2008-01-09  Satoshi Nakagawa <artension@gmail.com>
 
 	* framework/src/ruby/osx/objc/oc_types.rb,
