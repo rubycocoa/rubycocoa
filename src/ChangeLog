@@ -1,3 +1,11 @@
+2008-1-13 Eloy Duran <e.duran@superalloy.nl>
+
+	* framework/tool/gen_bridge_doc/lib/cocoa_ref.rb,
+	  framework/tool/gen_bridge_doc/lib/lib/hpricot_proxy.rb,
+	  framework/tool/gen_bridge_doc/rdocify_framework.rb:
+	Fixed bugs that were introduced by the new (not better) layout Apple uses for it's reference docs.
+	This does not yet fix any regular parsing errors for misspelled methods etc, but the majority will parse.
+
 2008-01-13  Satoshi Nakagawa <artension@gmail.com>
 
 	* framework/src/ruby/osx/objc/oc_attachments.rb,
