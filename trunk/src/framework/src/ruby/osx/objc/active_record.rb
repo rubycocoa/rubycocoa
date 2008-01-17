@@ -62,12 +62,14 @@ module OSX
   # ---------------------------------------------------------
   
   class ActiveRecordSetController < OSX::NSArrayController
-    # First tries to destroy the record then lets the super method do it's work
-    # FIXME: Currently only expects one selected object
+    # First tries to destroy the record(s) then lets the super method do it's work.
     def remove(sender)
-      if self.selectedObjects.to_a.first.destroy
-        super_remove(sender)
-      end
+      super_remove(sender) if selectedObjects.to_a.all? {|proxy| proxy.destroy }
+    end
+    
+    # Directly saves the new record.
+    def newObject
+      objectClass.class.create
     end
     
     # Sets up the ActiveRecordSetController for a given model and sets the content if it's specified.
@@ -80,7 +82,14 @@ module OSX
       self.setObjectClass( Object.const_get("#{options[:model].to_s}Proxy") )
       self.setContent(options[:content]) unless options[:content].nil?
     end
-    
+  end
+  
+  class BelongsToActiveRecordSetController < ActiveRecordSetController
+    # Doesn't save the record to the db in a belongs to association,
+    # because it will automatically be saved by ActiveRecord when added to the collection.
+    def newObject
+      objectClass.class.alloc.init
+    end
   end
   
   class ActiveRecordTableView < OSX::NSTableView
@@ -201,16 +210,17 @@ module OSX
         @model_class ||= Object.const_get(self.to_s[0..-6])
         return @model_class
       end
+      
+      def create(attributes = {})
+        alloc.initWithAttributes(attributes)
+      end
     end
     
     # Creates a new record and returns a proxy for it.
     def init
       if super_init
         # instantiate a new record if necessary
-        unless @record
-          @record = self.record_class.send(:new)
-          return nil unless @record.save
-        end
+        @record = self.record_class.send(:new) unless @record
         
         # define all the record attributes getters and setters
         @record.attribute_names.each do |m|
@@ -327,18 +337,20 @@ module OSX
     def rbSetValue_forKey(value, key)
       # puts "setValue_forKey('#{value}', '#{key}')"
       if is_association? key
-        # we are dealing with an association (only has_many for now),
-        # so add the newest record to the has_many association of the @record
-        @record.send(key.to_s.to_sym) << value.to_a.last.to_activerecord
-        result = @record.save
-        # reload the @record, if we don't do this then the newest record will not show up in the array
-        # FIXME: this is slow! check if there's another way to add the latest record to the array without reloading everything.
-        @record.reload
+        # we are dealing with an association (only has_many for now)
+        if @record.send(key.to_s.to_sym).length < value.to_a.length
+          # add the newest record to the has_many association of the @record
+          return true if (@record.send(key.to_s.to_sym) << value.to_a.last.to_activerecord)
+        else
+          # reload the children to reflect the changes deletion of records
+          @record.reload
+          return true
+        end
       else
         @record[key.to_s] = value.to_ruby rescue nil
-        result = @record.save
+        return @record.save
       end
-      return result
+      return false
     end
   
     # This method is called by the object that self is bound to,

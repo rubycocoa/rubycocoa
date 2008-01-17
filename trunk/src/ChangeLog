@@ -1,3 +1,11 @@
+2008-1-18 Eloy Duran <e.duran@superalloy.nl>
+
+	* framework/src/ruby/osx/objc/active_record.rb:
+
+	- Made speed improvements in the way records in a has many association are created.
+	  You'll get this by using a BelongsToActiveRecordSetController instead of a ActiveRecordSetController.
+	- ActiveRecordSetController now allows to destroy a multiple selection.
+
 2008-1-13 Eloy Duran <e.duran@superalloy.nl>
 
 	* framework/tool/gen_bridge_doc/lib/cocoa_ref.rb,
