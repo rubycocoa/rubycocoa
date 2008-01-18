@@ -78,16 +78,21 @@ end
 raise 'ERROR: ruby must be built as a shared library' if Config::CONFIG["ENABLE_SHARED"] != 'yes'
 
 # Add the libffi library to the build process.
-if !lib_exist?('/usr/lib/libffi.a') and !lib_exist?('/usr/lib/libffi.dylib')
-  if lib_exist?('/usr/local/lib/libffi.a') and lib_exist?('/usr/local/include/ffi')
-    cflags << ' -I/usr/local/include/ffi '
-    ldflags << ' -L/usr/local/lib '
-  else
-    cflags << ' -I../../misc/libffi/include -I../misc/libffi/include ' 
-    ldflags << ' -L../../misc/libffi -L../misc/libffi '
-  end
+if @config['macosx-deployment-target'].to_f < 10.5
+  cflags << ' -I../../misc/libffi/include -I../misc/libffi/include ' 
+  ldflags << ' -L../../misc/libffi -L../misc/libffi '
 else
-  cflags << ' -I/usr/include/ffi '
+  if !lib_exist?('/usr/lib/libffi.a') and !lib_exist?('/usr/lib/libffi.dylib')
+    if lib_exist?('/usr/local/lib/libffi.a') and lib_exist?('/usr/local/include/ffi')
+      cflags << ' -I/usr/local/include/ffi '
+      ldflags << ' -L/usr/local/lib '
+    else
+      cflags << ' -I../../misc/libffi/include -I../misc/libffi/include ' 
+      ldflags << ' -L../../misc/libffi -L../misc/libffi '
+    end
+  else
+    cflags << ' -I/usr/include/ffi '
+  end
 end
 cflags << ' -DMACOSX '
 ldflags << ' -lffi '
