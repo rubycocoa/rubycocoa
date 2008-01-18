@@ -11,15 +11,26 @@ begin
   require 'osx/active_record'
   require 'sqlite3'
   
-  dbfile = '/tmp/maildemo.sqlite'
-  File.delete(dbfile) if File.exist?(dbfile)
-  system("sqlite3 #{dbfile} < #{ File.join(File.dirname( File.expand_path(__FILE__) ), 'maildemo.sql') }")
-
   ActiveRecord::Base.establish_connection({
     :adapter => 'sqlite3',
-    :dbfile => dbfile
+    :dbfile => ':memory:'
   })
+  ActiveRecord::Migration.verbose = false
+  
+  ActiveRecord::Schema.define do
+    create_table :mailboxes do |t|
+      t.column :title, :string, :default => 'title'
+    end
 
+    create_table :emails do |t|
+      t.column :mailbox_id, :integer
+      t.column :address, :string, :default => "test@test.com"
+      t.column :subject, :string, :default => "test subject"
+      t.column :body, :text
+      t.column :updated_at, :datetime
+    end
+  end
+  
   class Mailbox < ActiveRecord::Base
     has_many :emails
   
@@ -61,10 +72,6 @@ begin
   end
 
   class TC_ActiveRecord < Test::Unit::TestCase
-  
-    def setup
-      # when we need more complex tests here should probably go some code that flushes the db
-    end
     
     # ---------------------------------------------------------
     # Class additions
@@ -129,12 +136,11 @@ begin
       end
     end
     
-    
     # ActiveRecordProxy
-    def test_proxy_init
+    def test_proxy_init_should_not_create_a_new_record
       before = Mailbox.count
       proxy  = MailboxProxy.alloc.init
-      assert Mailbox.count == (before + 1)
+      assert Mailbox.count == before
     end
     
     def test_proxy_initWithRecord
