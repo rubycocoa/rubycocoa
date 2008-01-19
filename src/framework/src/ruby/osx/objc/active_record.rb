@@ -20,7 +20,7 @@ end
 
 class ActiveRecord::Base
   class << self
-    alias_method :__inherited_before_proxy__, :inherited
+    alias_method :__inherited_before_proxy, :inherited
     def inherited(klass)
       proxy_klass = "#{klass.to_s}Proxy"
       unless Object.const_defined?(proxy_klass)
@@ -28,7 +28,7 @@ class ActiveRecord::Base
         # FIXME: This leads to a TypeError originating from: oc_import.rb:618:in `method_added'
         # Object.const_set(proxy_klass, Class.new(OSX::ActiveRecordProxy))
       end
-      self.__inherited_before_proxy__(klass)
+      __inherited_before_proxy(klass)
     end
   end
   
@@ -37,7 +37,7 @@ class ActiveRecord::Base
     if self.class.instance_variable_get(:@proxy_klass).nil?
       self.class.instance_variable_set(:@proxy_klass, Object.const_get("#{self.class.to_s}Proxy"))
     end
-    return self.class.instance_variable_get(:@proxy_klass).alloc.initWithRecord(self)
+    self.class.instance_variable_get(:@proxy_klass).alloc.initWithRecord(self)
   end
   alias_method :to_activerecord_proxies, :to_activerecord_proxy
 end
@@ -45,13 +45,13 @@ end
 class Array
   # Returns an array with proxies for all the original records in this array.
   def to_activerecord_proxies
-    self.map { |rec| rec.to_activerecord_proxy }
+    map { |rec| rec.to_activerecord_proxy }
   end
   alias_method :to_activerecord_proxy, :to_activerecord_proxies
   
   # Returns an array with all the original records for the proxies in this array.
   def original_records
-    self.map { |rec| rec.original_record }
+    map { |rec| rec.original_record }
   end
 end
 
@@ -64,7 +64,7 @@ module OSX
   class ActiveRecordSetController < OSX::NSArrayController
     # First tries to destroy the record(s) then lets the super method do it's work.
     def remove(sender)
-      super_remove(sender) if selectedObjects.to_a.all? {|proxy| proxy.destroy }
+      super_remove(sender) if selectedObjects.all? {|proxy| proxy.destroy }
     end
     
     # Directly saves the new record.
@@ -119,7 +119,7 @@ module OSX
     #       column_options['NSValidatesImmediately'] = true
     #     end
     #   end
-    def scaffold_columns_for(options, &block)
+    def scaffold_columns_for(options)
       raise ArgumentError, ":model was nil, expected a ActiveRecord::Base subclass" if options[:model].nil?
       raise ArgumentError, ":bind_to was nil, expected an instance of ActiveRecordSetController" if options[:bind_to].nil?
       options[:except] ||= []
@@ -144,9 +144,10 @@ module OSX
         # create a hash that will hold the options that will be passed as options to the bind method
         column_options = {}
         column_options['NSValidatesImmediately'] = options[:validates_immediately]
-        unless block.nil?
-          yield table_column, column_options
-        end
+        
+        # FIXME: causes a bus error on my machine...
+        yield(table_column, column_options) if block_given?
+        
         # set the binding
         table_column.bind_toObject_withKeyPath_options(OSX::NSValueBinding, options[:bind_to], "arrangedObjects.#{column_name}", column_options)
         # and add it to the table view
@@ -191,15 +192,13 @@ module OSX
       
       # This find class method passes the message on to the model, but it will return proxies for the returned records
       def find(*args)
-        result = self.model_class.find(*args)
-        return result.to_activerecord_proxies
+        model_class.find(*args).to_activerecord_proxies
       end
       
       # This method_missing class method passes the find_by_ message on to the model, but it will return proxies for the returned records
       def method_missing(method, *args)
         if method.to_s.index('find_by_') == 0
-          result = self.model_class.send(method, *args)
-          return result.to_activerecord_proxies
+          model_class.send(method, *args).to_activerecord_proxies
         else
           super
         end
@@ -208,7 +207,6 @@ module OSX
       # Returns the model class for this proxy
       def model_class
         @model_class ||= Object.const_get(self.to_s[0..-6])
-        return @model_class
       end
       
       def create(attributes = {})
@@ -243,21 +241,21 @@ module OSX
           end
         end
         
-        return self
+        self
       end
     end
     
     # Takes an existing record as an argument and returns a proxy for it.
     def initWithRecord(record)
       @record = record
-      self.init
+      init
     end
     
     # Creates a new record with the given attributes and returns a proxy for it.
     def initWithAttributes(attributes)
       @record = record_class.send(:new, attributes)
       return nil unless @record.save
-      self.init
+      init
     end
     
     # Returns the model class for this proxy
@@ -278,12 +276,26 @@ module OSX
     def original_record
       @record
     end
-  
+    
+    # Useful inspect method for use as: p(my_proxy)
+    def inspect
+      @record.inspect.sub(/#{record_class}/, self.class.name.to_s)
+    end
+    
+    # Compare two ActiveRecord proxies. They are compared by the record.
+    def ==(other)
+      if self.class == other.class
+        self.original_record == other.original_record
+      else
+        super
+      end
+    end
+    
     # Returns +true+ if the given key is an association, otherwise returns +false+
     def is_association?(key)
       key_sym = key.to_s.to_sym
       @record.class.reflect_on_all_associations.each { |assoc| return true if assoc.name == key_sym }
-      return false
+      false
     end
   
     # KVC stuff
@@ -297,37 +309,25 @@ module OSX
     # This method is called by the object that self is bound to,
     # if the requested key is a association return proxies for the records.
     def rbValueForKey(key)
-      #puts "valueForKey('#{key}')"
-    
-      if is_association? key
-        # return the associated records as record proxies
-        return @record.send(key.to_s.to_sym).to_activerecord_proxies
+      if is_association?(key)
+        @record.send(key.to_s.to_sym).to_activerecord_proxies
       else
         if filter = self.on_get_filter_for_key(key)
-          #puts "filter for key: #{key}"
           if filter.is_a?(Hash)
             case filter.keys.first
             when :return
               klass, method = filter[:return]
               data = @record[key.to_s]
-              unless data.nil?
-                # if we have data, call the given init method and pass the data
-                return klass.alloc.send(method.to_sym, data)
-              else
-                # if we have no data simply initialize a new instance of klass
-                return klass.alloc.init
-              end
-            when :call
-              # call the given method and pass it the data
-              return self.send(filter[:call], @record[key.to_s])
+              return (data.nil? ? klass.alloc.init : klass.alloc.send(method.to_sym, data))
+            when :call # callback method
+              send(filter[:call], @record[key.to_s])
             end
           elsif filter.is_a?(Proc)
-            # call the proc and pass it the data
-            return filter.call(@record[key.to_s])
+            filter.call(@record[key.to_s])
           end
         else
           # no filter, so simply return the data
-          return @record[key.to_s]
+          @record[key.to_s]
         end
       end
     end
@@ -335,7 +335,6 @@ module OSX
     # This method is called by the object that self is bound to,
     # it's called when a update has occured.
     def rbSetValue_forKey(value, key)
-      # puts "setValue_forKey('#{value}', '#{key}')"
       if is_association? key
         # we are dealing with an association (only has_many for now)
         if @record.send(key.to_s.to_sym).length < value.to_a.length
@@ -359,21 +358,19 @@ module OSX
       original_value = @record[key.to_s]
       @record[key.to_s] = value[0].to_s
       @record.valid?
+      
       # we only want to check if the value for this attribute is valid and not every attribute
-      if @record.errors[key.to_s].nil?
-        return true
-      else
-        # set the original value back
-        @record[key.to_s] = original_value
-        # create a error message for each validation error on this attribute
-        error_msg = ''
-        @record.errors[key.to_s].each do |err|
-          error_msg += "#{self.record_class} #{key.to_s} #{err}\n"
-        end
-        # construct the NSError object
-        error.assign( OSX::NSError.alloc.initWithDomain_code_userInfo( OSX::NSCocoaErrorDomain, -1, { OSX::NSLocalizedDescriptionKey => error_msg } ) )
-        return false
+      return true if @record.errors[key.to_s].nil?
+
+      @record[key.to_s] = original_value
+      # create a error message for each validation error on this attribute
+      error_msg = ''
+      @record.errors[key.to_s].each do |err|
+        error_msg += "#{self.record_class} #{key.to_s} #{err}\n"
       end
+      # construct the NSError object
+      error.assign( OSX::NSError.alloc.initWithDomain_code_userInfo( OSX::NSCocoaErrorDomain, -1, { OSX::NSLocalizedDescriptionKey => error_msg } ) )
+      false
     end
 
   end
