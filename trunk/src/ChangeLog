@@ -1,3 +1,10 @@
+2008-01-20  Satoshi Nakagawa <artension@gmail.com>
+
+	* package/pre-package.rb,
+	  framework/post-setup.rb,
+	  misc/bridge-support-tiger.tar.gz:
+	Now we can build a release package for Tiger on Leopard.
+
 2008-01-19 Eloy Duran <e.duran@superalloy.nl>
 
 	* tests/TableView.nib,
