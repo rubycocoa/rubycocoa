@@ -1,3 +1,10 @@
+2008-01-19 Eloy Duran <e.duran@superalloy.nl>
+
+	* framework/src/ruby/osx/objc/active_record.rb,
+	  tests/tc_active_record.rb:
+	- Completely refactored the ActiveRecord related tests. (There's one FIXME in the file, which causes a segfualt.)
+	- Refactored the ActiveRecord libraries a bit.
+
 2008-01-18 Eloy Duran <e.duran@superalloy.nl>
 
 	* tests/maildemo.sql,
