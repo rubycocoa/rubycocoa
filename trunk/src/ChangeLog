@@ -1,5 +1,11 @@
 2008-01-20  Satoshi Nakagawa <artension@gmail.com>
 
+	* framework/src/ruby/osx/objc/oc_attachments.rb,
+	  tests/tc_attachments.rb:
+	NSNumber#to_f should use doubleValue.
+
+2008-01-20  Satoshi Nakagawa <artension@gmail.com>
+
 	* package/pre-package.rb,
 	  framework/post-setup.rb,
 	  misc/bridge-support-tiger.tar.gz:
