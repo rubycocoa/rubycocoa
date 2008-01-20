@@ -37,7 +37,7 @@
 
 2008-01-18  Satoshi Nakagawa <artension@gmail.com>
 
- 	* pre-setup.rb,
+	* pre-setup.rb,
 	  pre-config.rb,
 	  misc/libffi/Makefile.rubycocoa:
 	Fixed a problem, libffi should be built always for macosx-deployment-target=10.4.
