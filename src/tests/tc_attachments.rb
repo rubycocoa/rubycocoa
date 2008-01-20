@@ -132,5 +132,6 @@ class TC_Attachments < Test::Unit::TestCase
     f = 0.4242
     assert_equal(f, f.to_ns.to_f)
     assert_equal(f, f.to_ns.to_f.to_ns.to_f)
+    assert_equal(f, f.to_ns.to_ruby)
   end
 end
