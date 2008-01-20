@@ -127,4 +127,10 @@ class TC_Attachments < Test::Unit::TestCase
     dict =  OSX::NSDictionary.dictionaryWithDictionary({ str => num_b })
     assert_equal("#<NSCFDictionary {#{str.inspect}=>#{num_b.inspect}}>", dict.inspect)
   end
+  
+  def test_nsnumber_and_float_roundtrip
+    f = 0.4242
+    assert_equal(f, f.to_ns.to_f)
+    assert_equal(f, f.to_ns.to_f.to_ns.to_f)
+  end
 end

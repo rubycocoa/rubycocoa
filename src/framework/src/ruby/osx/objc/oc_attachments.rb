@@ -2217,7 +2217,7 @@ module OSX
     end
 
     def to_f
-      self.floatValue
+      self.doubleValue
     end
     
     def float?
