@@ -1,3 +1,12 @@
+2008-01-21 Eloy Duran <e.duran@superalloy.nl>
+
+	* framework/src/ruby/osx/objc/active_record.rb,
+	  tests/tc_active_record.rb:
+	- Fixed a bug where calling #to_activerecord_proxy on the same record object would return a new different proxy
+	  object and thus resulting in a kvo error. The proxy instance is now cached in the record itself.
+	- Made more speed improvements by making sure that all the record methods are only defined once on the proxy class.
+	- A ActiveRecordProxy instance will now go through #rbValueForKey and thus also return a ActiveRecordProxy instance.
+
 2008-01-20 Eloy Duran <e.duran@superalloy.nl>
 
 	* tests/tc_attachments.rb:

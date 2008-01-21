@@ -235,7 +235,9 @@ begin
     
     def setup
       setup_db
-      Mailbox.create('title' => 'foo')
+      mailbox = Mailbox.create('title' => 'foo')
+      mailbox.emails << Email.new
+      @email_proxy = EmailProxy.find(:first)
     end
     
     def teardown
@@ -264,6 +266,24 @@ begin
         proxy = MailboxProxy.alloc.initWithAttributes({ 'title' => 'initWithAttributes' })
         assert_equal 'initWithAttributes', proxy.to_activerecord.title
       end
+    end
+    
+    def test_should_always_return_the_same_cached_proxy_for_a_record_object
+      proxy1 = @email_proxy.mailbox.to_activerecord_proxy
+      proxy2 = @email_proxy.mailbox.to_activerecord_proxy
+      assert_equal proxy1.object_id, proxy2.object_id
+    end
+    
+    def test_should_only_define_all_the_proxy_methods_once
+      temp_class_eval_email_proxy_class do
+        assert_difference("EmailProxy.instance_variable_get(:@test_counter)", +1) do
+          2.times { EmailProxy.find(:first) }
+        end
+      end
+    end
+    
+    def test_should_return_a_proxy_when_requesting_a_belongs_to_associated_record
+      assert_kind_of OSX::ActiveRecordProxy, @email_proxy.mailbox
     end
     
     def test_should_be_able_to_compare_proxies
@@ -363,6 +383,26 @@ begin
       mailbox = Mailbox.find_by_title('foo')
       proxy = MailboxProxy.find_by_title('foo')
       assert_equal mailbox, proxy.original_record
+    end
+    
+    private
+    
+    # belongs to test_should_only_define_all_the_proxy_methods_once
+    def temp_class_eval_email_proxy_class
+      EmailProxy.class_eval do
+        @record_methods_defined = nil
+        @test_counter = 0
+        
+        alias_method :original_define_record_methods!, :define_record_methods!
+        def define_record_methods!
+          original_define_record_methods!
+          self.class.instance_variable_set(:@test_counter, self.class.instance_variable_get(:@test_counter) + 1)
+        end
+        
+        yield
+        
+        alias_method :define_record_methods!, :original_define_record_methods!
+      end
     end
   end
 
