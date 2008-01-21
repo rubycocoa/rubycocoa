@@ -37,7 +37,7 @@ class ActiveRecord::Base
     if self.class.instance_variable_get(:@proxy_klass).nil?
       self.class.instance_variable_set(:@proxy_klass, Object.const_get("#{self.class.to_s}Proxy"))
     end
-    self.class.instance_variable_get(:@proxy_klass).alloc.initWithRecord(self)
+    @record_proxy ||= self.class.instance_variable_get(:@proxy_klass).alloc.initWithRecord(self)
   end
   alias_method :to_activerecord_proxies, :to_activerecord_proxy
 end
@@ -217,30 +217,8 @@ module OSX
     # Creates a new record and returns a proxy for it.
     def init
       if super_init
-        # instantiate a new record if necessary
         @record = self.record_class.send(:new) unless @record
-        
-        # define all the record attributes getters and setters
-        @record.attribute_names.each do |m|
-          self.class.class_eval do
-            define_method(m) do
-              return @record.send(m)
-            end
-            sym = "#{m}=".to_sym
-            define_method(sym) do |*args|
-              return @record.send(sym, *args)
-            end
-          end
-        end
-        # define the normal instance methods of the record
-        (@record.methods - self.methods).each do |m|
-          self.class.class_eval do
-            define_method(m) do |*args|
-              return @record.send(m, *args)
-            end
-          end
-        end
-        
+        define_record_methods! unless self.class.instance_variable_get(:@record_methods_defined)
         self
       end
     end
@@ -279,7 +257,7 @@ module OSX
     
     # Useful inspect method for use as: p(my_proxy)
     def inspect
-      @record.inspect.sub(/#{record_class}/, self.class.name.to_s)
+      @record.inspect.sub(/#{record_class}/, "#{self.class.name.to_s} proxy_object_id: #{self.object_id} record_object_id: #{@record.object_id}")
     end
     
     # Compare two ActiveRecord proxies. They are compared by the record.
@@ -373,6 +351,36 @@ module OSX
       false
     end
 
+    private
+    
+    def define_record_methods!
+      # define all the record attributes getters and setters
+      @record.attribute_names.each do |m|
+        self.class.class_eval do
+          define_method(m) do
+            #return @record.send(m)
+            return rbValueForKey(m.to_s)
+          end
+          sym = "#{m}=".to_sym
+          define_method(sym) do |*args|
+            return @record.send(sym, *args)
+          end
+        end
+      end
+      # define the normal instance methods of the record
+      (@record.methods - self.methods).each do |m|
+        self.class.class_eval do
+          define_method(m) do |*args|
+            if is_association?(m)
+              return rbValueForKey(m)
+            else
+              return @record.send(m, *args)
+            end
+          end
+        end
+      end
+      self.class.instance_variable_set(:@record_methods_defined, true)
+    end
   end
 
   # ---------------------------------------------------------
