@@ -1,4 +1,11 @@
-2008-1-29 Eloy Duran <e.duran@superalloy.nl>
+2008-02-01 Eloy Duran <e.duran@superalloy.nl>
+
+	* framework/src/ruby/osx/objc/active_record.rb:
+
+	Fixed bug on case-sensitive filesystems where 'FileUtils' was required instead of 'fileutils'.
+	Reported by Jason Foreman.
+
+2008-01-29 Eloy Duran <e.duran@superalloy.nl>
 
 	* sample/MailDemo/MailDemoActiveRecordBindings/English.lproj/MainMenu.nib/classes.nib,
 	  sample/MailDemo/MailDemoActiveRecordBindings/English.lproj/MainMenu.nib/info.nib,

@@ -442,7 +442,7 @@ module OSX
       path_to_this_apps_app_support_dir = File.join(user_app_support_path, self.get_app_name)
       # and create it if necessary
       unless File.exists?(path_to_this_apps_app_support_dir)
-        require 'FileUtils'
+        require 'fileutils'
         FileUtils.mkdir_p(path_to_this_apps_app_support_dir)
       end
       return path_to_this_apps_app_support_dir
