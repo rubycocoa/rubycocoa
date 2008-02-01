@@ -120,8 +120,8 @@
 	  framework/src/objc/mdl_objwrapper.m,
 	  framework/src/objc/cls_objcptr.m:
 	- Set volatile to some VALUE type local variables.
-	  If VALUE local variables erased by optimization, the VALUE is missing from the stack.
-	  It could cause GC sweeps the VALUE.
+	  If VALUE local variables are erased by optimization, the VALUE is missing from the stack.
+	  It could cause that GC sweeps the VALUE.
 	  See http://i.loveruby.net/ja/rhg/book/gc.html (in Japanese)
 	- Changed func(RSTRING(rb_inspect(obj))->ptr to StringValuePtr(). Because it was a dangling pointer.
 
