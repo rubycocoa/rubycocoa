@@ -1,3 +1,9 @@
+2007-02-07  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* sample/RSSPhotoViewer/rb_main.rb,
+	  sample/QTKitSimpleDocument/rb_main.rb:
+	Removed ENV['BRIDGE_SUPPORT_PATH']= debug calls.
+
 2008-02-08 kimura wataru <kimuraw@i.nifty.jp>
 
 	* framework/src/objc/libffi.m,
