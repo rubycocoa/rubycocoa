@@ -176,6 +176,15 @@
     return NO;
 }
 
+- (BOOL)passByRefObjectWithTypeQualifiers:(inout id *)obj
+{
+    if (obj != NULL) {
+        *obj = self;
+        return YES;
+    }
+    return NO;
+}
+
 - (BOOL)passByRefInteger:(int *)integer
 {
     if (integer != NULL) {
@@ -204,6 +213,15 @@
         *floating = 666.0;
 }
 
+- (void)passByRefVariousTypeQualifiers:(in id *)object integer:(oneway int *)integer floating:(out float *)floating
+{
+    if (object != NULL)
+        *object = self;
+    if (integer != NULL)
+        *integer = 333;
+    if (floating != NULL)
+        *floating = 333.0;
+}
 @end
 
 // tc_subclass.rb 

@@ -54,6 +54,7 @@ void*   ocdata_malloc     (const char* octype_str);
 #define OCDATA_ALLOCA(s)  alloca(ocdata_alloc_size(s))
 
 const char *encoding_skip_modifiers(const char *type);
+const char *encoding_skip_notype(const char *type);
 BOOL is_id_ptr (const char *type);
 struct bsBoxed;
 BOOL is_boxed_ptr (const char *type, struct bsBoxed **boxed);
