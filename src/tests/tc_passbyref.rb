@@ -66,6 +66,10 @@ class TC_PassByRef < Test::Unit::TestCase
     assert_equal(0, bridged.passByRefObject(nil))
     assert_equal([1, bridged], bridged.passByRefObject_)
   
+    # type qualifiers, such as "in" "inout" "out" should be ignored
+    assert_equal(0, bridged.passByRefObjectWithTypeQualifiers(nil))
+    assert_equal([1, bridged], bridged.passByRefObjectWithTypeQualifiers_)
+  
     # Integer.
     assert_equal(0, bridged.passByRefInteger(nil))
     assert_equal([1, 666], bridged.passByRefInteger_)
@@ -79,6 +83,12 @@ class TC_PassByRef < Test::Unit::TestCase
     assert_equal([bridged, 666, 666.0], bridged.passByRefVarious_integer_floating_)
     assert_equal([666, 666.0], bridged.passByRefVarious_integer_floating_(nil))
     assert_equal(666.0, bridged.passByRefVarious_integer_floating_(nil, nil))
+
+    # Various. ignoreing type qualifiers 
+    assert_nil(bridged.passByRefVariousTypeQualifiers_integer_floating(nil, nil, nil))
+    assert_equal([bridged, 333, 333.0], bridged.passByRefVariousTypeQualifiers_integer_floating_)
+    assert_equal([333, 333.0], bridged.passByRefVariousTypeQualifiers_integer_floating_(nil))
+    assert_equal(333.0, bridged.passByRefVariousTypeQualifiers_integer_floating_(nil, nil))
   end
 
   def test_passbyref_subclass_methods
@@ -87,6 +97,10 @@ class TC_PassByRef < Test::Unit::TestCase
     # Object.
     assert_equal(0, bridged.passByRefObject(nil))
     assert_equal([1, bridged], bridged.passByRefObject_)
+  
+    # type qualifiers, such as "in" "inout" "out" should be ignored
+    assert_equal(0, bridged.passByRefObjectWithTypeQualifiers(nil))
+    assert_equal([1, bridged], bridged.passByRefObjectWithTypeQualifiers_)
   
     # Integer.
     assert_equal(0, bridged.passByRefInteger(nil))
@@ -101,6 +115,12 @@ class TC_PassByRef < Test::Unit::TestCase
     assert_equal([bridged, 6666, 6666.0], bridged.passByRefVarious_integer_floating_)
     assert_equal([6666, 6666.0], bridged.passByRefVarious_integer_floating_(nil))
     assert_equal(6666.0, bridged.passByRefVarious_integer_floating_(nil, nil))
+
+    # Various. ignoreing type qualifiers 
+    assert_nil(bridged.passByRefVariousTypeQualifiers_integer_floating(nil, nil, nil))
+    assert_equal([bridged, 333, 333.0], bridged.passByRefVariousTypeQualifiers_integer_floating_)
+    assert_equal([333, 333.0], bridged.passByRefVariousTypeQualifiers_integer_floating_(nil))
+    assert_equal(333.0, bridged.passByRefVariousTypeQualifiers_integer_floating_(nil, nil))
   end
 
   def test_passbyref_foundation

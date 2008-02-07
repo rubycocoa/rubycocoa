@@ -327,8 +327,7 @@ ocdata_to_rbobj (VALUE context_obj, const char *octype_str, const void *ocdata, 
   }
 #endif
 
-  if (*octype_str == _C_CONST)
-    octype_str++;
+  octype_str = encoding_skip_notype(octype_str);
 
   bs_boxed = find_bs_boxed_by_encoding(octype_str);
   if (bs_boxed != NULL) {
@@ -967,8 +966,7 @@ rbobj_to_ocdata (VALUE obj, const char *octype_str, void* ocdata, BOOL to_libffi
   }
 #endif
   
-  if (*octype_str == _C_CONST)
-    octype_str++;
+  octype_str = encoding_skip_notype(octype_str);
 
   // Make sure we convert booleans to NSNumber booleans.
   if (*octype_str != _C_ID && *octype_str != _C_BOOL) {
@@ -1226,6 +1224,27 @@ encoding_skip_modifiers(const char *type)
     switch (*type) {
       case _C_CONST:
       case _C_PTR:
+      case 'O': // bycopy
+      case 'n': // in
+      case 'o': // out
+      case 'N': // inout
+      case 'V': // oneway
+        type++;
+        break;
+
+      default:
+        return type;
+    }
+  }
+  return NULL;
+}
+
+const char *
+encoding_skip_notype(const char *type)
+{
+  while (YES) {
+    switch (*type) {
+      case _C_CONST:
       case 'O': // bycopy
       case 'n': // in
       case 'o': // out

@@ -1,3 +1,16 @@
+2008-02-08 kimura wataru <kimuraw@i.nifty.jp>
+
+	* framework/src/objc/libffi.m,
+	  framework/src/objc/ocdata_conv.h,
+	  framework/src/objc/ocdata_conv.m:
+	fix: cannot handle objc types with qualifiers such as (in|out|inout).
+	add a function "encoding_skip_notype", skipping type encoding 
+	characters.
+	
+	* tests/tc_passbyref.rb,
+	  tests/objc_test.m:
+	add tests of type encoding with (in|out|inout|bycopy|oneway).
+
 2008-02-01 Eloy Duran <e.duran@superalloy.nl>
 
 	* framework/src/ruby/osx/objc/active_record.rb:
