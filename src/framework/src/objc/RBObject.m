@@ -154,7 +154,7 @@ static int rb_obj_arity_of_method(VALUE rcv, SEL a_sel, BOOL *ok)
 - (BOOL)stuffForwardResult: (VALUE)result to: (NSInvocation*)an_inv returnedOcid: (id *) returnedOcid
 {
   NSMethodSignature* msig = [an_inv methodSignature];
-  const char* octype_str = encoding_skip_modifiers([msig methodReturnType]);
+  const char* octype_str = encoding_skip_to_first_type([msig methodReturnType]);
   BOOL f_success;
 
   RBOBJ_LOG("stuff forward result of type '%s'", octype_str);

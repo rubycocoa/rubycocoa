@@ -86,7 +86,7 @@ fake_ary_ffi_type (unsigned bytes, unsigned align)
 ffi_type *
 ffi_type_for_octype (const char *octypestr)
 {
-  octypestr = encoding_skip_notype(octypestr);
+  octypestr = encoding_skip_qualifiers(octypestr);
 
   switch (*octypestr) {
     case _C_ID:
@@ -283,7 +283,7 @@ rb_ffi_dispatch (
   if (expected_argc - length_args_count != given_argc) {
     for (i = 0; i < expected_argc; i++) {
       char *type = ARG_OCTYPESTR(i);
-      type = (char *)encoding_skip_notype(type);
+      type = (char *)encoding_skip_qualifiers(type);
       if (given_argc + pointers_args_count < expected_argc
           && (i >= given_argc || !NIL_P(argv[i]))
           && (*type == _C_PTR && find_bs_cf_type_by_encoding(type) == NULL) 
@@ -381,7 +381,7 @@ rb_ffi_dispatch (
         const char * ptype;
 
         ptype = octype_str;
-        ptype = encoding_skip_notype(ptype);
+        ptype = encoding_skip_qualifiers(ptype);
         if (*ptype != _C_PTR && *ptype != _C_ARY_B && *ptype != _C_CHARPTR)
           return rb_err_new(rb_eRuntimeError, "Internal error: argument #%d is not a defined as a pointer in the runtime or it is described as such in the metadata", i);
         ptype++;
@@ -552,10 +552,10 @@ rb_ffi_dispatch (
         char fake_octype_str[512];
 
         octype_str = ARG_OCTYPESTR(i);
-        octype_str = encoding_skip_notype(octype_str);
+        octype_str = encoding_skip_qualifiers(octype_str);
         if (*octype_str == _C_PTR)
           octype_str++;
-        octype_str = encoding_skip_notype(octype_str);
+        octype_str = encoding_skip_qualifiers(octype_str);
         FFI_LOG("got omitted_pointer[%d] : %s (%p)", i, octype_str, value);
         rbval = Qnil;
         if ((*octype_str == _C_PTR || *octype_str == _C_ARY_B) 

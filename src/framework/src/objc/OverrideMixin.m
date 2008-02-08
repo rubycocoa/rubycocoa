@@ -165,7 +165,7 @@ ovmix_ffi_closure(ffi_cif* cif, void* resp, void** args, void* userdata)
     }
   }
 
-  if (*encoding_skip_modifiers(retval_octype) != _C_VOID) {
+  if (*encoding_skip_to_first_type(retval_octype) != _C_VOID) {
     if (!rbobj_to_ocdata(retval, retval_octype, resp, YES))
       rb_raise(rb_eRuntimeError, "Can't convert return Ruby value to Objective-C value of octype '%s'", retval_octype);
   }
