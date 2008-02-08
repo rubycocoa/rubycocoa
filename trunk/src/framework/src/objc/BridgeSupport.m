@@ -944,7 +944,7 @@ func_dispatch_retain_if_necessary(VALUE arg, BOOL is_retval, void *ctx)
 
   // retain the new ObjC object, that will be released once the Ruby object is collected
   if (!NIL_P (arg) 
-      && (*encoding_skip_modifiers(func->retval->octypestr) == _C_ID 
+      && (*encoding_skip_to_first_type(func->retval->octypestr) == _C_ID 
           || find_bs_cf_type_by_encoding(func->retval->octypestr) != NULL)) {
     if (func->retval->should_be_retained && !OBJCID_DATA_PTR(arg)->retained) {
       DLOG("MDLOSX", "retaining objc value");
@@ -1593,7 +1593,7 @@ osx_load_bridge_support_file (VALUE mOSX, VALUE path)
             if (func != NULL) {
               if (retval->octypestr != NULL) {
                 retval->should_be_retained = 
-                  *encoding_skip_modifiers(retval->octypestr) == _C_ID
+                  *encoding_skip_to_first_type(retval->octypestr) == _C_ID
                   || find_bs_cf_type_by_encoding(retval->octypestr) != NULL
                     ? !get_boolean_attribute(reader, "already_retained", NO) 
                     : YES;

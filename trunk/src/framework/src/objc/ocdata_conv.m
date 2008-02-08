@@ -327,7 +327,7 @@ ocdata_to_rbobj (VALUE context_obj, const char *octype_str, const void *ocdata, 
   }
 #endif
 
-  octype_str = encoding_skip_notype(octype_str);
+  octype_str = encoding_skip_qualifiers(octype_str);
 
   bs_boxed = find_bs_boxed_by_encoding(octype_str);
   if (bs_boxed != NULL) {
@@ -804,7 +804,7 @@ funcptr_closure_handler (ffi_cif *cif, void *resp, void **args, void *userdata)
   retval = rb_funcall2(context->block, rb_intern("call"), RARRAY(rb_args)->len, RARRAY(rb_args)->ptr);
   DATACONV_LOG("called Ruby block");
 
-  if (*encoding_skip_modifiers(context->rettype) != _C_VOID) {
+  if (*encoding_skip_to_first_type(context->rettype) != _C_VOID) {
     if (!rbobj_to_ocdata(retval, context->rettype, resp, YES))
       rb_raise(rb_eRuntimeError, "Can't convert return Ruby value to Objective-C value of octype '%s'", context->rettype);
   }
@@ -966,7 +966,7 @@ rbobj_to_ocdata (VALUE obj, const char *octype_str, void* ocdata, BOOL to_libffi
   }
 #endif
   
-  octype_str = encoding_skip_notype(octype_str);
+  octype_str = encoding_skip_qualifiers(octype_str);
 
   // Make sure we convert booleans to NSNumber booleans.
   if (*octype_str != _C_ID && *octype_str != _C_BOOL) {
@@ -1192,7 +1192,7 @@ is_id_ptr (const char *type)
     return NO;
 
   type++;
-  type = encoding_skip_modifiers(type);
+  type = encoding_skip_to_first_type(type);
 
   return *type == _C_ID; 
 }
@@ -1218,7 +1218,7 @@ is_boxed_ptr (const char *type, struct bsBoxed **boxed)
 }
 
 const char *
-encoding_skip_modifiers(const char *type)
+encoding_skip_to_first_type(const char *type)
 {
   while (YES) {
     switch (*type) {
@@ -1240,7 +1240,7 @@ encoding_skip_modifiers(const char *type)
 }
 
 const char *
-encoding_skip_notype(const char *type)
+encoding_skip_qualifiers(const char *type)
 {
   while (YES) {
     switch (*type) {
@@ -1268,7 +1268,7 @@ __get_first_encoding(const char *type, char *buf, size_t buf_len)
 
   orig_type = type;
 
-  type = encoding_skip_modifiers(type);
+  type = encoding_skip_to_first_type(type);
 
   switch (*type) {
     case '\0':
