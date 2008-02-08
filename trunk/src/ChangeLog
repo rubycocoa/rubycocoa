@@ -1,5 +1,13 @@
 2008-02-08 kimura wataru <kimuraw@i.nifty.jp>
 
+	* install.rb:
+	add "--test-args" option of instal.rb. this option enables to pass
+	arguments of AutoRunner on test task.
+	ex) run test only "test_ocid" method
+	  % ruby install.rb test --test-args="--name=test_ocid"
+
+2008-02-08 kimura wataru <kimuraw@i.nifty.jp>
+
 	* framework/src/objc/RBObject.m,
 	  framework/src/objc/libffi.m,
 	  framework/src/objc/ocdata_conv.h,

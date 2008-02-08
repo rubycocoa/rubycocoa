@@ -981,9 +981,12 @@ class ToplevelInstaller < Installer
   
   def parsearg_test
     @options['use-rosetta'] = false
+    @options['test-args'] = nil
     while i = ARGV.shift do
       if i == '--use-rosetta'
         @options['use-rosetta'] = true
+      elsif /\A--test-args=(.+)/ =~ i
+        @options['test-args'] = $1
       else
         raise InstallError, "test: unknown option #{i}"
       end
@@ -1032,6 +1035,8 @@ class ToplevelInstaller < Installer
     out.puts 'Options for test:'
     out.printf "  %-20s %s [%s]\n",
         '--use-rosetta', 'use Rosetta for testing', 'off'
+    out.printf "  %-20s %s \n",
+        '--test-args=args', 'pass args to test/unit AutoRunner'
 
     out.puts
   end
@@ -1090,6 +1095,7 @@ class ToplevelInstaller < Installer
   def test_testcase(ruby_cmd)
     cmd = %Q!"#{ruby_cmd}" -I../ext/rubycocoa -I../lib testall.rb!
     cmd = "/usr/libexec/oah/translate " + cmd if @options['use-rosetta']
+    cmd += " " + @options['test-args'] if @options['test-args']
     command cmd
   end
 
