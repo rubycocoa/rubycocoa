@@ -259,8 +259,7 @@ ocm_send(int argc, VALUE* argv, VALUE rcv, VALUE* result)
   methodReturnType = NULL;
   argumentsTypes = NULL;
 
-  oc_rcv = rbobj_get_ocid(rcv);
-  if (oc_rcv == nil) {
+  if (!rbobj_to_nsobj(rcv, &oc_rcv) || oc_rcv == nil) {
     exception = rb_err_new(ocmsgsend_err_class(), "Can't get Objective-C object in %s", RSTRING(rb_inspect(rcv))->ptr);
     goto bails;
   }
@@ -444,8 +443,9 @@ bails:
 static VALUE
 wrapper_ocm_responds_p(VALUE rcv, VALUE sel)
 {
-  id oc_rcv = rbobj_get_ocid(rcv);
+  id oc_rcv;
   SEL oc_sel = rbobj_to_nssel(sel);
+  rbobj_to_nsobj(rcv, &oc_rcv);
   return [oc_rcv respondsToSelector: oc_sel] ? Qtrue : Qfalse;
 }
 
@@ -483,7 +483,7 @@ wrapper_to_s (VALUE rcv)
   id oc_rcv;
   id pool;
 
-  oc_rcv = rbobj_get_ocid(rcv);
+  rbobj_to_nsobj(rcv, &oc_rcv);
   pool = [[NSAutoreleasePool alloc] init];
   oc_rcv = [oc_rcv description];
   ret = ocstr_to_rbstr(oc_rcv);
@@ -528,7 +528,7 @@ wrapper_objc_methods (VALUE rcv)
   id oc_rcv;
 
   ary = rb_ary_new();
-  oc_rcv = rbobj_get_ocid (rcv);
+  rbobj_to_nsobj(rcv, &oc_rcv);
   _ary_push_objc_methods (ary, oc_rcv->isa, 1);
   return ary;
 }
@@ -542,7 +542,7 @@ wrapper_objc_instance_methods (int argc, VALUE* argv, VALUE rcv)
 
   recur = (argc == 0) ? 1 : RTEST(argv[0]);
   ary = rb_ary_new();
-  oc_rcv = rbobj_get_ocid (rcv);
+  rbobj_to_nsobj(rcv, &oc_rcv);
   _ary_push_objc_methods (ary, oc_rcv, recur);
   return ary;
 }
@@ -556,7 +556,7 @@ wrapper_objc_class_methods (int argc, VALUE* argv, VALUE rcv)
 
   recur = (argc == 0) ? 1 : RTEST(argv[0]);
   ary = rb_ary_new();
-  oc_rcv = rbobj_get_ocid (rcv);
+  rbobj_to_nsobj(rcv, &oc_rcv);
   _ary_push_objc_methods (ary, oc_rcv->isa, recur);
   return ary;
 }
@@ -591,7 +591,7 @@ wrapper_objc_method_type (VALUE rcv, VALUE name)
   id oc_rcv;
   const char* str;
 
-  oc_rcv = rbobj_get_ocid (rcv);
+  rbobj_to_nsobj(rcv, &oc_rcv);
   name = _name_to_selstr (name);
   str = _objc_method_type (oc_rcv->isa, StringValuePtr(name));
   if (str == NULL) return Qnil;
@@ -604,7 +604,7 @@ wrapper_objc_instance_method_type (VALUE rcv, VALUE name)
   id oc_rcv;
   const char* str;
 
-  oc_rcv = rbobj_get_ocid (rcv);
+  rbobj_to_nsobj(rcv, &oc_rcv);
   name = _name_to_selstr (name);
   str = _objc_method_type (oc_rcv, StringValuePtr(name));
   if (str == NULL) return Qnil;
@@ -617,7 +617,7 @@ wrapper_objc_class_method_type (VALUE rcv, VALUE name)
   id oc_rcv;
   const char* str;
 
-  oc_rcv = rbobj_get_ocid (rcv);
+  rbobj_to_nsobj(rcv, &oc_rcv);
   name = _name_to_selstr (name);
   str = _objc_method_type (oc_rcv->isa, StringValuePtr(name));
   if (str == NULL) return Qnil;
@@ -648,16 +648,18 @@ _objc_alias_method (Class klass, VALUE new, VALUE old)
 static VALUE
 wrapper_objc_alias_method (VALUE rcv, VALUE new, VALUE old)
 {
-  Class klass = rbobj_get_ocid (rcv);
-  _objc_alias_method(klass, new, old);
+  id oc_rcv;
+  rbobj_to_nsobj(rcv, &oc_rcv);
+  _objc_alias_method((Class)oc_rcv, new, old);
   return rcv;
 }
 
 static VALUE
 wrapper_objc_alias_class_method (VALUE rcv, VALUE new, VALUE old)
 {
-  Class klass = (rbobj_get_ocid (rcv))->isa;
-  _objc_alias_method(klass, new, old);
+  id oc_rcv;
+  rbobj_to_nsobj(rcv, &oc_rcv);
+  _objc_alias_method((Class)(oc_rcv->isa), new, old);
   return rcv;
 }
 
