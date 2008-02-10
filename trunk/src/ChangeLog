@@ -1,3 +1,10 @@
+2007-02-09  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* framework/src/objc/RBObject.m,
+	  framework/src/objc/OverrideMixin.m:
+	Resume caching method arguments of objc callbacks, which was disabled
+	for an unknown reason. (Thanks Kimura-san.)
+
 2008-02-08 kimura wataru <kimuraw@i.nifty.jp>
 
 	* install.rb:
@@ -20,6 +27,7 @@
 
 
 2007-02-07  Laurent Sansonetti <lsansonetti@apple.com>
+
 	* sample/RSSPhotoViewer/rb_main.rb,
 	  sample/QTKitSimpleDocument/rb_main.rb:
 	Removed ENV['BRIDGE_SUPPORT_PATH']= debug calls.
