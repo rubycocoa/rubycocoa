@@ -1,3 +1,9 @@
+2008-2-13 Eloy Duran <e.duran@superalloy.nl>
+
+	* framework/src/ruby/osx/objc/active_record.rb:
+	Fixed compatibility bug with AR 1.15.x.
+	Patch thanks to Laurent Sansonetti.
+
 2008-02-10  kimura wataru <kimuraw@i.nifty.jp>
 
 	* framework/src/objc/mdl_objwrapper.m:
