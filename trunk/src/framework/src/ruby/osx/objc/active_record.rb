@@ -7,6 +7,10 @@
 
 require 'osx/cocoa'
 begin
+  # for testing old AR
+  # require '/System/Library/Frameworks/Ruby.framework/Versions/1.8/usr/lib/ruby/gems/1.8/gems/activesupport-1.4.2/lib/active_support.rb'
+  # require '/System/Library/Frameworks/Ruby.framework/Versions/1.8/usr/lib/ruby/gems/1.8/gems/activerecord-1.15.3/lib/active_record.rb'
+  
   require 'active_record'
 rescue LoadError
   msg = "ActiveRecord was not found, if you have it installed as a gem you have to require 'rubygems' before you require 'osx/active_record'"
@@ -369,6 +373,7 @@ module OSX
       end
       # define the normal instance methods of the record
       (@record.methods - self.methods).each do |m|
+        next if m == 'initialize'
         self.class.class_eval do
           define_method(m) do |*args|
             if is_association?(m)
