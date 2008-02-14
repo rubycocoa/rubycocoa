@@ -1,11 +1,14 @@
 === RubyCocoa 0.13.2 ===
 
-2007-02-09  Laurent Sansonetti <lsansonetti@apple.com>
+2007-02-14  Laurent Sansonetti <lsansonetti@apple.com>
+
+	* **/*.{rb,m,h}:
+	Updated copyright headers for 2008.
 
 	* VERSION:
 	Updated for 0.13.2.
 
-2008-2-13 Eloy Duran <e.duran@superalloy.nl>
+2008-02-13 Eloy Duran <e.duran@superalloy.nl>
 
 	* framework/src/ruby/osx/objc/active_record.rb:
 	Fixed compatibility bug with AR 1.15.x.
