@@ -5,7 +5,7 @@
 #@config['rubycocoa-framework-version'] = 
 @config['xcode-extras'] = 
   ['/Library/Application Support/Apple/Developer Tools',
-   '/Library/Application Support/Developer/2.5/Xcode/']
+   '/Library/Application Support/Developer/2.5/Xcode/'].join(',')
 @config['bin-dir'] = '$install-prefix/bin'
 @config['site-ruby'] = '$install-prefix/lib/ruby/site_ruby/1.8'
 @config['prefix'] = '/usr'
@@ -17,7 +17,9 @@
 @config['examples'] = '/Developer/Examples'
 @config['ruby-path'] = '/usr/bin/ruby'
 @config['make-prog'] = 'make'
-@config['ruby-header-dir'] = '/usr/lib/ruby/1.8/universal-darwin8.0'
+### FIXME ###
+### SDK 10.4u does not contains ruby.h
+#@config['ruby-header-dir'] = '/usr/lib/ruby/1.8/universal-darwin8.0'
 @config['install-prefix'] = '$prefix'
 @config['rb-dir'] = '$site-ruby'
 @config['sdkroot'] = '/Developer/SDKs/MacOSX10.4u.sdk'
