@@ -857,6 +857,8 @@ class ToplevelInstaller < Installer
     case task = parsearg_global()
     when 'config'
       @config = ConfigTable.new
+    when 'package'
+      @config = ConfigTable.new
     else
       @config = ConfigTable.load
     end
@@ -993,6 +995,9 @@ class ToplevelInstaller < Installer
     end
   end
 
+  def parsearg_package
+    parsearg_config
+  end
 
   def print_usage( out )
     out.puts
@@ -1142,7 +1147,17 @@ class ToplevelInstaller < Installer
   #
 
   def exec_package
+    package_load_config
+    @config.save
+    exec_config
     package_dir_package('package')
+  end
+
+  def package_load_config
+    config_path = File.join('package', 'config', @config['macosx-deployment-target'])
+    unless try_run_hook File.expand_path(config_path)
+      raise Installer, "cannot load config \"#{config_path}\""
+    end
   end
 
   def package_dir_package( rel )
