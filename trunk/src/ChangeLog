@@ -1,3 +1,8 @@
+2008-03-12  kimura wataru <kimuraw@i.nifty.jp>
+
+	* install.rb, package/config/10.4, package/config/10.5:
+	package task ignores config.save and overwrite with package/config/*.
+
 === RubyCocoa 0.13.2 ===
 
 2007-02-14  Laurent Sansonetti <lsansonetti@apple.com>
