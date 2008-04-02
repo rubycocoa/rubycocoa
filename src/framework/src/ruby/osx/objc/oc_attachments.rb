@@ -833,7 +833,7 @@ module OSX
       _read_impl(:slice!, args)
     end
     
-    def split(sep=$/, limit=0)
+    def split(sep=$;, limit=0)
       sep = sep.to_ns if sep.is_a?(String)
       result = []
       if sep && sep.empty?

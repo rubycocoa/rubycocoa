@@ -840,6 +840,8 @@ class TC_ObjcString < Test::Unit::TestCase
       n = alloc_nsstring(s)
       assert_equal(s.split(sep, limit), n.split(sep, limit))
     end
+    s = 'abc xyz'
+    assert_equal(s.split, s.to_ns.split)
     assert_kind_of(NSArray, 'a,b,c'.to_ns.split(','))
   end
   
