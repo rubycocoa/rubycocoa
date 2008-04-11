@@ -1,3 +1,8 @@
+2008-04-11 Eloy Duran <e.duran@superalloy.nl>
+
+	* framework/src/ruby/osx/objc/oc_import.rb:
+	Added documentation for OSX.require_framework. Patch by Scott Thompson.
+
 2008-04-02  Satoshi Nakagawa <artension@gmail.com>
 
 	* framework/src/ruby/osx/objc/oc_attachments.rb,
