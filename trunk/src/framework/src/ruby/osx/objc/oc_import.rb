@@ -58,7 +58,30 @@ module OSX
     end
   end
   module_function :_bundle_path_for_framework
-
+  
+  # The OSX::require_framework method imports Mac OS X frameworks and uses the
+  # BridgeSupport metadata to add Ruby entry points for the framework's Classes,
+  # methods, and Constants into the OSX module.
+  #
+  # The framework parameter is a reference to the framework that should be
+  # imported.  This may be a full path name to a particular framework, a shortcut,
+  # or a framework name.  The shortcuts are the keys listed in the
+  # <tt>QUICK_FRAMEWORKS</tt> hash.
+  #
+  # If a framework name (with no path) is given, then the method searches a number
+  # of directories.  Those directories (in search order) are:
+  #   1.  /System/Library/Frameworks
+  #   2.  /Library/Frameworks
+  #   3.  Any directories in the RUBYCOCOA_FRAMEWORK_PATHS array, if defined
+  #   4.  ENV['HOME']/Library/Frameworks, if the HOME environment variable is defined
+  #
+  # When using the search paths, the <tt>.framework</tt> file type extension should
+  # be omitted from the framework name passed to the method.
+  #
+  # If the method loads the framework successfully, it returns <tt>true</tt>.
+  # If the framework was already loaded the method returns <tt>false</tt>.
+  # If the method is unable to locate, or unable to load the framework then it
+  # raises an <tt>ArgumentError</tt>.
   def require_framework(framework)
     return false if framework_loaded?(framework)
     bundle, path = _bundle_path_for_framework(framework)
