@@ -1,3 +1,8 @@
+2008-05-15 Eloy Duran <e.duran@superalloy.nl>
+
+	* sample/Scripts/HelloWorld.rb:
+	Updated to work with MacRuby RubyCocoa layer. Also cleaned up the whitesapec a bit, sumimasen Hisa-san ;)
+
 2008-04-22  kimura wataru <kimuraw@i.nifty.jp>
 
 	* framework/src/ruby/osx/objc/oc_wrapper.rb, tests/tc_constants.rb:
