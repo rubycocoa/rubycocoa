@@ -1,3 +1,12 @@
+2008-05-28  kimura wataru <kimuraw@i.nifty.jp>
+
+	* framework/src/ruby/osx/objc/oc_import.rb,
+	  tests/tc_subclass.rb:
+	remove unwanted willChangeValueForKey and didChangeValueForKey.
+	this bug makes an object to send wrong notification via KVO.
+	Though the reciever does not have a setter for the key, Cocoa invokes 
+	these methods in setValue:forKey:. 
+
 2008-05-15 Eloy Duran <e.duran@superalloy.nl>
 
 	* sample/Scripts/HelloWorld.rb,
