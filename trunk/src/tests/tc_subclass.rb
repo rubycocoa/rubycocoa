@@ -38,13 +38,18 @@ end
 class SubClassC < OSX::NSObject
   attr_accessor :value1, :value2
   attr_reader :observed
+  kvc_writer :kvc1, :kvc2
+  kvc_reader :kvc1, :kvc2 # observation process invokes valueForKey:
 
   def initialize
     @observed = Hash.new(0)
   end
 
   def self.automaticallyNotifiesObserversForKey(key)
-    if key.to_s == "value1"
+    case key.to_s 
+    when 'value1'
+      true
+    when 'kvc1'
       true
     else
       false
@@ -304,11 +309,11 @@ class TC_SubClass < Test::Unit::TestCase
 
   def test_rbobject_kvo_autonotify
     obj = SubClassC.alloc.init
-    [:value1, :value2].each do |key|
+    [:value1, :value2, :kvc1, :kvc2].each do |key|
       obj.addObserver_forKeyPath_options_context(obj, key,
         OSX::NSKeyValueObservingOptionNew | OSX::NSKeyValueObservingOptionOld, nil)
     end
-    #
+    # ruby accessor
     obj.setValue_forKey(1, :value1)
     obj.rbSetValue_forKey(2, :value2)
     assert_equal(1, obj.observed['value1'], "observed count of value1")
@@ -317,8 +322,17 @@ class TC_SubClass < Test::Unit::TestCase
     obj.setValue_forKey(4, :value2)
     assert_equal(2, obj.observed['value1'], "observed count of value1")
     assert_equal(0, obj.observed['value2'], "observed count of value1")
+    # accessor defined by kvc_writer
+    obj.setValue_forKey(1, :kvc1)
+    obj.setValue_forKey(2, :kvc2)
+    assert_equal(1, obj.observed['kvc1'], "observed count of kvc1")
+    assert_equal(0, obj.observed['kvc2'], "observed count of kvc2")
+    obj.kvc1 = 3
+    obj.kvc2 = 4 
+    assert_equal(2, obj.observed['kvc1'], "observed count of kvc1")
+    assert_equal(0, obj.observed['kvc2'], "observed count of kvc2")
     #
-    [:value1, :value2].each do |key|
+    [:value1, :value2, :kvc1, :kvc2].each do |key|
       obj.removeObserver_forKeyPath(obj, key)
     end
   end

@@ -527,9 +527,13 @@ module OSX
         alias_method kvc_internal_setter(key), setter
         self.class_eval <<-EOE_KVC_WRITER,__FILE__,__LINE__+1
           def #{kvc_setter_wrapper(key)}(value)
-            willChangeValueForKey('#{key.to_s}')
-            send('#{kvc_internal_setter(key)}', value)
-            didChangeValueForKey('#{key.to_s}')
+	    if self.class.automaticallyNotifiesObserversForKey('#{key.to_s}')
+	      willChangeValueForKey('#{key.to_s}')
+	      send('#{kvc_internal_setter(key)}', value)
+	      didChangeValueForKey('#{key.to_s}')
+	    else
+	      send('#{kvc_internal_setter(key)}', value)
+	    end
           end
         EOE_KVC_WRITER
         alias_method setter, kvc_setter_wrapper(key)
