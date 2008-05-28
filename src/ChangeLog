@@ -7,6 +7,11 @@
 	Though the reciever does not have a setter for the key, Cocoa invokes 
 	these methods in setValue:forKey:. 
 
+	* framework/src/ruby/osx/objc/oc_import.rb,
+	  tests/tc_subclass.rb:
+	bug fix: ignoring automaticallyNotifiesObserversForKey: at 
+	setValue:forKey: with accessors defined by kvc_writer.
+
 2008-05-15 Eloy Duran <e.duran@superalloy.nl>
 
 	* sample/Scripts/HelloWorld.rb,
