@@ -481,9 +481,7 @@ module OSX
     # invoked from setValue:forUndefinedKey: of a Cocoa object
     def rbSetValue_forKey(value, key)
       if m = kvc_setter_method(key.to_s)
-        willChangeValueForKey(key)
         send(m, value)
-        didChangeValueForKey(key)
       else
         kvc_accessor_notfound(key)
       end
