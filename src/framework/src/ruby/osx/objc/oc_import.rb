@@ -612,25 +612,37 @@ module OSX
 
           def insertObject_in#{keyname}AtIndex(obj, index)
             indexes = OSX::NSIndexSet.indexSetWithIndex(index)
-            willChange_valuesAtIndexes_forKey(OSX::NSKeyValueChangeInsertion, indexes, #{key.inspect})
-            @#{key.to_s}.insert(index, obj)
-            didChange_valuesAtIndexes_forKey(OSX::NSKeyValueChangeInsertion, indexes, #{key.inspect})
+	    if self.class.automaticallyNotifiesObserversForKey('#{key.to_s}')
+	      willChange_valuesAtIndexes_forKey(OSX::NSKeyValueChangeInsertion, indexes, #{key.inspect})
+	      @#{key.to_s}.insert(index, obj)
+	      didChange_valuesAtIndexes_forKey(OSX::NSKeyValueChangeInsertion, indexes, #{key.inspect})
+	    else
+	      @#{key.to_s}.insert(index, obj)
+	    end
             nil
           end
 
           def removeObjectFrom#{keyname}AtIndex(index)
             indexes = OSX::NSIndexSet.indexSetWithIndex(index)
-            willChange_valuesAtIndexes_forKey(OSX::NSKeyValueChangeRemoval, indexes, #{key.inspect})
-            @#{key.to_s}.delete_at(index)
-            didChange_valuesAtIndexes_forKey(OSX::NSKeyValueChangeRemoval, indexes, #{key.inspect})
+	    if self.class.automaticallyNotifiesObserversForKey('#{key.to_s}')
+	      willChange_valuesAtIndexes_forKey(OSX::NSKeyValueChangeRemoval, indexes, #{key.inspect})
+	      @#{key.to_s}.delete_at(index)
+	      didChange_valuesAtIndexes_forKey(OSX::NSKeyValueChangeRemoval, indexes, #{key.inspect})
+	    else
+	      @#{key.to_s}.delete_at(index)
+	    end
             nil
           end
 
           def replaceObjectIn#{keyname}AtIndex_withObject(index, obj)
             indexes = OSX::NSIndexSet.indexSetWithIndex(index)
-            willChange_valuesAtIndexes_forKey(OSX::NSKeyValueChangeReplacement, indexes, #{key.inspect})
-            @#{key.to_s}[index] = obj
-            didChange_valuesAtIndexes_forKey(OSX::NSKeyValueChangeReplacement, indexes, #{key.inspect})
+	    if self.class.automaticallyNotifiesObserversForKey('#{key.to_s}')
+	      willChange_valuesAtIndexes_forKey(OSX::NSKeyValueChangeReplacement, indexes, #{key.inspect})
+	      @#{key.to_s}[index] = obj
+	      didChange_valuesAtIndexes_forKey(OSX::NSKeyValueChangeReplacement, indexes, #{key.inspect})
+	    else
+	      @#{key.to_s}[index] = obj
+	    end
             nil
           end
         EOT
