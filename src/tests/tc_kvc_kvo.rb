@@ -69,7 +69,7 @@ class TC_KeyValueObserving < Test::Unit::TestCase
     end
     # ruby accessor
     obj.setValue_forKey(1, :value1)
-    obj.rbSetValue_forKey(2, :value2)
+    obj.setValue_forKey(2, :value2)
     assert_equal(1, obj.observed['value1'], "observed count of value1")
     assert_equal(0, obj.observed['value2'], "observed count of value1")
     # accessor defined by kvc_writer
