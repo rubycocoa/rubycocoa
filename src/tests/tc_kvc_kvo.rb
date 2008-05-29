@@ -100,7 +100,7 @@ class TC_KeyValueObserving < Test::Unit::TestCase
     assert_equal('key1', obs.path)
     assert_equal(OSX::NSKeyValueChangeInsertion, obs.change)
     ## replace
-    obj.replaceObjectInKey1AtIndex_withObject(0, 1)
+    obj.replaceObjectInKey1AtIndex_withObject(0, 2)
     obs = obj.observed.pop
     assert_equal('key1', obs.path)
     assert_equal(OSX::NSKeyValueChangeReplacement, obs.change)
@@ -114,7 +114,7 @@ class TC_KeyValueObserving < Test::Unit::TestCase
     obj.insertObject_inKey2AtIndex(1, 0)
     assert_equal(0, obj.observed.size)
     ## replace
-    obj.replaceObjectInKey2AtIndex_withObject(0, 1)
+    obj.replaceObjectInKey2AtIndex_withObject(0, 2)
     assert_equal(0, obj.observed.size)
     ## remove
     obj.removeObjectFromKey2AtIndex(0)
