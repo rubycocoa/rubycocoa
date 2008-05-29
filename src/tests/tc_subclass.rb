@@ -38,8 +38,7 @@ end
 class SubClassC < OSX::NSObject
   attr_accessor :value1, :value2
   attr_reader :observed
-  kvc_writer :kvc1, :kvc2
-  kvc_reader :kvc1, :kvc2 # observation process invokes valueForKey:
+  kvc_accessor :kvc1, :kvc2
 
   def initialize
     @observed = Hash.new(0)
@@ -317,10 +316,6 @@ class TC_SubClass < Test::Unit::TestCase
     obj.setValue_forKey(1, :value1)
     obj.rbSetValue_forKey(2, :value2)
     assert_equal(1, obj.observed['value1'], "observed count of value1")
-    assert_equal(0, obj.observed['value2'], "observed count of value1")
-    obj.setValue_forKey(3, :value1)
-    obj.setValue_forKey(4, :value2)
-    assert_equal(2, obj.observed['value1'], "observed count of value1")
     assert_equal(0, obj.observed['value2'], "observed count of value1")
     # accessor defined by kvc_writer
     obj.setValue_forKey(1, :kvc1)

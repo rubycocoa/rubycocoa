@@ -1,3 +1,8 @@
+2008-05-29  kimura wataru <kimuraw@i.nifty.jp>
+
+	* tests/tc_subclass.rb:
+	simplify test_rbobject_kvo_autonotify.
+
 2008-05-28  kimura wataru <kimuraw@i.nifty.jp>
 
 	* framework/src/ruby/osx/objc/oc_import.rb,
