@@ -344,8 +344,7 @@ VALUE rbobj_call_ruby(id rbobj, SEL selector, VALUE args)
 - (void) releaseRubyObject
 {
   if (m_rbobj_retain_release_track && m_rbobj_retained) {
-    VALUE str = rb_inspect(m_rbobj);
-    RBOBJ_LOG("releasing Ruby object `%s'", StringValuePtr(str));
+    RBOBJ_LOG("releasing Ruby object `#<%s:%p>'", rb_obj_classname(m_rbobj), m_rbobj);
     rb_gc_unregister_address(&m_rbobj);
     m_rbobj_retained = NO;
   }
