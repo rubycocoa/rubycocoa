@@ -1719,6 +1719,10 @@ module OSX
       end
     end
 
+    def count
+      oc_count
+    end
+
     def size
       count
     end
@@ -2110,6 +2114,9 @@ module OSX
       end
     end
 
+    def count
+      oc_count
+    end
     def size
       count
     end

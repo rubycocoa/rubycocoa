@@ -1,5 +1,9 @@
 2008-06-26  kimura wataru <kimuraw@i.nifty.jp>
 
+	* framework/src/ruby/osx/objc/oc_attachments.rb:
+	fix infinite loop of NSArray#count and NSDictionary#count for
+	add Enumerable#count for ruby 1.8.7.
+
 	* framework/src/objc/RBObject.m:
 	fix "[BUG] object allocation during garbage collection phase" at
 	-[RBObject releaseRubyObject] on ruby 1.8.7.
