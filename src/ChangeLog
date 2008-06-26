@@ -1,5 +1,11 @@
 2008-06-26  kimura wataru <kimuraw@i.nifty.jp>
 
+	* tests/tc_nsarray.rb:
+	the behavior of Array#slice! with out-of-boundary was changed in
+	ruby 1.8.7. see "Compatibility issues" of
+	http://svn.ruby-lang.org/repos/ruby/tags/v1_8_7/NEWS
+	[ToDo]NSArray#slice! in osx/objc/oc_attachments.rb should be modified.
+
 	* framework/src/ruby/osx/objc/oc_attachments.rb:
 	fix infinite loop of NSArray#count and NSDictionary#count for
 	add Enumerable#count for ruby 1.8.7.
