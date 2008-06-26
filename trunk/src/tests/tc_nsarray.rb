@@ -719,15 +719,25 @@ class TC_NSArray < Test::Unit::TestCase
     [(-10...3), (-20...-10)].each do |i|
       a = alloc_nsarray(1,2,3,4,5)
       b = map_to_nsnumber([1,2,3,4,5])
-      assert_raise(RangeError) { a.slice!(i) }
-      assert_raise(RangeError) { b.slice!(i) }
+      if RUBY_VERSION >= "1.8.7"
+	assert_nil(a.slice!(i)) # TODO NSArray#slice!
+	assert_nil(b.slice!(i))
+      else
+	assert_raise(RangeError) { a.slice!(i) }
+	assert_raise(RangeError) { b.slice!(i) }
+      end
     end
     
     [[0,-3], [-3,-3]].each do |i|
       a = alloc_nsarray(1,2,3,4,5)
       b = map_to_nsnumber([1,2,3,4,5])
-      assert_raise(IndexError) { a.slice!(*i) }
-      assert_raise(IndexError) { b.slice!(*i) }
+      if RUBY_VERSION >= "1.8.7"
+	assert_nil(a.slice!(*i)) # TODO NSArray#slice!
+	assert_nil(b.slice!(*i))
+      else
+	assert_raise(IndexError) { a.slice!(*i) }
+	assert_raise(IndexError) { b.slice!(*i) }
+      end
     end
   end
   
