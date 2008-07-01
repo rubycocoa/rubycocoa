@@ -1,3 +1,10 @@
+2008-07-01  kimura wataru <kimuraw@i.nifty.jp>
+
+	* metaconfig:
+	change install destination of Xcode temlate files
+	from /Library/Application Support/Developer/3.0/Xcode/
+	to   /Library/Application Support/Developer/Shared/Xcode/.
+
 2008-06-26  kimura wataru <kimuraw@i.nifty.jp>
 
 	* tests/tc_nsarray.rb:
