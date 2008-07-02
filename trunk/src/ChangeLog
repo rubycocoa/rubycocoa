@@ -1,3 +1,9 @@
+2008-07-02  kimura wataru <kimuraw@i.nifty.jp>
+
+	* framework/src/ruby/osx/objc/oc_import.rb:
+	fix infinite loop of kvc-setter defined by invoking kvc_writer()
+	multiple times for the same key.
+
 2008-07-01  kimura wataru <kimuraw@i.nifty.jp>
 
 	* metaconfig:

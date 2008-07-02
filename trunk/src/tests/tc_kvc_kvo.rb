@@ -59,6 +59,11 @@ class KVToMany < OSX::NSObject
   end
 end
 
+class KVCMultiInvoked < OSX::NSObject
+  kvc_accessor :key1, :key2 # 1st
+  kvc_accessor :key1, :key2 # 2nd
+end
+
 class TC_KeyValueObserving < Test::Unit::TestCase
 
   def test_rbobject_kvo_autonotify
@@ -78,7 +83,7 @@ class TC_KeyValueObserving < Test::Unit::TestCase
     assert_equal(1, obj.observed['kvc1'], "observed count of kvc1")
     assert_equal(0, obj.observed['kvc2'], "observed count of kvc2")
     obj.kvc1 = 3
-    obj.kvc2 = 4 
+    obj.kvc2 = 4
     assert_equal(2, obj.observed['kvc1'], "observed count of kvc1")
     assert_equal(0, obj.observed['kvc2'], "observed count of kvc2")
     #
@@ -123,6 +128,12 @@ class TC_KeyValueObserving < Test::Unit::TestCase
     [:key1, :key2].each do |key|
       obj.removeObserver_forKeyPath(obj, key)
     end
+  end
+
+  def test_kvc_multi_invoked
+    obj = KVCMultiInvoked.alloc.init
+    assert_nothing_thrown {obj.key1 = 300}
+    assert_equal(300, obj.key1)
   end
 
 end
