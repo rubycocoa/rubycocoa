@@ -658,8 +658,6 @@ module OSX
       wrapper = kvc_setter_wrapper(key)
       return unless method_defined?(setter) && method_defined?(wrapper)
       return if instance_method(wrapper) == instance_method(sym)
-#      undef_method setter if method_defined?(setter)
-#      undef_method wrapper if method_defined?(wrapper)
       alias_method setter, sym
       alias_method sym, wrapper
     end
