@@ -1,5 +1,10 @@
 2008-07-20  kimura wataru <kimuraw@i.nifty.jp>
 
+	* framework/src/ruby/osx/objc/oc_attachments.rb,
+	  tests/tc_nsarray.rb:
+	adjust behavior of OSX::NSArray#slice! to Array#slice on both of
+	Ruby 1.8.7 and 1.8.6 (or earlier).
+
 	* framework/src/ruby/osx/objc/oc_attachments.rb:
 	refactoring OSX::NSString#_read_impl()
 	refactoring OSX::NSArray#_read_impl()

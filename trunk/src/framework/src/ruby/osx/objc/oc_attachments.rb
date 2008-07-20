@@ -1868,9 +1868,6 @@ module OSX
     def _read_impl_range(slice, range, count)
       n, len = OSX::RangeUtil.normalize(range, count)
       if n < 0 || count < n
-	if slice
-	  raise RangeError, "#{first} out of range"
-	end
 	return nil
       end
       
@@ -1887,9 +1884,6 @@ module OSX
 
     def _read_impl_num_len(slice, method, num, len, count)
       if len < 0
-	if slice
-	  raise IndexError, "negative length (#{len})"
-	end
 	nil
       else
 	num += count if num < 0
@@ -1899,6 +1893,49 @@ module OSX
 	  _read_impl(method, [num...num+len])
 	end
       end
+    end
+
+    # the behavior of Array#slice is different from 1.8.6 or earlier
+    # against an out of range argument
+    if RUBY_VERSION <= '1.8.6'
+      def _read_impl_range(slice, range, count)
+	n, len = OSX::RangeUtil.normalize(range, count)
+	if n < 0 || count < n
+	  if slice
+	    # raises RangeError, 1.8.7 or later returns nil
+	    raise RangeError, "#{first} out of range" 
+	  end
+	  return nil
+	end
+	
+	if 0 <= n && n < count
+	  nsrange = OSX::NSRange.new(n, len)
+	  indexes = OSX::NSIndexSet.indexSetWithIndexesInRange(nsrange)
+	  result = objectsAtIndexes(indexes).mutableCopy
+	  removeObjectsAtIndexes(indexes) if slice
+	  result
+	else
+	  [].to_ns
+	end
+      end
+
+      def _read_impl_num_len(slice, method, num, len, count)
+	if len < 0
+	  if slice
+	    # raises IndexError, 1.8.7 or later returns nil
+	    raise IndexError, "negative length (#{len})"
+	  end
+	  nil
+	else
+	  num += count if num < 0
+	  if num < 0
+	    nil
+	  else
+	    _read_impl(method, [num...num+len])
+	  end
+	end
+    end
+
     end
   end
 
