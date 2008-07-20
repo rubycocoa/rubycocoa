@@ -1024,7 +1024,7 @@ module OSX
         first = args.first
         case first
         when Numeric,OSX::NSNumber
-	  _read_impl_number(slice, first.to_i, count)
+	  _read_impl_num(slice, first.to_i, count)
         when String,OSX::NSString
 	  _read_impl_str(slice, first.to_ns)
         #when Regexp
@@ -1050,7 +1050,7 @@ module OSX
       end
     end
 
-    def _read_impl_number(slice, num, count)
+    def _read_impl_num(slice, num, count)
       num += count if num < 0
       if 0 <= num && num < count
 	c = characterAtIndex(num)
@@ -1834,34 +1834,9 @@ module OSX
         first = args.first
         case first
         when Numeric,OSX::NSNumber
-          n = first.to_i
-          n += count if n < 0
-          if 0 <= n && n < count
-            result = objectAtIndex(n)
-            removeObjectAtIndex(n) if slice
-            result
-          else
-            nil
-          end
+	  _read_impl_num(slice, first.to_i, count)
         when Range
-          range = first
-          n, len = OSX::RangeUtil.normalize(range, count)
-          if n < 0 || count < n
-            if slice
-              raise RangeError, "#{first} out of range"
-            end
-            return nil
-          end
-          
-          if 0 <= n && n < count
-            nsrange = OSX::NSRange.new(n, len)
-            indexes = OSX::NSIndexSet.indexSetWithIndexesInRange(nsrange)
-            result = objectsAtIndexes(indexes).mutableCopy
-            removeObjectsAtIndexes(indexes) if slice
-            result
-          else
-            [].to_ns
-          end
+	  _read_impl_range(slice, first, count)
         else
           raise TypeError, "can't convert #{args.first.class} into Integer"
         end
@@ -1873,26 +1848,60 @@ module OSX
         unless len.is_a?(Numeric) || len.is_a?(OSX::NSNumber)
           raise TypeError, "can't convert #{len.class} into Integer"
         end
-        n = n.to_i
-        len = len.to_i
-        if len < 0
-          if slice
-            raise IndexError, "negative length (#{args[1]})"
-          end
-          nil
-        else
-          n += count if n < 0
-          if n < 0
-            nil
-          else
-            _read_impl(method, [n...n+len])
-          end
-        end
+	_read_impl_num_len(slice, method, n.to_i, len.to_i, count)
       else
         raise ArgumentError, "wrong number of arguments (#{args.length} for 2)"
       end
     end
+
+    def _read_impl_num(slice, num, count)
+      num += count if num < 0
+      if 0 <= num && num < count
+	result = objectAtIndex(num)
+	removeObjectAtIndex(num) if slice
+	result
+      else
+	nil
+      end
+    end
+
+    def _read_impl_range(slice, range, count)
+      n, len = OSX::RangeUtil.normalize(range, count)
+      if n < 0 || count < n
+	if slice
+	  raise RangeError, "#{first} out of range"
+	end
+	return nil
+      end
+      
+      if 0 <= n && n < count
+	nsrange = OSX::NSRange.new(n, len)
+	indexes = OSX::NSIndexSet.indexSetWithIndexesInRange(nsrange)
+	result = objectsAtIndexes(indexes).mutableCopy
+	removeObjectsAtIndexes(indexes) if slice
+	result
+      else
+	[].to_ns
+      end
+    end
+
+    def _read_impl_num_len(slice, method, num, len, count)
+      if len < 0
+	if slice
+	  raise IndexError, "negative length (#{len})"
+	end
+	nil
+      else
+	num += count if num < 0
+	if num < 0
+	  nil
+	else
+	  _read_impl(method, [num...num+len])
+	end
+      end
+    end
   end
+
   class NSArray
     include NSEnumerable
   end
