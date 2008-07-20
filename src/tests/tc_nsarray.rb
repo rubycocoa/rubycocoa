@@ -713,14 +713,18 @@ class TC_NSArray < Test::Unit::TestCase
   def test_slice_error
     a = alloc_nsarray(1,2,3,4,5)
     b = map_to_nsnumber([1,2,3,4,5])
-    assert_raise(RangeError) { a.slice!(10..20) }
+    if RUBY_VERSION >= '1.8.7'
+      assert_nothing_raised { a.slice!(10..20) }
+    else
+      assert_raise(RangeError) { a.slice!(10..20) }
+    end
     assert_nothing_raised { b.slice!(10..20) }
     
     [(-10...3), (-20...-10)].each do |i|
       a = alloc_nsarray(1,2,3,4,5)
       b = map_to_nsnumber([1,2,3,4,5])
-      if RUBY_VERSION >= "1.8.7"
-	assert_nil(a.slice!(i)) # TODO NSArray#slice!
+      if RUBY_VERSION >= '1.8.7'
+	assert_nil(a.slice!(i))
 	assert_nil(b.slice!(i))
       else
 	assert_raise(RangeError) { a.slice!(i) }
@@ -731,8 +735,8 @@ class TC_NSArray < Test::Unit::TestCase
     [[0,-3], [-3,-3]].each do |i|
       a = alloc_nsarray(1,2,3,4,5)
       b = map_to_nsnumber([1,2,3,4,5])
-      if RUBY_VERSION >= "1.8.7"
-	assert_nil(a.slice!(*i)) # TODO NSArray#slice!
+      if RUBY_VERSION >= '1.8.7'
+	assert_nil(a.slice!(*i))
 	assert_nil(b.slice!(*i))
       else
 	assert_raise(IndexError) { a.slice!(*i) }
