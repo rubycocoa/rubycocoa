@@ -1,3 +1,8 @@
+2008-07-20  kimura wataru <kimuraw@i.nifty.jp>
+
+	* framework/src/ruby/osx/objc/oc_attachments.rb:
+	refactoring OSX::NSString#_read_impl()
+
 2008-07-02  kimura wataru <kimuraw@i.nifty.jp>
 
 	* framework/src/ruby/osx/objc/oc_import.rb:

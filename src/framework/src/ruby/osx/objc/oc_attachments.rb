@@ -1024,38 +1024,12 @@ module OSX
         first = args.first
         case first
         when Numeric,OSX::NSNumber
-          n = first.to_i
-          n += count if n < 0
-          if 0 <= n && n < count
-            c = characterAtIndex(n)
-            deleteCharactersInRange(OSX::NSRange.new(n, 1)) if slice
-            c
-          else
-            nil
-          end
+	  _read_impl_number(slice, first.to_i, count)
         when String,OSX::NSString
-          str = first.to_ns
-          n = index(str)
-          if n
-            s = str.mutableCopy
-            deleteCharactersInRange(OSX::NSRange.new(n, str.length)) if slice
-            s
-          else
-            nil
-          end
+	  _read_impl_str(slice, first.to_ns)
         #when Regexp
         when Range
-          n, len = OSX::RangeUtil.normalize(first, count)
-          if 0 <= n && n < count
-            range = OSX::NSRange.new(n, len)
-            s = substringWithRange(range).mutableCopy
-            deleteCharactersInRange(range) if slice
-            s
-          elsif n == count
-            ''.to_ns
-          else
-            nil
-          end
+	  _read_impl_range(slice, first, count)
         else
           raise TypeError, "can't convert #{first.class} into Integer"
         end
@@ -1066,21 +1040,60 @@ module OSX
           unless second.is_a?(Numeric) || second.is_a?(OSX::NSNumber)
             raise TypeError, "can't convert #{second.class} into Integer"
           end
-          n, len = first.to_i, second.to_i
-          n += count if n < 0
-          if n < 0 || count < n
-            nil
-          elsif len < 0
-            nil
-          else
-            _read_impl(method, [n...n+len])
-          end
+	  _read_impl_num_len(method, first.to_i, second.to_i, count)
         #when Regexp
         else
           raise TypeError, "can't convert #{first.class} into Integer"
         end
       else
         raise ArgumentError, "wrong number of arguments (#{args.length} for 2)"
+      end
+    end
+
+    def _read_impl_number(slice, num, count)
+      num += count if num < 0
+      if 0 <= num && num < count
+	c = characterAtIndex(num)
+	deleteCharactersInRange(OSX::NSRange.new(num, 1)) if slice
+	c
+      else
+	nil
+      end
+    end
+
+    def _read_impl_str(slice, str)
+      n = index(str)
+      if n
+	s = str.mutableCopy
+	deleteCharactersInRange(OSX::NSRange.new(n, str.length)) if slice
+	s
+      else
+	nil
+      end
+    end
+
+    def _read_impl_range(slice, range, count)
+      n, len = OSX::RangeUtil.normalize(range, count)
+      if 0 <= n && n < count
+	range = OSX::NSRange.new(n, len)
+	s = substringWithRange(range).mutableCopy
+	deleteCharactersInRange(range) if slice
+	s
+      elsif n == count
+	''.to_ns
+      else
+	nil
+      end
+    end
+
+    def _read_impl_num_len(method, num, len, count)
+      num += count if num < 0
+      if num < 0 || count < num
+	nil
+      elsif len < 0
+	nil
+      else
+	_read_impl(method, [num...num+len])
       end
     end
   end
