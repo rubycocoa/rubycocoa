@@ -1,3 +1,8 @@
+2008-07-25 Eloy Duran <e.duran@superalloy.nl>
+
+	* Rakefile:
+	Check for the existence of rubycocoa.bundle before running the install task.
+
 2008-07-20  kimura wataru <kimuraw@i.nifty.jp>
 
 	* framework/src/ruby/osx/objc/oc_attachments.rb,
