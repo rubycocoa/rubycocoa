@@ -1,3 +1,9 @@
+2008-08-25  kimura wataru <kimuraw@i.nifty.jp>
+
+	* framework/src/objc/mdl_bundle_support.m:
+	avoid crashes from bundleForClass: on ruby uninitialized thread.
+	[Rubycocoa-devel 1368] by Jonathan deWerd.
+
 2008-07-25 Eloy Duran <e.duran@superalloy.nl>
 
 	* Rakefile:
