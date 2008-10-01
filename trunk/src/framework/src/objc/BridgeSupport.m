@@ -1064,6 +1064,51 @@ osx_load_bridge_support_dylib (VALUE rcv, VALUE path)
   return Qnil;
 }
 
+static void
+reload_protocols(void) 
+{ 
+    Protocol **prots; 
+    unsigned int i, prots_count; 
+ 
+    prots = objc_copyProtocolList(&prots_count); 
+    for (i = 0; i < prots_count; i++) { 
+        Protocol *p; 
+        struct objc_method_description *methods; 
+        unsigned j, methods_count; 
+ 
+        p = prots[i]; 
+ 
+#define REGISTER_MDESCS(cmethods) \
+    do { \
+	struct st_table *t = cmethods ? bsInformalProtocolClassMethods : bsInformalProtocolInstanceMethods; \
+        for (j = 0; j < methods_count; j++) { \
+            struct bsInformalProtocolMethod *informal_method; \
+            informal_method = (struct bsInformalProtocolMethod *)malloc(sizeof(struct bsInformalProtocolMethod)); \
+            ASSERT_ALLOC(informal_method); \
+            informal_method->selector = methods[j].name; \
+            informal_method->is_class_method = cmethods; \
+            informal_method->encoding = strdup(methods[j].types); \
+            informal_method->protocol_name = strdup(protocol_getName(p)); \
+            st_insert(t, (st_data_t)methods[j].name, (st_data_t)informal_method); \
+        } \
+        free(methods); \
+    } \
+    while (0)
+ 
+        methods = protocol_copyMethodDescriptionList(p, true, true, &methods_count); 
+        REGISTER_MDESCS(false); 
+        methods = protocol_copyMethodDescriptionList(p, false, true, &methods_count); 
+        REGISTER_MDESCS(false);
+        methods = protocol_copyMethodDescriptionList(p, true, false, &methods_count); 
+        REGISTER_MDESCS(true);
+        methods = protocol_copyMethodDescriptionList(p, false, false, &methods_count); 
+        REGISTER_MDESCS(true);
+ 
+#undef REGISTER_MDESCS 
+    } 
+    free(prots); 
+} 
+
 static VALUE
 osx_load_bridge_support_file (VALUE mOSX, VALUE path)
 {
@@ -1800,6 +1845,8 @@ osx_load_bridge_support_file (VALUE mOSX, VALUE path)
   }
 
   xmlFreeTextReader(reader);
+
+  reload_protocols(); // TODO this should probably be done somewhere else
 
   return mOSX;
 }
