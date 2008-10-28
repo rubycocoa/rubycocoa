@@ -1122,7 +1122,7 @@ class ToplevelInstaller < Installer
         raise RuntimeError, "error: wrong extention was loaded: #{lib}"
       end
 
-      lib = libs.find {|lib| /RubyCocoa\b/ =~ lib}
+      lib = libs.find {|lib| /RubyCocoa.framework\b/ =~ lib}
       if /..\/framework\/build/ =~ lib
         print "framework ok: #{lib}"
       else

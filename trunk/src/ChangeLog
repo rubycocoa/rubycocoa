@@ -1,3 +1,9 @@
+2008-10-28  kimura wataru <kimuraw@i.nifty.jp>
+
+	* install.rb:
+	fix failure of test_loadlibs() from an ambiguous condition for path
+	of RubyCocoa.framework.
+
 2008-08-25  kimura wataru <kimuraw@i.nifty.jp>
 
 	* framework/src/objc/mdl_bundle_support.m:
