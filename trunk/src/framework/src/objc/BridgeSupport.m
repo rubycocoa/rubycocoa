@@ -1109,6 +1109,14 @@ reload_protocols(void)
     free(prots); 
 } 
 
+static int
+compare_bs_arg(const void *a, const void *b)
+{
+    struct bsArg *arg_a = (struct bsArg *)a;
+    struct bsArg *arg_b = (struct bsArg *)b;
+    return arg_a->index == arg_b->index ? 0 : (arg_a->index > arg_b->index ? 1 : -1);
+}
+
 static VALUE
 osx_load_bridge_support_file (VALUE mOSX, VALUE path)
 {
@@ -1828,6 +1836,7 @@ osx_load_bridge_support_file (VALUE mOSX, VALUE path)
           method->argv = (struct bsArg *)malloc(len);
           ASSERT_ALLOC(method->argv);
           memcpy(method->argv, args, len);
+          qsort(method->argv, method->argc, sizeof(struct bsArg), compare_bs_arg);
         }
 
         method = NULL;
