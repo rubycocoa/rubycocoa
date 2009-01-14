@@ -473,7 +473,7 @@ rb_ffi_dispatch (
   FFI_LOG("retval : %s", ret_octype);
   ret_type = ffi_type_for_octype(ret_octype);
   if (ret_type != &ffi_type_void) {
-    size_t ret_len = ocdata_size(ret_octype);
+    size_t ret_len = MAX(sizeof(long), ocdata_size(ret_octype));
     FFI_LOG("allocated %ld bytes for the result", ret_len);
     retval = alloca(ret_len);
   }
