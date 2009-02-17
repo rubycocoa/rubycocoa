@@ -20,7 +20,12 @@
 #import "ocexception.h"
 #import "objc_compat.h"
 
-#define OCM_AUTO_REGISTER 1
+#if __LP64__
+/* FIXME */
+# define OCM_AUTO_REGISTER 0
+#else
+# define OCM_AUTO_REGISTER 1
+#endif
 
 static VALUE _mObjWrapper = Qnil;
 static VALUE _mClsWrapper = Qnil;
@@ -161,6 +166,7 @@ wrapper_ignore_ns_override (VALUE rcv)
   return ignore_ns_override ? Qtrue : Qfalse;
 }
 
+#if OCM_AUTO_REGISTER
 static void
 ocm_register(Class klass, VALUE oc_mname, VALUE rb_mname, VALUE is_predicate,
   SEL selector, BOOL is_class_method)
@@ -227,6 +233,7 @@ ocm_register(Class klass, VALUE oc_mname, VALUE rb_mname, VALUE is_predicate,
     is_class_method ? "class" : "instance", rb_mname_str, 
     rb_class2name(rclass));
 }
+#endif
 
 static VALUE
 ocm_send(int argc, VALUE* argv, VALUE rcv, VALUE* result)
