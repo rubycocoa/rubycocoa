@@ -1085,7 +1085,7 @@ reload_protocols(void)
             struct bsInformalProtocolMethod *informal_method; \
             informal_method = (struct bsInformalProtocolMethod *)malloc(sizeof(struct bsInformalProtocolMethod)); \
             ASSERT_ALLOC(informal_method); \
-            informal_method->selector = methods[j].name; \
+            informal_method->selector = (char *)methods[j].name; \
             informal_method->is_class_method = cmethods; \
             informal_method->encoding = strdup(methods[j].types); \
             informal_method->protocol_name = strdup(protocol_getName(p)); \
