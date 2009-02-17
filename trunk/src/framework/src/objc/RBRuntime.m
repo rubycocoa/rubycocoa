@@ -217,7 +217,6 @@ int RBNotifyException(const char* title, VALUE err)
 {
   volatile VALUE ary;
   VALUE str;
-  volatile VALUE printf_args[2];
   int i;
 
   if (! RTEST(rb_obj_is_kind_of(err, rb_eException))) return 0;
@@ -231,6 +230,7 @@ int RBNotifyException(const char* title, VALUE err)
     ary = rb_funcall(err, rb_intern("backtrace"), 0);
     if (!NIL_P(ary)) {
       for (i = 0; i < RARRAY(ary)->len; i++) {
+        VALUE printf_args[2]; /* GC safe */
         printf_args[0] = rb_str_new2("\t%s\n");
         printf_args[1] = rb_ary_entry(ary, i);
         str = rb_f_sprintf(2, printf_args);
