@@ -31,6 +31,7 @@ extern VALUE rubycocoa_debug;
                                                  \
       pool = [[NSAutoreleasePool alloc] init];   \
       nsfmt = [NSString stringWithFormat:        \
+        @"%@",                                   \
         [NSString stringWithFormat:@"%s : %s",   \
           mod, fmt], ##args];                    \
       NSLog(@"%@", nsfmt);                       \
