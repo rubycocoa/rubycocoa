@@ -58,10 +58,17 @@ if @config['build-universal'] == 'yes'
     raise "ERROR: SDK \"#{sdkroot}\" does not exist." unless File.exist?(sdkroot)
     libruby_sdk = @config['libruby-path']
     raise "ERROR: library \"#{libruby_sdk}\" does not exist." unless File.exist?(libruby_sdk)
+  elsif @config['macosx-deployment-target'].to_f > 10.5
+    cflags << ' -arch x86_64'
+    ldflags << ' -arch x86_64'
   else
     cflags << ' -arch ppc64 -arch x86_64'
     ldflags << ' -arch ppc64 -arch x86_64'
   end
+end
+
+if @config['macosx-deployment-target'].to_f > 10.5
+  cflags << ' -DRB_ID=ID'
 end
 
 def lib_exist?(path, sdkoot=@config['sdkroot'])
