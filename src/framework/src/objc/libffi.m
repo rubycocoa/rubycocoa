@@ -286,8 +286,8 @@ rb_ffi_dispatch (
       type = (char *)encoding_skip_qualifiers(type);
       if (given_argc + pointers_args_count < expected_argc
           && (i >= given_argc || !NIL_P(argv[i]))
-          && (*type == _C_PTR && find_bs_cf_type_by_encoding(type) == NULL) 
-              || *type == _C_ARY_B) {
+          && ((*type == _C_PTR && find_bs_cf_type_by_encoding(type) == NULL) 
+               || *type == _C_ARY_B)) {
         struct bsArg *bs_arg;
 
         bs_arg = find_bs_arg_by_index(call_entry, i, expected_argc);

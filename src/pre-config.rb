@@ -42,7 +42,7 @@ if @config['build-universal'] == 'yes' && @config['sdkroot'].size == 0
 end
 
 # build options
-cflags = '-fno-common -g -fobjc-exceptions'
+cflags = '-fno-common -g -fobjc-exceptions -Wall'
 ldflags = '-undefined suppress -flat_namespace'
 sdkroot = @config['sdkroot'] 
 
