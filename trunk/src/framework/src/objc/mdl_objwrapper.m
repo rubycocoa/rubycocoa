@@ -166,6 +166,13 @@ wrapper_ignore_ns_override (VALUE rcv)
   return ignore_ns_override ? Qtrue : Qfalse;
 }
 
+static VALUE
+wrapper_ignore_ns_override_set (VALUE rcv, VALUE val)
+{
+  ignore_ns_override = RTEST(val);
+  return val;
+}
+
 #if OCM_AUTO_REGISTER
 static void
 ocm_register(Class klass, VALUE oc_mname, VALUE rb_mname, VALUE is_predicate,
@@ -695,6 +702,7 @@ init_mdl_OCObjWrapper(VALUE outer)
   rb_define_method(_mClsWrapper, "_objc_alias_class_method", wrapper_objc_alias_class_method, 2);
 
   rb_define_module_function(outer, "_ignore_ns_override", wrapper_ignore_ns_override, 0);
+  rb_define_module_function(outer, "_ignore_ns_override=", wrapper_ignore_ns_override_set, 1);
 
   return Qnil;
 }

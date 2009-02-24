@@ -7,6 +7,8 @@
 
 require 'osx/objc/oc_wrapper'
 
+OSX._ignore_ns_override = true
+  
 module OSX
   
   # Utility for private use
@@ -2375,3 +2377,5 @@ module OSX
     end
   end
 end
+
+OSX._ignore_ns_override = false
