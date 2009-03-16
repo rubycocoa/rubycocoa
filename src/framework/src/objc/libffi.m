@@ -16,6 +16,7 @@
 #import "cls_objcptr.h"
 #import "internal_macros.h"
 #import <st.h>
+#include <sys/mman.h>   // for mmap()
 
 #define FFI_LOG(fmt, args...) DLOG("LIBFFI", fmt, ##args)
 
@@ -679,14 +680,23 @@ ffi_make_closure(const char *rettype, const char **argtypes, unsigned argc, void
     goto bails;
   }
 
-  closure = (ffi_closure *)malloc(sizeof(ffi_closure));
-  if (closure == NULL) {
+  // Allocate a page to hold the closure with read and write permissions.
+  if ((closure = mmap(NULL, sizeof(ffi_closure), PROT_READ | PROT_WRITE,
+				  MAP_ANON | MAP_PRIVATE, -1, 0)) == (void*)-1)
+  {
     error = "Can't allocate memory";
     goto bails;
   }
 
   if (ffi_prep_closure(closure, cif, handler, context) != FFI_OK) {
     error = "Can't prepare closure";
+    goto bails;
+  }
+
+  // Ensure that the closure will execute on all architectures.
+  if (mprotect(closure, sizeof(closure), PROT_READ | PROT_EXEC) == -1)
+  {
+    error = "Can't mark the closure with PROT_EXEC";
     goto bails;
   }
 
