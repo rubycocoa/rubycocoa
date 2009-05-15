@@ -1,3 +1,8 @@
+2009-05-15  Satoshi Nakagawa <psychs@limechat.net>
+
+	* src/framework/src/objc/RBClassUtils.m
+	Improved warning message by Eloy Duran.
+
 2008-10-28  kimura wataru <kimuraw@i.nifty.jp>
 
 	* install.rb:
