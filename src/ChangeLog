@@ -1,3 +1,13 @@
+2009-06-09  kimura wataru <kimuraw@i.nifty.jp>
+
+	* framework/src/objc/RBObject.m,
+	  framework/src/objc/mdl_objwrapper.m,
+	  tests/tc_passbyref.rb, tests/tc_subclass.rb:
+	make to programs written with strict syntax behave same whether
+	OSX.relaxed_syntax is true or not.
+	prefer always methods with the last charactor "_" when invoke ruby
+	method from objective-c.
+
 2009-05-15  Satoshi Nakagawa <psychs@limechat.net>
 
 	* src/framework/src/objc/RBClassUtils.m

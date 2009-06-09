@@ -40,12 +40,22 @@ class OSX::NSObject
     end
 end
 
-class CalledClass < OSX::NSObject
+class CalledClass1 < OSX::NSObject
     def calledFoo(dummy)
         'foo'
     end
     def calledFoo_(dummy)
         'bar'
+    end
+end
+class CalledClass2 < OSX::NSObject
+    def calledFoo_(dummy)
+        'bar'
+    end
+end
+class CalledClass3 < OSX::NSObject
+    def calledFoo(dummy)
+        'foo'
     end
 end
 
@@ -184,12 +194,25 @@ class TC_SubClass < Test::Unit::TestCase
 
   def test_objc_ruby_call
     caller = OSX::CallerClass.alloc.init # <- ObjC
-    called = CalledClass.alloc.init # <- Ruby
+    called = CalledClass1.alloc.init # <- Ruby
     saved_relaxed_syntax = OSX.relaxed_syntax
+    # calledFoo() and calledFoo_() -> invoke calledFoo_()
+    OSX.relaxed_syntax = true
+    assert_equal('bar', caller.callFoo(called).to_s)
+    OSX.relaxed_syntax = false
+    assert_equal('bar', caller.callFoo_(called).to_s)
+    # only calledFoo_()
+    called = CalledClass2.alloc.init # <- Ruby
+    OSX.relaxed_syntax = true
+    assert_equal('bar', caller.callFoo(called).to_s)
+    OSX.relaxed_syntax = false
+    assert_equal('bar', caller.callFoo_(called).to_s)
+    # only calledFoo() -> cannot invoke when relaxed_syntax = false
+    called = CalledClass3.alloc.init # <- Ruby
     OSX.relaxed_syntax = true
     assert_equal('foo', caller.callFoo(called).to_s)
     OSX.relaxed_syntax = false
-    assert_equal('bar', caller.callFoo_(called).to_s)
+    assert_raise(OSX::OCException) {caller.callFoo_(called)}
     OSX.relaxed_syntax = saved_relaxed_syntax
   end
 

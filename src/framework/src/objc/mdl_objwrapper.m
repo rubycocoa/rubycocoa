@@ -207,7 +207,7 @@ ocm_register(Class klass, VALUE oc_mname, VALUE rb_mname, VALUE is_predicate,
     return;
   }
 
-  rb_mname_str = rb_id2name(SYM2ID(rb_mname));
+  rb_mname_str = rb_id2name(rb_intern(rb_mname));
   OBJWRP_LOG("registering Ruby %s method `%s' on `%s'", 
     is_class_method ? "class" : "instance", rb_mname_str, 
     rb_class2name(rclass));
