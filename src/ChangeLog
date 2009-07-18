@@ -1,3 +1,8 @@
+2009-07-18  kimura wataru <kimuraw@i.nifty.jp>
+
+	* framework/src/objc/internal_macros.h:
+	fix debug log (with RUBYOPT=-d) print only format string (revert r2223)
+
 2009-06-09  kimura wataru <kimuraw@i.nifty.jp>
 
 	* framework/src/objc/RBObject.m,
@@ -10,7 +15,7 @@
 
 2009-05-15  Satoshi Nakagawa <psychs@limechat.net>
 
-	* src/framework/src/objc/RBClassUtils.m
+	* src/framework/src/objc/RBClassUtils.m:
 	Improved warning message by Eloy Duran.
 
 2008-10-28  kimura wataru <kimuraw@i.nifty.jp>
