@@ -7,7 +7,6 @@
 @protocol TCAdditonalProtocol
 + (int)tc_clmWithArg1:(id)arg1 arg2:(BOOL)arg2 arg3:(char *)arg3;
 - (id)tc_instmWithArg1:(int)arg1 arg2:(double)arg2 arg3:(id)arg3;
-- (int)foobarbazfoobarbaz;
 @end
 
 @interface DummyProtoImpl <TCAdditonalProtocol>
