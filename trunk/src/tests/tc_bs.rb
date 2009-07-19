@@ -49,6 +49,7 @@ class TC_BridgeSupport < Test::Unit::TestCase
   end
 
   # reload_protocol() in BridgeSupport.m
+  # this test should be failure on 10.4 (not supported)
   def test_bs_reload_protocol
     # NSCopying (known protocol)
     assert_not_nil(OSX.lookup_informal_protocol_method_type('copyWithZone:', false))

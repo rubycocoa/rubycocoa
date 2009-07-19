@@ -1064,6 +1064,12 @@ osx_load_bridge_support_dylib (VALUE rcv, VALUE path)
   return Qnil;
 }
 
+#if MAC_OS_X_VERSION_MAX_ALLOWED <= MAC_OS_X_VERSION_10_4
+// DO NOT SUPPORT formal protocols with bridgesupport on 10.4 or earlier.
+// there is no objc runtime-api for gathering all protocols in objective-c 1.0.
+#define reload_protocols()
+#else
+
 static void
 reload_protocols(void) 
 { 
@@ -1108,6 +1114,8 @@ reload_protocols(void)
     } 
     free(prots); 
 } 
+
+#endif
 
 static int
 compare_bs_arg(const void *a, const void *b)
