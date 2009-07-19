@@ -1,3 +1,11 @@
+2009-07-19  kimura wataru <kimuraw@i.nifty.jp>
+
+	* framework/src/objc/BridgeSupport.m, tests/tc_bs.rb:
+	disable reload_protocols() on 10.4 or earlier. it means
+	DO NOT SUPPORT formal protocols with bridgesupport on 10.4.
+	there is no objc runtime-api for gathering all protocols in
+	objective-c 1.0.
+
 2009-07-18  kimura wataru <kimuraw@i.nifty.jp>
 
 	* tests/tc_bs.rb, tests/Makefile.in, tests/objc_proto.m:
