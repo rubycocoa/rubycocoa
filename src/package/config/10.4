@@ -36,3 +36,5 @@
 @config['frameworks'] = '/Library/Frameworks'
 @config['data-dir'] = '$install-prefix/share'
 @config['so-dir'] = '$install-prefix/lib/ruby/site_ruby/1.8/universal-darwin8.0'
+# prefer /usr/bin, /usr/lib
+ENV['PATH'] = ['/usr/bin', ENV['PATH']].join(':')
