@@ -1,5 +1,9 @@
 2009-09-08  kimura wataru <kimuraw@i.nifty.jp>
 
+	* package/config/10.4, package/config/10.5:
+	- correct install destination of project templates (10.5).
+	- correct comment (10.4 and 10.5).
+
 	* package/config/10.6:
 	packaging support for 10.6 Snow Leopard.
 
