@@ -1,5 +1,12 @@
 2009-09-15  kimura wataru <kimuraw@i.nifty.jp>
 
+	* package/post-package.rb, package/pre-package.rb,
+	  package/config/10.4, package/config/10.5, package/config/10.6:
+	use --target-archs for packaging. remove "universal" from package
+	name, like "RubyCocoa-1.0.0-OSX10.6.dmg"
+
+2009-09-15  kimura wataru <kimuraw@i.nifty.jp>
+
 	* pre-config.rb, framework/post-config.rb, metaconfig:
 	remove configure option "--build-universal", and
 	add option "--target-archs".

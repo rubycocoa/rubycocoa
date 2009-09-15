@@ -7,9 +7,6 @@ resources_dir = File.join(work_dir, 'resources')
 system "find '#{contents_dir}' -name .svn -exec rm -rf {} \\; >& /dev/null"
 
 package_name = "RubyCocoa-#{@config['rubycocoa-version']}-OSX#{@config['macosx-deployment-target']}"
-if @config['build-universal'] == 'yes'
-  package_name << 'universal'
-end
 dmg_dir = File.join(work_dir, package_name)
 Dir.mkdir dmg_dir
 
