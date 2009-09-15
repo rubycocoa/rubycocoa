@@ -1,5 +1,8 @@
 2009-09-15  kimura wataru <kimuraw@i.nifty.jp>
 
+	* Rakefile:
+	remove config option "--build-universal".
+
 	* pre-config.rb, framework/GeneratedConfig.xcconfig.in,
 	  ext/rubycocoa/extconf.rb.in:
 	use $ARCHS of Xcode for building RubyCocoa.xcodeproj
