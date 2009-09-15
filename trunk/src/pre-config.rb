@@ -38,8 +38,6 @@ archs = @config['target-archs']
 
 # add archs if given
 arch_flags = archs.gsub(/\A|\s+/, ' -arch ')
-cflags << arch_flags
-ldflags << arch_flags
 
 if sdkroot.size > 0
   cflags << ' -isysroot ' << sdkroot
@@ -85,6 +83,8 @@ ldflags << ' -lffi '
 
 config_ary << [ :other_cflags, cflags ]
 config_ary << [ :other_ldflags, ldflags ]
+config_ary << [ :target_archs, archs.size > 0 ? archs : '$NATIVE_ARCH' ]
+config_ary << [ :arch_flags, arch_flags ]
 
 target_files.each do |dst_name|
   src_name = dst_name + '.in'

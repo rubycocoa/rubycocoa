@@ -1,5 +1,11 @@
 2009-09-15  kimura wataru <kimuraw@i.nifty.jp>
 
+	* pre-config.rb, framework/GeneratedConfig.xcconfig.in,
+	  ext/rubycocoa/extconf.rb.in:
+	use $ARCHS of Xcode for building RubyCocoa.xcodeproj
+
+2009-09-15  kimura wataru <kimuraw@i.nifty.jp>
+
 	* package/post-package.rb, package/pre-package.rb,
 	  package/config/10.4, package/config/10.5, package/config/10.6:
 	use --target-archs for packaging. remove "universal" from package

@@ -15,8 +15,8 @@ end
 $CFLAGS = '-F../../framework/%%%build_dir%%%'
 $LDFLAGS  = '-F../../framework/%%%build_dir%%% -framework RubyCocoa'
 
-$CFLAGS << ' %%%other_cflags%%%'
-$LDFLAGS << ' %%%other_ldflags%%%'
+$CFLAGS << ' %%%other_cflags%%% %%%arch_flags%%%'
+$LDFLAGS << ' %%%other_ldflags%%% %%%arch_flags%%%'
 
 create_makefile('rubycocoa')
 command "mv -f Makefile Makefile.bak"
