@@ -909,20 +909,17 @@ static void rb_cocoa_thread_schedule_hook(rb_threadswitch_event_t event,
 
 static void RBCocoaInstallRubyThreadSchedulerHooks()
 {
-  SInt32 version;
-  if (Gestalt(gestaltSystemVersion, &version) == noErr) {
-    if (version >= 0x1060) {
-      /* The threading support is not implemented yet in 10.6. */
-      return;
-    }
-  }
-  
+#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_6
+  /* The threading support is not implemented yet in 10.6. */
+  return;
+#else
   if (getenv("RUBYCOCOA_THREAD_HOOK_DISABLE") != NULL) {
     if (rb_cocoa_thread_debug) {
       NSLog(@"RBCocoaInstallRubyThreadSchedulerHooks: warning: disabled hooks due to RUBYCOCOA_THREAD_HOOK_DISABLE environment variable");
     }
     return;
   }
+#endif
   
   rb_cocoa_thread_debug = getenv("RUBYCOCOA_THREAD_DEBUG") != NULL;
   

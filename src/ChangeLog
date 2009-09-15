@@ -1,6 +1,12 @@
 2009-09-15  Satoshi Nakagawa <psychs@limechat.net>
 
 	* src/framework/src/objc/RBRuntime.m:
+	We cannot use a common RubyCocoa.framework on 10.5 and 10.6.
+	So simply applied a patch from Apple: http://www.opensource.apple.com/source/RubyCocoa/RubyCocoa-67/patches/disable_threading_hacks.diff
+
+2009-09-15  Satoshi Nakagawa <psychs@limechat.net>
+
+	* src/framework/src/objc/RBRuntime.m:
 	Disable threading hacks in 10.6.
 	Based on a patch from Apple: http://www.opensource.apple.com/source/RubyCocoa/RubyCocoa-67/patches/disable_threading_hacks.diff
 
