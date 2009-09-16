@@ -1,4 +1,4 @@
-2009-09-15  Satoshi Nakagawa <psychs@limechat.net>
+2009-09-17  Satoshi Nakagawa <psychs@limechat.net>
 
 	* pre-config.rb:
 	Enabled -DRB_ID=ID always.
