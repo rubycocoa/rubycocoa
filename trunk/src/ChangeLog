@@ -1,3 +1,9 @@
+2009-09-15  Satoshi Nakagawa <psychs@limechat.net>
+
+	* pre-config.rb:
+	Enabled -DRB_ID=ID always.
+	Because we need it to build RubyCocoa with target=10.5 on 10.6.
+
 2009-09-15  kimura wataru <kimuraw@i.nifty.jp>
 
 	* Rakefile:
