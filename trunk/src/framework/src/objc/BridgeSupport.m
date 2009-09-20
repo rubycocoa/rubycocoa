@@ -1309,14 +1309,17 @@ osx_load_bridge_support_file (VALUE mOSX, VALUE path)
             st_insert(bsConstants, (st_data_t)enum_name, (st_data_t)fake_bs_const); 
           }
           else {
-            char *  enum_value;        
+            char *  enum_value = NULL;
             VALUE   value;
 
-            enum_value = get_attribute(reader, "value");
 #if __LP64__
-            if (enum_value == NULL)
-              enum_value = get_attribute(reader, "value64");
+            enum_value = get_attribute(reader, "value64");
+	    if (strncmp("NSNotFound", enum_name, 10) == 0)
+	    NSLog(@"\ncpath: %s\n\tname: %s\n\tvalue: %s", cpath, enum_name, enum_value);
 #endif
+            if (enum_value == NULL) {
+              enum_value = get_attribute(reader, "value");
+	    }
 #if BYTE_ORDER == BIG_ENDIAN
             if (enum_value == NULL)
               enum_value = get_attribute(reader, "be_value");
