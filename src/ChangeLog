@@ -1,3 +1,12 @@
+2009-09-20  kimura wataru <kimuraw@i.nifty.jp>
+
+	* tests/tc_bool.rb:
+	fix a failure of test_informal_protocol(in tc_bool.rb).
+	use "validateMenuItem", not "control:textView:doCommandBySelector:"
+	for testing informal protocol.
+	On 10.6, "control:textView:doCommandBySelector:" becomes an optional
+	method of a formal protocol NSTextViewDelegate.
+
 2009-09-17  Satoshi Nakagawa <psychs@limechat.net>
 
 	* pre-config.rb:
