@@ -1,5 +1,8 @@
 2009-09-20  kimura wataru <kimuraw@i.nifty.jp>
 
+	* framework/src/objc/BridgeSupport.m:
+	correct reading order between 'value64' and 'value' from .bridgesupport
+
 	* install.rb:
 	new option --arch of test task allows testing specified architecture,
 	like `ruby install.rb test --arch=i386'.
