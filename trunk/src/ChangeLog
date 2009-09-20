@@ -1,5 +1,9 @@
 2009-09-20  kimura wataru <kimuraw@i.nifty.jp>
 
+	* install.rb:
+	new option --arch of test task allows testing specified architecture,
+	like `ruby install.rb test --arch=i386'.
+
 	* tests/Makefile.in:
 	use -arch flags for compiling tests/*.bundle.
 
