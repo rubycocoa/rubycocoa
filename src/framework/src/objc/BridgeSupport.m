@@ -1314,8 +1314,6 @@ osx_load_bridge_support_file (VALUE mOSX, VALUE path)
 
 #if __LP64__
             enum_value = get_attribute(reader, "value64");
-	    if (strncmp("NSNotFound", enum_name, 10) == 0)
-	    NSLog(@"\ncpath: %s\n\tname: %s\n\tvalue: %s", cpath, enum_name, enum_value);
 #endif
             if (enum_value == NULL) {
               enum_value = get_attribute(reader, "value");
