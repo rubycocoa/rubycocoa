@@ -1,3 +1,9 @@
+2009-09-22  kimura wataru <kimuraw@i.nifty.jp>
+
+	* tests/tc_objcptr.rb, tests/tc_types.rb:
+	skip some assertions. most of cftypes become NSObject(__NSCFType) via
+	toll-free on 10.6, and names of the cftypes are not defined in Ruby.
+
 2009-09-20  kimura wataru <kimuraw@i.nifty.jp>
 
 	* framework/src/objc/BridgeSupport.m:
