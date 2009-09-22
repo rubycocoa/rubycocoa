@@ -1,5 +1,9 @@
 2009-09-22  kimura wataru <kimuraw@i.nifty.jp>
 
+	* framework/src/ruby/osx/objc/foundation.rb:
+	correct value of NSNotFound to NSIntegerMax.
+	10.6 Foundation.bridgesupport defines the value64 of NSNotFound as -1.
+
 	* tests/tc_objcptr.rb, tests/tc_types.rb:
 	skip some assertions. most of cftypes become NSObject(__NSCFType) via
 	toll-free on 10.6, and names of the cftypes are not defined in Ruby.
