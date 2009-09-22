@@ -43,8 +43,13 @@ class TC_ObjcPtr < Test::Unit::TestCase
     assert_equal( 2, ObjcPtr.new(:ushort).allocated_size )
     # assert_equal( 4, ObjcPtr.new(:int).allocated_size )
     # assert_equal( 4, ObjcPtr.new(:uint).allocated_size )
-    assert_equal( 4, ObjcPtr.new(:long).allocated_size )
-    assert_equal( 4, ObjcPtr.new(:ulong).allocated_size )
+    if OSX::RUBYCOCOA_BUILD_LP64
+      assert_equal( 8, ObjcPtr.new(:long).allocated_size )
+      assert_equal( 8, ObjcPtr.new(:ulong).allocated_size )
+    else
+      assert_equal( 4, ObjcPtr.new(:long).allocated_size )
+      assert_equal( 4, ObjcPtr.new(:ulong).allocated_size )
+    end
     assert_equal( 8, ObjcPtr.new(:longlong).allocated_size )
     assert_equal( 8, ObjcPtr.new(:ulonglong).allocated_size )
     assert_equal( 4, ObjcPtr.new(:float).allocated_size )
@@ -85,8 +90,13 @@ class TC_ObjcPtr < Test::Unit::TestCase
     assert_equal( 2 * 17, ObjcPtr.new(:ushort, 17).allocated_size )
     # assert_equal( 4 * 17, ObjcPtr.new(:int).allocated_size )
     # assert_equal( 4 * 17, ObjcPtr.new(:uint).allocated_size )
-    assert_equal( 4 * 17, ObjcPtr.new(:long, 17).allocated_size )
-    assert_equal( 4 * 17, ObjcPtr.new(:ulong, 17).allocated_size )
+    if OSX::RUBYCOCOA_BUILD_LP64
+      assert_equal( 8 * 17, ObjcPtr.new(:long, 17).allocated_size )
+      assert_equal( 8 * 17, ObjcPtr.new(:ulong, 17).allocated_size )
+    else
+      assert_equal( 4 * 17, ObjcPtr.new(:long, 17).allocated_size )
+      assert_equal( 4 * 17, ObjcPtr.new(:ulong, 17).allocated_size )
+    end
     assert_equal( 8 * 17, ObjcPtr.new(:longlong, 17).allocated_size )
     assert_equal( 8 * 17, ObjcPtr.new(:ulonglong, 17).allocated_size )
     assert_equal( 4 * 17, ObjcPtr.new(:float, 17).allocated_size )

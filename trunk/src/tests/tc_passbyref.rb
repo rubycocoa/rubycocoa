@@ -231,12 +231,14 @@ class TC_PassByRef < Test::Unit::TestCase
   end
 
   def test_in_c_array_fixed_length
-    font = OSX::NSFont.fontWithName_matrix('Helvetica', [1, 0, 0, 1, 0, 0].pack('f*'))
+    # CGFLoat becomes double on 64-bit
+    pack_tmpl = OSX::RUBYCOCOA_BUILD_LP64 ? 'd*' : 'f*'
+    font = OSX::NSFont.fontWithName_matrix('Helvetica', [1, 0, 0, 1, 0, 0].pack(pack_tmpl))
     assert_kind_of(OSX::NSFont, font)
     assert_raises(ArgumentError) { OSX::NSFont.fontWithName_matrix('Helvetica', nil) } 
-    assert_raises(ArgumentError) { OSX::NSFont.fontWithName_matrix('Helvetica', [].pack('f*')) } 
-    assert_raises(ArgumentError) { OSX::NSFont.fontWithName_matrix('Helvetica', [1, 2, 3, 4, 5].pack('f*')) } 
-    assert_raises(ArgumentError) { OSX::NSFont.fontWithName_matrix('Helvetica', [1, 2, 3, 4, 5, 6, 7].pack('f*')) } 
+    assert_raises(ArgumentError) { OSX::NSFont.fontWithName_matrix('Helvetica', [].pack(pack_tmpl)) }
+    assert_raises(ArgumentError) { OSX::NSFont.fontWithName_matrix('Helvetica', [1, 2, 3, 4, 5].pack(pack_tmpl)) }
+    assert_raises(ArgumentError) { OSX::NSFont.fontWithName_matrix('Helvetica', [1, 2, 3, 4, 5, 6, 7].pack(pack_tmpl)) }
     # TODO: should support direct Array of Float.
   end
 
@@ -246,8 +248,12 @@ class TC_PassByRef < Test::Unit::TestCase
     assert_equal(2, ary.length)
     assert_kind_of(String, ary.first)
     assert_kind_of(Fixnum, ary.last)
-    types = ary.first.unpack('i*')
-    assert_equal(ary.last, types.length) 
+    if OSX::RUBYCOCOA_BUILD_LP64
+      types = ary.first.unpack('Q*')
+    else
+      types = ary.first.unpack('i*')
+    end
+    assert_equal(ary.last, types.length)
   end
 
   def test_out_c_array_length_pointer2

@@ -396,6 +396,11 @@ void initialize_mdl_osxobjc()
 		  rb_obj_freeze(rb_str_new2(RUBYCOCOA_RELEASE_DATE)));
   rb_define_const(mOSX, "RUBYCOCOA_SVN_REVISION", 
 		  rb_obj_freeze(rb_str_new2(RUBYCOCOA_SVN_REVISION)));
+#if __LP64__
+  rb_define_const(mOSX, "RUBYCOCOA_BUILD_LP64", Qtrue);
+#else
+  rb_define_const(mOSX, "RUBYCOCOA_BUILD_LP64", Qfalse);
+#endif
 
   char *p = framework_resources_path();
   rb_define_const(mOSX, "RUBYCOCOA_RESOURCES_PATH",
