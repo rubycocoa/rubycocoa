@@ -1,5 +1,10 @@
 2009-09-22  kimura wataru <kimuraw@i.nifty.jp>
 
+	* framework/src/objc/mdl_osxobjc.m, tests/tc_passbyref.rb,
+	  tests/tc_objcptr.rb:
+	introduce OSX::RUBYCOCOA_BUILD_LP64 (true/false).
+	fix some test cases for 64-bit.
+
 	* framework/src/ruby/osx/objc/foundation.rb:
 	correct value of NSNotFound to NSIntegerMax.
 	10.6 Foundation.bridgesupport defines the value64 of NSNotFound as -1.
