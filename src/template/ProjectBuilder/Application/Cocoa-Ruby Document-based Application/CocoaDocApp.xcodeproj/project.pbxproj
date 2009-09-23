@@ -279,6 +279,11 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				PREBINDING = NO;
+				DEBUG_INFORMATION_FORMAT = &quot;dwarf-with-dsym&quot;;
+				ARCHS = (
+					ppc,
+					i386,
+				);
 			};
 			name = Release;
 		};

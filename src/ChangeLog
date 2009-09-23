@@ -1,5 +1,10 @@
 2009-09-23  kimura wataru <kimuraw@i.nifty.jp>
 
+	* template/ProjectBuilder/Application/*:
+	upgrade projecte templates for Xcode 3.x. apply a patch from Apple:
+	http://www.opensource.apple.com/source/RubyCocoa/RubyCocoa-67/patches/fix_templates_for_leopard.diff
+	and remove SDKROOT.
+
 	* pre-install.rb, template/Xcode2.x:
 	separate project templates for Xcode 3.x and Xcode 2.x.	
 
