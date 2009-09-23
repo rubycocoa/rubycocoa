@@ -1,3 +1,9 @@
+2009-09-23  kimura wataru <kimuraw@i.nifty.jp>
+
+	* framework/src/ruby/osx/objc/oc_attachments.rb, tests/tc_nsstring.rb:
+	use Objective-C hash for NSString#hash, it makes NSString to become a
+	key of Ruby Hash. (tracker:2849613)
+
 2009-09-22  kimura wataru <kimuraw@i.nifty.jp>
 
 	* framework/src/objc/mdl_osxobjc.m, tests/tc_passbyref.rb,

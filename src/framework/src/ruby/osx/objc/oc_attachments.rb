@@ -144,6 +144,10 @@ module OSX
       "#<#{self.class.to_s.gsub(/^OSX::/, '')} \"#{self.to_s}\">"
     end
 
+    def hash
+      oc_hash
+    end
+
     def pretty_print(q)
       self.to_s.pretty_print(q)
     end

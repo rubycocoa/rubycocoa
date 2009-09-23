@@ -88,6 +88,12 @@ class TC_NSString < Test::Unit::TestCase
       b += 'def'
     }
   end
+
+  def test_hash
+    str1 = NSString.stringWithString('abc')
+    str2 = NSString.stringWithString('abc')
+    assert(str1.hash == str2.hash)
+  end
   
   def test_to_ns
     assert_equal(OSX::NSString.stringWithString('abc'), 'abc'.to_ns)
