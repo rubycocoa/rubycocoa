@@ -59,7 +59,7 @@ end
     end
     command "mkdir -p '#{File.dirname(dstdir)}'"
     command "cp -R '#{srcdir}' '#{dstdir}'"
-    command "find '#{dstdir}' -name '*.in' -print0 | xargs -0 rm"
+    command "find '#{dstdir}' -name '*.in' -print0 | /usr/bin/xargs -0 rm"
   
     fix_xcode_projects_in_dir(dstdir) 
   end

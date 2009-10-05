@@ -1,3 +1,8 @@
+2009-10-05  kimura wataru <kimuraw@i.nifty.jp>
+
+	* pre-install.rb:
+	specify full path of `xargs'. install task fails with gnu xargs.
+
 2009-09-23  kimura wataru <kimuraw@i.nifty.jp>
 
 	* template/ProjectBuilder/Application/*:
