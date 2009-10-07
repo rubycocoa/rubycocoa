@@ -1,5 +1,8 @@
 2009-10-07  kimura wataru <kimuraw@i.nifty.jp>
 
+	* tests/tc_subclass.rb:
+	on 10.6 NSArray.array returns an instance of NSArray, not NSCFArray.
+
 	* framework/src/objc/mdl_objwrapper.m:
 	adhoc fix of raising NSInternalInconsistencyException from
 	NSUndoManager#prepareWithInvocationTarget: on 10.6.
