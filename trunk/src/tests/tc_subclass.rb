@@ -223,7 +223,7 @@ class TC_SubClass < Test::Unit::TestCase
     # CoreFoundation-bridged ancestors.
     assert(OSX::NSCFString.ancestors.include?(OSX::NSString))
     assert(OSX::NSCFDictionary.ancestors.include?(OSX::NSDictionary))
-    assert_kind_of(OSX::NSCFArray, OSX::NSArray.array)  
+    assert_kind_of(OSX::NSCFArray, OSX::NSArray.arrayWithArray(%w{a b c}))
  
     # Method manually defined in an ancestor. 
     s = OSX::NSString.stringWithString('foo')
