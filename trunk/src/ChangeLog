@@ -1,5 +1,9 @@
 2009-10-07  kimura wataru <kimuraw@i.nifty.jp>
 
+	* framework/src/objc/mdl_objwrapper.m:
+	adhoc fix of raising NSInternalInconsistencyException from
+	NSUndoManager#prepareWithInvocationTarget: on 10.6.
+
 	* pre-config.rb:
 	correct build error when --target-archs is not given.
 

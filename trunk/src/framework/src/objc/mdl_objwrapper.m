@@ -73,6 +73,16 @@ ocm_retain_arg_if_necessary (VALUE result, BOOL is_result, void *context)
     if (selector != @selector(alloc) && selector != @selector(allocWithZone:)) {
       OBJCID_DATA_PTR(result)->can_be_released = YES;
     }
+    // FIXME: 10.6 NSUndoManager#prepareWithInvocationTarget: raises the
+    // following exception:
+    // ----
+    // uncaught exception 'NSInternalInconsistencyException', reason:
+    // 'forwardInvocation:: NSUndoManager 0x*** received forwarded invocation
+    // while invocation target is nil. Call prepareWithInvocationTarget:
+    // before invoking respondsToSelector:'
+    if (selector == @selector(prepareWithInvocationTarget:) && object_getClass(OBJCID_ID(result)) == NSClassFromString(@"NSUndoManagerProxy")) {
+      return; // do not call performSelector:
+    }
     // Objects that come from an NSObject-based class defined in Ruby have a
     // slave object as an instance variable that serves as the message proxy.
     // However, this RBObject retains the Ruby instance by default, which isn't
