@@ -67,4 +67,7 @@ extern CFRunLoopRef CFRunLoopGetMain(void);
   while (0)
 #endif
 
+/* invoke-based undo requires some special handling on 10.6 */
+#define IS_UNDOPROXY(obj) (object_getClass(obj) == objc_getClass("NSUndoManagerProxy"))
+
 #endif	// _INTERNAL_MACROS_H_

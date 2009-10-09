@@ -23,6 +23,7 @@
 #import "cls_objcid.h"
 #import "objc_compat.h"
 #import "OverrideMixin.h"
+#import "internal_macros.h"
 
 #define OSX_MODULE_NAME "OSX"
 
@@ -306,9 +307,10 @@ ocid_get_rbobj (id ocid)
 {
   VALUE result = Qnil;
 
-  @try {  
-    if (([ocid isProxy] && [ocid isRBObject])
-        || [ocid respondsToSelector:@selector(__rbobj__)])
+  @try {
+    if (!IS_UNDOPROXY(ocid)
+        && (([ocid isProxy] && [ocid isRBObject])
+        || [ocid respondsToSelector:@selector(__rbobj__)]))
       result = [ocid __rbobj__];
   } 
   @catch (id exception) {}

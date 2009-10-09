@@ -247,8 +247,7 @@ class TC_SubClass < Test::Unit::TestCase
   def test_undo1
     ary = OSX::NSMutableArray.arrayWithObject('foo')
     undo = OSX::NSUndoManager.alloc.init
-    undo.prepareWithInvocationTarget(ary)
-    undo.removeLastObject
+    undo.prepareWithInvocationTarget(ary).removeLastObject
     assert_equal(1, ary.count)
     undo.undo
     assert_equal(0, ary.count)
@@ -258,8 +257,7 @@ class TC_SubClass < Test::Unit::TestCase
     slave = UndoSlave.alloc.init 
     ary = OSX::NSMutableArray.alloc.init
     undo = OSX::NSUndoManager.alloc.init
-    undo.prepareWithInvocationTarget(slave)
-    undo.addFoo(ary)
+    undo.prepareWithInvocationTarget(slave).addFoo(ary)
     assert_equal(0, ary.count)
     undo.undo
     assert_equal(1, ary.count)
