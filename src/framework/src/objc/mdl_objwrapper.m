@@ -80,7 +80,7 @@ ocm_retain_arg_if_necessary (VALUE result, BOOL is_result, void *context)
     // 'forwardInvocation:: NSUndoManager 0x*** received forwarded invocation
     // while invocation target is nil. Call prepareWithInvocationTarget:
     // before invoking respondsToSelector:'
-    if (selector == @selector(prepareWithInvocationTarget:) && object_getClass(OBJCID_ID(result)) == NSClassFromString(@"NSUndoManagerProxy")) {
+    if (IS_UNDOPROXY(OBJCID_ID(result))) {
       return; // do not call performSelector:
     }
     // Objects that come from an NSObject-based class defined in Ruby have a
