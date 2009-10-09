@@ -19,7 +19,7 @@ $Id$
       p hash[str1] # => 2
 
   * refactoring build system
-     * depricate config option "--build-universal"
+     * deprecate config option "--build-universal"
      * introduce config option "--target-archs"
 
         old) ruby install.rb config --build-universal=yes
