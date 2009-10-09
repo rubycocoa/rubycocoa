@@ -4,7 +4,7 @@
 	  framework/src/objc/mdl_objwrapper.m,
 	  framework/src/objc/internal_macros.h,
 	  framework/src/objc/OverrideMixin.m, tests/tc_subclass.rb:
-	fix invoke-based undo management do not work on 10.6.
+	fix invoke-based undo management does not work on 10.6.
 
 2009-10-07  kimura wataru <kimuraw@i.nifty.jp>
 
