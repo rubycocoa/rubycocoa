@@ -1,5 +1,8 @@
 2009-10-10  kimura wataru <kimuraw@i.nifty.jp>
 
+	* tests/tc_types.rb:
+	skips assersions occurs SEGV and print a warning on 10.6.
+
 	* framework/src/objc/mdl_objwrapper.m:
 	fix SEGV from auto register methods (bug of r2234).
 
