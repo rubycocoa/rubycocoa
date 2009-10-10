@@ -1,3 +1,8 @@
+2009-10-10  kimura wataru <kimuraw@i.nifty.jp>
+
+	* framework/src/objc/mdl_objwrapper.m:
+	fix SEGV from auto register methods (bug of r2234).
+
 2009-10-09  kimura wataru <kimuraw@i.nifty.jp>
 
 	* framework/src/objc/mdl_osxobjc.m,
