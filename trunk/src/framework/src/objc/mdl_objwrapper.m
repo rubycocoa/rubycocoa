@@ -217,7 +217,20 @@ ocm_register(Class klass, VALUE oc_mname, VALUE rb_mname, VALUE is_predicate,
     return;
   }
 
-  rb_mname_str = rb_id2name(rb_intern(rb_mname));
+  if (TYPE(rb_mname) == T_SYMBOL) {
+    rb_mname_str = rb_id2name(SYM2ID(rb_mname));
+  } else {
+    rb_mname_str = NULL;
+  }
+
+  if (rb_mname_str == NULL || strlen(rb_mname_str) <= 0) {
+    OBJWRP_LOG("cannot register Ruby %s method `%s' on `%s' "
+      "(problem when getting method name)",
+      is_class_method ? "class" : "instance",
+      RSTRING(rb_inspect(rb_mname_str))->ptr, rb_class2name(rclass));
+    return;
+  }
+
   OBJWRP_LOG("registering Ruby %s method `%s' on `%s'", 
     is_class_method ? "class" : "instance", rb_mname_str, 
     rb_class2name(rclass));
