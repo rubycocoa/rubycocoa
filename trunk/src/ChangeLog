@@ -1,5 +1,8 @@
 2009-10-16  kimura wataru <kimuraw@i.nifty.jp>
 
+	* pre-config.rb:
+	use -DRB_ID=ID for 10.6 or later (revert r2253)
+	
 	* framework/post-setup.rb:
 	not to make a symlink RubyCococa.framework/Headers/Headers
 
