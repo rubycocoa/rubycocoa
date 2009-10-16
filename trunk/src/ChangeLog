@@ -1,5 +1,8 @@
 2009-10-16  kimura wataru <kimuraw@i.nifty.jp>
 
+	* package/config/10.5, package/config/10.6:
+	update packaging configurations
+
 	* pre-config.rb:
 	use -DRB_ID=ID for 10.6 or later (revert r2253)
 	
