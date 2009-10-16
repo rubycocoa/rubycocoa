@@ -1,3 +1,8 @@
+2009-10-16  kimura wataru <kimuraw@i.nifty.jp>
+
+	* framework/post-setup.rb:
+	not to make a symlink RubyCococa.framework/Headers/Headers
+
 2009-10-10  kimura wataru <kimuraw@i.nifty.jp>
 
 	* tests/tc_types.rb:
