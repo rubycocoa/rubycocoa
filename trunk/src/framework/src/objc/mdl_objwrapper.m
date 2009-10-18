@@ -195,6 +195,11 @@ ocm_register(Class klass, VALUE oc_mname, VALUE rb_mname, VALUE is_predicate,
   void *closure;
   char *rb_mname_str;
  
+  // should not register methods on proxy classes
+  if ([klass isKindOfClass:[NSProxy class]]) {
+    return;
+  }
+
   // Let's locate the original class where the method is defined.
   getMethod = is_class_method ? class_getClassMethod : class_getInstanceMethod;
   while ((c = class_getSuperclass(klass)) != NULL 
