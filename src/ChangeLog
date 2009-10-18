@@ -1,3 +1,8 @@
+2009-10-18  kimura wataru <kimuraw@i.nifty.jp>
+
+	* framework/src/objc/mdl_objwrapper.m:
+	disable auto register methods on proxy classes.
+
 === RubyCocoa 1.0.1 ===
 
 2009-10-18  kimura wataru <kimuraw@i.nifty.jp>
