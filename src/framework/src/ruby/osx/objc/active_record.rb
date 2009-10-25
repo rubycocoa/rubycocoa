@@ -361,7 +361,7 @@ module OSX
       # define all the record attributes getters and setters
       @record.attribute_names.each do |m|
         self.class.class_eval do
-          define_method(m) do
+          define_method(m) do ||
             #return @record.send(m)
             return rbValueForKey(m.to_s)
           end
