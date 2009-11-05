@@ -25,7 +25,7 @@ if @config['gen-bridge-support'] != 'no'
   archs = @config['target-archs']
   cflags = ''
   cflags << archs.gsub(/\a|\s+/, ' -arch ') if archs.size > 0
-  cfalgs << " -isysroot #{sdkroot}" if sdkroot.size > 0
+  cflags << " -isysroot #{sdkroot}" if sdkroot.size > 0
   Dir.chdir('../misc/bridgesupport') do
     command("BSROOT=\"#{out_dir}\" CFLAGS=\"#{cflags}\" #{@config['ruby-prog']} build.rb")
   end
