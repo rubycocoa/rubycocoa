@@ -80,7 +80,6 @@ begin
   end
   
   class Mailbox < ActiveRecord::Base
-    self.default_scoping = []
     
     has_many :emails
     
@@ -93,7 +92,6 @@ begin
   # end
   
   class Email < ActiveRecord::Base
-    self.default_scoping = []
     
     belongs_to :mailbox
   end
