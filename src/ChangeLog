@@ -1,5 +1,8 @@
 2009-12-05  kimura wataru <kimuraw@i.nifty.jp>
 
+	* install.rb:
+	install.rb should fail with ruby-1.9. RubyCocoa do not support 1.9.
+
 	* framework/post-config.rb:
 	fix missing `-arch' in CFLAGS from --target-archs option (bug:#2908732)
 

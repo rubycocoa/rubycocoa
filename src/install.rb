@@ -1188,6 +1188,7 @@ end
 
 if $0 == __FILE__ then
   begin
+    raise "RubyCocoa DO NOT support Ruby-1.9" if RUBY_VERSION.to_f >= 1.9
     installer = ToplevelInstaller.new( File.dirname($0) )
     installer.execute
   rescue
