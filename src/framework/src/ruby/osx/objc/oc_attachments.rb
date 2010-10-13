@@ -2300,7 +2300,11 @@ module OSX
     def integer?
       !OSX::CFNumberIsFloatType(self)
     end
-    
+   
+    def bool?
+      OSX::CFGetTypeID(self) == OSX::CFBooleanGetTypeID()
+    end
+ 
     def ==(other)
       if other.is_a? NSNumber
         isEqualToNumber?(other)
@@ -2330,7 +2334,11 @@ module OSX
     end
     
     def inspect
-      "#<#{self.class.to_s.gsub(/^OSX::/, '')} #{self.description}>"
+      if bool?
+        "#<#{self.class.to_s.gsub(/^OSX::/, '')} #{ (self == 1) ? true : false }>"
+      else
+        "#<#{self.class.to_s.gsub(/^OSX::/, '')} #{self.description}>"
+      end
     end
   end
 
@@ -2360,7 +2368,13 @@ module OSX
       when OSX::NSCFBoolean
         self.boolValue
       when OSX::NSNumber
-        self.integer? ? self.to_i : self.to_f
+        if self.bool?
+          self == 1
+        elsif self.integer?
+          self.to_i
+        else
+           self.to_f
+        end
       when OSX::NSString
         self.to_s
       when OSX::NSAttributedString
