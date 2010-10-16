@@ -92,7 +92,7 @@ osx_mf_objc_class_method_add(VALUE mdl, VALUE kls, VALUE method_name, VALUE clas
 {
   Class a_class;
   SEL a_sel;
-  char *kls_name;
+  const char *kls_name;
   BOOL direct_override;
 
   method_name = rb_obj_as_string(method_name);

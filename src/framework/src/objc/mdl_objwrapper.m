@@ -193,7 +193,7 @@ ocm_register(Class klass, VALUE oc_mname, VALUE rb_mname, VALUE is_predicate,
   VALUE rclass;
   RB_ID rclass_id;
   void *closure;
-  char *rb_mname_str;
+  const char *rb_mname_str;
  
   // should not register methods on proxy classes
   if ([klass isKindOfClass:[NSProxy class]]) {
@@ -232,7 +232,7 @@ ocm_register(Class klass, VALUE oc_mname, VALUE rb_mname, VALUE is_predicate,
     OBJWRP_LOG("cannot register Ruby %s method `%s' on `%s' "
       "(problem when getting method name)",
       is_class_method ? "class" : "instance",
-      RSTRING(rb_inspect(rb_mname_str))->ptr, rb_class2name(rclass));
+      RSTRING(rb_inspect(rb_mname))->ptr, rb_class2name(rclass));
     return;
   }
 
