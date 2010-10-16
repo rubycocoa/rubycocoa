@@ -332,7 +332,7 @@ undecorate_encoding(const char *src, char *dest, size_t dest_len, struct bsStruc
         char buf2[MAX_ENCODE_LEN];
    
         strncpy(buf, p_src, MIN(sizeof buf, i));
-        buf[MIN(sizeof buf, i)] = '\0';        
+        buf[MIN((sizeof buf) - 1, i)] = '\0';        
      
         if (!undecorate_encoding(buf, buf2, sizeof buf2, NULL, 0, NULL)) {
           DLOG("MDLOSX", "Can't un-decode the field encoding '%s'", buf);
