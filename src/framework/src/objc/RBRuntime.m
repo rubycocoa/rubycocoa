@@ -507,12 +507,10 @@ typedef void (*rb_threadswitch_hook_func_t) _((rb_threadswitch_event_t,VALUE));
    will still load without thread switching hooks support in the ruby 
    interpreter.
 */
-#if 0
 extern void *rb_add_threadswitch_hook(rb_threadswitch_hook_func_t func) 
   __attribute__ ((weak_import));
 extern void rb_remove_threadswitch_hook(void *handle) 
   __attribute__ ((weak_import));
-#endif
 
 /* Cached values for direct call to +[NSThread currentThread] (not clear if 
    this is a significant performance improvement) */
@@ -911,7 +909,6 @@ static void rb_cocoa_thread_schedule_hook(rb_threadswitch_event_t event,
 
 static void RBCocoaInstallRubyThreadSchedulerHooks()
 {
-#if 0
   SInt32 version;
   if (Gestalt(gestaltSystemVersion, &version) == noErr) {
     if (version >= 0x1060) {
@@ -993,7 +990,6 @@ static void RBCocoaInstallRubyThreadSchedulerHooks()
 
   DLOG("Thread hooks done, main Ruby thread is %p\n", 
     (void *)rb_thread_current());
-#endif
 }
 
 @interface RBRuntime : NSObject
