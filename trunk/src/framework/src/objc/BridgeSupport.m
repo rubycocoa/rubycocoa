@@ -1333,11 +1333,18 @@ osx_load_bridge_support_file (VALUE mOSX, VALUE path)
             if (enum_value == NULL)
               enum_value = get_attribute(reader, "le_value");
 #endif
-            if (enum_value != NULL) {     
+            if (enum_value != NULL) {
+              /* Because rb_cstr_to_dbl() might warn in case the given float
+               * is out of range. */
+              VALUE old_ruby_verbose = ruby_verbose;    
+              ruby_verbose = Qnil;
+
               value = strchr(enum_value, '.') != NULL
-                ? rb_float_new(rb_cstr_to_dbl(enum_value, 1))
-                : rb_cstr_to_inum(enum_value, 10, 1); 
-            
+                ? rb_float_new(rb_cstr_to_dbl(enum_value, 0))
+                : rb_cstr_to_inum(enum_value, 10, 0); 
+
+              ruby_verbose = old_ruby_verbose;            
+
               CAPITALIZE(enum_name);
               rb_define_const(mOSX, enum_name, value);
 
