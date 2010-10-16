@@ -252,6 +252,10 @@ undecorate_encoding(const char *src, char *dest, size_t dest_len, struct bsStruc
     size_t len;
 
     field = field_idx < fields_count ? &fields[field_idx] : NULL;
+    if (field != NULL) {
+      field->name = NULL;
+      field->encoding = NULL;
+    }
 
     // Locate the first field, if any.
     pos = strchr(p_src, '"');
@@ -362,10 +366,14 @@ undecorate_encoding(const char *src, char *dest, size_t dest_len, struct bsStruc
   return YES;
 
 bails:
-  // Free what we allocated! 
+  // Free what we allocated!
   for (i = 0; i < field_idx; i++) {
-    free(fields[i].name);
-    free(fields[i].encoding);
+    if (fields[i].name != NULL) {
+      free(fields[i].name);
+    }
+    if (fields[i].encoding != NULL) {
+      free(fields[i].encoding);
+    }
   }
   return NO;
 }
@@ -1787,7 +1795,16 @@ osx_load_bridge_support_file (VALUE mOSX, VALUE path)
           if (atom->val == BS_XML_RETVAL) {
             struct bsRetval *retval;
             retval = call_entry->retval;
-            free(retval->octypestr);
+            if (retval == &default_func_retval) {
+              struct bsRetval *new_retval =
+                (struct bsRetval *)malloc(sizeof(struct bsRetval));
+              ASSERT_ALLOC(new_retval);
+              memcpy(new_retval, retval, sizeof(struct bsRetval));
+              retval = new_retval;
+            }
+            else {
+              free(retval->octypestr);
+            }
             retval->octypestr = (char *)strdup(new_type);
           }
           else {
