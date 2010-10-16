@@ -665,7 +665,7 @@ static void *
 rb_bs_struct_get_field_data(VALUE rcv, char **field_encoding_out)
 {
   struct bsBoxed *bs_struct;
-  char *field;
+  const char *field;
   unsigned field_len;
   unsigned i;
   unsigned offset;
@@ -966,7 +966,7 @@ func_dispatch_retain_if_necessary(VALUE arg, BOOL is_retval, void *ctx)
 static VALUE
 bridge_support_dispatcher (int argc, VALUE *argv, VALUE rcv)
 {
-  char *func_name;
+  const char *func_name;
   struct bsFunction *func;
   int expected_argc;
   ffi_type **arg_types;
