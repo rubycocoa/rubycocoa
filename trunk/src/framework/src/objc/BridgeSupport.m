@@ -907,7 +907,6 @@ init_bs_boxed_struct (VALUE mOSX, const char *name, const char *decorated_encodi
 
   // Allocate and return bs_boxed entry.
   bs_boxed = init_bs_boxed(bsBoxedStructType, name, encoding, klass);
-printf("field_count %d\n", field_count);
   bs_boxed->opt.s.fields = (struct bsStructField *)malloc(sizeof(struct bsStructField) * field_count);
   ASSERT_ALLOC(bs_boxed->opt.s.fields);
   memcpy(bs_boxed->opt.s.fields, fields, sizeof(struct bsStructField) * field_count); 
