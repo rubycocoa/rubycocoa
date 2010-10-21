@@ -256,6 +256,10 @@ undecorate_encoding(const char *src, char *dest, size_t dest_len, struct bsStruc
       field->name = NULL;
       field->encoding = NULL;
     }
+    if (field == NULL && fields != NULL) {
+      // Not enough fields!
+      goto bails;
+    }
 
     // Locate the first field, if any.
     pos = strchr(p_src, '"');
@@ -367,12 +371,14 @@ undecorate_encoding(const char *src, char *dest, size_t dest_len, struct bsStruc
 
 bails:
   // Free what we allocated!
-  for (i = 0; i < field_idx; i++) {
-    if (fields[i].name != NULL) {
-      free(fields[i].name);
-    }
-    if (fields[i].encoding != NULL) {
-      free(fields[i].encoding);
+  if (fields != NULL) {
+    for (i = 0; i < field_idx; i++) {
+      if (fields[i].name != NULL) {
+        free(fields[i].name);
+      }
+      if (fields[i].encoding != NULL) {
+        free(fields[i].encoding);
+      }
     }
   }
   return NO;
@@ -869,7 +875,7 @@ init_bs_boxed_struct (VALUE mOSX, const char *name, const char *decorated_encodi
 {
   char encoding[MAX_ENCODE_LEN];
   struct bsStructField fields[128];
-  int field_count;
+  int field_count = 0;
   VALUE klass;
   unsigned i;
   struct bsBoxed *bs_boxed;
@@ -901,6 +907,7 @@ init_bs_boxed_struct (VALUE mOSX, const char *name, const char *decorated_encodi
 
   // Allocate and return bs_boxed entry.
   bs_boxed = init_bs_boxed(bsBoxedStructType, name, encoding, klass);
+printf("field_count %d\n", field_count);
   bs_boxed->opt.s.fields = (struct bsStructField *)malloc(sizeof(struct bsStructField) * field_count);
   ASSERT_ALLOC(bs_boxed->opt.s.fields);
   memcpy(bs_boxed->opt.s.fields, fields, sizeof(struct bsStructField) * field_count); 
@@ -1080,7 +1087,7 @@ osx_load_bridge_support_dylib (VALUE rcv, VALUE path)
 
 static void
 reload_protocols(void) 
-{ 
+{
     Protocol **prots; 
     unsigned int i, prots_count; 
  
@@ -1105,7 +1112,9 @@ reload_protocols(void)
             informal_method->protocol_name = strdup(protocol_getName(p)); \
             st_insert(t, (st_data_t)methods[j].name, (st_data_t)informal_method); \
         } \
-        free(methods); \
+	if (methods != NULL) { \
+	    free(methods); \
+	} \
     } \
     while (0)
  
@@ -1119,8 +1128,10 @@ reload_protocols(void)
         REGISTER_MDESCS(true);
  
 #undef REGISTER_MDESCS 
-    } 
-    free(prots); 
+    }
+    if (prots != NULL) { 
+	free(prots); 
+    }
 } 
 
 #endif
