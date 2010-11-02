@@ -19,6 +19,7 @@
 #import "internal_macros.h"
 #import "ocexception.h"
 #import "objc_compat.h"
+#import <sys/mman.h>
 
 #if __LP64__
 /* FIXME */
@@ -151,9 +152,13 @@ ocm_ffi_closure(VALUE mname, VALUE is_predicate)
     } 
   }
 
-  closure = (ffi_closure *)malloc(sizeof(ffi_closure));
-  ASSERT_ALLOC(closure);
- 
+  // Allocate a page to hold the closure with read and write permissions.
+  closure = mmap(NULL, sizeof(ffi_closure), PROT_READ | PROT_WRITE,
+	  MAP_ANON | MAP_PRIVATE, -1, 0);
+  if (closure == (void *)-1) {
+    return NULL;
+  }
+
   userdata = (struct ocm_closure_userdata *)malloc(
     sizeof(struct ocm_closure_userdata));
   ASSERT_ALLOC(userdata);
@@ -164,6 +169,10 @@ ocm_ffi_closure(VALUE mname, VALUE is_predicate)
   if (ffi_prep_closure(closure, cif, ocm_closure_handler, userdata) 
       != FFI_OK)
     return NULL;
+
+  if (mprotect(closure, sizeof(ffi_closure), PROT_READ | PROT_EXEC) == -1) {
+    return NULL;
+  }
 
   return closure; 
 }
