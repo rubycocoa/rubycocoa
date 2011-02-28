@@ -46,7 +46,7 @@ static struct st_table *bsInformalProtocolInstanceMethods;      // selector -> s
 
 struct bsFunction *current_function = NULL;
 
-#define MAX_ENCODE_LEN 1024
+#define MAX_ENCODE_LEN 4096
 
 #define CAPITALIZE(x)         \
   do {                        \
@@ -1356,7 +1356,10 @@ osx_load_bridge_support_file (VALUE mOSX, VALUE path)
               ruby_verbose = old_ruby_verbose;            
 
               CAPITALIZE(enum_name);
-              rb_define_const(mOSX, enum_name, value);
+              ID enum_id = rb_intern(enum_name);
+              if (!rb_const_defined(mOSX, enum_id)) {
+                rb_const_set(mOSX, enum_id, value);
+              }
 
               free (enum_value);
             }
