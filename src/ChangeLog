@@ -3,6 +3,10 @@
 	* install.rb:
 	fix detecting version of Xcode on Lion.
 
+	* install.rb:
+	accept "-v" option for test.
+	print each testcase name when `ruby -v install.rb test'.
+
 2009-12-05  kimura wataru <kimuraw@i.nifty.jp>
 
 	* install.rb:
