@@ -1998,6 +1998,10 @@ find_bs_cf_type_by_encoding(const char *encoding)
 {
   struct bsCFType *cf_type;
 
+  // void pointer should not be any specified type (FIXME quick hack for Lion)
+  if (strcmp(encoding, "^v") == 0)
+    return NULL;
+
   if (!st_lookup(bsCFTypes, (st_data_t)encoding, (st_data_t *)&cf_type))
     return NULL;
 
