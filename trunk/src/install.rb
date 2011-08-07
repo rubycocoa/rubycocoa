@@ -1111,6 +1111,7 @@ class ToplevelInstaller < Installer
     cmd = "/usr/libexec/oah/translate " + cmd if @options['use-rosetta']
     cmd = "arch -#{@options['arch']} " + cmd if @options['arch']
     cmd += " " + @options['test-args'] if @options['test-args']
+    cmd += " -v" if $VERBOSE # print each testname
     command cmd
   end
 
