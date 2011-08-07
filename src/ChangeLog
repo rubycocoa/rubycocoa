@@ -7,6 +7,11 @@
 	accept "-v" option for test.
 	print each testcase name when `ruby -v install.rb test'.
 
+	* framework/src/objc/BridgeSupport.m:
+	fix wrong data conversion of void pointer on Lion,
+	such as -[NSData bytes] => NSMutableString.
+	it's only a quick hack.
+
 2009-12-05  kimura wataru <kimuraw@i.nifty.jp>
 
 	* install.rb:
