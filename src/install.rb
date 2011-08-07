@@ -645,17 +645,21 @@ class Installer
   # (2.0 or older generates into framework/build)
   def framework_obj_path
     obj_path = 'build'
+    with_default = false
     if File.basename(buildcommand) == 'xcodebuild'
       sys_version = `uname -r`.to_f
-      if sys_version < 8.0 
-        xcode_version = 0 # <= Xcode 1.5 on MacOS X 10.3
+      if sys_version < 8.0
+        # Xcode 1.5 or earlier on MacOS X 10.3
+      elsif sys_version >= 11.0
+	with_default = true  # Xcode 4.1 or later
       elsif /DevToolsCore-(\d+)/.match(`#{buildcommand} -version`)
         xcode_version = $1.to_i
+	with_default = true if xcode_version >= 620
       else
-        xcode_version = 0 # unknown
+        # unknown
       end
-      obj_path = "#{obj_path}/Default" if xcode_version >= 620
     end
+    obj_path = "#{obj_path}/Default" if with_default
     obj_path
   end
 
