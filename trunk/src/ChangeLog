@@ -1,5 +1,8 @@
 2011-08-08  kimura wataru <kimuraw@i.nifty.jp>
 
+	* tests/testall.rb:
+	allow gems test-unit2 and redgreen if enable.
+
 	* framework/src/objc/BridgeSupport.m:
 	fix some opaque becomes ABRecordRef on Lion.
 	opaque type table shold not contain enconding "@".
