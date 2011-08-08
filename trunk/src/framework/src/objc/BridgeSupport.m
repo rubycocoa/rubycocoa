@@ -1418,6 +1418,9 @@ osx_load_bridge_support_file (VALUE mOSX, VALUE path)
           DLOG("MDLOSX", "Opaque type with encoding '%s' already defined -- skipping...", opaque_encoding);
           free(opaque_encoding);
         }
+        else if (strcmp(opaque_encoding, "@") == 0) {
+	  // do not register encoding "@", such as ABRecordRef in AddressBook.
+	}
         else {
           char *            opaque_name;
           struct bsBoxed *  bs_boxed;
@@ -1493,7 +1496,7 @@ osx_load_bridge_support_file (VALUE mOSX, VALUE path)
  
 	  // void pointer (*void) should not be any specified type.
 	  // Lion's bridgesupport file contains cftype with encoding "^v",
-	  // such as CFType in CoreFoundation or ABRecordRef in AddressBook.
+	  // such as CFTypeRef in CoreFoundation or ABRecordRef in AddressBook.
 	  // (1) bsCFTypes : lookup by enconding "^v" -> NG
 	  // (2) bsCFTypes2: lookup by CFTypeID `CFTypeRef' -> OK
 	  if (strcmp(typeid_encoding, "^v") == 0) {
