@@ -1,3 +1,10 @@
+2011-08-08  kimura wataru <kimuraw@i.nifty.jp>
+
+	* framework/src/objc/BridgeSupport.m:
+	refactoring fix wrong data conversion of void pointer on Lion.
+	find_bs_cf_type_by_encoding() for "^v" always returns NULL
+	by ignoring registration of encoding "^v" into the table bsCFTypes.
+
 2011-08-07  kimura wataru <kimuraw@i.nifty.jp>
 
 	* install.rb:

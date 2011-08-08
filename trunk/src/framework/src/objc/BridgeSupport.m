@@ -1491,7 +1491,17 @@ osx_load_bridge_support_file (VALUE mOSX, VALUE path)
             bs_cf_type->bridged_class_name = bs_cf_type->name;
           }
  
-          st_insert(bsCFTypes, (st_data_t)typeid_encoding, (st_data_t)bs_cf_type);
+	  // void pointer (*void) should not be any specified type.
+	  // Lion's bridgesupport file contains cftype with encoding "^v",
+	  // such as CFType in CoreFoundation or ABRecordRef in AddressBook.
+	  // (1) bsCFTypes : lookup by enconding "^v" -> NG
+	  // (2) bsCFTypes2: lookup by CFTypeID `CFTypeRef' -> OK
+	  if (strcmp(typeid_encoding, "^v") == 0) {
+	    // do not insert into bsCFTypes
+	  }
+	  else {
+	    st_insert(bsCFTypes, (st_data_t)typeid_encoding, (st_data_t)bs_cf_type);
+	  }
           if (bs_cf_type->type_id > 0) 
             st_insert(bsCFTypes2, (st_data_t)bs_cf_type->type_id, (st_data_t)bs_cf_type);
         }
@@ -1997,10 +2007,6 @@ struct bsCFType *
 find_bs_cf_type_by_encoding(const char *encoding)
 {
   struct bsCFType *cf_type;
-
-  // void pointer should not be any specified type (FIXME quick hack for Lion)
-  if (strcmp(encoding, "^v") == 0)
-    return NULL;
 
   if (!st_lookup(bsCFTypes, (st_data_t)encoding, (st_data_t *)&cf_type))
     return NULL;
