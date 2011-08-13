@@ -292,6 +292,7 @@ static int rubycocoa_initialized_p()
 VALUE rubycocoa_debug = Qfalse;
 
 static BOOL rb_cocoa_check_for_multiple_libruby(void);
+static const char *rb_cocoa_path_libruby(void);
 static void RBCocoaInstallRubyThreadSchedulerHooks(void);
 
 static void rubycocoa_init()
@@ -923,20 +924,24 @@ static void RBCocoaInstallRubyThreadSchedulerHooks()
     }
     return;
   }
-  
+
   rb_cocoa_thread_debug = getenv("RUBYCOCOA_THREAD_DEBUG") != NULL;
   
-  if (rb_add_threadswitch_hook == NULL) {
+  // TODO dyld "NS" APIs are deprecated. the following code should be rewritten
+  // with dlopen/dlsym. see mach-o/dyld.h.
+  struct mach_header *libruby_image = 
+    NSAddImage(rb_cocoa_path_libruby(), NSADDIMAGE_OPTION_RETURN_ON_ERROR);
+  NSSymbol threadswitch_symbol = 
+    NSLookupSymbolInImage(libruby_image, "_rb_add_threadswitch_hook", NSLOOKUPSYMBOLINIMAGE_OPTION_RETURN_ON_ERROR); 
+  NSSymbol ruby_init_symbol = 
+    NSLookupSymbolInImage(libruby_image, "_ruby_init", NSLOOKUPSYMBOLINIMAGE_OPTION_RETURN_ON_ERROR); 
+  
+  if (threadswitch_symbol == NULL) {
     if (rb_cocoa_thread_debug) {
       NSLog(@"RBCocoaInstallRubyThreadSchedulerHooks: warning: rb_set_cocoa_thread_hooks not present in ruby core");
     }
     return;
   }
-  
-  NSSymbol threadswitch_symbol = 
-    NSLookupAndBindSymbol("_rb_add_threadswitch_hook");
-  NSSymbol ruby_init_symbol = 
-    NSLookupAndBindSymbol("_ruby_init");
   
   if (NSModuleForSymbol(threadswitch_symbol) 
       != NSModuleForSymbol(ruby_init_symbol)) {
@@ -1026,4 +1031,24 @@ static BOOL rb_cocoa_check_for_multiple_libruby()
     }
   }
   return multiple;
+}
+
+static const char *rb_cocoa_path_libruby()
+{
+  int i, count = _dyld_image_count();
+  const char *name;
+  const char *libruby_name = NULL;
+  
+  libruby_name = NULL;
+  for (i=0;i<count;i++) {
+    name = _dyld_get_image_name(i);
+    if (name && strstr(name, "/libruby.")) {
+      if (libruby_name) {
+        NSLog(@"WARNING: multiple libruby.dylib found: '%s' and '%s'", 
+          libruby_name, name);
+      }
+      libruby_name = name;
+    }
+  }
+  return libruby_name;
 }
