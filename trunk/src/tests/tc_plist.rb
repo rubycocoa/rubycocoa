@@ -70,7 +70,6 @@ class TC_Plist < Test::Unit::TestCase
       obj = OSX.load_plist(data)
       assert_kind_of(rbobj.class, obj)
       assert_equal(obj, rbobj)
-      assert_equal(obj, OSX.load_plist(data, format))
     end
   end
 
