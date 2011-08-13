@@ -1,5 +1,9 @@
 2011-08-13  kimura wataru <kimuraw@i.nifty.jp>
 
+	* framework/src/ruby/osx/objc/ruby_addition.rb,
+	  tests/tc_plist.rb:
+	let OSX.load_plist() to accept binary formats data.
+
 	* src/framework/src/objc/RBRuntime.m:
 	fix 'Symbol not found: _rb_add_threadswitch_hook (LoadError)'
 	runnig under ruby without threadswitch_hook.
