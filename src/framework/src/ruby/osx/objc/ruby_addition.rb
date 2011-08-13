@@ -33,8 +33,19 @@ end
 
 # Property list API.
 module OSX
-  def load_plist(data)
-    nsdata = data.to_s.to_ns.dataUsingEncoding(OSX::NSUTF8StringEncoding)
+  def load_plist(data, format=nil)
+    format ||= OSX::NSPropertyListXMLFormat_v1_0
+    if format == OSX::NSPropertyListBinaryFormat_v1_0
+      nsdata = OSX::NSData.dataWithBytes_length(data, data.size)
+    else
+      str = data.to_s.to_ns
+      if str
+	nsdata = str.dataUsingEncoding(OSX::NSUTF8StringEncoding)
+      else
+	# binary string data => guess binary format plist
+	nsdata = OSX::NSData.dataWithBytes_length(data, data.size)
+      end
+    end
     obj, error = OSX::NSPropertyListSerialization.objc_send \
       :propertyListFromData, nsdata,
       :mutabilityOption, OSX::NSPropertyListImmutable,
