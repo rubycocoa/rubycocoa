@@ -1,6 +1,9 @@
 2011-08-15  kimura wataru <kimuraw@i.nifty.jp>
 
 	* framework/src/objc/libffi.m:
+	fix wrong value on x86_64 getting from small C array, such as [2f].
+
+	* framework/src/objc/libffi.m:
 	fix missing the last NULL element of ffi_type->elements at
 	fake_ary_ffi_type().
 
