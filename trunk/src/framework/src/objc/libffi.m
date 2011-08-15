@@ -54,6 +54,7 @@ bs_boxed_ffi_type(struct bsBoxed *bs_boxed)
 
 static struct st_table *ary_ffi_types = NULL;
 
+// [2f] => {cccccccc}
 static ffi_type *
 fake_ary_ffi_type (unsigned bytes, unsigned align)
 {
@@ -81,6 +82,39 @@ fake_ary_ffi_type (unsigned bytes, unsigned align)
   type->elements[bytes] = NULL;
 
   st_insert(ary_ffi_types, (st_data_t)bytes, (st_data_t)type);
+
+  return type;
+}
+
+// [2f] => {ff} -- keep type
+static ffi_type *
+fake_ary_ffi_type_cary (unsigned bytes, unsigned align, const char *octypestr)
+{
+  ffi_type *type;
+  unsigned i;
+  int count = 0;
+  const char octype[2];
+  ffi_type *element_type;
+
+  assert(bytes > 0);
+
+  if (sscanf(octypestr, "[%d%1s]", &count, octype) == 0 || count == 0) {
+    FFI_LOG("scan failed for octype '%s'", octypestr);
+    return fake_ary_ffi_type ( bytes, align);
+  }
+
+  type = (ffi_type *)malloc(sizeof(ffi_type));
+  ASSERT_ALLOC(type);
+
+  type->size = bytes;
+  type->alignment = align;
+  type->type = FFI_TYPE_STRUCT;
+  type->elements = malloc((count +1) * sizeof(ffi_type *));
+  ASSERT_ALLOC(type->elements);
+  element_type = ffi_type_for_octype(octype);
+  for (i = 0; i < count; i++)
+    type->elements[i] = element_type;
+  type->elements[count] = NULL;
 
   return type;
 }
@@ -176,8 +210,12 @@ ffi_type_for_octype (const char *octypestr)
             octypestr, [[exception description] UTF8String]);
         }
 
-        if (size > 0)  
+        if (size > 0)
+#if __LP64__
+          return fake_ary_ffi_type_cary(size, align, octypestr);
+#else
           return fake_ary_ffi_type(size, align);
+#endif
       }
       break;
 
