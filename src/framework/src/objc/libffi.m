@@ -74,10 +74,11 @@ fake_ary_ffi_type (unsigned bytes, unsigned align)
   type->size = bytes; 
   type->alignment = align;
   type->type = FFI_TYPE_STRUCT;
-  type->elements = malloc(bytes * sizeof(ffi_type *));
+  type->elements = malloc((bytes +1) * sizeof(ffi_type *));
   ASSERT_ALLOC(type->elements);
   for (i = 0; i < bytes; i++)
     type->elements[i] = &ffi_type_uchar;
+  type->elements[bytes] = NULL;
 
   st_insert(ary_ffi_types, (st_data_t)bytes, (st_data_t)type);
 
