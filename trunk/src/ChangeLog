@@ -1,5 +1,9 @@
 2011-08-31  kimura wataru <kimuraw@i.nifty.jp>
 
+	* tests/CAryStructTest.bridgesupport, tests/objc_test.m
+	  tests/tc_types.rb:
+	refactoring tests for C array.
+
 	* tests/tc_thread.rb:
 	print 'Omission' for thread-hooks related tests on 10.6 or later.
 

@@ -7,9 +7,10 @@ require 'osx/cocoa'
 
 system 'make -s' || raise(RuntimeError, "'make' failed")
 require 'objc_test.bundle'
-$OS_VERS = `/usr/bin/sw_vers -productVersion`.chomp # such as "10.6.1"
 
 class TC_Types < Test::Unit::TestCase
+
+  SYSTEM_VERSION = `/usr/bin/sw_vers -productVersion`.chomp # such as "10.6.1"
 
   def test_auto_boolean_conversion_objc
     s1 = OSX::NSString.alloc.initWithString("foo")
@@ -152,8 +153,8 @@ class TC_Types < Test::Unit::TestCase
     assert_equal(url.path, OSX::CFURLCopyPath(url))
   end
 
-# FIXME: no suitable type for testing without toll-free on 10.6
-if $OS_VERS.to_f < 10.6
+# no suitable type for testing without toll-free on 10.6
+if SYSTEM_VERSION.to_f <= 10.5
   def test_cftype_proxies
     assert_kind_of(OSX::CFRunLoopRef, OSX::CFRunLoopGetCurrent())
   end
@@ -277,14 +278,21 @@ end
     assert_kind_of(OSX::Ttype1, t1)
     assert_equal(1.0, t1.a)
     assert_equal(2.0, t1.b)
-# FIXME: SEGV on 10.6
-if $OS_VERS.to_f < 10.6
     t2 = o.test2
     assert_kind_of(OSX::Ttype2, t2)
     assert_equal(1.0, t2.a[0])
     assert_equal(2.0, t2.a[1])
-else
-    warn "skip 3 assertions in test_cary_struct()"
-end
+  end
+
+  # libffi on x86_64 passes the value via stack when the size of the struct
+  # is larger than 32 bytes.
+  def test_cary_struct_gt32
+    OSX.load_bridge_support_file('CAryStructTest.bridgesupport')
+    o = OSX::NSObject.new
+    t4 = o.test4
+    assert_equal(11, t4.a[0])
+    assert_equal(22, t4.a[1])
+    assert_equal(33, t4.a[2])
+    assert_equal(99, t4.a[8])
   end
 end
