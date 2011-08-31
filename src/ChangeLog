@@ -1,5 +1,8 @@
 2011-08-31  kimura wataru <kimuraw@i.nifty.jp>
 
+	* NEWS, NEWS.ja:
+	update NEWS.
+
 	* tests/tc_nsarray.rb:
 	rename duplicated test TC_NSArray#test_sort.
 
