@@ -896,7 +896,7 @@ class TC_NSArray < Test::Unit::TestCase
     end
   end
   
-  def test_sort
+  def test_sort2
     [['abc','d!ef','98adfa','zAvcz'], [1,2,3,4]].each do |d|
       a = alloc_nsarray(*d)
       b = d
