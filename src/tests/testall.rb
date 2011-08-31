@@ -1,10 +1,7 @@
 begin
-  # use gems test-unit2 and redgreen if enable
+  # use gems test-unit2 if enable
   require 'rubygems'
-rescue LoadError
-end
-begin
-  require 'redgreen'
+  gem('test-unit')
 rescue LoadError
 end
 require 'test/unit'
