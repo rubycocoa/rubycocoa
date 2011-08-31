@@ -1,5 +1,8 @@
 2011-08-31  kimura wataru <kimuraw@i.nifty.jp>
 
+	* tests/tc_nsarray.rb:
+	rename duplicated test TC_NSArray#test_sort.
+
 	* tests/tc_types.rb, tests/tc_attachments.rb, tests/tc_subclass.rb:
 	fix test failures caused by objc class changed on 10.7,
 	such as NSCFString => NSMutableString or NSCFBoolean => NSNumber.
