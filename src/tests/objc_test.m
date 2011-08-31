@@ -708,6 +708,7 @@ static BOOL TestThreadedCallbackDone = NO;
 
 struct ttype1 {float a; float b;};
 struct ttype2 {float a[2];};
+struct ttype4 {float a[9];};
 
 @implementation NSObject (FooTests)
 - (struct ttype1)test1 {
@@ -718,6 +719,14 @@ struct ttype2 {float a[2];};
 	struct ttype2 r;
 	r.a[0] = 1.;
 	r.a[1] = 2.;
+	return r;
+}
+- (struct ttype4)test4 {
+	struct ttype4 r;
+	r.a[0] = 11.;
+	r.a[1] = 22.;
+	r.a[2] = 33.;
+	r.a[8] = 99.;
 	return r;
 }
 @end
