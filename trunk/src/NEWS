@@ -3,6 +3,18 @@
 
 $Id$
 
+== Changes 1.0.2 from 1.0.1: 2011-08-31
+
+=== Fixes
+
+  * Lion
+     * Fixed SEGV at working with NSData or Ruby byte string.
+     * Fixed some opaque becomes ABRecordRef.
+     * Fixed build error with install.rb.
+  * x86_64
+     * Fixed SEGV passing/getting small C struct contains C array,
+       such as NSDecimal.
+
 == Changes 1.0.1 from 1.0.0: 2009-10-18
 
 === Improvements
