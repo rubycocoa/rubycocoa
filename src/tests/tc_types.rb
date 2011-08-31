@@ -126,8 +126,13 @@ class TC_Types < Test::Unit::TestCase
     d.setValue_forKey(true, 'true')
     d.setValue_forKey(false, 'false')
     d.setValue_forKey(123, '123')
-    assert_kind_of(OSX::NSCFBoolean, d.objectForKey('true'))
-    assert_kind_of(OSX::NSCFBoolean, d.objectForKey('false'))
+    if SYSTEM_VERSION.to_f >= 10.7
+      assert_kind_of(OSX::NSNumber, d.objectForKey('true'))
+      assert_kind_of(OSX::NSNumber, d.objectForKey('false'))
+    else
+      assert_kind_of(OSX::NSCFBoolean, d.objectForKey('true'))
+      assert_kind_of(OSX::NSCFBoolean, d.objectForKey('false'))
+    end
     assert_kind_of(OSX::NSNumber, d.objectForKey('123'))
   end
 
