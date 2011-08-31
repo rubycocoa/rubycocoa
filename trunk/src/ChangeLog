@@ -1,5 +1,8 @@
 2011-08-31  kimura wataru <kimuraw@i.nifty.jp>
 
+	* tests/tc_thread.rb:
+	print 'Omission' for thread-hooks related tests on 10.6 or later.
+
 	* tests/testall.rb:
 	disable redgreen. test-unit2 supports colored output.
 

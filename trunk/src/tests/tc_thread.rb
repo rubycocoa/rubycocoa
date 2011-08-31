@@ -52,6 +52,8 @@ end
 class TC_Thread < Test::Unit::TestCase
   attr_reader :mainThread
 
+  SYSTEM_VERSION = `/usr/bin/sw_vers -productVersion`.chomp # such as "10.6.1"
+
   def setup
     @mainThread = OSX::NSThread.currentThread
     @helper = OSX::RBThreadTest.alloc.init
@@ -76,6 +78,11 @@ class TC_Thread < Test::Unit::TestCase
   end
   
   def assert_threads_supported
+    # Mac OS X 10.6 or later, thread-hooks is not enable.
+    # use test-unit2 `omit' not error.
+    if respond_to?(:omit) && SYSTEM_VERSION.to_f >= 10.6
+      omit("no runtime support for Ruby threads")
+    end
     assert OSX::RBRuntime.isRubyThreadingSupported?, "no runtime support for Ruby threads" unless ENV['RUBYCOCOA_THREAD_HOOK_DISABLE']
   end
   
