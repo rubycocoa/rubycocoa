@@ -89,6 +89,8 @@ end
 
 class TC_SubClass < Test::Unit::TestCase
 
+  SYSTEM_VERSION = `/usr/bin/sw_vers -productVersion`.chomp # such as "10.6.1"
+
   def test_s_new
     # all NSObject-based classes respond to new, others don't.
     assert_kind_of(OSX::NSObject, OSX::NSObject.new)
@@ -221,9 +223,13 @@ class TC_SubClass < Test::Unit::TestCase
     assert(OSX::NSString.ancestors.include?(OSX::NSObject))
     
     # CoreFoundation-bridged ancestors.
-    assert(OSX::NSCFString.ancestors.include?(OSX::NSString))
-    assert(OSX::NSCFDictionary.ancestors.include?(OSX::NSDictionary))
-    assert_kind_of(OSX::NSCFArray, OSX::NSArray.arrayWithArray(%w{a b c}))
+    if SYSTEM_VERSION.to_f >= 10.7
+      # 10.7 does not have classes NSCFString, NSCFDictionary and NSCFArray
+    else
+      assert(OSX::NSCFString.ancestors.include?(OSX::NSString))
+      assert(OSX::NSCFDictionary.ancestors.include?(OSX::NSDictionary))
+      assert_kind_of(OSX::NSCFArray, OSX::NSArray.arrayWithArray(%w{a b c}))
+    end
  
     # Method manually defined in an ancestor. 
     s = OSX::NSString.stringWithString('foo')
