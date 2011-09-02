@@ -1,5 +1,8 @@
 2011-09-02  kimura wataru <kimuraw@i.nifty.jp>
 
+	* package/post-package.rb:
+	set correct permissions of install contents at packaging.
+
 	* pre-install.rb, template/ProjectBuilder, template/Xcode3.x:
 	move template/ProjectBuilder into template/Xcode3.x.
 
