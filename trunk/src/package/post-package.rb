@@ -12,7 +12,14 @@ Dir.mkdir dmg_dir
 
 pkgmaker = '/Developer/Applications/Utilities/PackageMaker.app/Contents/MacOS/PackageMaker'
 
+# set permissions
+['/Developer', '/Developer/Documentation', '/Developer/Examples',
+ '/Library', '/Library/Application Support'].each do |dir|
+  File.chmod(0775, File.join(contents_dir, dir))
+end
+
 command "sudo chown -R root:admin \"#{contents_dir}\""
+command "sudo chgrp -R wheel \"#{File.join(contents_dir, '/Library/Ruby')}\" \"#{File.join(contents_dir, '/Library/Frameworks')}\""
 
 begin
   str = %Q!"#{pkgmaker}" -build ! +
