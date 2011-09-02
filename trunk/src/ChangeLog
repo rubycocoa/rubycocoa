@@ -1,5 +1,8 @@
 2011-09-02  kimura wataru <kimuraw@i.nifty.jp>
 
+	* NEWS, NEWS.ja:
+	update NEWS.
+
 	* package/config/10.7:
 	add package configuration for 10.7.
 

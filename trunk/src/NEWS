@@ -5,6 +5,10 @@ $Id$
 
 == Changes 1.0.2 from 1.0.1: 2011-08-31
 
+=== Improvements
+
+  * OSX.load_plist() accepts binary format plist data.
+
 === Fixes
 
   * Lion
