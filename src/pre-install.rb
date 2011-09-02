@@ -25,7 +25,7 @@ xcodeextras_dir =
   @config['xcode-extras'] ? @config['xcode-extras'].split(',').map {|path|
     File.expand_path("#{install_root}#{path}")} : nil
 if @config['macosx-deployment-target'].to_f >= 10.5
-  pbtmpldir = "template/ProjectBuilder" # for Xcode 3.x
+  pbtmpldir = "template/Xcode3.x/ProjectBuilder" # for Xcode 3.x
 else
   pbtmpldir = "template/Xcode2.x/ProjectBuilder" # for Xcode 2.x
 end

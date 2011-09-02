@@ -1,3 +1,8 @@
+2011-09-02  kimura wataru <kimuraw@i.nifty.jp>
+
+	* pre-install.rb, template/ProjectBuilder, template/Xcode3.x:
+	move template/ProjectBuilder into template/Xcode3.x.
+
 2011-08-31  kimura wataru <kimuraw@i.nifty.jp>
 
 	* NEWS, NEWS.ja:
