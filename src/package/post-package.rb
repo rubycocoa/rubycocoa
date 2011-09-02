@@ -14,12 +14,17 @@ pkgmaker = '/Developer/Applications/Utilities/PackageMaker.app/Contents/MacOS/Pa
 
 # set permissions
 ['/Developer', '/Developer/Documentation', '/Developer/Examples',
- '/Library', '/Library/Application Support'].each do |dir|
+ '/Library/Application Support'].each do |dir|
   File.chmod(0775, File.join(contents_dir, dir))
 end
 
 command "sudo chown -R root:admin \"#{contents_dir}\""
-command "sudo chgrp -R wheel \"#{File.join(contents_dir, '/Library/Ruby')}\" \"#{File.join(contents_dir, '/Library/Frameworks')}\""
+if @config['macosx-deployment-target'].to_f >= 10.7
+  command "sudo chgrp wheel \"#{File.join(contents_dir, '/Library')}\""
+  command "sudo chgrp -R wheel " +
+          "\"#{File.join(contents_dir, '/Library/Ruby')}\" " +
+	  "\"#{File.join(contents_dir, '/Library/Frameworks')}\""
+end
 
 begin
   str = %Q!"#{pkgmaker}" -build ! +
