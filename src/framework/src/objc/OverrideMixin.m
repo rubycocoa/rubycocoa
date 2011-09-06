@@ -160,7 +160,7 @@ ovmix_ffi_closure(ffi_cif* cif, void* resp, void** args, void* userdata)
   for (i = 2; i < cif->nargs; i++) {
     struct bsBoxed *bs_boxed;
     if (is_boxed_ptr(args_octypes[i - 2], &bs_boxed)) {
-      VALUE arg = RARRAY(rb_args)->ptr[i - 2];
+      VALUE arg = RARRAY_PTR(rb_args)[i - 2];
       rb_bs_boxed_get_data(arg, bs_boxed->encoding, NULL, NULL, NO);
     }
   }

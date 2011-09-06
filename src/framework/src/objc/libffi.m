@@ -431,7 +431,7 @@ rb_ffi_dispatch (
         else if (TYPE(arg) == T_STRING)
           len = RSTRING(arg)->len;
         else if (TYPE(arg) == T_ARRAY)
-          len = RARRAY(arg)->len; // XXX should be RARRAY(arg)->len * ocdata_sizeof(...)
+          len = RARRAY_LEN(arg); // XXX should be RARRAY(arg)->len * ocdata_sizeof(...)
         else if (rb_obj_is_kind_of(arg, objcptr_s_class()))
           len = objcptr_allocated_size(arg); 
         else {
@@ -671,7 +671,7 @@ rb_ffi_dispatch (
       }
     }
 
-    *result = RARRAY(retval_ary)->len == 1 ? RARRAY(retval_ary)->ptr[0] : RARRAY(retval_ary)->len == 0 ? Qnil : retval_ary;
+    *result = RARRAY_LEN(retval_ary) == 1 ? RARRAY_PTR(retval_ary)[0] : RARRAY_LEN(retval_ary) == 0 ? Qnil : retval_ary;
   }
   
   FFI_LOG("ffi dispatch done");

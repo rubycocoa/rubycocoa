@@ -229,7 +229,7 @@ int RBNotifyException(const char* title, VALUE err)
           StringValuePtr(err_str));
     ary = rb_funcall(err, rb_intern("backtrace"), 0);
     if (!NIL_P(ary)) {
-      for (i = 0; i < RARRAY(ary)->len; i++) {
+      for (i = 0; i < RARRAY_LEN(ary); i++) {
         VALUE printf_args[2]; /* GC safe */
         printf_args[0] = rb_str_new2("\t%s\n");
         printf_args[1] = rb_ary_entry(ary, i);
