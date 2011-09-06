@@ -491,8 +491,8 @@ rb_bs_struct_new (int argc, VALUE *argv, VALUE rcv)
 #if 0
   // Probably not necessary.
   if (argc == 1 && TYPE(argv[0]) == T_ARRAY) {
-    argc = RARRAY(argv[0])->len;
-    argv = RARRAY(argv[0])->ptr;
+    argc = RARRAY_LEN(argv[0]);
+    argv = RARRAY_PTR(argv[0]);
   }
 #endif
 
@@ -573,7 +573,7 @@ rb_bs_boxed_struct_get_data(VALUE obj, struct bsBoxed *bs_boxed, size_t *size, B
       rb_ary_push(ary, obj);
       obj = ary;
     }
-    obj = rb_funcall2(bs_boxed->klass, rb_intern("new"), RARRAY(obj)->len, RARRAY(obj)->ptr);
+    obj = rb_funcall2(bs_boxed->klass, rb_intern("new"), RARRAY_LEN(obj), RARRAY_PTR(obj));
   }
 
   if (rb_obj_is_kind_of(obj, cOSXBoxed) != Qtrue)

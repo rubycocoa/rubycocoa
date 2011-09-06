@@ -123,7 +123,7 @@ ocm_closure_handler(ffi_cif *cif, void *resp, void **args, void *userdata)
   rb_ary_unshift(argv, Qnil);
   rb_ary_unshift(argv, mname);
 
-  *(VALUE *)resp = wrapper_ocm_send(RARRAY(argv)->len, RARRAY(argv)->ptr, rcv); 
+  *(VALUE *)resp = wrapper_ocm_send(RARRAY_LEN(argv), RARRAY_PTR(argv), rcv); 
   
   OBJWRP_LOG("ocm_closure_handler ok");
 }

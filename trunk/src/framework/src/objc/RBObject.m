@@ -215,8 +215,8 @@ rbobjRaiseRubyException (void)
   NSMutableArray *backtraceArray = [NSMutableArray array];
   volatile VALUE ary = rb_funcall(ruby_errinfo, rb_intern("backtrace"), 0);
   int c;
-  for (c=0; c<RARRAY(ary)->len; c++) {
-      const char *path = StringValuePtr(RARRAY(ary)->ptr[c]);
+  for (c=0; c<RARRAY_LEN(ary); c++) {
+      const char *path = StringValuePtr(RARRAY_PTR(ary)[c]);
       NSString *nspath = [NSString stringWithUTF8String:path];
       [backtraceArray addObject: nspath];
   }
@@ -273,7 +273,7 @@ VALUE rbobj_call_ruby(id rbobj, SEL selector, VALUE args)
   stub_args[1] = mid;
   stub_args[2] = args;
 
-  RBOBJ_LOG("calling method %s on Ruby object %p with %d args", rb_id2name(mid), m_rbobj, RARRAY(args)->len);
+  RBOBJ_LOG("calling method %s on Ruby object %p with %d args", rb_id2name(mid), m_rbobj, RARRAY_LEN(args));
 
   if (rb_respond_to(m_rbobj, mid) == 0) {
     VALUE str = rb_inspect(m_rbobj);

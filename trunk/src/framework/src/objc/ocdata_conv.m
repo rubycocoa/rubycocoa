@@ -124,16 +124,16 @@ convert_cary(VALUE *result, void *ocdata, char *octype_str, BOOL to_ruby)
     ary = *result;
 
     Check_Type(ary, T_ARRAY);
-    if (RARRAY(ary)->len > count)
+    if (RARRAY_LEN(ary) > count)
       rb_raise(rb_eArgError, 
         "Given Array expected with maximum %d elements, but got %d",
-        count, RARRAY(ary)->len);
+        count, RARRAY_LEN(ary));
 
-    for (i = 0; i < RARRAY(ary)->len; i++) {
+    for (i = 0; i < RARRAY_LEN(ary); i++) {
       VALUE val;
       void *p;
 
-      val = RARRAY(ary)->ptr[i];
+      val = RARRAY_PTR(ary)[i];
       p = ocdata + (i * size);
       if (!rbobj_to_ocdata(val, octype_str, p, NO)) {
         ok = NO;
@@ -441,12 +441,12 @@ rbary_to_nsary (VALUE rbary, id* nsary)
   long i, len;
   id *objects;
 
-  len = RARRAY(rbary)->len;
+  len = RARRAY_LEN(rbary);
   objects = (id *)alloca(sizeof(id) * len);
   ASSERT_ALLOC(objects);
   
   for (i = 0; i < len; i++)
-    if (!rbobj_to_nsobj(RARRAY(rbary)->ptr[i], &objects[i]))
+    if (!rbobj_to_nsobj(RARRAY_PTR(rbary)[i], &objects[i]))
       return NO;
   
   *nsary = [[[NSMutableArray alloc] initWithObjects:objects count:len] autorelease];
@@ -466,8 +466,8 @@ rbhash_to_nsdic (VALUE rbhash, id* nsdic)
   id *nskeys, *nsvals;
 
   ary_keys = rb_funcall(rbhash, rb_intern("keys"), 0);
-  len = RARRAY(ary_keys)->len;
-  keys = RARRAY(ary_keys)->ptr;
+  len = RARRAY_LEN(ary_keys);
+  keys = RARRAY_PTR(ary_keys);
 
   nskeys = (id *)alloca(sizeof(id) * len);
   ASSERT_ALLOC(nskeys);
@@ -800,8 +800,8 @@ funcptr_closure_handler (ffi_cif *cif, void *resp, void **args, void *userdata)
     rb_ary_store(rb_args, i, arg);
   }
 
-  DATACONV_LOG("calling Ruby block with %d args...", RARRAY(rb_args)->len);
-  retval = rb_funcall2(context->block, rb_intern("call"), RARRAY(rb_args)->len, RARRAY(rb_args)->ptr);
+  DATACONV_LOG("calling Ruby block with %d args...", RARRAY_LEN(rb_args));
+  retval = rb_funcall2(context->block, rb_intern("call"), RARRAY_LEN(rb_args), RARRAY_PTR(rb_args));
   DATACONV_LOG("called Ruby block");
 
   if (*encoding_skip_to_first_type(context->rettype) != _C_VOID) {
@@ -872,7 +872,7 @@ rbobj_to_objcptr (VALUE obj, void** cptr, const char *octype_str)
     *cptr = RSTRING(obj)->ptr;
   }
   else if (TYPE(obj) == T_ARRAY) {
-    if (RARRAY(obj)->len > 0) {
+    if (RARRAY_LEN(obj) > 0) {
       size_t len;
       void *ary;
       unsigned i;
@@ -880,8 +880,8 @@ rbobj_to_objcptr (VALUE obj, void** cptr, const char *octype_str)
       len = ocdata_size(octype_str);
       ary = *cptr;
 
-      for (i = 0; i < RARRAY(obj)->len; i++) {
-        if (!rbobj_to_ocdata(RARRAY(obj)->ptr[i], octype_str, ary + (i * len), NO))
+      for (i = 0; i < RARRAY_LEN(obj); i++) {
+        if (!rbobj_to_ocdata(RARRAY_PTR(obj)[i], octype_str, ary + (i * len), NO))
           return NO;
       }
     }
@@ -922,13 +922,13 @@ rbobj_to_idptr (VALUE obj, id** idptr)
     *idptr = nil;
   }
   else if (TYPE(obj) == T_ARRAY) {
-    if (RARRAY(obj)->len > 0) {
+    if (RARRAY_LEN(obj) > 0) {
       id *ary;
       unsigned i;
 
       ary = *idptr;
-      for (i = 0; i < RARRAY(obj)->len; i++) {
-        if (!rbobj_to_nsobj(RARRAY(obj)->ptr[i], &ary[i])) {
+      for (i = 0; i < RARRAY_LEN(obj); i++) {
+        if (!rbobj_to_nsobj(RARRAY_PTR(obj)[i], &ary[i])) {
           *idptr = nil;
           return NO;
         }
