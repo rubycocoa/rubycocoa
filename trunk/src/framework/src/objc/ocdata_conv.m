@@ -541,7 +541,7 @@ rbobj_convert_to_nsobj (VALUE obj, id* nsobj)
 
     case T_SYMBOL:
       obj = rb_obj_as_string(obj);
-      *nsobj = [NSString stringWithUTF8String: RSTRING(obj)->ptr];
+      *nsobj = [NSString stringWithUTF8String: RSTRING_PTR(obj)];
       return YES;
 
     case T_ARRAY:
@@ -750,17 +750,17 @@ rbobj_to_cselstr (VALUE obj)
     ? obj : rb_obj_as_string(obj);
 
   if (rb_ivar_defined(str, rb_intern("@__is_sel__")) == Qtrue)
-    return sel_registerName(RSTRING(str)->ptr);
+    return sel_registerName(RSTRING_PTR(str));
 
-  sel = (char *)alloca(RSTRING(str)->len + 1);
-  sel[0] = RSTRING(str)->ptr[0];
-  for (i = 1; i < RSTRING(str)->len; i++) {
-    char c = RSTRING(str)->ptr[i];
+  sel = (char *)alloca(RSTRING_LEN(str) + 1);
+  sel[0] = RSTRING_PTR(str)[0];
+  for (i = 1; i < RSTRING_LEN(str); i++) {
+    char c = RSTRING_PTR(str)[i];
     if (c == '_')
       c = ':';
     sel[i] = c;  
   }
-  sel[RSTRING(str)->len] = '\0';
+  sel[RSTRING_LEN(str)] = '\0';
 
   return sel_registerName(sel);
 }
@@ -869,7 +869,7 @@ rbobj_to_objcptr (VALUE obj, void** cptr, const char *octype_str)
     *cptr = NULL;
   }
   else if (TYPE(obj) == T_STRING) {
-    *cptr = RSTRING(obj)->ptr;
+    *cptr = RSTRING_PTR(obj);
   }
   else if (TYPE(obj) == T_ARRAY) {
     if (RARRAY_LEN(obj) > 0) {
@@ -1127,8 +1127,8 @@ NSStringEncoding kcode_to_nsencoding (const char* kcode)
 id
 rbstr_to_ocstr(VALUE obj)
 {
-  return [[[NSMutableString alloc] initWithData:[NSData dataWithBytes:RSTRING(obj)->ptr
-			    			 length: RSTRING(obj)->len]
+  return [[[NSMutableString alloc] initWithData:[NSData dataWithBytes:RSTRING_PTR(obj)
+			    			 length: RSTRING_LEN(obj)]
 			    encoding:KCODE_NSSTRENCODING] autorelease];
 }
 

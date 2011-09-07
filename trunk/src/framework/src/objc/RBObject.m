@@ -63,9 +63,9 @@ static RB_ID sel_to_mid_as_setter(SEL a_sel)
   const char* re_pattern = "^set([A-Z][^:]*):$";
   VALUE re = rb_reg_new(re_pattern, strlen(re_pattern), 0);
   if (rb_funcall(str, rb_intern("sub!"), 2, re, rb_str_new2("\\1=")) != Qnil) {
-    int c = (int)(RSTRING(str)->ptr[0]);
+    int c = (int)(RSTRING_PTR(str)[0]);
     c = tolower(c);
-    RSTRING(str)->ptr[0] = (char) c;
+    RSTRING_PTR(str)[0] = (char) c;
   }
 
   return rb_to_id(str);

@@ -241,7 +241,7 @@ ocm_register(Class klass, VALUE oc_mname, VALUE rb_mname, VALUE is_predicate,
     OBJWRP_LOG("cannot register Ruby %s method `%s' on `%s' "
       "(problem when getting method name)",
       is_class_method ? "class" : "instance",
-      RSTRING(rb_inspect(rb_mname))->ptr, rb_class2name(rclass));
+      RSTRING_PTR(rb_inspect(rb_mname)), rb_class2name(rclass));
     return;
   }
 
@@ -311,7 +311,7 @@ ocm_send(int argc, VALUE* argv, VALUE rcv, VALUE* result)
   argumentsTypes = NULL;
 
   if (!rbobj_to_nsobj(rcv, &oc_rcv) || oc_rcv == nil) {
-    exception = rb_err_new(ocmsgsend_err_class(), "Can't get Objective-C object in %s", RSTRING(rb_inspect(rcv))->ptr);
+    exception = rb_err_new(ocmsgsend_err_class(), "Can't get Objective-C object in %s", RSTRING_PTR(rb_inspect(rcv)));
     goto bails;
   }
 
@@ -322,7 +322,7 @@ ocm_send(int argc, VALUE* argv, VALUE rcv, VALUE* result)
     // as the target class may override the invocation dispatching methods (as NSUndoManager).
     methodSignature = [oc_rcv methodSignatureForSelector:selector];
     if (methodSignature == nil) {
-      exception = rb_err_new(ocmsgsend_err_class(), "Can't get Objective-C method signature for selector '%s' of receiver %s", (char *) selector, RSTRING(rb_inspect(rcv))->ptr);
+      exception = rb_err_new(ocmsgsend_err_class(), "Can't get Objective-C method signature for selector '%s' of receiver %s", (char *) selector, RSTRING_PTR(rb_inspect(rcv)));
       goto bails;
     }
     // Let's use the regular message dispatcher.
