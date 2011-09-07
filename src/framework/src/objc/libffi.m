@@ -429,7 +429,7 @@ rb_ffi_dispatch (
         if (NIL_P(arg))
           len = 0;
         else if (TYPE(arg) == T_STRING)
-          len = RSTRING(arg)->len;
+          len = RSTRING_LEN(arg);
         else if (TYPE(arg) == T_ARRAY)
           len = RARRAY_LEN(arg); // XXX should be RARRAY(arg)->len * ocdata_sizeof(...)
         else if (rb_obj_is_kind_of(arg, objcptr_s_class()))
