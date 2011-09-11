@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>Kind</key>
+	<string>Xcode.Xcode3.ProjectTemplateUnitKind</string>
+	<key>Identifier</key>
+	<string>net.sourceforge.rubycocoa.dt.unit.rubycocoaApplication</string>
+	<key>Concrete</key>
+	<true/>
+	<key>Description</key>
+	<string>This template builds a Cocoa-based application written in Ruby.</string>
+	<key>SortOrder</key>
+	<integer>102</integer>
+	<key>Ancestors</key>
+	<array>
+		<string>net.sourceforge.rubycocoa.dt.unit.rubycocoaApplicationBase</string>
+	</array>
+	<key>Definitions</key>
+	<dict>
+		<key>en.lproj/MainMenu.xib</key>
+		<dict>
+			<key>Path</key>
+			<string>MainMenuApp.xib</string>
+		</dict>
+	</dict>
+</dict>
+</plist>

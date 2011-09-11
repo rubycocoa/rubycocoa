@@ -1,3 +1,8 @@
+2011-09-11 kimura wataru <kimuraw@i.nifty.jp>
+
+	* template/Xcode4.x/:
+	add Xcode 4.x file/project templates.
+
 2011-09-07 kimura wataru <kimuraw@i.nifty.jp>
 
 	* framework/src/objc/RBObject.m,
