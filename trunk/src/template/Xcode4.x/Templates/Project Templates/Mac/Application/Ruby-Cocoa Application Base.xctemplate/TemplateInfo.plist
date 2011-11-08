@@ -36,7 +36,8 @@
 		<string>#import &lt;RubyCocoa/RBRuntime.h&gt;
 </string>
 		<key>main.m:main:RBApplicationMain</key>
-		<string>return RBApplicationMain("rb_main.rb", argc, argv);</string>
+		<string>RBApplicationInit("rb_main.rb", argc, argv, nil);
+return NSApplicationMain(argc, argv);</string>
 		<key>rb_main.rb</key>
 		<dict>
 			<key>Group</key>
