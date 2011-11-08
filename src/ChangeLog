@@ -1,5 +1,9 @@
 2011-11-08 kimura wataru <kimuraw@i.nifty.jp>
 
+	* template/:
+	let to use NSApplicationInit() and NSApplicationMain(), not
+	older-style RBApplicationMain().
+
 	* framework/src/objc/RBRuntime.m:
 	fix: cannot run RubyCocoa apps on Xcode-4 from an error "invalid option
 	-N (-h will show valid options)".
