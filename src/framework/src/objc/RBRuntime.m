@@ -192,6 +192,7 @@ prepare_argv(int argc, const char* argv[], const char* rb_main_name, const char*
   for (i = 0; i < argc; i++) {
     if (strncmp(argv[i], "-psn_", 5) == 0) continue;
     ruby_argv[ruby_argc++] = argv[i];
+    break; // only use argv[0]
   }
   for (i = 0; i < my_argc; i++) ruby_argv[ruby_argc++] = my_argv[i];
   ruby_argv[ruby_argc] = NULL;
@@ -347,7 +348,6 @@ rubycocoa_app_init(const char* program,
   if (! rubycocoa_initialized_p()) {
     ruby_init();
     ruby_script(argv[0]);
-    ruby_set_argv(argc - 1, (char**)(argv+1));
     ruby_init_loadpath();
     rubycocoa_init();
     rubycocoa_set_frequently_init_stack(0);

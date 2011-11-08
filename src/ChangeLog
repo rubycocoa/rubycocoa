@@ -1,3 +1,11 @@
+2011-11-08 kimura wataru <kimuraw@i.nifty.jp>
+
+	* framework/src/objc/RBRuntime.m:
+	fix: cannot run RubyCocoa apps on Xcode-4 from an error "invalid option
+	-N (-h will show valid options)".
+	do not pass command line arguments to ruby as ruby options at
+	rubycocoa_app_init() and prepare_argv().
+
 2011-09-11 kimura wataru <kimuraw@i.nifty.jp>
 
 	* template/Xcode4.x/:
