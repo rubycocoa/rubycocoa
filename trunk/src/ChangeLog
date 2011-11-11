@@ -1,7 +1,7 @@
 2011-11-08 kimura wataru <kimuraw@i.nifty.jp>
 
 	* template/:
-	let to use NSApplicationInit() and NSApplicationMain(), not
+	let to use RBApplicationInit() and NSApplicationMain(), not
 	older-style RBApplicationMain().
 
 	* framework/src/objc/RBRuntime.m:
