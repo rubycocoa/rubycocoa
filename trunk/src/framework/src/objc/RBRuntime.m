@@ -359,6 +359,7 @@ rubycocoa_app_init(const char* program,
   if (! rubycocoa_initialized_p()) {
     ruby_init();
     ruby_script(argv[0]);
+    ruby_set_argv(argc - 1, (char**)(argv + 1));
     ruby_init_loadpath();
     rubycocoa_init();
     rubycocoa_set_frequently_init_stack(0);
