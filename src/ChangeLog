@@ -1,3 +1,10 @@
+2011-11-12 kimura wataru <kimuraw@i.nifty.jp>
+
+	* framework/src/objc/RBRuntime.m:
+	- turn on $RUBYCOCOA_DEBUG via environment RUBYCOCOA_DEBUG.
+	- show message "commandline options are obsoleted" when an application
+	  is launched with option "-d".
+
 2011-11-08 kimura wataru <kimuraw@i.nifty.jp>
 
 	* template/:
