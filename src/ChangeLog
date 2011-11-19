@@ -1,3 +1,8 @@
+2011-11-19 kimura wataru <kimuraw@i.nifty.jp>
+
+	* NEWS, NEWS.ja:
+	update NEWS.
+
 2011-11-12 kimura wataru <kimuraw@i.nifty.jp>
 
 	* framework/src/objc/RBRuntime.m:

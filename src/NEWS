@@ -3,6 +3,50 @@
 
 $Id$
 
+== Changes 1.0.3 from 1.0.2: 2011-MM-DD
+
+=== Improvements
+
+  * turn on debug printing by environment RUBYCOCOA_DEBUG.
+  * project templates for Xcode 4.x. [Experimental]
+    templates should be installed under ~/Library/Developer/Xcode/Templates.
+
+=== Fixes
+
+  * Fixed RubyCocoa apps fail to launch by Xcode-4 "Run" with an error
+    "invalid option -N (-h will show valid options)".
+    Now RubyCocoa apps do not process commandline options such as "-d".
+
+    If you want to avoid this problem with Lion built-in RubyCocoa,
+    edit main.m and rb_main.rb in your project like this.
+
+        diff -ur old/main.m new/main.m
+        --- old/main.m  2011-11-19 15:49:58.000000000 +0900
+        +++ new/main.m  2011-11-19 15:49:16.000000000 +0900
+        @@ -11,5 +11,6 @@
+         
+         int main(int argc, const char *argv[])
+         {
+        -    return RBApplicationMain("rb_main.rb", argc, argv);
+        +    RBApplicationInit("rb_main.rb", argc, argv, nil);
+        +    return NSApplicationMain(argc, argv);
+         }
+        diff -ur old/rb_main.rb new/rb_main.rb
+        --- old/rb_main.rb      2011-11-19 15:49:58.000000000 +0900
+        +++ new/rb_main.rb      2011-11-19 15:49:16.000000000 +0900
+        @@ -17,7 +17,4 @@
+           end
+         end
+         
+        -if $0 == __FILE__ then
+        -  rb_main_init
+        -  OSX.NSApplicationMain(0, nil)
+        -end
+        +rb_main_init
+
+    the API RBApplicationInit() is available since version 0.12.0.
+    (version of Leopard built-in RubyCocoa is 0.13.x)
+
 == Changes 1.0.2 from 1.0.1: 2011-08-31
 
 === Improvements
