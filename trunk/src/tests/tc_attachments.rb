@@ -125,7 +125,7 @@ class TC_Attachments < Test::Unit::TestCase
     assert_match(/\A#<(NSArray|NSCFArray) \[#{str.inspect}, #{num_i.inspect}\]>\z/, arr.inspect)
     
     dict =  OSX::NSDictionary.dictionaryWithDictionary({ str => num_b })
-    assert_match(/\A#<(NSMutableDictionary|NSCFDictionary) \{#{str.inspect}=>#{num_b.inspect}\}>\z/, dict.inspect)
+    assert_match(/\A#<NS(Mutable|CF|)Dictionary \{#{str.inspect}=>#{num_b.inspect}\}>\z/, dict.inspect)
   end
   
   def test_nsnumber_and_float_roundtrip
