@@ -3,13 +3,17 @@
 
 $Id$
 
-== Changes 1.0.3 from 1.0.2: 2011-MM-DD
+== Changes 1.0.3 from 1.0.2: 2012-08-26
 
 === Improvements
 
   * turn on debug printing by environment RUBYCOCOA_DEBUG.
   * project templates for Xcode 4.x. [Experimental]
     templates should be installed under ~/Library/Developer/Xcode/Templates.
+    you can try the templates with the following command.
+
+        $ svn export --force https://rubycocoa.svn.sourceforge.net/svnroot/rubycocoa/trunk/src/template/Xcode4.x/Templates ~/Library/Developer/Xcode/Templates
+
 
 === Fixes
 
@@ -46,6 +50,8 @@ $Id$
 
     the API RBApplicationInit() is available since version 0.12.0.
     (version of Leopard built-in RubyCocoa is 0.13.x)
+
+  * Fixed NSBundle.loadNibNamed_owner(nibname, owner) fails on Lion or Later.
 
 == Changes 1.0.2 from 1.0.1: 2011-08-31
 
