@@ -18,15 +18,3 @@ intern_h = File.join(@config['ruby-header-dir'], 'intern.h')
   end
 end
 
-if @config['gen-bridge-support'] != 'no'
-  # generate bridge support metadata files
-  out_dir = File.join(Dir.pwd, 'bridge-support')
-  sdkroot = @config['sdkroot']
-  archs = @config['target-archs']
-  cflags = ''
-  cflags << archs.gsub(/\A|\s+/, ' -arch ') if archs.size > 0
-  cflags << " -isysroot #{sdkroot}" if sdkroot.size > 0
-  Dir.chdir('../misc/bridgesupport') do
-    command("BSROOT=\"#{out_dir}\" CFLAGS=\"#{cflags}\" #{@config['ruby-prog']} build.rb")
-  end
-end
