@@ -48,8 +48,10 @@ if File.exist?('/Developer/Applications/Project Builder.app') then
     'path to the directory for "Project Bulder Extras"'
 end 
 
-if File.exist?('/Developer/Applications/Xcode.app') then
-  if RubyCocoaConfig.system_version.to_f >= 10.5
+if File.exist?('/Developer/Applications/Xcode.app') or File.exist?('/usr/bin/xcrun') then
+  if RubyCocoaConfig.system_version.to_f >= 10.7
+    xcode_templates_dir = nil
+  elsif RubyCocoaConfig.system_version.to_f >= 10.5
     xcode_templates_dir = '/Library/Application Support/Developer/Shared/Xcode/'
   else
     xcode_templates_dir = 

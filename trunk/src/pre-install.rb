@@ -24,13 +24,18 @@ pbextras_dir =
 xcodeextras_dir = 
   @config['xcode-extras'] ? @config['xcode-extras'].split(',').map {|path|
     File.expand_path("#{install_root}#{path}")} : nil
-if @config['macosx-deployment-target'].to_f >= 10.5
+if @config['macosx-deployment-target'].to_f >= 10.7
+  # Xcode 4.x requires templates to be installed under
+  # each user's ~/Library/Developer/Xcode/Templates
+  pbtmpldir = nil
+elsif @config['macosx-deployment-target'].to_f >= 10.5
   pbtmpldir = "template/Xcode3.x/ProjectBuilder" # for Xcode 3.x
 else
   pbtmpldir = "template/Xcode2.x/ProjectBuilder" # for Xcode 2.x
 end
 
 [pbextras_dir, xcodeextras_dir].flatten.compact.each do |extras_dir|
+  break unless pbtmpldir # do not install templates into 10.7 or later
   [
     [ "#{pbtmpldir}/File",
       "#{extras_dir}/File Templates/Ruby" ],

@@ -15,7 +15,8 @@ pkgmaker = '/Developer/Applications/Utilities/PackageMaker.app/Contents/MacOS/Pa
 # set permissions
 ['/Developer', '/Developer/Documentation', '/Developer/Examples',
  '/Library/Application Support'].each do |dir|
-  File.chmod(0775, File.join(contents_dir, dir))
+  target_dir = File.join(contents_dir, dir)
+  File.chmod(0775, target_dir) if File.exist?(target_dir)
 end
 
 command "sudo chown -R root:admin \"#{contents_dir}\""
