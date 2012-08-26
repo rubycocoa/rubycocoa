@@ -1,4 +1,9 @@
+=== RubyCocoa 1.0.2 ===
+
 2012-08-26 kimura wataru <kimuraw@i.nifty.jp>
+
+	* VERSION:
+	Updated for 1.0.3.
 
 	* sample/Hakoiri-Musume:
 	fix does not launch.
