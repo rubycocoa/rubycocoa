@@ -3,9 +3,56 @@
 
 $Id$
 
-== 1.0.2から1.0.3の変更点: 2011-MM-DD
+== 1.0.2から1.0.3の変更点: 2012-08-26
 
-  ### TODO: translate from en ###
+  * 環境変数RUBYCOCOA_DEBUGをセットするとデバッグモードになるようにしました。
+  * Xcode 4.x用のプロジェクトテンプレートを用意してみました。[Experimental]
+    テンプレートは ~/Library/Developer/Xcode/Templates 以下に配置する必要があります。
+    以下のコマンドでテンプレートを使用することができます。
+
+        $ svn export --force https://rubycocoa.svn.sourceforge.net/svnroot/rubycocoa/trunk/src/template/Xcode4.x/Templates ~/Library/Developer/Xcode/Templates
+
+
+=== Fixes
+
+  * Xcode-4の"Run"ボタンでRubyCocoaアプリを起動すると以下のエラーで
+    起動できない問題を修正しました。
+
+        "invalid option -N (-h will show valid options)".
+        Now RubyCocoa apps do not process commandline options such as "-d".
+
+    LionのOS付属のRubyCocoaでこの問題を回避するためには、以下のように
+    main.mとrb_main.rbを修正してください。
+
+        diff -ur old/main.m new/main.m
+        --- old/main.m  2011-11-19 15:49:58.000000000 +0900
+        +++ new/main.m  2011-11-19 15:49:16.000000000 +0900
+        @@ -11,5 +11,6 @@
+         
+         int main(int argc, const char *argv[])
+         {
+        -    return RBApplicationMain("rb_main.rb", argc, argv);
+        +    RBApplicationInit("rb_main.rb", argc, argv, nil);
+        +    return NSApplicationMain(argc, argv);
+         }
+        diff -ur old/rb_main.rb new/rb_main.rb
+        --- old/rb_main.rb      2011-11-19 15:49:58.000000000 +0900
+        +++ new/rb_main.rb      2011-11-19 15:49:16.000000000 +0900
+        @@ -17,7 +17,4 @@
+           end
+         end
+         
+        -if $0 == __FILE__ then
+        -  rb_main_init
+        -  OSX.NSApplicationMain(0, nil)
+        -end
+        +rb_main_init
+
+    RBApplicationInit()はバージョン0.12.0から利用できる関数です。
+    (LeopardのRubyCocoaのバージョンは0.13)
+
+  * NSBundle.loadNibNamed_owner(nibname, owner)がLion以降で例外が起きて
+    しまう問題を修正しました。
 
 == 1.0.1から1.0.2の変更点: 2011-08-31
 

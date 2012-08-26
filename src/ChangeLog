@@ -1,5 +1,8 @@
 2012-08-26 kimura wataru <kimuraw@i.nifty.jp>
 
+	* NEWS, NEWS.ja:
+	update NEWS.
+
 	* framework/src/objc/mdl_bundle_support.m:
 	- fix bundle_for_class() returns NSNumber, not NSBundle.
 	- remove constant OSX::BundleSupport::BUNDLE_MAP. introduce a function
