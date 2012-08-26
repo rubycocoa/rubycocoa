@@ -18,8 +18,7 @@
 
 /** module OSX::BundleSupport  **/
 static VALUE _mBundleSupport = Qnil;
-static NSMutableDictionary* gBundleMap;
-static const char* BUNDLE_MAP_NAME = "BUNDLE_MAP";
+static NSMutableDictionary* gBundleMap = nil;
 static const char* BUNDLE_STACK_NAME = "BUNDLE_STACK";
 #define BUNDLE_STACK  rb_const_get(_mBundleSupport, rb_intern(BUNDLE_STACK_NAME))
 
@@ -81,7 +80,7 @@ static VALUE _current_bundle()
 }
 
 static VALUE rb_current_bundle(VALUE mdl) { return _current_bundle(); }
-
+static VALUE rb_bundle_map(VALUE mdl) { return ocid_to_rbobj(Qnil, gBundleMap); }
 
 /** bundle_map - the  mapping table of class to bundle **/
 
@@ -113,9 +112,9 @@ rb_bind_class_with_current_bundle(VALUE mdl, VALUE objc_class)
   VALUE stack_item;
   stack_item = _current_bundle();
   if (! NIL_P(stack_item)) {
-    VALUE bundle = rb_ary_entry(stack_item, 0);
+    VALUE bundle = rb_ary_entry(stack_item, 0); // [bundle, additional_param] => bundle
     if (!gBundleMap) gBundleMap = [NSMutableDictionary new];
-	[gBundleMap setObject:[NSNumber numberWithUnsignedLongLong:bundle] forKey:_ruby2ocid(objc_class)];
+    [gBundleMap setObject:_ruby2ocid(bundle) forKey:_ruby2ocid(objc_class)];
     return bundle;
   }
   return Qnil;
@@ -209,7 +208,6 @@ initialize_mdl_bundle_support()
   if (NIL_P(_mBundleSupport)) {
     _mBundleSupport = rb_define_module_under(osx_s_module(), "BundleSupport");
 
-    rb_define_const(_mBundleSupport, BUNDLE_MAP_NAME,   ocid_get_rbobj(gBundleMap));
     rb_define_const(_mBundleSupport, BUNDLE_STACK_NAME, rb_ary_new());
 
     rb_define_module_function(_mBundleSupport, 
@@ -223,6 +221,11 @@ initialize_mdl_bundle_support()
     rb_define_module_function(_mBundleSupport,
                               "_current_bundle",
                               rb_current_bundle, 0);
+
+    rb_define_module_function(_mBundleSupport, 
+                              "_bundle_map",
+			      rb_bundle_map, 0);
+
     setup_bundleForClass();
   }
 }
