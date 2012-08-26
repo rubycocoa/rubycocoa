@@ -13,7 +13,7 @@ end
 
 class CocoaHako < OSX::NSObject
 
-  def init (parent = nil, unit_size = 64)
+  def initWithParent_unitSize (parent = nil, unit_size = 64)
     @w = 4
     @h = 5
     @unit_size = unit_size
