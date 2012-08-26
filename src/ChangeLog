@@ -1,5 +1,8 @@
 2012-08-26 kimura wataru <kimuraw@i.nifty.jp>
 
+	* framework/src/objc/RBRuntime.m:
+	fix warning "just leaking" on Snow Leopard.
+
 	* Rakefile, framework/post-config.rb, metaconfig,
 	  package/config/*:
 	obsolete config --gen-bridge-support.
