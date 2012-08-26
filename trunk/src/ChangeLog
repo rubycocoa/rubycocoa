@@ -1,5 +1,9 @@
 2012-08-26 kimura wataru <kimuraw@i.nifty.jp>
 
+	* Rakefile, framework/post-config.rb, metaconfig,
+	  package/config/*:
+	obsolete config --gen-bridge-support.
+
 	* samples/CurrencyConverter, samples/HybridLangApp,
 	  samples/Pong, samples/RaiseMan,
 	  samples/RoundTransparentWindow, samples/RubyRocks,
