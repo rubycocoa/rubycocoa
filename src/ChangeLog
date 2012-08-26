@@ -1,5 +1,8 @@
 2012-08-26 kimura wataru <kimuraw@i.nifty.jp>
 
+	* sample/Hakoiri-Musume:
+	fix does not launch.
+
 	* metaconfig, package/config/10.7, package/config/10.8,
           package/post-package.rb, pre-install.rb:
         support packaging for 10.8.
