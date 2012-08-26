@@ -6,147 +6,41 @@
 	objectVersion = 42;
 	objects = {
 
-/* Begin PBXApplicationTarget section */
-		2A37F4C6FDCFA73011CA2CEA /* rubyrocks */ = {
-			isa = PBXApplicationTarget;
-			buildConfigurationList = 2286163509A7DDEA0032CA49 /* Build configuration list for PBXApplicationTarget "rubyrocks" */;
-			buildPhases = (
-				2A37F4C7FDCFA73011CA2CEA /* Headers */,
-				2A37F4C9FDCFA73011CA2CEA /* Resources */,
-				2A37F4CEFDCFA73011CA2CEA /* Sources */,
-				2A37F4D1FDCFA73011CA2CEA /* Frameworks */,
-			);
-			buildSettings = {
-				FRAMEWORK_SEARCH_PATHS = "";
-				HEADER_SEARCH_PATHS = "";
-				INSTALL_PATH = "$(HOME)/Applications";
-				LIBRARY_SEARCH_PATHS = "";
-				OTHER_CFLAGS = "";
-				OTHER_LDFLAGS = "";
-				PREBINDING = NO;
-				PRODUCT_NAME = rubyrocks;
-				SECTORDER_FLAGS = "";
-				WARNING_CFLAGS = (
-					"-Wmost",
-					"-Wno-four-char-constants",
-					"-Wno-unknown-pragmas",
-				);
-				WRAPPER_EXTENSION = app;
-			};
-			dependencies = (
-			);
-			name = rubyrocks;
-			productInstallPath = "$(HOME)/Applications";
-			productName = rubyrocks;
-			productReference = 1758732AFF379DA111CA2CBB /* rubyrocks.app */;
-			productSettingsXML = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
-<!DOCTYPE plist PUBLIC \"-//Apple Computer//DTD PLIST 1.0//EN\" \"http://www.apple.com/DTDs/PropertyList-1.0.dtd\">
-<plist version=\"1.0\">
-<dict>
-	<key>CFBundleDevelopmentRegion</key>
-	<string>English</string>
-	<key>CFBundleDocumentTypes</key>
-	<array>
-		<dict>
-			<key>CFBundleTypeExtensions</key>
-			<array>
-				<string>????</string>
-			</array>
-			<key>CFBundleTypeIconFile</key>
-			<string></string>
-			<key>CFBundleTypeName</key>
-			<string>DocumentType</string>
-			<key>CFBundleTypeOSTypes</key>
-			<array>
-				<string>????</string>
-			</array>
-			<key>CFBundleTypeRole</key>
-			<string>Editor</string>
-			<key>NSDocumentClass</key>
-			<string>Game</string>
-		</dict>
-	</array>
-	<key>CFBundleExecutable</key>
-	<string>rubyrocks</string>
-	<key>CFBundleIconFile</key>
-	<string></string>
-	<key>CFBundleInfoDictionaryVersion</key>
-	<string>6.0</string>
-	<key>CFBundlePackageType</key>
-	<string>APPL</string>
-	<key>CFBundleSignature</key>
-	<string>????</string>
-	<key>CFBundleVersion</key>
-	<string>0.1</string>
-	<key>NSMainNibFile</key>
-	<string>MainMenu</string>
-	<key>NSPrincipalClass</key>
-	<string>NSApplication</string>
-</dict>
-</plist>
-";
-		};
-/* End PBXApplicationTarget section */
-
 /* Begin PBXBuildFile section */
-		080E96D9FE201CDB7F000001 /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 2A37F4B9FDCFA73011CA2CEA /* Credits.rtf */; };
-		080E96DAFE201CDB7F000001 /* MainMenu.nib in Resources */ = {isa = PBXBuildFile; fileRef = 2A37F4B6FDCFA73011CA2CEA /* MainMenu.nib */; };
-		080E96DBFE201CDB7F000001 /* Game.nib in Resources */ = {isa = PBXBuildFile; fileRef = 2A37F4B4FDCFA73011CA2CEA /* Game.nib */; };
-		089C1661FE840EACC02AAC07 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165FFE840EACC02AAC07 /* InfoPlist.strings */; };
-		1058C7A9FEA54F5311CA2CBB /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A7FEA54F5311CA2CBB /* Cocoa.framework */; };
-		2A37F4D0FDCFA73011CA2CEA /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A37F4B0FDCFA73011CA2CEA /* main.m */; settings = {ATTRIBUTES = (); }; };
-		E8F5E29E03AEDE5A03A81C6F /* RubyCocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E8F5E29503AEDE5A03A81C6F /* RubyCocoa.framework */; };
-		E8F5E2A003AEDEA503A81C6F /* rb_main.rb in Resources */ = {isa = PBXBuildFile; fileRef = E8F5E29F03AEDEA503A81C6F /* rb_main.rb */; };
-		E8F5E2A203AEDEBE03A81C6F /* RubyRocks.rb in Resources */ = {isa = PBXBuildFile; fileRef = E8F5E2A103AEDEBE03A81C6F /* RubyRocks.rb */; };
+		A510113D15EA4754000A9B95 /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 2A37F4B9FDCFA73011CA2CEA /* Credits.rtf */; };
+		A510113E15EA4754000A9B95 /* MainMenu.nib in Resources */ = {isa = PBXBuildFile; fileRef = 2A37F4B6FDCFA73011CA2CEA /* MainMenu.nib */; };
+		A510113F15EA4754000A9B95 /* Game.nib in Resources */ = {isa = PBXBuildFile; fileRef = 2A37F4B4FDCFA73011CA2CEA /* Game.nib */; };
+		A510114015EA4754000A9B95 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165FFE840EACC02AAC07 /* InfoPlist.strings */; };
+		A510114115EA4754000A9B95 /* rb_main.rb in Resources */ = {isa = PBXBuildFile; fileRef = E8F5E29F03AEDEA503A81C6F /* rb_main.rb */; };
+		A510114215EA4754000A9B95 /* RubyRocks.rb in Resources */ = {isa = PBXBuildFile; fileRef = E8F5E2A103AEDEBE03A81C6F /* RubyRocks.rb */; };
+		A510114415EA4754000A9B95 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A37F4B0FDCFA73011CA2CEA /* main.m */; settings = {ATTRIBUTES = (); }; };
+		A510114615EA4754000A9B95 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A7FEA54F5311CA2CBB /* Cocoa.framework */; };
+		A510114715EA4754000A9B95 /* RubyCocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E8F5E29503AEDE5A03A81C6F /* RubyCocoa.framework */; };
 /* End PBXBuildFile section */
-
-/* Begin PBXBuildStyle section */
-		4A9504D0FFE6A4CB11CA0CBA /* Development */ = {
-			isa = PBXBuildStyle;
-			buildSettings = {
-				COPY_PHASE_STRIP = NO;
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_ENABLE_FIX_AND_CONTINUE = YES;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				OPTIMIZATION_CFLAGS = "-O0";
-				ZERO_LINK = YES;
-			};
-			name = Development;
-		};
-		4A9504D1FFE6A4CB11CA0CBA /* Deployment */ = {
-			isa = PBXBuildStyle;
-			buildSettings = {
-				COPY_PHASE_STRIP = YES;
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
-				ZERO_LINK = NO;
-			};
-			name = Deployment;
-		};
-/* End PBXBuildStyle section */
 
 /* Begin PBXFileReference section */
 		089C1660FE840EACC02AAC07 /* English */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		1058C7A7FEA54F5311CA2CBB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
-		1758732AFF379DA111CA2CBB /* rubyrocks.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; path = rubyrocks.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2A37F4B0FDCFA73011CA2CEA /* main.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		2A37F4B5FDCFA73011CA2CEA /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/Game.nib; sourceTree = "<group>"; };
 		2A37F4B7FDCFA73011CA2CEA /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/MainMenu.nib; sourceTree = "<group>"; };
 		2A37F4BAFDCFA73011CA2CEA /* English */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = English; path = English.lproj/Credits.rtf; sourceTree = "<group>"; };
 		2A37F4C4FDCFA73011CA2CEA /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
 		2A37F4C5FDCFA73011CA2CEA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
+		A510114C15EA4754000A9B95 /* Info-rubyrocks_____________.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Info-rubyrocks_____________.plist"; sourceTree = "<group>"; };
+		A510114D15EA4754000A9B95 /* rubyrocks.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = rubyrocks.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E8F5E29503AEDE5A03A81C6F /* RubyCocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RubyCocoa.framework; path = /Library/Frameworks/RubyCocoa.framework; sourceTree = "<absolute>"; };
 		E8F5E29F03AEDEA503A81C6F /* rb_main.rb */ = {isa = PBXFileReference; lastKnownFileType = text.script.ruby; path = rb_main.rb; sourceTree = "<group>"; };
 		E8F5E2A103AEDEBE03A81C6F /* RubyRocks.rb */ = {isa = PBXFileReference; lastKnownFileType = text.script.ruby; path = RubyRocks.rb; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		2A37F4D1FDCFA73011CA2CEA /* Frameworks */ = {
+		A510114515EA4754000A9B95 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1058C7A9FEA54F5311CA2CBB /* Cocoa.framework in Frameworks */,
-				E8F5E29E03AEDE5A03A81C6F /* RubyCocoa.framework in Frameworks */,
+				A510114615EA4754000A9B95 /* Cocoa.framework in Frameworks */,
+				A510114715EA4754000A9B95 /* RubyCocoa.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -174,7 +68,7 @@
 		19C28FB0FE9D524F11CA2CBB /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				1758732AFF379DA111CA2CBB /* rubyrocks.app */,
+				A510114D15EA4754000A9B95 /* rubyrocks.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -187,6 +81,7 @@
 				2A37F4B8FDCFA73011CA2CEA /* Resources */,
 				2A37F4C3FDCFA73011CA2CEA /* Frameworks */,
 				19C28FB0FE9D524F11CA2CBB /* Products */,
+				A510114C15EA4754000A9B95 /* Info-rubyrocks_____________.plist */,
 			);
 			name = rubyrocks;
 			sourceTree = "<group>";
@@ -231,7 +126,7 @@
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
-		2A37F4C7FDCFA73011CA2CEA /* Headers */ = {
+		A510113B15EA4754000A9B95 /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -240,47 +135,72 @@
 		};
 /* End PBXHeadersBuildPhase section */
 
+/* Begin PBXNativeTarget section */
+		A510113A15EA4754000A9B95 /* rubyrocks */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A510114815EA4754000A9B95 /* Build configuration list for PBXNativeTarget "rubyrocks" */;
+			buildPhases = (
+				A510113B15EA4754000A9B95 /* Headers */,
+				A510113C15EA4754000A9B95 /* Resources */,
+				A510114315EA4754000A9B95 /* Sources */,
+				A510114515EA4754000A9B95 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = rubyrocks;
+			productInstallPath = "$(HOME)/Applications";
+			productName = rubyrocks;
+			productReference = A510114D15EA4754000A9B95 /* rubyrocks.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
 /* Begin PBXProject section */
 		2A37F4A9FDCFA73011CA2CEA /* Project object */ = {
 			isa = PBXProject;
 			buildConfigurationList = 2286163909A7DDEA0032CA49 /* Build configuration list for PBXProject "rubyrocks" */;
-			buildSettings = {
-			};
-			buildStyles = (
-				4A9504D0FFE6A4CB11CA0CBA /* Development */,
-				4A9504D1FFE6A4CB11CA0CBA /* Deployment */,
-			);
+			compatibilityVersion = "Xcode 2.4";
+			developmentRegion = English;
 			hasScannedForEncodings = 0;
+			knownRegions = (
+				English,
+				Japanese,
+				French,
+				German,
+			);
 			mainGroup = 2A37F4AAFDCFA73011CA2CEA /* rubyrocks */;
 			projectDirPath = "";
+			projectRoot = "";
 			targets = (
-				2A37F4C6FDCFA73011CA2CEA /* rubyrocks */,
+				A510113A15EA4754000A9B95 /* rubyrocks */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		2A37F4C9FDCFA73011CA2CEA /* Resources */ = {
+		A510113C15EA4754000A9B95 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				080E96D9FE201CDB7F000001 /* Credits.rtf in Resources */,
-				080E96DAFE201CDB7F000001 /* MainMenu.nib in Resources */,
-				080E96DBFE201CDB7F000001 /* Game.nib in Resources */,
-				089C1661FE840EACC02AAC07 /* InfoPlist.strings in Resources */,
-				E8F5E2A003AEDEA503A81C6F /* rb_main.rb in Resources */,
-				E8F5E2A203AEDEBE03A81C6F /* RubyRocks.rb in Resources */,
+				A510113D15EA4754000A9B95 /* Credits.rtf in Resources */,
+				A510113E15EA4754000A9B95 /* MainMenu.nib in Resources */,
+				A510113F15EA4754000A9B95 /* Game.nib in Resources */,
+				A510114015EA4754000A9B95 /* InfoPlist.strings in Resources */,
+				A510114115EA4754000A9B95 /* rb_main.rb in Resources */,
+				A510114215EA4754000A9B95 /* RubyRocks.rb in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		2A37F4CEFDCFA73011CA2CEA /* Sources */ = {
+		A510114315EA4754000A9B95 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2A37F4D0FDCFA73011CA2CEA /* main.m in Sources */,
+				A510114415EA4754000A9B95 /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -322,79 +242,6 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
-		2286163609A7DDEA0032CA49 /* Development */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				COPY_PHASE_STRIP = NO;
-				FRAMEWORK_SEARCH_PATHS = "";
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_ENABLE_FIX_AND_CONTINUE = YES;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				HEADER_SEARCH_PATHS = "";
-				INSTALL_PATH = "$(HOME)/Applications";
-				LIBRARY_SEARCH_PATHS = "";
-				OPTIMIZATION_CFLAGS = "-O0";
-				OTHER_CFLAGS = "";
-				OTHER_LDFLAGS = "";
-				PREBINDING = NO;
-				PRODUCT_NAME = rubyrocks;
-				SECTORDER_FLAGS = "";
-				WARNING_CFLAGS = (
-					"-Wmost",
-					"-Wno-four-char-constants",
-					"-Wno-unknown-pragmas",
-				);
-				WRAPPER_EXTENSION = app;
-				ZERO_LINK = YES;
-			};
-			name = Development;
-		};
-		2286163709A7DDEA0032CA49 /* Deployment */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				COPY_PHASE_STRIP = YES;
-				FRAMEWORK_SEARCH_PATHS = "";
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
-				HEADER_SEARCH_PATHS = "";
-				INSTALL_PATH = "$(HOME)/Applications";
-				LIBRARY_SEARCH_PATHS = "";
-				OTHER_CFLAGS = "";
-				OTHER_LDFLAGS = "";
-				PREBINDING = NO;
-				PRODUCT_NAME = rubyrocks;
-				SECTORDER_FLAGS = "";
-				WARNING_CFLAGS = (
-					"-Wmost",
-					"-Wno-four-char-constants",
-					"-Wno-unknown-pragmas",
-				);
-				WRAPPER_EXTENSION = app;
-				ZERO_LINK = NO;
-			};
-			name = Deployment;
-		};
-		2286163809A7DDEA0032CA49 /* Default */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				FRAMEWORK_SEARCH_PATHS = "";
-				HEADER_SEARCH_PATHS = "";
-				INSTALL_PATH = "$(HOME)/Applications";
-				LIBRARY_SEARCH_PATHS = "";
-				OTHER_CFLAGS = "";
-				OTHER_LDFLAGS = "";
-				PREBINDING = NO;
-				PRODUCT_NAME = rubyrocks;
-				SECTORDER_FLAGS = "";
-				WARNING_CFLAGS = (
-					"-Wmost",
-					"-Wno-four-char-constants",
-					"-Wno-unknown-pragmas",
-				);
-				WRAPPER_EXTENSION = app;
-			};
-			name = Default;
-		};
 		2286163A09A7DDEA0032CA49 /* Development */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -413,25 +260,103 @@
 			};
 			name = Default;
 		};
+		A510114915EA4754000A9B95 /* Development */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				FRAMEWORK_SEARCH_PATHS = "";
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				HEADER_SEARCH_PATHS = "";
+				INFOPLIST_FILE = "Info-rubyrocks_____________.plist";
+				INSTALL_PATH = "$(HOME)/Applications";
+				LIBRARY_SEARCH_PATHS = "";
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = "";
+				PREBINDING = NO;
+				PRODUCT_NAME = rubyrocks;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+				WRAPPER_EXTENSION = app;
+				ZERO_LINK = YES;
+			};
+			name = Development;
+		};
+		A510114A15EA4754000A9B95 /* Deployment */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				FRAMEWORK_SEARCH_PATHS = "";
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				HEADER_SEARCH_PATHS = "";
+				INFOPLIST_FILE = "Info-rubyrocks_____________.plist";
+				INSTALL_PATH = "$(HOME)/Applications";
+				LIBRARY_SEARCH_PATHS = "";
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = "";
+				PREBINDING = NO;
+				PRODUCT_NAME = rubyrocks;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+				WRAPPER_EXTENSION = app;
+				ZERO_LINK = NO;
+			};
+			name = Deployment;
+		};
+		A510114B15EA4754000A9B95 /* Default */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = "";
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				HEADER_SEARCH_PATHS = "";
+				INFOPLIST_FILE = "Info-rubyrocks_____________.plist";
+				INSTALL_PATH = "$(HOME)/Applications";
+				LIBRARY_SEARCH_PATHS = "";
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = "";
+				PREBINDING = NO;
+				PRODUCT_NAME = rubyrocks;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+				WRAPPER_EXTENSION = app;
+			};
+			name = Default;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		2286163509A7DDEA0032CA49 /* Build configuration list for PBXApplicationTarget "rubyrocks" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				2286163609A7DDEA0032CA49 /* Development */,
-				2286163709A7DDEA0032CA49 /* Deployment */,
-				2286163809A7DDEA0032CA49 /* Default */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Default;
-		};
 		2286163909A7DDEA0032CA49 /* Build configuration list for PBXProject "rubyrocks" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				2286163A09A7DDEA0032CA49 /* Development */,
 				2286163B09A7DDEA0032CA49 /* Deployment */,
 				2286163C09A7DDEA0032CA49 /* Default */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Default;
+		};
+		A510114815EA4754000A9B95 /* Build configuration list for PBXNativeTarget "rubyrocks" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A510114915EA4754000A9B95 /* Development */,
+				A510114A15EA4754000A9B95 /* Deployment */,
+				A510114B15EA4754000A9B95 /* Default */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Default;
