@@ -1,5 +1,8 @@
 2012-08-27 kimura wataru <kimuraw@i.nifty.jp>
 
+	* NEWS, NEWS.ja:
+	update NEWS.
+
 	* framework/src/ruby/osx/objc/oc_bundle_support.rb:
 	load bridgesupport files from nested framework.
 	such as "QuartzCore.framework/Frameworks/CoreImage.framework".
