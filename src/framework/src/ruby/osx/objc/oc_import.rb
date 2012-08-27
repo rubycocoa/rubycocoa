@@ -142,7 +142,12 @@ module OSX
     # A path to a framework, let's search for a BridgeSupport file inside the Resources folder.
     if framework[0] == ?/
       path = File.join(framework, 'Resources', 'BridgeSupport')
-      return true if __load_bridge_support_file__(path, fname)
+      if __load_bridge_support_file__(path, fname)
+	Dir.glob(File.join(framework, 'Frameworks', '*.framework')).each do |subframework|
+	  OSX.load_bridge_support_signatures(subframework)
+	end
+        return true
+      end
       framework = fname
     end
     
@@ -150,8 +155,13 @@ module OSX
     FRAMEWORK_PATHS.each do |dir|
       path = File.join(dir, "#{framework}.framework")
       if File.exist?(path)
-        path = File.join(path, 'Resources', 'BridgeSupport')
-        return true if __load_bridge_support_file__(path, fname)
+        bspath = File.join(path, 'Resources', 'BridgeSupport')
+        if __load_bridge_support_file__(bspath, fname)
+          Dir.glob(File.join(framework, 'Frameworks', '*.framework')).each do |subframework|
+            OSX.load_bridge_support_signatures(subframework)
+          end
+          return true
+        end
       end
     end
 
