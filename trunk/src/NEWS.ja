@@ -3,17 +3,30 @@
 
 $Id$
 
-== 1.0.2から1.0.3の変更点: 2012-08-26
+== 1.0.3から1.0.4の変更点: 2012-08-27
+
+=== 修正
+
+  * RubyCocoa-1.0.3の初期化時のメモリリークを修正しました。
+  * ネストしたフレームワークのbridgesupportファイルが読み込まれない
+    問題を修正しました。 たとえば、
+    QuartzCore.framework/Frameworks/CoreImage.framework などです。
+
+
+== 1.0.2から1.0.3の変更点: 2012-08-26 (Not released)
+
+=== 改良
 
   * 環境変数RUBYCOCOA_DEBUGをセットするとデバッグモードになるようにしました。
   * Xcode 4.x用のプロジェクトテンプレートを用意してみました。[Experimental]
-    テンプレートは ~/Library/Developer/Xcode/Templates 以下に配置する必要があります。
+    テンプレートは ~/Library/Developer/Xcode/Templates 以下に配置する必要が
+    あります。
     以下のコマンドでテンプレートを使用することができます。
 
         $ svn export --force https://rubycocoa.svn.sourceforge.net/svnroot/rubycocoa/trunk/src/template/Xcode4.x/Templates ~/Library/Developer/Xcode/Templates
 
 
-=== Fixes
+=== 修正
 
   * Xcode-4の"Run"ボタンでRubyCocoaアプリを起動すると以下のエラーで
     起動できない問題を修正しました。
