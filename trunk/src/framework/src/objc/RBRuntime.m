@@ -322,6 +322,7 @@ static void rubycocoa_init()
       while (option = (NSString *)[enumerator nextObject]) {
         if ([option isEqualToString:@"-d"]) {
           NSLog(@"rubycocoa_init: warning: commandline options are obsoleted. use environmet RUBYCOCOA_DEBUG for debug, not \"-d\".");
+          break;
         }
       }
     } END_POOL(pool);
