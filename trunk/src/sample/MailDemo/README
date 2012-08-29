@@ -12,7 +12,3 @@ In this directory, you will find 3 MailDemo examples.
 
 - MailDemoBindings: The simple version modified to actually use Cocoa bindings.
 
-- MailDemoActiveRecordBindings: A specialized version that uses the 
-  'osx/active_record' library to achieve persistent storage by using 
-  ActiveRecord with a sqlite3 backend. It shows how to use a belongs_to 
-  relationship with a subclass of NSArrayController.
