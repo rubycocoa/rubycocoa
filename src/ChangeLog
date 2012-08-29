@@ -1,3 +1,13 @@
+2012-08-29 kimura wataru <kimuraw@i.nifty.jp>
+
+	* framework/src/ruby/osx/active_record.rb,
+	  framework/src/ruby/osx/objc/active_record.rb,
+	  framework/RubyCocoa.xcodeproj,
+	  lib/osx/active_record.rb,
+	  sample/MailDemo/MailDemoActiveRecordBindings,
+	  sample/MailDemo/README, tests/tc_active_record.rb:
+	deprecate osx/active_record.rb, not maintained.
+
 2012-08-28 kimura wataru <kimuraw@i.nifty.jp>
 
 	* framework/src/objc/RBRuntime.m:
