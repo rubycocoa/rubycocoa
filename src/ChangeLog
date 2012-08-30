@@ -1,3 +1,8 @@
+2012-08-30 kimura wataru <kimuraw@i.nifty.jp>
+
+	* templates/Xcode4.2:
+	copy Xcode4.x -> Xcode4.2.
+
 2012-08-29 kimura wataru <kimuraw@i.nifty.jp>
 
 	* framework/src/ruby/osx/active_record.rb,
