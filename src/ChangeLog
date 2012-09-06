@@ -1,6 +1,10 @@
 2012-09-06 kimura wataru <kimuraw@i.nifty.jp>
 
 	* template/Xcode4.x/Templates/Project Templates/Mac/Application/
+	  Ruby-Cocoa Application.xctemplate:
+	refactoring templates.
+
+	* template/Xcode4.x/Templates/Project Templates/Mac/Application/
 	  Ruby-Cocoa Application.xctemplate/TemplateInfo.plist:
 	remove "SortOrder".
 
