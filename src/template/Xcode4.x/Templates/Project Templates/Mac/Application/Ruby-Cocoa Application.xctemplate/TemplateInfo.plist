@@ -10,8 +10,10 @@
 	<true/>
 	<key>Description</key>
 	<string>This template builds a Cocoa-based application written in Ruby.</string>
+	<!--
 	<key>SortOrder</key>
-	<integer>102</integer>
+	<integer>0</integer>
+	 -->
 	<key>Ancestors</key>
 	<array>
 		<string>net.sourceforge.rubycocoa.dt.unit.rubycocoaApplicationBase</string>
