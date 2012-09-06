@@ -16,15 +16,49 @@
 	 -->
 	<key>Ancestors</key>
 	<array>
-		<string>net.sourceforge.rubycocoa.dt.unit.rubycocoaApplicationBase</string>
+		<string>com.apple.dt.unit.cocoaApplicationBase</string>
+		<string>com.apple.dt.unit.macReferenceCounting</string>
+	</array>
+	<key>Targets</key>
+	<array>
+		<dict>
+			<key>SharedSettings</key>
+			<dict>
+				<key>FRAMEWORK_SEARCH_PATHS</key>
+				<string>&quot;/Library/Frameworks&quot;</string>
+			</dict>
+			<key>Frameworks</key>
+			<array>
+				<string>RubyCocoa</string>
+			</array>
+		</dict>
 	</array>
 	<key>Definitions</key>
 	<dict>
+		<key>*:*:importRubyCocoa</key>
+		<string>#import &lt;RubyCocoa/RBRuntime.h&gt;
+</string>
+		<!-- overwrite NSApplicationMain in "Cocoa Application Base" -->
+		<key>main.m:main:NSApplicationMain</key>
+		<string>RBApplicationInit("rb_main.rb", argc, (const char **)argv, nil);
+return NSApplicationMain(argc, (const char **)argv);</string>
+		<key>rb_main.rb</key>
+		<dict>
+			<key>Group</key>
+			<string>Supporting Files</string>
+			<key>Path</key>
+			<string>rb_main.rb</string>
+		</dict>
 		<key>en.lproj/MainMenu.xib</key>
 		<dict>
 			<key>Path</key>
 			<string>MainMenuApp.xib</string>
 		</dict>
 	</dict>
+	<key>Nodes</key>
+	<array>
+		<string>main.m:import:importRubyCocoa</string>
+		<string>rb_main.rb</string>
+	</array>
 </dict>
 </plist>
