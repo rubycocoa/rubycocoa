@@ -1,3 +1,10 @@
+2012-09-07 kimura wataru <kimuraw@i.nifty.jp>
+
+	* template/Xcode4.[2x]/Templates/Project Templates/Mac/Application/
+	  Ruby-Cocoa Document-based
+	  Application.xctemplate/TemplateInfo.plist":
+	correct filename of AppDelegate.rb.
+
 2012-09-06 kimura wataru <kimuraw@i.nifty.jp>
 
 	* template/Xcode4.x/Templates/Project Templates/Mac/Application/
