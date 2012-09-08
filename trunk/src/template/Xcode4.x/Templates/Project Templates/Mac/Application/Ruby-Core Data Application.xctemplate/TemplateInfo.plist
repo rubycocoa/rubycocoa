@@ -18,7 +18,7 @@
 			<key>Name</key>
 			<string>Use Core Data</string>
 			<key>Description</key>
-			<string>Indicates whether the application should use the Core Data framework for storage.</string>
+			<string>Whether the application should use the Core Data framework for storage</string>
 			<key>Type</key>
 			<string>checkbox</string>
 			<key>Default</key>
@@ -35,7 +35,8 @@
 						</dict>
 						<key>Nodes</key>
 						<array>
-							<string>___VARIABLE_documentClassName:identifier___.xcdatamodeld</string>
+							<string>___VARIABLE_classPrefix___Document.xcdatamodeld</string>
+							<string>___VARIABLE_classPrefix:identifier___Document.rb</string>
 						</array>
 						<key>Definitions</key>
 						<dict>
@@ -58,7 +59,7 @@
 		&lt;key&gt;LSTypeIsPackage&lt;/key&gt;
 		&lt;false/&gt;
 		&lt;key&gt;NSDocumentClass&lt;/key&gt;
-		&lt;string&gt;___VARIABLE_documentClassName:identifier___&lt;/string&gt;
+		&lt;string&gt;___VARIABLE_classPrefix___Document&lt;/string&gt;
 		&lt;key&gt;NSPersistentStoreTypeKey&lt;/key&gt;
 		&lt;string&gt;Binary&lt;/string&gt;
 	&lt;/dict&gt;
@@ -78,7 +79,7 @@
 		&lt;key&gt;LSTypeIsPackage&lt;/key&gt;
 		&lt;false/&gt;
 		&lt;key&gt;NSDocumentClass&lt;/key&gt;
-		&lt;string&gt;___VARIABLE_documentClassName:identifier___&lt;/string&gt;
+		&lt;string&gt;___VARIABLE_classPrefix___Document&lt;/string&gt;
 		&lt;key&gt;NSPersistentStoreTypeKey&lt;/key&gt;
 		&lt;string&gt;SQLite&lt;/string&gt;
 	&lt;/dict&gt;
@@ -104,16 +105,22 @@
 		&lt;key&gt;LSTypeIsPackage&lt;/key&gt;
 		&lt;false/&gt;
 		&lt;key&gt;NSDocumentClass&lt;/key&gt;
-		&lt;string&gt;___VARIABLE_documentClassName:identifier___&lt;/string&gt;
+		&lt;string&gt;___VARIABLE_classPrefix___Document&lt;/string&gt;
 		&lt;key&gt;NSPersistentStoreTypeKey&lt;/key&gt;
 		&lt;string&gt;XML&lt;/string&gt;
 	&lt;/dict&gt;
 &lt;/array&gt;
 </string>
-							<key>___VARIABLE_documentClassName:identifier___.xcdatamodeld</key>
+							<key>___VARIABLE_classPrefix___Document.xcdatamodeld</key>
 							<dict>
 								<key>Path</key>
-								<string>___VARIABLE_documentClassName___.xcdatamodeld</string>
+								<string>Document.xcdatamodeld</string>
+							</dict>
+							<!-- overwrite definition in Ruby-Cocoa Document-based Application -->
+							<key>___VARIABLE_classPrefix:identifier___Document.rb</key>
+							<dict>
+								<key>Path</key>
+								<string>CoreDataDocument.rb</string>
 							</dict>
 						</dict>
 					</dict>
@@ -126,8 +133,7 @@
 						<key>Nodes</key>
 						<array>
 							<string>___PACKAGENAMEASIDENTIFIER___.xcdatamodeld</string>
-							<string>___PACKAGENAMEASIDENTIFIER___AppDelegate.rb</string>
-							<string>___VARIABLE_documentClassName:identifier___.rb</string>
+							<string>___VARIABLE_classPrefix:identifier___AppDelegate.rb</string>
 						</array>
 						<key>Definitions</key>
 						<dict>
@@ -136,37 +142,10 @@
 								<key>Path</key>
 								<string>___PACKAGENAMEASIDENTIFIER___.xcdatamodeld</string>
 							</dict>
-							<key>___PACKAGENAMEASIDENTIFIER___AppDelegate.rb</key>
+							<key>___VARIABLE_classPrefix:identifier___AppDelegate.rb</key>
 							<dict>
 								<key>Path</key>
-								<string>___PACKAGENAMEASIDENTIFIER___AppDelegate.rb</string>
-							</dict>
-							<key>___VARIABLE_documentClassName:identifier___.rb</key>
-							<dict>
-								<key>Path</key>
-								<string>NotDocument.rb</string>
-							</dict>
-						</dict>
-					</dict>
-				</array>
-				<key>false</key>
-				<array>
-					<dict>
-						<key>RequiredOptions</key>
-						<dict>
-							<key>documentBased</key>
-							<string>true</string>
-						</dict>
-						<key>Nodes</key>
-						<array>
-							<string>___VARIABLE_documentClassName:identifier___.rb</string>
-						</array>
-						<key>Definitions</key>
-						<dict>
-							<key>___VARIABLE_documentClassName:identifier___.rb</key>
-							<dict>
-								<key>Path</key>
-								<string>Document.rb</string>
+								<string>AppDelegate.rb</string>
 							</dict>
 						</dict>
 					</dict>
