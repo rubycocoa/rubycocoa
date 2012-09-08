@@ -8,13 +8,12 @@
 
 require 'osx/cocoa'
 
-class ___VARIABLE_documentClassName:identifier___ < OSX::NSDocument
+class ___VARIABLE_classPrefix:identifier___Document < OSX::NSDocument
 
 	def init
 		super_init
 		if self
 			# Add your subclass-specific initialization here.
-			# If an error occurs here, send a [self release] message and return nil.
 		end
 		return self
 	end
@@ -22,7 +21,7 @@ class ___VARIABLE_documentClassName:identifier___ < OSX::NSDocument
 	def windowNibName
 		# Override returning the nib file name of the document
 		# If you need to use a subclass of NSWindowController or if your document supports multiple NSWindowControllers, you should remove this method and override -makeWindowControllers instead.
-		return "___VARIABLE_documentClassName:identifier___"
+		return "___VARIABLE_classPrefix:identifier___Document"
 	end
 
 	def windowControllerDidLoadNib_(controller)
@@ -33,9 +32,8 @@ class ___VARIABLE_documentClassName:identifier___ < OSX::NSDocument
 	def dataOfType_error_(typename, outError)
 		# Insert code here to write your document to data of the specified type. If outError != NULL, ensure that you create and set an appropriate error when returning nil.
 		# You can also choose to override -fileWrapperOfType:error:, -writeToURL:ofType:error:, or -writeToURL:ofType:forSaveOperation:originalContentsURL:error: instead.
-		if outError
-			outError.assign(OSX::NSError.errorWithDomain_code_userInfo_(OSX::NSOSStatusErrorDomain, unimpErr, nil))
-		end
+    	exception = OSX::NSException.exceptionWithName_reason_userInfo_("UnimplementedMethod", "#{__method__} is unimplemented", nil)
+    	exception.raise
 		return nil
 	end
 
@@ -43,10 +41,9 @@ class ___VARIABLE_documentClassName:identifier___ < OSX::NSDocument
 		# Insert code here to read your document from the given data of the specified type. If outError != NULL, ensure that you create and set an appropriate error when returning NO.
 		# You can also choose to override -readFromFileWrapper:ofType:error: or -readFromURL:ofType:error: instead.
 		# If you override either of these, you should also override -isEntireFileLoaded to return NO if the contents are lazily loaded.
-		if outError
-			outError.assign(OSX::NSError.errorWithDomain_code_userInfo_(OSX::NSOSStatusErrorDomain, unimpErr, nil))
-		end
-		return true
+    	exception = OSX::NSException.exceptionWithName_reason_userInfo_("UnimplementedMethod", "#{__method__} is unimplemented", nil)
+    	exception.raise
+		return nil
 	end
 
 	def self.autosavesInPlace
