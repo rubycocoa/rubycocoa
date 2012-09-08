@@ -1,5 +1,8 @@
 2012-09-08 kimura wataru <kimuraw@i.nifty.jp>
 
+	* templates/Xcode4.x:
+	update templates for Xcode 4.4.
+
 	* templates/Xcode4.1:
 	rename from Xcode4.2.
 
