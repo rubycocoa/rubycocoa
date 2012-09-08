@@ -36,6 +36,7 @@
 						<key>Nodes</key>
 						<array>
 							<string>___VARIABLE_documentClassName:identifier___.xcdatamodeld</string>
+							<string>___VARIABLE_documentClassName:identifier___.rb</string>
 						</array>
 						<key>Definitions</key>
 						<dict>
@@ -115,6 +116,11 @@
 								<key>Path</key>
 								<string>___VARIABLE_documentClassName___.xcdatamodeld</string>
 							</dict>
+							<key>___VARIABLE_documentClassName:identifier___.rb</key>
+							<dict>
+								<key>Path</key>
+								<string>Document.rb</string>
+							</dict>
 						</dict>
 					</dict>
 					<dict>
@@ -127,7 +133,6 @@
 						<array>
 							<string>___PACKAGENAMEASIDENTIFIER___.xcdatamodeld</string>
 							<string>___PACKAGENAMEASIDENTIFIER___AppDelegate.rb</string>
-							<string>___VARIABLE_documentClassName:identifier___.rb</string>
 						</array>
 						<key>Definitions</key>
 						<dict>
@@ -140,33 +145,6 @@
 							<dict>
 								<key>Path</key>
 								<string>___PACKAGENAMEASIDENTIFIER___AppDelegate.rb</string>
-							</dict>
-							<key>___VARIABLE_documentClassName:identifier___.rb</key>
-							<dict>
-								<key>Path</key>
-								<string>NotDocument.rb</string>
-							</dict>
-						</dict>
-					</dict>
-				</array>
-				<key>false</key>
-				<array>
-					<dict>
-						<key>RequiredOptions</key>
-						<dict>
-							<key>documentBased</key>
-							<string>true</string>
-						</dict>
-						<key>Nodes</key>
-						<array>
-							<string>___VARIABLE_documentClassName:identifier___.rb</string>
-						</array>
-						<key>Definitions</key>
-						<dict>
-							<key>___VARIABLE_documentClassName:identifier___.rb</key>
-							<dict>
-								<key>Path</key>
-								<string>Document.rb</string>
 							</dict>
 						</dict>
 					</dict>

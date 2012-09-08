@@ -75,7 +75,7 @@ class ___PACKAGENAMEASIDENTIFIER___AppDelegate < OSX::NSObject
 				
 				dict = OSX::NSMutableDictionary.dictionary
 				dict.setValue_forKey_(failureDescription, OSX::NSLocalizedDescriptionKey)
-				error = OSX::NSError.errorWithDomain_code_userInfor_("YOUR_ERROR_DOMAIN", 101, dict)
+				error = OSX::NSError.errorWithDomain_code_userInfo_("YOUR_ERROR_DOMAIN", 101, dict)
 				
 				OSX::NSApplication.sharedApplication.presentError_(error)
 				return nil
