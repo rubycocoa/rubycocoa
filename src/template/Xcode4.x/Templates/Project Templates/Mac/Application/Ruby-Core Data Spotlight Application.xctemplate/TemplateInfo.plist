@@ -27,7 +27,7 @@
 			<key>Name</key>
 			<string>Include Spotlight Importer</string>
 			<key>Description</key>
-			<string>Indicates whether the application should also create a Spotlight importer.</string>
+			<string>Whether the application should also create a Spotlight importer</string>
 			<key>Type</key>
 			<string>checkbox</string>
 			<key>SortOrder</key>
