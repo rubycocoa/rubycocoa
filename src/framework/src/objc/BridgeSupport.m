@@ -26,6 +26,8 @@
 #import "ocexception.h"
 #import "objc_compat.h"
 
+#define BS_LOG(fmt, args...) DLOG("BRIDGE", fmt, ##args)
+
 static VALUE cOSXBoxed;
 static ID ivarEncodingID;
 
@@ -277,7 +279,7 @@ undecorate_encoding(const char *src, char *dest, size_t dest_len, struct bsStruc
     p_src = pos + 1;
     pos = strchr(p_src, '"');
     if (pos == NULL) {
-      DLOG("MDLOSX", "Can't find the end of field delimiter starting at %d", p_src - src);
+      BS_LOG("Can't find the end of field delimiter starting at %d", p_src - src);
       goto bails; 
     }
     if (field != NULL) {
@@ -327,7 +329,7 @@ undecorate_encoding(const char *src, char *dest, size_t dest_len, struct bsStruc
       }
 
       if (ok == NO) {
-        DLOG("MDLOSX", "Can't find the field encoding starting at %d", p_src - src);
+        BS_LOG("Can't find the field encoding starting at %d", p_src - src);
         goto bails;
       }
 
@@ -339,7 +341,7 @@ undecorate_encoding(const char *src, char *dest, size_t dest_len, struct bsStruc
         buf[MIN((sizeof buf) - 1, i)] = '\0';        
      
         if (!undecorate_encoding(buf, buf2, sizeof buf2, NULL, 0, NULL)) {
-          DLOG("MDLOSX", "Can't un-decode the field encoding '%s'", buf);
+          BS_LOG("Can't un-decode the field encoding '%s'", buf);
           goto bails;
         }
 
@@ -882,7 +884,7 @@ init_bs_boxed_struct (VALUE mOSX, const char *name, const char *decorated_encodi
 
   // Undecorate the encoding and its fields.
   if (!undecorate_encoding(decorated_encoding, encoding, MAX_ENCODE_LEN, fields, 128, &field_count)) {
-    DLOG("MDLOSX", "Can't handle structure '%s' with encoding '%s'", name, decorated_encoding);
+    BS_LOG("Can't handle structure '%s' with encoding '%s'", name, decorated_encoding);
     return NULL;
   }
 
@@ -961,7 +963,7 @@ func_dispatch_retain_if_necessary(VALUE arg, BOOL is_retval, void *ctx)
       && (*encoding_skip_to_first_type(func->retval->octypestr) == _C_ID 
           || find_bs_cf_type_by_encoding(func->retval->octypestr) != NULL)) {
     if (func->retval->should_be_retained && !OBJCID_DATA_PTR(arg)->retained) {
-      DLOG("MDLOSX", "retaining objc value");
+      BS_LOG("retaining objc value");
       [OBJCID_ID(arg) retain];
     }
     OBJCID_DATA_PTR(arg)->retained = YES;
@@ -984,7 +986,7 @@ bridge_support_dispatcher (int argc, VALUE *argv, VALUE rcv)
 
   // lookup structure
   func_name = rb_id2name(rb_frame_last_func());
-  DLOG("MDLOSX", "dispatching function '%s'", func_name);
+  BS_LOG("dispatching function '%s'", func_name);
   if (!st_lookup(bsFunctions, (st_data_t)func_name, (st_data_t *)&func))
     rb_fatal("Unrecognized function '%s'", func_name);
   if (func == NULL)
@@ -1011,7 +1013,7 @@ bridge_support_dispatcher (int argc, VALUE *argv, VALUE rcv)
     unsigned i;
     VALUE format_str;
 
-    DLOG("MDLOSX", "function is variadic, %d min argc, %d additional argc", func->argc, argc - func->argc);
+    BS_LOG("function is variadic, %d min argc, %d additional argc", func->argc, argc - func->argc);
     arg_octypesstr = (char **)alloca((expected_argc + 1) * sizeof(char *));
     format_str = Qnil;
     for (i = 0; i < func->argc; i++) {
@@ -1059,7 +1061,7 @@ bridge_support_dispatcher (int argc, VALUE *argv, VALUE rcv)
   if (!NIL_P(exception))
     rb_exc_raise(exception);
 
-  DLOG("MDLOSX", "dispatching function '%s' done", func_name);
+  BS_LOG("dispatching function '%s' done", func_name);
 
   return result;
 }
@@ -1173,7 +1175,7 @@ osx_load_bridge_support_file (VALUE mOSX, VALUE path)
 
   RESET_FUNC_PTR_CTX();
 
-  DLOG("MDLOSX", "Loading bridge support file `%s'", cpath);
+  BS_LOG("Loading bridge support file `%s'", cpath);
   
   reader = xmlNewTextReaderFilename(cpath);
   if (reader == NULL)
@@ -1217,7 +1219,7 @@ osx_load_bridge_support_file (VALUE mOSX, VALUE path)
         const_name = get_attribute_and_check(reader, "name");
 
         if (st_lookup(bsConstants, (st_data_t)const_name, NULL)) {
-          DLOG("MDLOSX", "Constant '%s' already registered, skipping...", const_name);
+          BS_LOG("Constant '%s' already registered, skipping...", const_name);
           free(const_name);
         }
         else {
@@ -1253,7 +1255,7 @@ osx_load_bridge_support_file (VALUE mOSX, VALUE path)
 
         strconst_name = get_attribute_and_check(reader, "name");
         if (rb_const_defined(mOSX, rb_intern(strconst_name))) {
-          DLOG("MDLOSX", "String constant '%s' already registered, skipping...", strconst_name);
+          BS_LOG("String constant '%s' already registered, skipping...", strconst_name);
           free(strconst_name);
         }
         else { 
@@ -1301,7 +1303,7 @@ osx_load_bridge_support_file (VALUE mOSX, VALUE path)
         ignore = NO;
         enum_name = get_attribute_and_check(reader, "name");
         if (rb_const_defined(mOSX, rb_intern(enum_name)) || strcmp(enum_name, "Nil") == 0) {
-          DLOG("MDLOSX", "Enum '%s' already registered, skipping...", enum_name);
+          BS_LOG("Enum '%s' already registered, skipping...", enum_name);
         }
         else {
           char *  ignored;
@@ -1364,7 +1366,7 @@ osx_load_bridge_support_file (VALUE mOSX, VALUE path)
               free (enum_value);
             }
             else {
-              DLOG("MDLOSX", "Enum '%s' doesn't have a compatible value attribute, skipping...", enum_name);
+              BS_LOG("Enum '%s' doesn't have a compatible value attribute, skipping...", enum_name);
             }
           }
         }
@@ -1393,16 +1395,16 @@ osx_load_bridge_support_file (VALUE mOSX, VALUE path)
 
         bs_boxed = init_bs_boxed_struct(mOSX, struct_name, struct_decorated_encoding, is_opaque);
         if (bs_boxed == NULL) {
-          DLOG("MDLOSX", "Can't init structure '%s' -- skipping...", struct_decorated_encoding);
+          BS_LOG("Can't init structure '%s' -- skipping...", struct_decorated_encoding);
           free(struct_name);
         }
         else {
           if (st_lookup(bsBoxed, (st_data_t)bs_boxed->encoding, NULL)) {
-            DLOG("MDLOSX", "Another C structure already registered under the encoding '%s', skipping...", bs_boxed->encoding); 
+            BS_LOG("Another C structure already registered under the encoding '%s', skipping...", bs_boxed->encoding); 
           }
           else {
             st_insert(bsBoxed, (st_data_t)bs_boxed->encoding, (st_data_t)bs_boxed);
-            DLOG("MDLOSX", "Imported boxed type of name `%s' encoding `%s'", struct_name, bs_boxed->encoding);
+            BS_LOG("Imported boxed type of name `%s' encoding `%s'", struct_name, bs_boxed->encoding);
           }
         }
 
@@ -1415,7 +1417,7 @@ osx_load_bridge_support_file (VALUE mOSX, VALUE path)
 
         opaque_encoding = get_type_attribute_and_check(reader);
         if (st_lookup(bsBoxed, (st_data_t)opaque_encoding, NULL)) {
-          DLOG("MDLOSX", "Opaque type with encoding '%s' already defined -- skipping...", opaque_encoding);
+          BS_LOG("Opaque type with encoding '%s' already defined -- skipping...", opaque_encoding);
           free(opaque_encoding);
         }
         else if (strcmp(opaque_encoding, "@") == 0) {
@@ -1429,7 +1431,7 @@ osx_load_bridge_support_file (VALUE mOSX, VALUE path)
 
           bs_boxed = init_bs_boxed_opaque(mOSX, opaque_name, opaque_encoding);
           if (bs_boxed == NULL) {
-            DLOG("MDLOSX", "Can't init opaque '%s' -- skipping...", opaque_encoding);
+            BS_LOG("Can't init opaque '%s' -- skipping...", opaque_encoding);
           }
           else {
             st_insert(bsBoxed, (st_data_t)bs_boxed->encoding, (st_data_t)bs_boxed);
@@ -1444,7 +1446,7 @@ osx_load_bridge_support_file (VALUE mOSX, VALUE path)
 
         typeid_encoding = get_type_attribute_and_check(reader);
         if (st_lookup(bsCFTypes, (st_data_t)typeid_encoding, NULL)) {
-          DLOG("MDLOSX", "CFType with encoding '%s' already defined -- skipping...", typeid_encoding);
+          BS_LOG("CFType with encoding '%s' already defined -- skipping...", typeid_encoding);
           free(typeid_encoding);
         }
         else {
@@ -1464,7 +1466,7 @@ osx_load_bridge_support_file (VALUE mOSX, VALUE path)
 
             sym = dlsym(RTLD_DEFAULT, gettypeid_func);
             if (sym == NULL) {
-              DLOG("MDLOSX", "Cannot locate GetTypeID function '%s' for given CFType '%s' -- ignoring it...", gettypeid_func, bs_cf_type->name);
+              BS_LOG("Cannot locate GetTypeID function '%s' for given CFType '%s' -- ignoring it...", gettypeid_func, bs_cf_type->name);
               bs_cf_type->type_id = 0; /* not a type */
             }
             else {
@@ -1485,7 +1487,7 @@ osx_load_bridge_support_file (VALUE mOSX, VALUE path)
               bs_cf_type->bridged_class_name = toll_free;
             }
             else {
-              DLOG("MDLOSX", "Given CFType toll-free class '%s' doesn't exist -- creating a proxy...", toll_free);
+              BS_LOG("Given CFType toll-free class '%s' doesn't exist -- creating a proxy...", toll_free);
               free(toll_free);
             }
           }
@@ -1522,7 +1524,7 @@ osx_load_bridge_support_file (VALUE mOSX, VALUE path)
         func_name = get_attribute_and_check(reader, "name");
         if (st_lookup(bsFunctions, (st_data_t)func_name, (st_data_t *)&func)) {
           st_delete(bsFunctions, (st_data_t *)&func->name, (st_data_t *)&func);
-          DLOG("MDLOSX", "Re-defining function '%s'", func_name);
+          BS_LOG("Re-defining function '%s'", func_name);
           free_bs_function(func);
         }
 
@@ -1580,7 +1582,7 @@ osx_load_bridge_support_file (VALUE mOSX, VALUE path)
       case BS_XML_ARG: {
         if (within_func_ptr_arg) {
           if (func_ptr.argc > MAX_ARGS) {
-              DLOG("MDLOSX", "Maximum number of arguments reached for function pointer (%d), skipping...", MAX_ARGS);
+              BS_LOG("Maximum number of arguments reached for function pointer (%d), skipping...", MAX_ARGS);
           }
           else {
             func_ptr.argv[func_ptr.argc++] = get_type_attribute_and_check(reader);
@@ -1593,9 +1595,9 @@ osx_load_bridge_support_file (VALUE mOSX, VALUE path)
 
           if (*argc >= MAX_ARGS) {
             if (func != NULL)
-              DLOG("MDLOSX", "Maximum number of arguments reached for function '%s' (%d), skipping...", func->name, MAX_ARGS);
+              BS_LOG("Maximum number of arguments reached for function '%s' (%d), skipping...", func->name, MAX_ARGS);
             else
-              DLOG("MDLOSX", "Maximum number of arguments reached for method '%s' (%d), skipping...", method->selector, MAX_ARGS);
+              BS_LOG("Maximum number of arguments reached for method '%s' (%d), skipping...", method->selector, MAX_ARGS);
           } 
           else {
             char *  type_modifier;
@@ -1626,7 +1628,7 @@ osx_load_bridge_support_file (VALUE mOSX, VALUE path)
                   arg->type_modifier = bsTypeModifierInout;
                   break;
                 default:
-                  DLOG("MDLOSX", "Given type modifier '%s' is invalid, default'ing to 'out'", type_modifier);
+                  BS_LOG("Given type modifier '%s' is invalid, default'ing to 'out'", type_modifier);
                   arg->type_modifier = bsTypeModifierOut;
               }
               free(type_modifier);
@@ -1657,7 +1659,7 @@ osx_load_bridge_support_file (VALUE mOSX, VALUE path)
           }
         }
         else {
-          DLOG("MDLOSX", "Argument defined outside of a function/method/function_pointer, skipping...");
+          BS_LOG("Argument defined outside of a function/method/function_pointer, skipping...");
         }
       }
       break;
@@ -1665,7 +1667,7 @@ osx_load_bridge_support_file (VALUE mOSX, VALUE path)
       case BS_XML_RETVAL: {
         if (within_func_ptr_arg) {
           if (func_ptr.retval != NULL) {
-            DLOG("MDLOSX", "Function pointer return value defined more than once, skipping...");
+            BS_LOG("Function pointer return value defined more than once, skipping...");
           } 
           else {
             func_ptr.retval = get_type_attribute(reader);
@@ -1673,10 +1675,10 @@ osx_load_bridge_support_file (VALUE mOSX, VALUE path)
         }
         else if (func != NULL || method != NULL) {
           if (func != NULL && func->retval != NULL && func->retval != &default_func_retval) {
-            DLOG("MDLOSX", "Function '%s' return value defined more than once, skipping...", func->name);
+            BS_LOG("Function '%s' return value defined more than once, skipping...", func->name);
           }
           else if (method != NULL && method->retval != NULL) {
-            DLOG("MDLOSX", "Method '%s' return value defined more than once, skipping...", method->selector);
+            BS_LOG("Method '%s' return value defined more than once, skipping...", method->selector);
           }
           else {
             bsCArrayArgType type;
@@ -1703,7 +1705,7 @@ osx_load_bridge_support_file (VALUE mOSX, VALUE path)
                 func->retval = retval;
               }
               else {
-                DLOG("MDLOSX", "Function '%s' return value defined without type, using default return type...", func->name);
+                BS_LOG("Function '%s' return value defined without type, using default return type...", func->name);
                 free(retval);
               }
             }
@@ -1722,7 +1724,7 @@ osx_load_bridge_support_file (VALUE mOSX, VALUE path)
           }
         }
         else {
-          DLOG("MDLOSX", "Return value defined outside a function/method, skipping...");
+          BS_LOG("Return value defined outside a function/method, skipping...");
         }
       }
       break;
@@ -1737,7 +1739,7 @@ osx_load_bridge_support_file (VALUE mOSX, VALUE path)
           is_class_method = get_boolean_attribute(reader, "class_method", NO);
           hash = is_class_method ? bsInformalProtocolClassMethods : bsInformalProtocolInstanceMethods;         
           if (st_lookup(hash, (st_data_t)selector, NULL)) {
-            DLOG("MDLOSX", "Informal protocol method [NSObject %c%s] already defined, skipping...", is_class_method ? '+' : '-', selector);
+            BS_LOG("Informal protocol method [NSObject %c%s] already defined, skipping...", is_class_method ? '+' : '-', selector);
             free(selector);
           }
           else {
@@ -1755,7 +1757,7 @@ osx_load_bridge_support_file (VALUE mOSX, VALUE path)
           }
         }
         else if (klass == NULL) {
-          DLOG("MDLOSX", "Method defined outside a class or informal protocol, skipping...");
+          BS_LOG("Method defined outside a class or informal protocol, skipping...");
         }
         else {
           char * selector;
@@ -1768,7 +1770,7 @@ osx_load_bridge_support_file (VALUE mOSX, VALUE path)
           methods_hash = is_class_method ? klass->class_methods : klass->instance_methods;
           if (st_lookup(methods_hash, (st_data_t)selector, (st_data_t *)&method)) {
             st_delete(methods_hash, (st_data_t *)&method->selector, (st_data_t *)&method);
-            DLOG("MDLOSX", "Re-defining method '%s' in class '%s'", selector, klass->name);
+            BS_LOG("Re-defining method '%s' in class '%s'", selector, klass->name);
             free_bs_method(method);
           }
 
@@ -1859,7 +1861,7 @@ osx_load_bridge_support_file (VALUE mOSX, VALUE path)
   
         for (i = 0; i < func->argc; i++) {
           if (args[i].octypestr == NULL) {
-            DLOG("MDLOSX", "Function '%s' argument #%d type has not been provided, skipping...", func->name, i);
+            BS_LOG("Function '%s' argument #%d type has not been provided, skipping...", func->name, i);
             all_args_ok = NO;
             break;
           }
@@ -1968,7 +1970,7 @@ osx_import_c_constant (VALUE self, VALUE sym)
   cvalue = dlsym(RTLD_DEFAULT, real_name);
   value = Qnil;
   if (cvalue != NULL) {
-    DLOG("MDLOSX", "Importing C constant `%s' of type '%s'", name, bs_const->encoding);
+    BS_LOG("Importing C constant `%s' of type '%s'", name, bs_const->encoding);
     if (bs_const->is_magic_cookie) { 
       struct bsCFType *bs_cftype;
 
@@ -1976,14 +1978,14 @@ osx_import_c_constant (VALUE self, VALUE sym)
       bs_const->class_name = bs_cftype != NULL
         ? bs_cftype->bridged_class_name : "OCObject";
 
-      DLOG("MDLOSX", "Constant is a magic-cookie of fixed value %p, guessed class name '%s'", *(void **)cvalue, bs_const->class_name);
+      BS_LOG("Constant is a magic-cookie of fixed value %p, guessed class name '%s'", *(void **)cvalue, bs_const->class_name);
 
       st_insert(bsMagicCookieConstants, (st_data_t)*(void **)cvalue, (st_data_t)bs_const);
     }
     if (!ocdata_to_rbobj(Qnil, bs_const->encoding, cvalue, &value, NO))
       rb_raise(ocdataconv_err_class(), "Cannot convert the Objective-C constant '%s' as '%s' to Ruby", name, bs_const->encoding);
     rb_define_const(self, name, value);
-    DLOG("MDLOSX", "Imported C constant `%s' with value %p", name, value);
+    BS_LOG("Imported C constant `%s' with value %p", name, value);
   }
 
   if (name != real_name)
