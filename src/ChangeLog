@@ -1,5 +1,9 @@
 2012-09-09 kimura wataru <kimuraw@i.nifty.jp>
 
+	* framework/src/objc/BridgeSupportLexer.h:
+	fix "Symbol not found: _bs_xml_element" when RubyCocoa
+	build with -O0.
+
 	* framework/src/objc/BridgeSupport.m,
 	  framework/src/objc/cls_objcid.m:
 	refactoring debug log. use wrapper macros not DLOG.
