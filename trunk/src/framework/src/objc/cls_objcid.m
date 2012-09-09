@@ -19,6 +19,8 @@
 #import "BridgeSupport.h"
 #import "mdl_osxobjc.h"
 
+#define CLSOBJ_LOG(fmt, args...) DLOG("CLSOBJ", fmt, ##args)
+
 static VALUE _kObjcID = Qnil;
 
 static void
@@ -29,7 +31,7 @@ _objcid_data_free(struct _objcid_data* dp)
     if (dp->ocid != nil) {
       remove_from_oc2rb_cache(dp->ocid);
       if (dp->retained && dp->can_be_released) {
-        DLOG("CLSOBJ", "releasing %p", dp->ocid);
+        CLSOBJ_LOG("CLSOBJ", "releasing %p", dp->ocid);
         [dp->ocid release];
       }
     }
