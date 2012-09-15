@@ -55,4 +55,4 @@ RBApplicationMain (const char* path_to_ruby_program,
  */
 BOOL RBIsRubyThreadingSupported (void);
 
-#endif  // _RBRUNTIME_H_
+#endif  /* _RBRUNTIME_H_ */

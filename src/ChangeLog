@@ -1,3 +1,9 @@
+2012-09-15 kimura wataru <kimuraw@i.nifty.jp>
+
+	* framework/src/objc/RBRuntime.h:
+	fix build error of ext/rubycocoa/rubycocoa.m with Xcode clang
+	and MacPorts' ruby.
+
 2012-09-09 kimura wataru <kimuraw@i.nifty.jp>
 
 	* framework/src/objc/BridgeSupportLexer.h:
