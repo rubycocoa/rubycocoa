@@ -258,6 +258,7 @@
                         isa = XCBuildConfiguration;
                         buildSettings = {
                                 COPY_PHASE_STRIP = NO;
+				FRAMEWORK_SEARCH_PATHS = "/Library/Frameworks";
                                 GCC_DYNAMIC_NO_PIC = NO;
                                 GCC_ENABLE_FIX_AND_CONTINUE = YES;
                                 GCC_MODEL_TUNING = G5;
@@ -273,6 +274,7 @@
                 C01FCF4C08A954540054247B /* Release */ = {
                         isa = XCBuildConfiguration;
                         buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = "/Library/Frameworks";
                                 GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
                                 GCC_MODEL_TUNING = G5;
                                 INFOPLIST_FILE = Info.plist;

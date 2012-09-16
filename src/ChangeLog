@@ -1,3 +1,8 @@
+2012-09-16 kimura wataru <kimuraw@i.nifty.jp>
+
+	* samples/*:
+	add FRAMEWORK_SEARCH_PATHS = "/Library/Frameworks" into samples.
+
 2012-09-15 kimura wataru <kimuraw@i.nifty.jp>
 
 	* framework/src/objc/RBRuntime.h:
