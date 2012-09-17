@@ -238,7 +238,7 @@ module Standaloneify
         internal_path = File.join(prefix,relative_path)
         FileUtils.mkdir_p(File.dirname(new_path))
         FileUtils.cp(full_path,new_path)
-        File.chmod(0700,new_path)
+        File.chmod(0744,new_path)
         full_path = new_path
         system("install_name_tool","-id",internal_path,new_path)
       end
