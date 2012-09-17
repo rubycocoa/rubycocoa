@@ -1,5 +1,8 @@
 2012-09-17 kimura wataru <kimuraw@i.nifty.jp>
 
+	* framework/tool/standaloneify.rb:
+	fix permission of copied libraries by standaloneify.rb.
+
 	* framework/src/objc/RBRuntime.m:
 	RubyCocoa app accepts arguments after "--rubycocoa-ruby-opt" as
 	ruby argument. this feature fixes standaloneify.rb does not works.
