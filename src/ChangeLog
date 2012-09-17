@@ -1,3 +1,9 @@
+2012-09-17 kimura wataru <kimuraw@i.nifty.jp>
+
+	* framework/src/objc/RBRuntime.m:
+	RubyCocoa app accepts arguments after "--rubycocoa-ruby-opt" as
+	ruby argument. this feature fixes standaloneify.rb does not works.
+
 2012-09-16 kimura wataru <kimuraw@i.nifty.jp>
 
 	* samples/*:
