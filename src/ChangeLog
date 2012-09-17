@@ -1,6 +1,11 @@
 2012-09-17 kimura wataru <kimuraw@i.nifty.jp>
 
 	* framework/tool/standaloneify.rb:
+	fix standaloneify.rb does not work with RubyCocoa 1.0.4.
+	let to pass --rubycocoa-ruby-opt to MacOS/YourApp when the
+	framework version is 1.0.4 or later.
+
+	* framework/tool/standaloneify.rb:
 	fix permission of copied libraries by standaloneify.rb.
 
 	* framework/src/objc/RBRuntime.m:
