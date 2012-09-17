@@ -174,7 +174,7 @@ module Standaloneify
     end
   end
 
-  def self.get_dependencies(macos_d,resources_d)
+  def self.get_dependencies(macos_d,resources_d,rc_path)
     # Set an environment variable that can be checked inside the application.
     # This is useful because standaloneify uses evaluation, so it might be possible
     # that the application does something which leads to problems while standaloneifying.
@@ -184,7 +184,14 @@ module Standaloneify
     # Run the main Mac program
     mainprog = Dir[File.join(macos_d,"*")][0]
     ENV['STANDALONEIFY_DUMP_FILE'] = dump_file
-    system(mainprog,__FILE__,MAGIC_ARGUMENT)
+    # get RubyCocoa.framework version
+    rc_vers = `/usr/bin/defaults read "#{File.join(rc_path,'Resources','Info')}" CFBundleShortVersionString`
+    if rc_vers.to_f >= 1.0 && rc_vers >= "1.0.4"
+      # 1.0.5 or later requires "--ruby-cocoa-opt" to process args as ruby options
+      system(mainprog,"--rubycocoa-ruby-opt",__FILE__,MAGIC_ARGUMENT)
+    else
+      system(mainprog,__FILE__,MAGIC_ARGUMENT)
+    end
 
     begin
       result = eval(File.read(dump_file))
@@ -301,7 +308,7 @@ module Standaloneify
     FileUtils.mkdir_p(third_party_d)
 
     # Calculate bundles and Ruby modules needed
-    dependencies = get_dependencies(macos_d,resources_d)
+    dependencies = get_dependencies(macos_d,resources_d,rc_path)
 
     patch_main_rb(resources_d)
 
