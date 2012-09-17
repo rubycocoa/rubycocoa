@@ -181,6 +181,7 @@ prepare_argv(int argc, const char* argv[], const char* rb_main_name, const char*
   int ruby_argc;
   const char** ruby_argv;
   int my_argc;
+  BOOL pick_rubycocoa_args = NO;
   char* my_argv[] = {
     rb_main_path(rb_main_name)
   };
@@ -191,8 +192,19 @@ prepare_argv(int argc, const char* argv[], const char* rb_main_name, const char*
   ruby_argv = malloc (sizeof(char*) * (argc + my_argc + 1));
   for (i = 0; i < argc; i++) {
     if (strncmp(argv[i], "-psn_", 5) == 0) continue;
-    ruby_argv[ruby_argc++] = argv[i];
-    break; // only use argv[0]
+    if (ruby_argc == 0) {
+      ruby_argv[ruby_argc++] = argv[i]; // pick arg[0]
+      continue;
+    }
+    // treat args as ruby options after "--rubycocoa-ruby-opt"
+    if (strncmp(argv[i], "--rubycocoa-ruby-opt", 20) == 0) {
+      pick_rubycocoa_args = YES;
+      continue;
+    }
+    if (pick_rubycocoa_args) {
+      ruby_argv[ruby_argc++] = argv[i];
+      continue;
+    }
   }
   for (i = 0; i < my_argc; i++) ruby_argv[ruby_argc++] = my_argv[i];
   ruby_argv[ruby_argc] = NULL;
