@@ -1,0 +1,101 @@
+<!DOCTYPE HTML>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>RubyCocoa - Documentation : Getting Started</title>
+    <link rel="stylesheet" type="text/css" href="/style.css" media="screen">
+
+    <!-- you don't need to keep this, but it's cool for stats! -->
+    <meta name="generator" content="nanoc 3.4.1"> 
+  </head>
+  <body>
+    <div id="header">
+      <p><a href="/">RubyCocoa</a> - A Ruby/Objective-C Bridge for Mac OS X with Cocoa</p>
+    </div>
+    <div id="wrapper">
+    <div id="main">
+      <h1 id="getting-started">Getting Started</h1>
+
+<h2 id="mac-os-x-built-in-framework">Mac OS X built-in framework</h2>
+
+<p>Mac OS X 10.5 Leopard or later, RubyCocoa is installed as a part of Mac OS X.
+The versions of RubyCocoa pre-installed into Mac OS X are:</p>
+
+<ul>
+  <li>Mac OS X 10.8 Mountain Lion: 1.0.1</li>
+  <li>Mac OS X 10.7 Lion: 1.0.0</li>
+  <li>Mac OS X 10.6 Snow Leopard: 1.0.0</li>
+  <li>Mac OS X 10.5 Leopard: 0.13.2</li>
+</ul>
+
+<p>If you want to use the latest RubyCocoa, you need to install RubyCocoa.framework from dmg or source code.</p>
+
+<h2 id="download-binary-distribution">Download binary distribution</h2>
+
+<p>Download RubyCocoa-x.x.x.dmg from <a href="http://sourceforge.net/projects/rubycocoa/files/RubyCocoa/">SourceForge.net</a>.</p>
+
+<p>It includes library, samples, templates for Xcode etc. for RubyCocoa. Everything necessary for execution and development is included in an easy-to-install ‘.pkg’ package file.</p>
+
+<p>A successful installation of the binary package will add the following items:</p>
+
+<pre><code>/Library/Frameworks/RubyCocoa.framework
+    RubyCocoa framework (core)
+inside of /Library/Ruby/Site/1.8/osx
+    RubyCocoa library (stub)
+/Library/Ruby/Site/1.8/universal-darwin12.0/rubycocoa.bundle
+    RubyCocoa extended library (stub)
+inside of '/Library/Application Support/Apple/Developer Tools'
+    Some templates for Xcode 3 or earlier
+/Developer/Examples/RubyCocoa
+    Sample programs
+</code></pre>
+
+<p>After installation, try the samples that are written in Ruby. Refer to <a href="/doc/try-samples/">Try Samples</a>.</p>
+
+<h2 id="build-from-source">Build from Source</h2>
+
+<p>Extract RubyCocoa source from the ‘.tar.gz’ file into a directory somewhere.</p>
+
+<pre><code>$ tar xzf RubyCocoa-x.x.x.tar.gz
+$ cd RubyCocoa-x.x.x
+$ ruby install.rb config
+$ ruby install.rb setup
+$ ruby install.rb test
+$ sudo ruby install.rb intstall
+</code></pre>
+
+
+    </div>
+    <div id="sidebar">
+      
+      <ul>
+	  <li><a href="/">Home</a></li>
+      </ul>
+      
+      <h2>The latest version</h2>
+      <ul>
+	  <li><a href="http://sourceforge.net/projects/rubycocoa/files/RubyCocoa/1.0.4/">1.0.4 (2012-08-27)</a></li>
+	  <li><a href="/doc/changes/">Changes</a></li>
+      </ul>
+      <h2>Documentation</h2>
+      <ul>
+	<li><a href="/doc/getting-started/">Getting Started</a></li>
+	<li><a href="/doc/">Documentation</a></li>
+      </ul>
+      <h2>Community</h2>
+      <ul>
+	<li><a href="https://lists.sourceforge.net/lists/listinfo/rubycocoa-talk">rubycocoa-talk</a>(users)</li>
+	<li><a href="http://lists.sourceforge.jp/mailman/listinfo/rubycocoa-devel">rubycocoa-devel</a>(developers)</li>
+      </ul>
+    </div>
+    </div>
+    <div id="footer">
+      <p>The RubyCocoa Project hosted by 
+      <a href="http://sourceforge.net">
+	<img src="http://sourceforge.net/sflogo.php?group_id=44114&amp;type=4"
+	     width="125" height="37" border="0" alt="SourceForge.net"/>
+      </a>.
+      </p>
+    </div>
+  </body>
+</html>
