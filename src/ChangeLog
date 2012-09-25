@@ -1,6 +1,9 @@
 2012-09-25 kimura wataru <kimuraw@i.nifty.jp>
 
 	* framework/tool/standaloneify.rb:
+	add an option "--framework" to standaloneify.rb.
+
+	* framework/tool/standaloneify.rb:
 	change order of detecting path of RubyCocoa.framework.
 	prefer /Library over /System/Library.
 
