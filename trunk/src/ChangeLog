@@ -1,5 +1,8 @@
 2012-09-25 kimura wataru <kimuraw@i.nifty.jp>
 
+	* NEWS, NEWS.ja:
+	update NEWS.
+
 	* framework/tool/standaloneify.rb:
 	add an option "--framework" to standaloneify.rb.
 

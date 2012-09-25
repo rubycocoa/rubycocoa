@@ -7,8 +7,11 @@ $Id$
 
 === Improvements
 
-  * project templates for Xcode 4.4 are available.
+  * project templates are upgraded for Xcode 4.2-4.5.
 
+=== Fixes
+
+  * Fixed standaloneify.rb not work.
 
 === Removals
 
