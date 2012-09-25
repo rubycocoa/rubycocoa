@@ -267,7 +267,7 @@ module Standaloneify
     end
   end
 
-  def self.make_standalone_application(source,dest,extra_libs)
+  def self.make_standalone_application(source,dest,extra_libs,framework_paths)
     FileUtils.cp_r(source,dest)
     dest_d = Pathname.new(dest).realpath.to_s
 
@@ -288,10 +288,11 @@ module Standaloneify
       # Create Frameworks dir and copy RubyCocoa in there
       FileUtils.mkdir_p(frameworks_d)
       FileUtils.mkdir_p(lib_d)
-      rc_path = [
-        "/Library/Frameworks/RubyCocoa.framework",
-        "/System/Library/Frameworks/RubyCocoa.framework",
-      ].find { |p| File.exist?(p) }
+      rc_search_path = framework_paths.collect { |dir| File.join(dir, 'RubyCocoa.framework') }
+      rc_search_path +=
+        ["/Library/Frameworks/RubyCocoa.framework",
+         "/System/Library/Frameworks/RubyCocoa.framework",]
+      rc_path = rc_search_path.find { |p| File.exist?(p) }
       raise "Cannot locate RubyCocoa.framework" unless rc_path  
       # FileUtils.cp_r(rc_path,frameworks_d)
       # Do not use FileUtils.cp_r because it tries to follow symlinks.
@@ -371,12 +372,14 @@ if $0 == __FILE__ then
   config.force = false
   config.extra_libs = []
   config.dest = nil
+  config.framework_paths = []
 
   ARGV.options do |opts|
     opts.banner = "usage: #{File.basename(__FILE__)} -d DEST [options] APPLICATION\n\nUse ENV['RUBYCOCOA_STANDALONEIFYING?'] in your application to check if it's being standaloneified.\n"
     opts.on("-f","--force","Delete target app if it exists already") { |config.force| }
     opts.on("-d DEST","--dest","Place result at DEST (required)") {|config.dest|}
     opts.on("-l LIBRARY","--lib","Extra library to bundle") { |lib| config.extra_libs << lib }
+    opts.on("--framework DIR","Add search path for RubyCocoa.framework") { |dir| config.framework_paths << dir }
 
     opts.parse!
   end
@@ -402,7 +405,7 @@ if $0 == __FILE__ then
     end
   end
 
-  Standaloneify.make_standalone_application(source_app_d,config.dest,config.extra_libs)
+  Standaloneify.make_standalone_application(source_app_d,config.dest,config.extra_libs,config.framework_paths)
 
 end
 
