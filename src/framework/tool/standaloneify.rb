@@ -289,8 +289,8 @@ module Standaloneify
       FileUtils.mkdir_p(frameworks_d)
       FileUtils.mkdir_p(lib_d)
       rc_path = [
+        "/Library/Frameworks/RubyCocoa.framework",
         "/System/Library/Frameworks/RubyCocoa.framework",
-        "/Library/Frameworks/RubyCocoa.framework"
       ].find { |p| File.exist?(p) }
       raise "Cannot locate RubyCocoa.framework" unless rc_path  
       # FileUtils.cp_r(rc_path,frameworks_d)
