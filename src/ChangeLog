@@ -1,3 +1,8 @@
+2012-09-25 kimura wataru <kimuraw@i.nifty.jp>
+
+	* package/pre-package.rb:
+	remove background.gif from installer.
+
 2012-09-17 kimura wataru <kimuraw@i.nifty.jp>
 
 	* framework/tool/standaloneify.rb:
