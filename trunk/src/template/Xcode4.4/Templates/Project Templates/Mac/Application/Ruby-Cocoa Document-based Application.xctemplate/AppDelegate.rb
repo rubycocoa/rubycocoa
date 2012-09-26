@@ -3,7 +3,7 @@
 #  ___PROJECTNAME___
 #
 #  Created by ___FULLUSERNAME___ on ___DATE___.
-#  Copyright ___YEAR___ ___ORGANIZATIONNAME___. All rights reserved.
+#___COPYRIGHT___
 #
 
 class ___VARIABLE_classPrefix:identifier___AppDelegate < OSX::NSObject
