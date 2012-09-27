@@ -8,7 +8,7 @@
 
 require 'osx/cocoa'
 
-class ___FILEBASENAMEASIDENTIFIER___ < OSX::NSObject
+class ___FILEBASENAMEASIDENTIFIER___ < OSX::___VARIABLE_cocoaSubclass___
 
   def initWithWindow_(window)
     self = super_initWithWindow_(window)

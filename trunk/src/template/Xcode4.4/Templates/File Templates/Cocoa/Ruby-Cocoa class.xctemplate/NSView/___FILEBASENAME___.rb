@@ -8,7 +8,7 @@
 
 require 'osx/cocoa'
 
-class ___FILEBASENAMEASIDENTIFIER___ < OSX::NSView
+class ___FILEBASENAMEASIDENTIFIER___ < OSX::___VARIABLE_cocoaSubclass___
 
   def initWithFrame_(frame)
     self = super_initWithFrame_(frame)

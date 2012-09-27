@@ -14,7 +14,6 @@ class ___FILEBASENAMEASIDENTIFIER___ < OSX::NSDocument
     self = super_init
     if self
       # Add your subclass-specific initialization here.
-      # If an error occurs here, send a [self release] message and return nil.
     end
     return self
   end

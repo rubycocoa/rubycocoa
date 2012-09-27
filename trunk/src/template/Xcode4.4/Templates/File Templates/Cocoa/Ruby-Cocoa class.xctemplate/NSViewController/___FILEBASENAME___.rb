@@ -8,7 +8,7 @@
 
 require 'osx/cocoa'
 
-class ___FILEBASENAMEASIDENTIFIER___ < OSX::NSObject
+class ___FILEBASENAMEASIDENTIFIER___ < OSX::___VARIABLE_cocoaSubclass___
 
   def initWithNibName_bundle_(nibNameOrNil, nibBundleOrNil)
     self = [super_initWithNibName_bundle_(nibNameOrNil, nibBundleOrNil)

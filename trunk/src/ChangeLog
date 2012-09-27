@@ -1,6 +1,11 @@
+2012-09-27 kimura wataru <kimuraw@i.nifty.jp>
+
+	* templates/Xcode4.4/File templates/:
+	upgrade file templates for Xcode 4.5.
+
 2012-09-26 kimura wataru <kimuraw@i.nifty.jp>
 
-	* templates/Xcode4.4:
+	* templates/Xcode4.4/:
 	use ___COPYRIGHT___ for templates.
 
 2012-09-25 kimura wataru <kimuraw@i.nifty.jp>
