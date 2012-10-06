@@ -3,11 +3,14 @@
 
 $Id$
 
-== Changes 1.0.5 from 1.0.4: 2012-XX-XX
+== Changes 1.0.5 from 1.0.4: 2012-10-07
 
 === Improvements
 
   * project templates are upgraded for Xcode 4.2-4.5.
+    you can install the templates with the following command.
+
+      $ ruby /Developer/Documentation/RubyCocoa/Templates/install_templates.rb Xcode4.x
 
 === Fixes
 
