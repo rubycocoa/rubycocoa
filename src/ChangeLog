@@ -1,5 +1,10 @@
 2012-10-06 kimura wataru <kimuraw@i.nifty.jp>
 
+	* templates/install_templates.rb,
+	  templates/Xcode4.x/filelist.txt,
+	  templates/Xcode4.x/filelist.txt:
+        add install script for Xcode4 templates.
+
 	* templates/Xcode4.x:
 	rename from Xcode4.4.
 
