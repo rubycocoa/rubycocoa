@@ -83,18 +83,14 @@ end
   end
   command "mkdir -p '#{dstdir}'"
   command "cp -R '#{srcdir}' '#{dstdir}/RubyCocoa'"
+  # install template and script for xcode 4
+  if srcdir == 'doc' && @config['macosx-deployment-target'].to_f >= 10.7
+    command "mkdir -p '#{dstdir}/RubyCocoa/Templates'"
+    ['install_templates.rb', 'Xcode4.1', 'Xcode4.x'].each do |fname|
+      command "cp -R 'template/#{fname}' '#{dstdir}/RubyCocoa/Templates'"
+    end
+  end
   command "chmod -R #{chmod} '#{dstdir}/RubyCocoa'" if chmod
 
   fix_xcode_projects_in_dir(dstdir) if fix_xcode_projects
-end
-if File.exist?('framework/bridge-doc')
-  # Frameworks HTML documentation 
-  dstdir = "#{install_root}#{@config['documentation']}/RubyCocoa/Frameworks"
-  command "cp -R 'framework/bridge-doc/html' '#{dstdir}'" if File.exist?('framework/bridge-doc/html')
-  # Frameworks RI documentation
-  basedstdir = @config['ri-dir']
-  unless File.exist?(basedstdir)
-    command "mkdir -p '#{basedstdir}'"
-  end
-  command "cp -R 'framework/bridge-doc/ri/OSX' '#{basedstdir}'" if File.exist?('framework/bridge-doc/ri/OSX')
 end
