@@ -1,5 +1,8 @@
 2012-10-07 kimura wataru <kimuraw@i.nifty.jp>
 
+	* NEWS, NEWS.ja:
+	update NEWS.
+
 	* pre-install.rb:
 	copy Xcode4 templates and install script under
 	/Developer/Documentation/RubyCocoa/Templates.

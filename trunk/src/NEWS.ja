@@ -3,15 +3,18 @@
 
 $Id$
 
-== 1.0.4から1.0.5の変更点: 2012-XX-XX
+== 1.0.4から1.0.5の変更点: 2012-10-07
 
 === 改良
 
   * Xcode 4.2-4.5に最適化したプロジェクトテンプレートも用意しました。
+    以下のコマンドで ~/Library/Developer/Xcode 以下にテンプレートがインストールできます。
+
+      $ ruby /Developer/Documentation/RubyCocoa/Templates/install_templates.rb Xcode4.x
 
 === 修正
 
-  * standaloneify.rbが機能しなくなっていたのを修正しました。
+  * standaloneify.rbが動作しなくなっていた問題を修正しました。
 
 === 削除
 
