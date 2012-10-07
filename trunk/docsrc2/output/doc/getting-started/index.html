@@ -52,6 +52,25 @@ inside of '/Library/Application Support/Apple/Developer Tools'
 
 <p>After installation, try the samples that are written in Ruby. Refer to <a href="/doc/try-samples/">Try Samples</a>.</p>
 
+<h2 id="install-xcode4-project-templates-105-or-later">Install Xcode4 project templates (1.0.5 or later)</h2>
+
+<pre><code>$ ruby /Developer/Documentation/RubyCocoa/Templates/install_templates.rb \
+      Xcode4.x
+% ls ~/Library/Developer/Xcode/Templates/Project\ Templates/Mac/Application
+Ruby-Cocoa Application Base.xctemplate
+Ruby-Cocoa Application.xctemplate
+Ruby-Cocoa Document-based Application.xctemplate
+Ruby-Core Data Application.xctemplate
+Ruby-Core Data Spotlight Application.xctemplate
+% ruby /Developer/Documentation/RubyCocoa/Templates/install_templates.rb \
+      --help
+usage: install_templates.rb [options] TEMPLATE_DIR
+    TEMPLATE_DIR: Xcode4.x or Xcode4.1
+    -f, --force                      overwrite existing templates
+    -v, --verbose                    print verbose message
+        --dest=dir                   specify install destination
+</code></pre>
+
 <h2 id="build-from-source">Build from Source</h2>
 
 <p>Extract RubyCocoa source from the ‘.tar.gz’ file into a directory somewhere.</p>
@@ -74,7 +93,7 @@ $ sudo ruby install.rb intstall
       
       <h2>The latest version</h2>
       <ul>
-	  <li><a href="http://sourceforge.net/projects/rubycocoa/files/RubyCocoa/1.0.4/">1.0.4 (2012-08-27)</a></li>
+	  <li><a href="http://sourceforge.net/projects/rubycocoa/files/RubyCocoa/1.0.5/">1.0.5 (2012-10-07)</a></li>
 	  <li><a href="/doc/changes/">Changes</a></li>
       </ul>
       <h2>Documentation</h2>

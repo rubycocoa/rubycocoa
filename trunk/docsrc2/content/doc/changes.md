@@ -1,6 +1,24 @@
 
 # RubyCocoa Changes
 
+# Changes 1.0.5 from 1.0.4: 2012-10-07
+
+## Improvements
+
+  * project templates are upgraded for Xcode 4.2-4.5.
+    you can install the templates with the following command.
+
+        $ ruby /Developer/Documentation/RubyCocoa/Templates/install_templates.rb Xcode4.x
+
+## Fixes
+
+  * Fixed standaloneify.rb not work.
+
+## Removals
+
+  * osx/active_record.rb was removed.
+
+
 ## changes 1.0.4 from 1.0.3: 2012-08-27
 
 ### fixes

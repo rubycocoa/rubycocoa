@@ -33,6 +33,24 @@ A successful installation of the binary package will add the following items:
 
 After installation, try the samples that are written in Ruby. Refer to [Try Samples](/doc/try-samples/).
 
+## Install Xcode4 project templates (1.0.5 or later)
+
+    $ ruby /Developer/Documentation/RubyCocoa/Templates/install_templates.rb \
+          Xcode4.x
+    % ls ~/Library/Developer/Xcode/Templates/Project\ Templates/Mac/Application
+    Ruby-Cocoa Application Base.xctemplate
+    Ruby-Cocoa Application.xctemplate
+    Ruby-Cocoa Document-based Application.xctemplate
+    Ruby-Core Data Application.xctemplate
+    Ruby-Core Data Spotlight Application.xctemplate
+    % ruby /Developer/Documentation/RubyCocoa/Templates/install_templates.rb \
+          --help
+    usage: install_templates.rb [options] TEMPLATE_DIR
+        TEMPLATE_DIR: Xcode4.x or Xcode4.1
+        -f, --force                      overwrite existing templates
+        -v, --verbose                    print verbose message
+            --dest=dir                   specify install destination
+
 ## Build from Source
 
 Extract RubyCocoa source from the '.tar.gz' file into a directory somewhere.
