@@ -1,3 +1,10 @@
+2012-10-07 kimura wataru <kimuraw@i.nifty.jp>
+
+	* template/Xcode4.x/Templates/Project Templates/Mac/Application/
+	  Ruby-Cocoa Application Base.xctemplate,
+	  templates/Xcode4.x/filelist.txt:
+	remove empty directory.
+
 === RubyCocoa 1.0.5 ===
 
 2012-10-07 kimura wataru <kimuraw@i.nifty.jp>
