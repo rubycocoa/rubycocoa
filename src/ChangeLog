@@ -1,3 +1,9 @@
+2012-10-11 kimura wataru <kimuraw@i.nifty.jp>
+
+	* framework/tool/standaloneify.rb:
+	standaloneify fails when RubyCocoa.framework already exists in
+	the target application.
+
 2012-10-07 kimura wataru <kimuraw@i.nifty.jp>
 
 	* template/Xcode4.x/Templates/Project Templates/Mac/Application/
