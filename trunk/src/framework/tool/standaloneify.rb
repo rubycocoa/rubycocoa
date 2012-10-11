@@ -79,6 +79,19 @@ if __FILE__ == $0 and ARGV[0] == Standaloneify::MAGIC_ARGUMENT then
     end
   end
 
+  if defined?(Gem) && Gem::Specification.respond_to?(:list)
+    # backward compatibility for RubyGems 1.3.2 or earlier
+    module Gem
+      class Specification
+	def self.each
+	  self.list.each do |x|
+	    yield x
+	  end
+	end
+      end
+    end
+  end
+
   module Standaloneify
     def self.find_files(loaded_features,loaded_files)
 
@@ -99,8 +112,12 @@ if __FILE__ == $0 and ARGV[0] == Standaloneify::MAGIC_ARGUMENT then
         FileUtils.mkdir_p(gems_spec_d)
         FileUtils.mkdir_p(gems_gem_d)
 
-        Gem::Specification.list.each do |gem|
-          next unless gem.loaded?
+	unless Gem::Specification.respond_to? :each
+	  raise 'RubyGems is too old! run "gem update --sysmtem"'
+	end
+	Gem::Specification.all.each do |gem|
+          $stderr.puts gem
+          next unless gem.activated?
           $stderr.puts "Found gem #{gem.name}"
 
           FileUtils.cp_r(gem.full_gem_path,gems_gem_d)
@@ -200,7 +217,7 @@ module Standaloneify
       $stderr.puts "Couldn't read dependency list"
       exit 1
     end
-    File.unlink(dump_file)        
+    File.unlink(dump_file)
     result
   end
 
