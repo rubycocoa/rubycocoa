@@ -1,3 +1,8 @@
+2012-10-12 kimura wataru <kimuraw@i.nifty.jp>
+
+	* framework/src/objc/RBRuntime.m:
+	fix RBApplicationInit() does not process --rubycocoa-ruby-opt.
+
 2012-10-11 kimura wataru <kimuraw@i.nifty.jp>
 
 	* framework/tool/standaloneify.rb:
