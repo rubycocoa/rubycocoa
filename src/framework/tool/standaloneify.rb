@@ -88,6 +88,8 @@ if __FILE__ == $0 and ARGV[0] == Standaloneify::MAGIC_ARGUMENT then
 	    yield x
 	  end
 	end
+
+	alias :activated? :loaded?
       end
     end
   end
