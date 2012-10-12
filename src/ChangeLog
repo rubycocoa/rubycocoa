@@ -1,5 +1,9 @@
 2012-10-12 kimura wataru <kimuraw@i.nifty.jp>
 
+	* samples/*:
+	replace RBApplicationMain() with RBApplicationInit() and
+	NSApplicationMain().
+
 	* framework/src/objc/RBRuntime.m:
 	fix RBApplicationInit() does not process --rubycocoa-ruby-opt.
 
