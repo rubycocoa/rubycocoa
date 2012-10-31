@@ -384,7 +384,10 @@ rubycocoa_app_init(const char* program,
   sign_path_unshift(bridge_support_path());
   framework_paths_unshift(private_frameworks_path());
   framework_paths_unshift(shared_frameworks_path());
-  ruby_run();
+  // call ruby_run() when ruby's $0 is not "rb_main.rb" (for standaloneify.rb)
+  if (strncmp(program, basename(ruby_sourcefile), strlen(program)) != 0) {
+    ruby_run();
+  }
   return loader(program, nil, param);
 }
 
