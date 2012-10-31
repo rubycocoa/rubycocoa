@@ -1,3 +1,8 @@
+2012-10-31 kimura wataru <kimuraw@i.nifty.jp>
+
+	* framework/src/objc/RBRuntime.m:
+	fix app initialized with RBApplicationInit() does not launch.
+
 2012-10-12 kimura wataru <kimuraw@i.nifty.jp>
 
 	* samples/*:
