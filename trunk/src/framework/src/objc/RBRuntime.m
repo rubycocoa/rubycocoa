@@ -374,18 +374,18 @@ rubycocoa_app_init(const char* program,
   Init_stack((void*)&state);
   if (! rubycocoa_initialized_p()) {
     ruby_init();
-    ruby_argc = prepare_argv(argc, argv, program, &ruby_argv);
-    ruby_options(ruby_argc, (char**) ruby_argv);
     ruby_init_loadpath();
     rubycocoa_init();
+    ruby_argc = prepare_argv(argc, argv, program, &ruby_argv);
+    ruby_options(ruby_argc, (char**) ruby_argv);
     rubycocoa_set_frequently_init_stack(0);
   }
   load_path_unshift(resource_path());
   sign_path_unshift(bridge_support_path());
   framework_paths_unshift(private_frameworks_path());
   framework_paths_unshift(shared_frameworks_path());
-  // call ruby_run() when ruby's $0 is not "rb_main.rb" (for standaloneify.rb)
-  if (strncmp(program, basename(ruby_sourcefile), strlen(program)) != 0) {
+  // call ruby_run() launched from standaloneify.rb
+  if (getenv("RUBYCOCOA_STANDALONEIFYING?")) {
     ruby_run();
   }
   return loader(program, nil, param);
