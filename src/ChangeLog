@@ -1,3 +1,8 @@
+2012-11-01 kimura wataru <kimuraw@i.nifty.jp>
+
+	* samples/*:
+	remove unnecessary NSApplicationMain() in rb_main.rb.
+
 2012-10-31 kimura wataru <kimuraw@i.nifty.jp>
 
 	* framework/src/objc/RBRuntime.m:

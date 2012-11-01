@@ -307,5 +307,3 @@ end
 $delegate = ApplicationDelegate.alloc.init
 OSX::NSApplication.sharedApplication.setDelegate($delegate)
 
-# run the main loop
-OSX.NSApplicationMain(0, nil)
