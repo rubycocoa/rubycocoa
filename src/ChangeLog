@@ -1,4 +1,12 @@
+=== RubyCocoa 1.0.6 ===
+
 2012-12-31 kimura wataru <kimuraw@i.nifty.jp>
+
+	* VERSION:
+	set version to 1.0.6
+
+	* NEWS, NEWS.ja:
+	update NEWS.
 
 	* framework/src/objc/RBRuntime.m:
 	remove warning for "-d" option.
