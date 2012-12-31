@@ -326,18 +326,6 @@ static void rubycocoa_init()
     rubycocoa_initialized_flag = 1;
     rb_define_variable("$RUBYCOCOA_DEBUG", &ruby_debug);
     rubycocoa_debug = getenv("RUBYCOCOA_DEBUG") != NULL;
-    // commandline options are obsoleted since version 1.0.3
-    POOL_DO(pool) {
-      NSArray * options = [[NSProcessInfo processInfo] arguments];
-      NSEnumerator * enumerator = [options objectEnumerator];
-      NSString * option;
-      while (option = (NSString *)[enumerator nextObject]) {
-        if ([option isEqualToString:@"-d"]) {
-          NSLog(@"rubycocoa_init: warning: commandline options are obsoleted. use environmet RUBYCOCOA_DEBUG for debug, not \"-d\".");
-          break;
-        }
-      }
-    } END_POOL(pool);
   }
 }
 
