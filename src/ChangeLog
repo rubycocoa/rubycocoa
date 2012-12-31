@@ -1,3 +1,8 @@
+2012-12-31 kimura wataru <kimuraw@i.nifty.jp>
+
+	* framework/src/objc/RBRuntime.m:
+	remove warning for "-d" option.
+
 2012-11-01 kimura wataru <kimuraw@i.nifty.jp>
 
 	* framework/src/objc/RBRuntime.m:
