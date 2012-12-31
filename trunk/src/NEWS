@@ -3,6 +3,13 @@
 
 $Id$
 
+== Changes 1.0.6 from 1.0.5: 2012-12-31
+
+=== Fixes
+
+  * Fixed some applications does not launch with 1.0.5.
+  * Fixed standaloneifi-ed app does not work with rubygems 1.3.2 or later.
+
 == Changes 1.0.5 from 1.0.4: 2012-10-07
 
 === Improvements
