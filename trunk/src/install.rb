@@ -50,7 +50,7 @@ end
 
 class ConfigTable
 
-  c = ::Config::CONFIG
+  c = ::RbConfig::CONFIG
 
   rubypath = c['bindir'] + '/' + c['ruby_install_name']
 
@@ -726,7 +726,7 @@ class Installer
         "no extention exists: Have you done 'ruby #{$0} setup' ? "
   end
 
-  DLEXT = /\.#{ ::Config::CONFIG['DLEXT'] }\z/
+  DLEXT = /\.#{ ::RbConfig::CONFIG['DLEXT'] }\z/
 
   def _allext( dir )
     Dir.open( dir ) {|d|
@@ -1083,8 +1083,8 @@ class ToplevelInstaller < Installer
   #
 
   def exec_test
-    ruby_cmd = File.join(Config::CONFIG['bindir'],
-                         Config::CONFIG['RUBY_INSTALL_NAME'])
+    ruby_cmd = File.join(RbConfig::CONFIG['bindir'],
+                         RbConfig::CONFIG['RUBY_INSTALL_NAME'])
     dive_into('tests') {
       ENV['DYLD_FRAMEWORK_PATH'] = File.join('../framework', framework_obj_path)
       ENV['BRIDGE_SUPPORT_PATH'] = '../framework/bridge-support'

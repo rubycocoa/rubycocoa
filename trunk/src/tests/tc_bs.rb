@@ -11,7 +11,7 @@ system 'make -s' || raise(RuntimeError, "'make' failed")
 class TC_BridgeSupport < Test::Unit::TestCase
 
   def setup
-    @ruby_path = File.join(Config::CONFIG["bindir"], Config::CONFIG["RUBY_INSTALL_NAME"])
+    @ruby_path = File.join(RbConfig::CONFIG["bindir"], RbConfig::CONFIG["RUBY_INSTALL_NAME"])
   end
  
   def test_framework_loaded

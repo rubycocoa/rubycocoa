@@ -6,7 +6,7 @@ require 'rbconfig'
 require 'fileutils'
 
 srcfile = File.join('<%= @config['so-dir'] %>', 'rubycocoa.bundle')
-destdir = Config::CONFIG['sitearchdir']
+destdir = RbConfig::CONFIG['sitearchdir']
 destfile = File.join(destdir, File.basename(srcfile))
 
 begin

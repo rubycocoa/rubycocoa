@@ -14,11 +14,11 @@ def command( str )
 end
 
 def ruby( str )
-  command "#{Config::CONFIG["bindir"]}/ruby #{str}"
+  command "#{RbConfig::CONFIG["bindir"]}/ruby #{str}"
 end
 
 def rdoc( str )
-  command "#{Config::CONFIG["bindir"]}/rdoc #{str}"
+  command "#{RbConfig::CONFIG["bindir"]}/rdoc #{str}"
 end
 
 def get_reference_files(framework_path)

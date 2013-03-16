@@ -57,7 +57,7 @@ else
   puts "libxml2 is not available!"
 end
 
-raise 'ERROR: ruby must be built as a shared library' if Config::CONFIG["ENABLE_SHARED"] != 'yes'
+raise 'ERROR: ruby must be built as a shared library' if RbConfig::CONFIG["ENABLE_SHARED"] != 'yes'
 
 # Add the libffi library to the build process.
 if @config['macosx-deployment-target'].to_f < 10.5
