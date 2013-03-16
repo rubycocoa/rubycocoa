@@ -8,7 +8,7 @@
  */
 
 #import <RubyCocoa/RBObject.h>
-#import <RubyCocoa/osx_ruby.h>
+#import <ruby.h>
 
 @interface RBObject(RBSlaveObject)
 - initWithMasterObject: master;

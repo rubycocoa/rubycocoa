@@ -10,7 +10,7 @@
 #import <Foundation/NSBundle.h>
 #import <Foundation/NSAutoreleasePool.h>
 #import <Foundation/NSDictionary.h>
-#import "osx_ruby.h"
+#import <ruby.h>
 #import "mdl_osxobjc.h"
 #import "ocdata_conv.h"
 #import "internal_macros.h"

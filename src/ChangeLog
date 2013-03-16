@@ -1,5 +1,11 @@
 2013-03-16 kimura wataru <kimuraw@i.nifty.jp>
 
+	* *.h, *.m:
+	rename "osx_intern.h" to <ruby.h>.
+
+	* framework/post-config.rb:
+	remove. osx_ruby.h and osx_intern.h are not needed.
+
 	* *.rb:
 	rename Config to RbCofig. Config of rbconfig was obsoleted.
 

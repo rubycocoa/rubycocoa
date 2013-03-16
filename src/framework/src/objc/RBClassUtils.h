@@ -9,7 +9,7 @@
 
 #import <objc/objc.h>
 #import <Foundation/NSObject.h>
-#import "osx_ruby.h"
+#import <ruby.h>
 
 Class RBObjcClassFromRubyClass (VALUE kls);
 VALUE RBRubyClassFromObjcClass (Class cls);

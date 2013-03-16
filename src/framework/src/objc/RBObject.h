@@ -8,7 +8,7 @@
  */
 
 #import <Foundation/NSProxy.h>
-#import <RubyCocoa/osx_ruby.h>
+#import <ruby.h>
 
 @interface RBObject : NSProxy
 {

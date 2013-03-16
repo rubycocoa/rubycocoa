@@ -9,7 +9,7 @@
 
 #import <objc/objc-class.h>
 #import <Foundation/NSObject.h>
-#import "osx_ruby.h"
+#import <ruby.h>
 
 void init_ovmix(void);
 

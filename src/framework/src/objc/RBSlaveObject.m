@@ -11,7 +11,7 @@
 #import "RBObject.h"
 #import "RBSlaveObject.h"
 #import "RBClassUtils.h"
-#import "osx_ruby.h"
+#import <ruby.h>
 #import "ocdata_conv.h"
 #import "mdl_osxobjc.h"
 

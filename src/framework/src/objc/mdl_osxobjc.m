@@ -8,7 +8,7 @@
  */
 
 #import "mdl_osxobjc.h"
-#import "osx_ruby.h"
+#import <ruby.h>
 #import <Foundation/Foundation.h>
 #import "RubyCocoa.h"
 #import "Version.h"

@@ -7,7 +7,7 @@
  * LGPL. See the COPYRIGHT file for more information.
  */
 
-#import "osx_ruby.h"
+#import <ruby.h>
 
 /** class methods **/
 VALUE objcptr_s_class ();

@@ -9,7 +9,7 @@
 
 #import <objc/objc-class.h>
 #import <stdarg.h>
-#import "osx_ruby.h"
+#import <ruby.h>
 
 #if HAVE_LONG_LONG
 /* long long is missing from objc-class.h
