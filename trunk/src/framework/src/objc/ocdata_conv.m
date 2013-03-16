@@ -1073,11 +1073,11 @@ rbobj_to_ocdata (VALUE obj, const char *octype_str, void* ocdata, BOOL to_libffi
 #endif
 
     case _C_FLT:
-      *(float*)ocdata = (float) RFLOAT(rb_Float(obj))->value;
+      *(float*)ocdata = (float) RFLOAT_VALUE(rb_Float(obj));
       break;
 
     case _C_DBL:
-      *(double*)ocdata = RFLOAT(rb_Float(obj))->value;
+      *(double*)ocdata = RFLOAT_VALUE(rb_Float(obj));
       break;
 
     case _C_CHARPTR:
