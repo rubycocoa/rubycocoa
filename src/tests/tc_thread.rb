@@ -57,7 +57,7 @@ class TC_Thread < Test::Unit::TestCase
   def setup
     @mainThread = OSX::NSThread.currentThread
     @helper = OSX::RBThreadTest.alloc.init
-    @ruby_path = File.join(Config::CONFIG["bindir"], Config::CONFIG["RUBY_INSTALL_NAME"])
+    @ruby_path = File.join(RbConfig::CONFIG["bindir"], RbConfig::CONFIG["RUBY_INSTALL_NAME"])
   end
 
   def threaded

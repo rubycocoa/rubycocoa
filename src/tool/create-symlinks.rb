@@ -28,7 +28,7 @@ Dir.chdir('/System/Library/Frameworks') {
 Dir.chdir('/usr/lib/ruby/1.8') {
   mv('osx', 'osx.old')
   ln_s(File.join(pwd, 'lib/osx'), 'osx')
-  Dir.chdir(Config::CONFIG['arch']) {
+  Dir.chdir(RbConfig::CONFIG['arch']) {
     mv('rubycocoa.bundle', 'rubycocoa.bundle.old')
     ln_s(File.join(pwd, 'ext/rubycocoa/rubycocoa.bundle'), 'rubycocoa.bundle')
   }

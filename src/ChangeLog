@@ -1,3 +1,8 @@
+2013-03-16 kimura wataru <kimuraw@i.nifty.jp>
+
+	* *.rb:
+	rename Config to RbCofig. Config of rbconfig was obsoleted.
+
 === RubyCocoa 1.0.6 ===
 
 2012-12-31 kimura wataru <kimuraw@i.nifty.jp>

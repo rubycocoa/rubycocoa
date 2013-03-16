@@ -6,13 +6,13 @@ module RubyCocoaConfig
   module_function
 
   def libruby_path
-    path = File.join(Config::CONFIG['libdir'], Config::CONFIG['LIBRUBY'])
+    path = File.join(RbConfig::CONFIG['libdir'], RbConfig::CONFIG['LIBRUBY'])
     unless File.exist?( path ) then
-      path = File.join(Config::CONFIG['archdir'], Config::CONFIG['LIBRUBY_A'])
+      path = File.join(RbConfig::CONFIG['archdir'], RbConfig::CONFIG['LIBRUBY_A'])
     end
     # On Panther, /usr/lib/ruby reports wrong CONFIG
     unless File.exist?( path ) then
-      path = File.join(Config::CONFIG['libdir'], 'libruby.dylib')
+      path = File.join(RbConfig::CONFIG['libdir'], 'libruby.dylib')
     end
     return path
   end
@@ -27,9 +27,9 @@ module RubyCocoaConfig
   end
 
   def archs
-    # collect ruby's -arch flags from Config::CONFIG
-    flags = [Config::CONFIG['CFLAGS'], Config::CONFIG['LDFLAGS'],
-            Config::CONFIG['ARCH_FLAG']].join(' ')
+    # collect ruby's -arch flags from RbConfig::CONFIG
+    flags = [RbConfig::CONFIG['CFLAGS'], RbConfig::CONFIG['LDFLAGS'],
+            RbConfig::CONFIG['ARCH_FLAG']].join(' ')
     archs = flags.scan(/(?:\s?-arch\s+(\w+))/).flatten.uniq
     archs.join(' ')
   end
@@ -75,17 +75,17 @@ add_bool_config 'build-as-embeddable', true,
 ### build configuration ### 
 
 # Xcode 2.2 moved ruby.h, but ruby command reports old path.
-unless File.exist? File.join(Config::CONFIG['archdir'], 'ruby.h')
-  Config::CONFIG['archdir'] = Config::CONFIG['archdir'].sub(/powerpc/, 'universal')
+unless File.exist? File.join(RbConfig::CONFIG['archdir'], 'ruby.h')
+  RbConfig::CONFIG['archdir'] = RbConfig::CONFIG['archdir'].sub(/powerpc/, 'universal')
 end
-add_path_config 'ruby-header-dir', Config::CONFIG['archdir'],
+add_path_config 'ruby-header-dir', RbConfig::CONFIG['archdir'],
   'path to the ruby header directory'
 
 add_path_config 'libruby-path', RubyCocoaConfig.libruby_path,
   'path to the libruby file'
 
 add_path_config 'ri-dir',
-  "#{Config::CONFIG['datadir']}/ri/#{Config::CONFIG['ruby_version']}/site",
+  "#{RbConfig::CONFIG['datadir']}/ri/#{RbConfig::CONFIG['ruby_version']}/site",
   'the directory for ri files'
 
 add_config 'macosx-deployment-target', 'version', 
