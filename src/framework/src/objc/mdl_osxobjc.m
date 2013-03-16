@@ -136,14 +136,14 @@ osx_mf_ruby_thread_switcher_start(int argc, VALUE* argv, VALUE mdl)
   }
   else {
     Check_Type(arg_interval, T_FLOAT);
-    interval = RFLOAT(arg_interval)->value;
+    interval = RFLOAT_VALUE(arg_interval);
 
     if (arg_wait == Qnil) {
       [RBThreadSwitcher start: interval];
     }
     else {
       Check_Type(arg_wait, T_FLOAT);
-      wait = RFLOAT(arg_wait)->value;
+      wait = RFLOAT_VALUE(arg_wait);
       [RBThreadSwitcher start: interval wait: wait];
     }
   }
