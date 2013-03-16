@@ -8,8 +8,7 @@
  */
 
 #import <Foundation/Foundation.h>
-#import "osx_ruby.h"
-#import "osx_intern.h"
+#import <ruby.h>
 #import "BridgeSupport.h"
 #import <dlfcn.h>
 #import <st.h>

@@ -8,7 +8,7 @@
  */
 
 #import <objc/objc.h>
-#import "osx_ruby.h"
+#import <ruby.h>
 #import "cls_objcid.h"
 #import "cls_objcptr.h"
 #import "mdl_objwrapper.h"

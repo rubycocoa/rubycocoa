@@ -7,7 +7,7 @@
  * LGPL. See the COPYRIGHT file for more information.
  */
 
-#import "osx_ruby.h"
+#import <ruby.h>
 #import <objc/objc.h>
 
 struct _objcid_data {

@@ -11,7 +11,7 @@
 #define  _MDL_BUNDLE_SUPPORT_H_
 
 #import <objc/objc.h>
-#import "osx_ruby.h"
+#import <ruby.h>
 
 void initialize_mdl_bundle_support();
 

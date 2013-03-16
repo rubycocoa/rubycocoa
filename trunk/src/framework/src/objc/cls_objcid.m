@@ -9,7 +9,7 @@
 
 #import "cls_objcid.h"
 
-#import "osx_ruby.h"
+#import <ruby.h>
 #import "ocdata_conv.h"
 #import <Foundation/Foundation.h>
 #import <string.h>

@@ -7,7 +7,7 @@
  * LGPL. See the COPYRIGHT file for more information.
  */
 
-#import "osx_ruby.h"
+#import <ruby.h>
 
 /* Ruby and FFI use both autoconf, and some variables collide. */
 #if defined(PACKAGE_BUGREPORT)

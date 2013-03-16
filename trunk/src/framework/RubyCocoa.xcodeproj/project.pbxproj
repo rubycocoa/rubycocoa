@@ -41,8 +41,6 @@
 		FCDF926C0A87E09E0002AD01 /* RBThreadSwitcher.h in Headers */ = {isa = PBXBuildFile; fileRef = E88C6D6A035BB1F5031D1B90 /* RBThreadSwitcher.h */; };
 		FCDF926D0A87E09E0002AD01 /* RubyCocoa.h in Headers */ = {isa = PBXBuildFile; fileRef = E88C6D6C035BB1F5031D1B90 /* RubyCocoa.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		FCDF926E0A87E09E0002AD01 /* Version.h in Headers */ = {isa = PBXBuildFile; fileRef = E88C6D6D035BB1F5031D1B90 /* Version.h */; settings = {ATTRIBUTES = (); }; };
-		FCDF926F0A87E09E0002AD01 /* osx_intern.h in Headers */ = {isa = PBXBuildFile; fileRef = E8FA5ED5035BB5A5035CBD51 /* osx_intern.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		FCDF92700A87E09E0002AD01 /* osx_ruby.h in Headers */ = {isa = PBXBuildFile; fileRef = E8FA5ED6035BB5A5035CBD51 /* osx_ruby.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		FCDF92710A87E09E0002AD01 /* RBSlaveObject.h in Headers */ = {isa = PBXBuildFile; fileRef = E813DE9B036CC9C1033794D5 /* RBSlaveObject.h */; };
 		FCDF92720A87E09E0002AD01 /* mdl_osxobjc.h in Headers */ = {isa = PBXBuildFile; fileRef = E813DE9D036D122F033794D5 /* mdl_osxobjc.h */; };
 		FCDF92730A87E09E0002AD01 /* RBClassUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = E813DE9F036D122F033794D5 /* RBClassUtils.h */; };
@@ -190,11 +188,9 @@
 		E88C6E7D035BB408031D1B90 /* oc_import.rb */ = {isa = PBXFileReference; lastKnownFileType = text.script.ruby; path = oc_import.rb; sourceTree = "<group>"; };
 		E88C6E7F035BB408031D1B90 /* oc_types.rb */ = {isa = PBXFileReference; lastKnownFileType = text.script.ruby; path = oc_types.rb; sourceTree = "<group>"; };
 		E88C6E80035BB408031D1B90 /* oc_wrapper.rb */ = {isa = PBXFileReference; lastKnownFileType = text.script.ruby; path = oc_wrapper.rb; sourceTree = "<group>"; };
-		E8FA5ED5035BB5A5035CBD51 /* osx_intern.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = osx_intern.h; sourceTree = "<group>"; };
-		E8FA5ED6035BB5A5035CBD51 /* osx_ruby.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = osx_ruby.h; sourceTree = "<group>"; };
 		E8FD49D003D45B2603A81C6F /* ruby_addition.rb */ = {isa = PBXFileReference; lastKnownFileType = text.script.ruby; path = ruby_addition.rb; sourceTree = "<group>"; };
 		FCDF92610A87E06A0002AD01 /* GeneratedConfig.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = GeneratedConfig.xcconfig; sourceTree = "<group>"; };
-		FCDF92A40A87E09E0002AD01 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = Info.plist; sourceTree = "<group>"; };
+		FCDF92A40A87E09E0002AD01 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		FCDF92A50A87E09E0002AD01 /* RubyCocoa.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = RubyCocoa.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -272,8 +268,6 @@
 				4D615B560B83B3950064908B /* internal_macros.h */,
 				4D615B570B83B3950064908B /* mdl_bundle_support.h */,
 				4E85DEEB0B7B62D4007290BD /* mdl_bundle_support.m */,
-				E8FA5ED5035BB5A5035CBD51 /* osx_intern.h */,
-				E8FA5ED6035BB5A5035CBD51 /* osx_ruby.h */,
 				E813DE9D036D122F033794D5 /* mdl_osxobjc.h */,
 				E813DE9E036D122F033794D5 /* mdl_osxobjc.m */,
 				E88C6D58035BB1F5031D1B90 /* cls_objcid.h */,
@@ -383,8 +377,6 @@
 				FCDF926C0A87E09E0002AD01 /* RBThreadSwitcher.h in Headers */,
 				FCDF926D0A87E09E0002AD01 /* RubyCocoa.h in Headers */,
 				FCDF926E0A87E09E0002AD01 /* Version.h in Headers */,
-				FCDF926F0A87E09E0002AD01 /* osx_intern.h in Headers */,
-				FCDF92700A87E09E0002AD01 /* osx_ruby.h in Headers */,
 				FCDF92710A87E09E0002AD01 /* RBSlaveObject.h in Headers */,
 				FCDF92720A87E09E0002AD01 /* mdl_osxobjc.h in Headers */,
 				FCDF92730A87E09E0002AD01 /* RBClassUtils.h in Headers */,

@@ -7,6 +7,6 @@
  * LGPL. See the COPYRIGHT file for more information.
  */
 
-#import "osx_ruby.h"
+#import <ruby.h>
 
 VALUE init_mdl_OCObjWrapper(VALUE);

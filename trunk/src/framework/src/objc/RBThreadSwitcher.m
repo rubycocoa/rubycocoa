@@ -9,7 +9,7 @@
 
 #import <Foundation/NSAutoreleasePool.h>
 #import "RBThreadSwitcher.h"
-#import "osx_ruby.h"
+#import <ruby.h>
 #import "rubysig.h"
 
 #define DEFAULT_WAIT      0.000	// sec
