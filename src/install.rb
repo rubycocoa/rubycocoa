@@ -992,7 +992,7 @@ class ToplevelInstaller < Installer
     while i = ARGV.shift do
       if i == '--use-rosetta'
         @options['use-rosetta'] = true
-      elsif /\A--test-args=(.+)/ =~ i
+      elsif /\A(?:--test-args|TESTS)=(.+)/ =~ i
         @options['test-args'] = $1
       elsif /\A--arch=(.+)/ =~ i
         @options['arch'] = $1

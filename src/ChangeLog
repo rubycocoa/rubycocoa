@@ -1,3 +1,10 @@
+2013-09-07 kimura wataru <kimuraw@i.nifty.jp>
+
+	* install.rb:
+	add an option "TESTS=" to test task of install.rb.
+	the option similar to ruby's `make TESTS=opts test-all`.
+	ex) % ruby install.rb test TESTS=-v
+
 2013-04-13 kimura wataru <kimuraw@i.nifty.jp>
 
 	* tests/tc_thread.rb:
