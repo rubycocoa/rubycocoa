@@ -1,5 +1,12 @@
 2013-09-07 kimura wataru <kimuraw@i.nifty.jp>
 
+	* framework/src/objc/BridgeSupport.m:
+	fix some OSX::ObjCPtr values become OSX::CFTypeRef.
+	the following functions always should return NULL when passed type
+	encoding is "^v".
+	  - find_bs_boxed_by_encoding()
+	  - find_bs_cf_type_by_encoding()
+
 	* install.rb:
 	add an option "TESTS=" to test task of install.rb.
 	the option similar to ruby's `make TESTS=opts test-all`.
