@@ -2010,7 +2010,7 @@ find_bs_cf_type_by_encoding(const char *encoding)
   // such as CFTypeRef in CoreFoundation or ABRecordRef in AddressBook.
   // (1) bsCFTypes : lookup by enconding "^v" -> NG
   // (2) bsCFTypes2: lookup by CFTypeID `CFTypeRef' -> OK
-  if (strncmp(encoding, "^v", 1) == 0)
+  if (strncmp(encoding, "^v", 2) == 0)
     return NULL;
 
   if (!st_lookup(bsCFTypes, (st_data_t)encoding, (st_data_t *)&cf_type))
