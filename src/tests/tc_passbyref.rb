@@ -227,6 +227,7 @@ class TC_PassByRef < Test::Unit::TestCase
   end
 
   def test_null_accepted
+    tmp = OSX.CGMainDisplayID() # let to work NSCountWindows()
     assert_raises(ArgumentError) { OSX::NSCountWindows(nil) }
     r = OSX::NSCountWindows()
     assert_kind_of(Fixnum, r)

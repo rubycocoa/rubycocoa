@@ -1,5 +1,8 @@
 2013-09-10 kimura wataru <kimuraw@i.nifty.jp>
 
+	* tests/tc_passbyref:
+	fix failure of test_null_accepted() at running only tc_passbyref.rb.
+
 	* tests/ObjcPassByRefTest.bridgesupport, tests/objc_test.m,
 	tests/tc_passbyref.rb:
 	fix SEGV at test_ignore() on 10.9 Mervericks. use prepared
