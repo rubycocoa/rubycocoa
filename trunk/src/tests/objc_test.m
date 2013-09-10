@@ -224,6 +224,16 @@
 }
 @end
 
+@interface NSData (TcPassByRef)
+- (void)testGetBytes:(void *)buffer;
+- (void)testGetBytes:(void *)buffer range:(NSRange)range;
+@end
+
+@implementation NSData (TcPassByRef)
+- (void)testGetBytes:(void *)buffer { }
+- (void)testGetBytes:(void *)buffer range:(NSRange)range { }
+@end
+
 // tc_subclass.rb 
 @interface __SkipInternalClass : NSData
 @end

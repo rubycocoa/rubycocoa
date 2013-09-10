@@ -7,6 +7,7 @@ require 'osx/cocoa'
 
 system 'make -s' || raise(RuntimeError, "'make' failed")
 require 'objc_test.bundle'
+OSX.load_bridge_support_file 'ObjcPassByRefTest.bridgesupport'
 
 class PassByRefSubclass1 < OSX::PassByRef
 
@@ -218,10 +219,11 @@ class TC_PassByRef < Test::Unit::TestCase
     assert_equal(data, 'foo')
   end
 
+  # raise RuntimeError at invoking "ignore='true'" methods
   def test_ignored
     d = OSX::NSData.alloc.initWithBytes_length('foobar')
-    assert_raises(RuntimeError) { d.getBytes(nil) }
-    assert_raises(RuntimeError) { d.getBytes_range(nil, OSX::NSRange.new(0, 1)) }
+    assert_raises(RuntimeError) { d.testGetBytes(nil) }
+    assert_raises(RuntimeError) { d.testGetBytes_range(nil, OSX::NSRange.new(0, 1)) }
   end
 
   def test_null_accepted
