@@ -61,7 +61,7 @@ ocm_retain_arg_if_necessary (VALUE result, BOOL is_result, void *context)
 
       if (!is_result
           || NIL_P(rcv)
-          || strncmp((const char *)selector, "init", 4) != 0
+          || strncmp(sel_getName(selector), "init", 4) != 0
           || OBJCID_ID(rcv) == OBJCID_ID(result)
           || !OBJCID_DATA_PTR(rcv)->retained) { 
 
@@ -322,7 +322,7 @@ ocm_send(int argc, VALUE* argv, VALUE rcv, VALUE* result)
     // as the target class may override the invocation dispatching methods (as NSUndoManager).
     methodSignature = [oc_rcv methodSignatureForSelector:selector];
     if (methodSignature == nil) {
-      exception = rb_err_new(ocmsgsend_err_class(), "Can't get Objective-C method signature for selector '%s' of receiver %s", (char *) selector, RSTRING_PTR(rb_inspect(rcv)));
+      exception = rb_err_new(ocmsgsend_err_class(), "Can't get Objective-C method signature for selector '%s' of receiver %s", sel_getName(selector), RSTRING_PTR(rb_inspect(rcv)));
       goto bails;
     }
     // Let's use the regular message dispatcher.
@@ -372,7 +372,7 @@ ocm_send(int argc, VALUE* argv, VALUE rcv, VALUE* result)
 
     exception = Qnil;
     @try {
-      OBJWRP_LOG("direct call easy method %s imp %p", (const char *)selector, imp);
+      OBJWRP_LOG("direct call easy method %s imp %p", sel_getName(selector), imp);
       val = (*imp)(oc_rcv, selector);
     }
     @catch (id oc_exception) {
@@ -408,7 +408,7 @@ ocm_send(int argc, VALUE* argv, VALUE rcv, VALUE* result)
 
   expected_argc = numberOfArguments;
 
-  bs_method = find_bs_method(klass, (const char *) selector, is_class_method); 
+  bs_method = find_bs_method(klass, sel_getName(selector), is_class_method); 
   if (bs_method != NULL) {
     OBJWRP_LOG("found metadata description\n");
     if (bs_method->ignore) {
@@ -472,7 +472,7 @@ ocm_send(int argc, VALUE* argv, VALUE rcv, VALUE* result)
     result);
 
 success:
-  OBJWRP_LOG("ocm_send (%s) done%s", (const char *)selector, NIL_P(exception) ? "" : " with exception");
+  OBJWRP_LOG("ocm_send (%s) done%s", sel_getName(selector), NIL_P(exception) ? "" : " with exception");
 
 bails:
   if (methodReturnType != NULL)
@@ -551,7 +551,7 @@ _ary_push_objc_methods (VALUE ary, Class cls, int recur)
   unsigned int i, count;
   methods = class_copyMethodList(cls, &count);
   for (i = 0; i < count; i++)
-    rb_ary_push(ary, rb_str_new2((const char *)method_getName(methods[i])));
+    rb_ary_push(ary, rb_str_new2(sel_getName(method_getName(methods[i]))));
   free(methods);
 #else
   void* iterator = NULL;
@@ -689,7 +689,7 @@ _objc_alias_method (Class klass, VALUE new, VALUE old)
 
   // warn if trying to alias a method that isn't a member of the specified class
   if (me == NULL)
-    rb_raise(rb_eRuntimeError, "could not alias '%s' for '%s' to class '%s': Objective-C cannot find it in the class", (char *)new_name, (char *)old_name, class_getName(klass));
+    rb_raise(rb_eRuntimeError, "could not alias '%s' for '%s' to class '%s': Objective-C cannot find it in the class", sel_getName(new_name), sel_getName(old_name), class_getName(klass));
   
   class_addMethod(klass, new_name, method_getImplementation(me), method_getTypeEncoding(me));
   

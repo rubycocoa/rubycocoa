@@ -277,7 +277,7 @@ VALUE rbobj_call_ruby(id rbobj, SEL selector, VALUE args)
 
   if (rb_respond_to(m_rbobj, mid) == 0) {
     VALUE str = rb_inspect(m_rbobj);
-    rb_raise(rb_eRuntimeError, "Ruby object `%s' doesn't respond to the ObjC selector `%s', the method either doesn't exist or is private", StringValuePtr(str), (char *)selector);
+    rb_raise(rb_eRuntimeError, "Ruby object `%s' doesn't respond to the ObjC selector `%s', the method either doesn't exist or is private", StringValuePtr(str), sel_getName(selector));
   }
 
   rb_result = rb_protect(rbobject_protected_apply, (VALUE)stub_args, &err);
@@ -439,7 +439,7 @@ VALUE rbobj_call_ruby(id rbobj, SEL selector, VALUE args)
   if (ret == nil) {
     struct bsInformalProtocolMethod *method;
 
-    method = find_bs_informal_protocol_method((const char *)a_sel, NO);
+    method = find_bs_informal_protocol_method(sel_getName(a_sel), NO);
     if (method != NULL) {
       ret = [NSMethodSignature signatureWithObjCTypes:method->encoding];
       RBOBJ_LOG("\tgot method signature from metadata (types: '%s')", method->encoding);
