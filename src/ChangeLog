@@ -1,8 +1,8 @@
 2013-09-15 kimura wataru <kimuraw@i.nifty.jp>
 
 	* framework/src/objc/BridgeSupport.m,
-	framework/src/objc/OverrideMixin.m, framework/src/objc/RBObject.m,
- 	framework/src/objc/mdl_objwrapper.m:
+	  framework/src/objc/OverrideMixin.m, framework/src/objc/RBObject.m,
+ 	  framework/src/objc/mdl_objwrapper.m:
 	suppress warnings -Wcast-of-sel-type.
 
 	* framework/src/objc/BridgeSupport.m,
