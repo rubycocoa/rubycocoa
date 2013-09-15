@@ -377,17 +377,17 @@ ovmix_register_ruby_method(Class klass, SEL method, BOOL direct_override)
   me = class_getInstanceMethod(klass, method);
   // warn if trying to override a method that isn't a member of the specified class
   if (me == NULL)
-    rb_raise(rb_eRuntimeError, "could not add '%s' to class '%s': Objective-C cannot find it in the superclass", (char *)method, class_getName(klass));
+    rb_raise(rb_eRuntimeError, "could not add '%s' to class '%s': Objective-C cannot find it in the superclass", sel_getName(method), class_getName(klass));
     
   me_imp = method_getImplementation(me);
   me_name = method_getName(me);
   me_types = strdup(method_getTypeEncoding(me));
 
   // override method
-  OVMIX_LOG("Registering %sRuby method by selector '%s' types '%s'", direct_override ? "(direct override) " : "", (char *)method, me_types);
+  OVMIX_LOG("Registering %sRuby method by selector '%s' types '%s'", direct_override ? "(direct override) " : "", sel_getName(method), me_types);
   imp = ovmix_imp_for_type(me_types);
   if (me_imp == imp) {
-    OVMIX_LOG("Already registered Ruby method by selector '%s' types '%s', skipping...", (char *)method, me_types);
+    OVMIX_LOG("Already registered Ruby method by selector '%s' types '%s', skipping...", sel_getName(method), me_types);
     return;
   }
   
@@ -420,7 +420,7 @@ ovmix_register_ruby_method(Class klass, SEL method, BOOL direct_override)
 
   class_addMethod(klass, super_selector(me_name), me_imp, me_types);
   
-  OVMIX_LOG("Registered Ruby method by selector '%s' types '%s'", (char *)method, me_types);
+  OVMIX_LOG("Registered Ruby method by selector '%s' types '%s'", sel_getName(method), me_types);
 }
 
 static id imp_c_addRubyMethod(Class klass, SEL method, SEL arg0)
@@ -431,8 +431,8 @@ static id imp_c_addRubyMethod(Class klass, SEL method, SEL arg0)
 
 static id imp_c_addRubyMethod_withType(Class klass, SEL method, SEL arg0, const char *type)
 {
-  class_addMethod(klass, sel_registerName((const char*)arg0), ovmix_imp_for_type(type), strdup(type));
-  OVMIX_LOG("Registered Ruby method by selector '%s' types '%s'", (char *)arg0, type);
+  class_addMethod(klass, sel_registerName(sel_getName(arg0)), ovmix_imp_for_type(type), strdup(type));
+  OVMIX_LOG("Registered Ruby method by selector '%s' types '%s'", sel_getName(arg0), type);
   return nil;
 }
 
@@ -474,7 +474,7 @@ install_objc_hook(Class c, SEL orig, SEL new, IMP new_cb)
     if (method != NULL) {
       IMP orig_cb = method_getImplementation(method);
       if (orig_cb != new_cb) {
-        OVMIX_LOG("hooking [%s -%s]", class_getName(c), (char *)orig);
+        OVMIX_LOG("hooking [%s -%s]", class_getName(c), sel_getName(orig));
         char *types = (char *)method_getTypeEncoding(method);
         class_addMethod(c, new, method_getImplementation(method), types);
         class_addMethod(c, orig, new_cb, types);
