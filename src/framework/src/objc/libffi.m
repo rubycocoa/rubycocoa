@@ -98,7 +98,7 @@ fake_ary_ffi_type_cary (unsigned bytes, unsigned align, const char *octypestr)
 
   assert(bytes > 0);
 
-  if (sscanf(octypestr, "[%d%1s]", &count, octype) == 0 || count == 0) {
+  if (sscanf(octypestr, "[%d%1s]", &count, (char *)octype) == 0 || count == 0) {
     FFI_LOG("scan failed for octype '%s'", octypestr);
     return fake_ary_ffi_type ( bytes, align);
   }
@@ -449,7 +449,7 @@ rb_ffi_dispatch (
           prev_len = arg_values[bs_arg->c_ary_type_value + argc_delta];
           if (prev_len != NULL && (*prev_len > len || *prev_len < 0))
             return rb_err_new(rb_eArgError, "Incorrect array length of argument #%d (expected a non negative value greater or equal to %d, got %d)", i, len, *prev_len);
-          FFI_LOG("arg[%d] (%p) : %s (defined as a C array delimited by arg #%d in the metadata)", i, arg, octype_str, bs_arg->c_ary_type_value);
+          FFI_LOG("arg[%d] (%p) : %s (defined as a C array delimited by arg #%d in the metadata)", i, (void *)arg, octype_str, bs_arg->c_ary_type_value);
         }
         value = OCDATA_ALLOCA(octype_str);
         if (len > 0)
@@ -457,7 +457,7 @@ rb_ffi_dispatch (
       }
       // Regular argument. 
       else {
-        FFI_LOG("arg[%d] (%p) : %s", i, arg, octype_str);
+        FFI_LOG("arg[%d] (%p) : %s", i, (void *)arg, octype_str);
         len = 0;
         value = OCDATA_ALLOCA(octype_str);
       }

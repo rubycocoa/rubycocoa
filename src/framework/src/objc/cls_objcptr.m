@@ -107,7 +107,7 @@ _lookup_encoding_type(VALUE key)
 void cptrlog(const char* s, VALUE obj)
 {
   NSStringEncoding* p = (NSStringEncoding*) CPTR_OF(obj);
-  NSLog(@"%s: < p,*p > %u(%x) %d(%x)", s, p, p, *p, *p);
+  NSLog(@"%s: < p,*p > %lu(%lx) %ld(%lx)", s, (NSUInteger)p, (NSUInteger)p, *p, *p);
 }
 /** **/
 

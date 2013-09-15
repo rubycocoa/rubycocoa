@@ -278,7 +278,7 @@ undecorate_encoding(const char *src, char *dest, size_t dest_len, struct bsStruc
     p_src = pos + 1;
     pos = strchr(p_src, '"');
     if (pos == NULL) {
-      BS_LOG("Can't find the end of field delimiter starting at %d", p_src - src);
+      BS_LOG("Can't find the end of field delimiter starting at %ld", p_src - src);
       goto bails; 
     }
     if (field != NULL) {
@@ -328,7 +328,7 @@ undecorate_encoding(const char *src, char *dest, size_t dest_len, struct bsStruc
       }
 
       if (ok == NO) {
-        BS_LOG("Can't find the field encoding starting at %d", p_src - src);
+        BS_LOG("Can't find the field encoding starting at %ld", p_src - src);
         goto bails;
       }
 
@@ -1974,7 +1974,7 @@ osx_import_c_constant (VALUE self, VALUE sym)
     if (!ocdata_to_rbobj(Qnil, bs_const->encoding, cvalue, &value, NO))
       rb_raise(ocdataconv_err_class(), "Cannot convert the Objective-C constant '%s' as '%s' to Ruby", name, bs_const->encoding);
     rb_define_const(self, name, value);
-    BS_LOG("Imported C constant `%s' with value %p", name, value);
+    BS_LOG("Imported C constant `%s' with value %p", name, (void *)value);
   }
 
   if (name != real_name)

@@ -795,12 +795,12 @@ funcptr_closure_handler (ffi_cif *cif, void *resp, void **args, void *userdata)
     if (!ocdata_to_rbobj(Qnil, context->argtypes[i], args[i], &arg, NO))
       rb_raise(rb_eRuntimeError, "Can't convert Objective-C argument #%d of octype '%s' to Ruby value", i, context->argtypes[i]);
 
-    DATACONV_LOG("converted arg #%d of type %s to Ruby value %p", i, context->argtypes[i], arg);
+    DATACONV_LOG("converted arg #%d of type %s to Ruby value %p", i, context->argtypes[i], (void *)arg);
 
     rb_ary_store(rb_args, i, arg);
   }
 
-  DATACONV_LOG("calling Ruby block with %d args...", RARRAY_LEN(rb_args));
+  DATACONV_LOG("calling Ruby block with %ld args...", RARRAY_LEN(rb_args));
   retval = rb_funcall2(context->block, rb_intern("call"), RARRAY_LEN(rb_args), RARRAY_PTR(rb_args));
   DATACONV_LOG("called Ruby block");
 
