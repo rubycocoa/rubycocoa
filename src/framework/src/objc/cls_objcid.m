@@ -31,7 +31,7 @@ _objcid_data_free(struct _objcid_data* dp)
     if (dp->ocid != nil) {
       remove_from_oc2rb_cache(dp->ocid);
       if (dp->retained && dp->can_be_released) {
-        CLSOBJ_LOG("CLSOBJ", "releasing %p", dp->ocid);
+        CLSOBJ_LOG("releasing %p", dp->ocid);
         [dp->ocid release];
       }
     }

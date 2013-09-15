@@ -1,3 +1,8 @@
+2013-09-15 kimura wataru <kimuraw@i.nifty.jp>
+
+	* framework/src/objc/cls_objcid.m:
+	fix wrong format of CLSOBJ_LOG().
+
 2013-09-10 kimura wataru <kimuraw@i.nifty.jp>
 
 	* tests/tc_passbyref:
