@@ -361,7 +361,7 @@ ocm_send(int argc, VALUE* argv, VALUE rcv, VALUE* result)
   argc--; // skip is predicate flag
   argv++;
 
-  OBJWRP_LOG("ocm_send (%s%c%s): args_count=%d ret_type=%s", class_getName(klass), is_class_method ? '.' : '#', selector, argc, methodReturnType);
+  OBJWRP_LOG("ocm_send (%s%c%s): args_count=%d ret_type=%s", class_getName(klass), is_class_method ? '.' : '#', sel_getName(selector), argc, methodReturnType);
 
   // Easy case: a method returning ID (or nothing) _and_ without argument.
   // We don't need libffi here, we can just call it (faster).

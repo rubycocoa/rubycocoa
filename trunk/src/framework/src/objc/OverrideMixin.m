@@ -130,7 +130,7 @@ ovmix_ffi_closure(ffi_cif* cif, void* resp, void** args, void* userdata)
   args_octypes = ((char **)userdata) + 1;
   rb_args = rb_ary_new2(cif->nargs - 2);
 
-  OVMIX_LOG("ffi_closure cif %p nargs %d sel '%s'", cif, cif->nargs, *(SEL *)args[1]); 
+  OVMIX_LOG("ffi_closure cif %p nargs %d sel '%s'", cif, cif->nargs, sel_getName(*(SEL *)args[1]));
 
   for (i = 2; i < cif->nargs; i++) {
     VALUE arg;
@@ -138,7 +138,7 @@ ovmix_ffi_closure(ffi_cif* cif, void* resp, void** args, void* userdata)
     if (!ocdata_to_rbobj(Qnil, args_octypes[i - 2], args[i], &arg, NO))
       rb_raise(rb_eRuntimeError, "Can't convert Objective-C argument #%d of octype '%s' to Ruby value", i - 2, args_octypes[i - 2]);
 
-    OVMIX_LOG("converted arg #%d of type '%s' to Ruby value %p", i - 2, args_octypes[i - 2], arg);
+    OVMIX_LOG("converted arg #%d of type '%s' to Ruby value %p", i - 2, args_octypes[i - 2], (void *)arg);
 
     if (!NIL_P(arg)
         && rb_obj_is_kind_of(arg, objid_s_class()) == Qtrue
@@ -154,7 +154,7 @@ ovmix_ffi_closure(ffi_cif* cif, void* resp, void** args, void* userdata)
 
   OVMIX_LOG("calling Ruby method `%s' on %@...", *(char **)args[1], *(id *)args[0]);
   retval = rbobj_call_ruby(*(id *)args[0], *(SEL *)args[1], rb_args);
-  OVMIX_LOG("calling Ruby method done, retval %p", retval);
+  OVMIX_LOG("calling Ruby method done, retval %p", (void *)retval);
 
   // Make sure to sync boxed pointer ivars.
   for (i = 2; i < cif->nargs; i++) {

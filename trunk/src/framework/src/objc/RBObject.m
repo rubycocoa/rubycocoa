@@ -119,7 +119,7 @@ static int rb_obj_arity_of_method(VALUE rcv, SEL a_sel, BOOL *ok)
   extern void Init_stack(VALUE*);
 
   if (FREQUENTLY_INIT_STACK_FLAG) {
-    RBOBJ_LOG("rbobjRespondsToSelector(%s) w/Init_stack(%08lx)", a_sel, (void*)&state);
+    RBOBJ_LOG("rbobjRespondsToSelector(%s) w/Init_stack(%p)", sel_getName(a_sel), (void*)&state);
     Init_stack((void*)&state);
   }
   mid = rb_obj_sel_to_mid(m_rbobj, a_sel);
@@ -273,7 +273,7 @@ VALUE rbobj_call_ruby(id rbobj, SEL selector, VALUE args)
   stub_args[1] = mid;
   stub_args[2] = args;
 
-  RBOBJ_LOG("calling method %s on Ruby object %p with %d args", rb_id2name(mid), m_rbobj, RARRAY_LEN(args));
+  RBOBJ_LOG("calling method %s on Ruby object %p with %ld args", rb_id2name(mid), (void *)m_rbobj, RARRAY_LEN(args));
 
   if (rb_respond_to(m_rbobj, mid) == 0) {
     VALUE str = rb_inspect(m_rbobj);
@@ -344,7 +344,7 @@ VALUE rbobj_call_ruby(id rbobj, SEL selector, VALUE args)
 - (void) releaseRubyObject
 {
   if (m_rbobj_retain_release_track && m_rbobj_retained) {
-    RBOBJ_LOG("releasing Ruby object `#<%s:%p>'", rb_obj_classname(m_rbobj), m_rbobj);
+    RBOBJ_LOG("releasing Ruby object `#<%s:%p>'", rb_obj_classname(m_rbobj), (void *)m_rbobj);
     rb_gc_unregister_address(&m_rbobj);
     m_rbobj_retained = NO;
   }
@@ -426,7 +426,7 @@ VALUE rbobj_call_ruby(id rbobj, SEL selector, VALUE args)
 - (NSMethodSignature*)methodSignatureForSelector: (SEL)a_sel
 {
   NSMethodSignature* ret = nil;
-  RBOBJ_LOG("methodSignatureForSelector(%s)", a_sel);
+  RBOBJ_LOG("methodSignatureForSelector(%s)", sel_getName(a_sel));
   if (a_sel == NULL)
     return nil;
   // Try the master object.
@@ -481,7 +481,7 @@ VALUE rbobj_call_ruby(id rbobj, SEL selector, VALUE args)
   BOOL ret;
   if (a_sel == @selector(__rbobj__))
     return YES;
-  RBOBJ_LOG("respondsToSelector(%s)", a_sel);
+  RBOBJ_LOG("respondsToSelector(%s)", sel_getName(a_sel));
   ret = [self rbobjRespondsToSelector: a_sel];
   RBOBJ_LOG("   --> %d", ret);
   return ret;
