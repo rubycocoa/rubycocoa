@@ -580,7 +580,7 @@ wrapper_objc_methods (VALUE rcv)
 
   ary = rb_ary_new();
   rbobj_to_nsobj(rcv, &oc_rcv);
-  _ary_push_objc_methods (ary, oc_rcv->isa, 1);
+  _ary_push_objc_methods (ary, object_getClass(oc_rcv), 1);
   return ary;
 }
 
@@ -608,7 +608,7 @@ wrapper_objc_class_methods (int argc, VALUE* argv, VALUE rcv)
   recur = (argc == 0) ? 1 : RTEST(argv[0]);
   ary = rb_ary_new();
   rbobj_to_nsobj(rcv, &oc_rcv);
-  _ary_push_objc_methods (ary, oc_rcv->isa, recur);
+  _ary_push_objc_methods (ary, object_getClass(oc_rcv), recur);
   return ary;
 }
 
@@ -644,7 +644,7 @@ wrapper_objc_method_type (VALUE rcv, VALUE name)
 
   rbobj_to_nsobj(rcv, &oc_rcv);
   name = _name_to_selstr (name);
-  str = _objc_method_type (oc_rcv->isa, StringValuePtr(name));
+  str = _objc_method_type (object_getClass(oc_rcv), StringValuePtr(name));
   if (str == NULL) return Qnil;
   return rb_str_new2(str);
 }
@@ -670,7 +670,7 @@ wrapper_objc_class_method_type (VALUE rcv, VALUE name)
 
   rbobj_to_nsobj(rcv, &oc_rcv);
   name = _name_to_selstr (name);
-  str = _objc_method_type (oc_rcv->isa, StringValuePtr(name));
+  str = _objc_method_type (object_getClass(oc_rcv), StringValuePtr(name));
   if (str == NULL) return Qnil;
   return rb_str_new2(str);
 }
@@ -710,7 +710,7 @@ wrapper_objc_alias_class_method (VALUE rcv, VALUE new, VALUE old)
 {
   id oc_rcv;
   rbobj_to_nsobj(rcv, &oc_rcv);
-  _objc_alias_method((Class)(oc_rcv->isa), new, old);
+  _objc_alias_method(object_getClass(oc_rcv), new, old);
   return rcv;
 }
 
