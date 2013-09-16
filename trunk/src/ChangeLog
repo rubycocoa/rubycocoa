@@ -1,3 +1,10 @@
+2013-09-16 kimura wataru <kimuraw@i.nifty.jp>
+
+	* framework/src/objc/RBRuntime.m:
+	suppress warnings of deprecated functions in
+	RBCocoaInstallRubyThreadSchedulerHooks().
+	this function do not work on 10.6 or later.
+
 2013-09-15 kimura wataru <kimuraw@i.nifty.jp>
 
 	* framework/src/objc/BridgeSupport.m,
