@@ -1083,8 +1083,9 @@ class ToplevelInstaller < Installer
   #
 
   def exec_test
-    ruby_cmd = File.join(RbConfig::CONFIG['bindir'],
-                         RbConfig::CONFIG['RUBY_INSTALL_NAME'])
+    ruby_cmd = '"' + File.join(RbConfig::CONFIG['bindir'],
+                               RbConfig::CONFIG['RUBY_INSTALL_NAME']) + '"'
+    ruby_cmd = "/usr/bin/arch -#{@options['arch']} " + ruby_cmd if @options['arch']
     dive_into('tests') {
       ENV['DYLD_FRAMEWORK_PATH'] = File.join('../framework', framework_obj_path)
       ENV['BRIDGE_SUPPORT_PATH'] = '../framework/bridge-support'
@@ -1103,13 +1104,12 @@ class ToplevelInstaller < Installer
   end
 
   def test_rubycocoa_command(ruby_cmd)
-    command %Q!"#{ruby_cmd}"  -I../../../ext/rubycocoa -I../../../lib setup.rb test!
+    command %Q!#{ruby_cmd}  -I../../../ext/rubycocoa -I../../../lib setup.rb test!
   end
 
   def test_testcase(ruby_cmd)
-    cmd = %Q!"#{ruby_cmd}" -I../ext/rubycocoa -I../lib testall.rb!
+    cmd = %Q!#{ruby_cmd} -I../ext/rubycocoa -I../lib testall.rb!
     cmd = "/usr/libexec/oah/translate " + cmd if @options['use-rosetta']
-    cmd = "arch -#{@options['arch']} " + cmd if @options['arch']
     cmd += " " + @options['test-args'] if @options['test-args']
     cmd += " -v" if $VERBOSE # print each testname
     command cmd
@@ -1119,7 +1119,7 @@ class ToplevelInstaller < Installer
   def test_loadlibs(ruby_cmd)
     ENV['DYLD_PRINT_LIBRARIES_POST_LAUNCH'] = '1'
     begin
-      cmd = %Q!"#{ruby_cmd}" -I../ext/rubycocoa -I../lib ! +
+      cmd = %Q!#{ruby_cmd} -I../ext/rubycocoa -I../lib ! +
 	    %Q!-e 'require "osx/cocoa"' !
       require 'open3'
       libs = Open3.popen3(cmd) do |stdin, stdout, stderr|

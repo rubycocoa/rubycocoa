@@ -1,5 +1,9 @@
 2013-09-16 kimura wataru <kimuraw@i.nifty.jp>
 
+	* install.rb:
+	fix missing "arch" command at test with --arch option
+	in test_loadlibs() and test_testcase().
+
 	* framework/src/objc/mdl_objwrapper.m:
 	suppress warnings -Wdeprecated-objc-isa-usage.
 
@@ -546,7 +550,7 @@
 2009-09-23  kimura wataru <kimuraw@i.nifty.jp>
 
 	* template/ProjectBuilder/Application/*:
-	upgrade projecte templates for Xcode 3.x. apply a patch from Apple:
+	upgrade project templates for Xcode 3.x. apply a patch from Apple:
 	http://www.opensource.apple.com/source/RubyCocoa/RubyCocoa-67/patches/fix_templates_for_leopard.diff
 	and remove SDKROOT.
 
