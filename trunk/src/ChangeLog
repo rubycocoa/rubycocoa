@@ -1,5 +1,8 @@
 2013-09-16 kimura wataru <kimuraw@i.nifty.jp>
 
+	* framework/src/objc/mdl_objwrapper.m:
+	suppress warnings -Wdeprecated-objc-isa-usage.
+
 	* framework/src/objc/RBRuntime.m:
 	suppress warnings of deprecated functions in
 	RBCocoaInstallRubyThreadSchedulerHooks().
