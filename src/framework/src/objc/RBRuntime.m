@@ -930,6 +930,9 @@ static void rb_cocoa_thread_schedule_hook(rb_threadswitch_event_t event,
 
 static void RBCocoaInstallRubyThreadSchedulerHooks()
 {
+#if MAC_OS_X_VERSION_MIN_REQUIRED >= 1060
+  return;
+#else
   SInt32 version;
   if (Gestalt(gestaltSystemVersion, &version) == noErr) {
     if (version >= 0x1060) {
@@ -1015,6 +1018,7 @@ static void RBCocoaInstallRubyThreadSchedulerHooks()
 
   DLOG("Thread hooks done, main Ruby thread is %p\n", 
     (void *)rb_thread_current());
+#endif
 }
 
 @interface RBRuntime : NSObject
