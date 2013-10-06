@@ -563,6 +563,11 @@ class Installer
 
   def extconf
     opt = @options['config-opt'].join(' ')
+    %w(sdkroot ruby-header-dir ruby-archheader-dir).each do |conf|
+      if config(conf).size > 0 then
+	opt += [' --', conf, '=', config(conf)].join
+      end
+    end
     command "#{config('ruby-prog')} \"#{curr_srcdir}/extconf.rb\" #{opt}"
   end
 
