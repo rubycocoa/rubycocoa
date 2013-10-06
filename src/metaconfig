@@ -78,8 +78,11 @@ add_bool_config 'build-as-embeddable', true,
 unless File.exist? File.join(RbConfig::CONFIG['archdir'], 'ruby.h')
   RbConfig::CONFIG['archdir'] = RbConfig::CONFIG['archdir'].sub(/powerpc/, 'universal')
 end
-add_path_config 'ruby-header-dir', RbConfig::CONFIG['archdir'],
-  'path to the ruby header directory'
+add_path_config 'ruby-header-dir', RbConfig::CONFIG['rubyhdrdir'] || RbConfig::CONFIG['archdir'],
+  'path to the ruby ruby.h header directory'
+
+add_path_config 'ruby-archheader-dir', RbConfig::CONFIG['rubyarchhdrdir'] || RbConfig::CONFIG['archdir'],
+  'path to the ruby config.h header directory'
 
 add_path_config 'libruby-path', RubyCocoaConfig.libruby_path,
   'path to the libruby file'

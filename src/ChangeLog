@@ -1,3 +1,9 @@
+2013-10-06 kimura wataru <kimuraw@i.nifty.jp>
+
+	* metaconfig, pre-config.rb, framework/GeneratedConfig.xcconfig.in:
+	add a config option "--ruby-archheader-dir".
+	the option gives location of ruby's config.h.
+
 2013-10-04 kimura wataru <kimuraw@i.nifty.jp>
 
 	* install.rb:
