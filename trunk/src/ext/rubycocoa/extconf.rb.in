@@ -1,4 +1,20 @@
 require 'rbconfig'
+# avoid "mkmf.rb can't find header files for ruby" with SDKs
+options = {}
+%w(sdkroot ruby-header-dir ruby-archheader-dir).each do |opt|
+  arg = ARGV.find {|arg| /\A--#{opt}=/ =~ arg}
+  next unless arg
+  arg, val = arg.split('=', 2)
+  options[opt] = val
+end
+$top_srcdir, $topdir = %w(ruby-header-dir ruby-archheader-dir).map do |opt|
+  if dir = options[opt]
+    dir = File.join(options['sdkroot'], dir) unless dir.start_with?(options['sdkroot'])
+    dir
+  else
+    nil
+  end
+end
 # Xcode 2.2 moved ruby.h 
 unless File.exist? File.join(RbConfig::CONFIG['archdir'], 'ruby.h')
   RbConfig::CONFIG['archdir'] = RbConfig::CONFIG['archdir'].sub(/powerpc/, 'universal')

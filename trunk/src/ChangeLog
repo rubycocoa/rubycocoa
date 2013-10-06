@@ -1,3 +1,12 @@
+2013-10-07 kimura wataru <kimuraw@i.nifty.jp>
+
+	* install.rb, ext/rubycocoa/extconf.rb.in:
+	fix config error "mkmf.rb can't find header files for ruby"
+	with --sdkroot option.
+
+	* metaconfig:
+	set default value --sdkroot for 10.8 or later.
+
 2013-10-06 kimura wataru <kimuraw@i.nifty.jp>
 
 	* metaconfig, pre-config.rb, framework/GeneratedConfig.xcconfig.in:

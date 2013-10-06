@@ -95,7 +95,13 @@ add_config 'macosx-deployment-target', 'version',
   sprintf('%02.1f', RubyCocoaConfig.system_version.to_f),
   'target Mac OS X version'
 
-add_config 'sdkroot', 'sdkroot-path', '', '$SDKROOT of Xcode.'
+sdkroot =
+  if RubyCocoaConfig.system_version.to_f >= 10.8
+    `xcrun --sdk macosx --show-sdk-path`.chomp
+  else
+    ''
+  end
+add_config 'sdkroot', 'sdkroot-path', sdkroot, '$SDKROOT of Xcode.'
 
 add_config 'target-archs', 'arch(s)', RubyCocoaConfig.archs,
   '$ARCHS of Xcode. target architecture type(s)'
