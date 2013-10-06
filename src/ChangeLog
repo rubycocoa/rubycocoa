@@ -1,3 +1,8 @@
+2013-10-04 kimura wataru <kimuraw@i.nifty.jp>
+
+	* install.rb:
+	use String#readlines not String#read when array values are expected.
+
 2013-09-16 kimura wataru <kimuraw@i.nifty.jp>
 
 	* install.rb:

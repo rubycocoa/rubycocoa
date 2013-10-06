@@ -1124,7 +1124,7 @@ class ToplevelInstaller < Installer
       require 'open3'
       libs = Open3.popen3(cmd) do |stdin, stdout, stderr|
         stdin.close
-        stderr.read
+        stderr.readlines
       end
       lib = libs.find {|lib| /rubycocoa.bundle\b/ =~ lib}
       if /..\/ext\/rubycocoa/ =~ lib
