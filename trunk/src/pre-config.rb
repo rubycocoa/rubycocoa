@@ -16,7 +16,7 @@ install_path = @config['build-as-embeddable'] == 'yes' \
 
 config_ary = [
   [ :frameworks,      @config['frameworks'] ],
-  [ :ruby_header_dir, @config['ruby-header-dir'] ],
+  [ :ruby_header_paths, [@config['ruby-header-dir'], @config['ruby-archheader-dir']].uniq.join(' ') ],
   [ :libruby_path,    @config['libruby-path'] ],
   [ :libruby_path_dirname,  File.dirname(@config['libruby-path']) ],
   [ :libruby_path_basename, File.basename(@config['libruby-path']) ],
