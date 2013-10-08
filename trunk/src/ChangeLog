@@ -1,3 +1,8 @@
+2013-10-08 kimura wataru <kimuraw@i.nifty.jp>
+
+	* pre-config.rb:
+	correct CFLAGS "-Idir" with --sdkroot option.
+
 2013-10-07 kimura wataru <kimuraw@i.nifty.jp>
 
 	* install.rb, ext/rubycocoa/extconf.rb.in:

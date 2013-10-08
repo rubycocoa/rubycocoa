@@ -50,8 +50,12 @@ def lib_exist?(path, sdkroot=@config['sdkroot'])
   File.exist?(File.join(sdkroot, path))
 end
 
+def cflag_inc_expand(path, sdkroot=@config['sdkroot'])
+  ' -I' + File.join(sdkroot, path) + ' '
+end
+
 if lib_exist?('/usr/include/libxml2') and lib_exist?('/usr/lib/libxml2.dylib')
-  cflags << ' -I/usr/include/libxml2 -DHAS_LIBXML2 '
+  cflags << cflag_inc_expand('/usr/include/libxml2') + '-DHAS_LIBXML2 '
   ldflags << ' -lxml2 '
 else
   puts "libxml2 is not available!"
@@ -73,7 +77,7 @@ else
       ldflags << ' -L../../misc/libffi -L../misc/libffi '
     end
   else
-    cflags << ' -I/usr/include/ffi '
+    cflags << cflag_inc_expand('/usr/include/ffi')
   end
 end
 cflags << ' -DMACOSX '
