@@ -1,5 +1,11 @@
 2013-10-08 kimura wataru <kimuraw@i.nifty.jp>
 
+	* metaconfig, pre-install.rb:
+	remove unused code to install project builder templates.
+
+	* tests/tc_nsdata.rb:
+	change path of input file at test_s_dataWithContentsOfURL.
+
 	* pre-config.rb:
 	correct CFLAGS "-Idir" with --sdkroot option.
 
