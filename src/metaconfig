@@ -43,11 +43,6 @@ add_path_config 'install-root', '',
 add_path_config 'frameworks', '/Library/Frameworks',
   'path to the directory for installing RubyCocoa.framework'
 
-if File.exist?('/Developer/Applications/Project Builder.app') then
-  add_path_config 'projectbuilder-extras', '/Developer/ProjectBuilder Extras',
-    'path to the directory for "Project Bulder Extras"'
-end 
-
 if File.exist?('/Developer/Applications/Xcode.app') or File.exist?('/usr/bin/xcrun') then
   if RubyCocoaConfig.system_version.to_f >= 10.7
     xcode_templates_dir = nil

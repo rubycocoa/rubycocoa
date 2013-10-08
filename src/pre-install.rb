@@ -17,10 +17,6 @@ end
 # If required, backup files create here.
 backup_dir = '/tmp/rubycocoa_backup'
 
-# Install ProjectBuilder Templates 
-pbextras_dir = 
-  @config['projectbuilder-extras'] ?
-    File.expand_path("#{install_root}#{@config['projectbuilder-extras']}") : nil
 xcodeextras_dir = 
   @config['xcode-extras'] ? @config['xcode-extras'].split(',').map {|path|
     File.expand_path("#{install_root}#{path}")} : nil
@@ -34,7 +30,7 @@ else
   pbtmpldir = "template/Xcode2.x/ProjectBuilder" # for Xcode 2.x
 end
 
-[pbextras_dir, xcodeextras_dir].flatten.compact.each do |extras_dir|
+[xcodeextras_dir].flatten.compact.each do |extras_dir|
   break unless pbtmpldir # do not install templates into 10.7 or later
   [
     [ "#{pbtmpldir}/File",
