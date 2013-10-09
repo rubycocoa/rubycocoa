@@ -1,6 +1,6 @@
 RUBYCOCOA_COMMENT = This file is generated from GeneratedConfig.xcconfig.in
 
-HEADER_SEARCH_PATHS = %%%ruby_header_paths%%%
+HEADER_SEARCH_PATHS = %%%ruby_header_paths%%% %%%other_header_search_paths%%%
 LIBRARY_SEARCH_PATHS = %%%libruby_path_dirname%%%
 OTHER_LDFLAGS = %%%other_ldflags%%% %%%libruby_path%%%
 OTHER_CFLAGS = %%%other_cflags%%%

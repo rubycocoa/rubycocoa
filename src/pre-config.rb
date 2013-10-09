@@ -35,6 +35,7 @@ cflags = '-fno-common -g -fobjc-exceptions -Wall'
 ldflags = '-undefined suppress -flat_namespace'
 sdkroot = @config['sdkroot']
 archs = @config['target-archs']
+other_header_search_paths = []
 
 # add archs if given
 arch_flags = archs.gsub(/\A|\s+/, ' -arch ')
@@ -50,12 +51,9 @@ def lib_exist?(path, sdkroot=@config['sdkroot'])
   File.exist?(File.join(sdkroot, path))
 end
 
-def cflag_inc_expand(path, sdkroot=@config['sdkroot'])
-  ' -I' + File.join(sdkroot, path) + ' '
-end
-
 if lib_exist?('/usr/include/libxml2') and lib_exist?('/usr/lib/libxml2.dylib')
-  cflags << cflag_inc_expand('/usr/include/libxml2') + '-DHAS_LIBXML2 '
+  cflags << ' -DHAS_LIBXML2 '
+  other_header_search_paths << '/usr/include/libxml2'
   ldflags << ' -lxml2 '
 else
   puts "libxml2 is not available!"
@@ -77,7 +75,7 @@ else
       ldflags << ' -L../../misc/libffi -L../misc/libffi '
     end
   else
-    cflags << cflag_inc_expand('/usr/include/ffi')
+    other_header_search_paths << '/usr/include/ffi'
   end
 end
 cflags << ' -DMACOSX '
@@ -85,6 +83,7 @@ ldflags << ' -lffi '
 
 config_ary << [ :other_cflags, cflags ]
 config_ary << [ :other_ldflags, ldflags ]
+config_ary << [ :other_header_search_paths, other_header_search_paths.join(' ') ]
 config_ary << [ :target_archs, archs.size > 0 ? archs : '$NATIVE_ARCH' ]
 config_ary << [ :arch_flags, archs.size > 0 ? arch_flags : '' ]
 
