@@ -1,3 +1,8 @@
+2013-10-09 kimura wataru <kimuraw@i.nifty.jp>
+
+	* pre-config.rb, framework/GeneratedConfig.xcconfig.in:
+	refactor setting "-Idir" for ffi and libxml2.
+
 2013-10-08 kimura wataru <kimuraw@i.nifty.jp>
 
 	* metaconfig, pre-install.rb:
