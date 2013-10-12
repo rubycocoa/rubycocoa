@@ -18,6 +18,7 @@ Dir.mkdir work_dir
 # .plist
 erb('tmpl/Info.plist', File.join(work_dir, 'Info.plist'), binding)
 erb('tmpl/Description.plist', File.join(work_dir, 'Description.plist'), binding)
+erb('tmpl/product.plist', File.join(work_dir, 'product.plist'), binding)
 
 # Resources
 Dir.mkdir resources_dir
