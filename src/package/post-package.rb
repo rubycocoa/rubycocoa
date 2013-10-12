@@ -57,7 +57,7 @@ if productbuild.length > 0 && File.exist?(productbuild)
   next_os = [major, (minor.to_i + 1).to_s].join('.') # 10.9 => 10.10
   el_os_version.add_attributes('min' => @config['macosx-deployment-target'], 'before' => next_os)
   File.open(File.join(dist_dir, 'dist.xml'), 'w') do |f|
-    pf = REXML::Formatters::Pretty.new
+    pf = REXML::Formatters::Default.new
     pf.write(xml, f)
   end
   # complete .pkg
