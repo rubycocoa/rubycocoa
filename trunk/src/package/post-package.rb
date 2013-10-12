@@ -45,12 +45,12 @@ if productbuild.length > 0 && File.exist?(productbuild)
 	%Q!"#{File.join(dist_dir, 'dist_base.xml')}" !
   command str
   xml = REXML::Document.new(File.read(File.join(dist_dir, 'dist_base.xml')))
-  el_title = REXML::Element.new('title')
+  el_title = REXML::Element.new('title', xml.root)
   el_title.text = 'RubyCocoa'
-  xml.root.insert_before('//installer-gui-script/options', el_title)
-  el_license = REXML::Element.new('license')
+  el_license = REXML::Element.new('license', xml.root)
   el_license.add_attributes('file' => 'License.txt')
-  xml.root.insert_after('//installer-gui-script/title', el_license)
+  el_license = REXML::Element.new('readme', xml.root)
+  el_license.add_attributes('file' => 'ReadMe.html')
   File.open(File.join(dist_dir, 'dist.xml'), 'w') do |f|
     pf = REXML::Formatters::Pretty.new
     pf.write(xml, f)
