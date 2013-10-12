@@ -1,3 +1,8 @@
+2013-10-13 kimura wataru <kimuraw@i.nifty.jp>
+
+	* ext/rubycocoa/extconf.rb.in:
+	fix extconf error with sdkroot=nil.
+
 2013-10-09 kimura wataru <kimuraw@i.nifty.jp>
 
 	* pre-config.rb, framework/GeneratedConfig.xcconfig.in:

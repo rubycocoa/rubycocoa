@@ -9,7 +9,7 @@ options = {}
 end
 $top_srcdir, $topdir = %w(ruby-header-dir ruby-archheader-dir).map do |opt|
   if dir = options[opt]
-    dir = File.join(options['sdkroot'], dir) unless dir.start_with?(options['sdkroot'])
+    dir = File.join(options['sdkroot'].to_s, dir) unless dir.start_with?(options['sdkroot'])
     dir
   else
     nil
