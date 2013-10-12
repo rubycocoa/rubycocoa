@@ -51,6 +51,11 @@ if productbuild.length > 0 && File.exist?(productbuild)
   el_license.add_attributes('file' => 'License.txt')
   el_license = REXML::Element.new('readme', xml.root)
   el_license.add_attributes('file' => 'ReadMe.html')
+  el_allowed_versions = REXML::Element.new('allowed-os-versions', xml.root)
+  el_os_version = REXML::Element.new('os-version', el_allowed_versions)
+  major, minor = @config['macosx-deployment-target'].split('.', 2)
+  next_os = [major, (minor.to_i + 1).to_s].join('.') # 10.9 => 10.10
+  el_os_version.add_attributes('min' => @config['macosx-deployment-target'], 'before' => next_os)
   File.open(File.join(dist_dir, 'dist.xml'), 'w') do |f|
     pf = REXML::Formatters::Pretty.new
     pf.write(xml, f)
