@@ -35,6 +35,9 @@ class TC_NSData < Test::Unit::TestCase
 
   def test_s_dataWithContentsOfURL
     fpath = '/System/Library/Frameworks/Cocoa.framework/Resources/Info.plist'
+    unless File.exist? fpath # 10.6 or earlier
+      fpath = '/System/Library/Frameworks/Cocoa.framework/Headers/Cocoa.h'
+    end
     src = File.open(fpath).read
     url = NSURL.URLWithString "file://#{fpath}"
     data = NSData.dataWithContentsOfURL( url )

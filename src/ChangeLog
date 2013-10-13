@@ -1,5 +1,8 @@
 2013-10-13 kimura wataru <kimuraw@i.nifty.jp>
 
+	* tests/tc_nsdata.rb:
+	fix test test_s_dataWithContentsOfURL error on Snow Leopard.
+
 	*  framework/src/objc/internal_macros.h:
 	fix errors on Snow Leopard. missing RFLOAT_VALUE().
 
