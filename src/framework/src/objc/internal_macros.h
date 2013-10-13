@@ -70,4 +70,11 @@ extern CFRunLoopRef CFRunLoopGetMain(void);
 /* invoke-based undo requires some special handling on 10.6 */
 #define IS_UNDOPROXY(obj) (object_getClass(obj) == objc_getClass("NSUndoManagerProxy"))
 
+/* compatibility for older ruby versions */
+
+/* Snow Leopard */
+#ifndef RFLOAT_VALUE
+#define RFLOAT_VALUE(x) (RFLOAT(x)->value)
+#endif
+
 #endif	// _INTERNAL_MACROS_H_

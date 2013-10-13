@@ -1,5 +1,8 @@
 2013-10-13 kimura wataru <kimuraw@i.nifty.jp>
 
+	*  framework/src/objc/internal_macros.h:
+	fix errors on Snow Leopard. missing RFLOAT_VALUE().
+
 	* package/post-package.rb, package/tmpl/product.plist:
 	deny installation into later than .pkg target system version.
 
