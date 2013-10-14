@@ -424,8 +424,8 @@
 	  framework/src/objc/libffi.m,
 	  framework/src/objc/mdl_objwrapper.m,
 	  framework/src/objc/ocdata_conv.m:
-	RSTRING(ary)->len to RSTRING_LEN(ary),
-	RSTRING(ary)->ptr to RSTRING_PTR(ary)
+	RSTRING(str)->len to RSTRING_LEN(str),
+	RSTRING(str)->ptr to RSTRING_PTR(str)
 
 	* framework/src/objc/BridgeSupport.m,
 	  framework/src/objc/OverrideMixin.m,
