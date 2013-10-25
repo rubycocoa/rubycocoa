@@ -97,7 +97,7 @@
 
 	* tests/ObjcPassByRefTest.bridgesupport, tests/objc_test.m,
 	tests/tc_passbyref.rb:
-	fix SEGV at test_ignore() on 10.9 Mervericks. use prepared
+	fix SEGV at test_ignore() on 10.9 Mavericks. use prepared
 	.bridgesupport file for test_ignored() in tc_passbyref.rb.
 
 2013-09-07 kimura wataru <kimuraw@i.nifty.jp>
