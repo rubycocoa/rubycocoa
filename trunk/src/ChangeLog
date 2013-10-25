@@ -1,3 +1,8 @@
+2013-10-25 kimura wataru <kimuraw@i.nifty.jp>
+
+	* package/config/10.9:
+	add package configuration for 10.9.
+
 2013-10-13 kimura wataru <kimuraw@i.nifty.jp>
 
 	* tests/tc_nsdata.rb:
