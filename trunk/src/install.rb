@@ -633,9 +633,6 @@ class Installer
     fwname = "RubyCocoa"
     command "rm -f #{framework_obj_path}/#{fwname}.framework/Versions/Current"
     command buildcommand
-    obj_file = "#{fwname}.framework/Versions/Current/#{fwname}"
-    cmd = 'strip -x ' + File.join(framework_obj_path, obj_file)
-    command cmd
   end
 
   def buildcommand

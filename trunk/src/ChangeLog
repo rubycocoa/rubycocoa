@@ -1,5 +1,9 @@
 2013-10-25 kimura wataru <kimuraw@i.nifty.jp>
 
+	* install.rb:
+	remove "strip -x". this command added for strip bug of some versions
+	of Project Builder.
+
 	* package/config/10.9:
 	add package configuration for 10.9.
 
