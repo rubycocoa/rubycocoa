@@ -1,6 +1,20 @@
 
 # RubyCocoa Changes
 
+# Changes 1.0.7 from 1.0.6: 2013-10-26
+
+## Fixes
+
+  * Fixed boxed Objective-C object sometimes becomes wrong type
+    OSX::CFTypeRef in Ruby world on 10.9 Mavericks.
+
+## Changes 1.0.6 from 1.0.5: 2012-12-31
+
+## Fixes
+
+  * Fixed some applications does not launch with 1.0.5.
+  * Fixed standaloneifi-ed app does not work with rubygems 1.3.2 or later.
+
 # Changes 1.0.5 from 1.0.4: 2012-10-07
 
 ## Improvements
