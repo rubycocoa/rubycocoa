@@ -2,7 +2,7 @@ require 'test/unit'
 require 'osx/cocoa'
 
 system 'make -s' || raise(RuntimeError, "'make' failed")
-require 'objc_test.bundle'
+require './objc_test.bundle'
 
 OSX.ns_import :RetainCount
 

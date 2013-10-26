@@ -1,5 +1,14 @@
 2013-10-27 kimura wataru <kimuraw@i.nifty.jp>
 
+	* tests/testall.rb, tests/tc_bs.rb, tests/tc_cache.rb,
+	  tests/tc_exception.rb, tests/tc_hybrid.rb, tests/tc_objcptr.rb,
+	  tests/tc_ovmix.rb, tests/tc_passbyref.rb, tests/tc_retaincount.rb,
+	  tests/tc_subclass.rb, tests/tc_thread.rb, tests/tc_types.rb,
+	  tests/tc_uniqobj.rb:
+	fix errors with ruby-2.0.
+	- String#each -> String#each_line
+	- require 'curdir_file' -> require './curdir_file'
+
 	* install.rb:
 	allow "install.rb config" with ruby-2.0.
 
