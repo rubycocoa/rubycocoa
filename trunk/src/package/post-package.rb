@@ -94,8 +94,8 @@ else
   end
 end
 
-%w(License.txt ../../../ReadMe.html ../../../ReadMe.ja.html
-  ../../../LGPL).each do |f|
+%w(License.txt LGPL
+    ../../tmpl/ReadMe.html ../../tmpl/ReadMe.ja.html).each do |f|
   File.link(File.join(resources_dir, f), File.join(dmg_dir, File.basename(f)))
 end
 
