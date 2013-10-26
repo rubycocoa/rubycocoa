@@ -1195,7 +1195,12 @@ end
 
 if $0 == __FILE__ then
   begin
-    raise "RubyCocoa DO NOT support Ruby-1.9" if RUBY_VERSION.to_f >= 1.9
+    raise "RubyCocoa DO NOT support Ruby-1.9" if RUBY_VERSION.to_f == 1.9
+    if RUBY_VERSION.to_f >= 2.0
+	warn "=====================================================\n" +
+	     "NOTE: RubyCocoa for Ruby-2.0 is now work in progress!\n" +
+	     "====================================================="
+    end
     installer = ToplevelInstaller.new( File.dirname($0) )
     installer.execute
   rescue
