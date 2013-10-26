@@ -1,4 +1,9 @@
+=== RubyCocoa 1.0.7 ===
+
 2013-10-26 kimura wataru <kimuraw@i.nifty.jp>
+
+	* VERSION:
+	set version to 1.0.7
 
 	* NEWS, NEWS.ja:
 	update NEWS.
