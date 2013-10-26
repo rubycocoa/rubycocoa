@@ -20,7 +20,7 @@ end
 
 ###class ExceptionTest < OSX::NSObject
 system 'make -s' || raise(RuntimeError, "'make' failed")
-require 'objc_test.bundle'
+require './objc_test.bundle'
 
 OSX.ns_import :Override
 

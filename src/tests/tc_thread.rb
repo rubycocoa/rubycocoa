@@ -4,7 +4,7 @@ require 'thread'
 require 'rbconfig'
 
 system 'make' || raise(RuntimeError, "'make' failed")
-require 'objc_test.bundle'
+require './objc_test.bundle'
 
 # Helper class to explicitly yield control between threads
 class Barrier

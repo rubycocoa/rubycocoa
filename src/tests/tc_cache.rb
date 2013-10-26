@@ -2,7 +2,7 @@ require 'osx/cocoa'
 require 'test/unit'
 
 system 'make -s' || raise(RuntimeError, "'make' failed")
-require 'objc_test.bundle'
+require './objc_test.bundle'
 
 class ObjcToRubyCacheCallbackTarget < OSX::NSObject
   def callback(obj)
