@@ -17,7 +17,11 @@
 #import "RBClassUtils.h"
 #import "ocdata_conv.h"
 #import "BridgeSupport.h"
-#import "st.h"
+#ifdef HAVE_RUBY_RUBY_H
+#import <ruby/st.h>
+#else
+#import <st.h>
+#endif
 #import <objc/objc-runtime.h>
 #import "mdl_osxobjc.h"
 #import "objc_compat.h"

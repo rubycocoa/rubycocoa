@@ -1,3 +1,23 @@
+2013-10-27 kimura wataru <kimuraw@i.nifty.jp>
+
+	* framework/src/objc/BridgeSupport.m,
+	  framework/src/objc/OverrideMixin.m,
+	  framework/src/objc/RBObject.m,
+	  framework/src/objc/RBRuntime.m,
+	  framework/src/objc/RBThreadSwitcher.m,
+	  framework/src/objc/libffi.m,
+	  framework/src/objc/mdl_bundle_support.m,
+	  framework/src/objc/ocdata_conv.m:
+	fix compile error with ruby-2.0.
+	this change is WIP. config and setup works, but not work.
+	- fix importing header file, such as <ruby/ruby.h>
+	- fix renamed symbols:
+	  - rb_frame_last_func -> rb_frame_this_func
+	  - ruby_errinfo -> rb_errinfo
+	  - is_ruby_native_thread -> ruby_native_thread_p
+	- use alternate values for missing symbols:
+	  - rb_load_path, rb_thread_critical
+
 2013-10-26 kimura wataru <kimuraw@i.nifty.jp>
 
 	* package/tmpl/ReadMe.html, package/tmpl/ReadMe.ja.html,

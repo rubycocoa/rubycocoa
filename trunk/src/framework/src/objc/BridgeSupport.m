@@ -11,8 +11,12 @@
 #import <ruby.h>
 #import "BridgeSupport.h"
 #import <dlfcn.h>
+#ifdef HAVE_RUBY_RUBY_H
+#import <ruby/st.h>
+#else
 #import <st.h>
 #import <env.h>
+#endif
 #import <objc/objc-class.h>
 #import <objc/objc-runtime.h>
 #import "ocdata_conv.h"
@@ -24,6 +28,10 @@
 #import "mdl_osxobjc.h"
 #import "ocexception.h"
 #import "objc_compat.h"
+
+#ifdef HAVE_RUBY_RUBY_H
+#define rb_frame_last_func rb_frame_this_func
+#endif
 
 #define BS_LOG(fmt, args...) DLOG("BRIDGE", fmt, ##args)
 
