@@ -1,5 +1,10 @@
 2013-10-26 kimura wataru <kimuraw@i.nifty.jp>
 
+	* package/tmpl/ReadMe.html, package/tmpl/ReadMe.ja.html,
+	  package/post-package.rb, package/pre-package.rb:
+	move html version of ReadMe files under package/.
+	only .pkg installer requires these files.
+
 	* ReadMe.md:
 	add plain text ReadMe.
 
