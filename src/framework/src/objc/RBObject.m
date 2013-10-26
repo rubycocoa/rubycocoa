@@ -16,6 +16,11 @@
 #import "internal_macros.h"
 #import "OverrideMixin.h"
 
+#ifdef HAVE_RUBY_RUBY_H
+#define ruby_errinfo rb_errinfo()
+#define is_ruby_native_thread ruby_native_thread_p
+#endif
+
 #define RBOBJ_LOG(fmt, args...) DLOG("RBOBJ", fmt, ##args)
 
 extern ID _relaxed_syntax_ID;
@@ -116,7 +121,11 @@ static int rb_obj_arity_of_method(VALUE rcv, SEL a_sel, BOOL *ok)
   BOOL ret;
   RB_ID mid;
   int state;
+#ifdef HAVE_RUBY_RUBY_H
+  extern void Init_stack(volatile VALUE*);
+#else
   extern void Init_stack(VALUE*);
+#endif
 
   if (FREQUENTLY_INIT_STACK_FLAG) {
     RBOBJ_LOG("rbobjRespondsToSelector(%s) w/Init_stack(%p)", sel_getName(a_sel), (void*)&state);

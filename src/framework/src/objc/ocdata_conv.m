@@ -13,7 +13,11 @@
 #import "RBObject.h"
 #import "mdl_osxobjc.h"
 #import <CoreFoundation/CFString.h> // CFStringEncoding
-#import "st.h"
+#ifdef HAVE_RUBY_RUBY_H
+#import <ruby/st.h>
+#else
+#import <st.h>
+#endif
 #import "BridgeSupport.h"
 #import "internal_macros.h"
 
@@ -1110,6 +1114,10 @@ rbobj_to_ocdata (VALUE obj, const char *octype_str, void* ocdata, BOOL to_libffi
   return f_success;
 }
 
+#ifdef HAVE_RUBY_RUBY_H
+// FIXME use ruby default encoding
+#define KCODE_NSSTRENCODING NSUTF8StringEncoding
+#else
 static 
 NSStringEncoding kcode_to_nsencoding (const char* kcode) 
 { 
@@ -1123,6 +1131,7 @@ NSStringEncoding kcode_to_nsencoding (const char* kcode)
     return NSUTF8StringEncoding;
 }
 #define KCODE_NSSTRENCODING kcode_to_nsencoding(rb_get_kcode()) 
+#endif
 
 id
 rbstr_to_ocstr(VALUE obj)

@@ -10,10 +10,19 @@
 #import <Foundation/NSAutoreleasePool.h>
 #import "RBThreadSwitcher.h"
 #import <ruby.h>
+#ifdef HAVE_RUBY_RUBY_H
+#import "ruby/backward/rubysig.h"
+#else
 #import "rubysig.h"
+#endif
 
 #define DEFAULT_WAIT      0.000	// sec
 #define DEFAULT_INTERVAL  0.005 // sec
+
+/* dummy */
+#ifdef HAVE_RUBY_RUBY_H
+#define rb_thread_critical (0)
+#endif
 
 static id rthread_switcher = nil;
 

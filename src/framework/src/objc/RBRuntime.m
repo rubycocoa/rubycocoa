@@ -26,7 +26,11 @@
 #import "OverrideMixin.h"
 #import "internal_macros.h"
 #import "objc_compat.h"
-#import "st.h"
+#ifdef HAVE_RUBY_RUBY_H
+#import <ruby/st.h>
+#else
+#import <st.h>
+#endif
 
 #define BRIDGE_SUPPORT_NAME "BridgeSupport"
 
@@ -142,7 +146,11 @@ static char* framework_bridge_support_path()
 
 static void load_path_unshift(char* path)
 {
+#ifdef HAVE_RUBY_RUBY_H
+#define rb_load_path (rb_gv_get("$LOAD_PATH"))
+#else
   extern VALUE rb_load_path;
+#endif
   VALUE rpath = rb_str_new2(path);
   free(path);
 
@@ -334,7 +342,11 @@ rubycocoa_bundle_init(const char* program,
                       bundle_support_program_loader_t loader,
                       Class klass, id param)
 {
+#ifdef HAVE_RUBY_RUBY_H
+  extern void Init_stack(volatile VALUE*);
+#else
   extern void Init_stack(VALUE*);
+#endif
   int state;
   Init_stack((void*)&state);
   if (! rubycocoa_initialized_p()) {
@@ -355,7 +367,11 @@ rubycocoa_app_init(const char* program,
                    bundle_support_program_loader_t loader,
                    int argc, const char* argv[], id param)
 {
+#ifdef HAVE_RUBY_RUBY_H
+  extern void Init_stack(volatile VALUE*);
+#else
   extern void Init_stack(VALUE*);
+#endif
   int state;
   int ruby_argc;
   const char** ruby_argv;

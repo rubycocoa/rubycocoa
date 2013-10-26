@@ -16,6 +16,10 @@
 #import "internal_macros.h"
 #import "objc_compat.h"
 
+#ifdef HAVE_RUBY_RUBY_H
+#define ruby_errinfo rb_errinfo()
+#endif
+
 /** module OSX::BundleSupport  **/
 static VALUE _mBundleSupport = Qnil;
 static NSMutableDictionary* gBundleMap = nil;

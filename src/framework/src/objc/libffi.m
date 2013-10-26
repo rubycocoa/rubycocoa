@@ -15,7 +15,11 @@
 #import "cls_objcid.h"
 #import "cls_objcptr.h"
 #import "internal_macros.h"
+#ifdef HAVE_RUBY_RUBY_H
+#import <ruby/st.h>
+#else
 #import <st.h>
+#endif
 #include <sys/mman.h>   // for mmap()
 
 #define FFI_LOG(fmt, args...) DLOG("LIBFFI", fmt, ##args)
