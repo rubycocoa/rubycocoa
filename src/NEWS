@@ -3,6 +3,13 @@
 
 $Id$
 
+== Changes 1.0.7 from 1.0.6: 2013-10-XX
+
+=== Fixes
+
+  * Fixed boxed Objective-C object sometimes becomes wrong type
+    OSX::CFTypeRef in Ruby world on 10.9 Mavericks.
+
 == Changes 1.0.6 from 1.0.5: 2012-12-31
 
 === Fixes
