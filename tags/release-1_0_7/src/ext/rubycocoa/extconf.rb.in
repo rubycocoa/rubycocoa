@@ -1,0 +1,39 @@
+require 'rbconfig'
+# avoid "mkmf.rb can't find header files for ruby" with SDKs
+options = {}
+%w(sdkroot ruby-header-dir ruby-archheader-dir).each do |opt|
+  arg = ARGV.find {|arg| /\A--#{opt}=/ =~ arg}
+  next unless arg
+  arg, val = arg.split('=', 2)
+  options[opt] = val
+end
+$top_srcdir, $topdir = %w(ruby-header-dir ruby-archheader-dir).map do |opt|
+  if dir = options[opt]
+    dir = File.join(options['sdkroot'].to_s, dir) unless dir.start_with?(options['sdkroot'])
+    dir
+  else
+    nil
+  end
+end
+# Xcode 2.2 moved ruby.h 
+unless File.exist? File.join(RbConfig::CONFIG['archdir'], 'ruby.h')
+  RbConfig::CONFIG['archdir'] = RbConfig::CONFIG['archdir'].sub(/powerpc/, 'universal')
+end
+
+require 'mkmf'
+
+def command(cmd)
+  $stderr.puts "execute '#{cmd}' ..."
+  raise(RuntimeError, cmd) unless system(cmd)
+  $stderr.puts "execute '#{cmd}' done"
+end
+
+$CFLAGS = '-F../../framework/%%%build_dir%%%'
+$LDFLAGS  = '-F../../framework/%%%build_dir%%% -framework RubyCocoa'
+
+$CFLAGS << ' %%%other_cflags%%% %%%arch_flags%%%'
+$LDFLAGS << ' %%%other_ldflags%%% %%%arch_flags%%%'
+
+create_makefile('rubycocoa')
+command "mv -f Makefile Makefile.bak"
+command "sed -e 's/-no-cpp-precomp//' -e 's/-no-precomp//' Makefile.bak > Makefile"
