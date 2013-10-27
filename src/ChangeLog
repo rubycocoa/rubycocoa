@@ -1,5 +1,8 @@
 2013-10-27 kimura wataru <kimuraw@i.nifty.jp>
 
+	* framework/tool/standaloneify.rb:
+	fix syntax error with ruby-2.0.
+
 	* framework/src/objc/BridgeSupport.m,
 	  framework/src/objc/RBObject.m,
 	  framework/src/objc/mdl_bundle_support.m,
