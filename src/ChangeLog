@@ -1,5 +1,8 @@
 2013-10-27 kimura wataru <kimuraw@i.nifty.jp>
 
+	* package/post-package.rb:
+	remove packagemaker code. use productbuild to generate .pkg.
+
 	* tests/testall.rb, tests/tc_bs.rb, tests/tc_cache.rb,
 	  tests/tc_exception.rb, tests/tc_hybrid.rb, tests/tc_objcptr.rb,
 	  tests/tc_ovmix.rb, tests/tc_passbyref.rb, tests/tc_retaincount.rb,
