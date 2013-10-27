@@ -396,8 +396,8 @@ if $0 == __FILE__ then
 
   ARGV.options do |opts|
     opts.banner = "usage: #{File.basename(__FILE__)} -d DEST [options] APPLICATION\n\nUse ENV['RUBYCOCOA_STANDALONEIFYING?'] in your application to check if it's being standaloneified.\n"
-    opts.on("-f","--force","Delete target app if it exists already") { |config.force| }
-    opts.on("-d DEST","--dest","Place result at DEST (required)") {|config.dest|}
+    opts.on("-f","--force","Delete target app if it exists already") {|v| config.force=v}
+    opts.on("-d DEST","--dest","Place result at DEST (required)") {|v| config.dest=v}
     opts.on("-l LIBRARY","--lib","Extra library to bundle") { |lib| config.extra_libs << lib }
     opts.on("--framework DIR","Add search path for RubyCocoa.framework") { |dir| config.framework_paths << dir }
 
