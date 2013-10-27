@@ -31,6 +31,7 @@
 		4EACC7620C028851006372AD /* rb_nibtool.rb in CopyFiles */ = {isa = PBXBuildFile; fileRef = 4EACC75F0C028851006372AD /* rb_nibtool.rb */; };
 		4EACC7630C028851006372AD /* standaloneify.rb in CopyFiles */ = {isa = PBXBuildFile; fileRef = 4EACC7600C028851006372AD /* standaloneify.rb */; };
 		78A400E50C6C56BC00FEC3B6 /* RBTestProbe.m in Sources */ = {isa = PBXBuildFile; fileRef = 78A400E30C6C56BC00FEC3B6 /* RBTestProbe.m */; };
+		A59B43A3181D48C300EB0486 /* module.map in CopyFiles */ = {isa = PBXBuildFile; fileRef = A59B439E181D471800EB0486 /* module.map */; };
 		FCDF92650A87E09E0002AD01 /* cls_objcid.h in Headers */ = {isa = PBXBuildFile; fileRef = E88C6D58035BB1F5031D1B90 /* cls_objcid.h */; };
 		FCDF92660A87E09E0002AD01 /* cls_objcptr.h in Headers */ = {isa = PBXBuildFile; fileRef = E88C6D5A035BB1F5031D1B90 /* cls_objcptr.h */; };
 		FCDF92680A87E09E0002AD01 /* ocdata_conv.h in Headers */ = {isa = PBXBuildFile; fileRef = E88C6D5F035BB1F5031D1B90 /* ocdata_conv.h */; };
@@ -80,6 +81,16 @@
 				4EACC7610C028851006372AD /* gen_bridge_doc.rb in CopyFiles */,
 				4EACC7620C028851006372AD /* rb_nibtool.rb in CopyFiles */,
 				4EACC7630C028851006372AD /* standaloneify.rb in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A59B43A2181D48B000EB0486 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 1;
+			files = (
+				A59B43A3181D48C300EB0486 /* module.map in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -149,6 +160,7 @@
 		4EACC75F0C028851006372AD /* rb_nibtool.rb */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.ruby; name = rb_nibtool.rb; path = tool/rb_nibtool.rb; sourceTree = "<group>"; };
 		4EACC7600C028851006372AD /* standaloneify.rb */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.ruby; name = standaloneify.rb; path = tool/standaloneify.rb; sourceTree = "<group>"; };
 		78A400E30C6C56BC00FEC3B6 /* RBTestProbe.m */ = {isa = PBXFileReference; fileEncoding = 0; lastKnownFileType = sourcecode.c.objc; path = RBTestProbe.m; sourceTree = "<group>"; };
+		A59B439E181D471800EB0486 /* module.map */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = module.map; sourceTree = "<group>"; };
 		E813DE9B036CC9C1033794D5 /* RBSlaveObject.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RBSlaveObject.h; sourceTree = "<group>"; };
 		E813DE9D036D122F033794D5 /* mdl_osxobjc.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = mdl_osxobjc.h; sourceTree = "<group>"; };
 		E813DE9E036D122F033794D5 /* mdl_osxobjc.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = mdl_osxobjc.m; sourceTree = "<group>"; };
@@ -237,6 +249,7 @@
 		089C1665FE841158C02AAC07 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				A59B439E181D471800EB0486 /* module.map */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -400,6 +413,7 @@
 				4EACC7660C0288C8006372AD /* CopyFiles */,
 				FCDF92770A87E09E0002AD01 /* CopyFiles */,
 				FCDF927C0A87E09E0002AD01 /* CopyFiles */,
+				A59B43A2181D48B000EB0486 /* CopyFiles */,
 				FCDF928C0A87E09E0002AD01 /* Sources */,
 				FCDF929C0A87E09E0002AD01 /* Frameworks */,
 				FCDF929F0A87E09E0002AD01 /* Rez */,

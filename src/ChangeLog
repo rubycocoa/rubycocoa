@@ -1,5 +1,10 @@
 2013-10-27 kimura wataru <kimuraw@i.nifty.jp>
 
+	* framework/module.map,
+	  framework/RubyCocoa.xcodeproj/project.pbxproj:
+	support Xcode 5 modules "@import RubyCocoa;".
+	note: RBObject is not available.
+
 	* framework/RubyCocoa.xcodeproj/project.pbxproj,
 	  framework/src/objc/RubyCocoa.h,
 	  framework/src/objc/mdl_osxobjc.m:
