@@ -1,5 +1,12 @@
 2013-10-27 kimura wataru <kimuraw@i.nifty.jp>
 
+	* framework/src/objc/BridgeSupport.m,
+	  framework/src/objc/RBObject.m,
+	  framework/src/objc/mdl_bundle_support.m,
+	  framework/src/objc/internal_macros.h:
+	refactored ruby-2.0 rename symbols.
+	define rename symbols in internal_macros.h.
+
 	* package/post-package.rb:
 	remove packagemaker code. use productbuild to generate .pkg.
 

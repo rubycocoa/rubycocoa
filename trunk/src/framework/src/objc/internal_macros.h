@@ -77,4 +77,11 @@ extern CFRunLoopRef CFRunLoopGetMain(void);
 #define RFLOAT_VALUE(x) (RFLOAT(x)->value)
 #endif
 
+/* ruby 2.0 renamed symbols from ruby 1.8 */
+#ifdef HAVE_RUBY_RUBY_H
+#define ruby_errinfo rb_errinfo()
+#define is_ruby_native_thread ruby_native_thread_p
+#define rb_frame_last_func rb_frame_this_func
+#endif
+
 #endif	// _INTERNAL_MACROS_H_

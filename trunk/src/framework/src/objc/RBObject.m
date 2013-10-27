@@ -16,11 +16,6 @@
 #import "internal_macros.h"
 #import "OverrideMixin.h"
 
-#ifdef HAVE_RUBY_RUBY_H
-#define ruby_errinfo rb_errinfo()
-#define is_ruby_native_thread ruby_native_thread_p
-#endif
-
 #define RBOBJ_LOG(fmt, args...) DLOG("RBOBJ", fmt, ##args)
 
 extern ID _relaxed_syntax_ID;
