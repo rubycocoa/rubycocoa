@@ -83,13 +83,13 @@ if __FILE__ == $0 and ARGV[0] == Standaloneify::MAGIC_ARGUMENT then
     # backward compatibility for RubyGems 1.3.2 or earlier
     module Gem
       class Specification
-	def self.each
-	  self.list.each do |x|
-	    yield x
-	  end
-	end
+        def self.each
+          self.list.each do |x|
+            yield x
+          end
+        end
 
-	alias :activated? :loaded?
+        alias :activated? :loaded?
       end
     end
   end
@@ -114,21 +114,21 @@ if __FILE__ == $0 and ARGV[0] == Standaloneify::MAGIC_ARGUMENT then
         FileUtils.mkdir_p(gems_spec_d)
         FileUtils.mkdir_p(gems_gem_d)
 
-	unless Gem::Specification.respond_to? :each
-	  raise 'RubyGems is too old! run "gem update --sysmtem"'
-	end
-	Gem::Specification.all.each do |gem|
+        unless Gem::Specification.respond_to? :each
+          raise 'RubyGems is too old! run "gem update --sysmtem"'
+        end
+        Gem::Specification.all.each do |gem|
           $stderr.puts gem
           next unless gem.activated?
           $stderr.puts "Found gem #{gem.name}"
 
           FileUtils.cp_r(gem.full_gem_path,gems_gem_d)
-	  begin
-	    spec_path = gem.spec_file
-	  rescue NoMethodError
-	    spec_path = File.join(gem.installation_path,"specifications",gem.full_name)
-	  end
-	  FileUtils.cp(spec_path,gems_spec_d)
+          begin
+            spec_path = gem.spec_file
+          rescue NoMethodError
+            spec_path = File.join(gem.installation_path,"specifications",gem.full_name)
+          end
+          FileUtils.cp(spec_path,gems_spec_d)
           # Remove any files that come from the GEM
           files_and_paths.reject! { |f,p| p.index(gem.full_gem_path) == 0 }
         end
