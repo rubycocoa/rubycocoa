@@ -123,7 +123,12 @@ if __FILE__ == $0 and ARGV[0] == Standaloneify::MAGIC_ARGUMENT then
           $stderr.puts "Found gem #{gem.name}"
 
           FileUtils.cp_r(gem.full_gem_path,gems_gem_d)
-          FileUtils.cp(File.join(gem.installation_path,"specifications",gem.full_name + ".gemspec"),gems_spec_d)
+	  begin
+	    spec_path = gem.spec_file
+	  rescue NoMethodError
+	    spec_path = File.join(gem.installation_path,"specifications",gem.full_name)
+	  end
+	  FileUtils.cp(spec_path,gems_spec_d)
           # Remove any files that come from the GEM
           files_and_paths.reject! { |f,p| p.index(gem.full_gem_path) == 0 }
         end
