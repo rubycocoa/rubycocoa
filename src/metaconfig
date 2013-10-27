@@ -10,10 +10,6 @@ module RubyCocoaConfig
     unless File.exist?( path ) then
       path = File.join(RbConfig::CONFIG['archdir'], RbConfig::CONFIG['LIBRUBY_A'])
     end
-    # On Panther, /usr/lib/ruby reports wrong CONFIG
-    unless File.exist?( path ) then
-      path = File.join(RbConfig::CONFIG['libdir'], 'libruby.dylib')
-    end
     return path
   end
 
@@ -46,12 +42,8 @@ add_path_config 'frameworks', '/Library/Frameworks',
 if File.exist?('/Developer/Applications/Xcode.app') or File.exist?('/usr/bin/xcrun') then
   if RubyCocoaConfig.system_version.to_f >= 10.7
     xcode_templates_dir = nil
-  elsif RubyCocoaConfig.system_version.to_f >= 10.5
-    xcode_templates_dir = '/Library/Application Support/Developer/Shared/Xcode/'
   else
-    xcode_templates_dir = 
-      ['/Library/Application Support/Apple/Developer Tools',
-       '/Library/Application Support/Developer/2.5/Xcode/'].join(',')
+    xcode_templates_dir = '/Library/Application Support/Developer/Shared/Xcode/'
   end
   add_path_config 'xcode-extras', 
     xcode_templates_dir,
@@ -69,10 +61,6 @@ add_bool_config 'build-as-embeddable', true,
 
 ### build configuration ### 
 
-# Xcode 2.2 moved ruby.h, but ruby command reports old path.
-unless File.exist? File.join(RbConfig::CONFIG['archdir'], 'ruby.h')
-  RbConfig::CONFIG['archdir'] = RbConfig::CONFIG['archdir'].sub(/powerpc/, 'universal')
-end
 add_path_config 'ruby-header-dir', RbConfig::CONFIG['rubyhdrdir'] || RbConfig::CONFIG['archdir'],
   'path to the ruby ruby.h header directory'
 

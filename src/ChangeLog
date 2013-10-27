@@ -1,5 +1,11 @@
 2013-10-27 kimura wataru <kimuraw@i.nifty.jp>
 
+	* metaconfig, pre-install.rb:
+	remove Xcode 1.x or 2.x related code.
+
+	* template/Xcode2.x:
+	removed.
+
 	* framework/tool/standaloneify.rb:
 	fix error with rubygems-2.1.10.
 

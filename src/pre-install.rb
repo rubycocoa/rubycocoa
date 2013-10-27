@@ -24,10 +24,8 @@ if @config['macosx-deployment-target'].to_f >= 10.7
   # Xcode 4.x requires templates to be installed under
   # each user's ~/Library/Developer/Xcode/Templates
   pbtmpldir = nil
-elsif @config['macosx-deployment-target'].to_f >= 10.5
-  pbtmpldir = "template/Xcode3.x/ProjectBuilder" # for Xcode 3.x
 else
-  pbtmpldir = "template/Xcode2.x/ProjectBuilder" # for Xcode 2.x
+  pbtmpldir = "template/Xcode3.x/ProjectBuilder" # for Xcode 3.x
 end
 
 [xcodeextras_dir].flatten.compact.each do |extras_dir|
