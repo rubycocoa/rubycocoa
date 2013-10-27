@@ -10,7 +10,6 @@
 #import "mdl_osxobjc.h"
 #import <ruby.h>
 #import <Foundation/Foundation.h>
-#import "RubyCocoa.h"
 #import "Version.h"
 #import "RBThreadSwitcher.h"
 #import "RBObject.h"
