@@ -29,10 +29,6 @@
 #import "ocexception.h"
 #import "objc_compat.h"
 
-#ifdef HAVE_RUBY_RUBY_H
-#define rb_frame_last_func rb_frame_this_func
-#endif
-
 #define BS_LOG(fmt, args...) DLOG("BRIDGE", fmt, ##args)
 
 static VALUE cOSXBoxed;
