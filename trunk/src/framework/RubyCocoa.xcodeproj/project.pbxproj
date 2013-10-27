@@ -27,7 +27,6 @@
 		4DFE2FB90B5548ED002A7B34 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0867D69BFE84028FC02AAC07 /* Foundation.framework */; };
 		4E85DA260B788E43007290BD /* oc_bundle_support.rb in CopyFiles */ = {isa = PBXBuildFile; fileRef = 4E85DA250B788E43007290BD /* oc_bundle_support.rb */; };
 		4E85DEEC0B7B62D4007290BD /* mdl_bundle_support.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E85DEEB0B7B62D4007290BD /* mdl_bundle_support.m */; };
-		4EA2DB810BB3A10E0031EF22 /* RubyCocoa.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EA2DB800BB3A10E0031EF22 /* RubyCocoa.m */; };
 		4EACC7610C028851006372AD /* gen_bridge_doc.rb in CopyFiles */ = {isa = PBXBuildFile; fileRef = 4EACC75E0C028851006372AD /* gen_bridge_doc.rb */; };
 		4EACC7620C028851006372AD /* rb_nibtool.rb in CopyFiles */ = {isa = PBXBuildFile; fileRef = 4EACC75F0C028851006372AD /* rb_nibtool.rb */; };
 		4EACC7630C028851006372AD /* standaloneify.rb in CopyFiles */ = {isa = PBXBuildFile; fileRef = 4EACC7600C028851006372AD /* standaloneify.rb */; };
@@ -146,7 +145,6 @@
 		4DBC6E760B55541F0034513D /* cocoa_macros_appkit.rb */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.script.ruby; path = cocoa_macros_appkit.rb; sourceTree = "<group>"; };
 		4E85DA250B788E43007290BD /* oc_bundle_support.rb */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.ruby; path = oc_bundle_support.rb; sourceTree = "<group>"; };
 		4E85DEEB0B7B62D4007290BD /* mdl_bundle_support.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = mdl_bundle_support.m; sourceTree = "<group>"; };
-		4EA2DB800BB3A10E0031EF22 /* RubyCocoa.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RubyCocoa.m; path = objc/RubyCocoa.m; sourceTree = "<group>"; };
 		4EACC75E0C028851006372AD /* gen_bridge_doc.rb */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.ruby; name = gen_bridge_doc.rb; path = tool/gen_bridge_doc.rb; sourceTree = "<group>"; };
 		4EACC75F0C028851006372AD /* rb_nibtool.rb */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.ruby; name = rb_nibtool.rb; path = tool/rb_nibtool.rb; sourceTree = "<group>"; };
 		4EACC7600C028851006372AD /* standaloneify.rb */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.ruby; name = standaloneify.rb; path = tool/standaloneify.rb; sourceTree = "<group>"; };
@@ -354,7 +352,6 @@
 		E8E03A17035D04E103E1EA43 /* src */ = {
 			isa = PBXGroup;
 			children = (
-				4EA2DB800BB3A10E0031EF22 /* RubyCocoa.m */,
 				E88C6D57035BB1F5031D1B90 /* objc */,
 				E88C6E6D035BB408031D1B90 /* ruby */,
 			);
@@ -491,7 +488,6 @@
 				4D0942F30B5833CA001986D6 /* ocexception.m in Sources */,
 				4D0943800B584304001986D6 /* libffi.m in Sources */,
 				4E85DEEC0B7B62D4007290BD /* mdl_bundle_support.m in Sources */,
-				4EA2DB810BB3A10E0031EF22 /* RubyCocoa.m in Sources */,
 				78A400E50C6C56BC00FEC3B6 /* RBTestProbe.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

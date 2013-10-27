@@ -1,5 +1,14 @@
 2013-10-27 kimura wataru <kimuraw@i.nifty.jp>
 
+	* framework/RubyCocoa.xcodeproj/project.pbxproj,
+	  framework/src/objc/RubyCocoa.h,
+	  framework/src/objc/mdl_osxobjc.m:
+        deprecate Objective-C class "RubyCocoa" in <RubyCocoa/RubyCocoa.h>.
+	developers can use RBRuntime functions to call ruby from Objective-C.
+	  - bundleInitWithProgram:class:param: -> RBBundleInit()
+	  - applicationInitWithProgram:argc:argv:param: -> RBApplicationInit()
+	  - applicationMainWithProgram:argc:argv: -> RBApplicationMain()
+
 	* metaconfig, pre-install.rb:
 	remove Xcode 1.x or 2.x related code.
 
