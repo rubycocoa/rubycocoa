@@ -1005,6 +1005,12 @@ class ToplevelInstaller < Installer
   end
 
   def parsearg_package
+    ARGV.delete_if do |arg|
+      if /\A--sign=/ =~ arg
+	tmp, val = arg.split('=')
+	@options['sign-identity'] = val
+      end
+    end
     parsearg_config
   end
 
@@ -1054,6 +1060,10 @@ class ToplevelInstaller < Installer
     out.printf "  %-20s %s \n",
         '--arch=arch', 'pass architecture for testing'
 
+    out.puts
+    out.puts 'Options for package:'
+    out.printf "  %-20s %s \n",
+        '--sign=identity', 'add a digital signature to installer'
     out.puts
   end
 
