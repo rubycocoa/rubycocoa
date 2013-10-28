@@ -7,7 +7,7 @@
  * LGPL. See the COPYRIGHT file for more information.
  */
 
-#import <RubyCocoa/RBObject.h>
+#import "RBObject.h"
 #import <ruby.h>
 
 @interface RBObject(RBSlaveObject)

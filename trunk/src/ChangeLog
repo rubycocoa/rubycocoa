@@ -1,5 +1,10 @@
 2013-10-27 kimura wataru <kimuraw@i.nifty.jp>
 
+	* framework/src/objc/RBSlaveObject.h:
+	correct import header to ".h" style.
+
+2013-10-27 kimura wataru <kimuraw@i.nifty.jp>
+
 	* framework/module.map,
 	  framework/RubyCocoa.xcodeproj/project.pbxproj:
 	support Xcode 5 modules "@import RubyCocoa;".
