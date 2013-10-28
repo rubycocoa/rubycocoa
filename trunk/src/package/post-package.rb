@@ -63,7 +63,10 @@ File.open(File.join(dist_dir, 'dist.xml'), 'w') do |f|
   pf.write(xml, f)
 end
 # complete .pkg
-str = %Q!"#{productbuild}" ! +
+if opt_sign = @options['sign-identity']
+  opt_sign = '--sign "' + opt_sign + '" '
+end
+str = %Q!"#{productbuild}" ! + opt_sign +
       %Q!--distribution "#{File.join(dist_dir, 'dist.xml')}" ! +
       %Q!--resources "#{resources_dir}" ! +
       %Q!--package-path "#{dist_dir}" ! +
