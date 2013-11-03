@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (c) 2006-2008, The RubyCocoa Project.
  * Copyright (c) 2001-2006, FUJIMOTO Hisakuni.
  * All Rights Reserved.
@@ -17,8 +17,8 @@
  * initialize ruby and rubycocoa for a bundle.
  * return not 0 when something error.
  */
-int RBBundleInit (const char* path_to_ruby_program, 
-                  Class       objc_class, 
+int RBBundleInit (const char* path_to_ruby_program,
+                  Class       objc_class,
                   id          additional_param);
 
 
@@ -45,8 +45,8 @@ void RBRubyCocoaInit (void);
  * launch rubycocoa application
  */
 int
-RBApplicationMain (const char* path_to_ruby_program, 
-                   int         argc, 
+RBApplicationMain (const char* path_to_ruby_program,
+                   int         argc,
                    const char* argv[]);
 
 /** [API] RBIsRubyThreadingSupported
