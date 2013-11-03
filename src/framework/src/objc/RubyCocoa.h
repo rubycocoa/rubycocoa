@@ -10,6 +10,11 @@
 #ifndef _RUBYCOCOA_H_
 #define _RUBYCOCOA_H_
 
+/*!
+ * @framework RubyCocoa RubyCocoa.framework
+ * @header RubyCocoa.framework A Ruby/Objective-C Bridge for Mac OS X with Cocoa.
+ */
+
 #import <RubyCocoa/RBRuntime.h>
 #import <RubyCocoa/RBObject.h>
 

@@ -12,37 +12,74 @@
 
 #import <objc/objc.h>
 
-/** [API] RBBundleInit
+/*!
+ * @header RubyCocoa/RBRuntime.h
+ * @abstract RubyCocoa Runtime APIs.
+ * @unsorted
+ */
+
+/*!
+ * @functiongroup Runtime API functions
+ */
+
+/*!
+ * @abstract initialize ruby and rubycocoa for a bundle.
  *
- * initialize ruby and rubycocoa for a bundle.
- * return not 0 when something error.
+ * @param path_to_ruby_program Name of ruby script that run at load.
+ * @param objc_class Class for detecting Bundle to load.
+ * @param additional_param An optional object for initializing. It can be nil.
+ * see @link RBApplicationInit() @/link.
+ *
+ * @result 0 when complete, or not 0 when error.
+ *
  */
 int RBBundleInit (const char* path_to_ruby_program,
                   Class       objc_class,
                   id          additional_param);
 
 
-/** [API] RBApplicationInit
+/*!
+ * @abstract initialize ruby and rubycocoa for an application.
  *
- * initialize ruby and rubycocoa for a command/application
- * return 0 when complete, or return not 0 when error.
+ * @param path_to_ruby_program Name of ruby script that run at launch.
+ * @param argc Count of arguments.
+ * @param argv Values of argucments.
+ * @param additional_param An optional object for initializing. It can be nil.
+ * The value can be taken via OSX::BundleSupport._current_bundle()
+ * in initializing ruby script.
+ *
+ * @result 0 when complete, or not 0 when error.
+ *
+ * @discussion An example of main.m of RubyCocoa applications:
+ * <pre>
+ * @textblock
+ *      int main(int argc, const char* argv[])
+ *      {
+ *          RBApplicationInit("rb_main.rb", argc, argv, nil);
+ *          return NSApplicationMain(argc, argv);
+ *      }
+ * @/textblock
+ * </pre>
  */
 int RBApplicationInit (const char* path_to_ruby_program,
                        int         argc,
                        const char* argv[],
                        id          additional_param);
 
+/*!
+ * @functiongroup Runtime API functions (deprecated)
+ */
 
-/** [API] RBRubyCocoaInit (for compatibility)
- *
- * initialize rubycocoa for a ruby extention library
+/*!
+ * @abstract deperecated, use @link RBBundleInit() @/link.
+ * @deprecated in version 1.0.3
  */
 void RBRubyCocoaInit (void);
 
 
-/** [API] RBApplicationMain (for compatibility)
- *
- * launch rubycocoa application
+/*!
+ * @abstract deperecated, use @link RBApplicationInit() @/link and NSApplicationMain().
+ * @deprecated in version 1.0.3
  */
 int
 RBApplicationMain (const char* path_to_ruby_program,

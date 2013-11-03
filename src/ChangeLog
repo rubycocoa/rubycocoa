@@ -1,3 +1,9 @@
+2013-11-04 kimura wataru <kimuraw@i.nifty.jp>
+
+	* framework/src/objc/RBObject.h, framework/src/objc/RBRuntime.h,
+	  framework/src/objc/RubyCocoa.h:
+	add API documents can be processed with headerdoc.
+
 2013-10-27 kimura wataru <kimuraw@i.nifty.jp>
 
 	* install.rb, package/post-package.rb:
