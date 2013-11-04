@@ -238,13 +238,6 @@ rb_obj_ocid(VALUE rcv)
   return NUM2OCID(val);
 }
 
-static VALUE
-osx_mf_objc_symbol_to_obj(VALUE mdl, VALUE const_name, VALUE const_type)
-{
-  rb_raise(rb_eRuntimeError, "#objc_symbol_to_obj has been obsoleted");
-  return Qnil;
-}
-
 /***/
 
 VALUE
@@ -410,8 +403,6 @@ void initialize_mdl_osxobjc()
 
   rb_define_const(mOSX, "RUBYCOCOA_SIGN_PATHS", rb_ary_new());
   rb_define_const(mOSX, "RUBYCOCOA_FRAMEWORK_PATHS", rb_ary_new());
-
-  rb_define_module_function(mOSX, "objc_symbol_to_obj", osx_mf_objc_symbol_to_obj, 2);
 
   rb_define_module_function(mOSX, "__rebind_umethod__", osx_mf_rebind_umethod, 2);
 
