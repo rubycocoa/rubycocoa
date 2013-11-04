@@ -18,4 +18,4 @@ void* objcptr_cptr (VALUE rcv);
 long objcptr_allocated_size(VALUE rcv);
 
 /** initial loading **/
-VALUE init_cls_ObjcPtr (VALUE outer);
+void init_cls_ObjcPtr (VALUE mOSX);

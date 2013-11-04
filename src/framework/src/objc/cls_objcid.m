@@ -148,10 +148,14 @@ objid_s_class ()
 
 /*******/
 
-VALUE
-init_cls_ObjcID(VALUE outer)
+/*
+ * Document-class: OSX::ObjcID < Object
+ * Root class of Objective-C classes in Ruby world.
+ */
+void
+init_cls_ObjcID(VALUE mOSX)
 {
-  _kObjcID = rb_define_class_under(outer, "ObjcID", rb_cObject);
+  _kObjcID = rb_define_class_under(mOSX, "ObjcID", rb_cObject);
 
   rb_define_singleton_method(_kObjcID, "new", objcid_s_new, -1);
   rb_define_singleton_method(_kObjcID, "new_with_ocid", wrapper_objcid_s_new_with_ocid, 1);

@@ -527,10 +527,15 @@ rb_objcptr_at (int argc, VALUE* argv, VALUE rcv)
 
 /*******/
 
-VALUE
-init_cls_ObjcPtr(VALUE outer)
+/*
+ * Document-class: OSX::ObjcPtr < Object
+ * Representaion of C-pointer in Ruby world.  Commonly, RubyCocoa represents
+ * most of C-types or C-structures as {OSX::Boxed OSX::Boxed}.
+ */
+void
+init_cls_ObjcPtr(VALUE mOSX)
 {
-  _kObjcPtr = rb_define_class_under (outer, "ObjcPtr", rb_cObject);
+  _kObjcPtr = rb_define_class_under (mOSX, "ObjcPtr", rb_cObject);
 
   rb_define_singleton_method (_kObjcPtr, "new", rb_objcptr_s_allocate, -1);
   rb_define_singleton_method (_kObjcPtr, "allocate_as_int8", rb_objcptr_s_allocate_as_int8, 0);
