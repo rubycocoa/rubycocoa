@@ -29,4 +29,4 @@ VALUE objcid_new_with_ocid(VALUE klass, id ocid);
 #define OBJCID_IDPTR(rcv)  (&OBJCID_ID(rcv))
 
 /** initial loading **/
-VALUE init_cls_ObjcID (VALUE outer);
+void init_cls_ObjcID (VALUE mOSX);

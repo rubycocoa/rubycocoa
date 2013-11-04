@@ -491,6 +491,11 @@ bails:
 
 /*************************************************/
 
+
+/*
+ * Tests whether the reciever responds to a given Objective-C selector.
+ * @param [String] sel
+ */
 static VALUE
 wrapper_ocm_responds_p(VALUE rcv, VALUE sel)
 {
@@ -513,6 +518,9 @@ wrapper_ocm_conforms_p(VALUE rcv, VALUE name)
 }
 #endif
 
+/*
+ * Sends Objetive-C message to the reciever.
+ */
 static VALUE
 wrapper_ocm_send(int argc, VALUE* argv, VALUE rcv)
 {
@@ -527,6 +535,9 @@ wrapper_ocm_send(int argc, VALUE* argv, VALUE rcv)
   return result;
 }
 
+/*
+ * @return [NSString]
+ */
 static VALUE
 wrapper_to_s (VALUE rcv)
 {
@@ -572,6 +583,11 @@ _ary_push_objc_methods (VALUE ary, Class cls, int recur)
   rb_funcall(ary, rb_intern("uniq!"), 0);
 }
 
+/*
+ * Returns an array of Objective-C methods of the reciever.
+ * Like Object#methods.
+ * @return [Array]
+ */
 static VALUE
 wrapper_objc_methods (VALUE rcv)
 {
@@ -584,6 +600,11 @@ wrapper_objc_methods (VALUE rcv)
   return ary;
 }
 
+/*
+ * Returns an array of Objective-C instance methods of the reciever class.
+ * Like Module#instance_methods.
+ * @return [Array]
+ */
 static VALUE
 wrapper_objc_instance_methods (int argc, VALUE* argv, VALUE rcv)
 {
@@ -598,6 +619,11 @@ wrapper_objc_instance_methods (int argc, VALUE* argv, VALUE rcv)
   return ary;
 }
 
+/*
+ * Returns an array of Objective-C class methods of the reciever class.
+ * Like Object#sigleton_methods.
+ * @return [Array]
+ */
 static VALUE
 wrapper_objc_class_methods (int argc, VALUE* argv, VALUE rcv)
 {
@@ -636,6 +662,17 @@ _name_to_selstr (VALUE name)
   return name;
 }
 
+/*
+ * Returns Objective-C type encodings of a given selector.
+ * @param [String] name
+ * @return [String]
+ *
+ * @example
+ *     str = OSX::NSString.stringWithString('RubyCocoa')
+ *     str.objc_method_type('compare:options:') => "q32@0:8@16Q24"
+ *     str.objc_method_type('compare_options_') => "q32@0:8@16Q24"
+ *     str.objc_method_type('hasPrefix:') => "c24@0:8@16"
+ */
 static VALUE
 wrapper_objc_method_type (VALUE rcv, VALUE name)
 {
@@ -649,6 +686,12 @@ wrapper_objc_method_type (VALUE rcv, VALUE name)
   return rb_str_new2(str);
 }
 
+/*
+ * Returns Objective-C type encodings of a given selector.
+ * @param [String] name
+ * @return [String]
+ * @see OSX::OCObjWrapper#objc_method_type
+ */
 static VALUE
 wrapper_objc_instance_method_type (VALUE rcv, VALUE name)
 {
@@ -662,6 +705,12 @@ wrapper_objc_instance_method_type (VALUE rcv, VALUE name)
   return rb_str_new2(str);
 }
 
+/*
+ * Returns Objective-C type encodings of a given selector.
+ * @param [String] name
+ * @return [String]
+ * @see OSX::OCObjWrapper#objc_method_type
+ */
 static VALUE
 wrapper_objc_class_method_type (VALUE rcv, VALUE name)
 {
@@ -696,6 +745,12 @@ _objc_alias_method (Class klass, VALUE new, VALUE old)
   return nil;
 }
 
+/*
+ * Aliases Objective-C method to given new name.
+ * @param [String] new
+ * @param [String] old
+ * @return [self]
+ */
 static VALUE
 wrapper_objc_alias_method (VALUE rcv, VALUE new, VALUE old)
 {
@@ -705,6 +760,12 @@ wrapper_objc_alias_method (VALUE rcv, VALUE new, VALUE old)
   return rcv;
 }
 
+/*
+ * Aliases Objective-C method to given new name.
+ * @param [String] new
+ * @param [String] old
+ * @return [self]
+ */
 static VALUE
 wrapper_objc_alias_class_method (VALUE rcv, VALUE new, VALUE old)
 {
@@ -716,20 +777,28 @@ wrapper_objc_alias_class_method (VALUE rcv, VALUE new, VALUE old)
 
 /*****************************************/
 
-VALUE
-init_mdl_OCObjWrapper(VALUE outer)
+/*
+ * Document-module: OSX::OCObjWrapper
+ * Document-module: OSX::OCClsWrapper
+ *
+ * Utilities for communicating Objective-C classes.
+ *
+ * Objective-C classes in Ruby world includes {OSX::OCObjWrapper}
+ * and extends {OSX::OCClsWrapper}.
+ */
+void
+init_mdl_OCObjWrapper(mOSX)
 {
-  _mObjWrapper = rb_define_module_under(outer, "OCObjWrapper");
+  _mObjWrapper = rb_define_module_under(mOSX, "OCObjWrapper");
 
   rb_define_method(_mObjWrapper, "ocm_responds?", wrapper_ocm_responds_p, 1);
-	//rb_define_method(_mObjWrapper, "ocm_conforms?", wrapper_ocm_conforms_p, 1);
   rb_define_method(_mObjWrapper, "ocm_send", wrapper_ocm_send, -1);
   rb_define_method(_mObjWrapper, "to_s", wrapper_to_s, 0);
 
   rb_define_method(_mObjWrapper, "objc_methods", wrapper_objc_methods, 0);
   rb_define_method(_mObjWrapper, "objc_method_type", wrapper_objc_method_type, 1);
 
-  _mClsWrapper = rb_define_module_under(outer, "OCClsWrapper");
+  _mClsWrapper = rb_define_module_under(mOSX, "OCClsWrapper");
   rb_define_method(_mClsWrapper, "objc_instance_methods", wrapper_objc_instance_methods, -1);
   rb_define_method(_mClsWrapper, "objc_class_methods", wrapper_objc_class_methods, -1);
   rb_define_method(_mClsWrapper, "objc_instance_method_type", wrapper_objc_instance_method_type, 1);
@@ -738,8 +807,8 @@ init_mdl_OCObjWrapper(VALUE outer)
   rb_define_method(_mClsWrapper, "_objc_alias_method", wrapper_objc_alias_method, 2);
   rb_define_method(_mClsWrapper, "_objc_alias_class_method", wrapper_objc_alias_class_method, 2);
 
-  rb_define_module_function(outer, "_ignore_ns_override", wrapper_ignore_ns_override, 0);
-  rb_define_module_function(outer, "_ignore_ns_override=", wrapper_ignore_ns_override_set, 1);
+  rb_define_module_function(mOSX, "_ignore_ns_override", wrapper_ignore_ns_override, 0);
+  rb_define_module_function(mOSX, "_ignore_ns_override=", wrapper_ignore_ns_override_set, 1);
 
   return Qnil;
 }

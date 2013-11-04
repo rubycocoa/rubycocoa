@@ -55,8 +55,14 @@ static VALUE init_cls_OCObject(VALUE mOSX)
   return kOCObject;
 }
 
-// def OSX.objc_proxy_class_new (kls, kls_name)
-// ex1.  OSX.objc_proxy_class_new (AA::BB::AppController, "AppController")
+/*
+ * Defines new Objective-C class from Ruby class by a given name.
+ * @param kls [Class] Ruby class
+ * @param kls_name [String] Objective-C class name
+ * @return nil
+ * @example declare new Objective-C class named "AppController".
+ *     OSX.objc_proxy_class_new (AA::BB::AppController, "AppController")
+ */
 static VALUE
 osx_mf_objc_proxy_class_new(VALUE mdl, VALUE kls, VALUE kls_name)
 {
@@ -65,8 +71,15 @@ osx_mf_objc_proxy_class_new(VALUE mdl, VALUE kls, VALUE kls_name)
   return Qnil;
 }
 
-// def OSX.objc_derived_class_new (kls, kls_name, super_name)
-// ex1.  OSX.objc_derived_class_new (AA::BB::CustomView, "CustomView", "NSView")
+/*
+ * Defines new Objective-C subclass from Ruby class by a given name.
+ * @param kls [Class] Ruby class
+ * @param kls_name [String] Objective-C class name
+ * @param super_name [String] Objective-C superclass name
+ * @return nil
+ * @example declare new Objective-C class named "CustomView" as a subclass of "NSView".
+ *     OSX.objc_derived_class_new (AA::BB::CustomView, "CustomView", "NSView")
+ */
 static VALUE
 osx_mf_objc_derived_class_new(VALUE mdl, VALUE kls, VALUE kls_name, VALUE super_name)
 {
@@ -84,8 +97,16 @@ osx_mf_objc_derived_class_new(VALUE mdl, VALUE kls, VALUE kls_name, VALUE super_
   return Qnil;
 }
 
-// def OSX.objc_class_method_add (kls, method_name)
-// ex1.  OSX.objc_class_method_add (AA::BB::CustomView, "drawRect:")
+
+/*
+ * Adds an Objective-C method by a given name.
+ * @param method_name [String] Method name
+ * @param class_method [Boolean] Whether class method or not
+ * @param types [String] Objective-C encoding types
+ * @return nil
+ * @example
+ *     OSX.objc_class_method_add (AA::BB::CustomView, "drawRect:")
+ */
 static VALUE
 osx_mf_objc_class_method_add(VALUE mdl, VALUE kls, VALUE method_name, VALUE class_method, VALUE types)
 {
@@ -156,6 +177,13 @@ osx_mf_ruby_thread_switcher_stop(VALUE mdl)
   return Qnil;
 }
 
+/*
+ * Like Objective-C "@autorelease { ... }" block.
+ * @example
+ *     OSX.ns_autorelease_pool do
+ *         # do something
+ *     end
+ */
 static VALUE
 ns_autorelease_pool(VALUE mdl)
 {
@@ -317,6 +345,9 @@ struct RB_METHOD {
   // ...
 };
 
+/*
+ * @api private
+ */
 static VALUE
 osx_mf_rebind_umethod(VALUE rcv, VALUE klass, VALUE umethod)
 {
@@ -328,6 +359,9 @@ osx_mf_rebind_umethod(VALUE rcv, VALUE klass, VALUE umethod)
   return Qnil;
 }
 
+/*
+ * Converts Ruby objects to Objective-C objects.
+ */
 static VALUE
 osx_rbobj_to_nsobj (VALUE rcv, VALUE obj)
 {
@@ -355,6 +389,11 @@ NSRunLoop *rubycocoaRunLoop;
 
 /******************/
 
+/*
+ * Document-module: OSX
+ * Namespace for RubyCocoa and Objective-C classes,
+ * such as OSX::NSString, OSX::NSView, ...
+ */
 void initialize_mdl_osxobjc()
 {
   char* framework_resources_path();
@@ -384,24 +423,31 @@ void initialize_mdl_osxobjc()
   rb_define_module_function(mOSX, "ns_autorelease_pool",
 			    ns_autorelease_pool, 0);
 
+  // The RubyCocoa version string
   rb_define_const(mOSX, "RUBYCOCOA_VERSION", 
 		  rb_obj_freeze(rb_str_new2(RUBYCOCOA_VERSION)));
+  // The release date string
   rb_define_const(mOSX, "RUBYCOCOA_RELEASE_DATE", 
 		  rb_obj_freeze(rb_str_new2(RUBYCOCOA_RELEASE_DATE)));
+  // The release revision string
   rb_define_const(mOSX, "RUBYCOCOA_SVN_REVISION", 
 		  rb_obj_freeze(rb_str_new2(RUBYCOCOA_SVN_REVISION)));
 #if __LP64__
+  // Whether built for LP64 or not
   rb_define_const(mOSX, "RUBYCOCOA_BUILD_LP64", Qtrue);
 #else
   rb_define_const(mOSX, "RUBYCOCOA_BUILD_LP64", Qfalse);
 #endif
 
   char *p = framework_resources_path();
+  // Path to Resources directory of RubyCocoa.framework
   rb_define_const(mOSX, "RUBYCOCOA_RESOURCES_PATH",
 		  rb_obj_freeze(rb_str_new2(p)));
   free(p);
 
+  // bridgesupport search paths at OSX.require_framework()
   rb_define_const(mOSX, "RUBYCOCOA_SIGN_PATHS", rb_ary_new());
+  // Framework search paths at OSX.require_framework() or OSX.load_bridge_support_signatures()
   rb_define_const(mOSX, "RUBYCOCOA_FRAMEWORK_PATHS", rb_ary_new());
 
   rb_define_module_function(mOSX, "__rebind_umethod__", osx_mf_rebind_umethod, 2);

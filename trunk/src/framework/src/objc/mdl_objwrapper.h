@@ -9,4 +9,4 @@
 
 #import <ruby.h>
 
-VALUE init_mdl_OCObjWrapper(VALUE);
+void init_mdl_OCObjWrapper(VALUE);

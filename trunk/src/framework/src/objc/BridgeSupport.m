@@ -2137,6 +2137,10 @@ osx_lookup_informal_protocol_method_type (VALUE rcv, VALUE sel,
   return method == NULL ? Qnil : rb_str_new2(method->encoding);
 }
 
+/*
+ * Document-class: OSX::Boxed < Object
+ * Representaion of C-types and C-structures in Ruby world.
+ */
 void
 initialize_bridge_support (VALUE mOSX)
 {

@@ -1,5 +1,19 @@
 2013-11-04 kimura wataru <kimuraw@i.nifty.jp>
 
+	* framework/src/objc/BridgeSupport.m,
+	  framework/src/objc/cls_objcid.h,
+	  framework/src/objc/cls_objcid.m,
+	  framework/src/objc/cls_objcptr.h,
+	  framework/src/objc/cls_objcptr.m,
+	  framework/src/objc/mdl_bundle_support.m,
+	  framework/src/objc/mdl_objwrapper.h,
+	  framework/src/objc/mdl_objwrapper.m,
+	  framework/src/objc/mdl_osxobjc.m:
+	add Objective-C API documents for yardoc.
+	refactored some module/class initializer to work with yardoc.
+	- change initializer return type to void
+	- rename variable name of OSX
+
 	* framework/src/objc/mdl_osxobjc.m:
 	remove OSX.objc_symbol_to_obj. this function obsoleted at 0.11.0.
 

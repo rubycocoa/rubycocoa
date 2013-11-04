@@ -79,7 +79,15 @@ static VALUE _current_bundle()
   return Qnil;
 }
 
+/*
+ * Returns the current bundle in bundle stack.
+ * @return [Array<OSX::NSBundle, Object>]
+ */
 static VALUE rb_current_bundle(VALUE mdl) { return _current_bundle(); }
+/*
+ * Returns a dictionary contains Objective-C Class -> NSBundle relations.
+ * @return [OSX::NSMutableDictionary]
+ */
 static VALUE rb_bundle_map(VALUE mdl) { return ocid_to_rbobj(Qnil, gBundleMap); }
 
 /** bundle_map - the  mapping table of class to bundle **/
@@ -100,12 +108,23 @@ bundle_for_class(Class klass)
   return [gBundleMap objectForKey:klass];
 }
 
+/*
+ * Returns an instalce of OSX::NSBundle that is main bundle of a given Objective-C class.
+ * @param [Class] objc_class
+ * @return [OSX::NSBundle]
+ */
 static VALUE
 rb_bundle_for_class(VALUE mdl, VALUE objc_class)
 {
   return ocid_get_rbobj([gBundleMap objectForKey:_ruby2ocid(objc_class)]);
 }
 
+/*
+ * Binds a given Objective-C class to current bundle.
+ * @param [Class] objc_class
+ * @return [Array<OSX::NSBundle, Object>]
+ * @return [nil] if the bundle stack is empty.
+ */
 static VALUE
 rb_bind_class_with_current_bundle(VALUE mdl, VALUE objc_class)
 {
@@ -202,11 +221,25 @@ static void setup_bundleForClass()
 }
 
 /** initialize primitive functions for module OSX::BundleSupport **/
+/*
+ * Document-module: OSX::BundleSupport
+ * Utilities for handling NSBundle stack in applications.
+ *
+ * bundle_stack - stack for the current bundle and related
+ * parameter. the related parameter (additional_param) can be
+ * passed from  RBApplicationInit() or RBBundleInit().
+ *
+ * @example
+ *     _push_bundle([bundle, additional_param])
+ *     _pop_bundle     => [bundle, additional_param] or nil
+ *     _current_bundle => [bundle, additional_param] or nil
+ */
 void
 initialize_mdl_bundle_support()
 {
   if (NIL_P(_mBundleSupport)) {
-    _mBundleSupport = rb_define_module_under(osx_s_module(), "BundleSupport");
+    VALUE _mOSX = osx_s_module();
+    _mBundleSupport = rb_define_module_under(_mOSX, "BundleSupport");
 
     rb_define_const(_mBundleSupport, BUNDLE_STACK_NAME, rb_ary_new());
 
