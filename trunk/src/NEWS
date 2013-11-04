@@ -3,6 +3,29 @@
 
 $Id$
 
+== Changes 1.1.0 from 1.0.7: 2013-XX-XX
+
+=== Improvements
+
+  * Support Xcode 5 "Modules".
+
+=== Fixes
+
+  * Fixed standaloneify.rb error with ruby-2.0 or rubygems-2.1.
+
+=== Deprecates
+
+  * Deprecated Objective-C class "RubyCocoa" in <RubyCocoa/RubyCocoa.h>.
+    developers can use RBRuntime functions to call ruby from Objective-C.
+
+      - bundleInitWithProgram:class:param: -> RBBundleInit()
+      - applicationInitWithProgram:argc:argv:param: -> RBApplicationInit()
+      - applicationMainWithProgram:argc:argv: -> RBApplicationMain()
+
+=== Note
+
+  * Mac OS X 10.5 or earlier not supported.
+
 == Changes 1.0.7 from 1.0.6: 2013-10-26
 
 === Fixes

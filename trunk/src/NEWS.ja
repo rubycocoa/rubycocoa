@@ -3,6 +3,30 @@
 
 $Id$
 
+== 1.0.7から1.1.0の変更点: 2013-XX-XX
+
+=== 改良
+
+  * Xcode 5の"Modules"に対応。
+
+=== 修正
+
+  * standaloneify.rbがruby-2.0またはrubygems-2.1でエラーになる問題を修正。
+
+=== 廃止された機能
+
+  * Objective-Cのクラス"RubyCocoa"は廃止されました。
+    Objective-Cからrubyを呼び出すには、ランタイム関数を使ってください。
+    それぞれ対応する関数は次のとおりです。
+
+      - bundleInitWithProgram:class:param: -> RBBundleInit()
+      - applicationInitWithProgram:argc:argv:param: -> RBApplicationInit()
+      - applicationMainWithProgram:argc:argv: -> RBApplicationMain()
+
+=== 備考
+
+  * Mac OS X 10.5 or earlier not supported.
+
 == 1.0.6から1.0.7の変更点: 2013-10-26
 
 === 修正
