@@ -1,5 +1,8 @@
 2013-11-04 kimura wataru <kimuraw@i.nifty.jp>
 
+	* framework/pre-doc.rb:
+	generate Ruby documents under doc/ruby/ with yardoc.
+
 	* framework/src/objc/mdl_objwrapper.h,
 	  framework/src/objc/mdl_objwrapper.m:
 	fix build error from r2479.
