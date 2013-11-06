@@ -787,7 +787,7 @@ wrapper_objc_alias_class_method (VALUE rcv, VALUE new, VALUE old)
  * and extends {OSX::OCClsWrapper}.
  */
 void
-init_mdl_OCObjWrapper(mOSX)
+init_mdl_OCObjWrapper(VALUE mOSX)
 {
   _mObjWrapper = rb_define_module_under(mOSX, "OCObjWrapper");
 

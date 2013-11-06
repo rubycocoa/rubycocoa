@@ -1,5 +1,9 @@
 2013-11-04 kimura wataru <kimuraw@i.nifty.jp>
 
+	* framework/src/objc/mdl_objwrapper.h,
+	  framework/src/objc/mdl_objwrapper.m:
+	fix build error from r2479.
+
 	* framework/tool/yard_objc_register.rb:
 	let yard to process .m files as C code.
 
