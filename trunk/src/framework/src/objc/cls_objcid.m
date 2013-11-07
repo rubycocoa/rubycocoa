@@ -51,6 +51,9 @@ _objcid_data_new()
   return dp;
 }
 
+/*
+ * @api private
+ */
 static VALUE
 objcid_s_new(int argc, VALUE* argv, VALUE klass)
 {
@@ -79,12 +82,18 @@ objcid_new_with_ocid(VALUE klass, id ocid)
   return obj;
 }
 
+/*
+ * @api private
+ */
 static VALUE
 wrapper_objcid_s_new_with_ocid(VALUE klass, VALUE rbocid)
 {
   return objcid_new_with_ocid(klass, NUM2OCID(rbocid));
 }
 
+/*
+ * Sends Objective-C "release" message to reciever.
+ */
 static VALUE
 objcid_release(VALUE rcv)
 {
@@ -101,12 +110,26 @@ objcid_initialize(int argc, VALUE* argv, VALUE rcv)
   return rcv;
 }
 
+/*
+ * Objective-C id value as Number.
+ * @return [Number]
+ * @example
+ *     url = OSX::NSURL.URLWithString('http://www.apple.com')
+ *     url.inspect
+ *     => "#<OSX::NSURL:0x8775b0c0 class='NSURL' id=0x7fe3b2913690>"
+ *     url.__ocid__
+ *     => 140615930164880
+ */
 static VALUE
 objcid_ocid(VALUE rcv)
 {
   return OCID2NUM(OBJCID_ID(rcv));
 }
 
+/*
+ * Object#inspect.
+ * @return [String]
+ */
 static VALUE
 objcid_inspect(VALUE rcv)
 {
@@ -151,6 +174,14 @@ objid_s_class ()
 /*
  * Document-class: OSX::ObjcID < Object
  * Root class of Objective-C classes in Ruby world.
+ *
+ * @example
+ *     OSX::NSObject.superclass
+ *     => OSX::ObjcID
+ *     OSX::NSProxy.superclass
+ *     => OSX::ObjcID
+ *     OSX::NSString.superclass
+ *     => OSX::NSObject
  */
 void
 init_cls_ObjcID(VALUE mOSX)

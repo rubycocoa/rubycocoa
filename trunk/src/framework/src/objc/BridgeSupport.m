@@ -389,12 +389,28 @@ bails:
   return NO;
 }
 
+/*
+ * Returns type encoding.
+ * @return [String]
+ * @example
+ *     OSX::NSRange.encoding
+ *     => "{_NSRange=QQ}"
+ */
 static VALUE
 rb_bs_boxed_get_encoding (VALUE rcv)
 {
-  return rb_ivar_get(rcv, ivarEncodingID);  
+  return rb_ivar_get(rcv, ivarEncodingID);
 }
 
+/*
+ * Returns allocation size.
+ * @return [Number]
+ * @example
+ *     OSX::NSRect.size
+ *     => 32
+ *     OSX::NSSize.size
+ *     => 16
+ */
 static VALUE
 rb_bs_boxed_get_size (VALUE rcv)
 {
@@ -405,6 +421,15 @@ rb_bs_boxed_get_size (VALUE rcv)
   return LONG2NUM(bs_boxed_size(boxed));
 }
 
+/*
+ * Returns field names.
+ * @return [Array]
+ * @example
+ *      OSX::NSRect.fields
+ *      => [:origin, :size]
+ *      OSX::NSSize.fields
+ *      => [:width, :height]
+ */
 static VALUE
 rb_bs_boxed_get_fields (VALUE rcv)
 {
@@ -428,6 +453,14 @@ rb_bs_boxed_get_fields (VALUE rcv)
   return ary;
 }
 
+/*
+ * Returns opaque or not.
+ * @example
+ *     OSX::NSDecimal.opaque?
+ *     => true
+ *     OSX::NSRect.opaque?
+ *     => false
+ */
 static VALUE
 rb_bs_boxed_is_opaque (VALUE rcv)
 {
@@ -1069,9 +1102,14 @@ bridge_support_dispatcher (int argc, VALUE *argv, VALUE rcv)
   return result;
 }
 
-static struct bsRetval default_func_retval = { bsCArrayArgUndefined, -1, "v", NO };  
+static struct bsRetval default_func_retval = { bsCArrayArgUndefined, -1, "v", NO };
 
-static VALUE 
+/*
+ * Loads brdigesupport dylib. Recommends to use OSX.require_frmework in regular cases.
+ * @param Path of bridgesupport dylib.
+ * @return nil
+ */
+static VALUE
 osx_load_bridge_support_dylib (VALUE rcv, VALUE path)
 {
   const char *cpath;
@@ -1916,6 +1954,11 @@ osx_load_bridge_support_file (VALUE mOSX, VALUE path)
 
 #else /* !HAS_LIBXML2 */
 
+/*
+ * Loads brdigesupport file. Recommends to use OSX.require_frmework in regular cases.
+ * @param Path of bridgesupport file.
+ * @return [Moudule] Module OSX
+ */
 static VALUE
 osx_load_bridge_support_file (VALUE rcv, VALUE path)
 {
@@ -1936,6 +1979,11 @@ find_magic_cookie_const_by_value(void *value)
   return bs_const;
 }
 
+/*
+ * Imports a C constant from loaded bridgesupport.
+ * @param sym Name of constant
+ * @return A new constant imported
+ */
 static VALUE
 osx_import_c_constant (VALUE self, VALUE sym)
 {
@@ -2125,6 +2173,12 @@ find_bs_informal_protocol_method(const char *selector, BOOL is_class_method)
     ? method : NULL;
 }
 
+/*
+ * Finds type encoding of a given method from informal protocols.
+ * @param sel Name of a method
+ * @param [Boolean] is_class_method Whether the given method is a class method or not
+ * @return [Sting] Type encoding
+ */
 static VALUE
 osx_lookup_informal_protocol_method_type (VALUE rcv, VALUE sel, 
   VALUE is_class_method)
@@ -2140,6 +2194,15 @@ osx_lookup_informal_protocol_method_type (VALUE rcv, VALUE sel,
 /*
  * Document-class: OSX::Boxed < Object
  * Representaion of C-types and C-structures in Ruby world.
+ *
+ * Information of types are described in bridgesupport files
+ * located under frameworks.
+ *
+ * @example
+ *     range = OSX.NSMakeRange(1, 3)
+ *     => #<OSX::NSRange location=1, length=3>
+ *     OSX::NSRange.superclass
+ *     => OSX::Boxed
  */
 void
 initialize_bridge_support (VALUE mOSX)
