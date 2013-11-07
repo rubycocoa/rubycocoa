@@ -37,26 +37,8 @@ class TC_NSString < Test::Unit::TestCase
     assert_equal(@teststr, obj.to_s)
   end
 
-  def test_stringWithRubyString_euc
-    $KCODE = 'EUC'
-    nsstr = NSString.stringWithRubyString( @eucstr )
-    assert_equal( @eucstr, nsstr.to_s.toeuc )
-  end
-
-  def test_stringWithRubyString_sjis
-    $KCODE = 'EUC'
-    nsstr = NSString.stringWithRubyString( @eucstr.tosjis )
-    assert_equal( @eucstr, nsstr.to_s.toeuc )
-  end
-
-  def test_stringWithRubyString_jis
-    $KCODE = 'EUC'
-    nsstr = NSString.stringWithRubyString( @eucstr.tojis )
-    assert_equal( @eucstr, nsstr.to_s.toeuc )
-  end
-
   def test_dataUsingEncoding_euc
-    nsstr = NSString.stringWithRubyString( @eucstr )
+    nsstr = NSString.stringWithCString_encoding(@eucstr, NSJapaneseEUCStringEncoding)
     data = nsstr.dataUsingEncoding( NSJapaneseEUCStringEncoding )
     bytes = "." * data.length
     data.getBytes_length( bytes )
@@ -64,7 +46,7 @@ class TC_NSString < Test::Unit::TestCase
   end
 
   def test_dataUsingEncoding_sjis
-    nsstr = NSString.stringWithRubyString( @eucstr )
+    nsstr = NSString.stringWithCString_encoding(@eucstr, NSJapaneseEUCStringEncoding)
     data = nsstr.dataUsingEncoding( NSShiftJISStringEncoding )
     bytes = "." * data.length
     data.getBytes_length( bytes )
@@ -72,7 +54,7 @@ class TC_NSString < Test::Unit::TestCase
   end
 
   def test_dataUsingEncoding_jis
-    nsstr = NSString.stringWithRubyString( @eucstr )
+    nsstr = NSString.stringWithCString_encoding(@eucstr, NSJapaneseEUCStringEncoding)
     data = nsstr.dataUsingEncoding( NSISO2022JPStringEncoding )
     bytes = "." * data.length
     data.getBytes_length( bytes )

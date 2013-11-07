@@ -1,5 +1,8 @@
 2013-11-07 kimura wataru <kimuraw@i.nifty.jp>
 
+	* tests/tc_nsstring.rb, tests/tc_rubystring.rb:
+	remove tests for deprecated methods.
+
 	* framework/src/ruby/osx/objc/cocoa_macros.rb,
 	  framework/src/ruby/osx/objc/ruby_addition.rb:
 	deprecated string functions using NKF.
