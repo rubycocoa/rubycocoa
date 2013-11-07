@@ -5,24 +5,27 @@
 # RubyCocoa is free software, covered under either the Ruby's license or the 
 # LGPL. See the COPYRIGHT file for more information.
 
-# String additions.
+# Utility methods for String.
 class String
-  
-  def nsencoding
-    warn "#{caller[0]}: nsencoding is now deprecated and its use is discouraged, please use 'NKF.guess(rbstr)' instead."
-    OSX::NSString.guess_nsencoding(self)
-  end
-	
+
+  # @!parse
+  #     # @deprecated use NKF.guess.
+  #     def nsencoding; nil; end
+
+  # @deprecated use obj#to_ns.
+  # @return [OSX::NSString]
   def to_nsstring
     warn "#{caller[0]}: to_nsstring is now deprecated and its use is discouraged, please use to_ns instead."
     OSX::NSString.stringWithRubyString(self)
   end
-  
+
+  # @deprecated use obj#to_ns.
+  # @return [OSX::NSMutableString]
   def to_nsmutablestring
     warn "#{caller[0]}: to_nsmutablestring is now deprecated and its use is discouraged, please use to_ns instead."
     OSX::NSMutableString.stringWithRubyString(self)
   end
-  
+
   def to_sel
     s = self.dup
     s.instance_variable_set(:@__is_sel__, true)
