@@ -1,3 +1,8 @@
+2013-11-08 kimura wataru <kimuraw@i.nifty.jp>
+
+	* NEWS, NEWS.ja:
+	update NEWS.
+
 2013-11-07 kimura wataru <kimuraw@i.nifty.jp>
 
 	* tests/tc_nsstring.rb, tests/tc_rubystring.rb:

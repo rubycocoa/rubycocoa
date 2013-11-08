@@ -22,6 +22,14 @@ $Id$
       - applicationInitWithProgram:argc:argv:param: -> RBApplicationInit()
       - applicationMainWithProgram:argc:argv: -> RBApplicationMain()
 
+  * Deprecated NSString|String methods depends "NKF" extension.
+
+      - NSString.guess_nsencoding
+      - NSString.guess_encoding
+      - NSString.stringWithRubyString
+      - NSMutableString.stringWithRubyString
+      - String.nsencoding
+
 === Note
 
   * Mac OS X 10.5 or earlier not supported.
