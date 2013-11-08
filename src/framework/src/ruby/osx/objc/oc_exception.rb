@@ -7,10 +7,17 @@
 
 module OSX
 
+  # Whether prints debug information or not.
   def self._debug?
     ($DEBUG || $RUBYCOCOA_DEBUG)
   end
 
+  # Represents NSException in Ruby world.
+  # @example
+  #     ary = OSX::NSMutableArray.alloc.init
+  #     ary.addObject(nil)
+  #     => OSX::OCException: NSInvalidArgumentException - ***
+  #         -[__NSArrayM insertObject:atIndex:]: object cannot be nil
   class OCException < RuntimeError
 
     attr_reader :name, :reason, :userInfo, :nsexception
@@ -26,9 +33,17 @@ module OSX
 
   end
 
+  # Raised when object conversion fails between Ruby and Objective-C.
   class OCDataConvException < RuntimeError
   end
 
+  # Raised when message sending fails to Objective-C from Ruby.
+  # @example
+  #     str = OSX::NSString.stringWithString('abc')
+  #     str.foo_bar_baz_
+  #     => OSX::OCMessageSendException: Can't get Objective-C
+  #        method signature for selector 'foo:bar:baz:' of
+  #        receiver #<NSMutableString "abc">
   class OCMessageSendException < RuntimeError
   end
 

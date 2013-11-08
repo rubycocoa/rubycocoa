@@ -41,6 +41,8 @@ module OSX
     'ImageKit' => '/System/Library/Frameworks/Quartz.framework/Frameworks/ImageKit.framework'
   }
 
+  # @!group Frameworks and BridgeSupport files
+
   def _bundle_path_for_framework(framework)
     if framework[0] == ?/
       [OSX::NSBundle.bundleWithPath(framework), framework]
@@ -58,7 +60,9 @@ module OSX
     end
   end
   module_function :_bundle_path_for_framework
-  
+
+  # "require" for OSX .framework.
+  #
   # The OSX::require_framework method imports Mac OS X frameworks and uses the
   # BridgeSupport metadata to add Ruby entry points for the framework's Classes,
   # methods, and Constants into the OSX module.
@@ -66,22 +70,23 @@ module OSX
   # The framework parameter is a reference to the framework that should be
   # imported.  This may be a full path name to a particular framework, a shortcut,
   # or a framework name.  The shortcuts are the keys listed in the
-  # <tt>QUICK_FRAMEWORKS</tt> hash.
+  # {QUICK_FRAMEWORKS} hash.
   #
   # If a framework name (with no path) is given, then the method searches a number
   # of directories.  Those directories (in search order) are:
+  #
   #   1.  /System/Library/Frameworks
   #   2.  /Library/Frameworks
   #   3.  Any directories in the RUBYCOCOA_FRAMEWORK_PATHS array, if defined
   #   4.  ENV['HOME']/Library/Frameworks, if the HOME environment variable is defined
   #
-  # When using the search paths, the <tt>.framework</tt> file type extension should
+  # When using the search paths, the `.framework` file type extension should
   # be omitted from the framework name passed to the method.
   #
-  # If the method loads the framework successfully, it returns <tt>true</tt>.
-  # If the framework was already loaded the method returns <tt>false</tt>.
+  # If the method loads the framework successfully, it returns `true`.
+  # If the framework was already loaded the method returns `false`.
   # If the method is unable to locate, or unable to load the framework then it
-  # raises an <tt>ArgumentError</tt>.
+  # raises an `ArgumentError`.
   def require_framework(framework)
     return false if framework_loaded?(framework)
     bundle, path = _bundle_path_for_framework(framework)
@@ -94,6 +99,8 @@ module OSX
   end
   module_function :require_framework
 
+  # Returns whether a framework is loaded of not.
+  # @note
   def framework_loaded?(framework)
     bundle, path = _bundle_path_for_framework(framework)
     unless bundle.nil?
@@ -180,6 +187,10 @@ module OSX
     return false
   end
   module_function :load_bridge_support_signatures
+
+  # @!endgroup
+
+  # @!group Objective-C Classes and methods
 
   # Load C constants/classes lazily.
   def self.const_missing(c)
@@ -275,6 +286,9 @@ module OSX
   end
   module_function :_objc_lookup_superclass
 
+  # @!endgroup
+
+  # TODO
   module NSBehaviorAttachment
 
     ERRMSG_FOR_RESTRICT_NEW = "use 'alloc.initXXX' to instantiate Cocoa Object"
@@ -303,6 +317,7 @@ module OSX
       @inherited = true
     end
 
+    # Returns whether receiver class is inherited from Objecitve-C class or not.
     def ns_inherited?
       return defined?(@inherited) && @inherited
     end
@@ -323,6 +338,7 @@ module OSX
     end
     alias_method :ib_outlet, :ib_outlets
 
+    # @deprecated use ib_outlet.
     def ns_outlets(*args)
       warn "#{caller[0]}:: ns_outlet(s) is deprecated, and will be removed in a next release. Please use ib_outlet(s) instead."
       ib_outlets(*args)
@@ -464,22 +480,24 @@ module OSX
 
   end       # module OSX::NSBehaviorAttachment
 
+  # Defines internal setter/getter methods.
   module NSKVCAccessorUtil
     private
 
     def kvc_internal_setter(key)
-      return '_kvc_internal_' + key.to_s + '=' 
+      return '_kvc_internal_' + key.to_s + '='
     end
 
     def kvc_setter_wrapper(key)
-      return '_kvc_wrapper_' + key.to_s + '=' 
+      return '_kvc_wrapper_' + key.to_s + '='
     end
   end       # module OSX::NSKVCAccessorUtil
 
+  # Interface getter/setter methods from Objecite-C objects via Key-Value Coding.
   module NSKeyValueCodingAttachment
     include NSKVCAccessorUtil
 
-    # invoked from valueForUndefinedKey: of a Cocoa object
+    # Invoked from valueForUndefinedKey: of an Objective-C object
     def rbValueForKey(key)
       if m = kvc_getter_method(key.to_s)
         return send(m)
@@ -488,7 +506,7 @@ module OSX
       end
     end
 
-    # invoked from setValue:forUndefinedKey: of a Cocoa object
+    # Invoked from setValue:forUndefinedKey: of an Objective-C object
     def rbSetValue_forKey(value, key)
       if m = kvc_setter_method(key.to_s)
         send(m, value)
@@ -498,7 +516,7 @@ module OSX
     end
 
     private
-    
+
     # find accesor for key-value coding
     # "key" must be a ruby string
 
@@ -508,7 +526,7 @@ module OSX
       end
       return nil # accessor not found
     end
- 
+
     def kvc_setter_method(key)
       [kvc_internal_setter(key), key + '='].each do |m|
         return m if respond_to? m
@@ -523,13 +541,16 @@ module OSX
 
   end       # module OSX::NSKeyValueCodingAttachment
 
+  # Utility for Key-Value Coding.
   module NSKVCBehaviorAttachment
     include NSKVCAccessorUtil
 
+    # @see #kvc_accessor
     def kvc_reader(*args)
       attr_reader(*args)
     end
 
+    # @see #kvc_accessor
     def kvc_writer(*args)
       args.flatten.each do |key|
 	next if method_defined?(kvc_setter_wrapper(key))
@@ -551,24 +572,28 @@ module OSX
       end
     end
 
+    # Defines accessor methods from given names.
+    # Writer methods aware Key-Value Observing.
     def kvc_accessor(*args)
       kvc_reader(*args)
       kvc_writer(*args)
     end
 
+    # see sample/CurrencyConverter/.
     def kvc_depends_on(keys, *dependencies)
       dependencies.flatten.each do |dependentKey|
         setKeys_triggerChangeNotificationsForDependentKey(Array(keys), dependentKey)
       end
     end
- 
-    # define accesor for keys defined in Cocoa, 
-    # such as NSUserDefaultsController and NSManagedObject
+
+    # Defines accesor methods for keys defined in Objective-C,
+    # such as NSUserDefaultsController and NSManagedObject.
     def kvc_wrapper(*keys)
       kvc_wrapper_reader(*keys)
       kvc_wrapper_writer(*keys)
     end
 
+    # @see #kvc_wrapper
     def kvc_wrapper_reader(*keys)
       keys.flatten.compact.each do |key|
         class_eval <<-EOE_KVC_WRAPPER,__FILE__,__LINE__+1
@@ -579,6 +604,7 @@ module OSX
       end
     end
 
+    # @see #kvc_wrapper
     def kvc_wrapper_writer(*keys)
       keys.flatten.compact.each do |key|
         class_eval <<-EOE_KVC_WRAPPER,__FILE__,__LINE__+1
@@ -592,11 +618,11 @@ module OSX
     # Define accessors that send change notifications for an array.
     # The array instance variable must respond to the following methods:
     #
-    #  length
-    #  [index]
-    #  [index]=
-    #  insert(index,obj)
-    #  delete_at(index)
+    #  - length
+    #  - [index]
+    #  - [index]=
+    #  - insert(index,obj)
+    #  - delete_at(index)
     #
     # Notifications are only sent for accesses through the Cocoa methods:
     #  countOfKey, objectInKeyAtIndex_, insertObject_inKeyAtIndex_,
@@ -660,6 +686,7 @@ module OSX
       end
     end
 
+    private
     # re-wrap at overriding setter method
     def _kvc_behavior_method_added(sym)
       return unless sym.to_s =~ /\A([^=]+)=\z/
@@ -677,7 +704,7 @@ module OSX
   module OCObjWrapper
 
     include NSKeyValueCodingAttachment
-  
+
   end
 
   module OCClsWrapper
@@ -688,8 +715,8 @@ module OSX
 
     def singleton_method_added(sym)
       _ns_behavior_method_added(sym, true)
-    end 
- 
+    end
+
     def method_added(sym)
       _ns_behavior_method_added(sym, false)
       _kvc_behavior_method_added(sym)
@@ -700,10 +727,10 @@ module OSX
 end       # module OSX
 
 # The following code defines a new subclass of Object (Ruby's).
-# 
-#    module OSX 
-#      class NSCocoaClass end 
-#    end
+#
+#      module OSX
+#        class NSCocoaClass end
+#      end
 #
 # This Object.inherited() replaces the subclass of Object class by 
 # a Cocoa class from # OSX.ns_import.

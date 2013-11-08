@@ -10,6 +10,14 @@
 class OSX::NSRange
   class << self
     alias_method :orig_new, :new
+    # @return [OSX::NSRange]
+    # @example
+    #     OSX::NSRange.new
+    #     => #<OSX::NSRange location=0, length=0>
+    #     OSX::NSRange.new(2..5)
+    #     => #<OSX::NSRange location=2, length=4>
+    #     OSX::NSRange.new(5, 3)
+    #     => #<OSX::NSRange location=5, length=3>
     def new(*args)
       location, length = case args.size
       when 0
@@ -41,6 +49,7 @@ class OSX::NSRange
       orig_new(location, length)
     end
   end
+  # @return [Range]
   def to_range
     Range.new(location, location + length, true)
   end
@@ -61,6 +70,12 @@ class OSX::NSRange
   def intersection(range); OSX::NSIntersectionRange(self, range); end
   def union(range); OSX::NSUnionRange(self, range); end
   def max; location + length; end
+  # @example
+  #     str = OSX::NSString.stringWithString('abc')
+  #     range = str.rangeOfString('xyz')
+  #     range.not_found?
+  #     => true
   def not_found?; location == OSX::NSNotFound; end
+  # @return [String]
   def inspect; "#<#{self.class} location=#{location}, length=#{length}>"; end
 end

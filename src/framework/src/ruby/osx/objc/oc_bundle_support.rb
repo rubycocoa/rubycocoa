@@ -9,6 +9,15 @@ module OSX
 
   module BundleSupport
 
+    # Initializes RubyCocoa bundle from Cocoa applications.
+    # see sample/CocoaRepl/.
+    # @yield [bundle, param, logger] bundle and param values from
+    #                                Objective-C initilizer RBBundleInit().
+    # @example
+    #     OSX.init_for_bundle do |bundle, param, logger|
+    #       require '...'
+    #       # do something
+    #     end
     def init_for_bundle(option = nil)
       ret = nil
       bdl, prm = _current_bundle

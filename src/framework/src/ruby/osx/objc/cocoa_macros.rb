@@ -7,15 +7,19 @@
 
 module OSX
 
-  # from NSBundle
+  # @!group Localization
+
+  # Convenient function for -[NSBundle localizedStringForKey:value:table:] of mainBundle.
   def NSLocalizedString (key, comment = nil)
     OSX::NSBundle.mainBundle.
       localizedStringForKey_value_table(key, "", nil)
   end
+  # Convenient function for -[NSBundle localizedStringForKey:value:table:] of mainBundle.
   def NSLocalizedStringFromTable (key, tbl, comment = nil)
     OSX::NSBundle.mainBundle.
       localizedStringForKey_value_table(key, "", tbl)
   end
+  # Convenient function for -[NSBundle localizedStringForKey:value:table:].
   def NSLocalizedStringFromTableInBundle (key, tbl, bundle, comment = nil)
     bundle.localizedStringForKey_value_table(key, "", tbl)
   end
@@ -23,18 +27,22 @@ module OSX
   module_function :NSLocalizedStringFromTable
   module_function :NSLocalizedString
 
-  # for NSData
+  # @!endgroup
+
+  # NSData additions.
   class NSData
 
+    # @return [OSX::NSData]
     def NSData.dataWithRubyString (str)
       NSData.dataWithBytes_length( str )
     end
 
   end
 
-  # for NSMutableData
+  # NSMutableData additions.
   class NSMutableData
 
+    # @return [OSX::NSMutableData]
     def NSMutableData.dataWithRubyString (str)
       NSMutableData.dataWithBytes_length( str )
     end
@@ -43,7 +51,8 @@ module OSX
 
   # CoreData additions.
   module CoreData
-    # define wrappers from NSManagedObjectModel
+    # Defines wrapper methods from given NSManagedObjectModel.
+    # @param [OSX::NSManagedObjectModel] model
     def define_wrapper(model)
       unless model.isKindOfClass? OSX::NSManagedObjectModel
         raise RuntimeError, "invalid class: #{model.class}"
@@ -55,6 +64,8 @@ module OSX
     end
     module_function :define_wrapper
 
+    # Defines wrapper method from given NSEntityDescription.
+    # @param [OSX::NSEntityDescription] entity
     def define_wrapper_for_entity(entity)
       klassname = entity.managedObjectClassName.to_s
       return if klassname == 'NSManagedObject'

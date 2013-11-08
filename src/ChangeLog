@@ -1,5 +1,15 @@
 2013-11-08 kimura wataru <kimuraw@i.nifty.jp>
 
+	* framework/src/ruby/osx/objc/application.rb,
+	  framework/src/ruby/osx/objc/cocoa_macros.rb,
+	  framework/src/ruby/osx/objc/cocoa_macros_appkit.rb,
+	  framework/src/ruby/osx/objc/oc_bundle_support.rb,
+	  framework/src/ruby/osx/objc/oc_exception.rb,
+	  framework/src/ruby/osx/objc/oc_import.rb,
+	  framework/src/ruby/osx/objc/oc_types.rb,
+	  framework/src/ruby/osx/objc/oc_types_appkit.rb:
+	add Ruby API documents for yardoc.
+
 	* NEWS, NEWS.ja:
 	update NEWS.
 

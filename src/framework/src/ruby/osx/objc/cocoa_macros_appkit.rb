@@ -7,9 +7,10 @@
 
 module OSX
 
-  # for NSApplication
-  class NSApplication 
-    
+  # Utility functions for NSApplication.
+  class NSApplication
+
+    # @private
     class RBCCTemporaryDelegate < OSX::NSObject
       attr_writer :proc, :terminate
 
@@ -26,6 +27,12 @@ module OSX
 
     end
 
+    # Runs given block as a Cocoa application.
+    # @param [Boolean] terminate Whether app terminates after done given block or not
+    # @example
+    #     OSX::NSApplication.run_with_temp_app do
+    #         # do something
+    #     end
     def NSApplication.run_with_temp_app(terminate = true, &proc)
       # prepare delegate
       delegate = RBCCTemporaryDelegate.alloc.init

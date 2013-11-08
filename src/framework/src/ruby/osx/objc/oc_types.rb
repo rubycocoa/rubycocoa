@@ -11,9 +11,18 @@
 # Now structures are automatically handled via the metadata mechanism, but
 # the API is not compatible with what we used to have.
 
+# NSRect additons.
 class OSX::NSRect
   class << self
     alias_method :orig_new, :new
+    # @return [OSX::NSRect]
+    # @example
+    #     OSX::NSRect.new
+    #     => #<OSX::NSRect x=0.0, y=0.0, width=0.0, height=0.0>
+    #     OSX::NSRect.new([1,2],[3,4])
+    #     => #<OSX::NSRect x=1.0, y=2.0, width=3.0, height=4.0>
+    #     OSX::NSRect.new(1,2,3,4)
+    #     => #<OSX::NSRect x=1.0, y=2.0, width=3.0, height=4.0>
     def new(*args)
       origin, size = case args.size
       when 0
@@ -62,6 +71,7 @@ class OSX::NSRect
   def inspect; "#<#{self.class} x=#{x}, y=#{y}, width=#{width}, height=#{height}>"; end
 end
 
+# NSPoint additions.
 class OSX::NSPoint
   def in?(rect); OSX::NSPointInRect(self, rect); end
   alias_method :inRect?, :in?
@@ -82,6 +92,7 @@ class OSX::NSPoint
   def inspect; "#<#{self.class} x=#{x}, y=#{y}>"; end
 end
 
+# NSSize additions.
 class OSX::NSSize
   def /(v); OSX::NSSize.new(width / v, height / v); end
   def *(v); OSX::NSSize.new(width * v, height * v); end
