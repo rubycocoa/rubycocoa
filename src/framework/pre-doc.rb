@@ -13,7 +13,7 @@ if hd2html.length > 0 && File.exist?(hd2html)
     command(cmd.join(' '))
 end
 
-# TODO: Ruby documents by "yard"
+# Ruby documents by "yard"
 yardoc = `which yardoc`.chomp
 if yardoc.length > 0 && File.exist?(yardoc)
     FileUtils.rm_r('../doc/ruby/', :force => true)
@@ -22,10 +22,17 @@ if yardoc.length > 0 && File.exist?(yardoc)
 	     --title "RubyCocoa\ Documentation"
     )
     # defined in Ruby
-#    cmd += Dir.glob("src/ruby/**/*.rb")
-#    cmd -= %w(src/ruby/osx/objc/cocoa.rb
-#	      src/ruby/osx/objc/oc_all.rb
-#	      src/ruby/osx/objc/foundation.rb)
+    cmd += Dir.glob("src/ruby/**/*.rb")
+    cmd -= %w(src/ruby/osx/objc/cocoa.rb
+	      src/ruby/osx/foundation.rb
+	      src/ruby/osx/appkit.rb
+	      src/ruby/osx/coredate.rb
+	      src/ruby/osx/qtkit.rb
+	      src/ruby/osx/addressbook.rb
+	      src/ruby/osx/webkit.rb
+	      src/ruby/osx/objc/foundation.rb
+	      src/ruby/osx/objc/oc_attachments.rb
+	      src/ruby/osx/objc/oc_all.rb)
     # defined in Objective-C
     cmd += %w(src/objc/cls_objcid.m
 	      src/objc/cls_objcptr.m
