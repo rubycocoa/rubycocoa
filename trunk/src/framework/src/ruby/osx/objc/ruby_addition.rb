@@ -36,6 +36,8 @@ end
 
 # Property list API.
 module OSX
+  # @param data
+  # @return [OSX::NSPropertyList]
   def load_plist(data)
     str = data.to_s.to_ns
     if str
@@ -84,8 +86,10 @@ end
   end
 end
 
-# Pascal strings API.
+# Array additions.
 class Array
+  # Returns string into packed Pascal string.
+  # @return [String]
   def pack_as_pstring
     len = self[0]
     self[1..-1].pack("C#{len}")
@@ -93,6 +97,8 @@ class Array
 end
 
 class String
+  # Returns an array unpacked from Pascal string.
+  # @return [Array]
   def unpack_as_pstring
     ary = [self.length]
     ary.concat(self.unpack('C*'))
@@ -100,17 +106,18 @@ class String
   end
 end
 
+# Thread additions.
 class Thread
   class << self
     alias :pre_rubycocoa_new :new
-    
-    # Override Thread.new to prevent threads being created if there isn't 
+
+    # Override Thread.new to prevent threads being created if there isn't
     # runtime support for it
     def new(*args,&block)
       unless defined? @_rubycocoa_threads_allowed then
-        # If user has explicilty disabled thread support, also disable the 
+        # If user has explicilty disabled thread support, also disable the
         # check (for debugging/testing only)
-        @_rubycocoa_threads_allowed = ENV['RUBYCOCOA_THREAD_HOOK_DISABLE'] || 
+        @_rubycocoa_threads_allowed = ENV['RUBYCOCOA_THREAD_HOOK_DISABLE'] ||
           OSX::RBRuntime.isRubyThreadingSupported?
       end
       if !@_rubycocoa_threads_allowed then
