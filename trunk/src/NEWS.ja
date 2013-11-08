@@ -23,6 +23,14 @@ $Id$
       - applicationInitWithProgram:argc:argv:param: -> RBApplicationInit()
       - applicationMainWithProgram:argc:argv: -> RBApplicationMain()
 
+  * NSString|Stringの"NKF"拡張ライブラリを使っているメソッドを廃止しました。
+
+      - NSString.guess_nsencoding
+      - NSString.guess_encoding
+      - NSString.stringWithRubyString
+      - NSMutableString.stringWithRubyString
+      - String.nsencoding
+
 === 備考
 
   * Mac OS X 10.5 or earlier not supported.
