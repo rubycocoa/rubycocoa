@@ -8,7 +8,7 @@
 
 #import <Cocoa/Cocoa.h>
 #import <VPPlugin/VPPlugin.h>
-#import <RubyCocoa/RubyCocoa.h>
+#import <RubyCocoa/RBRuntime.h>
 
 @interface VPRubyPluginEnabler : VPPlugin
 - (void) didRegister;

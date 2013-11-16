@@ -1,5 +1,13 @@
 2013-11-16 kimura wataru <kimuraw@i.nifty.jp>
 
+	* sample/CGPDFViewer/main.m,
+	  sample/CocoaRepl/main.m,
+	  sample/PassengerPane/Passenger_Prefix.pch,
+	  sample/RubyAnywhere/RubyAnywhereLoader.m,
+	  sample/VPRubyPluginEnabler/VPRubyPluginEnabler.m,
+	  sample/buildall.rb:
+	fix build error of samples.
+
 	* misc/libffi, misc/libruby.1.dylib-tiger.tar.gz,
 	  misc/bridge-support-tiger.tar.gz:
 	delete build resources for Mac OS X 10.4.

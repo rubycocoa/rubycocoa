@@ -6,7 +6,7 @@
 //  Created by Fujimoto Hisa on 07/02/01.
 //  Copyright 2007 FOBJ SYSTEMS. All rights reserved.
 
-#import <RubyCocoa/RubyCocoa.h>
+#import <RubyCocoa/RBRuntime.h>
 
 @interface RubyAnywhereLoader : NSObject
 + (void) install;

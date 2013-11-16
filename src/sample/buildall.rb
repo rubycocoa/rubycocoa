@@ -20,11 +20,15 @@ rm_rf tmp_dir
 mkdir_p tmp_dir
 
 succeeded, failed = [], []
-
+sdkroot = if `uname -r`.to_f >= 12.0
+	    `xcrun --sdk macosx --show-sdk-path`.chomp
+	  else
+	    ''
+	  end
 Dir.glob('*/**/*.xcodeproj').each do |sampleDir|
   name = File.dirname(sampleDir)
   Dir.chdir name do
-    ary = system("xcodebuild SYMROOT=#{tmp_dir} >& /dev/null") ? succeeded : failed
+    ary = system("xcodebuild SYMROOT=#{tmp_dir} SDKROOT=\"#{sdkroot}\" >& /dev/null") ? succeeded : failed
     ary << name
   end
 end
