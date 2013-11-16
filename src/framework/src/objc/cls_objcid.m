@@ -250,5 +250,4 @@ init_cls_ObjcID(VALUE mOSX)
 
   // disable deep copy.
   rb_undef_method(_kObjcID, "clone");
-  return _kObjcID;
 }
