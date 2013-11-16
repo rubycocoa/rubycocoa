@@ -8,10 +8,15 @@ $Id$
 === Improvements
 
   * Support Xcode 5 "Modules".
+  * Developers can disable internal Objective-C -> Ruby objects cache
+    via a new global variable $RUBYCOCOA_USE_OC2RBCACHE to avoid crashes
+    from inconsistency between the cache and Ruby's GC. [Experimental]
+    The crash may occurs delegate of NSTableView.
 
 === Fixes
 
   * Fixed standaloneify.rb error with ruby-2.0 or rubygems-2.1.
+  * Fixed SEGV at Object#dup for some Objective-C objects.
 
 === Deprecates
 

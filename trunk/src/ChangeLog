@@ -1,5 +1,8 @@
 2013-11-16 kimura wataru <kimuraw@i.nifty.jp>
 
+	* NEWS, NEWS.ja:
+	update NEWS.
+
 	* framework/src/objc/RBRuntime.m,
 	  framework/src/objc/internal_macros.h,
 	  framework/src/objc/ocdata_conv.h,
