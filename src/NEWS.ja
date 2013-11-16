@@ -8,10 +8,16 @@ $Id$
 === 改良
 
   * Xcode 5の"Modules"に対応。
+  * Objective-CとRubyオブジェクトのキャッシュをグローバル変数
+    $RUBYCOCOA_USE_OC2RBCACHEで無効にできるようになりました。[Experimental]
+    この機能は、NSTableViewのdelegateなどでときどきキャッシュとRubyのGCで
+    不整合が発生してアプリケーションがクラッシュしてしまうケースを回避する
+    ために使用することができます。
 
 === 修正
 
   * standaloneify.rbがruby-2.0またはrubygems-2.1でエラーになる問題を修正。
+  * Objective-CのオブジェクトをObject#dupしたときSEGVする問題を修正。
 
 === 廃止された機能
 
