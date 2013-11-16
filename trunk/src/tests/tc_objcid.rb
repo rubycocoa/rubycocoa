@@ -38,4 +38,11 @@ class TC_ObjCID < Test::Unit::TestCase
     end
   end
 
+  def test_objcid_dup
+    url1 = OSX::NSURL.URLWithString('http://www.apple.com/')
+    url2 = url1.dup
+    assert_equal(url1.hash, url2.hash)
+    assert_equal(url1.__ocid__, url2.__ocid__)
+    assert_not_equal(url1.__id__, url2.__id__)
+  end
 end

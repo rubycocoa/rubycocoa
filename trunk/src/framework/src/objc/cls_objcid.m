@@ -52,15 +52,12 @@ _objcid_data_new()
 }
 
 /*
- * @api private
+ * allocate
  */
 static VALUE
-objcid_s_new(int argc, VALUE* argv, VALUE klass)
+objcid_s_alloc(VALUE klass)
 {
-  VALUE obj;
-  obj = Data_Wrap_Struct(klass, NULL, _objcid_data_free, _objcid_data_new());
-  rb_obj_call_init(obj, argc, argv);
-  return obj;
+  return Data_Wrap_Struct(klass, NULL, _objcid_data_free, _objcid_data_new());
 }
 
 VALUE
@@ -104,10 +101,15 @@ objcid_release(VALUE rcv)
   return rcv;
 }
 
+/*
+ * @api private
+ * Returns shallow copied object by Object#dup.
+ */
 static VALUE
-objcid_initialize(int argc, VALUE* argv, VALUE rcv)
+objcid_init_copy(VALUE self, VALUE orig)
 {
-  return rcv;
+  OBJCID_DATA_PTR(self)->ocid = OBJCID_DATA_PTR(orig)->ocid;
+  return self;
 }
 
 /*
@@ -234,10 +236,10 @@ init_cls_ObjcID(VALUE mOSX)
 {
   _kObjcID = rb_define_class_under(mOSX, "ObjcID", rb_cObject);
 
-  rb_define_singleton_method(_kObjcID, "new", objcid_s_new, -1);
+  rb_define_alloc_func(_kObjcID, objcid_s_alloc);
   rb_define_singleton_method(_kObjcID, "new_with_ocid", wrapper_objcid_s_new_with_ocid, 1);
 
-  rb_define_method(_kObjcID, "initialize", objcid_initialize, -1);
+  rb_define_method(_kObjcID, "initialize_copy", objcid_init_copy, 1);
   rb_define_method(_kObjcID, "__ocid__", objcid_ocid, 0);
   rb_define_method(_kObjcID, "__inspect__", objcid_inspect, 0);
   rb_define_method(_kObjcID, "release", objcid_release, 0);

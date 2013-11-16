@@ -1,3 +1,9 @@
+2013-11-16 kimura wataru <kimuraw@i.nifty.jp>
+
+	* framework/src/objc/cls_objcid.m, tests/tc_objcid.rb:
+	fix SEGV at OSX::ObjCID#dup. malloc at a function defined
+	by rb_define_alloc_func(), not initialize.
+
 2013-11-15 kimura wataru <kimuraw@i.nifty.jp>
 
  	* framework/src/objc/cls_objcid.m, tests/tc_objcid.rb:
