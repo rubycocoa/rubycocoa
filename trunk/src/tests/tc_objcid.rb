@@ -31,4 +31,11 @@ class TC_ObjCID < Test::Unit::TestCase
     assert_not_equal(url1.__ocid__, url2.__ocid__)
   end
 
+  def test_objcid_clone
+    url = OSX::NSURL.URLWithString('http://www.apple.com/')
+    assert_raise OSX::OCMessageSendException do
+      url.clone
+    end
+  end
+
 end
