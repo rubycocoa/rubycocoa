@@ -775,9 +775,6 @@ class Installer
     command 'rm -f src/objc/Version.h'
     command 'rm -rf bridge-support'
     command 'rm -rf bridge-doc'
-    dive_into( '../misc/libffi' ) {
-      command config('make-prog') + ' -f Makefile.rubycocoa clean'
-    }
   end
 
   #

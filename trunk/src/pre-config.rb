@@ -56,27 +56,21 @@ if lib_exist?('/usr/include/libxml2') and lib_exist?('/usr/lib/libxml2.dylib')
   other_header_search_paths << '/usr/include/libxml2'
   ldflags << ' -lxml2 '
 else
-  puts "libxml2 is not available!"
+  raise "ERROR: libxml2 not found!"
 end
 
 raise 'ERROR: ruby must be built as a shared library' if RbConfig::CONFIG["ENABLE_SHARED"] != 'yes'
 
 # Add the libffi library to the build process.
-if @config['macosx-deployment-target'].to_f < 10.5
-  cflags << ' -I../../misc/libffi/include -I../misc/libffi/include ' 
-  ldflags << ' -L../../misc/libffi -L../misc/libffi '
-else
-  if !lib_exist?('/usr/lib/libffi.a') and !lib_exist?('/usr/lib/libffi.dylib')
-    if lib_exist?('/usr/local/lib/libffi.a') and lib_exist?('/usr/local/include/ffi')
-      cflags << ' -I/usr/local/include/ffi '
-      ldflags << ' -L/usr/local/lib '
-    else
-      cflags << ' -I../../misc/libffi/include -I../misc/libffi/include ' 
-      ldflags << ' -L../../misc/libffi -L../misc/libffi '
-    end
+if !lib_exist?('/usr/lib/libffi.a') and !lib_exist?('/usr/lib/libffi.dylib')
+  if lib_exist?('/usr/local/lib/libffi.a') and lib_exist?('/usr/local/include/ffi')
+    cflags << ' -I/usr/local/include/ffi '
+    ldflags << ' -L/usr/local/lib '
   else
-    other_header_search_paths << '/usr/include/ffi'
+    raise "ERROR: libxml2 not found!"
   end
+else
+  other_header_search_paths << '/usr/include/ffi'
 end
 cflags << ' -DMACOSX '
 ldflags << ' -lffi '
