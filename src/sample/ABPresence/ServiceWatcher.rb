@@ -12,6 +12,7 @@ class ServiceWatcher < NSObject
 
   def startMonitoring
     nCenter = IMService.notificationCenter
+    return if nCenter.nil?
     nCenter.objc_send :addObserver, self,
                       :selector, 'imPersonStatusChangedNotification:',
                       :name, IMPersonStatusChangedNotification,

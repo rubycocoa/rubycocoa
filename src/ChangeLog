@@ -1,5 +1,9 @@
 2013-11-16 kimura wataru <kimuraw@i.nifty.jp>
 
+	* sample/ABPresence/ServiceWatcher.rb,
+	  sample/ABPresence/main.m:
+	fix crash when IMService.notificationCenter returns nil.
+
 	* sample/CGPDFViewer/main.m,
 	  sample/CocoaRepl/main.m,
 	  sample/PassengerPane/Passenger_Prefix.pch,
