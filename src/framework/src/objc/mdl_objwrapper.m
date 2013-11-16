@@ -809,6 +809,4 @@ init_mdl_OCObjWrapper(VALUE mOSX)
 
   rb_define_module_function(mOSX, "_ignore_ns_override", wrapper_ignore_ns_override, 0);
   rb_define_module_function(mOSX, "_ignore_ns_override=", wrapper_ignore_ns_override_set, 1);
-
-  return Qnil;
 }

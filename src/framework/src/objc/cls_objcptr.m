@@ -580,6 +580,4 @@ init_cls_ObjcPtr(VALUE mOSX)
   rb_define_method (_kObjcPtr, "assign", rb_objcptr_assign, 1);
   
   rb_define_method (_kObjcPtr, "cast_as", rb_objcptr_cast_as, 1);
-
-  return _kObjcPtr;
 }
