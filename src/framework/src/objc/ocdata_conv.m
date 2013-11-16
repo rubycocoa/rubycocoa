@@ -67,6 +67,20 @@ void init_oc2rb_cache(void)
 #endif
 }
 
+static int
+delete_cache_item(st_data_t key, VALUE value, VALUE never)
+{
+  return ST_DELETE;
+}
+
+void clear_oc2rb_cache(void)
+{
+  CACHE_LOCK(&oc2rbCacheLock);
+  // delete all cached items
+  st_foreach(oc2rbCache, delete_cache_item, Qundef);
+  CACHE_UNLOCK(&oc2rbCacheLock);
+}
+
 void remove_from_oc2rb_cache(id ocid)
 {
   CACHE_LOCK(&oc2rbCacheLock);
@@ -724,7 +738,7 @@ _ocid_to_rbobj (VALUE context_obj, id ocid, BOOL is_class)
           ? context_obj : ocobj_s_new(ocid);
     }
 
-    if (shouldCache) {
+    if (shouldCache && RUBYCOCOA_USE_OC2RBCACHE_P) {
       CACHE_LOCK(&oc2rbCacheLock);
       // Check out that the hash is still empty for us, to avoid a race 
       // condition.

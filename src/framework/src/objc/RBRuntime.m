@@ -309,12 +309,20 @@ static int rubycocoa_initialized_p()
   return rubycocoa_initialized_flag;
 }
 
-// exported and used by internal_macros.h 
+// exported and used by internal_macros.h
 VALUE rubycocoa_debug = Qfalse;
+VALUE rubycocoa_use_oc2rbCache = Qtrue;
 
 static BOOL rb_cocoa_check_for_multiple_libruby(void);
 static const char *rb_cocoa_path_libruby(void);
 static void RBCocoaInstallRubyThreadSchedulerHooks(void);
+
+static void rb_cocoa_use_cache_setter(VALUE val, ID id)
+{
+  rubycocoa_use_oc2rbCache = RTEST(val);
+  if (!RTEST(val))
+    clear_oc2rb_cache();
+}
 
 static void rubycocoa_init()
 {
@@ -334,6 +342,7 @@ static void rubycocoa_init()
     rubycocoa_initialized_flag = 1;
     rb_define_variable("$RUBYCOCOA_DEBUG", &ruby_debug);
     rubycocoa_debug = getenv("RUBYCOCOA_DEBUG") != NULL;
+    rb_define_hooked_variable("$RUBYCOCOA_USE_OC2RBCACHE", &rubycocoa_use_oc2rbCache, 0, &rb_cocoa_use_cache_setter);
   }
 }
 
