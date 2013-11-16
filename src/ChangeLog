@@ -1,5 +1,8 @@
 2013-11-16 kimura wataru <kimuraw@i.nifty.jp>
 
+	* template/install_templates.rb:
+	fix syntax error with ruby-2.0.
+
 	* sample/ABPresence/ServiceWatcher.rb,
 	  sample/ABPresence/main.m:
 	fix crash when IMService.notificationCenter returns nil.
