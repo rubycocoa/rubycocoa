@@ -1,5 +1,10 @@
 2013-11-16 kimura wataru <kimuraw@i.nifty.jp>
 
+	* framework/src/objc/cls_objcptr.m,
+	  framework/src/objc/mdl_objwrapper.m:
+	suppress warning return type of init_cls_ObjcPtr() and
+	init_mdl_OCObjWrapper().
+
 	* NEWS, NEWS.ja:
 	update NEWS.
 
