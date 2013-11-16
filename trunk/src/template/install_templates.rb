@@ -28,8 +28,8 @@ class App
 usage: #{File.basename(__FILE__)} [options] TEMPLATE_DIR
     TEMPLATE_DIR: Xcode4.x or Xcode4.1
 EOS
-      opts.on('-f', '--force', 'overwrite existing templates') {|config.force|}
-      opts.on('-v', '--verbose', 'print verbose message') {|config.verbose|}
+      opts.on('-f', '--force', 'overwrite existing templates') {|v| config.force = v}
+      opts.on('-v', '--verbose', 'print verbose message') {|v| config.verbose = v}
       opts.on('--dest=dir', 'specify install destination') {|v| config.target = v}
       opts.parse!
     end
@@ -38,7 +38,7 @@ EOS
       exit 1
     end
     config.target = Pathname.new(config.target)
-    config.src_dir = Pathname.new(__FILE__).parent + argv.shift
+    config.src_dir = Pathname.new(__FILE__).expand_path.parent + argv.shift
     config.futil_opts[:verbose] = true if config.verbose
 
     return config
@@ -59,7 +59,7 @@ EOS
       unless dest.parent.exist?
 	FileUtils.mkdir_p(dest.parent, config.futil_opts)
       end
-      if dest.exist?
+      if dest.symlink? or dest.exist?
 	if config.force
 	  FileUtils.rm_rf(dest, config.futil_opts)
 	else
