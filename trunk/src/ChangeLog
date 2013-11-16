@@ -1,3 +1,9 @@
+2013-11-15 kimura wataru <kimuraw@i.nifty.jp>
+
+	* framework/src/objc/cls_objcid.m, tests/tc_objcid.rb:
+	add OSX::ObjCID#hash, #eql?.
+	Objective-C instances can become key of Hash.
+
 2013-11-08 kimura wataru <kimuraw@i.nifty.jp>
 
 	* framework/pre-doc.rb:

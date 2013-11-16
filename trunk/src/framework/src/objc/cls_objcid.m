@@ -129,6 +129,7 @@ objcid_ocid(VALUE rcv)
 /*
  * Object#inspect.
  * @return [String]
+ * @note overrides Object#inspect.
  */
 static VALUE
 objcid_inspect(VALUE rcv)
@@ -159,6 +160,51 @@ objcid_inspect(VALUE rcv)
     [pool release];
 
   return rb_str_new2(s);
+}
+
+/*
+ * Returns an hash value form internal Objective-C "id".
+ * @return [FIXNUM]
+ * @example
+ *     num1 = OSX::NSNumberWithInt(1)
+ *     num2 = OSX::NSNumberWithInt(1)
+ *     num1.__id__ == num2.__id__
+ *     # => false
+ *     num1.hash == num2.hash
+ *     # => true
+ * @note overrides Object#hash.
+ */
+static VALUE
+objcid_hash(VALUE rcv)
+{
+  id ocid;
+
+  ocid = OBJCID_ID(rcv);
+  return LONG2FIX(ocid);
+}
+
+/*
+ * Returns `true` when `other` contains same Objective-C "id".
+ * @example
+ *     num1 = OSX::NSNumberWithInt(1)
+ *     num2 = OSX::NSNumberWithInt(1)
+ *     num1.eql?(num2)
+ *     # => true
+ *     num1 == num2
+ *     # => true
+ *     num1.__id__ == num2.__id__
+ *     # => false
+ *     num1.__ocid__ == num2.__ocid__
+ *     # => true
+ * @note overrides Object#eql? and Object#==.
+ */
+static VALUE
+objcid_eql(VALUE rcv, VALUE other)
+{
+  if (rb_obj_is_kind_of(other, _kObjcID) && OBJCID_ID(rcv) == OBJCID_ID(other)) {
+    return Qtrue;
+  }
+  return Qfalse;
 }
 
 /** class methods **/
@@ -196,6 +242,9 @@ init_cls_ObjcID(VALUE mOSX)
   rb_define_method(_kObjcID, "__inspect__", objcid_inspect, 0);
   rb_define_method(_kObjcID, "release", objcid_release, 0);
   rb_define_method(_kObjcID, "inspect", objcid_inspect, 0);
+  rb_define_method(_kObjcID, "hash", objcid_hash, 0);
+  rb_define_method(_kObjcID, "eql?", objcid_eql, 1);
+  rb_define_alias(_kObjcID, "==", "eql?");
 
   return _kObjcID;
 }
