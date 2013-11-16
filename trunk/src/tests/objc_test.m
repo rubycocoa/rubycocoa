@@ -652,6 +652,11 @@ static BOOL TestThreadedCallbackDone = NO;
   return [probe findInOcidToRbobjCache:obj];
 }
 
++ (NSArray *)testObjcToRubyCacheWith:(NSObject *)val
+{
+  return [NSArray arrayWithObjects: val, val, nil];
+}
+
 @end
 
 @interface OvmixArgRetained : NSObject

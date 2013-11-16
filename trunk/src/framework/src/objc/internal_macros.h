@@ -21,6 +21,9 @@ extern VALUE rubycocoa_debug;
 #define RUBYCOCOA_DEBUG_P RTEST(rubycocoa_debug)
 #define DEBUG_P           (RUBY_DEBUG_P || RUBYCOCOA_DEBUG_P)
 
+extern VALUE rubycocoa_use_oc2rbCache;
+#define RUBYCOCOA_USE_OC2RBCACHE_P RTEST(rubycocoa_use_oc2rbCache)
+
 #define ASSERT_ALLOC(x) do { if (x == NULL) rb_fatal("can't allocate memory"); } while (0)
 
 #define DLOG(mod, fmt, args...)                  \
