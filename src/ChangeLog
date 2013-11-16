@@ -1,5 +1,8 @@
 2013-11-16 kimura wataru <kimuraw@i.nifty.jp>
 
+	* install.rb, pre-config.rb, pre-setup.rb:
+	delete building libffi from misc/libffi.
+
 	* framework/src/objc/cls_objcptr.m,
 	  framework/src/objc/mdl_objwrapper.m:
 	suppress warning return type of init_cls_ObjcPtr() and
