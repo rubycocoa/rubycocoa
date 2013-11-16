@@ -246,5 +246,7 @@ init_cls_ObjcID(VALUE mOSX)
   rb_define_method(_kObjcID, "eql?", objcid_eql, 1);
   rb_define_alias(_kObjcID, "==", "eql?");
 
+  // disable deep copy.
+  rb_undef_method(_kObjcID, "clone");
   return _kObjcID;
 }
