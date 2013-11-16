@@ -1,5 +1,9 @@
 2013-11-16 kimura wataru <kimuraw@i.nifty.jp>
 
+	* misc/libffi, misc/libruby.1.dylib-tiger.tar.gz,
+	  misc/bridge-support-tiger.tar.gz:
+	delete build resources for Mac OS X 10.4.
+
 	* install.rb, pre-config.rb, pre-setup.rb:
 	delete building libffi from misc/libffi.
 
