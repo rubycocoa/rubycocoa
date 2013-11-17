@@ -1,0 +1,3576 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>
+  Module: OSX
+  
+    &mdash; RubyCocoa Documentation
+  
+</title>
+
+  <link rel="stylesheet" href="css/style.css" type="text/css" charset="utf-8" />
+
+  <link rel="stylesheet" href="css/common.css" type="text/css" charset="utf-8" />
+
+<script type="text/javascript" charset="utf-8">
+  hasFrames = window.top.frames.main ? true : false;
+  relpath = '';
+  framesUrl = "frames.html#!" + escape(window.location.href);
+</script>
+
+
+  <script type="text/javascript" charset="utf-8" src="js/jquery.js"></script>
+
+  <script type="text/javascript" charset="utf-8" src="js/app.js"></script>
+
+
+  </head>
+  <body>
+    <div id="header">
+      <div id="menu">
+  
+    <a href="_index.html">Index (O)</a> &raquo;
+    
+    
+    <span class="title">OSX</span>
+  
+
+  <div class="noframes"><span class="title">(</span><a href="." target="_top">no frames</a><span class="title">)</span></div>
+</div>
+
+      <div id="search">
+  
+    <a class="full_list_link" id="class_list_link"
+        href="class_list.html">
+      Class List
+    </a>
+  
+    <a class="full_list_link" id="method_list_link"
+        href="method_list.html">
+      Method List
+    </a>
+  
+    <a class="full_list_link" id="file_list_link"
+        href="file_list.html">
+      File List
+    </a>
+  
+</div>
+      <div class="clear"></div>
+    </div>
+
+    <iframe id="search_frame"></iframe>
+
+    <div id="content"><h1>Module: OSX
+  
+  
+  
+</h1>
+
+<dl class="box">
+  
+  
+    
+  
+    
+  
+  
+  
+    <dt class="r1 last">Defined in:</dt>
+    <dd class="r1 last">src/ruby/osx/objc/cocoa_macros.rb<span class="defines">,<br />
+  src/ruby/osx/objc/application.rb,<br /> src/ruby/osx/objc/cocoa_macros_appkit.rb,<br /> src/ruby/osx/objc/oc_attachments_appkit.rb,<br /> src/ruby/osx/objc/oc_bundle_support.rb,<br /> src/ruby/osx/objc/oc_exception.rb,<br /> src/ruby/osx/objc/oc_import.rb,<br /> src/ruby/osx/objc/oc_wrapper.rb,<br /> src/ruby/osx/objc/ruby_addition.rb,<br /> src/objc/mdl_osxobjc.m</span>
+</dd>
+  
+</dl>
+<div class="clear"></div>
+
+<h2>Overview</h2><div class="docstring">
+  <div class="discussion">
+    <p>Namespace for RubyCocoa and Objective-C classes,
+such as OSX::NSString, OSX::NSView, …</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><h2>Defined Under Namespace</h2>
+<p class="children">
+  
+    
+      <strong class="modules">Modules:</strong> <span class='object_link'><a href="OSX/BundleSupport.html" title="OSX::BundleSupport (module)">BundleSupport</a></span>, <span class='object_link'><a href="OSX/CoreData.html" title="OSX::CoreData (module)">CoreData</a></span>, <span class='object_link'><a href="OSX/NSBehaviorAttachment.html" title="OSX::NSBehaviorAttachment (module)">NSBehaviorAttachment</a></span>, <span class='object_link'><a href="OSX/NSKVCAccessorUtil.html" title="OSX::NSKVCAccessorUtil (module)">NSKVCAccessorUtil</a></span>, <span class='object_link'><a href="OSX/NSKVCBehaviorAttachment.html" title="OSX::NSKVCBehaviorAttachment (module)">NSKVCBehaviorAttachment</a></span>, <span class='object_link'><a href="OSX/NSKeyValueCodingAttachment.html" title="OSX::NSKeyValueCodingAttachment (module)">NSKeyValueCodingAttachment</a></span>, <span class='object_link'><a href="OSX/OCClsWrapper.html" title="OSX::OCClsWrapper (module)">OCClsWrapper</a></span>, <span class='object_link'><a href="OSX/OCObjWrapper.html" title="OSX::OCObjWrapper (module)">OCObjWrapper</a></span>
+    
+  
+    
+      <strong class="classes">Classes:</strong> <span class='object_link'><a href="OSX/Boxed.html" title="OSX::Boxed (class)">Boxed</a></span>, <span class='object_link'><a href="OSX/NSApplication.html" title="OSX::NSApplication (class)">NSApplication</a></span>, <span class='object_link'><a href="OSX/NSBundle.html" title="OSX::NSBundle (class)">NSBundle</a></span>, <span class='object_link'><a href="OSX/NSData.html" title="OSX::NSData (class)">NSData</a></span>, <span class='object_link'><a href="OSX/NSImage.html" title="OSX::NSImage (class)">NSImage</a></span>, <span class='object_link'><a href="OSX/NSMutableData.html" title="OSX::NSMutableData (class)">NSMutableData</a></span>, <span class='object_link'><a href="OSX/NSPoint.html" title="OSX::NSPoint (class)">NSPoint</a></span>, <span class='object_link'><a href="OSX/NSRange.html" title="OSX::NSRange (class)">NSRange</a></span>, <span class='object_link'><a href="OSX/NSRect.html" title="OSX::NSRect (class)">NSRect</a></span>, <span class='object_link'><a href="OSX/NSSize.html" title="OSX::NSSize (class)">NSSize</a></span>, <span class='object_link'><a href="OSX/OCDataConvException.html" title="OSX::OCDataConvException (class)">OCDataConvException</a></span>, <span class='object_link'><a href="OSX/OCException.html" title="OSX::OCException (class)">OCException</a></span>, <span class='object_link'><a href="OSX/OCMessageSendException.html" title="OSX::OCMessageSendException (class)">OCMessageSendException</a></span>, <span class='object_link'><a href="OSX/ObjcID.html" title="OSX::ObjcID (class)">ObjcID</a></span>, <span class='object_link'><a href="OSX/ObjcPtr.html" title="OSX::ObjcPtr (class)">ObjcPtr</a></span>
+    
+  
+</p>
+
+  <h2>Constant Summary</h2>
+  
+    <dl class="constants">
+      
+        <dt id="APP_DIR-constant" class="">APP_DIR =
+          <div class="docstring">
+  <div class="discussion">
+    <p>Fullpath of running application</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div>
+        </dt>
+        <dd><pre class="code"><span class='const'>File</span><span class='period'>.</span><span class='id identifier rubyid_expand_path'>expand_path</span><span class='lparen'>(</span><span class='const'>File</span><span class='period'>.</span><span class='id identifier rubyid_dirname'>dirname</span><span class='lparen'>(</span><span class='gvar'>$0</span><span class='rparen'>)</span><span class='rparen'>)</span><span class='period'>.</span>
+<span class='id identifier rubyid_split'>split</span><span class='lparen'>(</span><span class='const'>File</span><span class='op'>::</span><span class='const'>SEPARATOR</span><span class='rparen'>)</span><span class='lbracket'>[</span><span class='int'>0</span><span class='op'>..</span><span class='op'>-</span><span class='int'>3</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_join'>join</span><span class='lparen'>(</span><span class='const'>File</span><span class='op'>::</span><span class='const'>SEPARATOR</span><span class='rparen'>)</span></pre></dd>
+      
+        <dt id="RSRC_DIR-constant" class="">RSRC_DIR =
+          <div class="docstring">
+  <div class="discussion">
+    <p>Fullpath of “Resources” directory in running application</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div>
+        </dt>
+        <dd><pre class="code"><span class='const'>File</span><span class='period'>.</span><span class='id identifier rubyid_join'>join</span><span class='lparen'>(</span><span class='const'>APP_DIR</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>Contents</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>Resources</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span></pre></dd>
+      
+        <dt id="APP_BUNDLE-constant" class="">APP_BUNDLE =
+          <div class="docstring">
+  <div class="discussion">
+    <p>OSX::NSBundle of running application</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div>
+        </dt>
+        <dd><pre class="code"><span class='const'>NSBundle</span><span class='period'>.</span><span class='id identifier rubyid_bundleWithPath'>bundleWithPath</span><span class='lparen'>(</span><span class='const'>APP_DIR</span><span class='rparen'>)</span></pre></dd>
+      
+        <dt id="FRAMEWORK_PATHS-constant" class="">FRAMEWORK_PATHS =
+          
+        </dt>
+        <dd><pre class="code"><span class='lbracket'>[</span>
+  <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>/System/Library/Frameworks</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span>
+  <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>/Library/Frameworks</span><span class='tstring_end'>&#39;</span></span>
+<span class='rbracket'>]</span></pre></dd>
+      
+        <dt id="SIGN_PATHS-constant" class="">SIGN_PATHS =
+          
+        </dt>
+        <dd><pre class="code"><span class='lbracket'>[</span>
+  <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>/System/Library/BridgeSupport</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> 
+  <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>/Library/BridgeSupport</span><span class='tstring_end'>&#39;</span></span>
+<span class='rbracket'>]</span></pre></dd>
+      
+        <dt id="PRE_SIGN_PATHS-constant" class="">PRE_SIGN_PATHS =
+          
+        </dt>
+        <dd><pre class="code"><span class='kw'>if</span> <span class='id identifier rubyid_path'>path</span> <span class='op'>=</span> <span class='const'>ENV</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>BRIDGE_SUPPORT_PATH</span><span class='tstring_end'>&#39;</span></span><span class='rbracket'>]</span>
+  <span class='id identifier rubyid_path'>path</span><span class='period'>.</span><span class='id identifier rubyid_split'>split</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>:</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span>
+<span class='kw'>else</span>
+  <span class='lbracket'>[</span><span class='rbracket'>]</span>
+<span class='kw'>end</span></pre></dd>
+      
+        <dt id="QUICK_FRAMEWORKS-constant" class="">QUICK_FRAMEWORKS =
+          <div class="docstring">
+  <div class="discussion">
+    <p>A name-to-path cache for the frameworks we support that are buried into umbrella frameworks.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div>
+        </dt>
+        <dd><pre class="code"><span class='lbrace'>{</span>
+  <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>CoreGraphics</span><span class='tstring_end'>&#39;</span></span> <span class='op'>=&gt;</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>/System/Library/Frameworks/ApplicationServices.framework/Frameworks/CoreGraphics.framework</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span>
+  <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>PDFKit</span><span class='tstring_end'>&#39;</span></span> <span class='op'>=&gt;</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>/System/Library/Frameworks/Quartz.framework/Frameworks/PDFKit.framework</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span>
+  <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>QuartzComposer</span><span class='tstring_end'>&#39;</span></span> <span class='op'>=&gt;</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>/System/Library/Frameworks/Quartz.framework/Frameworks/QuartzComposer.framework</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span>
+  <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>ImageKit</span><span class='tstring_end'>&#39;</span></span> <span class='op'>=&gt;</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>/System/Library/Frameworks/Quartz.framework/Frameworks/ImageKit.framework</span><span class='tstring_end'>&#39;</span></span>
+<span class='rbrace'>}</span></pre></dd>
+      
+        <dt id="RUBYCOCOA_VERSION-constant" class="">RUBYCOCOA_VERSION =
+          <div class="docstring">
+  <div class="discussion">
+    <p>The RubyCocoa version string</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div>
+        </dt>
+        <dd><pre class="code"><span class='id identifier rubyid_rb_obj_freeze'>rb_obj_freeze</span><span class='lparen'>(</span><span class='id identifier rubyid_rb_str_new2'>rb_str_new2</span><span class='lparen'>(</span><span class='const'>RUBYCOCOA_VERSION</span><span class='rparen'>)</span><span class='rparen'>)</span></pre></dd>
+      
+        <dt id="RUBYCOCOA_RELEASE_DATE-constant" class="">RUBYCOCOA_RELEASE_DATE =
+          <div class="docstring">
+  <div class="discussion">
+    <p>The release date string</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div>
+        </dt>
+        <dd><pre class="code"><span class='id identifier rubyid_rb_obj_freeze'>rb_obj_freeze</span><span class='lparen'>(</span><span class='id identifier rubyid_rb_str_new2'>rb_str_new2</span><span class='lparen'>(</span><span class='const'>RUBYCOCOA_RELEASE_DATE</span><span class='rparen'>)</span><span class='rparen'>)</span></pre></dd>
+      
+        <dt id="RUBYCOCOA_SVN_REVISION-constant" class="">RUBYCOCOA_SVN_REVISION =
+          <div class="docstring">
+  <div class="discussion">
+    <p>The release revision string</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div>
+        </dt>
+        <dd><pre class="code"><span class='id identifier rubyid_rb_obj_freeze'>rb_obj_freeze</span><span class='lparen'>(</span><span class='id identifier rubyid_rb_str_new2'>rb_str_new2</span><span class='lparen'>(</span><span class='const'>RUBYCOCOA_SVN_REVISION</span><span class='rparen'>)</span><span class='rparen'>)</span></pre></dd>
+      
+        <dt id="RUBYCOCOA_BUILD_LP64-constant" class="">RUBYCOCOA_BUILD_LP64 =
+          <div class="docstring">
+  <div class="discussion">
+    <p>Whether built for LP64 or not</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div>
+        </dt>
+        <dd><pre class="code"><span class='const'>Qfalse</span></pre></dd>
+      
+        <dt id="RUBYCOCOA_RESOURCES_PATH-constant" class="">RUBYCOCOA_RESOURCES_PATH =
+          <div class="docstring">
+  <div class="discussion">
+    <p>Path to Resources directory of RubyCocoa.framework</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div>
+        </dt>
+        <dd><pre class="code"><span class='id identifier rubyid_rb_obj_freeze'>rb_obj_freeze</span><span class='lparen'>(</span><span class='id identifier rubyid_rb_str_new2'>rb_str_new2</span><span class='lparen'>(</span><span class='id identifier rubyid_p'>p</span><span class='rparen'>)</span><span class='rparen'>)</span></pre></dd>
+      
+        <dt id="RUBYCOCOA_SIGN_PATHS-constant" class="">RUBYCOCOA_SIGN_PATHS =
+          <div class="docstring">
+  <div class="discussion">
+    <p>bridgesupport search paths at OSX.require_framework()</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div>
+        </dt>
+        <dd><pre class="code"><span class='id identifier rubyid_rb_ary_new'>rb_ary_new</span><span class='lparen'>(</span><span class='rparen'>)</span></pre></dd>
+      
+        <dt id="RUBYCOCOA_FRAMEWORK_PATHS-constant" class="">RUBYCOCOA_FRAMEWORK_PATHS =
+          <div class="docstring">
+  <div class="discussion">
+    <p>Framework search paths at OSX.require_framework() or OSX.load_bridge_support_signatures()</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div>
+        </dt>
+        <dd><pre class="code"><span class='id identifier rubyid_rb_ary_new'>rb_ary_new</span><span class='lparen'>(</span><span class='rparen'>)</span></pre></dd>
+      
+    </dl>
+  
+
+
+
+
+  <h2>Class Attribute Summary <small>(<a href="#" class="summary_toggle">collapse</a>)</small></h2>
+  <ul class="summary">
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#relaxed_syntax-class_method" title="relaxed_syntax (class method)">+ (Object) <strong>relaxed_syntax</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>Returns the value of attribute relaxed_syntax.</p>
+</div></span>
+  
+</li>
+
+    
+  </ul>
+
+
+
+
+  
+    <h2>
+      Localization
+      <small>(<a href="#" class="summary_toggle">collapse</a>)</small>
+    </h2>
+
+    <ul class="summary">
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#NSLocalizedString-class_method" title="NSLocalizedString (class method)">+ (Object) <strong>NSLocalizedString</strong>(key, comment = nil) </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>Convenient function for -[NSBundle localizedStringForKey:value:table:] of mainBundle.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#NSLocalizedStringFromTable-class_method" title="NSLocalizedStringFromTable (class method)">+ (Object) <strong>NSLocalizedStringFromTable</strong>(key, tbl, comment = nil) </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>Convenient function for -[NSBundle localizedStringForKey:value:table:] of mainBundle.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#NSLocalizedStringFromTableInBundle-class_method" title="NSLocalizedStringFromTableInBundle (class method)">+ (Object) <strong>NSLocalizedStringFromTableInBundle</strong>(key, tbl, bundle, comment = nil) </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>Convenient function for -[NSBundle localizedStringForKey:value:table:].</p>
+</div></span>
+  
+</li>
+
+      
+    </ul>
+  
+    <h2>
+      Frameworks and BridgeSupport files
+      <small>(<a href="#" class="summary_toggle">collapse</a>)</small>
+    </h2>
+
+    <ul class="summary">
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#__load_bridge_support_file__-class_method" title="__load_bridge_support_file__ (class method)">+ (Object) <strong>__load_bridge_support_file__</strong>(dir, framework_name) </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#_bundle_path_for_framework-class_method" title="_bundle_path_for_framework (class method)">+ (Object) <strong>_bundle_path_for_framework</strong>(framework) </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#framework_loaded%3F-class_method" title="framework_loaded? (class method)">+ (Boolean) <strong>framework_loaded?</strong>(framework) </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>Returns whether a framework is loaded of not.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#load_bridge_support_signatures-class_method" title="load_bridge_support_signatures (class method)">+ (Object) <strong>load_bridge_support_signatures</strong>(framework) </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#require_framework-class_method" title="require_framework (class method)">+ (Object) <strong>require_framework</strong>(framework) </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>“require” for OSX .framework.</p>
+</div></span>
+  
+</li>
+
+      
+    </ul>
+  
+    <h2>
+      Objective-C Classes and methods
+      <small>(<a href="#" class="summary_toggle">collapse</a>)</small>
+    </h2>
+
+    <ul class="summary">
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#_objc_lookup_superclass-class_method" title="_objc_lookup_superclass (class method)">+ (Object) <strong>_objc_lookup_superclass</strong>(occls) </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#class_new_for_occlass-class_method" title="class_new_for_occlass (class method)">+ (Object) <strong>class_new_for_occlass</strong>(occls) </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>create Ruby’s class for Cocoa class.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#const_missing-class_method" title="const_missing (class method)">+ (Object) <strong>const_missing</strong>(c) </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>Load C constants/classes lazily.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#included-class_method" title="included (class method)">+ (Object) <strong>included</strong>(m) </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#ns_import-class_method" title="ns_import (class method)">+ (Object) <strong>ns_import</strong>(sym) </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>create Ruby’s class for Cocoa class, then define Constant under module ‘OSX’.</p>
+</div></span>
+  
+</li>
+
+      
+    </ul>
+  
+    <h2>
+      Class Method Summary
+      <small>(<a href="#" class="summary_toggle">collapse</a>)</small>
+    </h2>
+
+    <ul class="summary">
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#__rebind_umethod__-class_method" title="__rebind_umethod__ (class method)">+ (Object) <strong>__rebind_umethod__</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  <span class="private note title">private</span>
+
+  
+    <span class="summary_desc"><div class='inline'>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#_debug%3F-class_method" title="_debug? (class method)">+ (Boolean) <strong>_debug?</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>Whether prints debug information or not.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#_ignore_ns_override-class_method" title="_ignore_ns_override (class method)">+ (Object) <strong>_ignore_ns_override</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#_ignore_ns_override%3D-class_method" title="_ignore_ns_override= (class method)">+ (Object) <strong>_ignore_ns_override=</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#import_c_constant-class_method" title="import_c_constant (class method)">+ (Object) <strong>import_c_constant</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>Imports a C constant from loaded bridgesupport.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#init_for_bundle-class_method" title="init_for_bundle (class method)">+ (Object) <strong>init_for_bundle</strong>(args = nil) </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#load_bridge_support_dylib-class_method" title="load_bridge_support_dylib (class method)">+ (Object) <strong>load_bridge_support_dylib</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>Loads brdigesupport dylib.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#load_bridge_support_file-class_method" title="load_bridge_support_file (class method)">+ (Moudule) <strong>load_bridge_support_file</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>Loads brdigesupport file.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#load_plist-class_method" title="load_plist (class method)">+ (OSX::NSPropertyList) <strong>load_plist</strong>(data) </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#lookup_informal_protocol_method_type-class_method" title="lookup_informal_protocol_method_type (class method)">+ (Sting) <strong>lookup_informal_protocol_method_type</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>Finds type encoding of a given method from informal protocols.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#method_missing-class_method" title="method_missing (class method)">+ (Object) <strong>method_missing</strong>(mname, *args) </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>Backward compatibility check; get C constants.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#ns_autorelease_pool-class_method" title="ns_autorelease_pool (class method)">+ (Object) <strong>ns_autorelease_pool</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>Like Objective-C “@autorelease { … }” block.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#objc_class_method_add-class_method" title="objc_class_method_add (class method)">+ (Object) <strong>objc_class_method_add</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>Adds an Objective-C method by a given name.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#objc_derived_class_new-class_method" title="objc_derived_class_new (class method)">+ (Object) <strong>objc_derived_class_new</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>Defines new Objective-C subclass from Ruby class by a given name.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#objc_proxy_class_new-class_method" title="objc_proxy_class_new (class method)">+ (Object) <strong>objc_proxy_class_new</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>Defines new Objective-C class from Ruby class by a given name.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#object_to_plist-class_method" title="object_to_plist (class method)">+ (Object) <strong>object_to_plist</strong>(object, format = nil) </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#rbobj_to_nsobj-class_method" title="rbobj_to_nsobj (class method)">+ (Object) <strong>rbobj_to_nsobj</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>Converts Ruby objects to Objective-C objects.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#ruby_thread_switcher_start-class_method" title="ruby_thread_switcher_start (class method)">+ (Object) <strong>ruby_thread_switcher_start</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#ruby_thread_switcher_stop-class_method" title="ruby_thread_switcher_stop (class method)">+ (Object) <strong>ruby_thread_switcher_stop</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+</div></span>
+  
+</li>
+
+      
+    </ul>
+  
+
+
+  <div id="class_attr_details" class="attr_details">
+    <h2>Class Attribute Details</h2>
+    
+      
+      <span id="relaxed_syntax=-class_method"></span>
+      <div class="method_details first">
+  <h3 class="signature first" id="relaxed_syntax-class_method">
+  
+    + (<tt><span class='object_link'><a href="Object.html" title="Object (class)">Object</a></span></tt>) <strong>relaxed_syntax</strong> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    <p>Returns the value of attribute relaxed_syntax</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+11
+12
+13</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'src/ruby/osx/objc/oc_wrapper.rb', line 11</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_relaxed_syntax'>relaxed_syntax</span>
+  <span class='ivar'>@relaxed_syntax</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+  </div>
+
+
+  <div id="class_method_details" class="method_details_list">
+    <h2>Class Method Details</h2>
+
+    
+      <div class="method_details first">
+  <h3 class="signature first" id="__load_bridge_support_file__-class_method">
+  
+    + (<tt><span class='object_link'><a href="Object.html" title="Object (class)">Object</a></span></tt>) <strong>__load_bridge_support_file__</strong>(dir, framework_name) 
+  
+
+  
+
+  
+</h3><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135
+136
+137
+138
+139
+140
+141</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'src/ruby/osx/objc/oc_import.rb', line 123</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid___load_bridge_support_file__'>__load_bridge_support_file__</span><span class='lparen'>(</span><span class='id identifier rubyid_dir'>dir</span><span class='comma'>,</span> <span class='id identifier rubyid_framework_name'>framework_name</span><span class='rparen'>)</span>
+  <span class='ivar'>@bridge_support_signatures_loaded_marks</span> <span class='op'>||=</span> <span class='lbrace'>{</span><span class='rbrace'>}</span>
+  <span class='kw'>return</span> <span class='kw'>true</span> <span class='kw'>if</span> <span class='ivar'>@bridge_support_signatures_loaded_marks</span><span class='lbracket'>[</span><span class='id identifier rubyid_framework_name'>framework_name</span><span class='rbracket'>]</span>
+  <span class='id identifier rubyid_bs'>bs</span> <span class='op'>=</span> <span class='const'>File</span><span class='period'>.</span><span class='id identifier rubyid_join'>join</span><span class='lparen'>(</span><span class='id identifier rubyid_dir'>dir</span><span class='comma'>,</span> <span class='id identifier rubyid_framework_name'>framework_name</span> <span class='op'>+</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>.bridgesupport</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_pbs'>pbs</span> <span class='op'>=</span> <span class='const'>File</span><span class='period'>.</span><span class='id identifier rubyid_join'>join</span><span class='lparen'>(</span><span class='id identifier rubyid_dir'>dir</span><span class='comma'>,</span> <span class='id identifier rubyid_framework_name'>framework_name</span> <span class='op'>+</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>Private.bridgesupport</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span>
+  <span class='kw'>if</span> <span class='const'>File</span><span class='period'>.</span><span class='id identifier rubyid_exist?'>exist?</span><span class='lparen'>(</span><span class='id identifier rubyid_bs'>bs</span><span class='rparen'>)</span> <span class='kw'>or</span> <span class='const'>File</span><span class='period'>.</span><span class='id identifier rubyid_exist?'>exist?</span><span class='lparen'>(</span><span class='id identifier rubyid_pbs'>pbs</span><span class='rparen'>)</span>
+    <span class='comment'># Load the .dylib first (if any).
+</span>    <span class='id identifier rubyid_dylib'>dylib</span> <span class='op'>=</span> <span class='const'>File</span><span class='period'>.</span><span class='id identifier rubyid_join'>join</span><span class='lparen'>(</span><span class='id identifier rubyid_dir'>dir</span><span class='comma'>,</span> <span class='id identifier rubyid_framework_name'>framework_name</span> <span class='op'>+</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>.dylib</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span>
+    <span class='const'>OSX</span><span class='period'>.</span><span class='id identifier rubyid_load_bridge_support_dylib'>load_bridge_support_dylib</span><span class='lparen'>(</span><span class='id identifier rubyid_dylib'>dylib</span><span class='rparen'>)</span> <span class='kw'>if</span> <span class='const'>File</span><span class='period'>.</span><span class='id identifier rubyid_exist?'>exist?</span><span class='lparen'>(</span><span class='id identifier rubyid_dylib'>dylib</span><span class='rparen'>)</span> 
+
+    <span class='comment'># Then the regular metadata file.
+</span>    <span class='const'>OSX</span><span class='period'>.</span><span class='id identifier rubyid_load_bridge_support_file'>load_bridge_support_file</span><span class='lparen'>(</span><span class='id identifier rubyid_bs'>bs</span><span class='rparen'>)</span> <span class='kw'>if</span> <span class='const'>File</span><span class='period'>.</span><span class='id identifier rubyid_exist?'>exist?</span><span class='lparen'>(</span><span class='id identifier rubyid_bs'>bs</span><span class='rparen'>)</span>
+  
+    <span class='comment'># And finally the private metadata file (if any).
+</span>    <span class='const'>OSX</span><span class='period'>.</span><span class='id identifier rubyid_load_bridge_support_file'>load_bridge_support_file</span><span class='lparen'>(</span><span class='id identifier rubyid_pbs'>pbs</span><span class='rparen'>)</span> <span class='kw'>if</span> <span class='const'>File</span><span class='period'>.</span><span class='id identifier rubyid_exist?'>exist?</span><span class='lparen'>(</span><span class='id identifier rubyid_pbs'>pbs</span><span class='rparen'>)</span>
+    <span class='kw'>return</span> <span class='ivar'>@bridge_support_signatures_loaded_marks</span><span class='lbracket'>[</span><span class='id identifier rubyid_framework_name'>framework_name</span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='kw'>true</span>
+  <span class='kw'>end</span>
+  <span class='kw'>return</span> <span class='kw'>false</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="__rebind_umethod__-class_method">
+  
+    + (<tt><span class='object_link'><a href="Object.html" title="Object (class)">Object</a></span></tt>) <strong>__rebind_umethod__</strong> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    <p class="note private">
+  <strong>This method is part of a private API.</strong>
+  You should avoid using this method if possible, as it may be removed or be changed in the future.
+</p>
+
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+351
+352
+353
+354
+355
+356
+357
+358
+359
+360</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'src/objc/mdl_osxobjc.m', line 351</span>
+
+static VALUE
+osx_mf_rebind_umethod(VALUE rcv, VALUE klass, VALUE umethod)
+{
+  struct RB_METHOD *data;
+
+  Data_Get_Struct(umethod, struct RB_METHOD, data);
+  data-&gt;rklass = klass;
+  
+  return Qnil;
+}</pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="_bundle_path_for_framework-class_method">
+  
+    + (<tt><span class='object_link'><a href="Object.html" title="Object (class)">Object</a></span></tt>) <strong>_bundle_path_for_framework</strong>(framework) 
+  
+
+  
+
+  
+</h3><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'src/ruby/osx/objc/oc_import.rb', line 46</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid__bundle_path_for_framework'>_bundle_path_for_framework</span><span class='lparen'>(</span><span class='id identifier rubyid_framework'>framework</span><span class='rparen'>)</span>
+  <span class='kw'>if</span> <span class='id identifier rubyid_framework'>framework</span><span class='lbracket'>[</span><span class='int'>0</span><span class='rbracket'>]</span> <span class='op'>==</span> <span class='CHAR'>?/</span>
+    <span class='lbracket'>[</span><span class='const'>OSX</span><span class='op'>::</span><span class='const'>NSBundle</span><span class='period'>.</span><span class='id identifier rubyid_bundleWithPath'>bundleWithPath</span><span class='lparen'>(</span><span class='id identifier rubyid_framework'>framework</span><span class='rparen'>)</span><span class='comma'>,</span> <span class='id identifier rubyid_framework'>framework</span><span class='rbracket'>]</span>
+  <span class='kw'>elsif</span> <span class='id identifier rubyid_path'>path</span> <span class='op'>=</span> <span class='const'>QUICK_FRAMEWORKS</span><span class='lbracket'>[</span><span class='id identifier rubyid_framework'>framework</span><span class='rbracket'>]</span>
+    <span class='lbracket'>[</span><span class='const'>OSX</span><span class='op'>::</span><span class='const'>NSBundle</span><span class='period'>.</span><span class='id identifier rubyid_bundleWithPath'>bundleWithPath</span><span class='lparen'>(</span><span class='id identifier rubyid_path'>path</span><span class='rparen'>)</span><span class='comma'>,</span> <span class='id identifier rubyid_path'>path</span><span class='rbracket'>]</span>
+  <span class='kw'>else</span>
+    <span class='id identifier rubyid_path'>path</span> <span class='op'>=</span> <span class='const'>FRAMEWORK_PATHS</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_dir'>dir</span><span class='op'>|</span> 
+      <span class='const'>File</span><span class='period'>.</span><span class='id identifier rubyid_join'>join</span><span class='lparen'>(</span><span class='id identifier rubyid_dir'>dir</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_framework'>framework</span><span class='embexpr_end'>}</span><span class='tstring_content'>.framework</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span> 
+    <span class='rbrace'>}</span><span class='period'>.</span><span class='id identifier rubyid_find'>find</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_path'>path</span><span class='op'>|</span> 
+      <span class='const'>File</span><span class='period'>.</span><span class='id identifier rubyid_exist?'>exist?</span><span class='lparen'>(</span><span class='id identifier rubyid_path'>path</span><span class='rparen'>)</span> 
+    <span class='rbrace'>}</span>
+    <span class='kw'>if</span> <span class='id identifier rubyid_path'>path</span>
+      <span class='lbracket'>[</span><span class='const'>OSX</span><span class='op'>::</span><span class='const'>NSBundle</span><span class='period'>.</span><span class='id identifier rubyid_bundleWithPath'>bundleWithPath</span><span class='lparen'>(</span><span class='id identifier rubyid_path'>path</span><span class='rparen'>)</span><span class='comma'>,</span> <span class='id identifier rubyid_path'>path</span><span class='rbracket'>]</span>
+    <span class='kw'>end</span>
+  <span class='kw'>end</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="_debug?-class_method">
+  
+    + (<tt>Boolean</tt>) <strong>_debug?</strong> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    <p>Whether prints debug information or not.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Boolean</tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+11
+12
+13</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'src/ruby/osx/objc/oc_exception.rb', line 11</span>
+
+<span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid__debug?'>_debug?</span>
+  <span class='lparen'>(</span><span class='gvar'>$DEBUG</span> <span class='op'>||</span> <span class='gvar'>$RUBYCOCOA_DEBUG</span><span class='rparen'>)</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="_ignore_ns_override-class_method">
+  
+    + (<tt><span class='object_link'><a href="Object.html" title="Object (class)">Object</a></span></tt>) <strong>_ignore_ns_override</strong> 
+  
+
+  
+
+  
+</h3><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+182
+183
+184
+185
+186</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'src/objc/mdl_objwrapper.m', line 182</span>
+
+static VALUE
+wrapper_ignore_ns_override (VALUE rcv)
+{
+  return ignore_ns_override ? Qtrue : Qfalse;
+}</pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="_ignore_ns_override=-class_method">
+  
+    + (<tt><span class='object_link'><a href="Object.html" title="Object (class)">Object</a></span></tt>) <strong>_ignore_ns_override=</strong> 
+  
+
+  
+
+  
+</h3><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+188
+189
+190
+191
+192
+193</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'src/objc/mdl_objwrapper.m', line 188</span>
+
+static VALUE
+wrapper_ignore_ns_override_set (VALUE rcv, VALUE val)
+{
+  ignore_ns_override = RTEST(val);
+  return val;
+}</pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="_objc_lookup_superclass-class_method">
+  
+    + (<tt><span class='object_link'><a href="Object.html" title="Object (class)">Object</a></span></tt>) <strong>_objc_lookup_superclass</strong>(occls) 
+  
+
+  
+
+  
+</h3><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+267
+268
+269
+270
+271
+272
+273
+274
+275
+276
+277
+278
+279
+280
+281
+282
+283
+284
+285
+286</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'src/ruby/osx/objc/oc_import.rb', line 267</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid__objc_lookup_superclass'>_objc_lookup_superclass</span><span class='lparen'>(</span><span class='id identifier rubyid_occls'>occls</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_occls_superclass'>occls_superclass</span> <span class='op'>=</span> <span class='id identifier rubyid_occls'>occls</span><span class='period'>.</span><span class='id identifier rubyid_oc_superclass'>oc_superclass</span>
+  <span class='kw'>if</span> <span class='id identifier rubyid_occls_superclass'>occls_superclass</span><span class='period'>.</span><span class='id identifier rubyid_nil?'>nil?</span> <span class='kw'>or</span> <span class='id identifier rubyid_occls_superclass'>occls_superclass</span><span class='period'>.</span><span class='id identifier rubyid___ocid__'>__ocid__</span> <span class='op'>==</span> <span class='id identifier rubyid_occls'>occls</span><span class='period'>.</span><span class='id identifier rubyid___ocid__'>__ocid__</span> 
+    <span class='const'>OSX</span><span class='op'>::</span><span class='const'>ObjcID</span>
+  <span class='kw'>elsif</span> <span class='id identifier rubyid_occls_superclass'>occls_superclass</span><span class='period'>.</span><span class='id identifier rubyid_is_a?'>is_a?</span><span class='lparen'>(</span><span class='const'>OSX</span><span class='op'>::</span><span class='const'>NSProxy</span><span class='rparen'>)</span> <span class='kw'>or</span> <span class='id identifier rubyid_occls_superclass'>occls_superclass</span><span class='period'>.</span><span class='id identifier rubyid___ocid__'>__ocid__</span> <span class='op'>==</span> <span class='const'>OSX</span><span class='op'>::</span><span class='const'>NSProxy</span><span class='period'>.</span><span class='id identifier rubyid___ocid__'>__ocid__</span>
+    <span class='const'>OSX</span><span class='op'>::</span><span class='const'>NSProxy</span>
+  <span class='kw'>else</span>
+    <span class='kw'>begin</span>
+      <span class='const'>OSX</span><span class='period'>.</span><span class='id identifier rubyid_const_get'>const_get</span><span class='lparen'>(</span><span class='id identifier rubyid_occls_superclass'>occls_superclass</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span><span class='period'>.</span><span class='id identifier rubyid_to_sym'>to_sym</span><span class='rparen'>)</span> 
+    <span class='kw'>rescue</span> <span class='const'>NameError</span>
+      <span class='comment'># some ObjC internal class cannot become Ruby constant
+</span>      <span class='comment'># because of prefix &#39;%&#39; or &#39;_&#39;
+</span>      <span class='kw'>if</span> <span class='id identifier rubyid_occls'>occls</span><span class='period'>.</span><span class='id identifier rubyid___ocid__'>__ocid__</span> <span class='op'>!=</span> <span class='id identifier rubyid_occls_superclass'>occls_superclass</span><span class='period'>.</span><span class='id identifier rubyid___ocid__'>__ocid__</span>
+        <span class='const'>OSX</span><span class='period'>.</span><span class='id identifier rubyid__objc_lookup_superclass'>_objc_lookup_superclass</span><span class='lparen'>(</span><span class='id identifier rubyid_occls_superclass'>occls_superclass</span><span class='rparen'>)</span>
+      <span class='kw'>else</span>
+        <span class='const'>OSX</span><span class='op'>::</span><span class='const'>ObjcID</span> <span class='comment'># root class of ObjC
+</span>      <span class='kw'>end</span>
+    <span class='kw'>end</span>
+  <span class='kw'>end</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="class_new_for_occlass-class_method">
+  
+    + (<tt><span class='object_link'><a href="Object.html" title="Object (class)">Object</a></span></tt>) <strong>class_new_for_occlass</strong>(occls) 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    <p>create Ruby’s class for Cocoa class</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+248
+249
+250
+251
+252
+253
+254
+255
+256
+257
+258
+259
+260
+261
+262
+263
+264</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'src/ruby/osx/objc/oc_import.rb', line 248</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_class_new_for_occlass'>class_new_for_occlass</span><span class='lparen'>(</span><span class='id identifier rubyid_occls'>occls</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_superclass'>superclass</span> <span class='op'>=</span> <span class='id identifier rubyid__objc_lookup_superclass'>_objc_lookup_superclass</span><span class='lparen'>(</span><span class='id identifier rubyid_occls'>occls</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_klass'>klass</span> <span class='op'>=</span> <span class='const'>Class</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='id identifier rubyid_superclass'>superclass</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_klass'>klass</span><span class='period'>.</span><span class='id identifier rubyid_class_eval'>class_eval</span> <span class='kw'>do</span>
+    <span class='kw'>if</span> <span class='id identifier rubyid_superclass'>superclass</span> <span class='op'>==</span> <span class='const'>OSX</span><span class='op'>::</span><span class='const'>ObjcID</span>
+      <span class='id identifier rubyid_include'>include</span> <span class='const'>OCObjWrapper</span> 
+      <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_extend'>extend</span> <span class='const'>OCClsWrapper</span>
+    <span class='kw'>end</span>
+    <span class='ivar'>@ocid</span> <span class='op'>=</span> <span class='id identifier rubyid_occls'>occls</span><span class='period'>.</span><span class='id identifier rubyid___ocid__'>__ocid__</span><span class='period'>.</span><span class='id identifier rubyid_to_i'>to_i</span>
+  <span class='kw'>end</span>
+  <span class='kw'>if</span> <span class='id identifier rubyid_superclass'>superclass</span> <span class='op'>==</span> <span class='const'>OSX</span><span class='op'>::</span><span class='const'>ObjcID</span>
+    <span class='kw'>def</span> <span class='id identifier rubyid_klass'>klass</span><span class='period'>.</span><span class='id identifier rubyid___ocid__'>__ocid__</span><span class='lparen'>(</span><span class='rparen'>)</span> <span class='ivar'>@ocid</span> <span class='kw'>end</span>
+    <span class='kw'>def</span> <span class='id identifier rubyid_klass'>klass</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span><span class='lparen'>(</span><span class='rparen'>)</span> <span class='id identifier rubyid_name'>name</span> <span class='kw'>end</span>
+    <span class='kw'>def</span> <span class='id identifier rubyid_klass'>klass</span><span class='period'>.</span><span class='id identifier rubyid_inherited'>inherited</span><span class='lparen'>(</span><span class='id identifier rubyid_subklass'>subklass</span><span class='rparen'>)</span> <span class='id identifier rubyid_subklass'>subklass</span><span class='period'>.</span><span class='id identifier rubyid_ns_inherited'>ns_inherited</span><span class='lparen'>(</span><span class='rparen'>)</span> <span class='kw'>end</span>
+  <span class='kw'>end</span>
+  <span class='kw'>return</span> <span class='id identifier rubyid_klass'>klass</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="const_missing-class_method">
+  
+    + (<tt><span class='object_link'><a href="Object.html" title="Object (class)">Object</a></span></tt>) <strong>const_missing</strong>(c) 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    <p>Load C constants/classes lazily.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+196
+197
+198
+199
+200
+201
+202</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'src/ruby/osx/objc/oc_import.rb', line 196</span>
+
+<span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_const_missing'>const_missing</span><span class='lparen'>(</span><span class='id identifier rubyid_c'>c</span><span class='rparen'>)</span>
+  <span class='kw'>begin</span>
+    <span class='const'>OSX</span><span class='op'>::</span><span class='id identifier rubyid_import_c_constant'>import_c_constant</span><span class='lparen'>(</span><span class='id identifier rubyid_c'>c</span><span class='rparen'>)</span>
+  <span class='kw'>rescue</span> <span class='const'>LoadError</span>
+    <span class='lparen'>(</span><span class='const'>OSX</span><span class='op'>::</span><span class='id identifier rubyid_ns_import'>ns_import</span><span class='lparen'>(</span><span class='id identifier rubyid_c'>c</span><span class='rparen'>)</span> <span class='kw'>or</span> <span class='id identifier rubyid_raise'>raise</span> <span class='const'>NameError</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>uninitialized constant </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_c'>c</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
+  <span class='kw'>end</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="framework_loaded?-class_method">
+  
+    + (<tt>Boolean</tt>) <strong>framework_loaded?</strong>(framework) 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+  <div class="note notetag">
+    <strong>Note:</strong>
+    <div class='inline'>
+</div>
+  </div>
+
+<p>Returns whether a framework is loaded of not.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Boolean</tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'src/ruby/osx/objc/oc_import.rb', line 104</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_framework_loaded?'>framework_loaded?</span><span class='lparen'>(</span><span class='id identifier rubyid_framework'>framework</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_bundle'>bundle</span><span class='comma'>,</span> <span class='id identifier rubyid_path'>path</span> <span class='op'>=</span> <span class='id identifier rubyid__bundle_path_for_framework'>_bundle_path_for_framework</span><span class='lparen'>(</span><span class='id identifier rubyid_framework'>framework</span><span class='rparen'>)</span>
+  <span class='kw'>unless</span> <span class='id identifier rubyid_bundle'>bundle</span><span class='period'>.</span><span class='id identifier rubyid_nil?'>nil?</span>
+    <span class='id identifier rubyid_loaded'>loaded</span> <span class='op'>=</span> <span class='id identifier rubyid_bundle'>bundle</span><span class='period'>.</span><span class='id identifier rubyid_isLoaded'>isLoaded</span>
+    <span class='kw'>if</span> <span class='id identifier rubyid_loaded'>loaded</span> <span class='kw'>then</span>
+      <span class='id identifier rubyid_load_bridge_support_signatures'>load_bridge_support_signatures</span><span class='lparen'>(</span><span class='id identifier rubyid_path'>path</span><span class='rparen'>)</span>
+    <span class='kw'>else</span>
+      <span class='comment'># CoreFoundation/Foundation are linked at built-time.
+</span>      <span class='id identifier rubyid_id'>id</span> <span class='op'>=</span> <span class='id identifier rubyid_bundle'>bundle</span><span class='period'>.</span><span class='id identifier rubyid_bundleIdentifier'>bundleIdentifier</span>
+      <span class='id identifier rubyid_loaded'>loaded</span> <span class='op'>=</span> <span class='lparen'>(</span><span class='id identifier rubyid_id'>id</span><span class='period'>.</span><span class='id identifier rubyid_isEqualToString'>isEqualToString</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>com.apple.CoreFoundation</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span> <span class='kw'>or</span> 
+                <span class='id identifier rubyid_id'>id</span><span class='period'>.</span><span class='id identifier rubyid_isEqualToString'>isEqualToString</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>com.apple.Foundation</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span><span class='rparen'>)</span>
+    <span class='kw'>end</span>
+    <span class='id identifier rubyid_loaded'>loaded</span>
+  <span class='kw'>else</span>
+    <span class='id identifier rubyid_raise'>raise</span> <span class='const'>ArgumentError</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Can&#39;t locate framework &#39;</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_framework'>framework</span><span class='embexpr_end'>}</span><span class='tstring_content'>&#39;</span><span class='tstring_end'>&quot;</span></span>
+  <span class='kw'>end</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="import_c_constant-class_method">
+  
+    + (<tt><span class='object_link'><a href="Object.html" title="Object (class)">Object</a></span></tt>) <strong>import_c_constant</strong> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    <p>Imports a C constant from loaded bridgesupport.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>sym</span>
+      
+      
+        <span class='type'></span>
+      
+      
+      
+        &mdash;
+        <div class='inline'><p>Name of constant</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'></span>
+      
+      
+      
+        
+        <div class='inline'><p>A new constant imported</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+1987
+1988
+1989
+1990
+1991
+1992
+1993
+1994
+1995
+1996
+1997
+1998
+1999
+2000
+2001
+2002
+2003
+2004
+2005
+2006
+2007
+2008
+2009
+2010
+2011
+2012
+2013
+2014
+2015
+2016
+2017
+2018
+2019
+2020
+2021
+2022
+2023
+2024
+2025
+2026
+2027
+2028
+2029
+2030
+2031
+2032
+2033
+2034
+2035
+2036
+2037
+2038
+2039</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'src/objc/BridgeSupport.m', line 1987</span>
+
+static VALUE
+osx_import_c_constant (VALUE self, VALUE sym)
+{
+  const char *      name;
+  char *            real_name;
+  struct bsConst *  bs_const;
+  void *            cvalue;
+  VALUE             value;
+  
+  name = rb_id2name(SYM2ID(sym));
+  real_name = (char *)name;
+  if (!st_lookup(bsConstants, (st_data_t)name, (st_data_t *)&amp;bs_const)) {
+    // Decapitalize the string and try again.
+    real_name = strdup(name);
+    DECAPITALIZE(real_name);
+    if (!st_lookup(bsConstants, (st_data_t)real_name, (st_data_t *)&amp;bs_const)) {
+      free(real_name);
+      rb_raise(rb_eLoadError, &quot;C constant &#39;%s&#39; not found&quot;, name);
+    }
+  }
+
+  if (bs_const-&gt;ignored)
+    rb_raise(rb_eRuntimeError, &quot;Constant &#39;%s&#39; is not supported (suggested alternative: &#39;%s&#39;)&quot;, bs_const-&gt;name, bs_const-&gt;suggestion != NULL ? bs_const-&gt;suggestion : &quot;n/a&quot;);
+
+  cvalue = dlsym(RTLD_DEFAULT, real_name);
+  value = Qnil;
+  if (cvalue != NULL) {
+    BS_LOG(&quot;Importing C constant `%s&#39; of type &#39;%s&#39;&quot;, name, bs_const-&gt;encoding);
+    if (bs_const-&gt;is_magic_cookie) { 
+      struct bsCFType *bs_cftype;
+
+      bs_cftype = find_bs_cf_type_by_encoding(bs_const-&gt;encoding);
+      bs_const-&gt;class_name = bs_cftype != NULL
+        ? bs_cftype-&gt;bridged_class_name : &quot;OCObject&quot;;
+
+      BS_LOG(&quot;Constant is a magic-cookie of fixed value %p, guessed class name &#39;%s&#39;&quot;, *(void **)cvalue, bs_const-&gt;class_name);
+
+      st_insert(bsMagicCookieConstants, (st_data_t)*(void **)cvalue, (st_data_t)bs_const);
+    }
+    if (!ocdata_to_rbobj(Qnil, bs_const-&gt;encoding, cvalue, &amp;value, NO))
+      rb_raise(ocdataconv_err_class(), &quot;Cannot convert the Objective-C constant &#39;%s&#39; as &#39;%s&#39; to Ruby&quot;, name, bs_const-&gt;encoding);
+    rb_define_const(self, name, value);
+    BS_LOG(&quot;Imported C constant `%s&#39; with value %p&quot;, name, (void *)value);
+  }
+
+  if (name != real_name)
+    free(real_name);
+  
+  if (cvalue == NULL)
+    rb_bug(&quot;Can&#39;t locate constant symbol &#39;%s&#39; : %s&quot;, name, dlerror());
+  
+  return value;
+}</pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="included-class_method">
+  
+    + (<tt><span class='object_link'><a href="Object.html" title="Object (class)">Object</a></span></tt>) <strong>included</strong>(m) 
+  
+
+  
+
+  
+</h3><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+204
+205
+206
+207
+208
+209
+210
+211
+212
+213
+214
+215
+216
+217
+218
+219
+220
+221
+222
+223
+224
+225</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'src/ruby/osx/objc/oc_import.rb', line 204</span>
+
+<span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_included'>included</span><span class='lparen'>(</span><span class='id identifier rubyid_m'>m</span><span class='rparen'>)</span>
+  <span class='kw'>if</span> <span class='id identifier rubyid_m'>m</span><span class='period'>.</span><span class='id identifier rubyid_respond_to?'>respond_to?</span> <span class='symbol'>:const_missing</span>
+    <span class='id identifier rubyid_m'>m</span><span class='period'>.</span><span class='id identifier rubyid_module_eval'>module_eval</span> <span class='kw'>do</span>
+      <span class='kw'>class</span> <span class='op'>&lt;&lt;</span><span class='kw'>self</span>
+        <span class='id identifier rubyid_alias_method'>alias_method</span> <span class='symbol'>:_osx_const_missing_prev</span><span class='comma'>,</span> <span class='symbol'>:const_missing</span>
+        <span class='kw'>def</span> <span class='id identifier rubyid_const_missing'>const_missing</span><span class='lparen'>(</span><span class='id identifier rubyid_c'>c</span><span class='rparen'>)</span>
+          <span class='kw'>begin</span>
+            <span class='const'>OSX</span><span class='period'>.</span><span class='id identifier rubyid_const_missing'>const_missing</span><span class='lparen'>(</span><span class='id identifier rubyid_c'>c</span><span class='rparen'>)</span>
+          <span class='kw'>rescue</span> <span class='const'>NameError</span>
+            <span class='id identifier rubyid__osx_const_missing_prev'>_osx_const_missing_prev</span><span class='lparen'>(</span><span class='id identifier rubyid_c'>c</span><span class='rparen'>)</span>
+          <span class='kw'>end</span>
+        <span class='kw'>end</span>
+      <span class='kw'>end</span>
+    <span class='kw'>end</span>
+  <span class='kw'>else</span>
+    <span class='id identifier rubyid_m'>m</span><span class='period'>.</span><span class='id identifier rubyid_module_eval'>module_eval</span> <span class='kw'>do</span>
+      <span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_const_missing'>const_missing</span><span class='lparen'>(</span><span class='id identifier rubyid_c'>c</span><span class='rparen'>)</span>
+        <span class='const'>OSX</span><span class='period'>.</span><span class='id identifier rubyid_const_missing'>const_missing</span><span class='lparen'>(</span><span class='id identifier rubyid_c'>c</span><span class='rparen'>)</span>
+      <span class='kw'>end</span>
+    <span class='kw'>end</span>
+  <span class='kw'>end</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="init_for_bundle-class_method">
+  
+    + (<tt><span class='object_link'><a href="Object.html" title="Object (class)">Object</a></span></tt>) <strong>init_for_bundle</strong>(args = nil) 
+  
+
+  
+
+  
+</h3><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+57
+58
+59</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'src/ruby/osx/objc/oc_bundle_support.rb', line 57</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_init_for_bundle'>init_for_bundle</span><span class='lparen'>(</span><span class='id identifier rubyid_args'>args</span> <span class='op'>=</span> <span class='kw'>nil</span><span class='rparen'>)</span>
+  <span class='const'>BundleSupport</span><span class='period'>.</span><span class='id identifier rubyid_init_for_bundle'>init_for_bundle</span><span class='lparen'>(</span><span class='id identifier rubyid_args'>args</span><span class='rparen'>)</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='op'>*</span><span class='id identifier rubyid_x'>x</span><span class='op'>|</span> <span class='kw'>yield</span><span class='lparen'>(</span><span class='op'>*</span><span class='id identifier rubyid_x'>x</span><span class='rparen'>)</span> <span class='rbrace'>}</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="load_bridge_support_dylib-class_method">
+  
+    + (<tt><span class='object_link'><a href="Object.html" title="Object (class)">Object</a></span></tt>) <strong>load_bridge_support_dylib</strong> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    <p>Loads brdigesupport dylib. Recommends to use OSX.require_frmework in regular cases.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>Path</span>
+      
+      
+        <span class='type'></span>
+      
+      
+      
+        &mdash;
+        <div class='inline'><p>of bridgesupport dylib.</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'></span>
+      
+      
+      
+        
+        <div class='inline'><p>nil</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+1112
+1113
+1114
+1115
+1116
+1117
+1118
+1119
+1120
+1121
+1122</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'src/objc/BridgeSupport.m', line 1112</span>
+
+static VALUE
+osx_load_bridge_support_dylib (VALUE rcv, VALUE path)
+{
+  const char *cpath;
+
+  cpath = StringValuePtr(path);
+  if (dlopen(cpath, RTLD_LAZY) == NULL)
+    rb_raise(rb_eArgError, &quot;Can&#39;t load the bridge support dylib file `%s&#39; : %s&quot;, cpath, dlerror());
+
+  return Qnil;
+}</pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="load_bridge_support_file-class_method">
+  
+    + (<tt>Moudule</tt>) <strong>load_bridge_support_file</strong> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    <p>Loads brdigesupport file. Recommends to use OSX.require_frmework in regular cases.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>Path</span>
+      
+      
+        <span class='type'></span>
+      
+      
+      
+        &mdash;
+        <div class='inline'><p>of bridgesupport file.</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Moudule</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'><p>Module OSX</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+1962
+1963
+1964
+1965
+1966
+1967</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'src/objc/BridgeSupport.m', line 1962</span>
+
+static VALUE
+osx_load_bridge_support_file (VALUE rcv, VALUE path)
+{
+  rb_warn(&quot;libxml2 is not available, bridge support file `%s&#39; cannot be read&quot;, StringValuePtr(path));
+  return rcv;
+}</pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="load_bridge_support_signatures-class_method">
+  
+    + (<tt><span class='object_link'><a href="Object.html" title="Object (class)">Object</a></span></tt>) <strong>load_bridge_support_signatures</strong>(framework) 
+  
+
+  
+
+  
+</h3><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+144
+145
+146
+147
+148
+149
+150
+151
+152
+153
+154
+155
+156
+157
+158
+159
+160
+161
+162
+163
+164
+165
+166
+167
+168
+169
+170
+171
+172
+173
+174
+175
+176
+177
+178
+179
+180
+181
+182
+183
+184
+185
+186
+187
+188</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'src/ruby/osx/objc/oc_import.rb', line 144</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_load_bridge_support_signatures'>load_bridge_support_signatures</span><span class='lparen'>(</span><span class='id identifier rubyid_framework'>framework</span><span class='rparen'>)</span>
+  <span class='comment'># First, look into the pre paths.  
+</span>  <span class='id identifier rubyid_fname'>fname</span> <span class='op'>=</span> <span class='id identifier rubyid_framework'>framework</span><span class='lbracket'>[</span><span class='int'>0</span><span class='rbracket'>]</span> <span class='op'>==</span> <span class='CHAR'>?/</span> <span class='op'>?</span> <span class='const'>File</span><span class='period'>.</span><span class='id identifier rubyid_basename'>basename</span><span class='lparen'>(</span><span class='id identifier rubyid_framework'>framework</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>.framework</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span> <span class='op'>:</span> <span class='id identifier rubyid_framework'>framework</span>
+  <span class='const'>PRE_SIGN_PATHS</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_dir'>dir</span><span class='op'>|</span> <span class='kw'>return</span> <span class='kw'>true</span> <span class='kw'>if</span> <span class='id identifier rubyid___load_bridge_support_file__'>__load_bridge_support_file__</span><span class='lparen'>(</span><span class='id identifier rubyid_dir'>dir</span><span class='comma'>,</span> <span class='id identifier rubyid_fname'>fname</span><span class='rparen'>)</span> <span class='rbrace'>}</span>
+
+  <span class='comment'># A path to a framework, let&#39;s search for a BridgeSupport file inside the Resources folder.
+</span>  <span class='kw'>if</span> <span class='id identifier rubyid_framework'>framework</span><span class='lbracket'>[</span><span class='int'>0</span><span class='rbracket'>]</span> <span class='op'>==</span> <span class='CHAR'>?/</span>
+    <span class='id identifier rubyid_path'>path</span> <span class='op'>=</span> <span class='const'>File</span><span class='period'>.</span><span class='id identifier rubyid_join'>join</span><span class='lparen'>(</span><span class='id identifier rubyid_framework'>framework</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>Resources</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>BridgeSupport</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span>
+    <span class='kw'>if</span> <span class='id identifier rubyid___load_bridge_support_file__'>__load_bridge_support_file__</span><span class='lparen'>(</span><span class='id identifier rubyid_path'>path</span><span class='comma'>,</span> <span class='id identifier rubyid_fname'>fname</span><span class='rparen'>)</span>
+	<span class='const'>Dir</span><span class='period'>.</span><span class='id identifier rubyid_glob'>glob</span><span class='lparen'>(</span><span class='const'>File</span><span class='period'>.</span><span class='id identifier rubyid_join'>join</span><span class='lparen'>(</span><span class='id identifier rubyid_framework'>framework</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>Frameworks</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>*.framework</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_subframework'>subframework</span><span class='op'>|</span>
+ <span class='const'>OSX</span><span class='period'>.</span><span class='id identifier rubyid_load_bridge_support_signatures'>load_bridge_support_signatures</span><span class='lparen'>(</span><span class='id identifier rubyid_subframework'>subframework</span><span class='rparen'>)</span>
+	<span class='kw'>end</span>
+      <span class='kw'>return</span> <span class='kw'>true</span>
+    <span class='kw'>end</span>
+    <span class='id identifier rubyid_framework'>framework</span> <span class='op'>=</span> <span class='id identifier rubyid_fname'>fname</span>
+  <span class='kw'>end</span>
+  
+  <span class='comment'># Let&#39;s try to localize the framework and see if it contains the metadata.
+</span>  <span class='const'>FRAMEWORK_PATHS</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_dir'>dir</span><span class='op'>|</span>
+    <span class='id identifier rubyid_path'>path</span> <span class='op'>=</span> <span class='const'>File</span><span class='period'>.</span><span class='id identifier rubyid_join'>join</span><span class='lparen'>(</span><span class='id identifier rubyid_dir'>dir</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_framework'>framework</span><span class='embexpr_end'>}</span><span class='tstring_content'>.framework</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
+    <span class='kw'>if</span> <span class='const'>File</span><span class='period'>.</span><span class='id identifier rubyid_exist?'>exist?</span><span class='lparen'>(</span><span class='id identifier rubyid_path'>path</span><span class='rparen'>)</span>
+      <span class='id identifier rubyid_bspath'>bspath</span> <span class='op'>=</span> <span class='const'>File</span><span class='period'>.</span><span class='id identifier rubyid_join'>join</span><span class='lparen'>(</span><span class='id identifier rubyid_path'>path</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>Resources</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>BridgeSupport</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span>
+      <span class='kw'>if</span> <span class='id identifier rubyid___load_bridge_support_file__'>__load_bridge_support_file__</span><span class='lparen'>(</span><span class='id identifier rubyid_bspath'>bspath</span><span class='comma'>,</span> <span class='id identifier rubyid_fname'>fname</span><span class='rparen'>)</span>
+        <span class='const'>Dir</span><span class='period'>.</span><span class='id identifier rubyid_glob'>glob</span><span class='lparen'>(</span><span class='const'>File</span><span class='period'>.</span><span class='id identifier rubyid_join'>join</span><span class='lparen'>(</span><span class='id identifier rubyid_framework'>framework</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>Frameworks</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>*.framework</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_subframework'>subframework</span><span class='op'>|</span>
+          <span class='const'>OSX</span><span class='period'>.</span><span class='id identifier rubyid_load_bridge_support_signatures'>load_bridge_support_signatures</span><span class='lparen'>(</span><span class='id identifier rubyid_subframework'>subframework</span><span class='rparen'>)</span>
+        <span class='kw'>end</span>
+        <span class='kw'>return</span> <span class='kw'>true</span>
+      <span class='kw'>end</span>
+    <span class='kw'>end</span>
+  <span class='kw'>end</span>
+
+  <span class='comment'># Try the app/bundle specific and RubyCocoa.framework metadata directories.
+</span>  <span class='const'>RUBYCOCOA_SIGN_PATHS</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_path'>path</span><span class='op'>|</span> 
+    <span class='kw'>if</span> <span class='const'>File</span><span class='period'>.</span><span class='id identifier rubyid_exist?'>exist?</span><span class='lparen'>(</span><span class='id identifier rubyid_path'>path</span><span class='rparen'>)</span> <span class='kw'>then</span>
+      <span class='kw'>return</span> <span class='kw'>true</span> <span class='kw'>if</span> <span class='id identifier rubyid___load_bridge_support_file__'>__load_bridge_support_file__</span><span class='lparen'>(</span><span class='id identifier rubyid_path'>path</span><span class='comma'>,</span> <span class='id identifier rubyid_fname'>fname</span><span class='rparen'>)</span> 
+    <span class='kw'>end</span>
+  <span class='kw'>end</span>
+
+  <span class='comment'># We can still look into the general metadata directories. 
+</span>  <span class='const'>SIGN_PATHS</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_dir'>dir</span><span class='op'>|</span> <span class='kw'>return</span> <span class='kw'>true</span> <span class='kw'>if</span> <span class='id identifier rubyid___load_bridge_support_file__'>__load_bridge_support_file__</span><span class='lparen'>(</span><span class='id identifier rubyid_dir'>dir</span><span class='comma'>,</span> <span class='id identifier rubyid_fname'>fname</span><span class='rparen'>)</span> <span class='rbrace'>}</span> 
+
+  <span class='comment'># Damnit!
+</span>  <span class='id identifier rubyid_warn'>warn</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Can&#39;t find signatures file for </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_framework'>framework</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span> <span class='kw'>if</span> <span class='const'>OSX</span><span class='period'>.</span><span class='id identifier rubyid__debug?'>_debug?</span>
+  <span class='kw'>return</span> <span class='kw'>false</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="load_plist-class_method">
+  
+    + (<tt>OSX::NSPropertyList</tt>) <strong>load_plist</strong>(data) 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+
+
+  </div>
+</div>
+<div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>data</span>
+      
+      
+        <span class='type'></span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>OSX::NSPropertyList</tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'src/ruby/osx/objc/ruby_addition.rb', line 41</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_load_plist'>load_plist</span><span class='lparen'>(</span><span class='id identifier rubyid_data'>data</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_str'>str</span> <span class='op'>=</span> <span class='id identifier rubyid_data'>data</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span><span class='period'>.</span><span class='id identifier rubyid_to_ns'>to_ns</span>
+  <span class='kw'>if</span> <span class='id identifier rubyid_str'>str</span>
+    <span class='id identifier rubyid_nsdata'>nsdata</span> <span class='op'>=</span> <span class='id identifier rubyid_str'>str</span><span class='period'>.</span><span class='id identifier rubyid_dataUsingEncoding'>dataUsingEncoding</span><span class='lparen'>(</span><span class='const'>OSX</span><span class='op'>::</span><span class='const'>NSUTF8StringEncoding</span><span class='rparen'>)</span>
+  <span class='kw'>else</span>
+    <span class='comment'># binary string data =&gt; guess binary format plist
+</span>    <span class='id identifier rubyid_nsdata'>nsdata</span> <span class='op'>=</span> <span class='const'>OSX</span><span class='op'>::</span><span class='const'>NSData</span><span class='period'>.</span><span class='id identifier rubyid_dataWithBytes_length'>dataWithBytes_length</span><span class='lparen'>(</span><span class='id identifier rubyid_data'>data</span><span class='comma'>,</span> <span class='id identifier rubyid_data'>data</span><span class='period'>.</span><span class='id identifier rubyid_size'>size</span><span class='rparen'>)</span>
+  <span class='kw'>end</span>
+  <span class='id identifier rubyid_obj'>obj</span><span class='comma'>,</span> <span class='id identifier rubyid_error'>error</span> <span class='op'>=</span> <span class='const'>OSX</span><span class='op'>::</span><span class='const'>NSPropertyListSerialization</span><span class='period'>.</span><span class='id identifier rubyid_objc_send'>objc_send</span> \
+    <span class='symbol'>:propertyListFromData</span><span class='comma'>,</span> <span class='id identifier rubyid_nsdata'>nsdata</span><span class='comma'>,</span>
+    <span class='symbol'>:mutabilityOption</span><span class='comma'>,</span> <span class='const'>OSX</span><span class='op'>::</span><span class='const'>NSPropertyListImmutable</span><span class='comma'>,</span>
+    <span class='symbol'>:format</span><span class='comma'>,</span> <span class='kw'>nil</span><span class='comma'>,</span>
+    <span class='symbol'>:errorDescription</span>
+  <span class='id identifier rubyid_raise'>raise</span> <span class='id identifier rubyid_error'>error</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span> <span class='kw'>if</span> <span class='id identifier rubyid_obj'>obj</span><span class='period'>.</span><span class='id identifier rubyid_nil?'>nil?</span>
+  <span class='id identifier rubyid_obj'>obj</span><span class='period'>.</span><span class='id identifier rubyid_respond_to?'>respond_to?</span><span class='lparen'>(</span><span class='symbol'>:to_ruby</span><span class='rparen'>)</span> <span class='op'>?</span> <span class='id identifier rubyid_obj'>obj</span><span class='period'>.</span><span class='id identifier rubyid_to_ruby'>to_ruby</span> <span class='op'>:</span> <span class='id identifier rubyid_obj'>obj</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="lookup_informal_protocol_method_type-class_method">
+  
+    + (<tt>Sting</tt>) <strong>lookup_informal_protocol_method_type</strong> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    <p>Finds type encoding of a given method from informal protocols.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>sel</span>
+      
+      
+        <span class='type'></span>
+      
+      
+      
+        &mdash;
+        <div class='inline'><p>Name of a method</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>is_class_method</span>
+      
+      
+        <span class='type'>(<tt>Boolean</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'><p>Whether the given method is a class method or not</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Sting</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'><p>Type encoding</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+2182
+2183
+2184
+2185
+2186
+2187
+2188
+2189
+2190
+2191
+2192</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'src/objc/BridgeSupport.m', line 2182</span>
+
+static VALUE
+osx_lookup_informal_protocol_method_type (VALUE rcv, VALUE sel, 
+  VALUE is_class_method)
+{
+  struct bsInformalProtocolMethod *method;
+
+  method = find_bs_informal_protocol_method(StringValuePtr(sel), 
+    RTEST(is_class_method));
+
+  return method == NULL ? Qnil : rb_str_new2(method-&gt;encoding);
+}</pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="method_missing-class_method">
+  
+    + (<tt><span class='object_link'><a href="Object.html" title="Object (class)">Object</a></span></tt>) <strong>method_missing</strong>(mname, *args) 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    <p>Backward compatibility check; get C constants</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'src/ruby/osx/objc/oc_wrapper.rb', line 14</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_method_missing'>method_missing</span><span class='lparen'>(</span><span class='id identifier rubyid_mname'>mname</span><span class='comma'>,</span> <span class='op'>*</span><span class='id identifier rubyid_args'>args</span><span class='rparen'>)</span>
+  <span class='kw'>if</span> <span class='id identifier rubyid_args'>args</span><span class='period'>.</span><span class='id identifier rubyid_length'>length</span> <span class='op'>==</span> <span class='int'>0</span>
+    <span class='kw'>begin</span>
+      <span class='id identifier rubyid_ret'>ret</span> <span class='op'>=</span> <span class='id identifier rubyid_const_get'>const_get</span><span class='lparen'>(</span><span class='id identifier rubyid_mname'>mname</span><span class='rparen'>)</span>
+      <span class='id identifier rubyid_warn'>warn</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_caller'>caller</span><span class='lbracket'>[</span><span class='int'>0</span><span class='rbracket'>]</span><span class='embexpr_end'>}</span><span class='tstring_content'>: syntax &#39;OSX.</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_mname'>mname</span><span class='embexpr_end'>}</span><span class='tstring_content'>&#39; to get the constant is deprecated and its use is discouraged, please use &#39;OSX::</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_mname'>mname</span><span class='embexpr_end'>}</span><span class='tstring_content'>&#39; instead.</span><span class='tstring_end'>&quot;</span></span>
+      <span class='kw'>return</span> <span class='id identifier rubyid_ret'>ret</span>
+    <span class='kw'>rescue</span>
+    <span class='kw'>end</span>
+  <span class='kw'>end</span>
+  <span class='kw'>super</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="ns_autorelease_pool-class_method">
+  
+    + (<tt><span class='object_link'><a href="Object.html" title="Object (class)">Object</a></span></tt>) <strong>ns_autorelease_pool</strong> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    <p>Like Objective-C “@autorelease { … }” block.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+  <div class="examples">
+    <p class="tag_title">Examples:</p>
+    
+      
+      <pre class="example code"><code><span class='const'>OSX</span><span class='period'>.</span><span class='id identifier rubyid_ns_autorelease_pool'>ns_autorelease_pool</span> <span class='kw'>do</span>
+    <span class='comment'># do something
+</span><span class='kw'>end</span></code></pre>
+    
+  </div>
+
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+187
+188
+189
+190
+191
+192
+193
+194</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'src/objc/mdl_osxobjc.m', line 187</span>
+
+static VALUE
+ns_autorelease_pool(VALUE mdl)
+{
+  id pool = [[NSAutoreleasePool alloc] init];
+  rb_yield(Qnil);
+  [pool release];
+  return Qnil;
+}</pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="ns_import-class_method">
+  
+    + (<tt><span class='object_link'><a href="Object.html" title="Object (class)">Object</a></span></tt>) <strong>ns_import</strong>(sym) 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    <p>create Ruby’s class for Cocoa class,
+then define Constant under module ‘OSX’.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+233
+234
+235
+236
+237
+238
+239
+240
+241
+242
+243
+244</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'src/ruby/osx/objc/oc_import.rb', line 233</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_ns_import'>ns_import</span><span class='lparen'>(</span><span class='id identifier rubyid_sym'>sym</span><span class='rparen'>)</span>
+  <span class='kw'>if</span> <span class='kw'>not</span> <span class='const'>OSX</span><span class='period'>.</span><span class='id identifier rubyid_const_defined?'>const_defined?</span><span class='lparen'>(</span><span class='id identifier rubyid_sym'>sym</span><span class='rparen'>)</span>
+    <span class='const'>NSLog</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>importing </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_sym'>sym</span><span class='embexpr_end'>}</span><span class='tstring_content'>...</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span> <span class='kw'>if</span> <span class='const'>OSX</span><span class='period'>.</span><span class='id identifier rubyid__debug?'>_debug?</span>
+    <span class='id identifier rubyid_klass'>klass</span> <span class='op'>=</span> <span class='kw'>if</span> <span class='id identifier rubyid_clsobj'>clsobj</span> <span class='op'>=</span> <span class='const'>NSClassFromString</span><span class='lparen'>(</span><span class='id identifier rubyid_sym'>sym</span><span class='rparen'>)</span>
+      <span class='kw'>if</span> <span class='id identifier rubyid_rbcls'>rbcls</span> <span class='op'>=</span> <span class='id identifier rubyid_class_new_for_occlass'>class_new_for_occlass</span><span class='lparen'>(</span><span class='id identifier rubyid_clsobj'>clsobj</span><span class='rparen'>)</span>
+        <span class='const'>OSX</span><span class='period'>.</span><span class='id identifier rubyid_const_set'>const_set</span><span class='lparen'>(</span><span class='id identifier rubyid_sym'>sym</span><span class='comma'>,</span> <span class='id identifier rubyid_rbcls'>rbcls</span><span class='rparen'>)</span>
+      <span class='kw'>end</span>
+    <span class='kw'>end</span>
+    <span class='const'>NSLog</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>importing </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_sym'>sym</span><span class='embexpr_end'>}</span><span class='tstring_content'>... done (</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_klass'>klass</span><span class='period'>.</span><span class='id identifier rubyid_ancestors'>ancestors</span><span class='period'>.</span><span class='id identifier rubyid_join'>join</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'> -&gt; </span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span><span class='embexpr_end'>}</span><span class='tstring_content'>)</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span> <span class='kw'>if</span> <span class='lparen'>(</span><span class='id identifier rubyid_klass'>klass</span> <span class='kw'>and</span> <span class='const'>OSX</span><span class='period'>.</span><span class='id identifier rubyid__debug?'>_debug?</span><span class='rparen'>)</span>
+    <span class='kw'>return</span> <span class='id identifier rubyid_klass'>klass</span>
+  <span class='kw'>end</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="NSLocalizedString-class_method">
+  
+    + (<tt><span class='object_link'><a href="Object.html" title="Object (class)">Object</a></span></tt>) <strong>NSLocalizedString</strong>(key, comment = nil) 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    <p>Convenient function for -[NSBundle localizedStringForKey:value:table:] of mainBundle.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+13
+14
+15
+16</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'src/ruby/osx/objc/cocoa_macros.rb', line 13</span>
+
+<span class='kw'>def</span> <span class='const'>NSLocalizedString</span> <span class='lparen'>(</span><span class='id identifier rubyid_key'>key</span><span class='comma'>,</span> <span class='id identifier rubyid_comment'>comment</span> <span class='op'>=</span> <span class='kw'>nil</span><span class='rparen'>)</span>
+  <span class='const'>OSX</span><span class='op'>::</span><span class='const'>NSBundle</span><span class='period'>.</span><span class='id identifier rubyid_mainBundle'>mainBundle</span><span class='period'>.</span>
+    <span class='id identifier rubyid_localizedStringForKey_value_table'>localizedStringForKey_value_table</span><span class='lparen'>(</span><span class='id identifier rubyid_key'>key</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='kw'>nil</span><span class='rparen'>)</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="NSLocalizedStringFromTable-class_method">
+  
+    + (<tt><span class='object_link'><a href="Object.html" title="Object (class)">Object</a></span></tt>) <strong>NSLocalizedStringFromTable</strong>(key, tbl, comment = nil) 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    <p>Convenient function for -[NSBundle localizedStringForKey:value:table:] of mainBundle.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+18
+19
+20
+21</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'src/ruby/osx/objc/cocoa_macros.rb', line 18</span>
+
+<span class='kw'>def</span> <span class='const'>NSLocalizedStringFromTable</span> <span class='lparen'>(</span><span class='id identifier rubyid_key'>key</span><span class='comma'>,</span> <span class='id identifier rubyid_tbl'>tbl</span><span class='comma'>,</span> <span class='id identifier rubyid_comment'>comment</span> <span class='op'>=</span> <span class='kw'>nil</span><span class='rparen'>)</span>
+  <span class='const'>OSX</span><span class='op'>::</span><span class='const'>NSBundle</span><span class='period'>.</span><span class='id identifier rubyid_mainBundle'>mainBundle</span><span class='period'>.</span>
+    <span class='id identifier rubyid_localizedStringForKey_value_table'>localizedStringForKey_value_table</span><span class='lparen'>(</span><span class='id identifier rubyid_key'>key</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='id identifier rubyid_tbl'>tbl</span><span class='rparen'>)</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="NSLocalizedStringFromTableInBundle-class_method">
+  
+    + (<tt><span class='object_link'><a href="Object.html" title="Object (class)">Object</a></span></tt>) <strong>NSLocalizedStringFromTableInBundle</strong>(key, tbl, bundle, comment = nil) 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    <p>Convenient function for -[NSBundle localizedStringForKey:value:table:].</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+23
+24
+25</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'src/ruby/osx/objc/cocoa_macros.rb', line 23</span>
+
+<span class='kw'>def</span> <span class='const'>NSLocalizedStringFromTableInBundle</span> <span class='lparen'>(</span><span class='id identifier rubyid_key'>key</span><span class='comma'>,</span> <span class='id identifier rubyid_tbl'>tbl</span><span class='comma'>,</span> <span class='id identifier rubyid_bundle'>bundle</span><span class='comma'>,</span> <span class='id identifier rubyid_comment'>comment</span> <span class='op'>=</span> <span class='kw'>nil</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_bundle'>bundle</span><span class='period'>.</span><span class='id identifier rubyid_localizedStringForKey_value_table'>localizedStringForKey_value_table</span><span class='lparen'>(</span><span class='id identifier rubyid_key'>key</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='id identifier rubyid_tbl'>tbl</span><span class='rparen'>)</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="objc_class_method_add-class_method">
+  
+    + (<tt><span class='object_link'><a href="Object.html" title="Object (class)">Object</a></span></tt>) <strong>objc_class_method_add</strong> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    <p>Adds an Objective-C method by a given name.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+  <div class="examples">
+    <p class="tag_title">Examples:</p>
+    
+      
+      <pre class="example code"><code>OSX.objc_class_method_add (AA::BB::CustomView, &quot;drawRect:&quot;)</code></pre>
+    
+  </div>
+<p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>method_name</span>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="String.html" title="String (class)">String</a></span></tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'><p>Method name</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>class_method</span>
+      
+      
+        <span class='type'>(<tt>Boolean</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'><p>Whether class method or not</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>types</span>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="String.html" title="String (class)">String</a></span></tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'><p>Objective-C encoding types</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'></span>
+      
+      
+      
+        
+        <div class='inline'><p>nil</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135
+136
+137
+138
+139
+140
+141
+142
+143
+144</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'src/objc/mdl_osxobjc.m', line 110</span>
+
+static VALUE
+osx_mf_objc_class_method_add(VALUE mdl, VALUE kls, VALUE method_name, VALUE class_method, VALUE types)
+{
+  Class a_class;
+  SEL a_sel;
+  const char *kls_name;
+  BOOL direct_override;
+
+  method_name = rb_obj_as_string(method_name);
+  a_sel = sel_registerName(StringValuePtr(method_name));
+  if (a_sel == NULL)
+    return Qnil;
+  kls_name = rb_class2name(kls);
+  if (strncmp(kls_name, &quot;OSX::&quot;, 5) == 0 
+      &amp;&amp; (a_class = objc_lookUpClass(kls_name + 5)) != NULL 
+      &amp;&amp; !is_objc_derived_class(kls)) {
+    // override in the current class
+    direct_override = YES;
+  }
+  else {
+    // override in the super class 
+    a_class = RBObjcClassFromRubyClass(kls);
+    direct_override = NO;
+  }
+  if (a_class != NULL) {
+    id rcv;
+
+    rcv = RTEST(class_method) ? a_class-&gt;isa : a_class;
+    if (NIL_P(types))
+      ovmix_register_ruby_method(rcv, a_sel, direct_override);
+    else
+      [rcv addRubyMethod:a_sel withType:StringValuePtr(types)];
+  }
+  return Qnil;
+}</pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="objc_derived_class_new-class_method">
+  
+    + (<tt><span class='object_link'><a href="Object.html" title="Object (class)">Object</a></span></tt>) <strong>objc_derived_class_new</strong> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    <p>Defines new Objective-C subclass from Ruby class by a given name.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+  <div class="examples">
+    <p class="tag_title">Examples:</p>
+    
+      
+        <p class="example_title"><div class='inline'><p>declare new Objective-C class named “CustomView” as a subclass of “NSView”.</p>
+</div></p>
+      
+      <pre class="example code"><code>OSX.objc_derived_class_new (AA::BB::CustomView, &quot;CustomView&quot;, &quot;NSView&quot;)</code></pre>
+    
+  </div>
+<p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>kls</span>
+      
+      
+        <span class='type'>(<tt>Class</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'><p>Ruby class</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>kls_name</span>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="String.html" title="String (class)">String</a></span></tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'><p>Objective-C class name</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>super_name</span>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="String.html" title="String (class)">String</a></span></tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'><p>Objective-C superclass name</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'></span>
+      
+      
+      
+        
+        <div class='inline'><p>nil</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'src/objc/mdl_osxobjc.m', line 83</span>
+
+static VALUE
+osx_mf_objc_derived_class_new(VALUE mdl, VALUE kls, VALUE kls_name, VALUE super_name)
+{
+  Class super_class;
+  Class new_cls = nil;
+
+  kls_name = rb_obj_as_string(kls_name);
+  super_name = rb_obj_as_string(super_name);
+  super_class = objc_getClass(StringValuePtr(super_name));
+  if (super_class)
+    new_cls = RBObjcDerivedClassNew(kls, StringValuePtr(kls_name), super_class);
+
+  if (new_cls)
+    return ocobj_s_new(new_cls);
+  return Qnil;
+}</pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="objc_proxy_class_new-class_method">
+  
+    + (<tt><span class='object_link'><a href="Object.html" title="Object (class)">Object</a></span></tt>) <strong>objc_proxy_class_new</strong> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    <p>Defines new Objective-C class from Ruby class by a given name.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+  <div class="examples">
+    <p class="tag_title">Examples:</p>
+    
+      
+        <p class="example_title"><div class='inline'><p>declare new Objective-C class named “AppController”.</p>
+</div></p>
+      
+      <pre class="example code"><code>OSX.objc_proxy_class_new (AA::BB::AppController, &quot;AppController&quot;)</code></pre>
+    
+  </div>
+<p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>kls</span>
+      
+      
+        <span class='type'>(<tt>Class</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'><p>Ruby class</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>kls_name</span>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="String.html" title="String (class)">String</a></span></tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'><p>Objective-C class name</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'></span>
+      
+      
+      
+        
+        <div class='inline'><p>nil</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+66
+67
+68
+69
+70
+71
+72</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'src/objc/mdl_osxobjc.m', line 66</span>
+
+static VALUE
+osx_mf_objc_proxy_class_new(VALUE mdl, VALUE kls, VALUE kls_name)
+{
+  kls_name = rb_obj_as_string(kls_name);
+  RBObjcClassNew(kls, StringValuePtr(kls_name), [RBObject class]);
+  return Qnil;
+}</pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="object_to_plist-class_method">
+  
+    + (<tt><span class='object_link'><a href="Object.html" title="Object (class)">Object</a></span></tt>) <strong>object_to_plist</strong>(object, format = nil) 
+  
+
+  
+
+  
+</h3><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'src/ruby/osx/objc/ruby_addition.rb', line 59</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_object_to_plist'>object_to_plist</span><span class='lparen'>(</span><span class='id identifier rubyid_object'>object</span><span class='comma'>,</span> <span class='id identifier rubyid_format'>format</span><span class='op'>=</span><span class='kw'>nil</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_format'>format</span> <span class='op'>||=</span> <span class='const'>OSX</span><span class='op'>::</span><span class='const'>NSPropertyListXMLFormat_v1_0</span>
+  <span class='id identifier rubyid_data'>data</span><span class='comma'>,</span> <span class='id identifier rubyid_error'>error</span> <span class='op'>=</span> <span class='const'>OSX</span><span class='op'>::</span><span class='const'>NSPropertyListSerialization</span><span class='period'>.</span><span class='id identifier rubyid_objc_send'>objc_send</span> \
+    <span class='symbol'>:dataFromPropertyList</span><span class='comma'>,</span> <span class='id identifier rubyid_object'>object</span><span class='comma'>,</span>
+    <span class='symbol'>:format</span><span class='comma'>,</span> <span class='id identifier rubyid_format'>format</span><span class='comma'>,</span>
+    <span class='symbol'>:errorDescription</span>
+  <span class='id identifier rubyid_raise'>raise</span> <span class='id identifier rubyid_error'>error</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span> <span class='kw'>if</span> <span class='id identifier rubyid_data'>data</span><span class='period'>.</span><span class='id identifier rubyid_nil?'>nil?</span>
+  <span class='kw'>case</span> <span class='id identifier rubyid_format'>format</span>
+    <span class='kw'>when</span> <span class='const'>OSX</span><span class='op'>::</span><span class='const'>NSPropertyListXMLFormat_v1_0</span><span class='comma'>,</span> 
+         <span class='const'>OSX</span><span class='op'>::</span><span class='const'>NSPropertyListOpenStepFormat</span>
+      <span class='const'>OSX</span><span class='op'>::</span><span class='const'>NSString</span><span class='period'>.</span><span class='id identifier rubyid_alloc'>alloc</span><span class='period'>.</span><span class='id identifier rubyid_initWithData_encoding'>initWithData_encoding</span><span class='lparen'>(</span><span class='id identifier rubyid_data'>data</span><span class='comma'>,</span> 
+        <span class='const'>OSX</span><span class='op'>::</span><span class='const'>NSUTF8StringEncoding</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span>
+    <span class='kw'>else</span>
+      <span class='id identifier rubyid_data'>data</span><span class='period'>.</span><span class='id identifier rubyid_bytes'>bytes</span><span class='period'>.</span><span class='id identifier rubyid_bytestr'>bytestr</span><span class='lparen'>(</span><span class='id identifier rubyid_data'>data</span><span class='period'>.</span><span class='id identifier rubyid_length'>length</span><span class='rparen'>)</span>
+  <span class='kw'>end</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="rbobj_to_nsobj-class_method">
+  
+    + (<tt><span class='object_link'><a href="Object.html" title="Object (class)">Object</a></span></tt>) <strong>rbobj_to_nsobj</strong> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    <p>Converts Ruby objects to Objective-C objects.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+365
+366
+367
+368
+369
+370
+371
+372
+373
+374
+375
+376
+377
+378
+379
+380
+381
+382
+383
+384
+385</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'src/objc/mdl_osxobjc.m', line 365</span>
+
+static VALUE
+osx_rbobj_to_nsobj (VALUE rcv, VALUE obj)
+{
+  id ocid, pool;
+  VALUE val;
+
+  pool = [[NSAutoreleasePool alloc] init];
+  if (!rbobj_to_nsobj(obj, &amp;ocid) || ocid == nil) {
+    [pool release];
+    return Qnil;
+  }
+
+  val = ocid_to_rbobj(Qnil, ocid);
+  [ocid retain];
+  OBJCID_DATA_PTR(val)-&gt;retained = YES;
+  OBJCID_DATA_PTR(val)-&gt;can_be_released = YES;
+
+  [pool release];
+
+  return val;
+}</pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="require_framework-class_method">
+  
+    + (<tt><span class='object_link'><a href="Object.html" title="Object (class)">Object</a></span></tt>) <strong>require_framework</strong>(framework) 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    <p>“require” for OSX .framework.</p>
+
+<p>The OSX::require_framework method imports Mac OS X frameworks and uses the
+BridgeSupport metadata to add Ruby entry points for the framework’s Classes,
+methods, and Constants into the OSX module.</p>
+
+<p>The framework parameter is a reference to the framework that should be
+imported.  This may be a full path name to a particular framework, a shortcut,
+or a framework name.  The shortcuts are the keys listed in the
+<span class='object_link'><a href="#QUICK_FRAMEWORKS-constant" title="OSX::QUICK_FRAMEWORKS (constant)">QUICK_FRAMEWORKS</a></span> hash.</p>
+
+<p>If a framework name (with no path) is given, then the method searches a number
+of directories.  Those directories (in search order) are:</p>
+
+<ol>
+  <li>/System/Library/Frameworks</li>
+  <li>/Library/Frameworks</li>
+  <li>Any directories in the RUBYCOCOA_FRAMEWORK_PATHS array, if defined</li>
+  <li>ENV[‘HOME’]/Library/Frameworks, if the HOME environment variable is defined</li>
+</ol>
+
+<p>When using the search paths, the <code>.framework</code> file type extension should
+be omitted from the framework name passed to the method.</p>
+
+<p>If the method loads the framework successfully, it returns <code>true</code>.
+If the framework was already loaded the method returns <code>false</code>.
+If the method is unable to locate, or unable to load the framework then it
+raises an <code>ArgumentError</code>.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'src/ruby/osx/objc/oc_import.rb', line 90</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_require_framework'>require_framework</span><span class='lparen'>(</span><span class='id identifier rubyid_framework'>framework</span><span class='rparen'>)</span>
+  <span class='kw'>return</span> <span class='kw'>false</span> <span class='kw'>if</span> <span class='id identifier rubyid_framework_loaded?'>framework_loaded?</span><span class='lparen'>(</span><span class='id identifier rubyid_framework'>framework</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_bundle'>bundle</span><span class='comma'>,</span> <span class='id identifier rubyid_path'>path</span> <span class='op'>=</span> <span class='id identifier rubyid__bundle_path_for_framework'>_bundle_path_for_framework</span><span class='lparen'>(</span><span class='id identifier rubyid_framework'>framework</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_bundle'>bundle</span><span class='period'>.</span><span class='id identifier rubyid_oc_load'>oc_load</span>
+  <span class='kw'>if</span> <span class='kw'>not</span> <span class='id identifier rubyid_bundle'>bundle</span><span class='period'>.</span><span class='id identifier rubyid_isLoaded?'>isLoaded?</span> <span class='kw'>then</span>
+    <span class='id identifier rubyid_raise'>raise</span> <span class='const'>ArgumentError</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Can&#39;t load framework &#39;</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_framework'>framework</span><span class='embexpr_end'>}</span><span class='tstring_content'>&#39;</span><span class='tstring_end'>&quot;</span></span> 
+  <span class='kw'>end</span>
+  <span class='id identifier rubyid_load_bridge_support_signatures'>load_bridge_support_signatures</span><span class='lparen'>(</span><span class='id identifier rubyid_path'>path</span><span class='rparen'>)</span>
+  <span class='kw'>return</span> <span class='kw'>true</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="ruby_thread_switcher_start-class_method">
+  
+    + (<tt><span class='object_link'><a href="Object.html" title="Object (class)">Object</a></span></tt>) <strong>ruby_thread_switcher_start</strong> 
+  
+
+  
+
+  
+</h3><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+146
+147
+148
+149
+150
+151
+152
+153
+154
+155
+156
+157
+158
+159
+160
+161
+162
+163
+164
+165
+166
+167
+168
+169
+170
+171</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'src/objc/mdl_osxobjc.m', line 146</span>
+
+static VALUE
+osx_mf_ruby_thread_switcher_start(int argc, VALUE* argv, VALUE mdl)
+{
+  volatile VALUE arg_interval, arg_wait;
+  double interval, wait;
+
+  rb_scan_args(argc, argv, &quot;02&quot;, &amp;arg_interval, &amp;arg_wait);
+
+  if (arg_interval == Qnil) {
+    [RBThreadSwitcher start];
+  }
+  else {
+    Check_Type(arg_interval, T_FLOAT);
+    interval = RFLOAT_VALUE(arg_interval);
+
+    if (arg_wait == Qnil) {
+      [RBThreadSwitcher start: interval];
+    }
+    else {
+      Check_Type(arg_wait, T_FLOAT);
+      wait = RFLOAT_VALUE(arg_wait);
+      [RBThreadSwitcher start: interval wait: wait];
+    }
+  }
+  return Qnil;
+}</pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="ruby_thread_switcher_stop-class_method">
+  
+    + (<tt><span class='object_link'><a href="Object.html" title="Object (class)">Object</a></span></tt>) <strong>ruby_thread_switcher_stop</strong> 
+  
+
+  
+
+  
+</h3><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+173
+174
+175
+176
+177
+178</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'src/objc/mdl_osxobjc.m', line 173</span>
+
+static VALUE
+osx_mf_ruby_thread_switcher_stop(VALUE mdl)
+{
+  [RBThreadSwitcher stop];
+  return Qnil;
+}</pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+  </div>
+
+</div>
+
+    <div id="footer">
+  Generated on Sun Nov 17 10:10:43 2013 by
+  <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
+  0.8.7.3 (ruby-2.0.0).
+</div>
+
+  </body>
+</html>

@@ -1,5 +1,8 @@
 2013-11-17 kimura wataru <kimuraw@i.nifty.jp>
 
+	* doc/html:
+	add docs generated with yardoc and headerdoc.
+
 	* framework/pre-doc.rb:
 	change docs generate destination to doc/html/.
 
