@@ -40,5 +40,13 @@ if yardoc.length > 0 && File.exist?(yardoc)
 	      src/objc/mdl_objwrapper.m
 	      src/objc/mdl_osxobjc.m
 	      src/objc/BridgeSupport.m)
+    # additional documents
+    cmd += %w(--readme
+	      ../doc/index.md)
+    cmd += %w(--files)
+    cmd.push %w(../doc/getting-started.md,
+	      ../doc/try-samples.md,
+	      ../doc/programming.md,
+	      ../doc/resources.md).join
     command(cmd.join(' '))
 end
