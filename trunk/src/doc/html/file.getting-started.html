@@ -1,0 +1,138 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>
+  File: Getting Started
+  
+    &mdash; RubyCocoa Documentation
+  
+</title>
+
+  <link rel="stylesheet" href="css/style.css" type="text/css" charset="utf-8" />
+
+  <link rel="stylesheet" href="css/common.css" type="text/css" charset="utf-8" />
+
+<script type="text/javascript" charset="utf-8">
+  hasFrames = window.top.frames.main ? true : false;
+  relpath = '';
+  framesUrl = "frames.html#!" + escape(window.location.href);
+</script>
+
+
+  <script type="text/javascript" charset="utf-8" src="js/jquery.js"></script>
+
+  <script type="text/javascript" charset="utf-8" src="js/app.js"></script>
+
+
+  </head>
+  <body>
+    <div id="header">
+      <div id="menu">
+  
+    <a href="_index.html">Index</a> &raquo; 
+    <span class="title">File: Getting Started</span>
+  
+
+  <div class="noframes"><span class="title">(</span><a href="." target="_top">no frames</a><span class="title">)</span></div>
+</div>
+
+      <div id="search">
+  
+    <a class="full_list_link" id="class_list_link"
+        href="class_list.html">
+      Class List
+    </a>
+  
+    <a class="full_list_link" id="method_list_link"
+        href="method_list.html">
+      Method List
+    </a>
+  
+    <a class="full_list_link" id="file_list_link"
+        href="file_list.html">
+      File List
+    </a>
+  
+</div>
+      <div class="clear"></div>
+    </div>
+
+    <iframe id="search_frame"></iframe>
+
+    <div id="content"><div id='filecontents'>
+<h1 id="getting-started">Getting Started</h1>
+
+<h2 id="mac-os-x-built-in-framework">Mac OS X built-in framework</h2>
+
+<p>Mac OS X 10.5 Leopard or later, RubyCocoa is installed as a part of Mac OS X.
+The versions of RubyCocoa pre-installed into Mac OS X are:</p>
+
+<ul>
+  <li>OS X 10.9 Mavericks: 1.0.1</li>
+  <li>OS X 10.8 Mountain Lion: 1.0.1</li>
+  <li>Mac OS X 10.7 Lion: 1.0.0</li>
+  <li>Mac OS X 10.6 Snow Leopard: 1.0.0</li>
+  <li>Mac OS X 10.5 Leopard: 0.13.2</li>
+</ul>
+
+<p>If you want to use the latest RubyCocoa, you need to install RubyCocoa.framework from dmg or source code.</p>
+
+<h2 id="download-binary-distribution">Download binary distribution</h2>
+
+<p>Download RubyCocoa-x.x.x.dmg from <a href="http://sourceforge.net/projects/rubycocoa/files/RubyCocoa/">SourceForge.net</a>.</p>
+
+<p>It includes library, samples, templates for Xcode etc. for RubyCocoa. Everything necessary for execution and development is included in an easy-to-install ‘.pkg’ package file.</p>
+
+<p>A successful installation of the binary package will add the following items:</p>
+
+<ul>
+  <li>/Library/Frameworks/RubyCocoa.framework : RubyCocoa framework (core)</li>
+  <li>inside of /Library/Ruby/Site/1.8/osx : RubyCocoa library (stub)</li>
+  <li>/Library/Ruby/Site/1.8/universal-darwin12.0/rubycocoa.bundle : RubyCocoa extended library (stub)</li>
+  <li>/Developer/Examples/RubyCocoa : Sample programs</li>
+</ul>
+
+<p>After installation, try the samples that are written in Ruby. Refer to <a href="file.try-samples.html" title="Try Samples">Try Samples</a>.</p>
+
+<h2 id="install-xcode4-project-templates-105-or-later">Install Xcode4 project templates (1.0.5 or later)</h2>
+
+<pre class="code ruby"><code class="ruby">$ ruby /Developer/Documentation/RubyCocoa/Templates/install_templates.rb \
+      Xcode4.x
+% ls ~/Library/Developer/Xcode/Templates/Project\ Templates/Mac/Application
+Ruby-Cocoa Application Base.xctemplate
+Ruby-Cocoa Application.xctemplate
+Ruby-Cocoa Document-based Application.xctemplate
+Ruby-Core Data Application.xctemplate
+Ruby-Core Data Spotlight Application.xctemplate
+% ruby /Developer/Documentation/RubyCocoa/Templates/install_templates.rb \
+      --help
+usage: install_templates.rb [options] TEMPLATE_DIR
+    TEMPLATE_DIR: Xcode4.x or Xcode4.1
+    -f, --force                      overwrite existing templates
+    -v, --verbose                    print verbose message
+        --dest=dir                   specify install destination
+</code></pre>
+
+<h2 id="build-from-source">Build from Source</h2>
+
+<p>Extract RubyCocoa source from the ‘.tar.gz’ file into a directory somewhere.</p>
+
+<pre class="code ruby"><code class="ruby">$ tar xzf RubyCocoa-x.x.x.tar.gz
+$ cd RubyCocoa-x.x.x
+$ ruby install.rb config
+$ ruby install.rb setup
+$ ruby install.rb test
+$ sudo ruby install.rb intstall
+</code></pre>
+</div></div>
+
+    <div id="footer">
+  Generated on Sun Nov 17 10:10:43 2013 by
+  <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
+  0.8.7.3 (ruby-2.0.0).
+</div>
+
+  </body>
+</html>
