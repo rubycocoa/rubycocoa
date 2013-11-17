@@ -1,4 +1,9 @@
+=== RubyCocoa 1.1.0 ===
+
 2013-11-17 kimura wataru <kimuraw@i.nifty.jp>
+
+	* VERSION, doc/index.md:
+	set version to 1.1.0
 
 	* doc/html:
 	add docs generated with yardoc and headerdoc.

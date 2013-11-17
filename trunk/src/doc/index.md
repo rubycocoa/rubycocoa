@@ -20,7 +20,7 @@ Some useful applications of RubyCocoa:
 
 ## Latest Release
 
-* [1.1.0](http://sourceforge.net/projects/rubycocoa/files/RubyCocoa/1.0.7/) (2013-XX-XX)
+* [1.1.0](http://sourceforge.net/projects/rubycocoa/files/RubyCocoa/1.1.0/) (2013-11-17)
 * [NEWS](http://sourceforge.net/p/rubycocoa/svn/HEAD/tree/trunk/src/NEWS)
 
 ## LICENSE
