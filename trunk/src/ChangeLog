@@ -1,5 +1,8 @@
 2013-11-17 kimura wataru <kimuraw@i.nifty.jp>
 
+	* framework/pre-doc.rb:
+	change docs generate destination to doc/html/.
+
 	* doc/Rakefile, doc/html/ja/, doc/ja/:
 	remove unused documents.
 
