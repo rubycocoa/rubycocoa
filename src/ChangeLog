@@ -1,5 +1,8 @@
 2013-11-17 kimura wataru <kimuraw@i.nifty.jp>
 
+	* doc/Rakefile, doc/html/ja/, doc/ja/:
+	remove unused documents.
+
 	* doc/getting-started.md, doc/index.md,
 	  doc/programming.md, doc/resources.md,
 	  doc/try-samples.md, framework/pre-doc.rb:
