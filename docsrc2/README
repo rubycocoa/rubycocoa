@@ -1,6 +1,0 @@
-this site is built with nanoc.
-you can build this site with the following commands.
-
-  % bundle install --path vendor/bundle
-  % bundle exec nanoc compile
-
