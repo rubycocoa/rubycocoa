@@ -1,23 +1,11 @@
 # vim:sw=4:ts=8
 require 'fileutils'
 
-# Objective-C documents by "headerdoc"
-hd2html = `xcrun -f headerdoc2html`.chomp
-gatherhd = `xcrun -f gatherheaderdoc`.chomp
-if hd2html.length > 0 && File.exist?(hd2html)
-    FileUtils.rm_r('../doc/objc/', :force => true)
-    cmd = %W(#{hd2html} -o ../doc/objc)
-    cmd += %w(src/objc/RubyCocoa.h src/objc/RBRuntime.h src/objc/RBObject.h)
-    command(cmd.join(' '))
-    cmd = %W(#{gatherhd} ../doc/objc RubyCocoa.html)
-    command(cmd.join(' '))
-end
-
 # Ruby documents by "yard"
 yardoc = `which yardoc`.chomp
 if yardoc.length > 0 && File.exist?(yardoc)
-    FileUtils.rm_r('../doc/ruby/', :force => true)
-    cmd = %W(#{yardoc} -o ../doc/ruby --markup markdown
+    #FileUtils.rm_r('../doc/html/', :force => true)
+    cmd = %W(#{yardoc} -o ../doc/html --markup markdown
              --load ./tool/yard_objc_register.rb
 	     --title "RubyCocoa\ Documentation"
     )
@@ -50,3 +38,16 @@ if yardoc.length > 0 && File.exist?(yardoc)
 	      ../doc/resources.md).join
     command(cmd.join(' '))
 end
+
+# Objective-C documents by "headerdoc"
+hd2html = `xcrun -f headerdoc2html`.chomp
+gatherhd = `xcrun -f gatherheaderdoc`.chomp
+if hd2html.length > 0 && File.exist?(hd2html)
+    FileUtils.rm_r('../doc/html/objc/', :force => true)
+    cmd = %W(#{hd2html} -o ../doc/html/objc)
+    cmd += %w(src/objc/RubyCocoa.h src/objc/RBRuntime.h src/objc/RBObject.h)
+    command(cmd.join(' '))
+    cmd = %W(#{gatherhd} ../doc/html/objc RubyCocoa.html)
+    command(cmd.join(' '))
+end
+
