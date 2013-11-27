@@ -307,7 +307,7 @@ module OSX
     # Objective-C World.
     def ns_inherited()
       return if ns_inherited?
-      kls_name = self.name.split('::')[-1]
+      kls_name = self.name.to_s.split('::')[-1]
       if kls_name
         spr_name = superclass.name.split('::')[-1]
         occls = OSX.objc_derived_class_new(self, kls_name, spr_name)

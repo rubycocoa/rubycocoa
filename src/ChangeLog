@@ -1,3 +1,8 @@
+2013-11-27 kimura wataru <kimuraw@i.nifty.jp>
+
+	* framework/src/ruby/osx/objc/oc_import.rb:
+	fix NoMethodError at NSBehaviorAttachment#ns_inherited with ruby-2.0.
+
 === RubyCocoa 1.1.0 ===
 
 2013-11-17 kimura wataru <kimuraw@i.nifty.jp>
