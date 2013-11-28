@@ -772,19 +772,15 @@ class Object
               method = self.method(sym).unbind
               OSX.__rebind_umethod__(nsklass.class, method)
               nsklass.module_eval do 
-                @__imported_arity = method.arity
                 (class << self; self; end).instance_eval do 
                   define_method(sym, method)
                 end
-                @__imported_arity = nil
               end
             else
               method = self.instance_method(sym)
               OSX.__rebind_umethod__(nsklass, method)
               nsklass.module_eval do
-                @__imported_arity = method.arity
                 define_method(sym, method)
-                @__imported_arity = nil
               end
             end
           rescue NameError

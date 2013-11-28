@@ -1,6 +1,9 @@
 2013-11-28 kimura wataru <kimuraw@i.nifty.jp>
 
 	* framework/src/ruby/osx/objc/oc_import.rb:
+	remove unused instance variable @__imported_arity.
+
+	* framework/src/ruby/osx/objc/oc_import.rb:
 	remove code for ruby-1.8.4 or earlier.
 
 2013-11-27 kimura wataru <kimuraw@i.nifty.jp>
