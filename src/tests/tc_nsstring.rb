@@ -1,4 +1,4 @@
-#
+# coding: euc-jp
 #  $Id$
 #
 #  Copyright (c) 2005 kimura wataru
