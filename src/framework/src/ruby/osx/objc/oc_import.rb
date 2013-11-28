@@ -353,16 +353,9 @@ module OSX
 
     def _ns_behavior_method_added(sym, class_method)
       return if OSX._ignore_ns_override
-      sel = sym.to_s.gsub(/([^_])_/, '\1:') 
-      arity = if defined?(@__imported_arity) and @__imported_arity != nil \
-              and RUBY_VERSION < "1.8.5"
-        # This is a workaround for a Ruby 1.8.2 issue, the real arity is 
-        # provided by _register_method. 
-        @__imported_arity
-      else
-        m = class_method ? method(sym) : instance_method(sym)
-        m.arity
-      end
+      sel = sym.to_s.gsub(/([^_])_/, '\1:')
+      m = class_method ? method(sym) : instance_method(sym)
+      arity = m.arity
       sel << ':' if arity > 0 and /[^:]\z/ =~ sel
       mtype = nil
       if _ns_enable_override?(sel, class_method) or
