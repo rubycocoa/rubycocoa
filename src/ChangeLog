@@ -1,5 +1,9 @@
 2013-12-07 kimura wataru <kimuraw@i.nifty.jp>
 
+	* framework/src/ruby/osx/objc/oc_import.rb:
+	delete deprecated method NSBehaviorAttachment#objc_export().
+	use objc_method().
+
 	* pre-config.rb:
 	correct library name of error message.
 
