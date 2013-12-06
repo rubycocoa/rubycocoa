@@ -414,11 +414,6 @@ module OSX
       _objc_export(name, types, true)
     end
 
-    def objc_export(name, types)
-      warn "#{caller[0]}: objc_export is deprecated, and will be removed in a next release. please use objc_method instead."
-      objc_method(name, types)
-    end
-
     def objc_alias_method(new, old)
       new_sel = new.to_s.gsub(/([^_])_/, '\1:')
       old_sel = old.to_s.gsub(/([^_])_/, '\1:')
