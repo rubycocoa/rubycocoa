@@ -67,7 +67,7 @@ if !lib_exist?('/usr/lib/libffi.a') and !lib_exist?('/usr/lib/libffi.dylib')
     cflags << ' -I/usr/local/include/ffi '
     ldflags << ' -L/usr/local/lib '
   else
-    raise "ERROR: libxml2 not found!"
+    raise "ERROR: libffi not found!"
   end
 else
   other_header_search_paths << '/usr/include/ffi'
