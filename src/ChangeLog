@@ -1,3 +1,8 @@
+2013-12-07 kimura wataru <kimuraw@i.nifty.jp>
+
+	* pre-config.rb:
+	correct library name of error message.
+
 2013-11-28 kimura wataru <kimuraw@i.nifty.jp>
 
 	* tests/tc_bool.rb, tests/tc_nsstring.rb:
