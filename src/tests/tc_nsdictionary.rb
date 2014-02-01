@@ -133,7 +133,11 @@ class TC_NSDictionary < Test::Unit::TestCase
   
   def test_fetch_error
     assert_raise(IndexError) { alloc_nsdictionary.fetch(1) }
-    assert_raise(IndexError) { {}.fetch(1) }
+    if RUBY_VERSION.to_f >= 1.9
+      assert_raise(KeyError) { {}.fetch(1) }
+    else
+      assert_raise(IndexError) { {}.fetch(1) }
+    end
   end
   
   def test_reject!
