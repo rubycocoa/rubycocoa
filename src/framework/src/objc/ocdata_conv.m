@@ -13,7 +13,7 @@
 #import "RBObject.h"
 #import "mdl_osxobjc.h"
 #import <CoreFoundation/CFString.h> // CFStringEncoding
-#ifdef HAVE_RUBY_RUBY_H
+#ifdef HAVE_RUBY_ST_H
 #import <ruby/st.h>
 #else
 #import <st.h>
