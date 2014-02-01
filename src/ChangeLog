@@ -1,5 +1,12 @@
 2014-02-01 kimura wataru <kimuraw@i.nifty.jp>
 
+	* framework/RubyCocoa.xcodeproj,
+	  framework/src/ruby/osx/objc/oc_all.rb,
+	  framework/src/ruby/osx/objc/oc_import.rb,
+	  framework/src/ruby/osx/objc/oc_import_openclass.rb:
+	refactaring pseudo-openclass of Objective-C classes.
+	this feature is enabled only with ruby-1.8.
+
 	* framework/src/objc/BridgeSupport.m,
 	  framework/src/objc/OverrideMixin.m,
 	  framework/src/objc/RBRuntime.m,
