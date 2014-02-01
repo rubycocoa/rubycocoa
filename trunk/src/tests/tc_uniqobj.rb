@@ -85,7 +85,7 @@ class TC_UniqObject < Test::Unit::TestCase
       
       url = OSX::NSURL.fileURLWithPath(File.expand_path('../TableView.nib', __FILE__))
       nib = OSX::NSNib.alloc.initWithContentsOfURL(url)
-      owner = OSX::TableViewNibOwner.alloc.init
+      owner = TableViewNibOwner.alloc.init
       res, outlets = nib.instantiateNibWithOwner_topLevelObjects(owner)
       
       # They are both the same objc objects but referenced in another way,

@@ -1,5 +1,8 @@
 2014-02-01 kimura wataru <kimuraw@i.nifty.jp>
 
+	* tests/tc_passbyref.rb, tests/tc_uniqobj.rb:
+	fix wrong namespace of test classes.
+
 	* tests/tc_nsdictionary.rb:
 	fix test failure of TC_NSDictionary#test_fetch_error with
 	ruby-2.0 or later.
