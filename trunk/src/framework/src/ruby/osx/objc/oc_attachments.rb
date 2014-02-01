@@ -2287,6 +2287,7 @@ module OSX
     def to_i
       self.stringValue.to_s.to_i
     end
+    alias_method :to_int, :to_i
 
     def to_f
       self.doubleValue
