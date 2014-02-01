@@ -1,5 +1,9 @@
 2014-02-01 kimura wataru <kimuraw@i.nifty.jp>
 
+	* tests/tc_nsdictionary.rb:
+	fix test failure of TC_NSDictionary#test_fetch_error with
+	ruby-2.0 or later.
+
 	* framework/src/ruby/osx/objc/oc_attachments.rb:
 	add OSX:NSNumber#to_int.
 
