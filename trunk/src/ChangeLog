@@ -1,3 +1,12 @@
+2014-02-01 kimura wataru <kimuraw@i.nifty.jp>
+
+	* framework/src/objc/BridgeSupport.m,
+	  framework/src/objc/OverrideMixin.m,
+	  framework/src/objc/RBRuntime.m,
+	  framework/src/objc/libffi.m,
+	  framework/src/objc/ocdata_conv.m:
+	use HAVE_RUBY_ST_H for ruby/st.h, not HAVE_RUBY_RUBY_H.
+
 2013-12-07 kimura wataru <kimuraw@i.nifty.jp>
 
 	* framework/src/ruby/osx/objc/oc_import.rb:
