@@ -115,7 +115,7 @@ class TC_PassByRef < Test::Unit::TestCase
   end
 
   def test_passbyref_subclass_methods
-    bridged = OSX::PassByRefSubclass1.alloc.init
+    bridged = PassByRefSubclass1.alloc.init
     
     # Object.
     assert_equal(0, bridged.passByRefObject(nil))
@@ -137,7 +137,7 @@ class TC_PassByRef < Test::Unit::TestCase
   end
 
   def test_passbyref_subclass_methods_with_modifiers
-    bridged = OSX::PassByRefSubclass1.alloc.init
+    bridged = PassByRefSubclass1.alloc.init
   
     # type qualifiers, such as "in" "inout" "out" should be ignored
     assert_equal(0, bridged.passByRefObjectWithTypeQualifiers(nil))
