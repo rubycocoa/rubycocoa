@@ -1,5 +1,8 @@
 2014-02-01 kimura wataru <kimuraw@i.nifty.jp>
 
+	* framework/src/ruby/osx/objc/oc_attachments.rb:
+	add OSX:NSNumber#to_int.
+
 	* framework/RubyCocoa.xcodeproj,
 	  framework/src/ruby/osx/objc/oc_all.rb,
 	  framework/src/ruby/osx/objc/oc_import.rb,
