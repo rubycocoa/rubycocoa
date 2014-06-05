@@ -53,6 +53,7 @@ class TC_Thread < Test::Unit::TestCase
   attr_reader :mainThread
 
   SYSTEM_VERSION = `/usr/bin/sw_vers -productVersion`.chomp # such as "10.6.1"
+  SYSTEM_VERSION_MINOR = SYSTEM_VERSION.split('.')[1] # "6" <= "10.6.1"
 
   def setup
     @mainThread = OSX::NSThread.currentThread
@@ -218,7 +219,7 @@ EOS
   end
 
   # Mac OS X 10.6 or later, thread-hooks is unavailable.
-  if SYSTEM_VERSION.to_f >= 10.6
+  if SYSTEM_VERSION_MINOR.to_i >= 6 # 10.6
     remove_method :test_autorelease, :test_exceptions,
 	:test_existing_threads_before_rubycocoa
   end

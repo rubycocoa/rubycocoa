@@ -20,7 +20,7 @@ backup_dir = '/tmp/rubycocoa_backup'
 xcodeextras_dir = 
   @config['xcode-extras'] ? @config['xcode-extras'].split(',').map {|path|
     File.expand_path("#{install_root}#{path}")} : nil
-if @config['macosx-deployment-target'].to_f >= 10.7
+if @config['macosx-deployment-target'].split('.')[1].to_i >= 7 # 10.7
   # Xcode 4.x requires templates to be installed under
   # each user's ~/Library/Developer/Xcode/Templates
   pbtmpldir = nil
@@ -78,7 +78,7 @@ end
   command "mkdir -p '#{dstdir}'"
   command "cp -R '#{srcdir}' '#{dstdir}/RubyCocoa'"
   # install template and script for xcode 4
-  if srcdir == 'doc' && @config['macosx-deployment-target'].to_f >= 10.7
+  if srcdir == 'doc' && @config['macosx-deployment-target'].split('.')[1].to_i >= 7 # 10.7
     command "mkdir -p '#{dstdir}/RubyCocoa/Templates'"
     ['install_templates.rb', 'Xcode4.1', 'Xcode4.x'].each do |fname|
       command "cp -R 'template/#{fname}' '#{dstdir}/RubyCocoa/Templates'"

@@ -11,6 +11,7 @@ require './objc_test.bundle'
 class TC_Types < Test::Unit::TestCase
 
   SYSTEM_VERSION = `/usr/bin/sw_vers -productVersion`.chomp # such as "10.6.1"
+  SYSTEM_VERSION_MINOR = SYSTEM_VERSION.split('.')[1] # "6" <= "10.6.1"
 
   def test_auto_boolean_conversion_objc
     s1 = OSX::NSString.alloc.initWithString("foo")
@@ -126,7 +127,7 @@ class TC_Types < Test::Unit::TestCase
     d.setValue_forKey(true, 'true')
     d.setValue_forKey(false, 'false')
     d.setValue_forKey(123, '123')
-    if SYSTEM_VERSION.to_f >= 10.7
+    if SYSTEM_VERSION_MINOR.to_i >= 7 # 10.7
       assert_kind_of(OSX::NSNumber, d.objectForKey('true'))
       assert_kind_of(OSX::NSNumber, d.objectForKey('false'))
     else
@@ -157,13 +158,6 @@ class TC_Types < Test::Unit::TestCase
     assert_kind_of(OSX::NSURL, url)
     assert_equal(url.path, OSX::CFURLCopyPath(url))
   end
-
-# no suitable type for testing without toll-free on 10.6
-if SYSTEM_VERSION.to_f <= 10.5
-  def test_cftype_proxies
-    assert_kind_of(OSX::CFRunLoopRef, OSX::CFRunLoopGetCurrent())
-  end
-end
 
   def test_opaque_boxed
     z = OSX::NSDefaultMallocZone()
