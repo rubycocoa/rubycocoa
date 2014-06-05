@@ -351,11 +351,11 @@
 
     short s = [helper testShort:2];
     if (s != 2)
-      [NSException raise:@"TestRigError" format:@"assertion testShort: failed, expected %hd, got %hd", 2, s];
+      [NSException raise:@"TestRigError" format:@"assertion testShort: failed, expected %hd, got %hd", (short)2, s];
 
     long l = [helper testLong:2];
     if (l != 2)
-      [NSException raise:@"TestRigError" format:@"assertion testLong: failed, expected %ld, got %ld", 2, l];
+      [NSException raise:@"TestRigError" format:@"assertion testLong: failed, expected %ld, got %ld", (long)2, l];
 
     float f2 = 3.141592;
     float f = [helper testFloat:f2];
