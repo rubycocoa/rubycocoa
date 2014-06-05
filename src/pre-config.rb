@@ -45,7 +45,7 @@ if sdkroot.size > 0
   ldflags << ' -Wl,-syslibroot,' << sdkroot
 end
 
-cflags << ' -DRB_ID=ID'  if @config['macosx-deployment-target'].to_f > 10.5
+cflags << ' -DRB_ID=ID'
 
 def lib_exist?(path, sdkroot=@config['sdkroot'])
   File.exist?(File.join(sdkroot, path))

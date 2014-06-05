@@ -90,6 +90,7 @@ end
 class TC_SubClass < Test::Unit::TestCase
 
   SYSTEM_VERSION = `/usr/bin/sw_vers -productVersion`.chomp # such as "10.6.1"
+  SYSTEM_VERSION_MINOR = SYSTEM_VERSION.split('.')[1] # "6" <= "10.6.1"
 
   def test_s_new
     # all NSObject-based classes respond to new, others don't.
@@ -223,7 +224,7 @@ class TC_SubClass < Test::Unit::TestCase
     assert(OSX::NSString.ancestors.include?(OSX::NSObject))
     
     # CoreFoundation-bridged ancestors.
-    if SYSTEM_VERSION.to_f >= 10.7
+    if SYSTEM_VERSION_MINOR.to_i >= 7 # 10.7
       # 10.7 does not have classes NSCFString, NSCFDictionary and NSCFArray
     else
       assert(OSX::NSCFString.ancestors.include?(OSX::NSString))

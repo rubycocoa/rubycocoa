@@ -14,7 +14,7 @@ end
 class TC_Plist < Test::Unit::TestCase
 
   def setup
-    @tiger_or_lower = `sw_vers -productVersion`.to_f <= 10.4
+    @tiger_or_lower = false # supports 10.6 or later
   end
 
   def test_array
