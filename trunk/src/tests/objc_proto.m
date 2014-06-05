@@ -9,7 +9,7 @@
 - (id)tc_instmWithArg1:(int)arg1 arg2:(double)arg2 arg3:(id)arg3;
 @end
 
-@interface DummyProtoImpl <TCAdditonalProtocol>
+@interface DummyProtoImpl : NSObject <TCAdditonalProtocol>
 @end
 
 @implementation DummyProtoImpl

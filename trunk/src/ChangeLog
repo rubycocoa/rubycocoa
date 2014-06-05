@@ -1,5 +1,8 @@
 2014-06-06 kimura wataru <kimuraw@i.nifty.jp>
 
+	* tests/objc_proto.m:
+	suppress warning from missing base class.
+
 	* tests/objc_test.m:
 	suppress warning from format specifies "%hd" and "%ld".
 
