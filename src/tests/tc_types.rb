@@ -30,13 +30,13 @@ class TC_Types < Test::Unit::TestCase
   end
 
   def test_char_conversion
-    v = OSX::NSNumber.numberWithChar(?v)
-    assert_equal(?v, v.charValue)
+    v = OSX::NSNumber.numberWithChar(42)
+    assert_equal(42, v.charValue)
   end
 
   def test_uchar_conversion
-    v = OSX::NSNumber.numberWithUnsignedChar(?v)
-    assert_equal(?v, v.unsignedCharValue)
+    v = OSX::NSNumber.numberWithUnsignedChar(42)
+    assert_equal(42, v.unsignedCharValue)
   end
 
   def test_short_conversion

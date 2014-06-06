@@ -1,5 +1,8 @@
 2014-06-06 kimura wataru <kimuraw@i.nifty.jp>
 
+	* tests/tc_printf_format.rb, tests/tc_types.rb:
+	fix "?x" style number literals do not means numbers on ruby-2.x.
+
 	* tests/objc_proto.m:
 	suppress warning from missing base class.
 
