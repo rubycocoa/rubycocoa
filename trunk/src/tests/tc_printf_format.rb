@@ -13,8 +13,8 @@ class TC_PrintfFormat < Test::Unit::TestCase
   end
 
   def test_char
-    verify('%c', ?a)
-    verify('%c', ?A)
+    verify('%c', 97) # a
+    verify('%c', 65) # A
   end
 
   def test_str
