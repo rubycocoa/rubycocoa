@@ -1,3 +1,10 @@
+2014-06-07 kimura wataru <kimuraw@i.nifty.jp>
+
+	* tests/tc_nsarray.rb:
+	fix test error at test_assign_range() and
+	test_assign_start_and_length() on ruby-2.x.
+	Array#[range]=nil does not delete element(s) on ruby-1.9 or later.
+
 2014-06-06 kimura wataru <kimuraw@i.nifty.jp>
 
 	* tests/tc_printf_format.rb, tests/tc_types.rb:

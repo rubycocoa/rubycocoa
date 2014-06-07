@@ -98,6 +98,9 @@ class TC_NSArray < Test::Unit::TestCase
       [(0..4), (0...4), (0..5), (0...5), (1..15),
        (0...-1), (5..3), (3..10), (1..0), (1..-10),
        (-5...3), (-3..-2), (-3...-3)].each do |d|
+	# deletion by nil was removed ruby-1.9 or later
+	next if val.nil? && RUBY_VERSION.to_f >= 1.9
+
         a = alloc_nsarray(1,2,3,4,5)
         b = [1,2,3,4,5]
         a[d] = val
@@ -120,6 +123,9 @@ class TC_NSArray < Test::Unit::TestCase
     [33, nil, [], [11,22,33], NSArray.arrayWithArray([1,2,3])].each do |val|
       [[1,3], [1,10], [-3,2], [-3,10], [-3,0],
        [-1,0], [0,0],[-2,3], [-2,2]].each do |d|
+	# deletion by nil was removed ruby-1.9 or later
+	next if val.nil? && RUBY_VERSION.to_f >= 1.9
+
         a = alloc_nsarray(1,2,3,4,5)
         b = [1,2,3,4,5]
         a[*d] = val
