@@ -104,6 +104,8 @@ class TC_BoolTypeConversion < Test::Unit::TestCase
     end
 =end
     [[nil, '0'], [false, '0'], [true, '1'], [0, '0'], [1, '1'], [42, '42'], [2.0, '2']].each do |v, expected|
+      # nil cannot convert to Integer on ruby-1.9 or later
+      next if v.nil? && RUBY_VERSION.to_f >= 1.9
       rubydata.v = v
       s = rcv.callbackTestInt(rubydata).to_s
       assert_equal(expected, s, "testing ruby to objc int conversion #{msg}: #{v} <=> #{expected}")

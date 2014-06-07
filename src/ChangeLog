@@ -1,5 +1,8 @@
 2014-06-07 kimura wataru <kimuraw@i.nifty.jp>
 
+	* tests/tc_bool.rb:
+	fix test error at test_bool_type_conversions().
+
 	* tests/tc_nsarray.rb:
 	fix test error at test_assign_range() and
 	test_assign_start_and_length() on ruby-2.x.
