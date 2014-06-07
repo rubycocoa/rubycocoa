@@ -1,7 +1,10 @@
 2014-06-07 kimura wataru <kimuraw@i.nifty.jp>
 
+	* tests/tc_objcptr.rb:
+	fix test error at test_ocptr_ary_assign() on ruby-2.x.
+
 	* tests/tc_bool.rb:
-	fix test error at test_bool_type_conversions().
+	fix test error at test_bool_type_conversions() on ruby-2.x.
 
 	* tests/tc_nsarray.rb:
 	fix test error at test_assign_range() and
