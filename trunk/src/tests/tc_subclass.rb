@@ -272,12 +272,14 @@ class TC_SubClass < Test::Unit::TestCase
 
   def test_rbobject
     test = OSX::TestRBObject.alloc.init
-    o = SimpleClass.new    
+    o = SimpleClass.new
     n = test.addressOfObject(o)
+    GC.start
     assert(n != test.addressOfObject(o))
     a = OSX::NSMutableArray.array
     a << o
     n = test.addressOfObject(o)
+    GC.start
     assert(n == test.addressOfObject(o))
   end
 
