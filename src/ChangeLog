@@ -1,5 +1,8 @@
 2014-06-07 kimura wataru <kimuraw@i.nifty.jp>
 
+	* tests/tc_subclass.rb:
+	fix test failure at test_rbobject() on ruby-2.x.
+
 	* tests/tc_objcptr.rb:
 	fix test error at test_ocptr_ary_assign() on ruby-2.x.
 
