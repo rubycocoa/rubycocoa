@@ -225,7 +225,8 @@ class TC_ObjcPtr < Test::Unit::TestCase
   def test_ocptr_ary_assign
     str = 'foobar'
     obj = ObjcPtr.new(:char, str.length)
-    str.length.times { |i| obj[i] = str[i] }
+    # Note: ruby-1.8 String#bytes does not returns an array.
+    str.length.times { |i| obj[i] = str.bytes.to_a[i] }
     assert_equal('foobar', obj.bytestr)
     assert_raises(ArgumentError) { obj[0] = 'blah' }
   end
