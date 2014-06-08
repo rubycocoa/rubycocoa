@@ -1,3 +1,8 @@
+2014-06-08 kimura wataru <kimuraw@i.nifty.jp>
+
+	* framework/src/objc/mdl_osxobjc.m, tests/tc_objcid.rb:
+	add a function OSX.objc_classnames.
+
 2014-06-07 kimura wataru <kimuraw@i.nifty.jp>
 
 	* tests/tc_subclass.rb:

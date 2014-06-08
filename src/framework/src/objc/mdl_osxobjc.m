@@ -143,6 +143,38 @@ osx_mf_objc_class_method_add(VALUE mdl, VALUE kls, VALUE method_name, VALUE clas
   return Qnil;
 }
 
+/*
+ * Returns an array of class names from Objective-C runtime.
+ * @example
+ *     OSX.objc_classnames # => ["NSObject","NSArray", ..]
+ */
+static VALUE
+osx_mf_objc_classnames(VALUE mdl)
+{
+  VALUE ary;
+  int num_klasses;
+
+  num_klasses = objc_getClassList(NULL, 0);
+  ary = rb_ary_new2(num_klasses);
+  if (num_klasses > 0) {
+    Class *klasses;
+
+    klasses = malloc(sizeof(Class) * num_klasses);
+    num_klasses = objc_getClassList(klasses, num_klasses);
+    for (int i = 0; i < num_klasses; i++) {
+      Class klass = klasses[i];
+      // reject non-NS Objective-C root classes, such as Object.
+      if (class_respondsToSelector(klass, @selector(isKindOfClass:)) &&
+	   ([klass isKindOfClass:[NSObject class]] ||
+	    [klass isKindOfClass:[NSProxy class]] )) {
+	rb_ary_push(ary, rb_str_new2(strdup(class_getName(klass))));
+      }
+    }
+    free(klasses);
+  }
+  return ary;
+}
+
 static VALUE
 osx_mf_ruby_thread_switcher_start(int argc, VALUE* argv, VALUE mdl)
 {
@@ -422,6 +454,9 @@ void initialize_mdl_osxobjc()
 
   rb_define_module_function(mOSX, "ns_autorelease_pool",
 			    ns_autorelease_pool, 0);
+
+  rb_define_module_function(mOSX, "objc_classnames",
+			    osx_mf_objc_classnames, 0);
 
   // The RubyCocoa version string
   rb_define_const(mOSX, "RUBYCOCOA_VERSION", 
