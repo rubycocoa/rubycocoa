@@ -869,6 +869,7 @@ class TC_NSArray < Test::Unit::TestCase
     end
   end
   
+  # [bug] - ruby20: Array#grep() fails by invoking NSNumber#to_str
   def test_grep
     [['abc','d!ef','98adfa','zAvcz'], [1,2,3,4]].each do |d|
       a = alloc_nsarray(*d)
