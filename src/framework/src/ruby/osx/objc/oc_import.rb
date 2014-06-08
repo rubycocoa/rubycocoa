@@ -95,6 +95,7 @@ module OSX
       raise ArgumentError, "Can't load framework '#{framework}'" 
     end
     load_bridge_support_signatures(path)
+    ns_import_all if RUBY_VERSION.to_f >= 2.0 # create ruby classes from Objective-C
     return true
   end
   module_function :require_framework
@@ -224,10 +225,6 @@ module OSX
     end
   end
   
-  # Load the foundation frameworks.
-  OSX.load_bridge_support_signatures('CoreFoundation')
-  OSX.load_bridge_support_signatures('Foundation')
-
   # create Ruby's class for Cocoa class,
   # then define Constant under module 'OSX'.
   def ns_import(sym)
@@ -243,6 +240,24 @@ module OSX
     end
   end
   module_function :ns_import
+
+  # Runs {OSX.ns_import} for all Cococa classes.
+  # RubyCocoa invokes `ns_import_all` implicitly in {OSX.require_framework}.
+  # @return [nil]
+  # @since 1.2.0
+  def ns_import_all
+    OSX.objc_classnames.each do |klassname|
+      # ignore private classes, such as starting with "_".
+      if /\A[A-Z]/ =~ klassname
+        if OSX.const_defined?(klassname)
+	  next
+	end
+	OSX.ns_import(klassname)
+      end
+    end
+    return nil
+  end
+  module_function :ns_import_all
 
   # create Ruby's class for Cocoa class
   def class_new_for_occlass(occls)
@@ -714,6 +729,11 @@ module OSX
     end
 
   end
+
+  # Load the foundation frameworks.
+  OSX.load_bridge_support_signatures('CoreFoundation')
+  OSX.load_bridge_support_signatures('Foundation')
+  OSX.ns_import_all if RUBY_VERSION.to_f >= 2.0
 
 end       # module OSX
 
