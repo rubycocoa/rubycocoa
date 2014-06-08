@@ -92,6 +92,7 @@ class TestStret < OSX::ObjcTestStret
   end
 end
 
+OSX.ns_import :DirectOverride if RUBY_VERSION.to_f >= 2.0
 class OSX::DirectOverride
   def self.classOverrideMe
     'bar'
@@ -101,6 +102,7 @@ class OSX::DirectOverride
   end
 end
 
+OSX.ns_import :DirectOverrideChild if RUBY_VERSION.to_f >= 2.0
 class OSX::DirectOverrideChild
   def overrideMe
     'bar'

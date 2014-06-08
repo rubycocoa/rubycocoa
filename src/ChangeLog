@@ -1,5 +1,9 @@
 2014-06-08 kimura wataru <kimuraw@i.nifty.jp>
 
+	* tests/tc_hybrid.rb, tests/tc_ovmix.rb, tests/tc_passbyref.rb:
+	fix test failures on ruby-2.x. to using Objecvtive-C classes
+	from bundle requires OSX.ns_import.
+
 	* framework/src/ruby/osx/objc/oc_import.rb:
 	add a function OSX.ns_import_all, invokes ns_import for
 	all Objective-C classes. OSX.require_frakework invokes
