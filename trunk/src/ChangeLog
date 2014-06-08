@@ -1,5 +1,10 @@
 2014-06-08 kimura wataru <kimuraw@i.nifty.jp>
 
+	* framework/src/ruby/osx/objc/oc_import.rb:
+	add a function OSX.ns_import_all, invokes ns_import for
+	all Objective-C classes. OSX.require_frakework invokes
+	ns_import_all implicitly.
+
 	* framework/src/objc/mdl_osxobjc.m, tests/tc_objcid.rb:
 	add a function OSX.objc_classnames.
 
