@@ -8,6 +8,7 @@ require 'osx/cocoa'
 system 'make -s' || raise(RuntimeError, "'make' failed")
 require './objc_test.bundle'
 OSX.load_bridge_support_file 'ObjcPassByRefTest.bridgesupport'
+OSX.ns_import :PassByRef if RUBY_VERSION.to_f >= 2.0
 
 class PassByRefSubclass1 < OSX::PassByRef
 

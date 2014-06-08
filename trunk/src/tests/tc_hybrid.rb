@@ -3,6 +3,7 @@ require 'osx/cocoa'
 
 system 'make -s' || raise(RuntimeError, "'make' failed")
 require './objc_test.bundle'
+OSX.ns_import :HybridClass if RUBY_VERSION.to_f >= 2.0
 
 class OSX::HybridClass
   def imethod
