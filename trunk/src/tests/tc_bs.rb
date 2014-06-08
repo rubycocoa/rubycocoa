@@ -14,6 +14,7 @@ class TC_BridgeSupport < Test::Unit::TestCase
     @ruby_path = File.join(RbConfig::CONFIG["bindir"], RbConfig::CONFIG["RUBY_INSTALL_NAME"])
   end
  
+  # [bug] - ruby20: AddressBook loaded without OSX.require_framework
   def test_framework_loaded
     %w{Foundation /System/Library/Frameworks/CoreFoundation.framework AppKit CoreGraphics}.each do |fname|
       assert_equal(true, OSX.framework_loaded?(fname), fname)
