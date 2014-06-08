@@ -45,4 +45,14 @@ class TC_ObjCID < Test::Unit::TestCase
     assert_equal(url1.__ocid__, url2.__ocid__)
     assert_not_equal(url1.__id__, url2.__id__)
   end
+
+  def test_osx_objc_classnames
+    names = OSX.objc_classnames
+    assert_kind_of(Array, names)
+    assert_include(names, 'NSObject')   # root class
+    assert_include(names, 'NSProxy')    # root class
+    assert_include(names, 'NSURL')      # subclass
+    assert_not_include(names, 'Object') # not NS-class
+    assert_include(names, 'RBObject')   # declared in RubyCocoa.framework
+  end
 end
