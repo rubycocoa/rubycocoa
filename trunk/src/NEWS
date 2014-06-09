@@ -3,6 +3,16 @@
 
 $Id$
 
+== Changes 1.2.0 from 1.1.0: 2014-XX-XX
+
+=== Improvements
+
+  * .
+
+=== Deprecates
+
+  * CocoaClass#objc_export() is deprecated. use objc_method().
+
 == Changes 1.1.0 from 1.0.7: 2013-11-17
 
 === Improvements
