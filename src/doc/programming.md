@@ -196,7 +196,7 @@ tutorials is defined in Ruby like this:
       ib_outlets :messageField
     
       def btnClicked(sender)
-	@messageField.setStringValue "Merry Xmas !"
+        @messageField.setStringValue "Merry Xmas !"
       end
     
     end
@@ -252,8 +252,8 @@ with "`super\_`".
       ns_overrides :drawRect_
     
       def drawRect (frame)
-	p frame
-	super_drawRect(frame)   # invoke the implementation of NSView#drawRect
+        p frame
+        super_drawRect(frame)   # invoke the implementation of NSView#drawRect
       end
     
     end
