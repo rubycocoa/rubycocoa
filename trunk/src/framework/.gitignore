@@ -3,3 +3,4 @@ RubyCocoa.xcodeproj/project.xcworkspace/
 RubyCocoa.xcodeproj/xcuserdata/
 build/
 src/objc/Version.h
+.yardoc/
