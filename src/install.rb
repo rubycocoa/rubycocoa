@@ -858,7 +858,7 @@ class ToplevelInstaller < Installer
     run_metaconfigs
 
     case task = parsearg_global()
-    when 'config'
+    when 'config', 'clean'
       @config = ConfigTable.new
     when 'package'
       @config = ConfigTable.new

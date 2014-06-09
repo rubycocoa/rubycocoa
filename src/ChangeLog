@@ -1,5 +1,8 @@
 2014-06-08 kimura wataru <kimuraw@i.nifty.jp>
 
+	* install.rb:
+	allow to run clean task witout config.save.
+
 	* tests/tc_hybrid.rb, tests/tc_ovmix.rb, tests/tc_passbyref.rb:
 	fix test failures on ruby-2.x. to using Objecvtive-C classes
 	from bundle requires OSX.ns_import.
