@@ -18,7 +18,6 @@
 #import "BridgeSupport.h"
 #import "internal_macros.h"
 #import "ocexception.h"
-#import "objc_compat.h"
 #import <sys/mman.h>
 
 #if __LP64__

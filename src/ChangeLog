@@ -1,3 +1,18 @@
+2014-06-10 kimura wataru <kimuraw@i.nifty.jp>
+
+	* framework/src/objc/objc_compat.h,
+	  framework/RubyCocoa.xcodeproj/project.pbxproj:
+	delete file for OS X 10.4 or earlier.
+
+	* framework/src/objc/BridgeSupport.m,
+	  framework/src/objc/OverrideMixin.m,
+	  framework/src/objc/RBClassUtils.m,
+	  framework/src/objc/RBRuntime.m,
+	  framework/src/objc/mdl_bundle_support.m,
+	  framework/src/objc/mdl_objwrapper.m,
+	  framework/src/objc/mdl_osxobjc.m:
+	delete #import "objc_compat.h".
+
 2014-06-09 kimura wataru <kimuraw@i.nifty.jp>
 
 	* framework/src/objc/BridgeSupport.m,

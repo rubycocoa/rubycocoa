@@ -27,7 +27,6 @@
 #import "RBClassUtils.h"
 #import "mdl_osxobjc.h"
 #import "ocexception.h"
-#import "objc_compat.h"
 
 #define BS_LOG(fmt, args...) DLOG("BRIDGE", fmt, ##args)
 

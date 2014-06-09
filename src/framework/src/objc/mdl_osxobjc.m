@@ -20,7 +20,6 @@
 #import "BridgeSupport.h"
 #import <objc/objc-runtime.h>
 #import "cls_objcid.h"
-#import "objc_compat.h"
 #import "OverrideMixin.h"
 #import "internal_macros.h"
 

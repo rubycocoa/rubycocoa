@@ -25,7 +25,6 @@
 #import "ocdata_conv.h"
 #import "OverrideMixin.h"
 #import "internal_macros.h"
-#import "objc_compat.h"
 #ifdef HAVE_RUBY_ST_H
 #import <ruby/st.h>
 #else

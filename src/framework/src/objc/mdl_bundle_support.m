@@ -14,7 +14,6 @@
 #import "mdl_osxobjc.h"
 #import "ocdata_conv.h"
 #import "internal_macros.h"
-#import "objc_compat.h"
 
 /** module OSX::BundleSupport  **/
 static VALUE _mBundleSupport = Qnil;

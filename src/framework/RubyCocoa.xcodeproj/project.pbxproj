@@ -19,7 +19,6 @@
 		4D615B5B0B83B3950064908B /* internal_macros.h in Headers */ = {isa = PBXBuildFile; fileRef = 4D615B560B83B3950064908B /* internal_macros.h */; };
 		4D615B5C0B83B3950064908B /* mdl_bundle_support.h in Headers */ = {isa = PBXBuildFile; fileRef = 4D615B570B83B3950064908B /* mdl_bundle_support.h */; };
 		4D615B5D0B83B3950064908B /* mdl_objwrapper.h in Headers */ = {isa = PBXBuildFile; fileRef = 4D615B580B83B3950064908B /* mdl_objwrapper.h */; };
-		4D615B5E0B83B3950064908B /* objc_compat.h in Headers */ = {isa = PBXBuildFile; fileRef = 4D615B590B83B3950064908B /* objc_compat.h */; };
 		4D9283210B55505C0070944C /* foundation.rb in CopyFiles */ = {isa = PBXBuildFile; fileRef = 4D92831E0B55505C0070944C /* foundation.rb */; };
 		4D9283220B55505C0070944C /* oc_attachments_appkit.rb in CopyFiles */ = {isa = PBXBuildFile; fileRef = 4D92831F0B55505C0070944C /* oc_attachments_appkit.rb */; };
 		4D9283230B55505C0070944C /* oc_types_appkit.rb in CopyFiles */ = {isa = PBXBuildFile; fileRef = 4D9283200B55505C0070944C /* oc_types_appkit.rb */; };
@@ -151,7 +150,6 @@
 		4D615B560B83B3950064908B /* internal_macros.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = internal_macros.h; sourceTree = "<group>"; };
 		4D615B570B83B3950064908B /* mdl_bundle_support.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = mdl_bundle_support.h; sourceTree = "<group>"; };
 		4D615B580B83B3950064908B /* mdl_objwrapper.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = mdl_objwrapper.h; sourceTree = "<group>"; };
-		4D615B590B83B3950064908B /* objc_compat.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = objc_compat.h; sourceTree = "<group>"; };
 		4D92831E0B55505C0070944C /* foundation.rb */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.script.ruby; path = foundation.rb; sourceTree = "<group>"; };
 		4D92831F0B55505C0070944C /* oc_attachments_appkit.rb */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.script.ruby; path = oc_attachments_appkit.rb; sourceTree = "<group>"; };
 		4D9283200B55505C0070944C /* oc_types_appkit.rb */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.script.ruby; path = oc_types_appkit.rb; sourceTree = "<group>"; };
@@ -278,7 +276,6 @@
 		E88C6D57035BB1F5031D1B90 /* objc */ = {
 			isa = PBXGroup;
 			children = (
-				4D615B590B83B3950064908B /* objc_compat.h */,
 				4D615B560B83B3950064908B /* internal_macros.h */,
 				4D615B570B83B3950064908B /* mdl_bundle_support.h */,
 				4E85DEEB0B7B62D4007290BD /* mdl_bundle_support.m */,
@@ -401,7 +398,6 @@
 				4D615B5B0B83B3950064908B /* internal_macros.h in Headers */,
 				4D615B5C0B83B3950064908B /* mdl_bundle_support.h in Headers */,
 				4D615B5D0B83B3950064908B /* mdl_objwrapper.h in Headers */,
-				4D615B5E0B83B3950064908B /* objc_compat.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
