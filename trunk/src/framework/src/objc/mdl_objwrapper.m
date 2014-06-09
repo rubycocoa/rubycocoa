@@ -557,26 +557,12 @@ static void
 _ary_push_objc_methods (VALUE ary, Class cls, int recur)
 {
   Class superclass = class_getSuperclass(cls);
-#if MAC_OS_X_VERSION_MAX_ALLOWED > MAC_OS_X_VERSION_10_4
   Method *methods;
   unsigned int i, count;
   methods = class_copyMethodList(cls, &count);
   for (i = 0; i < count; i++)
     rb_ary_push(ary, rb_str_new2(sel_getName(method_getName(methods[i]))));
   free(methods);
-#else
-  void* iterator = NULL;
-  struct objc_method_list* list;
-
-  while (list = class_nextMethodList(cls, &iterator)) {
-    int i;
-    struct objc_method* methods = list->method_list;
-    
-    for (i = 0; i < list->method_count; i++) {
-      rb_ary_push (ary, rb_str_new2((const char*)(methods[i].method_name)));
-    }
-  }
-#endif
 
   if (recur && superclass != NULL && !class_isMetaClass(cls))
     _ary_push_objc_methods (ary, superclass, recur);

@@ -23,8 +23,6 @@
 // to use st_table, which is 1) faster and 2) independent from ObjC (no need
 // to create autorelease pools etc...).
 
-#if MAC_OS_X_VERSION_MAX_ALLOWED > MAC_OS_X_VERSION_10_4
-
 Class objc_class_alloc(const char* name, Class super_class)
 {
   Class klass = objc_getClass(name);
@@ -34,57 +32,6 @@ Class objc_class_alloc(const char* name, Class super_class)
   }
   return objc_allocateClassPair(super_class, name, 0);
 }
-
-#else
-
-static void* alloc_from_default_zone(unsigned int size)
-{
-  return NSZoneMalloc(NSDefaultMallocZone(), size);
-}
-
-static struct objc_method_list** method_list_alloc(int cnt)
-{
-  int i;
-  struct objc_method_list** mlp;
-  mlp = alloc_from_default_zone(cnt * sizeof(void*));
-  for (i = 0; i < (cnt-1); i++)
-    mlp[i] = NULL;
-  mlp[cnt-1] = (struct objc_method_list*)-1; // END_OF_METHODS_LIST
-  return mlp;
-}
-
-Class objc_class_alloc(const char* name, Class super_class)
-{
-  Class c = alloc_from_default_zone(sizeof(struct objc_class));
-  Class isa = alloc_from_default_zone(sizeof(struct objc_class));
-  struct objc_method_list **mlp0, **mlp1;
-  mlp0 = method_list_alloc(16);
-  mlp1 = method_list_alloc(4);
-
-  c->isa = isa;
-  c->super_class = super_class;
-  c->name = strdup(name);
-  c->version = 0;
-  c->info = CLS_CLASS + CLS_METHOD_ARRAY;
-  c->instance_size = super_class->instance_size;
-  c->ivars = NULL;
-  c->methodLists = mlp0;
-  c->cache = NULL;
-  c->protocols = NULL;
-
-  isa->isa = super_class->isa->isa;
-  isa->super_class = super_class->isa;
-  isa->name = c->name;
-  isa->version = 5;
-  isa->info = CLS_META + CLS_INITIALIZED + CLS_METHOD_ARRAY;
-  isa->instance_size = super_class->isa->instance_size;
-  isa->ivars = NULL;
-  isa->methodLists = mlp1;
-  isa->cache = NULL;
-  isa->protocols = NULL;
-  return c;
-}
-#endif
 
 /**
  * Dictionary for Ruby class (key by name)

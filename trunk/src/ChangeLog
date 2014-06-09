@@ -1,5 +1,17 @@
 2014-06-09 kimura wataru <kimuraw@i.nifty.jp>
 
+	* framework/src/objc/BridgeSupport.m,
+	  framework/src/objc/OverrideMixin.m,
+	  framework/src/objc/RBClassUtils.m,
+	  framework/src/objc/RBObject.m,
+	  framework/src/objc/RBRuntime.m,
+	  framework/src/objc/internal_macros.h,
+	  framework/src/objc/mdl_objwrapper.m,
+	  framework/src/objc/ocdata_conv.m:
+	delete code for OS X 10.5 or earlier.
+
+2014-06-09 kimura wataru <kimuraw@i.nifty.jp>
+
 	* framework/src/objc/mdl_osxobjc.m,
 	  framework/src/ruby/osx/objc/oc_import.rb,
 	  framework/src/ruby/osx/objc/oc_types.rb:
