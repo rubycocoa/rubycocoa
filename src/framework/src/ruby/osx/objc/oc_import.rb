@@ -227,6 +227,8 @@ module OSX
   
   # create Ruby's class for Cocoa class,
   # then define Constant under module 'OSX'.
+  # @param sym [Symbol, String] name of Objective-C class
+  # @return [Class]
   def ns_import(sym)
     if not OSX.const_defined?(sym)
       NSLog("importing #{sym}...") if OSX._debug?

@@ -1,5 +1,13 @@
 2014-06-09 kimura wataru <kimuraw@i.nifty.jp>
 
+	* framework/src/objc/mdl_osxobjc.m,
+	  framework/src/ruby/osx/objc/oc_import.rb,
+	  framework/src/ruby/osx/objc/oc_types.rb:
+	update documents for OSX.ns_import, OSX.objc_classnames,
+	OSX::NSPoint and OSX::NSSize.
+
+2014-06-09 kimura wataru <kimuraw@i.nifty.jp>
+
 	* NEWS:
 	update NEWS.
 

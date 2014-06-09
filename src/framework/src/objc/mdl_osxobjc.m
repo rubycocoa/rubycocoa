@@ -145,8 +145,10 @@ osx_mf_objc_class_method_add(VALUE mdl, VALUE kls, VALUE method_name, VALUE clas
 
 /*
  * Returns an array of class names from Objective-C runtime.
+ * @return [Array]
  * @example
  *     OSX.objc_classnames # => ["NSObject","NSArray", ..]
+ * @since 1.2.0
  */
 static VALUE
 osx_mf_objc_classnames(VALUE mdl)
