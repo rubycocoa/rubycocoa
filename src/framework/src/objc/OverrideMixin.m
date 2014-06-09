@@ -395,7 +395,6 @@ ovmix_register_ruby_method(Class klass, SEL method, BOOL direct_override)
     return;
   }
   
-#if MAC_OS_X_VERSION_MAX_ALLOWED > MAC_OS_X_VERSION_10_4
   if (direct_override) {
     // It's only ok to use setImplementation if this method is in our own
     // class--otherwise it will change the behavior of our ancestors.
@@ -419,7 +418,6 @@ ovmix_register_ruby_method(Class klass, SEL method, BOOL direct_override)
   if (direct_override)
     method_setImplementation(me, imp);
   else
-#endif
     class_addMethod(klass, me_name, imp, me_types);
 
   class_addMethod(klass, super_selector(me_name), me_imp, me_types);
@@ -442,20 +440,7 @@ static id imp_c_addRubyMethod_withType(Class klass, SEL method, SEL arg0, const 
 
 void install_ovmix_ivars(Class c)
 {
-#if MAC_OS_X_VERSION_MAX_ALLOWED <= MAC_OS_X_VERSION_10_4
-  struct objc_ivar_list* ivlp = NSZoneMalloc(NSDefaultMallocZone(), sizeof(struct objc_ivar));
-  ivlp->ivar_count = 1;
-  ivlp->ivar_list[0].ivar_name = "m_slave";
-  ivlp->ivar_list[0].ivar_type = "@";
-  ivlp->ivar_list[0].ivar_offset = c->instance_size;
-  c->instance_size += ocdata_size("@");
-#ifdef __LP64__
-  ivlp->ivar_list[0].space = 0;
-#endif
-  c->ivars = ivlp;
-#else
   class_addIvar(c, "m_slave", ocdata_size("@"), 0, "@");
-#endif
 }
 
 void install_ovmix_methods(Class c)

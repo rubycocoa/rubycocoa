@@ -20,13 +20,6 @@
 
 extern ID _relaxed_syntax_ID;
 
-#if MAC_OS_X_VERSION_MAX_ALLOWED <= MAC_OS_X_VERSION_10_4
-// On MacOS X 10.4 or earlier, +signatureWithObjCTypes: is a SPI
-@interface NSMethodSignature (WarningKiller)
-+ (id) signatureWithObjCTypes:(const char*)types;
-@end
-#endif
-
 static RB_ID sel_to_mid(VALUE rcv, SEL a_sel)
 {
   int i, length;

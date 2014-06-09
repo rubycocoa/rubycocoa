@@ -49,26 +49,12 @@ extern int rubycocoa_frequently_init_stack();
 extern NSThread *rubycocoaThread;
 extern NSRunLoop *rubycocoaRunLoop;
 
-#if MAC_OS_X_VERSION_MAX_ALLOWED <= MAC_OS_X_VERSION_10_4
-#import <CoreFoundation/CFRunLoop.h>
-extern CFRunLoopRef CFRunLoopGetMain(void);
-#define DISPATCH_ON_RUBYCOCOA_THREAD(self, sel) \
-  do { \
-    assert(rubycocoaRunLoop != nil); \
-    if ([rubycocoaRunLoop getCFRunLoop] != CFRunLoopGetMain()) \
-      [[NSException exceptionWithName:@"DispatchRubyCocoaThreadError" message:@"cannot forward %s to %@ because RubyCocoa doesn't run in the main thread" userInfo:nil] raise]; \
-    else \
-      [self performSelectorOnMainThread:sel withObject:nil waitUntilDone:YES]; \
-  } \
-  while (0) 
-#else
 #define DISPATCH_ON_RUBYCOCOA_THREAD(self, sel) \
   do { \
     assert(rubycocoaThread != nil); \
     [self performSelector:sel onThread:rubycocoaThread withObject:nil waitUntilDone:YES]; \
   } \
   while (0)
-#endif
 
 /* invoke-based undo requires some special handling on 10.6 */
 #define IS_UNDOPROXY(obj) (object_getClass(obj) == objc_getClass("NSUndoManagerProxy"))
