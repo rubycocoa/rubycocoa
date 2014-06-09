@@ -72,6 +72,15 @@ class OSX::NSRect
 end
 
 # NSPoint additions.
+#
+# @example
+#     point = OSX::NSPoint.new(42, 24)
+#     => #<OSX::NSPoint x=42.0, y=24.0>
+#     point.in? OSX::NSRect.new(40, 20, 2, 1) # x, y, w, h
+#     => false
+#     point.in? OSX::NSRect.new(40, 20, 3, 2)
+#     => true
+#
 class OSX::NSPoint
   def in?(rect); OSX::NSPointInRect(self, rect); end
   alias_method :inRect?, :in?
@@ -93,6 +102,15 @@ class OSX::NSPoint
 end
 
 # NSSize additions.
+#
+# @example
+#     size = OSX::NSSize.new(100, 200)
+#     => #<OSX::NSSize width=100.0, height=200.0>
+#     size.width = 120
+#     => 120
+#     size * 2
+#     => #<OSX::NSSize width=240.0, height=400.0>
+#
 class OSX::NSSize
   def /(v); OSX::NSSize.new(width / v, height / v); end
   def *(v); OSX::NSSize.new(width * v, height * v); end
