@@ -24,7 +24,6 @@
 #endif
 #import <objc/objc-runtime.h>
 #import "mdl_osxobjc.h"
-#import "objc_compat.h"
 
 #define OVMIX_LOG(fmt, args...) DLOG("OVMIX", fmt, ##args)
 
