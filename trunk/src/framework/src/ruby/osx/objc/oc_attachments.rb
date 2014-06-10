@@ -689,7 +689,7 @@ module OSX
       if length > 0
         characterAtIndex(0)
       else
-        0
+        raise ArgumentError, "empty string"
       end
     end
     

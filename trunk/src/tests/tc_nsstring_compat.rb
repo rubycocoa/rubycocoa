@@ -663,9 +663,18 @@ class TC_ObjcString < Test::Unit::TestCase
   end
   
   def test_ord
-    ['', 'a', 'Z', '0', "\n"].each do |s|
+    ['a', 'Z', '0', "\n"].each do |s|
       n = alloc_nsstring(s)
-      assert_equal(s[0] || 0, n.ord)
+      o = if s.respond_to?(:ord)
+	s.ord
+      else
+	s[0] # ruby-1.8
+      end
+      assert_equal(o, n.ord)
+    end
+    ['', alloc_nsstring('')].each do |s|
+      next unless s.respond_to?(:ord)
+      assert_raise(ArgumentError) {s.ord}
     end
   end
   

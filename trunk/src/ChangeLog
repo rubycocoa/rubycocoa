@@ -1,5 +1,11 @@
 2014-06-10 kimura wataru <kimuraw@i.nifty.jp>
 
+	* framework/src/ruby/osx/objc/oc_attachments.rb,
+	  tests/tc_nsstring_compat.rb:
+	fix test_ord(String#ord) failure on ruby-2.x.
+
+2014-06-10 kimura wataru <kimuraw@i.nifty.jp>
+
 	* tests/tc_nsstring_compat.rb:
 	fix test failure on ruby-2.x from String#each.
 
