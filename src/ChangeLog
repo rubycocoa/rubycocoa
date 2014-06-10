@@ -1,5 +1,10 @@
 2014-06-10 kimura wataru <kimuraw@i.nifty.jp>
 
+	* tests/tc_nsstring_compat.rb:
+	fix test failure on ruby-2.x from String#each.
+
+2014-06-10 kimura wataru <kimuraw@i.nifty.jp>
+
 	* framework/src/objc/objc_compat.h,
 	  framework/RubyCocoa.xcodeproj/project.pbxproj:
 	delete file for OS X 10.4 or earlier.

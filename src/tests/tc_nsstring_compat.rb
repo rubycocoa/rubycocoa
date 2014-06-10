@@ -610,7 +610,7 @@ class TC_ObjcString < Test::Unit::TestCase
      "\nabc\n\ndef\nghi\njkl\n\nmnopq\n\n"].each do |s|
       n = alloc_nsstring(s)
       a = []
-      s.each {|i| a << i }
+      s.each_line {|i| a << i }
       assert_equal(n.lines, a)
       assert_kind_of(NSArray, n.lines)
     end
