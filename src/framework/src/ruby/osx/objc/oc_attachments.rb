@@ -559,6 +559,9 @@ module OSX
     def index(pattern, pos=0)
       case pattern
       when Numeric,OSX::NSNumber
+	if RUBY_VERSION >= '2.0'
+	  raise TypeError, "\`index': type mismatch: #{pattern.class} given (TypeError)"
+	end
         i = pattern.to_i
         if 0 <= i && i < 65536
           s = OSX::NSString.stringWithFormat("%C", i)
@@ -728,6 +731,9 @@ module OSX
     def rindex(pattern, pos=self.length)
       case pattern
       when Numeric,OSX::NSNumber
+	if RUBY_VERSION >= '2.0'
+	  raise TypeError, "\`index': type mismatch: #{pattern.class} given (TypeError)"
+	end
         i = pattern.to_i
         if 0 <= i && i < 65536
           s = OSX::NSString.stringWithFormat("%C", i)
@@ -1059,8 +1065,12 @@ module OSX
     def _read_impl_num(slice, num, count)
       num += count if num < 0
       if 0 <= num && num < count
-	c = characterAtIndex(num)
-	deleteCharactersInRange(OSX::NSRange.new(num, 1)) if slice
+	if RUBY_VERSION >= '2.0'
+	  c = substringWithRange([num, 1])
+	else
+	  c = characterAtIndex(num)
+	  deleteCharactersInRange(OSX::NSRange.new(num, 1)) if slice
+	end
 	c
       else
 	nil
