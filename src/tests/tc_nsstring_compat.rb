@@ -568,14 +568,18 @@ class TC_ObjcString < Test::Unit::TestCase
     with_kcode('utf-8') do
       s = alloc_nsstring('abc def')
       assert_equal(true, s.include?('c d'))
-      assert_equal(true, s.include?(0x62))
       assert_equal(false, s.include?('C D'))
-      assert_equal(false, s.include?(0x41))
+      if RUBY_VERSION < '2.0'
+	assert_equal(true, s.include?(0x62))
+	assert_equal(false, s.include?(0x41))
+      end
       s = alloc_nsstring('abc かきくけこ')
       assert_equal(true, s.include?('かき'))
-      assert_equal(true, s.include?(0x3053))
       assert_equal(false, s.include?('は'))
-      assert_equal(false, s.include?(0x3060))
+      if RUBY_VERSION < '2.0'
+	assert_equal(true, s.include?(0x3053))
+	assert_equal(false, s.include?(0x3060))
+      end
     end
   end
   
@@ -584,6 +588,10 @@ class TC_ObjcString < Test::Unit::TestCase
     n = alloc_nsstring(s)
     assert_raise(TypeError) { s.include?([]) }
     assert_raise(TypeError) { n.include?([]) }
+    if RUBY_VERSION >= '2.0'
+      assert_raise(TypeError) { s.include?(0x62) }
+      assert_raise(TypeError) { s.include?(0x3053) }
+    end
   end
   
   def test_index
