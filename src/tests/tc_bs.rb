@@ -14,12 +14,11 @@ class TC_BridgeSupport < Test::Unit::TestCase
     @ruby_path = File.join(RbConfig::CONFIG["bindir"], RbConfig::CONFIG["RUBY_INSTALL_NAME"])
   end
  
-  # [bug] - ruby20: AddressBook loaded without OSX.require_framework
   def test_framework_loaded
     %w{Foundation /System/Library/Frameworks/CoreFoundation.framework AppKit CoreGraphics}.each do |fname|
       assert_equal(true, OSX.framework_loaded?(fname), fname)
     end
-    %w{AddressBook /System/Library/Frameworks/OpenGL.framework InstantMessage}.each do |fname|
+    %w{WebKit /System/Library/Frameworks/OpenGL.framework InstantMessage}.each do |fname|
       assert_equal(false, OSX.framework_loaded?(fname), fname)
     end
     %w{DoesNotExist /System/Library/Frameworks/DoesNotExist.framework}.each do |fname|
