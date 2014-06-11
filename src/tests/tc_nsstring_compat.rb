@@ -2,12 +2,29 @@
 require 'test/unit'
 require 'osx/cocoa'
 
-def with_kcode(k)
-  cur = $KCODE
-  $KCODE = k
-  yield
-ensure
-  $KCODE = cur
+if RUBY_VERSION >= '2.0'
+  def with_kcode(k)
+    cur = Encoding.default_internal
+    $KCODE = k
+    enc = case k
+    when 'utf-8'
+      Encoding::UTF_8
+    else
+      raise ArgumentError
+    end
+    Encoding.default_internal = enc
+    yield
+  ensure
+    Encoding.default_internal = cur
+  end
+else
+  def with_kcode(k)
+    cur = $KCODE
+    $KCODE = k
+    yield
+  ensure
+    $KCODE = cur
+  end
 end
 
 class TC_ObjcString < Test::Unit::TestCase
