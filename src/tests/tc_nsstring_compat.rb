@@ -240,14 +240,25 @@ class TC_ObjcString < Test::Unit::TestCase
   def test_assign_nth_error
     s = 'abc'
     n = alloc_nsstring(s)
-    assert_raise(IndexError) { s[3] = '' }
-    assert_raise(IndexError) { n[3] = '' }
+    # ruby-2.0 or later, str[len]=other appends other to str.
+    if RUBY_VERSION >= '2.0'
+      assert_nothing_raised { s[3] = '' }
+      assert_nothing_raised { n[3] = '' }
+    else
+      assert_raise(IndexError) { s[3] = '' }
+      assert_raise(IndexError) { n[3] = '' }
+    end
     assert_raise(IndexError) { s[-4] = '' }
     assert_raise(IndexError) { n[-4] = '' }
     s = ''
     n = alloc_nsstring(s)
-    assert_raise(IndexError) { s[0] = '' }
-    assert_raise(IndexError) { n[0] = '' }
+    if RUBY_VERSION >= '2.0'
+      assert_nothing_raised { s[0] = '' }
+      assert_nothing_raised { n[0] = '' }
+    else
+      assert_raise(IndexError) { s[0] = '' }
+      assert_raise(IndexError) { n[0] = '' }
+    end
     assert_raise(IndexError) { s[-1] = '' }
     assert_raise(IndexError) { n[-1] = '' }
   end
