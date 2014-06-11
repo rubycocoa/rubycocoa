@@ -190,8 +190,13 @@ class TC_ObjcString < Test::Unit::TestCase
     
     with_kcode('utf-8') do
       s = alloc_nsstring('foo かきくけこ')
-      assert_equal(0x3051, s[-2])
-      assert_equal(0x3053, s[8])
+      if RUBY_VERSION >= '2.0'
+	assert_equal("\u3051", s[-2])
+	assert_equal("\u3053", s[8])
+      else
+	assert_equal(0x3051, s[-2])
+	assert_equal(0x3053, s[8])
+      end
       assert_equal(nil, s[10])
       assert_equal(nil, s[-10])
     end
