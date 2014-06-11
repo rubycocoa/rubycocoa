@@ -206,6 +206,8 @@ module OSX
         when Numeric,OSX::NSNumber
           n = first.to_i
           n += count if n < 0
+	  # ruby-2.0 or later allows index == length
+	  count += 1 if RUBY_VERSION >= '2.0'
           if n < 0 || count <= n
             raise IndexError, "index #{first.to_i} out of string"
           end

@@ -2,6 +2,13 @@
 
 	* framework/src/ruby/osx/objc/oc_attachments.rb,
 	  tests/tc_nsstring_compat.rb:
+	fix test_assign_nth_error fails on ruby-2.x.
+	str[idx] = str allows idx == str.length on ruby-2.0 or later.
+
+2014-06-11 kimura wataru <kimuraw@i.nifty.jp>
+
+	* framework/src/ruby/osx/objc/oc_attachments.rb,
+	  tests/tc_nsstring_compat.rb:
 	fix test_index and test_rindex fail on ruby-2.x.
 	String#index(i) and String#rindex(i) do not accept Numeric
 	as a parameter on ruby-2.0 or later.
