@@ -555,6 +555,10 @@ class TC_ObjcString < Test::Unit::TestCase
   
   def test_index
     ['', 'a', 'z', 0x42, 0x100000].each do |i|
+      # ruby-2.0 or later, String#index() does not accept
+      if (i.kind_of?(Fixnum) && RUBY_VERSION >= '2.0')
+	next
+      end
       s = 'abc'
       n = alloc_nsstring(s)
       assert_equal(s.index(i), n.index(i))
@@ -571,6 +575,11 @@ class TC_ObjcString < Test::Unit::TestCase
     n = alloc_nsstring(s)
     assert_raise(TypeError) { s.index([]) }
     assert_raise(TypeError) { n.index([]) }
+    # ruby-2.0 or later, String#index() does not accept
+    if RUBY_VERSION >= '2.0'
+      assert_raise(TypeError) { s.index(0) }
+      assert_raise(TypeError) { n.index(0) }
+    end
   end
   
   def test_insert
@@ -713,7 +722,13 @@ class TC_ObjcString < Test::Unit::TestCase
     ['', 'a', 'z', 0x42, 0x100000].each do |i|
       s = 'abcabc'
       n = alloc_nsstring(s)
-      assert_equal(s.rindex(i), n.rindex(i))
+      # ruby-2.0 or later, String#index() does not accept
+      if (i.kind_of?(Fixnum) && RUBY_VERSION >= '2.0')
+	assert_raise(TypeError) { s.rindex(i) }
+	assert_raise(TypeError) { n.rindex(i) }
+      else
+	assert_equal(s.rindex(i), n.rindex(i))
+      end
     end
     [-10,-6,-5,-4,-3,-2,-1,0,1,2,3,4,5,6,10].each do |i|
       s = 'abcabc'
