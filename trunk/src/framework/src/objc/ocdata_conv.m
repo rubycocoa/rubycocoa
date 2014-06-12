@@ -18,6 +18,9 @@
 #else
 #import <st.h>
 #endif
+#ifdef HAVE_RUBY_ENCODING_H
+#import <ruby/encoding.h>
+#endif
 #import "BridgeSupport.h"
 #import "internal_macros.h"
 
@@ -431,7 +434,18 @@ ocdata_to_rbobj (VALUE context_obj, const char *octype_str, const void *ocdata, 
       if (*(void **)ocdata == NULL)
         rbval = Qnil;
       else
+#ifdef HAVE_RUBY_ENCODING_H
+      {
+	// [TODO] - [WIP] the dummy encoding should be defined at RubyCocoa initializaion.
+	rb_encoding *dummy_enc;
+	if (!(dummy_enc = rb_enc_find("rubycocoa_binary"))) {
+	  dummy_enc = rb_enc_from_index(rb_define_dummy_encoding("rubycocoa_binary"));
+	}
+	rbval = rb_enc_str_new((*(char **)ocdata), strlen((*(char **)ocdata)), dummy_enc);
+      }
+#else
         rbval = rb_str_new2(*(char **)ocdata); 
+#endif
       break;
   
     default:
@@ -1121,10 +1135,7 @@ rbobj_to_ocdata (VALUE obj, const char *octype_str, void* ocdata, BOOL to_libffi
   return f_success;
 }
 
-#ifdef HAVE_RUBY_RUBY_H
-// FIXME use ruby default encoding
-#define KCODE_NSSTRENCODING NSUTF8StringEncoding
-#else
+#ifndef HAVE_RUBY_ENCODING_H
 static 
 NSStringEncoding kcode_to_nsencoding (const char* kcode) 
 { 
@@ -1143,17 +1154,92 @@ NSStringEncoding kcode_to_nsencoding (const char* kcode)
 id
 rbstr_to_ocstr(VALUE obj)
 {
-  return [[[NSMutableString alloc] initWithData:[NSData dataWithBytes:RSTRING_PTR(obj)
-			    			 length: RSTRING_LEN(obj)]
-			    encoding:KCODE_NSSTRENCODING] autorelease];
+  NSStringEncoding nsenc;
+  VALUE str = obj;
+#ifdef HAVE_RUBY_ENCODING_H
+  int rbenc_idx = rb_enc_get_index(obj);
+  // TODO encoding conversion by lookup st_table
+  if (rbenc_idx == rb_utf8_encindex()) {
+    nsenc = NSUTF8StringEncoding;
+  }
+  else if (rbenc_idx == rb_enc_find_index("UTF8-Mac")) {
+    nsenc = NSUTF8StringEncoding;
+  }
+  else if (rbenc_idx == rb_ascii8bit_encoding()) {
+    nsenc = NSASCIIStringEncoding;
+  }
+  else if (rbenc_idx == rb_enc_find_index("Shift_JIS")) {
+    nsenc = NSShiftJISStringEncoding;
+  }
+  else if (rbenc_idx == rb_enc_find_index("eucJP")) {
+    nsenc = NSJapaneseEUCStringEncoding;
+  }
+  else if (rbenc_idx == rb_enc_find_index("ISO-2022-JP")) {
+    nsenc = NSISO2022JPStringEncoding;
+  }
+  else {
+    str = rb_str_conv_enc(obj, rb_enc_from_index(rbenc_idx), rb_utf8_encoding());
+    if (rb_enc_get_index(str) == rb_utf8_encindex()) {
+      nsenc = NSUTF8StringEncoding;
+    } else {
+      str = obj;
+      nsenc = CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingInvalidId);
+    }
+  }
+#else
+  nsenc = KCODE_NSSTRENCODING;
+#endif
+  return [[[NSMutableString alloc] initWithData:[NSData dataWithBytes:RSTRING_PTR(str)
+			    			 length: RSTRING_LEN(str)]
+			    encoding:nsenc] autorelease];
 }
 
 VALUE
 ocstr_to_rbstr(id ocstr)
 {
-  NSData * data = [(NSString *)ocstr dataUsingEncoding:KCODE_NSSTRENCODING
-				     allowLossyConversion:YES];
+  NSData * data;
+#ifdef HAVE_RUBY_ENCODING_H
+  NSStringEncoding nsenc = [(NSString *)ocstr fastestEncoding];
+  rb_encoding * rbenc = Qnil;
+  BOOL allowLossy = NO;
+  // TODO encoding conversion by lookup st_table
+  switch (nsenc) {
+    case NSUTF8StringEncoding:
+//      rbenc = rb_enc_find("UTF8-MAC");
+      rbenc = rb_utf8_encoding();
+      break;
+    case NSASCIIStringEncoding:
+      rbenc = rb_ascii8bit_encoding();
+      break;
+    case NSShiftJISStringEncoding:
+      rbenc = rb_enc_find("Shift_JIS");
+      break;
+    case NSJapaneseEUCStringEncoding:
+      rbenc = rb_enc_find("eucJP");
+      break;
+    case NSISO2022JPStringEncoding:
+      rbenc = rb_enc_find("ISO-2022-JP");
+      break;
+    default:
+      if ([ocstr canBeConvertedToEncoding:NSUTF8StringEncoding]) {
+	nsenc = NSUTF8StringEncoding;
+	rbenc = rb_utf8_encoding();
+      } else {
+	// the dummy encoding should be defined at RubyCocoa initializaion.
+	if (!(rbenc = rb_enc_find("rubycocoa_binary"))) {
+	  rbenc = rb_enc_from_index(rb_define_dummy_encoding("rubycocoa_binary"));
+	}
+	nsenc = CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingInvalidId);
+      }
+  }
+  data = [(NSString *)ocstr dataUsingEncoding:nsenc
+		     allowLossyConversion:allowLossy];
+  return rb_enc_str_new([data bytes], [data length], rbenc);
+#else
+  data = [(NSString *)ocstr dataUsingEncoding:KCODE_NSSTRENCODING
+		     allowLossyConversion:YES];
   return rb_str_new ([data bytes], [data length]);
+#endif
 }
 
 static void

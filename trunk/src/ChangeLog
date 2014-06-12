@@ -1,3 +1,8 @@
+2014-06-13 kimura wataru <kimuraw@i.nifty.jp>
+
+	* framework/src/objc/ocdata_conv.m:
+	add WIP encoding conversion between Ruby and NSString for ruby-2.x.
+
 2014-06-12 kimura wataru <kimuraw@i.nifty.jp>
 
 	* tests/tc_nsstring.rb:
