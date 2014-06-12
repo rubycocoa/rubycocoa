@@ -15,11 +15,15 @@ class TC_NSString < Test::Unit::TestCase
   def setup
     @teststr = "Hello World".freeze
     @eucstr = "オブジェクト指向スクリプト言語Ruby".toeuc.freeze
-    $KCODE = 'NONE'
+    if RUBY_VERSION < '2.0'
+      $KCODE = 'NONE'
+    end
   end
 
   def teardown
-    $KCODE = 'NONE'
+    if RUBY_VERSION < '2.0'
+      $KCODE = 'NONE'
+    end
   end
 
   def test_s_alloc
