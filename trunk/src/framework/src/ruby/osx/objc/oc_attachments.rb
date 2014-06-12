@@ -1071,8 +1071,8 @@ module OSX
 	  c = substringWithRange([num, 1])
 	else
 	  c = characterAtIndex(num)
-	  deleteCharactersInRange(OSX::NSRange.new(num, 1)) if slice
 	end
+	deleteCharactersInRange(OSX::NSRange.new(num, 1)) if slice
 	c
       else
 	nil

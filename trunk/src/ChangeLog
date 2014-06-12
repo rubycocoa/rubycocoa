@@ -1,5 +1,11 @@
 2014-06-13 kimura wataru <kimuraw@i.nifty.jp>
 
+	* framework/src/ruby/osx/objc/oc_attachments.rb:
+	fix OSX::NSString#slice!(num) not delete by given position
+	on ruby-2.x.
+
+2014-06-13 kimura wataru <kimuraw@i.nifty.jp>
+
 	* tests/tc_nsarray.rb:
 	fix test_upto fails on ruby-2.x.
 	Range#each yields String when its element responds to :to_str
