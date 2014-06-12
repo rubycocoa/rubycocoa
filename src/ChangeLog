@@ -1,3 +1,8 @@
+2014-06-12 kimura wataru <kimuraw@i.nifty.jp>
+
+	* tests/tc_nsstring.rb:
+	use $KCODE only for ruby-1.8.
+
 2014-06-11 kimura wataru <kimuraw@i.nifty.jp>
 
 	* tests/tc_nsstring_compat.rb:
