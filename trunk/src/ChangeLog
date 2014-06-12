@@ -1,5 +1,12 @@
 2014-06-13 kimura wataru <kimuraw@i.nifty.jp>
 
+	* tests/tc_nsarray.rb:
+	fix test_upto fails on ruby-2.x.
+	Range#each yields String when its element responds to :to_str
+	on ruby-2.0 or later.
+
+2014-06-13 kimura wataru <kimuraw@i.nifty.jp>
+
 	* framework/src/objc/ocdata_conv.m:
 	add WIP encoding conversion between Ruby and NSString for ruby-2.x.
 
