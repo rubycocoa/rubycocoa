@@ -5,7 +5,6 @@ require 'osx/cocoa'
 if RUBY_VERSION >= '2.0'
   def with_kcode(k)
     cur = Encoding.default_internal
-    $KCODE = k
     enc = case k
     when 'utf-8'
       Encoding::UTF_8
