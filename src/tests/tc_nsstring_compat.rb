@@ -1016,11 +1016,10 @@ class TC_ObjcString < Test::Unit::TestCase
     a.upto(b) {|i| r << i }
     if RUBY_VERSION >= '2.0'
       # Range#each yields String when its element responds to :to_str on ruby-2.0 or later
-      assert_kind_of(String, r.first)
     else
       r.map! {|i| i.to_ruby }
-      assert_kind_of(NSString, r.first)
     end
+    assert_kind_of(String, r.first)
     c = 'aa'
     d = 'ba'
     s = []
