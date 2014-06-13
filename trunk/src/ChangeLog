@@ -1,5 +1,10 @@
 2014-06-13 kimura wataru <kimuraw@i.nifty.jp>
 
+	* tests/tc_nsstring_compat.rb:
+	fix wrong assertion in test_upto.
+
+2014-06-13 kimura wataru <kimuraw@i.nifty.jp>
+
 	* framework/src/ruby/osx/objc/oc_all.rb,
 	  framework/src/ruby/osx/objc/oc_import.rb,
 	  install.rb, tests/tc_bool.rb, tests/tc_hybrid.rb, tests/tc_nsarray.rb,
