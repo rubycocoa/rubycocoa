@@ -1,5 +1,13 @@
 2014-06-13 kimura wataru <kimuraw@i.nifty.jp>
 
+	* framework/src/ruby/osx/objc/oc_all.rb,
+	  framework/src/ruby/osx/objc/oc_import.rb,
+	  install.rb, tests/tc_bool.rb, tests/tc_hybrid.rb, tests/tc_nsarray.rb,
+	  tests/tc_nsdictionary.rb, tests/tc_ovmix.rb, tests/tc_passbyref.rb:
+	compare RUBY_VERSION as string not by #to_f.
+
+2014-06-13 kimura wataru <kimuraw@i.nifty.jp>
+
 	* framework/src/ruby/osx/objc/oc_attachments.rb:
 	fix OSX::NSString#slice!(num) not delete by given position
 	on ruby-2.x.

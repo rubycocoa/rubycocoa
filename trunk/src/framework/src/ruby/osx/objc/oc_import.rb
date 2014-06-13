@@ -95,7 +95,7 @@ module OSX
       raise ArgumentError, "Can't load framework '#{framework}'" 
     end
     load_bridge_support_signatures(path)
-    ns_import_all if RUBY_VERSION.to_f >= 2.0 # create ruby classes from Objective-C
+    ns_import_all if RUBY_VERSION >= '2.0' # create ruby classes from Objective-C
     return true
   end
   module_function :require_framework
@@ -735,7 +735,7 @@ module OSX
   # Load the foundation frameworks.
   OSX.load_bridge_support_signatures('CoreFoundation')
   OSX.load_bridge_support_signatures('Foundation')
-  OSX.ns_import_all if RUBY_VERSION.to_f >= 2.0
+  OSX.ns_import_all if RUBY_VERSION >= '2.0'
 
 end       # module OSX
 

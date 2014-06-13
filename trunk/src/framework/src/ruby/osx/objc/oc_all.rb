@@ -7,7 +7,7 @@
 
 require 'osx/objc/oc_exception'
 require 'osx/objc/oc_import'
-if RUBY_VERSION.to_f <= 1.8
+if RUBY_VERSION < '1.9'
   require 'osx/objc/oc_import_openclass'
 end
 require 'osx/objc/oc_types'
