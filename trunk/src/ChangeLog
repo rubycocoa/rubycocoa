@@ -1,5 +1,10 @@
 2014-06-14 kimura wataru <kimuraw@i.nifty.jp>
 
+	* tests/tc_nsarray.rb:
+	add assertions Regexp#===(obj) in test_grep.
+
+2014-06-14 kimura wataru <kimuraw@i.nifty.jp>
+
 	* framework/src/ruby/osx/objc/oc_attachments.rb
 	  tests/tc_nsarray.rb:
 	NSArray#[range]=nil should raise ArgumentError on ruby-2.x.
