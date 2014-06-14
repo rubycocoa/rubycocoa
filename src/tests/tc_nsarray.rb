@@ -114,9 +114,15 @@ class TC_NSArray < Test::Unit::TestCase
     a = alloc_nsarray(1,2,3,4,5)
     assert_raise(RangeError) { a[-10..5] = nil }
     assert_raise(RangeError) { a[10..5] = nil }
-    assert_nothing_raised { a[5..5] = nil }
-    assert_nothing_raised { a[5..-10] = nil }
-    assert_nothing_raised { a[-5..10] = nil }
+    if RUBY_VERSION >= '2.0'
+      assert_raise(ArgumentError) { a[5..5] = nil }
+      assert_raise(ArgumentError) { a[5..-10] = nil }
+      assert_raise(ArgumentError) { a[-5..10] = nil }
+    else
+      assert_nothing_raised { a[5..5] = nil }
+      assert_nothing_raised { a[5..-10] = nil }
+      assert_nothing_raised { a[-5..10] = nil }
+    end
   end
 
   def test_assign_start_and_length
@@ -137,10 +143,10 @@ class TC_NSArray < Test::Unit::TestCase
 
   def test_assign_start_and_length_error
     a = alloc_nsarray(1,2,3,4,5)
-    assert_raise(IndexError) { a[-10,2] = nil }
-    assert_raise(IndexError) { a[10,2] = nil }
-    assert_raise(IndexError) { a[3,-2] = nil }
-    assert_nothing_raised { a[3,0] = nil }
+    assert_raise(IndexError) { a[-10,2] = 0 }
+    assert_raise(IndexError) { a[10,2] = 0 }
+    assert_raise(IndexError) { a[3,-2] = 0 }
+    assert_nothing_raised { a[3,0] = 0 }
   end
 
   def test_plus

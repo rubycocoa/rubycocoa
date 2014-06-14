@@ -1207,7 +1207,9 @@ module OSX
           if n < 0 || count < n
             raise RangeError, "#{range} out of range"
           end
-	  # [TODO] - ruby20: Array#[]=(range, []) should delete elements at given range
+	  if RUBY_VERSION >= '2.0' && value.nil?
+            raise ArgumentError, "attempt insert nil to NSArray"
+	  end
           
           if 0 <= n && n < count
             if len > 0
