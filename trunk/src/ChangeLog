@@ -1,3 +1,17 @@
+2014-06-15 kimura wataru <kimuraw@i.nifty.jp>
+
+	* framework/src/objc/RBRuntime.m,
+	  framework/src/objc/ocdata_conv.h,
+	  framework/src/objc/ocdata_conv.m:
+	add functions for ruby dummy encoding.
+	- init_encoding_conversion()
+	- rbstr_dummyenc_new()
+	- rbstr_dummyenc_new_cstr()
+
+	* framework/src/objc/libffi.m,
+	  framework/src/objc/ocdata_conv.m:
+        use rbstr_dummyenc_new() to generate strings with unknown encoding.
+
 2014-06-14 kimura wataru <kimuraw@i.nifty.jp>
 
 	* tests/tc_nsarray.rb:

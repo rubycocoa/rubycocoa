@@ -31,6 +31,11 @@
 static struct st_table *rb2ocCache;
 static struct st_table *oc2rbCache;
 
+/* dummy ruby string encoding for unknown Ruby<->NSString conversion */
+#ifdef HAVE_RUBY_ENCODING_H
+static int ENCINDEX_RUBYCOCOA_UNKNOWN;
+#endif
+
 static VALUE _ocid_to_rbobj (VALUE context_obj, id ocid, BOOL is_class);
 
 #if CACHE_LOCKING
@@ -435,14 +440,7 @@ ocdata_to_rbobj (VALUE context_obj, const char *octype_str, const void *ocdata, 
         rbval = Qnil;
       else
 #ifdef HAVE_RUBY_ENCODING_H
-      {
-	// [TODO] - [WIP] the dummy encoding should be defined at RubyCocoa initializaion.
-	rb_encoding *dummy_enc;
-	if (!(dummy_enc = rb_enc_find("rubycocoa_binary"))) {
-	  dummy_enc = rb_enc_from_index(rb_define_dummy_encoding("rubycocoa_binary"));
-	}
-	rbval = rb_enc_str_new((*(char **)ocdata), strlen((*(char **)ocdata)), dummy_enc);
-      }
+	rbval = rbstr_dummyenc_new_cstr((*(char **)ocdata));
 #else
         rbval = rb_str_new2(*(char **)ocdata); 
 #endif
@@ -1526,3 +1524,22 @@ set_octypes_for_format_str (char **octypes, unsigned len, char *format_str)
   for (; j < len; j++)
     octypes[j] = "@"; // _C_ID;
 }
+
+#ifdef HAVE_RUBY_ENCODING_H
+// #pragma mark - encoding conversion
+void init_encoding_conversion()
+{
+  rb_define_dummy_encoding("RUBYCOCOA_UNKNOWN");
+}
+
+// #pragma mark - String with unkownn encoding
+VALUE rbstr_dummyenc_new(const char* ptr, long len)
+{
+  return rb_enc_str_new(ptr, len, rb_enc_from_index(ENCINDEX_RUBYCOCOA_UNKNOWN));
+}
+
+VALUE rbstr_dummyenc_new_cstr(const char* ptr)
+{
+  return rb_enc_str_new_cstr(ptr, rb_enc_from_index(ENCINDEX_RUBYCOCOA_UNKNOWN));
+}
+#endif

@@ -336,6 +336,7 @@ static void rubycocoa_init()
     init_ovmix();
     load_path_unshift(framework_ruby_path()); // PATH_TO_FRAMEWORK/Resources/ruby
     sign_path_unshift(framework_bridge_support_path());
+    init_encoding_conversion(); // initialize Ruby<->ObjC string encoding conversion
     rubycocoa_initialized_flag = 1;
     rb_define_variable("$RUBYCOCOA_DEBUG", &ruby_debug);
     rubycocoa_debug = getenv("RUBYCOCOA_DEBUG") != NULL;
