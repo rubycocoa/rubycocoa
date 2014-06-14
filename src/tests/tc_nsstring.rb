@@ -54,7 +54,12 @@ class TC_NSString < Test::Unit::TestCase
     data = nsstr.dataUsingEncoding( NSShiftJISStringEncoding )
     bytes = "." * data.length
     data.getBytes_length( bytes )
-    assert_equal( @eucstr.tosjis, bytes )
+    sjisstr = @eucstr.tosjis
+    if RUBY_VERSION >= '2.0'
+      assert_equal( sjisstr.bytesize, data.length )
+      bytes.force_encoding("Shift_JIS")
+    end
+    assert_equal( sjisstr, bytes )
   end
 
   def test_dataUsingEncoding_jis
@@ -62,7 +67,12 @@ class TC_NSString < Test::Unit::TestCase
     data = nsstr.dataUsingEncoding( NSISO2022JPStringEncoding )
     bytes = "." * data.length
     data.getBytes_length( bytes )
-    assert_equal( @eucstr.tojis, bytes )
+    jisstr = @eucstr.tojis
+    if RUBY_VERSION >= '2.0'
+      assert_equal( jisstr.bytesize, data.length )
+      bytes.force_encoding("ISO-2022-JP")
+    end
+    assert_equal( jisstr, bytes )
   end
   
   def test_copy

@@ -1,5 +1,10 @@
 2014-06-15 kimura wataru <kimuraw@i.nifty.jp>
 
+	* tests/tc_nsstring.rb:
+	fix test_dataUsingEncoding_jis fails on ruby-2.x.
+
+2014-06-15 kimura wataru <kimuraw@i.nifty.jp>
+
 	* framework/src/objc/RBRuntime.m,
 	  framework/src/objc/ocdata_conv.h,
 	  framework/src/objc/ocdata_conv.m:
