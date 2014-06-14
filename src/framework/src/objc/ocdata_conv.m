@@ -1223,10 +1223,7 @@ ocstr_to_rbstr(id ocstr)
 	nsenc = NSUTF8StringEncoding;
 	rbenc = rb_utf8_encoding();
       } else {
-	// the dummy encoding should be defined at RubyCocoa initializaion.
-	if (!(rbenc = rb_enc_find("rubycocoa_binary"))) {
-	  rbenc = rb_enc_from_index(rb_define_dummy_encoding("rubycocoa_binary"));
-	}
+	rbenc = rb_enc_from_index(ENCINDEX_RUBYCOCOA_UNKNOWN);
 	nsenc = CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingInvalidId);
       }
   }
