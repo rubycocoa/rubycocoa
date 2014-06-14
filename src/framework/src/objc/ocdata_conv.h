@@ -83,6 +83,12 @@ void remove_from_rb2oc_cache(VALUE rbobj);
 void remove_from_oc2rb_cache(id ocid);
 VALUE ocid_to_rbobj_cache_only(id ocid);
 
+#ifdef HAVE_RUBY_ENCODING_H
+void init_encoding_conversion(void);
+VALUE rbstr_dummyenc_new(const char* ptr, long len);
+VALUE rbstr_dummyenc_new_cstr(const char* ptr);
+#endif
+
 @class NSMethodSignature;
 void decode_method_encoding(const char *encoding, NSMethodSignature *methodSignature, unsigned *argc, char **retval_type, char ***arg_types, BOOL strip_first_two_args);
 void set_octypes_for_format_str (char **octypes, unsigned len, char *format_str);
