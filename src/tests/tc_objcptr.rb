@@ -250,7 +250,11 @@ class TC_ObjcPtr < Test::Unit::TestCase
     assert_equal(4294967295, obj.cast_as('^I'))
     
     obj = ObjcPtrTest.new.returnVoidPtrForCStr
-    assert_equal('foobar', obj.cast_as('*'))
+    str = obj.cast_as('*')
+    if RUBY_VERSION >= '2.0'
+      str.force_encoding("ASCII-8BIT")
+    end
+    assert_equal('foobar', str)
   end
 
 #   rb_define_method (_kObjcPtr, "int8_at", rb_objcptr_int8_at, 1);

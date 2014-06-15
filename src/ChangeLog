@@ -1,5 +1,10 @@
 2014-06-15 kimura wataru <kimuraw@i.nifty.jp>
 
+	* tests/tc_objcptr.rb:
+	fix test_ocptr_as_id fails on ruby-2.x.
+
+2014-06-15 kimura wataru <kimuraw@i.nifty.jp>
+
 	* framework/src/objc/ocdata_conv.m:
 	fix missing assign value to ENCINDEX_RUBYCOCOA_UNKNOWN.
 
