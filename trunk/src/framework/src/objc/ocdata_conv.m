@@ -1526,7 +1526,7 @@ set_octypes_for_format_str (char **octypes, unsigned len, char *format_str)
 // #pragma mark - encoding conversion
 void init_encoding_conversion()
 {
-  rb_define_dummy_encoding("RUBYCOCOA_UNKNOWN");
+  ENCINDEX_RUBYCOCOA_UNKNOWN = rb_define_dummy_encoding("RUBYCOCOA_UNKNOWN");
 }
 
 // #pragma mark - String with unkownn encoding
