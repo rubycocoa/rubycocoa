@@ -106,6 +106,7 @@ if __FILE__ == $0 and ARGV[0] == Standaloneify::MAGIC_ARGUMENT then
       files_and_paths.reject! { |f,p| p.nil? }
 
       if defined?(Gem) then
+        $stderr.puts "standaloneifying Gem::VERSION: #{Gem::VERSION}"
         resources_d = OSX::NSBundle.mainBundle.resourcePath.fileSystemRepresentation
         gems_home_d = File.join(resources_d,"RubyGems")
         gems_gem_d = File.join(gems_home_d,"gems")
@@ -145,6 +146,11 @@ if __FILE__ == $0 and ARGV[0] == Standaloneify::MAGIC_ARGUMENT then
   end
 
   require 'osx/cocoa'
+
+  $stderr.puts "standaloneifying Ruby Version: #{RUBY_VERSION}"
+  $stderr.puts "standaloneifying RubyCocoa Version: #{OSX::RUBYCOCOA_VERSION}"
+  rcbundle = OSX::NSBundle.bundleForClass_(OSX::RBObject)
+  $stderr.puts "standaloneifying RubyCocoa path: #{rcbundle.bundlePath}"
 
   module OSX
     def self.NSApplicationMain(*args)
@@ -213,15 +219,30 @@ module Standaloneify
     rc_vers = `/usr/bin/defaults read "#{File.join(rc_path,'Resources','Info')}" CFBundleShortVersionString`
     if rc_vers.to_f >= 1.0 && rc_vers >= "1.0.4"
       # 1.0.5 or later requires "--ruby-cocoa-opt" to process args as ruby options
-      system(mainprog,"--rubycocoa-ruby-opt",__FILE__,MAGIC_ARGUMENT)
+      opts = ["--rubycocoa-ruby-opt",__FILE__,MAGIC_ARGUMENT]
     else
-      system(mainprog,__FILE__,MAGIC_ARGUMENT)
+      opts = [__FILE__,MAGIC_ARGUMENT]
     end
+    system(mainprog, *opts)
 
     begin
       result = eval(File.read(dump_file))
     rescue
-      $stderr.puts "Couldn't read dependency list"
+      # print failed command and loaded libraries
+      $stderr.puts ">> command: #{mainprog} #{opts.join(' ')}"
+      begin
+        env_print_lib = ENV["DYLD_PRINT_LIBRARIES"]
+        ENV["DYLD_PRINT_LIBRARIES"] = "1"
+        require 'open3'
+        libs = Open3.popen3(mainprog, *opts) do |stdin, stdout, stderr|
+          stdin.close
+          stderr.readlines
+        end
+        $stderr.puts libs.grep(/^dyld.*ruby/i).map {|line| '>> ' + line}
+      ensure
+        ENV["DYLD_PRINT_LIBRARIES"] = env_print_lib
+      end
+      $stderr.puts "Error: Couldn't read dependency list"
       exit 1
     end
     File.unlink(dump_file)
