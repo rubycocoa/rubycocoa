@@ -1,5 +1,10 @@
 2014-06-15 kimura wataru <kimuraw@i.nifty.jp>
 
+	* framework/src/objc/RBRuntime.m:
+	fix "Symbol not found: _init_encoding_conversion" on ruby-1.8.
+
+2014-06-15 kimura wataru <kimuraw@i.nifty.jp>
+
 	* tests/tc_objcptr.rb:
 	fix test_ocptr_as_id fails on ruby-2.x.
 
