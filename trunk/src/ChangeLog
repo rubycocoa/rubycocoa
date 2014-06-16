@@ -1,6 +1,12 @@
 2014-06-15 kimura wataru <kimuraw@i.nifty.jp>
 
 	* framework/tool/standaloneify.rb:
+	print version and location of RubyCocoa.framework in target
+	application bundle.
+
+2014-06-15 kimura wataru <kimuraw@i.nifty.jp>
+
+	* framework/tool/standaloneify.rb:
 	fix errors with rubygems 1.3, 2.1 or later.
 
 2014-06-15 kimura wataru <kimuraw@i.nifty.jp>
