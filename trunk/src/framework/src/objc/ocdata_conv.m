@@ -1163,7 +1163,7 @@ rbstr_to_ocstr(VALUE obj)
   else if (rbenc_idx == rb_enc_find_index("UTF8-Mac")) {
     nsenc = NSUTF8StringEncoding;
   }
-  else if (rbenc_idx == rb_ascii8bit_encoding()) {
+  else if (rbenc_idx == rb_ascii8bit_encindex()) {
     nsenc = NSASCIIStringEncoding;
   }
   else if (rbenc_idx == rb_enc_find_index("Shift_JIS")) {

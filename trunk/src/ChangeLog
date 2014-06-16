@@ -1,3 +1,8 @@
+2014-06-16 kimura wataru <kimuraw@i.nifty.jp>
+
+	* framework/src/objc/ocdata_conv.m:
+	fix wrong type comparison rb_encoding for ruby encoding index.
+
 2014-06-15 kimura wataru <kimuraw@i.nifty.jp>
 
 	* framework/tool/standaloneify.rb:
