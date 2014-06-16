@@ -550,7 +550,7 @@ rb_bs_struct_new (int argc, VALUE *argv, VALUE rcv)
       field_octype = bs_struct->opt.s.fields[i].encoding;
 
       if (!rbobj_to_ocdata(argv[i], field_octype, data + pos, NO))
-        rb_raise(rb_eArgError, "Cannot convert arg #%d of type %d to Objective-C", i, field_octype);
+        rb_raise(rb_eArgError, "Cannot convert arg #%d of type %s to Objective-C", i, field_octype);
 
       pos += ocdata_size(field_octype);
     }
