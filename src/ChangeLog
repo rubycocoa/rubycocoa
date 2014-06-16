@@ -1,5 +1,10 @@
 2014-06-16 kimura wataru <kimuraw@i.nifty.jp>
 
+	* framework/src/objc/BridgeSupport.m:
+	fix wrong format type.
+
+2014-06-16 kimura wataru <kimuraw@i.nifty.jp>
+
 	* framework/src/objc/ocdata_conv.m:
 	fix wrong type comparison rb_encoding for ruby encoding index.
 
