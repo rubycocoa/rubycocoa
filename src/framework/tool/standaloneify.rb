@@ -302,6 +302,10 @@ module Standaloneify
     end
   end
 
+  def self.bundle_version(bundle)
+    `/usr/bin/defaults read "#{File.join(bundle,'Resources','Info')}" CFBundleShortVersionString`.chomp
+  end
+
   def self.make_standalone_application(source,dest,extra_libs,framework_paths)
     FileUtils.cp_r(source,dest)
     dest_d = Pathname.new(dest).realpath.to_s
@@ -331,9 +335,13 @@ module Standaloneify
       raise "Cannot locate RubyCocoa.framework" unless rc_path  
       # FileUtils.cp_r(rc_path,frameworks_d)
       # Do not use FileUtils.cp_r because it tries to follow symlinks.
-      unless system("cp -R \"#{rc_path}\" \"#{frameworks_d}\"")
+      if system("cp -R \"#{rc_path}\" \"#{frameworks_d}\"")
+        $stderr.puts "INFO: RubyCocoa.framework (version #{bundle_version(rc_path)}) copied from \"#{rc_path}\"."
+      else
         raise "cannot copy #{rc_path} to #{frameworks_d}"
       end
+    else
+      $stderr.puts "INFO: framework \"#{ruby_cocoa_d}\" (version #{bundle_version(ruby_cocoa_d)}) already exists. standaloneifying.rb will not overwrite this file."
     end
 
     # Copy in and update library references for RubyCocoa
@@ -392,6 +400,7 @@ module Standaloneify
         $stderr.puts "WARNING: unknown feature %s loaded" % feature.inspect
       end
     end
+    $stderr.puts "\nFinish: \"#{dest}\" generated."
   end
 
 end
