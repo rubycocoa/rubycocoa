@@ -1,5 +1,10 @@
 2014-06-19 kimura wataru <kimuraw@i.nifty.jp>
 
+	* tests/tc_objcptr.rb:
+	fix test_ocptr_ary_assign fails on ruby-1.8.
+
+2014-06-19 kimura wataru <kimuraw@i.nifty.jp>
+
 	* framework/src/objc/cls_objcptr.m,
 	  tests/tc_attachments.rb,
 	  tests/tc_nsdata.rb,
