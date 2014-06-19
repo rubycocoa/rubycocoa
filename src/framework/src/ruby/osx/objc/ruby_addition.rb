@@ -36,15 +36,27 @@ end
 
 # Property list API.
 module OSX
-  # @param data
+  # @param data [String, OSX::NSString, OSX::NSData]
   # @return [OSX::NSPropertyList]
   def load_plist(data)
-    str = data.to_s.to_ns
-    if str
-      nsdata = str.dataUsingEncoding(OSX::NSUTF8StringEncoding)
+    case data
+    when String
+      if RUBY_VERSION >= '2.0'
+        if data.encoding == Encoding.find('RUBYCOCOA_UNKNOWN')
+          nsdata = OSX::NSData.dataWithBytes_length(data, data.bytesize)
+        else
+          str = data.encode!(Encoding::UTF_8).to_ns
+          nsdata = str.dataUsingEncoding(OSX::NSUTF8StringEncoding)
+        end
+      else
+        nsdata = OSX::NSData.dataWithBytes_length(data, data.length)
+      end
+    when OSX::NSString
+      nsdata = data.dataUsingEncoding(OSX::NSUTF8StringEncoding)
+    when OSX::NSData
+      nsdata = data
     else
-      # binary string data => guess binary format plist
-      nsdata = OSX::NSData.dataWithBytes_length(data, data.size)
+      raise ArgumentError, 'argument should be String, OSX::NSString or OSX::NSData'
     end
     obj, error = OSX::NSPropertyListSerialization.objc_send \
       :propertyListFromData, nsdata,
@@ -69,7 +81,7 @@ module OSX
         OSX::NSString.alloc.initWithData_encoding(data, 
           OSX::NSUTF8StringEncoding).to_s
       else
-        data.bytes.bytestr(data.length)
+        data.rubyString
     end
   end
   module_function :object_to_plist

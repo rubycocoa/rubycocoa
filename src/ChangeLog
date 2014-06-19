@@ -1,3 +1,9 @@
+2014-06-20 kimura wataru <kimuraw@i.nifty.jp>
+
+	* framework/src/ruby/osx/objc/ruby_addition.rb,
+	  tests/tc_plist.rb:
+	OSX.load_plist() accepts String, OSX::NSString and OSX::NSData.
+
 2014-06-19 kimura wataru <kimuraw@i.nifty.jp>
 
 	* framework/src/objc/ocdata_conv.m:
