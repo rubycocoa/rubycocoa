@@ -246,7 +246,12 @@ class TC_Types < Test::Unit::TestCase
       if provided_ctx.nil?
         assert_nil(ctx)
       else
-        assert_equal(provided_ctx, ctx.bytestr(provided_ctx.length))
+        bstr = ctx.bytestr(provided_ctx.length)
+        if RUBY_VERSION >= '2.0'
+          assert_equal(Encoding.find('RUBYCOCOA_UNKNOWN'), bstr.encoding)
+          bstr.force_encoding('ASCII-8BIT')
+        end
+        assert_equal(provided_ctx, bstr)
       end
       assert_kind_of(OSX::ObjcPtr, value)
       i += 1

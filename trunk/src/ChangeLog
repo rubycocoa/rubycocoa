@@ -1,3 +1,12 @@
+2014-06-19 kimura wataru <kimuraw@i.nifty.jp>
+
+	* framework/src/objc/cls_objcptr.m,
+	  tests/tc_attachments.rb,
+	  tests/tc_nsdata.rb,
+	  tests/tc_objcptr.rb,
+	  tests/tc_types.rb:
+	OSX::ObjcPtr#bytestr, #bytestr_at should return dummy encoding string.
+
 2014-06-16 kimura wataru <kimuraw@i.nifty.jp>
 
 	* framework/src/objc/BridgeSupport.m:

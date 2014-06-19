@@ -170,6 +170,10 @@ class TC_ObjcPtr < Test::Unit::TestCase
     src = 'hello world'
     cptr = NSData.dataWithRubyString(src).bytes
     bstr = cptr.bytestr_at(3,4)
+    if RUBY_VERSION >= '2.0'
+      assert_equal( Encoding.find("RUBYCOCOA_UNKNOWN"), bstr.encoding )
+      bstr.force_encoding("ASCII-8BIT")
+    end
     assert_equal( src[3,4], bstr )
     assert( bstr.tainted? )
   end
@@ -178,6 +182,10 @@ class TC_ObjcPtr < Test::Unit::TestCase
     src = 'hello world'
     cptr = NSData.dataWithRubyString(src).bytes
     bstr = cptr.bytestr(src.size)
+    if RUBY_VERSION >= '2.0'
+      assert_equal( Encoding.find("RUBYCOCOA_UNKNOWN"), bstr.encoding )
+      bstr.force_encoding("ASCII-8BIT")
+    end
     assert_equal( src, bstr )
     assert( bstr.tainted? )
   end
@@ -227,7 +235,7 @@ class TC_ObjcPtr < Test::Unit::TestCase
     obj = ObjcPtr.new(:char, str.length)
     # Note: ruby-1.8 String#bytes does not returns an array.
     str.length.times { |i| obj[i] = str.bytes.to_a[i] }
-    assert_equal('foobar', obj.bytestr)
+    assert_equal('foobar', obj.bytestr.force_encoding("ASCII-8BIT"))
     assert_raises(ArgumentError) { obj[0] = 'blah' }
   end
   

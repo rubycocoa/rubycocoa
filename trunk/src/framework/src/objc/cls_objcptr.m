@@ -285,13 +285,21 @@ rb_objcptr_regard_as(VALUE rcv, VALUE key)
 static VALUE
 rb_objcptr_bytestr_at(VALUE rcv, VALUE offset, VALUE length)
 {
-  return rb_tainted_str_new ((char*)CPTR_OF(rcv) + NUM2LONG(offset), NUM2LONG(length));
+  VALUE str;
+#ifdef HAVE_RUBY_ENCODING_H
+  str = rbstr_dummyenc_new ((char*)CPTR_OF(rcv) + NUM2LONG(offset), NUM2LONG(length));
+  rb_obj_taint(str);
+#else
+  str = rb_tainted_str_new ((char*)CPTR_OF(rcv) + NUM2LONG(offset), NUM2LONG(length));
+#endif
+  return str;
 }
 
 static VALUE
 rb_objcptr_bytestr(int argc, VALUE* argv, VALUE rcv)
 {
   VALUE  rb_length;
+  VALUE  str;
   long length;
 
   length = ALLOCATED_SIZE_OF(rcv);
@@ -301,7 +309,13 @@ rb_objcptr_bytestr(int argc, VALUE* argv, VALUE rcv)
       Check_Type(rb_length, T_BIGNUM);
     length = NUM2LONG(rb_length);
   }
-  return rb_tainted_str_new (CPTR_OF(rcv), length);
+#ifdef HAVE_RUBY_ENCODING_H
+  str = rbstr_dummyenc_new (CPTR_OF(rcv), length);
+  rb_obj_taint(str);
+#else
+  str = rb_tainted_str_new (CPTR_OF(rcv), length);
+#endif
+  return str;
 }
 
 static VALUE
