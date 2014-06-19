@@ -1537,6 +1537,6 @@ VALUE rbstr_dummyenc_new(const char* ptr, long len)
 
 VALUE rbstr_dummyenc_new_cstr(const char* ptr)
 {
-  return rb_enc_str_new_cstr(ptr, rb_enc_from_index(ENCINDEX_RUBYCOCOA_UNKNOWN));
+  return rb_enc_str_new(ptr, strlen(ptr), rb_enc_from_index(ENCINDEX_RUBYCOCOA_UNKNOWN));
 }
 #endif
