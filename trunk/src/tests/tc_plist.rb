@@ -81,7 +81,7 @@ class TC_Plist < Test::Unit::TestCase
   end
 
   def test_invalid_plist_data
-    assert_raise(RuntimeError) do
+    assert_raise(ArgumentError) do
       OSX.load_plist(nil)
     end
     assert_raise(RuntimeError) do
