@@ -70,7 +70,12 @@ class TC_Attachments < Test::Unit::TestCase
   
   def test_data
     data = NSData.dataWithBytes_length("somedata")
-    assert_equal "somedata", data.rubyString
+    str = data.rubyString
+    if RUBY_VERSION >= '2.0'
+      assert_equal( Encoding.find('RUBYCOCOA_UNKNOWN'), str.encoding )
+      str.force_encoding('ASCII-8BIT')
+    end
+    assert_equal "somedata", str
   end
   
   def test_image_focus

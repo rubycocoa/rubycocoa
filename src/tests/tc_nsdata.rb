@@ -72,7 +72,12 @@ class TC_NSData < Test::Unit::TestCase
   def test_bytes
     src = 'hello world'
     data = NSData.dataWithRubyString( src )
-    assert_equal( src, data.bytes.bytestr( src.size ))
+    bstr = data.bytes.bytestr( src.size )
+    if RUBY_VERSION >= '2.0'
+      assert_equal(Encoding.find("RUBYCOCOA_UNKNOWN"), bstr.encoding)
+      bstr.force_encoding("ASCII-8BIT")
+    end
+    assert_equal( src, bstr )
     assert( data.bytes.tainted? )
   end
 
@@ -81,7 +86,12 @@ class TC_NSData < Test::Unit::TestCase
     data = NSData.dataWithRubyString( src )
     cptr = ObjcPtr.new( src.size )
     data.getBytes_length( cptr )
-    assert_equal( src, cptr.bytestr( src.size ))
+    bstr = cptr.bytestr( src.size )
+    if RUBY_VERSION >= '2.0'
+      assert_equal(Encoding.find("RUBYCOCOA_UNKNOWN"), bstr.encoding)
+      bstr.force_encoding("ASCII-8BIT")
+    end
+    assert_equal( src, bstr )
     assert( cptr.tainted? )
   end
 
