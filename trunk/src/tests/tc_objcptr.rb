@@ -235,7 +235,11 @@ class TC_ObjcPtr < Test::Unit::TestCase
     obj = ObjcPtr.new(:char, str.length)
     # Note: ruby-1.8 String#bytes does not returns an array.
     str.length.times { |i| obj[i] = str.bytes.to_a[i] }
-    assert_equal('foobar', obj.bytestr.force_encoding("ASCII-8BIT"))
+    bstr = obj.bytestr
+    if RUBY_VERSION >= '2.0'
+      bstr.force_encoding("ASCII-8BIT")
+    end
+    assert_equal('foobar', bstr)
     assert_raises(ArgumentError) { obj[0] = 'blah' }
   end
   
