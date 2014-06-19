@@ -1,5 +1,11 @@
 2014-06-20 kimura wataru <kimuraw@i.nifty.jp>
 
+	* tests/tc_nsarray.rb,
+	* tests/tc_objcid.rb:
+	allow running tests with `minitest`, standard library of ruby-2.0.
+
+2014-06-20 kimura wataru <kimuraw@i.nifty.jp>
+
 	* framework/src/ruby/osx/objc/ruby_addition.rb,
 	  tests/tc_plist.rb:
 	OSX.load_plist() accepts String, OSX::NSString and OSX::NSData.

@@ -877,10 +877,10 @@ class TC_NSArray < Test::Unit::TestCase
   
   # [bug] - ruby20: Array#grep() fails by invoking NSNumber#to_str
   def test_grep
-    assert_true(/a/ === 'abc')
-    assert_true(/a/ === 'abc'.to_ns)
-    assert_false(/a/ === 1)
-    assert_false(/a/ === 1.to_ns)
+    assert_equal(true, /a/ === 'abc')
+    assert_equal(true, /a/ === 'abc'.to_ns)
+    assert_equal(false, /a/ === 1)
+    assert_equal(false, /a/ === 1.to_ns)
     [['abc','d!ef','98adfa','zAvcz'], [1,2,3,4]].each do |d|
       a = alloc_nsarray(*d)
       b = d
