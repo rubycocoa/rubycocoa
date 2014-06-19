@@ -7,15 +7,15 @@ class TC_ObjCID < Test::Unit::TestCase
     # NSNumber represented like immediate value for small integer
     num1 = OSX::NSNumber.numberWithInt(1)
     num2 = OSX::NSNumber.numberWithInt(1)
-    assert_true(num1 == num2, 'num1 == num2')
-    assert_true(num1.eql?(num2), 'num1.eql? num2')
-    assert_false(num1.equal?(num2), 'num1.equal? num2')
+    assert_equal(true, num1 == num2, 'num1 == num2')
+    assert_equal(true, num1.eql?(num2), 'num1.eql? num2')
+    assert_equal(false, num1.equal?(num2), 'num1.equal? num2')
     #
     url1 = OSX::NSURL.URLWithString('http://www.apple.com/')
     url2 = OSX::NSURL.URLWithString('http://www.apple.com/')
-    assert_false(url1 == url2, 'url1 == url2')
-    assert_false(url1.eql?(url2), 'url1.eql? url2')
-    assert_false(url1.equal?(url2), 'url1.equal? url2')
+    assert_equal(false, url1 == url2, 'url1 == url2')
+    assert_equal(false, url1.eql?(url2), 'url1.eql? url2')
+    assert_equal(false, url1.equal?(url2), 'url1.equal? url2')
   end
 
   def test_objcid_hash
