@@ -34,6 +34,12 @@ static struct st_table *oc2rbCache;
 /* dummy ruby string encoding for unknown Ruby<->NSString conversion */
 #ifdef HAVE_RUBY_ENCODING_H
 static int ENCINDEX_RUBYCOCOA_UNKNOWN;
+
+static struct st_table *rb2ocEncConv;
+static struct st_table *oc2rbEncConv;
+
+static CFStringEncoding strenc_rb2oc(rb_encoding *rbenc);
+static rb_encoding *strenc_oc2rb(CFStringEncoding cfenc);
 #endif
 
 static VALUE _ocid_to_rbobj (VALUE context_obj, id ocid, BOOL is_class);
@@ -1155,35 +1161,19 @@ rbstr_to_ocstr(VALUE obj)
   NSStringEncoding nsenc;
   VALUE str = obj;
 #ifdef HAVE_RUBY_ENCODING_H
-  int rbenc_idx = rb_enc_get_index(obj);
-  // TODO encoding conversion by lookup st_table
-  if (rbenc_idx == rb_utf8_encindex()) {
-    nsenc = NSUTF8StringEncoding;
-  }
-  else if (rbenc_idx == rb_enc_find_index("UTF8-Mac")) {
-    nsenc = NSUTF8StringEncoding;
-  }
-  else if (rbenc_idx == rb_ascii8bit_encindex()) {
-    nsenc = NSASCIIStringEncoding;
-  }
-  else if (rbenc_idx == rb_enc_find_index("Shift_JIS")) {
-    nsenc = NSShiftJISStringEncoding;
-  }
-  else if (rbenc_idx == rb_enc_find_index("eucJP")) {
-    nsenc = NSJapaneseEUCStringEncoding;
-  }
-  else if (rbenc_idx == rb_enc_find_index("ISO-2022-JP")) {
-    nsenc = NSISO2022JPStringEncoding;
-  }
-  else {
-    str = rb_str_conv_enc(obj, rb_enc_from_index(rbenc_idx), rb_utf8_encoding());
+  rb_encoding *rbenc = rb_enc_get(obj);
+  CFStringEncoding cfenc;
+  cfenc = strenc_rb2oc(rbenc);
+  if (cfenc == kCFStringEncodingInvalidId && rb_enc_to_index(rbenc) != ENCINDEX_RUBYCOCOA_UNKNOWN) {
+    // try to convert into UTF-8
+    str = rb_str_conv_enc(obj, rbenc, rb_utf8_encoding());
     if (rb_enc_get_index(str) == rb_utf8_encindex()) {
-      nsenc = NSUTF8StringEncoding;
+      cfenc = kCFStringEncodingUTF8;
     } else {
-      str = obj;
-      nsenc = CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingInvalidId);
+      cfenc = kCFStringEncodingInvalidId;
     }
   }
+  nsenc = CFStringConvertEncodingToNSStringEncoding(cfenc);
 #else
   nsenc = KCODE_NSSTRENCODING;
 #endif
@@ -1197,37 +1187,22 @@ ocstr_to_rbstr(id ocstr)
 {
   NSData * data;
 #ifdef HAVE_RUBY_ENCODING_H
-  NSStringEncoding nsenc = [(NSString *)ocstr fastestEncoding];
-  rb_encoding * rbenc = Qnil;
+  CFStringEncoding cfenc = CFStringGetFastestEncoding((CFStringRef)((NSString *)ocstr));
+  rb_encoding *rbenc;
   BOOL allowLossy = NO;
-  // TODO encoding conversion by lookup st_table
-  switch (nsenc) {
-    case NSUTF8StringEncoding:
-//      rbenc = rb_enc_find("UTF8-MAC");
+
+  rbenc = strenc_oc2rb(cfenc);
+  if (rb_enc_to_index(rbenc) == ENCINDEX_RUBYCOCOA_UNKNOWN && cfenc != kCFStringEncodingInvalidId) {
+    // try to convert into UTF-8
+    if ([ocstr canBeConvertedToEncoding:NSUTF8StringEncoding]) {
+      cfenc = kCFStringEncodingUTF8;
       rbenc = rb_utf8_encoding();
-      break;
-    case NSASCIIStringEncoding:
-      rbenc = rb_ascii8bit_encoding();
-      break;
-    case NSShiftJISStringEncoding:
-      rbenc = rb_enc_find("Shift_JIS");
-      break;
-    case NSJapaneseEUCStringEncoding:
-      rbenc = rb_enc_find("eucJP");
-      break;
-    case NSISO2022JPStringEncoding:
-      rbenc = rb_enc_find("ISO-2022-JP");
-      break;
-    default:
-      if ([ocstr canBeConvertedToEncoding:NSUTF8StringEncoding]) {
-	nsenc = NSUTF8StringEncoding;
-	rbenc = rb_utf8_encoding();
-      } else {
-	rbenc = rb_enc_from_index(ENCINDEX_RUBYCOCOA_UNKNOWN);
-	nsenc = CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingInvalidId);
-      }
+    } else {
+      cfenc = kCFStringEncodingInvalidId;
+      rbenc = rb_enc_from_index(ENCINDEX_RUBYCOCOA_UNKNOWN);
+    }
   }
-  data = [(NSString *)ocstr dataUsingEncoding:nsenc
+  data = [(NSString *)ocstr dataUsingEncoding:CFStringConvertEncodingToNSStringEncoding(cfenc)
 		     allowLossyConversion:allowLossy];
   return rb_enc_str_new([data bytes], [data length], rbenc);
 #else
@@ -1523,13 +1498,121 @@ set_octypes_for_format_str (char **octypes, unsigned len, char *format_str)
 }
 
 #ifdef HAVE_RUBY_ENCODING_H
-// #pragma mark - encoding conversion
+#pragma mark - string encoding conversion
+BOOL register_strenc_rb2oc(rb_encoding *rbenc, CFStringEncoding cfenc, BOOL force);
+BOOL register_strenc_oc2rb(CFStringEncoding cfenc, rb_encoding *rbenc, BOOL force);
+BOOL register_strenc_pair(rb_encoding *rbenc, CFStringEncoding cfenc, BOOL force);
+
 void init_encoding_conversion()
 {
+  rb_encoding *rbenc;
+
+  rb2ocEncConv = st_init_numtable();
+  oc2rbEncConv = st_init_numtable();
+
+  // register basic encodings
+  if ((rbenc = rb_enc_find("ASCII-8BIT"))) {
+    register_strenc_pair(rbenc, kCFStringEncodingASCII, NO);
+  }
+  if ((rbenc = rb_enc_find("US-ASCII"))) {
+    register_strenc_rb2oc(rbenc, kCFStringEncodingASCII, NO); // rb->cf only
+  }
+  if ((rbenc = rb_enc_find("UTF-8"))) {
+    register_strenc_pair(rbenc, kCFStringEncodingUTF8, NO);
+  }
+
+  // define dummy encoding
   ENCINDEX_RUBYCOCOA_UNKNOWN = rb_define_dummy_encoding("RUBYCOCOA_UNKNOWN");
+  if ((rbenc = rb_enc_from_index(ENCINDEX_RUBYCOCOA_UNKNOWN))) {
+    register_strenc_pair(rbenc, kCFStringEncodingInvalidId, NO);
+  } else {
+//    TODO print error
+  }
+  
 }
 
-// #pragma mark - String with unkownn encoding
+BOOL register_strenc_rb2oc(rb_encoding *rbenc, CFStringEncoding cfenc, BOOL force)
+{
+  BOOL ok;
+  int rbenc_idx = rb_enc_to_index(rbenc);
+  CFStringEncoding cfenc2;
+
+  if (rbenc_idx < 0) {
+    return NO;
+  }
+
+  if (st_lookup(rb2ocEncConv, (st_data_t)rbenc_idx, &cfenc2)) {
+    if (!force) {
+      return NO;
+    }
+    st_delete(rb2ocEncConv, (st_data_t)rbenc_idx, NULL);
+  }
+  ok = st_insert(rb2ocEncConv, (st_data_t)rbenc_idx, (st_data_t)cfenc);
+  return ok;
+}
+
+BOOL register_strenc_oc2rb(CFStringEncoding cfenc, rb_encoding *rbenc, BOOL force)
+{
+  BOOL ok;
+  int rbenc_idx = rb_enc_to_index(rbenc);
+  int rbenc_idx2;
+
+  if (rbenc_idx < 0) {
+    return NO;
+  }
+
+  if (st_lookup(oc2rbEncConv, (st_data_t)cfenc, &rbenc_idx2)) {
+    if (!force) {
+      return NO;
+    }
+    st_delete(oc2rbEncConv, (st_data_t)cfenc, NULL);
+  }
+  ok = st_insert(oc2rbEncConv, (st_data_t)cfenc, (st_data_t)rbenc_idx);
+  return ok;
+}
+
+BOOL register_strenc_pair(rb_encoding *rbenc, CFStringEncoding cfenc, BOOL force)
+{
+  BOOL rb2oc, oc2rb;
+
+  rb2oc = register_strenc_rb2oc(rbenc, cfenc, force);
+  oc2rb = register_strenc_oc2rb(cfenc, rbenc, force);
+  return (rb2oc && oc2rb);
+}
+
+static CFStringEncoding strenc_rb2oc(rb_encoding *rbenc)
+{
+  CFStringEncoding cfenc;
+  int rbenc_idx = rb_enc_to_index(rbenc);
+
+  if (st_lookup(rb2ocEncConv, (st_data_t)rbenc_idx, &cfenc)) {
+    return cfenc; // registered
+  }
+
+  // TODO get objc string encoding from ruby encoding
+  cfenc = kCFStringEncodingInvalidId;
+  register_strenc_rb2oc(rbenc, cfenc, NO);
+
+  return cfenc;
+}
+
+static rb_encoding *strenc_oc2rb(CFStringEncoding cfenc)
+{
+  int rbenc_idx;
+  CFStringRef iana_charset_name;
+
+  if (st_lookup(oc2rbEncConv, (st_data_t)cfenc, &rbenc_idx)) {
+    return rb_enc_from_index(rbenc_idx);
+  }
+
+  // TODO get ruby string encoding from objc encoding
+  rbenc_idx = ENCINDEX_RUBYCOCOA_UNKNOWN;
+  register_strenc_oc2rb(cfenc, rb_enc_from_index(rbenc_idx), NO);
+
+  return rb_enc_from_index(rbenc_idx);
+}
+
+#pragma mark - unkown string encoding (bytes)
 VALUE rbstr_dummyenc_new(const char* ptr, long len)
 {
   return rb_enc_str_new(ptr, len, rb_enc_from_index(ENCINDEX_RUBYCOCOA_UNKNOWN));

@@ -1,5 +1,10 @@
 2014-06-21 kimura wataru <kimuraw@i.nifty.jp>
 
+	* framework/src/objc/ocdata_conv.m:
+	add st_table for string encoding conversion between ruby and objc.
+
+2014-06-21 kimura wataru <kimuraw@i.nifty.jp>
+
 	* framework/src/objc/RBRuntime.m:
 	Use ruby_run_node() on ruby-2.x.
 
