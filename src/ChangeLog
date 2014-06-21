@@ -1,3 +1,12 @@
+2014-06-21 kimura wataru <kimuraw@i.nifty.jp>
+
+	* framework/src/objc/RBRuntime.m:
+	Use ruby_run_node() on ruby-2.x.
+
+	* framework/src/ruby/osx/objc/oc_attachments.rb:
+	NSString#fileSystemRepresentation should return regular string,
+	not dummy encoding.
+
 2014-06-20 kimura wataru <kimuraw@i.nifty.jp>
 
 	* tests/tc_nsarray.rb,
