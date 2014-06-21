@@ -376,21 +376,26 @@ rubycocoa_app_init(const char* program,
                    bundle_support_program_loader_t loader,
                    int argc, const char* argv[], id param)
 {
-#ifdef HAVE_RUBY_RUBY_H
-  extern void Init_stack(volatile VALUE*);
-#else
-  extern void Init_stack(VALUE*);
-#endif
   int state;
   int ruby_argc;
   const char** ruby_argv;
+#ifdef HAVE_RUBY_RUBY_H
+  void* node = NULL;
+  RUBY_INIT_STACK;
+#else
+  extern void Init_stack(VALUE*);
   Init_stack((void*)&state);
+#endif
   if (! rubycocoa_initialized_p()) {
     ruby_init();
     ruby_init_loadpath();
     rubycocoa_init();
     ruby_argc = prepare_argv(argc, argv, program, &ruby_argv);
+#ifdef HAVE_RUBY_RUBY_H
+    node = ruby_options(ruby_argc, (char**) ruby_argv);
+#else
     ruby_options(ruby_argc, (char**) ruby_argv);
+#endif
     rubycocoa_set_frequently_init_stack(0);
   }
   load_path_unshift(resource_path());
@@ -399,7 +404,11 @@ rubycocoa_app_init(const char* program,
   framework_paths_unshift(shared_frameworks_path());
   // call ruby_run() launched from standaloneify.rb
   if (getenv("RUBYCOCOA_STANDALONEIFYING?")) {
+#ifdef HAVE_RUBY_RUBY_H
+    ruby_run_node(node);
+#else
     ruby_run();
+#endif
   }
   return loader(program, nil, param);
 }
@@ -469,17 +478,28 @@ RBApplicationMain(const char* rb_program_path, int argc, const char* argv[])
 {
   int ruby_argc;
   const char** ruby_argv;
+#ifdef HAVE_RUBY_RUBY_H
+  void* node;
+#endif
 
   if (! rubycocoa_initialized_p()) {
     ruby_init();
     ruby_argc = prepare_argv(argc, argv, rb_program_path, &ruby_argv);
+#ifdef HAVE_RUBY_RUBY_H
+    node = ruby_options(ruby_argc, (char**) ruby_argv);
+#else
     ruby_options(ruby_argc, (char**) ruby_argv);
+#endif
     rubycocoa_init();
     load_path_unshift(resource_path()); // PATH_TO_BUNDLE/Contents/resources
     sign_path_unshift(bridge_support_path());
     framework_paths_unshift(private_frameworks_path());
     framework_paths_unshift(shared_frameworks_path());
+#ifdef HAVE_RUBY_RUBY_H
+    ruby_run_node(node);
+#else
     ruby_run();
+#endif
   }
   return 0;
 }

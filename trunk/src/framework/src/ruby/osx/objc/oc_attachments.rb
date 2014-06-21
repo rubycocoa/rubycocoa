@@ -1027,6 +1027,13 @@ module OSX
       (self..max).each {|i| yield i}
       self
     end
+
+    if RUBY_VERSION >= '2.0'
+      # @note Returns UTF-8 String, not dummy encoding.
+      def fileSystemRepresentation
+        self.oc_fileSystemRepresentation.force_encoding("filesystem")
+      end
+    end
     
     private
     
