@@ -493,10 +493,10 @@ bails:
 
 /*
  * Tests whether the reciever responds to a given Objective-C selector.
- * @param [String] sel
+ * @param [String] sel ruby-style method name, like "foo_bar_".
  */
 static VALUE
-wrapper_ocm_responds_p(VALUE rcv, VALUE sel)
+wrapper_ocm_respond_to_p(VALUE rcv, VALUE sel)
 {
   id oc_rcv;
   SEL oc_sel = rbobj_to_nssel(sel);
@@ -776,7 +776,8 @@ init_mdl_OCObjWrapper(VALUE mOSX)
 {
   _mObjWrapper = rb_define_module_under(mOSX, "OCObjWrapper");
 
-  rb_define_method(_mObjWrapper, "ocm_responds?", wrapper_ocm_responds_p, 1);
+  rb_define_method(_mObjWrapper, "ocm_respond_to?", wrapper_ocm_respond_to_p, 1);
+  rb_define_alias(_mObjWrapper, "ocm_responds?", "ocm_respond_to?");
   rb_define_method(_mObjWrapper, "ocm_send", wrapper_ocm_send, -1);
   rb_define_method(_mObjWrapper, "to_s", wrapper_to_s, 0);
 

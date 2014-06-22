@@ -111,8 +111,8 @@ module OSX
       else
         # CoreFoundation/Foundation are linked at built-time.
         id = bundle.bundleIdentifier
-        loaded = (id.isEqualToString('com.apple.CoreFoundation') or 
-                  id.isEqualToString('com.apple.Foundation'))
+        loaded = (id.isEqualToString?('com.apple.CoreFoundation') or 
+                  id.isEqualToString?('com.apple.Foundation'))
       end
       loaded
     else
@@ -313,7 +313,7 @@ module OSX
     # restrict creating an instance by Class#new, unless the Objective-C class 
     # really responds to the new selector.
     def new
-      if ocm_responds?(:new)
+      if ocm_respond_to?(:new)
         objc_send(:new)
       else
         raise ERRMSG_FOR_RESTRICT_NEW
@@ -735,7 +735,7 @@ module OSX
   # Load the foundation frameworks.
   OSX.load_bridge_support_signatures('CoreFoundation')
   OSX.load_bridge_support_signatures('Foundation')
-  OSX.ns_import_all if RUBY_VERSION >= '2.0'
+  OSX.ns_import_all
 
 end       # module OSX
 

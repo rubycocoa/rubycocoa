@@ -1,3 +1,24 @@
+2014-06-22 kimura wataru <kimuraw@i.nifty.jp>
+
+	* framework/src/ruby/osx/objc/oc_import.rb:
+	fix missing "?" for isEqualToString.
+
+2014-06-22 kimura wataru <kimuraw@i.nifty.jp>
+
+	* framework/src/ruby/osx/objc/oc_attachments.rb:
+	refactor OS::NSString#method_missing and #respond_to?.
+
+2014-06-22 kimura wataru <kimuraw@i.nifty.jp>
+
+	* framework/src/ruby/osx/objc/oc_attachments.rb,
+	  framework/src/ruby/osx/objc/oc_import.rb:
+	remove "include OSX::OCObjWrapper" needed for pseudo-openclass.
+
+2014-06-22 kimura wataru <kimuraw@i.nifty.jp>
+
+	* framework/src/objc/mdl_objwrapper.m:
+	rename OSX::OCObjWrapper#ocm_responds? to #ocm_respond_to?.
+
 2014-06-21 kimura wataru <kimuraw@i.nifty.jp>
 
 	* framework/src/objc/ocdata_conv.m:

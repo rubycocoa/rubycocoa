@@ -78,7 +78,7 @@ module OSX
         as_predicate = OSX.relaxed_syntax
         # convert foo? to isFoo
         orig_sel = m_args.size > 0 ? m_name.sub(/[^_:]$/, '\0_')  : m_name
-        unless ocm_responds?(orig_sel)
+        unless ocm_respond_to?(orig_sel)
           m_name = 'is' + m_name[0].chr.upcase + m_name[1..-1]
         end
       end
