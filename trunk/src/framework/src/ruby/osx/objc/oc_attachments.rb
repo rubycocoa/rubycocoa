@@ -103,8 +103,6 @@ module OSX
 
   # NSString additions
   class NSString
-    include OSX::OCObjWrapper
-
     def dup
       mutableCopy
     end
@@ -153,12 +151,14 @@ module OSX
     end
 
     # responds to Ruby String methods
-    alias_method :_rbobj_respond_to?, :respond_to?
     def respond_to?(mname, private = false)
-      String.public_method_defined?(mname) or _rbobj_respond_to?(mname, private)
+      if String.public_method_defined?(mname)
+        return true
+      else
+        super
+      end
     end
 
-    alias_method :objc_method_missing, :method_missing
     def method_missing(mname, *args, &block)
       if mname == :match || mname == :=~
         i = mname == :match ? 0 : 1
@@ -181,7 +181,7 @@ module OSX
         end
       else
         # call as objc string
-        result = objc_method_missing(mname, *args)
+        result = super
       end
       result
     end
@@ -1125,8 +1125,6 @@ module OSX
 
   # NSArray additions
   class NSArray
-    include OSX::OCObjWrapper
-
     def dup
       mutableCopy
     end
@@ -1973,8 +1971,6 @@ module OSX
 
   # NSDictionary additions
   class NSDictionary
-    include OSX::OCObjWrapper
-
     def dup
       mutableCopy
     end
