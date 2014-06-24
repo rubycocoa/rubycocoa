@@ -33,7 +33,7 @@ class TC_ObjCID < Test::Unit::TestCase
 
   def test_objcid_clone
     url = OSX::NSURL.URLWithString('http://www.apple.com/')
-    assert_raise OSX::OCMessageSendException do
+    assert_raise NoMethodError do
       url.clone
     end
   end
