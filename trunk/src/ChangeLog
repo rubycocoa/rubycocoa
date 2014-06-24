@@ -1,3 +1,9 @@
+2014-06-24 kimura wataru <kimuraw@i.nifty.jp>
+
+	* tool/create-symlinks.rb,
+	  tool/install-ruby.rb:
+	remove unused scripts.
+
 2014-06-22 kimura wataru <kimuraw@i.nifty.jp>
 
 	* framework/src/ruby/osx/objc/oc_import.rb:
