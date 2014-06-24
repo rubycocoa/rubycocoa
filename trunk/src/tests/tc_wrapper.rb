@@ -52,30 +52,33 @@ class TC_OCObjWrapper < Test::Unit::TestCase
   def test_message_syntaxes
     old_relaxed_syntax = OSX.relaxed_syntax
     OSX.relaxed_syntax = true
-    url1 = NSURL.alloc.initWithScheme_host_path_('http', 'localhost', '/foo') 
-    url2 = NSURL.alloc.initWithScheme_host_path('http', 'localhost', '/foo') 
-    assert_equal(true, url1.isEqual(url2)) 
-    url3 = NSURL.alloc.objc_send(:initWithScheme, 'http', :host, 'localhost', :path, '/foo')
-    assert_equal(true, url1.isEqual(url3))
-    # No need to check for symbol/value/... and inline Hash syntaxes, as they are deprecated.
-    # However we should check that an exception is raised (as if relaxed_syntax was false) for
-    # the 1.0.0 release.
-    OSX.relaxed_syntax = false 
-    url5 = NSURL.alloc.initWithScheme_host_path_('http', 'localhost', '/foo') 
-    assert_equal(true, url1.isEqual_(url5))
-    assert_raises OSX::OCMessageSendException do
-      # We cannot check the following method
-      #   NSURL.alloc.initWithScheme_host_path('http', 'localhost', '/foo')
-      # because it has already been registered, so let's check another method:
-      NSString.stringWithCapacity(42)
-    end 
-    assert_raises OSX::OCMessageSendException do 
-      NSURL.alloc.initWithScheme('http', :host, 'localhost', :path, '/foo')
+    begin
+      url1 = NSURL.alloc.initWithScheme_host_path_('http', 'localhost', '/foo')
+      url2 = NSURL.alloc.initWithScheme_host_path('http', 'localhost', '/foo')
+      assert_equal(true, url1.isEqual(url2))
+      url3 = NSURL.alloc.objc_send(:initWithScheme, 'http', :host, 'localhost', :path, '/foo')
+      assert_equal(true, url1.isEqual(url3))
+      # No need to check for symbol/value/... and inline Hash syntaxes, as they are deprecated.
+      # However we should check that an exception is raised (as if relaxed_syntax was false) for
+      # the 1.0.0 release.
+      OSX.relaxed_syntax = false
+      url5 = NSURL.alloc.initWithScheme_host_path_('http', 'localhost', '/foo')
+      assert_equal(true, url1.isEqual_(url5))
+      assert_raises OSX::OCMessageSendException do
+        # We cannot check the following method
+        #   NSURL.alloc.initWithScheme_host_path('http', 'localhost', '/foo')
+        # because it has already been registered, so let's check another method:
+        NSString.stringWithCapacity(42)
+      end
+      assert_raises OSX::OCMessageSendException do
+        NSURL.alloc.initWithScheme('http', :host, 'localhost', :path, '/foo')
+      end
+      assert_raises OSX::OCMessageSendException do
+        NSURL.alloc.initWithScheme('http', :host => 'localhost', :path => '/foo')
+      end
+    ensure
+      OSX.relaxed_syntax = old_relaxed_syntax
     end
-    assert_raises OSX::OCMessageSendException do
-      NSURL.alloc.initWithScheme('http', :host => 'localhost', :path => '/foo')
-    end
-    OSX.relaxed_syntax = old_relaxed_syntax
   end
 
   def test_objc_send
