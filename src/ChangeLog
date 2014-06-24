@@ -1,3 +1,9 @@
+2014-06-25 kimura wataru <kimuraw@i.nifty.jp>
+
+	* tests/tc_wrapper.rb:
+	fix missing restore OSX.relaxed_syntax when test_message_syntaxes()
+	fails.
+
 2014-06-24 kimura wataru <kimuraw@i.nifty.jp>
 
 	* tool/create-symlinks.rb,
