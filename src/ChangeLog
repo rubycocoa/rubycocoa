@@ -1,5 +1,14 @@
 2014-06-25 kimura wataru <kimuraw@i.nifty.jp>
 
+	* framework/src/objc/mdl_objwrapper.m,
+	  tests/tc_objcid.rb,
+	  tests/tc_subclass.rb,
+	  tests/tc_wrapper.rb:
+	raise NoMethodError, not OSX::OCMessageSendException, when Objective-C
+	method is not found.
+
+2014-06-25 kimura wataru <kimuraw@i.nifty.jp>
+
 	* tests/tc_wrapper.rb:
 	fix missing restore OSX.relaxed_syntax when test_message_syntaxes()
 	fails.

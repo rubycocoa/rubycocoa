@@ -321,7 +321,7 @@ ocm_send(int argc, VALUE* argv, VALUE rcv, VALUE* result)
     // as the target class may override the invocation dispatching methods (as NSUndoManager).
     methodSignature = [oc_rcv methodSignatureForSelector:selector];
     if (methodSignature == nil) {
-      exception = rb_err_new(ocmsgsend_err_class(), "Can't get Objective-C method signature for selector '%s' of receiver %s", sel_getName(selector), RSTRING_PTR(rb_inspect(rcv)));
+      exception = rb_err_new(rb_eNoMethodError, "Can't get Objective-C method signature for selector '%s' of receiver %s", sel_getName(selector), RSTRING_PTR(rb_inspect(rcv)));
       goto bails;
     }
     // Let's use the regular message dispatcher.

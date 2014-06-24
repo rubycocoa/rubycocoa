@@ -64,16 +64,16 @@ class TC_OCObjWrapper < Test::Unit::TestCase
       OSX.relaxed_syntax = false
       url5 = NSURL.alloc.initWithScheme_host_path_('http', 'localhost', '/foo')
       assert_equal(true, url1.isEqual_(url5))
-      assert_raises OSX::OCMessageSendException do
+      assert_raises NoMethodError do
         # We cannot check the following method
         #   NSURL.alloc.initWithScheme_host_path('http', 'localhost', '/foo')
         # because it has already been registered, so let's check another method:
         NSString.stringWithCapacity(42)
       end
-      assert_raises OSX::OCMessageSendException do
+      assert_raises NoMethodError do
         NSURL.alloc.initWithScheme('http', :host, 'localhost', :path, '/foo')
       end
-      assert_raises OSX::OCMessageSendException do
+      assert_raises NoMethodError do
         NSURL.alloc.initWithScheme('http', :host => 'localhost', :path => '/foo')
       end
     ensure
@@ -107,14 +107,14 @@ class TC_OCObjWrapper < Test::Unit::TestCase
 
   def test_alias
     # alias class method
-    assert_raises OSX::OCMessageSendException do
+    assert_raises NoMethodError do
       str = NSString.objc_send(:str, 'RubyCocoa')
     end
     OSX::NSString.objc_alias_class_method 'str:', 'stringWithString:'
     str = NSString.objc_send(:str, 'RubyCocoa')
     assert(str.isEqualToString?('RubyCocoa'), 'alias class method')
     # alias instance method
-    assert_raises OSX::OCMessageSendException do
+    assert_raises NoMethodError do
       substr = str.objc_send(:substr, [4..8])
     end
     OSX::NSString.objc_alias_method 'substr:', 'substringWithRange:'
