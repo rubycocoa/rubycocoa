@@ -72,8 +72,7 @@ class TC_Attachments < Test::Unit::TestCase
     data = NSData.dataWithBytes_length("somedata")
     str = data.rubyString
     if RUBY_VERSION >= '2.0'
-      assert_equal( Encoding.find('RUBYCOCOA_UNKNOWN'), str.encoding )
-      str.force_encoding('ASCII-8BIT')
+      assert_equal( Encoding::ASCII_8BIT, str.encoding )
     end
     assert_equal "somedata", str
   end

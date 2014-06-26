@@ -445,11 +445,8 @@ ocdata_to_rbobj (VALUE context_obj, const char *octype_str, const void *ocdata, 
       if (*(void **)ocdata == NULL)
         rbval = Qnil;
       else
-#ifdef HAVE_RUBY_ENCODING_H
-	rbval = rbstr_dummyenc_new_cstr((*(char **)ocdata));
-#else
+        // ASCII-8BIT on ruby-2.0 or later
         rbval = rb_str_new2(*(char **)ocdata); 
-#endif
       break;
   
     default:
@@ -1511,11 +1508,8 @@ void init_encoding_conversion()
   oc2rbEncConv = st_init_numtable();
 
   // register basic encodings
-  if ((rbenc = rb_enc_find("ASCII-8BIT"))) {
-    register_strenc_pair(rbenc, kCFStringEncodingASCII, NO);
-  }
   if ((rbenc = rb_enc_find("US-ASCII"))) {
-    register_strenc_rb2oc(rbenc, kCFStringEncodingASCII, NO); // rb->cf only
+    register_strenc_pair(rbenc, kCFStringEncodingASCII, NO);
   }
   if ((rbenc = rb_enc_find("UTF-8"))) {
     register_strenc_pair(rbenc, kCFStringEncodingUTF8, NO);
@@ -1610,16 +1604,5 @@ static rb_encoding *strenc_oc2rb(CFStringEncoding cfenc)
   register_strenc_oc2rb(cfenc, rb_enc_from_index(rbenc_idx), NO);
 
   return rb_enc_from_index(rbenc_idx);
-}
-
-#pragma mark - unkown string encoding (bytes)
-VALUE rbstr_dummyenc_new(const char* ptr, long len)
-{
-  return rb_enc_str_new(ptr, len, rb_enc_from_index(ENCINDEX_RUBYCOCOA_UNKNOWN));
-}
-
-VALUE rbstr_dummyenc_new_cstr(const char* ptr)
-{
-  return rb_enc_str_new(ptr, strlen(ptr), rb_enc_from_index(ENCINDEX_RUBYCOCOA_UNKNOWN));
 }
 #endif

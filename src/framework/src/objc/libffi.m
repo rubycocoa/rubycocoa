@@ -634,13 +634,9 @@ rb_ffi_dispatch (
                     octype_str = fake_octype_str;
                   }
                   else {
-#ifdef HAVE_RUBY_ENCODING_H
-                    rbval = rbstr_dummyenc_new((char *)value,
-                      length_value * ocdata_size(octype_str));
-#else
+                    // ASCII-8BIT on ruby-2.0 or later
                     rbval = rb_str_new((char *)value, 
                       length_value * ocdata_size(octype_str));
-#endif
                   }
                 }
                 else {
@@ -650,19 +646,13 @@ rb_ffi_dispatch (
               break;
 
             case bsCArrayArgFixedLength:
-#ifdef HAVE_RUBY_ENCODING_H
-              rbval = rbstr_dummyenc_new((char *)value, bs_arg->c_ary_type_value);
-#else
+              // ASCII-8BIT on ruby-2.0 or later
               rbval = rb_str_new((char *)value, bs_arg->c_ary_type_value);
-#endif
               break;
 
             case bsCArrayArgDelimitedByNull:
-#ifdef HAVE_RUBY_ENCODING_H
-              rbval = rbstr_dummyenc_new_cstr((char *)value);
-#else
+              // ASCII-8BIT on ruby-2.0 or later
               rbval = rb_str_new2((char *)value);
-#endif
               break;
 
             default:

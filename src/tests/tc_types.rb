@@ -248,8 +248,7 @@ class TC_Types < Test::Unit::TestCase
       else
         bstr = ctx.bytestr(provided_ctx.length)
         if RUBY_VERSION >= '2.0'
-          assert_equal(Encoding.find('RUBYCOCOA_UNKNOWN'), bstr.encoding)
-          bstr.force_encoding('ASCII-8BIT')
+          assert_equal(Encoding::ASCII_8BIT, bstr.encoding)
         end
         assert_equal(provided_ctx, bstr)
       end
