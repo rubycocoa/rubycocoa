@@ -286,12 +286,8 @@ static VALUE
 rb_objcptr_bytestr_at(VALUE rcv, VALUE offset, VALUE length)
 {
   VALUE str;
-#ifdef HAVE_RUBY_ENCODING_H
-  str = rbstr_dummyenc_new ((char*)CPTR_OF(rcv) + NUM2LONG(offset), NUM2LONG(length));
-  rb_obj_taint(str);
-#else
+  // ASCII-8BIT on ruby-2.0 or later
   str = rb_tainted_str_new ((char*)CPTR_OF(rcv) + NUM2LONG(offset), NUM2LONG(length));
-#endif
   return str;
 }
 
@@ -309,12 +305,8 @@ rb_objcptr_bytestr(int argc, VALUE* argv, VALUE rcv)
       Check_Type(rb_length, T_BIGNUM);
     length = NUM2LONG(rb_length);
   }
-#ifdef HAVE_RUBY_ENCODING_H
-  str = rbstr_dummyenc_new (CPTR_OF(rcv), length);
-  rb_obj_taint(str);
-#else
+  // ASCII-8BIT on ruby-2.0 or later
   str = rb_tainted_str_new (CPTR_OF(rcv), length);
-#endif
   return str;
 }
 

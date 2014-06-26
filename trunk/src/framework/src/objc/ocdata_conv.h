@@ -85,8 +85,6 @@ VALUE ocid_to_rbobj_cache_only(id ocid);
 
 #ifdef HAVE_RUBY_ENCODING_H
 void init_encoding_conversion(void);
-VALUE rbstr_dummyenc_new(const char* ptr, long len);
-VALUE rbstr_dummyenc_new_cstr(const char* ptr);
 #endif
 
 @class NSMethodSignature;

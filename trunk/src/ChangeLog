@@ -1,3 +1,17 @@
+2014-06-27 kimura wataru <kimuraw@i.nifty.jp>
+
+	* framework/src/objc/cls_objcptr.m,
+	  framework/src/objc/libffi.m,
+	  framework/src/objc/ocdata_conv.h,
+	  framework/src/objc/ocdata_conv.m,
+	  framework/src/ruby/osx/objc/ruby_addition.rb,
+	  tests/tc_attachments.rb,
+	  tests/tc_nsdata.rb,
+	  tests/tc_objcptr.rb,
+	  tests/tc_types.rb:
+	convert Objective-C char* value into ASCII-8BIT string on Ruby, not
+	original dummy encoding.
+
 2014-06-25 kimura wataru <kimuraw@i.nifty.jp>
 
 	* framework/src/objc/mdl_objwrapper.m,

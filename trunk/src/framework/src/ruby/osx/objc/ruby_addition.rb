@@ -42,7 +42,7 @@ module OSX
     case data
     when String
       if RUBY_VERSION >= '2.0'
-        if data.encoding == Encoding.find('RUBYCOCOA_UNKNOWN')
+        if data.encoding == Encoding::ASCII_8BIT
           nsdata = OSX::NSData.dataWithBytes_length(data, data.bytesize)
         else
           str = data.encode!(Encoding::UTF_8).to_ns

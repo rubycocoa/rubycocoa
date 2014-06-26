@@ -171,8 +171,7 @@ class TC_ObjcPtr < Test::Unit::TestCase
     cptr = NSData.dataWithRubyString(src).bytes
     bstr = cptr.bytestr_at(3,4)
     if RUBY_VERSION >= '2.0'
-      assert_equal( Encoding.find("RUBYCOCOA_UNKNOWN"), bstr.encoding )
-      bstr.force_encoding("ASCII-8BIT")
+      assert_equal( Encoding::ASCII_8BIT, bstr.encoding )
     end
     assert_equal( src[3,4], bstr )
     assert( bstr.tainted? )
@@ -183,8 +182,7 @@ class TC_ObjcPtr < Test::Unit::TestCase
     cptr = NSData.dataWithRubyString(src).bytes
     bstr = cptr.bytestr(src.size)
     if RUBY_VERSION >= '2.0'
-      assert_equal( Encoding.find("RUBYCOCOA_UNKNOWN"), bstr.encoding )
-      bstr.force_encoding("ASCII-8BIT")
+      assert_equal( Encoding::ASCII_8BIT, bstr.encoding )
     end
     assert_equal( src, bstr )
     assert( bstr.tainted? )
@@ -237,7 +235,7 @@ class TC_ObjcPtr < Test::Unit::TestCase
     str.length.times { |i| obj[i] = str.bytes.to_a[i] }
     bstr = obj.bytestr
     if RUBY_VERSION >= '2.0'
-      bstr.force_encoding("ASCII-8BIT")
+      assert_equal(Encoding::ASCII_8BIT, bstr.encoding)
     end
     assert_equal('foobar', bstr)
     assert_raises(ArgumentError) { obj[0] = 'blah' }
@@ -264,7 +262,7 @@ class TC_ObjcPtr < Test::Unit::TestCase
     obj = ObjcPtrTest.new.returnVoidPtrForCStr
     str = obj.cast_as('*')
     if RUBY_VERSION >= '2.0'
-      str.force_encoding("ASCII-8BIT")
+      assert_equal(Encoding::ASCII_8BIT, str.encoding)
     end
     assert_equal('foobar', str)
   end

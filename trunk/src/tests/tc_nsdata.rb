@@ -74,8 +74,7 @@ class TC_NSData < Test::Unit::TestCase
     data = NSData.dataWithRubyString( src )
     bstr = data.bytes.bytestr( src.size )
     if RUBY_VERSION >= '2.0'
-      assert_equal(Encoding.find("RUBYCOCOA_UNKNOWN"), bstr.encoding)
-      bstr.force_encoding("ASCII-8BIT")
+      assert_equal(Encoding::ASCII_8BIT, bstr.encoding)
     end
     assert_equal( src, bstr )
     assert( data.bytes.tainted? )
@@ -88,8 +87,7 @@ class TC_NSData < Test::Unit::TestCase
     data.getBytes_length( cptr )
     bstr = cptr.bytestr( src.size )
     if RUBY_VERSION >= '2.0'
-      assert_equal(Encoding.find("RUBYCOCOA_UNKNOWN"), bstr.encoding)
-      bstr.force_encoding("ASCII-8BIT")
+      assert_equal(Encoding::ASCII_8BIT, bstr.encoding)
     end
     assert_equal( src, bstr )
     assert( cptr.tainted? )
