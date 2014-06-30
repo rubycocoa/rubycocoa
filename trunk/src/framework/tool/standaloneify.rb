@@ -149,7 +149,12 @@ if __FILE__ == $0 and ARGV[0] == Standaloneify::MAGIC_ARGUMENT then
 
   $LOADED_FEATURES << "rubycocoa.bundle"
 
-  $0 = ARGV[0]
+  if RUBY_VERSION >= '2.0'
+    procinfo = OSX::NSProcessInfo.processInfo
+    procinfo.processName = ARGV[0]
+  else
+    $0 = ARGV[0]
+  end
   require ARGV[0]
 
   loaded_features = $LOADED_FEATURES.uniq.dup
