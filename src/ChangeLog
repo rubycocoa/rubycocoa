@@ -1,3 +1,8 @@
+2014-06-30 kimura wataru <kimuraw@i.nifty.jp>
+
+	* framework/tool/standaloneify.rb:
+	fix "$0 not initialized" on ruby-2.x.
+
 2014-06-27 kimura wataru <kimuraw@i.nifty.jp>
 
 	* framework/src/objc/cls_objcptr.m,
