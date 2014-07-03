@@ -405,7 +405,7 @@ rubycocoa_app_init(const char* program,
   // call ruby_run() launched from standaloneify.rb
   if (getenv("RUBYCOCOA_STANDALONEIFYING?")) {
 #ifdef HAVE_RUBY_RUBY_H
-    ruby_run_node(node);
+    exit(ruby_run_node(node));
 #else
     ruby_run();
 #endif
