@@ -1,3 +1,8 @@
+2014-07-03 kimura wataru <kimuraw@i.nifty.jp>
+
+	* framework/src/objc/RBRuntime.m:
+	fix standaloneify.rb crashes on ruby-2.x.
+
 2014-06-30 kimura wataru <kimuraw@i.nifty.jp>
 
 	* framework/tool/standaloneify.rb:
