@@ -1,3 +1,8 @@
+2014-07-06 kimura wataru <kimuraw@i.nifty.jp>
+
+	* sample/Thread/Makefile:
+	fix build failure on OS X 10.9.
+
 2014-07-03 kimura wataru <kimuraw@i.nifty.jp>
 
 	* framework/src/objc/RBRuntime.m:
