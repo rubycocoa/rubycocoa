@@ -30,6 +30,7 @@ class AppController < OSX::NSObject
 
   def start_thread
     Thread.start {
+      Thread.pass
       loop do
 	set_msg(Time.now.to_s)
 	sleep 0.5
