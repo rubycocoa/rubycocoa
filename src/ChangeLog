@@ -1,3 +1,10 @@
+2014-07-10 kimura wataru <kimuraw@i.nifty.jp>
+
+	* sample/Pong/AppCtrl.rb,
+	  sample/SimpleApp/AppController.rb,
+	  sample/Thread/AppController.rb:
+	fix sample apps using ruby Thread do not work with ruby-2.x.
+
 2014-07-06 kimura wataru <kimuraw@i.nifty.jp>
 
 	* sample/Thread/Makefile:

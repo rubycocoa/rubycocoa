@@ -52,6 +52,7 @@ class AppController < OSX::NSObject
   def threadStart (sender)
     alpha_saved = @myView.alpha
     Thread.start do
+      Thread.pass
       @slider.setEnabled(false)
       @threadBtn.setEnabled(false)
       100.times do |i|

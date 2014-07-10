@@ -14,6 +14,7 @@ class AppCtrl < OSX::NSObject
       @movings.each {|m| m.died = false }
       @startBtn.setTitle "Stop"
       @thread = Thread.start do
+        Thread.pass
 	loop do
 	  sleep 0.02
 	  ary = @movings.select {|m| ! m.died }
