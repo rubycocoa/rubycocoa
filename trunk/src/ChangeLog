@@ -1,3 +1,8 @@
+2014-07-12 kimura wataru <kimuraw@i.nifty.jp>
+
+	* framework/src/objc/RBThreadSwitcher.m:
+	remove import obsoleted header file "ruby/backward/rubysig.h".
+
 2014-07-10 kimura wataru <kimuraw@i.nifty.jp>
 
 	* sample/Pong/AppCtrl.rb,

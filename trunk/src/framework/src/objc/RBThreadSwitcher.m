@@ -10,9 +10,7 @@
 #import <Foundation/NSAutoreleasePool.h>
 #import "RBThreadSwitcher.h"
 #import <ruby.h>
-#ifdef HAVE_RUBY_RUBY_H
-#import "ruby/backward/rubysig.h"
-#else
+#ifndef HAVE_RUBY_RUBY_H
 #import "rubysig.h"
 #endif
 
@@ -53,13 +51,21 @@ static id rthread_switcher = nil;
 
 - (void) sched: (NSTimer*)a_timer
 {
+#ifdef HAVE_RUBY_RUBY_H
+  rb_thread_check_ints();
+#else
   CHECK_INTS;
+#endif
   if (!rb_thread_critical) rb_thread_schedule();
 }
 
 - (void) schedWithWait: (NSTimer*)a_timer
 {
+#ifdef HAVE_RUBY_RUBY_H
+  rb_thread_check_ints();
+#else
   CHECK_INTS;
+#endif
   if (!rb_thread_critical) rb_thread_wait_for(wait);
 }
 
