@@ -35,3 +35,5 @@
 # prefer /usr/bin, /usr/lib
 ENV['PATH'] = ['/usr/bin', ENV['PATH']].join(':')
 
+# add ruby version into package name
+@config.set_raw('package-name',"RubyCocoa-#{@config['rubycocoa-version']}-OSX10.9-Ruby1.8")
