@@ -1,3 +1,9 @@
+2014-07-13 kimura wataru <kimuraw@i.nifty.jp>
+
+	* package/config/10.9,
+	  package/post-package.rb:
+	allow to specify package name in config files.
+
 2014-07-12 kimura wataru <kimuraw@i.nifty.jp>
 
 	* framework/src/objc/RBThreadSwitcher.m:
