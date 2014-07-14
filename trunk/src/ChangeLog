@@ -1,5 +1,10 @@
 2014-07-14 kimura wataru <kimuraw@i.nifty.jp>
 
+	* package/config/10.9-ruby2.0:
+	add a config file for packaging with 10.9 builtin ruby-2.0.
+
+2014-07-14 kimura wataru <kimuraw@i.nifty.jp>
+
 	* install.rb:
 	add a packaging option "--config-file".
 
