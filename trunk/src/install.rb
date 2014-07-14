@@ -1003,9 +1003,15 @@ class ToplevelInstaller < Installer
 
   def parsearg_package
     ARGV.delete_if do |arg|
-      if /\A--sign=/ =~ arg
-	tmp, val = arg.split('=')
-	@options['sign-identity'] = val
+      case arg
+      when /\A--sign=/
+        tmp, val = arg.split('=')
+        @options['sign-identity'] = val
+      when /\A--config-file=/
+        tmp, val = arg.split('=')
+        @options['package-config-file'] = val
+      else
+        false
       end
     end
     parsearg_config
@@ -1174,7 +1180,9 @@ class ToplevelInstaller < Installer
   end
 
   def package_load_config
-    config_path = File.join('package', 'config', @config['macosx-deployment-target'])
+    config_file = @options['package-config-file']
+    config_file ||= @config['macosx-deployment-target']
+    config_path = File.join('package', 'config', config_file)
     unless try_run_hook File.expand_path(config_path)
       raise Installer, "cannot load config \"#{config_path}\""
     end
