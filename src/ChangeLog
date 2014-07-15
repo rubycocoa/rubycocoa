@@ -1,3 +1,9 @@
+2014-07-15 kimura wataru <kimuraw@i.nifty.jp>
+
+	* framework/src/ruby/osx/objc/oc_attachments.rb:
+	convert NSString#fileSystemRepresentation encoding to UTF-8 from
+	UTF-8-Mac on ruby-2.x.
+
 2014-07-14 kimura wataru <kimuraw@i.nifty.jp>
 
 	* package/config/10.9-ruby2.0:
