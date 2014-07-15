@@ -1031,7 +1031,7 @@ module OSX
     if RUBY_VERSION >= '2.0'
       # @note Returns UTF-8 String, not dummy encoding.
       def fileSystemRepresentation
-        self.oc_fileSystemRepresentation.force_encoding("filesystem")
+        self.oc_fileSystemRepresentation.force_encoding(Encoding::UTF8_MAC).encode!("filesystem")
       end
     end
     
