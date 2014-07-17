@@ -3,7 +3,9 @@
 # $Id$
 #
 
-$KCODE = 'e'
+if RUBY_VERSION < '1.9'
+  $KCODE = 'e'
+end
 require 'hako'
 require 'cocoa_hako'
 
