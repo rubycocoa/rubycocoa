@@ -1,3 +1,4 @@
+# coding: euc-jp
 module Hako
 
   class House

@@ -1,3 +1,14 @@
+2014-07-17 kimura wataru <kimuraw@i.nifty.jp>
+
+	* sample/Hakoiri-Musume/Makefile:
+	fix build failure on OS X 10.9.
+
+	* sample/Hakoiri-Musume/hako.rb:
+	add magic-comment of encoding euc-jp.
+	
+	* sample/Hakoiri-Musume/rb_main.rb:
+	not use $KCODE when running ruby is 2.0 or later.
+
 2014-07-16 kimura wataru <kimuraw@i.nifty.jp>
 
 	* sample/DotView/Makefile:
