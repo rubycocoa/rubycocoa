@@ -28,5 +28,12 @@
 	<string>RUBYCOCOA_VERSION_BARE</string>
 	<key>NSPrincipalClass</key>
 	<string></string>
+	<key>RUBYCOCOA_BUILD_CONFIG</key>
+	<dict>
+		<key>MACOSX_DEPLOYMET_TARGET</key>
+		<string>RUBYCOCOA_DEPLOYMET_TARGET</string>
+		<key>RUBY_VERSION</key>
+		<string>BUILD_RUBY_VERSION</string>
+	</dict>
 </dict>
 </plist>
