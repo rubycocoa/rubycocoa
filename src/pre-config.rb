@@ -80,6 +80,7 @@ config_ary << [ :other_ldflags, ldflags ]
 config_ary << [ :other_header_search_paths, other_header_search_paths.join(' ') ]
 config_ary << [ :target_archs, archs.size > 0 ? archs : '$NATIVE_ARCH' ]
 config_ary << [ :arch_flags, archs.size > 0 ? arch_flags : '' ]
+config_ary << [ :build_ruby_version, RUBY_VERSION ]
 
 target_files.each do |dst_name|
   src_name = dst_name + '.in'
