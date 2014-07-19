@@ -74,6 +74,7 @@ end
 
 class RubyCocoaInputMethod < IRB::StdioInputMethod
   def initialize(console)
+    IRB.init_config(nil)
     super() # superclass method has no arguments
     @console = console
     @history_index = 1
@@ -144,7 +145,7 @@ class RubyConsole < OSX::NSObject
 
   def attString(string)
     OSX::NSAttributedString.alloc.initWithString_attributes(
-      string, { OSX::NSFontAttributeName, @font })
+      string, { OSX::NSFontAttributeName => @font })
   end
 
   def write(object)
@@ -185,10 +186,12 @@ class RubyConsole < OSX::NSObject
          event.window and 
          (event.window.isEqual? @textview.window)
         break if event.characters.to_s == "\r"
-        if (event.modifierFlags & OSX::NSControlKeyMask) != 0:
+        if (event.modifierFlags & OSX::NSControlKeyMask) != 0
           case event.keyCode
-          when 0:  moveAndScrollToIndex(@startOfInput)     # control-a
-          when 14: moveAndScrollToIndex(lengthOfTextView)  # control-e
+          when 0
+            moveAndScrollToIndex(@startOfInput)     # control-a
+          when 14
+            moveAndScrollToIndex(lengthOfTextView)  # control-e
           end
         end
       end
