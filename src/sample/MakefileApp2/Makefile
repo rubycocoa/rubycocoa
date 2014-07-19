@@ -9,7 +9,7 @@ OBJS = main.o
 
 TARGET = $(APPNAME).app
 CFLAGS = -Wall
-LIBS = -lobjc -framework RubyCocoa
+LIBS = -lobjc -framework RubyCocoa -framework AppKit
 
 SED_CMD_0 = -e "s/%%%APPNAME%%%/$(APPNAME)/"
 SED_CMD_1 = -e "s/%%%BUNDLEID%%%/$(BUNDLEID)/"
