@@ -1,5 +1,11 @@
 2014-07-19 kimura wataru <kimuraw@i.nifty.jp>
 
+	* sample/MyViewer/Makefile,
+	  sample/MyViewer/main.m:
+	fix MyViewer.app do not launch.
+
+2014-07-19 kimura wataru <kimuraw@i.nifty.jp>
+
 	* sample/MultiNib/Makefile,
 	  sample/MultiNib/main.m:
 	fix build failure on OS X 10.9.

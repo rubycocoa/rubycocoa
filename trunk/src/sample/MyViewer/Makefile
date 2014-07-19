@@ -6,7 +6,7 @@ BUNDLEID = rubyapp.$(APPNAME)
 RUBYSRCS = main.rb MyInspector.rb MyNotification.rb MyViewerCtrl.rb WinCtrl.rb
 
 OBJS = main.o
-LIBS = -lobjc -framework RubyCocoa
+LIBS = -lobjc -framework RubyCocoa -framework AppKit
 
 TARGET = $(APPNAME).app
 CFLAGS = -Wall
