@@ -1,3 +1,13 @@
+2014-07-19 kimura wataru <kimuraw@i.nifty.jp>
+
+	* sample/MakefileApp/Makefile,
+	  sample/MakefileApp/main.m:
+	fix build failure on OS X 10.9.
+
+	* sample/MakefileApp2/Makefile,
+	  sample/MakefileApp2/main.m:
+	ditto.
+
 2014-07-18 kimura wataru <kimuraw@i.nifty.jp>
 
 	* framework/Info.plist,
