@@ -6,7 +6,7 @@ RUBYSRCS = ApplicationDelegate.rb WindowAController.rb WindowBController.rb
 NIBDIR = English.lproj
 RUBYSRC_MAIN = rb_main.rb
 OBJS = main.o
-LIBS = -lobjc -framework RubyCocoa
+LIBS = -lobjc -framework RubyCocoa -framework AppKit
 
 TARGET = $(APPNAME).app
 CFLAGS = -Wall
