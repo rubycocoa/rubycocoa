@@ -1,5 +1,10 @@
 2014-07-19 kimura wataru <kimuraw@i.nifty.jp>
 
+	* sample/RubyRocks/RubyRocks.rb:
+	fix syntax error on ruby-2.x.
+
+2014-07-19 kimura wataru <kimuraw@i.nifty.jp>
+
 	* sample/RubyConsole/console.rb:
 	fix syntax error and IRB initialization on ruby-2.x.
 

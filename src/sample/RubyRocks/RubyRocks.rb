@@ -25,7 +25,7 @@ class GameView < OSX::NSView
   def awakeFromNib
     window.setOpaque(false)
     @game.bounds = bounds
-    @timer = OSX::NSTimer.scheduledTimerWithTimeInterval_target_selector_userInfo_repeats_(1.0/60.0, self, :tick, nil, true)    
+    @timer = OSX::NSTimer.scheduledTimerWithTimeInterval_target_selector_userInfo_repeats_(1.0/60.0, self, :tick, nil, true)
   end
 
   def drawRect(rect)
@@ -54,7 +54,7 @@ class Game < OSX::NSDocument
   attr_accessor :bounds
 
   def windowNibName
-    return "Game" 
+    return "Game"
   end
 
   def awakeFromNib
@@ -85,14 +85,14 @@ class Game < OSX::NSDocument
     @ship.moveWithBounds_(@bounds) if @ship
     @missiles.each {|missile| missile.moveWithBounds_(@bounds)}
     @rocks.each {|rock|
-        @missiles.each {|missile| 
+        @missiles.each {|missile|
              if missile.collidesWith_?(rock)
-             missile.ttl = rock.ttl = 0 
+             missile.ttl = rock.ttl = 0
              @sounds[:rockDestroyed].play
          end
         }
         if @ship and @ship.collidesWith_?(rock)
-            @ship.ttl = rock.ttl = 0 
+            @ship.ttl = rock.ttl = 0
             @sounds[:shipDestroyed].play
         end
     }
@@ -104,30 +104,30 @@ class Game < OSX::NSDocument
 
   def keyDown(code)
     case code
-    when KEY_SPACE:
+    when KEY_SPACE
         if @ship
-        @missiles << @ship.shoot 
+        @missiles << @ship.shoot
         @sounds[:shoot].play
     end
-    when KEY_LEFT_ARROW:
+    when KEY_LEFT_ARROW
         @ship.angle = TURN_ANGLE if @ship
-    when KEY_RIGHT_ARROW:
+    when KEY_RIGHT_ARROW
         @ship.angle = -TURN_ANGLE if @ship
-    when KEY_UP_ARROW:
+    when KEY_UP_ARROW
         @ship.acceleration = ACCELERATION if @ship
-    when KEY_DOWN_ARROW:
+    when KEY_DOWN_ARROW
         @ship.acceleration = -ACCELERATION if @ship
-    when KEY_P:
+    when KEY_P
         @paused = ! @paused
     end
   end
 
   def keyUp(code)
     case code
-    when KEY_LEFT_ARROW, KEY_RIGHT_ARROW:
-        @ship.angle = 0 if @ship    
-    when KEY_UP_ARROW, KEY_DOWN_ARROW:
-        @ship.acceleration = 0 if @ship    
+    when KEY_LEFT_ARROW, KEY_RIGHT_ARROW
+        @ship.angle = 0 if @ship
+    when KEY_UP_ARROW, KEY_DOWN_ARROW
+        @ship.acceleration = 0 if @ship
     end
   end
 end
@@ -145,7 +145,7 @@ class Sprite < OSX::NSObject
   def moveWithBounds_(bounds)
     @ttl -= 1 if @ttl > 0
     @position.x += @velocity.x
-    @position.y += @velocity.y    
+    @position.y += @velocity.y
     @position.x = bounds.width if @position.x < 0
     @position.x = 0 if @position.x > bounds.width
     @position.y = bounds.height if @position.y < 0
@@ -213,7 +213,7 @@ class Ship < Sprite
     path.lineToPoint(OSX::NSPoint.new(x0 + r * (-x +y), y0 + r * (-x -y)))
     path.lineToPoint(OSX::NSPoint.new(x0, y0))
     path.lineToPoint(OSX::NSPoint.new(x0 + r * (-x -y), y0 + r * (+x -y)))
-    path.fill  
+    path.fill
   end
 
   def shoot
