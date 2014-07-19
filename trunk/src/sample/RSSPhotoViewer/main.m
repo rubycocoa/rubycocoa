@@ -6,6 +6,7 @@
 //  Copyright (c) 2007 Apple Computer. All rights reserved.
 //
 
+#import <AppKit/NSApplication.h>
 #import <RubyCocoa/RBRuntime.h>
 
 int main(int argc, const char *argv[])

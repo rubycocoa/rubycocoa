@@ -1,4 +1,5 @@
 // $Id$
+#import <AppKit/NSApplication.h>
 #import <RubyCocoa/RBRuntime.h>
 
 int main(int argc, const char *argv[])

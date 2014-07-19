@@ -6,6 +6,7 @@
  *
  **/
 
+#import <AppKit/NSApplication.h>
 #import <RubyCocoa/RBRuntime.h>
 
 int
