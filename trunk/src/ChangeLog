@@ -1,5 +1,10 @@
 2014-07-20 kimura wataru <kimuraw@i.nifty.jp>
 
+	* install.rb:
+	add a help message for `package --config-file=`.
+
+2014-07-20 kimura wataru <kimuraw@i.nifty.jp>
+
 	* package/tmpl/ReadMe.html,
 	  package/tmpl/ReadMe.ja.html:
 	correct prerequisites OS version to 10.6.
