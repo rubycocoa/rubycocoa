@@ -17,7 +17,7 @@
 <script type="text/javascript" charset="utf-8">
   hasFrames = window.top.frames.main ? true : false;
   relpath = '';
-  framesUrl = "frames.html#!" + escape(window.location.href);
+  framesUrl = "frames.html#!file.programming.html";
 </script>
 
 
@@ -61,10 +61,9 @@
 
     <iframe id="search_frame"></iframe>
 
-    <div id="content"><div id='filecontents'>
-<h1 id="rubycocoa-programming">RubyCocoa Programming</h1>
+    <div id="content"><div id='filecontents'><h1>RubyCocoa Programming</h1>
 
-<h2 id="irb---interactive-ruby">irb - Interactive Ruby</h2>
+<h2>irb - Interactive Ruby</h2>
 
 <p>You may want to use <code>irb</code> to try the script snippets in this document.
 <code>irb</code> is a command that lets you use a Ruby interpreter interactively from
@@ -77,7 +76,7 @@ following command:</p>
 <p>(NOTE) In Mac OS X 10.9,
 use /System/Library/Frameworks/Ruby.framework/Versions/1.8/usr/bin/irb.</p>
 
-<h2 id="load-libraries">Load libraries</h2>
+<h2>Load libraries</h2>
 
 <pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_require'>require</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>osx/cocoa</span><span class='tstring_end'>&#39;</span></span>      <span class='comment'># classes defined in Foundation and AppKit.
 </span></code></pre>
@@ -88,9 +87,9 @@ use /System/Library/Frameworks/Ruby.framework/Versions/1.8/usr/bin/irb.</p>
 </span><span class='id identifier rubyid_require'>require</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>osx/appkit</span><span class='tstring_end'>&#39;</span></span>     <span class='comment'># classes defined in AppKit
 </span></code></pre>
 
-<h2 id="a-first-example-with-sensory-appeal">A first example with sensory appeal</h2>
+<h2>A first example with sensory appeal</h2>
 
-<p>Let’s start with a simple example that will delight your senses – this script
+<p>Let&#39;s start with a simple example that will delight your senses -- this script
 will play a sound. Try this with [irb]:</p>
 
 <pre class="code ruby"><code class="ruby">include OSX
@@ -100,7 +99,7 @@ NSSound.alloc.initWithContentsOfFile_byReference (files[1], true).play
 NSSound.alloc.initWithContentsOfFile_byReference (files[2], true).play
 </code></pre>
 
-<h2 id="cocoa-classes-are-ruby-classes">Cocoa classes are Ruby classes</h2>
+<h2>Cocoa classes are Ruby classes</h2>
 
 <p>In the following code examples, the comments starting with <code># =&gt;</code> show the
 string Ruby will output when it executes that line of code.</p>
@@ -115,7 +114,7 @@ string Ruby will output when it executes that line of code.</p>
 <p>In RubyCocoa, a Cocoa class is defined as a Ruby class under the
 <code>OSX</code> module. A Cocoa class is a Ruby class and behaves as a Cocoa object.</p>
 
-<h2 id="creating-a-cocoa-object">Creating a Cocoa object</h2>
+<h2>Creating a Cocoa object</h2>
 
 <p>The normal Cocoa methods are used for creation of Cocoa objects.</p>
 
@@ -125,14 +124,14 @@ string Ruby will output when it executes that line of code.</p>
 </code></pre>
 
 <p>Inside RubyCocoa, the created Cocoa object is wrapped in the object of a class
-called <code>OSX::ObjcID</code>. Usually, you don’t need to be conscious of the
+called <code>OSX::ObjcID</code>. Usually, you don&#39;t need to be conscious of the
 existence of an <code>OSX::ObjcID</code> class.</p>
 
-<h2 id="ownership-and-memory-management">Ownership and memory management</h2>
+<h2>Ownership and memory management</h2>
 
 <p>The instance of <code>OSX::ObjcID</code> is the real owner of the Cocoa object which
 <code>self</code> has wrapped. Ownership is automatically lost when the instance of
-<code>OSX::ObjcID</code> is cleaned by Ruby’s garbage collection. Therefore, it is not
+<code>OSX::ObjcID</code> is cleaned by Ruby&#39;s garbage collection. Therefore, it is not
 necessary to worry about memory management issues such as ownership in
 RubyCocoa.</p>
 
@@ -148,11 +147,11 @@ methods such as <code>release</code>, <code>autorelease</code>, and <code>retain
 not need to create <code>NSAutoreleasePool</code>s.</p>
 
 <ul>
-  <li>Use Cocoa methods to create Cocoa objects.</li>
-  <li>Don’t worry about ownership and memory management.</li>
+<li>Use Cocoa methods to create Cocoa objects.</li>
+<li>Don&#39;t worry about ownership and memory management.</li>
 </ul>
 
-<h2 id="return-value-of-methods">Return value of methods</h2>
+<h2>Return value of methods</h2>
 
 <pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_nstr'>nstr</span> <span class='op'>=</span> <span class='const'>OSX</span><span class='op'>::</span><span class='const'>NSString</span><span class='period'>.</span><span class='id identifier rubyid_description'>description</span>
 <span class='id identifier rubyid_p'>p</span> <span class='id identifier rubyid_nstr'>nstr</span>      <span class='comment'># =&gt; #&lt;OCObject:0x7233e class=&#39;NSCFString&#39; id=687610&gt;
@@ -179,7 +178,7 @@ examples.  The return value is not automatically converted to the corresponding
 Ruby class (<code>String</code>, for example). For <code>NSString</code> and <code>NSArray</code>,
 <code>to_s</code> and <code>to_a</code> are defined and can be used.</p>
 
-<h2 id="representing-objective-c-message-selectors">Representing Objective-C message selectors</h2>
+<h2>Representing Objective-C message selectors</h2>
 
 <pre class="code ruby"><code class="ruby"><span class='comment'># play system sounds (2)
 </span><span class='id identifier rubyid_sndfiles'>sndfiles</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_path'>path</span><span class='op'>|</span>
@@ -189,7 +188,7 @@ Ruby class (<code>String</code>, for example). For <code>NSString</code> and <co
 <span class='kw'>end</span>
 </code></pre>
 
-<p>This is another version of “playing system sounds”. This shows the other way
+<p>This is another version of &quot;playing system sounds&quot;. This shows the other way
 Objective-C message selectors can be represented in the Ruby world.</p>
 
 <p>In Objective-C:</p>
@@ -198,7 +197,7 @@ Objective-C message selectors can be represented in the Ruby world.</p>
 </code></pre>
 
 <p>RubyCocoa provides several ways to specify message selectors. The simplest way
-is to substitute “<code>:</code>” with “<code>_</code>”.</p>
+is to substitute &quot;<code>:</code>&quot; with &quot;<code>_</code>&quot;.</p>
 
 <pre class="code ruby"><code class="ruby">obj.hogeAt_withParamA_withParamB_ (a0, a1, a2)
 </code></pre>
@@ -215,7 +214,7 @@ selector keyword and each argument is unclear. In order to improve this:</p>
 </code></pre>
 
 <p>For Cocoa methods that return the <code>BOOL</code> type (predicate method), use
-the method name suffix “?” to return a Ruby boolean. If this suffix is omitted,
+the method name suffix &quot;?&quot; to return a Ruby boolean. If this suffix is omitted,
 the method will return the value <code>0</code> (NO) or <code>1</code> (YES). These values
 behave as <code>true</code> in the Ruby world, so you will get unexpected results.</p>
 
@@ -227,13 +226,13 @@ behave as <code>true</code> in the Ruby world, so you will get unexpected result
 </span><span class='id identifier rubyid_p'>p</span> <span class='id identifier rubyid_nary'>nary</span><span class='period'>.</span><span class='id identifier rubyid_containsObject?'>containsObject?</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>hoge</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>  <span class='comment'># =&gt; true
 </span></code></pre>
 
-<h2 id="convert-ruby-object-method-arguments-when-possible">Convert Ruby object method arguments when possible</h2>
+<h2>Convert Ruby object method arguments when possible</h2>
 
 <p>It seems to be usual containsObject of the top and, in case of method
 to catch Objective-C object as a value of argument, tries conversion
 even if it just hands Ruby object so long as it is possible.</p>
 
-<h2 id="handling-method-name-conflicts">Handling method name conflicts</h2>
+<h2>Handling method name conflicts</h2>
 
 <pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_klass'>klass</span> <span class='op'>=</span> <span class='const'>OSX</span><span class='op'>::</span><span class='const'>NSObject</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span>
 <span class='id identifier rubyid_p'>p</span> <span class='id identifier rubyid_klass'>klass</span>     <span class='comment'># =&gt; OSX::OCObject
@@ -242,18 +241,18 @@ even if it just hands Ruby object so long as it is possible.</p>
 </span></code></pre>
 
 <p>When the same method name exists in Ruby and Objective-C, like in the case of
-<code>Object#class</code>, prefix the method name with “<code>oc_</code>”.</p>
+<code>Object#class</code>, prefix the method name with &quot;<code>oc_</code>&quot;.</p>
 
-<h2 id="inheriting-from-cocoa">Inheriting from Cocoa</h2>
+<h2>Inheriting from Cocoa</h2>
 
-<p>So far, we’ve discussed existing Cocoa classes and their
-instances. From this point, we’ll discuss the definition and
+<p>So far, we&#39;ve discussed existing Cocoa classes and their
+instances. From this point, we&#39;ll discuss the definition and
 instantiation of derived class of Cocoa, which is also needed when
 writing RubyCocoa applications. Since the implementation of derived
 class mechanism for RubyCocoa is a little tricky, there are some
 restrictions and peculiarities.</p>
 
-<h2 id="defining-a-cocoa-inherited-class">Defining a Cocoa-inherited class</h2>
+<h2>Defining a Cocoa-inherited class</h2>
 
 <p>The class of the Cocoa objects set up in the GUI definition file (nib file)
 created by Interface Builder is defined as an inherited class (after 0.2.0).
@@ -265,7 +264,7 @@ tutorials is defined in Ruby like this:</p>
   <span class='id identifier rubyid_ib_outlets'>ib_outlets</span> <span class='symbol'>:messageField</span>
 
   <span class='kw'>def</span> <span class='id identifier rubyid_btnClicked'>btnClicked</span><span class='lparen'>(</span><span class='id identifier rubyid_sender'>sender</span><span class='rparen'>)</span>
-<span class='ivar'>@messageField</span><span class='period'>.</span><span class='id identifier rubyid_setStringValue'>setStringValue</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Merry Xmas !</span><span class='tstring_end'>&quot;</span></span>
+    <span class='ivar'>@messageField</span><span class='period'>.</span><span class='id identifier rubyid_setStringValue'>setStringValue</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Merry Xmas !</span><span class='tstring_end'>&quot;</span></span>
   <span class='kw'>end</span>
 
 <span class='kw'>end</span>
@@ -275,7 +274,7 @@ tutorials is defined in Ruby like this:</p>
 described to be the inherited class definition by the usual Ruby in
 this way.</p>
 
-<h2 id="defining-interface-builder-outlets">Defining Interface Builder outlets</h2>
+<h2>Defining Interface Builder outlets</h2>
 
 <p>The outlet set as the class in the nib file is written to be:</p>
 
@@ -293,7 +292,7 @@ this way:</p>
 
 <p><code>ns_outlets</code> also has an alias called <code>ib_outlets</code>.</p>
 
-<h2 id="overriding-a-method">Overriding a method</h2>
+<h2>Overriding a method</h2>
 
 <p>When overriding a method defined by the parent class, it is necessary to
 declare the override using <code>ns_overrides</code> (alias <code>ib_overrides</code>).</p>
@@ -311,26 +310,26 @@ end
 
 <p>In the argument of <code>ns_overrides</code> what expressed the message selector of
 Objective-C as the string or the symbol is given. However, the
-notation for omitting “:” and “_” of the end explained previously
+notation for omitting &quot;:&quot; and &quot;_&quot; of the end explained previously
 cannot be used. It is necessary to describe correctly according to the
 number of arguments.</p>
 
 <p>To invoke the superclass method in an overriding method, prefix the method name
-with “<code>super\_</code>”.</p>
+with &quot;<code>super\_</code>&quot;.</p>
 
 <pre class="code ruby"><code class="ruby"><span class='kw'>class</span> <span class='const'>MyCustomView</span> <span class='op'>&lt;</span> <span class='const'>OSX</span><span class='op'>::</span><span class='const'>NSView</span>
 
   <span class='id identifier rubyid_ns_overrides'>ns_overrides</span> <span class='symbol'>:drawRect_</span>
 
   <span class='kw'>def</span> <span class='id identifier rubyid_drawRect'>drawRect</span> <span class='lparen'>(</span><span class='id identifier rubyid_frame'>frame</span><span class='rparen'>)</span>
-<span class='id identifier rubyid_p'>p</span> <span class='id identifier rubyid_frame'>frame</span>
-<span class='id identifier rubyid_super_drawRect'>super_drawRect</span><span class='lparen'>(</span><span class='id identifier rubyid_frame'>frame</span><span class='rparen'>)</span>   <span class='comment'># invoke the implementation of NSView#drawRect
+    <span class='id identifier rubyid_p'>p</span> <span class='id identifier rubyid_frame'>frame</span>
+    <span class='id identifier rubyid_super_drawRect'>super_drawRect</span><span class='lparen'>(</span><span class='id identifier rubyid_frame'>frame</span><span class='rparen'>)</span>   <span class='comment'># invoke the implementation of NSView#drawRect
 </span>  <span class='kw'>end</span>
 
 <span class='kw'>end</span>
 </code></pre>
 
-<h2 id="instantiating-a-cocoa-inherited-class">Instantiating a Cocoa-inherited class</h2>
+<h2>Instantiating a Cocoa-inherited class</h2>
 
 <p>When an instance of a Cocoa-inherited class needs to be created in a Ruby
 script, it writes like:</p>
@@ -350,35 +349,35 @@ in this, since it becomes long, a detailed explanation is omitted here.</p>
 performed in the turn:</p>
 
 <ul>
-  <li>alloc (in Objective-C world)</li>
-  <li>in alloc, create a Ruby object (initialize method is called here)</li>
+<li>alloc (in Objective-C world)</li>
+<li>in alloc, create a Ruby object (initialize method is called here)</li>
 </ul>
 
-<h2 id="where-should-initialization-code-be-written">Where should initialization code be written?</h2>
+<h2>Where should initialization code be written?</h2>
 
 <p>In Ruby an initialization procedure is written in the
-“<code>initialize</code>” method generally. But you should be careful in
-doing so.  When the “initialize” method is invoked, a Cocoa object in
+&quot;<code>initialize</code>&quot; method generally. But you should be careful in
+doing so.  When the &quot;initialize&quot; method is invoked, a Cocoa object in
 the Objective-C space is just only given memory. And it is not
-initialized yet. Therefore, in the “initialize” method, you must not
+initialized yet. Therefore, in the &quot;initialize&quot; method, you must not
 invoke a method implemented in Objective-C space. You should use only
 a method by Ruby at the point.</p>
 
 <p>If the object needs to be loaded from a nib file, initializing by the
-“awakeFromNib” method is safest. Doesn’t it seem that it is also
+&quot;awakeFromNib&quot; method is safest. Doesn&#39;t it seem that it is also
 necessary to actually define the inherited class of Cocoa in most of
 these cases?</p>
 
-<p>In other cases, initialization is done in the style of Cocoa’s <code>init</code>.
+<p>In other cases, initialization is done in the style of Cocoa&#39;s <code>init</code>.
 It is probably a good idea to write to a method with a prefix.</p>
 
 <p>Please do not forget to return <code>self</code> from initialization methods.</p>
 </div></div>
 
     <div id="footer">
-  Generated on Sun Nov 17 10:10:43 2013 by
+  Generated on Sun Jul 20 15:38:38 2014 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.8.7.3 (ruby-2.0.0).
+  0.8.7.4 (ruby-2.1.2).
 </div>
 
   </body>

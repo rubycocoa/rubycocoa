@@ -17,7 +17,7 @@
 <script type="text/javascript" charset="utf-8">
   hasFrames = window.top.frames.main ? true : false;
   relpath = '';
-  framesUrl = "frames.html#!" + escape(window.location.href);
+  framesUrl = "frames.html#!file.getting-started.html";
 </script>
 
 
@@ -61,42 +61,41 @@
 
     <iframe id="search_frame"></iframe>
 
-    <div id="content"><div id='filecontents'>
-<h1 id="getting-started">Getting Started</h1>
+    <div id="content"><div id='filecontents'><h1>Getting Started</h1>
 
-<h2 id="mac-os-x-built-in-framework">Mac OS X built-in framework</h2>
+<h2>Mac OS X built-in framework</h2>
 
 <p>Mac OS X 10.5 Leopard or later, RubyCocoa is installed as a part of Mac OS X.
 The versions of RubyCocoa pre-installed into Mac OS X are:</p>
 
 <ul>
-  <li>OS X 10.9 Mavericks: 1.0.1</li>
-  <li>OS X 10.8 Mountain Lion: 1.0.1</li>
-  <li>Mac OS X 10.7 Lion: 1.0.0</li>
-  <li>Mac OS X 10.6 Snow Leopard: 1.0.0</li>
-  <li>Mac OS X 10.5 Leopard: 0.13.2</li>
+<li>OS X 10.9 Mavericks: 1.0.1</li>
+<li>OS X 10.8 Mountain Lion: 1.0.1</li>
+<li>Mac OS X 10.7 Lion: 1.0.0</li>
+<li>Mac OS X 10.6 Snow Leopard: 1.0.0</li>
+<li>Mac OS X 10.5 Leopard: 0.13.2</li>
 </ul>
 
 <p>If you want to use the latest RubyCocoa, you need to install RubyCocoa.framework from dmg or source code.</p>
 
-<h2 id="download-binary-distribution">Download binary distribution</h2>
+<h2>Download binary distribution</h2>
 
 <p>Download RubyCocoa-x.x.x.dmg from <a href="http://sourceforge.net/projects/rubycocoa/files/RubyCocoa/">SourceForge.net</a>.</p>
 
-<p>It includes library, samples, templates for Xcode etc. for RubyCocoa. Everything necessary for execution and development is included in an easy-to-install ‘.pkg’ package file.</p>
+<p>It includes library, samples, templates for Xcode etc. for RubyCocoa. Everything necessary for execution and development is included in an easy-to-install &#39;.pkg&#39; package file.</p>
 
 <p>A successful installation of the binary package will add the following items:</p>
 
 <ul>
-  <li>/Library/Frameworks/RubyCocoa.framework : RubyCocoa framework (core)</li>
-  <li>inside of /Library/Ruby/Site/1.8/osx : RubyCocoa library (stub)</li>
-  <li>/Library/Ruby/Site/1.8/universal-darwin12.0/rubycocoa.bundle : RubyCocoa extended library (stub)</li>
-  <li>/Developer/Examples/RubyCocoa : Sample programs</li>
+<li>/Library/Frameworks/RubyCocoa.framework : RubyCocoa framework (core)</li>
+<li>inside of /Library/Ruby/Site/1.8/osx : RubyCocoa library (stub)</li>
+<li>/Library/Ruby/Site/1.8/universal-darwin12.0/rubycocoa.bundle : RubyCocoa extended library (stub)</li>
+<li>/Developer/Examples/RubyCocoa : Sample programs</li>
 </ul>
 
 <p>After installation, try the samples that are written in Ruby. Refer to <a href="file.try-samples.html" title="Try Samples">Try Samples</a>.</p>
 
-<h2 id="install-xcode4-project-templates-105-or-later">Install Xcode4 project templates (1.0.5 or later)</h2>
+<h2>Install Xcode4 project templates (1.0.5 or later)</h2>
 
 <pre class="code ruby"><code class="ruby">$ ruby /Developer/Documentation/RubyCocoa/Templates/install_templates.rb \
       Xcode4.x
@@ -115,9 +114,9 @@ usage: install_templates.rb [options] TEMPLATE_DIR
         --dest=dir                   specify install destination
 </code></pre>
 
-<h2 id="build-from-source">Build from Source</h2>
+<h2>Build from Source</h2>
 
-<p>Extract RubyCocoa source from the ‘.tar.gz’ file into a directory somewhere.</p>
+<p>Extract RubyCocoa source from the &#39;.tar.gz&#39; file into a directory somewhere.</p>
 
 <pre class="code ruby"><code class="ruby">$ tar xzf RubyCocoa-x.x.x.tar.gz
 $ cd RubyCocoa-x.x.x
@@ -129,9 +128,9 @@ $ sudo ruby install.rb intstall
 </div></div>
 
     <div id="footer">
-  Generated on Sun Nov 17 10:10:43 2013 by
+  Generated on Sun Jul 20 15:38:38 2014 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.8.7.3 (ruby-2.0.0).
+  0.8.7.4 (ruby-2.1.2).
 </div>
 
   </body>
