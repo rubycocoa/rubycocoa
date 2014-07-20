@@ -1,5 +1,10 @@
 2014-07-19 kimura wataru <kimuraw@i.nifty.jp>
 
+	* sample/Scripts/itunes_albums.rb:
+	change output encoding to default from euc-jp.
+
+2014-07-19 kimura wataru <kimuraw@i.nifty.jp>
+
 	* sample/Scripts/TransparentHello.rb:
 	fix SEGV at quit with Ctrl-C.
 
