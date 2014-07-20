@@ -17,7 +17,7 @@
 <script type="text/javascript" charset="utf-8">
   hasFrames = window.top.frames.main ? true : false;
   relpath = '../';
-  framesUrl = "../frames.html#!" + escape(window.location.href);
+  framesUrl = "../frames.html#!OSX/OCObjWrapper.html";
 </script>
 
 
@@ -139,8 +139,7 @@ and extends <span class='object_link'><a href="OCClsWrapper.html" title="OSX::OC
   
 
   
-    <span class="summary_desc"><div class='inline'>
-</div></span>
+    <span class="summary_desc"><div class='inline'></div></span>
   
 </li>
 
@@ -208,7 +207,7 @@ and extends <span class='object_link'><a href="OCClsWrapper.html" title="OSX::OC
   
 
   
-    <span class="summary_desc"><div class='inline'><p>A convenience method to dispatch a message to ObjC as symbol/value/…</p>
+    <span class="summary_desc"><div class='inline'><p>A convenience method to dispatch a message to ObjC as symbol/value/...</p>
 </div></span>
   
 </li>
@@ -217,9 +216,11 @@ and extends <span class='object_link'><a href="OCClsWrapper.html" title="OSX::OC
         <li class="public ">
   <span class="summary_signature">
     
-      <a href="#ocm_responds%3F-instance_method" title="#ocm_responds? (instance method)">- (Boolean) <strong>ocm_responds?</strong> </a>
+      <a href="#ocm_respond_to%3F-instance_method" title="#ocm_respond_to? (instance method)">- (Boolean) <strong>ocm_respond_to?</strong> </a>
     
 
+    
+      (also: #ocm_responds?)
     
   </span>
   
@@ -277,8 +278,7 @@ and extends <span class='object_link'><a href="OCClsWrapper.html" title="OSX::OC
   
 
   
-    <span class="summary_desc"><div class='inline'>
-</div></span>
+    <span class="summary_desc"><div class='inline'></div></span>
   
 </li>
 
@@ -300,8 +300,7 @@ and extends <span class='object_link'><a href="OCClsWrapper.html" title="OSX::OC
   
 
   
-    <span class="summary_desc"><div class='inline'>
-</div></span>
+    <span class="summary_desc"><div class='inline'></div></span>
   
 </li>
 
@@ -452,21 +451,21 @@ str.objc_method_type(&#39;hasPrefix:&#39;) =&gt; &quot;c24@0:8@16&quot;</code></
       <pre class="lines">
 
 
-676
-677
-678
-679
-680
-681
-682
-683
-684
-685
-686
-687</pre>
+661
+662
+663
+664
+665
+666
+667
+668
+669
+670
+671
+672</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'src/objc/mdl_objwrapper.m', line 676</span>
+      <pre class="code"><span class="info file"># File 'src/objc/mdl_objwrapper.m', line 661</span>
 
 static VALUE
 wrapper_objc_method_type (VALUE rcv, VALUE name)
@@ -524,20 +523,20 @@ Like Object#methods.</p>
       <pre class="lines">
 
 
-591
-592
-593
-594
-595
-596
-597
-598
-599
-600
-601</pre>
+576
+577
+578
+579
+580
+581
+582
+583
+584
+585
+586</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'src/objc/mdl_objwrapper.m', line 591</span>
+      <pre class="code"><span class="info file"># File 'src/objc/mdl_objwrapper.m', line 576</span>
 
 static VALUE
 wrapper_objc_methods (VALUE rcv)
@@ -566,7 +565,7 @@ wrapper_objc_methods (VALUE rcv)
   
 </h3><div class="docstring">
   <div class="discussion">
-    <p>A convenience method to dispatch a message to ObjC as symbol/value/…
+    <p>A convenience method to dispatch a message to ObjC as symbol/value/...
 For example, [myObj doSomething:arg1 withObject:arg2] would translate as:
   myObj.objc_send(:doSomething, arg1, :withObject, arg2)</p>
 
@@ -633,11 +632,15 @@ For example, [myObj doSomething:arg1 withObject:arg2] would translate as:
 </div>
     
       <div class="method_details ">
-  <h3 class="signature " id="ocm_responds?-instance_method">
+  <h3 class="signature " id="ocm_respond_to?-instance_method">
   
-    - (<tt>Boolean</tt>) <strong>ocm_responds?</strong> 
+    - (<tt>Boolean</tt>) <strong>ocm_respond_to?</strong> 
   
 
+  
+    <span class="aliases">Also known as:
+    <span class="names"><span id='ocm_responds?-instance_method'>ocm_responds?</span></span>
+    </span>
   
 
   
@@ -660,6 +663,10 @@ For example, [myObj doSomething:arg1 withObject:arg2] would translate as:
         <span class='type'>(<tt><span class='object_link'><a href="../String.html" title="String (class)">String</a></span></tt>)</span>
       
       
+      
+        &mdash;
+        <div class='inline'><p>ruby-style method name, like &quot;foo_bar_&quot;.</p>
+</div>
       
     </li>
   
@@ -685,20 +692,20 @@ For example, [myObj doSomething:arg1 withObject:arg2] would translate as:
       <pre class="lines">
 
 
+498
 499
 500
 501
 502
 503
 504
-505
-506</pre>
+505</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'src/objc/mdl_objwrapper.m', line 499</span>
+      <pre class="code"><span class="info file"># File 'src/objc/mdl_objwrapper.m', line 498</span>
 
 static VALUE
-wrapper_ocm_responds_p(VALUE rcv, VALUE sel)
+wrapper_ocm_respond_to_p(VALUE rcv, VALUE sel)
 {
   id oc_rcv;
   SEL oc_sel = rbobj_to_nssel(sel);
@@ -735,6 +742,7 @@ wrapper_ocm_responds_p(VALUE rcv, VALUE sel)
       <pre class="lines">
 
 
+523
 524
 525
 526
@@ -746,11 +754,10 @@ wrapper_ocm_responds_p(VALUE rcv, VALUE sel)
 532
 533
 534
-535
-536</pre>
+535</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'src/objc/mdl_objwrapper.m', line 524</span>
+      <pre class="code"><span class="info file"># File 'src/objc/mdl_objwrapper.m', line 523</span>
 
 static VALUE
 wrapper_ocm_send(int argc, VALUE* argv, VALUE rcv)
@@ -782,7 +789,6 @@ wrapper_ocm_send(int argc, VALUE* argv, VALUE rcv)
 </h3><div class="docstring">
   <div class="discussion">
     
-
 
   </div>
 </div>
@@ -836,7 +842,6 @@ wrapper_ocm_send(int argc, VALUE* argv, VALUE rcv)
   <div class="discussion">
     
 
-
   </div>
 </div>
 <div class="tags">
@@ -861,6 +866,7 @@ wrapper_ocm_send(int argc, VALUE* argv, VALUE rcv)
       <pre class="lines">
 
 
+540
 541
 542
 543
@@ -873,11 +879,10 @@ wrapper_ocm_send(int argc, VALUE* argv, VALUE rcv)
 550
 551
 552
-553
-554</pre>
+553</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'src/objc/mdl_objwrapper.m', line 541</span>
+      <pre class="code"><span class="info file"># File 'src/objc/mdl_objwrapper.m', line 540</span>
 
 static VALUE
 wrapper_to_s (VALUE rcv)
@@ -903,9 +908,9 @@ wrapper_to_s (VALUE rcv)
 </div>
 
     <div id="footer">
-  Generated on Sun Nov 17 10:10:43 2013 by
+  Generated on Sun Jul 20 15:38:38 2014 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.8.7.3 (ruby-2.0.0).
+  0.8.7.4 (ruby-2.1.2).
 </div>
 
   </body>

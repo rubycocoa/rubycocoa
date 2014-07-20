@@ -17,7 +17,7 @@
 <script type="text/javascript" charset="utf-8">
   hasFrames = window.top.frames.main ? true : false;
   relpath = '../';
-  framesUrl = "../frames.html#!" + escape(window.location.href);
+  framesUrl = "../frames.html#!OSX/BundleSupport.html";
 </script>
 
 
@@ -152,7 +152,7 @@ _current_bundle =&gt; [bundle, additional_param] or nil</code></pre>
   
 
   
-    <span class="summary_desc"><div class='inline'><p>Returns a dictionary contains Objective-C Class -&gt; NSBundle relations.</p>
+    <span class="summary_desc"><div class='inline'><p>Returns a dictionary contains Objective-C Class -> NSBundle relations.</p>
 </div></span>
   
 </li>
@@ -270,7 +270,7 @@ _current_bundle =&gt; [bundle, additional_param] or nil</code></pre>
   
 </h3><div class="docstring">
   <div class="discussion">
-    <p>Returns a dictionary contains Objective-C Class -&gt; NSBundle relations.</p>
+    <p>Returns a dictionary contains Objective-C Class -> NSBundle relations.</p>
 
 
   </div>
@@ -297,10 +297,10 @@ _current_bundle =&gt; [bundle, additional_param] or nil</code></pre>
       <pre class="lines">
 
 
-91</pre>
+90</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'src/objc/mdl_bundle_support.m', line 91</span>
+      <pre class="code"><span class="info file"># File 'src/objc/mdl_bundle_support.m', line 90</span>
 
 <span class='id identifier rubyid_static'>static</span> <span class='const'>VALUE</span> <span class='id identifier rubyid_rb_bundle_map'>rb_bundle_map</span><span class='lparen'>(</span><span class='const'>VALUE</span> <span class='id identifier rubyid_mdl'>mdl</span><span class='rparen'>)</span> <span class='lbrace'>{</span> <span class='kw'>return</span> <span class='id identifier rubyid_ocid_to_rbobj'>ocid_to_rbobj</span><span class='lparen'>(</span><span class='const'>Qnil</span><span class='comma'>,</span> <span class='id identifier rubyid_gBundleMap'>gBundleMap</span><span class='rparen'>)</span><span class='semicolon'>;</span> <span class='rbrace'>}</span></pre>
     </td>
@@ -346,10 +346,10 @@ _current_bundle =&gt; [bundle, additional_param] or nil</code></pre>
       <pre class="lines">
 
 
-86</pre>
+85</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'src/objc/mdl_bundle_support.m', line 86</span>
+      <pre class="code"><span class="info file"># File 'src/objc/mdl_bundle_support.m', line 85</span>
 
 <span class='id identifier rubyid_static'>static</span> <span class='const'>VALUE</span> <span class='id identifier rubyid_rb_current_bundle'>rb_current_bundle</span><span class='lparen'>(</span><span class='const'>VALUE</span> <span class='id identifier rubyid_mdl'>mdl</span><span class='rparen'>)</span> <span class='lbrace'>{</span> <span class='kw'>return</span> <span class='id identifier rubyid__current_bundle'>_current_bundle</span><span class='lparen'>(</span><span class='rparen'>)</span><span class='semicolon'>;</span> <span class='rbrace'>}</span></pre>
     </td>
@@ -423,6 +423,7 @@ _current_bundle =&gt; [bundle, additional_param] or nil</code></pre>
       <pre class="lines">
 
 
+127
 128
 129
 130
@@ -434,11 +435,10 @@ _current_bundle =&gt; [bundle, additional_param] or nil</code></pre>
 136
 137
 138
-139
-140</pre>
+139</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'src/objc/mdl_bundle_support.m', line 128</span>
+      <pre class="code"><span class="info file"># File 'src/objc/mdl_bundle_support.m', line 127</span>
 
 static VALUE
 rb_bind_class_with_current_bundle(VALUE mdl, VALUE objc_class)
@@ -511,14 +511,14 @@ rb_bind_class_with_current_bundle(VALUE mdl, VALUE objc_class)
       <pre class="lines">
 
 
+115
 116
 117
 118
-119
-120</pre>
+119</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'src/objc/mdl_bundle_support.m', line 116</span>
+      <pre class="code"><span class="info file"># File 'src/objc/mdl_bundle_support.m', line 115</span>
 
 static VALUE
 rb_bundle_for_class(VALUE mdl, VALUE objc_class)
@@ -625,9 +625,9 @@ Objective-C initilizer RBBundleInit().</p>
 </div>
 
     <div id="footer">
-  Generated on Sun Nov 17 10:10:43 2013 by
+  Generated on Sun Jul 20 15:38:38 2014 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.8.7.3 (ruby-2.0.0).
+  0.8.7.4 (ruby-2.1.2).
 </div>
 
   </body>

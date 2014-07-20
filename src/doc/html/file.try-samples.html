@@ -17,7 +17,7 @@
 <script type="text/javascript" charset="utf-8">
   hasFrames = window.top.frames.main ? true : false;
   relpath = '';
-  framesUrl = "frames.html#!" + escape(window.location.href);
+  framesUrl = "frames.html#!file.try-samples.html";
 </script>
 
 
@@ -61,24 +61,23 @@
 
     <iframe id="search_frame"></iframe>
 
-    <div id="content"><div id='filecontents'>
-<h1 id="try-samples">Try Samples</h1>
+    <div id="content"><div id='filecontents'><h1>Try Samples</h1>
 
-<p>Let’s try scripts and applications of samples.</p>
+<p>Let&#39;s try scripts and applications of samples.</p>
 
-<h2 id="rubycocoa-application">RubyCocoa Application</h2>
+<h2>RubyCocoa Application</h2>
 
 <p>First, try to execute a RubyCocoa application which has already
-been built. In Finder, open ‘/Developer/Examples/RubyCocoa’ folder and
+been built. In Finder, open &#39;/Developer/Examples/RubyCocoa&#39; folder and
 double-click SimpleApp.  Or type following on command line:</p>
 
 <pre class="code ruby"><code class="ruby">% cd /Developer/Examples/RubyCocoa
 % open SimpleApp.app
 </code></pre>
 
-<h2 id="on-command-line-terminal">on command line (Terminal)</h2>
+<h2>on command line (Terminal)</h2>
 
-<p>You can write a script for command line with RubyCocoa.  Now, let’s
+<p>You can write a script for command line with RubyCocoa.  Now, let&#39;s
 try to execute a simple script in sample directory.</p>
 
 <pre class="code ruby"><code class="ruby">% cd /Developer/Examples/RubyCocoa
@@ -94,7 +93,7 @@ try to execute a simple script in sample directory.</p>
 </code></pre>
 
 <p>This will be interesting. When you execute speak.rb without arguments, the Mac
-will read all the text you type until ‘control-D’ is input.  This script uses
+will read all the text you type until &#39;control-D&#39; is input.  This script uses
 the AppleScript (and AppleEvent) interface which has been implemented since Mac
 OS X 10.2.</p>
 
@@ -105,7 +104,7 @@ $ ruby TransparentHello.rb                 # transparency!
 $ (cd Hakoiri-Musume &amp;&amp; ruby rb_main.rb )  # puzzle game
 </code></pre>
 
-<h2 id="build-a-makefile-based-rubycocoa-application">Build a Makefile-based RubyCocoa application</h2>
+<h2>Build a Makefile-based RubyCocoa application</h2>
 
 <p>The next example is Makefile-based. Type this to build: </p>
 
@@ -118,9 +117,9 @@ $ (cd Hakoiri-Musume &amp;&amp; ruby rb_main.rb )  # puzzle game
 <pre class="code ruby"><code class="ruby">% open CocoHako.app
 </code></pre>
 
-<p>or double-click ‘CocoHako’ in the Finder.</p>
+<p>or double-click &#39;CocoHako&#39; in the Finder.</p>
 
-<h2 id="build-a-xcode-based-rubycocoa-application">Build a Xcode-based RubyCocoa application</h2>
+<h2>Build a Xcode-based RubyCocoa application</h2>
 
 <p>The next example is Xcode-based. Type this to build it:</p>
 
@@ -132,39 +131,31 @@ $ (cd Hakoiri-Musume &amp;&amp; ruby rb_main.rb )  # puzzle game
 <p>You can build and run the application in Xcode, too. Launch the
 application:</p>
 
-<h2 id="next">Next…</h2>
+<h2>Next...</h2>
 
 <p>There are various other samples. Please read and try them. Have fun!</p>
 
-<h2 id="supplement">Supplement</h2>
+<h2>Supplement</h2>
 
 <ul>
-  <li>
-    <p>HelloWorld.rb is a sample script for <a href=":http://pyobjc.sf.net/">PyObjc</a>
-that was translated from Python into Ruby.</p>
-  </li>
-  <li>
-    <p>TransparentHello.rb appears in the article of
-<a href="http://www.ddj.com/articles/2002/0205/">‘Dr. Dobbs Journal, May 2002’</a>
-written by Chris Thomas.</p>
-  </li>
-  <li>
-    <p>RubyRaiseMan and RubyTypingTutor is a tutorial application in
-<a href="http://www.amazon.com/exec/obidos/tg/detail/-/0201726831">‘Mac OS X Cocoa Programming’</a>
-that was translated from Objective-C into Ruby.</p>
-  </li>
-  <li>
-    <p>MyViewer is a sample in Japanese book
-<a href="http://www.amazon.co.jp/exec/obidos/ASIN/4877780688">‘Guide of Mac OS X Programming - Objective-C’</a>
-that was translated from Objective-C into Ruby.</p>
-  </li>
+<li><p>HelloWorld.rb is a sample script for <a href=":http://pyobjc.sf.net/">PyObjc</a>
+that was translated from Python into Ruby.</p></li>
+<li><p>TransparentHello.rb appears in the article of
+<a href="http://www.ddj.com/articles/2002/0205/">&#39;Dr. Dobbs Journal, May 2002&#39;</a>
+written by Chris Thomas.</p></li>
+<li><p>RubyRaiseMan and RubyTypingTutor is a tutorial application in
+<a href="http://www.amazon.com/exec/obidos/tg/detail/-/0201726831">&#39;Mac OS X Cocoa Programming&#39;</a>
+that was translated from Objective-C into Ruby.</p></li>
+<li><p>MyViewer is a sample in Japanese book
+<a href="http://www.amazon.co.jp/exec/obidos/ASIN/4877780688">&#39;Guide of Mac OS X Programming - Objective-C&#39;</a>
+that was translated from Objective-C into Ruby.</p></li>
 </ul>
 </div></div>
 
     <div id="footer">
-  Generated on Sun Nov 17 10:10:43 2013 by
+  Generated on Sun Jul 20 15:38:38 2014 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.8.7.3 (ruby-2.0.0).
+  0.8.7.4 (ruby-2.1.2).
 </div>
 
   </body>
