@@ -7,11 +7,22 @@ $Id$
 
 === Improvements
 
-  * .
+  * support ruby-2.0 or later, mostly works as same as on ruby-1.8.
+    * we release RubyCocoa installers as separated packages for ruby-1.8/2.0.
+      replace RubyCocoa.framework if you try to run your RubyCocoa application
+      with OS X 10.9 buitin ruby-2.0.
+    * NOTE: String of ruby-2.x has its encodings.
+  * when called method is not found on an Objective-C object, RubyCocoa
+    raises NoMethodError. (before: OSX::OCMessageSendException)
 
 === Deprecates
 
   * CocoaClass#objc_export() is deprecated. use objc_method().
+  * OSX::NSObject#ocm_responds?() will be deprecated. use ocm_respond_to?().
+
+=== Fixes
+
+  * Fixed build errors on Yosemite DP.
 
 == Changes 1.1.0 from 1.0.7: 2013-11-17
 
