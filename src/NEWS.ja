@@ -3,6 +3,27 @@
 
 $Id$
 
+== 1.1.0から1.2.0の変更点: 2014-XX-XX
+
+=== 改良
+
+  * ruby-2.0に対応しました。おおむねruby-1.8と同様に動作します。
+    * RubyCocoaのインストーラはruby-1.8用と2.0用で別々のファイルとして
+      リリースされます。RubyCocoaアプリケーションをOS X 10.9添付のruby-2.0で
+      動作させてみたいときは、RubyCocoa.frameworkを入れ替えてください。
+    * 注: ruby-2.0のStringはエンコーディングを持っています。
+  * 存在しないメソッドが呼び出されたときの例外をNoMethodErrorに変更しました。
+    (以前はOSX::OCMessageSendExceptionでした。)
+
+=== 廃止された機能
+
+  * CocoaClass#objc_export()は廃止されました。objc_method()を使ってください。
+  * OSX::NSObject#ocm_responds?()は廃止される予定です。ocm_respond_to?()を使ってください。
+
+=== 修正
+
+  * Yosemite DP上でのビルドエラーを修正しました。
+
 == 1.0.7から1.1.0の変更点: 2013-11-17
 
 === 改良
