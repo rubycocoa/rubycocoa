@@ -1,0 +1,39 @@
+# $Id$
+# generated from config.save
+# /System/Library/Frameworks/Ruby.framework/Versions/1.8/usr/bin/ruby install.rb config # on 10.9
+
+@config['examples'] = '/Developer/Examples'
+@config['site-ruby'] = '/Library/Ruby/Site/1.8'
+@config['std-ruby'] = '$install-prefix/lib/ruby/1.8'
+#@config['rubycocoa-svn-revision'] = 
+#@config['rubycocoa-version-short'] = 
+@config['build-as-embeddable'] = 'yes'
+@config['bin-dir'] = '$install-prefix/bin'
+#@config['rubycocoa-framework-version'] = 'A'
+@config['target-archs'] = 'i386 x86_64'
+@config['ruby-archheader-dir'] = '/System/Library/Frameworks/Ruby.framework/Versions/1.8/usr/lib/ruby/1.8/universal-darwin13.0'
+@config['without-ext'] = 'no'
+@config['ruby-path'] = '/System/Library/Frameworks/Ruby.framework/Versions/1.8/usr/bin/ruby'
+@config['install-prefix'] = '$prefix'
+#@config['rubycocoa-release-date'] = 
+@config['install-root'] = ''
+@config['ruby-prog'] = '/System/Library/Frameworks/Ruby.framework/Versions/1.8/usr/bin/ruby'
+@config['rb-dir'] = '$site-ruby'
+@config['sdkroot'] = '/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk'
+@config['macosx-deployment-target'] = '10.9'
+@config['prefix'] = '/System/Library/Frameworks/Ruby.framework/Versions/1.8/usr'
+#@config['rubycocoa-version'] = 
+@config['libruby-path'] = '/System/Library/Frameworks/Ruby.framework/Versions/1.8/usr/lib/libruby.1.dylib'
+@config['ruby-header-dir'] = '/System/Library/Frameworks/Ruby.framework/Versions/1.8/usr/lib/ruby/1.8/universal-darwin13.0'
+@config['documentation'] = '/Developer/Documentation'
+@config['frameworks'] = '/Library/Frameworks'
+@config['ri-dir'] = '/System/Library/Frameworks/Ruby.framework/Versions/1.8/usr/share/ri/1.8/site'
+@config['make-prog'] = 'make'
+@config['data-dir'] = '$install-prefix/share'
+@config['so-dir'] = '/Library/Ruby/Site/1.8/universal-darwin13.0'
+
+# prefer /usr/bin, /usr/lib
+ENV['PATH'] = ['/usr/bin', ENV['PATH']].join(':')
+
+# add ruby version into package name
+@config.set_raw('package-name',"RubyCocoa-#{@config['rubycocoa-version']}-OSX10.9-Ruby1.8")

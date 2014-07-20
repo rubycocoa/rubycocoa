@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>AllowedTypes</key>
+	<array>
+		<string>public.ruby-script</string>
+	</array>
+	<key>DefaultCompletionName</key>
+	<string>MyClass</string>
+	<key>Description</key>
+	<string>A Ruby Cocoa class.</string>
+	<key>Kind</key>
+	<string>Xcode.IDEKit.TextSubstitutionFileTemplateKind</string>
+	<key>MainTemplateFile</key>
+	<string>___FILEBASENAME___.rb</string>
+	<key>Options</key>
+	<array>
+		<dict>
+      <key>Description</key>
+      <string>The name of the class to create</string>
+      <key>Identifier</key>
+      <string>productName</string>
+      <key>Name</key>
+      <string>Class</string>
+      <key>NotPersisted</key>
+      <true/>
+      <key>Required</key>
+      <true/>
+      <key>Type</key>
+      <string>text</string>
+    </dict>
+    <dict>
+			<key>Default</key>
+			<string>NSObject</string>
+			<key>Description</key>
+			<string>What class to subclass in the new file</string>
+			<key>Identifier</key>
+			<string>cocoaSubclass</string>
+			<key>Name</key>
+			<string>Subclass of</string>
+			<key>Required</key>
+			<true/>
+			<key>Suffixes</key>
+			<dict>
+				<key>NSViewController</key>
+				<string>ViewController</string>
+				<key>NSWindowController</key>
+				<string>WindowController</string>
+			</dict>
+			<key>Type</key>
+			<string>class</string>
+			<key>Values</key>
+			<array>
+				<string>NSObject</string>
+				<string>NSDocument</string>
+				<string>NSView</string>
+				<string>NSViewController</string>
+				<string>NSWindowController</string>
+			</array>
+			<dict>
+				<key>Default</key>
+				<string>true</string>
+				<key>Identifier</key>
+				<string>withXIBMac</string>
+				<key>Name</key>
+				<string>With XIB for user interface</string>
+				<key>RequiredOptions</key>
+				<dict>
+					<key>cocoaSubclass</key>
+					<array>
+						<string>NSViewController</string>
+						<string>NSWindowController</string>
+					</array>
+				</dict>
+				<key>Type</key>
+				<string>checkbox</string>
+			</dict>
+		</dict>
+	</array>
+	<key>Platforms</key>
+	<array>
+		<string>com.apple.platform.macosx</string>
+	</array>
+	<!--
+	<key>SortOrder</key>
+	<integer>101</integer>
+	-->
+	<key>Summary</key>
+	<string>A Ruby Cocoa class</string>
+</dict>
+</plist>

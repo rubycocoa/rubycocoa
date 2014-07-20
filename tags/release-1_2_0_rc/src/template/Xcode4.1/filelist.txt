@@ -1,0 +1,6 @@
+./Templates/File Templates/Cocoa/Ruby-Cocoa class.xctemplate
+./Templates/Project Templates/Mac/Application/Ruby-Cocoa Application Base.xctemplate
+./Templates/Project Templates/Mac/Application/Ruby-Cocoa Application.xctemplate
+./Templates/Project Templates/Mac/Application/Ruby-Cocoa Document-based Application.xctemplate
+./Templates/Project Templates/Mac/Application/Ruby-Core Data Application.xctemplate
+./Templates/Project Templates/Mac/Application/Ruby-Core Data Spotlight Application.xctemplate
