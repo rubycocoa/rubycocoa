@@ -88,6 +88,6 @@ if __FILE__ == $0
 
   # And start the application event loop
   $stderr.print "\rtype `Ctrl-C' for quit !\n"
-  trap('SIGINT') { $stderr.puts "bye." ; exit 0 }
+  trap('SIGINT') { $stderr.puts "bye." ; application.terminate(nil) }
   application.run
 end
