@@ -1067,6 +1067,8 @@ class ToplevelInstaller < Installer
     out.puts 'Options for package:'
     out.printf "  %-20s %s \n",
         '--sign=identity', 'add a digital signature to installer'
+    out.printf "  %-20s %s \n",
+        '--config-file=name', 'pass config filename from package/config/, such as 10.9-ruby2.0'
     out.puts
   end
 
