@@ -5,8 +5,6 @@ class WinCtrl < OSX::NSObject
 
   ImageSizeMIN = 32
 
-  private
-
   @@wincount = 0		# static int wincount = 0;
   
   def windowSetUp(image)
@@ -46,7 +44,7 @@ class WinCtrl < OSX::NSObject
     OSX::NSNotificationCenter.defaultCenter.
       addObserver(self,
 		  :selector, 'shrink:',
-		  :name, OSX::ShrinkAllNotification,
+		  :name, ShrinkAllNotification,
 		  :object, nil)
     @window.setTitleWithRepresentedFilename @filename
     @window.setDelegate(self)
