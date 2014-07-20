@@ -77,7 +77,7 @@ if __FILE__ == $0 then
   albums = AEList.new(result)
 
   # convert Ruby string and uniq
-  albums = albums.map {|i| i.stringValue.to_s.toeuc }.uniq
+  albums = albums.map {|i| i.stringValue.to_s }.uniq
 
   # print all alubum names
   albums.each do |title|
