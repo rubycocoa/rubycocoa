@@ -65,13 +65,13 @@ class TC_NSData < Test::Unit::TestCase
 
   def test_length
     src = 'hello world'
-    data = NSData.dataWithRubyString( src )
+    data = src.to_ns.dataUsingEncoding(OSX::NSASCIIStringEncoding)
     assert_equal( src.size, data.length )
   end
 
   def test_bytes
     src = 'hello world'
-    data = NSData.dataWithRubyString( src )
+    data = src.to_ns.dataUsingEncoding(OSX::NSASCIIStringEncoding)
     bstr = data.bytes.bytestr( src.size )
     if RUBY_VERSION >= '2.0'
       assert_equal(Encoding::ASCII_8BIT, bstr.encoding)
@@ -82,7 +82,7 @@ class TC_NSData < Test::Unit::TestCase
 
   def test_getBytes_length
     src = 'hello world'
-    data = NSData.dataWithRubyString( src )
+    data = src.to_ns.dataUsingEncoding(OSX::NSASCIIStringEncoding)
     cptr = ObjcPtr.new( src.size )
     data.getBytes_length( cptr )
     bstr = cptr.bytestr( src.size )
@@ -96,7 +96,7 @@ class TC_NSData < Test::Unit::TestCase
   # - (BOOL)isEqualToData:(NSData *)other;
   def test_isEqualToData
     src = 'hello world'
-    srcdata = NSData.dataWithRubyString( src )
+    srcdata = src.to_ns.dataUsingEncoding(OSX::NSASCIIStringEncoding)
     data = NSData.dataWithData( srcdata )
     assert( data.isEqualToData( srcdata ))
   end
@@ -104,7 +104,7 @@ class TC_NSData < Test::Unit::TestCase
   # - (NSData *)subdataWithRange:(NSRange)range;
   def test_subdataWithRange
     src = 'hello world'
-    data = NSData.dataWithRubyString( src )
+    data = src.to_ns.dataUsingEncoding(OSX::NSASCIIStringEncoding)
     subdata = data.subdataWithRange( 3..8 )
     assert_equal( 8 - 3 + 1, subdata.length )
   end
