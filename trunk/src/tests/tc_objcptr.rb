@@ -160,7 +160,7 @@ class TC_ObjcPtr < Test::Unit::TestCase
 
   def test_cptr_as_param_of_method_call
     src = 'hello world'
-    data = NSData.dataWithRubyString( src )
+    data = src.to_ns.dataUsingEncoding(OSX::NSASCIIStringEncoding)
     cptr = ObjcPtr.new( src.size )
     data.getBytes_length( cptr )
     assert_equal( src.size, cptr.allocated_size )
@@ -168,7 +168,7 @@ class TC_ObjcPtr < Test::Unit::TestCase
 
   def test_bytestr_at
     src = 'hello world'
-    cptr = NSData.dataWithRubyString(src).bytes
+    cptr = src.to_ns.dataUsingEncoding(OSX::NSASCIIStringEncoding).bytes
     bstr = cptr.bytestr_at(3,4)
     if RUBY_VERSION >= '2.0'
       assert_equal( Encoding::ASCII_8BIT, bstr.encoding )
@@ -179,7 +179,7 @@ class TC_ObjcPtr < Test::Unit::TestCase
 
   def test_bytestr
     src = 'hello world'
-    cptr = NSData.dataWithRubyString(src).bytes
+    cptr = src.to_ns.dataUsingEncoding(OSX::NSASCIIStringEncoding).bytes
     bstr = cptr.bytestr(src.size)
     if RUBY_VERSION >= '2.0'
       assert_equal( Encoding::ASCII_8BIT, bstr.encoding )
