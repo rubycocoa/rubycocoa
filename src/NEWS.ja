@@ -19,6 +19,8 @@ $Id$
 
   * CocoaClass#objc_export()は廃止されました。objc_method()を使ってください。
   * OSX::NSObject#ocm_responds?()は廃止される予定です。ocm_respond_to?()を使ってください。
+  * OSX::NSData#dataWithRubyString()およびOSX::NSMutableData#dataWithRubyString()は
+    廃止される予定です。[NSString dataUsingEncoding:]を使ってください。
 
 === 修正
 
