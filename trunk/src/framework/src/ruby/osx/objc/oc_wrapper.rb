@@ -8,6 +8,10 @@
 module OSX
 
   class << self
+    # If true (default), RubyCocoa allows to ommit last "_" of a method name.
+    # @example
+    #     obj.aaa_Bbb_Ccc_(a0, a1, a2)  # strict style.
+    #     obj.aaa_Bbb_Ccc(a0, a1, a2)   # allowed when OSX.relaxed_syntax is true.
     attr_accessor :relaxed_syntax
 
     # Backward compatibility check; get C constants
@@ -44,6 +48,7 @@ module OSX
       return self.ocm_send(mname.to_sel, nil, false, *margs)
     end
 
+    # Overrides BasicObject#method_missing.
     def method_missing(mname, *args)
       m_name, m_args, as_predicate = analyze_missing(mname, args)
       begin
@@ -57,6 +62,7 @@ module OSX
       end
     end
 
+    # Returns whether the Objective-C object of reciever is nil or not.
     def ocnil?
       self.__ocid__ == 0
     end

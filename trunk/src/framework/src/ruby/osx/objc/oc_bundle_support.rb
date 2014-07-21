@@ -34,20 +34,24 @@ module OSX
     module_function :init_for_bundle
 
     private
+    # Logger class for OSX::BundleSupport.
     class Logger
       def initialize(bdl)
         @bundle_name  = bdl.to_s.sub(/^.*<(.*)>.*$/,'\1').split('/').last
         @process_name = OSX::NSProcessInfo.processInfo.processName
       end
 
+      # Prints message with OSX::NSLog().
       def info(fmt, *args)
         OSX.NSLog("#{@bundle_name} (#{@process_name}): #{fmt % args}")
       end
       
+      # Prints error message.
       def error(err)
         info("%s: %s", err.class, err)
       end
 
+      # Prints backtrace.
       def backtrace(err)
         err.backtrace.each { |s| info("    %s", s) }
       end

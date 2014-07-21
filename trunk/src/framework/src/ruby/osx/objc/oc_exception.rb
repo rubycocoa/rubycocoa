@@ -22,6 +22,8 @@ module OSX
 
     attr_reader :name, :reason, :userInfo, :nsexception
 
+    # @param ocexcp [OSX::NSException]
+    # @param msg [String]
     def initialize(ocexcp, msg = nil)
       @nsexception = ocexcp
       @name = @nsexception.objc_send(:name).to_s

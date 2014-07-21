@@ -10,7 +10,8 @@ module OSX
   # Utility functions for NSApplication.
   class NSApplication
 
-    # @private
+    # A delegate class in NSApplication.run_with_temp_app.
+    # @api private
     class RBCCTemporaryDelegate < OSX::NSObject
       attr_writer :proc, :terminate
 
