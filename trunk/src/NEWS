@@ -19,6 +19,8 @@ $Id$
 
   * CocoaClass#objc_export() is deprecated. use objc_method().
   * OSX::NSObject#ocm_responds?() will be deprecated. use ocm_respond_to?().
+  * OSX::NSData#dataWithRubyString(), OSX::NSMutableData#dataWithRubyString()
+    will be deprecated. use [NSSting dataUsingEncoding:]
 
 === Fixes
 

@@ -1,5 +1,13 @@
 2014-07-21 kimura wataru <kimuraw@i.nifty.jp>
 
+	* framework/src/ruby/osx/objc/cocoa_macros.rb,
+	  NEWS, NEWS.ja:
+	mark these method will be deprecated:
+	- OSX::NSData#dataWithRubyString()
+	- OSX::NSMutableData#dataWithRubyString()
+
+2014-07-21 kimura wataru <kimuraw@i.nifty.jp>
+
 	* framework/src/ruby/osx/objc/:
 	update documents.
 
