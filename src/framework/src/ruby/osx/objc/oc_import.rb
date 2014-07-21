@@ -9,16 +9,19 @@ require 'osx/objc/oc_wrapper'
 
 module OSX
 
+  # framework search paths.
   FRAMEWORK_PATHS = [
     '/System/Library/Frameworks',
     '/Library/Frameworks'
   ]
 
+  # bridgesupport file search paths.
   SIGN_PATHS = [
     '/System/Library/BridgeSupport', 
     '/Library/BridgeSupport'
   ]
 
+  # additional bridgesupport file search paths by environment 'BRIDGE_SUPPORT_PATH'.
   PRE_SIGN_PATHS = 
     if path = ENV['BRIDGE_SUPPORT_PATH']
       path.split(':')
@@ -43,6 +46,10 @@ module OSX
 
   # @!group Frameworks and BridgeSupport files
 
+  # Returns bundle and path for given framework name.
+  # @api private
+  # @param framework [String] a name of framework, such as "WebKit".
+  # @return [Array] a pair of OSX::NSBundle and String.
   def _bundle_path_for_framework(framework)
     if framework[0] == ?/
       [OSX::NSBundle.bundleWithPath(framework), framework]
@@ -101,7 +108,7 @@ module OSX
   module_function :require_framework
 
   # Returns whether a framework is loaded of not.
-  # @note
+  # @param framework [String] a name of framework, such as "WebKit".
   def framework_loaded?(framework)
     bundle, path = _bundle_path_for_framework(framework)
     unless bundle.nil?
@@ -121,6 +128,7 @@ module OSX
   end
   module_function :framework_loaded?
 
+  # @api private
   def __load_bridge_support_file__(dir, framework_name)
     @bridge_support_signatures_loaded_marks ||= {}
     return true if @bridge_support_signatures_loaded_marks[framework_name]
@@ -142,6 +150,10 @@ module OSX
   end
   module_function :__load_bridge_support_file__
 
+  # Loads BridgeSupport file of given framework.
+  # @param framework [String] a name or fullpath of framework, such as "WebKit"
+  #                           or "/System/Library/Frameworks/WebKit.framework".
+  # @return [Boolean]
   def load_bridge_support_signatures(framework)
     # First, look into the pre paths.  
     fname = framework[0] == ?/ ? File.basename(framework, '.framework') : framework
@@ -202,6 +214,8 @@ module OSX
     end
   end
 
+  # Overrides const_missing.
+  # @api private
   def self.included(m)
     if m.respond_to? :const_missing
       m.module_eval do
@@ -227,7 +241,7 @@ module OSX
   
   # create Ruby's class for Cocoa class,
   # then define Constant under module 'OSX'.
-  # @param sym [Symbol, String] name of Objective-C class
+  # @param sym [Symbol, String] name of Objective-C class.
   # @return [Class]
   def ns_import(sym)
     if not OSX.const_defined?(sym)
@@ -262,6 +276,8 @@ module OSX
   module_function :ns_import_all
 
   # create Ruby's class for Cocoa class
+  # @param occls [Objective-C Class]
+  # @return [Class]
   def class_new_for_occlass(occls)
     superclass = _objc_lookup_superclass(occls)
     klass = Class.new(superclass)
@@ -281,6 +297,8 @@ module OSX
   end
   module_function :class_new_for_occlass 
  
+  # Returns super class of given Objecitve-C class.
+  # @api private
   def _objc_lookup_superclass(occls)
     occls_superclass = occls.oc_superclass
     if occls_superclass.nil? or occls_superclass.__ocid__ == occls.__ocid__ 
@@ -305,9 +323,11 @@ module OSX
 
   # @!endgroup
 
-  # TODO
+  # Defines Objecitve-C objects' behaviors.
   module NSBehaviorAttachment
 
+    # An error message.
+    # @api private
     ERRMSG_FOR_RESTRICT_NEW = "use 'alloc.initXXX' to instantiate Cocoa Object"
 
     # restrict creating an instance by Class#new, unless the Objective-C class 
@@ -322,6 +342,8 @@ module OSX
 
     # initializer for definition of a derived class of a class on
     # Objective-C World.
+    # @api private
+    # @return [Boolean]
     def ns_inherited()
       return if ns_inherited?
       kls_name = self.name.to_s.split('::')[-1]
@@ -335,12 +357,14 @@ module OSX
     end
 
     # Returns whether receiver class is inherited from Objecitve-C class or not.
+    # @api private
     def ns_inherited?
       return defined?(@inherited) && @inherited
     end
 
     # declare to override instance methods of super class which is
     # defined by Objective-C.
+    # @deprecated DO NOT use. RubyCocoa automatically overrides Objective-C methods.
     def ns_overrides(*args)
       warn "#{caller[0]}: ns_overrides is no longer necessary, should not be called anymore and will be removed in a next release. Please update your code to not use it."
     end
@@ -368,6 +392,8 @@ module OSX
       define_method(name, blk) if block_given?
     end
 
+    # Overrides automatically Objective-C methods.
+    # @api private
     def _ns_behavior_method_added(sym, class_method)
       return if OSX._ignore_ns_override
       sel = sym.to_s.gsub(/([^_])_/, '\1:')
@@ -385,10 +411,16 @@ module OSX
       end
     end
 
+    # Returns whether override Objective-C methods with given name is enable or not.
+    # @param sel [Symbol, String]
+    # @param class_method [Boolean]
+    # @api private
     def _ns_enable_override?(sel, class_method)
       ns_inherited? and (class_method ? self.objc_method_type(sel) : self.objc_instance_method_type(sel))
     end
 
+    # Returns whether given typefmt do not contains any parameters.
+    # @api private
     def _no_param_method?(typefmt)
       if typefmt[0] == ?{
         count = 1
@@ -406,6 +438,8 @@ module OSX
       end
     end
 
+    # Adds an method to Objective-C class.
+    # @api private
     def _objc_export(name, types, class_method)
       typefmt = _types_to_typefmt(types)
       name = name.to_s
@@ -414,16 +448,17 @@ module OSX
       OSX.objc_class_method_add(self, name, class_method, typefmt)
     end
 
+    # Defines Objective-C instance method.
     def def_objc_method(name, types, &blk)
       if block_given? then
-        objc_method(name, types, &blk) 
+        objc_method(name, types, &blk)
       else
         raise ArgumentError, "block for method implementation expected"
       end
     end
 
     # Defines Objective-C instance method.
-    # @param name 
+    # @param name
     def objc_method(name, types=['id'], &blk)
       define_method(name, blk) if block_given?
       _objc_export(name, types, false)
@@ -434,12 +469,14 @@ module OSX
       _objc_export(name, types, true)
     end
 
+    # Aliases Objective-C method.
     def objc_alias_method(new, old)
       new_sel = new.to_s.gsub(/([^_])_/, '\1:')
       old_sel = old.to_s.gsub(/([^_])_/, '\1:')
       _objc_alias_method(new, old)
     end
 
+    # Aliases Objective-C classs method.
     def objc_alias_class_method(new, old)
       new_sel = new.to_s.gsub(/([^_])_/, '\1:')
       old_sel = old.to_s.gsub(/([^_])_/, '\1:')
@@ -469,6 +506,7 @@ module OSX
       :ulonglong => 'Q',
       :cstr     => '*',
     }
+    # @api private
     def _types_to_typefmt(types)
       return types.strip if types.is_a?(String)
       raise ArgumentError, "Array or String (as type format) expected (got #{types.klass} instead)" unless types.is_a?(Array)
@@ -721,10 +759,12 @@ module OSX
     include NSBehaviorAttachment
     include NSKVCBehaviorAttachment
 
+    # Overrides BasicObject#singleton_method_added.
     def singleton_method_added(sym)
       _ns_behavior_method_added(sym, true)
     end
 
+    # Overrides Module#method_added.
     def method_added(sym)
       _ns_behavior_method_added(sym, false)
       _kvc_behavior_method_added(sym)
