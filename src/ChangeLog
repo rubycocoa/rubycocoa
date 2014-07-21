@@ -1,5 +1,10 @@
 2014-07-21 kimura wataru <kimuraw@i.nifty.jp>
 
+	* tests/tc_nsdata.rb:
+	add an assertion for NSData#length contains not ASCII data.
+
+2014-07-21 kimura wataru <kimuraw@i.nifty.jp>
+
 	* tests/tc_nsdata.rb,
 	  tests/tc_objcptr.rb:
 	replace NSData#dataWithString() to NSString#dataUsingEncoding().
