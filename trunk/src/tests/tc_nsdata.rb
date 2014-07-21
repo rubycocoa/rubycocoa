@@ -66,7 +66,18 @@ class TC_NSData < Test::Unit::TestCase
   def test_length
     src = 'hello world'
     data = src.to_ns.dataUsingEncoding(OSX::NSASCIIStringEncoding)
-    assert_equal( src.size, data.length )
+    if RUBY_VERSION >= '2.0'
+      assert_equal( src.bytesize, data.length )
+    else
+      assert_equal( src.size, data.length )
+    end
+    src = 'ハロー、ワールド' # UTF8, not ASCII characters
+    data = src.to_ns.dataUsingEncoding(OSX::NSUTF8StringEncoding)
+    if RUBY_VERSION >= '2.0'
+      assert_equal( src.bytesize, data.length )
+    else
+      assert_equal( src.size, data.length )
+    end
   end
 
   def test_bytes
