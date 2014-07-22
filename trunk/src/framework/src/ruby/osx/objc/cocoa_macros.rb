@@ -33,7 +33,7 @@ module OSX
   class NSData
 
     # @return [OSX::NSData]
-    # @deprecated DO NOT USE.
+    # @deprecated DO NOT USE. use NSString#dataUsingEncoding().
     def NSData.dataWithRubyString (str)
       warn "#{caller[0]}:: NSData.dataWithRubyString will be deprecated."
       NSData.dataWithBytes_length( str )
@@ -45,7 +45,7 @@ module OSX
   class NSMutableData
 
     # @return [OSX::NSMutableData]
-    # @deprecated DO NOT USE.
+    # @deprecated DO NOT USE. use NSString#dataUsingEncoding().
     def NSMutableData.dataWithRubyString (str)
       warn "#{caller[0]}:: NSMutableData.dataWithRubyString will be deprecated."
       NSMutableData.dataWithBytes_length( str )

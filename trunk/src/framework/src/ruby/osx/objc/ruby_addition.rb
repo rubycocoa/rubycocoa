@@ -26,6 +26,8 @@ class String
     OSX::NSMutableString.stringWithRubyString(self)
   end
 
+  # Returns Objective-C selector.
+  # @return [String]
   def to_sel
     s = self.dup
     s.instance_variable_set(:@__is_sel__, true)
@@ -36,6 +38,7 @@ end
 
 # Property list API.
 module OSX
+  # Returns property list from input data.
   # @param data [String, OSX::NSString, OSX::NSData]
   # @return [OSX::NSPropertyList]
   def load_plist(data)
@@ -68,6 +71,10 @@ module OSX
   end
   module_function :load_plist
 
+  # Serialize to property list.
+  # @param object [String, OSX::NSString, OSX::NSData]
+  # @param format [NSPropertyListFormat]
+  # @return [String]
   def object_to_plist(object, format=nil)
     format ||= OSX::NSPropertyListXMLFormat_v1_0
     data, error = OSX::NSPropertyListSerialization.objc_send \

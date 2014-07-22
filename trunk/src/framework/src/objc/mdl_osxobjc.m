@@ -176,6 +176,13 @@ osx_mf_objc_classnames(VALUE mdl)
   return ary;
 }
 
+/*
+ * Start switching ruby thread at short interval (default: 5/1000 sec).
+ * RubyCocoa start switching at application launched.
+ * @param interval [Float] switching interval seconds. (optional)
+ * @param wait [Float] wait seconds when running thread is busy. (optional)
+ * @return [nil]
+ */
 static VALUE
 osx_mf_ruby_thread_switcher_start(int argc, VALUE* argv, VALUE mdl)
 {
@@ -203,6 +210,10 @@ osx_mf_ruby_thread_switcher_start(int argc, VALUE* argv, VALUE mdl)
   return Qnil;
 }
 
+/*
+ * Stop switching ruby thread at short interval.
+ * @return [nil]
+ */
 static VALUE
 osx_mf_ruby_thread_switcher_stop(VALUE mdl)
 {
