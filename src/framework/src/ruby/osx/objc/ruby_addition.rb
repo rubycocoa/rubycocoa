@@ -124,25 +124,3 @@ class String
     return ary
   end
 end
-
-# Thread additions.
-class Thread
-  class << self
-    alias :pre_rubycocoa_new :new
-
-    # Override Thread.new to prevent threads being created if there isn't
-    # runtime support for it
-    def new(*args,&block)
-      unless defined? @_rubycocoa_threads_allowed then
-        # If user has explicilty disabled thread support, also disable the
-        # check (for debugging/testing only)
-        @_rubycocoa_threads_allowed = ENV['RUBYCOCOA_THREAD_HOOK_DISABLE'] ||
-          OSX::RBRuntime.isRubyThreadingSupported?
-      end
-      if !@_rubycocoa_threads_allowed then
-        warn "#{caller[0]}: Ruby threads cannot be used in RubyCocoa without patches to the Ruby interpreter"
-      end
-      pre_rubycocoa_new(*args,&block)
-    end
-  end
-end
