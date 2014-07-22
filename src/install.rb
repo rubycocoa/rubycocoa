@@ -657,6 +657,9 @@ class Installer
       elsif /DevToolsCore-(\d+)/.match(`#{buildcommand} -version`)
         xcode_version = $1.to_i
 	with_default = true if xcode_version >= 620
+      elsif /Xcode ([\d\.]+)/.match(`#{buildcommand} -version`)
+        xcode_version = $1.to_f
+        with_default = true if xcode_version >= 4
       else
         # unknown
       end

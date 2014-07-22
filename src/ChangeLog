@@ -1,5 +1,10 @@
 2014-07-22 kimura wataru <kimuraw@i.nifty.jp>
 
+	* install.rb:
+	improve detecting Xcode version on OS X 10.6 Snow Leopard.
+
+2014-07-22 kimura wataru <kimuraw@i.nifty.jp>
+
 	* framework/src/ruby/osx/objc/ruby_addition.rb:
 	remove Thread additions never used.
 
