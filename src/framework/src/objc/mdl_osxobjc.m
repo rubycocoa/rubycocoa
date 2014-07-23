@@ -160,16 +160,21 @@ osx_mf_objc_classnames(VALUE mdl)
   ary = rb_ary_new2(num_klasses);
   if (num_klasses > 0) {
     Class *klasses;
+    Protocol *proto = objc_getProtocol("NSObject");
 
     klasses = malloc(sizeof(Class) * num_klasses);
     num_klasses = objc_getClassList(klasses, num_klasses);
     for (i = 0; i < num_klasses; i++) {
       Class klass = klasses[i];
-      // reject non-NS Objective-C root classes, such as Object.
-      if (class_respondsToSelector(klass, @selector(isKindOfClass:)) &&
-	   ([klass isKindOfClass:[NSObject class]] ||
-	    [klass isKindOfClass:[NSProxy class]] )) {
-	rb_ary_push(ary, rb_str_new2(strdup(class_getName(klass))));
+      Ckass klasse_sup = klass;
+      // test confirms to protcol "NSObject" to reject non-NS Objective-C
+      // root classes, such as Object.
+      while (klass_sup) {
+        if (class_conformsToProtocol(klass_sup, proto)) {
+          rb_ary_push(ary, rb_str_new2(strdup(class_getName(klass))));
+          break;
+        }
+        klass_sup = class_getSuperclass(klass_sup);
       }
     }
     free(klasses);
