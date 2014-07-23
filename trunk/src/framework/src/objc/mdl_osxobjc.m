@@ -154,6 +154,7 @@ osx_mf_objc_classnames(VALUE mdl)
 {
   VALUE ary;
   int num_klasses;
+  int i;
 
   num_klasses = objc_getClassList(NULL, 0);
   ary = rb_ary_new2(num_klasses);
@@ -162,7 +163,7 @@ osx_mf_objc_classnames(VALUE mdl)
 
     klasses = malloc(sizeof(Class) * num_klasses);
     num_klasses = objc_getClassList(klasses, num_klasses);
-    for (int i = 0; i < num_klasses; i++) {
+    for (i = 0; i < num_klasses; i++) {
       Class klass = klasses[i];
       // reject non-NS Objective-C root classes, such as Object.
       if (class_respondsToSelector(klass, @selector(isKindOfClass:)) &&
