@@ -1,6 +1,12 @@
 2014-07-23 kimura wataru <kimuraw@i.nifty.jp>
 
 	* framework/src/objc/mdl_osxobjc.m:
+	fix NSInvalidArgumentException in osx_mf_objc_classnames()
+	on OS X 10.8 or earlier.
+
+2014-07-23 kimura wataru <kimuraw@i.nifty.jp>
+
+	* framework/src/objc/mdl_osxobjc.m:
 	fix build error with Xcode 4 or earlier.
 
 2014-07-22 kimura wataru <kimuraw@i.nifty.jp>
