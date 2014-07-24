@@ -1,3 +1,10 @@
+2014-07-25 kimura wataru <kimuraw@i.nifty.jp>
+
+	* framework/src/objc/BridgeSupport.m,
+	  framework/src/objc/cls_objcptr.m,
+	  framework/src/objc/ocdata_conv.m:
+	suppress format warnings.
+
 2014-07-24 kimura wataru <kimuraw@i.nifty.jp>
 
 	* framework/src/objc/mdl_osxobjc.m:

@@ -281,7 +281,7 @@ undecorate_encoding(const char *src, char *dest, size_t dest_len, struct bsStruc
     p_src = pos + 1;
     pos = strchr(p_src, '"');
     if (pos == NULL) {
-      BS_LOG("Can't find the end of field delimiter starting at %ld", p_src - src);
+      BS_LOG("Can't find the end of field delimiter starting at %ld", (long)(p_src - src));
       goto bails; 
     }
     if (field != NULL) {
@@ -331,7 +331,7 @@ undecorate_encoding(const char *src, char *dest, size_t dest_len, struct bsStruc
       }
 
       if (ok == NO) {
-        BS_LOG("Can't find the field encoding starting at %ld", p_src - src);
+        BS_LOG("Can't find the field encoding starting at %ld", (long)(p_src - src));
         goto bails;
       }
 
@@ -509,7 +509,7 @@ rb_bs_struct_get_bs_struct (VALUE rcv)
 
   bs_struct = find_bs_boxed_for_klass(rcv);
   if (bs_struct == NULL) 
-    rb_bug("Can't get bridge support structure for the given klass %p", rcv);
+    rb_bug("Can't get bridge support structure for the given klass %p", (void *)rcv);
   if (bs_struct->type != bsBoxedStructType)
     rb_bug("Invalid bridge support boxed structure type %d", bs_struct->type);
 
@@ -728,7 +728,7 @@ rb_bs_struct_get_field_data(VALUE rcv, char **field_encoding_out)
 
   Data_Get_Struct(rcv, void, struct_data);
   if (struct_data == NULL)
-    rb_raise(rb_eRuntimeError, "Given structure %p has null data", rcv);
+    rb_raise(rb_eRuntimeError, "Given structure %p has null data", (void *)rcv);
 
   for (i = 0, data = NULL, offset = 0; 
        i < bs_struct->opt.s.field_count; 
@@ -809,7 +809,7 @@ rb_bs_struct_set (VALUE rcv, VALUE val)
 
   data = rb_bs_struct_get_field_data(rcv, &octype);
   if (!rbobj_to_ocdata(val, octype, data, NO))
-    rb_raise(rb_eRuntimeError, "Can't convert Ruby object %p of type %s to Objective-C", val, octype);
+    rb_raise(rb_eRuntimeError, "Can't convert Ruby object %p of type %s to Objective-C", (void *)val, octype);
 
   rb_ivar_set(rcv, rb_bs_struct_field_ivar_id(), val);
 

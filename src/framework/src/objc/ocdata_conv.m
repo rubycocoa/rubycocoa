@@ -151,7 +151,7 @@ convert_cary(VALUE *result, void *ocdata, char *octype_str, BOOL to_ruby)
     Check_Type(ary, T_ARRAY);
     if (RARRAY_LEN(ary) > count)
       rb_raise(rb_eArgError, 
-        "Given Array expected with maximum %d elements, but got %d",
+        "Given Array expected with maximum %ld elements, but got %ld",
         count, RARRAY_LEN(ary));
 
     for (i = 0; i < RARRAY_LEN(ary); i++) {

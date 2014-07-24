@@ -107,7 +107,7 @@ _lookup_encoding_type(VALUE key)
 void cptrlog(const char* s, VALUE obj)
 {
   NSStringEncoding* p = (NSStringEncoding*) CPTR_OF(obj);
-  NSLog(@"%s: < p,*p > %lu(%lx) %ld(%lx)", s, (NSUInteger)p, (NSUInteger)p, *p, *p);
+  NSLog(@"%s: < p,*p > %lu(%lx) %lu(%lx)", s, (unsigned long)p, (unsigned long)p, (unsigned long)*p, (unsigned long)*p);
 }
 /** **/
 
@@ -507,7 +507,7 @@ objcptr_to_a (VALUE rcv, VALUE index, VALUE count)
     val = Qnil;
     if (! ocdata_to_rbobj(Qnil, type, ptr + offset, &val, NO))
       rb_raise(rb_eRuntimeError,
-               "Can't convert element of type '%s' at index %d offset %d", 
+               "Can't convert element of type '%s' at index %ld offset %ld",
                type, i, offset);
     rb_ary_store(ary, i, val);
     offset += type_size;
