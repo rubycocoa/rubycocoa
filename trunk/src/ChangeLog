@@ -1,3 +1,8 @@
+2014-07-24 kimura wataru <kimuraw@i.nifty.jp>
+
+	* framework/src/objc/mdl_osxobjc.m:
+	refactor osx_mf_objc_classnames() and add class_is_cocoa_class_p().
+
 2014-07-23 kimura wataru <kimuraw@i.nifty.jp>
 
 	* framework/src/objc/mdl_osxobjc.m:
