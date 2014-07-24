@@ -142,6 +142,21 @@ osx_mf_objc_class_method_add(VALUE mdl, VALUE kls, VALUE method_name, VALUE clas
   return Qnil;
 }
 
+static BOOL
+class_is_cocoa_class_p(Class klass) {
+  Protocol *proto = objc_getProtocol("NSObject");
+  Class klass_sup = klass;
+  // test confirms to protcol "NSObject" to reject non-NS Objective-C
+  // root classes, such as Object.
+  while (klass_sup) {
+    if (class_conformsToProtocol(klass_sup, proto)) {
+      return YES;
+    }
+    klass_sup = class_getSuperclass(klass_sup);
+  }
+  return NO;
+}
+
 /*
  * Returns an array of class names from Objective-C runtime.
  * @return [Array]
