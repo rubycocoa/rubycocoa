@@ -142,12 +142,16 @@ osx_mf_objc_class_method_add(VALUE mdl, VALUE kls, VALUE method_name, VALUE clas
   return Qnil;
 }
 
+/*
+ * Detects Cocoa Objective-C class or not with protcol "NSObject".
+ * - NSObject => YES
+ * - NSProxy  => YES
+ * - Object   => NO
+ */
 static BOOL
 class_is_cocoa_class_p(Class klass) {
   Protocol *proto = objc_getProtocol("NSObject");
   Class klass_sup = klass;
-  // test confirms to protcol "NSObject" to reject non-NS Objective-C
-  // root classes, such as Object.
   while (klass_sup) {
     if (class_conformsToProtocol(klass_sup, proto)) {
       return YES;
@@ -175,21 +179,13 @@ osx_mf_objc_classnames(VALUE mdl)
   ary = rb_ary_new2(num_klasses);
   if (num_klasses > 0) {
     Class *klasses;
-    Protocol *proto = objc_getProtocol("NSObject");
 
     klasses = malloc(sizeof(Class) * num_klasses);
     num_klasses = objc_getClassList(klasses, num_klasses);
     for (i = 0; i < num_klasses; i++) {
       Class klass = klasses[i];
-      Class klass_sup = klass;
-      // test confirms to protcol "NSObject" to reject non-NS Objective-C
-      // root classes, such as Object.
-      while (klass_sup) {
-        if (class_conformsToProtocol(klass_sup, proto)) {
-          rb_ary_push(ary, rb_str_new2(strdup(class_getName(klass))));
-          break;
-        }
-        klass_sup = class_getSuperclass(klass_sup);
+      if (class_is_cocoa_class_p(klass)) {
+        rb_ary_push(ary, rb_str_new2(strdup(class_getName(klass))));
       }
     }
     free(klasses);
