@@ -376,13 +376,13 @@ rubycocoa_app_init(const char* program,
                    bundle_support_program_loader_t loader,
                    int argc, const char* argv[], id param)
 {
-  int state;
   int ruby_argc;
   const char** ruby_argv;
 #ifdef HAVE_RUBY_RUBY_H
   void* node = NULL;
   RUBY_INIT_STACK;
 #else
+  int state;
   extern void Init_stack(VALUE*);
   Init_stack((void*)&state);
 #endif

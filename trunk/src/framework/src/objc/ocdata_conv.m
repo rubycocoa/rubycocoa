@@ -1593,7 +1593,6 @@ static CFStringEncoding strenc_rb2oc(rb_encoding *rbenc)
 static rb_encoding *strenc_oc2rb(CFStringEncoding cfenc)
 {
   int rbenc_idx;
-  CFStringRef iana_charset_name;
 
   if (st_lookup(oc2rbEncConv, (st_data_t)cfenc, &rbenc_idx)) {
     return rb_enc_from_index(rbenc_idx);
