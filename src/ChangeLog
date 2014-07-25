@@ -1,5 +1,13 @@
 2014-07-25 kimura wataru <kimuraw@i.nifty.jp>
 
+	* framework/src/objc/RBRuntime.m:
+	suppress warning unused variable in rubycocoa_app_init().
+
+	* framework/src/objc/ocdata_conv.m:
+	delete unused variable in strenc_rb2oc().
+
+2014-07-25 kimura wataru <kimuraw@i.nifty.jp>
+
 	* framework/src/objc/mdl_osxobjc.m:
 	use class_is_cocoa_class_p() in osx_mf_objc_classnames().
 
