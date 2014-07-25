@@ -12,7 +12,8 @@ interesting resources such as tutorials.
 Prerequisites
 -------------
 
-Mac OS X 10.6 or higher.
+- Mac OS X 10.6 or higher
+- Ruby 1.8.7, 2.0 or higher
 
 If you overwrote Apple's Ruby with a custom version, please make sure that it
 has been built with --enabled-shared.
