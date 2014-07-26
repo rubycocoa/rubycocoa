@@ -11,7 +11,6 @@ $Id$
     * RubyCocoaのインストーラはruby-1.8用と2.0用で別々のファイルとして
       リリースされます。RubyCocoaアプリケーションをOS X 10.9添付のruby-2.0で
       動作させてみたいときは、RubyCocoa.frameworkを入れ替えてください。
-    * 注: ruby-2.0のStringはエンコーディングを持っています。
   * 存在しないメソッドが呼び出されたときの例外をNoMethodErrorに変更しました。
     (以前はOSX::OCMessageSendExceptionでした。)
 
@@ -26,6 +25,22 @@ $Id$
 
   * Yosemite DP上でのビルドエラーを修正しました。
 
+=== RubyCocoaをRuby-2.0上で使う際の注意
+
+  * ruby-2.xの文字列はエンコーディングを保持するようになります。詳しくは
+	  https://bugs.ruby-lang.org/projects/ruby-trunk/wiki/MigrationIssuesFrom18 や
+		http://magazine.rubyist.net/?0025-Ruby19_m17n をごらんください。
+	* (frameworkでない)bundleやdylibのObjective-CのクラスをRubyのコードで
+	  拡張したいときは、OSX.ns_importを書くようにしてください。
+
+		    require 'path/to/your_bundle.bundle'
+				OSX.ns_import :YourClass
+				module OSX
+					class YourClass
+						: # extend class in Ruby code
+					end
+				end
+		
 == 1.0.7から1.1.0の変更点: 2013-11-17
 
 === 改良
