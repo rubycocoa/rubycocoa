@@ -163,20 +163,25 @@ class_is_cocoa_class_p(Class klass) {
 
 /*
  * Returns an array of class names from Objective-C runtime.
- * @return [Array]
+ * If a block is given, yields all Objective-C class names and returns nil.
+ * @return [Array, nil]
  * @example
  *     OSX.objc_classnames # => ["NSObject","NSArray", ..]
+ *
+ *     OSX.objc_classnames do |klassname|
+ *       :
+ *     end
  * @since 1.2.0
  */
 static VALUE
-osx_mf_objc_classnames(VALUE mdl)
+osx_mf_objc_classnames(int argc, VALUE* argv, VALUE mdl)
 {
-  VALUE ary;
+  VALUE result;
   int num_klasses;
   int i;
 
   num_klasses = objc_getClassList(NULL, 0);
-  ary = rb_ary_new2(num_klasses);
+  result = rb_block_given_p() ? Qnil : rb_ary_new2(num_klasses);
   if (num_klasses > 0) {
     Class *klasses;
 
@@ -185,12 +190,17 @@ osx_mf_objc_classnames(VALUE mdl)
     for (i = 0; i < num_klasses; i++) {
       Class klass = klasses[i];
       if (class_is_cocoa_class_p(klass)) {
-        rb_ary_push(ary, rb_str_new2(strdup(class_getName(klass))));
+        VALUE klass_name = rb_str_new2(strdup(class_getName(klass)));
+        if (rb_block_given_p()) {
+          rb_yield(klass_name);
+        } else {
+          rb_ary_push(result, klass_name);
+        }
       }
     }
     free(klasses);
   }
-  return ary;
+  return result;
 }
 
 /*
@@ -485,7 +495,7 @@ void initialize_mdl_osxobjc()
 			    ns_autorelease_pool, 0);
 
   rb_define_module_function(mOSX, "objc_classnames",
-			    osx_mf_objc_classnames, 0);
+			    osx_mf_objc_classnames, -1);
 
   // The RubyCocoa version string
   rb_define_const(mOSX, "RUBYCOCOA_VERSION", 

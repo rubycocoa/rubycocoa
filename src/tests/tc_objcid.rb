@@ -54,5 +54,9 @@ class TC_ObjCID < Test::Unit::TestCase
     assert_include(names, 'NSURL')      # subclass
     assert_not_include(names, 'Object') # not NS-class
     assert_include(names, 'RBObject')   # declared in RubyCocoa.framework
+
+    assert_nothing_raised do
+      OSX.objc_classnames {|klassname| break}
+    end
   end
 end

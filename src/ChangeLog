@@ -1,5 +1,12 @@
 2014-07-26 kimura wataru <kimuraw@i.nifty.jp>
 
+	* framework/src/objc/mdl_osxobjc.m,
+	  framework/src/ruby/osx/objc/oc_import.rb,
+	  tests/tc_objcid.rb:
+	allow to invoke OSX.objc_classnames with a block.
+
+2014-07-26 kimura wataru <kimuraw@i.nifty.jp>
+
 	* install.rb:
 	stop warning building with ruby-2.0 or later.
 

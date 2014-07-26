@@ -262,7 +262,7 @@ module OSX
   # @return [nil]
   # @since 1.2.0
   def ns_import_all
-    OSX.objc_classnames.each do |klassname|
+    OSX.objc_classnames do |klassname|
       # ignore private classes, such as starting with "_".
       if /\A[A-Z]/ =~ klassname
         if OSX.const_defined?(klassname)
