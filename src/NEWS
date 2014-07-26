@@ -11,7 +11,6 @@ $Id$
     * we release RubyCocoa installers as separated packages for ruby-1.8/2.0.
       replace RubyCocoa.framework if you try to run your RubyCocoa application
       with OS X 10.9 buitin ruby-2.0.
-    * NOTE: String of ruby-2.x has its encodings.
   * when called method is not found on an Objective-C object, RubyCocoa
     raises NoMethodError. (before: OSX::OCMessageSendException)
 
@@ -20,11 +19,28 @@ $Id$
   * CocoaClass#objc_export() is deprecated. use objc_method().
   * OSX::NSObject#ocm_responds?() will be deprecated. use ocm_respond_to?().
   * OSX::NSData#dataWithRubyString(), OSX::NSMutableData#dataWithRubyString()
-    will be deprecated. use [NSSting dataUsingEncoding:]
+    will be deprecated. use [NSString dataUsingEncoding:]
 
 === Fixes
 
   * Fixed build errors on Yosemite DP.
+
+=== Note for RubyCocoa with Ruby-2.0
+
+  * String of ruby-2.x has its encodings.
+	  see https://bugs.ruby-lang.org/projects/ruby-trunk/wiki/MigrationIssuesFrom18
+		 or http://magazine.rubyist.net/?0025-Ruby19_m17n (ja)
+	* if you want to extend Objective-C class from bundle or dylib (not
+	  from framework) in Ruby code, you need to invoke OSX.ns_import.
+
+		    require 'path/to/your_bundle.bundle'
+				OSX.ns_import :YourClass
+				module OSX
+					class YourClass
+						: # extend class in Ruby code
+					end
+				end
+		
 
 == Changes 1.1.0 from 1.0.7: 2013-11-17
 

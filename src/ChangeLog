@@ -1,5 +1,10 @@
 2014-07-26 kimura wataru <kimuraw@i.nifty.jp>
 
+	* NEWS, NEWS.ja:
+	update NEWS.
+
+2014-07-26 kimura wataru <kimuraw@i.nifty.jp>
+
 	* framework/src/objc/mdl_osxobjc.m:
 	fix failure OSX::Protocol.oc_superclass on OS X 10.7 or earlier.
 
