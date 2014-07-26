@@ -365,10 +365,23 @@ ocobj_s_new_with_class_name(id ocid, const char *cls_name)
   return objcid_new_with_ocid(rb_cls_ocobj(cls_name), ocid);
 }
 
+// Returns whether ocid can become an RubyCocoa Cocoa obect.
+static BOOL
+ocid_is_cocoa_object(id ocid) {
+  if (class_isMetaClass(object_getClass(ocid)) && !class_is_cocoa_class_p(ocid)) {
+    return NO; // such as "Object" class
+  }
+  return YES;
+}
+
 VALUE
 ocobj_s_new(id ocid)
 {
-  return ocobj_s_new_with_class_name(ocid, object_getClassName(ocid));
+  if (ocid_is_cocoa_object(ocid)) {
+    return ocobj_s_new_with_class_name(ocid, object_getClassName(ocid));
+  } else {
+    return Qnil;
+  }
 }
 
 id
@@ -397,6 +410,10 @@ VALUE
 ocid_get_rbobj (id ocid)
 {
   VALUE result = Qnil;
+
+  if (!ocid_is_cocoa_object(ocid)) {
+    return Qnil;
+  }
 
   @try {
     if (!IS_UNDOPROXY(ocid)
