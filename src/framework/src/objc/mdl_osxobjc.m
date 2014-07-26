@@ -143,7 +143,7 @@ osx_mf_objc_class_method_add(VALUE mdl, VALUE kls, VALUE method_name, VALUE clas
 }
 
 /*
- * Detects Cocoa Objective-C class or not with protcol "NSObject".
+ * Detects Cocoa Objective-C class or not with protocol "NSObject".
  * - NSObject => YES
  * - NSProxy  => YES
  * - Object   => NO
