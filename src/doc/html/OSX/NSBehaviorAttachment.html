@@ -90,7 +90,7 @@
 
 <h2>Overview</h2><div class="docstring">
   <div class="discussion">
-    <p>TODO</p>
+    <p>Defines Objecitve-C objects&#39; behaviors.</p>
 
 
   </div>
@@ -104,7 +104,21 @@
     <dl class="constants">
       
         <dt id="ERRMSG_FOR_RESTRICT_NEW-constant" class="">ERRMSG_FOR_RESTRICT_NEW =
-          
+          <div class="docstring">
+  <div class="discussion">
+    <p class="note private">
+  <strong>This constant is part of a private API.</strong>
+  You should avoid using this constant if possible, as it may be removed or be changed in the future.
+</p>
+<p>An error message.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div>
         </dt>
         <dd><pre class="code"><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>use &#39;alloc.initXXX&#39; to instantiate Cocoa Object</span><span class='tstring_end'>&quot;</span></span></pre></dd>
       
@@ -175,10 +189,11 @@
   
   
   
-  
+  <span class="private note title">private</span>
 
   
-    <span class="summary_desc"><div class='inline'></div></span>
+    <span class="summary_desc"><div class='inline'><p>Returns whether given typefmt do not contains any parameters.</p>
+</div></span>
   
 </li>
 
@@ -197,10 +212,11 @@
   
   
   
-  
+  <span class="private note title">private</span>
 
   
-    <span class="summary_desc"><div class='inline'></div></span>
+    <span class="summary_desc"><div class='inline'><p>Overrides automatically Objective-C methods.</p>
+</div></span>
   
 </li>
 
@@ -219,10 +235,11 @@
   
   
   
-  
+  <span class="private note title">private</span>
 
   
-    <span class="summary_desc"><div class='inline'></div></span>
+    <span class="summary_desc"><div class='inline'><p>Returns whether override Objective-C methods with given name is enable or not.</p>
+</div></span>
   
 </li>
 
@@ -241,10 +258,11 @@
   
   
   
-  
+  <span class="private note title">private</span>
 
   
-    <span class="summary_desc"><div class='inline'></div></span>
+    <span class="summary_desc"><div class='inline'><p>Adds an method to Objective-C class.</p>
+</div></span>
   
 </li>
 
@@ -263,7 +281,7 @@
   
   
   
-  
+  <span class="private note title">private</span>
 
   
     <span class="summary_desc"><div class='inline'></div></span>
@@ -288,7 +306,8 @@
   
 
   
-    <span class="summary_desc"><div class='inline'></div></span>
+    <span class="summary_desc"><div class='inline'><p>Defines Objective-C instance method.</p>
+</div></span>
   
 </li>
 
@@ -367,7 +386,7 @@
         <li class="public ">
   <span class="summary_signature">
     
-      <a href="#ns_inherited-instance_method" title="#ns_inherited (instance method)">- (Object) <strong>ns_inherited</strong> </a>
+      <a href="#ns_inherited-instance_method" title="#ns_inherited (instance method)">- (Boolean) <strong>ns_inherited</strong> </a>
     
 
     
@@ -378,7 +397,7 @@
   
   
   
-  
+  <span class="private note title">private</span>
 
   
     <span class="summary_desc"><div class='inline'><p>initializer for definition of a derived class of a class on Objective-C World.</p>
@@ -401,7 +420,7 @@
   
   
   
-  
+  <span class="private note title">private</span>
 
   
     <span class="summary_desc"><div class='inline'><p>Returns whether receiver class is inherited from Objecitve-C class or not.</p>
@@ -435,7 +454,7 @@
 </li>
 
       
-        <li class="public ">
+        <li class="public deprecated">
   <span class="summary_signature">
     
       <a href="#ns_overrides-instance_method" title="#ns_overrides (instance method)">- (Object) <strong>ns_overrides</strong>(*args) </a>
@@ -450,11 +469,11 @@
   
   
   
-  
+  <span class="deprecated note title">deprecated</span>
   
 
   
-    <span class="summary_desc"><div class='inline'><p>declare to override instance methods of super class which is defined by Objective-C.</p>
+    <span class="summary_desc"><strong>Deprecated.</strong> <div class='inline'><p>DO NOT use. RubyCocoa automatically overrides Objective-C methods.</p>
 </div></span>
   
 </li>
@@ -477,7 +496,8 @@
   
 
   
-    <span class="summary_desc"><div class='inline'></div></span>
+    <span class="summary_desc"><div class='inline'><p>Aliases Objective-C classs method.</p>
+</div></span>
   
 </li>
 
@@ -499,7 +519,8 @@
   
 
   
-    <span class="summary_desc"><div class='inline'></div></span>
+    <span class="summary_desc"><div class='inline'><p>Aliases Objective-C method.</p>
+</div></span>
   
 </li>
 
@@ -570,7 +591,12 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
+    <p class="note private">
+  <strong>This method is part of a private API.</strong>
+  You should avoid using this method if possible, as it may be removed or be changed in the future.
+</p>
+<p>Returns whether given typefmt do not contains any parameters.</p>
+
 
   </div>
 </div>
@@ -596,25 +622,25 @@
       <pre class="lines">
 
 
-392
-393
-394
-395
-396
-397
-398
-399
-400
-401
-402
-403
-404
-405
-406
-407</pre>
+424
+425
+426
+427
+428
+429
+430
+431
+432
+433
+434
+435
+436
+437
+438
+439</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'src/ruby/osx/objc/oc_import.rb', line 392</span>
+      <pre class="code"><span class="info file"># File 'src/ruby/osx/objc/oc_import.rb', line 424</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid__no_param_method?'>_no_param_method?</span><span class='lparen'>(</span><span class='id identifier rubyid_typefmt'>typefmt</span><span class='rparen'>)</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_typefmt'>typefmt</span><span class='lbracket'>[</span><span class='int'>0</span><span class='rbracket'>]</span> <span class='op'>==</span> <span class='CHAR'>?{</span>
@@ -646,31 +672,45 @@
   
 
   
-</h3><table class="source_code">
+</h3><div class="docstring">
+  <div class="discussion">
+    <p class="note private">
+  <strong>This method is part of a private API.</strong>
+  You should avoid using this method if possible, as it may be removed or be changed in the future.
+</p>
+<p>Overrides automatically Objective-C methods.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
   <tr>
     <td>
       <pre class="lines">
 
 
-371
-372
-373
-374
-375
-376
-377
-378
-379
-380
-381
-382
-383
-384
-385
-386</pre>
+397
+398
+399
+400
+401
+402
+403
+404
+405
+406
+407
+408
+409
+410
+411
+412</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'src/ruby/osx/objc/oc_import.rb', line 371</span>
+      <pre class="code"><span class="info file"># File 'src/ruby/osx/objc/oc_import.rb', line 397</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid__ns_behavior_method_added'>_ns_behavior_method_added</span><span class='lparen'>(</span><span class='id identifier rubyid_sym'>sym</span><span class='comma'>,</span> <span class='id identifier rubyid_class_method'>class_method</span><span class='rparen'>)</span>
   <span class='kw'>return</span> <span class='kw'>if</span> <span class='const'>OSX</span><span class='period'>.</span><span class='id identifier rubyid__ignore_ns_override'>_ignore_ns_override</span>
@@ -704,12 +744,43 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
+    <p class="note private">
+  <strong>This method is part of a private API.</strong>
+  You should avoid using this method if possible, as it may be removed or be changed in the future.
+</p>
+<p>Returns whether override Objective-C methods with given name is enable or not.</p>
+
 
   </div>
 </div>
 <div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
   
+    <li>
+      
+        <span class='name'>sel</span>
+      
+      
+        <span class='type'>(<tt>Symbol</tt>, <tt><span class='object_link'><a href="../String.html" title="String (class)">String</a></span></tt>)</span>
+      
+      
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>class_method</span>
+      
+      
+        <span class='type'>(<tt>Boolean</tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
 <p class="tag_title">Returns:</p>
 <ul class="return">
   
@@ -730,12 +801,12 @@
       <pre class="lines">
 
 
-388
-389
-390</pre>
+418
+419
+420</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'src/ruby/osx/objc/oc_import.rb', line 388</span>
+      <pre class="code"><span class="info file"># File 'src/ruby/osx/objc/oc_import.rb', line 418</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid__ns_enable_override?'>_ns_enable_override?</span><span class='lparen'>(</span><span class='id identifier rubyid_sel'>sel</span><span class='comma'>,</span> <span class='id identifier rubyid_class_method'>class_method</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_ns_inherited?'>ns_inherited?</span> <span class='kw'>and</span> <span class='lparen'>(</span><span class='id identifier rubyid_class_method'>class_method</span> <span class='op'>?</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_objc_method_type'>objc_method_type</span><span class='lparen'>(</span><span class='id identifier rubyid_sel'>sel</span><span class='rparen'>)</span> <span class='op'>:</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_objc_instance_method_type'>objc_instance_method_type</span><span class='lparen'>(</span><span class='id identifier rubyid_sel'>sel</span><span class='rparen'>)</span><span class='rparen'>)</span>
@@ -754,22 +825,36 @@
   
 
   
-</h3><table class="source_code">
+</h3><div class="docstring">
+  <div class="discussion">
+    <p class="note private">
+  <strong>This method is part of a private API.</strong>
+  You should avoid using this method if possible, as it may be removed or be changed in the future.
+</p>
+<p>Adds an method to Objective-C class.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
   <tr>
     <td>
       <pre class="lines">
 
 
-409
-410
-411
-412
-413
-414
-415</pre>
+443
+444
+445
+446
+447
+448
+449</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'src/ruby/osx/objc/oc_import.rb', line 409</span>
+      <pre class="code"><span class="info file"># File 'src/ruby/osx/objc/oc_import.rb', line 443</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid__objc_export'>_objc_export</span><span class='lparen'>(</span><span class='id identifier rubyid_name'>name</span><span class='comma'>,</span> <span class='id identifier rubyid_types'>types</span><span class='comma'>,</span> <span class='id identifier rubyid_class_method'>class_method</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_typefmt'>typefmt</span> <span class='op'>=</span> <span class='id identifier rubyid__types_to_typefmt'>_types_to_typefmt</span><span class='lparen'>(</span><span class='id identifier rubyid_types'>types</span><span class='rparen'>)</span>
@@ -794,7 +879,11 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
+    <p class="note private">
+  <strong>This method is part of a private API.</strong>
+  You should avoid using this method if possible, as it may be removed or be changed in the future.
+</p>
+
 
   </div>
 </div>
@@ -820,25 +909,25 @@
       <pre class="lines">
 
 
-472
-473
-474
-475
-476
-477
-478
-479
-480
-481
-482
-483
-484
-485
-486
-487</pre>
+510
+511
+512
+513
+514
+515
+516
+517
+518
+519
+520
+521
+522
+523
+524
+525</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'src/ruby/osx/objc/oc_import.rb', line 472</span>
+      <pre class="code"><span class="info file"># File 'src/ruby/osx/objc/oc_import.rb', line 510</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid__types_to_typefmt'>_types_to_typefmt</span><span class='lparen'>(</span><span class='id identifier rubyid_types'>types</span><span class='rparen'>)</span>
   <span class='kw'>return</span> <span class='id identifier rubyid_types'>types</span><span class='period'>.</span><span class='id identifier rubyid_strip'>strip</span> <span class='kw'>if</span> <span class='id identifier rubyid_types'>types</span><span class='period'>.</span><span class='id identifier rubyid_is_a?'>is_a?</span><span class='lparen'>(</span><span class='const'>String</span><span class='rparen'>)</span>
@@ -870,26 +959,36 @@
   
 
   
-</h3><table class="source_code">
+</h3><div class="docstring">
+  <div class="discussion">
+    <p>Defines Objective-C instance method.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
   <tr>
     <td>
       <pre class="lines">
 
 
-417
-418
-419
-420
-421
-422
-423</pre>
+452
+453
+454
+455
+456
+457
+458</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'src/ruby/osx/objc/oc_import.rb', line 417</span>
+      <pre class="code"><span class="info file"># File 'src/ruby/osx/objc/oc_import.rb', line 452</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_def_objc_method'>def_objc_method</span><span class='lparen'>(</span><span class='id identifier rubyid_name'>name</span><span class='comma'>,</span> <span class='id identifier rubyid_types'>types</span><span class='comma'>,</span> <span class='op'>&amp;</span><span class='id identifier rubyid_blk'>blk</span><span class='rparen'>)</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_block_given?'>block_given?</span> <span class='kw'>then</span>
-    <span class='id identifier rubyid_objc_method'>objc_method</span><span class='lparen'>(</span><span class='id identifier rubyid_name'>name</span><span class='comma'>,</span> <span class='id identifier rubyid_types'>types</span><span class='comma'>,</span> <span class='op'>&amp;</span><span class='id identifier rubyid_blk'>blk</span><span class='rparen'>)</span> 
+    <span class='id identifier rubyid_objc_method'>objc_method</span><span class='lparen'>(</span><span class='id identifier rubyid_name'>name</span><span class='comma'>,</span> <span class='id identifier rubyid_types'>types</span><span class='comma'>,</span> <span class='op'>&amp;</span><span class='id identifier rubyid_blk'>blk</span><span class='rparen'>)</span>
   <span class='kw'>else</span>
     <span class='id identifier rubyid_raise'>raise</span> <span class='const'>ArgumentError</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>block for method implementation expected</span><span class='tstring_end'>&quot;</span></span>
   <span class='kw'>end</span>
@@ -925,12 +1024,12 @@ implementation of the action.</p>
       <pre class="lines">
 
 
-367
-368
-369</pre>
+391
+392
+393</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'src/ruby/osx/objc/oc_import.rb', line 367</span>
+      <pre class="code"><span class="info file"># File 'src/ruby/osx/objc/oc_import.rb', line 391</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_ib_action'>ib_action</span><span class='lparen'>(</span><span class='id identifier rubyid_name'>name</span><span class='comma'>,</span> <span class='op'>&amp;</span><span class='id identifier rubyid_blk'>blk</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_define_method'>define_method</span><span class='lparen'>(</span><span class='id identifier rubyid_name'>name</span><span class='comma'>,</span> <span class='id identifier rubyid_blk'>blk</span><span class='rparen'>)</span> <span class='kw'>if</span> <span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -970,12 +1069,12 @@ in the Objective-C world.</p>
       <pre class="lines">
 
 
-353
-354
-355</pre>
+377
+378
+379</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'src/ruby/osx/objc/oc_import.rb', line 353</span>
+      <pre class="code"><span class="info file"># File 'src/ruby/osx/objc/oc_import.rb', line 377</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_ib_outlets'>ib_outlets</span><span class='lparen'>(</span><span class='op'>*</span><span class='id identifier rubyid_args'>args</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_attr_writer'>attr_writer</span><span class='lparen'>(</span><span class='op'>*</span><span class='id identifier rubyid_args'>args</span><span class='rparen'>)</span>
@@ -1011,16 +1110,16 @@ really responds to the new selector.</p>
       <pre class="lines">
 
 
-315
-316
-317
-318
-319
-320
-321</pre>
+335
+336
+337
+338
+339
+340
+341</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'src/ruby/osx/objc/oc_import.rb', line 315</span>
+      <pre class="code"><span class="info file"># File 'src/ruby/osx/objc/oc_import.rb', line 335</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_new'>new</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_ocm_respond_to?'>ocm_respond_to?</span><span class='lparen'>(</span><span class='symbol'>:new</span><span class='rparen'>)</span>
@@ -1037,7 +1136,7 @@ really responds to the new selector.</p>
       <div class="method_details ">
   <h3 class="signature " id="ns_inherited-instance_method">
   
-    - (<tt><span class='object_link'><a href="../Object.html" title="Object (class)">Object</a></span></tt>) <strong>ns_inherited</strong> 
+    - (<tt>Boolean</tt>) <strong>ns_inherited</strong> 
   
 
   
@@ -1045,7 +1144,11 @@ really responds to the new selector.</p>
   
 </h3><div class="docstring">
   <div class="discussion">
-    <p>initializer for definition of a derived class of a class on
+    <p class="note private">
+  <strong>This method is part of a private API.</strong>
+  You should avoid using this method if possible, as it may be removed or be changed in the future.
+</p>
+<p>initializer for definition of a derived class of a class on
 Objective-C World.</p>
 
 
@@ -1053,6 +1156,19 @@ Objective-C World.</p>
 </div>
 <div class="tags">
   
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Boolean</tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
 
 </div><table class="source_code">
   <tr>
@@ -1060,20 +1176,20 @@ Objective-C World.</p>
       <pre class="lines">
 
 
-325
-326
-327
-328
-329
-330
-331
-332
-333
-334
-335</pre>
+347
+348
+349
+350
+351
+352
+353
+354
+355
+356
+357</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'src/ruby/osx/objc/oc_import.rb', line 325</span>
+      <pre class="code"><span class="info file"># File 'src/ruby/osx/objc/oc_import.rb', line 347</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_ns_inherited'>ns_inherited</span><span class='lparen'>(</span><span class='rparen'>)</span>
   <span class='kw'>return</span> <span class='kw'>if</span> <span class='id identifier rubyid_ns_inherited?'>ns_inherited?</span>
@@ -1102,7 +1218,11 @@ Objective-C World.</p>
   
 </h3><div class="docstring">
   <div class="discussion">
-    <p>Returns whether receiver class is inherited from Objecitve-C class or not.</p>
+    <p class="note private">
+  <strong>This method is part of a private API.</strong>
+  You should avoid using this method if possible, as it may be removed or be changed in the future.
+</p>
+<p>Returns whether receiver class is inherited from Objecitve-C class or not.</p>
 
 
   </div>
@@ -1129,12 +1249,12 @@ Objective-C World.</p>
       <pre class="lines">
 
 
-338
-339
-340</pre>
+361
+362
+363</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'src/ruby/osx/objc/oc_import.rb', line 338</span>
+      <pre class="code"><span class="info file"># File 'src/ruby/osx/objc/oc_import.rb', line 361</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_ns_inherited?'>ns_inherited?</span>
   <span class='kw'>return</span> <span class='kw'>defined?</span><span class='lparen'>(</span><span class='ivar'>@inherited</span><span class='rparen'>)</span> <span class='op'>&amp;&amp;</span> <span class='ivar'>@inherited</span>
@@ -1174,13 +1294,13 @@ Objective-C World.</p>
       <pre class="lines">
 
 
-359
-360
-361
-362</pre>
+383
+384
+385
+386</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'src/ruby/osx/objc/oc_import.rb', line 359</span>
+      <pre class="code"><span class="info file"># File 'src/ruby/osx/objc/oc_import.rb', line 383</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_ns_outlets'>ns_outlets</span><span class='lparen'>(</span><span class='op'>*</span><span class='id identifier rubyid_args'>args</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_warn'>warn</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_caller'>caller</span><span class='lbracket'>[</span><span class='int'>0</span><span class='rbracket'>]</span><span class='embexpr_end'>}</span><span class='tstring_content'>:: ns_outlet(s) is deprecated, and will be removed in a next release. Please use ib_outlet(s) instead.</span><span class='tstring_end'>&quot;</span></span>
@@ -1206,7 +1326,9 @@ Objective-C World.</p>
   
 </h3><div class="docstring">
   <div class="discussion">
-    <p>declare to override instance methods of super class which is
+    <div class="note deprecated"><strong>Deprecated.</strong> <div class='inline'><p>DO NOT use. RubyCocoa automatically overrides Objective-C methods.</p>
+</div></div>
+<p>declare to override instance methods of super class which is
 defined by Objective-C.</p>
 
 
@@ -1221,12 +1343,12 @@ defined by Objective-C.</p>
       <pre class="lines">
 
 
-344
-345
-346</pre>
+368
+369
+370</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'src/ruby/osx/objc/oc_import.rb', line 344</span>
+      <pre class="code"><span class="info file"># File 'src/ruby/osx/objc/oc_import.rb', line 368</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_ns_overrides'>ns_overrides</span><span class='lparen'>(</span><span class='op'>*</span><span class='id identifier rubyid_args'>args</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_warn'>warn</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_caller'>caller</span><span class='lbracket'>[</span><span class='int'>0</span><span class='rbracket'>]</span><span class='embexpr_end'>}</span><span class='tstring_content'>: ns_overrides is no longer necessary, should not be called anymore and will be removed in a next release. Please update your code to not use it.</span><span class='tstring_end'>&quot;</span></span>
@@ -1245,20 +1367,30 @@ defined by Objective-C.</p>
   
 
   
-</h3><table class="source_code">
+</h3><div class="docstring">
+  <div class="discussion">
+    <p>Aliases Objective-C classs method.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
   <tr>
     <td>
       <pre class="lines">
 
 
-443
-444
-445
-446
-447</pre>
+480
+481
+482
+483
+484</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'src/ruby/osx/objc/oc_import.rb', line 443</span>
+      <pre class="code"><span class="info file"># File 'src/ruby/osx/objc/oc_import.rb', line 480</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_objc_alias_class_method'>objc_alias_class_method</span><span class='lparen'>(</span><span class='id identifier rubyid_new'>new</span><span class='comma'>,</span> <span class='id identifier rubyid_old'>old</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_new_sel'>new_sel</span> <span class='op'>=</span> <span class='id identifier rubyid_new'>new</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span><span class='period'>.</span><span class='id identifier rubyid_gsub'>gsub</span><span class='lparen'>(</span><span class='tstring'><span class='regexp_beg'>/</span><span class='tstring_content'>([^_])_</span><span class='regexp_end'>/</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>\1:</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span>
@@ -1279,20 +1411,30 @@ defined by Objective-C.</p>
   
 
   
-</h3><table class="source_code">
+</h3><div class="docstring">
+  <div class="discussion">
+    <p>Aliases Objective-C method.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
   <tr>
     <td>
       <pre class="lines">
 
 
-437
-438
-439
-440
-441</pre>
+473
+474
+475
+476
+477</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'src/ruby/osx/objc/oc_import.rb', line 437</span>
+      <pre class="code"><span class="info file"># File 'src/ruby/osx/objc/oc_import.rb', line 473</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_objc_alias_method'>objc_alias_method</span><span class='lparen'>(</span><span class='id identifier rubyid_new'>new</span><span class='comma'>,</span> <span class='id identifier rubyid_old'>old</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_new_sel'>new_sel</span> <span class='op'>=</span> <span class='id identifier rubyid_new'>new</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span><span class='period'>.</span><span class='id identifier rubyid_gsub'>gsub</span><span class='lparen'>(</span><span class='tstring'><span class='regexp_beg'>/</span><span class='tstring_content'>([^_])_</span><span class='regexp_end'>/</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>\1:</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span>
@@ -1329,12 +1471,12 @@ defined by Objective-C.</p>
       <pre class="lines">
 
 
-433
-434
-435</pre>
+468
+469
+470</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'src/ruby/osx/objc/oc_import.rb', line 433</span>
+      <pre class="code"><span class="info file"># File 'src/ruby/osx/objc/oc_import.rb', line 468</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_objc_class_method'>objc_class_method</span><span class='lparen'>(</span><span class='id identifier rubyid_name'>name</span><span class='comma'>,</span> <span class='id identifier rubyid_types'>types</span><span class='op'>=</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>id</span><span class='tstring_end'>&#39;</span></span><span class='rbracket'>]</span><span class='rparen'>)</span>
   <span class='id identifier rubyid__objc_export'>_objc_export</span><span class='lparen'>(</span><span class='id identifier rubyid_name'>name</span><span class='comma'>,</span> <span class='id identifier rubyid_types'>types</span><span class='comma'>,</span> <span class='kw'>true</span><span class='rparen'>)</span>
@@ -1384,13 +1526,13 @@ defined by Objective-C.</p>
       <pre class="lines">
 
 
-427
-428
-429
-430</pre>
+462
+463
+464
+465</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'src/ruby/osx/objc/oc_import.rb', line 427</span>
+      <pre class="code"><span class="info file"># File 'src/ruby/osx/objc/oc_import.rb', line 462</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_objc_method'>objc_method</span><span class='lparen'>(</span><span class='id identifier rubyid_name'>name</span><span class='comma'>,</span> <span class='id identifier rubyid_types'>types</span><span class='op'>=</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>id</span><span class='tstring_end'>&#39;</span></span><span class='rbracket'>]</span><span class='comma'>,</span> <span class='op'>&amp;</span><span class='id identifier rubyid_blk'>blk</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_define_method'>define_method</span><span class='lparen'>(</span><span class='id identifier rubyid_name'>name</span><span class='comma'>,</span> <span class='id identifier rubyid_blk'>blk</span><span class='rparen'>)</span> <span class='kw'>if</span> <span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -1406,7 +1548,7 @@ defined by Objective-C.</p>
 </div>
 
     <div id="footer">
-  Generated on Sun Jul 20 15:38:38 2014 by
+  Generated on Sun Jul 27 08:40:35 2014 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.8.7.4 (ruby-2.1.2).
 </div>

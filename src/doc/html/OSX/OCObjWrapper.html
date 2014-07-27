@@ -139,7 +139,8 @@ and extends <span class='object_link'><a href="OCClsWrapper.html" title="OSX::OC
   
 
   
-    <span class="summary_desc"><div class='inline'></div></span>
+    <span class="summary_desc"><div class='inline'><p>Overrides BasicObject#method_missing.</p>
+</div></span>
   
 </li>
 
@@ -278,7 +279,8 @@ and extends <span class='object_link'><a href="OCClsWrapper.html" title="OSX::OC
   
 
   
-    <span class="summary_desc"><div class='inline'></div></span>
+    <span class="summary_desc"><div class='inline'><p>Returns whether the Objective-C object of reciever is nil or not.</p>
+</div></span>
   
 </li>
 
@@ -341,27 +343,37 @@ and extends <span class='object_link'><a href="OCClsWrapper.html" title="OSX::OC
   
 
   
-</h3><table class="source_code">
+</h3><div class="docstring">
+  <div class="discussion">
+    <p>Overrides BasicObject#method_missing.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
   <tr>
     <td>
       <pre class="lines">
 
 
-47
-48
-49
-50
-51
 52
 53
 54
 55
 56
 57
-58</pre>
+58
+59
+60
+61
+62
+63</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'src/ruby/osx/objc/oc_wrapper.rb', line 47</span>
+      <pre class="code"><span class="info file"># File 'src/ruby/osx/objc/oc_wrapper.rb', line 52</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_method_missing'>method_missing</span><span class='lparen'>(</span><span class='id identifier rubyid_mname'>mname</span><span class='comma'>,</span> <span class='op'>*</span><span class='id identifier rubyid_args'>args</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_m_name'>m_name</span><span class='comma'>,</span> <span class='id identifier rubyid_m_args'>m_args</span><span class='comma'>,</span> <span class='id identifier rubyid_as_predicate'>as_predicate</span> <span class='op'>=</span> <span class='id identifier rubyid_analyze_missing'>analyze_missing</span><span class='lparen'>(</span><span class='id identifier rubyid_mname'>mname</span><span class='comma'>,</span> <span class='id identifier rubyid_args'>args</span><span class='rparen'>)</span>
@@ -594,10 +606,6 @@ For example, [myObj doSomething:arg1 withObject:arg2] would translate as:
       <pre class="lines">
 
 
-32
-33
-34
-35
 36
 37
 38
@@ -607,10 +615,14 @@ For example, [myObj doSomething:arg1 withObject:arg2] would translate as:
 42
 43
 44
-45</pre>
+45
+46
+47
+48
+49</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'src/ruby/osx/objc/oc_wrapper.rb', line 32</span>
+      <pre class="code"><span class="info file"># File 'src/ruby/osx/objc/oc_wrapper.rb', line 36</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_objc_send'>objc_send</span><span class='lparen'>(</span><span class='op'>*</span><span class='id identifier rubyid_args'>args</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_raise'>raise</span> <span class='const'>ArgumentError</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>wrong number of arguments (</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_args'>args</span><span class='period'>.</span><span class='id identifier rubyid_length'>length</span><span class='embexpr_end'>}</span><span class='tstring_content'> for at least 1)</span><span class='tstring_end'>&quot;</span></span> <span class='kw'>if</span> <span class='id identifier rubyid_args'>args</span><span class='period'>.</span><span class='id identifier rubyid_empty?'>empty?</span>
@@ -788,7 +800,8 @@ wrapper_ocm_send(int argc, VALUE* argv, VALUE rcv)
   
 </h3><div class="docstring">
   <div class="discussion">
-    
+    <p>Returns whether the Objective-C object of reciever is nil or not.</p>
+
 
   </div>
 </div>
@@ -814,12 +827,12 @@ wrapper_ocm_send(int argc, VALUE* argv, VALUE rcv)
       <pre class="lines">
 
 
-60
-61
-62</pre>
+66
+67
+68</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'src/ruby/osx/objc/oc_wrapper.rb', line 60</span>
+      <pre class="code"><span class="info file"># File 'src/ruby/osx/objc/oc_wrapper.rb', line 66</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_ocnil?'>ocnil?</span>
   <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid___ocid__'>__ocid__</span> <span class='op'>==</span> <span class='int'>0</span>
@@ -908,7 +921,7 @@ wrapper_to_s (VALUE rcv)
 </div>
 
     <div id="footer">
-  Generated on Sun Jul 20 15:38:38 2014 by
+  Generated on Sun Jul 27 08:40:35 2014 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.8.7.4 (ruby-2.1.2).
 </div>

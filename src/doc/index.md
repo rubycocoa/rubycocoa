@@ -20,7 +20,7 @@ Some useful applications of RubyCocoa:
 
 ## Latest Release
 
-* [1.1.0](http://sourceforge.net/projects/rubycocoa/files/RubyCocoa/1.1.0/) (2013-11-17)
+* [1.2.0](http://sourceforge.net/projects/rubycocoa/files/RubyCocoa/1.2.0/) (2014-07-27)
 * [NEWS](http://sourceforge.net/p/rubycocoa/svn/HEAD/tree/trunk/src/NEWS)
 
 ## LICENSE
@@ -30,7 +30,7 @@ Some useful applications of RubyCocoa:
 
 ## Requirement
 
-* Ruby 1.8
+* Ruby 1.8.7, 2.0 or later
 * Mac OS X 10.6 Snow Leopard or later
 * libxml2
 * libffi

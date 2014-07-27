@@ -338,13 +338,13 @@ Writer methods aware Key-Value Observing.</p>
       <pre class="lines">
 
 
-585
-586
-587
-588</pre>
+623
+624
+625
+626</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'src/ruby/osx/objc/oc_import.rb', line 585</span>
+      <pre class="code"><span class="info file"># File 'src/ruby/osx/objc/oc_import.rb', line 623</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_kvc_accessor'>kvc_accessor</span><span class='lparen'>(</span><span class='op'>*</span><span class='id identifier rubyid_args'>args</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_kvc_reader'>kvc_reader</span><span class='lparen'>(</span><span class='op'>*</span><span class='id identifier rubyid_args'>args</span><span class='rparen'>)</span>
@@ -393,44 +393,6 @@ The array instance variable must respond to the following methods:</p>
       <pre class="lines">
 
 
-639
-640
-641
-642
-643
-644
-645
-646
-647
-648
-649
-650
-651
-652
-653
-654
-655
-656
-657
-658
-659
-660
-661
-662
-663
-664
-665
-666
-667
-668
-669
-670
-671
-672
-673
-674
-675
-676
 677
 678
 679
@@ -449,10 +411,48 @@ The array instance variable must respond to the following methods:</p>
 692
 693
 694
-695</pre>
+695
+696
+697
+698
+699
+700
+701
+702
+703
+704
+705
+706
+707
+708
+709
+710
+711
+712
+713
+714
+715
+716
+717
+718
+719
+720
+721
+722
+723
+724
+725
+726
+727
+728
+729
+730
+731
+732
+733</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'src/ruby/osx/objc/oc_import.rb', line 639</span>
+      <pre class="code"><span class="info file"># File 'src/ruby/osx/objc/oc_import.rb', line 677</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_kvc_array_accessor'>kvc_array_accessor</span><span class='lparen'>(</span><span class='op'>*</span><span class='id identifier rubyid_args'>args</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_args'>args</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_key'>key</span><span class='op'>|</span>
@@ -541,14 +541,14 @@ The array instance variable must respond to the following methods:</p>
       <pre class="lines">
 
 
-591
-592
-593
-594
-595</pre>
+629
+630
+631
+632
+633</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'src/ruby/osx/objc/oc_import.rb', line 591</span>
+      <pre class="code"><span class="info file"># File 'src/ruby/osx/objc/oc_import.rb', line 629</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_kvc_depends_on'>kvc_depends_on</span><span class='lparen'>(</span><span class='id identifier rubyid_keys'>keys</span><span class='comma'>,</span> <span class='op'>*</span><span class='id identifier rubyid_dependencies'>dependencies</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_dependencies'>dependencies</span><span class='period'>.</span><span class='id identifier rubyid_flatten'>flatten</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_dependentKey'>dependentKey</span><span class='op'>|</span>
@@ -591,12 +591,12 @@ The array instance variable must respond to the following methods:</p>
       <pre class="lines">
 
 
-557
-558
-559</pre>
+595
+596
+597</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'src/ruby/osx/objc/oc_import.rb', line 557</span>
+      <pre class="code"><span class="info file"># File 'src/ruby/osx/objc/oc_import.rb', line 595</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_kvc_reader'>kvc_reader</span><span class='lparen'>(</span><span class='op'>*</span><span class='id identifier rubyid_args'>args</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_attr_reader'>attr_reader</span><span class='lparen'>(</span><span class='op'>*</span><span class='id identifier rubyid_args'>args</span><span class='rparen'>)</span>
@@ -632,13 +632,13 @@ such as NSUserDefaultsController and NSManagedObject.</p>
       <pre class="lines">
 
 
-599
-600
-601
-602</pre>
+637
+638
+639
+640</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'src/ruby/osx/objc/oc_import.rb', line 599</span>
+      <pre class="code"><span class="info file"># File 'src/ruby/osx/objc/oc_import.rb', line 637</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_kvc_wrapper'>kvc_wrapper</span><span class='lparen'>(</span><span class='op'>*</span><span class='id identifier rubyid_keys'>keys</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_kvc_wrapper_reader'>kvc_wrapper_reader</span><span class='lparen'>(</span><span class='op'>*</span><span class='id identifier rubyid_keys'>keys</span><span class='rparen'>)</span>
@@ -680,18 +680,18 @@ such as NSUserDefaultsController and NSManagedObject.</p>
       <pre class="lines">
 
 
-605
-606
-607
-608
-609
-610
-611
-612
-613</pre>
+643
+644
+645
+646
+647
+648
+649
+650
+651</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'src/ruby/osx/objc/oc_import.rb', line 605</span>
+      <pre class="code"><span class="info file"># File 'src/ruby/osx/objc/oc_import.rb', line 643</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_kvc_wrapper_reader'>kvc_wrapper_reader</span><span class='lparen'>(</span><span class='op'>*</span><span class='id identifier rubyid_keys'>keys</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_keys'>keys</span><span class='period'>.</span><span class='id identifier rubyid_flatten'>flatten</span><span class='period'>.</span><span class='id identifier rubyid_compact'>compact</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_key'>key</span><span class='op'>|</span>
@@ -738,18 +738,18 @@ such as NSUserDefaultsController and NSManagedObject.</p>
       <pre class="lines">
 
 
-616
-617
-618
-619
-620
-621
-622
-623
-624</pre>
+654
+655
+656
+657
+658
+659
+660
+661
+662</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'src/ruby/osx/objc/oc_import.rb', line 616</span>
+      <pre class="code"><span class="info file"># File 'src/ruby/osx/objc/oc_import.rb', line 654</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_kvc_wrapper_writer'>kvc_wrapper_writer</span><span class='lparen'>(</span><span class='op'>*</span><span class='id identifier rubyid_keys'>keys</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_keys'>keys</span><span class='period'>.</span><span class='id identifier rubyid_flatten'>flatten</span><span class='period'>.</span><span class='id identifier rubyid_compact'>compact</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_key'>key</span><span class='op'>|</span>
@@ -796,29 +796,29 @@ such as NSUserDefaultsController and NSManagedObject.</p>
       <pre class="lines">
 
 
-562
-563
-564
-565
-566
-567
-568
-569
-570
-571
-572
-573
-574
-575
-576
-577
-578
-579
-580
-581</pre>
+600
+601
+602
+603
+604
+605
+606
+607
+608
+609
+610
+611
+612
+613
+614
+615
+616
+617
+618
+619</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'src/ruby/osx/objc/oc_import.rb', line 562</span>
+      <pre class="code"><span class="info file"># File 'src/ruby/osx/objc/oc_import.rb', line 600</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_kvc_writer'>kvc_writer</span><span class='lparen'>(</span><span class='op'>*</span><span class='id identifier rubyid_args'>args</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_args'>args</span><span class='period'>.</span><span class='id identifier rubyid_flatten'>flatten</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_key'>key</span><span class='op'>|</span>
@@ -850,7 +850,7 @@ such as NSUserDefaultsController and NSManagedObject.</p>
 </div>
 
     <div id="footer">
-  Generated on Sun Jul 20 15:38:38 2014 by
+  Generated on Sun Jul 27 08:40:35 2014 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.8.7.4 (ruby-2.1.2).
 </div>
