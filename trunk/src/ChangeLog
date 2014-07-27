@@ -1,3 +1,9 @@
+2014-07-27 kimura wataru <kimuraw@i.nifty.jp>
+
+	* tests/testall.rb:
+	add ruby code coverage with simplecov. coverage enables via
+	environment COVERAGE.
+
 === RubyCocoa 1.2.0 ===
 
 2014-07-27 kimura wataru <kimuraw@i.nifty.jp>
