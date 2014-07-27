@@ -21,9 +21,7 @@
 	<key>CFBundleShortVersionString</key>
 	<string>RUBYCOCOA_VERSION_SHORT</string>
 	<key>CFBundleGetInfoString</key>
-	<string>RubyCocoa RUBYCOCOA_VERSION_BARE Copyright (c) 2002 FUJIMOTO Hisakuni.</string>
-	<key>NSHumanReadableCopyright</key>
-	<string>Copyright (c) 2002 FUJIMOTO Hisakuni.</string>
+	<string>RubyCocoa RUBYCOCOA_VERSION_BARE (build with Ruby BUILD_RUBY_VERSION on OSX RUBYCOCOA_DEPLOYMET_TARGET) Copyright (c) 2002 FUJIMOTO Hisakuni.</string>
 	<key>CFBundleVersion</key>
 	<string>RUBYCOCOA_VERSION_BARE</string>
 	<key>NSPrincipalClass</key>
