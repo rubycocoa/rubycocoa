@@ -1,0 +1,15 @@
+framework module RubyCocoa {
+
+  module RBRuntime {
+    header "RBRuntime.h"
+    export *
+  }
+
+  //  "RBObject.h" need to specified header path (-I)
+  //  to "ruby.h" and "ruby/config.h"
+//  explicit module RBObject {
+//    header "RBObject.h"
+//    export *
+//  }
+
+}

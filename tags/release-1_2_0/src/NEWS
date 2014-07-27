@@ -1,0 +1,231 @@
+
+= NEWS
+
+$Id$
+
+== Changes 1.2.0 from 1.1.0: 2014-07-27
+
+=== Improvements
+
+  * support ruby-2.0 or later, mostly works as same as on ruby-1.8.
+    * we release RubyCocoa installers as separated packages for ruby-1.8/2.0.
+      replace RubyCocoa.framework if you try to run your RubyCocoa application
+      with OS X 10.9 buitin ruby-2.0.
+  * when called method is not found on an Objective-C object, RubyCocoa
+    raises NoMethodError. (before: OSX::OCMessageSendException)
+
+=== Deprecates
+
+  * CocoaClass#objc_export() is deprecated. use objc_method().
+  * OSX::NSObject#ocm_responds?() will be deprecated. use ocm_respond_to?().
+  * OSX::NSData#dataWithRubyString(), OSX::NSMutableData#dataWithRubyString()
+    will be deprecated. use [NSString dataUsingEncoding:]
+
+=== Fixes
+
+  * Fixed build errors on Yosemite DP.
+
+=== Note for RubyCocoa with Ruby-2.0
+
+  * String of ruby-2.x has its encodings.
+    see https://bugs.ruby-lang.org/projects/ruby-trunk/wiki/MigrationIssuesFrom18
+     or http://magazine.rubyist.net/?0025-Ruby19_m17n (ja)
+  * if you want to extend Objective-C class from bundle or dylib (not
+    from framework) in Ruby code, you need to invoke OSX.ns_import.
+
+        require 'path/to/your_bundle.bundle'
+        OSX.ns_import :YourClass
+        module OSX
+          class YourClass
+            : # extend class in Ruby code
+          end
+        end
+		
+
+== Changes 1.1.0 from 1.0.7: 2013-11-17
+
+=== Improvements
+
+  * Support Xcode 5 "Modules".
+  * Developers can disable internal Objective-C -> Ruby objects cache
+    via a new global variable $RUBYCOCOA_USE_OC2RBCACHE to avoid crashes
+    from inconsistency between the cache and Ruby's GC. [Experimental]
+    The crash may occurs delegate of NSTableView.
+
+=== Fixes
+
+  * Fixed standaloneify.rb error with ruby-2.0 or rubygems-2.1.
+  * Fixed SEGV at Object#dup for some Objective-C objects.
+
+=== Deprecates
+
+  * Deprecated Objective-C class "RubyCocoa" in <RubyCocoa/RubyCocoa.h>.
+    developers can use RBRuntime functions to call ruby from Objective-C.
+
+      - bundleInitWithProgram:class:param: -> RBBundleInit()
+      - applicationInitWithProgram:argc:argv:param: -> RBApplicationInit()
+      - applicationMainWithProgram:argc:argv: -> RBApplicationMain()
+
+  * Deprecated NSString|String methods depends "NKF" extension.
+
+      - NSString.guess_nsencoding
+      - NSString.guess_encoding
+      - NSString.stringWithRubyString
+      - NSMutableString.stringWithRubyString
+      - String.nsencoding
+
+=== Note
+
+  * Mac OS X 10.5 or earlier not supported.
+
+== Changes 1.0.7 from 1.0.6: 2013-10-26
+
+=== Fixes
+
+  * Fixed boxed Objective-C object sometimes becomes wrong type
+    OSX::CFTypeRef in Ruby world on 10.9 Mavericks.
+
+== Changes 1.0.6 from 1.0.5: 2012-12-31
+
+=== Fixes
+
+  * Fixed some applications does not launch with 1.0.5.
+  * Fixed standaloneifi-ed app does not work with rubygems 1.3.2 or later.
+
+== Changes 1.0.5 from 1.0.4: 2012-10-07
+
+=== Improvements
+
+  * project templates are upgraded for Xcode 4.2-4.5.
+    you can install the templates with the following command.
+
+      $ ruby /Developer/Documentation/RubyCocoa/Templates/install_templates.rb Xcode4.x
+
+=== Fixes
+
+  * Fixed standaloneify.rb not work.
+
+=== Removals
+
+  * osx/active_record.rb was removed.
+
+
+== Changes 1.0.4 from 1.0.3: 2012-08-27
+
+=== Fixes
+
+  * Fixed leaks at initializing RubyCocoa-1.0.3.
+  * Fixed RubyCocoa does not load bridgesupport files under nested framework,
+    such as "QuartzCore.framework/Frameworks/CoreImage.framework".
+
+
+== Changes 1.0.3 from 1.0.2: 2012-08-26 (Not released)
+
+=== Improvements
+
+  * turn on debug printing by environment RUBYCOCOA_DEBUG.
+  * project templates for Xcode 4.x. [Experimental]
+    templates should be installed under ~/Library/Developer/Xcode/Templates.
+    you can try the templates with the following command.
+
+        $ svn export --force https://rubycocoa.svn.sourceforge.net/svnroot/rubycocoa/trunk/src/template/Xcode4.x/Templates ~/Library/Developer/Xcode/Templates
+
+
+=== Fixes
+
+  * Fixed RubyCocoa apps fail to launch by Xcode-4 "Run" with an error
+    "invalid option -N (-h will show valid options)".
+    Now RubyCocoa apps do not process commandline options such as "-d".
+
+    If you want to avoid this problem with Lion built-in RubyCocoa,
+    edit main.m and rb_main.rb in your project like this.
+
+        diff -ur old/main.m new/main.m
+        --- old/main.m  2011-11-19 15:49:58.000000000 +0900
+        +++ new/main.m  2011-11-19 15:49:16.000000000 +0900
+        @@ -11,5 +11,6 @@
+         
+         int main(int argc, const char *argv[])
+         {
+        -    return RBApplicationMain("rb_main.rb", argc, argv);
+        +    RBApplicationInit("rb_main.rb", argc, argv, nil);
+        +    return NSApplicationMain(argc, argv);
+         }
+        diff -ur old/rb_main.rb new/rb_main.rb
+        --- old/rb_main.rb      2011-11-19 15:49:58.000000000 +0900
+        +++ new/rb_main.rb      2011-11-19 15:49:16.000000000 +0900
+        @@ -17,7 +17,4 @@
+           end
+         end
+         
+        -if $0 == __FILE__ then
+        -  rb_main_init
+        -  OSX.NSApplicationMain(0, nil)
+        -end
+        +rb_main_init
+
+    the API RBApplicationInit() is available since version 0.12.0.
+    (version of Leopard built-in RubyCocoa is 0.13.x)
+
+  * Fixed NSBundle.loadNibNamed_owner(nibname, owner) fails on Lion or Later.
+
+== Changes 1.0.2 from 1.0.1: 2011-08-31
+
+=== Improvements
+
+  * OSX.load_plist() accepts binary format plist data.
+
+=== Fixes
+
+  * Lion
+     * Fixed SEGV at working with NSData or Ruby byte string.
+     * Fixed some opaque becomes ABRecordRef.
+     * Fixed build error with install.rb.
+  * x86_64
+     * Fixed SEGV passing/getting small C struct contains C array,
+       such as NSDecimal.
+
+== Changes 1.0.1 from 1.0.0: 2009-10-18
+
+=== Improvements
+
+  * RubyCocoa.framework built for 10.5 works on 10.6
+
+      $ ruby install.rb config \
+             --macosx-deployment-target=10.5 \
+             --sdkroot=/Developer/SDKs/MacOSX10.5.sdk \
+             --target-archs="ppc i386"
+      $ ruby install.rb setup
+
+  * NSString for same string returns same hash in Ruby world.
+    it enables NSString to become a key of Hash.
+
+      str1 = OSX::NSString.alloc.initWithString("a")
+      str2 = OSX::NSString.alloc.initWithString("a")
+      hash = {}
+      hash[str1] = 1
+      hash[str2] = 2
+      p hash[str1] # => 2
+
+  * refactoring build system for universal binary
+     * deprecate config option "--build-universal"
+     * introduce config option "--target-archs"
+
+        old) ruby install.rb config --build-universal=yes
+        new) ruby install.rb config --target-archs="i386 x86_64 ppc"
+
+  * upgrade project templates for Xcode 3.x
+
+=== Fixes
+
+  * Snow Leopard
+     * Fixed application stops with errors for thread such as
+       "Assertion failed: (ctx->autoreleasePool ..."
+     * Fixed some errors of invocation-based undo with NSUndoManager
+  * x86_64
+     * correct value of OSX::NSNotFound (Foudation.bridgesupport is wrong)
+     * Fixed debug log sometimes prints incorrect integer values
+     * Fixed getting values for 64-bit from bridgesupport files
+  * others
+     * Fixed SEGV irb at `require "osx/cocoa"'
+

@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>Ancestors</key>
+	<array>
+		<string>com.apple.dt.unit.objectiveCApplication</string>
+		<string>com.apple.dt.unit.macBase</string>
+	</array>
+	<key>Definitions</key>
+	<dict>
+		<key>___PACKAGENAME___-Info.plist:ApplicationCategory</key>
+		<string>&lt;key&gt;LSApplicationCategoryType&lt;/key&gt;
+&lt;string&gt;___VARIABLE_applicationCategory:XML___&lt;/string&gt;
+</string>
+		<key>___PACKAGENAME___-Info.plist:Mac</key>
+		<string>&lt;key&gt;CFBundleShortVersionString&lt;/key&gt;
+&lt;string&gt;1.0&lt;/string&gt;
+&lt;key&gt;LSMinimumSystemVersion&lt;/key&gt;
+&lt;string&gt;${MACOSX_DEPLOYMENT_TARGET}&lt;/string&gt;
+&lt;key&gt;CFBundleVersion&lt;/key&gt;
+&lt;string&gt;1&lt;/string&gt;
+&lt;key&gt;NSMainNibFile&lt;/key&gt;
+&lt;string&gt;MainMenu&lt;/string&gt;
+&lt;key&gt;NSPrincipalClass&lt;/key&gt;
+&lt;string&gt;NSApplication&lt;/string&gt;
+</string>
+		<key>en.lproj/Credits.rtf</key>
+		<dict>
+			<key>Group</key>
+			<string>Supporting Files</string>
+			<key>Path</key>
+			<string>Credits.rtf</string>
+		</dict>
+		<key>*:*:importRubyCocoa</key>
+		<string>#import &lt;RubyCocoa/RBRuntime.h&gt;
+</string>
+		<key>main.m:main:RBApplicationMain</key>
+		<string>RBApplicationInit("rb_main.rb", argc, argv, nil);
+return NSApplicationMain(argc, argv);</string>
+		<key>rb_main.rb</key>
+		<dict>
+			<key>Group</key>
+			<string>Supporting Files</string>
+			<key>Path</key>
+			<string>rb_main.rb</string>
+		</dict>
+	</dict>
+	<key>Identifier</key>
+	<string>net.sourceforge.rubycocoa.dt.unit.rubycocoaApplicationBase</string>
+	<key>Kind</key>
+	<string>Xcode.Xcode3.ProjectTemplateUnitKind</string>
+	<key>Nodes</key>
+	<array>
+		<string>main.m:import:importRubyCocoa</string>
+		<string>main.m:main:RBApplicationMain</string>
+		<string>___PACKAGENAME___-Info.plist:Mac</string>
+		<string>___PACKAGENAME___-Info.plist:ApplicationCategory</string>
+		<string>___PACKAGENAME___-Info.plist:NSHumanReadableCopyright</string>
+		<string>en.lproj/Credits.rtf</string>
+		<string>rb_main.rb</string>
+	</array>
+	<key>Options</key>
+	<array>
+		<dict>
+			<key>Description</key>
+			<string>The category for your application in the Mac App Store.</string>
+			<key>Identifier</key>
+			<string>applicationCategory</string>
+			<key>Name</key>
+			<string>App Store Category</string>
+			<key>NotPersisted</key>
+			<true/>
+			<key>Placeholder</key>
+			<string>None</string>
+			<key>SpecialType</key>
+			<string>LSApplicationCategoryType</string>
+			<key>Type</key>
+			<string>popup</string>
+			<key>Units</key>
+			<dict>
+				<key></key>
+				<array>
+					<dict>
+						<key>Definitions</key>
+						<dict>
+							<key>___PACKAGENAME___-Info.plist:ApplicationCategory</key>
+							<string></string>
+						</dict>
+					</dict>
+				</array>
+			</dict>
+		</dict>
+	</array>
+	<key>Targets</key>
+	<array>
+		<dict>
+			<key>Frameworks</key>
+			<array>
+				<string>Cocoa</string>
+				<string>RubyCocoa</string>
+			</array>
+			<key>OtherFrameworks</key>
+			<array>
+				<string>AppKit</string>
+				<string>CoreData</string>
+				<string>Foundation</string>
+			</array>
+		</dict>
+	</array>
+</dict>
+</plist>
