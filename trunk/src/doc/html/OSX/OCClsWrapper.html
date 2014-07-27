@@ -190,7 +190,8 @@ and extends <span class='object_link'><a href="" title="OSX::OCClsWrapper (modul
   
 
   
-    <span class="summary_desc"><div class='inline'></div></span>
+    <span class="summary_desc"><div class='inline'><p>Overrides Module#method_added.</p>
+</div></span>
   
 </li>
 
@@ -304,7 +305,8 @@ and extends <span class='object_link'><a href="" title="OSX::OCClsWrapper (modul
   
 
   
-    <span class="summary_desc"><div class='inline'></div></span>
+    <span class="summary_desc"><div class='inline'><p>Overrides BasicObject#singleton_method_added.</p>
+</div></span>
   
 </li>
 
@@ -565,19 +567,29 @@ wrapper_objc_alias_method (VALUE rcv, VALUE new, VALUE old)
   
 
   
-</h3><table class="source_code">
+</h3><div class="docstring">
+  <div class="discussion">
+    <p>Overrides Module#method_added.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
   <tr>
     <td>
       <pre class="lines">
 
 
-728
-729
-730
-731</pre>
+768
+769
+770
+771</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'src/ruby/osx/objc/oc_import.rb', line 728</span>
+      <pre class="code"><span class="info file"># File 'src/ruby/osx/objc/oc_import.rb', line 768</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_method_added'>method_added</span><span class='lparen'>(</span><span class='id identifier rubyid_sym'>sym</span><span class='rparen'>)</span>
   <span class='id identifier rubyid__ns_behavior_method_added'>_ns_behavior_method_added</span><span class='lparen'>(</span><span class='id identifier rubyid_sym'>sym</span><span class='comma'>,</span> <span class='kw'>false</span><span class='rparen'>)</span>
@@ -931,18 +943,28 @@ wrapper_objc_instance_methods (int argc, VALUE* argv, VALUE rcv)
   
 
   
-</h3><table class="source_code">
+</h3><div class="docstring">
+  <div class="discussion">
+    <p>Overrides BasicObject#singleton_method_added.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
   <tr>
     <td>
       <pre class="lines">
 
 
-724
-725
-726</pre>
+763
+764
+765</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'src/ruby/osx/objc/oc_import.rb', line 724</span>
+      <pre class="code"><span class="info file"># File 'src/ruby/osx/objc/oc_import.rb', line 763</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_singleton_method_added'>singleton_method_added</span><span class='lparen'>(</span><span class='id identifier rubyid_sym'>sym</span><span class='rparen'>)</span>
   <span class='id identifier rubyid__ns_behavior_method_added'>_ns_behavior_method_added</span><span class='lparen'>(</span><span class='id identifier rubyid_sym'>sym</span><span class='comma'>,</span> <span class='kw'>true</span><span class='rparen'>)</span>
@@ -957,7 +979,7 @@ wrapper_objc_instance_methods (int argc, VALUE* argv, VALUE rcv)
 </div>
 
     <div id="footer">
-  Generated on Sun Jul 20 15:38:38 2014 by
+  Generated on Sun Jul 27 08:40:35 2014 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.8.7.4 (ruby-2.1.2).
 </div>

@@ -1,5 +1,10 @@
 2014-07-27 kimura wataru <kimuraw@i.nifty.jp>
 
+	* doc/index.md, doc/html/:
+	update documents.
+
+2014-07-27 kimura wataru <kimuraw@i.nifty.jp>
+
 	* framework/Info.plist:
 	display build Ruby version on Finder "Get Info".
 

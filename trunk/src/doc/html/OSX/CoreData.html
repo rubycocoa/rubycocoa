@@ -204,18 +204,18 @@
       <pre class="lines">
 
 
-56
-57
-58
-59
 60
 61
 62
 63
-64</pre>
+64
+65
+66
+67
+68</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'src/ruby/osx/objc/cocoa_macros.rb', line 56</span>
+      <pre class="code"><span class="info file"># File 'src/ruby/osx/objc/cocoa_macros.rb', line 60</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_define_wrapper'>define_wrapper</span><span class='lparen'>(</span><span class='id identifier rubyid_model'>model</span><span class='rparen'>)</span>
   <span class='kw'>unless</span> <span class='id identifier rubyid_model'>model</span><span class='period'>.</span><span class='id identifier rubyid_isKindOfClass?'>isKindOfClass?</span> <span class='const'>OSX</span><span class='op'>::</span><span class='const'>NSManagedObjectModel</span>
@@ -271,10 +271,6 @@
       <pre class="lines">
 
 
-69
-70
-71
-72
 73
 74
 75
@@ -286,10 +282,14 @@
 81
 82
 83
-84</pre>
+84
+85
+86
+87
+88</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'src/ruby/osx/objc/cocoa_macros.rb', line 69</span>
+      <pre class="code"><span class="info file"># File 'src/ruby/osx/objc/cocoa_macros.rb', line 73</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_define_wrapper_for_entity'>define_wrapper_for_entity</span><span class='lparen'>(</span><span class='id identifier rubyid_entity'>entity</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_klassname'>klassname</span> <span class='op'>=</span> <span class='id identifier rubyid_entity'>entity</span><span class='period'>.</span><span class='id identifier rubyid_managedObjectClassName'>managedObjectClassName</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span>
@@ -317,7 +317,7 @@
 </div>
 
     <div id="footer">
-  Generated on Sun Jul 20 15:38:38 2014 by
+  Generated on Sun Jul 27 08:40:35 2014 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.8.7.4 (ruby-2.1.2).
 </div>
