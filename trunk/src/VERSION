@@ -1,6 +1,6 @@
 VERSION = "1.2.0"
-STAGE = "rc"
-RELEASE_DATE = "2014-07-20"
+STAGE = ""
+RELEASE_DATE = "2014-07-27"
 SVN_REVISION = proc {
                  vers = `svnversion`
                  rev = $?.success? ? vers.strip : 'unknown'

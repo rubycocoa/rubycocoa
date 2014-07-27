@@ -3,7 +3,7 @@
 
 $Id$
 
-== Changes 1.2.0 from 1.1.0: 2014-XX-XX
+== Changes 1.2.0 from 1.1.0: 2014-07-27
 
 === Improvements
 
@@ -28,18 +28,18 @@ $Id$
 === Note for RubyCocoa with Ruby-2.0
 
   * String of ruby-2.x has its encodings.
-	  see https://bugs.ruby-lang.org/projects/ruby-trunk/wiki/MigrationIssuesFrom18
-		 or http://magazine.rubyist.net/?0025-Ruby19_m17n (ja)
-	* if you want to extend Objective-C class from bundle or dylib (not
-	  from framework) in Ruby code, you need to invoke OSX.ns_import.
+    see https://bugs.ruby-lang.org/projects/ruby-trunk/wiki/MigrationIssuesFrom18
+     or http://magazine.rubyist.net/?0025-Ruby19_m17n (ja)
+  * if you want to extend Objective-C class from bundle or dylib (not
+    from framework) in Ruby code, you need to invoke OSX.ns_import.
 
-		    require 'path/to/your_bundle.bundle'
-				OSX.ns_import :YourClass
-				module OSX
-					class YourClass
-						: # extend class in Ruby code
-					end
-				end
+        require 'path/to/your_bundle.bundle'
+        OSX.ns_import :YourClass
+        module OSX
+          class YourClass
+            : # extend class in Ruby code
+          end
+        end
 		
 
 == Changes 1.1.0 from 1.0.7: 2013-11-17
