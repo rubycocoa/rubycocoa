@@ -1,3 +1,13 @@
+=== RubyCocoa 1.2.0 ===
+
+2014-07-27 kimura wataru <kimuraw@i.nifty.jp>
+
+	* VERSION:
+	set version to 1.2.0.
+
+	* NEWS, NEWS.ja:
+	set release date.
+
 2014-07-27 kimura wataru <kimuraw@i.nifty.jp>
 
 	* doc/index.md, doc/html/:
