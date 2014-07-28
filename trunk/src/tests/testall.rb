@@ -7,11 +7,15 @@ end
 require 'test/unit'
 
 if ENV['COVERAGE']
+  # coverage for ruby
   require 'simplecov'
   SimpleCov.configure do
+    project_name 'RubyCocoa'
     root '../'
+    coverage_dir 'coverage/ruby'
     add_group 'Framework', 'framework'
     add_group 'Tests', 'tests'
+    add_group 'Lib', 'lib'
   end
   SimpleCov.start
 end
