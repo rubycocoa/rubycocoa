@@ -1,3 +1,11 @@
+2014-07-28 kimura wataru <kimuraw@i.nifty.jp>
+
+	* tests/testall.rb:
+	add configuration to coverage.
+
+	* .gitignore:
+	add coverage dir.
+
 2014-07-27 kimura wataru <kimuraw@i.nifty.jp>
 
 	* tests/testall.rb:
