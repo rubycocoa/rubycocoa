@@ -1,5 +1,10 @@
 2014-07-28 kimura wataru <kimuraw@i.nifty.jp>
 
+	* tests/tc_nsdata.rb:
+	suppress warning from deprecated method NSData.dataWithRubyString.
+
+2014-07-28 kimura wataru <kimuraw@i.nifty.jp>
+
 	* tests/testall.rb:
 	add configuration to coverage.
 
