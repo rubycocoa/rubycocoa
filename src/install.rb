@@ -636,36 +636,12 @@ class Installer
   end
 
   def buildcommand
-    cmd = if test(?x, '/usr/bin/xcodebuild') then
-      '/usr/bin/xcodebuild'
-    else
-      '/usr/bin/pbxbuild'
-    end
-  end 
+    '/usr/bin/xcodebuild'
+  end
 
-  # XcodeTools 2.1 generates object file into framework/build/Default
-  # (2.0 or older generates into framework/build)
+  # Xcode 2.1 or later generates object file into framework/build/Default
   def framework_obj_path
-    obj_path = 'build'
-    with_default = false
-    if File.basename(buildcommand) == 'xcodebuild'
-      sys_version = `uname -r`.to_f
-      if sys_version < 8.0
-        # Xcode 1.5 or earlier on MacOS X 10.3
-      elsif sys_version >= 11.0
-	with_default = true  # Xcode 4.1 or later
-      elsif /DevToolsCore-(\d+)/.match(`#{buildcommand} -version`)
-        xcode_version = $1.to_i
-	with_default = true if xcode_version >= 620
-      elsif /Xcode ([\d\.]+)/.match(`#{buildcommand} -version`)
-        xcode_version = $1.to_f
-        with_default = true if xcode_version >= 4
-      else
-        # unknown
-      end
-    end
-    obj_path = "#{obj_path}/Default" if with_default
-    obj_path
+    obj_path = 'build/Default'
   end
 
   #
