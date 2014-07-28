@@ -56,11 +56,17 @@ class TC_NSData < Test::Unit::TestCase
   end
 
   def test_s_dataWithRubyString
-    src = 'hello world'
-    data = NSData.dataWithRubyString( src )
-    assert( data.isKindOfClass(NSData) )
-    assert_equal( src.size, data.length )
-    assert_kind_of( ObjcPtr, data.bytes )
+    verbose_bak = $VERBOSE
+    begin
+      $VERBOSE = nil # suppress warning "deprecated"
+      src = 'hello world'
+      data = NSData.dataWithRubyString( src )
+      assert( data.isKindOfClass(NSData) )
+      assert_equal( src.size, data.length )
+      assert_kind_of( ObjcPtr, data.bytes )
+    ensure
+      $VERBOSE = verbose_bak
+    end
   end
 
   def test_length
