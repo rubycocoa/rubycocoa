@@ -1,5 +1,15 @@
 2014-07-29 kimura wataru <kimuraw@i.nifty.jp>
 
+	* framework/post-setup.rb:
+	use function to detect framework_path.
+
+	* tests/tc_bs.rb,
+	  tests/tc_thread.rb:
+	remove setting DYLD_FRAMEWORK_PATH, the environment is already given
+	at running test.
+
+2014-07-29 kimura wataru <kimuraw@i.nifty.jp>
+
 	* install.rb:
 	delete package/work dir at clean task.
 

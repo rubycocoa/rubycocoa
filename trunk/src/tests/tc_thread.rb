@@ -213,7 +213,7 @@ EOS
   end
 
   def __spawn_line(line)
-    res = `DYLD_FRAMEWORK_PATH=../framework/build/Default #{@ruby_path} -I../lib -I../ext/rubycocoa -e \"#{line}\"`
+    res = `#{@ruby_path} -I../lib -I../ext/rubycocoa -e \"#{line}\"`
     raise "Can't spawn Ruby line: '#{line}'" unless $?.success?
     return res.strip
   end
