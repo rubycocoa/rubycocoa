@@ -725,6 +725,9 @@ class Installer
     dive_into( './tests' ) {
       clean
     }
+    dive_into( './package' ) {
+      command 'rm -rf work'
+    }
   end
 
   def clean_dir_bin( rel )

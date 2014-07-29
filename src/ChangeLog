@@ -1,3 +1,8 @@
+2014-07-29 kimura wataru <kimuraw@i.nifty.jp>
+
+	* install.rb:
+	delete package/work dir at clean task.
+
 2014-07-28 kimura wataru <kimuraw@i.nifty.jp>
 
 	* install.rb:
