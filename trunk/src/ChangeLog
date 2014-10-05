@@ -1,3 +1,8 @@
+2014-10-05 kimura wataru <kimuraw@i.nifty.jp>
+
+	* package/post-package.rb:
+	use pretty formatter to generate productbuild distribution xml.
+
 2014-07-29 kimura wataru <kimuraw@i.nifty.jp>
 
 	* framework/post-setup.rb:
