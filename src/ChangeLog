@@ -1,3 +1,8 @@
+2014-10-30 kimura wataru <kimuraw@i.nifty.jp>
+
+	* package/config/10.10-ruby2.0:
+	add a config file for packaging with 10.10 builtin ruby-2.0.
+
 2014-10-05 kimura wataru <kimuraw@i.nifty.jp>
 
 	* package/post-package.rb:
