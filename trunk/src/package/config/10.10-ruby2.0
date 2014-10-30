@@ -1,0 +1,34 @@
+# $Id$
+# generated from config.save
+# /usr/bin/ruby install.rb config
+# gawk -e 'BEGIN{FS=OFS="="}{$1="@config[\047" $1 "\047]";$2="\047" $2 "\047";print $0}' < config.save
+@config['prefix']='/System/Library/Frameworks/Ruby.framework/Versions/2.0/usr'
+@config['install-prefix']='$prefix'
+@config['std-ruby']='$install-prefix/lib/ruby/2.0.0'
+@config['site-ruby']='/Library/Ruby/Site/2.0.0'
+@config['bin-dir']='$install-prefix/bin'
+@config['rb-dir']='$site-ruby'
+@config['so-dir']='/Library/Ruby/Site/2.0.0/universal-darwin14'
+@config['data-dir']='$install-prefix/share'
+@config['ruby-path']='/System/Library/Frameworks/Ruby.framework/Versions/2.0/usr/bin/ruby'
+@config['ruby-prog']='/System/Library/Frameworks/Ruby.framework/Versions/2.0/usr/bin/ruby'
+@config['make-prog']='make'
+@config['without-ext']='no'
+@config['install-root']=''
+@config['frameworks']='/Library/Frameworks'
+@config['examples']='/Developer/Examples'
+@config['documentation']='/Developer/Documentation'
+@config['build-as-embeddable']='yes'
+@config['ruby-header-dir']='/System/Library/Frameworks/Ruby.framework/Versions/2.0/usr/include/ruby-2.0.0'
+@config['ruby-archheader-dir']='/System/Library/Frameworks/Ruby.framework/Versions/2.0/usr/include/ruby-2.0.0/universal-darwin14'
+@config['libruby-path']='/System/Library/Frameworks/Ruby.framework/Versions/2.0/usr/lib/libruby.2.0.0.dylib'
+@config['ri-dir']='/System/Library/Frameworks/Ruby.framework/Versions/2.0/usr/share/ri/2.0.0/site'
+@config['macosx-deployment-target']='10.10'
+@config['sdkroot']='/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.10.sdk'
+@config['target-archs']='x86_64 i386'
+
+# prefer /usr/bin, /usr/lib
+ENV['PATH'] = ['/usr/bin', ENV['PATH']].join(':')
+
+# add ruby version into package name
+@config.set_raw('package-name',"RubyCocoa-#{@config['rubycocoa-version']}-OSX10.10-Ruby2.0")
