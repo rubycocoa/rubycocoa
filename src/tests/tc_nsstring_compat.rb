@@ -83,11 +83,17 @@ class TC_ObjcString < Test::Unit::TestCase
   end
 
   def test_immutable
-    assert_raise(OSX::OCException, 'cannot modify immutable string') {
+    # cannot modify immutable string
+    # - OS X 10.9 or earlier: NSInvalidArgumentException
+    # - OS X 10.10: NoMethodError - does not respond to "setString:"
+    assert_raise(OSX::OCException, NoMethodError) {
       @nsstr.gsub!(/S/, 'X')
     }
     assert_equal('NSString', @nsstr.to_s, 'value not changed on error(gsub!)')
-    assert_raise(OSX::OCException, 'cannot modify immutable string') {
+    # cannot modify immutable string
+    # - OS X 10.9 or earlier: NSInvalidArgumentException
+    # - OS X 10.10: NoMethodError - does not respond to "appendString:"
+    assert_raise(OSX::OCException, NoMethodError) {
       @nsstr << 'Append'
     }
     assert_equal('NSString', @nsstr.to_s, 'value not changed on error(<<!)')

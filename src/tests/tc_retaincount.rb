@@ -24,7 +24,9 @@ class TC_RetainCount < Test::Unit::TestCase
     assert_equal(1, OSX::NSObject.alloc.retainCount, 'alloc')
     assert_equal(1, OSX::NSObject.alloc.init.retainCount, 'alloc.init')
     assert_equal(1, OSX::NSObject.new.retainCount, 'new')
-    assert_equal(1, OSX::NSString.stringWithString('foo').retainCount, 'factory')
+    # OS X 10.9 or earlier: 1
+    # OS X 10.10: NSUIntegerMax
+    assert_include([1, OSX::NSUIntegerMax], OSX::NSString.stringWithString('foo').retainCount, 'factory')
   end
 
   # retained by Objective-C

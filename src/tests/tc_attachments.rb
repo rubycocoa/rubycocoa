@@ -116,7 +116,8 @@ class TC_Attachments < Test::Unit::TestCase
   
   def test_inspect
     str =   OSX::NSString.stringWithString('foo')
-    assert_match(/\A#<(NSMutableString|NSCFString) "foo">\z/, str.inspect)
+    # OS X 10.10: NSTaggedPointerString
+    assert_match(/\A#<(NSTaggedPointerString|NSMutableString|NSCFString) "foo">\z/, str.inspect)
     
     num_i = OSX::NSNumber.numberWithInt(42)
     assert_match(/\A#<(NSNumber|NSCFNumber) 42>\z/, num_i.inspect)
