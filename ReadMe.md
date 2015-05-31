@@ -6,8 +6,7 @@ object-oriented scripting language [Ruby][1]. In other words, it is a bridge
 that let you access Objective-C objects from Ruby, and vice-versa.
 
 Please visit the RubyCocoa Web Site http://rubycocoa.sourceforge.net/ to get
-more information. The http://rubycocoa.com/ Web Site also contains very
-interesting resources such as tutorials.
+more information.
 
 Prerequisites
 -------------
