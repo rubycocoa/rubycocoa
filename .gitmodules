@@ -1,0 +1,3 @@
+[submodule "doc/rubycocoa.github.io"]
+	path = doc/rubycocoa.github.io
+	url = https://github.com/rubycocoa/rubycocoa.github.io.git

@@ -4,8 +4,8 @@ require 'fileutils'
 # Ruby documents by "yard"
 yardoc = `which yardoc`.chomp
 if yardoc.length > 0 && File.exist?(yardoc)
-    #FileUtils.rm_r('../doc/html/', :force => true)
-    cmd = %W(#{yardoc} -o ../doc/html --markup markdown
+    #FileUtils.rm_r('../doc/rubycocoa.github.io/', :force => true)
+    cmd = %W(#{yardoc} -o ../doc/rubycocoa.github.io --markup markdown
              --load ./tool/yard_objc_register.rb
 	     --title "RubyCocoa\ Documentation"
     )
@@ -43,11 +43,11 @@ end
 hd2html = `xcrun -f headerdoc2html`.chomp
 gatherhd = `xcrun -f gatherheaderdoc`.chomp
 if hd2html.length > 0 && File.exist?(hd2html)
-    FileUtils.rm_r('../doc/html/objc/', :force => true)
-    cmd = %W(#{hd2html} -o ../doc/html/objc)
+    FileUtils.rm_r('../doc/rubycocoa.github.io/objc/', :force => true)
+    cmd = %W(#{hd2html} -o ../doc/rubycocoa.github.io/objc)
     cmd += %w(src/objc/RubyCocoa.h src/objc/RBRuntime.h src/objc/RBObject.h)
     command(cmd.join(' '))
-    cmd = %W(#{gatherhd} ../doc/html/objc RubyCocoa.html)
+    cmd = %W(#{gatherhd} ../doc/rubycocoa.github.io/objc RubyCocoa.html)
     command(cmd.join(' '))
 end
 
