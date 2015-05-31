@@ -1,5 +1,10 @@
 2015-05-31 kimura wataru <kimuraw@i.nifty.jp>
 
+	* template/Xcode4.x/Templates/File Templates/Cocoa/Ruby-Cocoa class.xctemplate/TemplateInfo.plist:
+	fix wrong nesting <dict> of TemplateInfo.plist. (thanks to kmav)
+
+2015-05-31 kimura wataru <kimuraw@i.nifty.jp>
+
 	* ReadMe.md,
 	  doc/getting-started.md,
 	  doc/index.md,

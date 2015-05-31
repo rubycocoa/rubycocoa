@@ -5,6 +5,7 @@
 	<key>AllowedTypes</key>
 	<array>
 		<string>public.ruby-script</string>
+		<string>public.ruby-plus-script</string>
 	</array>
 	<key>DefaultCompletionName</key>
 	<string>MyClass</string>
@@ -30,7 +31,7 @@
       <key>Type</key>
       <string>text</string>
     </dict>
-    <dict>
+    	<dict>
 			<key>Default</key>
 			<string>NSObject</string>
 			<key>Description</key>
@@ -58,7 +59,8 @@
 				<string>NSViewController</string>
 				<string>NSWindowController</string>
 			</array>
-			<dict>
+		</dict>
+		<dict>
 				<key>Default</key>
 				<string>true</string>
 				<key>Identifier</key>
@@ -75,17 +77,14 @@
 				</dict>
 				<key>Type</key>
 				<string>checkbox</string>
-			</dict>
 		</dict>
 	</array>
 	<key>Platforms</key>
 	<array>
 		<string>com.apple.platform.macosx</string>
 	</array>
-	<!--
 	<key>SortOrder</key>
 	<integer>101</integer>
-	-->
 	<key>Summary</key>
 	<string>A Ruby Cocoa class</string>
 </dict>
