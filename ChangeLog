@@ -1,5 +1,15 @@
 2015-05-31 kimura wataru <kimuraw@i.nifty.jp>
 
+	* ReadMe.md,
+	  doc/getting-started.md,
+	  doc/index.md,
+	  doc/resources.md,
+	  package/tmpl/ReadMe.html,
+	  package/tmpl/ReadMe.ja.html:
+	RubyCocoa project was moved to github.
+
+2015-05-31 kimura wataru <kimuraw@i.nifty.jp>
+
 	* ReadMe.md:
 	rubycocoa.com was lost.
 

@@ -5,7 +5,7 @@ RubyCocoa is a Mac OS X framework that allows Cocoa programming in the
 object-oriented scripting language [Ruby][1]. In other words, it is a bridge
 that let you access Objective-C objects from Ruby, and vice-versa.
 
-Please visit the RubyCocoa Web Site http://rubycocoa.sourceforge.net/ to get
+Please visit the RubyCocoa Web Site http://rubycocoa.github.io/ to get
 more information.
 
 Prerequisites

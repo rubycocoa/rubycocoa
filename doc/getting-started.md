@@ -18,7 +18,7 @@ If you want to use the latest RubyCocoa, you need to install RubyCocoa.framework
 
 ## Download binary distribution
 
-Download RubyCocoa-x.x.x.dmg from [SourceForge.net](http://sourceforge.net/projects/rubycocoa/files/RubyCocoa/).
+Download RubyCocoa-x.x.x.dmg from [GitHub.com/rubycocoa/rubycocoa/releases](https://github.com/rubycocoa/rubycocoa/releases).
 
 It includes library, samples, templates for Xcode etc. for RubyCocoa. Everything necessary for execution and development is included in an easy-to-install '.pkg' package file.
 

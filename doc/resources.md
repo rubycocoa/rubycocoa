@@ -27,6 +27,5 @@ Mailing list:
 
 ## Development
 
-* [RubyCocoa projecte site](http://sourceforge.net/projects/rubycocoa/) on SourceForge.net
-* [Github mirror of sourcecode](https://github.com/kimuraw/rubycocoa/tree/develop)
+* [RubyCocoa projecte site](https://github.com/rubycocoa/rubycocoa) on GitHub.com
 
