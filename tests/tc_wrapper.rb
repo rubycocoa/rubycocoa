@@ -164,6 +164,20 @@ class TC_OCObjWrapper < Test::Unit::TestCase
     assert(!ary.equalToArray?([2]))
   end
 
+  # known bug as issue#2 on github
+  # https://github.com/rubycocoa/rubycocoa/issues/2
+  def test_p_arrangedObjects
+    ary = nil
+    assert_nothing_raised() {
+      ctl = OSX::NSArrayController.alloc.init
+      content = [1,2,3,4,5].map {|i| i.to_s}
+      ctl.addObjects(content)
+      ary = ctl.arrangedObjects
+      ary.inspect # raise NSGenericException on ruby-2.0 or later
+    }
+    assert_equal(5, ary.count)
+  end
+
 =begin
   # Test disabled, because #ocm_conforms? has also been disabled.
   def test_conforms_to_protocol

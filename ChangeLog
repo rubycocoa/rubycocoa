@@ -1,3 +1,9 @@
+2015-06-02 kimura wataru <kimuraw@i.nifty.jp>
+
+	* tests/tc_wrapper.rb:
+	add a test for unexpected exception at
+	NSArrayController#arragendObjects with ruby-2.0 or later.
+
 2015-05-31 kimura wataru <kimuraw@i.nifty.jp>
 
 	* .ruby-version:
