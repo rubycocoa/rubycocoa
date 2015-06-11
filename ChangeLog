@@ -1,5 +1,10 @@
 2015-06-12 kimura wataru <kimuraw@i.nifty.jp>
 
+	* tests/tc_uniqobj.rb:
+	suppress warning "Failed to connect ..." when runnig tests.
+
+2015-06-12 kimura wataru <kimuraw@i.nifty.jp>
+
 	* framework/src/objc/OverrideMixin.m,
 	  framework/src/objc/mdl_osxobjc.m:
 	use objc_getClass to get objc meta classes.

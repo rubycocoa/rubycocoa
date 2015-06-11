@@ -15,7 +15,7 @@ class UniqRubyObject < OSX::NSObject
 end
 
 class TableViewNibOwner < OSX::NSObject
-  ib_outlet :tableView
+  ib_outlet :tableView, :tableView1, :tableView2
 end
 
 class TC_UniqObject < Test::Unit::TestCase
