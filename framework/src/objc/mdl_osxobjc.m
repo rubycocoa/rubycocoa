@@ -133,7 +133,7 @@ osx_mf_objc_class_method_add(VALUE mdl, VALUE kls, VALUE method_name, VALUE clas
   if (a_class != NULL) {
     id rcv;
 
-    rcv = RTEST(class_method) ? a_class->isa : a_class;
+    rcv = RTEST(class_method) ? object_getClass(a_class) : a_class;
     if (NIL_P(types))
       ovmix_register_ruby_method(rcv, a_sel, direct_override);
     else

@@ -483,14 +483,14 @@ void install_ovmix_hooks(Class c)
 
 static inline void install_ovmix_pure_class_methods(Class c)
 {
-  class_addMethod(c->isa, @selector(addRubyMethod:), (IMP)imp_c_addRubyMethod, "@4@4:8:12");
-  class_addMethod(c->isa, @selector(addRubyMethod:withType:), (IMP)imp_c_addRubyMethod_withType, "@4@4:8:12*16");
+  class_addMethod(object_getClass(c), @selector(addRubyMethod:), (IMP)imp_c_addRubyMethod, "@4@4:8:12");
+  class_addMethod(object_getClass(c), @selector(addRubyMethod:withType:), (IMP)imp_c_addRubyMethod_withType, "@4@4:8:12*16");
 }
 
 void install_ovmix_class_methods(Class c)
 {
-  class_addMethod(c->isa, @selector(alloc), (IMP)imp_c_alloc, "@4@4:8");
-  class_addMethod(c->isa, @selector(allocWithZone:), (IMP)imp_c_allocWithZone, "@8@4:8^{_NSZone=}12");
+  class_addMethod(object_getClass(c), @selector(alloc), (IMP)imp_c_alloc, "@4@4:8");
+  class_addMethod(object_getClass(c), @selector(allocWithZone:), (IMP)imp_c_allocWithZone, "@8@4:8^{_NSZone=}12");
 }
 
 void init_ovmix(void)

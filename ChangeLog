@@ -1,3 +1,10 @@
+2015-06-12 kimura wataru <kimuraw@i.nifty.jp>
+
+	* framework/src/objc/OverrideMixin.m,
+	  framework/src/objc/mdl_osxobjc.m:
+	use objc_getClass to get objc meta classes.
+	'isa' was deprecated.
+
 2015-06-02 kimura wataru <kimuraw@i.nifty.jp>
 
 	* tests/tc_wrapper.rb:
