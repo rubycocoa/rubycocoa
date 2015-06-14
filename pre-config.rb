@@ -7,7 +7,7 @@ target_files = %w[
   ext/rubycocoa/extconf.rb
   framework/GeneratedConfig.xcconfig
   framework/src/objc/Version.h
-  tests/Makefile
+  test/Makefile
 ]
 
 install_path = @config['build-as-embeddable'] == 'yes' \

@@ -722,7 +722,7 @@ class Installer
   def exec_clean
     exec_task_traverse 'clean'
     rm_f 'config.save'
-    dive_into( './tests' ) {
+    dive_into( './test' ) {
       clean
     }
     dive_into( './package' ) {
@@ -1085,7 +1085,7 @@ class ToplevelInstaller < Installer
     ruby_cmd = '"' + File.join(RbConfig::CONFIG['bindir'],
                                RbConfig::CONFIG['RUBY_INSTALL_NAME']) + '"'
     ruby_cmd = "/usr/bin/arch -#{@options['arch']} " + ruby_cmd if @options['arch']
-    dive_into('tests') {
+    dive_into('test') {
       ENV['DYLD_FRAMEWORK_PATH'] = File.join('../framework', framework_obj_path)
       ENV['BRIDGE_SUPPORT_PATH'] = '../framework/bridge-support'
       test_loadlibs(ruby_cmd)
@@ -1107,7 +1107,7 @@ class ToplevelInstaller < Installer
   end
 
   def test_testcase(ruby_cmd)
-    cmd = %Q!#{ruby_cmd} -I../ext/rubycocoa -I../lib testall.rb!
+    cmd = %Q!#{ruby_cmd} -I../ext/rubycocoa -I../lib run_test.rb!
     cmd = "/usr/libexec/oah/translate " + cmd if @options['use-rosetta']
     cmd += " " + @options['test-args'] if @options['test-args']
     cmd += " -v" if $VERBOSE # print each testname

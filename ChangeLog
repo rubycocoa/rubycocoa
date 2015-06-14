@@ -1,5 +1,10 @@
 2015-06-15 kimura wataru <kimuraw@i.nifty.jp>
 
+	* install.rb, pre-config.rb, test/:
+	rename files and dir to standard test-unit style.
+
+2015-06-15 kimura wataru <kimuraw@i.nifty.jp>
+
 	* framework/src/ruby/osx/objc/foundation.rb:
 	redefine OSX::NSNotFound only need to correct its value.
 
