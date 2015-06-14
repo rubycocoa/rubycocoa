@@ -1,3 +1,8 @@
+2015-06-15 kimura wataru <kimuraw@i.nifty.jp>
+
+	* framework/src/ruby/osx/objc/foundation.rb:
+	redefine OSX::NSNotFound only need to correct its value.
+
 2015-06-12 kimura wataru <kimuraw@i.nifty.jp>
 
 	* tests/tc_uniqobj.rb:
