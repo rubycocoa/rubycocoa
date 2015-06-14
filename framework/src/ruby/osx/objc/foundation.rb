@@ -12,11 +12,11 @@ p = '/System/Library/BridgeSupport/libSystem.bridgesupport'
 OSX.load_bridge_support_file(p) if File.exist?(p)
 
 module OSX
-  if const_defined(:NSNotFound) && NSNotFound != NSIntegerMax
+  if const_defined?(:NSNotFound) && NSNotFound != NSIntegerMax
     # NOTE: 10.6 Foundation.bridgesupport defines the value64 of NSNotFound as -1
     remove_const(:NSNotFound)
   end
-  unless const_defined(:NSNotFound)
+  unless const_defined?(:NSNotFound)
     NSNotFound = NSIntegerMax
   end
 end
