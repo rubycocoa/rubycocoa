@@ -51,7 +51,8 @@ def lib_exist?(path, sdkroot=@config['sdkroot'])
   File.exist?(File.join(sdkroot, path))
 end
 
-if lib_exist?('/usr/include/libxml2') and lib_exist?('/usr/lib/libxml2.dylib')
+if lib_exist?('/usr/include/libxml2') and
+    (lib_exist?('/usr/lib/libxml2.dylib') || lib_exist?('/usr/lib/libxml2.tbd'))
   cflags << ' -DHAS_LIBXML2 '
   other_header_search_paths << '/usr/include/libxml2'
   ldflags << ' -lxml2 '
@@ -62,7 +63,8 @@ end
 raise 'ERROR: ruby must be built as a shared library' if RbConfig::CONFIG["ENABLE_SHARED"] != 'yes'
 
 # Add the libffi library to the build process.
-if !lib_exist?('/usr/lib/libffi.a') and !lib_exist?('/usr/lib/libffi.dylib')
+if !lib_exist?('/usr/lib/libffi.a') and
+    !lib_exist?('/usr/lib/libffi.dylib') and !lib_exist?('/usr/lib/libffi.tbd')
   if lib_exist?('/usr/local/lib/libffi.a') and lib_exist?('/usr/local/include/ffi')
     cflags << ' -I/usr/local/include/ffi '
     ldflags << ' -L/usr/local/lib '
