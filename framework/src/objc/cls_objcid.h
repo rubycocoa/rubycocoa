@@ -24,7 +24,11 @@ VALUE objcid_new_with_ocid(VALUE klass, id ocid);
  * id* objcid_idptr (VALUE rcv);
  * id  objcid_id (VALUE rcv);
  **/
+#ifdef HAVE_TYPE_RB_DATA_TYPE_T
+#define OBJCID_DATA_PTR(rcv) ((struct _objcid_data*)(RTYPEDDATA_DATA(rcv)))
+#else
 #define OBJCID_DATA_PTR(rcv) ((struct _objcid_data*)(DATA_PTR(rcv)))
+#endif
 #define OBJCID_ID(rcv)     (OBJCID_DATA_PTR(rcv)->ocid)
 #define OBJCID_IDPTR(rcv)  (&OBJCID_ID(rcv))
 

@@ -51,13 +51,26 @@ _objcid_data_new()
   return dp;
 }
 
+#ifdef HAVE_TYPE_RB_DATA_TYPE_T
+static const rb_data_type_t objcid_type = {
+    "osx_objcid",
+    {0, _objcid_data_free, sizeof(struct _objcid_data),},
+    0, 0,
+    0,
+};
+#endif
+
 /*
  * allocate
  */
 static VALUE
 objcid_s_alloc(VALUE klass)
 {
+#ifdef HAVE_TYPE_RB_DATA_TYPE_T
+  return TypedData_Wrap_Struct(klass, &objcid_type, _objcid_data_new());
+#else
   return Data_Wrap_Struct(klass, NULL, _objcid_data_free, _objcid_data_new());
+#endif
 }
 
 VALUE
@@ -65,7 +78,11 @@ objcid_new_with_ocid(VALUE klass, id ocid)
 {
   VALUE obj;
 
-  obj = Data_Wrap_Struct(klass, 0, _objcid_data_free, _objcid_data_new());
+#ifdef HAVE_TYPE_RB_DATA_TYPE_T
+  obj = TypedData_Wrap_Struct(klass, &objcid_type, _objcid_data_new());
+#else
+  obj = Data_Wrap_Struct(klass, NULL, _objcid_data_free, _objcid_data_new());
+#endif
 
   // The retention of the ObjC instance is delayed in ocm_send, to not
   // violate the "init-must-follow-alloc" initialization pattern.
@@ -236,6 +253,9 @@ init_cls_ObjcID(VALUE mOSX)
 {
   _kObjcID = rb_define_class_under(mOSX, "ObjcID", rb_cObject);
 
+#ifdef HAVE_TYPE_RB_DATA_TYPE_T
+  rb_undef_alloc_func(_kObjcID);
+#endif
   rb_define_alloc_func(_kObjcID, objcid_s_alloc);
   rb_define_singleton_method(_kObjcID, "new_with_ocid", wrapper_objcid_s_new_with_ocid, 1);
 
