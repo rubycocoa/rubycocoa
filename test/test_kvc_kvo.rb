@@ -14,10 +14,11 @@ class KVOneToOne < OSX::NSObject
 
   def initialize
     @observed = Hash.new(0)
+    @value1 = @value2 = @kvc1 = @kvc2 = 0
   end
 
   def self.automaticallyNotifiesObserversForKey(key)
-    case key.to_s 
+    case key.to_s
     when 'value1'
       true
     when 'kvc1'

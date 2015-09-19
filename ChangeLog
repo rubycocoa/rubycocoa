@@ -1,5 +1,11 @@
 2015-09-19 kimura wataru <kimuraw@i.nifty.jp>
 
+	* test/test_kvc_kvo.rb:
+	fix test failure test_rbobject_kvo_autonotify(TC_Key-
+	ValueObserving) on OS X 10.11.
+
+2015-09-19 kimura wataru <kimuraw@i.nifty.jp>
+
 	* test/test_retaincount.rb:
 	fix test failure test_cf_types(TC_RetainCount) on OS X 10.11.
 
