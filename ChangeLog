@@ -1,5 +1,11 @@
 2015-09-19 kimura wataru <kimuraw@i.nifty.jp>
 
+	* install.rb:
+	fix DYLD_ environments are ignored at running tests
+	on OS X 10.11.
+
+2015-09-19 kimura wataru <kimuraw@i.nifty.jp>
+
 	* metaconfig:
 	change default value of config --build-as-embeddable to 'no'
 	on OS X 10.11 or later. system built-in ruby does not allow
