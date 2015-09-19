@@ -2,6 +2,7 @@ require 'test/unit'
 require 'osx/cocoa'
 require 'thread'
 require 'rbconfig'
+require './util.rb'
 
 system 'make' || raise(RuntimeError, "'make' failed")
 require './objc_test.bundle'
@@ -50,6 +51,7 @@ class TestThreadNativeMethod < OSX::NSObject
 end
 
 class TC_Thread < Test::Unit::TestCase
+  include TestHelper
   attr_reader :mainThread
 
   SYSTEM_VERSION = `/usr/bin/sw_vers -productVersion`.chomp # such as "10.6.1"
@@ -210,12 +212,6 @@ t.join
 p 1
 EOS
     assert_equal('1', __spawn_line(code.gsub(/\n/, ';')))
-  end
-
-  def __spawn_line(line)
-    res = `#{@ruby_path} -I../lib -I../ext/rubycocoa -e \"#{line}\"`
-    raise "Can't spawn Ruby line: '#{line}'" unless $?.success?
-    return res.strip
   end
 
   # Mac OS X 10.6 or later, thread-hooks is unavailable.

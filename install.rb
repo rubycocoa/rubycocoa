@@ -15,6 +15,8 @@
 #   $Id$
 #
 
+require 'open3'
+require './test/util.rb'
 ### begin compat.rb
 
 unless Enumerable.instance_methods(false).include? 'inject' then
@@ -413,6 +415,7 @@ class InstallError < StandardError; end
 
 
 class Installer
+  include TestHelper
 
   Version   = '3.1.0'
   Copyright = 'Copyright (c) 2000,2001 Minero Aoki'
@@ -1122,7 +1125,6 @@ class ToplevelInstaller < Installer
       cmd = %Q!#{ruby_cmd} -I../ext/rubycocoa -I../lib ! +
 	    %Q!-e 'require "osx/cocoa"' !
       cmd = cmd_with_dyld_env(cmd)
-      require 'open3'
       libs = Open3.popen3(cmd) do |stdin, stdout, stderr|
         stdin.close
         stderr.readlines
@@ -1143,18 +1145,6 @@ class ToplevelInstaller < Installer
     ensure
       ENV.delete('DYLD_PRINT_LIBRARIES_POST_LAUNCH')
     end
-  end
-
-  # run command with DYLD_ environments via `env` command.
-  # OS X 10.11 does not pass DYLD_ environments to subprocess.
-  def cmd_with_dyld_env(cmd, env=ENV)
-    cmd_via_env = ['/usr/bin/env']
-    env.each_pair do |env_name, env_value|
-      next unless env_name =~ /\ADYLD_/
-      cmd_via_env << "#{env_name}=#{env_value}"
-    end
-    cmd_via_env << cmd
-    cmd_via_env.join(' ')
   end
 
   # doc

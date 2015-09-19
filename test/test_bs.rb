@@ -5,10 +5,12 @@
 require 'test/unit'
 require 'osx/cocoa'
 require 'rbconfig'
+require './util.rb'
 
 system 'make -s' || raise(RuntimeError, "'make' failed")
 
 class TC_BridgeSupport < Test::Unit::TestCase
+  include TestHelper
 
   def setup
     @ruby_path = File.join(RbConfig::CONFIG["bindir"], RbConfig::CONFIG["RUBY_INSTALL_NAME"])
@@ -40,12 +42,6 @@ class TC_BridgeSupport < Test::Unit::TestCase
 
   def test_include_osx_require_framework
     assert_equal('42', __spawn_line("require 'osx/foundation'; include OSX; require_framework 'AppKit'; p 42"))
-  end
-
-  def __spawn_line(line)
-    res = `#{@ruby_path} -I../lib -I../ext/rubycocoa -e \"#{line}\"`
-    raise "Can't spawn Ruby line: '#{line}'" unless $?.success?
-    return res.strip
   end
 
   # reload_protocol() in BridgeSupport.m
