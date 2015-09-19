@@ -72,7 +72,8 @@ add_path_config 'examples', '/Developer/Examples',
 add_path_config 'documentation', '/Developer/Documentation',
   'path to the directory for Documentation'
 
-add_bool_config 'build-as-embeddable', true,
+# on OS X 10.11, RubyCocoa.framwork shoud not be @executable_path
+add_bool_config 'build-as-embeddable', not(RubyCocoaConfig.os_version_ge?('10.11')),
   'yes, build the framework as embeddable (with INSTALL_PATH pointing to the current application\'s Frameworks directory)'
 
 ### build configuration ### 
