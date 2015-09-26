@@ -1163,7 +1163,10 @@ module OSX
     # For NSArray duck typing
     
     def each
-      iter = objectEnumerator
+      iter = self.objectEnumerator
+      # FIXME: iter.nextObject raises `NSGenericException` with ruby-2.x
+      # avoid the exception by invoking other objc-method before #nextObject
+      iter.oc_class
       while obj = iter.nextObject
         yield obj
       end
