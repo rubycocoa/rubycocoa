@@ -17,9 +17,6 @@ install_path = @config['build-as-embeddable'] == 'yes' \
 config_ary = [
   [ :frameworks,      @config['frameworks'] ],
   [ :ruby_header_paths, [@config['ruby-header-dir'], @config['ruby-archheader-dir']].uniq.join(' ') ],
-  [ :libruby_path,    @config['libruby-path'] ],
-  [ :libruby_path_dirname,  File.dirname(@config['libruby-path']) ],
-  [ :libruby_path_basename, File.basename(@config['libruby-path']) ],
   [ :rubycocoa_version,      @config['rubycocoa-version'] ],
   [ :rubycocoa_version_short,   @config['rubycocoa-version-short'] ],
   [ :rubycocoa_release_date, @config['rubycocoa-release-date'] ],
@@ -36,6 +33,15 @@ ldflags = '-undefined suppress -flat_namespace'
 sdkroot = @config['sdkroot']
 archs = @config['target-archs']
 other_header_search_paths = []
+
+# do not link statib ruby into the framework
+if RbConfig::CONFIG["ENABLE_SHARED"] == 'yes'
+  config_ary << [ :libruby_path, @config['libruby-path'] ]
+  config_ary << [ :libruby_path_dirname, File.dirname(@config['libruby-path']) ]
+else
+  config_ary << [ :libruby_path, '' ]
+  config_ary << [ :libruby_path_dirname, '' ]
+end
 
 # add archs if given
 arch_flags = archs.gsub(/\A|\s+/, ' -arch ')
@@ -59,8 +65,6 @@ if lib_exist?('/usr/include/libxml2') and
 else
   raise "ERROR: libxml2 not found!"
 end
-
-raise 'ERROR: ruby must be built as a shared library' if RbConfig::CONFIG["ENABLE_SHARED"] != 'yes'
 
 # Add the libffi library to the build process.
 if !lib_exist?('/usr/lib/libffi.a') and
