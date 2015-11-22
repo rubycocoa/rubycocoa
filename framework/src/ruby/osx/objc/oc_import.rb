@@ -6,6 +6,7 @@
 # LGPL. See the COPYRIGHT file for more information.
 
 require 'osx/objc/oc_wrapper'
+require 'osx/objc/oc_exception'
 
 module OSX
 
