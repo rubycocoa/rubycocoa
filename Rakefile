@@ -21,7 +21,12 @@ end
 
 desc "build RubyCocoa.framework"
 task :build do
+  require 'rbconfig'
+  target_arch = RbConfig::CONFIG['target_cpu']
+
   config = ["config"]
+  config << "--target-archs=#{target_arch}" if target_arch != 'universal'
+
   ruby "install.rb", *config
   ruby "install.rb", "setup"
   ruby "install.rb", "test"
