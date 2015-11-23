@@ -452,7 +452,7 @@ VALUE rbobj_call_ruby(id rbobj, SEL selector, VALUE args)
       char encoding[128], *p;
 
       if (argc < 0)
-        argc = -1 - argc;
+        argc = -argc;
       argc = MIN(sizeof(encoding) - 4, argc);
 
       strcpy(encoding, "@@:");

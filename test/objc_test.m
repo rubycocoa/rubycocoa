@@ -250,9 +250,10 @@
 @interface CallerClass : NSObject
 @end
 
-@interface NSObject (TcSubclassFoo)
+@interface NSObject (CallerClassSelectors)
 
 - (long)calledFoo:(id)arg;
+- (id)optional_arg:(id)arg :(id)optional_arg;
 
 @end
 
@@ -261,6 +262,11 @@
 - (id)callFoo:(id)receiver
 {
     return (id)[receiver calledFoo:nil];
+}
+
++ (id)callOnReceiver:(id)receiver arg:(id)arg optionalArg:(id)optionalArg;
+{
+    return (id)[receiver optional_arg:arg :optionalArg];
 }
 
 @end
