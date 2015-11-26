@@ -1,0 +1,4 @@
+os: osx
+language: ruby
+rvm: system
+script: rake build
