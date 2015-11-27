@@ -472,7 +472,7 @@ rbary_to_nsary (VALUE rbary, id* nsary)
   ASSERT_ALLOC(objects);
   
   for (i = 0; i < len; i++)
-    if (!rbobj_to_nsobj(RARRAY_PTR(rbary)[i], &objects[i]))
+    if (!rbobj_to_collection_safe_nsobj(RARRAY_PTR(rbary)[i], &objects[i]))
       return NO;
   
   *nsary = [[[NSMutableArray alloc] initWithObjects:objects count:len] autorelease];
@@ -501,10 +501,10 @@ rbhash_to_nsdic (VALUE rbhash, id* nsdic)
   ASSERT_ALLOC(nsvals);
 
   for (i = 0; i < len; i++) {
-    if (!rbobj_to_nsobj(keys[i], &nskeys[i])) 
+    if (!rbobj_to_collection_safe_nsobj(keys[i], &nskeys[i]))
       return NO;
     val = rb_hash_aref(rbhash, keys[i]);
-    if (!rbobj_to_nsobj(val, &nsvals[i])) 
+    if (!rbobj_to_collection_safe_nsobj(val, &nsvals[i]))
       return NO;
   }
 
@@ -637,6 +637,16 @@ rbobj_to_nsobj (VALUE obj, id* nsobj)
   }
 
   return ok;
+}
+
+BOOL
+rbobj_to_collection_safe_nsobj (VALUE obj, id* nsobj)
+{
+  if (obj == Qnil) {
+    *nsobj = [NSNull null];
+    return YES;
+  }
+  return rbobj_to_nsobj(obj, nsobj);
 }
 
 BOOL 

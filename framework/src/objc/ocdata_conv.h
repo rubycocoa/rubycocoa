@@ -76,6 +76,8 @@ BOOL  ocdata_to_rbobj (VALUE context_obj,
 		       const char *octype, const void* ocdata, VALUE* result, BOOL from_libffi);
 BOOL  rbobj_to_ocdata (VALUE obj, const char *octype, void* ocdata, BOOL to_libffi);
 
+BOOL rbobj_to_collection_safe_nsobj (VALUE obj, id* nsobj);
+
 void init_rb2oc_cache(void);
 void init_oc2rb_cache(void);
 void clear_oc2rb_cache(void);

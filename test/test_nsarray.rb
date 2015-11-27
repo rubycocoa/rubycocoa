@@ -1,6 +1,9 @@
 require 'test/unit'
 require 'osx/cocoa'
 
+system 'make -s' || raise(RuntimeError, "'make' failed")
+require './objc_test.bundle'
+
 class TC_NSArray < Test::Unit::TestCase
   include OSX
   
@@ -958,5 +961,11 @@ class TC_NSArray < Test::Unit::TestCase
       assert_equal(y, x.to_ruby)
       assert_kind_of(NSArray, x)
     end
+  end
+
+  def test_nil_protection
+    receiver = Object.new
+    def receiver.calledFoo(_); [nil]; end
+    assert_equal([NSNull.null].to_ns, CallerClass.new.callFoo(receiver))
   end
 end
