@@ -1,3 +1,10 @@
+2017-06-12 kimura wataru <kimuraw@i.nifty.jp>
+
+	* framework/src/ruby/osx/objc/oc_import.rb:
+	fix SEGV at OSX.ns_import on 10.12.
+	some WebKit classes such as WKObject or WKNS... looks to
+	have broken respondsToSelector: method.
+
 2015-09-26 kimura wataru <kimuraw@i.nifty.jp>
 
 	* framework/src/ruby/osx/objc/oc_attachments.rb:

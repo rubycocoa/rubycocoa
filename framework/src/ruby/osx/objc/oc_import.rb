@@ -247,6 +247,12 @@ module OSX
   def ns_import(sym)
     if not OSX.const_defined?(sym)
       NSLog("importing #{sym}...") if OSX._debug?
+      # on 10.12, some WebKit classes not fully implement NSObject protocol methods,
+      # such as "respondsToSelector:".
+      # SEGV occurs when invoking "respondsToSelector:" for these classes.
+      if sym == "WKObject" or /\AWKNS/ =~ sym
+        return nil
+      end
       klass = if clsobj = NSClassFromString(sym)
         if rbcls = class_new_for_occlass(clsobj)
           OSX.const_set(sym, rbcls)
