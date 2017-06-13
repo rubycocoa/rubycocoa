@@ -1,3 +1,8 @@
+2017-06-13 kimura wataru <kimuraw@i.nifty.jp>
+
+	* test/test_qtkit.rb:
+	ignore all tests for QTKIt. QTKit was deprecated in OS X 10.9.
+
 2017-06-12 kimura wataru <kimuraw@i.nifty.jp>
 
 	* framework/src/ruby/osx/objc/oc_import.rb:
