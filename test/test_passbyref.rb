@@ -231,7 +231,7 @@ class TC_PassByRef < Test::Unit::TestCase
     tmp = OSX.CGMainDisplayID() # let to work NSCountWindows()
     assert_raises(ArgumentError) { OSX::NSCountWindows(nil) }
     r = OSX::NSCountWindows()
-    assert_kind_of(Fixnum, r)
+    assert_kind_of(Integer, r)
   end
 
   def test_in_c_array_fixed_length
@@ -251,7 +251,7 @@ class TC_PassByRef < Test::Unit::TestCase
     assert_kind_of(Array, ary)
     assert_equal(2, ary.length)
     assert_kind_of(String, ary.first)
-    assert_kind_of(Fixnum, ary.last)
+    assert_kind_of(Integer, ary.last)
     if OSX::RUBYCOCOA_BUILD_LP64
       types = ary.first.unpack('Q*')
     else

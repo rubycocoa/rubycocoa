@@ -1,3 +1,10 @@
+2017-06-15 kimura wataru <kimuraw@i.nifty.jp>
+
+	* test/test_nsstring_compat.rb,
+	  test/test_passbyref.rb:
+	kind_of?(Fixnum) -> kind_of?(Integer). ruby-2.4 deprecetes
+	Fixnum and Bignum.
+
 2017-06-13 kimura wataru <kimuraw@i.nifty.jp>
 
 	* test/test_qtkit.rb:

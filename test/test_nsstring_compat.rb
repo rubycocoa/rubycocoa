@@ -602,7 +602,7 @@ class TC_ObjcString < Test::Unit::TestCase
   def test_index
     ['', 'a', 'z', 0x42, 0x100000].each do |i|
       # ruby-2.0 or later, String#index() does not accept
-      if (i.kind_of?(Fixnum) && RUBY_VERSION >= '2.0')
+      if (i.kind_of?(Integer) && RUBY_VERSION >= '2.0')
 	next
       end
       s = 'abc'
@@ -769,7 +769,7 @@ class TC_ObjcString < Test::Unit::TestCase
       s = 'abcabc'
       n = alloc_nsstring(s)
       # ruby-2.0 or later, String#index() does not accept
-      if (i.kind_of?(Fixnum) && RUBY_VERSION >= '2.0')
+      if (i.kind_of?(Integer) && RUBY_VERSION >= '2.0')
 	assert_raise(TypeError) { s.rindex(i) }
 	assert_raise(TypeError) { n.rindex(i) }
       else
