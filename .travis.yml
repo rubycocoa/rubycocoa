@@ -1,6 +1,7 @@
 language: ruby
 
 # 10.12, 10.11, 10.10
+os: osx
 osx_image:
   - xcode8.3
   - xcode8
