@@ -250,7 +250,7 @@ module OSX
       # on 10.12, some WebKit classes not fully implement NSObject protocol methods,
       # such as "respondsToSelector:".
       # SEGV occurs when invoking "respondsToSelector:" for these classes.
-      if sym == "WKObject" or /\AWKNS/ =~ sym
+      if /\AWK(Object\z|NS)/ =~ sym
         return nil
       end
       klass = if clsobj = NSClassFromString(sym)
