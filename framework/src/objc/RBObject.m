@@ -72,25 +72,6 @@ static RB_ID rb_obj_sel_to_mid(VALUE rcv, SEL a_sel)
   return mid;
 }
 
-static int rb_obj_arity_of_method(VALUE rcv, SEL a_sel, BOOL *ok)
-{
-  VALUE mstr;
-  RB_ID mid;
-  VALUE method;
-  VALUE argc;
-
-  mid = rb_obj_sel_to_mid(rcv, a_sel);
-  if (rb_respond_to(rcv, mid) == 0) {
-    *ok = NO;
-    return 0;
-  }
-  mstr = rb_str_new2(rb_id2name(mid)); // mstr = sel_to_rbobj (a_sel);
-  method = rb_funcall(rcv, rb_intern("method"), 1, mstr);
-  *ok = YES;
-  argc = rb_funcall(method, rb_intern("arity"), 0);
-  return NUM2INT(argc);
-}
-
 @interface __RBObjectThreadDispatcher : NSObject
 {
   id _returned_ocid;
@@ -442,32 +423,22 @@ VALUE rbobj_call_ruby(id rbobj, SEL selector, VALUE args)
       RBOBJ_LOG("\tgot method signature from metadata (types: '%s')", method->encoding);
     }
   }
-  // Ensure a dummy method signature ('id' for everything).
+  // Ensure a dummy method signature ('id' for every argument).
   if (ret == nil) {
-    int argc;
-    BOOL ok;
+    char encoding[128], *p;
+    strcpy(encoding, "@@:");
+    p = &encoding[3];
 
-    argc = rb_obj_arity_of_method(m_rbobj, a_sel, &ok);
-    if (ok) {
-      char encoding[128], *p;
-
-      if (argc < 0)
-        argc = -argc;
-      argc = MIN(sizeof(encoding) - 4, argc);
-
-      strcpy(encoding, "@@:");
-      p = &encoding[3];
-      while (argc-- > 0) {
+    char *mname = sel_getName(a_sel);
+    for (int i = 0; mname[i]; i++) {
+      if (mname[i] == ':') {
         *p++ = '@';
       }
-      *p = '\0';
-      ret = [NSMethodSignature signatureWithObjCTypes:encoding];
-      RBOBJ_LOG("\tgenerated dummy method signature");
     }
-    else {
-      VALUE str = rb_inspect(m_rbobj);
-      RBOBJ_LOG("\tcan't generate a dummy method signature because receiver %s doesn't respond to the selector", StringValuePtr(str));
-    }
+    *p = '\0';
+
+    ret = [NSMethodSignature signatureWithObjCTypes:encoding];
+    RBOBJ_LOG("\tgenerated dummy method signature (types: '%s')", encoding);
   }
   RBOBJ_LOG("   --> %@", ret);
   return ret;
