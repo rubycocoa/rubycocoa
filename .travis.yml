@@ -1,4 +1,18 @@
-os: osx
 language: ruby
-rvm: system
+
+# 10.12, 10.11, 10.10
+osx_image:
+  - xcode8.3
+  - xcode8
+  - xcode6.4
+
+# 10.11 or later, system built-in ruby cannot run RubyCocoa tests
+rvm:
+  - 2.4.1
+  - 2.3.4
+
+#matrix:
+#  allow_failures:
+#    rvm: ruby-head
+
 script: rake build
