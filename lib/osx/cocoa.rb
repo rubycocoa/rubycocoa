@@ -5,5 +5,4 @@
 # RubyCocoa is free software, covered under either the Ruby's license or the 
 # LGPL. See the COPYRIGHT file for more information.
 
-require 'osx/foundation'
-require 'osx/objc/cocoa'
+require 'osx/objc/cocoa.rb'
