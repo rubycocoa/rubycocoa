@@ -26,6 +26,10 @@ $CFLAGS << ' -g -fobjc-exceptions -Wall'
 $LDFLAGS = ' -undefined suppress -flat_namespace -framework Foundation'
 $CFLAGS << ' -DRB_ID=ID'
 
-create_header
+macosx_deployment_target =
+  with_config('deployment-target', `xcrun --show-sdk-version`.chomp)
+$defs.push("-DRUBYCOCOA_DEPLOYMET_TARGET=#{macosx_deployment_target}")
+$defs.push("-DBUILD_RUBY_VERSION=#{RUBY_VERSION}")
 
+create_header
 create_makefile("rubycocoa/rubycocoa")

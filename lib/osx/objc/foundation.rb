@@ -13,6 +13,10 @@ p = '/System/Library/BridgeSupport/libSystem.bridgesupport'
 OSX.load_bridge_support_file(p) if File.exist?(p)
 
 module OSX
+  RUBYCOCOA_VERSION = RubyCocoa::VERSION
+  RUBYCOCOA_RELEASE_DATE = RubyCocoa::RELEASE_DATE
+  RUBYCOCOA_SVN_REVISION = "(deprecated)"
+
   if const_defined?(:NSNotFound) && NSNotFound != NSIntegerMax
     # NOTE: 10.6 Foundation.bridgesupport defines the value64 of NSNotFound as -1
     remove_const(:NSNotFound)

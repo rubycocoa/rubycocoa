@@ -10,7 +10,6 @@
 #import "mdl_osxobjc.h"
 #import <ruby.h>
 #import <Foundation/Foundation.h>
-#import "Version.h"
 #import "RBThreadSwitcher.h"
 #import "RBObject.h"
 #import "RBClassUtils.h"
@@ -514,15 +513,6 @@ void initialize_mdl_osxobjc()
   rb_define_module_function(mOSX, "objc_classnames",
 			    osx_mf_objc_classnames, -1);
 
-  // The RubyCocoa version string
-  rb_define_const(mOSX, "RUBYCOCOA_VERSION", 
-		  rb_obj_freeze(rb_str_new2(RUBYCOCOA_VERSION)));
-  // The release date string
-  rb_define_const(mOSX, "RUBYCOCOA_RELEASE_DATE", 
-		  rb_obj_freeze(rb_str_new2(RUBYCOCOA_RELEASE_DATE)));
-  // The release revision string
-  rb_define_const(mOSX, "RUBYCOCOA_SVN_REVISION", 
-		  rb_obj_freeze(rb_str_new2(RUBYCOCOA_SVN_REVISION)));
 #if __LP64__
   // Whether built for LP64 or not
   rb_define_const(mOSX, "RUBYCOCOA_BUILD_LP64", Qtrue);
