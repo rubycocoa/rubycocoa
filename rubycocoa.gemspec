@@ -9,14 +9,21 @@ Gem::Specification.new do |spec|
   spec.authors       = ["kimura wataru"]
   spec.email         = ["kimuraw@i.nifty.jp"]
 
-  spec.summary       = %q{TODO: Write a short summary, because Rubygems requires one.}
-  spec.description   = %q{TODO: Write a longer description or delete this line.}
-  spec.homepage      = "TODO: Put your gem's website or public repo URL here."
+  spec.summary       = "RubyCocoa - A Ruby/Objective-C Bridge"
+  spec.description   = <<EOS
+RubyCocoa is a framework for Mac OS X that allows Cocoa programming in 
+the object-oriented scripting language Ruby.
+
+RubyCocoa lets you write a Cocoa application in Ruby. It allows you to 
+create and use a Cocoa object in a Ruby script. It's possible to write 
+a Cocoa application that mixes Ruby and Objective-C code.
+EOS
+  spec.homepage      = "http://rubycocoa.github.io/"
 
   # Prevent pushing this gem to RubyGems.org. To allow pushes either set the 'allowed_push_host'
   # to allow pushing to a single host or delete this section to allow pushing to any host.
   if spec.respond_to?(:metadata)
-    spec.metadata["allowed_push_host"] = "TODO: Set to 'http://mygemserver.com'"
+  # spec.metadata["allowed_push_host"] = "TODO: Set to 'http://mygemserver.com'"
   else
     raise "RubyGems 2.0 or newer is required to protect against " \
       "public gem pushes."
