@@ -34,7 +34,11 @@
 # undef WORDS_BIGENDIAN
 #endif
 
-#import "ffi.h"
+#ifdef USE_HEADER_HACKS
+#import <ffi/ffi.h>
+#else
+#import <ffi.h>
+#endif
 
 struct bsBoxed;
 struct bsCallEntry;

@@ -20,7 +20,11 @@
 #import <objc/objc-class.h>
 #import <objc/objc-runtime.h>
 #import "ocdata_conv.h"
-#import "ffi.h"
+#ifdef USE_HEADER_HACKS
+#import <ffi/ffi.h>
+#else
+#import <ffi.h>
+#endif
 #import "internal_macros.h"
 #import "cls_objcid.h"
 #import "BridgeSupportLexer.h"
