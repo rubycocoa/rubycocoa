@@ -5,14 +5,13 @@
 require 'test/unit'
 require 'osx/cocoa'
 require 'rbconfig'
-require './util.rb'
-
-system 'make -s' || raise(RuntimeError, "'make' failed")
+require 'util.rb'
 
 class TC_BridgeSupport < Test::Unit::TestCase
   include TestHelper
 
   def setup
+    build_objc_bundle
     @ruby_path = File.join(RbConfig::CONFIG["bindir"], RbConfig::CONFIG["RUBY_INSTALL_NAME"])
   end
  
@@ -52,7 +51,7 @@ class TC_BridgeSupport < Test::Unit::TestCase
     # new protocol introduced by dynamic libraries
     assert_nil(OSX.lookup_informal_protocol_method_type('tc_instmWithArg1:arg2:arg3:', false))
     assert_nil(OSX.lookup_informal_protocol_method_type('tc_clmWithArg1:arg2:arg3:', true))
-    require './objc_proto.bundle'
+    require 'objc_bundle/objc_proto.bundle'
     OSX.load_bridge_support_file('ObjcTest.bridgesupport')
     assert_not_nil(types = OSX.lookup_informal_protocol_method_type('tc_instmWithArg1:arg2:arg3:', false))
     assert_equal('@@:id@', types.gsub(/\d/, ''))

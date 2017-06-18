@@ -7,8 +7,8 @@
 require 'test/unit'
 require 'osx/cocoa'
 
-system 'make -s' || raise(RuntimeError, "'make' failed")
-require './objc_test.bundle'
+TestHelper.build_objc_bundle
+require 'objc_bundle/objc_test.bundle'
 OSX.load_bridge_support_file 'ObjcPtrTest.bridgesupport'
 
 class TC_ObjcPtr < Test::Unit::TestCase

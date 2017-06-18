@@ -25,4 +25,10 @@ module TestHelper
     end
   end
 
+  def build_objc_bundle
+    objc_bundle_dir = File.expand_path('../objc_bundle', __FILE__)
+    system "make -C '#{objc_bundle_dir}' -s" || raise(RuntimeError, "'make' failed")
+  end
+  module_function :build_objc_bundle
+
 end
