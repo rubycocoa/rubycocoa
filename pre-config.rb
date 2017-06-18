@@ -59,7 +59,6 @@ end
 
 if lib_exist?('/usr/include/libxml2') and
     (lib_exist?('/usr/lib/libxml2.dylib') || lib_exist?('/usr/lib/libxml2.tbd'))
-  cflags << ' -DHAS_LIBXML2 '
   other_header_search_paths << '/usr/include/libxml2'
   ldflags << ' -lxml2 '
 else

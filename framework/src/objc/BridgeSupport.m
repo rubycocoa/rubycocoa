@@ -66,7 +66,6 @@ struct bsFunction *current_function = NULL;
   }                           \
   while (0)
 
-#if HAS_LIBXML2
 #include <libxml/xmlreader.h>
 
 static BOOL
@@ -1937,22 +1936,6 @@ osx_load_bridge_support_file (VALUE mOSX, VALUE path)
 
   return mOSX;
 }
-
-#else /* !HAS_LIBXML2 */
-
-/*
- * Loads brdigesupport file. Recommends to use OSX.require_frmework in regular cases.
- * @param Path of bridgesupport file.
- * @return [Moudule] Module OSX
- */
-static VALUE
-osx_load_bridge_support_file (VALUE rcv, VALUE path)
-{
-  rb_warn("libxml2 is not available, bridge support file `%s' cannot be read", StringValuePtr(path));
-  return rcv;
-}
-
-#endif
 
 struct bsConst *
 find_magic_cookie_const_by_value(void *value)

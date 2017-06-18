@@ -1,3 +1,10 @@
+2017-06-18 kimura wataru <kimuraw@i.nifty.jp>
+
+	* framework/src/objc/BridgeSupport.m,
+	  pre-config.rb:
+	delete #define/#if directive for "HAS_LIBXML2".
+	current version of RubyCocoa always requires libxml2.
+
 2017-06-17 kimura wataru <kimuraw@i.nifty.jp>
 
 	* .travis.yml:
