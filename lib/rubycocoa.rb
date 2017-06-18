@@ -1,6 +1,6 @@
 require "rubycocoa/version"
 require "rubycocoa/rubycocoa"
 
-module Rubycocoa
+module RubyCocoa
   # Your code goes here...
 end

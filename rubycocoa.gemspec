@@ -5,7 +5,7 @@ require "rubycocoa/version"
 
 Gem::Specification.new do |spec|
   spec.name          = "rubycocoa"
-  spec.version       = Rubycocoa::VERSION
+  spec.version       = RubyCocoa::VERSION
   spec.authors       = ["kimura wataru"]
   spec.email         = ["kimuraw@i.nifty.jp"]
 
