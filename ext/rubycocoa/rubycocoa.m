@@ -7,7 +7,7 @@
  * LGPL. See the COPYRIGHT file for more information.
  */
 
-#import <RubyCocoa/RBRuntime.h>
+#import "RBRuntime.h"
 
 void Init_rubycocoa()
 {
