@@ -1,6 +1,6 @@
 TARGETS = objc_test.bundle objc_proto.bundle
 OBJS = objc_test.o objc_proto.o
-CFLAGS = %%%other_cflags%%% %%%arch_flags%%%
+CFLAGS = -fno-common -g -fobjc-exceptions -Wall
 
 .SUFFIXES: .bundle
 .o.bundle:
