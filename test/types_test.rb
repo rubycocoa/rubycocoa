@@ -275,7 +275,7 @@ class TC_Types < Test::Unit::TestCase
   end
 
   def test_cary_struct
-    OSX.load_bridge_support_file('CAryStructTest.bridgesupport')
+    TestHelper.load_bridge_support_file('CAryStructTest.bridgesupport')
     o = OSX::NSObject.new
     t1 = o.test1
     assert_kind_of(OSX::Ttype1, t1)
@@ -290,7 +290,7 @@ class TC_Types < Test::Unit::TestCase
   # libffi on x86_64 passes the value via stack when the size of the struct
   # is larger than 32 bytes.
   def test_cary_struct_gt32
-    OSX.load_bridge_support_file('CAryStructTest.bridgesupport')
+    TestHelper.load_bridge_support_file('CAryStructTest.bridgesupport')
     o = OSX::NSObject.new
     t4 = o.test4
     assert_equal(11, t4.a[0])

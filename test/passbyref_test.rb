@@ -4,11 +4,12 @@
 
 require 'test/unit'
 require 'osx/cocoa'
+require 'util.rb'
 
 TestHelper.build_objc_bundle
 require 'objc_bundle/objc_test.bundle'
-OSX.load_bridge_support_file 'ObjcPassByRefTest.bridgesupport'
 OSX.ns_import :PassByRef if RUBY_VERSION >= '2.0'
+TestHelper.load_bridge_support_file('ObjcPassByRefTest.bridgesupport')
 
 class PassByRefSubclass1 < OSX::PassByRef
 

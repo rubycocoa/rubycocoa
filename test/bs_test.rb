@@ -52,7 +52,7 @@ class TC_BridgeSupport < Test::Unit::TestCase
     assert_nil(OSX.lookup_informal_protocol_method_type('tc_instmWithArg1:arg2:arg3:', false))
     assert_nil(OSX.lookup_informal_protocol_method_type('tc_clmWithArg1:arg2:arg3:', true))
     require 'objc_bundle/objc_proto.bundle'
-    OSX.load_bridge_support_file('ObjcTest.bridgesupport')
+    TestHelper.load_bridge_support_file('ObjcTest.bridgesupport')
     assert_not_nil(types = OSX.lookup_informal_protocol_method_type('tc_instmWithArg1:arg2:arg3:', false))
     assert_equal('@@:id@', types.gsub(/\d/, ''))
     assert_not_nil(types = OSX.lookup_informal_protocol_method_type('tc_clmWithArg1:arg2:arg3:', true))

@@ -46,7 +46,7 @@ class TC_BoolTypeConversion < Test::Unit::TestCase
   def test_bool_type_conversions
     do_objc_to_ruby_conversion_tests
     do_ruby_to_objc_conversion_tests
-    OSX.load_bridge_support_file('ObjcTest.bridgesupport')    
+    TestHelper.load_bridge_support_file('ObjcTest.bridgesupport')
     do_objc_to_ruby_conversion_tests_with_bridgesupport
     do_ruby_to_objc_conversion_tests_with_bridgesupport
   end
