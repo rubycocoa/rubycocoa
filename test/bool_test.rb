@@ -2,7 +2,6 @@ require 'osx/cocoa'
 require 'test/unit'
 require 'util.rb'
 
-TestHelper.build_objc_bundle
 require 'objc_bundle/objc_test.bundle'
 
 class MyClass < OSX::NSObject

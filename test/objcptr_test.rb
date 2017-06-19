@@ -8,7 +8,6 @@ require 'test/unit'
 require 'osx/cocoa'
 require 'util.rb'
 
-TestHelper.build_objc_bundle
 require 'objc_bundle/objc_test.bundle'
 TestHelper.load_bridge_support_file('ObjcPtrTest.bridgesupport')
 

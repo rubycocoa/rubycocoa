@@ -5,7 +5,6 @@
 require 'test/unit'
 require 'osx/cocoa'
 
-TestHelper.build_objc_bundle
 require 'objc_bundle/objc_test.bundle'
 
 class PureUniqRubyObject

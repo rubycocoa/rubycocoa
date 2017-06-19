@@ -11,7 +11,6 @@ class TC_BridgeSupport < Test::Unit::TestCase
   include TestHelper
 
   def setup
-    build_objc_bundle
     @ruby_path = File.join(RbConfig::CONFIG["bindir"], RbConfig::CONFIG["RUBY_INSTALL_NAME"])
   end
  

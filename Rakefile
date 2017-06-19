@@ -7,6 +7,21 @@ Rake::TestTask.new(:test) do |t|
   t.test_files = FileList["test/**/*_test.rb"]
 end
 
+namespace :test do
+  sources = FileList["test/objc_bundle/*.m"]
+  bundles = sources.ext("bundle")
+  CLEAN.include(bundles)
+
+  task :pre_build => bundles
+
+  rule ".bundle" => [".m"] do |t|
+    cflags = '-fno-common -g -fobjc-exceptions -Wall'
+    frameworks = '-framework Foundation -framework AddressBook'
+    sh "cc -o #{t.name} #{cflags} -bundle #{frameworks} #{t.source}"
+  end
+end
+task :test => ["test:pre_build"]
+
 require "rake/extensiontask"
 
 task :build => :compile

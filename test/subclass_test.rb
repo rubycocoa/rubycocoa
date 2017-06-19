@@ -19,7 +19,6 @@ class SubClassA < OSX::NSObject
 end
 
 ###class ExceptionTest < OSX::NSObject
-TestHelper.build_objc_bundle
 require 'objc_bundle/objc_test.bundle'
 
 OSX.ns_import :Override

@@ -8,7 +8,6 @@ require 'test/unit'
 require 'osx/cocoa'
 
 ###class ExceptionTest < OSX::NSObject
-TestHelper.build_objc_bundle
 require 'objc_bundle/objc_test.bundle'
 
 OSX.ns_import "RBExceptionTestBase" # at end of RBObject.m

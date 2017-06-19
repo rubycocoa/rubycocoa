@@ -2,9 +2,7 @@ require 'test/unit'
 require 'osx/cocoa'
 require 'thread'
 require 'rbconfig'
-require 'util.rb'
 
-TestHelper.build_objc_bundle
 require 'objc_bundle/objc_test.bundle'
 
 # Helper class to explicitly yield control between threads
