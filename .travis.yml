@@ -2,8 +2,6 @@ language: ruby
 
 # 10.12
 os: osx
-osx_image:
-  - xcode8.3
 
 # 10.11 or later, system built-in ruby cannot run RubyCocoa tests
 rvm:
