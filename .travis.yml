@@ -5,7 +5,7 @@ os: osx
 
 # 10.11 or later, system built-in ruby cannot run RubyCocoa tests
 rvm:
-  - 2.4.1
+  - 2.3.1
 
 #matrix:
 #  allow_failures:
