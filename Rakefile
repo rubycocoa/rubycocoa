@@ -1,6 +1,8 @@
 require "bundler/gem_tasks"
 require "rake/testtask"
 
+#### gem "rubycocoa" ####
+
 Rake::TestTask.new(:test) do |t|
   t.libs << "test"
   t.libs << "lib"
@@ -31,3 +33,14 @@ Rake::ExtensionTask.new("rubycocoa") do |ext|
 end
 
 task :default => [:clobber, :compile, :test]
+
+#### RubyCocoa.framework ####
+# => ./framework/
+require "xcjobs"
+
+desc "Compile RubyCocoa.framework"
+XCJobs::Build.new "compile:framework" do |t|
+  t.project = "framework/RubyCocoa.xcodeproj"
+  t.configuration = "Default"
+end
+
