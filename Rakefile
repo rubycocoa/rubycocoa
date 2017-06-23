@@ -64,12 +64,18 @@ XCJobs::Build.new "compile:framework" do |t|
   t.project = "framework/RubyCocoa.xcodeproj"
   t.configuration = "Default"
 end
-task "compile:framework" => ["framework/GeneratedConfig.xcconfig"]
+task "compile:framework" => ["framework/GeneratedConfig.xcconfig", "framework/Info.plist"]
 
 file "framework/GeneratedConfig.xcconfig" =>
     ["framework/GeneratedConfig.xcconfig.erb",
      "lib/rubycocoa/version.rb"] do
   process_erb("framework/GeneratedConfig.xcconfig.erb")
+end
+
+file "framework/Info.plist" =>
+    ["framework/Info.plist.erb",
+     "lib/rubycocoa/version.rb"] do
+  process_erb("framework/Info.plist.erb")
 end
 
 def process_erb(*erb_files)

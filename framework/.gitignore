@@ -1,4 +1,5 @@
 GeneratedConfig.xcconfig
+Info.plist
 RubyCocoa.xcodeproj/project.xcworkspace/
 RubyCocoa.xcodeproj/xcuserdata/
 build/

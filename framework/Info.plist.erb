@@ -19,19 +19,19 @@
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleShortVersionString</key>
-	<string>RUBYCOCOA_VERSION_SHORT</string>
+	<string><%= RubyCocoa::VERSION %></string>
 	<key>CFBundleGetInfoString</key>
-	<string>RubyCocoa RUBYCOCOA_VERSION_BARE (build with Ruby BUILD_RUBY_VERSION on OSX RUBYCOCOA_DEPLOYMET_TARGET) Copyright (c) 2002 FUJIMOTO Hisakuni.</string>
+	<string>RubyCocoa <%= RubyCocoa::VERSION %> (build with Ruby <%= RUBY_VERSION %> on macOS <%= @rubycocoa_config[:MACOSX_DEPLOYMENT_TARGET] %>) Copyright (c) 2002 FUJIMOTO Hisakuni.</string>
 	<key>CFBundleVersion</key>
-	<string>RUBYCOCOA_VERSION_BARE</string>
+	<string><%= RubyCocoa::VERSION %></string>
 	<key>NSPrincipalClass</key>
 	<string></string>
 	<key>RUBYCOCOA_BUILD_CONFIG</key>
 	<dict>
-		<key>MACOSX_DEPLOYMET_TARGET</key>
-		<string>RUBYCOCOA_DEPLOYMET_TARGET</string>
+		<key>MACOSX_DEPLOYMENT_TARGET</key>
+		<string><%= @rubycocoa_config[:MACOSX_DEPLOYMENT_TARGET] %></string>
 		<key>RUBY_VERSION</key>
-		<string>BUILD_RUBY_VERSION</string>
+		<string><%= RUBY_VERSION %></string>
 	</dict>
 </dict>
 </plist>
