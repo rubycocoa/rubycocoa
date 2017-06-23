@@ -1,0 +1,7 @@
+RUBYCOCOA_COMMENT = This file is generated from GeneratedConfig.xcconfig.in
+
+OTHER_LDFLAGS = <%# add your flags %>
+OTHER_CFLAGS = <%# add your flags %>
+FRAMEWORK_VERSION = <%= RubyCocoa::VERSION %>
+MACOSX_DEPLOYMENT_TARGET = <%= `xcrun --show-sdk-version`.chomp %>
+ARCHS = <%= @rubycocoa_config[:ARCHS] %>

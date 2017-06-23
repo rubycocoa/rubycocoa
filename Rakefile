@@ -1,5 +1,15 @@
 require "bundler/gem_tasks"
 require "rake/testtask"
+require "erb"
+
+@rubycocoa_config = {}
+# collect ruby's -arch flags from RbConfig::CONFIG
+# => "x86_64 i386"
+@rubycocoa_config[:ARCHS] =
+  [RbConfig::CONFIG['CFLAGS'],
+   RbConfig::CONFIG['LDFLAGS'],
+   RbConfig::CONFIG['ARCH_FLAG']].join(' ').
+  scan(/(?:\s?-arch\s+(\w+))/).flatten.uniq.join(' ')
 
 #### gem "rubycocoa" ####
 
@@ -42,5 +52,22 @@ desc "Compile RubyCocoa.framework"
 XCJobs::Build.new "compile:framework" do |t|
   t.project = "framework/RubyCocoa.xcodeproj"
   t.configuration = "Default"
+end
+task "compile:framework" => ["framework/GeneratedConfig.xcconfig"]
+
+file "framework/GeneratedConfig.xcconfig" =>
+    ["framework/GeneratedConfig.xcconfig.erb",
+     "lib/rubycocoa/version.rb"] do
+  process_erb("framework/GeneratedConfig.xcconfig.erb")
+end
+
+def process_erb(*erb_files)
+  erb_files.each do |src|
+    target = src.ext("") # foo.ext.erb => foo.ext
+    result = ERB.new(File.read(src)).result
+    File.open(target, "w") do |f|
+      f.write(result)
+    end
+  end
 end
 
