@@ -2,6 +2,11 @@ require "mkmf"
 
 # :stopdoc:
 
+config = RbConfig::MAKEFILE_CONFIG
+if with_config('libruby-static')
+  $LIBRUBYARG = config['LIBRUBYARG_STATIC']
+end
+
 # libffi
 dir_config('libffi')
 if have_header(ffi_header = 'ffi.h')
