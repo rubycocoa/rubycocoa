@@ -2,6 +2,8 @@ require "bundler/gem_tasks"
 require "rake/testtask"
 require "erb"
 
+#### configuration ####
+
 @rubycocoa_config = {}
 # collect ruby's -arch flags from RbConfig::CONFIG
 # => "x86_64 i386"
@@ -10,6 +12,15 @@ require "erb"
    RbConfig::CONFIG['LDFLAGS'],
    RbConfig::CONFIG['ARCH_FLAG']].join(' ').
   scan(/(?:\s?-arch\s+(\w+))/).flatten.uniq.join(' ')
+@rubycocoa_config[:MACOSX_DEPLOYMENT_TARGET] = `xcrun --show-sdk-version`.chomp
+
+# merge from commandline options "--with-name=value"
+ARGV.grep(/\A--with-([\w-]+)=(.+)\z/) do |option|
+  case $1
+  when 'macosx-deployment-target'
+    @rubycocoa_config[:MACOSX_DEPLOYMENT_TARGET] = $2
+  end
+end
 
 #### gem "rubycocoa" ####
 

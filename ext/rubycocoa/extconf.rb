@@ -27,7 +27,7 @@ $LDFLAGS = ' -undefined suppress -flat_namespace -framework Foundation'
 $CFLAGS << ' -DRB_ID=ID'
 
 macosx_deployment_target =
-  with_config('deployment-target', `xcrun --show-sdk-version`.chomp)
+  with_config('macosx-deployment-target', `xcrun --show-sdk-version`.chomp)
 $defs.push("-DRUBYCOCOA_DEPLOYMET_TARGET=#{macosx_deployment_target}")
 $defs.push("-DBUILD_RUBY_VERSION=#{RUBY_VERSION}")
 
