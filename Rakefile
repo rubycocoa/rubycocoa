@@ -71,18 +71,20 @@ file "framework/GeneratedConfig.xcconfig" =>
      "lib/rubycocoa/version.rb"] do
   process_erb("framework/GeneratedConfig.xcconfig.erb")
 end
+CLEAN.include("framework/GeneratedConfig.xcconfig")
 
 file "framework/Info.plist" =>
     ["framework/Info.plist.erb",
      "lib/rubycocoa/version.rb"] do
   process_erb("framework/Info.plist.erb")
 end
+CLEAN.include("framework/Info.plist")
 
-def process_erb(*erb_files)
-  erb_files.each do |src|
-    target = src.ext("") # foo.ext.erb => foo.ext
-    result = ERB.new(File.read(src)).result
-    File.open(target, "w") do |f|
+def process_erb(*erbfiles)
+  erbfiles.each do |infile|
+    outfile  = infile.ext("") # foo.ext.erb => foo.ext
+    result = ERB.new(File.read(infile)).result
+    File.open(outfile, "w") do |f|
       f.write(result)
     end
   end
