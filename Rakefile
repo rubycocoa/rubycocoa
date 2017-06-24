@@ -13,6 +13,7 @@ require "erb"
    RbConfig::CONFIG['ARCH_FLAG']].join(' ').
   scan(/(?:\s?-arch\s+(\w+))/).flatten.uniq.join(' ')
 @rubycocoa_config[:MACOSX_DEPLOYMENT_TARGET] = `xcrun --show-sdk-version`.chomp
+@rubycocoa_config[:ruby_api_version] = RbConfig::CONFIG["ruby_version"]
 
 # merge from commandline options "--with-name=value"
 ARGV.grep(/\A--with-([\w-]+)=(.+)\z/) do |option|
@@ -59,12 +60,38 @@ task :default => [:clobber, :compile, :test]
 # => ./framework/
 require "xcjobs"
 
-desc "Compile RubyCocoa.framework"
-XCJobs::Build.new "compile:framework" do |t|
-  t.project = "framework/RubyCocoa.xcodeproj"
-  t.configuration = "Default"
+namespace :framework do
+  desc "Compile RubyCocoa.framework"
+  XCJobs::Build.new "compile" do |t|
+    t.project = "framework/RubyCocoa.xcodeproj"
+    t.configuration = "Default"
+  end
+  task "compile" => ["framework/GeneratedConfig.xcconfig",
+                     "framework/Info.plist"]
+
+  Rake::Task["framework:compile"].enhance do
+    Rake::Task["framework:copy:rubylibs"].invoke
+  end
+
+  # RubyCocoa.framework/Resources/
+  #     lib/{rubycocoa,osx}: .rb
+  #     ext/2.4.0/x86_64-darwin16/: .bundle
+  task "copy:rubylibs" => ["compile"] do
+    resource_dir = Pathname("framework/build/Default/RubyCocoa.framework/Resources")
+    # lib
+    lib_dir = resource_dir.join("lib")
+    cp_r "lib", lib_dir, {:remove_destination => true}
+    # ext
+    bundles = FileList["tmp/*/stage/**/*.bundle"]
+    ruby_api_version = @rubycocoa_config[:ruby_api_version]
+    bundles.each do |f|
+      arch = f.to_s.split("/")[1] # => "x86_64-darwin16"
+      ext_dir = resource_dir.join("ext", ruby_api_version, arch)
+      mkdir_p ext_dir
+      cp_r f, ext_dir.join(File.basename(f)), {:remove_destination => true}
+    end
+  end
 end
-task "compile:framework" => ["framework/GeneratedConfig.xcconfig", "framework/Info.plist"]
 
 file "framework/GeneratedConfig.xcconfig" =>
     ["framework/GeneratedConfig.xcconfig.erb",
