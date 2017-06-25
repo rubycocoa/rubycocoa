@@ -413,95 +413,11 @@ rubycocoa_app_init(const char* program,
   return loader(program, nil, param);
 }
 
-
-/** [API] RBBundleInit
- *
- * initialize ruby and rubycocoa for a bundle
- * return not 0 when something error.
- */
-int
-RBBundleInit(const char* path_to_ruby_program, Class klass, id param)
-{
-  VALUE result;
-  result = rubycocoa_bundle_init(path_to_ruby_program, 
-                                 load_ruby_program_for_class, 
-                                 klass, param);
-  return notify_if_error("RBBundleInit", result);
-}
-
-int
-RBBundleInitWithSource(const char* ruby_program, Class klass, id param)
-{
-  VALUE result;
-  result = rubycocoa_bundle_init(ruby_program, 
-                                 eval_ruby_program_for_class,
-                                 klass, param);
-  return notify_if_error("RBBundleInitWithSource", result);
-}
-
-
-/** [API] RBApplicationInit
- *
- * initialize ruby and rubycocoa for a command/application
- * return 0 when complete, or return not 0 when error.
- */
-int
-RBApplicationInit(const char* path_to_ruby_program, int argc, const char* argv[], id param)
-{
-  VALUE result;
-  result = rubycocoa_app_init(path_to_ruby_program,
-                              load_ruby_program_for_class,
-                              argc, argv, param);
-  return notify_if_error("RBApplicationInit", result);
-}
-
-int
-RBApplicationInitWithSource(const char* ruby_program, int argc, const char* argv[], id param)
-{
-  VALUE result;
-  result = rubycocoa_app_init(ruby_program, 
-                              eval_ruby_program_for_class,
-                              argc, argv, param);
-  return notify_if_error("RBApplicationInitWithSource", result);
-}
-
 /** [API] initialize rubycocoa for a ruby extention library **/
 void
 RBRubyCocoaInit()
 {
   rubycocoa_init();
-}
-
-/** [API] launch rubycocoa application (api for compatibility) **/
-int
-RBApplicationMain(const char* rb_program_path, int argc, const char* argv[])
-{
-  int ruby_argc;
-  const char** ruby_argv;
-#ifdef HAVE_RUBY_RUBY_H
-  void* node;
-#endif
-
-  if (! rubycocoa_initialized_p()) {
-    ruby_init();
-    ruby_argc = prepare_argv(argc, argv, rb_program_path, &ruby_argv);
-#ifdef HAVE_RUBY_RUBY_H
-    node = ruby_options(ruby_argc, (char**) ruby_argv);
-#else
-    ruby_options(ruby_argc, (char**) ruby_argv);
-#endif
-    rubycocoa_init();
-    load_path_unshift(resource_path()); // PATH_TO_BUNDLE/Contents/resources
-    sign_path_unshift(bridge_support_path());
-    framework_paths_unshift(private_frameworks_path());
-    framework_paths_unshift(shared_frameworks_path());
-#ifdef HAVE_RUBY_RUBY_H
-    ruby_run_node(node);
-#else
-    ruby_run();
-#endif
-  }
-  return 0;
 }
 
 /******************************************************************************/
@@ -947,20 +863,91 @@ static void rb_cocoa_thread_schedule_hook(rb_threadswitch_event_t event,
   }
 }
 
+/* communitace with RubyCocoa.framework */
 @interface RBRuntime : NSObject
 @end
 
 @implementation RBRuntime
-+(BOOL)isRubyThreadingSupported 
+
+static RBRuntime* sharedRuntime_;
+
++(instancetype)sharedInstance
+{
+  @synchronized(self) {
+    if (!sharedRuntime_) {
+      sharedRuntime_ = [[RBRuntime alloc] init];
+    }
+  }
+  return sharedRuntime_;
+}
+
+/** [API] RBBundleInit
+ *
+ * initialize ruby and rubycocoa for a bundle
+ * return not 0 when something error.
+ */
+-(int)setupBundleWithPath:(const char*)path_to_ruby_program bundleClass:(Class)klass associatedObject:(id)param
+{
+  VALUE result;
+  result = rubycocoa_bundle_init(path_to_ruby_program, 
+                                 load_ruby_program_for_class, 
+                                 klass, param);
+  return notify_if_error("RBBundleInit", result);
+}
+
+/** [API] RBApplicationInit
+ *
+ * initialize ruby and rubycocoa for a command/application
+ * return 0 when complete, or return not 0 when error.
+ */
+-(int)setupApplicationWithPath:(const char*)path_to_ruby_program numberOfArguments:(int)argc argumentValues:(const char**)argv associatedObject:(id)param
+{
+  VALUE result;
+  result = rubycocoa_app_init(path_to_ruby_program,
+                              load_ruby_program_for_class,
+                              argc, argv, param);
+  return notify_if_error("RBApplicationInit", result);
+}
+
+/** [API] RBApplicationMain
+ *
+ * launch rubycocoa application (api for compatibility)
+ */
+-(int)launchApplicationWithPath:(const char*)rb_program_path numberOfArguments:(int)argc argumentValues:(const char**)argv
+{
+  int ruby_argc;
+  const char** ruby_argv;
+#ifdef HAVE_RUBY_RUBY_H
+  void* node;
+#endif
+
+  if (! rubycocoa_initialized_p()) {
+    ruby_init();
+    ruby_argc = prepare_argv(argc, argv, rb_program_path, &ruby_argv);
+#ifdef HAVE_RUBY_RUBY_H
+    node = ruby_options(ruby_argc, (char**) ruby_argv);
+#else
+    ruby_options(ruby_argc, (char**) ruby_argv);
+#endif
+    rubycocoa_init();
+    load_path_unshift(resource_path()); // PATH_TO_BUNDLE/Contents/resources
+    sign_path_unshift(bridge_support_path());
+    framework_paths_unshift(private_frameworks_path());
+    framework_paths_unshift(shared_frameworks_path());
+#ifdef HAVE_RUBY_RUBY_H
+    ruby_run_node(node);
+#else
+    ruby_run();
+#endif
+  }
+  return 0;
+}
+
+-(BOOL)isRubyThreadingSupported 
 {
   return rb_cocoa_did_install_thread_hooks;
 }
 @end
-
-BOOL RBIsRubyThreadingSupported (void)
-{
-  return [RBRuntime isRubyThreadingSupported];
-}
 
 static BOOL rb_cocoa_check_for_multiple_libruby() 
 {

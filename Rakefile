@@ -60,6 +60,16 @@ task :default => [:clobber, :compile, :test]
 # => ./framework/
 require "xcjobs"
 
+@cflags_by_arch = {}
+Rake::Task["compile:rubycocoa"].prerequisites.each do |t|
+  next unless /\Acompile:rubycocoa:([\w-]+)\z/ =~ t
+  arch = $1
+  arch_cpu = arch.split("-")[0]
+  # => "ext/2.4.0/x86_64-darwin16/rubycocoa"
+  ext_path = File.join("ext", @rubycocoa_config[:ruby_api_version], arch, "rubycocoa")
+  @cflags_by_arch[arch_cpu] = " -DRUBYCOCOA_DEFAULT_EXTENTION=#{ext_path}"
+end
+
 namespace :framework do
   desc "Compile RubyCocoa.framework"
   XCJobs::Build.new "compile" do |t|
