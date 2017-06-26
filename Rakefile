@@ -35,6 +35,7 @@ namespace :test do
   sources = FileList["test/objc_bundle/*.m"]
   bundles = sources.ext("bundle")
   CLEAN.include(bundles)
+  CLEAN.include(bundles.ext("dSYM"))
 
   task :pre_build => bundles
 
