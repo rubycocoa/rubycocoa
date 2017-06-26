@@ -16,7 +16,11 @@
 #define TO_CSTR(macro) #macro
 #define TO_NSSTR(macro) @ TO_CSTR(macro)
 
-@interface RBFramework : NSObject
+static int rubycocoa_ext_loaded = 0;
+
+@interface RBFramework : NSObject {
+  void* handle_;
+}
 +(instancetype)sharedInstance;
 -(NSBundle*)bundle;
 -(NSString*)defaultExtentionPath;
@@ -41,7 +45,7 @@ static RBFramework* sharedInstance_;
 -(instancetype)init
 {
   self = [super init];
-  _bundle = [NSBundle bundleForClass:[RBFramework class]];
+  _bundle = [NSBundle bundleForClass:[self class]];
   [_bundle retain];
   return self;
 }
@@ -51,26 +55,32 @@ static RBFramework* sharedInstance_;
   return [self.bundle pathForResource:TO_NSSTR(RUBYCOCOA_DEFAULT_EXTENTION) ofType:@"bundle"];
 }
 
-@end
-
-static int rubycocoa_ext_loaded = 0;
-
-static BOOL load_rubycocoa_ext()
+-(BOOL)loadRubyCocoaExtention
 {
   NSString* extpath;
-  void* handle;
 
   if (rubycocoa_ext_loaded) {
     return YES;
   }
-  extpath = [[RBFramework sharedInstance] defaultExtentionPath];
-  handle = dlopen([extpath fileSystemRepresentation], RTLD_LAZY|RTLD_NODELETE);
-  if (!handle) {
+  extpath = [self defaultExtentionPath];
+  handle_ = dlopen([extpath fileSystemRepresentation], RTLD_LAZY|RTLD_NODELETE);
+  if (!handle_) {
     NSLog(@"Warning: ruby extention `%@' not loaded. (%s)", extpath, dlerror());
     return NO;
   }
+  rubycocoa_ext_loaded = 1;
   return YES;
 }
+
+-(void)dealloc
+{
+  if (rubycocoa_ext_loaded) {
+    dlclose(handle_);
+  }
+  [super dealloc];
+}
+
+@end
 
 // class "RBRuntime" is implemented in rubycocoa.bundle
 @protocol RBRuntime
@@ -94,7 +104,7 @@ static BOOL load_rubycocoa_ext()
 int
 RBBundleInit(const char* path_to_ruby_program, Class klass, id param)
 {
-  if (!load_rubycocoa_ext()) {
+  if (![[RBFramework sharedInstance] loadRubyCocoaExtention]) {
     NSLog(@"Error: RBBundleInit() failed at loading ruby extention.");
     return 1;
   }
@@ -109,7 +119,7 @@ RBBundleInit(const char* path_to_ruby_program, Class klass, id param)
 int
 RBApplicationInit(const char* path_to_ruby_program, int argc, const char* argv[], id param)
 {
-  if (!load_rubycocoa_ext()) {
+  if (![[RBFramework sharedInstance] loadRubyCocoaExtention]) {
     NSLog(@"Error: RBApplicationInit() failed at loading ruby extention.");
     return 1;
   }
@@ -123,7 +133,7 @@ RBApplicationMain(const char* rb_program_path, int argc, const char* argv[])
 {
   NSLog(@"Warning: RBApplicationMain() is deprecated. "
                  @"Use RBApplicationInit() and NSApplicationMain().");
-  if (!load_rubycocoa_ext()) {
+  if (![[RBFramework sharedInstance] loadRubyCocoaExtention]) {
     NSLog(@"Error: RBApplicationMain() failed at loading ruby extention.");
     return 1;
   }
