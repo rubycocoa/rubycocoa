@@ -79,6 +79,7 @@ namespace :framework do
   end
   task "compile" => ["framework/GeneratedConfig.xcconfig",
                      "framework/Info.plist"]
+  CLEAN.include("framework/build")
 
   Rake::Task["framework:compile"].enhance do
     Rake::Task["framework:copy:rubylibs"].invoke
