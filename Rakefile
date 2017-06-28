@@ -88,7 +88,7 @@ namespace :framework do
   # RubyCocoa.framework/Resources/
   #     ruby/{rubycocoa,osx}: .rb
   #     ext/2.4.0/x86_64-darwin16/: .bundle
-  task "copy:rubylibs" => ["compile"] do
+  task "copy:rubylibs" => ["compile:rubycocoa"] do
     resource_dir = Pathname("framework/build/Default/RubyCocoa.framework/Resources")
     # lib
     lib_dir = resource_dir.join("ruby")
