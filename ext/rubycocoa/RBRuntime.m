@@ -359,10 +359,10 @@ rubycocoa_bundle_init(const char* program,
   if (! rubycocoa_initialized_p()) {
     ruby_init();
     ruby_init_loadpath();
-    rubycocoa_init();
-    rubycocoa_set_frequently_init_stack(1);
     load_path_unshift(framework_ruby_path()); // PATH_TO_FRAMEWORK/Resources/ruby
+    rubycocoa_init();
     sign_path_unshift(framework_bridge_support_path());
+    rubycocoa_set_frequently_init_stack(1);
   }
   load_path_unshift(resource_path_for(klass));
   sign_path_unshift(bridge_support_path_for(klass));
@@ -389,7 +389,9 @@ rubycocoa_app_init(const char* program,
   if (! rubycocoa_initialized_p()) {
     ruby_init();
     ruby_init_loadpath();
+    load_path_unshift(framework_ruby_path()); // PATH_TO_FRAMEWORK/Resources/ruby
     rubycocoa_init();
+    sign_path_unshift(framework_bridge_support_path());
     ruby_argc = prepare_argv(argc, argv, program, &ruby_argv);
 #ifdef HAVE_RUBY_RUBY_H
     node = ruby_options(ruby_argc, (char**) ruby_argv);
@@ -397,8 +399,6 @@ rubycocoa_app_init(const char* program,
     ruby_options(ruby_argc, (char**) ruby_argv);
 #endif
     rubycocoa_set_frequently_init_stack(0);
-    load_path_unshift(framework_ruby_path()); // PATH_TO_FRAMEWORK/Resources/ruby
-    sign_path_unshift(framework_bridge_support_path());
   }
   load_path_unshift(resource_path());
   sign_path_unshift(bridge_support_path());
