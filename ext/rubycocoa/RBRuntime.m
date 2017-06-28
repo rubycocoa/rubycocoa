@@ -130,17 +130,17 @@ static char* shared_frameworks_path() {
 
 char* framework_resources_path()
 {
-  return resource_path_for([RBObject class]);
+  return resource_path_for(objc_getClass("RBFramework"));
 }
 
 static char* framework_ruby_path()
 {
-  return resource_item_path_for("ruby", [RBObject class]);
+  return resource_item_path_for("ruby", objc_getClass("RBFramework"));
 }
 
 static char* framework_bridge_support_path()
 {
-  return bridge_support_path_for([RBObject class]);
+  return bridge_support_path_for(objc_getClass("RBFramework"));
 }
 
 static void load_path_unshift(char* path)
@@ -334,8 +334,6 @@ static void rubycocoa_init()
     initialize_mdl_osxobjc();  // initialize an objc part of rubycocoa
     initialize_mdl_bundle_support();
     init_ovmix();
-    load_path_unshift(framework_ruby_path()); // PATH_TO_FRAMEWORK/Resources/ruby
-    sign_path_unshift(framework_bridge_support_path());
 #ifdef HAVE_RUBY_ENCODING_H
     init_encoding_conversion(); // initialize Ruby<->ObjC string encoding conversion
 #endif
@@ -363,6 +361,8 @@ rubycocoa_bundle_init(const char* program,
     ruby_init_loadpath();
     rubycocoa_init();
     rubycocoa_set_frequently_init_stack(1);
+    load_path_unshift(framework_ruby_path()); // PATH_TO_FRAMEWORK/Resources/ruby
+    sign_path_unshift(framework_bridge_support_path());
   }
   load_path_unshift(resource_path_for(klass));
   sign_path_unshift(bridge_support_path_for(klass));
@@ -397,6 +397,8 @@ rubycocoa_app_init(const char* program,
     ruby_options(ruby_argc, (char**) ruby_argv);
 #endif
     rubycocoa_set_frequently_init_stack(0);
+    load_path_unshift(framework_ruby_path()); // PATH_TO_FRAMEWORK/Resources/ruby
+    sign_path_unshift(framework_bridge_support_path());
   }
   load_path_unshift(resource_path());
   sign_path_unshift(bridge_support_path());

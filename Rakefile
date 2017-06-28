@@ -85,12 +85,12 @@ namespace :framework do
   end
 
   # RubyCocoa.framework/Resources/
-  #     lib/{rubycocoa,osx}: .rb
+  #     ruby/{rubycocoa,osx}: .rb
   #     ext/2.4.0/x86_64-darwin16/: .bundle
   task "copy:rubylibs" => ["compile"] do
     resource_dir = Pathname("framework/build/Default/RubyCocoa.framework/Resources")
     # lib
-    lib_dir = resource_dir.join("lib")
+    lib_dir = resource_dir.join("ruby")
     cp_r "lib", lib_dir, {:remove_destination => true}
     # ext
     bundles = FileList["tmp/*/stage/**/*.bundle"]
