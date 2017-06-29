@@ -1,5 +1,6 @@
 require "bundler/gem_tasks"
 require "rake/testtask"
+require "yard"
 require "erb"
 
 #### configuration ####
@@ -56,6 +57,22 @@ Rake::ExtensionTask.new("rubycocoa") do |ext|
 end
 
 task :default => [:clobber, :compile, :test]
+
+task :doc => [:yard]
+YARD::Rake::YardocTask.new do |t|
+  # register objective-c sources as yard targes
+  YARD::Parser::SourceParser.register_parser_type(:objc, YARD::Parser::C::CParser, %w(m))
+  YARD::Handlers::Processor.register_handler_namespace(:objc, YARD::Handlers::C)
+
+  t.files = ["lib/**/*.rb",
+             "ext/**/*.m",
+             "-",
+             "doc/index.md",
+             "doc/getting-started.md",
+             "doc/try-samples.md",
+             "doc/programming.md",
+             "doc/resources.md"]
+end
 
 #### RubyCocoa.framework ####
 # => ./framework/

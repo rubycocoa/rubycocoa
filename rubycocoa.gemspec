@@ -36,10 +36,12 @@ EOS
   spec.executables   = spec.files.grep(%r{^exe/}) { |f| File.basename(f) }
   spec.require_paths = ["lib"]
   spec.extensions    = ["ext/rubycocoa/extconf.rb"]
+  spec.metadata["yard.run"] = "yri" # use "yard" to build full HTML docs.
 
   spec.add_development_dependency "bundler", "~> 1.15"
   spec.add_development_dependency "rake", "~> 10.0"
   spec.add_development_dependency "rake-compiler"
   spec.add_development_dependency "test-unit"
+  spec.add_development_dependency "yard"
   spec.add_development_dependency "xcjobs"
 end
