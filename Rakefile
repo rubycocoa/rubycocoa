@@ -58,7 +58,7 @@ end
 
 task :default => [:clobber, :compile, :test]
 
-task :doc => [:yard]
+task :doc => [:yard, "framework:headerdoc"]
 YARD::Rake::YardocTask.new do |t|
   # register objective-c sources as yard targes
   YARD::Parser::SourceParser.register_parser_type(:objc, YARD::Parser::C::CParser, %w(m))
@@ -77,6 +77,8 @@ end
 #### RubyCocoa.framework ####
 # => ./framework/
 require "xcjobs"
+$LOAD_PATH << "rake"
+require "header_doc_task"
 
 @cflags_by_arch = {}
 Rake::Task["compile:rubycocoa"].prerequisites.each do |t|
@@ -119,6 +121,12 @@ namespace :framework do
       mkdir_p ext_dir
       cp_r f, ext_dir.join(File.basename(f)), {:remove_destination => true}
     end
+  end
+
+  HeaderDoc::HeaderDocTask.new do |t|
+    t.files = FileList["framework/src/objc/*.h"]
+    t.output_dir = "doc/objc"
+    t.toppage = "RubyCocoa.html"
   end
 end
 
