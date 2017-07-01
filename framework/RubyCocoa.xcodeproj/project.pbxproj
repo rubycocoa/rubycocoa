@@ -11,7 +11,7 @@
 		4EACC7610C028851006372AD /* gen_bridge_doc.rb in CopyFiles */ = {isa = PBXBuildFile; fileRef = 4EACC75E0C028851006372AD /* gen_bridge_doc.rb */; };
 		4EACC7620C028851006372AD /* rb_nibtool.rb in CopyFiles */ = {isa = PBXBuildFile; fileRef = 4EACC75F0C028851006372AD /* rb_nibtool.rb */; };
 		4EACC7630C028851006372AD /* standaloneify.rb in CopyFiles */ = {isa = PBXBuildFile; fileRef = 4EACC7600C028851006372AD /* standaloneify.rb */; };
-		A59B43A3181D48C300EB0486 /* module.map in CopyFiles */ = {isa = PBXBuildFile; fileRef = A59B439E181D471800EB0486 /* module.map */; };
+		A59B43A3181D48C300EB0486 /* module.modulemap in CopyFiles */ = {isa = PBXBuildFile; fileRef = A59B439E181D471800EB0486 /* module.modulemap */; };
 		FCDF926A0A87E09E0002AD01 /* RBObject.h in Headers */ = {isa = PBXBuildFile; fileRef = E88C6D65035BB1F5031D1B90 /* RBObject.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		FCDF926B0A87E09E0002AD01 /* RBRuntime.h in Headers */ = {isa = PBXBuildFile; fileRef = E88C6D67035BB1F5031D1B90 /* RBRuntime.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		FCDF926D0A87E09E0002AD01 /* RubyCocoa.h in Headers */ = {isa = PBXBuildFile; fileRef = E88C6D6C035BB1F5031D1B90 /* RubyCocoa.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -37,7 +37,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 1;
 			files = (
-				A59B43A3181D48C300EB0486 /* module.map in CopyFiles */,
+				A59B43A3181D48C300EB0486 /* module.modulemap in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -66,7 +66,7 @@
 		4EACC75E0C028851006372AD /* gen_bridge_doc.rb */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.ruby; name = gen_bridge_doc.rb; path = tool/gen_bridge_doc.rb; sourceTree = "<group>"; };
 		4EACC75F0C028851006372AD /* rb_nibtool.rb */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.ruby; name = rb_nibtool.rb; path = tool/rb_nibtool.rb; sourceTree = "<group>"; };
 		4EACC7600C028851006372AD /* standaloneify.rb */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.ruby; name = standaloneify.rb; path = tool/standaloneify.rb; sourceTree = "<group>"; };
-		A59B439E181D471800EB0486 /* module.map */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = module.map; sourceTree = "<group>"; };
+		A59B439E181D471800EB0486 /* module.modulemap */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = module.modulemap; sourceTree = "<group>"; };
 		E88C6D65035BB1F5031D1B90 /* RBObject.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RBObject.h; sourceTree = "<group>"; };
 		E88C6D67035BB1F5031D1B90 /* RBRuntime.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RBRuntime.h; sourceTree = "<group>"; };
 		E88C6D68035BB1F5031D1B90 /* RBRuntime.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RBRuntime.m; sourceTree = "<group>"; };
@@ -121,7 +121,7 @@
 		089C1665FE841158C02AAC07 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				A59B439E181D471800EB0486 /* module.map */,
+				A59B439E181D471800EB0486 /* module.modulemap */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
