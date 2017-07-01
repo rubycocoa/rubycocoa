@@ -13,7 +13,9 @@ require "erb"
    RbConfig::CONFIG['LDFLAGS'],
    RbConfig::CONFIG['ARCH_FLAG']].join(' ').
   scan(/(?:\s?-arch\s+(\w+))/).flatten.uniq.join(' ')
-@rubycocoa_config[:MACOSX_DEPLOYMENT_TARGET] = `xcrun --show-sdk-version`.chomp
+# set current macOS version by default, such as "10.12"
+# note: old "xcrun" does not accept --show-sdk-version
+@rubycocoa_config[:MACOSX_DEPLOYMENT_TARGET] = "10.#{`uname -r`.to_i - 4}"
 @rubycocoa_config[:ruby_api_version] = RbConfig::CONFIG["ruby_version"]
 
 # merge from commandline options "--with-name=value"
@@ -82,12 +84,12 @@ require "header_doc_task"
 
 @cflags_by_arch = {}
 Rake::Task["compile:rubycocoa"].prerequisites.each do |t|
-  next unless /\Acompile:rubycocoa:([\w-]+)\z/ =~ t
+  next unless /\Acompile:rubycocoa:([\w\.-]+)\z/ =~ t
   arch = $1
   arch_cpu = arch.split("-")[0]
-  # => "ext/2.4.0/x86_64-darwin16/rubycocoa"
-  ext_path = File.join("ext", @rubycocoa_config[:ruby_api_version], arch, "rubycocoa")
-  @cflags_by_arch[arch_cpu] = " -DRUBYCOCOA_DEFAULT_EXTENTION=#{ext_path}"
+  # => "ext/2.4.0/x86_64-darwin16"
+  ext_path = File.join("ext", @rubycocoa_config[:ruby_api_version], arch)
+  @cflags_by_arch[arch_cpu] = " -DRUBYCOCOA_DEFAULT_EXT_DIR=#{ext_path}"
 end
 
 namespace :framework do

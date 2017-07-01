@@ -2,6 +2,9 @@ require "mkmf"
 
 # :stopdoc:
 
+if /^Xcode ([0-9\.]+)/ =~ `xcrun -run xcodebuild -version`
+  xcode_version = $1
+end
 config = RbConfig::MAKEFILE_CONFIG
 if with_config('libruby-static')
   $LIBRUBYARG = config['LIBRUBYARG_STATIC']
@@ -30,9 +33,13 @@ end
 $CFLAGS << ' -g -fobjc-exceptions -Wall'
 $LDFLAGS = ' -undefined suppress -flat_namespace -framework Foundation'
 $CFLAGS << ' -DRB_ID=ID'
+# instancetype was introduced in Xcode 4.3
+if xcode_version.to_f < 4.3
+  $CFLAGS << ' -Dinstancetype=id'
+end
 
 macosx_deployment_target =
-  with_config('macosx-deployment-target', `xcrun --show-sdk-version`.chomp)
+  with_config('macosx-deployment-target', "10.#{`uname -r`.to_i - 4}")
 $defs.push("-DRUBYCOCOA_DEPLOYMET_TARGET=#{macosx_deployment_target}")
 $defs.push("-DBUILD_RUBY_VERSION=#{RUBY_VERSION}")
 

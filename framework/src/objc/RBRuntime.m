@@ -12,13 +12,17 @@
 #import <Foundation/Foundation.h>
 #import <dlfcn.h>
 
-/* expand RUBYCOCOA_DEFAULT_EXTENTION to @"path/to/bundle" */
+/* expand RUBYCOCOA_DEFAULT_EXT_DIR to @"path/to/bundle" */
 #define TO_CSTR(macro) #macro
 #define TO_NSSTR(macro) @ TO_CSTR(macro)
 
 static int rubycocoa_ext_loaded = 0;
 
 @interface RBFramework : NSObject {
+// Xcode 4.2 or earlier
+#if __clang_major__ < 3 || (__clang_major__ == 3 && __clang_minor__ < 1)
+  NSBundle* _bundle;
+#endif
   void* handle_;
 }
 +(instancetype)sharedInstance;
@@ -31,6 +35,10 @@ static int rubycocoa_ext_loaded = 0;
 @implementation RBFramework
 
 static RBFramework* sharedInstance_;
+// Xcode 4.2 or earlier
+#if __clang_major__ < 3 || (__clang_major__ == 3 && __clang_minor__ < 1)
+  @synthesize bundle = _bundle;
+#endif
 
 +(instancetype)sharedInstance
 {
@@ -52,7 +60,7 @@ static RBFramework* sharedInstance_;
 
 -(NSString*)defaultExtentionPath
 {
-  return [self.bundle pathForResource:TO_NSSTR(RUBYCOCOA_DEFAULT_EXTENTION) ofType:@"bundle"];
+  return [self.bundle pathForResource:@"rubycocoa" ofType:@"bundle" inDirectory:TO_NSSTR(RUBYCOCOA_DEFAULT_EXT_DIR)];
 }
 
 -(BOOL)loadRubyCocoaExtention
