@@ -104,10 +104,13 @@ static RBFramework* sharedInstance_;
 int
 RBBundleInit(const char* path_to_ruby_program, Class klass, id param)
 {
+  NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
   if (![[RBFramework sharedInstance] loadRubyCocoaExtention]) {
     NSLog(@"Error: RBBundleInit() failed at loading ruby extention.");
+    [pool release];
     return 1;
   }
+  [pool release];
   return [RBRuntimeObj setupBundleWithPath:path_to_ruby_program bundleClass:klass associatedObject:param];
 }
 
@@ -119,10 +122,13 @@ RBBundleInit(const char* path_to_ruby_program, Class klass, id param)
 int
 RBApplicationInit(const char* path_to_ruby_program, int argc, const char* argv[], id param)
 {
+  NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
   if (![[RBFramework sharedInstance] loadRubyCocoaExtention]) {
     NSLog(@"Error: RBApplicationInit() failed at loading ruby extention.");
+    [pool release];
     return 1;
   }
+  [pool release];
   return [RBRuntimeObj setupApplicationWithPath:path_to_ruby_program numberOfArguments:argc argumentValues:argv associatedObject:param];
 }
 
@@ -131,12 +137,15 @@ RBApplicationInit(const char* path_to_ruby_program, int argc, const char* argv[]
 int
 RBApplicationMain(const char* rb_program_path, int argc, const char* argv[])
 {
+  NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
   NSLog(@"Warning: RBApplicationMain() is deprecated. "
                  @"Use RBApplicationInit() and NSApplicationMain().");
   if (![[RBFramework sharedInstance] loadRubyCocoaExtention]) {
     NSLog(@"Error: RBApplicationMain() failed at loading ruby extention.");
+    [pool release];
     return 1;
   }
+  [pool release];
   return [RBRuntimeObj launchApplicationWithPath:rb_program_path numberOfArguments:argc argumentValues:argv];
 }
 
