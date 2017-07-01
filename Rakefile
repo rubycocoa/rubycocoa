@@ -123,6 +123,17 @@ namespace :framework do
     end
   end
 
+  desc "Install RubyCocoa.framework into /Library/Frameworks"
+  task :install => [:compile] do |t|
+    framework_dir = Pathname("/Library/Frameworks")
+    src = Pathname("framework/build/Default/RubyCocoa.framework")
+    dst = framework_dir.join("RubyCocoa.framework")
+    if dst.exist?
+      sh(%Q(sudo rm -rf "#{dst.to_s}"))
+    end
+    sh(%Q(sudo cp -R "#{src.to_s}" "#{dst.to_s}"))
+  end
+
   HeaderDoc::HeaderDocTask.new do |t|
     t.files = FileList["framework/src/objc/*.h"]
     t.output_dir = "doc/objc"
