@@ -1,4 +1,4 @@
 module RubyCocoa
-  VERSION = "1.2.0"
-  RELEASE_DATE = "2014-07-27"
+  VERSION = "2.0.0.dev"
+  RELEASE_DATE = "2017-07-02"
 end
