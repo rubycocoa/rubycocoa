@@ -18,13 +18,6 @@ Resources
 * [RubyCocoa Ruby API Reference](./OSX.html)
 * [RubyCocoa.framework Objective-C API Reference](./objc/RubyCocoa.html)
 
-## Community
-
-Mailing list:
-
-* [rubycocoa-talk (users)](https://lists.sourceforge.net/lists/listinfo/rubycocoa-talk)
-* [rubycocoa-devel (developers)](http://lists.sourceforge.jp/mailman/listinfo/rubycocoa-devel)
-
 ## Development
 
 * [RubyCocoa projecte site](https://github.com/rubycocoa/rubycocoa) on GitHub.com

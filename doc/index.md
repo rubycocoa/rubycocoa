@@ -3,8 +3,8 @@
 RubyCocoa - A Ruby/Objective-C Bridge
 =====================================
 
-RubyCocoa is a framework for [Mac OS X](http://www.apple.com/macosx/)
-that allows [Cocoa](http://developer.apple.com/cocoa/) programming
+RubyCocoa is a framework for [macOS](https://www.apple.com/macos/)
+that allows Cocoa programming
 in the object-oriented scripting language [Ruby](http://www.ruby-lang.org/).
 
 RubyCocoa lets you write a Cocoa application in Ruby. It allows you to create
@@ -16,7 +16,7 @@ Some useful applications of RubyCocoa:
   * Exploration of a Cocoa object's features with `irb` interactively
   * Prototyping of a Cocoa application
   * Writing a Cocoa application that combines good features of Ruby and Objective-C
-  * Wrapping Mac OS X's native GUI for a Ruby script
+  * Wrapping macOS's native GUI for a Ruby script
 
 ## Latest Release
 
