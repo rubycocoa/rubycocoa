@@ -148,7 +148,7 @@ namespace :framework do
   end
 
   desc "Build framework installer, RubyCocoa-#{RubyCocoa::VERSION}-macOS#{@rubycocoa_config[:MACOSX_DEPLOYMENT_TARGET]}.dmg"
-  DmgTask.new do |t|
+  @dmgtask = DmgTask.new do |t|
     # RubyCocoa-2.0.0-macOS10.12
     t.package_name = "RubyCocoa-#{RubyCocoa::VERSION}-macOS#{@rubycocoa_config[:MACOSX_DEPLOYMENT_TARGET]}"
     t.version = RubyCocoa::VERSION
@@ -156,7 +156,16 @@ namespace :framework do
     t.sign_identity = @rubycocoa_config[:DEVELOPER_SIGN_IDENTIFIER]
     t.target_macos_version = @rubycocoa_config[:MACOSX_DEPLOYMENT_TARGET]
     t.product_plist = "package/tmpl/product.plist"
+  end
+  task "dmg" => ["framework:compile",
+                 "package/tmpl/product.plist"]
 
+  Rake::Task["framework:pre_dmg"].enhance() do
+    Rake::Task["framework:dmg:content"].invoke
+  end
+
+  task "dmg:content" => ["compile"] do
+    t = @dmgtask
     # prepare install content
     framework_dir = t.pkg_files_dir + "Library/Frameworks"
     lproj_dir_en = t.pkg_resouces_dir + "English.lproj"
@@ -177,8 +186,6 @@ namespace :framework do
     cp "package/tmpl/ReadMe.html", (t.dmg_files_dir + "ReadMe.html")
     cp "package/tmpl/ReadMe.ja.html", (t.dmg_files_dir + "ReadMe.ja.html")
   end
-  task "dmg" => ["framework:compile",
-                 "package/tmpl/product.plist"]
 end
 
 file "framework/GeneratedConfig.xcconfig" =>

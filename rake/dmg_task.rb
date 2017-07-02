@@ -22,15 +22,10 @@ class DmgTask < Rake::TaskLib
     @target_macos_version = `xcrun --show-sdk-version`.chomp
     @product_plist = 'product.plist'
 
-    rm_rf "tmp/dmg"
     @pkg_files_dir = Pathname('tmp/dmg/pkg_files')
     @pkg_resouces_dir = Pathname('tmp/dmg/pkg_resources')
     @pkg_dist_dir = Pathname('tmp/dmg/pkg_dist')
     @dmg_files_dir = Pathname('tmp/dmg/dmg_files')
-    [@pkg_resouces_dir, @pkg_resouces_dir,
-     @pkg_dist_dir, @dmg_files_dir].each do |dir|
-      mkdir_p dir
-    end
 
     yield self if block_given?
 
@@ -93,6 +88,17 @@ class DmgTask < Rake::TaskLib
           '-format', 'UDZO', '-tgtimagekey', 'zlib-level=9',
           '-fs', 'HFS+', '-volname', @package_name,
           "#{@package_name}.dmg")
+    end
+
+    Rake::Task[@name].enhance(["pre_#{@name}"]) do
+    end
+
+    task "pre_#{@name}" do
+      rm_rf "tmp/dmg"
+      [@pkg_resouces_dir, @pkg_resouces_dir,
+       @pkg_dist_dir, @dmg_files_dir].each do |dir|
+        mkdir_p dir
+      end
     end
   end
 end
