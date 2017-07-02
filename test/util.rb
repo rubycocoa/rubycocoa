@@ -25,4 +25,11 @@ module TestHelper
     end
   end
 
+  # load .bridgesupport from "test/bridgesupport"
+  def load_bridge_support_file(bs_name)
+    bs_dir = File.expand_path('../bridgesupport', __FILE__)
+    OSX.load_bridge_support_file(File.join(bs_dir, bs_name))
+  end
+  module_function :load_bridge_support_file
+
 end

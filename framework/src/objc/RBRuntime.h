@@ -71,13 +71,6 @@ int RBApplicationInit (const char* path_to_ruby_program,
  */
 
 /*!
- * @abstract deperecated, use @link RBBundleInit() @/link.
- * @deprecated in version 1.0.3
- */
-void RBRubyCocoaInit (void);
-
-
-/*!
  * @abstract deperecated, use @link RBApplicationInit() @/link and NSApplicationMain().
  * @deprecated in version 1.0.3
  */

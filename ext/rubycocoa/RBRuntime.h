@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (c) 2006-2008, The RubyCocoa Project.
  * Copyright (c) 2001-2006, FUJIMOTO Hisakuni.
  * All Rights Reserved.
@@ -7,9 +7,11 @@
  * LGPL. See the COPYRIGHT file for more information.
  */
 
-#import "RBRuntime.h"
+#ifndef _RBRUNTIME_H_
+#define _RBRUNTIME_H_
 
-void Init_rubycocoa()
-{
-  RBRubyCocoaInit();
-}
+#import <objc/objc.h>
+
+void RBRubyCocoaInit (void);
+
+#endif  /* _RBRUNTIME_H_ */

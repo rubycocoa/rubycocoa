@@ -1,0 +1,17 @@
+RUBYCOCOA_COMMENT = This file is generated from GeneratedConfig.xcconfig.in
+
+<%  other_cflags = ''
+    if /^Xcode ([0-9\.]+)/ =~ `xcrun -run xcodebuild -version`
+      xcode_version = $1
+      if xcode_version.to_f < 4.3
+	other_cflags << ' -Dinstancetype=id'
+      end
+    end %>
+OTHER_LDFLAGS = <%# add your flags %>
+OTHER_CFLAGS = <%= other_cflags %> $(OTHER_CFLAGS_$(CURRENT_ARCH)) <%# add your flags %>
+<% @cflags_by_arch.each_pair do |arch, cflags|
+ %>OTHER_CFLAGS_<%= arch %> = <%= cflags %>
+<% end %>
+FRAMEWORK_VERSION = <%= RubyCocoa::VERSION %>
+MACOSX_DEPLOYMENT_TARGET = <%= @rubycocoa_config[:MACOSX_DEPLOYMENT_TARGET] %>
+ARCHS = <%= @rubycocoa_config[:ARCHS] %>
