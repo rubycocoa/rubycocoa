@@ -1,19 +1,16 @@
 language: ruby
 
-# 10.12, 10.11, 10.10
+# 10.12, 10.11
 os: osx
 osx_image:
   - xcode8.3
   - xcode7.3
 
-# 10.11 or later, system built-in ruby cannot run RubyCocoa tests
 rvm:
   - system
-  - 2.3.4
+  - 2.3.1
 
-#matrix:
-#  allow_failures:
-#    rvm: ruby-head
+cache: bundler
 
-# default: rake clobber compile test
-script: rake
+# default => clobber compile test
+script: bundle exec rake
