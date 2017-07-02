@@ -87,6 +87,8 @@ Rake::Task["compile:rubycocoa"].prerequisites.each do |t|
   next unless /\Acompile:rubycocoa:([\w\.-]+)\z/ =~ t
   arch = $1
   arch_cpu = arch.split("-")[0]
+  # macOS builtin ruby "universal.x86_64" => "x86_64"
+  arch_cpu = arch_cpu.split(".")[-1]
   # => "ext/2.4.0/x86_64-darwin16"
   ext_path = File.join("ext", @rubycocoa_config[:ruby_api_version], arch)
   @cflags_by_arch[arch_cpu] = " -DRUBYCOCOA_DEFAULT_EXT_DIR=#{ext_path}"
