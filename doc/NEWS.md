@@ -1,11 +1,25 @@
 
-= NEWS
+# NEWS
 
-$Id$
+## Changes 2.0.0 from 1.2.0: 2017-07-XX
 
-== Changes 1.2.0 from 1.1.0: 2014-07-27
+### Improvements
 
-=== Improvements
+  * RubyCocoa releases two style distribution:
+    * gem "rubycocoa": use from ruby scripts.
+    * RubyCocoa.framework: use with Xcode to write macOS applications.
+
+### Deprecates
+
+  * Objective-C class "RBObject" is deprecated. it becomes an internal class.
+
+### Fixes
+
+  * Fixed crash at `require "osx/cocoa"` on macOS 10.12 or 10.11 built-in ruby.
+
+## Changes 1.2.0 from 1.1.0: 2014-07-27
+
+### Improvements
 
   * support ruby-2.0 or later, mostly works as same as on ruby-1.8.
     * we release RubyCocoa installers as separated packages for ruby-1.8/2.0.
@@ -14,18 +28,18 @@ $Id$
   * when called method is not found on an Objective-C object, RubyCocoa
     raises NoMethodError. (before: OSX::OCMessageSendException)
 
-=== Deprecates
+### Deprecates
 
   * CocoaClass#objc_export() is deprecated. use objc_method().
   * OSX::NSObject#ocm_responds?() will be deprecated. use ocm_respond_to?().
   * OSX::NSData#dataWithRubyString(), OSX::NSMutableData#dataWithRubyString()
     will be deprecated. use [NSString dataUsingEncoding:]
 
-=== Fixes
+### Fixes
 
   * Fixed build errors on Yosemite DP.
 
-=== Note for RubyCocoa with Ruby-2.0
+### Note for RubyCocoa with Ruby-2.0
 
   * String of ruby-2.x has its encodings.
     see https://bugs.ruby-lang.org/projects/ruby-trunk/wiki/MigrationIssuesFrom18
@@ -42,9 +56,9 @@ $Id$
         end
 		
 
-== Changes 1.1.0 from 1.0.7: 2013-11-17
+## Changes 1.1.0 from 1.0.7: 2013-11-17
 
-=== Improvements
+### Improvements
 
   * Support Xcode 5 "Modules".
   * Developers can disable internal Objective-C -> Ruby objects cache
@@ -52,12 +66,12 @@ $Id$
     from inconsistency between the cache and Ruby's GC. [Experimental]
     The crash may occurs delegate of NSTableView.
 
-=== Fixes
+### Fixes
 
   * Fixed standaloneify.rb error with ruby-2.0 or rubygems-2.1.
   * Fixed SEGV at Object#dup for some Objective-C objects.
 
-=== Deprecates
+### Deprecates
 
   * Deprecated Objective-C class "RubyCocoa" in <RubyCocoa/RubyCocoa.h>.
     developers can use RBRuntime functions to call ruby from Objective-C.
@@ -74,54 +88,54 @@ $Id$
       - NSMutableString.stringWithRubyString
       - String.nsencoding
 
-=== Note
+### Note
 
   * Mac OS X 10.5 or earlier not supported.
 
-== Changes 1.0.7 from 1.0.6: 2013-10-26
+## Changes 1.0.7 from 1.0.6: 2013-10-26
 
-=== Fixes
+### Fixes
 
   * Fixed boxed Objective-C object sometimes becomes wrong type
     OSX::CFTypeRef in Ruby world on 10.9 Mavericks.
 
-== Changes 1.0.6 from 1.0.5: 2012-12-31
+## Changes 1.0.6 from 1.0.5: 2012-12-31
 
-=== Fixes
+### Fixes
 
   * Fixed some applications does not launch with 1.0.5.
   * Fixed standaloneifi-ed app does not work with rubygems 1.3.2 or later.
 
-== Changes 1.0.5 from 1.0.4: 2012-10-07
+## Changes 1.0.5 from 1.0.4: 2012-10-07
 
-=== Improvements
+### Improvements
 
   * project templates are upgraded for Xcode 4.2-4.5.
     you can install the templates with the following command.
 
       $ ruby /Developer/Documentation/RubyCocoa/Templates/install_templates.rb Xcode4.x
 
-=== Fixes
+### Fixes
 
   * Fixed standaloneify.rb not work.
 
-=== Removals
+### Removals
 
   * osx/active_record.rb was removed.
 
 
-== Changes 1.0.4 from 1.0.3: 2012-08-27
+## Changes 1.0.4 from 1.0.3: 2012-08-27
 
-=== Fixes
+### Fixes
 
   * Fixed leaks at initializing RubyCocoa-1.0.3.
   * Fixed RubyCocoa does not load bridgesupport files under nested framework,
     such as "QuartzCore.framework/Frameworks/CoreImage.framework".
 
 
-== Changes 1.0.3 from 1.0.2: 2012-08-26 (Not released)
+## Changes 1.0.3 from 1.0.2: 2012-08-26 (Not released)
 
-=== Improvements
+### Improvements
 
   * turn on debug printing by environment RUBYCOCOA_DEBUG.
   * project templates for Xcode 4.x. [Experimental]
@@ -131,7 +145,7 @@ $Id$
         $ svn export --force https://rubycocoa.svn.sourceforge.net/svnroot/rubycocoa/trunk/src/template/Xcode4.x/Templates ~/Library/Developer/Xcode/Templates
 
 
-=== Fixes
+### Fixes
 
   * Fixed RubyCocoa apps fail to launch by Xcode-4 "Run" with an error
     "invalid option -N (-h will show valid options)".
@@ -169,13 +183,13 @@ $Id$
 
   * Fixed NSBundle.loadNibNamed_owner(nibname, owner) fails on Lion or Later.
 
-== Changes 1.0.2 from 1.0.1: 2011-08-31
+## Changes 1.0.2 from 1.0.1: 2011-08-31
 
-=== Improvements
+### Improvements
 
   * OSX.load_plist() accepts binary format plist data.
 
-=== Fixes
+### Fixes
 
   * Lion
      * Fixed SEGV at working with NSData or Ruby byte string.
@@ -185,9 +199,9 @@ $Id$
      * Fixed SEGV passing/getting small C struct contains C array,
        such as NSDecimal.
 
-== Changes 1.0.1 from 1.0.0: 2009-10-18
+## Changes 1.0.1 from 1.0.0: 2009-10-18
 
-=== Improvements
+### Improvements
 
   * RubyCocoa.framework built for 10.5 works on 10.6
 
@@ -216,7 +230,7 @@ $Id$
 
   * upgrade project templates for Xcode 3.x
 
-=== Fixes
+### Fixes
 
   * Snow Leopard
      * Fixed application stops with errors for thread such as
