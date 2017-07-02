@@ -19,10 +19,7 @@
 static int rubycocoa_ext_loaded = 0;
 
 @interface RBFramework : NSObject {
-// Xcode 4.2 or earlier
-#if __clang_major__ < 3 || (__clang_major__ == 3 && __clang_minor__ < 1)
   NSBundle* _bundle;
-#endif
   void* handle_;
 }
 +(instancetype)sharedInstance;
@@ -35,10 +32,7 @@ static int rubycocoa_ext_loaded = 0;
 @implementation RBFramework
 
 static RBFramework* sharedInstance_;
-// Xcode 4.2 or earlier
-#if __clang_major__ < 3 || (__clang_major__ == 3 && __clang_minor__ < 1)
-  @synthesize bundle = _bundle;
-#endif
+@synthesize bundle = _bundle;
 
 +(instancetype)sharedInstance
 {
@@ -60,7 +54,12 @@ static RBFramework* sharedInstance_;
 
 -(NSString*)defaultExtentionPath
 {
-  return [self.bundle pathForResource:@"rubycocoa" ofType:@"bundle" inDirectory:TO_NSSTR(RUBYCOCOA_DEFAULT_EXT_DIR)];
+  NSString* extpath;
+  extpath = [self.bundle pathForResource:@"rubycocoa" ofType:@"bundle" inDirectory:TO_NSSTR(RUBYCOCOA_DEFAULT_EXT_DIR)];
+  if (!extpath) {
+    NSLog(@"Warning: \"rubycocoa.bundle\" not found in directory `%@'.", TO_NSSTR(RUBYCOCOA_DEFAULT_EXT_DIR));
+  }
+  return extpath;
 }
 
 -(BOOL)loadRubyCocoaExtention
