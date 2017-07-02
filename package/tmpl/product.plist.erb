@@ -3,9 +3,9 @@
 <plist version="1.0">
 <dict>
 	<key>arch</key>
-	<array><% @config['target-archs'].split.each do |arch| %>
-		<string><%= arch %></string>
-	<% end %></array>
+	<array><% @rubycocoa_config[:ARCHS].split.each do |arch| %>
+		<string><%= arch %></string><%
+		   end %></array>
 	<key>bundle</key>
 	<array>
 	</array>

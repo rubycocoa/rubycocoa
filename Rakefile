@@ -23,6 +23,8 @@ ARGV.grep(/\A--with-([\w-]+)=(.+)\z/) do |option|
   case $1
   when 'macosx-deployment-target'
     @rubycocoa_config[:MACOSX_DEPLOYMENT_TARGET] = $2
+  when 'sign'
+    @rubycocoa_config[:DEVELOPER_SIGN_IDENTIFIER] = $2
   end
 end
 
@@ -81,6 +83,7 @@ end
 require "xcjobs"
 $LOAD_PATH << "rake"
 require "header_doc_task"
+require "dmg_task"
 
 @cflags_by_arch = {}
 Rake::Task["compile:rubycocoa"].prerequisites.each do |t|
@@ -143,6 +146,39 @@ namespace :framework do
     t.output_dir = "doc/objc"
     t.toppage = "RubyCocoa.html"
   end
+
+  desc "Build framework installer, RubyCocoa-#{RubyCocoa::VERSION}-macOS#{@rubycocoa_config[:MACOSX_DEPLOYMENT_TARGET]}.dmg"
+  DmgTask.new do |t|
+    # RubyCocoa-2.0.0-macOS10.12
+    t.package_name = "RubyCocoa-#{RubyCocoa::VERSION}-macOS#{@rubycocoa_config[:MACOSX_DEPLOYMENT_TARGET]}"
+    t.version = RubyCocoa::VERSION
+    t.identifier = "com.fobj.rubycocoa"
+    t.sign_identity = @rubycocoa_config[:DEVELOPER_SIGN_IDENTIFIER]
+    t.target_macos_version = @rubycocoa_config[:MACOSX_DEPLOYMENT_TARGET]
+    t.product_plist = "package/tmpl/product.plist"
+
+    # prepare install content
+    framework_dir = t.pkg_files_dir + "Library/Frameworks"
+    lproj_dir_en = t.pkg_resouces_dir + "English.lproj"
+    lproj_dir_ja = t.pkg_resouces_dir + "Japanese.lproj"
+    [framework_dir, lproj_dir_en, lproj_dir_ja].each do |dir|
+      mkdir_p dir
+    end
+    cp_r "framework/build/Default/RubyCocoa.framework", framework_dir
+
+    cp "COPYING", (t.pkg_resouces_dir + "License.txt")
+    cp "LGPL", (t.pkg_resouces_dir + "LGPL")
+    cp "package/tmpl/ReadMe.html", (lproj_dir_en + "ReadMe.html")
+    cp "package/tmpl/ReadMe.ja.html", (lproj_dir_ja + "ReadMe.html")
+    cp "COPYING", (t.pkg_resouces_dir + "License.txt")
+
+    cp "COPYING", (t.dmg_files_dir + "License.txt")
+    cp "LGPL", (t.dmg_files_dir + "LGPL")
+    cp "package/tmpl/ReadMe.html", (t.dmg_files_dir + "ReadMe.html")
+    cp "package/tmpl/ReadMe.ja.html", (t.dmg_files_dir + "ReadMe.ja.html")
+  end
+  task "dmg" => ["framework:compile",
+                 "package/tmpl/product.plist"]
 end
 
 file "framework/GeneratedConfig.xcconfig" =>
@@ -158,6 +194,12 @@ file "framework/Info.plist" =>
   process_erb("framework/Info.plist.erb")
 end
 CLEAN.include("framework/Info.plist")
+
+file "package/tmpl/product.plist" =>
+    ["package/tmpl/product.plist.erb"] do
+  process_erb("package/tmpl/product.plist.erb")
+end
+CLEAN.include("package/tmpl/product.plist")
 
 def process_erb(*erbfiles)
   erbfiles.each do |infile|
