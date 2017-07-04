@@ -25,8 +25,14 @@ module HeaderDoc
     def define
       desc "Generate HeaderDoc Documentation" unless Rake.application.last_description
       task(self.name) do
-        sh([@headerdoc_cmd, '-o', @output_dir, @files].flatten.join(" "))
-        sh(@gatherhd_cmd, @output_dir, @toppage)
+        begin
+          lc_all = ENV['LC_ALL']
+          ENV['LC_ALL']='en_US.US-ASCII'
+          sh([@headerdoc_cmd, '-o', @output_dir, @files].flatten.join(" "))
+          sh(@gatherhd_cmd, @output_dir, @toppage)
+        ensure
+          ENV['LC_ALL']=lc_all
+        end
       end
     end
   end
