@@ -12,7 +12,7 @@
 
 /*!
  * @framework RubyCocoa RubyCocoa.framework
- * @header RubyCocoa.framework A Ruby/Objective-C Bridge for Mac OS X with Cocoa.
+ * @header RubyCocoa.framework A Ruby/Objective-C Bridge for macOS with Cocoa.
  */
 
 #import <RubyCocoa/RBRuntime.h>
