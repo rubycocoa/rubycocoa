@@ -81,7 +81,7 @@ end
 #### RubyCocoa.framework ####
 # => ./framework/
 require "xcjobs"
-$LOAD_PATH << "rake"
+$LOAD_PATH << "tasks"
 require "header_doc_task"
 require "dmg_task"
 
