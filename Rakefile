@@ -164,7 +164,7 @@ namespace :framework do
     Rake::Task["framework:dmg:content"].invoke
   end
 
-  task "dmg:content" => ["compile"] do
+  task "dmg:content" => ["compile", "build"] do
     t = @dmgtask
     # prepare install content
     framework_dir = t.pkg_files_dir + "Library/Frameworks"
@@ -185,6 +185,26 @@ namespace :framework do
     cp "LGPL", (t.dmg_files_dir + "LGPL")
     cp "package/tmpl/ReadMe.html", (t.dmg_files_dir + "ReadMe.html")
     cp "package/tmpl/ReadMe.ja.html", (t.dmg_files_dir + "ReadMe.ja.html")
+
+    # install gem
+    gemfile = "pkg/rubycocoa-#{RubyCocoa::VERSION}.gem"
+    gem_home_org =
+      case t.target_macos_version
+      when "10.13"
+        "/Library/Ruby/Gems/2.3.0"
+      when "10.12"
+        "/Library/Ruby/Gems/2.0.0"
+      when "10.11"
+        "/Library/Ruby/Gems/2.0.0"
+      else
+        nil
+      end
+    if gem_home_org
+      gem_home_dst = t.pkg_files_dir.to_s + gem_home_org
+      mkdir_p gem_home_dst
+      installer = Gem::Installer.new(gemfile, :install_dir => gem_home_dst)
+      installer.install
+    end
   end
 end
 
